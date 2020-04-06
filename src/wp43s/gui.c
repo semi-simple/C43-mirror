@@ -93,7 +93,7 @@ GtkWidget           *lbl82H,  *lbl83H,  *lbl84H,  *lbl85H;  //JM
 GtkWidget *lbl81Gr, *lbl82Gr, *lbl83Gr, *lbl84Gr, *lbl85Gr;
 GtkWidget           *btn82A,  *btn83A,  *btn84A,  *btn85A;              //vv dr - new AIM
 GtkWidget           *lbl82Fa, *lbl83Fa, *lbl84Fa, *lbl85Fa;             //^^
-GtkWidget *lblOn; //JM
+//GtkWidget *lblOn; //JM
 //JM7 GtkWidget  *lblConfirmY; //JM for Y/N
 //JM7 GtkWidget  *lblConfirmN; //JM for Y/N
 
@@ -1277,7 +1277,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl84Fa);
   gtk_widget_hide(lbl85Fa); //^^
 
-  gtk_widget_hide(lblOn);
+  //gtk_widget_hide(lblOn);
   //JM7 gtk_widget_hide(lblConfirmY);  //JM Y/N
   //JM7 gtk_widget_hide(lblConfirmN);  //JM Y/N
 
@@ -2254,7 +2254,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl85H); //JM
   gtk_widget_show(lbl85L);  //JM add ?
 
-  gtk_widget_show(lblOn);
+ // gtk_widget_show(lblOn);
  //JM7  gtk_widget_show(lblConfirmY);  //JM Y/N
  //JM7  gtk_widget_show(lblConfirmN);  //JM Y/N
 
@@ -2338,7 +2338,7 @@ void calcModeAimGui(void) {
   labelCaptionAimFa(keys, lbl85Fa);
   labelCaptionAim(keys++, btn85A, lbl85Gr, lbl85L);     //^^
 
-  gtk_widget_show(lblOn);
+ // gtk_widget_show(lblOn);
   //JM7 gtk_widget_show(lblConfirmY);  //JM Y/N
   //JM7 gtk_widget_show(lblConfirmN);  //JM Y/N
 
@@ -2525,7 +2525,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(lbl84Gr); //JM TT
   gtk_widget_show(lbl85Gr); //JM
 
-  gtk_widget_show(lblOn);
+//  gtk_widget_show(lblOn);
   //JM7 gtk_widget_show(lblConfirmY);  //JM Y/N
   //JM7 gtk_widget_show(lblConfirmN);  //JM Y/N
 
@@ -2587,7 +2587,7 @@ void calcModeAsmGui(void) {
   labelCaptionAim(keys++, btn84, lbl84Gr, lbl84L);
   labelCaptionAim(keys++, btn85, lbl85Gr, lbl85L);
 
-  gtk_widget_show(lblOn);
+//  gtk_widget_show(lblOn);
 
   gtk_widget_show(btn11);
   gtk_widget_show(btn12);
@@ -2727,7 +2727,7 @@ void calcModeAsmGui(void) {
   gtk_widget_show(lbl82Gr);
   gtk_widget_show(lbl83Gr);
 
-  gtk_widget_show(lblOn);
+//  gtk_widget_show(lblOn);
 
   gtk_widget_show(lbl31G);
   moveLabels();
@@ -3975,7 +3975,7 @@ void setupUI(void) {
   lbl84Gr = gtk_label_new("");
 //lbl84H  = gtk_label_new("\u2399"); // Printer   //JM: WHY DID THIS LINE COME BACK ??
   lbl85Gr = gtk_label_new("");
-  lblOn   = gtk_label_new("ON");
+//  lblOn   = gtk_label_new("ON");
 
   gtk_widget_set_size_request(btn81, KEY_WIDTH_1, 0);
   gtk_widget_set_size_request(btn82, KEY_WIDTH_2, 0);
@@ -3991,7 +3991,7 @@ void setupUI(void) {
   gtk_widget_set_name(lbl83H, "greekUnderline");
   gtk_widget_set_name(lbl84H, "greekUnderline");
   gtk_widget_set_name(lbl85H, "greekUnderline");    //JM
-  gtk_widget_set_name(lblOn,  "On");
+//  gtk_widget_set_name(lblOn,  "On");
 
   g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");
   g_signal_connect(btn82, "pressed", G_CALLBACK(btnPressed), "33");
@@ -4039,7 +4039,7 @@ void setupUI(void) {
   //gtk_fixed_put(GTK_FIXED(grid), lbl81L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);   //JM REMOVED Superfluous EXIT in Gr
   //gtk_fixed_put(GTK_FIXED(grid), lbl81H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);  //JM
   //gtk_fixed_move(GTK_FIXED(grid), lbl81G, xPos+KEY_WIDTH_1+ X_OFFSET_LETTER, yPos + 38); //JM+++ REMOVED AGAIN. OFF IS MANUALLY INSERTED SOMEHOW
-  gtk_fixed_put(GTK_FIXED(grid), lblOn,   0, 0);     //JM Removed ON to 81
+//  gtk_fixed_put(GTK_FIXED(grid), lblOn,   0, 0);     //JM Removed ON to 81
 
   xPos += DELTA_KEYS_X + 18;
   gtk_fixed_put(GTK_FIXED(grid), btn82,  xPos,                         yPos);

@@ -1982,7 +1982,7 @@ void printLongIntegerToConsole(const longInteger_t value, const char *before, co
   char str[3000];
 
   longIntegerToAllocatedString(value, str, sizeof(str));
-  printf("%slong integer (%" FMTSIZE " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), value->_mp_alloc * LIMB_SIZE, str, after);
+  printf("%slong integer (%" FMTSIZE " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), (uint64_t)(value->_mp_alloc * LIMB_SIZE), str, after);
 }
 
 

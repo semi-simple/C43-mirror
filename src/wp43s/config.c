@@ -625,7 +625,7 @@ void fnReset(uint16_t confirmation) {
     fnDisplayStack(4);                 //JMnote This line is over-writing the content of setupdefaults
     firstGregorianDay = 1752;          //JMnote This line is over-writing the content of setupdefaults
     fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
-    fnLeadingZeros(true);           //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
+    fnLeadingZeros(false);             //JMnote This line is over-writing the content of setupdefaults
     fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
     fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
     fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults

@@ -518,8 +518,8 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 
                                                                                                                                                                                                                   //JM HOME
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
-                                     ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_toREC,             ITM_toPOL,                   ITM_RTN,                            //JM HOME
-                                     ITM_PROFRC,                    ITM_XTHROOT,                KEY_HASH,                 ITM_DOTDEMU,           ITM_ms,                      ITM_LBL,                            //JM HOME
+                                     ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
+                                     ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
 
 /*HOME2*/

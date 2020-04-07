@@ -213,7 +213,6 @@ void fnNeighb                   (uint16_t unusedParamButMandatory) {}
 void fnGcd                      (uint16_t unusedParamButMandatory) {}
 void fnMin                      (uint16_t unusedParamButMandatory) {}
 void fnMax                      (uint16_t unusedParamButMandatory) {}
-void fnPercent                  (uint16_t unusedParamButMandatory) {}
 void fnStatSum                  (uint16_t unusedParamButMandatory) {}
 void fnIsPrime                  (uint16_t unusedParamButMandatory) {}
 void fnRandom                   (uint16_t unusedParamButMandatory) {}
@@ -402,6 +401,8 @@ void fnRange                    (uint16_t unusedParamButMandatory) {}
 void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}
 void fnCross                    (uint16_t unusedParamButMandatory) {}
+void fnPercent                  (uint16_t unusedParamButMandatory) {}
+void fnPercentMRR               (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1211,8 +1212,8 @@ const item_t indexOfItems[] = {
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            CAT_RVAR, SLS_UNCHANGED},
 /*  801 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                          CAT_RVAR, SLS_UNCHANGED},
 /*  802 */  { itemToBeCoded,               NOPARAM,                     STD_LEFT_RIGHT_ARROWS,                         STD_LEFT_RIGHT_ARROWS,                         CAT_FNCT, SLS_UNCHANGED},
-/*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_UNCHANGED},
-/*  804 */  { itemToBeCoded,               NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_ENABLED  },
+/*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { itemToBeCoded,               NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_UNCHANGED},
 /*  806 */  { itemToBeCoded,               NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  807 */  { itemToBeCoded,               NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},

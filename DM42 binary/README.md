@@ -11,8 +11,6 @@ From free42: select [shift][SETUP][5][2][4][3] WP43S.pgm [ENTER][ENTER] wait [EX
   
 The keyboard layout is also that of WP43S when navigating in the system part of the DM42 (thanks to the keymap.bin file)
   
-The Key_stickers.xcf and WP43S_overlay.xcf are GIMP image files to make your life easier!
-  
 To leave the WP43S program: in the menu [g][MODE][up] select [g][SYSTEM] ([g][F1]) to return to the DMCP system.
   
 To retrieve the original DM42 keyboard layout: copy the file **original_DM42_keymap.bin** to the DM42 flash disk, rename it **keymap.bin** and reset the DM42. More informations here: http://www.swissmicros.com/dm42/devel/dmcp_devel_manual/  

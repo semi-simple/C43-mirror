@@ -1994,8 +1994,9 @@
 #define ITM_USER_PRGM                 1951   //JM USER
 #define ITM_USER_USER                 1952   //JM USER
 #define ITM_USER_SIGMAPLUS            1953   //JM USER
+#define ITM_LISTXY                    1954   //JMSTAT
 
-#define LAST_ITEM                     1954   //JM
+#define LAST_ITEM                     1955   //JM
 
 #define CHR_PROD_SIGN                 9999
 

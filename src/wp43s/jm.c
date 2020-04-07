@@ -1150,7 +1150,7 @@ DEPRECIATED for Martin
 
  else
 
- if(JM_OPCODE == 45) {                                         //
+ if(JM_OPCODE == 45) {                                         // NEXT |PRIME ROUTINE
 
     int16_t ix;
     ix = 40;
@@ -1166,6 +1166,13 @@ DEPRECIATED for Martin
     }
 
  } 
+
+
+else
+ if(JM_OPCODE == 46) {                                         // LISTXY
+   fnStatList();
+ } 
+
 
 
 // Item 255 is NOP

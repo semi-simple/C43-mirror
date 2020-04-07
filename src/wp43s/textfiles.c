@@ -267,20 +267,16 @@ int f_puts (
 /*-----------------------------------------------------------------------*/
 //###################################################################################
 //###################################################################################
-int16_t line_y;
-char line[100];               /* Line buffer */
-void print_line(bool_t line_init) {
 
-    if(line_init) {line_y = 20;}
-    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
-    line_y += 20;
-}
+
 
 
 /*-----------------------------------------------------------------------*/
 
 
 int16_t testjm(void){
+char line[100];               /* Line buffer */
+
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
@@ -336,6 +332,8 @@ int16_t testjm(void){
 
 
 int16_t test_xy(float x, float y){
+char line[100];               /* Line buffer */
+
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
@@ -401,6 +399,7 @@ int16_t test_xy(float x, float y){
 
 
 int16_t test_line(void){          //uses  tmpStr3000;
+char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
@@ -466,6 +465,30 @@ int16_t test_xy(float x, float y){
 }
 
 #endif
+
+
+
+
+
+int16_t line_y;
+void print_line(bool_t line_init) {
+#ifndef TESTSUITE_BUILD
+char line[100];               /* Line buffer */
+    if(line_init) {line_y = 20;}
+    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
+    line_y += 20;
+#endif
+}
+
+
+void print_linestr(const char line1[100], bool_t line_init) {
+#ifndef TESTSUITE_BUILD
+    if(line_init) {line_y = 20;}
+    showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+    line_y += 20;
+#endif
+}
+
 
 
 

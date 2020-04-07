@@ -534,6 +534,27 @@ void fnJM(uint16_t JM_OPCODE) {
       fnDrop(0);
       fnSquareRoot(0);
     }
+    else if(tmpr == 4) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+      fnDrop(0);
+      fnSquareRoot(0);
+      fnSquareRoot(0);
+    }
+    else if(tmpr == 6) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+      fnDrop(0);
+      fnCubeRoot(0);
+      fnSquareRoot(0);
+    }
+    else if(tmpr == 8) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+      fnDrop(0);
+      fnSquareRoot(0);
+      fnSquareRoot(0);
+      fnSquareRoot(0);
+    }
+    else if(tmpr == 9) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
+      fnDrop(0);
+      fnCubeRoot(0);
+      fnCubeRoot(0);
+    }
     else {
       fnInvert(0);
       fnPower(0);

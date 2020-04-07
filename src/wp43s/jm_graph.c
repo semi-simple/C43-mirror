@@ -570,7 +570,7 @@ void graph_plotmem(void) {
         #ifdef STATDEBUG
         printf("%d %d  %d %d  ddx=%f, ddy=%f, zz=%f  zzz=%f, dx=%f, dy=%f \n",xo, yo, xn, yn, ddx,ddy,zz,zzz,dx,dy);
         #endif
-        if (xo!=xn && yo!=yn){
+        if (!(xo==xn && yo==yn)){
           plotline(xn+(-3*dx +dy), yn+(-3*dy -dx), xn, yn);
           plotline(xn+(-3*dx -dy), yn+(-3*dy +dx), xn, yn);
         } else {
@@ -919,6 +919,51 @@ void graph_prepscreen (void){
                     }
 
                     //-----------------------------------------------------//-----------------------------------------------------
+
+
+
+void fnStatList(void) {
+  char tmpstr[100];
+  int16_t ix, ixx, statnum;
+  real_t tmpy;
+
+  graph_prepscreen();
+
+  if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+
+  if(telltale == MEM_INITIALIZED) {
+
+    #ifndef TESTSUITE_BUILD
+    runFunction(ITM_NSIGMA);
+    #endif
+
+    if(plotmode != _VECT) {
+      //Convert from real to int
+      real34ToReal(SIGMA_N, &tmpy);
+      realToString(&tmpy, tmpStr3000);
+      statnum = atoi (tmpStr3000);
+    } else {
+      statnum = ix_count;
+    }
+   
+    print_linestr("Stat data",true);
+    #ifdef PC_BUILD
+    printf("Stat data %d - %d\n",statnum-1, max(0, statnum-1-6) );
+    #endif
+
+    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
+      ixx = statnum - ix - 1;
+      sprintf(tmpstr,"[%d]  x:%f,  y:%f",ixx+1, gr_x[ixx],gr_y[ixx]);
+      print_linestr(tmpstr,false);
+     // #ifdef STATDEBUG
+      printf("%d:%s\n",ixx,tmpstr);
+     // #endif
+    }
+  }
+}
+
+
+
 //-----------------------------------------------------//-----------------------------------------------------
 
 #define randnum(min, max)  ((rand() % (int)(((max) + 1) - (min))) + (min))

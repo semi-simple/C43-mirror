@@ -48,6 +48,9 @@ void graph_sigmaplus  (int8_t plusminus);   //Called from STAT module from fnSig
 void graph_setupmemory(void);
 void graph_end        (void);
 
+void fnStatList       (void);
+
+
 //TODO
 void autoscale(void);
 void defaultscale(void);

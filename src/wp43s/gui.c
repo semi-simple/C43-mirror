@@ -3945,7 +3945,7 @@ void setupUI(void) {
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn82A), ":");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn83A), ".");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn84A), "?");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn85A), " "); //^^
+  gtk_widget_set_tooltip_text(GTK_WIDGET(btn85A), "Space"); //^^
   lbl81F  = gtk_label_new("");
   lbl82F  = gtk_label_new("");
   lbl83F  = gtk_label_new("");

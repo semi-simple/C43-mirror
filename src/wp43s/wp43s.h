@@ -18,7 +18,7 @@
  * \file wp43s.h
  ***********************************************/
 
-//#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
 
 
 

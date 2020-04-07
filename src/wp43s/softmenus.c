@@ -492,10 +492,134 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                      -MNU_TRI,                      -MNU_EXP,                   -MNU_CPX,                 -MNU_XFN,              -MNU_MyMenu,                 -MNU_EE,                            //JM HOME
                                      -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,               ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
                                                                                                                                                                                                                   //JM HOME
-/*                                   ITM_pi,                        ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XTHROOT,                        //JM HOME
-                                     ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,                           //JM HOME
-                                     ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
-*/
+
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+KEY_EXIT1,
+ ITM_OFF,        //f ROW 7
+-MNU_HOME,       
+ ITM_SHOW,       
+ ITM_PR,         
+-MNU_CATALOG,    
+
+
+KEY_EXIT1,
+-MNU_PRINT,     //g
+ ITM_TIMER,    
+ ITM_VIEW,     
+-MNU_STK,      
+-MNU_PARTS,   
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+KEY_fg,        
+ ITM_NULL,       //f ROW 6
+ ITM_ASSIGN,     
+ KEY_USERMODE,   
+-MNU_PFN,        
+-MNU_IO,         
+
+KEY_fg,
+ ITM_NULL,     //g
+-MNU_ASN,      
+-MNU_LOOP,     
+-MNU_TEST,     
+-MNU_ALPHAFN,  
+
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+ KEY_DOWN1,
+ KEY_SST,        //f ROW5
+-MNU_BASE,       
+-MNU_ANGLECONV,  
+-MNU_FLAGS,      
+-MNU_PROB,       
+
+KEY_DOWN1,
+ ITM_STATUS,   //g
+-MNU_CLK,      
+-MNU_UNITCONV, 
+-MNU_BITS,     
+-MNU_INTS,    
+ 
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+KEY_UP1,
+ KEY_BST,        //f ROW 4
+-MNU_EQN,        
+-MNU_ADV,        
+-MNU_MATX,       
+-MNU_STAT,      
+
+KEY_UP1,
+ ITM_RBR,      //g
+-MNU_INFO,     
+-MNU_CONST,    
+-MNU_XFN,      
+-MNU_SUMS,     
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+ ITM_ENTER,
+ ITM_AIM,        //f ROW 3
+ ITM_LASTX,      
+-MNU_MODE,       
+-MNU_DSP,        
+-MNU_CLR,        
+
+ITM_ENTER,
+-MNU_CPX,      //g
+-MNU_EXP,      
+ KEY_CC,       
+-MNU_FIN,      
+ KEY_UNDO,     
+
+
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+
+ KEY_COMPLEX,    //f ROW2
+ ITM_PC,         
+ ITM_pi,         
+ ITM_arcsin,     
+ ITM_arccos,     
+ ITM_arctan,     
+
+  ITM_MAGNITUDE,  //g
+ ITM_DELTAPC,  
+ ITM_ANGLE,    
+ ITM_GTO,      
+ ITM_LBL,      
+ ITM_RTN,      
+
+
+
+
+
+                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+
+ ITM_SIGMAMINUS,  //f ROW1
+ ITM_YX,         
+ ITM_SQUARE,     
+ ITM_10x,        
+ ITM_EX,         
+ ITM_XTHROOT,    
+
+  ITM_PROFRC,   //g
+ ITM_toINT,    
+ KEY_dotD,     
+ ITM_ms,       
+ ITM_toREC,    
+ ITM_toPOL,    
+
+
+#ifdef XXXX
+
+
 #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                      KEY_EXIT1,                     -MNU_PRINT,                 ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
@@ -521,6 +645,7 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                      ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
                                      ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
+#endif //XXXX
 
 /*HOME2*/
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME

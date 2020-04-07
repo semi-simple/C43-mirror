@@ -539,8 +539,8 @@ const int16_t menu_GRAPH[]        = {
 
 const int16_t menu_ST_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_SIGMAMINUS,                ITM_NSIGMA,                 ITM_SUM,                  ITM_NULL,              ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
-                                     ITM_SIGMAPLUS,                 ITM_NULL,                   ITM_NULL,                 ITM_GRF_X0,            ITM_GRF_X1,                  ITM_GRF_HLP,                         //JM GRAPH
+                                     ITM_SIGMAMINUS,                ITM_SUM,                    ITM_LISTXY,               ITM_P_ALLREGS,         ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_GRF_X0,            ITM_GRF_X1,                  ITM_GRF_HLP,                         //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
 

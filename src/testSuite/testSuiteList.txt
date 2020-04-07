@@ -49,6 +49,7 @@ initialSettings
 
 ;debug
 
+
 ulp
 neighb
 min
@@ -208,3 +209,5 @@ decomp
 matrix
 dot
 cross
+
+percent

@@ -134,6 +134,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnNop",                  fnNop                 },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
+  {"fnPercent",              fnPercent             },
+  {"fnPercentMRR",           fnPercentMRR          },
   {"fnPower",                fnPower               },
   {"fnPyx",                  fnPyx                 },
   {"fnRealPart",             fnRealPart            },

@@ -1461,10 +1461,10 @@ In:  SL=0 RX=Real:"-inf"
 Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"-inf"
 
 In:  SL=0 RX=Cplx:"-inf i 0"
-Out: EC=0 SL=1 RL=Cplx:"-inf i 0" RX=Cplx:"inf i inf"
+Out: EC=0 SL=1 RL=Cplx:"-inf i 0" RX=Cplx:"-inf i 0"
 
 In:  SL=0 RX=Cplx:"-1e999 i 0"
-Out: EC=0 SL=1 RL=Cplx:"-1e999 i 0" RX=Cplx:"5e332 i 8.660254037844386467637231707529361834714026269051903140279e332"
+Out: EC=0 SL=1 RL=Cplx:"-1e999 i 0" RX=Cplx:"-1e333 i 0"
 
 
 Func: fnCube

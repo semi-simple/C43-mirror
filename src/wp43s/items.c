@@ -406,6 +406,8 @@ void fnRange                    (uint16_t unusedParamButMandatory) {}
 void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}
 void fnCross                    (uint16_t unusedParamButMandatory) {}
+void fnPercent                  (uint16_t unusedParamButMandatory) {}
+void fnPercentMRR               (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -438,7 +440,6 @@ void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -1242,8 +1243,8 @@ const item_t indexOfItems[] = {
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            CAT_RVAR, SLS_UNCHANGED},
 /*  801 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                          CAT_RVAR, SLS_UNCHANGED},
 /*  802 */  { itemToBeCoded,               NOPARAM,                     STD_LEFT_RIGHT_ARROWS,                         STD_LEFT_RIGHT_ARROWS,                         CAT_FNCT, SLS_UNCHANGED},
-/*  803 */  { itemToBeCoded,               NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_UNCHANGED},
-/*  804 */  { itemToBeCoded,               NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_ENABLED  },
+/*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { itemToBeCoded,               NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_UNCHANGED},
 /*  806 */  { itemToBeCoded,               NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  807 */  { itemToBeCoded,               NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},

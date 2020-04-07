@@ -70,6 +70,7 @@
 #include "neighb.h"
 #include "parallel.h"
 #include "pcg_basic.h"
+#include "percent.h"
 #include "power.h"
 #include "prime.h"
 #include "random.h"

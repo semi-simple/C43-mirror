@@ -473,6 +473,12 @@
 		<Unit filename="src/testSuite/parallel_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/percent.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/percentMRR.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/polarToRectangular.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1562,6 +1568,28 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/pcg_basic.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percent.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percent.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentMRR.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentMRR.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -84,7 +84,7 @@ const calcKey_t kbd_std[37] = {
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,             ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
  {33,   ITM_Rdown,        ITM_pi,          ITM_Rup,      ITM_NULL,       CHR_I,             CHR_DOWN_ARROW,  CHR_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
- {34,   ITM_sin,          ITM_arcsin,      ITM_GTO,  ITM_NULL,       CHR_J,             CHR_case,        CHR_THETA,     ITM_REGJ     }, //JM
+ {34,   ITM_sin,          ITM_arcsin,      ITM_GTO,      ITM_NULL,       CHR_J,             CHR_case,        CHR_THETA,     ITM_REGJ     }, //JM
  {35,   ITM_cos,          ITM_arccos,      ITM_LBL,      ITM_NULL,       CHR_K,             ITM_NULL,        CHR_KAPPA,     ITM_REGK     }, //JM
  {36,   ITM_tan,          ITM_arctan,      ITM_RTN,      ITM_NULL,       CHR_L,             ITM_NULL,        CHR_LAMBDA,    ITM_REGL     }, //JM
        

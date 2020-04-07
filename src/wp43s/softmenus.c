@@ -102,7 +102,7 @@ const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,      
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE,
-                                     KEY_TYPCON_DN,                 KEY_dotD,                   KEY_TYPCON_UP,            ITM_toSI,              ITM_NULL,                    ITM_NULL                      };    //JM
+                                     KEY_TYPCON_DN,                 ITM_DOTDEMU,                KEY_TYPCON_UP,            ITM_toSI,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
@@ -476,6 +476,7 @@ const int16_t menu_ASN[]         = {
  */
       };
 
+//##################################################################################################################################################################################################################################
 
 
 const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
@@ -491,168 +492,133 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      -MNU_TRI,                      -MNU_EXP,                   -MNU_CPX,                 -MNU_XFN,              -MNU_MyMenu,                 -MNU_EE,                            //JM HOME
                                      -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,               ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
-                                                                                                                                                                                                                  //JM HOME
+                                       
 
 
 
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-KEY_EXIT1,
- ITM_OFF,        //f ROW 7
--MNU_HOME,       
- ITM_SHOW,       
- ITM_PR,         
--MNU_CATALOG,    
+//HAAKON SUGGESTIONS OF FULL REPLICA
+/*ROW 7    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_NULL,               KEY_EXIT1,        CHR_0,            CHR_PERIOD,       ITM_RS,           ITM_ADD,
+/* f       */     ITM_NULL, /*      KEY_EXIT1,  */            ITM_OFF,          -MNU_HOME,        ITM_SHOW,         ITM_PR,           -MNU_CATALOG,    
+/* g       */     ITM_NULL, /*      KEY_EXIT1,  */            -MNU_PRINT,       ITM_TIMER,        ITM_VIEW,         -MNU_STK,         -MNU_PARTS,   
 
-
-KEY_EXIT1,
--MNU_PRINT,     //g
- ITM_TIMER,    
- ITM_VIEW,     
--MNU_STK,      
--MNU_PARTS,   
-
-
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-KEY_fg,        
- ITM_NULL,       //f ROW 6
- ITM_ASSIGN,     
- KEY_USERMODE,   
--MNU_PFN,        
--MNU_IO,         
-
-KEY_fg,
- ITM_NULL,     //g
--MNU_ASN,      
--MNU_LOOP,     
--MNU_TEST,     
--MNU_ALPHAFN,  
-
-
-
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
- KEY_DOWN1,
- KEY_SST,        //f ROW5
--MNU_BASE,       
--MNU_ANGLECONV,  
--MNU_FLAGS,      
--MNU_PROB,       
-
-KEY_DOWN1,
- ITM_STATUS,   //g
--MNU_CLK,      
--MNU_UNITCONV, 
--MNU_BITS,     
--MNU_INTS,    
+/*ROW 6    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_NULL,               KEY_fg,           CHR_1,            CHR_2,            CHR_3,            ITM_SUB,
+/* f       */     ITM_NULL, /*      KEY_fg,     */            ITM_NULL,         ITM_ASSIGN,       KEY_USERMODE,     -MNU_PFN,         -MNU_IO,         
+/* g       */     ITM_NULL, /*      KEY_fg,     */            ITM_NULL,         -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
  
+/*ROW 5    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_NULL,               KEY_DOWN1,        CHR_4,            CHR_5,            CHR_6,            ITM_MULT,
+/* f       */     ITM_NULL, /*      KEY_DOWN1,  */            KEY_SST,          -MNU_BASE,        -MNU_ANGLECONV,   -MNU_FLAGS,       -MNU_PROB,       
+/* g       */     ITM_NULL, /*      KEY_DOWN1,  */            ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
+ 
+/*ROW 4    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_NULL,               KEY_UP1,          CHR_7,            CHR_8,            CHR_9,            ITM_DIV,
+/* f       */     ITM_NULL, /*      KEY_UP1,    */            KEY_BST,          -MNU_EQN,         -MNU_ADV,         -MNU_MATX,        -MNU_STAT,      
+/* g       */     ITM_NULL, /*      KEY_UP1,    */            ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
 
+/*ROW 3    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_NULL,               ITM_ENTER,        ITM_XexY,         ITM_CHS,          ITM_EXPONENT,     KEY_BACKSPACE,
+/* f       */     ITM_NULL, /*      ITM_ENTER,  */            ITM_AIM,          ITM_LASTX,        -MNU_MODE,        -MNU_DSP,         -MNU_CLR,       
+/* g       */     ITM_NULL, /*      ITM_ENTER,  */            -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-KEY_UP1,
- KEY_BST,        //f ROW 4
--MNU_EQN,        
--MNU_ADV,        
--MNU_MATX,       
--MNU_STAT,      
+/*ROW 2    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                    ITM_STO,                ITM_RCL,          ITM_Rdown,        ITM_sin,          ITM_cos,         ITM_tan,
+/* f       */                       KEY_COMPLEX,            ITM_PC,           ITM_pi,           ITM_arcsin,       ITM_arccos,      ITM_arctan,     
+/* g       */                       ITM_MAGNITUDE,          ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
 
-KEY_UP1,
- ITM_RBR,      //g
--MNU_INFO,     
--MNU_CONST,    
--MNU_XFN,      
--MNU_SUMS,     
-
-
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
- ITM_ENTER,
- ITM_AIM,        //f ROW 3
- ITM_LASTX,      
--MNU_MODE,       
--MNU_DSP,        
--MNU_CLR,        
-
-ITM_ENTER,
--MNU_CPX,      //g
--MNU_EXP,      
- KEY_CC,       
--MNU_FIN,      
- KEY_UNDO,     
+ /*ROW 1    */         //              ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                     ITM_SIGMAPLUS,         ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,          ITM_XEQ,
+ /* f       */                     ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
+                                  //   ITM_NULL,              ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_GTO,    
+/* g       */                        ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
 
 
 
-
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-
- KEY_COMPLEX,    //f ROW2
- ITM_PC,         
- ITM_pi,         
- ITM_arcsin,     
- ITM_arccos,     
- ITM_arctan,     
-
-  ITM_MAGNITUDE,  //g
- ITM_DELTAPC,  
- ITM_ANGLE,    
- ITM_GTO,      
- ITM_LBL,      
- ITM_RTN,      
+//NIGEL SUGGESTED 36 CELLS OF ALL THE BLUE ONES                                                                                                                                                                         //JM HOME
+/* g       */                       ITM_TIMER,            ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
+/* g       */                       ITM_VIEW,            ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
+/* g       */                       -MNU_STK,            -MNU_PARTS,        -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
+/* g       */                       ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+/* g       */                       ITM_MAGNITUDE,          ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
+/* g       */                       -MNU_PRINT,            -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
 
 
+                              #ifdef XXXX
 
 
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+//JACO PROPOSAL WITH FIXED BUTTONS
+/*ROW 7    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       KEY_EXIT1,              ITM_OFF,          -MNU_HOME,        ITM_SHOW,         ITM_PR,           -MNU_CATALOG,    
+/* g       */                       KEY_EXIT1,              -MNU_PRINT,       ITM_TIMER,        ITM_VIEW,         -MNU_STK,         -MNU_PARTS,   
 
- ITM_SIGMAMINUS,  //f ROW1
- ITM_YX,         
- ITM_SQUARE,     
- ITM_10x,        
- ITM_EX,         
- ITM_XTHROOT,    
+/*ROW 6    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       KEY_fg,                 ITM_NULL,         ITM_ASSIGN,       KEY_USERMODE,     -MNU_PFN,         -MNU_IO,         
+/* g       */                       KEY_fg,                 ITM_NULL,         -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
+ 
+/*ROW 5    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       KEY_DOWN1,              KEY_SST,          -MNU_BASE,        -MNU_ANGLECONV,   -MNU_FLAGS,       -MNU_PROB,       
+/* g       */                       KEY_DOWN1,              ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
+ 
+/*ROW 4    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       KEY_UP1,                KEY_BST,          -MNU_EQN,         -MNU_ADV,         -MNU_MATX,        -MNU_STAT,      
+/* g       */                       KEY_UP1,                ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
 
-  ITM_PROFRC,   //g
- ITM_toINT,    
- KEY_dotD,     
- ITM_ms,       
- ITM_toREC,    
- ITM_toPOL,    
+/*ROW 3    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       ITM_ENTER,              ITM_AIM,          ITM_LASTX,        -MNU_MODE,        -MNU_DSP,         -MNU_CLR,       
+/* g       */                       ITM_ENTER,              -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
+/*ROW 2    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+/* f       */                       KEY_COMPLEX,            ITM_PC,           ITM_pi,           ITM_arcsin,       ITM_arccos,      ITM_arctan,     
+/* g       */                       ITM_MAGNITUDE,          ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
 
-#ifdef XXXX
-
-
-#if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
-                                     KEY_EXIT1,                     -MNU_PRINT,                 ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
-                                     KEY_fg,                        ITM_NULL,                   -MNU_ASN,                 -MNU_LOOP,             -MNU_TEST,                   -MNU_ALPHAFN,                       //JM HOME
-                                                                                                                                                                                                                  //JM HOME
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
-/* 6 Bottom Prim */  /* 6 */         KEY_DOWN1,                     ITM_STATUS,                 -MNU_CLK,                 -MNU_UNITCONV,         -MNU_BITS,                   -MNU_INTS,                          //JM HOME
-/* 5 Middle f    */  /* 5 */         KEY_UP1,                       ITM_RBR,                    -MNU_INFO,                -MNU_CONST,            -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
-
-
-
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
-#ifdef INLINE_TEST                                                              //vv dr
-/* 4 Top    g    */  /* 4 */        -MNU_INL_TST,                   -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
-#else                                                                           //^^
-/* 4 Top    g    */  /* 4 */         ITM_ENTER,                     -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
-#endif                                                                          //dr
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+ /*ROW 1    */                      ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+ /* f       */                  //  ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
+                                    ITM_NULL,              ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_GTO,    
+/* g       */                       ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
 
 
-                                                                                                                                                                                                                  //JM HOME
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
-                                     ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
-                                     ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
-#endif //JM END OF LAYOUT 2 DM42 STRICT.
-#endif //XXXX
+
+
+
+
+
+                              #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
+                                                                   ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
+                                                                   KEY_EXIT1,                     -MNU_PRINT,                 ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
+                                                                   KEY_fg,                        ITM_NULL,                   -MNU_ASN,                 -MNU_LOOP,             -MNU_TEST,                   -MNU_ALPHAFN,                       //JM HOME
+                                                                                                                                                                                                                                                //JM HOME
+                                                                   ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
+                              /* 6 Bottom Prim */  /* 6 */         KEY_DOWN1,                     ITM_STATUS,                 -MNU_CLK,                 -MNU_UNITCONV,         -MNU_BITS,                   -MNU_INTS,                          //JM HOME
+                              /* 5 Middle f    */  /* 5 */         KEY_UP1,                       ITM_RBR,                    -MNU_INFO,                -MNU_CONST,            -MNU_XFN,                    -MNU_SUMS,                          //JM HOME
+
+
+
+                                                                   ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
+                              #ifdef INLINE_TEST                                                              //vv dr
+                              /* 4 Top    g    */  /* 4 */        -MNU_INL_TST,                   -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+                              #else                                                                           //^^
+                              /* 4 Top    g    */  /* 4 */         ITM_ENTER,                     -MNU_CPX,                   -MNU_EXP,                 KEY_CC,                -MNU_FIN,                    KEY_UNDO,                           //JM HOME
+                              #endif                                                                          //dr
+                                                                   ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+
+
+                                                                                                                                                                                                                                                //JM HOME
+                                                                   ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
+                                                                   ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
+                                                                   ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
+                              #endif //JM END OF LAYOUT 2 DM42 STRICT.
+                              #endif //XXXX
+
+
 
 /*HOME2*/
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      ITM_SI_f,                      ITM_SI_p,                   ITM_PARALLEL,             KEY_CC,                ITM_MAGNITUDE,               ITM_SI_T,                           //JM HOME                                    
                                      ITM_SI_n,                      ITM_SI_u,                   ITM_SI_m,                 ITM_SI_k,              ITM_SI_M,                    ITM_SI_G                            //JM UNITS SI
 
-
+//##################################################################################################################################################################################################################################
 
                                      };                                                                                                                                                                           //JM HOME
 

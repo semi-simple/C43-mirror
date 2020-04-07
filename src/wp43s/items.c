@@ -430,6 +430,7 @@ void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
 void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
+void fnJM_ms                    (uint16_t unusedParamButMandatory) {}
 void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
 void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}
 void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}
@@ -2382,7 +2383,7 @@ const item_t indexOfItems[] = {
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
-/* 1926 */  { fnJM,                        30,                          ".ms",                                         ".ms",                                         CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
+/* 1926 */  { fnJM_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
 /* 1927 */  { fnJM,                        34,                          STD_DOT "p",                                   STD_DOT "p",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1928 */  { fnJM,                        35,                          STD_DOT "n",                                   STD_DOT "n",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1929 */  { fnJM,                        36,                          STD_DOT STD_mu,                                STD_DOT STD_mu,                                CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT

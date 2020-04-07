@@ -57,10 +57,10 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED
   shiftF = false;                  //JM
   shiftG = true;                 //JM
 #ifdef PC_BUILD
-  btnClicked(NULL, "03");         //JM changed from 02
+  btnClicked(NULL, "02");         //JM changed from 02
 #endif
 #ifdef DMCP_BUILD
-  btnClicked(NULL, "03");         //JM changed from 02
+  btnClicked(NULL, "02");         //JM changed from 02
 #endif
   userModeEnabled = userModeEnabledMEM;
 }
@@ -1187,6 +1187,11 @@ void fnJM_fnToPolar(uint16_t unusedParamButMandatory) {
 
 void fnJM_fnToRect(uint16_t unusedParamButMandatory) {
   fnJM(28);
+}
+
+
+void fnJM_ms(uint16_t unusedParamButMandatory) {
+  fnJM(30);
 }
 
 

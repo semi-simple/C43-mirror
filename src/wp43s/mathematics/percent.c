@@ -41,7 +41,7 @@ void (* const percent[9][9])(void) = {
 //-----------------------------------------------------------------------------
 
 /********************************************//**
- * \brief Data type error in DOT
+ * \brief Data type error in %
  *
  * \param void
  * \return void

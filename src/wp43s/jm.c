@@ -1332,7 +1332,7 @@ void fnUserJM(uint16_t jmUser) {
     break;
 
 
-#ifdef JM_LAYOUT_1A                         //JM LAYOUT 1A.
+#if defined (JM_LAYOUT_1A)  && !defined (TESTSUITE_BUILD)                          //JM LAYOUT 1A.
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].fShifted   = KEY_CC;                            //JM Changed CPX menu therefore USER MODE changes
     kbd_usr[0].primary     = -MNU_MyMenu;
@@ -1351,7 +1351,7 @@ void fnUserJM(uint16_t jmUser) {
     break;
 #endif
 
-#ifdef JM_LAYOUT_2_DM42_STRICT              //JM LAYOUT 42
+#if defined (JM_LAYOUT_2_DM42_STRICT) && !defined (TESTSUITE_BUILD)              //JM LAYOUT 42
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     //kbd_usr[12].gShifted   = KEY_CC;
     kbd_usr[0].primary     = -MNU_MyMenu;

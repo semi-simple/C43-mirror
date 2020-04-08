@@ -14,7 +14,7 @@
    viewBox="0 0 105 148"
    version="1.1"
    id="svg8"
-   sodipodi:docname="Manufacturing_glas.svg"
+   sodipodi:docname="WP43S_manufacturing_glas.svg"
    inkscape:version="0.92.4 5da689c313, 2019-01-14">
   <defs
      id="defs2">
@@ -8149,16 +8149,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4319679"
-     inkscape:cx="396.8504"
+     inkscape:zoom="1.424817"
+     inkscape:cx="198.4252"
      inkscape:cy="279.68504"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer8"
      showgrid="false"
-     inkscape:window-width="1910"
-     inkscape:window-height="1021"
-     inkscape:window-x="1919"
-     inkscape:window-y="0"
+     inkscape:window-width="1833"
+     inkscape:window-height="1017"
+     inkscape:window-x="1958"
+     inkscape:window-y="4"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:showpageshadow="false" />
@@ -8170,7 +8170,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" />
       </cc:Work>
@@ -8198,7 +8198,8 @@
      id="layer3"
      inkscape:label="Background"
      style="display:inline"
-     transform="translate(0,-149)">
+     transform="translate(0,-149)"
+     sodipodi:insensitive="true">
     <rect
        style="fill:#000000;stroke:#000000;stroke-width:0.04736037;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
        id="rect54862"
@@ -8207,63 +8208,6 @@
        x="0.023988117"
        y="152.02338" />
   </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="Key frames"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="Overlay"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer17"
-     inkscape:label="Bezel"
-     style="display:inline" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Keys"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer6"
-     inkscape:label="Bezel blue"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:label="Bezel gold"
-     inkscape:groupmode="layer"
-     id="layer1"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer7"
-     inkscape:label="Bezel grey"
-     style="display:inline"
-     transform="translate(0,-149)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer26"
-     inkscape:label="Symboles"
-     style="display:inline">
-    <g
-       aria-label="⇩"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math Bold';letter-spacing:0px;word-spacing:0px;fill:#f2a900;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       id="text4049"
-       transform="matrix(1.4998591,0,0,1,-19.994364,0)" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer23"
-     inkscape:label="Text"
-     style="display:inline" />
   <g
      inkscape:groupmode="layer"
      id="layer8"

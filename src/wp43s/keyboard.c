@@ -1071,7 +1071,24 @@ void btnPressed(void *notUsed, void *data) {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
             if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
+
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+
+              //JM Include or exclude HOME menu screens  //JMHOME
+              #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
+                #define A1 3   //HAAKON
+                #define A2 9   //HAAKON
+                #define B1 10  //NIGEL
+                #define B2 11  //NIGEL
+                #define C1 12  //JACO
+                #define C2 18  //JACO
+                #define HOME_SCHEME_A 1
+                #define HOME_SCHEME_B 0
+                #define HOME_SCHEME_C 0
+                if (HOME_SCHEME_A == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
+                if (HOME_SCHEME_B == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
+                if (HOME_SCHEME_C == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
+              #endif
               showSoftmenuCurrentPart();
             }
             else {
@@ -1184,6 +1201,13 @@ void btnPressed(void *notUsed, void *data) {
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
               softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
+
+            //JM Include or exclude HOME menu screens  //JMHOME
+            #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.            
+              if (HOME_SCHEME_C == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
+              if (HOME_SCHEME_B == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
+              if (HOME_SCHEME_A == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
+            #endif
             }
             else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
               softmenuStack[softmenuStackPointer - 1].firstItem = 0;

@@ -480,20 +480,21 @@ const int16_t menu_ASN[]         = {
 
 
 const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
-/*HOME1 */
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+/*HOME0 */
+/*0x18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      ITM_toREC,                     ITM_toPOL,                  ITM_PARALLEL,             KEY_CC,                ITM_MAGNITUDE,               ITM_ANGLE,                          //JM HOME
                                      ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
-/*HOME5*/                                                                                                                                                                                                         //JM HOME
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+/*HOME-1*/                                                                                                                                                                                                         //JM HOME
+/*1*18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      ITM_NULL,                      KEY_TYPCON_DN,              KEY_TYPCON_UP,            ITM_toSI,              -MNU_BASE,                   -MNU_INTS,                          //JM HOME
                                      ITM_SF,                        ITM_CF,                     ITM_RL,                   ITM_RR,                ITM_RMD,                     ITM_IDIV,                           //JM HOME
-/*HOME4*/                                                                                                                                                                                                         //JM HOME
-                                     ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
+/*HOME-2*/                                                                                                                                                                                                         //JM HOME
+/*2*18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      -MNU_TRI,                      -MNU_EXP,                   -MNU_CPX,                 -MNU_XFN,              -MNU_MyMenu,                 -MNU_EE,                            //JM HOME
                                      -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,               ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
                                        
 
+                        #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
 
 
 //HAAKON SUGGESTIONS OF FULL REPLICA
@@ -545,10 +546,10 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 
 
 
-                              #ifdef XXXX
 
-
-//JACO PROPOSAL WITH FIXED BUTTONS
+//JACO PROPOSAL WITH FIXED BUTTONS RUNG #1, ALL F-functions on RUNG #2, ALL G-functions on RUNG #3
+//
+//################################################################################################
 /*ROW 7    */                       ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
 /* f       */                       KEY_EXIT1,              ITM_OFF,          -MNU_HOME,        ITM_SHOW,         ITM_PR,           -MNU_CATALOG,    
 /* g       */                       KEY_EXIT1,              -MNU_PRINT,       ITM_TIMER,        ITM_VIEW,         -MNU_STK,         -MNU_PARTS,   
@@ -580,11 +581,9 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 
 
 
-
-
-
-
-                              #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
+//STANDARD FOUR HOME MENUS WITH FIXED BUTTONS RUNG #1
+//
+//################################################################################################
                                                                    ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                                                    KEY_EXIT1,                     -MNU_PRINT,                 ITM_TIMER,                ITM_VIEW,              -MNU_STK,                    -MNU_PARTS,                         //JM HOME
                                                                    KEY_fg,                        ITM_NULL,                   -MNU_ASN,                 -MNU_LOOP,             -MNU_TEST,                   -MNU_ALPHAFN,                       //JM HOME
@@ -608,12 +607,11 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
                                                                    ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                                                    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
                                                                    ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
-                              #endif //JM END OF LAYOUT 2 DM42 STRICT.
-                              #endif //XXXX
+                        #endif //JM END OF LAYOUT 2 DM42 STRICT.
 
 
 
-/*HOME2*/
+/*HOME1*/
                                      ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      ITM_SI_f,                      ITM_SI_p,                   ITM_PARALLEL,             KEY_CC,                ITM_MAGNITUDE,               ITM_SI_T,                           //JM HOME                                    
                                      ITM_SI_n,                      ITM_SI_u,                   ITM_SI_m,                 ITM_SI_k,              ITM_SI_M,                    ITM_SI_G                            //JM UNITS SI

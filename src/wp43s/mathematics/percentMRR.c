@@ -45,7 +45,7 @@ static void percentMRR() {
   /*
    * Convert register X.
    */
-  if(! convertRegisterToReal(REGISTER_X, &xReal)) {
+  if (!convertRegisterToReal(REGISTER_X, &xReal)) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -56,7 +56,7 @@ static void percentMRR() {
   /*
    * Convert register Y.
    */
-  if(! convertRegisterToReal(REGISTER_Y, &yReal)) {
+  if (!convertRegisterToReal(REGISTER_Y, &yReal)) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
@@ -67,7 +67,7 @@ static void percentMRR() {
   /*
    * Convert register Z
    */
-  if(! convertRegisterToReal(REGISTER_Z, &zReal)) {
+  if (!convertRegisterToReal(REGISTER_Z, &zReal)) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Z);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in Z", getRegisterDataTypeName(REGISTER_Z, true, false));
@@ -80,40 +80,37 @@ static void percentMRR() {
    */
   real_t q;
 
-  if(realIsZero(&xReal) && realIsZero(&yReal)) {
-    if(getFlag(FLAG_DANGER)) {
+  if (realIsZero(&xReal) && realIsZero(&yReal)) {
+    if (getFlag(FLAG_DANGER)) {
       realCopy(const_NaN, &q);
-    }
-    else {
+    } else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnPercentMRTR:", "cannot divide x=0 by y=0", NULL, NULL);
       #endif
+      return;
     }
-  }
-  else if(realIsZero(&yReal))
-  {
-    if(getFlag(FLAG_DANGER)) {
-      realCopy((realIsPositive(&xReal) ? const_plusInfinity : const_minusInfinity),&q);
-    }
-    else {
+  } else if (realIsZero(&yReal)) {
+    if (getFlag(FLAG_DANGER)) {
+      realCopy((realIsPositive(&xReal) ? const_plusInfinity : const_minusInfinity), &q);
+    } else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         showInfoDialog("In function fnPercentMRTR:", "cannot divide a real by 0", NULL, NULL);
       #endif
+      return;
     }
   }
-  else {
-    realDivide(&xReal, &yReal, &q, &ctxtReal39);        // q = x/y
-    realDivide(const_1, &zReal, &zReal, &ctxtReal39);   // z = 1/z
-    realPower(&q, &zReal, &q, &ctxtReal39);             // q = pow(x/y, 1/z)
-    realSubtract(&q, const_1, &q, &ctxtReal39);         // q = pow(x/y, 1/z) - 1
-    realMultiply(&q, const_100, &q, &ctxtReal39);       // q = 100 * ( pow(x/y, 1/z) - 1 )
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    realToReal34(&q, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
-  }
+  realDivide(&xReal, &yReal, &q, &ctxtReal39);        // q = x/y
+  realDivide(const_1, &zReal, &zReal, &ctxtReal39);   // z = 1/z
+  realPower(&q, &zReal, &q, &ctxtReal39);             // q = pow(x/y, 1/z)
+  realSubtract(&q, const_1, &q, &ctxtReal39);         // q = pow(x/y, 1/z) - 1
+  realMultiply(&q, const_100, &q, &ctxtReal39);       // q = 100 * ( pow(x/y, 1/z) - 1 )
+
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&q, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 /********************************************//**
@@ -131,6 +128,6 @@ void fnPercentMRR(uint16_t unusedParamButMandatory) {
   percentMRR();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
-  if(lastErrorCode == 0)
+  if (lastErrorCode == 0)
     fnDropY(NOPARAM);
 }

@@ -20,20 +20,20 @@
 
 #include "wp43s.h"
 
-static void percentDataTypeError(void);
+static void dataTtypeError(void);
 
-void (* const percent[9][9])(void) = {
-// regX |    regY ==>    1                      2                      3                      4                      5                      6                      7                      8                      9
-//      V                Long integer           Real34                 Complex34              Time                   Date                   String                 Real34 mat             Complex34 mat          Short integer
-/*  1 Long integer  */ { percentLonILonI,       percentRealLonI,       percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  2 Real34        */ { percentLonIReal,       percentRealReal,       percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  3 Complex34     */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  4 Time          */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  5 Date          */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  6 String        */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  7 Real34 mat    */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  8 Complex34 mat */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError },
-/*  9 Short integer */ { percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError,  percentDataTypeError }
+static void (* const functionMatrix[9][9])(void) = {
+// regX |    regY ==>    1               2                3               4               5               6               7               8               9
+//      V                Long integer    Real34           Complex34       Time            Date            String          Real34 mat      Complex34 mat   Short integer
+/*  1 Long integer  */ {percentLonILonI, percentRealLonI, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  2 Real34        */ {percentLonIReal, percentRealReal, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  3 Complex34     */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  4 Time          */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  5 Date          */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  6 String        */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  7 Real34 mat    */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  8 Complex34 mat */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError },
+/*  9 Short integer */ {dataTtypeError,  dataTtypeError,  dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError, dataTtypeError }
 };
 
 //=============================================================================
@@ -46,7 +46,7 @@ void (* const percent[9][9])(void) = {
  * \param void
  * \return void
  ***********************************************/
-static void percentDataTypeError(void) {
+static void dataTtypeError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -72,9 +72,9 @@ void fnPercent(uint16_t unusedParamButMandatory) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  percent[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 //=============================================================================

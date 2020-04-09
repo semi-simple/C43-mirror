@@ -33,7 +33,7 @@ static void (* const functionMatrix[9])(void) = {
 //-----------------------------------------------------------------------------
 
 /********************************************//**
- * \brief Data type error in %
+ * \brief Data type error in %Sigma
  *
  * \param void
  * \return void

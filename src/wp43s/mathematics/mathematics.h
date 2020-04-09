@@ -72,6 +72,7 @@
 #include "pcg_basic.h"
 #include "percent.h"
 #include "percentMRR.h"
+#include "percentPlusMG.h"
 #include "percentSigma.h"
 #include "percentT.h"
 #include "power.h"

@@ -406,6 +406,7 @@ void fnPercent                  (uint16_t unusedParamButMandatory) {}
 void fnPercentMRR               (uint16_t unusedParamButMandatory) {}
 void fnPercentT                 (uint16_t unusedParamButMandatory) {}
 void fnPercentSigma             (uint16_t unusedParamButMandatory) {}
+void fnPercentPlusMG            (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1219,7 +1220,7 @@ const item_t indexOfItems[] = {
 /*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { fnPercentT,                  NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_ENABLED  },
 /*  806 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_ENABLED  },
-/*  807 */  { itemToBeCoded,               NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  807 */  { fnPercentPlusMG,             NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  808 */  { fnSquareRoot,                NOPARAM,                     STD_SQUARE_ROOT STD_x_UNDER_ROOT,              STD_SQUARE_ROOT STD_x_UNDER_ROOT,              CAT_FNCT, SLS_ENABLED  },
 /*  809 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL,                                  STD_INTEGRAL,                                  CAT_FNCT, SLS_UNCHANGED},
 /*  810 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL "f",                              STD_INTEGRAL "f",                              CAT_MENU, SLS_UNCHANGED},

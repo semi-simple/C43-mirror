@@ -129,6 +129,7 @@ void runFunction(int16_t func) {
     #endif
   }
 }
+
 #endif
 
 #ifdef GENERATE_CATALOGS
@@ -404,6 +405,7 @@ void fnCross                    (uint16_t unusedParamButMandatory) {}
 void fnPercent                  (uint16_t unusedParamButMandatory) {}
 void fnPercentMRR               (uint16_t unusedParamButMandatory) {}
 void fnPercentT                 (uint16_t unusedParamButMandatory) {}
+void fnPercentSigma             (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1216,7 +1218,7 @@ const item_t indexOfItems[] = {
 /*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_ENABLED  },
 /*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { fnPercentT,                  NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_ENABLED  },
-/*  806 */  { itemToBeCoded,               NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_UNCHANGED},
+/*  806 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  807 */  { itemToBeCoded,               NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  808 */  { fnSquareRoot,                NOPARAM,                     STD_SQUARE_ROOT STD_x_UNDER_ROOT,              STD_SQUARE_ROOT STD_x_UNDER_ROOT,              CAT_FNCT, SLS_ENABLED  },
 /*  809 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL,                                  STD_INTEGRAL,                                  CAT_FNCT, SLS_UNCHANGED},
@@ -2002,5 +2004,5 @@ const item_t indexOfItems[] = {
 /* 1587 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            CAT_FNCT, SLS_ENABLED  },
 /* 1588 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            CAT_FNCT, SLS_ENABLED  },
 
-/* 1589 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED}
+/* 1589 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED},
 };

@@ -1218,7 +1218,7 @@ const item_t indexOfItems[] = {
 /*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           CAT_FNCT, SLS_ENABLED  },
 /*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { fnPercentT,                  NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_ENABLED  },
-/*  806 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_UNCHANGED},
+/*  806 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_ENABLED  },
 /*  807 */  { itemToBeCoded,               NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  808 */  { fnSquareRoot,                NOPARAM,                     STD_SQUARE_ROOT STD_x_UNDER_ROOT,              STD_SQUARE_ROOT STD_x_UNDER_ROOT,              CAT_FNCT, SLS_ENABLED  },
 /*  809 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL,                                  STD_INTEGRAL,                                  CAT_FNCT, SLS_UNCHANGED},

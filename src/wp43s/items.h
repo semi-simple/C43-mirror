@@ -25,8 +25,6 @@
 #define SLS_ENABLED   0
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
-
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1782,9 +1780,9 @@
 #define ITM_BASE_HOME                 1742   //JM BASEMENU
 #define ITM_1743                      1743
 #define ITM_BASE_AHOME                1744   //JM BASEMENU
-#define Not_used1745                  1745
-#define Not_used1746                  1746
-#define Not_used1747                  1747
+#define ITM_H_SUMRY                   1745   //JMHOME
+#define ITM_H_REPLCA                  1746   //JMHOME
+#define ITM_H_FIXED                   1747   //JMHOME
 #define Not_used1748                  1748
 #define Not_used1749                  1749
 #define ITM_EE_D2Y                    1750   //JM EE

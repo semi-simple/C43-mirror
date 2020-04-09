@@ -91,7 +91,11 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1679 */  { ITM_HOMEx3,           JC_HOME_TRIPLE,         CB_JC },  //fnSetSetJM
 /* 1770 */  { ITM_HOMEx3T,          JC_SH_3T,               CB_JC },  //fnSetSetJM
 /* 1680 */  { ITM_SHTIM,            JC_SHFT_4s,             CB_JC },  //fnSetSetJM
-/* 1943 */  { ITM_VECT,             JC_VECT,                CB_JC }   //fnSetSetJM
+/* 1943 */  { ITM_VECT,             JC_VECT,                CB_JC },  //fnSetSetJM
+/* 1744 */  { ITM_H_SUMRY,          JC_H_SUM,               CB_JC },  //fnSetSetJM
+/* 1745 */  { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
+/* 1746 */  { ITM_H_FIXED,          JC_H_FIX,               CB_JC }   //fnSetSetJM
+
 #ifdef INLINE_TEST
 /* 1892 */, { ITM_TEST,             DR_ITM_TST,             CB_JC }   //fnSetInlineTest
 #endif
@@ -427,10 +431,16 @@ void fnRebuildRadioState() {
 #endif
 // 1943     { ITM_VECT,             JC_VECT,                CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);
+// 1744     { ITM_H_SUMRY,          JC_H_SUM,               CB_JC },  //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_H_SUM, jm_HOME_SUM);
+// 1745     { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_H_MIR, jm_HOME_MIR);
+// 1746     { ITM_H_FIXED,          JC_H_FIX,               CB_JC }   //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_H_FIX, jm_HOME_FIX);
 
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);
-  printf("Nbr of RadioButton/Checkbox  %6" FMTSIZE "\n",n);
+  printf("Nbr of RadioButton/Checkbox  %6" FMTSIZE " (MAX_RADIO_CB_ITEMS set to %d)\n",n,MAX_RADIO_CB_ITEMS);
 #endif
 }
 

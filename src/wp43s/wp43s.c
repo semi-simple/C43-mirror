@@ -141,6 +141,9 @@ bool_t               jm_FG_LINE;                              //JM Screen / keyb
 bool_t               jm_FG_DOTS;                              //JM Screen / keyboard operation setup
 bool_t               jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
 bool_t               jm_VECT;                                 //JM GRAPH
+bool_t               jm_HOME_SUM;                             //JMHOME
+bool_t               jm_HOME_MIR;                             //JMHOME
+bool_t               jm_HOME_FIX;                             //JMHOME
 uint8_t              SigFigMode;                              //JM SIGFIG
 bool_t               eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t               HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
@@ -342,6 +345,9 @@ void setupDefaults(void) {
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
   jm_G_DOUBLETAP = false;                                        //JM Screen / keyboard operation setup
   jm_VECT = false;                                               //JM Screen / keyboard operation setup
+  jm_HOME_SUM = false;                                           //JMHOME
+  jm_HOME_MIR = true;                                            //JMHOME
+  jm_HOME_FIX = false;                                           //JMHOME
 
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline

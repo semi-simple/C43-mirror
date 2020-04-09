@@ -2204,9 +2204,9 @@ const item_t indexOfItems[] = {
 /* 1742 */  { fnSetSetJM,                  JC_BASE_HOME,                "_HOME",                                       "HOME",                                        CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
 /* 1743 */  { itemToBeCoded,               NOPARAM,                     "1743",                                        "1743",                                        CAT_NONE, SLS_UNCHANGED},   // JM SCREEN SHOT
 /* 1744 */  { fnSetSetJM,                  JC_BASE_AHOME,               "_" STD_alpha "HOME",                          STD_alpha "HOME",                              CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
-/* 1745 */  { itemToBeCoded,               NOPARAM,                     "1745",                                        "1745",                                        CAT_FREE, SLS_UNCHANGED},
-/* 1746 */  { itemToBeCoded,               NOPARAM,                     "1746",                                        "1746",                                        CAT_FREE, SLS_UNCHANGED},
-/* 1747 */  { itemToBeCoded,               NOPARAM,                     "1747",                                        "1747",                                        CAT_FREE, SLS_UNCHANGED},
+/* 1745 */  { fnSetSetJM,                  JC_H_SUM,                    "H-SUMMARY",                                   "SUMRY",                                       CAT_NONE, SLS_UNCHANGED},   //JMHOME
+/* 1746 */  { fnSetSetJM,                  JC_H_MIR,                    "H-MIRROR",                                    "REPLCA",                                      CAT_NONE, SLS_UNCHANGED},   //JMHOME
+/* 1747 */  { fnSetSetJM,                  JC_H_FIX,                    "H-FIXED",                                     "FIXED",                                       CAT_NONE, SLS_UNCHANGED},   //JMHOME
 /* 1748 */  { itemToBeCoded,               NOPARAM,                     "1748",                                        "1748",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1749 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1750 */  { fnJM,                        7,                           "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA, "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA, CAT_FNCT, SLS_ENABLED  },   //JM EE

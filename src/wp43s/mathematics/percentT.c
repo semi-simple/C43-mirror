@@ -20,20 +20,20 @@
 
 #include "wp43s.h"
 
-static void percentTDataTypeError(void);
+static void dataTypeError(void);
 
-void (* const percentT[9][9])(void) = {
-// regX |    regY ==>    1                       2                       3                       4                       5                       6                       7                       8                       9
-//      V                Long integer            Real34                  Complex34               Time                    Date                    String                  Real34 mat              Complex34 mat           Short integer
-/*  1 Long integer  */ { percentTLonILonI,       percentTRealLonI,       percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  2 Real34        */ { percentTLonIReal,       percentTRealReal,       percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  3 Complex34     */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  4 Time          */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  5 Date          */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  6 String        */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  7 Real34 mat    */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  8 Complex34 mat */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError },
-/*  9 Short integer */ { percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError,  percentTDataTypeError }
+static void (* const functionMatrix[9][9])(void) = {
+// regX |    regY ==>    1                 2                 3              4              5              6              7              8              9
+//      V                Long integer      Real34            Complex34      Time           Date           String         Real34 mat     Complex34 mat  Short integer
+/*  1 Long integer  */ { percentTLonILonI, percentTRealLonI, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  2 Real34        */ { percentTLonIReal, percentTRealReal, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  3 Complex34     */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  4 Time          */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  5 Date          */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  6 String        */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  7 Real34 mat    */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  8 Complex34 mat */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError },
+/*  9 Short integer */ { dataTypeError,    dataTypeError,    dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError }
 };
 
 //=============================================================================
@@ -46,7 +46,7 @@ void (* const percentT[9][9])(void) = {
  * \param void
  * \return void
  ***********************************************/
-static void percentTDataTypeError(void) {
+static void dataTypeError(void) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -72,7 +72,7 @@ void fnPercentT(uint16_t unusedParamButMandatory) {
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    percentT[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+    functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
@@ -82,7 +82,6 @@ void fnPercentT(uint16_t unusedParamButMandatory) {
 //-----------------------------------------------------------------------------
 
 static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realContext_t *realContext) {
-    bool_t result = true;
     /*
      * Check x and y
      */
@@ -95,7 +94,7 @@ static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realCont
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             showInfoDialog("In function fnPercentT:", "cannot divide x=0 by y=0", NULL, NULL);
 #endif
-            result = false;
+            return false;
         }
     }
     else if(realIsZero(yReal))
@@ -108,7 +107,7 @@ static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realCont
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             showInfoDialog("In function fnPercentT:", "cannot divide a real by y=0", NULL, NULL);
 #endif
-            result = false;
+            return false;
         }
     }
     else {
@@ -116,7 +115,7 @@ static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realCont
         realDivide(rReal, yReal, rReal, realContext);       // rReal = xReal * 100.0 / yReal
     }
 
-    return result;
+    return true;
 }
 
 /********************************************//**

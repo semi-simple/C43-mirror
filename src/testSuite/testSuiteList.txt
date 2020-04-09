@@ -212,4 +212,6 @@ cross
 percent
 percentMRR
 percentT
+percentSigma
+
 

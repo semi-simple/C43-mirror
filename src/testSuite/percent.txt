@@ -12,25 +12,25 @@ Func: fnPercent
 ; %(Real, Real) --> Real
 ;=======================================
 In:  SL=1 FI=1 RY=Real:"123.456" RX=Real:"456.123"
-Out: EC=0 FI=1 SL=1 RL=Real:"456.123" RX=Real:"563.11121088"
+Out: EC=0 FI=1 SL=1 RL=Real:"456.123" RY=Real:"123.456" RX=Real:"563.11121088"
 
 ;=======================================
 ; %(Long Integer, Real) --> Real
 ;=======================================
 In:  SL=1 FI=1 RY=LonI:"123" RX=Real:"456.123"
-Out: EC=0 FI=1 SL=1 RL=Real:"456.123" RX=Real:"561.03129"
+Out: EC=0 FI=1 SL=1 RL=Real:"456.123" RY=LonI:"123" RX=Real:"561.03129"
 
 ;=======================================
 ; %(Long Integer, Long Integer) --> Real
 ;=======================================
 In:  SL=1 FI=1 RY=LonI:"123" RX=LonI:"456"
-Out: EC=0 FI=1 SL=1 RL=LonI:"456" RX=Real:"560.88"
+Out: EC=0 FI=1 SL=1 RL=LonI:"456" RY=LonI:"123" RX=Real:"560.88"
 
 ;=======================================
 ; %(Real, Long Integer) --> Real
 ;=======================================
 In:  SL=1 FI=1 RY=Real:"123.456" RX=LonI:"456"
-Out: EC=0 FI=1 SL=1 RL=LonI:"456" RX=Real:"562.95936"
+Out: EC=0 FI=1 SL=1 RL=LonI:"456" RY=Real:"123.456" RX=Real:"562.95936"
 
 ;=======================================
 ; Error case: ERROR_INVALID_DATA_INPUT_FOR_OP

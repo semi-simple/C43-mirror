@@ -137,6 +137,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnPercent",              fnPercent             },
   {"fnPercentMRR",           fnPercentMRR          },
   {"fnPercentT",             fnPercentT            },
+  {"fnPercentSigma",         fnPercentSigma        },
   {"fnPower",                fnPower               },
   {"fnPyx",                  fnPyx                 },
   {"fnRealPart",             fnRealPart            },
@@ -164,7 +165,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnToRect",               fnToRect              },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
-  {"",                       NULL                  }
+  {"",                       NULL            }
 };
 
 const funcTest_t funcTestCvt[] = {

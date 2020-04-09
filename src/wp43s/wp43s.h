@@ -18,7 +18,7 @@
  * \file wp43s.h
  ***********************************************/
 
-//#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+#//define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
 
 
 
@@ -97,6 +97,9 @@
 #endif
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
+  #undef  JM_LAYOUT_1A
+  #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+
   #undef  PC_BUILD
   #undef  DMCP_BUILD
   #undef  DEBUG_PANEL

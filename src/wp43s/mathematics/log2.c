@@ -143,6 +143,8 @@ void log2ShoI(void) {
 
 
 void log2Real(void) {
+  real_t a;
+
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
@@ -163,14 +165,23 @@ void log2Real(void) {
       #endif
       return;
     }
+    else if(getFlag(FLAG_CPXRES)) {
+      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realDivide(const_pi, const_ln2, &a, &ctxtReal39);
+        realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+      }
+    }
     else {
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 
   else {
-    real_t a;
-
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
       WP34S_Ln(&a, &a, &ctxtReal39);

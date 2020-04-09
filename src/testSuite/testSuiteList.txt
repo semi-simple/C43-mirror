@@ -160,6 +160,7 @@ arctan
 cos
 sin
 tan
+sinc
 
 arccosh
 arcsinh
@@ -208,3 +209,10 @@ decomp
 matrix
 dot
 cross
+
+percent
+percentMRR
+percentT
+percentSigma
+percentPlusMG
+deltaPercent

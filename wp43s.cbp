@@ -305,6 +305,9 @@
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/deltaPercent.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/division_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -473,6 +476,21 @@
 		<Unit filename="src/testSuite/parallel_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/percent.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/percentMRR.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/percentPlusMG.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/percentSigma.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/percentT.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/polarToRectangular.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -525,6 +543,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sin.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/sinc.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sinh.txt">
@@ -1253,6 +1274,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/deltaPercent.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/deltaPercent.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/division.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1566,6 +1598,61 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/percent.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percent.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentMRR.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentMRR.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentPlusMG.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentPlusMG.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentSigma.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentSigma.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentT.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/percentT.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/power.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1674,6 +1761,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/sin.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sinc.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sinc.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

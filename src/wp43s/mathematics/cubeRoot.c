@@ -165,10 +165,22 @@ void curtCplx(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
-  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
-  realPower(&a, const_1on3, &a, &ctxtReal39);
-  realMultiply(&b, const_1on3, &b, &ctxtReal39);
-  realPolarToRectangular(&a, &b, &a, &b, &ctxtReal39);
+  if(realIsZero(&b)) {
+    if(realIsPositive(&a)) {
+      realPower(&a, const_1on3, &a, &ctxtReal39);
+    }
+    else {
+      realSetPositiveSign(&a);
+      realPower(&a, const_1on3, &a, &ctxtReal39);
+      realSetNegativeSign(&a);
+    }
+  }
+  else {
+    realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
+    realPower(&a, const_1on3, &a, &ctxtReal39);
+    realMultiply(&b, const_1on3, &b, &ctxtReal39);
+    realPolarToRectangular(&a, &b, &a, &b, &ctxtReal39);
+  }
 
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

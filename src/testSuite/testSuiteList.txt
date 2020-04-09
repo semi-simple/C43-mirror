@@ -160,6 +160,7 @@ arctan
 cos
 sin
 tan
+sinc
 
 arccosh
 arcsinh

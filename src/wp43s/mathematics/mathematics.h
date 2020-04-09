@@ -86,6 +86,7 @@
 #include "roundi.h"
 #include "sign.h"
 #include "sin.h"
+#include "sinc.h"
 #include "sinh.h"
 #include "slvq.h"
 #include "square.h"

@@ -47,13 +47,13 @@ static void (* const functionMatrix[9][9])(void) = {
  * \return void
  ***********************************************/
 static void dataTypeError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnPercentT:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-#endif
+  #endif
 }
 
 //=============================================================================
@@ -69,12 +69,12 @@ static void dataTypeError(void) {
  * \return void
  ***********************************************/
 void fnPercentT(uint16_t unusedParamButMandatory) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 //=============================================================================
@@ -82,40 +82,40 @@ void fnPercentT(uint16_t unusedParamButMandatory) {
 //-----------------------------------------------------------------------------
 
 static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realContext_t *realContext) {
-    /*
-     * Check x and y
-     */
-    if(realIsZero(xReal) && realIsZero(yReal)) {
-        if(getFlag(FLAG_DANGER)) {
-            realCopy(const_NaN, rReal);
-        }
-        else {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            showInfoDialog("In function fnPercentT:", "cannot divide x=0 by y=0", NULL, NULL);
-#endif
-            return false;
-        }
-    }
-    else if(realIsZero(yReal))
-    {
-        if(getFlag(FLAG_DANGER)) {
-            realCopy((realIsPositive(xReal) ? const_plusInfinity : const_minusInfinity), rReal);
-        }
-        else {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            showInfoDialog("In function fnPercentT:", "cannot divide a real by y=0", NULL, NULL);
-#endif
-            return false;
-        }
+  /*
+   * Check x and y
+   */
+  if(realIsZero(xReal) && realIsZero(yReal)) {
+    if(getFlag(FLAG_DANGER)) {
+      realCopy(const_NaN, rReal);
     }
     else {
-        realMultiply(xReal, const_100, rReal, realContext); // rReal = xReal * 100.0
-        realDivide(rReal, yReal, rReal, realContext);       // rReal = xReal * 100.0 / yReal
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnPercentT:", "cannot divide x=0 by y=0", NULL, NULL);
+      #endif
+      return false;
     }
+  }
+  else if(realIsZero(yReal))
+  {
+    if(getFlag(FLAG_DANGER)) {
+      realCopy((realIsPositive(xReal) ? const_plusInfinity : const_minusInfinity), rReal);
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnPercentT:", "cannot divide a real by y=0", NULL, NULL);
+      #endif
+      return false;
+    }
+  }
+  else {
+    realMultiply(xReal, const_100, rReal, realContext); // rReal = xReal * 100.0
+    realDivide(rReal, yReal, rReal, realContext);       // rReal = xReal * 100.0 / yReal
+  }
 
-    return true;
+  return true;
 }
 
 /********************************************//**
@@ -125,17 +125,17 @@ static bool_t percentTReal(real_t *xReal, real_t *yReal, real_t *rReal, realCont
  * \return void
  ***********************************************/
 void percentTLonILonI(void) {
-    real_t xReal, yReal;
-    real_t rReal;
+  real_t xReal, yReal;
+  real_t rReal;
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
 
-    if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+  if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -145,15 +145,15 @@ void percentTLonILonI(void) {
  * \return void
  ***********************************************/
 void percentTLonIReal(void) {
-    real_t xReal, yReal;
-    real_t rReal;
+  real_t xReal, yReal;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
 
-    if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+  if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }
 
 /********************************************//**
@@ -163,17 +163,17 @@ void percentTLonIReal(void) {
  * \return void
  ***********************************************/
 void percentTRealLonI(void) {
-    real_t xReal, yReal;
-    real_t rReal;
+  real_t xReal, yReal;
+  real_t rReal;
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
 
-    if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+  if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -183,13 +183,13 @@ void percentTRealLonI(void) {
  * \return void
  ***********************************************/
 void percentTRealReal(void) {
-    real_t xReal, yReal;
-    real_t rReal;
+  real_t xReal, yReal;
+  real_t rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
 
-    if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+  if(percentTReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }

@@ -545,6 +545,9 @@
 		<Unit filename="src/testSuite/sin.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/sinc.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/sinh.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1758,6 +1761,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/sin.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sinc.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sinc.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -491,7 +491,7 @@ const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME 
 /*HOME-2*/                                                                                                                                                                                                         //JM HOME
 /*2*18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
                                      -MNU_TRI,                      -MNU_EXP,                   -MNU_CPX,                 -MNU_XFN,              -MNU_MyMenu,                 -MNU_EE,                            //JM HOME
-                                     -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,               ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM HOME
+                                     -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,              ITM_H_SUMRY,           ITM_H_REPLCA,                ITM_H_FIXED,                        //JM HOME
                                        
 
                         #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.

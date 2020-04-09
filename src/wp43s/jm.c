@@ -182,6 +182,27 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
 
 
 
+  case JC_H_SUM:                                      //JM
+    jm_HOME_SUM = !jm_HOME_SUM;
+    fnRefreshComboxState(CB_JC, JC_H_SUM, jm_HOME_SUM);                //jm
+    break;
+
+  case JC_H_MIR:                                      //JM
+    jm_HOME_MIR = !jm_HOME_MIR;
+    fnRefreshComboxState(CB_JC, JC_H_MIR, jm_HOME_MIR);                //jm
+    break;
+
+  case JC_H_FIX:                                      //JM
+    jm_HOME_FIX = !jm_HOME_FIX;
+    fnRefreshComboxState(CB_JC, JC_H_FIX, jm_HOME_FIX);                //jm
+    break;
+
+
+
+
+
+
+
   default:
     break;
   }

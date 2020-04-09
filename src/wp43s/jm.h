@@ -98,6 +98,9 @@ extern float graph_ymax;                                             //JM Graph
 extern float graph_dx;                                               //JM Graph
 extern float graph_dy;                                               //JM Graph
 extern bool_t jm_VECT;                                               //JM GRAPH setup
+extern bool_t jm_HOME_SUM;                                          //JMHOME
+extern bool_t jm_HOME_MIR;                                          //JMHOME
+extern bool_t jm_HOME_FIX;                                          //JMHOME
 
 
 
@@ -184,6 +187,11 @@ char* itoa(int value, char* result, int base);
 #define JC_G_DOUBLETAP         22    // screen setup
 
 #define JC_VECT                23    // screen setup
+
+#define JC_H_SUM               24    //JMHOME
+#define JC_H_MIR               25    //JMHOME
+#define JC_H_FIX               26    //JMHOME
+
 
 //items.c
 void fnDisplayFormatSigFig(uint16_t displayFormatN);

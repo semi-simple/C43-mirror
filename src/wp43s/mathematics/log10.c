@@ -143,6 +143,8 @@ void log10ShoI(void) {
 
 
 void log10Real(void) {
+  real_t x;
+
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     if(getFlag(FLAG_DANGER)) {
       realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
@@ -159,18 +161,27 @@ void log10Real(void) {
     if(!getFlag(FLAG_DANGER)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log10 when flag D is not set", NULL, NULL);
+        showInfoDialog("In function log10Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log when flag D is not set", NULL, NULL);
       #endif
       return;
     }
+    else if(getFlag(FLAG_CPXRES)) {
+      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realDivide(const_pi, const_ln10, &x, &ctxtReal39);
+        realToReal34(&x, REGISTER_IMAG34_DATA(REGISTER_X));
+      }
+    }
     else {
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 
   else {
-    real_t x;
-
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
       WP34S_Ln(&x, &x, &ctxtReal39);

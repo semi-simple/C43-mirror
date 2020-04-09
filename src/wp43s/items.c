@@ -407,6 +407,7 @@ void fnPercentMRR               (uint16_t unusedParamButMandatory) {}
 void fnPercentT                 (uint16_t unusedParamButMandatory) {}
 void fnPercentSigma             (uint16_t unusedParamButMandatory) {}
 void fnPercentPlusMG            (uint16_t unusedParamButMandatory) {}
+void fnDeltaPercent             (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1139,7 +1140,7 @@ const item_t indexOfItems[] = {
 /*  723 */  { itemToBeCoded,               NOPARAM,                     STD_GAMMA STD_SUB_x STD_SUB_y,                 STD_GAMMA STD_SUB_x STD_SUB_y,                 CAT_FNCT, SLS_UNCHANGED},
 /*  724 */  { fnGamma,                     NOPARAM,                     STD_GAMMA "(x)",                               STD_GAMMA "(x)",                               CAT_FNCT, SLS_ENABLED  },
 /*  725 */  { itemToBeCoded,               NOPARAM,                     STD_delta "x",                                 STD_delta "x",                                 CAT_NONE, SLS_UNCHANGED},
-/*  726 */  { itemToBeCoded,               NOPARAM,                     STD_DELTA "%",                                 STD_DELTA "%",                                 CAT_FNCT, SLS_UNCHANGED},
+/*  726 */  { fnDeltaPercent,              NOPARAM,                     STD_DELTA "%",                                 STD_DELTA "%",                                 CAT_FNCT, SLS_ENABLED  },
 /*  727 */  { itemToBeCoded,               NOPARAM,                     STD_epsilon,                                   STD_epsilon,                                   CAT_FNCT, SLS_UNCHANGED},
 /*  728 */  { fnConstant,                  60,                          STD_epsilon STD_SUB_0,                         STD_epsilon STD_SUB_0,                         CAT_CNST, SLS_ENABLED  },
 /*  729 */  { itemToBeCoded,               NOPARAM,                     STD_epsilon STD_SUB_m,                         STD_epsilon STD_SUB_m,                         CAT_FNCT, SLS_UNCHANGED},
@@ -1220,7 +1221,7 @@ const item_t indexOfItems[] = {
 /*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { fnPercentT,                  NOPARAM,                     "%T",                                          "%T",                                          CAT_FNCT, SLS_ENABLED  },
 /*  806 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 CAT_FNCT, SLS_ENABLED  },
-/*  807 */  { fnPercentPlusMG,             NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  807 */  { fnPercentPlusMG,             NOPARAM,                     "%+MG",                                        "%+MG",                                        CAT_FNCT, SLS_ENABLED  },
 /*  808 */  { fnSquareRoot,                NOPARAM,                     STD_SQUARE_ROOT STD_x_UNDER_ROOT,              STD_SQUARE_ROOT STD_x_UNDER_ROOT,              CAT_FNCT, SLS_ENABLED  },
 /*  809 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL,                                  STD_INTEGRAL,                                  CAT_FNCT, SLS_UNCHANGED},
 /*  810 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL "f",                              STD_INTEGRAL "f",                              CAT_MENU, SLS_UNCHANGED},

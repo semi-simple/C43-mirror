@@ -81,6 +81,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCyx",                  fnCyx                 },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
+  {"fnDeltaPercent",         fnDeltaPercent        },
   {"fnDenMax",               fnDenMax              },
   {"fnDivide",               fnDivide              },
   {"fnDot",                  fnDot                 },

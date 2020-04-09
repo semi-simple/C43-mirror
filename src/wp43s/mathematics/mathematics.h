@@ -42,6 +42,7 @@
 #include "cxToRe.h"
 #include "cpyx.h"
 #include "decomp.h"
+#include "deltaPercent.h"
 #include "division.h"
 #include "dot.h"
 #include "exp.h"

@@ -81,6 +81,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCyx",                  fnCyx                 },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
+  {"fnDeltaPercent",         fnDeltaPercent        },
   {"fnDenMax",               fnDenMax              },
   {"fnDivide",               fnDivide              },
   {"fnDot",                  fnDot                 },
@@ -137,6 +138,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnPercent",              fnPercent             },
   {"fnPercentMRR",           fnPercentMRR          },
   {"fnPercentT",             fnPercentT            },
+  {"fnPercentPlusMG",        fnPercentPlusMG       },
+  {"fnPercentSigma",         fnPercentSigma        },
   {"fnPower",                fnPower               },
   {"fnPyx",                  fnPyx                 },
   {"fnRealPart",             fnRealPart            },
@@ -149,6 +152,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnRoundi",               fnRoundi              },
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
+  {"fnSinc",                 fnSinc                },
   {"fnSinh",                 fnSinh                },
   {"fnSlvq",                 fnSlvq                },
   {"fnSquare",               fnSquare              },
@@ -164,7 +168,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnToRect",               fnToRect              },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
-  {"",                       NULL                  }
+  {"",                       NULL            }
 };
 
 const funcTest_t funcTestCvt[] = {

@@ -164,6 +164,7 @@ void curtCplx(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+
   if(realIsZero(&b)) {
     if(realIsPositive(&a)) {
       realPower(&a, const_1on3, &a, &ctxtReal39);

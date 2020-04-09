@@ -213,5 +213,6 @@ percent
 percentMRR
 percentT
 percentSigma
+percentPlusMG
 
 

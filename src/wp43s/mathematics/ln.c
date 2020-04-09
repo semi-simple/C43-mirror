@@ -210,8 +210,18 @@ void lnReal(void) {
       #endif
       return;
     }
+    else if(getFlag(FLAG_CPXRES)) {
+      if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
+      }
+    }
     else {
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 

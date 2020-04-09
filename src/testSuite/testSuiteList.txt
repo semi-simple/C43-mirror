@@ -214,5 +214,4 @@ percentMRR
 percentT
 percentSigma
 percentPlusMG
-
-
+deltaPercent

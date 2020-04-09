@@ -160,6 +160,7 @@ arctan
 cos
 sin
 tan
+sinc
 
 arccosh
 arcsinh
@@ -212,4 +213,6 @@ cross
 percent
 percentMRR
 percentT
-
+percentSigma
+percentPlusMG
+deltaPercent

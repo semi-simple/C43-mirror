@@ -39,12 +39,12 @@ static void (* const functionMatrix[9])(void) = {
  * \return void
  ***********************************************/
 static void dataTypeError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot use %s", getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnPercentSigma:", errorMessage, NULL, NULL);
-#endif
+  #endif
 }
 
 //=============================================================================
@@ -60,21 +60,21 @@ static void dataTypeError(void) {
  * \return void
  ***********************************************/
 void fnPercentSigma(uint16_t unusedParamButMandatory) {
-    if(statisticalSumsPointer == NULL) {
-        displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "There is no statistical data available!");
-        showInfoDialog("In function fnPercentSigma:", errorMessage, NULL, NULL);
-#endif
-    }
-    else {
-        saveStack();
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(statisticalSumsPointer == NULL) {
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnPercentSigma:", errorMessage, NULL, NULL);
+    #endif
+  }
+  else {
+    saveStack();
+    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-        functionMatrix[getRegisterDataType(REGISTER_X)]();
+    functionMatrix[getRegisterDataType(REGISTER_X)]();
 
-        adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
-    }
+    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  }
 }
 
 //=============================================================================
@@ -82,25 +82,25 @@ void fnPercentSigma(uint16_t unusedParamButMandatory) {
 //-----------------------------------------------------------------------------
 
 static bool_t percentSigma(real_t *xReal, real_t *rReal, realContext_t *realContext) {
-    real34ToReal(SIGMA_X, rReal);    // r = Sum(x)
+  real34ToReal(SIGMA_X, rReal);    // r = Sum(x)
 
-    if(realIsZero(rReal)) {
-        if(getFlag(FLAG_DANGER)) {
-            realCopy((realIsPositive(rReal) ? const_plusInfinity : const_minusInfinity), rReal);
-        }
-        else {
-            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            showInfoDialog("In function fnPercentSigma:", "cannot divide a real by 0", NULL, NULL);
-#endif
-            return false;
-        }
+  if(realIsZero(rReal)) {
+    if(getFlag(FLAG_DANGER)) {
+      realCopy((realIsPositive(rReal) ? const_plusInfinity : const_minusInfinity), rReal);
     }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function fnPercentSigma:", "cannot divide a real by 0", NULL, NULL);
+      #endif
+      return false;
+    }
+  }
 
-    realDivide(xReal, rReal, rReal, realContext);       // r = x/Sum(x)
-    realMultiply(rReal, const_100, rReal, realContext); // r = 100*x/Sum(x)
+  realDivide(xReal, rReal, rReal, realContext);       // r = x/Sum(x)
+  realMultiply(rReal, const_100, rReal, realContext); // r = 100*x/Sum(x)
 
-    return true;
+  return true;
 }
 
 /********************************************//**
@@ -110,15 +110,15 @@ static bool_t percentSigma(real_t *xReal, real_t *rReal, realContext_t *realCont
  * \return void
  ***********************************************/
 void percentSigmaLonI(void) {
-    real_t xReal, rReal;
+  real_t xReal, rReal;
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
 
-    if(percentSigma(&xReal, &rReal, &ctxtReal39)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-    }
+  if(percentSigma(&xReal, &rReal, &ctxtReal39)) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 /********************************************//**
@@ -128,11 +128,11 @@ void percentSigmaLonI(void) {
  * \return void
  ***********************************************/
 void percentSigmaReal(void) {
-    real_t xReal, rReal;
+  real_t xReal, rReal;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
 
-    if(percentSigma(&xReal, &rReal, &ctxtReal39)) {
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+  if(percentSigma(&xReal, &rReal, &ctxtReal39)) {
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }

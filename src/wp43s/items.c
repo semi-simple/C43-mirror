@@ -159,6 +159,7 @@ void fnArctanh                  (uint16_t unusedParamButMandatory) {}
 void fnCos                      (uint16_t unusedParamButMandatory) {}
 void fnCosh                     (uint16_t unusedParamButMandatory) {}
 void fnSin                      (uint16_t unusedParamButMandatory) {}
+void fnSinc                     (uint16_t unusedParamButMandatory) {}
 void fnSinh                     (uint16_t unusedParamButMandatory) {}
 void fnTan                      (uint16_t unusedParamButMandatory) {}
 void fnTanh                     (uint16_t unusedParamButMandatory) {}
@@ -983,7 +984,7 @@ const item_t indexOfItems[] = {
 /*  567 */  { fnIntegerMode,               SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  568 */  { itemToBeCoded,               NOPARAM,                     "SIM_EQ",                                      "SIM EQ",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  569 */  { fnSin,                       NOPARAM,                     "sin",                                         "sin",                                         CAT_FNCT, SLS_ENABLED  },
-/*  570 */  { itemToBeCoded,               NOPARAM,                     "sinc",                                        "sinc",                                        CAT_FNCT, SLS_ENABLED  },
+/*  570 */  { fnSinc,                      NOPARAM,                     "sinc",                                        "sinc",                                        CAT_FNCT, SLS_ENABLED  },
 /*  571 */  { fnSinh,                      NOPARAM,                     "sinh",                                        "sinh",                                        CAT_FNCT, SLS_ENABLED  },
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  573 */  { fnSl,                        TM_VALUE,                    "SL",                                          "SL",                                          CAT_FNCT, SLS_ENABLED  },

@@ -152,6 +152,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnRoundi",               fnRoundi              },
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
+  {"fnSinc",                 fnSinc                },
   {"fnSinh",                 fnSinh                },
   {"fnSlvq",                 fnSlvq                },
   {"fnSquare",               fnSquare              },

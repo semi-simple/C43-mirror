@@ -1075,20 +1075,19 @@ void btnPressed(void *notUsed, void *data) {
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
 
               //JM Include or exclude HOME menu screens  //JMHOME
-              #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
-                #define A1 3   //HAAKON
+                #define A1 3   //HAAKON //jm_HOME_MIR
                 #define A2 9   //HAAKON
-                #define B1 10  //NIGEL
+                #define B1 10  //NIGEL  //jm_HOME_SUM
                 #define B2 11  //NIGEL
-                #define C1 12  //JACO
+                #define C1 12  //JACO   //jm_HOME_FIX
                 #define C2 18  //JACO
-                #define HOME_SCHEME_A 1
-                #define HOME_SCHEME_B 0
-                #define HOME_SCHEME_C 0
-                if (HOME_SCHEME_A == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
-                if (HOME_SCHEME_B == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
-                if (HOME_SCHEME_C == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
-              #endif
+                int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+                //printf("--1:%d %d %d menuId:%d item:%d  \n",jm_HOME_MIR,jm_HOME_SUM,jm_HOME_FIX,smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
+                if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
+                if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
+                if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
+                //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+                //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
               showSoftmenuCurrentPart();
             }
             else {
@@ -1202,12 +1201,13 @@ void btnPressed(void *notUsed, void *data) {
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
               softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
 
+
+
             //JM Include or exclude HOME menu screens  //JMHOME
-            #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.            
-              if (HOME_SCHEME_C == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
-              if (HOME_SCHEME_B == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
-              if (HOME_SCHEME_A == 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
-            #endif
+              int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+              if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
+              if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
+              if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
             }
             else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
               softmenuStack[softmenuStackPointer - 1].firstItem = 0;

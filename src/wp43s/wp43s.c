@@ -344,11 +344,16 @@ void setupDefaults(void) {
   jm_FG_LINE = true;                                             //JM Screen / keyboard operation setup
   jm_FG_DOTS = false;                                            //JM Screen / keyboard operation setup
   jm_G_DOUBLETAP = false;                                        //JM Screen / keyboard operation setup
+
   jm_VECT = false;                                               //JM Screen / keyboard operation setup
+  jm_HOME_SUM = false;                                           //JMHOME
+  jm_HOME_MIR = false;                                           //JMHOME
+  jm_HOME_FIX = false;                                           //JMHOME
+#if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
   jm_HOME_SUM = false;                                           //JMHOME
   jm_HOME_MIR = true;                                            //JMHOME
   jm_HOME_FIX = false;                                           //JMHOME
-
+#endif
   ULFL = false;                                                  //JM Underline
   ULGL = false;                                                  //JM Underline
   FN_state = ST_0_INIT;                                          //JM FN-DOUBLE

@@ -652,6 +652,15 @@ void fnReset(uint16_t confirmation) {
     graph_dx   = 0;                                                //JM GRAPH
     graph_dy   = 0;                                                //JM GRAPH
 
+    jm_VECT = false;                                               //JM Screen / keyboard operation setup
+    jm_HOME_SUM = false;                                           //JMHOME
+    jm_HOME_MIR = false;                                           //JMHOME
+    jm_HOME_FIX = false;                                           //JMHOME
+    #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)    //JM LAYOUT 2. DM42 STRICT.
+    jm_HOME_SUM = false;                                           //JMHOME
+    jm_HOME_MIR = true;                                            //JMHOME
+    jm_HOME_FIX = false;                                           //JMHOME
+    #endif
 
 
 

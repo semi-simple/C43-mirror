@@ -181,7 +181,6 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
 
 
 
-
   case JC_H_SUM:                                      //JM
     jm_HOME_SUM = !jm_HOME_SUM;
     fnRefreshComboxState(CB_JC, JC_H_SUM, jm_HOME_SUM);                //jm

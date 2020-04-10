@@ -48,7 +48,6 @@
   void calcModeNormalGui(void);
   void calcModeAimGui   (void);
   void calcModeTamGui   (void);
-  void calcModeAsmGui   (void);
 #endif
 
 #ifndef DMCP_BUILD

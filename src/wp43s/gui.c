@@ -639,80 +639,6 @@ void calcModeAimGui(void) {
 
 
 
-void calcModeAsmGui(void) {
-  const calcKey_t *keys;
-
-  keys = kbd_std;
-
-  labelCaptionAim(keys++, btn21);
-  labelCaptionAim(keys++, btn22);
-  labelCaptionAim(keys++, btn23);
-  labelCaptionAim(keys++, btn24);
-  labelCaptionAim(keys++, btn25);
-  labelCaptionAim(keys++, btn26);
-
-  labelCaptionAim(keys++, btn31);
-  labelCaptionAim(keys++, btn32);
-  labelCaptionAim(keys++, btn33);
-  labelCaptionAim(keys++, btn34);
-  labelCaptionAim(keys++, btn35);
-  labelCaptionAim(keys++, btn36);
-
-  labelCaptionAim(keys++, btn41);
-  labelCaptionAim(keys++, btn42);
-  labelCaptionAim(keys++, btn43);
-  labelCaptionAim(keys++, btn44);
-  labelCaptionAim(keys++, btn45);
-
-  labelCaptionAim(keys++, btn51);
-  labelCaptionAim(keys++, btn52);
-  labelCaptionAim(keys++, btn53);
-  labelCaptionAim(keys++, btn54);
-  labelCaptionAim(keys++, btn55);
-
-  labelCaptionAim(keys++, btn61);
-  labelCaptionAim(keys++, btn62);
-  labelCaptionAim(keys++, btn63);
-  labelCaptionAim(keys++, btn64);
-  labelCaptionAim(keys++, btn65);
-
-  labelCaptionAim(keys++, btn71);
-  labelCaptionAim(keys++, btn72);
-  labelCaptionAim(keys++, btn73);
-  labelCaptionAim(keys++, btn74);
-  labelCaptionAim(keys++, btn75);
-
-  labelCaptionAim(keys++, btn81);
-  labelCaptionAim(keys++, btn82);
-  labelCaptionAim(keys++, btn83);
-  labelCaptionAim(keys++, btn84);
-  labelCaptionAim(keys++, btn85);
-
-  gtk_image_set_from_file((GtkImage *)bezelImage, "artwork/bezel_ASM.png");
-
-  gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("artwork/key_22_AIM.png"));
-  gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("artwork/key_26_AIM.png"));
-
-  gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("artwork/key_empty.png"));
-  gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("artwork/key_empty.png"));
-
-  gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("artwork/key_42_AIM.png"));
-  gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("artwork/key_43_AIM.png"));
-  gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("artwork/key_empty.png"));
-
-  gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("artwork/key_empty.png"));
-
-  gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("artwork/key_empty.png"));
-}
-
-
-
 void calcModeTamGui(void) {
   const calcKey_t *keys;
 
@@ -1503,7 +1429,7 @@ void calcModeAsm(void) {
   resetAlphaSelectionBuffer();
 
   #ifdef PC_BUILD
-    calcModeAsmGui();
+    calcModeAimGui();
   #endif
 }
 

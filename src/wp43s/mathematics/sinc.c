@@ -80,7 +80,8 @@ void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t
   if(realIsZero(&rr) && realIsZero(&ii)) {
     realCopy(const_1, resReal);
     realCopy(const_0, resImag);
-  } else {
+  }
+  else {
     WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
     WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
@@ -102,7 +103,8 @@ void sincLonI(void) {
 
   if(realIsZero(&rr)) {
     realCopy(const_1, &x);
-  } else {
+  }
+  else {
     longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
     WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, &x, NULL, NULL, &ctxtReal39);
     realDivide(&x, &rr, &x, &ctxtReal39);
@@ -134,7 +136,7 @@ void sincReal(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function sinc:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
+        showInfoDialog("In function sincReal:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
       #endif
     }
   }
@@ -147,7 +149,8 @@ void sincReal(void) {
 
     if(realIsZero(&x)) {
       realCopy(const_1, &x);
-    } else {
+    }
+    else {
       realCopy(&x, &rr);
       xAngularMode = getRegisterAngularMode(REGISTER_X);
       WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &x, NULL, NULL, &ctxtReal39);

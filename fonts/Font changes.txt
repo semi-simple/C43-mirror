@@ -167,6 +167,9 @@ WP43S font:
 2020-04-10 Changed characters U+2430 and U+2433 in Standard font.
            Added characters U+2018 and U+2019 in Numeric font.
 
+           New WP43S_NumericFont.ttf generated.
+           New WP43S_StandardFont.ttf generated.
+
 
 WP43C font:
 2020-04-10 Copied 6 last glyphs in font from 2019-11-27 previous font, into the new WP43S font.

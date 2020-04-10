@@ -477,74 +477,93 @@ const int16_t menu_ASN[]         = {
       };
 
 //##################################################################################################################################################################################################################################
+const int16_t menu_A_HOME[360]   = { -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,               //HOME  0
+                                     -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,               //HOME -1  (Dn = -)
+                                     -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,               //HOME -2
+
+                                     -1,32,33,34,35,36,        -1 ,132,133,134,135,136,  -1 ,232,233,234,235,236,         //REPLICA ROW 7
+                                     -1,27,28,29,30,31,        -1 ,127,128,129,130,131,  -1 ,227,228,229,230,231,         //REPLICA ROW 6
+                                     -1,22,23,24,25,26,        -1 ,122,123,124,125,126,  -1 ,222,223,224,225,226,         //REPLICA ROW 5
+                                     -1,17,18,19,20,21,        -1 ,117,118,119,120,121,  -1 ,217,218,219,220,221,         //REPLICA ROW 4
+                                     -1,12,13,14,15,16,        -1 ,112,113,114,115,116,  -1 ,212,213,214,215,216,         //REPLICA ROW 3
+                                     6 , 7, 8, 9,10,11,        106,107,108,109,110,111,  206,207,208,209,210,211,         //REPLICA ROW 2
+                                     0 , 1, 2, 3, 4, 5,        100,101,102,103,104,105,  200,201,202,203,204,205,         //REPLICA ROW 1
+
+                                     -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,               //SUMMARY 1
+                                     -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,               //SUMMARY 2
+
+                                     -1,-1,-1,-1,-1,-1,        -1 ,132,133,134,135,136,  -1 ,232,233,234,235,136,         //FIXED ROW 7
+                                     -1,-1,-1,-1,-1,-1,        -1 ,127,128,129,130,131,  -1 ,227,228,229,230,231,         //FIXED ROW 6
+                                     -1,-1,-1,-1,-1,-1,        -1 ,122,123,124,125,126,  -1 ,222,223,224,225,226,         //FIXED ROW 5
+                                     -1,-1,-1,-1,-1,-1,        -1 ,117,118,119,120,121,  -1 ,217,218,219,220,221,         //FIXED ROW 4
+                                     -1,-1,-1,-1,-1,-1,        -1 ,112,113,114,115,116,  -1 ,212,213,214,215,216,         //FIXED ROW 3
+                                     -1,-1,-1,-1,-1,-1,        106,107,108,109,110,111,  206,207,208,209,210,211,         //FIXED ROW 2
+                                     -1,-1,-1,-1,-1,-1,        100,101,102,103,104,105,  200,201,202,203,204,205,         //FIXED ROW 1
+
+                                     -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1        };      //HOME  +1  (Up = +)
 
 
 const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
 /*HOME0 */
-/*0x18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-                                     ITM_toREC,                     ITM_toPOL,                  ITM_PARALLEL,             KEY_CC,                ITM_MAGNITUDE,               ITM_ANGLE,                          //JM HOME
-                                     ITM_DEG,                       ITM_RAD,                    ITM_DMS,                  ITM_op_j,              ITM_RECT,                    ITM_POLAR,                          //JM HOME
-/*HOME-1*/                                                                                                                                                                                                         //JM HOME
-/*1*18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-                                     ITM_NULL,                      KEY_TYPCON_DN,              KEY_TYPCON_UP,            ITM_toSI,              -MNU_BASE,                   -MNU_INTS,                          //JM HOME
-                                     ITM_SF,                        ITM_CF,                     ITM_RL,                   ITM_RR,                ITM_RMD,                     ITM_IDIV,                           //JM HOME
-/*HOME-2*/                                                                                                                                                                                                         //JM HOME
-/*2*18*/                             ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                        //JM HOME
-                                     -MNU_TRI,                      -MNU_EXP,                   -MNU_CPX,                 -MNU_XFN,              -MNU_MyMenu,                 -MNU_EE,                            //JM HOME
-                                     -MNU_CONST,                     ITM_RBR,                    ITM_STATUS,              ITM_H_SUMRY,           ITM_H_REPLCA,                ITM_H_FIXED,                        //JM HOME
+/*0x18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                     ITM_toREC,           ITM_toPOL,       ITM_PARALLEL,      KEY_CC,           ITM_MAGNITUDE,    ITM_ANGLE,                          //JM HOME
+                                     ITM_DEG,             ITM_RAD,         ITM_DMS,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
+/*HOME-1*/                                                                                                                                                             //JM HOME
+/*1*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                     ITM_NULL,            KEY_TYPCON_DN,   KEY_TYPCON_UP,     ITM_toSI,         -MNU_BASE,        -MNU_INTS,                          //JM HOME
+                                     ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
+/*HOME-2*/                                                                                                                                                             //JM HOME
+/*2*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
+                                     -MNU_TRI,            -MNU_EXP,        -MNU_CPX,          -MNU_XFN,         -MNU_MyMenu,      -MNU_EE,                            //JM HOME
+                                     -MNU_CONST,          ITM_RBR,         ITM_STATUS,        ITM_H_SUMRY,      ITM_H_REPLCA,     ITM_H_FIXED,                        //JM HOME
                                        
 
-//#if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)              //JM LAYOUT 2. DM42 STRICT.
-
-
 // 03 -- 09 HAAKON SUGGESTIONS OF FULL REPLICA
-/*ROW 7    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_NULL,               KEY_EXIT1,        CHR_0,            CHR_PERIOD,       ITM_RS,           ITM_ADD,
-/* f       */     ITM_NULL, /*      KEY_EXIT1,  */            ITM_OFF,          -MNU_HOME,        ITM_SHOW,         ITM_PR,           -MNU_CATALOG,    
-/* g       */     ITM_NULL, /*      KEY_EXIT1,  */            -MNU_PRINT,       ITM_TIMER,        ITM_VIEW,         -MNU_STK,         -MNU_PARTS,   
+/*ROW 7    */
+                                    ITM_NULL,             KEY_EXIT1,        CHR_0,            CHR_PERIOD,       ITM_RS,           ITM_ADD,
+/* f       */                       ITM_NULL,             ITM_OFF,          -MNU_HOME,        ITM_SHOW,         ITM_PR,           -MNU_CATALOG,    
+/* g       */                       ITM_NULL,             -MNU_PRINT,       ITM_TIMER,        ITM_VIEW,         -MNU_STK,         -MNU_PARTS,   
 
-/*ROW 6    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_NULL,               KEY_fg,           CHR_1,            CHR_2,            CHR_3,            ITM_SUB,
-/* f       */     ITM_NULL, /*      KEY_fg,     */            ITM_NULL,         ITM_ASSIGN,       KEY_USERMODE,     -MNU_PFN,         -MNU_IO,         
-/* g       */     ITM_NULL, /*      KEY_fg,     */            ITM_NULL,         -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
+/*ROW 6    */
+                                    ITM_NULL,             KEY_fg,           CHR_1,            CHR_2,            CHR_3,            ITM_SUB,
+/* f       */                       ITM_NULL,             ITM_NULL,         ITM_ASSIGN,       KEY_USERMODE,     -MNU_PFN,         -MNU_IO,         
+/* g       */                       ITM_NULL,             ITM_NULL,         -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
  
-/*ROW 5    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_NULL,               KEY_DOWN1,        CHR_4,            CHR_5,            CHR_6,            ITM_MULT,
-/* f       */     ITM_NULL, /*      KEY_DOWN1,  */            KEY_SST,          -MNU_BASE,        -MNU_ANGLECONV,   -MNU_FLAGS,       -MNU_PROB,       
-/* g       */     ITM_NULL, /*      KEY_DOWN1,  */            ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
+/*ROW 5    */
+                                    ITM_NULL,             KEY_DOWN1,        CHR_4,            CHR_5,            CHR_6,            ITM_MULT,
+/* f       */                       ITM_NULL,             KEY_SST,          -MNU_BASE,        -MNU_ANGLECONV,   -MNU_FLAGS,       -MNU_PROB,       
+/* g       */                       ITM_NULL,             ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
  
-/*ROW 4    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_NULL,               KEY_UP1,          CHR_7,            CHR_8,            CHR_9,            ITM_DIV,
-/* f       */     ITM_NULL, /*      KEY_UP1,    */            KEY_BST,          -MNU_EQN,         -MNU_ADV,         -MNU_MATX,        -MNU_STAT,      
-/* g       */     ITM_NULL, /*      KEY_UP1,    */            ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
+/*ROW 4    */
+                                    ITM_NULL,             KEY_UP1,          CHR_7,            CHR_8,            CHR_9,            ITM_DIV,
+/* f       */                       ITM_NULL,             KEY_BST,          -MNU_EQN,         -MNU_ADV,         -MNU_MATX,        -MNU_STAT,      
+/* g       */                       ITM_NULL,             ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
 
-/*ROW 3    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_NULL,               ITM_ENTER,        ITM_XexY,         ITM_CHS,          ITM_EXPONENT,     KEY_BACKSPACE,
-/* f       */     ITM_NULL, /*      ITM_ENTER,  */            ITM_AIM,          ITM_LASTX,        -MNU_MODE,        -MNU_DSP,         -MNU_CLR,       
-/* g       */     ITM_NULL, /*      ITM_ENTER,  */            -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
+/*ROW 3    */
+                                    ITM_NULL,             ITM_ENTER,        ITM_XexY,         ITM_CHS,          ITM_EXPONENT,     KEY_BACKSPACE,
+/* f       */                       ITM_NULL,             ITM_AIM,          ITM_LASTX,        -MNU_MODE,        -MNU_DSP,         -MNU_CLR,       
+/* g       */                       ITM_NULL,             -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
-/*ROW 2    */                    //   ITM_SIGMAMINUS,         ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                    ITM_STO,                ITM_RCL,          ITM_Rdown,        ITM_sin,          ITM_cos,         ITM_tan,
-/* f       */                       KEY_COMPLEX,            ITM_PC,           ITM_pi,           ITM_arcsin,       ITM_arccos,      ITM_arctan,     
-/* g       */                       ITM_MAGNITUDE,          ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
+/*ROW 2    */
+                                    ITM_STO,              ITM_RCL,          ITM_Rdown,        ITM_sin,          ITM_cos,         ITM_tan,
+/* f       */                       KEY_COMPLEX,          ITM_PC,           ITM_pi,           ITM_arcsin,       ITM_arccos,      ITM_arctan,     
+/* g       */                       ITM_MAGNITUDE,        ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
 
- /*ROW 1    */         //              ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                     ITM_SIGMAPLUS,         ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,          ITM_XEQ,
- /* f       */                     ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
-                                  //   ITM_NULL,              ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_GTO,    
-/* g       */                        ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+ /*ROW 1    */
+                                    ITM_SIGMAPLUS,        ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,           ITM_XEQ,
+ /* f       */                      ITM_SIGMAMINUS,       ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
+/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
 
 
 
 // 10 - 11 NIGEL SUGGESTED 36 CELLS OF ALL THE BLUE ONES                                                                                                                                                                         //JM HOME
 /* g       */                       ITM_TIMER,            ITM_RBR,          -MNU_INFO,        -MNU_CONST,       -MNU_XFN,         -MNU_SUMS,     
-/* g       */                       ITM_VIEW,            ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
-/* g       */                       -MNU_STK,            -MNU_PARTS,        -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
-/* g       */                       ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
-/* g       */                       ITM_MAGNITUDE,          ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,         ITM_RTN,      
-/* g       */                       -MNU_PRINT,            -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
+/* g       */                       ITM_VIEW,             ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
+/* g       */                       -MNU_STK,             -MNU_PARTS,       -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
 
-
+/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+/* g       */                       ITM_MAGNITUDE,        ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,          ITM_RTN,      
+/* g       */                       -MNU_PRINT,           -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
 
 // 12 - 18 JACO PROPOSAL WITH FIXED BUTTONS RUNG #1, ALL F-functions on RUNG #2, ALL G-functions on RUNG #3
@@ -1330,7 +1349,6 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
 }
 
 
-
 /********************************************//**
  * \brief Displays the current part of a softmenu
  *
@@ -1382,7 +1400,20 @@ void showSoftmenuCurrentPart(void) {
           item = ITM_NULL;
         }
         else {
-          item = softkeyItem[x];
+          int16_t xx = x + y*6;
+          //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
+          if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME) 
+          {                                          //JMHOME
+            if(menu_A_HOME[xx] < 100) {item = !userModeEnabled ? (kbd_std[menu_A_HOME[xx]    ].primary ) : (kbd_usr[menu_A_HOME[xx]    ].primary );}             else           
+            if(menu_A_HOME[xx] < 200) {item = !userModeEnabled ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
+            if(menu_A_HOME[xx]>= 200) {item = !userModeEnabled ? (kbd_std[menu_A_HOME[xx]-200].gShifted) : (kbd_usr[menu_A_HOME[xx]-200].gShifted);}
+            //printf("item (std/usr)=%d \n",item);                              //JMHOME
+          }                                                                     //JMHOME vv
+          else {
+            item = softkeyItem[x]; 
+            //printf("item (-1)=%d \n",item);                                  //JMHOME
+          }                                                                    //JMHOME
+
         }
         int8_t showCb = fnCbIsSet(item%10000);                                  //dr
         int16_t showValue = fnItemShowValue(item%10000);                        //dr
@@ -1440,14 +1471,16 @@ void showSoftmenuCurrentPart(void) {
           }
           if(showValue == ITEM_NOT_CODED) {
             int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
-            for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod
+            for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out
               if(xStroke%3 == 0) yStroke--;
               invertPixel(xStroke, yStroke -3);                                       //JM mod
             }
           }
         }
       }
+    // printf("\n"); //JMHOME
     }
+    // printf("\n"); //JMHOME
 
     if(0 <= yDotted && yDotted <= 2) {
       yDotted = 217 - SOFTMENU_HEIGHT * yDotted;

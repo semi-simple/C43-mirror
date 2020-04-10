@@ -75,6 +75,7 @@ static void angularUnitToString(uint32_t angularMode, char *string) {
 }
 
 
+
 void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
   longInteger_t lgInt;
   int16_t base, sign, n;
@@ -1654,6 +1655,7 @@ void refreshRegisterLine(calcRegister_t regist) {
                 sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
                 //sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(((real34_t *)statisticalSumsPointer) + 0));
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+
                 #ifdef PC_BUILD
                   for(w=0; w<SCREEN_WIDTH; w++) {
                     setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);

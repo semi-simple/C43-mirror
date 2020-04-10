@@ -151,8 +151,7 @@ WP43S font:
            Added U+2421 and U+2430 ... 33.
            New WP43S_StandardFont.ttf generated.
 
-WP43C font:
-           
+WP43C font:           
 2020-04-04 Copied 6 last glyphs in font from 2019-11-27 previous font, into the new WP43S font.
            JM 6 Greek glyphs to WP43S_StandardFont.ttf.
            - "\x83\xd8" 03D8   Ϙ  GREEK LETTER ARCHAIC KOPPA
@@ -164,5 +163,18 @@ WP43C font:
 
            - Copied the undo "u-turn" glyph back from previous font
 
+WP43S font:
+2020-04-10 Changed characters U+2430 and U+2433 in Standard font.
+           Added characters U+2018 and U+2019 in Numeric font.
 
+
+WP43C font:
+2020-04-10 Copied 6 last glyphs in font from 2019-11-27 previous font, into the new WP43S font.
+           JM 6 Greek glyphs to WP43S_StandardFont.ttf.
+           - "\x83\xd8" 03D8   Ϙ  GREEK LETTER ARCHAIC KOPPA
+           - "\x83\xd9" 03D9   ϙ  GREEK SMALL LETTER ARCHAIC KOPPA   
+           - "\x83\xdc" 03DC   Ϝ  GREEK LETTER DIGAMMA
+           - "\x83\xdd" 03DD   ϝ  GREEK SMALL LETTER DIGAMMA
+           - "\x83\xe0" 03E0   Ϡ  GREEK LETTER SAMPI
+           - "\x83\xe1" 03E1   ϡ  GREEK SMALL LETTER SAMPI
 

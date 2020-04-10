@@ -225,9 +225,9 @@ Func: fn2Pow
 In:  SL=0 RX=Real:"-inf"
 Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
 
-;Func: fnSinC
-;In:  SL=0 RX=Real:"-inf"
-;Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+Func: fnSinc
+In:  SL=0 RX=Real:"-inf"
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
 
 
 Func: fnSquare

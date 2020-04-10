@@ -585,7 +585,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   }
 
   w = stringWidth(label, &standardFont, false, false);
-  showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+  showString(label, &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
 }
 
 

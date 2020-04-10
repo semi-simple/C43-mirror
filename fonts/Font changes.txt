@@ -140,3 +140,7 @@
            Added U+2421 and U+2430 ... 33.
            New WP43S_StandardFont.ttf generated.
            
+2020-04-10 Changed characters U+2430 and U+2433 in Standard font.
+           Added characters U+2018 and U+2019 in Numeric font.
+           
+           

@@ -546,7 +546,6 @@ int main(int argc, char* argv[]) {
 }
 #endif
 
-
 #ifdef DMCP_BUILD
 void program_main(void) {
   int key = 0;

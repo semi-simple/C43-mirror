@@ -298,9 +298,9 @@ void fnEnter(uint16_t unusedParamButMandatory) {
       if( !eRPN ) {                                    //JM NEWERPN
           STACK_LIFT_ENABLE;
 
-          liftStack();
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          refreshStack();
+      liftStack();
+      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+      refreshStack();
 
           STACK_LIFT_DISABLE;
       }                                               //JM NEWERPN vv

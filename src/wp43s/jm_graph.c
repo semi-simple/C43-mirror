@@ -24,7 +24,7 @@
 #include "wp43s.h"
 #include "math.h"
 
-#define STATDEBUG
+//#define STATDEBUG
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
@@ -80,11 +80,13 @@ void Fn_Lbl_B(void) {                                   //Temporary RPN function
 
 
 void Fn_Lbl_C(void) {                                   //Temporary RPN function
-    fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
-    fnStore(99);             // STO 99
-    fnSin(0);                // SIN    
-    fnRCL(99);
-    fnDivide(0);             // /
+//    fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
+//    fnStore(99);             // STO 99
+//    fnSin(0);                // SIN    
+//    fnRCL(99);
+//    fnDivide(0);             // /
+    fnSinc(0);
+
 }
 
 
@@ -947,17 +949,17 @@ void fnStatList(void) {
     }
    
     print_linestr("Stat data",true);
-    #ifdef PC_BUILD
+    #ifdef STATDEBUG
     printf("Stat data %d - %d\n",statnum-1, max(0, statnum-1-6) );
     #endif
 
-    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
+    for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
       ixx = statnum - ix - 1;
       sprintf(tmpstr,"[%d]  x:%f,  y:%f",ixx+1, gr_x[ixx],gr_y[ixx]);
       print_linestr(tmpstr,false);
-     // #ifdef STATDEBUG
+      #ifdef STATDEBUG
       printf("%d:%s\n",ixx,tmpstr);
-     // #endif
+      #endif
     }
   }
 }

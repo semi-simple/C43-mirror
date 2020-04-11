@@ -225,9 +225,9 @@ Func: fn2Pow
 In:  SL=0 RX=Real:"-inf"
 Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
 
-;Func: fnSinC
-;In:  SL=0 RX=Real:"-inf"
-;Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
+Func: fnSinc
+In:  SL=0 RX=Real:"-inf"
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"0"
 
 
 Func: fnSquare
@@ -285,9 +285,9 @@ Func: fnInvert
 In:  SL=0 RX=Real:"inf"
 Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"0"
 
-;Func: fnSinc
-;In:  SL=0 RX=Real:"inf"
-;Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"0"
+Func: fnSinc
+In:  SL=0 RX=Real:"inf"
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"0"
 
 
 Func: fnTanh
@@ -940,9 +940,9 @@ Func: fn2Pow
 In:  SL=0 RX=Real:"-inf"
 Out: EC=1 SL=0 RX=Real:"-inf"
 
-;Func: fnSinC
-;In:  SL=0 RX=Real:"-inf"
-;Out: EC=1 SL=0 RX=Real:"-inf"
+Func: fnSinc
+In:  SL=0 RX=Real:"-inf"
+Out: EC=1 SL=0 RX=Real:"-inf"
 
 
 Func: fnSquare
@@ -1000,9 +1000,9 @@ Func: fnInvert
 In:  SL=0 RX=Real:"inf"
 Out: EC=1 SL=0 RX=Real:"inf"
 
-;Func: fnSinc
-;In:  SL=0 RX=Real:"inf"
-;Out: EC=1 SL=0 RX=Real:"inf"
+Func: fnSinc
+In:  SL=0 RX=Real:"inf"
+Out: EC=1 SL=0 RX=Real:"inf"
 
 
 Func: fnTanh

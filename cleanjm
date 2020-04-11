@@ -195,7 +195,7 @@ rm *.d
 rm *.o
 cd ..
 
-
+rm "rasterFontsData.c"
 
 cd ..
 cd ..

@@ -484,7 +484,9 @@ char line[100];               /* Line buffer */
 void print_linestr(const char line1[100], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
-    showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+    if(line_y < SCREEN_HEIGHT) { 
+        showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+    }
     line_y += 20;
 #endif
 }

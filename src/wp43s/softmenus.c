@@ -1199,12 +1199,12 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(figlabel(label, showValue), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);  //(xSoftkey == 5 ? 33 : 34) XXX
+    showString(figlabel(label, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
   else {
 //  w = stringWidth(label, &standardFont, false, false);
-     showString(figlabel(label, showValue), &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);  //(xSoftkey == 5 ? 33 : 34) XXX
+     showString(figlabel(label, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
   }                                                                                              //JM & dr ^^
 
 //  w = stringWidth(label, &standardFont, false, false);

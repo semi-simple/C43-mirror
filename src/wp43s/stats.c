@@ -19,15 +19,14 @@
  ***********************************************/
 
 #include "wp43s.h"
-#define real34Ln(operand, res) {real34ToReal(operand, &real); WP34S_Ln(&real, &real, &ctxtReal39); realToReal34(&real, res);}
 
 
 
 static void initStatisticalSums(void) {
   if(statisticalSumsPointer == NULL) {
-    statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL34_SIZE);
+    statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
-      real34Zero((real34_t *)(statisticalSumsPointer + REAL34_SIZE*sum));
+      realZero((real_t *)(statisticalSumsPointer + REAL_SIZE*sum));
     }
   }
 }
@@ -41,8 +40,9 @@ static void initStatisticalSums(void) {
  * \return void
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
-  real34_t tmpReal1, tmpReal2, tmpReal3;
-  real_t real;
+  real_t tmpReal1, tmpReal2, tmpReal3, x, y;
+  bool_t refreshLineX;
+  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {
@@ -52,199 +52,211 @@ void fnSigma(uint16_t plusMinus) {
     }
 
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal(REGISTER_X, &x, realContext);
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      refreshLineX = true;
+    }
+    else {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+      refreshLineX = false;
     }
 
     if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
-     convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+      convertLongIntegerRegisterToReal(REGISTER_Y, &y, realContext);
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    }
+    else {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     }
 
     if(plusMinus == 1) { // SIGMA+
       // n
-      real34Add(SIGMA_N, const34_1, SIGMA_N);
+      realAdd(SIGMA_N, const_1, SIGMA_N, realContext);
 
       // sigma x
-      real34Add(SIGMA_X, REGISTER_REAL34_DATA(REGISTER_X), SIGMA_X);
+      realAdd(SIGMA_X, &x, SIGMA_X, realContext);
 
       // sigma y
-      real34Add(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y), SIGMA_Y);
+      realAdd(SIGMA_Y, &y, SIGMA_Y, realContext);
 
       // sigma x²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Add(SIGMA_X2, &tmpReal1, SIGMA_X2);
+      realMultiply(&x, &x, &tmpReal1, realContext);
+      realAdd(SIGMA_X2, &tmpReal1, SIGMA_X2, realContext);
 
       // sigma x³
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Add(SIGMA_X3, &tmpReal2, SIGMA_X3);
+      realMultiply(&tmpReal1, &x, &tmpReal2, realContext);
+      realAdd(SIGMA_X3, &tmpReal2, SIGMA_X3, realContext);
 
       // sigma x⁴
-      real34Multiply(&tmpReal2, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Add(SIGMA_X4, &tmpReal2, SIGMA_X4);
+      realMultiply(&tmpReal2, &x, &tmpReal2, realContext);
+      realAdd(SIGMA_X4, &tmpReal2, SIGMA_X4, realContext);
 
       // sigma x²y
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
-      real34Add(SIGMA_X2Y, &tmpReal2, SIGMA_X2Y);
+      realMultiply(&tmpReal1, &y, &tmpReal2, realContext);
+      realAdd(SIGMA_X2Y, &tmpReal2, SIGMA_X2Y, realContext);
 
       // sigma x²/y
-      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
-      real34Add(SIGMA_X2onY, &tmpReal2, SIGMA_X2onY);
+      realDivide(&tmpReal1, &y, &tmpReal2, realContext);
+      realAdd(SIGMA_X2onY, &tmpReal2, SIGMA_X2onY, realContext);
 
       // sigma 1/x²
-      real34Divide(const34_1, &tmpReal1, &tmpReal2);
-      real34Add(SIGMA_1onX2, &tmpReal2, SIGMA_1onX2);
+      realDivide(const_1, &tmpReal1, &tmpReal2, realContext);
+      realAdd(SIGMA_1onX2, &tmpReal2, SIGMA_1onX2, realContext);
 
       // sigma y²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_Y2, &tmpReal1, SIGMA_Y2);
+      realMultiply(&y, &y, &tmpReal1, realContext);
+      realAdd(SIGMA_Y2, &tmpReal1, SIGMA_Y2, realContext);
 
       // sigma 1/y²
-      real34Divide(const34_1, &tmpReal1, &tmpReal2);
-      real34Add(SIGMA_1onY2, &tmpReal2, SIGMA_1onY2);
+      realDivide(const_1, &tmpReal1, &tmpReal2, realContext);
+      realAdd(SIGMA_1onY2, &tmpReal2, SIGMA_1onY2, realContext);
 
       // sigma xy
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_XY, &tmpReal1, SIGMA_XY);
+      realMultiply(&x, &y, &tmpReal1, realContext);
+      realAdd(SIGMA_XY, &tmpReal1, SIGMA_XY, realContext);
 
       // sigma ln(x)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Copy(&tmpReal1 ,&tmpReal3);
-      real34Add(SIGMA_lnX, &tmpReal1, SIGMA_lnX);
+      WP34S_Ln(&x, &tmpReal1, realContext);
+      realCopy(&tmpReal1 ,&tmpReal3);
+      realAdd(SIGMA_lnX, &tmpReal1, SIGMA_lnX, realContext);
 
       // sigma ln²(x)
-      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
-      real34Add(SIGMA_ln2X, &tmpReal2, SIGMA_ln2X);
+      realMultiply(&tmpReal1, &tmpReal1, &tmpReal2, realContext);
+      realAdd(SIGMA_ln2X, &tmpReal2, SIGMA_ln2X, realContext);
 
       // sigma yln(x)
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_YlnX, &tmpReal1, SIGMA_YlnX);
+      realMultiply(&tmpReal1, &y, &tmpReal1, realContext);
+      realAdd(SIGMA_YlnX, &tmpReal1, SIGMA_YlnX, realContext);
 
       // sigma ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_lnY, &tmpReal1, SIGMA_lnY);
+      WP34S_Ln(&y, &tmpReal1, realContext);
+      realAdd(SIGMA_lnY, &tmpReal1, SIGMA_lnY, realContext);
 
       // sigma ln(x)×ln(y)
-      real34Multiply(&tmpReal3, &tmpReal1, &tmpReal3);
-      real34Add(SIGMA_lnXlnY, &tmpReal3, SIGMA_lnXlnY);
+      realMultiply(&tmpReal3, &tmpReal1, &tmpReal3, realContext);
+      realAdd(SIGMA_lnXlnY, &tmpReal3, SIGMA_lnXlnY, realContext);
 
       // sigma ln(y)/x
-      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Add(SIGMA_lnYonX, &tmpReal2, SIGMA_lnYonX);
+      realDivide(&tmpReal1, &x, &tmpReal2, realContext);
+      realAdd(SIGMA_lnYonX, &tmpReal2, SIGMA_lnYonX, realContext);
 
       // sigma ln²(y)
-      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
-      real34Add(SIGMA_ln2Y, &tmpReal2, SIGMA_ln2Y);
+      realMultiply(&tmpReal1, &tmpReal1, &tmpReal2, realContext);
+      realAdd(SIGMA_ln2Y, &tmpReal2, SIGMA_ln2Y, realContext);
 
       // sigma xln(y)
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Add(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY);
+      realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
+      realAdd(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY, realContext);
 
       // sigma 1/x
-      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Add(SIGMA_1onX, &tmpReal1, SIGMA_1onX);
+      realDivide(const_1, &x, &tmpReal1, realContext);
+      realAdd(SIGMA_1onX, &tmpReal1, SIGMA_1onX, realContext);
 
       // sigma x/y
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_XonY, &tmpReal1, SIGMA_XonY);
+      realDivide(&x, &y, &tmpReal1, realContext);
+      realAdd(SIGMA_XonY, &tmpReal1, SIGMA_XonY, realContext);
 
       // sigma 1/y
-      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Add(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
+      realDivide(const_1, &y, &tmpReal1, realContext);
+      realAdd(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
     }
     else { // SIGMA-
       // n
-      real34Subtract(SIGMA_N, const34_1, SIGMA_N);
+      realSubtract(SIGMA_N, const_1, SIGMA_N, realContext);
 
       // sigma x
-      real34Subtract(SIGMA_X, REGISTER_REAL34_DATA(REGISTER_X), SIGMA_X);
+      realSubtract(SIGMA_X, &x, SIGMA_X, realContext);
 
       // sigma y
-      real34Subtract(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y), SIGMA_Y);
+      realSubtract(SIGMA_Y, &y, SIGMA_Y, realContext);
 
       // sigma x²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Subtract(SIGMA_X2, &tmpReal1, SIGMA_X2);
+      realMultiply(&x, &x, &tmpReal1, realContext);
+      realSubtract(SIGMA_X2, &tmpReal1, SIGMA_X2, realContext);
 
       // sigma x³
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Subtract(SIGMA_X3, &tmpReal2, SIGMA_X3);
+      realMultiply(&tmpReal1, &x, &tmpReal2, realContext);
+      realSubtract(SIGMA_X3, &tmpReal2, SIGMA_X3, realContext);
 
       // sigma x⁴
-      real34Multiply(&tmpReal2, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Subtract(SIGMA_X4, &tmpReal2, SIGMA_X4);
+      realMultiply(&tmpReal2, &x, &tmpReal2, realContext);
+      realSubtract(SIGMA_X4, &tmpReal2, SIGMA_X4, realContext);
 
       // sigma x²y
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
-      real34Subtract(SIGMA_X2Y, &tmpReal2, SIGMA_X2Y);
+      realMultiply(&tmpReal1, &y, &tmpReal2, realContext);
+      realSubtract(SIGMA_X2Y, &tmpReal2, SIGMA_X2Y, realContext);
 
       // sigma x²/y
-      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal2);
-      real34Subtract(SIGMA_X2onY, &tmpReal2, SIGMA_X2onY);
+      realDivide(&tmpReal1, &y, &tmpReal2, realContext);
+      realSubtract(SIGMA_X2onY, &tmpReal2, SIGMA_X2onY, realContext);
 
       // sigma 1/x²
-      real34Divide(const34_1, &tmpReal1, &tmpReal2);
-      real34Subtract(SIGMA_1onX2, &tmpReal2, SIGMA_1onX2);
+      realDivide(const_1, &tmpReal1, &tmpReal2, realContext);
+      realSubtract(SIGMA_1onX2, &tmpReal2, SIGMA_1onX2, realContext);
 
       // sigma y²
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_Y2, &tmpReal1, SIGMA_Y2);
+      realMultiply(&y, &y, &tmpReal1, realContext);
+      realSubtract(SIGMA_Y2, &tmpReal1, SIGMA_Y2, realContext);
 
       // sigma 1/y²
-      real34Divide(const34_1, &tmpReal1, &tmpReal2);
-      real34Subtract(SIGMA_1onY2, &tmpReal2, SIGMA_1onY2);
+      realDivide(const_1, &tmpReal1, &tmpReal2, realContext);
+      realSubtract(SIGMA_1onY2, &tmpReal2, SIGMA_1onY2, realContext);
 
       // sigma xy
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_XY, &tmpReal1, SIGMA_XY);
+      realMultiply(&x, &y, &tmpReal1, realContext);
+      realSubtract(SIGMA_XY, &tmpReal1, SIGMA_XY, realContext);
 
       // sigma ln(x)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Copy(&tmpReal1 ,&tmpReal3);
-      real34Subtract(SIGMA_lnX, &tmpReal1, SIGMA_lnX);
+      WP34S_Ln(&x, &tmpReal1, realContext);
+      realCopy(&tmpReal1 ,&tmpReal3);
+      realSubtract(SIGMA_lnX, &tmpReal1, SIGMA_lnX, realContext);
 
       // sigma ln²(x)
-      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
-      real34Subtract(SIGMA_ln2X, &tmpReal2, SIGMA_ln2X);
+      realMultiply(&tmpReal1, &tmpReal1, &tmpReal2, realContext);
+      realSubtract(SIGMA_ln2X, &tmpReal2, SIGMA_ln2X, realContext);
 
       // sigma yln(x)
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_YlnX, &tmpReal1, SIGMA_YlnX);
+      realMultiply(&tmpReal1, &y, &tmpReal1, realContext);
+      realSubtract(SIGMA_YlnX, &tmpReal1, SIGMA_YlnX, realContext);
 
       // sigma ln(y)
-      real34Ln(REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_lnY, &tmpReal1, SIGMA_lnY);
+      WP34S_Ln(&y, &tmpReal1, realContext);
+      realSubtract(SIGMA_lnY, &tmpReal1, SIGMA_lnY, realContext);
 
       // sigma ln(x)×ln(y)
-      real34Multiply(&tmpReal3, &tmpReal1, &tmpReal3);
-      real34Subtract(SIGMA_lnXlnY, &tmpReal3, SIGMA_lnXlnY);
+      realMultiply(&tmpReal3, &tmpReal1, &tmpReal3, realContext);
+      realSubtract(SIGMA_lnXlnY, &tmpReal3, SIGMA_lnXlnY, realContext);
 
       // sigma ln(y)/x
-      real34Divide(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal2);
-      real34Subtract(SIGMA_lnYonX, &tmpReal2, SIGMA_lnYonX);
+      realDivide(&tmpReal1, &x, &tmpReal2, realContext);
+      realSubtract(SIGMA_lnYonX, &tmpReal2, SIGMA_lnYonX, realContext);
 
       // sigma ln²(y)
-      real34Multiply(&tmpReal1, &tmpReal1, &tmpReal2);
-      real34Subtract(SIGMA_ln2Y, &tmpReal2, SIGMA_ln2Y);
+      realMultiply(&tmpReal1, &tmpReal1, &tmpReal2, realContext);
+      realSubtract(SIGMA_ln2Y, &tmpReal2, SIGMA_ln2Y, realContext);
 
       // sigma xln(y)
-      real34Multiply(&tmpReal1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Subtract(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY);
+      realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
+      realSubtract(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY, realContext);
 
       // sigma 1/x
-      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), &tmpReal1);
-      real34Subtract(SIGMA_1onX, &tmpReal1, SIGMA_1onX);
+      realDivide(const_1, &x, &tmpReal1, realContext);
+      realSubtract(SIGMA_1onX, &tmpReal1, SIGMA_1onX, realContext);
 
       // sigma x/y
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_XonY, &tmpReal1, SIGMA_XonY);
+      realDivide(&x, &y, &tmpReal1, realContext);
+      realSubtract(SIGMA_XonY, &tmpReal1, SIGMA_XonY, realContext);
 
       // sigma 1/y
-      real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_Y), &tmpReal1);
-      real34Subtract(SIGMA_1onY, &tmpReal1, SIGMA_1onY);
+      realDivide(const_1, &y, &tmpReal1, realContext);
+      realSubtract(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;
-
-    refreshStack();
+    refreshRegisterLine(REGISTER_Y);
+    if(refreshLineX) {
+      refreshRegisterLine(REGISTER_X);
+    }
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
@@ -254,7 +266,7 @@ void fnSigma(uint16_t plusMinus) {
     #endif
   }
 //for(int i=0; i<NUMBER_OF_STATISTICAL_SUMS; i++) {
-//printf("sum %02d ", i); printReal34ToConsole(((real34_t *)statisticalSumsPointer) + i); printf("\n");
+//printf("sum %02d ", i); printRealToConsole(((real_t *)statisticalSumsPointer) + i); printf("\n");
 //}
 }
 
@@ -270,7 +282,7 @@ void fnStatSum(uint16_t sum) {
   }
   else {
    liftStack();
-   real34Copy(statisticalSumsPointer + REAL34_SIZE*sum, REGISTER_REAL34_DATA(REGISTER_X));
+   realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE*sum), REGISTER_REAL34_DATA(REGISTER_X));
    refreshStack();
   }
 }
@@ -298,8 +310,8 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
     STACK_LIFT_ENABLE;
     liftStack();
 
-    real34Copy(SIGMA_X, REGISTER_REAL34_DATA(REGISTER_X));
-    real34Copy(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y));
+    realToReal34(SIGMA_X, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_SUMX_SUMY;
     refreshStack();
@@ -315,6 +327,8 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnMeanXY(uint16_t unusedParamButMandatory) {
+  real_t mean;
+
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -329,8 +343,11 @@ void fnMeanXY(uint16_t unusedParamButMandatory) {
     STACK_LIFT_ENABLE;
     liftStack();
 
-    real34Divide(SIGMA_X, SIGMA_N, REGISTER_REAL34_DATA(REGISTER_X));
-    real34Divide(SIGMA_Y, SIGMA_N, REGISTER_REAL34_DATA(REGISTER_Y));
+    realDivide(SIGMA_X, SIGMA_N, &mean, &ctxtReal39);
+    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
+
+    realDivide(SIGMA_Y, SIGMA_N, &mean, &ctxtReal39);
+    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_MEANX_MEANY;
     refreshStack();

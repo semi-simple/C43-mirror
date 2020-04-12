@@ -61,7 +61,7 @@ void decompError(void) {
 static void modReal(real_t *a, real_t *b, real_t *result, realContext_t *realContext) {
   WP34S_Mod(a, b, result, realContext);
 
-  if(!realIsZero(result) && realSign(b) != realSign(a)) {
+  if(!realIsZero(result) && realGetSign(b) != realGetSign(a)) {
     realAdd(result, a, result, realContext);
   }
 }

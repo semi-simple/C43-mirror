@@ -616,7 +616,7 @@ void debugNIM(void) {
    * \return void
    ***********************************************/
   void refreshDebugPanel(void) {
-    char string[100];
+    char string[200];
     int row;
 
     if(debugWindow == DBG_BIT_FIELDS) {
@@ -1109,7 +1109,7 @@ void debugNIM(void) {
       if(statisticalSumsPointer != NULL) {
         gtk_label_set_label(GTK_LABEL(lbl1[row]), "n");
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_N);
+        formatRealDebug(string, SIGMA_N);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1117,7 +1117,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X);
+        formatRealDebug(string, SIGMA_X);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1125,7 +1125,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_Y);
+        formatRealDebug(string, SIGMA_Y);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1133,7 +1133,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X2);
+        formatRealDebug(string, SIGMA_X2);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1141,7 +1141,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X2Y);
+        formatRealDebug(string, SIGMA_X2Y);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1149,7 +1149,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_Y2);
+        formatRealDebug(string, SIGMA_Y2);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1157,7 +1157,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_XY);
+        formatRealDebug(string, SIGMA_XY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1165,7 +1165,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_lnXlnY);
+        formatRealDebug(string, SIGMA_lnXlnY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1173,7 +1173,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_lnX);
+        formatRealDebug(string, SIGMA_lnX);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1181,7 +1181,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_ln2X);
+        formatRealDebug(string, SIGMA_ln2X);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1189,7 +1189,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_YlnX);
+        formatRealDebug(string, SIGMA_YlnX);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1197,7 +1197,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_lnY);
+        formatRealDebug(string, SIGMA_lnY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1205,7 +1205,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_ln2Y);
+        formatRealDebug(string, SIGMA_ln2Y);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1213,7 +1213,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_XlnY);
+        formatRealDebug(string, SIGMA_XlnY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1221,7 +1221,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_lnYonX);
+        formatRealDebug(string, SIGMA_lnYonX);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1229,7 +1229,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X2onY);
+        formatRealDebug(string, SIGMA_X2onY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1237,7 +1237,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_1onX);
+        formatRealDebug(string, SIGMA_1onX);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1245,7 +1245,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_1onX2);
+        formatRealDebug(string, SIGMA_1onX2);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1253,7 +1253,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_XonY);
+        formatRealDebug(string, SIGMA_XonY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1261,7 +1261,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_1onY);
+        formatRealDebug(string, SIGMA_1onY);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1269,7 +1269,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_1onY2);
+        formatRealDebug(string, SIGMA_1onY2);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1277,7 +1277,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X3);
+        formatRealDebug(string, SIGMA_X3);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
@@ -1285,7 +1285,7 @@ void debugNIM(void) {
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
         gtk_widget_show(lbl1[row]);
-        formatReal34Debug(string, SIGMA_X4);
+        formatRealDebug(string, SIGMA_X4);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
       }
@@ -1398,26 +1398,26 @@ void debugNIM(void) {
    * \brief Formats a real34 for the debug window
    *
    * \param[in] str char*  String receiving the value
-   * \param[in] x real34_t* Value
+   * \param[in] real34 real34_t* Value
    * \return void
    ***********************************************/
-  void formatReal34Debug(char *str, void *addr) {
+  void formatReal34Debug(char *str, real34_t *real34) {
     uint8_t ch, coef, digit;
     uint8_t bcd[DECQUAD_Pmax];
     int32_t sign, exponent;
 
-    if(real34IsInfinite(addr) || real34IsNaN(addr)) {
-      real34ToString(addr, str);
+    if(real34IsInfinite(real34) || real34IsNaN(real34)) {
+      real34ToString(real34, str);
       return;
     }
 
-    if(real34IsZero(addr)) {
+    if(real34IsZero(real34)) {
       strcpy(str, "+0.000000000000000000000000000000000e+0");
       return;
     }
 
-    sign = real34GetCoefficient(addr, bcd);
-    exponent = real34GetExponent(addr);
+    sign = real34GetCoefficient(real34, bcd);
+    exponent = real34GetExponent(real34);
     if(sign) {
       str[0] = '-';
     }
@@ -1445,6 +1445,24 @@ void debugNIM(void) {
     }
 
     sprintf(str+ch, "e%+d", exponent);
+  }
+
+
+
+  /********************************************//**
+   * \brief Formats a real for the debug window
+   *
+   * \param[in] str char*  String receiving the value
+   * \param[in] real real_t* Value
+   * \return void
+   ***********************************************/
+  void formatRealDebug(char *str, real_t *real) {
+    if(realIsZero(real)) {
+      xcopy(str, "0.", 3);
+    }
+    else {
+      realToString(real, str);
+    }
   }
 
 

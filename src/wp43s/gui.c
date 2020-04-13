@@ -157,8 +157,8 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
       btnClicked(w, "11");
       break;
 
-    case 65421: // Enter
     case 65293: // Enter
+    case 65421: // Enter numeric pad
       //printf("key pressed: ENTER\n");
       btnClicked(w, "12");
       break;
@@ -901,6 +901,13 @@ void setupUI(void) {
   g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
   g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
 
+  gtk_widget_set_focus_on_click(btn11, FALSE);
+  gtk_widget_set_focus_on_click(btn12, FALSE);
+  gtk_widget_set_focus_on_click(btn13, FALSE);
+  gtk_widget_set_focus_on_click(btn14, FALSE);
+  gtk_widget_set_focus_on_click(btn15, FALSE);
+  gtk_widget_set_focus_on_click(btn16, FALSE);
+
   xPos = X_LEFT_PORTRAIT;
   yPos = Y_TOP_PORTRAIT;
   gtk_fixed_put(GTK_FIXED(grid), btn11, xPos, yPos);
@@ -1479,11 +1486,14 @@ void calcModeTam(void) {
     closeNim();
   }
 
-  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER || tamMode == TM_FLAG) {
+  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER) {
     showSoftmenu(NULL, -MNU_TAM, true);
   }
   else if(tamMode == TM_CMP) {
     showSoftmenu(NULL, -MNU_TAMCMP, true);
+  }
+  else if(tamMode == TM_FLAG) {
+    showSoftmenu(NULL, -MNU_TAMFLAG, true);
   }
   else if(tamMode == TM_STORCL) {
     showSoftmenu(NULL, -MNU_TAMSTORCL, true);

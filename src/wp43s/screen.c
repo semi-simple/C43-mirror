@@ -958,7 +958,7 @@ void resetTemporaryInformation(void) {
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBase, prefixWidth, lineWidth = 0;
-  char prefix[15], lastBase[4];
+  char prefix[18], lastBase[4];
 
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
@@ -1278,7 +1278,8 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
-                sprintf(prefix, "Data point %03" FMT32S, real34ToInt32(statisticalSumsPointer));
+                realToInt32(SIGMA_N, w);
+                sprintf(prefix, "Data point %03" FMT16S, w);
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
 
                 #ifdef PC_BUILD

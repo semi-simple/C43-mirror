@@ -68,6 +68,7 @@ typedef struct {
 #define real_t                                            decNumber
 typedef struct {real34_t real, imag;}                     complex34_t;
 
+#define REAL_SIZE                                         sizeof(real_t)
 #define REAL34_SIZE                                       sizeof(real34_t)
 #define REAL39_SIZE                                       sizeof(real39_t)
 #define REAL51_SIZE                                       sizeof(real51_t)
@@ -170,6 +171,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define realFMA(factor1, factor2, term, res, ctxt)             decNumberFMA             (res, factor1,  factor2,  term, ctxt)
 #define realGetCoefficient(source, destination)                decNumberGetBCD          (source, (uint8_t *)(destination))
 #define realGetExponent(source)                                ((source)->digits)
+#define realGetSign(source)                                    (((source)->bits) & 0x80) // 0x80=negative and 0x00=positive
 #define realIsInfinite(source)                                 decNumberIsInfinite      (source)
 #define realIsNaN(source)                                      decNumberIsNaN           (source)
 #define realIsNegative(source)                                 ((((source)->bits) & 0x80) == 0x80)
@@ -183,7 +185,6 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define realPower(operand1, operand2, res, ctxt)               decNumberPower           (res, operand1, operand2, ctxt)
 #define realSetNegativeSign(operand)                           (operand)->bits |= 0x80
 #define realSetPositiveSign(operand)                           (operand)->bits &= 0x7F
-#define realSign(source)                                       (((source)->bits) & 0x80) // 0x80=negative and 0x00=positive
 #define realSquareRoot(operand, res, ctxt)                     decNumberSquareRoot      (res, operand, ctxt)
 #define realSubtract(operand1, operand2, res, ctxt)            decNumberSubtract        (res, operand1, operand2, ctxt)
 #define realToInt32(source, destination)                       {enum rounding savedRoundingMode; \

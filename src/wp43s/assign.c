@@ -94,7 +94,7 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DSP,        -MNU_FIN,      ITM_NULL,       CHR_O,             CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
  {45,   KEY_BACKSPACE,    KEY_UNDO,       -MNU_CLR,      KEY_BACKSPACE,  KEY_BACKSPACE,     KEY_UNDO,       -MNU_CLR,       KEY_BACKSPACE}, //JM
                   
- {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,           KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
+ {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,           KEY_BST,        -MNU_ALPHA,     KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_HOME,     CHR_7,          CHR_P,             CHR_7,           CHR_PI,        CHR_7        }, //JM
  {53,   CHR_8,           -MNU_ADV,        -MNU_CONST,    CHR_8,          CHR_Q,             CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,             CHR_9,           CHR_RHO,       CHR_9        }, //JM
@@ -112,7 +112,7 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,           -MNU_PARTS,      -MNU_TEST,     CHR_3,          CHR_Z,             CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_STK,        -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,    CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT/*KEY_PRTX*/,    KEY_EXIT1,      KEY_EXIT1,         ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,         ITM_OFF,         CHR_PRINTER,   KEY_EXIT1    }, //JM
  {82,   CHR_0,            ITM_VIEW,       ITM_TIMER,     CHR_0,          CHR_COLON,         CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,       -MNU_INFO,     CHR_PERIOD,     CHR_COMMA,         CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
  {84,   ITM_RS,           ITM_PR,         -MNU_PFN,      ITM_NULL,       CHR_QUESTION_MARK, CHR_SLASH,      -MNU_ALPHAMATH, ITM_NULL     }, //JM
@@ -143,7 +143,7 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DSP,        -MNU_FIN,      ITM_NULL,       CHR_O,            CHR_UP_ARROW,    CHR_OMICRON,   ITM_NULL     }, //JM
  {45,   KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,     KEY_BACKSPACE,  KEY_BACKSPACE,   -MNU_CLR,         KEY_UNDO,      KEY_BACKSPACE}, //JM
                  
- {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,          KEY_BST,         ITM_NULL,      KEY_UP1      }, //JM
+ {51,   KEY_UP1,          KEY_BST,         ITM_RBR,      KEY_UP1,        KEY_UP1,          KEY_BST,        -MNU_ALPHA,     KEY_UP1      }, //JM
  {52,   CHR_7,           -MNU_EQN,        -MNU_INFO,     CHR_7,          CHR_P,            CHR_7,           CHR_PI,        CHR_7        }, //JM
  {53,   CHR_8,           -MNU_ADV,        -MNU_CONST,    CHR_8,          CHR_Q,            CHR_8,           CHR_QOPPA,     CHR_8        }, //JM
  {54,   CHR_9,           -MNU_MATX,       -MNU_XFN,      CHR_9,          CHR_R,            CHR_9,           CHR_RHO,       CHR_9        }, //JM
@@ -161,7 +161,7 @@ const calcKey_t kbd_std[37] = {
  {74,   CHR_3,           -MNU_PFN,        -MNU_TEST,     CHR_3,          CHR_Z,            CHR_3,           CHR_ZETA,      CHR_3        }, //JM
  {75,   ITM_SUB,         -MNU_IO,         -MNU_ALPHAFN,  CHR_MINUS,      CHR_UNDERSCORE,   CHR_MINUS,       CHR_SAMPI,     ITM_SUB      }, //JM
 
- {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT/*KEY_PRTX*/,    KEY_EXIT1,      KEY_EXIT1,        ITM_OFF,         ITM_NULL,      KEY_EXIT1    }, //JM
+ {81,   KEY_EXIT1,        ITM_OFF,        -MNU_PRINT,    KEY_EXIT1,      KEY_EXIT1,        ITM_OFF,         CHR_PRINTER,   KEY_EXIT1    }, //JM
  {82,   CHR_0,           -MNU_HOME,        ITM_TIMER,    CHR_0,          CHR_COLON,        CHR_0,          -MNU_ALPHA,     CHR_0        }, //JM
  {83,   CHR_PERIOD,       ITM_SHOW,        ITM_VIEW,     CHR_PERIOD,     CHR_COMMA,        CHR_PERIOD,     -MNU_ALPHADOT,  CHR_PERIOD   }, //JM
  {84,   ITM_RS,           ITM_PR,         -MNU_STK,      ITM_NULL,       CHR_QUESTION_MARK,CHR_SLASH,      -MNU_ALPHAMATH, ITM_NULL     }, //JM

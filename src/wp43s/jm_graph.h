@@ -43,7 +43,7 @@ int8_t plotmode;                            //      _SCAT
 #define Aspect_Square false
 
 void fnGraph          (uint16_t func);
-void graph_sigmaplus  (int8_t plusminus);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
+void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 
 void graph_setupmemory(void);
 void graph_end        (void);

@@ -227,9 +227,8 @@ void graph_end(void) {
 
 
 
-void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
+void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
-  real_t tmpy;
   float x; 
   float y;
 
@@ -242,15 +241,13 @@ void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSig
 
 
   //Convert from X register to float
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &tmpy);
-  realToString(&tmpy, tmpStr3000);
+  realToString(yy, tmpStr3000);
   y = strtof (tmpStr3000, NULL);
 
   //printf("y=%f ",y);
 
   //Convert from X register to float
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-  realToString(&tmpy, tmpStr3000);
+  realToString(xx, tmpStr3000);
   x = strtof (tmpStr3000, NULL);
 
   //printf("x=%f ",x);
@@ -264,8 +261,7 @@ void graph_sigmaplus(int8_t plusminus) {    //Called from STAT module from fnSig
     cnt = ix_count;
   } else {
     //Convert from real to int
-    real34ToReal(SIGMA_N, &tmpy);
-    realToString(&tmpy, tmpStr3000);
+    realToString(SIGMA_N, tmpStr3000);
     cnt = atoi (tmpStr3000);
     #ifdef STATDEBUG
     printf("Count: %s, %d\n",tmpStr3000,cnt);
@@ -596,7 +592,6 @@ void graph_plotmem(void) {
 
 
   uint16_t cnt, ix, statnum;
-  real_t tmpy;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
   float x; 
@@ -612,8 +607,7 @@ void graph_plotmem(void) {
 
     if(plotmode != _VECT) {
       //Convert from real to int
-      real34ToReal(SIGMA_N, &tmpy);
-      realToString(&tmpy, tmpStr3000);
+      realToString(SIGMA_N, tmpStr3000);
       statnum = atoi (tmpStr3000);
     } else {
       statnum = ix_count;
@@ -927,7 +921,6 @@ void graph_prepscreen (void){
 void fnStatList(void) {
   char tmpstr[100];
   int16_t ix, ixx, statnum;
-  real_t tmpy;
 
   graph_prepscreen();
 
@@ -941,8 +934,7 @@ void fnStatList(void) {
 
     if(plotmode != _VECT) {
       //Convert from real to int
-      real34ToReal(SIGMA_N, &tmpy);
-      realToString(&tmpy, tmpStr3000);
+      realToString(SIGMA_N, tmpStr3000);
       statnum = atoi (tmpStr3000);
     } else {
       statnum = ix_count;

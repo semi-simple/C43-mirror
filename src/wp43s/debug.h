@@ -54,7 +54,8 @@
 #endif
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
-  void   formatReal34Debug                  (char *str, void *addr);
+  void   formatReal34Debug                  (char *str, real34_t *addr);
+  void   formatRealDebug                    (char *str, real_t *addr);
   void   formatComplex34Debug               (char *str, void *addr);
 #endif
 

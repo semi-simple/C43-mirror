@@ -446,6 +446,7 @@ void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -2045,8 +2046,8 @@ const item_t indexOfItems[] = {
 
 
 
-/* 1589 */  { itemToBeCoded,               NOPARAM,                     "1589",                                        "1589",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
-/* 1590 */  { itemToBeCoded,               NOPARAM,                     "1590",                                        "1590",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1589 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         CAT_MENU, SLS_UNCHANGED},
+/* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamFlag",                                     CAT_NONE, SLS_UNCHANGED},
 /* 1591 */  { itemToBeCoded,               NOPARAM,                     "1591",                                        "1591",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1592 */  { itemToBeCoded,               NOPARAM,                     "1592",                                        "1592",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1593 */  { itemToBeCoded,               NOPARAM,                     "1593",                                        "1593",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin

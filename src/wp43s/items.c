@@ -2006,6 +2006,7 @@ const item_t indexOfItems[] = {
 /* 1586 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "SR",                                STD_alpha "SR",                                CAT_FNCT, SLS_UNCHANGED},
 /* 1587 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            CAT_FNCT, SLS_ENABLED  },
 /* 1588 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            CAT_FNCT, SLS_ENABLED  },
+/* 1589 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         CAT_MENU, SLS_UNCHANGED},
 
-/* 1589 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED},
+/* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED},
 };

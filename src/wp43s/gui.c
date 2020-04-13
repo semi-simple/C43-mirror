@@ -1486,11 +1486,14 @@ void calcModeTam(void) {
     closeNim();
   }
 
-  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER || tamMode == TM_FLAG) {
+  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER) {
     showSoftmenu(NULL, -MNU_TAM, true);
   }
   else if(tamMode == TM_CMP) {
     showSoftmenu(NULL, -MNU_TAMCMP, true);
+  }
+  else if(tamMode == TM_FLAG) {
+    showSoftmenu(NULL, -MNU_TAMFLAG, true);
   }
   else if(tamMode == TM_STORCL) {
     showSoftmenu(NULL, -MNU_TAMSTORCL, true);

@@ -1623,8 +1623,9 @@
 #define ITM_HECTAREtoM2               1587
 #define ITM_M2toHECTARE               1588
 #define MNU_VAR                       1589
+#define MNU_TAMFLAG                   1590
 
-#define LAST_ITEM                     1590
+#define LAST_ITEM                     1591
 
 #define CHR_PROD_SIGN                 9999
 

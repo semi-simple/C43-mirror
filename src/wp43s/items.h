@@ -25,6 +25,7 @@
 #define SLS_ENABLED   0
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1621,8 +1622,8 @@
 #define ITM_ALPHASR                   1586
 #define ITM_HECTAREtoM2               1587
 #define ITM_M2toHECTARE               1588
-#define Not_used1589                  1589
-#define Not_used1590                  1590
+#define MNU_VAR                       1589
+#define MNU_TAMFLAG                   1590
 #define Not_used1591                  1591
 #define Not_used1592                  1592
 #define Not_used1593                  1593

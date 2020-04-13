@@ -2007,6 +2007,7 @@ const item_t indexOfItems[] = {
 /* 1587 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            CAT_FNCT, SLS_ENABLED  },
 /* 1588 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            CAT_FNCT, SLS_ENABLED  },
 /* 1589 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         CAT_MENU, SLS_UNCHANGED},
+/* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamFlag",                                     CAT_NONE, SLS_UNCHANGED},
 
-/* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED},
+/* 1591 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   CAT_NONE, SLS_UNCHANGED},
 };

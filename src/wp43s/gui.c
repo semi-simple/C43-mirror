@@ -1602,7 +1602,7 @@ void moveLabels(void) {
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_widget_get_preferred_size(  lbl81F, NULL, &lblF);
-  gtk_widget_get_preferred_size(  lbl81G, NULL, &lblG);
+//  gtk_widget_get_preferred_size(  lbl81G, NULL, &lblG);
 
 
 
@@ -1618,7 +1618,7 @@ void moveLabels(void) {
     gtk_fixed_move(GTK_FIXED(grid), lblOn, (2*xPos+KEY_WIDTH_1+lblF.width+2*GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
 //  gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-20)/2, yPos + 38);    //JM
 
-  gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);                                                              //JM++_ //JMAPRT
+//  gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);         //JMPRTA                                                     //JM++_ //JMAPRT
 //  gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK); //JM ++ //JMAPRT
 //JMPRT removed for template-    gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 20, yPos + 10);      //JM JMAPRT ALPHA BLUE MENU LABELS //^^
 //JM^^
@@ -2253,7 +2253,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn85);
 
   gtk_widget_show(lbl81F);
-  gtk_widget_show(lbl81G);
+//  gtk_widget_show(lbl81G); //JM
   gtk_widget_show(lbl81L);
 //gtk_widget_show(lbl81H);  //JM
   gtk_widget_show(lbl82F);
@@ -2539,7 +2539,7 @@ void calcModeAimGui(void) {
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
 
-  gtk_widget_show(lbl81Gr); //JMAPRT
+//  gtk_widget_show(lbl81Gr); //JMAPRT
   gtk_widget_show(lbl82Gr);
   gtk_widget_show(lbl83Gr);
   gtk_widget_show(lbl84Gr); //JM TT

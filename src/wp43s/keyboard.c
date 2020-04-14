@@ -132,7 +132,7 @@ void resetShiftState(void) {
   }                                                                             //^^
 }
 
-
+//JM Changing the individual softmenu cell, based on the content of the assigned keyboard array
 bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
   int16_t ix_fn, ix_sm,ix, ix0;  //JMXXX
   bool_t tmp;
@@ -146,14 +146,23 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
         if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}             else           
         if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}             else
         if(menu_A_HOME[ix0+ix]>= 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}
-        //printf("--> MNU_HOME:%d (current menu %d): first item %d + ix %d\n",MNU_HOME, ix_sm,ix0,ix);
-        //printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
-        //printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
+        printf("--> MNU_HOME:%d (current menu %d): first item %d + ix %d\n",MNU_HOME, ix_sm,ix0,ix);
+        printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
+        printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
 
         if(ix == 0 && !userModeEnabled && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
           ix_fn = Norm_Key_00_VAR;
           tmp = true;
         }
+
+        if (ix_fn == ITM_toINT)  {    //  793   fnChangeBase, TM_VALUE_CHB, STD_RIGHT_ARROW "INT",                         "#"
+            ix_fn = KEY_HASH;         //  1737  fnBASE_Hash,  NOPARAM, "##" STD_RIGHT_ARROW "INT", 
+        } else
+        if (ix_fn == KEY_dotD) {      //  1527 fnJM, 255, "", ".d",
+           ix_fn = ITM_DOTDEMU;       //  1935 fnKeyDotD, NOPARAM, "Dot.d"
+        }
+
+        printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
 
         *funk = ix_fn;
         }

@@ -504,7 +504,7 @@ const int16_t menu_A_HOME[360]   = { -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1
                                      -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1        };      //HOME  +1  (Up = +)
 
 
-const int16_t menu_HOME[]        = { //JMHOME: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
+const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
 /*HOME0 */
 /*0x18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
                                      ITM_toREC,           ITM_toPOL,       ITM_PARALLEL,      KEY_CC,           ITM_MAGNITUDE,    ITM_ANGLE,                          //JM HOME
@@ -1411,6 +1411,11 @@ void showSoftmenuCurrentPart(void) {
             if(menu_A_HOME[xx] < 200) {item = !userModeEnabled ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
             if(menu_A_HOME[xx]>= 200) {item = !userModeEnabled ? (kbd_std[menu_A_HOME[xx]-200].gShifted) : (kbd_usr[menu_A_HOME[xx]-200].gShifted);}
             //printf("item (std/usr)=%d \n",item);                              //JMHOME
+
+            if(!userModeEnabled && menu_A_HOME[xx] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+              item = Norm_Key_00_VAR;
+            }
+
           }                                                                     //JMHOME vv
           else {
             item = softkeyItem[x]; 
@@ -1503,14 +1508,15 @@ void showSoftmenuCurrentPart(void) {
 }
 
 
-//JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
+//JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
 //        Here a HOME menu config can be loaded from disk
 /*void Load_HOME(void) {
   menu_HOME[0] = 744; //pi=744
   menu_HOME[1] = 744; //pi=744
   menu_HOME[2] = 744; //pi=744
-}*/
-//JMHOME: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
+}
+*/
+//JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
 
 /********************************************//**
  * \brief Initializes the softmenu stack with a

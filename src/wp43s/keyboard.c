@@ -133,6 +133,34 @@ void resetShiftState(void) {
 }
 
 
+bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
+  int16_t ix_fn, ix_sm,ix, ix0;  //JMXXX
+  bool_t tmp;
+  tmp = false;
+
+      ix = itemShift + (fn - 1);
+      ix0 = softmenuStack[softmenuStackPointer - 1].firstItem;
+      ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+      if(ix_sm == -MNU_HOME) {
+        ix_fn = -9999;
+        if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}             else           
+        if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}             else
+        if(menu_A_HOME[ix0+ix]>= 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}
+        //printf("--> MNU_HOME:%d (current menu %d): first item %d + ix %d\n",MNU_HOME, ix_sm,ix0,ix);
+        //printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
+        //printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
+
+        if(ix == 0 && !userModeEnabled && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+          ix_fn = Norm_Key_00_VAR;
+          tmp = true;
+        }
+
+        *funk = ix_fn;
+        }
+
+  return (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)) || (!userModeEnabled && tmp);
+}
+
 
 /********************************************//**
  * \brief Executes one function from a softmenu
@@ -146,6 +174,7 @@ void resetShiftState(void) {
  ***********************************************/
 void executeFunction(int16_t fn, int16_t itemShift) {
   int16_t row, func;
+  int16_t ix_fn;  //JMXXX
   const softmenu_t *sm;
   //printf("Exec %d=\n",fn); //JMEXEC
 
@@ -155,7 +184,13 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-
+/*XXX*/
+      ix_fn = 0;
+      if(func_lookup(fn,itemShift,&ix_fn)) {
+        //printf("---%d\n",ix_fn);
+        func = ix_fn;
+      }
+/*XXX*/
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }
@@ -236,6 +271,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
   int16_t row, func;
+  int16_t ix_fn;  //JMXXX
   func = 0;
   const softmenu_t *sm;
 
@@ -245,6 +281,13 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+/*XXX*/
+      ix_fn = 0;
+      if(func_lookup(fn,itemShift,&ix_fn)) {
+        //printf("---%d\n",ix_fn);
+        func = ix_fn;
+      }
+/*XXX*/
 
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);

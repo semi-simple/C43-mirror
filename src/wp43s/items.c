@@ -380,7 +380,7 @@ void fnDecomp                   (uint16_t unusedParamButMandatory) {}
 void fnSumXY                    (uint16_t unusedParamButMandatory) {}
 void fnMeanXY                   (uint16_t unusedParamButMandatory) {}
 void fnGeometricMeanXY          (uint16_t unusedParamButMandatory) {}
-void fnWeightedMeanXY           (uint16_t unusedParamButMandatory) {}
+void fnWeightedMeanX            (uint16_t unusedParamButMandatory) {}
 void fnMaskl                    (uint16_t unusedParamButMandatory) {}
 void fnMaskr                    (uint16_t unusedParamButMandatory) {}
 void fnAsr                      (uint16_t unusedParamButMandatory) {}
@@ -1092,7 +1092,7 @@ const item_t indexOfItems[] = {
 /*  673 */  { fnLogicalXor,                NOPARAM,                     "XOR",                                         "XOR",                                         CAT_FNCT, SLS_ENABLED  },
 /*  674 */  { fnMeanXY,                    NOPARAM,                     STD_x_BAR,                                     STD_x_BAR,                                     CAT_FNCT, SLS_ENABLED  },
 /*  675 */  { fnGeometricMeanXY,           NOPARAM,                     STD_x_BAR STD_SUB_G,                           STD_x_BAR STD_SUB_G,                           CAT_FNCT, SLS_UNCHANGED},
-/*  676 */  { fnWeightedMeanXY,            NOPARAM,                     STD_x_BAR STD_SUB_w,                           STD_x_BAR STD_SUB_w,                           CAT_FNCT, SLS_UNCHANGED},
+/*  676 */  { fnWeightedMeanX,             NOPARAM,                     STD_x_BAR STD_SUB_w,                           STD_x_BAR STD_SUB_w,                           CAT_FNCT, SLS_UNCHANGED},
 /*  677 */  { itemToBeCoded,               NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                    CAT_FNCT, SLS_UNCHANGED},
 /*  678 */  { itemToBeCoded,               NOPARAM,                     "X.FN",                                        "X.FN",                                        CAT_MENU, SLS_UNCHANGED},
 /*  679 */  { fnFactorial,                 NOPARAM,                     "x!",                                          "x!",                                          CAT_FNCT, SLS_ENABLED  },

@@ -924,6 +924,7 @@ void resetTemporaryInformation(void) {
     case TI_THETA_RADIUS:
     case TI_SUMX_SUMY:
     case TI_MEANX_MEANY:
+    case TI_GEOMMEANX_GEOMMEANY:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -934,7 +935,7 @@ void resetTemporaryInformation(void) {
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
     case TI_WHO:
-    case TI_MEANX:
+    case TI_WEIGHTEDMEANX:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1277,9 +1278,20 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
             }
 
-            else if(temporaryInformation == TI_MEANX) {
+            else if(temporaryInformation == TI_GEOMMEANX_GEOMMEANY) {
                 if(regist == REGISTER_X) {
-                    strcpy(prefix, STD_x_BAR STD_SPACE_FIGURE "=");
+                    strcpy(prefix, STD_x_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_WEIGHTEDMEANX) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }

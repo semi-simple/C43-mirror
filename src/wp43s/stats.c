@@ -388,7 +388,7 @@ void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
     realExp(&tempReal, &mean, &ctxtReal39);
     realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
 
-    temporaryInformation = TI_MEANX_MEANY;
+    temporaryInformation = TI_GEOMMEANX_GEOMMEANY;
     refreshStack();
   }
 }
@@ -401,14 +401,14 @@ void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnWeightedMeanXY(uint16_t unusedParamButMandatory) {
+void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
   real_t mean;
 
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnMeanXY:", errorMessage, NULL, NULL);
+      showInfoDialog("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -420,7 +420,7 @@ void fnWeightedMeanXY(uint16_t unusedParamButMandatory) {
     realDivide(SIGMA_XY, SIGMA_Y, &mean, &ctxtReal39);
     realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
 
-    temporaryInformation = TI_MEANX;
+    temporaryInformation = TI_WEIGHTEDMEANX;
     refreshStack();
   }
 }

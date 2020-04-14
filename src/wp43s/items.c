@@ -744,7 +744,7 @@ const item_t indexOfItems[] = {
 /*  293 */  { fnConstant,                  21,                          "K" STD_SUB_J,                                 "K" STD_SUB_J,                                 CAT_CNST, SLS_ENABLED  },
 /*  294 */  { itemToBeCoded,               NOPARAM,                     "KTYP?",                                       "KTYP?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  295 */  { addItemToBuffer,             REGISTER_L,                  "L",                                           "L",                                           CAT_RVAR, SLS_UNCHANGED},
-/*  296 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LASTx",                                       CAT_FNCT, SLS_ENABLED  },
+/*  296 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LSTx",                                       CAT_FNCT, SLS_ENABLED  },
 /*  297 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                     CAT_FNCT, SLS_ENABLED  },
 /*  298 */  { itemToBeCoded,               NOPARAM,                     "LBL",                                         "LBL",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  299 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -2143,7 +2143,7 @@ const item_t indexOfItems[] = {
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},   //JM HOME
 /* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIG",                                         "SIG",                                         CAT_FNCT, SLS_UNCHANGED},   //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},   //JM ALPHA
-/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_MENU, SLS_UNCHANGED},   //JM BASE
+/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BAS",                                         CAT_MENU, SLS_UNCHANGED},   //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1686 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1687 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX

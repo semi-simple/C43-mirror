@@ -353,3 +353,74 @@ void fnMeanXY(uint16_t unusedParamButMandatory) {
     refreshStack();
   }
 }
+
+
+/********************************************//**
+ * \brief x bar sub G ==> regX, regY
+ * enables stack lift and refreshes the stack.
+ * regX = GEOMTERIC MEAN x, regY = GEOMTERIC MEAN y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
+  real_t mean, tempReal;
+
+  if(statisticalSumsPointer == NULL) {
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnGeometricMeanXY:", errorMessage, NULL, NULL);
+    #endif
+  }
+  else {
+    saveStack();
+
+    liftStack();
+    STACK_LIFT_ENABLE;
+    liftStack();
+
+    realDivide(SIGMA_lnX, SIGMA_N, &tempReal, &ctxtReal39);
+    realExp(&tempReal, &mean, &ctxtReal39);
+    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
+
+    realDivide(SIGMA_lnY, SIGMA_N, &tempReal, &ctxtReal39);
+    realExp(&tempReal, &mean, &ctxtReal39);
+    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
+
+    temporaryInformation = TI_MEANX_MEANY;
+    refreshStack();
+  }
+}
+
+/********************************************//**
+ * \brief x bar sub W ==> regX
+ * enables stack lift and refreshes the stack.
+ * regX = Weighted MEAN
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnWeightedMeanXY(uint16_t unusedParamButMandatory) {
+  real_t mean;
+
+  if(statisticalSumsPointer == NULL) {
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnMeanXY:", errorMessage, NULL, NULL);
+    #endif
+  }
+  else {
+    saveStack();
+
+    liftStack();
+    STACK_LIFT_ENABLE;
+
+    realDivide(SIGMA_XY, SIGMA_Y, &mean, &ctxtReal39);
+    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
+
+    temporaryInformation = TI_MEANX;
+    refreshStack();
+  }
+}

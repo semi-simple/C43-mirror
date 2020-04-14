@@ -934,6 +934,7 @@ void resetTemporaryInformation(void) {
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
     case TI_WHO:
+    case TI_MEANX:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1272,6 +1273,13 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
                 else if(regist == REGISTER_Y) {
                     strcpy(prefix, STD_y_BAR STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_MEANX) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }

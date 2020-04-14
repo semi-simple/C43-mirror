@@ -520,6 +520,18 @@ int main(int argc, char* argv[]) {
 
   setupDefaults();
 
+// Without the following 8 lines of code
+  // the f- and g-shifted labels are
+  // miss aligned! I dont know why!
+  calcModeAimGui();
+  while(gtk_events_pending()) {
+    gtk_main_iteration();
+  }
+  calcModeNormalGui();
+  while(gtk_events_pending()) {
+    gtk_main_iteration();
+  }
+
   restoreCalc();
   //fnReset(CONFIRMED);
 

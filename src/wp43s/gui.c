@@ -1614,8 +1614,8 @@ void moveLabels(void) {
 //JMPRT removed for template-  gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 15, yPos + 10);                       //JM
   gtk_widget_get_preferred_size(  lblOn, NULL, &lblF);                                                          //JM
 
-    gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width-2*GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
-    gtk_fixed_move(GTK_FIXED(grid), lblOn, (2*xPos+KEY_WIDTH_1+lblF.width+2*GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+    gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width-2*GAP-lblG.width+2)/2 -10, yPos - Y_OFFSET_SHIFTED_LABEL);
+    gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1+lblF.width+2*GAP-lblG.width+2)/2 -10, yPos - Y_OFFSET_SHIFTED_LABEL);
 //  gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-20)/2, yPos + 38);    //JM
 
 //  gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);         //JMPRTA                                                     //JM++_ //JMAPRT

@@ -2146,7 +2146,7 @@ const item_t indexOfItems[] = {
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},   //JM HOME
 /* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIG",                                         "SIG",                                         CAT_FNCT, SLS_UNCHANGED},   //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},   //JM ALPHA
-/* 1684 */  { itemToBeCoded,               NOPARAM,                     "RDX",                                         "RDX",                                         CAT_MENU, SLS_UNCHANGED},   //JM BASE
+/* 1684 */  { itemToBeCoded,               NOPARAM,                     "#BASE",                                       "#B",                                         CAT_MENU, SLS_UNCHANGED},   //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1686 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1687 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX

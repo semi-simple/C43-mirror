@@ -132,6 +132,43 @@ void resetShiftState(void) {
   }                                                                             //^^
 }
 
+//JM Changing the individual softmenu cell, based on the content of the assigned keyboard array
+bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
+  int16_t ix_fn, ix_sm,ix, ix0;  //JMXXX
+  bool_t tmp;
+  tmp = false;
+
+      ix = itemShift + (fn - 1);
+      ix0 = softmenuStack[softmenuStackPointer - 1].firstItem;
+      ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+      if(ix_sm == -MNU_HOME) {
+        ix_fn = -9999;
+        if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}             else           
+        if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}             else
+        if(menu_A_HOME[ix0+ix]>= 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}
+        printf("--> MNU_HOME:%d (current menu %d): first item %d + ix %d\n",MNU_HOME, ix_sm,ix0,ix);
+        printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
+        printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
+
+        if(ix == 0 && !userModeEnabled && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+          ix_fn = Norm_Key_00_VAR;
+          tmp = true;
+        }
+
+        if (ix_fn == ITM_toINT)  {    //  793   fnChangeBase, TM_VALUE_CHB, STD_RIGHT_ARROW "INT",                         "#"
+            ix_fn = KEY_HASH;         //  1737  fnBASE_Hash,  NOPARAM, "##" STD_RIGHT_ARROW "INT", 
+        } else
+        if (ix_fn == KEY_dotD) {      //  1527 fnJM, 255, "", ".d",
+           ix_fn = ITM_DOTDEMU;       //  1935 fnKeyDotD, NOPARAM, "Dot.d"
+        }
+
+        printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
+
+        *funk = ix_fn;
+        }
+
+  return (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)) || (!userModeEnabled && tmp);
+}
 
 
 /********************************************//**
@@ -146,6 +183,7 @@ void resetShiftState(void) {
  ***********************************************/
 void executeFunction(int16_t fn, int16_t itemShift) {
   int16_t row, func;
+  int16_t ix_fn;  //JMXXX
   const softmenu_t *sm;
   //printf("Exec %d=\n",fn); //JMEXEC
 
@@ -155,7 +193,13 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-
+/*XXX*/
+      ix_fn = 0;
+      if(func_lookup(fn,itemShift,&ix_fn)) {
+        //printf("---%d\n",ix_fn);
+        func = ix_fn;
+      }
+/*XXX*/
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }
@@ -236,6 +280,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
 int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
   int16_t row, func;
+  int16_t ix_fn;  //JMXXX
   func = 0;
   const softmenu_t *sm;
 
@@ -245,6 +290,13 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+/*XXX*/
+      ix_fn = 0;
+      if(func_lookup(fn,itemShift,&ix_fn)) {
+        //printf("---%d\n",ix_fn);
+        func = ix_fn;
+      }
+/*XXX*/
 
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
@@ -1071,7 +1123,23 @@ void btnPressed(void *notUsed, void *data) {
             itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
             if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
+
               softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+
+              //JM Include or exclude HOME menu screens  //JMHOME
+                #define A1 3   //HAAKON //jm_HOME_MIR
+                #define A2 9   //HAAKON
+                #define B1 10  //NIGEL  //jm_HOME_SUM
+                #define B2 11  //NIGEL
+                #define C1 12  //JACO   //jm_HOME_FIX
+                #define C2 18  //JACO
+                int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+                //printf("--1:%d %d %d menuId:%d item:%d  \n",jm_HOME_MIR,jm_HOME_SUM,jm_HOME_FIX,smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
+                if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
+                if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
+                if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
+                //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+                //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
               showSoftmenuCurrentPart();
             }
             else {
@@ -1184,6 +1252,14 @@ void btnPressed(void *notUsed, void *data) {
 
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
               softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
+
+
+
+            //JM Include or exclude HOME menu screens  //JMHOME
+              int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+              if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
+              if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
+              if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
             }
             else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
               softmenuStack[softmenuStackPointer - 1].firstItem = 0;

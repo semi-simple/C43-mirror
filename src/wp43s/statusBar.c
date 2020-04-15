@@ -516,6 +516,7 @@ void toggleUserMode(void) {
   userModeEnabled = !userModeEnabled;
 
   #ifdef PC_BUILD
+    showSoftmenuCurrentPart();
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM) calcModeTamGui();

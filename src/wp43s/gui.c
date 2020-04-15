@@ -1602,19 +1602,28 @@ void moveLabels(void) {
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_widget_get_preferred_size(  lbl81F, NULL, &lblF);
-  gtk_widget_get_preferred_size(  lbl81G, NULL, &lblG);
+//  gtk_widget_get_preferred_size(  lbl81G, NULL, &lblG);
+
+
 
 //-last one  gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_2-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
 //-last one  gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
 //JM MANUAL positioning
-  gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-22)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM
-  gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 15, yPos + 10);                       //JM
+//  gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-22)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM
+
+//JMPRT removed for template-  gtk_fixed_move(GTK_FIXED(grid), lbl81G, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 15, yPos + 10);                       //JM
   gtk_widget_get_preferred_size(  lblOn, NULL, &lblF);                                                          //JM
-  gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-20)/2, yPos + 38);    //JM
-  gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);                                                              //JM++_ //JMAPRT
+
+    gtk_fixed_move(GTK_FIXED(grid), lbl81F, (2*xPos+KEY_WIDTH_1-lblF.width-2*GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+    gtk_fixed_move(GTK_FIXED(grid), lblOn, (2*xPos+KEY_WIDTH_1+lblF.width+2*GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
+//  gtk_fixed_move(GTK_FIXED(grid), lblOn,  (2*xPos+KEY_WIDTH_1-20)/2, yPos + 38);    //JM
+
+//  gtk_widget_get_preferred_size(  lbl81Gr, NULL, &lblG);         //JMPRTA                                                     //JM++_ //JMAPRT
 //  gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK); //JM ++ //JMAPRT
-  gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 20, yPos + 10);      //JM JMAPRT ALPHA BLUE MENU LABELS //^^
+//JMPRT removed for template-    gtk_fixed_move(GTK_FIXED(grid), lbl81Gr, (2*xPos+KEY_WIDTH_1+lblF.width+2)/2 + 20, yPos + 10);      //JM JMAPRT ALPHA BLUE MENU LABELS //^^
 //JM^^
+
+
 
   xPos += DELTA_KEYS_X + 18;
   gtk_widget_get_preferred_size(  lbl82F, NULL, &lblF);
@@ -1764,8 +1773,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   if(lbl[0] == ' ') {     //JM SPACE |  OPEN BOX 9251,  0xE2 0x90 0xA3  |  0xE2 0x90 0xA0 for SP.
     lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
     lbl[1]=0xB7;          //JM SPACE
-    lbl[1]=0xB7;          //JM SPACE
-    lbl[2]=' ';           //JM SPACE
+    lbl[2]='_';           //JM SPACE
     lbl[3]=0xc2;          //JM SPACE
     lbl[4]=0xb7;          //JM SPACE
     lbl[5]=0;             //JM SPACE
@@ -1838,6 +1846,15 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   if(key->primaryAim == ITM_NULL) {
     lbl[0] = 0;
   }
+
+if(key->primaryAim == CHR_SPACE) {
+    lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
+    lbl[1]=0xB7;          //JM SPACE
+    lbl[2]='_';           //JM SPACE
+    lbl[3]=0xc2;          //JM SPACE
+    lbl[4]=0xb7;          //JM SPACE
+    lbl[5]=0;             //JM SPACE
+}
   else {
     if(alphaCase == AC_LOWER && (CHR_A <= key->primaryAim && key->primaryAim <= CHR_Z)) {
         stringToUtf8(indexOfItems[key->primaryAim + 26].itemSoftmenuName, lbl);
@@ -2236,7 +2253,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(btn85);
 
   gtk_widget_show(lbl81F);
-  gtk_widget_show(lbl81G);
+//  gtk_widget_show(lbl81G); //JM
   gtk_widget_show(lbl81L);
 //gtk_widget_show(lbl81H);  //JM
   gtk_widget_show(lbl82F);
@@ -2522,7 +2539,7 @@ void calcModeAimGui(void) {
   //gtk_widget_show(lbl85F); //JM
   //gtk_widget_show(lbl85G); //JM
 
-  gtk_widget_show(lbl81Gr); //JMAPRT
+//  gtk_widget_show(lbl81Gr); //JMAPRT
   gtk_widget_show(lbl82Gr);
   gtk_widget_show(lbl83Gr);
   gtk_widget_show(lbl84Gr); //JM TT
@@ -3772,10 +3789,10 @@ void setupUI(void) {
   lbl83G  = gtk_label_new("");
   lbl84G  = gtk_label_new("");
   lbl85G  = gtk_label_new("");
-  lbl82H  = gtk_label_new("\u03B1");        //JM ALPHA u221D
-  lbl83H  = gtk_label_new("\u2219");  //JM Alphadot -  Menu alphaDOT for AIM 2218
-  lbl84H  = gtk_label_new("\u221E");  //JM Alpha MATH - also considered pi \u03C0 and integral u222E
-  lbl85H  = gtk_label_new("\u00f1");  //JM Alpha Intnl - also considered \u2139
+  lbl82H  = gtk_label_new("");//("\u03B1");        //JM ALPHA u221D
+  lbl83H  = gtk_label_new("");//("\u2219");  //JM Alphadot -  Menu alphaDOT for AIM 2218
+  lbl84H  = gtk_label_new("");//("\u221E");  //JM Alpha MATH - also considered pi \u03C0 and integral u222E
+  lbl85H  = gtk_label_new("");//("\u00f1");  //JM Alpha Intnl - also considered \u2139
   lbl81L  = gtk_label_new("");
   lbl82L  = gtk_label_new("");
   lbl83L  = gtk_label_new("");

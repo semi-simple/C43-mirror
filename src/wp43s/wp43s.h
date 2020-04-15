@@ -381,6 +381,8 @@ typedef int16_t calcRegister_t;
 #define TI_MEANX_MEANY         15
 #define TI_GEOMMEANX_GEOMMEANY 16
 #define TI_WEIGHTEDMEANX       17
+#define TI_HARMMEANX_HARMMEANY 18
+#define TI_RMSMEANX_RMSMEANY   19
 
 // Register browser mode
 #define RBR_GLOBAL              0

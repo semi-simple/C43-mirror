@@ -925,6 +925,8 @@ void resetTemporaryInformation(void) {
     case TI_SUMX_SUMY:
     case TI_MEANX_MEANY:
     case TI_GEOMMEANX_GEOMMEANY:
+    case TI_HARMMEANX_HARMMEANY:
+    case TI_RMSMEANX_RMSMEANY:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -1292,6 +1294,28 @@ void refreshRegisterLine(calcRegister_t regist) {
             else if(temporaryInformation == TI_WEIGHTEDMEANX) {
                 if(regist == REGISTER_X) {
                     strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_RMSMEANX_RMSMEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_G STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }

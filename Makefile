@@ -28,8 +28,8 @@ ifeq ($(detected_OS),Windows)
 	CFLAGS += -D WIN32
 else ifeq ($(detected_OS),Darwin)        # Mac OS X
 	CFLAGS += -D OSX
-	CFLAGS += -I/opt/local/include/
-	LDFLAGS += -L/opt/local/lib
+	CFLAGS += -I/usr/local/include/
+	LDFLAGS += -L/usr/local/lib
 else ifeq ($(detected_OS),Linux)
 	CFLAGS += -D LINUX
 endif

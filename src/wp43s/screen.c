@@ -476,6 +476,7 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
 #endif
 
 
+
 #ifndef TESTSUITE_BUILD
 void refreshFn(uint16_t timerType) {                        //vv dr - general timeout handler
   if(timerType == TO_FG_LONG) { Shft_handler(); }
@@ -1251,11 +1252,14 @@ void resetTemporaryInformation(void) {
   switch(tempInfo) {
     case TI_NO_INFO:           break;
 
-    case TI_WHO:
+    case TI_WHO:                                         //JM Moved here to allow second WHO line
     case TI_RADIUS_THETA:
     case TI_THETA_RADIUS:
     case TI_SUMX_SUMY:
     case TI_MEANX_MEANY:
+    case TI_GEOMMEANX_GEOMMEANY:
+    case TI_HARMMEANX_HARMMEANY:
+    case TI_RMSMEANX_RMSMEANY:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -1265,6 +1269,7 @@ void resetTemporaryInformation(void) {
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
+    case TI_WEIGHTEDMEANX:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1649,6 +1654,46 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
             }
 
+            else if(temporaryInformation == TI_GEOMMEANX_GEOMMEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_WEIGHTEDMEANX) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_RMSMEANX_RMSMEANY) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_y_BAR STD_SUB_G STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
             else if(temporaryInformation == TI_STATISTIC_SUMS) {
               if(regist == REGISTER_Y) {
                 realToInt32(SIGMA_N, w);
@@ -1676,6 +1721,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
           }
+
+          // else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
+          //complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
 
           else if(getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtReal34) {
              if(temporaryInformation == TI_ABC) {                             //JM EE \/

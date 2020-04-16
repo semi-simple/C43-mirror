@@ -1315,7 +1315,7 @@ void refreshRegisterLine(calcRegister_t regist) {
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
                 else if(regist == REGISTER_Y) {
-                    strcpy(prefix, STD_y_BAR STD_SUB_G STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+                    strcpy(prefix, STD_y_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }

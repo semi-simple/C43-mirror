@@ -382,7 +382,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
   // Function name display
-  if(showFunctionNameCounter>0) {
+  if(showFunctionNameCounter > 0) {
     if(--showFunctionNameCounter == 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
@@ -864,10 +864,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+  if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
 }
 
 
@@ -880,10 +880,16 @@ void showFunctionName(int16_t item, int8_t counter) {
  * \param void
  * \return void
  ***********************************************/
-void hideFunctionName() {
+void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
   refreshRegisterLine(REGISTER_T);
+  if(calcMode == CM_TAM) {
+    if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+      clearRegisterLine(Y_POSITION_OF_TAM_LINE, 32);
+    }
+    showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  }
 }
 
 

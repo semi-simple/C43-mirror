@@ -32,6 +32,7 @@
   int16_t            debugWindow;
   uint32_t           *screenData;
   bool_t             screenChange;
+  char               debugString[10000];
   #if (DEBUG_REGISTER_L == 1)
     GtkWidget        *lblRegisterL1;
     GtkWidget        *lblRegisterL2;
@@ -44,6 +45,7 @@
 char                 *ram;
 bool_t               allowScreenUpdate;
 bool_t               funcOK;
+bool_t               keyActionProcessed;
 
 // Variables stored in RAM
 realContext_t        ctxtReal34;   //   34 digits

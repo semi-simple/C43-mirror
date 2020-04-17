@@ -57,7 +57,6 @@ const funcTest_t funcTestNoParam[] = {
   {"fnClFAll",               fnClFAll              },
   {"fnClSigma",              fnClSigma             },
   {"fnClX",                  fnClX                 },
-  {"fnComplexCCCC",          fnComplexCCCC         },
   {"fnConfigChina",          fnConfigChina         },
   {"fnConfigEurope",         fnConfigEurope        },
   {"fnConfigIndia",          fnConfigIndia         },
@@ -1482,15 +1481,11 @@ void checkExpectedOutParameter(char *p) {
 
       checkRegisterType(regist, letter, dtReal34, am);
       stringToReal34(r, &expectedReal34);
-//printf("\nexpectedReal34 = "); printReal34ToConsole(&expectedReal34); printf("\n");
-//printf("\nR%d = ", regist); printRegisterToConsole(regist); printf("\n");
-//printf("\n1<%s|%s|%s>\n", p, l, r);
       if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
         if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "real", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
-//printf("\n2<%s|%s|%s>\n", p, l, r);
       }
     }
     else if(strcmp(l, "STRI") == 0) {

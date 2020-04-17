@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 30  // 30 = exponentLimit
+#define BACKUP_VERSION 31  // 31 = keyActionProcessed
 
 void saveCalc(void) {
   size_t size;
@@ -168,6 +168,7 @@ void saveCalc(void) {
   size += fwrite(displayValueX,                       1, sizeof(displayValueX),                      backup); //printf("%8lu displayValueX\n",                      (unsigned long)size);
   size += fwrite(&pcg32_global,                       1, sizeof(pcg32_global),                       backup); //printf("%8lu pcg32_global\n",                       (unsigned long)size);
   size += fwrite(&exponentLimit,                      1, sizeof(exponentLimit),                      backup); //printf("%8lu exponentLimit\n",                      (unsigned long)size);
+  size += fwrite(&keyActionProcessed,                 1, sizeof(keyActionProcessed),                 backup); //printf("%8lu keyActionProcessed\n",                 (unsigned long)size);
 
   printf("%" FMT32U " bytes saved\n", (uint32_t)size);
 
@@ -338,6 +339,7 @@ void restoreCalc(void) {
     size += fread(displayValueX,                       1, sizeof(displayValueX),                      backup); //printf("%8lu displayValueX\n",                      (unsigned long)size);
     size += fread(&pcg32_global,                       1, sizeof(pcg32_global),                       backup); //printf("%8lu pcg32_global\n",                       (unsigned long)size);
     size += fread(&exponentLimit,                      1, sizeof(exponentLimit),                      backup); //printf("%8lu exponentLimit\n",                      (unsigned long)size);
+    size += fread(&keyActionProcessed,                 1, sizeof(keyActionProcessed),                 backup); //printf("%8lu keyActionProcessed\n",                 (unsigned long)size);
 
     printf("%" FMT32U " bytes restored\n", (uint32_t)size);
 

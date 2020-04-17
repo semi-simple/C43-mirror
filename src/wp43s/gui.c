@@ -901,6 +901,19 @@ void setupUI(void) {
   g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
   g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
 
+  //g_signal_connect(btn11, "pressed", G_CALLBACK(btnPressed), "1");
+  //g_signal_connect(btn12, "pressed", G_CALLBACK(btnPressed), "2");
+  //g_signal_connect(btn13, "pressed", G_CALLBACK(btnPressed), "3");
+  //g_signal_connect(btn14, "pressed", G_CALLBACK(btnPressed), "4");
+  //g_signal_connect(btn15, "pressed", G_CALLBACK(btnPressed), "5");
+  //g_signal_connect(btn16, "pressed", G_CALLBACK(btnPressed), "6");
+  //g_signal_connect(btn11, "released", G_CALLBACK(btnReleased), "1");
+  //g_signal_connect(btn12, "released", G_CALLBACK(btnReleased), "2");
+  //g_signal_connect(btn13, "released", G_CALLBACK(btnReleased), "3");
+  //g_signal_connect(btn14, "released", G_CALLBACK(btnReleased), "4");
+  //g_signal_connect(btn15, "released", G_CALLBACK(btnReleased), "5");
+  //g_signal_connect(btn16, "released", G_CALLBACK(btnReleased), "6");
+
   gtk_widget_set_focus_on_click(btn11, FALSE);
   gtk_widget_set_focus_on_click(btn12, FALSE);
   gtk_widget_set_focus_on_click(btn13, FALSE);

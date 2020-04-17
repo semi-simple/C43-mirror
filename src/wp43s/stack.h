@@ -14,22 +14,21 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-void fnClX           (uint16_t unusedParamButMandatory);
-void fnDrop          (uint16_t unusedParamButMandatory);
-void liftStack       (void);
-void fnDropY         (uint16_t unusedParamButMandatory);
-void fnRollUp        (uint16_t unusedParamButMandatory);
-void fnRollDown      (uint16_t unusedParamButMandatory);
-void fnStackSize     (uint16_t stackSize);
-void fnDisplayStack  (uint16_t numberOfStackLines);
-void fnSwapXY        (uint16_t unusedParamButMandatory);
-void fnFillStack     (uint16_t unusedParamButMandatory);
-void fnGetStackSize  (uint16_t unusedParamButMandatory);
-void fnClearStack    (uint16_t unusedParamButMandatory);
-void saveStack       (void);
-void restoreStack    (void);
-void refreshStack    (void);
-void fnEnter         (uint16_t unusedParamButMandatory);
+void fnClX         (uint16_t unusedParamButMandatory);
+void fnDrop        (uint16_t unusedParamButMandatory);
+void liftStack     (void);
+void fnDropY       (uint16_t unusedParamButMandatory);
+void fnRollUp      (uint16_t unusedParamButMandatory);
+void fnRollDown    (uint16_t unusedParamButMandatory);
+void fnStackSize   (uint16_t stackSize);
+void fnDisplayStack(uint16_t numberOfStackLines);
+void fnSwapXY      (uint16_t unusedParamButMandatory);
+void fnFillStack   (uint16_t unusedParamButMandatory);
+void fnGetStackSize(uint16_t unusedParamButMandatory);
+void fnClearStack  (uint16_t unusedParamButMandatory);
+void saveStack     (void);
+void restoreStack  (void);
+void refreshStack  (void);
 #ifdef PC_BUILD
   void stackLiftEnable (void);
   void stackLiftDisable(void);

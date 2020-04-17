@@ -18,20 +18,27 @@
  * \file keyboard.h
  ***********************************************/
 
-void resetShiftState(void);
-void showShiftState (void);
-void fnComplexCCCC  (uint16_t unusedParamButMandatory);
+void resetShiftState (void);
+void showShiftState  (void);
+void processKeyAction(int16_t item);
+void fnKeyEnter      (uint16_t unusedParamButMandatory);
+void fnKeyExit       (uint16_t unusedParamButMandatory);
+void fnKeyCC         (uint16_t unusedParamButMandatory);
+void fnKeyBackspace  (uint16_t unusedParamButMandatory);
+void fnKeyUp         (uint16_t unusedParamButMandatory);
+void fnKeyDown       (uint16_t unusedParamButMandatory);
+void fnKeyDotD       (uint16_t unusedParamButMandatory);
 
 #ifdef PC_BUILD
-  void btnFnClicked   (GtkWidget *w, gpointer data);
-  void btnClicked     (GtkWidget *w, gpointer data);
-  void btnPressed     (GtkWidget *w, gpointer data);
-  void btnReleased    (GtkWidget *w, gpointer data);
+  void btnFnClicked(GtkWidget *w, gpointer data);
+  void btnClicked  (GtkWidget *w, gpointer data);
+  void btnPressed  (GtkWidget *w, gpointer data);
+  void btnReleased (GtkWidget *w, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
-  void btnFnClicked   (void *w, void *data);
-  void btnClicked     (void *w, void *data);
-  void btnPressed     (void *w, void *data);
-  void btnReleased    (void *w, void *data);
+  void btnFnClicked(void *w, void *data);
+  void btnClicked  (void *w, void *data);
+  void btnPressed  (void *w, void *data);
+  void btnReleased (void *w, void *data);
 #endif // DMCP_BUILD

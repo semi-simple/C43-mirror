@@ -31,8 +31,8 @@ uint32_t             mem__32;                                 //JM_CSV
 
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
-  char csv[3000];
-  char csvp[3000];
+  char csv[TMP_STR_LENGTH];
+  char csvp[TMP_STR_LENGTH];
   csvp[0] = 0;
 
   int16_t ix;
@@ -71,12 +71,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       strcat(csv, CSV_NEWLINE);
     }
 
-    #ifdef DMCP_BUILD
-    strcpy(tmpStr3000, csv);
-    test_line();                    //Output append to CSV file
-    #elif PC_BUILD
-    printf("%s\n",csv);
-    #endif
+    test_line(csv);                    //Output append to CSV file
 
     ++ix;
   }
@@ -89,6 +84,8 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
   make_date_filename(filename_csv,"/SCREENS/",".TSV");
+  #endif
+
 
   switch (unusedParamButMandatory)
   {
@@ -97,7 +94,7 @@ void fnP_All_Regs(uint16_t unusedParamButMandatory){
        stackregister_csv_out(REGISTER_X,REGISTER_D);
        stackregister_csv_out(REGISTER_D,REGISTER_K);
        stackregister_csv_out(0,99);
-       //register_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
+       //stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
     }
     break;
   case 1:           //Stack only
@@ -112,13 +109,12 @@ void fnP_All_Regs(uint16_t unusedParamButMandatory){
     break;
   case 3:           //USER Registers
     {
-       //register_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
+       stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
     }
     break;
   default:
     break;
   }
-  #endif
 }
 
 
@@ -398,7 +394,7 @@ char line[100];               /* Line buffer */
 
 
 
-int16_t test_line(void){          //uses  tmpStr3000;
+int16_t test_line(char *inputstring){
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
@@ -432,8 +428,7 @@ char line[100];               /* Line buffer */
       return (int)fr;
     }
 
-//uses tmpstr3000
-    fr = f_puts(tmpStr3000, &fil);
+    fr = f_puts(inputstring, &fil);
 
 
     /* close the file */
@@ -456,11 +451,13 @@ char line[100];               /* Line buffer */
 
 #elif PC_BUILD
 
-int16_t test_line(void){          //uses  tmpStr3000;
+int16_t test_line(char *inputstring){
+  printf("%s\n",inputstring);
   return 0;
 }
 
 int16_t test_xy(float x, float y){
+  printf("%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
   return 0;
 }
 

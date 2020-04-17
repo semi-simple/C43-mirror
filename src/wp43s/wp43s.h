@@ -608,7 +608,7 @@ extern realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH      3000          //JMMAX
+#define TMP_STR_LENGTH      6000          //JMMAX 3000+ extra to make sure
 #define ERROR_MESSAGE_LENGTH 512
 #define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];

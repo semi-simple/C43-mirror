@@ -80,7 +80,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
-  char tmp2[3000];                   //JMCSV
+  char tmp2[TMP_STR_LENGTH];                   //JMCSV
   static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {
@@ -91,7 +91,9 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       tmp2[0]=0;                 //JMCSV add apostrophies
       strcat(tmp2,"\"");         //JMCSV
       strcat(tmp2,tmpStr3000);   //JMCSV
-      strcpy(tmpStr3000,tmp2);   //JMCSV
+      //strcpy(tmpStr3000,tmp2);   //JMCSV
+      tmp2[TMP_STR_LENGTH-1]=0;  //JMCSV trying a better way, in case the terminating 0 is not copied
+      memcpy(tmpStr3000,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
       strcat(tmpStr3000,"\"");   //JMCSV
       break;
 
@@ -181,7 +183,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
 
 void copyRegisterXToClipboard(void) {
   GtkClipboard *clipboard;
-  char clipboardString[3000];
+  char clipboardString[TMP_STR_LENGTH];                     //JM fixed
 
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);

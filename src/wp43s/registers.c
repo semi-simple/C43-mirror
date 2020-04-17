@@ -1870,7 +1870,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
  * \return void
  ***********************************************/
 void printRegisterToConsole(calcRegister_t regist, const char *before, const char *after) {
-  char str[3000];
+  char str[TMP_STR_LENGTH];     //JM updated from 3000
 
   printf(before);
 
@@ -1966,7 +1966,7 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
 
   else if(getRegisterDataType(regist) == dtLongInteger) {
     longInteger_t lgInt;
-    char lgIntStr[3000];
+    char lgIntStr[TMP_STR_LENGTH];                       //JM updated from 3000
 
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
     longIntegerToAllocatedString(lgInt, lgIntStr, sizeof(lgIntStr));
@@ -2107,7 +2107,7 @@ void printRegisterDescriptorToConsole(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void printLongIntegerToConsole(const longInteger_t value, const char *before, const char *after) {
-  char str[3000];
+  char str[TMP_STR_LENGTH];                            //JM updated from 3000
 
   longIntegerToAllocatedString(value, str, sizeof(str));
   printf("%slong integer (%" FMTSIZE " + %" FMT64U " <%" FMT64U " reserved> bytes) %s%s", before, sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc), (uint64_t)longIntegerSizeInBytes(value), (uint64_t)(value->_mp_alloc * LIMB_SIZE), str, after);

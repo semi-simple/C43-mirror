@@ -20,20 +20,19 @@
 
 /* ADDITIONAL WP43C functions and routines */
 
-char                 filename_csv[60];                        //JM_CSV
-uint32_t             tmp__32;                                 //JM_CSV
-uint32_t             mem__32;                                 //JM_CSV
+char         filename_csv[60];                        //JM_CSV
+uint32_t     tmp__32;                                 //JM_CSV
+uint32_t     mem__32;                                 //JM_CSV
 
-#define CSV_NEWLINE "\n"
-#define CSV_TAB     "\t"
-#define CSV_CR      "\r"
-#define CSV_SLASH   "\\"
-#define CSV_STR     "\""
-
-
-int16_t testjm(void);
-int16_t test_xy(float x, float y);
-void fnP_All_Regs(uint16_t unusedParamButMandatory);
-void print_line(bool_t line_init);
-void print_linestr(const char line1[100], bool_t line_init);
-int16_t test_line(void);          //uses  tmpStr3000;
+#define      CSV_NEWLINE "\n"
+#define      CSV_TAB     "\t"
+#define      CSV_CR      "\r"
+#define      CSV_SLASH   "\\"
+#define      CSV_STR     "\""
+ 
+int16_t      testjm(void);
+int16_t      test_xy(float x, float y);
+void         fnP_All_Regs(uint16_t unusedParamButMandatory);
+void         print_line(bool_t line_init);
+void         print_linestr(const char line1[100], bool_t line_init);
+int16_t      test_line(char *inputstring);

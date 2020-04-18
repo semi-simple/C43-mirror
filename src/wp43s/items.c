@@ -70,8 +70,11 @@ void fnNop(uint16_t unusedParamButMandatory) {
 void runFunction(int16_t func) {
   funcOK = true;
 
-  if(func > LAST_ITEM) {
-  }
+  if(func >= LAST_ITEM) {
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "item (%" FMT16S ") must be below LAST_ITEM", func);
+      showInfoDialog("In function runFunction:", errorMessage, NULL, NULL);
+    #endif
 
   tamMode = indexOfItems[func].param;
   if(calcMode != CM_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
@@ -208,7 +211,13 @@ void fnIsFlagSetClear           (uint16_t unusedParamButMandatory) {}
 void fnIsFlagSetFlip            (uint16_t unusedParamButMandatory) {}
 void fnIsFlagSetSet             (uint16_t unusedParamButMandatory) {}
 void fnDisplayOvr               (uint16_t unusedParamButMandatory) {}
-void fnEnter                    (uint16_t unusedParamButMandatory) {}
+void fnKeyEnter                 (uint16_t unusedParamButMandatory) {}
+void fnKeyExit                  (uint16_t unusedParamButMandatory) {}
+void fnKeyUp                    (uint16_t unusedParamButMandatory) {}
+void fnKeyDown                  (uint16_t unusedParamButMandatory) {}
+void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}
+void fnKeyCC                    (uint16_t unusedParamButMandatory) {}
+void fnKeyBackspace             (uint16_t unusedParamButMandatory) {}
 void fnDisplayStack             (uint16_t unusedParamButMandatory) {}
 void fnFreeFlashMemory          (uint16_t unusedParamButMandatory) {}
 void fnFreeMemory               (uint16_t unusedParamButMandatory) {}
@@ -365,7 +374,6 @@ void fnCvtDegToDms              (uint16_t unusedParamButMandatory) {}
 void addItemToBuffer            (uint16_t unusedParamButMandatory) {}
 void fnOff                      (uint16_t unusedParamButMandatory) {}
 void fnAim                      (uint16_t unusedParamButMandatory) {}
-void fnComplexCCCC              (uint16_t unusedParamButMandatory) {}
 void fnShow                     (uint16_t unusedParamButMandatory) {}
 void fnLastX                    (uint16_t unusedParamButMandatory) {}
 void fnCyx                      (uint16_t unusedParamButMandatory) {}
@@ -451,6 +459,7 @@ void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -599,7 +608,7 @@ const item_t indexOfItems[] = {
 /*  145 */  { fnDisplayFormatEng,          TM_VALUE,                    "ENG",                                         "ENG",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  146 */  { fnDisplayOvr,                DO_ENG,                      "ENGOVR",                                      "ENGOVR",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  147 */  { itemToBeCoded,               NOPARAM,                     "ENORM",                                       "ENORM",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  148 */  { fnEnter,                     NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          CAT_FNCT, SLS_DISABLED },
+/*  148 */  { fnKeyEnter,                  NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          CAT_FNCT, SLS_DISABLED },
 /*  149 */  { itemToBeCoded,               NOPARAM,                     "ENTRY?",                                      "ENTRY?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  150 */  { itemToBeCoded,               NOPARAM,                     "EQN",                                         "EQN",                                         CAT_MENU, SLS_UNCHANGED},
 /*  151 */  { itemToBeCoded,               NOPARAM,                     "EQ.DEL",                                      "DELETE",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -1223,8 +1232,8 @@ const item_t indexOfItems[] = {
 /*  769 */  { fnRange,                     NOPARAM,                     "RANGE",                                       "RANGE",                                       CAT_FNCT, SLS_ENABLED  },
 /*  770 */  { fnGetRange,                  NOPARAM,                     "RANGE?",                                      "RANGE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  771 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2  STD_SUB_p "(x)",            STD_chi STD_SUP_2  STD_SUB_p "(x)",            CAT_FNCT, SLS_UNCHANGED},
-/*  772 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2  STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R, STD_chi STD_SUP_2  STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R, CAT_FNCT, SLS_UNCHANGED},
-/*  773 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2  STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R, STD_chi STD_SUP_2  STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R, CAT_FNCT, SLS_UNCHANGED},
+/*  772 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", CAT_FNCT, SLS_UNCHANGED},
+/*  773 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", CAT_FNCT, SLS_UNCHANGED},
 /*  774 */  { itemToBeCoded,               NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     CAT_FNCT, SLS_UNCHANGED},
 /*  775 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 ":",                         STD_chi STD_SUP_2 ":",                         CAT_MENU, SLS_UNCHANGED},
 /*  776 */  { fnConstant,                  75,                          STD_omega,                                     STD_omega,                                     CAT_CNST, SLS_ENABLED  },
@@ -1960,24 +1969,24 @@ const item_t indexOfItems[] = {
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1506 */  { fnJM,                        31,                          "",                                            STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
-/* 1507 */  { itemToBeCoded,               NOPARAM,                     "",                                            "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
-/* 1508 */  { itemToBeCoded,               NOPARAM,                     "",                                            "R/S",                                         CAT_NONE, SLS_UNCHANGED},
+/* 1507 */  { itemToBeCoded,               NOPARAM,                     "PRGM",                                        "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
+/* 1508 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1510 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1511 */  { itemToBeCoded,               NOPARAM,                     "",                                            "defined",                                     CAT_NONE, SLS_UNCHANGED},
 /* 1512 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Tam",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   CAT_NONE, SLS_UNCHANGED},
-/* 1515 */  { fnUserMode,                  NOPARAM,                     "",                                            "USER",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1516 */  { fnComplexCCCC_CC,            NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1515 */  { fnUserMode,                  NOPARAM,                     "USER",                                        "USER",                                        CAT_NONE, SLS_UNCHANGED},
+/* 1516 */  { fnKeyCC/*fnComplexCCCC_CC*/, NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                           CAT_NONE, SLS_UNCHANGED},
-/* 1519 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
+/* 1519 */  { fnKeyUp,                     NOPARAM,                     "UP",                                          STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_BST,                         CAT_NONE, SLS_UNCHANGED},
-/* 1521 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_DOWN_ARROW,                                CAT_NONE, SLS_UNCHANGED},
+/* 1521 */  { fnKeyDown,                   NOPARAM,                     "DOWN",                                        STD_DOWN_ARROW,                                CAT_NONE, SLS_UNCHANGED},
 /* 1522 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_SST,                         CAT_NONE, SLS_UNCHANGED},
-/* 1523 */  { itemToBeCoded,               NOPARAM,                     "",                                            "EXIT",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1524 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_LEFT_ARROW,                                CAT_NONE, SLS_UNCHANGED},
+/* 1523 */  { fnKeyExit,                   NOPARAM,                     "EXIT",                                        "EXIT",                                        CAT_NONE, SLS_UNCHANGED},
+/* 1524 */  { fnKeyBackspace,              NOPARAM,                     "BKSPC",                                       STD_LEFT_ARROW,                                CAT_NONE, SLS_UNCHANGED},
 /* 1525 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_PRINTER "x",                               CAT_NONE, SLS_UNCHANGED},
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            "ALPHA",                                       CAT_NONE, SLS_UNCHANGED},   //JM
@@ -1985,7 +1994,7 @@ const item_t indexOfItems[] = {
 #ifdef JM_LAYOUT_1A
 /* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                     CAT_NONE, SLS_UNCHANGED},   //JM
 #endif //JM END OF LAYOUT 1
-/* 1527 */  { fnJM,                        255,                         "",                                            ".d",                                          CAT_NONE, SLS_UNCHANGED},   //JM mod
+/* 1527 */  { fnKeyDotD/*fnJM 255*/,       NOPARAM,                     ".d",                                          ".d",                                          CAT_NONE, SLS_UNCHANGED},   //JM mod
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
@@ -2146,7 +2155,7 @@ const item_t indexOfItems[] = {
 /* 1681 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        CAT_MENU, SLS_UNCHANGED},   //JM HOME
 /* 1682 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIG",                                         "SIG",                                         CAT_FNCT, SLS_UNCHANGED},   //JM SIGFIG
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       CAT_FNCT, SLS_UNCHANGED},   //JM ALPHA
-/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                         CAT_MENU, SLS_UNCHANGED},   //JM BASE
+/* 1684 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        CAT_MENU, SLS_UNCHANGED},   //JM BASE
 /* 1685 */  { fnChangeBase,                2,                           STD_RIGHT_ARROW "BIN",                         STD_RIGHT_ARROW "BIN",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1686 */  { fnChangeBase,                8,                           STD_RIGHT_ARROW "OCT",                         STD_RIGHT_ARROW "OCT",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX
 /* 1687 */  { fnChangeBase,                10,                          STD_RIGHT_ARROW "DEC",                         STD_RIGHT_ARROW "DEC",                         CAT_FNCT, SLS_UNCHANGED},   //JM HEX

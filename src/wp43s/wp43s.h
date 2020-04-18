@@ -113,7 +113,6 @@
   #define addItemToBuffer fnNop
   #define fnOff           fnNop
   #define fnAim           fnNop
-  #define fnComplexCCCC   fnNop
   #define registerBrowser fnNop
   #define flagBrowser     fnNop
   #define fontBrowser     fnNop
@@ -576,6 +575,7 @@ typedef int16_t calcRegister_t;
   extern int16_t            debugWindow;
   extern uint32_t           *screenData;
   extern bool_t             screenChange;
+  extern char               debugString[10000];
   #if (DEBUG_REGISTER_L == 1)
     extern GtkWidget        *lblRegisterL1;
     extern GtkWidget        *lblRegisterL2;
@@ -588,6 +588,7 @@ typedef int16_t calcRegister_t;
 extern char                 *ram;
 extern bool_t               allowScreenUpdate;
 extern bool_t               funcOK;
+extern bool_t               keyActionProcessed;
 
 // Variables stored in FLASH
 extern const item_t         indexOfItems[];

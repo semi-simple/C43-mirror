@@ -2019,6 +2019,7 @@ typedef struct {
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;
 
-void runFunction(int16_t func);
-void fnToBeCoded(void);
+void runFunction  (int16_t func);
+void fnToBeCoded  (void);
 void itemToBeCoded(uint16_t unusedParamButMandatory);
+void fnNop        (uint16_t unusedParamButMandatory);

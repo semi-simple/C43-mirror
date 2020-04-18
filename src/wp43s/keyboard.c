@@ -183,6 +183,7 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
 }
 
 
+
 /********************************************//**
  * \brief Executes one function from a softmenu
  *
@@ -205,13 +206,13 @@ void executeFunction(int16_t fn, int16_t itemShift) {
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-/*XXX*/
+      /*JMEXEC XXX vv*/
       ix_fn = 0;
       if(func_lookup(fn,itemShift,&ix_fn)) {
         //printf("---%d\n",ix_fn);
         func = ix_fn;
       }
-/*XXX*/
+      /*JMEXEC XXX ^^*/
       if(func == CHR_PROD_SIGN) {
         func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }
@@ -646,6 +647,83 @@ void btnFnClicked(void *w, void *data) {
 
 
 
+int16_t determineItem(const char *data) {
+  int16_t result;
+  const calcKey_t *key;
+
+  key = userModeEnabled ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
+
+  allowScreenUpdate = true;
+
+
+  // Shift f pressed and shift g not active
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+    resetTemporaryInformation();
+
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
+    }
+
+    shiftF = !shiftF;
+//    shiftStateChanged = true; //JM
+
+    showShiftState();
+
+    return ITM_NOP;
+  }
+
+  // Shift g pressed and shift f not active
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+    resetTemporaryInformation();
+
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
+    }
+
+    shiftG = !shiftG;
+//    shiftStateChanged = true; //JM
+
+    showShiftState();
+
+    return ITM_NOP;
+  }
+
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
+    result = shiftF ? key->fShifted :
+             shiftG ? key->gShifted :
+                      key->primary;
+  }
+  else if(calcMode == CM_AIM || calcMode == CM_ASM) {
+    result = shiftF ? key->fShiftedAim :
+             shiftG ? key->gShiftedAim :
+                      key->primaryAim;
+
+  }
+  else if(calcMode == CM_TAM) {
+    result = key->primaryTam; // No shifted function in TAM
+  }
+  else {
+    displayBugScreen("In function determineItem: item was not determined!");
+    result = 0;
+  }
+
+  if(result == CHR_PROD_SIGN) {
+    result = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
+  }
+
+  resetShiftState();
+
+  return result;
+}
+
+
+
+#define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
+
+
+
 /********************************************//**
  * \brief Simulate a button click.
  *
@@ -665,34 +743,6 @@ void btnClicked(void *w, void *data) {
 
 
 
-uint16_t determineItem(const calcKey_t *key) {
-  uint16_t result;
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
-    result = shiftF ? key->fShifted :
-             shiftG ? key->gShifted :
-                      key->primary;
-  }
-  else if(calcMode == CM_AIM || calcMode == CM_ASM) {
-    result = shiftF ? key->fShiftedAim :
-             shiftG ? key->gShiftedAim :
-                      key->primaryAim;
-  }
-  else if(calcMode == CM_TAM) {
-    result = key->primaryTam; // No shifted function in TAM
-  }
-  else {
-    displayBugScreen("In function determineItem: item was not determined!");
-    result = 0;
-  }
-  return result;
-}
-
-
-
-#define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
-
-
-
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -706,6 +756,21 @@ void btnPressed(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnPressed(void *notUsed, void *data) {
 #endif
+  int16_t item = determineItem((char *)data);
+
+  if(item != ITM_NOP && item != ITM_NULL) {
+    processKeyAction(item);
+    if(!keyActionProcessed) {
+      showFunctionName(item, 10);
+    }
+  }
+}
+
+
+/******************************************************************************/
+/************************************************VVVVVVV***********************/
+/*******************************************************/
+
   const calcKey_t *key;
   int16_t itemShift;
 
@@ -1545,6 +1610,12 @@ void btnPressed(void *notUsed, void *data) {
 }
 
 
+/******************************************************************************/
+/************************************************^^^^^^^^^^***********************/
+/*******************************************************/
+
+
+
 
 /********************************************//**
  * \brief A calc button was released
@@ -1564,22 +1635,196 @@ void btnReleased(void *notUsed, void *data) {
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();
-    runFunction(item);
+    if(item < 0) {
+      showSoftmenu(NULL, item, false);
+    }
+    else {
+      runFunction(item);
+    }
   }
 }
 
 
 
-void fnComplexCCCC(uint16_t unusedParamButMandatory) {
-  // Emulating a CC key stroke
-  //if(!shiftF) {
-  //  shiftF = true;
-  //  shiftStateChanged = true;
-  //}
-  //btnClicked(NULL, "09"); // Index 9 of kbd_std array (beginning with "{34,   KEY_CC,") in file assign.c
-  int16_t Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
-  Norm_Key_00_VAR        = KEY_CC;               //JM
-  btnClicked(NULL, "00");
-  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
+/********************************************//**
+ * \brief A calc button was pressed
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+void processKeyAction(int16_t item) {
+  keyActionProcessed = false;
+
+  if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
+    lastErrorCode = 0;
+    refreshStack();
+  }
+
+  resetTemporaryInformation();
+
+  if(item != ITM_ENTER && item != KEY_EXIT && item != KEY_CC && item != KEY_BACKSPACE && item != KEY_UP && item != KEY_DOWN && item != KEY_dotD) {
+    switch(calcMode) {
+      case CM_NORMAL:
+        if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+          addItemToNimBuffer(item);
+          keyActionProcessed = true;
+        }
+        break;
+
+      case CM_AIM:
+        if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+          addItemToBuffer(item + 26);
+          keyActionProcessed = true;
+        }
+
+        else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+          addItemToBuffer(item + 36);
+          keyActionProcessed = true;
+        }
+
+        else if(item == CHR_DOWN_ARROW) {
+          nextChar = NC_SUBSCRIPT;
+          keyActionProcessed = true;
+        }
+
+        else if(item == CHR_UP_ARROW) {
+          nextChar = NC_SUPERSCRIPT;
+          keyActionProcessed = true;
+        }
+        break;
+
+      case CM_TAM:
+        addItemToBuffer(item);
+        keyActionProcessed = true;
+        break;
+
+      case CM_ASM:
+        if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+          addItemToBuffer(item + 26);
+          keyActionProcessed = true;
+        }
+
+        else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+          addItemToBuffer(item + 36);
+          keyActionProcessed = true;
+        }
+
+        else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+          addItemToBuffer(item);
+          keyActionProcessed = true;
+        }
+        break;
+
+      case CM_NIM:
+        addItemToNimBuffer(item);
+        keyActionProcessed = true;
+        break;
+
+      case CM_REGISTER_BROWSER:
+        if(item == CHR_PERIOD) {
+          rbr1stDigit = true;
+          if(rbrMode == RBR_GLOBAL) {
+            rbrMode = RBR_LOCAL;
+            currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+          }
+          else if(rbrMode == RBR_LOCAL) {
+            rbrMode = RBR_GLOBAL;
+            currentRegisterBrowserScreen = REGISTER_X;
+          }
+          else if(rbrMode == RBR_NAMED) {
+            rbrMode = RBR_LOCAL;
+            currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+          }
+          registerBrowser(NOPARAM);
+        }
+        else if(item == ITM_RS) {
+          rbr1stDigit = true;
+          showContent = !showContent;
+          registerBrowser(NOPARAM);
+        }
+        else if(item == ITM_RS) { // same as previous if! STRANGE
+          rbr1stDigit = true;
+          if(rbrMode == RBR_GLOBAL) {
+            rbrMode = RBR_NAMED;
+            currentRegisterBrowserScreen = 1000;
+          }
+          else if(rbrMode == RBR_LOCAL) {
+            rbrMode = RBR_NAMED;
+            currentRegisterBrowserScreen = 1000;
+          }
+          else if(rbrMode == RBR_NAMED) {
+            rbrMode = RBR_GLOBAL;
+            currentRegisterBrowserScreen = REGISTER_X;
+          }
+          registerBrowser(NOPARAM);
+        }
+        else if(item == ITM_RCL) {
+          rbr1stDigit = true;
+          if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
+            calcMode = previousCalcMode;
+            oldTime[0] = 0;
+            showDateTime();
+            clearScreen(false, true, true);
+            fnRecall(currentRegisterBrowserScreen);
+            STACK_LIFT_ENABLE;
+            refreshStack();
+          }
+          else if(rbrMode == RBR_NAMED) {
+          }
+        }
+        else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+          if(rbr1stDigit) {
+            rbr1stDigit = false;
+            rbrRegister = item - CHR_0;
+          }
+          else {
+            rbr1stDigit = true;
+            rbrRegister = rbrRegister*10 + item - CHR_0;
+
+            if(rbrMode == RBR_GLOBAL) {
+              currentRegisterBrowserScreen = rbrRegister;
+              registerBrowser(NOPARAM);
+            }
+            else {
+              rbrRegister = (rbrRegister >= numberOfLocalRegisters ? 0 : rbrRegister);
+              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+              registerBrowser(NOPARAM);
+            }
+          }
+        }
+
+        keyActionProcessed = true;
+        break;
+
+      case CM_FLAG_BROWSER:
+      case CM_FONT_BROWSER:
+      case CM_ERROR_MESSAGE:
+      case CM_BUG_ON_SCREEN:
+        keyActionProcessed = true;
+        break;
+
+      case CM_CONFIRMATION:
+        if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ
+          calcMode = previousCalcMode;
+          temporaryInformation = TI_NO_INFO;
+          confirmedFunction(CONFIRMED);
+          refreshStack();
+        }
+
+        else if(item == CHR_7) { // No
+          calcMode = previousCalcMode;
+          temporaryInformation = TI_NO_INFO;
+          refreshStack();
+        }
+
+        keyActionProcessed = true;
+        break;
+
+      default:
+        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  }
 }
 #endif // END IF NOT TESTSUITE_BUILD

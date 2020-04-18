@@ -18,9 +18,16 @@
  * \file keyboard.h
  ***********************************************/
 
-void resetShiftState(void);
-void showShiftState (void);
-void fnComplexCCCC  (uint16_t unusedParamButMandatory);
+void resetShiftState (void);
+void showShiftState  (void);
+void processKeyAction(int16_t item);
+void fnKeyEnter      (uint16_t unusedParamButMandatory);
+void fnKeyExit       (uint16_t unusedParamButMandatory);
+void fnKeyCC         (uint16_t unusedParamButMandatory);
+void fnKeyBackspace  (uint16_t unusedParamButMandatory);
+void fnKeyUp         (uint16_t unusedParamButMandatory);
+void fnKeyDown       (uint16_t unusedParamButMandatory);
+void fnKeyDotD       (uint16_t unusedParamButMandatory);
 void execFnTimeout  (uint16_t key);                         //dr - delayed call of the primary function key
 void shiftCutoff    (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
 

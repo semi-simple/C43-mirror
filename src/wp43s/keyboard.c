@@ -77,65 +77,47 @@ void resetShiftState(void) {
 
 
 
-/********************************************//**
- * \brief Executes one function from a softmenu
- *
- * \param[in] fn int16_t    Function key from 1 to 6
- * \param[in] itemShift int16_t Shift status
- *                          *  0 = not shifted
- *                          *  6 = f shifted
- *                          * 12 = g shifted
- * \return void
- ***********************************************/
-void executeFunction(int16_t fn, int16_t itemShift) {
-  int16_t row, func;
+int16_t determineFunctionKeyItem(const char *data) {
+  int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
+  int16_t itemShift, fn = *(data) - '0';
+
+  if(shiftF) {
+    itemShift = 6;
+  }
+  else if(shiftG) {
+    itemShift = 12;
+  }
+  else {
+    itemShift = 0;
+  }
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+      item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
-      if(func == CHR_PROD_SIGN) {
-        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      if(item > 0) {
+        item %= 10000;
       }
 
-      if(func < 0) { // softmenu
-        showSoftmenu(NULL, func, true);
-      }
-      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
-        addItemToNimBuffer(func);
-      }
-      else if(calcMode == CM_TAM) {
-        addItemToBuffer(func);
-      }
-      else if(func > 0) { // function
-        if(calcMode == CM_NIM && func != KEY_CC) {
-          closeNim();
-          if(calcMode != CM_NIM) {
-            if(indexOfItems[func % 10000].func == fnConstant) {
-              STACK_LIFT_ENABLE;
-            }
-          }
-        }
-
-        if(lastErrorCode == 0) {
-          resetTemporaryInformation();
-          runFunction(func % 10000);
-        }
+      if(item == CHR_PROD_SIGN) {
+        item = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
       }
     }
   }
+
+  return item;
 }
 
 
 
 /********************************************//**
- * \brief One of the function keys was clicked
+ * \brief Simulate a function key click.
  *
- * \param w GtkWidget* The clicked button
+ * \param w GtkWidget* The button to pass to btnFnPressed and btnFnReleased
  * \param data gpointer String containing the key ID
  * \return void
  ***********************************************/
@@ -145,35 +127,99 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnClicked(void *w, void *data) {
 #endif
-  int16_t fn = *((char *)data) - '0';
+  btnFnPressed(w, data);
+  btnFnReleased(w, data);
+}
 
-  if(calcMode != CM_CONFIRMATION) {
-    allowScreenUpdate = true;
+
+
+/********************************************//**
+ * \brief A calc function key was pressed
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnFnPressed(GtkWidget *notUsed, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnFnPressed(void *notUsed, void *data) {
+#endif
+  int16_t item = determineFunctionKeyItem((char *)data);
+
+  if(item != ITM_NOP && item != ITM_NULL) {
+    resetShiftState();
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
       refreshStack();
     }
 
-    if(softmenuStackPointer > 0) {
-      if(calcMode == CM_ASM) {
-        calcModeNormal();
+    showFunctionName(item, 10);
+  }
+  else {
+    showFunctionNameItem = ITM_NOP;
+  }
+}
+
+
+
+/********************************************//**
+ * \brief A calc function key was released
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnFnReleased(GtkWidget *notUsed, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnFnReleased(void *notUsed, void *data) {
+#endif
+  if(showFunctionNameItem != 0) {
+    int16_t item = showFunctionNameItem;
+    hideFunctionName();
+
+    if(calcMode != CM_CONFIRMATION) {
+      allowScreenUpdate = true;
+
+      if(lastErrorCode != 0) {
+        lastErrorCode = 0;
+        refreshStack();
       }
 
-      if(shiftF) {
-        resetShiftState();
-        executeFunction(fn,  6);
+      if(softmenuStackPointer > 0) {
+        if(calcMode == CM_ASM) {
+          calcModeNormal();
+        }
+
+        if(item < 0) { // softmenu
+          showSoftmenu(NULL, item, true);
+        }
+        else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+          addItemToNimBuffer(item);
+        }
+        else if(calcMode == CM_TAM) {
+          addItemToBuffer(item);
+        }
+        else if(item > 0) { // function
+          if(calcMode == CM_NIM && item != KEY_CC) {
+            closeNim();
+            if(calcMode != CM_NIM) {
+              if(indexOfItems[item].func == fnConstant) {
+                STACK_LIFT_ENABLE;
+              }
+            }
+          }
+
+          if(lastErrorCode == 0) {
+            resetTemporaryInformation();
+            runFunction(item);
+          }
+        }
       }
-      else if(shiftG) {
-        resetShiftState();
-        executeFunction(fn, 12);
-      }
-      else {
-        executeFunction(fn, 0);
-      }
-    }
-    else {
-      resetShiftState();
     }
   }
 }
@@ -287,6 +333,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
+  showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
     if(!keyActionProcessed) {

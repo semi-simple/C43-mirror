@@ -630,15 +630,21 @@ void program_main(void) {
 
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
-      btnFnClicked(NULL, charKey);
+      btnFnPressed(NULL, charKey);
       lcd_refresh();
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
       lcd_refresh();
-    } else if(key == 0) {
-      btnReleased(NULL, NULL);
+    }
+    else if(key == 0) {
+      if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
+        btnFnReleased(NULL, NULL);
+      }
+      else { // Last key pressed was not one of the 6 function keys
+        btnReleased(NULL, NULL);
+      }
       lcd_refresh();
     }
 

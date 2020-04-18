@@ -894,13 +894,6 @@ void setupUI(void) {
   gtk_widget_set_name(btn15, "calcKey");
   gtk_widget_set_name(btn16, "calcKey");
 
-  //g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnClicked), "1");
-  //g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnClicked), "2");
-  //g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnClicked), "3");
-  //g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnClicked), "4");
-  //g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
-  //g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
-
   g_signal_connect(btn11, "pressed", G_CALLBACK(btnFnPressed), "1");
   g_signal_connect(btn12, "pressed", G_CALLBACK(btnFnPressed), "2");
   g_signal_connect(btn13, "pressed", G_CALLBACK(btnFnPressed), "3");

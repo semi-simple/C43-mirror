@@ -51,7 +51,7 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory) {
 
 
 
-void fnKeyDotD(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED 
+void fnKeyDotDjm(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED 
   userModeEnabledMEM = userModeEnabled;
   userModeEnabled = false;
   shiftF = false;                  //JM
@@ -1716,7 +1716,7 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t n
 
 //JM\/\/\/\/
 
-
+#ifdef NOTNEEDED
 /********************************************//**
  * \brief
  *
@@ -1760,20 +1760,20 @@ void fnComplexCCCC_CPX(uint16_t unusedParamButMandatory) {      //JM HARDWAIRED 
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
-#ifndef TESTSUITE_BUILD
-  userModeEnabledMEM = userModeEnabled;
-  userModeEnabled = false;
-  shiftF = false;                 //JM
-  shiftG = false;                 //JM
-  int16_t Norm_Key_00_VAR_M;
-  Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
-  Norm_Key_00_VAR        = KEY_CC1;               //JM
-  btnClicked(NULL, "00");
-  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
-  userModeEnabled = userModeEnabledMEM;
-#endif
-}
+//void fnComplexCCCC_CC1(uint16_t unusedParamButMandatory) {      //FOR CC1  HARDWIRED FOR TOP LEFT BUTTON
+//#ifndef TESTSUITE_BUILD
+//  userModeEnabledMEM = userModeEnabled;
+//  userModeEnabled = false;
+//  shiftF = false;                 //JM
+//  shiftG = false;                 //JM
+//  int16_t Norm_Key_00_VAR_M;
+//  Norm_Key_00_VAR_M = Norm_Key_00_VAR;   //JM Use key 00 as temporary location for CC, which is not normally on the 43C keyboard.
+//  Norm_Key_00_VAR        = KEY_CC1;               //JM
+//  btnClicked(NULL, "00");
+//  Norm_Key_00_VAR        = Norm_Key_00_VAR_M;    //JM
+//  userModeEnabled = userModeEnabledMEM;
+//#endif
+//}
 
 
 
@@ -1798,6 +1798,10 @@ void fnComplexCCCC_CC(uint16_t unusedParamButMandatory) {       //FOR CC  HARDWI
   userModeEnabled = userModeEnabledMEM;
 #endif
 }
+
+#endif //NOTNEEDED
+
+
 //JM^^^^^^^
 
 

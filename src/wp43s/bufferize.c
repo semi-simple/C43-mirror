@@ -686,7 +686,6 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case KEY_CC :
-    case KEY_CC1 :                         //JM CPX Added CC1
       lastChar = strlen(nimBuffer) - 1;
 
       done = true;
@@ -1881,7 +1880,7 @@ void closeNim(void) {
       }
 
       if(nimNumberPart == NP_COMPLEX_INT_PART && (nimBuffer[lastChar] == 'i' || nimBuffer[lastChar-1]*256 + nimBuffer[lastChar]*256 == 0xa221)) { // complex i or measured angle
-        nimBuffer[++lastChar] = '1';
+        nimBuffer[++lastChar] = '0'; //Change from 1 to 0 to make imaginary part rather default to 0 if EXIT is pressed
         nimBuffer[lastChar + 1] = 0;
       }
 

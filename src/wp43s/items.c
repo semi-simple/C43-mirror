@@ -75,6 +75,7 @@ void runFunction(int16_t func) {
       sprintf(errorMessage, "item (%" FMT16S ") must be below LAST_ITEM", func);
       showInfoDialog("In function runFunction:", errorMessage, NULL, NULL);
     #endif
+  }
 
   tamMode = indexOfItems[func].param;
   if(calcMode != CM_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
@@ -126,6 +127,7 @@ void runFunction(int16_t func) {
 
   if((func == ITM_ENTER) && (eRPN)) {      //JM NEWERPN 
     STACK_LIFT_ENABLE;                     //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+    //printf("Forced ERPN items.c\n");
   }                                        //JM NEWERPN 
 
 
@@ -427,9 +429,9 @@ void fnPercentSigma             (uint16_t unusedParamButMandatory) {}
 void fnPercentPlusMG            (uint16_t unusedParamButMandatory) {}
 void fnDeltaPercent             (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
-void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
-void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
-void fnComplexCCCC_CC1          (uint16_t unusedParamButMandatory) {}
+//void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
+//void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
+//void fnComplexCCCC_CC1          (uint16_t unusedParamButMandatory) {}
 void fnCvtmmhgPa                (uint16_t unusedParamButMandatory) {}
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -450,7 +452,7 @@ void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
 void fnJM_ms                    (uint16_t unusedParamButMandatory) {}
 void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
-void fnKeyDotD                  (uint16_t unusedParamButMandatory) {}
+void fnKeyDotDjm                (uint16_t unusedParamButMandatory) {}
 void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}
 void fnJM_fnToPolar             (uint16_t unusedParamButMandatory) {}
 void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          //^^
@@ -459,7 +461,6 @@ void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          /
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", CAT_FNCT, SLS_ENABLED  },
@@ -1978,7 +1979,7 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "USER",                                        "USER",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1516 */  { fnKeyCC/*fnComplexCCCC_CC*/, NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1516 */  { fnKeyCC,                     NOPARAM,                     "CC",                                          "CC",                                          CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1519 */  { fnKeyUp,                     NOPARAM,                     "UP",                                          STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
@@ -2239,8 +2240,8 @@ const item_t indexOfItems[] = {
 /* 1763 */  { fnJM,                        18,                          "3I" STD_CROSS "3Z",                           "I" STD_CROSS "Z",                             CAT_FNCT, SLS_ENABLED  },   //JM EE
 /* 1764 */  { fnJM,                        19,                          "3V" STD_DIVIDE "3Z",                          "V" STD_DIVIDE "Z",                            CAT_FNCT, SLS_ENABLED  },   //JM EE
 /* 1765 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", CAT_FNCT, SLS_ENABLED  },   //JM EE
-/* 1766 */  { fnComplexCCCC_CPX,           NOPARAM,                     "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
-/* 1767 */  { fnComplexCCCC_CC1,           NOPARAM,                     "CC1",                                         "CC1",                                         CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to CC1
+/* 1766 */  { fnKeyCC,                     KEY_COMPLEX,                 "COMPLEX",                                     "COMPLEX",                                     CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1767 */  { itemToBeCoded,               NOPARAM,                     "1767",                                        "1767",                                        CAT_FREE, SLS_UNCHANGED},
 /* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "LI",          CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW STD_LEFT_ARROW,            CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       CAT_NONE, SLS_UNCHANGED},
@@ -2411,7 +2412,7 @@ const item_t indexOfItems[] = {
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
-/* 1935 */  { fnKeyDotD,                   NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
+/* 1935 */  { fnKeyDotDjm,                 NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
 /* 1936 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1937 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1938 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       CAT_FNCT, SLS_ENABLED  },

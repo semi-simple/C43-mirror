@@ -594,9 +594,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
   if(Shft_timeouts) {
 
     if(fnTimerGetStatus(TO_FG_LONG) == TMR_COMPLETED) {
-#ifdef JM_MULTISHIFT
       fnTimerStop(TO_3S_CTFF);
-#endif
       if(!shiftF && !shiftG) {
         shiftF = true;
         fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);

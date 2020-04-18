@@ -1803,7 +1803,7 @@
 #define ITM_EE_STO_V_Z                1764   //JM EE
 #define ITM_EE_X2BAL                  1765   //JM EE
 #define KEY_COMPLEX                   1766   //JM CPX
-#define KEY_CC1                       1767   //JM CPX
+#define NOT_USED1767                  1767
 #define KEY_TYPCON_UP                 1768   //JM CPX
 #define KEY_TYPCON_DN                 1769   //JM CPX
 #define ITM_HOMEx3T                   1770   //JM HOME.3T

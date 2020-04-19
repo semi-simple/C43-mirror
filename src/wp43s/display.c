@@ -1577,8 +1577,8 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
     for(int16_t i=len - groupingGap; i>0; i-=groupingGap) {
       if(i != 1 || displayString[0] != '-') {
         xcopy(displayString + i + 2, displayString + i, len - i + 1);
-        displayString[i] = 0xa0;
-        displayString[i + 1] = 0x08;
+        displayString[i] = *separator;
+        displayString[i + 1] = *(separator + 1);
         len += 2;
       }
     }
@@ -1623,10 +1623,10 @@ void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int3
           lastChar = (displayString[0] == '-' ? 1 : 0);
           xcopy(displayString + lastChar + 1, displayString + lastChar, strlen(displayString) + 1);
           displayString[lastChar] = '1';
-          if(groupingGap != 0 && displayString[lastChar + groupingGap + 2] == 0x08) { // We need to insert a new goup separator
+          if(groupingGap != 0 && displayString[lastChar + groupingGap + 2] == *(separator + 1)) { // We need to insert a new goup separator
             xcopy(displayString + lastChar + 3, displayString + lastChar + 1, strlen(displayString));
-            displayString[lastChar + 1] = 0xa0;
-            displayString[lastChar + 2] = 0x08;
+            displayString[lastChar + 1] = *separator;
+            displayString[lastChar + 2] = *(separator + 1);
           }
 
           // Has the string become too long?
@@ -1730,12 +1730,14 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 void fnShow(uint16_t unusedParamButMandatory) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
-  int16_t source, dest, last, d, i;
+  int16_t source, dest, last, d, maxWidth;
   real34_t real34;
+  char *separator;
 
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
 
+  tmpStr3000[   0] = 0; // L1
   tmpStr3000[ 300] = 0; // L2
   tmpStr3000[ 600] = 0; // L3
   tmpStr3000[ 900] = 0; // L4
@@ -1747,21 +1749,38 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
+      separator = STD_SPACE_4_PER_EM;
+      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
       dest = 0;
+
+      if(groupingGap == 0) {
+        maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true);
+      }
+      else {
+        maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true)*groupingGap - stringWidth(separator, &standardFont, true, true);
+      }
+
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
-          }
-          source++;
-          tmpStr3000[++dest] = 0;
+        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
+          do {
+            tmpStr3000[dest] = tmpStr3000[source];
+            if(tmpStr3000[dest] & 0x80) {
+              tmpStr3000[++dest] = tmpStr3000[++source];
+            }
+            source++;
+            tmpStr3000[++dest] = 0;
+          } while(source < last && groupingGap > 0 && (tmpStr3000[source] != *separator || tmpStr3000[source + 1] != *(separator + 1)));
         }
+      }
+
+      if(source < last) { // The long integer is too long
+        xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
+        xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
+        tmpStr3000[dest + 2] = 0;
       }
       break;
 
@@ -1771,12 +1790,8 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
     case dtComplex34:
       // Real part
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
-      for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
-        if(tmpStr3000[i] == 0x08) {
-          tmpStr3000[i] = 0x05;
-        }
-      }
+      separator = STD_SPACE_4_PER_EM;
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34, false, separator);
 
       // +/- i×
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
@@ -1786,12 +1801,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
       // Imaginary part
       real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
-      for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
-        if(tmpStr3000[600 + i] == 0x08) {
-          tmpStr3000[600 + i] = 0x05;
-        }
-      }
+      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34, false, separator);
 
       if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
         strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299);

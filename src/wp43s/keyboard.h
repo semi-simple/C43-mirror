@@ -28,10 +28,8 @@ void fnKeyBackspace  (uint16_t unusedParamButMandatory);
 void fnKeyUp         (uint16_t unusedParamButMandatory);
 void fnKeyDown       (uint16_t unusedParamButMandatory);
 void fnKeyDotD       (uint16_t unusedParamButMandatory);
-void execFnTimeout  (uint16_t key);                         //dr - delayed call of the primary function key
-void shiftCutoff    (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
 
-int16_t nameFunction(int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
+void executeFunction(int16_t fn, int16_t itemShift);   //JM copied here
 
 
 #define ST_0_INIT     0     //STATE 0 INIT             //JM vv FN-DOUBLE

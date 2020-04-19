@@ -431,7 +431,6 @@ void fnDeltaPercent             (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 //void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 //void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
-//void fnComplexCCCC_CC1          (uint16_t unusedParamButMandatory) {}
 void fnCvtmmhgPa                (uint16_t unusedParamButMandatory) {}
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -455,7 +454,8 @@ void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
 void fnKeyDotDjm                (uint16_t unusedParamButMandatory) {}
 void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}
 void fnJM_fnToPolar             (uint16_t unusedParamButMandatory) {}
-void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}          //^^
+void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}
+void fnKeyCase                  (uint16_t unusedParamButMandatory) {}          //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -2209,7 +2209,7 @@ const item_t indexOfItems[] = {
 /* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                     CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                   CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     CAT_NONE, SLS_UNCHANGED},   //JM GREEK
-/* 1736 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                      CAT_NONE, SLS_UNCHANGED},   //JM CASE
+/* 1736 */  { fnKeyCase,                   NOPARAM,                     "",                                            STD_case,                                      CAT_NONE, SLS_UNCHANGED},   //JM CASE
 /* 1737 */  { fnBASE_Hash,                 NOPARAM,                     "##" STD_RIGHT_ARROW "INT",                    "##" STD_RIGHT_ARROW "INT",                    CAT_NONE, SLS_UNCHANGED},   //JM ##
 /* 1738 */  { itemToBeCoded,               NOPARAM,                     "1738",                                        "1738",                                        CAT_FREE, SLS_UNCHANGED},
 

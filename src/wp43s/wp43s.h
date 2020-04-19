@@ -189,7 +189,7 @@ typedef int16_t calcRegister_t;
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
 #define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 //9965   // 43S:3328 //JMMAX
-#define MAX_FACTORIAL                 1142  //1142   // 43S: 450 //JMMAX
+#define MAX_FACTORIAL                 1000 //1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98
@@ -609,7 +609,7 @@ extern realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH      6000          //JMMAX 3000+ extra to make sure
+#define TMP_STR_LENGTH      3000          //JMMAX 3000+ extra to make sure
 #define ERROR_MESSAGE_LENGTH 512
 #define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];

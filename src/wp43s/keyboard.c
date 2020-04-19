@@ -28,81 +28,20 @@
  * \param void
  * \return void
  ***********************************************/
-
-bool_t DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
-
-void DOT_F() {
-  JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
-  JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
-  DOT_F_painted = !DOT_F_painted;
-}
-
-void DOT_G() {
-  JM_DOT( -1, 175-2 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 175-2 );                                                     //JM - Display dot in the g - line
-  JM_DOT( -1, 182+3 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 182+3 );                                                     //JM - Display dot in the g - line
-  DOT_G_painted = !DOT_G_painted;
-}
-
-void DOT_F_clear() {
-  if(DOT_F_painted) {
-    DOT_F();
-  }
-}
-
-void DOT_G_clear() {
-  if(DOT_G_painted) {
-    DOT_G();
-  }
-}
-
 void showShiftState(void) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-        //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-          DOT_G_clear();
-          DOT_F();
-          if(!FN_timeouts_in_progress) {
-            if(!ULFL) {
-              underline(1);
-              ULFL = !ULFL;
-            }
-            if(ULGL) {
-              underline(2);
-              ULGL = !ULGL;
-            }
-          }
-        }                                                                         //JM - Display dot in the f - line
+        show_f_jm();
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-      //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-          DOT_F_clear(); //cancel dots
-          DOT_G();
-          if(!FN_timeouts_in_progress) {
-            if(ULFL) {
-              underline(1);
-              ULFL = !ULFL;
-            }
-            if(!ULGL) {
-              underline(2);
-              ULGL = !ULGL;
-            }
-          }
-        }                                                                         //JM - Display dot in the g - line
+        show_g_jm();
       }
       else {
-        //DOT_G_clear(); //cancel dots
         refreshRegisterLine(REGISTER_T);
-        showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
-        DOT_G_painted = false;
-        DOT_F_painted = false;
-
+        clear_fg_jm();
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
@@ -132,56 +71,6 @@ void resetShiftState(void) {
   }                                                                             //^^
 }
 
-//JM Changing the individual softmenu cell, based on the content of the assigned keyboard array
-bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
-  int16_t ix_fn, ix_sm,ix, ix0;  //JMXXX
-  bool_t tmp;
-  tmp = false;
-
-  ix = itemShift + (fn - 1);
-  ix0 = softmenuStack[softmenuStackPointer - 1].firstItem;
-  ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-  
-  if(ix_sm == -MNU_HOME) {
-    if(menu_A_HOME[ix0+ix]!=-1) {
-      ix_fn = -9999; 
-  
-      //The problem was at this point menu_A_HOME[ix0+ix] could be -1.
-      //Which means kbd_std or kbd_usr[-1] is looked up.
-  
-      if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}  else           
-      if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}  else
-      if(menu_A_HOME[ix0+ix] < 300) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}  else
-      if(menu_A_HOME[ix0+ix]>= 300) {ix_fn = -9999;}
-      //printf("--> MNU_HOME:%d (current menu %d): first item ix0:%d + ix:%d\n",MNU_HOME, ix_sm,ix0,ix);
-      //printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
-      //printf("    Function on key: %d. ", ix_fn);
-      //printf(   "  Use this function: %d ", (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)) );
-      //printf(   "  %s\n", indexOfItems[ix_fn].itemSoftmenuName );
-  
-      //Handle normal mode key change in dynamic HOME menu
-      if(ix_fn != -9999 && ix == 0 && !userModeEnabled && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
-        ix_fn = Norm_Key_00_VAR;
-        tmp = true;
-      }
-  /*
-      //Change direct entry functions from key allocation to special allocation
-      if (ix_fn == ITM_toINT)  {    //  793   fnChangeBase, TM_VALUE_CHB, STD_RIGHT_ARROW "INT",                         "#"
-          ix_fn = KEY_HASH;         //  1737  fnBASE_Hash,  NOPARAM, "##" STD_RIGHT_ARROW "INT", 
-      } else
-      if (ix_fn == KEY_dotD) {      //  1527 fnJM, 255, "", ".d",
-         ix_fn = ITM_DOTDEMU;       //  1935 fnKeyDotD, NOPARAM, "Dot.d"
-      }
-      //printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
-*/  
-      *funk = ix_fn;
-      return ix_fn != -9999 && ((userModeEnabled) || (!userModeEnabled && tmp));
-    }
-    return false;
-  }
-  return false;
-}
-
 
 
 /********************************************//**
@@ -196,8 +85,8 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
  ***********************************************/
 void executeFunction(int16_t fn, int16_t itemShift) {
   int16_t row, func;
-  int16_t ix_fn;  //JMXXX
   const softmenu_t *sm;
+  int16_t ix_fn;             //JMXXX
   //printf("Exec %d=\n",fn); //JMEXEC
 
   if(softmenuStackPointer > 0) {
@@ -285,315 +174,6 @@ void executeFunction(int16_t fn, int16_t itemShift) {
       }
     }
   }   // JM FN KEYS ^^
-}
-
-
-
-//******************* JM LONGPRESS & JM DOUBLE CLICK START *******************************
-
-int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
-  int16_t row, func;
-  int16_t ix_fn;  //JMXXX
-  func = 0;
-  const softmenu_t *sm;
-
-  if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
-
-    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-/*XXX*/
-      ix_fn = 0;
-      if(func_lookup(fn,itemShift,&ix_fn)) {
-        //printf("---%d\n",ix_fn);
-        func = ix_fn;
-      }
-/*XXX*/
-
-      if(func == CHR_PROD_SIGN) {
-        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
-      }
-
-      if(func < 0) {
-        func = - func;
-      }
-    }
-  }
-
-  return func % 10000;
-}
-
-
-//CONCEPT - actual timing was changed:
-
-/* Switching profile, to jump to g[FN]:
-                   set g
-____-----_______--------->
-    P    R      P
-
-   |>              btnFnPressed:  mark time and ignore if FN_double_click is not set
-        |>         btnFnReleased: if t<t0 then set FN_double_click AND prevent normal MAIN keypress
-               |>  btnFnPressed:  if t<t1 AND if FN_double_click then jump start to g[FN]
-
-
-Standard procedure LONGPRESS:
-
-   | 800 | 800 | 800 |    ms     Monitored while LONGPRESSED
-___+-----|-----|-----|--> NOP    Press and time out to NOP
-___+---x_|_____|_____|___        Press and release within Fx time. Fx selected upon release
-___+-----|--x__|_____|___        Press and hold, release within f(Fx) time. f(Fx) selected upon release
-___+-----|-----|--___|___        Press and hold and hold, release within g(Fx) time. g(Fx) selected upon release
-         |     |     |
-
-At x, at time 0, wait 75 ms to see if a press happens, i.e. double click.
-- After 75 ms, execute function.
-- If before 75 ms, key is pressed, jump to the beginning of g(Fx) state.
-
-     STATE #1 #2 #3 #4
-___________---___---_____       STATES indicated
-
-----------x1 x2 x3 x4           X's indicate transitions X
-
-
-Detail for x (transition press/release):
-
-STATE1  | STATE2  | STATE3
-        |t=0      |t=75 ms
---------E______   |             Showing release and immediate execution at "E" (previous system, no LONGPRESS no DOUBLE click)
---------x_________E_____        Showing release at x and delayed execution "E" (if double click is to be detected)
-         #########              ## shows DEAD TIME where 43C does not react to the key release that already happened
-                  ^             ^ shows the point where the x command is executed if no double press recognised.
-
---------x_______G-|-----        Starting with key already pressed, release at x, re-press shown at 60 ms, double click registered, g-shift activated, COMMAND displayed, timing started to NOP if not released.
-
---------x_________E             Starting with key already pressed, release at x, no repress within 75 ms execute Fx.
---------x_________|_C---        Starting with key already pressed, release at x, re-press shown at 85 ms, timing cycle C re-started on Fx.
-
-
-Double click release:
-Timing is reset to start 800 ms from G again
---------x_______G---E__        Starting with key already pressed, release at x, re-press shown at 60 ms, double click registered, g-shift activated, COMMAND displayed, timing started, key released
-
-//Summary
-  //Process starts in btnFnReleased, with a FN key released.
-  //  do timecheck, i.e. zero the timer
-  //At the next press, i.e. btnFnPressed, check for a 5 ms < re-press < 75 ms gap, which, indicates a double press. (5 ms = debounce check).
-  //Set a flag here, to let the refresh cyclic check for 75 ms and, if exceeded, execute the function
-
-*/
-
-
-
-//**************JM DOUBLE CLICK SUPPORT vv **********************************
-void FN_cancel() {
-  FN_key_pressed = 0;
-  FN_timeouts_in_progress = false;
-  fnTimerStop(TO_FN_LONG);                                  //dr
-}
-
-
-
-//*************----------*************------- FN KEY PRESSED -------***************-----------------
-#ifdef PC_BUILD                                                           //JM LONGPRESS FN
-void btnFnPressed(GtkWidget *w, gpointer data) { 
-#endif
-#ifdef DMCP_BUILD
-void btnFnPressed(void *w, void *data) {
-#endif
-  bool_t exexute_double_g;
-  bool_t double_click_detected;
-
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(1); }     //dr
-#endif
-
-  FN_timed_out_to_RELEASE_EXEC = false;
-
-  //Change states according to PRESS/RELEASE incoming sequence
-  if(FN_state == ST_2_REL1) {
-    FN_state = ST_3_PRESS2;
-  }
-  else {
-    FN_state =  ST_1_PRESS1;
-  }
-
-  if(FN_state == ST_3_PRESS2 && fnTimerGetStatus(TO_FN_EXEC) == TMR_COMPLETED) {
-    //----------------Copied here
-    char charKey[3];
-    underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
-    sprintf(charKey, "%c", FN_key_pressed + 11);
-    hideFunctionName();
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-    refreshRegisterLine(REGISTER_T);
-
-    //IF 2-->3 is longer than double click time, then move back to state 1
-    FN_timeouts_in_progress = false;
-    FN_state = ST_1_PRESS1;
-  }
-
-  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-
-  if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try
-    if(FN_key_pressed_last != FN_key_pressed) {
-      fnTimerExec(TO_FN_EXEC);
-      FN_handle_timed_out_to_EXEC = true;
-      exexute_double_g = false;
-    }
-    else {
-      FN_handle_timed_out_to_EXEC = false;
-      exexute_double_g = true;
-      fnTimerStop(TO_FN_EXEC);
-    }
-  }
-  else {
-    FN_handle_timed_out_to_EXEC = true;
-    exexute_double_g = false;
-  }                                                         //^^
-
-  if(FN_state == ST_1_PRESS1) {
-    FN_key_pressed_last = FN_key_pressed;
-  }
-
-
-  //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
-  double_click_detected = false;                                            //JM FN-DOUBLE - Dip detection flag
-  if(jm_G_DOUBLETAP) {
-    if(exexute_double_g) {
-      if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
-        shiftF = false; //R_shF();                                          //JM
-        shiftG = true;  //S_shG();                                          //JM
-        double_click_detected = true;                                       //JM --> FORCE INTO LONGPRESS
-        FN_handle_timed_out_to_EXEC = false;                //dr
-      }
-    }
-    else {
-      FN_timeouts_in_progress = false;         //still in no shift mode
-      fnTimerStop(TO_FN_LONG);                              //dr
-    }
-  }
-
-  //STAGE 1 AND 3 GO HERE
-  //**************JM LONGPRESS ****************************************************
-  if( (FN_state == ST_1_PRESS1 || FN_state == ST_3_PRESS2) && (!FN_timeouts_in_progress || double_click_detected) && FN_key_pressed != 0) {
-    FN_timeouts_in_progress = true;
-    fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);    //dr
-    FN_timed_out_to_NOP = false;
-    if(!shiftF && !shiftG) {
-      showFunctionName(nameFunction(FN_key_pressed-37,0),0);
-      underline_softkey(FN_key_pressed-38, 0, true /*dontclear at first call*/);
-    }
-    else if(shiftF && !shiftG) {
-      showFunctionName(nameFunction(FN_key_pressed-37,6),0);
-      underline_softkey(FN_key_pressed-38, 1, true /*dontclear at first call*/);
-    }
-    else if(!shiftF && shiftG) {
-      showFunctionName(nameFunction(FN_key_pressed-37,12),0);
-      underline_softkey(FN_key_pressed-38, 2, true /*dontclear at first call*/);
-    }                                                                      //further shifts are done within FN_handler
-  }
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(1); }      //dr
-#endif
-}
-
-
-
-//*************----------*************------- FN KEY RELEASED -------***************-----------------
-#ifdef PC_BUILD                                                             //JM LONGPRESS FN
-void btnFnReleased(GtkWidget *w, gpointer data) {                           //JM LONGPRESS FN
-#endif
-#ifdef DMCP_BUILD
-void btnFnReleased(void *w, void *data) {
-#endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(2); }     //dr
-#endif
-
-  if(FN_state == ST_3_PRESS2) {
-    FN_state =  ST_4_REL2;
-  }
-  else {
-    FN_state =  ST_2_REL1;
-  }
-
-  if(jm_G_DOUBLETAP && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
-    uint8_t                      offset =  0;
-    if(shiftF && !shiftG)      { offset =  6; }
-    else if(!shiftF && shiftG) { offset = 12; }
-    fnTimerStart(TO_FN_EXEC, FN_key_pressed + offset, JM_FN_DOUBLE_TIMER);
-  }
-
-
-     // **************JM LONGPRESS EXECUTE****************************************************
-  char charKey[3];
-  bool_t EXEC_pri;
-  EXEC_pri = (FN_timeouts_in_progress && (FN_key_pressed != 0));
-  // EXEC_FROM_LONGPRESS_RELEASE     EXEC_FROM_LONGPRESS_TIMEOUT  EXEC FN primary
-  if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
-    underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
-    sprintf(charKey, "%c", FN_key_pressed + 11);
-    hideFunctionName();
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
-    refreshRegisterLine(REGISTER_T);
-
-    if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
-      btnFnClicked(w, charKey);                                             //Execute
-    }
-    resetShiftState();
-    FN_cancel();
-  }
-//**************JM LONGPRESS AND JM DOUBLE ^^ *********************************************   // JM FN-DOUBLE
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(2); }      //dr
-#endif
-}
-//JM btnFnClicked is called by gui.c keyPressed
-//JM btnFnClicked is called by wp43s.c program_main
-
-
-
-void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
-  char charKey[3];
-  sprintf(charKey, "%c", key + 11);
-  int16_t fn = *((char *)charKey) - '0';
-
-  if(calcMode != CM_CONFIRMATION) {
-    allowScreenUpdate = true;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-      refreshStack();
-    }
-
-    if(softmenuStackPointer > 0) {
-      if(calcMode == CM_ASM) {
-        calcModeNormal();
-      }
-
-      if(shiftF) {
-        resetShiftState();
-        executeFunction(fn,  6);
-      }
-      else if(shiftG) {
-        resetShiftState();
-        executeFunction(fn, 12);
-      }
-      else {
-        executeFunction(fn, 0);
-      }
-    }
-    else {
-      resetShiftState();
-      executeFunction(fn, 0);          //JM FN NOMENU KEYS
-    }
-  }
-}
-
-
-
-void shiftCutoff(uint16_t unusedParamButMandatory) {        //dr - press shift three times within one second to call HOME timer
-  fnTimerStop(TO_3S_CTFF);
 }
 
 
@@ -693,53 +273,8 @@ int16_t determineItem(const char *data) {
       refreshStack();                                                                                                         //JM shifts
     }                                                                                                                         //JM shifts
 
-    if(ShiftTimoutMode || Home3TimerMode) {
-      if(Home3TimerMode) {
-        if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) {
-          JM_SHIFT_HOME_TIMER1++;
-          if(JM_SHIFT_HOME_TIMER1 >= 3) {
-            fnTimerStop(TO_3S_CTFF);
-            shiftF = false;  // Set it up, for flags to be cleared below.
-            shiftG = true;
-            if(HOME3) {
-              if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                          //JM shifts
-                popSoftmenu();                                                                                                //JM shifts
-              }
-              else {
-                if(calcMode == CM_AIM) {                                                                                      //JM shifts
-                  showSoftmenu(NULL, -MNU_ALPHA, true);                                                                       //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
-                }
-                else {                                                                                                        //JM SHIFTS
-                  showSoftmenu(NULL, -MNU_HOME, true);                                                                        //JM shifts  //JM ALPHA-HOME
-                }                                                                                                             //JM shifts                                                                                                                              //JM shifts
-                softmenuStackPointer_MEM = softmenuStackPointer;                                                              //JM shifts
-              }
-            }                                                                                                                 //JM shifts
-          }
-        }
-        if(fnTimerGetStatus(TO_3S_CTFF) == TMR_STOPPED) {
-          JM_SHIFT_HOME_TIMER1 = 1;
-          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, JM_TO_3S_CTFF);        //dr
-        }
-      }
-    }
+    fg_processing_jm();
 
-    if(!shiftF && !shiftG) {                                                                                                  //JM shifts
-      shiftF = true;                                                                                                          //JM shifts
-      shiftG = false;
-    }                                                                                                                         //JM shifts
-    else if(shiftF && !shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = true;                                                                                                          //JM shifts
-    }
-    else if(!shiftF && shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
-    }
-    else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
-    }                                                                                                                         //JM shifts
     showShiftState();                                                                                                         //JM shifts
 
     return ITM_NOP;
@@ -863,6 +398,29 @@ int16_t determineItem(const char *data) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /********************************************//**
  * \brief Simulate a button click.
  *
@@ -879,6 +437,12 @@ void btnClicked(void *w, void *data) {
   btnPressed(w, data);
   btnReleased(w, data);
 }
+
+
+
+
+
+
 
 
 
@@ -904,9 +468,6 @@ void btnPressed(void *notUsed, void *data) {
     }
   }
 }
-
-
-
 
 
 
@@ -1344,7 +905,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using unusedParamButMan
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
   uint32_t dataTypeY;
-printf("Complex %d %d\n",KEY_COMPLEX,unusedParamButMandatory);
+  //printf("Complex %d %d\n",KEY_COMPLEX,unusedParamButMandatory);
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (unusedParamButMandatory == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -1468,6 +1029,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
 
 
+
 /********************************************//**
  * \brief Processing UP key
  *
@@ -1478,20 +1040,18 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   int16_t itemShift;
 
+  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1);}             //JMSHOW
+
   switch(calcMode) {
-    case CM_NORMAL:                     //JMSHOW vv
-      if(softmenuStackPointer == 0) {
-        fnShow_SCROLL(1);}
-        break;                          //JMSHOW ^^
+    case CM_NORMAL:
     case CM_AIM:
     case CM_NIM:
     case CM_ASM:
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+        if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
-
          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
          {
            showAlphaMode();
@@ -1503,7 +1063,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
          showSoftmenuCurrentPart();
        }
 
-        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
           if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
           {
@@ -1513,16 +1073,10 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 #endif
           }                                               //^^
         }
-        else if(item == CHR_case) {   //vv JM
-          showSoftmenuCurrentPart();
-          setCatalogLastPos();
-        }                             //^^
-
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-          if((item != CHR_case) && (softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
-          
+          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
             //JM Include or exclude HOME menu screens  //JMHOME
               #define A1 3   //HAAKON //jm_HOME_MIR
@@ -1557,7 +1111,8 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 #ifdef PC_BUILD     //dr - new AIM
             calcModeAimGui();
 #endif
-          }                                               //^^
+          }
+        }                                               //^^
       }
       break;
 
@@ -1616,18 +1171,17 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   int16_t itemShift;
 
+  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(2);}             //JMSHOW
+
   switch(calcMode) {
     case CM_NORMAL:                     //JMSHOW vv
-      if(softmenuStackPointer == 0) {
-        fnShow_SCROLL(2);}
-        break;                          //JMSHOW ^^
-     case CM_AIM:
+    case CM_AIM:
     case CM_NIM:
     case CM_ASM:
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
           if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
           {
@@ -1639,7 +1193,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
           showSoftmenuCurrentPart();
         }
-        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
           if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
           {
@@ -1649,11 +1203,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 #endif
           }                                               //^^
         }
-        else if(item == CHR_case) {   //vvJM
-          showSoftmenuCurrentPart();
-          setCatalogLastPos();
-        }                             //^^
-        else {
+      else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
@@ -1684,7 +1234,8 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 #ifdef PC_BUILD     //dr - new AIM
             calcModeAimGui();
 #endif
-          }                                               //^^
+          }
+        }                                               //^^
       }
       break;
 
@@ -1733,7 +1284,6 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 }
 
 
-
 /********************************************//**
  * \brief Processing .d key
  *
@@ -1770,59 +1320,3 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
   }
   #endif
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#ifdef XXXXXX
-/******************************************************************************************************************************VVVVVVV***********************/
-/**************************************************************************************************************//*******************************************************/
-
-Check from here on
-
-
-
-/*
-    else if((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER)) {      //JM CASE JM CAPS
-      alphaCase = AC_UPPER;                                                     //JM CASE JM CAPS
-      showAlphaMode();                                                          //JM CASE JM CAPS
-#ifdef PC_BUILD     //dr - new AIM
-      calcModeAimGui();
-#endif
-    }                                                                           //JM CASE JM CAPS
-*/
-
-    else if((item == KEY_UP1) || ((calcMode == CM_AIM) && (item == CHR_case) && (alphaCase == AC_LOWER))) {    //JM
-      if(calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_ASM) {
-
-
-
-/*
-    else if((calcMode == CM_AIM) && (item == CHR_case)  && (alphaCase == AC_UPPER)) {     //JM CASE JM CAPS
-      alphaCase = AC_LOWER;                                                     //JM CASE JM CAPS
-      showAlphaMode();                                                          //JM CASE JM CAPS
-#ifdef PC_BUILD     //dr - new AIM
-      calcModeAimGui();
-#endif
-    }                                                                          //JM CASE JM CAPS
-*/
-
- 
- /*******************************************************/
-#endif
-

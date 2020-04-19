@@ -451,7 +451,7 @@ void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
 void fnJM_ms                    (uint16_t unusedParamButMandatory) {}
 void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
-void fnKeyDotDjm                (uint16_t unusedParamButMandatory) {}
+//void fnKeyDotDjm                (uint16_t unusedParamButMandatory) {}
 void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}
 void fnJM_fnToPolar             (uint16_t unusedParamButMandatory) {}
 void fnJM_fnToRect              (uint16_t unusedParamButMandatory) {}
@@ -2412,7 +2412,7 @@ const item_t indexOfItems[] = {
 /* 1932 */  { fnJM,                        39,                          STD_DOT "M",                                   STD_DOT "M",                                   CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        CAT_NONE, SLS_UNCHANGED},
-/* 1935 */  { fnKeyDotDjm,                 NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },
+/* 1935 */  { fnKeyDotD/*jm*/,             NOPARAM,                     "Dot.d",                                       "Dot.d",                                       CAT_NONE, SLS_ENABLED  },   //JM. Replaced by .d, superceded by Martin. KEEP FOR REFERENCE ONLY. NOTE jm
 /* 1936 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1937 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       CAT_FNCT, SLS_ENABLED  },
 /* 1938 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       CAT_FNCT, SLS_ENABLED  },

@@ -575,7 +575,7 @@ typedef int16_t calcRegister_t;
   extern int16_t            debugWindow;
   extern uint32_t           *screenData;
   extern bool_t             screenChange;
-  extern char               debugString[10000];
+  extern char               debugString[10000]; //JMMAX Why is this permanent?
   #if (DEBUG_REGISTER_L == 1)
     extern GtkWidget        *lblRegisterL1;
     extern GtkWidget        *lblRegisterL2;

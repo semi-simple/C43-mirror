@@ -1078,12 +1078,12 @@ void refreshRegisterLine(calcRegister_t regist) {
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpStr3000, &standardFont, true, true);
-                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
                              break;
 
             // L2 & L3
             case REGISTER_Z: w = stringWidth(tmpStr3000 + 300, &standardFont, true, true);
-                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21, vmNormal, true, true);
+                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
                              if(tmpStr3000[600]) {
                                w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);

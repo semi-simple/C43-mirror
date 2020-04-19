@@ -29,7 +29,7 @@ extern const int16_t menu_CONST[];
 extern const int16_t menu_MENUS[];
 extern const softmenu_t softmenu[];
 char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
-int32_t lineNumber, numTestsFile, numTestsTotal;
+int32_t lineNumber, numTestsFile, numTestsTotal, failedTests;
 int32_t functionIndex, funcType, correctSignificantDigits;
 void (*funcNoParam)(uint16_t);
 void (*funcCvt)(uint16_t);
@@ -167,7 +167,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnToRect",               fnToRect              },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
-  {"",                       NULL            }
+  {"",                       NULL                  }
 };
 
 const funcTest_t funcTestCvt[] = {
@@ -422,7 +422,7 @@ void getString(char *str) {
 
 void setParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
-  int32_t i, am;
+  int32_t i, am = AM_DEGREE;
 
   //printf("  setting %s\n", p);
 
@@ -692,7 +692,7 @@ void setParameter(char *p) {
 
   //Setting a register
   else if(l[0] == 'R') {
-    calcRegister_t regist;
+    calcRegister_t regist = 0;
 
     //Lettered register
     if(l[1] >= 'A' && l[2] == 0) {
@@ -1005,7 +1005,7 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
     printf("in file %s line %d\n", fileName, lineNumber);
     if(correctSignificantDigits < 32 && correctSignificantDigits < NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED) {
       puts(registerExpectedAndValue);
-      exit(-1);
+      //exit(-1);
     }
   }
 
@@ -1016,13 +1016,13 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
 
 void wrongRegisterValue(calcRegister_t regist, char letter, char *expectedValue) {
   if(letter == 0) {
-    printf("\nRegister %u value should be ", regist);
+    //printf("\nRegister %u value should be ", regist);
   }
   else {
-    printf("\nRegister %c value should be ", letter);
+    //printf("\nRegister %c value should be ", letter);
   }
-  printf("%s\nbut it is ", expectedValue);
-  printRegisterToConsole(regist, "", "\n");
+  //printf("%s\nbut it is ", expectedValue);
+  //printRegisterToConsole(regist, "", "\n");
   abortTest();
 }
 
@@ -1065,8 +1065,8 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 
 
 void checkExpectedOutParameter(char *p) {
-  char l[200], r[200], real[200], imag[200], angMod[200], letter;
-  int32_t i, am;
+  char l[200], r[200], real[200], imag[200], angMod[200], letter = 0;
+  int32_t i, am = AM_DEGREE;
   real34_t expectedReal34, expectedImag34;
 
   //printf("  Checking %s\n", p);
@@ -1378,7 +1378,7 @@ void checkExpectedOutParameter(char *p) {
 
   //Checking a register
   else if(l[0] == 'R') {
-    calcRegister_t regist;
+    calcRegister_t regist = 0;
 
     //Lettered register
     if(l[1] >= 'A' && l[2] == 0) {
@@ -1746,10 +1746,12 @@ void functionToCall(char *functionName) {
 
 
 void abortTest(void) {
-  printf("\n%s\n", lastInParameters);
-  printf("%s\n", line);
-  printf("in file %s line %d\n", fileName, lineNumber);
-  exit(-1);
+  numTestsTotal--;
+  failedTests++;
+  //printf("\n%s\n", lastInParameters);
+  //printf("%s\n", line);
+  //printf("in file %s line %d\n", fileName, lineNumber);
+  //exit(-1);
 }
 
 
@@ -1923,7 +1925,7 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
   }
   if(nbElements == 0) {
     printf("MNU_%s (-%d) not found in structure softmenu!\n", catalogName, catalogId);
-    exit(1);
+    //exit(1);
   }
 
   printf("Checking sort order of catalog %s (%d elements)\n", catalogName, nbElements);
@@ -1931,7 +1933,7 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
   for(i=1; i<nbElements; i++) {
     if((cmp = compareString(indexOfItems[abs(catalog[i - 1])].itemCatalogName, indexOfItems[abs(catalog[i])].itemCatalogName, CMP_EXTENSIVE)) >= 0) {
       printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n", catalogName, i - 1, catalog[i - 1], i, catalog[i], cmp);
-      exit(1);
+      //exit(1);
     }
   }
 }
@@ -1953,6 +1955,7 @@ void processTests(void) {
   checkCatalogsSorting();
 
   numTestsTotal = 0;
+  failedTests = 0;
 
   strcpy(filePath, "src/testSuite"); // without trailing /
 
@@ -1976,5 +1979,6 @@ void processTests(void) {
 
   printf("\n************************************\n");
   printf("* %6d TESTS PASSED SUCCESSFULLY *\n", numTestsTotal);
+  printf("* %6d TEST%c FAILED              *\n", failedTests, failedTests == 1 ? ' ' : 'S');
   printf("************************************\n");
 }

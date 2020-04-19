@@ -309,6 +309,10 @@ typedef int16_t calcRegister_t;
 #define CU_J                    1
 #define COMPLEX_UNIT            (complexUnit == CU_I ? STD_i : STD_j)
 
+// Complex mode 1 bit
+#define CM_RECTANGULAR          0
+#define CM_POLAR                1
+
 // Product sign 1 bit
 #define PS_DOT                  0
 #define PS_CROSS                1
@@ -328,10 +332,6 @@ typedef int16_t calcRegister_t;
 // Stack size 1 bit
 #define SS_4                    0
 #define SS_8                    1
-
-// Complex mode 1 bit
-#define CM_RECTANGULAR          0
-#define CM_POLAR                1
 
 // Alpha case 1 bit
 #define AC_UPPER                0

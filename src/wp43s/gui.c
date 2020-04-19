@@ -2922,7 +2922,7 @@ void setupUI(void) {
   g_signal_connect(btn15, "released", G_CALLBACK(btnFnReleased), "5");
   g_signal_connect(btn16, "released", G_CALLBACK(btnFnReleased), "6");   //JM LONGPRESS ^^
 
-  gtk_widget_set_focus_on_click(btn11, FALSE); //JM TO CHECK XXX
+  gtk_widget_set_focus_on_click(btn11, FALSE);
   gtk_widget_set_focus_on_click(btn12, FALSE);
   gtk_widget_set_focus_on_click(btn13, FALSE);
   gtk_widget_set_focus_on_click(btn14, FALSE);

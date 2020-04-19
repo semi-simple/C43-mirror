@@ -1969,7 +1969,7 @@ const item_t indexOfItems[] = {
 /* 1503 */  { addItemToBuffer,             ITM_MA34,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
-/* 1506 */  { fnJM,                        31,                          "",                                            STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
+/* 1506 */  { fnJM,                        31,                          "UNDO",                                        STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
 /* 1507 */  { itemToBeCoded,               NOPARAM,                     "PRGM",                                        "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
 /* 1508 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         CAT_NONE, SLS_UNCHANGED},
@@ -2027,8 +2027,8 @@ const item_t indexOfItems[] = {
 /* 1556 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     STD_SPACE_HAIR,                                CAT_DUPL, SLS_ENABLED  },
 /* 1557 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                CAT_DUPL, SLS_ENABLED  },
 /* 1558 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                CAT_DUPL, SLS_ENABLED  },
-/* 1559 */  { fnHarmonicMeanXY,            NOPARAM,                     STD_x_BAR STD_SUB_H,                           STD_x_BAR STD_SUB_H,                           CAT_FNCT, SLS_UNCHANGED},
-/* 1560 */  { fnRMSMeanXY,                 NOPARAM,                     STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       CAT_FNCT, SLS_UNCHANGED},
+/* 1559 */  { fnHarmonicMeanXY,            NOPARAM,                     STD_x_BAR STD_SUB_H,                           STD_x_BAR STD_SUB_H,                           CAT_FNCT, SLS_ENABLED  },
+/* 1560 */  { fnRMSMeanXY,                 NOPARAM,                     STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       CAT_FNCT, SLS_ENABLED  },
 /* 1561 */  { itemToBeCoded,               NOPARAM,                     "SUMS",                                        "SUMS",                                        CAT_MENU, SLS_UNCHANGED},
 /* 1562 */  { itemToBeCoded,               NOPARAM,                     "GaussF",                                      "GaussF",                                      CAT_FNCT, SLS_UNCHANGED},
 /* 1563 */  { itemToBeCoded,               NOPARAM,                     "CauchF",                                      "CauchF",                                      CAT_FNCT, SLS_UNCHANGED},

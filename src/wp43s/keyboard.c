@@ -46,7 +46,6 @@ void showShiftState(void) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
       }
-
 //    shiftStateChanged = false;                                                //vv dr
 //  }                                                                           //^^
   }
@@ -228,15 +227,17 @@ void btnFnClicked(void *w, void *data) {
 
 
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
+
 int16_t determineItem(const char *data) {
   int16_t result;
   const calcKey_t *key;
-  fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
-  //43s:  key = userModeEnabled ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
+  //key = userModeEnabled ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
   key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
+
+  fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
   switch(key->primary) {                              //JMSHOW
     case      KEY_UP1:
@@ -302,8 +303,6 @@ int16_t determineItem(const char *data) {
 
     return ITM_NOP;
   }
-
-
 
 
   // Shift g pressed 
@@ -440,12 +439,6 @@ void btnClicked(void *w, void *data) {
 
 
 
-
-
-
-
-
-
 /********************************************//**
  * \brief A calc button was pressed
  *
@@ -461,6 +454,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
+  showFunctionNameItem = 0;        //JM TOCHECK
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
     if(!keyActionProcessed) {

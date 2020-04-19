@@ -661,6 +661,7 @@ void fnReset(uint16_t confirmation) {
     jm_HOME_MIR = true;                                            //JMHOME
     jm_HOME_FIX = false;                                           //JMHOME
     #endif
+    SHOWregis = 9999;
 
 
 

@@ -72,34 +72,29 @@ void resetShiftState(void) {
 
 
 
-int16_t determineFunctionKeyItem(const char *data) {
-  int16_t row, item = ITM_NOP;
+/********************************************//**
+ * \brief Executes one function from a softmenu
+ *
+ * \param[in] fn int16_t    Function key from 1 to 6
+ * \param[in] itemShift int16_t Shift status
+ *                          *  0 = not shifted
+ *                          *  6 = f shifted
+ *                          * 12 = g shifted
+ * \return void
+ ***********************************************/
+void executeFunction(int16_t fn, int16_t itemShift) {
+  int16_t row, func;
   const softmenu_t *sm;
-<<<<<<< HEAD
   int16_t ix_fn;             //JMXXX
   //printf("Exec %d=\n",fn); //JMEXEC
-=======
-  int16_t itemShift, fn = *(data) - '0';
-
-  if(shiftF) {
-    itemShift = 6;
-  }
-  else if(shiftG) {
-    itemShift = 12;
-  }
-  else {
-    itemShift = 0;
-  }
->>>>>>> 43S-Master-JM
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
-<<<<<<< HEAD
       ix_fn = 0;                                /*JMEXEC XXX vv*/
       if(func_lookup(fn,itemShift,&ix_fn)) {
         //printf("---%d\n",ix_fn);
@@ -178,27 +173,14 @@ int16_t determineFunctionKeyItem(const char *data) {
       }
     }
   }   // JM FN KEYS ^^
-=======
-      if(item > 0) {
-        item %= 10000;
-      }
-
-      if(item == CHR_PROD_SIGN) {
-        item = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
-      }
-    }
-  }
-
-  return item;
->>>>>>> 43S-Master-JM
 }
 
 
 
 /********************************************//**
- * \brief Simulate a function key click.
+ * \brief One of the function keys was clicked
  *
- * \param w GtkWidget* The button to pass to btnFnPressed and btnFnReleased
+ * \param w GtkWidget* The clicked button
  * \param data gpointer String containing the key ID
  * \return void
  ***********************************************/
@@ -208,107 +190,37 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnClicked(void *w, void *data) {
 #endif
-  btnFnPressed(w, data);
-  btnFnReleased(w, data);
-}
+  int16_t fn = *((char *)data) - '0';
 
-
-
-/********************************************//**
- * \brief A calc function key was pressed
- *
- * \param w GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnFnPressed(GtkWidget *notUsed, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnFnPressed(void *notUsed, void *data) {
-#endif
-  int16_t item = determineFunctionKeyItem((char *)data);
-
-  if(item != ITM_NOP && item != ITM_NULL) {
-    resetShiftState();
+  if(calcMode != CM_CONFIRMATION) {
+    allowScreenUpdate = true;
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
       refreshStack();
     }
 
-    showFunctionName(item, 10);
-  }
-  else {
-    showFunctionNameItem = ITM_NOP;
-  }
-}
-
-
-
-/********************************************//**
- * \brief A calc function key was released
- *
- * \param w GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnFnReleased(GtkWidget *notUsed, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnFnReleased(void *notUsed, void *data) {
-#endif
-  if(showFunctionNameItem != 0) {
-    int16_t item = showFunctionNameItem;
-    hideFunctionName();
-
-    if(calcMode != CM_CONFIRMATION) {
-      allowScreenUpdate = true;
-
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-        refreshStack();
+    if(softmenuStackPointer > 0) {
+      if(calcMode == CM_ASM) {
+        calcModeNormal();
       }
 
-      if(softmenuStackPointer > 0) {
-        if(calcMode == CM_ASM) {
-          calcModeNormal();
-        }
-
-        if(item < 0) { // softmenu
-          showSoftmenu(NULL, item, true);
-        }
-        else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
-          addItemToNimBuffer(item);
-        }
-        else if(calcMode == CM_TAM) {
-          addItemToBuffer(item);
-        }
-        else if(item > 0) { // function
-          if(calcMode == CM_NIM && item != KEY_CC) {
-            closeNim();
-            if(calcMode != CM_NIM) {
-              if(indexOfItems[item].func == fnConstant) {
-                STACK_LIFT_ENABLE;
-              }
-            }
-          }
-
-          if(lastErrorCode == 0) {
-            resetTemporaryInformation();
-            runFunction(item);
-          }
-        }
+      if(shiftF) {
+        resetShiftState();
+        executeFunction(fn,  6);
+      }
+      else if(shiftG) {
+        resetShiftState();
+        executeFunction(fn, 12);
+      }
+      else {
+        executeFunction(fn, 0);
       }
     }
-<<<<<<< HEAD
     else {
       resetShiftState();
       executeFunction(fn, 0);          //JM FN NOMENU KEYS
     }
-=======
->>>>>>> 43S-Master-JM
   }
 }
 
@@ -542,11 +454,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
-<<<<<<< HEAD
   showFunctionNameItem = 0;        //JM TOCHECK
-=======
-  showFunctionNameItem = 0;
->>>>>>> 43S-Master-JM
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
     if(!keyActionProcessed) {

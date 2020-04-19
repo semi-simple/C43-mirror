@@ -1968,7 +1968,7 @@ const item_t indexOfItems[] = {
 /* 1531 */  { fnShow,                      NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
-/* 1534 */  { fnArg,                       NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
+/* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
 /* 1535 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     "fathom",                                      CAT_FNCT, SLS_ENABLED  },
 /* 1536 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                          CAT_DUPL, SLS_ENABLED  },
 /* 1537 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     "m " STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },

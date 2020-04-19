@@ -422,7 +422,7 @@ void getString(char *str) {
 
 void setParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
-  int32_t i, am;
+  int32_t i, am = AM_DEGREE;
 
   //printf("  setting %s\n", p);
 
@@ -692,7 +692,7 @@ void setParameter(char *p) {
 
   //Setting a register
   else if(l[0] == 'R') {
-    calcRegister_t regist;
+    calcRegister_t regist = 0;
 
     //Lettered register
     if(l[1] >= 'A' && l[2] == 0) {
@@ -1065,8 +1065,8 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 
 
 void checkExpectedOutParameter(char *p) {
-  char l[200], r[200], real[200], imag[200], angMod[200], letter;
-  int32_t i, am;
+  char l[200], r[200], real[200], imag[200], angMod[200], letter = 0;
+  int32_t i, am = AM_DEGREE;
   real34_t expectedReal34, expectedImag34;
 
   //printf("  Checking %s\n", p);
@@ -1378,7 +1378,7 @@ void checkExpectedOutParameter(char *p) {
 
   //Checking a register
   else if(l[0] == 'R') {
-    calcRegister_t regist;
+    calcRegister_t regist = 0;
 
     //Lettered register
     if(l[1] >= 'A' && l[2] == 0) {

@@ -1750,7 +1750,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 7*400 - 8, 350, separator);
+      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
@@ -1766,18 +1766,21 @@ void fnShow(uint16_t unusedParamButMandatory) {
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
         while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
-          for(;;) {
+          do {
             tmpStr3000[dest] = tmpStr3000[source];
             if(tmpStr3000[dest] & 0x80) {
               tmpStr3000[++dest] = tmpStr3000[++source];
             }
             source++;
             tmpStr3000[++dest] = 0;
-            if(source >= last || groupingGap == 0 || (tmpStr3000[source] == *separator && tmpStr3000[source + 1] == *(separator + 1))) {
-              break;
-            }
-          }
+          } while(source < last && groupingGap > 0 && (tmpStr3000[source] != *separator || tmpStr3000[source + 1] != *(separator + 1)));
         }
+      }
+
+      if(source < last) { // The long integer is too long
+        xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
+        xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
+        tmpStr3000[dest + 2] = 0;
       }
       break;
 

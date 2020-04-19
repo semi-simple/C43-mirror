@@ -36,8 +36,6 @@ Modes available in the mode menu:
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
-#define JM_MULTISHIFT            //MULTISHIFT AND CLRDROP
-
 #define JM_SHIFT_TIMER     4000  //ms TO_FG_TIMR
 #define JM_TO_FG_LONG 	   580   //ms TO_FG_LONG
 
@@ -203,11 +201,11 @@ void JM_DOT(int16_t xx, int16_t yy);
 #endif
 
 void fnBASE_Hash(uint16_t unusedParamButMandatory);
-void fnKeyDotD  (uint16_t unusedParamButMandatory);
+//void fnKeyDotDjm  (uint16_t unusedParamButMandatory);
 
-void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX
-void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX
-void fnComplexCCCC_CC1  (uint16_t unusedParamButMandatory);  //JM CPX
+
+//void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED
+//void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED 
 
 //display.c
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator);

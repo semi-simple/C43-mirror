@@ -85,14 +85,15 @@ void     underline(int16_t y);               //JM SHIFT LINE
 #endif
 
 #ifndef TESTSUITE_BUILD
+
 void     refreshFn            (uint16_t timerType);         //dr - general timeout handler 
 uint8_t  compressString;                                    //JM compressString
 void     underline_softkey    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);  //JM LONGPRESS
 void     JM_DOT               (int16_t xx, int16_t yy);
 void     force_refresh        (void);                                                  //JM SCREEN
 
-void     setPixel             (int16_t x, int16_t y);
-void     clearPixel           (int16_t x, int16_t y);
+void     setPixel                 (int16_t x, int16_t y);
+void     clearPixel               (int16_t x, int16_t y);
 void     invertPixel          (int16_t x, int16_t y);
 int      getPixel             (int16_t x, int16_t y);
 int16_t  showString           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);

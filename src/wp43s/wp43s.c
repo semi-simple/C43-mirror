@@ -35,6 +35,7 @@
   int16_t            debugWindow;
   uint32_t           *screenData;
   bool_t             screenChange;
+  char               debugString[10000];   //JMMAX Why is this permanent?
   #if (DEBUG_REGISTER_L == 1)
     GtkWidget        *lblRegisterL1;
     GtkWidget        *lblRegisterL2;
@@ -47,6 +48,7 @@
 char                 *ram;
 bool_t               allowScreenUpdate;
 bool_t               funcOK;
+bool_t               keyActionProcessed;
 
 // Variables stored in RAM
 realContext_t        ctxtReal34;   //   34 digits
@@ -386,6 +388,8 @@ void setupDefaults(void) {
   strcpy(filename_csv,"DEFAULT.CSV");                            //JMCSV
   tmp__32=0;                                                     //JMCSV
   mem__32=0;                                                     //JMCSV
+  SHOWregis = 9999;                                              //JM
+
 
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state

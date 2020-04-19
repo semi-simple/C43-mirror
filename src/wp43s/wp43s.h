@@ -113,7 +113,6 @@
   #define addItemToBuffer fnNop
   #define fnOff           fnNop
   #define fnAim           fnNop
-  #define fnComplexCCCC   fnNop
   #define registerBrowser fnNop
   #define flagBrowser     fnNop
   #define fontBrowser     fnNop
@@ -190,7 +189,7 @@ typedef int16_t calcRegister_t;
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
 #define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 //9965   // 43S:3328 //JMMAX
-#define MAX_FACTORIAL                 1142  //1142   // 43S: 450 //JMMAX
+#define MAX_FACTORIAL                 1000 //1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98
@@ -375,6 +374,10 @@ typedef int16_t calcRegister_t;
 #define CU_J                    1
 #define COMPLEX_UNIT            (complexUnit == CU_I ? STD_i : STD_j)
 
+// Complex mode 1 bit
+#define CM_RECTANGULAR          0
+#define CM_POLAR                1
+
 // Product sign 1 bit
 #define PS_DOT                  0
 #define PS_CROSS                1
@@ -394,10 +397,6 @@ typedef int16_t calcRegister_t;
 // Stack size 1 bit
 #define SS_4                    0
 #define SS_8                    1
-
-// Complex mode 1 bit
-#define CM_RECTANGULAR          0
-#define CM_POLAR                1
 
 // Alpha case 1 bit
 #define AC_UPPER                0
@@ -576,6 +575,7 @@ typedef int16_t calcRegister_t;
   extern int16_t            debugWindow;
   extern uint32_t           *screenData;
   extern bool_t             screenChange;
+  extern char               debugString[10000]; //JMMAX Why is this permanent?
   #if (DEBUG_REGISTER_L == 1)
     extern GtkWidget        *lblRegisterL1;
     extern GtkWidget        *lblRegisterL2;
@@ -588,6 +588,7 @@ typedef int16_t calcRegister_t;
 extern char                 *ram;
 extern bool_t               allowScreenUpdate;
 extern bool_t               funcOK;
+extern bool_t               keyActionProcessed;
 
 // Variables stored in FLASH
 extern const item_t         indexOfItems[];
@@ -608,7 +609,7 @@ extern realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t             flags[7];
-#define TMP_STR_LENGTH      6000          //JMMAX 3000+ extra to make sure
+#define TMP_STR_LENGTH      3000          //JMMAX 3000+ extra to make sure
 #define ERROR_MESSAGE_LENGTH 512
 #define DISPLAY_VALUE_LEN     80
 extern char                 tmpStr3000[TMP_STR_LENGTH];

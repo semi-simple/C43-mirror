@@ -75,71 +75,54 @@ void fnMultiply(uint16_t unusedParamButMandatory) {
 
 void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, const real_t *factor2Real, const real_t *factor2Imag, real_t *productReal, real_t *productImag, realContext_t *realContext) {
   real_t a, b, c, d;
+  bool_t aIsZero, bIsZero, cIsZero, dIsZero, aIsInfinite, bIsInfinite, cIsInfinite, dIsInfinite;
 
   realCopy(factor1Real, &a);
+  aIsZero = realIsZero(&a);
+  aIsInfinite = realIsInfinite(&a);
+
   realCopy(factor1Imag, &b);
+  bIsZero = realIsZero(&b);
+  bIsInfinite = realIsInfinite(&b);
+
   realCopy(factor2Real, &c);
+  cIsZero = realIsZero(&c);
+  cIsInfinite = realIsInfinite(&c);
+
   realCopy(factor2Imag, &d);
+  dIsZero = realIsZero(&d);
+  dIsInfinite = realIsInfinite(&d);
 
   if(   realIsNaN(&a) || realIsNaN(&b) || realIsNaN(&c) || realIsNaN(&d)
-     || (realIsZero(&a) && realIsZero(&b) && (realIsInfinite(&c) || realIsInfinite(&d)))
-     || (realIsZero(&c) && realIsZero(&d) && (realIsInfinite(&a) || realIsInfinite(&b)))) {
+     || (aIsZero && bIsZero && (cIsInfinite || dIsInfinite))
+     || (cIsZero && dIsZero && (aIsInfinite || bIsInfinite))) {
     realCopy(const_NaN, productReal);
     realCopy(const_NaN, productImag);
     return;
   }
 
-  if(realIsInfinite(&a) && !realIsInfinite(&b)) {
-    realZero(&b);
+  if((aIsInfinite || bIsInfinite) && (cIsInfinite || dIsInfinite)) { // perform multiplication in polar form
+    setInfiniteComplexAngle((getInfiniteComplexAngle(&a, &b) + getInfiniteComplexAngle(&c, &d)) % 8, productReal, productImag);
   }
+  // Not sure the following lines are needed
+  //else if(aIsInfinite || bIsInfinite || cIsInfinite || dIsInfinite) {
+  //  realRectangularToPolar(&a, &b, &a, &b, realContext);
+  //  realRectangularToPolar(&c, &d, &c, &d, realContext);
+  //  realMultiply(&a, &c, &a, realContext);
+  //  realAdd(&b, &d, &b, realContext);
+  //  realPolarToRectangular(&a, &b, productReal, productImag, realContext);
+  //}
+  else { // perform multiplication in rectangular form
+    // real part
+    realMultiply(&a, &c, productReal, realContext);                   // a*c
+    realMultiply(&b, &d, productImag, realContext);                   // b*d
+    realSubtract(productReal, productImag, productReal, realContext); // a*c - b*d
 
-  if(realIsInfinite(&b) && !realIsInfinite(&a)) {
-    realZero(&a);
+    // imaginary part
+    realMultiply(&a, &d, productImag, realContext);     // a*d
+    realMultiply(&b, &c, &a, realContext);              // b*c
+    realAdd(productImag, &a, productImag, realContext); // a*d + b*c
   }
-
-  if(realIsInfinite(&c) && !realIsInfinite(&d)) {
-    realZero(&d);
-  }
-
-  if(realIsInfinite(&d) && !realIsInfinite(&c)) {
-    realZero(&c);
-  }
-
-
-  // real part
-  if(realIsZero(&a) || realIsZero(&c)) {
-    realZero(productReal);
-  }
-  else {
-    realMultiply(&a, &c, productReal, realContext);                // a*c
-  }
-
-  if(realIsZero(&b) || realIsZero(&d)) {
-    realZero(productImag);
-  }
-  else {
-    realMultiply(&b, &d, productImag, realContext);                 // b*d
-  }
-
-  realSubtract(productReal, productImag, productReal, realContext); // a*c - b*d
-
-
-  // imaginary part
-  if(realIsZero(&a) || realIsZero(&d)) {
-    realZero(productImag);
-  }
-  else {
-    realMultiply(&a, &d, productImag, realContext);   // a*d
-  }
-
-  if(realIsZero(&b) || realIsZero(&c)) {
-    realZero(&a);
-  }
-  else {
-    realMultiply(&b, &c, &a, realContext);            // b*c
-  }
-
-  realAdd(productImag, &a, productImag, realContext); // a*d + b*c
 }
 
 

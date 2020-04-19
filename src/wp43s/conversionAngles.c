@@ -440,3 +440,67 @@ void checkDms34(real34_t *angle34Dms) {
 
   realToReal34(&angleDms, angle34Dms);
 }
+
+
+
+uint32_t getInfiniteComplexAngle(real_t *x, real_t *y) {
+  if(!realIsInfinite(x)) {
+    if(realIsPositive(y))
+      return 2; // 90°
+    else
+      return 6; // -90° or 270°
+  }
+
+  if(!realIsInfinite(y)) {
+    if(realIsPositive(x))
+      return 0; // 0°
+    else
+      return 4; // -180° or 180°
+  }
+
+  // At this point, x and y are infinite
+  if(realIsPositive(x)) {
+    if(realIsPositive(y))
+      return 1; // 45°
+    else
+      return 7; // -45° or 315°
+  }
+
+  // At this point, x is negative
+  if(realIsPositive(y))
+    return 3; // 135°
+  else
+    return 5; // -135° or 225°
+}
+
+
+
+void setInfiniteComplexAngle(uint32_t angle, real_t *x, real_t *y) {
+  switch(angle) {
+    case 3:
+    case 4:
+    case 5:  realCopy(const_minusInfinity, x);
+             break;
+
+    case 2:
+    case 6:  realZero(x);
+             break;
+
+    default: realCopy(const_plusInfinity, x);
+             break;
+  }
+
+  switch(angle) {
+    case 5:
+    case 6:
+    case 7:  realCopy(const_minusInfinity, y);
+             break;
+
+    case 0:
+    case 4:  realZero(y);
+             break;
+
+    default: realCopy(const_plusInfinity, y);
+             break;
+  }
+}

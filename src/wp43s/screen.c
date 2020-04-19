@@ -400,7 +400,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
   // Function name display
-  if(showFunctionNameCounter>0) {
+  if(showFunctionNameCounter > 0) {
     if(--showFunctionNameCounter == 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
@@ -594,9 +594,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
   if(Shft_timeouts) {
 
     if(fnTimerGetStatus(TO_FG_LONG) == TMR_COMPLETED) {
-#ifdef JM_MULTISHIFT
       fnTimerStop(TO_3S_CTFF);
-#endif
       if(!shiftF && !shiftG) {
         shiftF = true;
         fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
@@ -1198,10 +1196,10 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[item].itemCatalogName, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
+  if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
   }
-  showString(indexOfItems[item].itemCatalogName, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);  //JM
+  showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);  //JM
 }
 
 
@@ -1214,10 +1212,16 @@ void showFunctionName(int16_t item, int8_t counter) {
  * \param void
  * \return void
  ***********************************************/
-void hideFunctionName() {
+void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
   refreshRegisterLine(REGISTER_T);
+  if(calcMode == CM_TAM) {
+    if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+      clearRegisterLine(Y_POSITION_OF_TAM_LINE, 32);
+    }
+    showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  }
 }
 
 
@@ -1271,6 +1275,7 @@ void resetTemporaryInformation(void) {
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
+    //case TI_WHO:
     case TI_WEIGHTEDMEANX:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
@@ -1414,12 +1419,12 @@ void refreshRegisterLine(calcRegister_t regist) {
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpStr3000, &standardFont, true, true);
-                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
                              break;
 
             // L2 & L3
             case REGISTER_Z: w = stringWidth(tmpStr3000 + 300, &standardFont, true, true);
-                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21, vmNormal, true, true);
+                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
                              if(tmpStr3000[600]) {
                                w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);

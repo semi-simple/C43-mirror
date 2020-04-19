@@ -113,7 +113,6 @@ int main(int argc, char* argv[]) {
       }
     }
   }
-  printf("FCNS numberOfItems %d, ",numberOfItems);                            //JM
 
   qsort(itemList, numberOfItems, sizeof(*itemList), sortItems);
 

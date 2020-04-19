@@ -434,7 +434,7 @@ void powLonICplx(void) {
  * \return void
  ***********************************************/
 void powCplxLonI(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(longIntegerIsZeroRegister(REGISTER_X)) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -446,7 +446,7 @@ void powCplxLonI(void) {
       realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
-  }
+  }*/
 
   real_t a, b, c, d;
 
@@ -699,7 +699,7 @@ void powShoICplx(void) {
  * \return void
  ***********************************************/
 void powCplxShoI(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -711,7 +711,7 @@ void powCplxShoI(void) {
       realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
-  }
+  }*/
 
   real_t a, b, c, d;
 
@@ -794,7 +794,7 @@ void powRealReal(void) {
  * \return void
  ***********************************************/
 void powRealCplx(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -806,7 +806,7 @@ void powRealCplx(void) {
       realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
-  }
+  }*/
 
   real_t a, c, d;
 
@@ -840,7 +840,7 @@ void powRealCplx(void) {
  * \return void
  ***********************************************/
 void powCplxReal(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
@@ -852,7 +852,7 @@ void powCplxReal(void) {
       realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     return;
-  }
+  }*/
 
   real_t a, b, c, d;
 

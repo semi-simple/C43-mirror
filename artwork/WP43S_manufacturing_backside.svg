@@ -25,16 +25,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3944257"
+     inkscape:zoom="1.4319679"
      inkscape:cx="198.4252"
      inkscape:cy="279.68504"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1790"
-     inkscape:window-height="1000"
-     inkscape:window-x="2039"
-     inkscape:window-y="21"
+     inkscape:window-width="1909"
+     inkscape:window-height="1021"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:object-nodes="true"
      showguides="false" />
@@ -79,8 +79,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Calculator frame"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <path
        inkscape:connector-curvature="0"
        id="path846"
@@ -121,23 +120,23 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="14.911313"
+       x="15.94414"
        y="277.48947"
        id="text1654"><tspan
          sodipodi:role="line"
          id="tspan1652"
-         x="14.911313"
+         x="15.94414"
          y="277.48947"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.26458332">https://gitlab.com/Over_score/wp43s</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222223px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="14.929919"
+       x="15.962747"
        y="273.69971"
        id="text1658"><tspan
          sodipodi:role="line"
          id="tspan1656"
-         x="14.929919"
+         x="15.962747"
          y="273.69971"
          style="font-size:2.11666656px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458332">Visit your favorite calculator development site at:</tspan></text>
     <text

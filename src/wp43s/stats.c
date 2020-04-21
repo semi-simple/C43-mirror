@@ -323,17 +323,22 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
  * enables stack lift and refreshes the stack.
  * regX = MEAN x, regY = MEAN y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] displayInfo int
+ * \param[in] sumX real_t
+ * \param[in] numberX real_t
+ * \param[in] sumY real_t
+ * \param[in] numberY real_t
+ * \param[in] transform void (*)(const real_t *operand, real_t *result)
  * \return void
  ***********************************************/
-void fnMeanXY(uint16_t unusedParamButMandatory) {
-  real_t mean;
+static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t *sumY, real_t *numberY, void (*transform)(const real_t *operand, real_t *result)) {
+  real_t *mean, tempReal1, tempReal2;
 
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnMeanXY:", errorMessage, NULL, NULL);
+      showInfoDialog("In function calculateMean:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -343,17 +348,39 @@ void fnMeanXY(uint16_t unusedParamButMandatory) {
     STACK_LIFT_ENABLE;
     liftStack();
 
-    realDivide(SIGMA_X, SIGMA_N, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
+    realDivide(sumX, numberX, &tempReal1, &ctxtReal39);
+    if (transform != NULL) {
+      (*transform)(&tempReal1, &tempReal2);
+    }
+    mean = transform == NULL ? &tempReal1 : &tempReal2;
+    realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_X));
 
-    realDivide(SIGMA_Y, SIGMA_N, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
+    realDivide(sumY, numberY, &tempReal1, &ctxtReal39);
+    if (transform != NULL) {
+      (*transform)(&tempReal1, &tempReal2);
+    }
+    realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_Y));
 
-    temporaryInformation = TI_MEANX_MEANY;
+    temporaryInformation = displayInfo;
     refreshStack();
   }
 }
 
+/********************************************//**
+ * \brief x bar ==> regX, regY
+ * enables stack lift and refreshes the stack.
+ * regX = MEAN x, regY = MEAN y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnMeanXY(uint16_t unusedParamButMandatory) {
+  calculateMean(TI_MEANX_MEANY, SIGMA_X, SIGMA_N, SIGMA_Y, SIGMA_N, NULL);
+}
+
+static void geometricMeanTransform(const real_t *operand, real_t *result) {
+  realExp(operand, result, &ctxtReal39);
+}
 
 /********************************************//**
  * \brief x bar sub G ==> regX, regY
@@ -364,33 +391,35 @@ void fnMeanXY(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
-  real_t mean, tempReal;
+  calculateMean(TI_GEOMMEANX_GEOMMEANY, SIGMA_lnX, SIGMA_N, SIGMA_lnY, SIGMA_N, &geometricMeanTransform);
+}
 
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnGeometricMeanXY:", errorMessage, NULL, NULL);
-    #endif
-  }
-  else {
-    saveStack();
+/********************************************//**
+ * \brief x bar sub H ==> regX, regY
+ * enables stack lift and refreshes the stack.
+ * regX = HARMONIC MEAN x, regY = HARMONIC MEAN y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnHarmonicMeanXY(uint16_t unusedParamButMandatory) {
+  calculateMean(TI_HARMMEANX_HARMMEANY, SIGMA_N, SIGMA_1onX, SIGMA_N, SIGMA_1onY, NULL);
+}
 
-    liftStack();
-    STACK_LIFT_ENABLE;
-    liftStack();
+static void RMSMeanTransform(const real_t *operand, real_t *result) {
+  realSquareRoot(operand, result, &ctxtReal39);
+}
 
-    realDivide(SIGMA_lnX, SIGMA_N, &tempReal, &ctxtReal39);
-    realExp(&tempReal, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
-
-    realDivide(SIGMA_lnY, SIGMA_N, &tempReal, &ctxtReal39);
-    realExp(&tempReal, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
-
-    temporaryInformation = TI_GEOMMEANX_GEOMMEANY;
-    refreshStack();
-  }
+/********************************************//**
+ * \brief x bar sub R sub M sub S ==> regX, regY
+ * enables stack lift and refreshes the stack.
+ * regX = RMS MEAN x, regY = RMS MEAN y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnRMSMeanXY(uint16_t unusedParamButMandatory) {
+  calculateMean(TI_RMSMEANX_RMSMEANY, SIGMA_X2, SIGMA_N, SIGMA_Y2, SIGMA_N, &RMSMeanTransform);
 }
 
 /********************************************//**
@@ -421,80 +450,6 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
     realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
 
     temporaryInformation = TI_WEIGHTEDMEANX;
-    refreshStack();
-  }
-}
-
-/********************************************//**
- * \brief x bar sub H ==> regX, regY
- * enables stack lift and refreshes the stack.
- * regX = HARMONIC MEAN x, regY = HARMONIC MEAN y
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnHarmonicMeanXY(uint16_t unusedParamButMandatory) {
-  real_t mean;
-
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnHarmonicMeanXY:", errorMessage, NULL, NULL);
-    #endif
-  }
-  else {
-    saveStack();
-
-    liftStack();
-    STACK_LIFT_ENABLE;
-    liftStack();
-
-    realDivide(SIGMA_N, SIGMA_1onX, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
-
-    realDivide(SIGMA_N, SIGMA_1onY, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
-
-    temporaryInformation = TI_HARMMEANX_HARMMEANY;
-    refreshStack();
-  }
-}
-
-/********************************************//**
- * \brief x bar sub R sub M sub S ==> regX, regY
- * enables stack lift and refreshes the stack.
- * regX = RMS MEAN x, regY = RMS MEAN y
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnRMSMeanXY(uint16_t unusedParamButMandatory) {
-  real_t mean, tempReal;
-
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnRMSMeanXY:", errorMessage, NULL, NULL);
-    #endif
-  }
-  else {
-    saveStack();
-
-    liftStack();
-    STACK_LIFT_ENABLE;
-    liftStack();
-
-    realDivide(SIGMA_X2, SIGMA_N, &tempReal, &ctxtReal39);
-    realSquareRoot(&tempReal, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
-
-    realDivide(SIGMA_Y2, SIGMA_N, &tempReal, &ctxtReal39);
-    realSquareRoot(&tempReal, &mean, &ctxtReal39);
-    realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_Y));
-
-    temporaryInformation = TI_RMSMEANX_RMSMEANY;
     refreshStack();
   }
 }

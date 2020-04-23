@@ -22,9 +22,9 @@
 #define LONG_INTEGER_POINTER(a)                                           ((longInteger_t *)(a))
 #define REGISTER_LONG_INTEGER_DATA(a)                                     ((longInteger_t *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
 #define LIMB_SIZE                                                         sizeof(mp_limb_t)
-#define LONG_INTEGER_ZERO                                                 0 // 0
-#define LONG_INTEGER_NEGATIVE                                             1 // -
-#define LONG_INTEGER_POSITIVE                                             2 // +
+#define LI_ZERO                                                           0 // 0
+#define LI_NEGATIVE                                                       1 // -
+#define LI_POSITIVE                                                       2 // +
 #define longIntegerSizeInBytes(li)                                        (abs((li)->_mp_size) * LIMB_SIZE)
 
 
@@ -53,7 +53,7 @@
 #define longIntegerIsEven(op)                                             mpz_even_p(op)
 #define longIntegerIsOdd(op)                                              mpz_odd_p(op)
 #define longIntegerSign(op)                                               mpz_sgn(op)
-#define longIntegerSignTag(op)                                            ((op)->_mp_size == 0 ? LONG_INTEGER_ZERO : ((op)->_mp_size > 0 ? LONG_INTEGER_POSITIVE : LONG_INTEGER_NEGATIVE))
+#define longIntegerSignTag(op)                                            ((op)->_mp_size == 0 ? LI_ZERO : ((op)->_mp_size > 0 ? LI_POSITIVE : LI_NEGATIVE))
 #define longIntegerBits(op)                                               mpz_sizeinbase(op, 2)
 #define longIntegerBase10Digits(op)                                       mpz_sizeinbase(op, 10)
 #define longIntegerProbabPrime(op)                                        mpz_probab_prime_p(op, 15); // 0=composite 1=probably prime 2=prime  A composite number will be identified as a prime with a probability of less than 4^(-15)

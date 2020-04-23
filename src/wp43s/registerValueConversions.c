@@ -43,7 +43,7 @@ void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_
 
   memcpy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), sizeInBytes);
 
-  if(getRegisterLongIntegerSign(regist) == LONG_INTEGER_NEGATIVE) {
+  if(getRegisterLongIntegerSign(regist) == LI_NEGATIVE) {
     lgInt->_mp_size = -(sizeInBytes / LIMB_SIZE);
   }
   else {

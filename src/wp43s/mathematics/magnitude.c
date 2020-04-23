@@ -64,7 +64,7 @@ void fnMagnitude(uint16_t unusedParamButMandatory) {
 
 
 void magnitudeLonI(void) {
-  setRegisterLongIntegerSign(REGISTER_X, LONG_INTEGER_POSITIVE);
+  setRegisterLongIntegerSign(REGISTER_X, LI_POSITIVE);
 }
 
 

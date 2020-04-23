@@ -156,7 +156,7 @@ void fnSeed(uint16_t unusedParamButMandatory) {
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    if(getRegisterLongIntegerSign(REGISTER_X) != LONG_INTEGER_ZERO) {
+    if(getRegisterLongIntegerSign(REGISTER_X) != LI_ZERO) {
       seed = *(uint64_t *)getRegisterDataPointer(REGISTER_X);          // First 64 bits of the long integer
       sequ = *(((uint64_t *)getRegisterDataPointer(REGISTER_X)) + 1);  // Second 64 bits of the long integer
     }

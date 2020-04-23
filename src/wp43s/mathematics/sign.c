@@ -70,11 +70,11 @@ void signLonI(void) {
   longIntegerInit(lgInt);
 
   switch(getRegisterLongIntegerSign(REGISTER_X)) {
-    case LONG_INTEGER_POSITIVE:
+    case LI_POSITIVE:
       intToLongInteger(1, lgInt);
       break;
 
-    case LONG_INTEGER_NEGATIVE:
+    case LI_NEGATIVE:
       intToLongInteger(-1, lgInt);
       break;
 

@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    sodipodi:docname="WP43S_manufacturing_keys.svg"
-   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
   <defs
      id="defs2">
     <clipPath
@@ -8150,10 +8150,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4319679"
-     inkscape:cx="126.83876"
+     inkscape:cx="-9.3374769"
      inkscape:cy="178.08324"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1773"
      inkscape:window-height="1008"
@@ -8215,13 +8215,13 @@
      style="display:inline"
      transform="translate(0,-149)">
     <path
-       style="display:inline;fill:#00b5e2;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#53c9e9;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 65.45,234.5 v -7.2 h 9.1 v 7.2 z"
        id="path3519-6-3-2-689"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;fill:#f2a900;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;fill:#f7a800;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 53.95,234.5 v -7.2 h 9.1 v 7.2 z"
        id="path3519-6-3-2-64"
        inkscape:connector-curvature="0"

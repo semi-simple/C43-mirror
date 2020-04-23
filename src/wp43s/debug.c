@@ -126,9 +126,9 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
       switch(getRegisterTag(regist)) {
-        case LONG_INTEGER_ZERO:     return "zero    ";
-        case LONG_INTEGER_NEGATIVE: return "negative";
-        case LONG_INTEGER_POSITIVE: return "positive";
+        case LI_ZERO:     return "zero    ";
+        case LI_NEGATIVE: return "negative";
+        case LI_POSITIVE: return "positive";
         default:                    return "???     ";
       }
 

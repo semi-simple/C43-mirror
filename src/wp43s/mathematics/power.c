@@ -343,6 +343,22 @@ void powLonIReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
   realPower(&y, &x, &x, &ctxtReal39);
+
+  if(getFlag(FLAG_CPXRES) && realIsNaN(&x)) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
+
+    reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+    real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
+
+    powCplxCplx();
+    return;
+  }
+
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -402,27 +418,15 @@ void powRealLonI(void) {
  * \return void
  ***********************************************/
 void powLonICplx(void) {
-  real_t a, c, d;
+  real_t y;
 
-  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
-  // ln(a) --> a
-  WP34S_Ln(&a, &a, &ctxtReal39);
+  reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
 
-  // (c + di) * ln(a) --> c +di
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realExp(&c, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  powCplxCplx();
 }
 
 
@@ -781,6 +785,22 @@ void powRealReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
   realPower(&y, &x, &x, &ctxtReal39);
+
+  if(getFlag(FLAG_CPXRES) && realIsNaN(&x)) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
+
+    reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+    real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
+
+    powCplxCplx();
+    return;
+  }
+
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
@@ -808,27 +828,14 @@ void powRealCplx(void) {
     return;
   }*/
 
-  real_t a, c, d;
+  real_t y;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
 
-  // ln(a) --> a
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  // (c + di) * ln(a) --> c +di
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realExp(&c, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  powCplxCplx();
 }
 
 
@@ -854,29 +861,14 @@ void powCplxReal(void) {
     return;
   }*/
 
-  real_t a, b, c, d;
+  real_t x;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
 
-  // ln(a + bi) --> a + bi
-  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  // c * ln(a + bi) -- > a + bi
-  realMultiply(&c, &a, &a, &ctxtReal39);
-  realMultiply(&c, &b, &b, &ctxtReal39);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realExp(&a, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  powCplxCplx();
 }
 
 

@@ -43,6 +43,7 @@
 #define BLOCKS_TO_BYTES(n)          ((n) << MEMORY_ALLOCATION_SHIFT)
 #define WP43SMEMPTR_TO_PCMEMPTR(p)  ((void *)(ram + ((p) << MEMORY_ALLOCATION_SHIFT)))
 #define PCMEMPTR_TO_WP43SMEMPTR(p)  ((uint32_t)(((char *)(p) - ram) >> MEMORY_ALLOCATION_SHIFT))
+#define FN_KEY_TIMEOUT_TO_NOP       0
 
 #if (MEMORY_ALLOCATION_ALIGNMENT == 4)
   #define dataSize_t                uint32_t

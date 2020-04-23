@@ -362,7 +362,7 @@ void powRealLonI(void) {
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      if(getRegisterLongIntegerSign(REGISTER_X) == LONG_INTEGER_POSITIVE) {
+      if(getRegisterLongIntegerSign(REGISTER_X) == LI_POSITIVE) {
         longInteger_t lgInt;
         convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);

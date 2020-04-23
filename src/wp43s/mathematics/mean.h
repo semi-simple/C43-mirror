@@ -15,11 +15,12 @@
  */
 
 /********************************************//**
- * \file stats.h Statistical functions
+ * \file mean.h
  ***********************************************/
 
-
-
-void fnSigma          (uint16_t plusMinus);
-void fnStatSum        (uint16_t sum);
-void fnSumXY          (uint16_t unusedParamButMandatory);
+int checkMinimumDataPoints(uint32_t n);
+void fnMeanXY             (uint16_t unusedParamButMandatory);
+void fnGeometricMeanXY    (uint16_t unusedParamButMandatory);
+void fnWeightedMeanX      (uint16_t unusedParamButMandatory);
+void fnHarmonicMeanXY     (uint16_t unusedParamButMandatory);
+void fnRMSMeanXY          (uint16_t unusedParamButMandatory);

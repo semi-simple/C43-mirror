@@ -329,8 +329,6 @@ void xthRootLonILonI(void) {
     }
     else {
       if(longIntegerIsNegative(base)) {                                 // neg base and even exponent
-        if(longIntegerIsEven(exponent)) {
-        } else
         if(longIntegerIsOdd(exponent)) {
           longIntegerChangeSign(base);
           longIntegerInit(l);
@@ -344,8 +342,6 @@ void xthRootLonILonI(void) {
           }
           longIntegerFree(l);
           longIntegerChangeSign(base);
-        } else
-        if(longIntegerIsZero(base)) {
         }
       }
     }

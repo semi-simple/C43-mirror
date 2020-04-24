@@ -72,8 +72,8 @@ void fnChangeSign(uint16_t unusedParamButMandatory) {
 
 void chsLonI(void) {
   switch(getRegisterLongIntegerSign(REGISTER_X)) {
-    case LONG_INTEGER_POSITIVE : setRegisterLongIntegerSign(REGISTER_X, LONG_INTEGER_NEGATIVE); break;
-    case LONG_INTEGER_NEGATIVE : setRegisterLongIntegerSign(REGISTER_X, LONG_INTEGER_POSITIVE); break;
+    case LI_POSITIVE : setRegisterLongIntegerSign(REGISTER_X, LI_NEGATIVE); break;
+    case LI_NEGATIVE : setRegisterLongIntegerSign(REGISTER_X, LI_POSITIVE); break;
     default : {}
   }
 }

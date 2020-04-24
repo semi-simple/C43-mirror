@@ -89,9 +89,14 @@ void convertLongIntegerRegisterToReal(calcRegister_t source, real_t *destination
 
 void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base, calcRegister_t destination) {
   reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, base);
-  *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
-  if(longIntegerIsNegative(lgInt)) {
-    *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
+  if(longIntegerIsZero(lgInt)) {
+    *(REGISTER_SHORT_INTEGER_DATA(destination)) = 0;
+  }
+  else {
+    *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
+    if(longIntegerIsNegative(lgInt)) {
+      *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
+    }
   }
 }
 

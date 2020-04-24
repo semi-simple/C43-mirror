@@ -621,6 +621,9 @@
 		<Unit filename="src/testSuite/unitVector.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/xthRoot.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">
 			<Option compilerVar="CC" />
 			<Option target="testTtf2RasterFonts" />
@@ -1926,6 +1929,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/wp34s.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/xthRoot.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/xthRoot.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -41,19 +41,19 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
 
 #ifdef PC_BUILD
-  void btnFnClicked   (GtkWidget *w, gpointer data);
-  void btnFnPressed   (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
-  void btnFnReleased  (GtkWidget *w, gpointer data);   //JM LONGPRESS FN
-  void btnClicked     (GtkWidget *w, gpointer data);
-  void btnPressed     (GtkWidget *w, gpointer data);
-  void btnReleased    (GtkWidget *w, gpointer data);
+  void btnFnClicked (GtkWidget *w, gpointer data);
+  void btnFnPressed (GtkWidget *w, gpointer data);
+  void btnFnReleased(GtkWidget *w, gpointer data);
+  void btnClicked   (GtkWidget *w, gpointer data);
+  void btnPressed   (GtkWidget *w, gpointer data);
+  void btnReleased  (GtkWidget *w, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD
-  void btnFnClicked   (void *w, void *data);
-  void btnFnPressed   (void *w, void *data);           //JM LONGPRESS FN
-  void btnFnReleased  (void *w, void *data);           //JM LONGPRESS FN
-  void btnClicked     (void *w, void *data);
-  void btnPressed     (void *w, void *data);
-  void btnReleased    (void *w, void *data);
+  void btnFnClicked (void *w, void *data);
+  void btnFnPressed (void *w, void *data);
+  void btnFnReleased(void *w, void *data);
+  void btnClicked   (void *w, void *data);
+  void btnPressed   (void *w, void *data);
+  void btnReleased  (void *w, void *data);
 #endif // DMCP_BUILD

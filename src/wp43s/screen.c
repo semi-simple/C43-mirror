@@ -58,9 +58,8 @@ void copyScreenToClipboard(void) {
 }
 
 
-#endif
+#endif                                                //JMCSV
 #if defined (PC_BUILD) || defined (DMCP_BUILD)        //JMCSV
-
 
 static void angularUnitToString(uint32_t angularMode, char *string) {
   switch(angularMode) {
@@ -80,7 +79,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
-  char tmp2[TMP_STR_LENGTH];                   //JMCSV
+  char tmp2[TMP_STR_LENGTH];                           //JMCSV
   static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {
@@ -88,13 +87,13 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
       longIntegerToAllocatedString(lgInt, tmpStr3000, sizeof(tmpStr3000));
       longIntegerFree(lgInt);
-      tmp2[0]=0;                 //JMCSV add apostrophies
-      strcat(tmp2,"\"");         //JMCSV
-      strcat(tmp2,tmpStr3000);   //JMCSV
-      //strcpy(tmpStr3000,tmp2);   //JMCSV
-      tmp2[TMP_STR_LENGTH-1]=0;  //JMCSV trying a better way, in case the terminating 0 is not copied
+      tmp2[0]=0;                                         //JMCSV add apostrophies
+      strcat(tmp2,"\"");                                 //JMCSV
+      strcat(tmp2,tmpStr3000);                           //JMCSV
+      //strcpy(tmpStr3000,tmp2);                         //JMCSV
+      tmp2[TMP_STR_LENGTH-1]=0;                          //JMCSV trying a better way, in case the terminating 0 is not copied
       memcpy(tmpStr3000,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
-      strcat(tmpStr3000,"\"");   //JMCSV
+      strcat(tmpStr3000,"\"");                           //JMCSV
       break;
 
     case dtTime:
@@ -108,11 +107,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
     case dtString:
       memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-      tmp2[0]=0;                 //JMCSV add apostrophies
-      strcat(tmp2,"\"");         //JMCSV
-      strcat(tmp2,tmpStr3000);   //JMCSV
-      strcpy(tmpStr3000,tmp2);   //JMCSV
-      strcat(tmpStr3000,"\"");   //JMCSV
+      tmp2[0]=0;                                         //JMCSV add apostrophies
+      strcat(tmp2,"\"");                                 //JMCSV
+      strcat(tmp2,tmpStr3000);                           //JMCSV
+      strcpy(tmpStr3000,tmp2);                           //JMCSV
+      strcat(tmpStr3000,"\"");                           //JMCSV
       break;
 
     case dtReal34Matrix:
@@ -177,8 +176,8 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   strcpy(clipboardString, tmpStr3000);
 }
 
-#endif
-#ifdef PC_BUILD
+#endif                                                //JMCSV
+#ifdef PC_BUILD                                       //JMCSV
 
 
 void copyRegisterXToClipboard(void) {

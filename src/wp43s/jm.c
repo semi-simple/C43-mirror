@@ -535,7 +535,9 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
 //********************************************
+/*DEPRECIATED REPLACED WITH PROPER fnXthRoot
   if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Temporary implementation of xthe root of y, until Martins is done
+
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO TMP
 
@@ -581,14 +583,16 @@ void fnJM(uint16_t JM_OPCODE) {
     }
     refreshStack();
     copySourceRegisterToDestRegister(99, REGISTER_L);           // STO TMP
+
   } //end OPCODE 1
   else
+*/
 
 
 
 //********************************************
-/*DEPRECIATED, Martin provided proper
-
+//DEPRECIATED, Martin provided proper, Martin removed
+/*
   if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
     uint16_t cm;
 

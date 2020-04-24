@@ -516,7 +516,7 @@ void toggleUserMode(void) {
   userModeEnabled = !userModeEnabled;
 
   #ifdef PC_BUILD
-    showSoftmenuCurrentPart();
+    showSoftmenuCurrentPart();                       //JM TOCHECK. Suspect in here to force icon update in Gui
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM) calcModeTamGui();

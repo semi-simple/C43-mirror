@@ -2015,6 +2015,8 @@ typedef struct {
   uint16_t param;             ///< 1st parameter to the above function
   char     *itemCatalogName;  ///< Name of the item in the catalogs
   char     *itemSoftmenuName; ///< Representation of the item in the menus or on the keyboard
+  uint16_t tamMin;            ///< Minimul value for TAM argument
+  uint16_t tamMax;            ///< Maximal value for TAM argument
   char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
 } item_t;

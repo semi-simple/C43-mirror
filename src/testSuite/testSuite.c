@@ -167,6 +167,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnJM_fnToRect",          fnJM_fnToRect         },     //JM
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
+  {"fnXthRoot",              fnXthRoot             },
   {"",                       NULL                  }
 };
 
@@ -1016,13 +1017,13 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
 
 void wrongRegisterValue(calcRegister_t regist, char letter, char *expectedValue) {
   if(letter == 0) {
-    //printf("\nRegister %u value should be ", regist);
+    printf("\nRegister %u value should be ", regist);
   }
   else {
-    //printf("\nRegister %c value should be ", letter);
+    printf("\nRegister %c value should be ", letter);
   }
-  //printf("%s\nbut it is ", expectedValue);
-  //printRegisterToConsole(regist, "", "\n");
+  printf("%s\nbut it is ", expectedValue);
+  printRegisterToConsole(regist, "", "\n");
   abortTest();
 }
 
@@ -1748,9 +1749,9 @@ void functionToCall(char *functionName) {
 void abortTest(void) {
   numTestsTotal--;
   failedTests++;
-  //printf("\n%s\n", lastInParameters);
-  //printf("%s\n", line);
-  //printf("in file %s line %d\n", fileName, lineNumber);
+  printf("\n%s\n", lastInParameters);
+  printf("%s\n", line);
+  printf("in file %s line %d\n-------------------------------------------------------------------------------------------------------------------------------------\n", fileName, lineNumber);
   //exit(-1);
 }
 

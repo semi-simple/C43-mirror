@@ -29,11 +29,11 @@
  * \return void
  ***********************************************/
 void fnConfigChina(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);
+  fnRadixMark(RM_PERIOD);   //JM
   groupingGap = 4;
   refreshStack();
-  fnTimeFormat(TF_H24);
-  fnDateFormat(DF_YMD);
+  fnTimeFormat(TF_H24);   //JM
+  fnDateFormat(DF_YMD);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1949; // JDN of the first day in the Gregorian calendar
 }
@@ -47,11 +47,11 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigEurope(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_COMMA);
+  fnRadixMark(RM_COMMA);   //JM
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);
-  fnDateFormat(DF_DMY);
+  fnTimeFormat(TF_H24);   //JM
+  fnDateFormat(DF_DMY);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1582; // JDN of the first day in the Gregorian calendar
 }
@@ -65,11 +65,11 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigIndia(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);
+  fnRadixMark(RM_PERIOD);   //JM
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);
-  fnDateFormat(DF_DMY);
+  fnTimeFormat(TF_H24);   //JM
+  fnDateFormat(DF_DMY);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }
@@ -83,11 +83,11 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigJapan(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);
+  fnRadixMark(RM_PERIOD);   //JM
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);
-  fnDateFormat(DF_YMD);
+  fnTimeFormat(TF_H24);   //JM
+  fnDateFormat(DF_YMD);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1873; // JDN of the first day in the Gregorian calendar
 }
@@ -101,11 +101,11 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUk(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);
+  fnRadixMark(RM_PERIOD);   //JM
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H12);
-  fnDateFormat(DF_DMY);
+  fnTimeFormat(TF_H12);   //JM
+  fnDateFormat(DF_DMY);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }
@@ -119,11 +119,11 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUsa(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);
+  fnRadixMark(RM_PERIOD);   //JM
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H12);
-  fnDateFormat(DF_MDY);
+  fnTimeFormat(TF_H12);   //JM
+  fnDateFormat(DF_MDY);   //JM
   oldTime[0] = 0;
   firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
 }

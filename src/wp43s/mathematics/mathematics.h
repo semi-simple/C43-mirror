@@ -64,6 +64,7 @@
 #include "magnitude.h"
 #include "mant.h"
 #include "max.h"
+#include "mean.h"
 #include "min.h"
 #include "minusOnePow.h"
 #include "modulo.h"
@@ -99,5 +100,6 @@
 #include "toRect.h"
 #include "ulp.h"
 #include "unitVector.h"
+#include "xthRoot.h"
 #include "wp34s.h"
 

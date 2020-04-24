@@ -33,15 +33,15 @@ void showShiftState(void) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-        show_f_jm();
+        show_f_jm();        //JM
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-        show_g_jm();
+        show_g_jm();        //JM
       }
       else {
         refreshRegisterLine(REGISTER_T);
-        clear_fg_jm();
+        clear_fg_jm();      //JM
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
@@ -465,9 +465,6 @@ void btnPressed(void *notUsed, void *data) {
 
 
 
-
-
-
 /********************************************//**
  * \brief A calc button was released
  *
@@ -514,171 +511,202 @@ void processKeyAction(int16_t item) {
 
   resetTemporaryInformation();
 
-  if(item != ITM_ENTER && item != KEY_EXIT1 && item != KEY_CC && item != KEY_BACKSPACE && item != KEY_UP1 && item != KEY_DOWN1 && item != KEY_dotD) {
-    switch(calcMode) {
-      case CM_NORMAL:
-        if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
-          addItemToNimBuffer(item);
-          keyActionProcessed = true;
-        }
-        break;
+  switch(item) {
+    case KEY_BACKSPACE:
+      fnKeyBackspace(NOPARAM);
+      keyActionProcessed = true;
+      break;
 
-      case CM_AIM:
-        if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
-          addItemToBuffer(item + 26);
-          keyActionProcessed = true;
-        }
+    case KEY_UP1:
+      fnKeyUp(NOPARAM);
+      keyActionProcessed = true;
+      break;
 
-        else if(alphaCase==AC_LOWER && ( (CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
-          addItemToBuffer(item + 36);
-          keyActionProcessed = true;
-        }
+    case KEY_DOWN1:
+      fnKeyDown(NOPARAM);
+      keyActionProcessed = true;
+      break;
 
-        else if(item == CHR_DOWN_ARROW) {
-          nextChar = NC_SUBSCRIPT;
-          keyActionProcessed = true;
-        }
+    case KEY_EXIT1:
+      fnKeyExit(NOPARAM);
+      keyActionProcessed = true;
+      break;
 
-        else if(item == CHR_UP_ARROW) {
-          nextChar = NC_SUPERSCRIPT;
-          keyActionProcessed = true;
-        }
-        break;
+    case ITM_ENTER:
+    case KEY_CC:
+    case KEY_dotD:
+      break;
 
-      case CM_TAM:
-        addItemToBuffer(item);
-        keyActionProcessed = true;
-        break;
+    default:
+      switch(calcMode) {
+        case CM_NORMAL:
+          if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+            addItemToNimBuffer(item);
+            keyActionProcessed = true;
+          }
+          // Following xommands do not timeout to NOP
+          else if(item == KEY_UNDO || item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {
+            runFunction(item);
+            keyActionProcessed = true;
+          }
+          break;
 
-      case CM_ASM:
-        if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
-          addItemToBuffer(item + 26);
-          keyActionProcessed = true;
-        }
+        case CM_AIM:
+          if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+            addItemToBuffer(item + 26);
+            keyActionProcessed = true;
+          }
 
-        else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
-          addItemToBuffer(item + 36);
-          keyActionProcessed = true;
-        }
+          else if(alphaCase==AC_LOWER && ( (CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
+            addItemToBuffer(item + 36);
+            keyActionProcessed = true;
+          }
 
-        else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+          else if(item == CHR_DOWN_ARROW) {
+            nextChar = NC_SUBSCRIPT;
+            keyActionProcessed = true;
+          }
+
+          else if(item == CHR_UP_ARROW) {
+            nextChar = NC_SUPERSCRIPT;
+            keyActionProcessed = true;
+          }
+          break;
+
+        case CM_TAM:
           addItemToBuffer(item);
           keyActionProcessed = true;
-        }
-        break;
+          break;
 
-      case CM_NIM:
-        addItemToNimBuffer(item);
-        keyActionProcessed = true;
-        break;
+        case CM_ASM:
+          if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+            addItemToBuffer(item + 26);
+            keyActionProcessed = true;
+          }
 
-      case CM_REGISTER_BROWSER:
-        if(item == CHR_PERIOD) {
-          rbr1stDigit = true;
-          if(rbrMode == RBR_GLOBAL) {
-            rbrMode = RBR_LOCAL;
-            currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+          else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+            addItemToBuffer(item + 36);
+            keyActionProcessed = true;
           }
-          else if(rbrMode == RBR_LOCAL) {
-            rbrMode = RBR_GLOBAL;
-            currentRegisterBrowserScreen = REGISTER_X;
+
+          else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+            addItemToBuffer(item);
+            keyActionProcessed = true;
           }
-          else if(rbrMode == RBR_NAMED) {
-            rbrMode = RBR_LOCAL;
-            currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
-          }
-          registerBrowser(NOPARAM);
-        }
-        else if(item == ITM_RS) {
-          rbr1stDigit = true;
-          showContent = !showContent;
-          registerBrowser(NOPARAM);
-        }
-        else if(item == ITM_RS) { // same as previous if! STRANGE
-          rbr1stDigit = true;
-          if(rbrMode == RBR_GLOBAL) {
-            rbrMode = RBR_NAMED;
-            currentRegisterBrowserScreen = 1000;
-          }
-          else if(rbrMode == RBR_LOCAL) {
-            rbrMode = RBR_NAMED;
-            currentRegisterBrowserScreen = 1000;
-          }
-          else if(rbrMode == RBR_NAMED) {
-            rbrMode = RBR_GLOBAL;
-            currentRegisterBrowserScreen = REGISTER_X;
-          }
-          registerBrowser(NOPARAM);
-        }
-        else if(item == ITM_RCL) {
-          rbr1stDigit = true;
-          if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
-            calcMode = previousCalcMode;
-            oldTime[0] = 0;
-            showDateTime();
-            clearScreen(false, true, true);
-            fnRecall(currentRegisterBrowserScreen);
-            STACK_LIFT_ENABLE;
-            refreshStack();
-          }
-          else if(rbrMode == RBR_NAMED) {
-          }
-        }
-        else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
-          if(rbr1stDigit) {
-            rbr1stDigit = false;
-            rbrRegister = item - CHR_0;
-          }
-          else {
+          break;
+
+        case CM_NIM:
+          addItemToNimBuffer(item);
+          keyActionProcessed = true;
+          break;
+
+        case CM_REGISTER_BROWSER:
+          if(item == CHR_PERIOD) {
             rbr1stDigit = true;
-            rbrRegister = rbrRegister*10 + item - CHR_0;
-
             if(rbrMode == RBR_GLOBAL) {
-              currentRegisterBrowserScreen = rbrRegister;
-              registerBrowser(NOPARAM);
+              rbrMode = RBR_LOCAL;
+              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+            }
+            else if(rbrMode == RBR_LOCAL) {
+              rbrMode = RBR_GLOBAL;
+              currentRegisterBrowserScreen = REGISTER_X;
+            }
+            else if(rbrMode == RBR_NAMED) {
+              rbrMode = RBR_LOCAL;
+              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+            }
+            registerBrowser(NOPARAM);
+          }
+          else if(item == ITM_RS) {
+            rbr1stDigit = true;
+            showContent = !showContent;
+            registerBrowser(NOPARAM);
+          }
+          else if(item == ITM_RS) { // same as previous if! STRANGE
+            rbr1stDigit = true;
+            if(rbrMode == RBR_GLOBAL) {
+              rbrMode = RBR_NAMED;
+              currentRegisterBrowserScreen = 1000;
+            }
+            else if(rbrMode == RBR_LOCAL) {
+              rbrMode = RBR_NAMED;
+              currentRegisterBrowserScreen = 1000;
+            }
+            else if(rbrMode == RBR_NAMED) {
+              rbrMode = RBR_GLOBAL;
+              currentRegisterBrowserScreen = REGISTER_X;
+            }
+            registerBrowser(NOPARAM);
+          }
+          else if(item == ITM_RCL) {
+            rbr1stDigit = true;
+            if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
+              calcMode = previousCalcMode;
+              oldTime[0] = 0;
+              showDateTime();
+              clearScreen(false, true, true);
+              fnRecall(currentRegisterBrowserScreen);
+              STACK_LIFT_ENABLE;
+              refreshStack();
+            }
+            else if(rbrMode == RBR_NAMED) {
+            }
+          }
+          else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+            if(rbr1stDigit) {
+              rbr1stDigit = false;
+              rbrRegister = item - CHR_0;
             }
             else {
-              rbrRegister = (rbrRegister >= numberOfLocalRegisters ? 0 : rbrRegister);
-              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
-              registerBrowser(NOPARAM);
+              rbr1stDigit = true;
+              rbrRegister = rbrRegister*10 + item - CHR_0;
+
+              if(rbrMode == RBR_GLOBAL) {
+                currentRegisterBrowserScreen = rbrRegister;
+                registerBrowser(NOPARAM);
+              }
+              else {
+                rbrRegister = (rbrRegister >= numberOfLocalRegisters ? 0 : rbrRegister);
+                currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+                registerBrowser(NOPARAM);
+              }
             }
           }
-        }
 
-        keyActionProcessed = true;
-        break;
+          keyActionProcessed = true;
+          break;
 
-      case CM_FLAG_BROWSER:
-      case CM_FONT_BROWSER:
-      case CM_ERROR_MESSAGE:
-      case CM_BUG_ON_SCREEN:
-        keyActionProcessed = true;
-        break;
+        case CM_FLAG_BROWSER:
+        case CM_FONT_BROWSER:
+        case CM_ERROR_MESSAGE:
+        case CM_BUG_ON_SCREEN:
+          keyActionProcessed = true;
+          break;
 
-      case CM_CONFIRMATION:
-        if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
-          calcMode = previousCalcMode;
-          temporaryInformation = TI_NO_INFO;
-          confirmedFunction(CONFIRMED);
-          refreshStack();
-        }
+        case CM_CONFIRMATION:
+          if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
+            calcMode = previousCalcMode;
+            temporaryInformation = TI_NO_INFO;
+            confirmedFunction(CONFIRMED);
+            refreshStack();
+          }
 
-        else if(item == ITEM_CONF_N || item == KEY_EXIT1) { // No
-          calcMode = previousCalcMode;
-          temporaryInformation = TI_NO_INFO;
-          refreshStack();
-        }
+          else if(item == ITEM_CONF_N || item == KEY_EXIT1) { // No
+            calcMode = previousCalcMode;
+            temporaryInformation = TI_NO_INFO;
+            refreshStack();
+          }
 
-        keyActionProcessed = true;
-        break;
+          keyActionProcessed = true;
+          break;
 
-      default:
-        sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
-        displayBugScreen(errorMessage);
-    }
+        default:
+          sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
+          displayBugScreen(errorMessage);
+      }
   }
 }
-#endif // END IF NOT TESTSUITE_BUILD
+#endif // TESTSUITE_BUILD
 
 
 
@@ -818,7 +846,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
         if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
         calcModeNormal();
         popSoftmenu();
-   
+
         if(aimBuffer[0] == 0) {
           restoreStack();
         }
@@ -899,7 +927,6 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using unusedParamButMan
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
   uint32_t dataTypeY;
-  //printf("Complex %d %d\n",KEY_COMPLEX,unusedParamButMandatory);
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (unusedParamButMandatory == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);

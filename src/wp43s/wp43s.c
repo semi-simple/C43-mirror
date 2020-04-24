@@ -596,6 +596,13 @@ void program_main(void) {
   telltale_pos = 0;                                              //JM test
   #endif
 
+//longInteger_t mem;
+//longIntegerInit(mem);
+//uIntToLongInteger(sys_free_mem(), mem);
+//convertLongIntegerToShortIntegerRegister(mem, 10, REGISTER_X);
+//refreshRegisterLine(REGISTER_X);
+//longIntegerFree(mem);
+
   backToDMCP = false;
 
   lcd_forced_refresh();

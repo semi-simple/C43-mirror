@@ -468,6 +468,13 @@ void program_main(void) {
   lcd_clear_buf();
   setupDefaults();
 
+//longInteger_t mem;
+//longIntegerInit(mem);
+//uIntToLongInteger(sys_free_mem(), mem);
+//convertLongIntegerToShortIntegerRegister(mem, 10, REGISTER_X);
+//refreshRegisterLine(REGISTER_X);
+//longIntegerFree(mem);
+
   backToDMCP = false;
 
   lcd_refresh();

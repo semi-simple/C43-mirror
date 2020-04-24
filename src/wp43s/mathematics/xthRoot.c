@@ -1,0 +1,891 @@
+/* This file is part of 43S.
+ *
+ * 43S is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 43S is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/********************************************//**
+ * \file xthRoot.c
+ ***********************************************/
+// Coded by JM, based on power.c, with reference to cuberoot.c
+
+#include "wp43s.h"
+
+
+void (* const xthRoot[9][9])(void) = {
+// regX |    regY ==>   1                2                3                4             5             6             7                8                9
+//      V               Long integer     Real34           Complex34        Time          Date          String        Real34 mat       Complex34 m      Short integer
+/*  1 Long integer  */ {xthRootLonILonI, xthRootRealLonI, xthRootCplxLonI, xthRootError, xthRootError, xthRootError, xthRootRemaLonI, xthRootCxmaLonI, xthRootShoILonI},
+/*  2 Real34        */ {xthRootLonIReal, xthRootRealReal, xthRootCplxReal, xthRootError, xthRootError, xthRootError, xthRootRemaReal, xthRootCxmaReal, xthRootShoIReal},
+/*  3 Complex34     */ {xthRootLonICplx, xthRootRealCplx, xthRootCplxCplx, xthRootError, xthRootError, xthRootError, xthRootRemaCplx, xthRootCxmaCplx, xthRootShoICplx},
+/*  4 Time          */ {xthRootError,    xthRootError,    xthRootError,    xthRootError, xthRootError, xthRootError, xthRootError,    xthRootError,    xthRootError   },
+/*  5 Date          */ {xthRootError,    xthRootError,    xthRootError,    xthRootError, xthRootError, xthRootError, xthRootError,    xthRootError,    xthRootError   },
+/*  6 String        */ {xthRootError,    xthRootError,    xthRootError,    xthRootError, xthRootError, xthRootError, xthRootError,    xthRootError,    xthRootError   },
+/*  7 Real34 mat    */ {xthRootError,    xthRootError,    xthRootError,    xthRootError, xthRootError, xthRootError, xthRootError,    xthRootError,    xthRootError   },
+/*  8 Complex34 mat */ {xthRootError,    xthRootError,    xthRootError,    xthRootError, xthRootError, xthRootError, xthRootError,    xthRootError,    xthRootError   },
+/*  9 Short integer */ {xthRootLonIShoI, xthRootRealShoI, xthRootCplxShoI, xthRootError, xthRootError, xthRootError, xthRootRemaShoI, xthRootCxmaShoI, xthRootShoIShoI}
+};
+
+
+
+/********************************************//**
+ * \brief Data type error in xthRoot
+ *
+ * \param[in] unusedParamButMandatory
+ * \return void
+ ***********************************************/
+void xthRootError(void) {
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot obtain xthRoot of %s", getRegisterDataTypeName(REGISTER_Y, true, false));
+    sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    showInfoDialog("In function fnRoot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and regY ^ (1/regX) ==> regX
+ * Drops Y, enables stack lift and refreshes the stack
+ *
+ * \param[in] unusedParamButMandatory
+ * \return void
+ ***********************************************/
+void fnXthRoot(uint16_t unusedParamButMandatory) {
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  xthRoot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+     
+  adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+}
+
+
+
+/********************************************//**
+ * \brief (a+ib) ^ (1/(c+id))
+ *
+ * \param[in] Expecting a,b,c,d:   Y = a +ib;   X = c +id
+ * \return REGISTER Y unchanged. REGISTER X with result of (a+ib) ^ (1/(c+id))
+ ***********************************************/
+real_t a, b, c, d;
+void xthRootCC(void) {
+  real_t theta;
+  if(!getFlag(FLAG_DANGER))
+  {  if(realIsZero(&c)&&realIsZero(&d)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function xthRootCC: 0th Root is not defined!", NULL, NULL, NULL);
+      #endif
+      return;       
+     }
+    else
+	 {  if(realIsNaN(&a)||realIsNaN(&b)||realIsNaN(&c)||realIsNaN(&d)) {
+	      c = *const_NaN;
+		  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+	      realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+   	      realToReal34(&c, REGISTER_IMAG34_DATA(REGISTER_X));
+	      return;       
+	     }
+	  }
+  }
+
+
+
+    divRealComplex(const_1, &c, &d, &c, &d, &ctxtReal39);
+
+    //From power.c
+    realRectangularToPolar(&a, &b, &a, &theta, &ctxtReal39);
+    WP34S_Ln(&a, &a, &ctxtReal39);
+    realMultiply(&a, &d, &b, &ctxtReal39);
+    realFMA(&theta, &c, &b, &b, &ctxtReal39);
+    realChangeSign(&theta);
+    realMultiply(&a, &c, &a, &ctxtReal39);
+    realFMA(&theta, &d, &a, &a, &ctxtReal39);
+    realExp(&a, &c, &ctxtReal39);
+    realPolarToRectangular(const_1, &b, &a, &b, &ctxtReal39);
+    realMultiply(&c, &b, &d, &ctxtReal39);
+    realMultiply(&c, &a, &c, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  } 
+
+
+/********************************************//**
+ * \brief y^(1/x)
+ *
+ * \param[in] Expecting x,y
+ * \return REGISTER Y unchanged. REGISTER X with result of y^x
+ ***********************************************/
+real_t y, x;
+void xthRootRR(void) {
+  real_t r, o;
+  uint8_t telltale;
+
+  telltale = 0;
+  if(getFlag(FLAG_DANGER)) {
+    //0
+    if(
+         ( (real34IsZero(&y)                           /**/&&/**/    (realCompareGreaterEqual(&x, const_0) || (realIsInfinite(&x) && realIsPositive(&x)) ) ) )
+      || ( (realIsInfinite(&y) && realIsPositive(&y))  /**/&&/**/    (realCompareLessThan(&x, const_0) && (!realIsInfinite(&x)                            ) ) )
+      )
+    { telltale += 1;
+      realCopy(const_0, &o);
+    }
+
+    //1
+    if(
+         ( (realCompareGreaterEqual(&y, const_0) || (realIsInfinite(&y) && realIsPositive(&y)) )   /**/&&/**/  realIsInfinite(&x) )
+      )
+    { telltale += 2;
+      realCopy(const_1, &o);
+    }
+
+    //inf
+    if(
+            (realIsZero(&y) && (realCompareLessThan(&x, const_0) /**/&&/**/  (!realIsInfinite(&x)))) // (y=0.) AND (-inf < x < 0) 
+       || ( (realIsInfinite(&y) && realIsPositive(&y))           /**/&&/**/  (realCompareGreaterEqual(&x, const_0) && (!realIsInfinite(&x)) ) ) // (y=+inf)  AND (0>=x > inf)
+      )
+    { telltale += 4;
+      realCopy(const_plusInfinity, &o);
+    }
+    //NaN
+    realDivideRemainder(&x, const_2, &r, &ctxtReal39);
+    if(     (realIsNaN(&x) || realIsNaN(&y))
+       || ( (realCompareLessThan(&y, const_0) || (realIsInfinite(&y) && realIsNegative(&y)) )   /**/&&/**/   (realIsInfinite(&x)    ) ) // (-inf <= y < 0)  AND (x =(inf or -inf))
+       || ( (realCompareLessThan(&y, const_0) && (!realIsInfinite(&y)                       )   /**/&&/**/   (!realIsAnInteger(&x)) ) ) // (-inf < y < 0)  AND (x in non-integer)
+       || ( (realIsInfinite(&y) && realIsNegative(&y))           /**/&&/**/  (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x)) )   // (y=-inf) AND (x is even > 0) [zero r means n/2 has no remainder, therefore even]  
+      )
+    { telltale += 8;
+      realCopy(const_NaN, &o);
+    }
+
+    //-inf
+    realAdd(&x, const_1, &r, &ctxtReal39);
+    realDivideRemainder(&r, const_2, &r, &ctxtReal39);
+    if(     (realIsInfinite(&y) && realIsNegative(&y))           /**/&&/**/  (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x))   // (y=-inf) AND (x is odd > 0) [zero r means (n+1)/2 has no remainder, therefore even]  
+      )
+    { telltale += 16;
+      realCopy(const_minusInfinity, &o);
+    }
+
+
+    if(telltale != 0) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&o, REGISTER_REAL34_DATA(REGISTER_X));
+      setRegisterAngularMode(REGISTER_X, AM_NONE); 
+      return;
+    }
+  } 
+  else //!SPCRES  
+  {  if(realIsZero(&x)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        showInfoDialog("In function xthRootRR: 0th Root is not defined!", NULL, NULL, NULL);
+      #endif
+      return;       
+     }
+  else
+  {  if(realIsNaN(&x)||realIsNaN(&y)) {
+      o = *const_NaN;
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&o, REGISTER_REAL34_DATA(REGISTER_X));
+      setRegisterAngularMode(REGISTER_X, AM_NONE); 
+      return;       
+     }
+  }
+  }
+
+
+ 
+  if(realIsPositive(&y)) {                                         //positive base, no problem, get the power function y^(1/x)
+     if(realCompareEqual(const_3, &x)) {x = *const_1on3;} else       //time saving if cuberoot
+       if(realCompareEqual(const_2, &x)) {x = *const_1on2;} else     //time saving if squareroot
+         { realDivide(const_1,&x, &x, &ctxtReal39);}                 //otherwise get inverse
+     realPower(&y, &x, &x, &ctxtReal39);
+     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+     setRegisterAngularMode(REGISTER_X, AM_NONE); 
+     return;
+  }  //fall through, but returned
+  else 
+  if (realIsNegative(&y)) {
+     realDivideRemainder(&x, const_2, &r, &ctxtReal39);
+     if(realIsZero(&r)) {                                          // negative base and even exp     (zero means no remainder means even)
+       a = y;       b = *const_0;
+       c = x;       d = *const_0; 
+       if(!getFlag(FLAG_CPXRES)) {
+         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+           showInfoDialog("In function xthRootRR:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
+         #endif
+         return;
+       } else
+       xthRootCC(); 
+
+     } //fall through after Root CC
+     else {     
+       realAdd(&x, const_1, &r, &ctxtReal39);
+       realDivideRemainder(&r, const_2, &r, &ctxtReal39);
+       if(realIsZero(&r)) {                                        // negative base and odd exp
+         if(realCompareEqual(const_3, &x)) {x = *const_1on3;} else      //time saving if cuberoot
+           if(realCompareEqual(const_2, &x)) {x = *const_1on2;} else    //time saving if squareroot
+             { realDivide(const_1,&x, &x, &ctxtReal39);}                //otherwise get inverse
+         realSetPositiveSign(&y);
+         realPower(&y, &x, &x, &ctxtReal39);
+         realSetNegativeSign(&x);
+
+         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+         setRegisterAngularMode(REGISTER_X, AM_NONE); 
+         return; 
+       } //fall though, but returned
+       else {      //neither odd nor even, i.e. not integer
+         a = y;       b = *const_0;
+         c = x;       d = *const_0; 
+         if(!getFlag(FLAG_CPXRES)) {
+           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+             showInfoDialog("In function xthRootRR:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
+           #endif
+           return;
+         } else
+         xthRootCC(); 
+
+       }
+     } //fall through
+  }
+  else
+  if(realIsZero(&y)) {
+     if(!realIsZero(&x)) {                                         // zero base and non-zero exp
+       x = *const_1;
+     }
+     else /*if(realIsZero(&x))*/ {                                 // zero base and zero exp
+       x = *const_NaN;
+     }
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  return;
+  } //fall through, but returned
+
+}
+
+
+
+
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* long integer ^ ...                                                                                                                                                                     */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(long integer) ^ 1/X(long integer) ==> X(long integer)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootLonILonI(void) {                       //checked
+  longInteger_t base, exponent, l;
+  //printf("LonLon\n");
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
+
+  if(longIntegerIsZero(exponent)) {    // 1/0 is not possible
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function xthRootLonILonI: Cannot divide by 0!", NULL, NULL, NULL);
+    #endif
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+    return;
+  }
+
+  if(longIntegerIsZero(base)) {          //base=0 -->  0
+    uIntToLongInteger(0, base);
+    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
+    longIntegerFree(base);
+    longIntegerFree(exponent);
+    return;
+  }
+  
+  if(longIntegerCompareUInt(base, 2147483640) == -1) {
+    int32_t exp = longIntegerToInt(exponent);  
+    if(longIntegerIsPositive(base)) {                                 // pos base
+      longIntegerInit(l);
+      if(longIntegerRoot(base, exp, l)) {                             // if integer xthRoot found, return
+        convertLongIntegerToLongIntegerRegister(l, REGISTER_X);
+        longIntegerFree(base);
+        longIntegerFree(exponent); 
+        longIntegerFree(l);
+        return;
+      }
+      longIntegerFree(l);
+      //printf("not integer xthRoot, fall through to real\n");           // if no integer xthRoot, fall through to real xthRoot
+    } 
+    else
+    if(longIntegerIsNegative(base)) {                                 // neg base and even exponent
+      if(longIntegerIsEven(exponent)) {
+      //printf("complex xthRoot, fall through to real to complex\n");    // if complex xthRoot, fall through to real xthRoot
+      } else
+      if(longIntegerIsOdd(exponent)) {        
+        longIntegerChangeSign(base);
+        longIntegerInit(l);
+        if(longIntegerRoot(base, exp, l)) {                           // if negative integer xthRoot found, return
+          longIntegerChangeSign(l);
+          convertLongIntegerToLongIntegerRegister(l, REGISTER_X);
+          longIntegerFree(base);
+          longIntegerFree(exponent);
+          longIntegerFree(l);
+          return;
+        }
+        longIntegerFree(l);
+        longIntegerChangeSign(base);
+        //printf("not integer xthRoot, fall through to real\n");           // if no negative integer xthRoot, fall through to real xthRoot
+      } else
+      if(longIntegerIsZero(base)) {
+        //printf("NaN, fall through to real\n");  
+      }
+    }
+  }
+  //printf("fell through to real\n");  
+
+
+
+  longIntegerToAllocatedString(exponent, tmpStr3000, TMP_STR_LENGTH);
+  stringToReal(tmpStr3000, &x, &ctxtReal39);
+  //printf("xx %s",tmpStr3000);
+  longIntegerToAllocatedString(base, tmpStr3000, TMP_STR_LENGTH);
+  stringToReal(tmpStr3000, &y, &ctxtReal39);
+  //printf(" yy %s\n",tmpStr3000);
+
+  longIntegerFree(base);
+  longIntegerFree(exponent);
+
+  xthRootRR();
+}
+
+
+
+/********************************************//**
+ * \brief Y(long integer) ^ 1/X(short integer) ==> X(long integer)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootLonIShoI(void) {                       //checked
+
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
+
+  xthRootLonILonI();
+}
+
+
+
+/********************************************//**
+ * \brief Y(short integer) ^ 1/X(long integer) ==> X(long integer)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootShoILonI(void) {                       //checked
+  int16_t bs;
+
+  bs = getRegisterShortIntegerBase(REGISTER_Y);
+  if(bs == 0) {bs = 10;}
+
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+
+  xthRootLonILonI();
+
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    fnChangeBase(bs);
+  }
+
+  //This whole workaround is just to change the base, as fnChangebase does not work for 0
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    longInteger_t ll;
+    bool_t lll;
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, ll);
+    lll = longIntegerIsZero(ll);
+    longIntegerFree(ll);
+    if(lll) {
+      //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
+      convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
+    } 
+    else {
+      fnChangeBase(bs);
+    }
+  }
+}
+
+
+/********************************************//**
+ * \brief Y(long integer) ^ 1/X(real34) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootLonIReal(void) {                       //checked
+
+  if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
+    convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+    xthRootLonILonI();
+  } else {
+    convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    xthRootRR();
+  }
+
+
+
+}
+
+
+
+/********************************************//**
+ * \brief Y(real34) ^ 1/X(long integer) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRealLonI(void) {                       //checked
+
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+
+  xthRootRR();
+}
+
+
+
+/********************************************//**
+ * \brief Y(long integer) ^ 1/X(complex34) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootLonICplx(void) {                       //checked
+
+  convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real34ToReal(const_0, &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+
+  xthRootCC();
+
+ }
+
+
+
+/********************************************//**
+ * \brief Y(complex34) ^ 1/X(long integer) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCplxLonI(void) {                       //checked
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
+  real34ToReal(const_0, &d);
+
+  xthRootCC();
+
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* time ^ ...                                                                                                                                                                             */
+/******************************************************************************************************************************************************************************************/
+
+/******************************************************************************************************************************************************************************************/
+/* date ^ ...                                                                                                                                                                             */
+/******************************************************************************************************************************************************************************************/
+
+/******************************************************************************************************************************************************************************************/
+/* string ^ ...                                                                                                                                                                           */
+/******************************************************************************************************************************************************************************************/
+
+/******************************************************************************************************************************************************************************************/
+/* real16 matrix ^ ...                                                                                                                                                                    */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(real16 matrix) ^ 1/X(long integer) ==> X(real16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRemaLonI(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(real16 matrix) ^ 1/X(short integer) ==> X(real16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRemaShoI(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(real16 matrix) ^ 1/X(real34) ==> X(real16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRemaReal(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(real16 matrix) ^ 1/X(complex34) ==> X(complex16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRemaCplx(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* complex16 matrix ^ ...                                                                                                                                                                 */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(complex16 matrix) ^ 1/X(long integer) ==> X(complex16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCxmaLonI(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(complex16 matrix) ^ 1/X(short integer) ==> X(complex16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCxmaShoI(void) {
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(complex16 matrix) ^ 1/X(real34) ==> X(complex16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCxmaReal(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/********************************************//**
+ * \brief Y(complex16 matrix) ^ 1/X(complex34) ==> X(complex16 matrix)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCxmaCplx(void) {                     
+  fnToBeCoded();
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* short integer ^ ...                                                                                                                                                                    */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(short integer) ^ 1/X(short integer) ==> X(short integer)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootShoIShoI(void) {                       //checked
+  int16_t bs;
+
+  bs = getRegisterShortIntegerBase(REGISTER_Y);
+  if(bs == 0) {bs = 10;}
+
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+
+  xthRootLonILonI();
+
+  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    fnChangeBase(bs);
+  }
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    fnChangeBase(bs);
+  }
+}
+
+
+
+/********************************************//**
+ * \brief Y(short integer) ^ 1/X(real34) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootShoIReal(void) {                       //checked
+  int16_t bs;
+
+  bs = getRegisterShortIntegerBase(REGISTER_Y);
+  if(bs == 0) {bs = 10;}
+
+  if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
+    convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+    convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+
+    xthRootLonILonI();
+
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+      fnChangeBase(bs);
+    }
+
+    //This whole workaround is just to change the base, as fnChangebase does not work for 0
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      longInteger_t ll;
+      bool_t lll;
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, ll);
+      lll = longIntegerIsZero(ll);
+      longIntegerFree(ll);
+      if(lll) {
+        //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
+        convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
+      } 
+      else {
+        fnChangeBase(bs);
+      }
+    }
+
+
+  } else {
+    convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    xthRootRR();
+  }
+}
+
+
+
+
+/********************************************//**
+ * \brief Y(real34) ^ 1/X(short integer) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRealShoI(void) {    //--CHECKED                  
+
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+
+  xthRootRR();
+
+}
+
+
+
+
+/********************************************//**
+ * \brief Y(short integer) ^ 1/X(complex34) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootShoICplx(void) {                       //checked
+  convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
+  real34ToReal(const_0, &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+
+  xthRootCC();
+
+}
+
+
+
+
+/********************************************//**
+ * \brief Y(complex34) ^ 1/X(short integer) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCplxShoI(void) {                       //checked
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
+  real34ToReal(const_0, &d);
+
+  xthRootCC();
+
+}
+
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* real34 ^ ...                                                                                                                                                                           */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(real34) ^ 1/X(real34) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRealReal(void) {                       //checked
+
+  if((real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) && !getFlag(FLAG_DANGER)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      showInfoDialog("In function xthRootRealReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X or Y input of xthRoot when flag D is not set", NULL, NULL);
+    #endif
+    return;
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+  xthRootRR();
+}
+
+
+
+/********************************************//**
+ * \brief Y(real34) ^ 1/X(complex34) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootRealCplx(void) {                       //checked
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(const_0, &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+
+  xthRootCC();
+
+}
+
+
+
+/********************************************//**
+ * \brief Y(complex34) ^ 1/X(real34) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCplxReal(void) {                       //checked
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(const_0, &d);
+
+  xthRootCC();
+
+}
+
+
+
+/******************************************************************************************************************************************************************************************/
+/* complex34 + ...                                                                                                                                                                        */
+/******************************************************************************************************************************************************************************************/
+
+/********************************************//**
+ * \brief Y(complex34) ^ 1/X(complex34) ==> X(complex34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void xthRootCplxCplx(void) {                       //checked
+  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    return;
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
+
+  xthRootCC();
+
+}

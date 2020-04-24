@@ -100,5 +100,6 @@
 #include "toRect.h"
 #include "ulp.h"
 #include "unitVector.h"
+#include "xthRoot.h"
 #include "wp34s.h"
 

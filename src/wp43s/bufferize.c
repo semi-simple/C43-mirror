@@ -864,24 +864,6 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    // Reported by Jaco Mostert January 3th 2020: following lines are useless
-    //case ITM_ENTER :
-    //  done = true;
-    //  closeNim();
-    //  if(calcMode != CM_NIM && lastErrorCode == 0) {
-    //    if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
-    //      fnSetFlag(FLAG_CPXRES);
-    //    }
-    //
-    //    STACK_LIFT_ENABLE;
-    //    liftStack();
-    //    copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-    //    refreshStack();
-    //    STACK_LIFT_DISABLE;
-    //    return;
-    //  }
-    //  break;
-
     case ITM_LOG10 :                                                                //JM layout different
       if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // D for decimal base
         done = true;

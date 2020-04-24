@@ -95,7 +95,12 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         }
         else if(getRegisterDataType(regist) == dtLongInteger) {
           if(showContent) {
-            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+            if(getRegisterLongIntegerSign(regist) == LI_NEGATIVE) {
+              longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+            }
+            else {
+              longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 9 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+            }
           }
           else {
             sprintf(tmpStr3000, "%" FMT32U " bits := 2+%" FMT32U " bytes", (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)) * 8, (uint32_t)*(REGISTER_DATA_MAX_LEN(regist)));

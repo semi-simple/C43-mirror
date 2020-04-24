@@ -617,7 +617,7 @@ void program_main(void) {
   //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
   //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
   while(!backToDMCP) {
-    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) {            // Already in off mode and suspended
+    if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
     }
@@ -700,10 +700,9 @@ void program_main(void) {
      }
     #endif
 
-    if(38 <= key && key <= 43) {
-      sprintf(charKey, "%c", key +11);
-//    btnFnClicked(NULL, charKey);
-      btnFnPressed(NULL, charKey);                //JM
+    if(38 <= key && key <=43) {
+      sprintf(charKey, "%c", key+11);
+      btnFnPressed(NULL, charKey);
       lcd_refresh_dma();
     }
     else if(key == 0 && FN_key_pressed != 0) {    //JM

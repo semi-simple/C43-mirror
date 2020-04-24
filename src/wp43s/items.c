@@ -428,6 +428,7 @@ void fnPercentT                 (uint16_t unusedParamButMandatory) {}
 void fnPercentSigma             (uint16_t unusedParamButMandatory) {}
 void fnPercentPlusMG            (uint16_t unusedParamButMandatory) {}
 void fnDeltaPercent             (uint16_t unusedParamButMandatory) {}
+void fnXthRoot                  (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 //void fnComplexCCCC_CPX          (uint16_t unusedParamButMandatory) {}
 //void fnComplexCCCC_CC           (uint16_t unusedParamButMandatory) {}
@@ -485,18 +486,18 @@ const item_t indexOfItems[] = {
 /*   21 */  { fnConstant,                  2,                           "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "a" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   CAT_CNST, SLS_ENABLED  },
 /*   22 */  { fnLogicalAnd,                NOPARAM,                     "AND",                                         "AND",                                         CAT_FNCT, SLS_ENABLED  },
 /*   23 */  { itemToBeCoded,               NOPARAM,                     "ANGLES",                                      "ANGLES",                                      CAT_MENU, SLS_UNCHANGED},
-/*   24 */  { fnArccos,                    NOPARAM,                     "ARCCOS",                                      "ACOS",                                        CAT_FNCT, SLS_ENABLED  },   //JM
+/*   24 */  { fnArccos,                    NOPARAM     /*# JM #*/,      "ARCCOS",                                      "ACOS",                                        CAT_FNCT, SLS_ENABLED  },   //JM
 /*   25 */  { fnArccosh,                   NOPARAM,                     "arcosh",                                      "arcosh",                                      CAT_FNCT, SLS_ENABLED  },
-/*   26 */  { fnArcsin,                    NOPARAM,                     "ARCSIN",                                      "ASIN",                                        CAT_FNCT, SLS_ENABLED  },   //JM
-/*   27 */  { fnArctan,                    NOPARAM,                     "ARCTAN",                                      "ATAN",                                        CAT_FNCT, SLS_ENABLED  },   //JM
+/*   26 */  { fnArcsin,                    NOPARAM     /*# JM #*/,      "ARCSIN",                                      "ASIN",                                        CAT_FNCT, SLS_ENABLED  },   //JM
+/*   27 */  { fnArctan,                    NOPARAM     /*# JM #*/,      "ARCTAN",                                      "ATAN",                                        CAT_FNCT, SLS_ENABLED  },   //JM
 /*   28 */  { fnArcsinh,                   NOPARAM,                     "arsinh",                                      "arsinh",                                      CAT_FNCT, SLS_ENABLED  },
 /*   29 */  { fnArctanh,                   NOPARAM,                     "artanh",                                      "artanh",                                      CAT_FNCT, SLS_ENABLED  },
 /*   30 */  { fnAsr,                       TM_VALUE,                    "ASR",                                         "ASR",                                         CAT_FNCT, SLS_ENABLED  },
-/*   31 */  { itemToBeCoded,               NOPARAM,                     "ASN",                                         "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
+/*   31 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "ASN",                                         "ASN",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   32 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    CAT_FNCT, SLS_ENABLED  },
 /*   33 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*   34 */  { itemToBeCoded,               NOPARAM,                     "PRINT",                                       STD_PRINTER,                                   CAT_MENU, SLS_UNCHANGED},
-/*   35 */  { itemToBeCoded,               NOPARAM,                     "Area:",                                       "Area:",                                       CAT_MENU, SLS_UNCHANGED},
+/*   34 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "PRINT",                                       STD_PRINTER,                                   CAT_MENU, SLS_UNCHANGED},
+/*   35 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Area:",                                       "Area:",                                       CAT_MENU, SLS_UNCHANGED},
 /*   36 */  { fnConstant,                  3,                           "a" STD_SUB_EARTH,                             "a" STD_SUB_EARTH,                             CAT_CNST, SLS_ENABLED  },
 /*   37 */  { itemToBeCoded,               NOPARAM,                     "B",                                           "B",                                           CAT_RVAR, SLS_UNCHANGED},
 /*   38 */  { itemToBeCoded,               NOPARAM,                     "BACK",                                        "BACK",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -522,7 +523,7 @@ const item_t indexOfItems[] = {
 /*   58 */  { fnConstant,                  6,                           "c" STD_SUB_2,                                 "c" STD_SUB_2,                                 CAT_CNST, SLS_ENABLED  },
 /*   59 */  { fnCvtCalJ,                   multiply,                    "cal" STD_RIGHT_ARROW "J",                     "cal" STD_RIGHT_ARROW "J",                     CAT_FNCT, SLS_ENABLED  },
 /*   60 */  { itemToBeCoded,               NOPARAM,                     "CASE",                                        "CASE",                                        CAT_FNCT, SLS_UNCHANGED},
-/*   61 */  { itemToBeCoded,               NOPARAM,                     "CATALOG",                                     "CAT",                                         CAT_MENU, SLS_UNCHANGED},   // JM
+/*   61 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "CATALOG",                                     "CAT",                                         CAT_MENU, SLS_UNCHANGED},   // JM
 /*   62 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_SUB_p,                             "Cauch" STD_SUB_p,                             CAT_FNCT, SLS_UNCHANGED},
 /*   63 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Cauch" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   CAT_FNCT, SLS_UNCHANGED},
 /*   64 */  { itemToBeCoded,               NOPARAM,                     "Cauch" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Cauch" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   CAT_FNCT, SLS_UNCHANGED},
@@ -547,19 +548,19 @@ const item_t indexOfItems[] = {
 /*   83 */  { fnClearStack,                NOPARAM,                     "CLSTK",                                       "CLSTK",                                       CAT_FNCT, SLS_UNCHANGED},
 /*   84 */  { fnClX,                       NOPARAM,                     "CLX",                                         "CLX",                                         CAT_FNCT, SLS_DISABLED },
 /*   85 */  { fnClSigma,                   NOPARAM,                     "CL" STD_SIGMA,                                "CL" STD_SIGMA,                                CAT_FNCT, SLS_UNCHANGED},
-/*   86 */  { itemToBeCoded,               NOPARAM,                     "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},   //JM Keeps the same. Don't havce space for more on kjeyplate
+/*   86 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "CNST",                                        "CNST",                                        CAT_MENU, SLS_UNCHANGED},   //JM Keeps the same. Don't havce space for more on kjeyplate
 /*   87 */  { fnCyx,                       NOPARAM,                     "COMB",                                        "C" STD_SUB_y STD_SUB_x,                       CAT_FNCT, SLS_ENABLED  },
 /*   88 */  { fnConjugate,                 NOPARAM,                     "CONJ",                                        "conj",                                        CAT_FNCT, SLS_ENABLED  },
-/*   89 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        CAT_FNCT, SLS_ENABLED  },   //JM RENAMED
+/*   89 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        CAT_FNCT, SLS_ENABLED  },
 /*   90 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*   91 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                           CAT_FNCT, SLS_UNCHANGED},
-/*   92 */  { fnCos,                       NOPARAM,                     "COS",                                         "COS",                                         CAT_FNCT, SLS_ENABLED  },   //JM
+/*   92 */  { fnCos,                       NOPARAM     /*# JM #*/,      "COS",                                         "COS",                                         CAT_FNCT, SLS_ENABLED  },   //JM
 /*   93 */  { fnCosh,                      NOPARAM,                     "cosh",                                        "cosh",                                        CAT_FNCT, SLS_ENABLED  },
 /*   94 */  { itemToBeCoded,               NOPARAM,                     "COV",                                         "cov",                                         CAT_FNCT, SLS_UNCHANGED},
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                         CAT_MENU, SLS_UNCHANGED},
 /*   96 */  { fnComplexUnit,               CU_I,                        "CPXi",                                        "CPXi",                                        CAT_FNCT, SLS_UNCHANGED},
 /*   97 */  { fnComplexUnit,               CU_J,                        "CPXj",                                        "CPXj",                                        CAT_FNCT, SLS_UNCHANGED},
-/*   98 */  { fnComplexResult,             true,                        "CPXRES",                                      "CPXRES",                                      CAT_NONE, SLS_UNCHANGED},   //dr
+/*   98 */  { fnComplexResult,             true     /*# JM #*/,         "CPXRES",                                      "CPXRES",                                      CAT_NONE, SLS_UNCHANGED},   //dr. Why Changed from _FNCT?
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  101 */  { fnCross,                     NOPARAM,                     "CROSS",                                       "cross",                                       CAT_FNCT, SLS_ENABLED  },
@@ -631,7 +632,7 @@ const item_t indexOfItems[] = {
 /*  167 */  { fnExpt,                      NOPARAM,                     "EXPT",                                        "EXPT",                                        CAT_FNCT, SLS_ENABLED  },
 /*  168 */  { itemToBeCoded,               NOPARAM,                     "e" STD_SUP_x "-1",                            "e" STD_SUP_x "-1",                            CAT_FNCT, SLS_ENABLED  },
 /*  169 */  { itemToBeCoded,               NOPARAM,                     "e/m" STD_SUB_e,                               "e/m" STD_SUB_e,                               CAT_NONE, SLS_ENABLED  },
-/*  170 */  { itemToBeCoded,               NOPARAM,                     "Energy:",                                     "Energy:",                                     CAT_MENU, SLS_UNCHANGED},
+/*  170 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Energy:",                                     "Energy:",                                     CAT_MENU, SLS_UNCHANGED},
 /*  171 */  { fnConstant,                  9,                           "F",                                           "F",                                           CAT_CNST, SLS_ENABLED  },
 /*  172 */  { itemToBeCoded,               NOPARAM,                     "FAST",                                        "FAST",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  173 */  { fnFb,                        TM_VALUE,                    "FB",                                          "FB",                                          CAT_FNCT, SLS_ENABLED  },
@@ -757,7 +758,7 @@ const item_t indexOfItems[] = {
 /*  293 */  { fnConstant,                  21,                          "K" STD_SUB_J,                                 "K" STD_SUB_J,                                 CAT_CNST, SLS_ENABLED  },
 /*  294 */  { itemToBeCoded,               NOPARAM,                     "KTYP?",                                       "KTYP?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  295 */  { addItemToBuffer,             REGISTER_L,                  "L",                                           "L",                                           CAT_RVAR, SLS_UNCHANGED},
-/*  296 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LSTx",                                        CAT_FNCT, SLS_ENABLED  },
+/*  296 */  { fnLastX,                     NOPARAM     /*# JM #*/,      "LASTx",                                       "LSTx",                                        CAT_FNCT, SLS_ENABLED  },
 /*  297 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                     CAT_FNCT, SLS_ENABLED  },
 /*  298 */  { itemToBeCoded,               NOPARAM,                     "LBL",                                         "LBL",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  299 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -771,7 +772,7 @@ const item_t indexOfItems[] = {
 /*  307 */  { itemToBeCoded,               NOPARAM,                     "LgNrm:",                                      "LgNrm:",                                      CAT_MENU, SLS_UNCHANGED},
 /*  308 */  { fnCurveFitting,              CF_LINEAR_FITTING,           "LinF",                                        "LinF",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  309 */  { fnLj,                        NOPARAM,                     "LJ",                                          "LJ",                                          CAT_FNCT, SLS_ENABLED  },
-/*  310 */  { fnLn,                        NOPARAM,                     "LN",                                          "LN",                                          CAT_FNCT, SLS_ENABLED  },   //JM3 change ln to LN
+/*  310 */  { fnLn,                        NOPARAM     /*# JM #*/,      "LN",                                          "LN",                                          CAT_FNCT, SLS_ENABLED  },   //JM3 change ln to LN
 /*  311 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                CAT_FNCT, SLS_UNCHANGED},
 /*  312 */  { itemToBeCoded,               NOPARAM,                     "LN(1+x)",                                     "ln 1+x",                                      CAT_FNCT, SLS_ENABLED  },
 /*  313 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                   CAT_FNCT, SLS_UNCHANGED},
@@ -784,7 +785,7 @@ const item_t indexOfItems[] = {
 /*  320 */  { itemToBeCoded,               NOPARAM,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                              CAT_FNCT, SLS_UNCHANGED},
 /*  321 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  322 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       CAT_FNCT, SLS_ENABLED  },
-/*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "LOG",                                         CAT_FNCT, SLS_ENABLED  },   //JM Change lg to LOG
+/*  323 */  { fnLog10,                     NOPARAM     /*# JM #*/,      "LOG" STD_SUB_10,                              "LOG",                                         CAT_FNCT, SLS_ENABLED  },   //JM Change lg to LOG
 /*  324 */  { fnLog2,                      NOPARAM,                     "LOG" STD_SUB_2,                               "lb x",                                        CAT_FNCT, SLS_ENABLED  },
 /*  325 */  { fnCurveFitting,              CF_LOGARITHMIC_FITTING,      "LogF",                                        "LogF",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  326 */  { itemToBeCoded,               NOPARAM,                     "Logis" STD_SUB_p,                             "Logis" STD_SUB_p,                             CAT_FNCT, SLS_UNCHANGED},
@@ -796,8 +797,8 @@ const item_t indexOfItems[] = {
 /*  332 */  { itemToBeCoded,               NOPARAM,                     "LOOP",                                        "LOOP",                                        CAT_MENU, SLS_UNCHANGED},
 /*  333 */  { fnConstant,                  22,                          "l" STD_SUB_P STD_SUB_L,                       "l" STD_SUB_P STD_SUB_L,                       CAT_CNST, SLS_ENABLED  },
 /*  334 */  { fnCvtLyM,                    multiply,                    "ly" STD_RIGHT_ARROW "m",                      "ly" STD_RIGHT_ARROW "m",                      CAT_FNCT, SLS_ENABLED  },
-/*  335 */  { fnLeadingZeros,              false,                       "LZOFF",                                       "LZOFF",                                       CAT_NONE, SLS_UNCHANGED},   //dr
-/*  336 */  { fnLeadingZeros,              true,                        "LZON",                                        "LZON",                                        CAT_NONE, SLS_UNCHANGED},   //dr
+/*  335 */  { fnLeadingZeros,              false     /*# JM #*/,        "LZOFF",                                       "LZOFF",                                       CAT_FNCT, SLS_UNCHANGED},   //dr. Why Changed from _FNCT?
+/*  336 */  { fnLeadingZeros,              true     /*# JM #*/,         "LZON",                                        "LZON",                                        CAT_FNCT, SLS_UNCHANGED},   //dr. Why Changed from _FNCT?
 /*  337 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  338 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,             CAT_FNCT, SLS_ENABLED  },
 /*  339 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "m" STD_SUP_2 " " STD_RIGHT_ARROW,             CAT_FNCT, SLS_ENABLED  },
@@ -838,7 +839,7 @@ const item_t indexOfItems[] = {
 /*  374 */  { fnProductSign,               PS_DOT,                      "MULT" STD_DOT,                                "MULT" STD_DOT,                                CAT_FNCT, SLS_UNCHANGED},
 /*  375 */  { fnAngularMode,               AM_MULTPI,                   "MUL" STD_pi,                                  "MUL" STD_pi,                                  CAT_FNCT, SLS_UNCHANGED},
 /*  376 */  { itemToBeCoded,               NOPARAM,                     "MVAR",                                        "MVAR",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  377 */  { itemToBeCoded,               NOPARAM,                     "MyMenu",                                      "MyM",                                         CAT_MENU, SLS_UNCHANGED},
+/*  377 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "MyMenu",                                      "MyM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  378 */  { itemToBeCoded,               NOPARAM,                     "My" STD_alpha,                                "My" STD_alpha,                                CAT_MENU, SLS_UNCHANGED},
 /*  379 */  { fnConstant,                  32,                          "m" STD_SUB_mu,                                "m" STD_SUB_mu,                                CAT_CNST, SLS_ENABLED  },
 /*  380 */  { itemToBeCoded,               NOPARAM,                     "M.DELR",                                      "DELR",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -860,7 +861,7 @@ const item_t indexOfItems[] = {
 /*  396 */  { itemToBeCoded,               NOPARAM,                     "M.SIMQ",                                      "M.SIMQ",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  397 */  { itemToBeCoded,               NOPARAM,                     "M.SQR?",                                      "M.SQR?",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  398 */  { itemToBeCoded,               NOPARAM,                     "M.WRAP",                                      "WRAP",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  399 */  { itemToBeCoded,               NOPARAM,                     "Mass:",                                       "Mass:",                                       CAT_MENU, SLS_UNCHANGED},
+/*  399 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Mass:",                                       "Mass:",                                       CAT_MENU, SLS_UNCHANGED},
 /*  400 */  { fnCvtAuM,                    divide,                      "m" STD_RIGHT_ARROW "au",                      "m" STD_RIGHT_ARROW "au",                      CAT_FNCT, SLS_ENABLED  },
 /*  401 */  { fnCvtFtM,                    divide,                      "m" STD_RIGHT_ARROW "ft.",                     "m" STD_RIGHT_ARROW "ft.",                     CAT_FNCT, SLS_ENABLED  },
 /*  402 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "m " STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },
@@ -916,7 +917,7 @@ const item_t indexOfItems[] = {
 /*  452 */  { itemToBeCoded,               NOPARAM,                     "PGMINT",                                      "PGMINT",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  453 */  { itemToBeCoded,               NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  454 */  { itemToBeCoded,               NOPARAM,                     "PIXEL",                                       "PIXEL",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  455 */  { fnGraph,                     4,                           "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},
+/*  455 */  { fnGraph,                     4     /*# JM #*/,            "PLOT",                                        "PLOT",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  456 */  { itemToBeCoded,               NOPARAM,                     "PMT",                                         "PMT",                                         CAT_RVAR, SLS_UNCHANGED},
 /*  457 */  { itemToBeCoded,               NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  458 */  { itemToBeCoded,               NOPARAM,                     "POINT",                                       "POINT",                                       CAT_FNCT, SLS_UNCHANGED},
@@ -941,14 +942,14 @@ const item_t indexOfItems[] = {
 /*  477 */  { itemToBeCoded,               NOPARAM,                     "PV",                                          "PV",                                          CAT_RVAR, SLS_UNCHANGED},
 /*  478 */  { itemToBeCoded,               NOPARAM,                     "P.FN",                                        "P.FN",                                        CAT_MENU, SLS_UNCHANGED},
 /*  479 */  { itemToBeCoded,               NOPARAM,                     "P.FN2",                                       "P.FN2",                                       CAT_MENU, SLS_UNCHANGED},
-/*  480 */  { itemToBeCoded,               NOPARAM,                     "Power:",                                      "Power:",                                      CAT_MENU, SLS_UNCHANGED},
+/*  480 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Power:",                                      "Power:",                                      CAT_MENU, SLS_UNCHANGED},
 /*  481 */  { itemToBeCoded,               NOPARAM,                     "QUIET",                                       "QUIET",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  482 */  { fnConstant,                  38,                          "R",                                           "R",                                           CAT_CNST, SLS_ENABLED  },
 /*  483 */  { fnAngularMode,               AM_RADIAN,                   "RAD",                                         "RAD",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  484 */  { fnCvtToCurrentAngularMode,   AM_RADIAN,                   "RAD" STD_RIGHT_ARROW,                         "RAD" STD_RIGHT_ARROW,                         CAT_FNCT, SLS_ENABLED  },
 /*  485 */  { itemToBeCoded,               NOPARAM,                     "RAM",                                         "RAM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  486 */  { fnRandom,                    NOPARAM,                     "RAN#",                                        "RAN#",                                        CAT_FNCT, SLS_ENABLED  },
-/*  487 */  { registerBrowser,             NOPARAM,                     "REGS.V",                                      "REGS",                                        CAT_FNCT, SLS_UNCHANGED},   //JM Changed RBR to REGS
+/*  487 */  { registerBrowser,             NOPARAM     /*# JM #*/,      "REGS.V",                                      "REGS",                                        CAT_FNCT, SLS_UNCHANGED},   //JM Changed RBR to REGS
 /*  488 */  { fnRecall,                    TM_STORCL,                   "RCL",                                         "RCL",                                         CAT_FNCT, SLS_ENABLED  },
 /*  489 */  { fnRecallConfig,              NOPARAM,                     "RCLCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  490 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       CAT_FNCT, SLS_ENABLED  },
@@ -965,7 +966,7 @@ const item_t indexOfItems[] = {
 /*  501 */  { fnRadixMark,                 RM_PERIOD,                   "RDX.",                                        "RDX.",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  502 */  { fnConstant,                  39,                          "r" STD_SUB_e,                                 "r" STD_SUB_e,                                 CAT_CNST, SLS_ENABLED  },
 /*  503 */  { fnRealPart,                  NOPARAM,                     "Re",                                          "Re",                                          CAT_FNCT, SLS_ENABLED  },
-/*  504 */  { fnComplexResult,             false,                       "REALRE",                                      "REALRE",                                      CAT_FNCT, SLS_UNCHANGED},   //dr
+/*  504 */  { fnComplexResult,             false     /*# JM #*/,        "REALRE",                                      "REALRE",                                      CAT_FNCT, SLS_UNCHANGED},   //dr Why is this still FNCT?
 /*  505 */  { itemToBeCoded,               NOPARAM,                     "REALS",                                       "REALS",                                       CAT_MENU, SLS_UNCHANGED},
 /*  506 */  { itemToBeCoded,               NOPARAM,                     "REAL?",                                       "REAL?",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  507 */  { fnComplexMode,               CM_RECTANGULAR,              "RECT",                                        "RECT",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -979,8 +980,8 @@ const item_t indexOfItems[] = {
 /*  515 */  { fnRl,                        TM_VALUE,                    "RL",                                          "RL",                                          CAT_FNCT, SLS_ENABLED  },
 /*  516 */  { fnRlc,                       TM_VALUE,                    "RLC",                                         "RLC",                                         CAT_FNCT, SLS_ENABLED  },
 /*  517 */  { fnConstant,                  41,                          "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   "R" STD_SUB_M STD_SUB_o STD_SUB_o STD_SUB_n,   CAT_CNST, SLS_ENABLED  },
-/*  518 */  { itemToBeCoded,               NOPARAM,                     "RMODE",                                       "RMODE",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  519 */  { fnGetRoundingMode,           NOPARAM,                     "RMODE?",                                      "RMODE?",                                      CAT_FNCT, SLS_ENABLED  },
+/*  518 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "RMODE",                                       "RMODE",                                       CAT_FNCT, SLS_UNCHANGED},
+/*  519 */  { fnGetRoundingMode,           NOPARAM     /*# JM #*/,      "RMODE?",                                      "RMODE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  520 */  { fnRmd,                       NOPARAM,                     "RMD",                                         "RMD",                                         CAT_FNCT, SLS_ENABLED  },
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  522 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "ROUND",                                       CAT_FNCT, SLS_ENABLED  },
@@ -1030,7 +1031,7 @@ const item_t indexOfItems[] = {
 /*  566 */  { fnSign,                      NOPARAM,                     "SIGN",                                        "sign",                                        CAT_FNCT, SLS_ENABLED  },
 /*  567 */  { fnIntegerMode,               SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  568 */  { itemToBeCoded,               NOPARAM,                     "SIM_EQ",                                      "SIM EQ",                                      CAT_FNCT, SLS_UNCHANGED},
-/*  569 */  { fnSin,                       NOPARAM,                     "SIN",                                         "SIN",                                         CAT_FNCT, SLS_ENABLED  },   //JM3
+/*  569 */  { fnSin,                       NOPARAM     /*# JM #*/,      "SIN",                                         "SIN",                                         CAT_FNCT, SLS_ENABLED  },   //JM3
 /*  570 */  { fnSinc,                      NOPARAM,                     "sinc",                                        "sinc",                                        CAT_FNCT, SLS_ENABLED  },
 /*  571 */  { fnSinh,                      NOPARAM,                     "sinh",                                        "sinh",                                        CAT_FNCT, SLS_ENABLED  },
 /*  572 */  { itemToBeCoded,               NOPARAM,                     "SKIP",                                        "SKIP",                                        CAT_FNCT, SLS_UNCHANGED},
@@ -1048,7 +1049,7 @@ const item_t indexOfItems[] = {
 /*  584 */  { fnStackSize,                 SS_8,                        "SSIZE8",                                      "SSIZE8",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      CAT_FNCT, SLS_ENABLED  },
 /*  586 */  { itemToBeCoded,               NOPARAM,                     "STAT",                                        "STAT",                                        CAT_MENU, SLS_UNCHANGED},
-/*  587 */  { flagBrowser,                 NOPARAM,                     "FLAGS.V",                                     "FLGS",                                        CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
+/*  587 */  { flagBrowser,                 NOPARAM     /*# JM #*/,      "FLAGS.V",                                     "FLGS",                                        CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
 /*  588 */  { itemToBeCoded,               NOPARAM,                     "STK",                                         "STK",                                         CAT_MENU, SLS_UNCHANGED},
 /*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  590 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -1079,7 +1080,7 @@ const item_t indexOfItems[] = {
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                       CAT_FNCT, SLS_ENABLED  },
 /*  616 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                    CAT_FNCT, SLS_ENABLED  },
 /*  617 */  { fnConstant,                  50,                          "T" STD_SUB_0,                                 "T" STD_SUB_0,                                 CAT_CNST, SLS_ENABLED  },
-/*  618 */  { fnTan,                       NOPARAM,                     "TAN",                                         "TAN",                                         CAT_FNCT, SLS_ENABLED  },   //JM3
+/*  618 */  { fnTan,                       NOPARAM     /*# JM #*/,      "TAN",                                         "TAN",                                         CAT_FNCT, SLS_ENABLED  },   //JM3
 /*  619 */  { fnTanh,                      NOPARAM,                     "tanh",                                        "tanh",                                        CAT_FNCT, SLS_ENABLED  },
 /*  620 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                       CAT_FNCT, SLS_UNCHANGED},
 /*  621 */  { itemToBeCoded,               NOPARAM,                     "TEST",                                        "TEST",                                        CAT_MENU, SLS_UNCHANGED},
@@ -1098,7 +1099,7 @@ const item_t indexOfItems[] = {
 /*  634 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", CAT_FNCT, SLS_UNCHANGED},
 /*  635 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", CAT_FNCT, SLS_UNCHANGED},
 /*  636 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUP_MINUS_1 "(p)",                     "t" STD_SUP_MINUS_1 "(p)",                     CAT_FNCT, SLS_UNCHANGED},
-/*  637 */  { itemToBeCoded,               NOPARAM,                     "TRI",                                         "TRIG",                                        CAT_MENU, SLS_UNCHANGED},   //JM
+/*  637 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "TRI",                                         "TRIG",                                        CAT_MENU, SLS_UNCHANGED},   //JM
 /*  638 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    "tr.oz",                                       CAT_FNCT, SLS_ENABLED  },
 /*  639 */  { itemToBeCoded,               NOPARAM,                     "TVM",                                         "TVM",                                         CAT_MENU, SLS_UNCHANGED},
 /*  640 */  { itemToBeCoded,               NOPARAM,                     "t:",                                          "t:",                                          CAT_MENU, SLS_UNCHANGED},
@@ -1107,13 +1108,13 @@ const item_t indexOfItems[] = {
 /*  643 */  { itemToBeCoded,               NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 CAT_FNCT, SLS_UNCHANGED},
 /*  644 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                       CAT_FNCT, SLS_ENABLED  },
 /*  645 */  { fnIntegerMode,               SIM_UNSIGN,                  "UNSIGN",                                      "UNSIGN",                                      CAT_FNCT, SLS_UNCHANGED},
-/*  646 */  { itemToBeCoded,               NOPARAM,                     "UNIT",                                        "UNIT",                                        CAT_MENU, SLS_UNCHANGED},   //JM Change U> arrow to CONV. Changed again to UNIT
+/*  646 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "UNIT",                                        "UNIT",                                        CAT_MENU, SLS_UNCHANGED},   //JM Change U> arrow to CONV. Changed again to UNIT
 /*  647 */  { itemToBeCoded,               NOPARAM,                     "VARMNU",                                      "VARMNU",                                      CAT_FNCT, SLS_UNCHANGED},
 /*  648 */  { itemToBeCoded,               NOPARAM,                     "VARS",                                        "VARS",                                        CAT_MENU, SLS_UNCHANGED},
 /*  649 */  { fnVersion,                   NOPARAM,                     "VERS?",                                       "VERS?",                                       CAT_FNCT, SLS_UNCHANGED},
-/*  650 */  { fnShow,                      NOPARAM,                     "VIEW",                                        "VIEW",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  651 */  { fnConstant,                  54,                          "V" STD_SUB_m,                                 "V" STD_SUB_m,                                 CAT_CNST, SLS_ENABLED  },
-/*  652 */  { itemToBeCoded,               NOPARAM,                     "Volume:",                                     "Volume:",                                     CAT_MENU, SLS_UNCHANGED},
+/*  650 */  { fnShow,                      NOPARAM     /*# JM #*/,      "VIEW",                                        "VIEW",                                        CAT_FNCT, SLS_UNCHANGED},   //TEMPORARY SHOW OLD
+/*  651 */  { fnConstant,                  53,                          "V" STD_SUB_m,                                 "V" STD_SUB_m,                                 CAT_CNST, SLS_ENABLED  },
+/*  652 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Volume:",                                     "Volume:",                                     CAT_MENU, SLS_UNCHANGED},
 /*  653 */  { itemToBeCoded,               NOPARAM,                     "WDAY",                                        "WDAY",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  654 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUB_p,                             "Weibl" STD_SUB_p,                             CAT_FNCT, SLS_UNCHANGED},
 /*  655 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Weibl" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   CAT_FNCT, SLS_UNCHANGED},
@@ -1141,7 +1142,7 @@ const item_t indexOfItems[] = {
 /*  677 */  { itemToBeCoded,               NOPARAM,                     STD_x_CIRC,                                    STD_x_CIRC,                                    CAT_FNCT, SLS_UNCHANGED},
 /*  678 */  { itemToBeCoded,               NOPARAM,                     "X.FN",                                        "X.FN",                                        CAT_MENU, SLS_UNCHANGED},
 /*  679 */  { fnFactorial,                 NOPARAM,                     "x!",                                          "x!",                                          CAT_FNCT, SLS_ENABLED  },
-/*  680 */  { itemToBeCoded,               NOPARAM,                     "Dist:",                                       "Dist:",                                       CAT_MENU, SLS_UNCHANGED},
+/*  680 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "Dist:",                                       "Dist:",                                       CAT_MENU, SLS_UNCHANGED},
 /*  681 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW "DATE",                    "x" STD_RIGHT_ARROW "DATE",                    CAT_FNCT, SLS_UNCHANGED},
 /*  682 */  { itemToBeCoded,               NOPARAM,                     "x" STD_RIGHT_ARROW STD_alpha,                 "x" STD_RIGHT_ARROW STD_alpha,                 CAT_FNCT, SLS_UNCHANGED},
 /*  683 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LEFT_RIGHT_ARROWS,                     "x" STD_LEFT_RIGHT_ARROWS,                     CAT_FNCT, SLS_UNCHANGED},
@@ -1155,7 +1156,7 @@ const item_t indexOfItems[] = {
 /*  691 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LESS_EQUAL " ?",                       "x" STD_LESS_EQUAL " ?",                       CAT_FNCT, SLS_UNCHANGED},
 /*  692 */  { itemToBeCoded,               NOPARAM,                     "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                    CAT_FNCT, SLS_UNCHANGED},
 /*  693 */  { itemToBeCoded,               NOPARAM,                     "x> ?",                                        "x> ?",                                        CAT_FNCT, SLS_UNCHANGED},
-/*  694 */  { fnJM,                        1,                           STD_xTH_ROOT STD_y_UNDER_ROOT,                 STD_xTH_ROOT STD_y_UNDER_ROOT,                 CAT_FNCT, SLS_ENABLED  },
+/*  694 */  { fnXthRoot,                   NOPARAM,                     STD_xTH_ROOT STD_y_UNDER_ROOT,                 STD_xTH_ROOT STD_y_UNDER_ROOT,                 CAT_FNCT, SLS_ENABLED  },
 /*  695 */  { fnCvtYardM,                  multiply,                    "yd." STD_RIGHT_ARROW "m",                     "yd." STD_RIGHT_ARROW "m",                     CAT_FNCT, SLS_ENABLED  },
 /*  696 */  { itemToBeCoded,               NOPARAM,                     "YEAR",                                        "YEAR",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  697 */  { fnCvtYearS,                  multiply,                    "year" STD_RIGHT_ARROW "s",                    "year" STD_RIGHT_ARROW "s",                    CAT_FNCT, SLS_ENABLED  },
@@ -1175,7 +1176,7 @@ const item_t indexOfItems[] = {
 /*  711 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "RL",                                STD_alpha "RL",                                CAT_FNCT, SLS_UNCHANGED},
 /*  712 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "RR",                                STD_alpha "RR",                                CAT_FNCT, SLS_UNCHANGED},
 /*  713 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "SL",                                STD_alpha "SL",                                CAT_FNCT, SLS_UNCHANGED},
-/*  714 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "STR",                               STD_alpha "STR",                               CAT_MENU, SLS_UNCHANGED},   //JM Changed a.FN to STRNG
+/*  714 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      STD_alpha "STR",                               STD_alpha "STR",                               CAT_MENU, SLS_UNCHANGED},   //JM Changed a.FN to STRNG
 /*  715 */  { itemToBeCoded,               NOPARAM,                     STD_ALPHA STD_ELLIPSIS STD_OMEGA,              STD_ALPHA STD_ELLIPSIS STD_OMEGA,              CAT_MENU, SLS_UNCHANGED},
 /*  716 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_BULLET,                          STD_alpha STD_BULLET,                          CAT_MENU, SLS_UNCHANGED},
 /*  717 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_RIGHT_ARROW "x",                 STD_alpha STD_RIGHT_ARROW "x",                 CAT_FNCT, SLS_UNCHANGED},
@@ -1232,7 +1233,7 @@ const item_t indexOfItems[] = {
 /*  768 */  { itemToBeCoded,               NOPARAM,                     "SYS.FL",                                      "SYS.FL",                                      CAT_MENU, SLS_UNCHANGED},
 /*  769 */  { fnRange,                     NOPARAM,                     "RANGE",                                       "RANGE",                                       CAT_FNCT, SLS_ENABLED  },
 /*  770 */  { fnGetRange,                  NOPARAM,                     "RANGE?",                                      "RANGE?",                                      CAT_FNCT, SLS_ENABLED  },
-/*  771 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2  STD_SUB_p "(x)",            STD_chi STD_SUP_2  STD_SUB_p "(x)",            CAT_FNCT, SLS_UNCHANGED},
+/*  771 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2  STD_SUB_p "(x)",            STD_chi STD_SUP_2 STD_SUB_p "(x)",             CAT_FNCT, SLS_UNCHANGED},
 /*  772 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", CAT_FNCT, SLS_UNCHANGED},
 /*  773 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", CAT_FNCT, SLS_UNCHANGED},
 /*  774 */  { itemToBeCoded,               NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     CAT_FNCT, SLS_UNCHANGED},
@@ -1240,12 +1241,12 @@ const item_t indexOfItems[] = {
 /*  776 */  { fnConstant,                  75,                          STD_omega,                                     STD_omega,                                     CAT_CNST, SLS_ENABLED  },
 /*  777 */  { fnM1Pow,                     NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                              CAT_FNCT, SLS_ENABLED  },
 /*  778 */  { fnAdd,                       ITM_ADD,                     "+",                                           "+",                                           CAT_FNCT, SLS_ENABLED  },
-/*  779 */  { fnChangeSign,                ITM_CHS,                     "CHS",                                         "CHS",                                         CAT_FNCT, SLS_ENABLED  },   //JM Change +/- to CHS
+/*  779 */  { fnChangeSign,                ITM_CHS     /*# JM #*/,      "CHS",                                         "CHS",                                         CAT_FNCT, SLS_ENABLED  },   //JM Change +/- to CHS
 /*  780 */  { fnSubtract,                  ITM_SUB,                     "-",                                           "-",                                           CAT_FNCT, SLS_ENABLED  },
 /*  781 */  { fnConstant,                  76,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                              CAT_CNST, SLS_ENABLED  },
 /*  782 */  { fnMultiply,                  ITM_MULT,                    STD_CROSS,                                     STD_CROSS,                                     CAT_FNCT, SLS_ENABLED  },
 /*  783 */  { itemToBeCoded,               NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               CAT_FNCT, SLS_UNCHANGED},
-/*  784 */  { fnDivide,                    ITM_DIV,                     STD_DIVIDE,                                    STD_DIVIDE,                                    CAT_FNCT, SLS_ENABLED  },
+/*  784 */  { fnDivide,                    ITM_DIV     /*# JM #*/,      STD_DIVIDE,                                    STD_DIVIDE,                                    CAT_FNCT, SLS_ENABLED  },
 /*  785 */  { itemToBeCoded,               NOPARAM,                     STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               CAT_FNCT, SLS_UNCHANGED},
 /*  786 */  { addItemToBuffer,             ITM_INDIRECTION,             STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               CAT_NONE, SLS_UNCHANGED},
 /*  787 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "DATE",                        STD_RIGHT_ARROW "DATE",                        CAT_FNCT, SLS_UNCHANGED},
@@ -1253,13 +1254,13 @@ const item_t indexOfItems[] = {
 /*  789 */  { fnCvtFromCurrentAngularMode, AM_DMS,                      STD_RIGHT_ARROW "D.MS",                        STD_RIGHT_ARROW "D.MS",                        CAT_FNCT, SLS_ENABLED  },
 /*  790 */  { fnCvtFromCurrentAngularMode, AM_GRAD,                     STD_RIGHT_ARROW "GRAD",                        STD_RIGHT_ARROW "GRAD",                        CAT_FNCT, SLS_ENABLED  },
 /*  791 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                          CAT_FNCT, SLS_ENABLED  },
-/*  792 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        CAT_FNCT, SLS_UNCHANGED},   //JM mod
+/*  792 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        CAT_FNCT, SLS_UNCHANGED},   //JM mod
 /*  793 */  { fnChangeBase,                TM_VALUE_CHB,                STD_RIGHT_ARROW "INT",                         "#",                                           CAT_FNCT, SLS_UNCHANGED},
 /*  794 */  { fnCvtFromCurrentAngularMode, AM_MULTPI,                   STD_RIGHT_ARROW "MUL" STD_pi,                  STD_RIGHT_ARROW "MUL" STD_pi,                  CAT_FNCT, SLS_ENABLED  },
-/*  795 */  { fnJM_fnToPolar,              NOPARAM,                     STD_RIGHT_ARROW "POLAR",                       STD_RIGHT_ARROW "P",                           CAT_FNCT, SLS_ENABLED  },   //JM TEXT & point to function to add POLAR/RECT
+/*  795 */  { fnJM_fnToPolar,              NOPARAM     /*# JM #*/,      STD_RIGHT_ARROW "POLAR",                       STD_RIGHT_ARROW "P",                           CAT_FNCT, SLS_ENABLED  },   //JM TEXT & point to function to add POLAR/RECT
 /*  796 */  { fnCvtFromCurrentAngularMode, AM_RADIAN,                   STD_RIGHT_ARROW "RAD",                         STD_RIGHT_ARROW "RAD",                         CAT_FNCT, SLS_ENABLED  },
 /*  797 */  { fnToReal,                    NOPARAM,                     STD_RIGHT_ARROW "REAL",                        ".d",                                          CAT_FNCT, SLS_ENABLED  },
-/*  798 */  { fnJM_fnToRect,               NOPARAM,                     STD_RIGHT_ARROW "RECT",                        STD_RIGHT_ARROW "R",                           CAT_FNCT, SLS_ENABLED  },   //SWAPPED ARROW DIRECTION & JM TEXT & point to function to add POLAR/RECT
+/*  798 */  { fnJM_fnToRect,               NOPARAM     /*# JM #*/,      STD_RIGHT_ARROW "RECT",                        STD_RIGHT_ARROW "R",                           CAT_FNCT, SLS_ENABLED  },   //SWAPPED ARROW DIRECTION & JM TEXT & point to function to add POLAR/RECT
 /*  799 */  { fnCvtDegToDms,               NOPARAM,                     "D" STD_RIGHT_ARROW "D.MS",                    "D" STD_RIGHT_ARROW "D.MS",                    CAT_FNCT, SLS_ENABLED  },
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            CAT_RVAR, SLS_UNCHANGED},
 /*  801 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                          CAT_RVAR, SLS_UNCHANGED},
@@ -1277,12 +1278,12 @@ const item_t indexOfItems[] = {
 /*  813 */  { itemToBeCoded,               NOPARAM,                     "^MOD",                                        "^MOD",                                        CAT_FNCT, SLS_UNCHANGED},
 /*  814 */  { itemToBeCoded,               NOPARAM,                     "|M|",                                         "|M|",                                         CAT_FNCT, SLS_UNCHANGED},
 /*  815 */  { fnMagnitude,                 NOPARAM,                     "|x|",                                         "|x|",                                         CAT_FNCT, SLS_ENABLED  },
-/*  816 */  { fnParallel,                  NOPARAM,                     "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                    CAT_FNCT, SLS_ENABLED  },   //JM
+/*  816 */  { fnParallel,                  NOPARAM     /*# JM #*/,      "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                    CAT_FNCT, SLS_ENABLED  },   //JM
 /*  817 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               CAT_FNCT, SLS_UNCHANGED},
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                         CAT_FNCT, SLS_UNCHANGED},
-/*  819 */  { fnArg,                       NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },   //JM CALC
+/*  819 */  { fnArg,                       NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
 /*  820 */  { fnCvtToCurrentAngularMode,   AM_MULTPI,                   "MUL" STD_pi STD_RIGHT_ARROW,                  "MUL" STD_pi STD_RIGHT_ARROW,                  CAT_FNCT, SLS_ENABLED  },
-/*  821 */  { itemToBeCoded,               NOPARAM,                     "CONV",                                        "CONV",                                        CAT_MENU, SLS_UNCHANGED},   //JM Change to text DRG and change again to CONV
+/*  821 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "CONV",                                        "CONV",                                        CAT_MENU, SLS_UNCHANGED},   //JM Change to text DRG and change again to CONV
 /*  822 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "ADV",                             STD_PRINTER "ADV",                             CAT_FNCT, SLS_UNCHANGED},
 /*  823 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "CHAR",                            STD_PRINTER "CHAR",                            CAT_FNCT, SLS_UNCHANGED},
 /*  824 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "DLAY",                            STD_PRINTER "DLAY",                            CAT_FNCT, SLS_UNCHANGED},
@@ -1291,7 +1292,7 @@ const item_t indexOfItems[] = {
 /*  827 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "PROG",                            STD_PRINTER "PROG",                            CAT_FNCT, SLS_UNCHANGED},
 /*  828 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "r",                               STD_PRINTER "r",                               CAT_FNCT, SLS_UNCHANGED},
 /*  829 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "REGS",                            STD_PRINTER "REGS",                            CAT_FNCT, SLS_UNCHANGED},
-/*  830 */  { fnP_All_Regs,                1,                           STD_PRINTER "STK",                             STD_PRINTER "STK",                             CAT_FNCT, SLS_UNCHANGED},
+/*  830 */  { fnP_All_Regs,                1     /*# JM #*/,            STD_PRINTER "STK",                             STD_PRINTER "STK",                             CAT_FNCT, SLS_UNCHANGED},
 /*  831 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "TAB",                             STD_PRINTER "TAB",                             CAT_FNCT, SLS_UNCHANGED},
 /*  832 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "USER",                            STD_PRINTER "USER",                            CAT_FNCT, SLS_UNCHANGED},
 /*  833 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "WIDTH",                           STD_PRINTER "WIDTH",                           CAT_FNCT, SLS_UNCHANGED},
@@ -1337,7 +1338,7 @@ const item_t indexOfItems[] = {
 /*  873 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    STD_RIGHT_ARROW " kg",                         CAT_DUPL, SLS_ENABLED  },
 
 /*  874 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         CAT_FNCT, SLS_UNCHANGED},   // Font Browser
-/*  875 */  { itemToBeCoded,               NOPARAM,                     "CFG",                                         "CFG",                                         CAT_MENU, SLS_UNCHANGED},   // JM Menu not defined 
+/*  875 */  { itemToBeCoded,               NOPARAM,                     "CFG",                                         "CFG",                                         CAT_MENU, SLS_UNCHANGED},
 /*  876 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_ELLIPSIS STD_omega,              STD_alpha STD_ELLIPSIS STD_omega,              CAT_MENU, SLS_UNCHANGED},   // Small greek letters
 /*  877 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "intl",                              STD_alpha "intl",                              CAT_MENU, SLS_UNCHANGED},   // Small intl letters
 /*  878 */  { addItemToBuffer,             REGISTER_X,                  "REG_X",                                       "X",                                           CAT_NONE, SLS_UNCHANGED},   // The order
@@ -1424,7 +1425,7 @@ const item_t indexOfItems[] = {
 /*  958 */  { itemToBeCoded,               NOPARAM,                     "0958",                                        "0958",                                        CAT_FREE, SLS_UNCHANGED},
 /*  959 */  { addItemToBuffer,             CHR_ZETA,                    "",                                            STD_ZETA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  960 */  { addItemToBuffer,             CHR_ETA,                     "",                                            STD_ETA,                                       CAT_NONE, SLS_UNCHANGED},
-/*  961 */  { itemToBeCoded,               NOPARAM,                     "0961",                                        "0961",                                        CAT_NONE, SLS_UNCHANGED},
+/*  961 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0961",                                        CAT_NONE, SLS_UNCHANGED},
 /*  962 */  { addItemToBuffer,             CHR_THETA,                   "",                                            STD_THETA,                                     CAT_NONE, SLS_UNCHANGED},
 /*  963 */  { addItemToBuffer,             CHR_IOTA,                    "",                                            STD_IOTA,                                      CAT_NONE, SLS_UNCHANGED},
 /*  964 */  { itemToBeCoded,               NOPARAM,                     "0964",                                        "0964",                                        CAT_FREE, SLS_UNCHANGED},
@@ -1950,7 +1951,7 @@ const item_t indexOfItems[] = {
 /* 1484 */  { addItemToBuffer,             ITM_dddIJ,                   "",                                            STD_ELLIPSIS "IJ",                             CAT_NONE, SLS_UNCHANGED},
 /* 1485 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0.",                                          CAT_NONE, SLS_UNCHANGED},
 /* 1486 */  { itemToBeCoded,               NOPARAM,                     "",                                            "1.",                                          CAT_NONE, SLS_UNCHANGED},
-/* 1487 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            "EEX",                                         CAT_NONE, SLS_UNCHANGED},   //JM Change E to EEX
+/* 1487 */  { addItemToBuffer,             ITM_EXPONENT     /*# JM #*/, "",                                            "EEX",                                         CAT_NONE, SLS_UNCHANGED},   //JM Change E to EEX
 /* 1488 */  { addItemToBuffer,             ITM_MA11,                    "",                                            STD_a_DIARESIS,                                CAT_NONE, SLS_UNCHANGED},
 /* 1489 */  { addItemToBuffer,             ITM_MA12,                    "",                                            STD_o_DIARESIS,                                CAT_NONE, SLS_UNCHANGED},
 /* 1490 */  { addItemToBuffer,             ITM_MA13,                    "",                                            STD_u_DIARESIS,                                CAT_NONE, SLS_UNCHANGED},
@@ -1969,8 +1970,8 @@ const item_t indexOfItems[] = {
 /* 1503 */  { addItemToBuffer,             ITM_MA34,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                            CAT_NONE, SLS_UNCHANGED},
-/* 1506 */  { fnJM,                        31,                          "UNDO",                                        STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
-/* 1507 */  { itemToBeCoded,               NOPARAM,                     "PRGM",                                        "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
+/* 1506 */  { fnJM,                        31     /*# JM #*/,           "UNDO",                                        STD_UNDO,                                      CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
+/* 1507 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "PRGM",                                        "PRGM",                                        CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
 /* 1508 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         CAT_NONE, SLS_UNCHANGED},
 /* 1510 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                         CAT_NONE, SLS_UNCHANGED},
@@ -1979,30 +1980,30 @@ const item_t indexOfItems[] = {
 /* 1513 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1514 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   CAT_NONE, SLS_UNCHANGED},
 /* 1515 */  { fnUserMode,                  NOPARAM,                     "USER",                                        "USER",                                        CAT_NONE, SLS_UNCHANGED},
-/* 1516 */  { fnKeyCC,                     NOPARAM,                     "CC",                                          "CC",                                          CAT_NONE, SLS_UNCHANGED},   //JM Change CC to COMPLEX
+/* 1516 */  { fnKeyCC,                     NOPARAM,                     "CC",                                          "CC",                                          CAT_NONE, SLS_UNCHANGED},
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "",                                            "f",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "",                                            "g",                                           CAT_NONE, SLS_UNCHANGED},
 /* 1519 */  { fnKeyUp,                     NOPARAM,                     "UP",                                          STD_UP_ARROW,                                  CAT_NONE, SLS_UNCHANGED},
-/* 1520 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_BST,                         CAT_NONE, SLS_UNCHANGED},
+/* 1520 */  { itemToBeCoded,               NOPARAM,                     "BST",                                         STD_HAMBURGER STD_BST,                         CAT_NONE, SLS_UNCHANGED},
 /* 1521 */  { fnKeyDown,                   NOPARAM,                     "DOWN",                                        STD_DOWN_ARROW,                                CAT_NONE, SLS_UNCHANGED},
-/* 1522 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_HAMBURGER STD_SST,                         CAT_NONE, SLS_UNCHANGED},
+/* 1522 */  { itemToBeCoded,               NOPARAM,                     "SST",                                         STD_HAMBURGER STD_SST,                         CAT_NONE, SLS_UNCHANGED},
 /* 1523 */  { fnKeyExit,                   NOPARAM,                     "EXIT",                                        "EXIT",                                        CAT_NONE, SLS_UNCHANGED},
 /* 1524 */  { fnKeyBackspace,              NOPARAM,                     "BKSPC",                                       STD_LEFT_ARROW,                                CAT_NONE, SLS_UNCHANGED},
 /* 1525 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_PRINTER "x",                               CAT_NONE, SLS_UNCHANGED},
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
-/* 1526 */  { fnAim,                       NOPARAM,                     "",                                            "ALPHA",                                       CAT_NONE, SLS_UNCHANGED},   //JM
+/* 1526 */  { fnAim,                       NOPARAM     /*# JM #*/,      "AIM",                                         "ALPHA",                                       CAT_NONE, SLS_UNCHANGED},   //JM
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
 #ifdef JM_LAYOUT_1A
-/* 1526 */  { fnAim,                       NOPARAM,                     "",                                            STD_alpha,                                     CAT_NONE, SLS_UNCHANGED},   //JM
+/* 1526 */  { fnAim,                       NOPARAM,                     "AIM",                                         STD_alpha,                                     CAT_NONE, SLS_UNCHANGED},
 #endif //JM END OF LAYOUT 1
-/* 1527 */  { fnKeyDotD/*fnJM 255*/,       NOPARAM,                     ".d",                                          ".d",                                          CAT_NONE, SLS_UNCHANGED},   //JM mod
+/* 1527 */  { fnKeyDotD,                   NOPARAM,                     ".d",                                          ".d",                                          CAT_NONE, SLS_UNCHANGED},
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           CAT_FNCT, SLS_ENABLED  },
 /* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          CAT_FNCT, SLS_ENABLED  },
-/* 1531 */  { fnShow_SCROLL,               NOPARAM,                     "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
+/* 1531 */  { fnShow_SCROLL,               NOPARAM     /*# JM #*/,      "SHOW",                                        "SHOW",                                        CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    CAT_FNCT, SLS_ENABLED  },
-/* 1534 */  { fnArg,                       NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
+/* 1534 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            CAT_FNCT, SLS_ENABLED  },
 /* 1535 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     "fathom",                                      CAT_FNCT, SLS_ENABLED  },
 /* 1536 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                          CAT_DUPL, SLS_ENABLED  },
 /* 1537 */  { fnCvtFathomM,                divide,                      "m" STD_RIGHT_ARROW "fm.",                     "m " STD_RIGHT_ARROW,                          CAT_FNCT, SLS_ENABLED  },
@@ -2029,7 +2030,7 @@ const item_t indexOfItems[] = {
 /* 1558 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                CAT_DUPL, SLS_ENABLED  },
 /* 1559 */  { fnHarmonicMeanXY,            NOPARAM,                     STD_x_BAR STD_SUB_H,                           STD_x_BAR STD_SUB_H,                           CAT_FNCT, SLS_ENABLED  },
 /* 1560 */  { fnRMSMeanXY,                 NOPARAM,                     STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S,       CAT_FNCT, SLS_ENABLED  },
-/* 1561 */  { itemToBeCoded,               NOPARAM,                     "SUMS",                                        "SUMS",                                        CAT_MENU, SLS_UNCHANGED},
+/* 1561 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "SUMS",                                        "SUMS",                                        CAT_MENU, SLS_UNCHANGED},
 /* 1562 */  { itemToBeCoded,               NOPARAM,                     "GaussF",                                      "GaussF",                                      CAT_FNCT, SLS_UNCHANGED},
 /* 1563 */  { itemToBeCoded,               NOPARAM,                     "CauchF",                                      "CauchF",                                      CAT_FNCT, SLS_UNCHANGED},
 /* 1564 */  { itemToBeCoded,               NOPARAM,                     "ParabF",                                      "ParabF",                                      CAT_FNCT, SLS_UNCHANGED},
@@ -2057,9 +2058,6 @@ const item_t indexOfItems[] = {
 /* 1586 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "SR",                                STD_alpha "SR",                                CAT_FNCT, SLS_UNCHANGED},
 /* 1587 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            CAT_FNCT, SLS_ENABLED  },
 /* 1588 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            CAT_FNCT, SLS_ENABLED  },
-
-
-
 /* 1589 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         CAT_MENU, SLS_UNCHANGED},
 /* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamFlag",                                     CAT_NONE, SLS_UNCHANGED},
 /* 1591 */  { itemToBeCoded,               NOPARAM,                     "1591",                                        "1591",                                        CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin

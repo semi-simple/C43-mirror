@@ -327,25 +327,26 @@ void xthRootLonILonI(void) {
       }
       longIntegerFree(l);
     }
-    else
-    if(longIntegerIsNegative(base)) {                                 // neg base and even exponent
-      if(longIntegerIsEven(exponent)) {
-      } else
-      if(longIntegerIsOdd(exponent)) {
-        longIntegerChangeSign(base);
-        longIntegerInit(l);
-        if(longIntegerRoot(base, exp, l)) {                           // if negative integer xthRoot found, return
-          longIntegerChangeSign(l);
-          convertLongIntegerToLongIntegerRegister(l, REGISTER_X);
-          longIntegerFree(base);
-          longIntegerFree(exponent);
+    else {
+      if(longIntegerIsNegative(base)) {                                 // neg base and even exponent
+        if(longIntegerIsEven(exponent)) {
+        } else
+        if(longIntegerIsOdd(exponent)) {
+          longIntegerChangeSign(base);
+          longIntegerInit(l);
+          if(longIntegerRoot(base, exp, l)) {                           // if negative integer xthRoot found, return
+            longIntegerChangeSign(l);
+            convertLongIntegerToLongIntegerRegister(l, REGISTER_X);
+            longIntegerFree(base);
+            longIntegerFree(exponent);
+            longIntegerFree(l);
+            return;
+          }
           longIntegerFree(l);
-          return;
+          longIntegerChangeSign(base);
+        } else
+        if(longIntegerIsZero(base)) {
         }
-        longIntegerFree(l);
-        longIntegerChangeSign(base);
-      } else
-      if(longIntegerIsZero(base)) {
       }
     }
   }
@@ -383,33 +384,15 @@ void xthRootLonIShoI(void) {
  * \return void
  ***********************************************/
 void xthRootShoILonI(void) {
-  int16_t bs;
-
-  bs = getRegisterShortIntegerBase(REGISTER_Y);
-  if(bs == 0) {bs = 10;}
+  uint32_t base = getRegisterShortIntegerBase(REGISTER_Y);
 
   convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
 
   xthRootLonILonI();
 
-  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    fnChangeBase(bs);
-  }
-
-  //This whole workaround is just to change the base, as fnChangebase does not work for 0
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    longInteger_t ll;
-    bool_t lll;
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, ll);
-    lll = longIntegerIsZero(ll);
-    longIntegerFree(ll);
-    if(lll) {
-      //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
-      convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
-    }
-    else {
-      fnChangeBase(bs);
-    }
+    convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+    setRegisterShortIntegerBase(REGISTER_X, base);
   }
 }
 
@@ -619,22 +602,16 @@ void xthRootCxmaCplx(void) {
  * \return void
  ***********************************************/
 void xthRootShoIShoI(void) {
-  int16_t bs;
-
-  bs = getRegisterShortIntegerBase(REGISTER_Y);
-  if(bs == 0) {bs = 10;}
+  uint32_t base = getRegisterShortIntegerBase(REGISTER_Y);
 
   convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
   convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
 
   xthRootLonILonI();
 
-  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    fnChangeBase(bs);
-  }
-
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    fnChangeBase(bs);
+    convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+    setRegisterShortIntegerBase(REGISTER_X, base);
   }
 }
 
@@ -648,38 +625,18 @@ void xthRootShoIShoI(void) {
  ***********************************************/
 void xthRootShoIReal(void) {
   real_t x, y;
-  int16_t bs;
-
-  bs = getRegisterShortIntegerBase(REGISTER_Y);
-  if(bs == 0) {bs = 10;}
 
   if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
+    uint32_t base = getRegisterShortIntegerBase(REGISTER_Y);
     convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
     convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
 
     xthRootLonILonI();
 
-    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      fnChangeBase(bs);
-    }
-
-    //This whole workaround is just to change the base, as fnChangebase does not work for 0
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      longInteger_t ll;
-      bool_t lll;
-      convertLongIntegerRegisterToLongInteger(REGISTER_X, ll);
-      lll = longIntegerIsZero(ll);
-      longIntegerFree(ll);
-      if(lll) {
-        //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
-        convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
-      }
-      else {
-        fnChangeBase(bs);
-      }
+      convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+      setRegisterShortIntegerBase(REGISTER_X, base);
     }
-
-
   }
   else {
     convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);

@@ -39,7 +39,7 @@ Out: EC=0 FI=0 SL=1 RL=LonI:"1" RX=LonI:"456"
 
 
 
-;=======================================|
+;=======================================
 ; Short Integer ^1/ Short Integer --> Short Int or Real
 ;=======================================
 In:  SL=0 RY=ShoI:"8#10" RX=ShoI:"3#10"
@@ -68,7 +68,7 @@ Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=ShoI:"2#10"
 In:  SL=0 RY=ShoI:"-8#10" RX=LonI:"3"
 Out: EC=0 FI=0 SL=1 RL=LonI:"3" RX=ShoI:"-2#10"
 
-In:  SL=0 RY=ShoI:"0#10" RX=LonI:"1"            
+In:  SL=0 RY=ShoI:"0#10" RX=LonI:"1"
 Out: EC=0 FI=0 SL=1 RL=LonI:"1" RX=ShoI:"0#10"
 
 In:  SL=0 RY=ShoI:"8#10" RX=LonI:"2"

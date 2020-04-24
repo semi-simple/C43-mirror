@@ -167,6 +167,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnToRect",               fnToRect              },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
+  {"fnXthRoot",              fnXthRoot             },
   {"",                       NULL                  }
 };
 

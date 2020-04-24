@@ -181,6 +181,7 @@ square
 squareRoot
 cube
 cubeRoot
+xthRoot
 
 lnGamma
 gamma

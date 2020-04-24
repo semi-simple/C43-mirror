@@ -628,6 +628,190 @@ Out: EC=0 SL=1 RL=LonI:"0" RX=Real:"NaN"
 In:  SL=0 RY=LonI:"0" RX=LonI:"0"
 Out: EC=1 SL=0 RX=LonI:"0"
 
+Func: fnXthRoot                     ;; F I =109=CPXRES=0    F D =104=DANGER=SPCRES=1
+In:  SL=0 RY=Real:"0" RX=Real:"-501"   ;1
+Out: EC=0 SL=1 RL=Real:"-501" RX=Real:"inf"   ;jm:1:0; -∞<x<0; ∞ 
+
+In:  SL=0 RY=Real:"0" RX=Real:"-502"   ;2
+Out: EC=0 SL=1 RL=Real:"-502" RX=Real:"inf"   ;jm:1:0; -∞<x<0; ∞ 
+
+In:  SL=0 RY=Real:"0" RX=Real:"-6.1"   ;3
+Out: EC=0 SL=1 RL=Real:"-6.1" RX=Real:"inf"   ;jm:1:0; -∞<x<0; ∞ 
+
+In:  SL=0 RY=Real:"0" RX=Real:"-1"   ;4
+Out: EC=0 SL=1 RL=Real:"-1" RX=Real:"inf"   ;jm:1:0; -∞<x<0; ∞ 
+
+In:  SL=0 RY=Real:"0" RX=Real:"-0.5"   ;5
+Out: EC=0 SL=1 RL=Real:"-0.5" RX=Real:"inf"   ;jm:1:0; -∞<x<0; ∞ 
+
+In:  SL=0 RY=Real:"0" RX=Real:"0.5"   ;6
+Out: EC=0 SL=1 RL=Real:"0.5" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"1"   ;7
+Out: EC=0 SL=1 RL=Real:"1" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"6.1"   ;8
+Out: EC=0 SL=1 RL=Real:"6.1" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"502"   ;9
+Out: EC=0 SL=1 RL=Real:"502" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"501"   ;10
+Out: EC=0 SL=1 RL=Real:"501" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"0"   ;11
+Out: EC=0 SL=1 RL=Real:"0" RX=Real:"0"   ;jm:2:0; 0. <= x < ∞; 0. 
+
+In:  SL=0 RY=Real:"0" RX=Real:"inf"   ;12
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"0.5" RX=Real:"inf"   ;13
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"1" RX=Real:"inf"   ;14
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"6.1" RX=Real:"inf"   ;15
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"501" RX=Real:"inf"   ;16
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"502" RX=Real:"inf"   ;17
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"inf"   ;18
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"0" RX=Real:"-inf"   ;19
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"0.5" RX=Real:"-inf"   ;20
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"1" RX=Real:"-inf"   ;21
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"6.1" RX=Real:"-inf"   ;22
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"501" RX=Real:"-inf"   ;23
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"502" RX=Real:"-inf"   ;24
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"1"   ;jm:3:0 <= y <= ∞ ; +- ∞; 1.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"-501"   ;25
+Out: EC=0 SL=1 RL=Real:"-501" RX=Real:"0"   ;jm:4:∞ ; -∞ < x < 0; 0.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"-502"   ;26
+Out: EC=0 SL=1 RL=Real:"-502" RX=Real:"0"   ;jm:4:∞ ; -∞ < x < 0; 0.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"-6.1"   ;27
+Out: EC=0 SL=1 RL=Real:"-6.1" RX=Real:"0"   ;jm:4:∞ ; -∞ < x < 0; 0.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"-1"   ;28
+Out: EC=0 SL=1 RL=Real:"-1" RX=Real:"0"   ;jm:4:∞ ; -∞ < x < 0; 0.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"-0.5"   ;29
+Out: EC=0 SL=1 RL=Real:"-0.5" RX=Real:"0"   ;jm:4:∞ ; -∞ < x < 0; 0.
+
+In:  SL=0 RY=Real:"inf" RX=Real:"0.5"   ;30
+Out: EC=0 SL=1 RL=Real:"0.5" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"inf" RX=Real:"1"   ;31
+Out: EC=0 SL=1 RL=Real:"1" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"inf" RX=Real:"6.1"   ;32
+Out: EC=0 SL=1 RL=Real:"6.1" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"inf" RX=Real:"502"   ;33
+Out: EC=0 SL=1 RL=Real:"502" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"inf" RX=Real:"501"   ;34
+Out: EC=0 SL=1 RL=Real:"501" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"inf" RX=Real:"0"   ;35
+Out: EC=0 SL=1 RL=Real:"0" RX=Real:"inf"   ;jm:5:∞ ; 0 <= x < ∞; ∞
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"inf"   ;36
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-502" RX=Real:"inf"   ;37
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-501" RX=Real:"inf"   ;38
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-6.01" RX=Real:"inf"   ;39
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-1" RX=Real:"inf"   ;40
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-0.5" RX=Real:"inf"   ;41
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"-inf"   ;42
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-502" RX=Real:"-inf"   ;43
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-501" RX=Real:"-inf"   ;44
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-6.01" RX=Real:"-inf"   ;45
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-1" RX=Real:"-inf"   ;46
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-0.5" RX=Real:"-inf"   ;47
+Out: EC=0 SL=1 RL=Real:"-inf" RX=Real:"NaN"   ;jm:6:-∞ <= y < 0 ; +- ∞; NaN
+
+In:  SL=0 RY=Real:"-1E6" RX=Real:"6.1"   ;48
+Out: EC=0 SL=1 RL=Real:"6.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-502" RX=Real:"-6.1"   ;49
+Out: EC=0 SL=1 RL=Real:"-6.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-501" RX=Real:"1.1"   ;50
+Out: EC=0 SL=1 RL=Real:"1.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-6.01" RX=Real:"-1.1"   ;51
+Out: EC=0 SL=1 RL=Real:"-1.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-1" RX=Real:"500.1"   ;52
+Out: EC=0 SL=1 RL=Real:"500.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-0.5" RX=Real:"-500.1"   ;53
+Out: EC=0 SL=1 RL=Real:"-500.1" RX=Real:"NaN"   ;jm:7:-∞ < y < 0 ; non int; NaN
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"1"   ;54
+Out: EC=0 SL=1 RL=Real:"1" RX=Real:"-inf"   ;jm:8:-∞ ; odd x>0; -∞
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"3"   ;55
+Out: EC=0 SL=1 RL=Real:"3" RX=Real:"-inf"   ;jm:8:-∞ ; odd x>0; -∞
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"1001"   ;56
+Out: EC=0 SL=1 RL=Real:"1001" RX=Real:"-inf"   ;jm:8:-∞ ; odd x>0; -∞
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"100001"   ;57
+Out: EC=0 SL=1 RL=Real:"100001" RX=Real:"-inf"   ;jm:8:-∞ ; odd x>0; -∞
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"2"   ;58
+Out: EC=0 SL=1 RL=Real:"2" RX=Real:"NaN"   ;jm:9:-∞ ; even x>0; NaN
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"4"   ;59
+Out: EC=0 SL=1 RL=Real:"4" RX=Real:"NaN"   ;jm:9:-∞ ; even x>0; NaN
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"1000"   ;60
+Out: EC=0 SL=1 RL=Real:"1000" RX=Real:"NaN"   ;jm:9:-∞ ; even x>0; NaN
+
+In:  SL=0 RY=Real:"-inf" RX=Real:"100000"   ;61
+Out: EC=0 SL=1 RL=Real:"100000" RX=Real:"NaN"   ;jm:9:-∞ ; even x>0; NaN
+
 
 
 Func: fnPower
@@ -905,6 +1089,7 @@ Out: EC=1 SL=0 RX=Real:"-inf"
 
 In:  SL=0 RX=Real:"-inf"
 Out: EC=1 SL=0 RX=Real:"-inf"
+
 
 Func: fnArcsinh
 In:  SL=0 RX=Real:"-inf"
@@ -1344,6 +1529,16 @@ In:  SL=0 RY=LonI:"0" RX=LonI:"0"
 Out: EC=1 SL=0
 
 
+Func: fnXthRoot                     ;; F I =109=CPXRES=0    F D =104=DANGER=SPCRES=0
+In:  SL=0 RY=Real:"-inf" RX=Real:"-inf"
+Out: EC=1 SL=0 RL=Real:"-inf" RX=Real:"-inf"
+
+In:  SL=0 RY=Real:"0" RX=Real:"0"
+Out: EC=1 SL=0 RX=Real:"0"
+
+In:  SL=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=1 SL=0 RX=Real:"inf"
+
 
 Func: fnPower
 In:  SL=0 RY=Real:"0" RX=Real:"0"
@@ -1499,6 +1694,11 @@ Out: EC=0 SL=1 RL=Cplx:"inf i -inf" RX=Cplx:"0 i -inf"
 
 In:  SL=0 RX=Cplx:"inf i -99"
 Out: EC=0 SL=1 RL=Cplx:"inf i -99" RX=Cplx:"inf i 0"
+
+
+Func: fnXthRoot                      ;; F I =109=CPXRES=1    F D =104=DANGER=SPCRES=1
+In:  SL=0 RY=Real:"inf" RX=Real:"inf"
+Out: EC=0 SL=1 RL=Real:"inf" RX=Real:"1"
 
 
 Func: fnCubeRoot

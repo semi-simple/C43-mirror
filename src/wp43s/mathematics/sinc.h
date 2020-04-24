@@ -15,8 +15,9 @@
  */
 
 /********************************************//**
- * \file sin.h
+ * \file sinc.h
  ***********************************************/
+// Coded by JM, based on sin.h
 
 void fnSinc  (uint16_t unusedParamButMandatory);
 void sincError(void);

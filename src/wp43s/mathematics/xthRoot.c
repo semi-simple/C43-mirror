@@ -67,7 +67,7 @@ void fnXthRoot(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   xthRoot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-     
+
   adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
 }
 
@@ -79,49 +79,51 @@ void fnXthRoot(uint16_t unusedParamButMandatory) {
  * \param[in] Expecting a,b,c,d:   Y = a +ib;   X = c +id
  * \return REGISTER Y unchanged. REGISTER X with result of (a+ib) ^ (1/(c+id))
  ***********************************************/
-real_t a, b, c, d;
-void xthRootCC(void) {
-  real_t theta;
-  if(!getFlag(FLAG_DANGER))
-  {  if(realIsZero(&c)&&realIsZero(&d)) {
+void xthRootComplex(const real_t *aa, const real_t *bb, const real_t *cc, const real_t *dd, realContext_t *realContext) {
+  real_t theta, a, b, c, d;
+
+  realCopy(aa, &a);
+  realCopy(bb, &b);
+  realCopy(cc, &c);
+  realCopy(dd, &d);
+
+  if(!getFlag(FLAG_DANGER)) {
+    if(realIsZero(&c)&&realIsZero(&d)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function xthRootCC: 0th Root is not defined!", NULL, NULL, NULL);
+        showInfoDialog("In function xthRootComplexComplex: 0th Root is not defined!", NULL, NULL, NULL);
       #endif
-      return;       
+      return;
      }
-    else
-	 {  if(realIsNaN(&a)||realIsNaN(&b)||realIsNaN(&c)||realIsNaN(&d)) {
-	      c = *const_NaN;
-		  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-	      realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-   	      realToReal34(&c, REGISTER_IMAG34_DATA(REGISTER_X));
-	      return;       
-	     }
-	  }
+    else {
+      if(realIsNaN(&a)||realIsNaN(&b)||realIsNaN(&c)||realIsNaN(&d)) {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+        return;
+      }
+    }
   }
 
+  divRealComplex(const_1, &c, &d, &c, &d, realContext);
 
+  //From power.c
+  realRectangularToPolar(&a, &b, &a, &theta, realContext);
+  WP34S_Ln(&a, &a, realContext);
+  realMultiply(&a, &d, &b, realContext);
+  realFMA(&theta, &c, &b, &b, realContext);
+  realChangeSign(&theta);
+  realMultiply(&a, &c, &a, realContext);
+  realFMA(&theta, &d, &a, &a, realContext);
+  realExp(&a, &c, realContext);
+  realPolarToRectangular(const_1, &b, &a, &b, realContext);
+  realMultiply(&c, &b, &d, realContext);
+  realMultiply(&c, &a, &c, realContext);
 
-    divRealComplex(const_1, &c, &d, &c, &d, &ctxtReal39);
-
-    //From power.c
-    realRectangularToPolar(&a, &b, &a, &theta, &ctxtReal39);
-    WP34S_Ln(&a, &a, &ctxtReal39);
-    realMultiply(&a, &d, &b, &ctxtReal39);
-    realFMA(&theta, &c, &b, &b, &ctxtReal39);
-    realChangeSign(&theta);
-    realMultiply(&a, &c, &a, &ctxtReal39);
-    realFMA(&theta, &d, &a, &a, &ctxtReal39);
-    realExp(&a, &c, &ctxtReal39);
-    realPolarToRectangular(const_1, &b, &a, &b, &ctxtReal39);
-    realMultiply(&c, &b, &d, &ctxtReal39);
-    realMultiply(&c, &a, &c, &ctxtReal39);
-
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
-  } 
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
 
 /********************************************//**
@@ -130,55 +132,53 @@ void xthRootCC(void) {
  * \param[in] Expecting x,y
  * \return REGISTER Y unchanged. REGISTER X with result of y^x
  ***********************************************/
-real_t y, x;
-void xthRootRR(void) {
-  real_t r, o;
+void xthRootReal(real_t *yy, real_t *xx, realContext_t *realContext) {
+  real_t r, o, x, y;
   uint8_t telltale;
+
+  realCopy(xx, &x);
+  realCopy(yy, &y);
 
   telltale = 0;
   if(getFlag(FLAG_DANGER)) {
     //0
-    if(
-         ( (real34IsZero(&y)                           /**/&&/**/    (realCompareGreaterEqual(&x, const_0) || (realIsInfinite(&x) && realIsPositive(&x)) ) ) )
-      || ( (realIsInfinite(&y) && realIsPositive(&y))  /**/&&/**/    (realCompareLessThan(&x, const_0) && (!realIsInfinite(&x)                            ) ) )
-      )
-    { telltale += 1;
+    if(   ((real34IsZero(&y)                          && (realCompareGreaterEqual(&x, const_0) || (realIsInfinite(&x) && realIsPositive(&x)))))
+       || ((realIsInfinite(&y) && realIsPositive(&y)) && (realCompareLessThan(&x, const_0) && (!realIsInfinite(&x))))
+      ) {
+      telltale += 1;
       realCopy(const_0, &o);
     }
 
     //1
-    if(
-         ( (realCompareGreaterEqual(&y, const_0) || (realIsInfinite(&y) && realIsPositive(&y)) )   /**/&&/**/  realIsInfinite(&x) )
-      )
-    { telltale += 2;
+    if(((realCompareGreaterEqual(&y, const_0) || (realIsInfinite(&y) && realIsPositive(&y))) && realIsInfinite(&x))) {
+      telltale += 2;
       realCopy(const_1, &o);
     }
 
     //inf
-    if(
-            (realIsZero(&y) && (realCompareLessThan(&x, const_0) /**/&&/**/  (!realIsInfinite(&x)))) // (y=0.) AND (-inf < x < 0) 
-       || ( (realIsInfinite(&y) && realIsPositive(&y))           /**/&&/**/  (realCompareGreaterEqual(&x, const_0) && (!realIsInfinite(&x)) ) ) // (y=+inf)  AND (0>=x > inf)
-      )
-    { telltale += 4;
+    if(   (realIsZero(&y) && (realCompareLessThan(&x, const_0) && (!realIsInfinite(&x)))) // (y=0.) AND (-inf < x < 0)
+       || ((realIsInfinite(&y) && realIsPositive(&y))          && (realCompareGreaterEqual(&x, const_0) && (!realIsInfinite(&x)))) // (y=+inf)  AND (0>= x > inf)
+      ) {
+      telltale += 4;
       realCopy(const_plusInfinity, &o);
     }
+
     //NaN
-    realDivideRemainder(&x, const_2, &r, &ctxtReal39);
-    if(     (realIsNaN(&x) || realIsNaN(&y))
-       || ( (realCompareLessThan(&y, const_0) || (realIsInfinite(&y) && realIsNegative(&y)) )   /**/&&/**/   (realIsInfinite(&x)    ) ) // (-inf <= y < 0)  AND (x =(inf or -inf))
-       || ( (realCompareLessThan(&y, const_0) && (!realIsInfinite(&y)                       )   /**/&&/**/   (!realIsAnInteger(&x)) ) ) // (-inf < y < 0)  AND (x in non-integer)
-       || ( (realIsInfinite(&y) && realIsNegative(&y))           /**/&&/**/  (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x)) )   // (y=-inf) AND (x is even > 0) [zero r means n/2 has no remainder, therefore even]  
-      )
-    { telltale += 8;
+    realDivideRemainder(&x, const_2, &r, realContext);
+    if(    (realIsNaN(&x) || realIsNaN(&y))
+       || ((realCompareLessThan(&y, const_0) || (realIsInfinite(&y) && realIsNegative(&y))) && (realIsInfinite(&x)   ))                  // (-inf <= y < 0)  AND (x =(inf or -inf))
+       || ((realCompareLessThan(&y, const_0) && (!realIsInfinite(&y)                      ) && (!realIsAnInteger(&x))))                  // (-inf < y < 0)  AND (x in non-integer)
+       || ((realIsInfinite(&y) && realIsNegative(&y)) && (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x))) // (y=-inf) AND (x is even > 0) [zero r means n/2 has no remainder, therefore even]
+      ) {
+      telltale += 8;
       realCopy(const_NaN, &o);
     }
 
     //-inf
-    realAdd(&x, const_1, &r, &ctxtReal39);
-    realDivideRemainder(&r, const_2, &r, &ctxtReal39);
-    if(     (realIsInfinite(&y) && realIsNegative(&y))           /**/&&/**/  (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x))   // (y=-inf) AND (x is odd > 0) [zero r means (n+1)/2 has no remainder, therefore even]  
-      )
-    { telltale += 16;
+    realAdd(&x, const_1, &r, realContext);
+    realDivideRemainder(&r, const_2, &r, realContext);
+    if((realIsInfinite(&y) && realIsNegative(&y)) && (realIsZero(&r) && realCompareGreaterThan(&x, const_0) && realIsAnInteger(&x))) { // (y=-inf) AND (x is odd > 0) [zero r means (n+1)/2 has no remainder, therefore even]
+      telltale += 16;
       realCopy(const_minusInfinity, &o);
     }
 
@@ -186,108 +186,97 @@ void xthRootRR(void) {
     if(telltale != 0) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realToReal34(&o, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE); 
+      setRegisterAngularMode(REGISTER_X, AM_NONE);
       return;
     }
-  } 
-  else //!SPCRES  
-  {  if(realIsZero(&x)) {
+  }
+  else { // not DANGER
+    if(realIsZero(&x)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function xthRootRR: 0th Root is not defined!", NULL, NULL, NULL);
+        showInfoDialog("In function xthRootRealReal: 0th Root is not defined!", NULL, NULL, NULL);
       #endif
-      return;       
-     }
-  else
-  {  if(realIsNaN(&x)||realIsNaN(&y)) {
-      o = *const_NaN;
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(&o, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE); 
-      return;       
-     }
-  }
+      return;
+    }
+    else {
+      if(realIsNaN(&x)||realIsNaN(&y)) {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+        setRegisterAngularMode(REGISTER_X, AM_NONE);
+        return;
+      }
+    }
   }
 
-
- 
   if(realIsPositive(&y)) {                                         //positive base, no problem, get the power function y^(1/x)
-     if(realCompareEqual(const_3, &x)) {x = *const_1on3;} else       //time saving if cuberoot
-       if(realCompareEqual(const_2, &x)) {x = *const_1on2;} else     //time saving if squareroot
-         { realDivide(const_1,&x, &x, &ctxtReal39);}                 //otherwise get inverse
-     realPower(&y, &x, &x, &ctxtReal39);
-     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-     setRegisterAngularMode(REGISTER_X, AM_NONE); 
-     return;
+    realDivide(const_1, &x, &x, realContext);
+
+    realPower(&y, &x, &x, realContext);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    return;
   }  //fall through, but returned
-  else 
-  if (realIsNegative(&y)) {
-     realDivideRemainder(&x, const_2, &r, &ctxtReal39);
-     if(realIsZero(&r)) {                                          // negative base and even exp     (zero means no remainder means even)
-       a = y;       b = *const_0;
-       c = x;       d = *const_0; 
-       if(!getFlag(FLAG_CPXRES)) {
-         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-           showInfoDialog("In function xthRootRR:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
-         #endif
-         return;
-       } else
-       xthRootCC(); 
+  else {
+    if (realIsNegative(&y)) {
+      realDivideRemainder(&x, const_2, &r, realContext);
+      if(realIsZero(&r)) {                                          // negative base and even exp     (zero means no remainder means even)
+        if(!getFlag(FLAG_CPXRES)) {
+          displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            showInfoDialog("In function xthRootRealReal:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
+          #endif
+          return;
+        }
+        else {
+          xthRootComplex(&y, const_0, &x, const_0, realContext);
+        }
+      } //fall through after Root CC
+      else {
+        realAdd(&x, const_1, &r, realContext);
+        realDivideRemainder(&r, const_2, &r, realContext);
+        if(realIsZero(&r)) {                                        // negative base and odd exp
+          realDivide(const_1,&x, &x, realContext);
 
-     } //fall through after Root CC
-     else {     
-       realAdd(&x, const_1, &r, &ctxtReal39);
-       realDivideRemainder(&r, const_2, &r, &ctxtReal39);
-       if(realIsZero(&r)) {                                        // negative base and odd exp
-         if(realCompareEqual(const_3, &x)) {x = *const_1on3;} else      //time saving if cuberoot
-           if(realCompareEqual(const_2, &x)) {x = *const_1on2;} else    //time saving if squareroot
-             { realDivide(const_1,&x, &x, &ctxtReal39);}                //otherwise get inverse
-         realSetPositiveSign(&y);
-         realPower(&y, &x, &x, &ctxtReal39);
-         realSetNegativeSign(&x);
+          realSetPositiveSign(&y);
+          realPower(&y, &x, &x, realContext);
+          realSetNegativeSign(&x);
 
-         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-         setRegisterAngularMode(REGISTER_X, AM_NONE); 
-         return; 
-       } //fall though, but returned
-       else {      //neither odd nor even, i.e. not integer
-         a = y;       b = *const_0;
-         c = x;       d = *const_0; 
-         if(!getFlag(FLAG_CPXRES)) {
-           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-             showInfoDialog("In function xthRootRR:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
-           #endif
-           return;
-         } else
-         xthRootCC(); 
+          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+          realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+          setRegisterAngularMode(REGISTER_X, AM_NONE);
+          return;
+        } //fall though, but returned
+        else {      //neither odd nor even, i.e. not integer
+          if(!getFlag(FLAG_CPXRES)) {
+            displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              showInfoDialog("In function xthRootRealReal:", "cannot do complex xthRoots when CPXRES is not set", NULL, NULL);
+            #endif
+            return;
+          }
+          else {
+            xthRootComplex(&y, const_0, &x, const_0, realContext);
+          }
+        }
+      } //fall through
+    }
+    else {
+      if(realIsZero(&y)) {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-       }
-     } //fall through
+        if(!realIsZero(&x)) {                                         // zero base and non-zero exp
+          realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+        else {                                                        // zero base and zero exp
+          realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+        }
+
+        setRegisterAngularMode(REGISTER_X, AM_NONE);
+      } //fall through, but returned
+    }
   }
-  else
-  if(realIsZero(&y)) {
-     if(!realIsZero(&x)) {                                         // zero base and non-zero exp
-       x = *const_1;
-     }
-     else /*if(realIsZero(&x))*/ {                                 // zero base and zero exp
-       x = *const_NaN;
-     }
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
-  return;
-  } //fall through, but returned
-
 }
-
-
-
-
-
 
 
 /******************************************************************************************************************************************************************************************/
@@ -300,9 +289,10 @@ void xthRootRR(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootLonILonI(void) {                       //checked
+void xthRootLonILonI(void) {
+  real_t x, y;
   longInteger_t base, exponent, l;
-  //printf("LonLon\n");
+
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
 
@@ -323,27 +313,25 @@ void xthRootLonILonI(void) {                       //checked
     longIntegerFree(exponent);
     return;
   }
-  
+
   if(longIntegerCompareUInt(base, 2147483640) == -1) {
-    int32_t exp = longIntegerToInt(exponent);  
+    int32_t exp = longIntegerToInt(exponent);
     if(longIntegerIsPositive(base)) {                                 // pos base
       longIntegerInit(l);
       if(longIntegerRoot(base, exp, l)) {                             // if integer xthRoot found, return
         convertLongIntegerToLongIntegerRegister(l, REGISTER_X);
         longIntegerFree(base);
-        longIntegerFree(exponent); 
+        longIntegerFree(exponent);
         longIntegerFree(l);
         return;
       }
       longIntegerFree(l);
-      //printf("not integer xthRoot, fall through to real\n");           // if no integer xthRoot, fall through to real xthRoot
-    } 
+    }
     else
     if(longIntegerIsNegative(base)) {                                 // neg base and even exponent
       if(longIntegerIsEven(exponent)) {
-      //printf("complex xthRoot, fall through to real to complex\n");    // if complex xthRoot, fall through to real xthRoot
       } else
-      if(longIntegerIsOdd(exponent)) {        
+      if(longIntegerIsOdd(exponent)) {
         longIntegerChangeSign(base);
         longIntegerInit(l);
         if(longIntegerRoot(base, exp, l)) {                           // if negative integer xthRoot found, return
@@ -356,28 +344,21 @@ void xthRootLonILonI(void) {                       //checked
         }
         longIntegerFree(l);
         longIntegerChangeSign(base);
-        //printf("not integer xthRoot, fall through to real\n");           // if no negative integer xthRoot, fall through to real xthRoot
       } else
       if(longIntegerIsZero(base)) {
-        //printf("NaN, fall through to real\n");  
       }
     }
   }
-  //printf("fell through to real\n");  
-
-
 
   longIntegerToAllocatedString(exponent, tmpStr3000, TMP_STR_LENGTH);
   stringToReal(tmpStr3000, &x, &ctxtReal39);
-  //printf("xx %s",tmpStr3000);
   longIntegerToAllocatedString(base, tmpStr3000, TMP_STR_LENGTH);
   stringToReal(tmpStr3000, &y, &ctxtReal39);
-  //printf(" yy %s\n",tmpStr3000);
 
   longIntegerFree(base);
   longIntegerFree(exponent);
 
-  xthRootRR();
+  xthRootReal(&y, &x, &ctxtReal39);
 }
 
 
@@ -388,10 +369,8 @@ void xthRootLonILonI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootLonIShoI(void) {                       //checked
-
+void xthRootLonIShoI(void) {
   convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
-
   xthRootLonILonI();
 }
 
@@ -403,7 +382,7 @@ void xthRootLonIShoI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootShoILonI(void) {                       //checked
+void xthRootShoILonI(void) {
   int16_t bs;
 
   bs = getRegisterShortIntegerBase(REGISTER_Y);
@@ -427,7 +406,7 @@ void xthRootShoILonI(void) {                       //checked
     if(lll) {
       //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
       convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
-    } 
+    }
     else {
       fnChangeBase(bs);
     }
@@ -441,19 +420,19 @@ void xthRootShoILonI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootLonIReal(void) {                       //checked
+void xthRootLonIReal(void) {
+  real_t x, y;
 
   if(!real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsAnInteger(REGISTER_REAL34_DATA(REGISTER_X))) {
     convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
     xthRootLonILonI();
-  } else {
+  }
+  else {
     convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    xthRootRR();
+
+    xthRootReal(&y, &x, &ctxtReal39);
   }
-
-
-
 }
 
 
@@ -464,12 +443,13 @@ void xthRootLonIReal(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootRealLonI(void) {                       //checked
+void xthRootRealLonI(void) {
+  real_t x, y;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  xthRootRR();
+  xthRootReal(&y, &x, &ctxtReal39);
 }
 
 
@@ -480,15 +460,15 @@ void xthRootRealLonI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootLonICplx(void) {                       //checked
+void xthRootLonICplx(void) {
+  real_t a, b, c, d;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
   real34ToReal(const_0, &b);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
  }
 
 
@@ -499,14 +479,15 @@ void xthRootLonICplx(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootCplxLonI(void) {                       //checked
+void xthRootCplxLonI(void) {
+  real_t a, b, c, d;
+
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   real34ToReal(const_0, &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }
 
 
@@ -533,7 +514,7 @@ void xthRootCplxLonI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootRemaLonI(void) {                     
+void xthRootRemaLonI(void) {
   fnToBeCoded();
 }
 
@@ -545,7 +526,7 @@ void xthRootRemaLonI(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootRemaShoI(void) {                     
+void xthRootRemaShoI(void) {
   fnToBeCoded();
 }
 
@@ -557,7 +538,7 @@ void xthRootRemaShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootRemaReal(void) {                     
+void xthRootRemaReal(void) {
   fnToBeCoded();
 }
 
@@ -569,7 +550,7 @@ void xthRootRemaReal(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootRemaCplx(void) {                     
+void xthRootRemaCplx(void) {
   fnToBeCoded();
 }
 
@@ -585,7 +566,7 @@ void xthRootRemaCplx(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootCxmaLonI(void) {                     
+void xthRootCxmaLonI(void) {
   fnToBeCoded();
 }
 
@@ -609,7 +590,7 @@ void xthRootCxmaShoI(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootCxmaReal(void) {                     
+void xthRootCxmaReal(void) {
   fnToBeCoded();
 }
 
@@ -621,7 +602,7 @@ void xthRootCxmaReal(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootCxmaCplx(void) {                     
+void xthRootCxmaCplx(void) {
   fnToBeCoded();
 }
 
@@ -637,7 +618,7 @@ void xthRootCxmaCplx(void) {
  * \param void
  * \return void
  ***********************************************/
-void xthRootShoIShoI(void) {                       //checked
+void xthRootShoIShoI(void) {
   int16_t bs;
 
   bs = getRegisterShortIntegerBase(REGISTER_Y);
@@ -665,7 +646,8 @@ void xthRootShoIShoI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootShoIReal(void) {                       //checked
+void xthRootShoIReal(void) {
+  real_t x, y;
   int16_t bs;
 
   bs = getRegisterShortIntegerBase(REGISTER_Y);
@@ -691,17 +673,18 @@ void xthRootShoIReal(void) {                       //checked
       if(lll) {
         //does not work: convertLongIntegerToShortIntegerRegister(ll, bs, REGISTER_X);
         convertUInt64ToShortIntegerRegister(0,0,bs,REGISTER_X);
-      } 
+      }
       else {
         fnChangeBase(bs);
       }
     }
 
 
-  } else {
+  }
+  else {
     convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    xthRootRR();
+    xthRootReal(&y, &x, &ctxtReal39);
   }
 }
 
@@ -714,13 +697,13 @@ void xthRootShoIReal(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootRealShoI(void) {    //--CHECKED                  
+void xthRootRealShoI(void) {
+  real_t x, y;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
 
-  xthRootRR();
-
+  xthRootReal(&y, &x, &ctxtReal39);
 }
 
 
@@ -732,14 +715,15 @@ void xthRootRealShoI(void) {    //--CHECKED
  * \param void
  * \return void
  ***********************************************/
-void xthRootShoICplx(void) {                       //checked
+void xthRootShoICplx(void) {
+  real_t a, b, c, d;
+
   convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
   real34ToReal(const_0, &b);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }
 
 
@@ -751,14 +735,15 @@ void xthRootShoICplx(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootCplxShoI(void) {                       //checked
+void xthRootCplxShoI(void) {
+  real_t a, b, c, d;
+
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
   convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
   real34ToReal(const_0, &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }
 
 
@@ -774,7 +759,8 @@ void xthRootCplxShoI(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootRealReal(void) {                       //checked
+void xthRootRealReal(void) {
+  real_t x, y;
 
   if((real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) && !getFlag(FLAG_DANGER)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -787,7 +773,7 @@ void xthRootRealReal(void) {                       //checked
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  xthRootRR();
+  xthRootReal(&y, &x, &ctxtReal39);
 }
 
 
@@ -798,7 +784,9 @@ void xthRootRealReal(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootRealCplx(void) {                       //checked
+void xthRootRealCplx(void) {
+  real_t a, b, c, d;
+
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -818,8 +806,7 @@ void xthRootRealCplx(void) {                       //checked
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }
 
 
@@ -830,7 +817,9 @@ void xthRootRealCplx(void) {                       //checked
  * \param void
  * \return void
  ***********************************************/
-void xthRootCplxReal(void) {                       //checked
+void xthRootCplxReal(void) {
+  real_t a, b, c, d;
+
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -850,8 +839,7 @@ void xthRootCplxReal(void) {                       //checked
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(const_0, &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }
 
 
@@ -867,6 +855,8 @@ void xthRootCplxReal(void) {                       //checked
  * \return void
  ***********************************************/
 void xthRootCplxCplx(void) {                       //checked
+  real_t a, b, c, d;
+
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -886,6 +876,5 @@ void xthRootCplxCplx(void) {                       //checked
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
 
-  xthRootCC();
-
+  xthRootComplex(&a, &b, &c, &d, &ctxtReal39);
 }

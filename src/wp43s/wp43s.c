@@ -452,7 +452,7 @@ void program_main(void) {
   //program_init();
 
   lcd_clear_buf();
-  lcd_putsAt(t24, 4, "Press EXIT from DM42 (not from WP43S)");
+  lcd_putsAt(t24, 4, "Press the bottom left key.");
   lcd_refresh();
   while(key != 33 && key != 37) {
     key = key_pop();

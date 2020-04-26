@@ -1028,7 +1028,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
               strcat(string1, "long integer = ");
-              longIntegerToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+              longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
             }
 
             else {
@@ -1480,7 +1480,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
-            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+            longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

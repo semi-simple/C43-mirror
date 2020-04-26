@@ -111,17 +111,23 @@ static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realCon
   realDivide(y, result, result, realContext);     // t = y! / [x! * (y - x)!]
 }
 
-static void cyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
-  longIntegerSubtract(*y, *x, *result);                      // t = y-x
-  longIntegerFactorial(longIntegerToUInt(*result), *result); // t = (y-x)!
+static void cyxLong(longInteger_t y, longInteger_t x, longInteger_t result) {
+  uint32_t temp;
 
-  longIntegerFactorial(longIntegerToUInt(*y), *y);           // y = y!
+  longIntegerSubtract(y, x, result);      // t = y - x
 
-  longIntegerFactorial(longIntegerToUInt(*x), *x);           // x = x!
+  longIntegerToUInt(result, temp);
+  longIntegerFactorial(temp , result);    // t = (y - x)!
 
-  longIntegerMultiply(*x, *result, *result);                 // t = x! * (y-x)!
+  longIntegerToUInt(y, temp);
+  longIntegerFactorial(temp, y);          // y = y!
 
-  longIntegerDivide(*y, *result, *result);                   // t = y! / [x! * (y -x)!]
+  longIntegerToUInt(x, temp);
+  longIntegerFactorial(temp, x);          // x = x!
+
+  longIntegerMultiply(x, result, result); // t = x! * (y - x)!
+
+  longIntegerDivide(y, result, result);   // t = y! / [x! * (y - x)!]
 }
 
 static void cyxCplx(real_t *yReal, real_t *yImag, real_t *xReal, real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
@@ -150,13 +156,17 @@ static void pyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realCon
   realDivide(y, result, result, realContext);   // t = y! / (y - x)!
 }
 
-static void pyxLong(longInteger_t *y, longInteger_t *x, longInteger_t *result) {
-  longIntegerSubtract(*y, *x, *result);                      // t = y-x
-  longIntegerFactorial(longIntegerToUInt(*result), *result); // t = (y-x)!
+static void pyxLong(longInteger_t y, longInteger_t x, longInteger_t result) {
+  uint32_t temp;
 
-  longIntegerFactorial(longIntegerToUInt(*y), *y);           // y = y!
+  longIntegerSubtract(y, x, result);    // t = y-x
+  longIntegerToUInt(result, temp);
+  longIntegerFactorial(temp, result);   // t = (y-x)!
 
-  longIntegerDivide(*y, *result, *result);                   // t = y! / (y -x)!
+  longIntegerToUInt(y, temp);
+  longIntegerFactorial(temp, y);        // y = y!
+
+  longIntegerDivide(y, result, result); // t = y! / (y -x)!
 }
 
 static void pyxCplx(real_t *yReal, real_t *yImag, real_t *xReal, real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
@@ -241,7 +251,7 @@ void cpyxLonILonI(uint16_t combOrPerm) {
     longInteger_t t;
     longIntegerInit(t);
 
-    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(y, x, t) : pyxLong(y, x, t);
 
     convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
     longIntegerFree(t);
@@ -323,7 +333,7 @@ void cpyxLonIShoI(uint16_t combOrPerm) {
     longInteger_t t;
     longIntegerInit(t);
 
-    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(y, x, t) : pyxLong(y, x, t);
 
     convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
     longIntegerFree(t);
@@ -560,7 +570,7 @@ void cpyxShoILonI(uint16_t combOrPerm) {
     longInteger_t t;
     longIntegerInit(t);
 
-    (combOrPerm == CP_COMBINATION) ? cyxLong(&y, &x, &t) : pyxLong(&y, &x, &t);
+    (combOrPerm == CP_COMBINATION) ? cyxLong(y, x, t) : pyxLong(y, x, t);
 
     convertLongIntegerToLongIntegerRegister(t, REGISTER_X);
     longIntegerFree(t);

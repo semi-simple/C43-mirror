@@ -1686,7 +1686,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       longIntegerFree(lgInt);
       return 9999;
     }
-    value = longIntegerToUInt(lgInt);
+    longIntegerToUInt(lgInt, value);
     longIntegerFree(lgInt);
   }
 

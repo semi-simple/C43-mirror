@@ -395,12 +395,12 @@ void btnFnPressed(void *w, void *data) {
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
 
   if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try
-    if(FN_key_pressed_last != FN_key_pressed) {
+    if(FN_key_pressed_last != FN_key_pressed) {       //first press
       fnTimerExec(TO_FN_EXEC);
       FN_handle_timed_out_to_EXEC = true;
       exexute_double_g = false;
     }
-    else {
+    else {                                            //second press
       FN_handle_timed_out_to_EXEC = false;
       exexute_double_g = true;
       fnTimerStop(TO_FN_EXEC);

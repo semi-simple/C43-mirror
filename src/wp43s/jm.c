@@ -1053,6 +1053,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 28) {                                         //toRECT
+    //saveStack();       //Not savestack because both functions already have savestack.
     if(getRegisterDataType(REGISTER_X) == dtComplex34) {
       fnComplexMode(CM_RECTANGULAR);
     }
@@ -1062,7 +1063,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 29) {                                         //toPOLAR
-    saveStack();
+    //saveStack();       //Not savestack because both functions already have savestack.
     if(getRegisterDataType(REGISTER_X) == dtComplex34) {
       fnComplexMode(CM_POLAR);
     }

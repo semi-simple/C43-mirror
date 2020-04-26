@@ -375,10 +375,24 @@ int16_t determineItem(const char *data) {
         if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
           restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          result = ITM_NULL;
-          fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+#define NEWDROP
+          #ifdef OLDDROP
+            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            result = ITM_NULL;
+            fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            btnReleased(NULL, NULL);
+          #else
+            showFunctionName(ITM_DROP, 10);  //JM CLRDROP
+            #ifdef PC_BUILD
+              refreshScreen(NULL);            //JM CLRDROP
+            #elif DMCP_BUILD
+              refreshScreen();                //JM CLRDROP
+            #endif
+            result = ITM_DROP;
+            fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+          #endif
         }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
   }
 
@@ -513,8 +527,8 @@ void processKeyAction(int16_t item) {
 
   switch(item) {
     case KEY_BACKSPACE:
-      fnKeyBackspace(NOPARAM);
-      keyActionProcessed = true;
+//      fnKeyBackspace(NOPARAM);             //JM CLRDROP - removed this, to allow echoing with subsequent execution
+  //    keyActionProcessed = true;           //JM CLRDROP - removed this, to allow echoing with subsequent execution
       break;
 
     case KEY_UP1:

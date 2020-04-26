@@ -337,6 +337,8 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
     runFunction(ITM_CLSIGMA);
   }
 
+  fnAngularMode(AM_RADIAN);
+
   //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
   for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
 

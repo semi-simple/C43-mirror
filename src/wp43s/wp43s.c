@@ -605,6 +605,7 @@ void program_main(void) {
 
   backToDMCP = false;
 
+  fnTimerReset();       //JM Suspects timers not resetting. Duplicating reset. Trying no response on first FN bug.
   lcd_forced_refresh();
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;
   fnTimerReset();                                                                         //vv dr timeouts for kb handling
@@ -701,9 +702,14 @@ void program_main(void) {
        telltale_lastkey = sys_last_key();
        telltale_pos++;
        telltale_pos = telltale_pos & 0x03;
-       char aaa[50];
+       char aaa[100];
        sprintf(aaa,"--> %d    \n",sys_last_key());
        showString(aaa, &standardFont, telltale_pos*75+ 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+       aaa[0]=0;
+       sprintf(aaa,"Rel=%d, nop=%d, St=%d",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_state);
+       showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+       sprintf(aaa,"Key=%d, FN_kp=%d",sys_last_key(), FN_key_pressed);
+       showString(aaa, &standardFont, 121, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
      }
     #endif
 
@@ -712,8 +718,8 @@ void program_main(void) {
       btnFnPressed(NULL, charKey);
       lcd_refresh_dma();
     }
-    else if(key == 0 && FN_key_pressed != 0) {    //JM
-      btnFnReleased(NULL,NULL);
+    else if(key == 0 && FN_key_pressed != 0) {    //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
+      btnFnReleased(NULL,NULL);                   //    in short, it can only execute release after there was a FN press.
       lcd_refresh_dma();
     }
     else if(1 <= key && key <= 37) {

@@ -504,7 +504,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
     if(!dontclear) {                            //Recursively call the same routine to clear the previous line
       underline_softkey(ul_x, ul_y, true);
     }
-    ul_x = xSoftkey;
+    ul_x = xSoftkey;                            //Store cell reference for next call to clear previous line
     ul_y = ySoftKey;
 
 

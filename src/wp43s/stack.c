@@ -228,7 +228,7 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
   liftStack();
 
   longIntegerInit(stack);
-  uIntToLongInteger(stackSize==SS_4 ? 4 : 8, stack);
+  uIntToLongInteger(stackSize == SS_4 ? 4 : 8, stack);
   convertLongIntegerToLongIntegerRegister(stack, REGISTER_X);
   longIntegerFree(stack);
 

@@ -368,6 +368,15 @@ void fnGeometricMeanXY          (uint16_t unusedParamButMandatory) {}
 void fnWeightedMeanX            (uint16_t unusedParamButMandatory) {}
 void fnHarmonicMeanXY           (uint16_t unusedParamButMandatory) {}
 void fnRMSMeanXY                (uint16_t unusedParamButMandatory) {}
+void fnWeightedSampleStdDev     (uint16_t unusedParamButMandatory) {}
+void fnWeightedPopulationStdDev (uint16_t unusedParamButMandatory) {}
+void fnWeightedStandardError    (uint16_t unusedParamButMandatory) {}
+void fnSampleStdDev             (uint16_t unusedParamButMandatory) {}
+void fnPopulationStdDev         (uint16_t unusedParamButMandatory) {}
+void fnStandardError            (uint16_t unusedParamButMandatory) {}
+void fnGeometricSampleStdDev    (uint16_t unusedParamButMandatory) {}
+void fnGeometricPopulationStdDev(uint16_t unusedParamButMandatory) {}
+void fnGeometricStandardError   (uint16_t unusedParamButMandatory) {}
 void fnMaskl                    (uint16_t unusedParamButMandatory) {}
 void fnMaskr                    (uint16_t unusedParamButMandatory) {}
 void fnAsr                      (uint16_t unusedParamButMandatory) {}
@@ -944,7 +953,7 @@ const item_t indexOfItems[] = {
 /*  537 */  { fnConstant,                  42,                          "R" STD_SUB_INFINITY,                          "R" STD_SUB_INFINITY,                          0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  538 */  { fnConstant,                  43,                          "R" STD_SUB_SUN,                               "R" STD_SUB_SUN,                               0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  539 */  { fnConstant,                  44,                          "R" STD_SUB_EARTH,                             "R" STD_SUB_EARTH,                             0,       0,       CAT_CNST, SLS_ENABLED  },
-/*  540 */  { itemToBeCoded,               NOPARAM,                     "s",                                           "s",                                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  540 */  { fnSampleStdDev,              NOPARAM,                     "s",                                           "s",                                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  541 */  { fnConstant,                  45,                          "Sa",                                          "Sa",                                          0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  542 */  { itemToBeCoded,               NOPARAM,                     "SAVE",                                        "SAVE",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  543 */  { fnSb,                        TM_VALUE,                    "SB",                                          "SB",                                          1,      64,       CAT_FNCT, SLS_ENABLED  },
@@ -980,9 +989,9 @@ const item_t indexOfItems[] = {
 /*  573 */  { fnSl,                        TM_VALUE,                    "SL",                                          "SL",                                          0,      63,       CAT_FNCT, SLS_ENABLED  },
 /*  574 */  { itemToBeCoded,               NOPARAM,                     "SLOW",                                        "SLOW",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  575 */  { fnSlvq,                      NOPARAM,                     "SLVQ",                                        "SLVQ",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  576 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  576 */  { fnStandardError,             NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  577 */  { fnGetIntegerSignMode,        NOPARAM,                     "SMODE?",                                      "SMODE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  578 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  578 */  { fnWeightedStandardError,     NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  579 */  { itemToBeCoded,               NOPARAM,                     "SOLVE",                                       "SOLVE",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  580 */  { itemToBeCoded,               NOPARAM,                     "Solver",                                      "Solver",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  581 */  { itemToBeCoded,               NOPARAM,                     "SPEC?",                                       "SPEC?",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
@@ -1017,7 +1026,7 @@ const item_t indexOfItems[] = {
 /*  610 */  { addItemToBuffer,             REGISTER_Y,                  "ST.Y",                                        "ST.Y",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED},
 /*  611 */  { addItemToBuffer,             REGISTER_Z,                  "ST.Z",                                        "ST.Z",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED},
 /*  612 */  { fnSumXY,                     NOPARAM,                     "SUM",                                         "SUM",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  613 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_w,                                 "s" STD_SUB_w,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  613 */  { fnWeightedSampleStdDev,      NOPARAM,                     "s" STD_SUB_w,                                 "s" STD_SUB_w,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  614 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_x STD_SUB_y,                       "s" STD_SUB_x STD_SUB_y,                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  615 */  { fnCvtShorttonKg,             multiply,                    "s.t" STD_RIGHT_ARROW "kg",                    "short",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  616 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                    0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -1132,10 +1141,10 @@ const item_t indexOfItems[] = {
 /*  724 */  { fnGamma,                     NOPARAM,                     STD_GAMMA "(x)",                               STD_GAMMA "(x)",                               0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  725 */  { itemToBeCoded,               NOPARAM,                     STD_delta "x",                                 STD_delta "x",                                 0,       0,       CAT_NONE, SLS_UNCHANGED},
 /*  726 */  { fnDeltaPercent,              NOPARAM,                     STD_DELTA "%",                                 STD_DELTA "%",                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  727 */  { itemToBeCoded,               NOPARAM,                     STD_epsilon,                                   STD_epsilon,                                   0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  727 */  { fnGeometricSampleStdDev,     NOPARAM,                     STD_epsilon,                                   STD_epsilon,                                   0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  728 */  { fnConstant,                  60,                          STD_epsilon STD_SUB_0,                         STD_epsilon STD_SUB_0,                         0,       0,       CAT_CNST, SLS_ENABLED  },
-/*  729 */  { itemToBeCoded,               NOPARAM,                     STD_epsilon STD_SUB_m,                         STD_epsilon STD_SUB_m,                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  730 */  { itemToBeCoded,               NOPARAM,                     STD_epsilon STD_SUB_p,                         STD_epsilon STD_SUB_p,                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  729 */  { fnGeometricStandardError,    NOPARAM,                     STD_epsilon STD_SUB_m,                         STD_epsilon STD_SUB_m,                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  730 */  { fnGeometricPopulationStdDev, NOPARAM,                     STD_epsilon STD_SUB_p,                         STD_epsilon STD_SUB_p,                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  731 */  { itemToBeCoded,               NOPARAM,                     STD_zeta "(x)",                                STD_zeta "(x)",                                0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  732 */  { fnConstant,                  61,                          STD_lambda STD_SUB_C,                          STD_lambda STD_SUB_C,                          0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  733 */  { fnConstant,                  62,                          STD_lambda STD_SUB_C STD_SUB_n,                STD_lambda STD_SUB_C STD_SUB_n,                0,       0,       CAT_CNST, SLS_ENABLED  },
@@ -1151,14 +1160,14 @@ const item_t indexOfItems[] = {
 /*  743 */  { itemToBeCoded,               NOPARAM,                     STD_PI STD_SUB_n,                              STD_PI STD_SUB_n,                              0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  744 */  { fnPi,                        NOPARAM,                     STD_pi,                                        STD_pi,                                        0,       0,       CAT_NONE, SLS_ENABLED  },
 /*  745 */  { itemToBeCoded,               NOPARAM,                     STD_SIGMA STD_SUB_n,                           STD_SIGMA STD_SUB_n,                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  746 */  { itemToBeCoded,               NOPARAM,                     STD_sigma,                                     STD_sigma,                                     0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  746 */  { fnPopulationStdDev,          NOPARAM,                     STD_sigma,                                     STD_sigma,                                     0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  747 */  { fnConstant,                  72,                          STD_sigma STD_SUB_B,                           STD_sigma STD_SUB_B,                           0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  748 */  { fnStatSum,                   9,                           STD_SIGMA "ln" STD_SUP_2 "x",                  STD_SIGMA "ln" STD_SUP_2 "x",                  0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  749 */  { fnStatSum,                   12,                          STD_SIGMA "ln" STD_SUP_2 "y",                  STD_SIGMA "ln" STD_SUP_2 "y",                  0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  750 */  { fnStatSum,                   8,                           STD_SIGMA "lnx",                               STD_SIGMA "lnx",                               0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  751 */  { fnStatSum,                   7,                           STD_SIGMA "lnxy",                              STD_SIGMA "lnxy",                              0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  752 */  { fnStatSum,                   11,                          STD_SIGMA "lny",                               STD_SIGMA "lny",                               0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  753 */  { itemToBeCoded,               NOPARAM,                     STD_sigma STD_SUB_w,                           STD_sigma STD_SUB_w,                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  753 */  { fnWeightedPopulationStdDev,  NOPARAM,                     STD_sigma STD_SUB_w,                           STD_sigma STD_SUB_w,                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  754 */  { fnStatSum,                   1,                           STD_SIGMA "x",                                 STD_SIGMA "x",                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  755 */  { fnStatSum,                   3,                           STD_SIGMA "x" STD_SUP_2,                       STD_SIGMA "x" STD_SUP_2,                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  756 */  { fnStatSum,                   4,                           STD_SIGMA "x" STD_SUP_2 "y",                   STD_SIGMA "x" STD_SUP_2 "y",                   0,       0,       CAT_FNCT, SLS_ENABLED  },

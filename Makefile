@@ -86,7 +86,7 @@ SRC_WP43S                = \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
 		random.c realPart.c remainder.c reToCx.c round.c roundi.c sign.c sin.c sinc.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
-		wp34s.c) \
+		variance.c wp34s.c) \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/browsers/, \

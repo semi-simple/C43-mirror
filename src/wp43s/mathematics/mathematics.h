@@ -101,5 +101,6 @@
 #include "ulp.h"
 #include "unitVector.h"
 #include "xthRoot.h"
+#include "variance.h"
 #include "wp34s.h"
 

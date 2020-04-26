@@ -18,9 +18,12 @@
  * \file mean.h
  ***********************************************/
 
-int checkMinimumDataPoints(const real_t *n);
-void fnMeanXY             (uint16_t unusedParamButMandatory);
-void fnGeometricMeanXY    (uint16_t unusedParamButMandatory);
-void fnWeightedMeanX      (uint16_t unusedParamButMandatory);
-void fnHarmonicMeanXY     (uint16_t unusedParamButMandatory);
-void fnRMSMeanXY          (uint16_t unusedParamButMandatory);
+void fnWeightedSampleStdDev(uint16_t unusedParamButMandatory);
+void fnWeightedPopulationStdDev(uint16_t unusedParamButMandatory);
+void fnWeightedStandardError(uint16_t unusedParamButMandatory);
+void fnSampleStdDev(uint16_t unusedParamButMandatory);
+void fnPopulationStdDev(uint16_t unusedParamButMandatory);
+void fnStandardError(uint16_t unusedParamButMandatory);
+void fnGeometricSampleStdDev(uint16_t unusedParamButMandatory);
+void fnGeometricPopulationStdDev(uint16_t unusedParamButMandatory);
+void fnGeometricStandardError(uint16_t unusedParamButMandatory);

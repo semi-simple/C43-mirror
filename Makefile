@@ -68,7 +68,7 @@ DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
 SRC_WP43S                = \
 	$(addprefix src/wp43s/, \
-		jm.c jm_graph.c \
+		addons.c jm.c jm_graph.c \
 		assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \

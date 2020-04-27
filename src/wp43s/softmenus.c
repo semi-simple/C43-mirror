@@ -76,7 +76,7 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };
 
 const int16_t menu_TRI[]         = { ITM_sin,                       ITM_cos,                    ITM_tan,                  ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
-                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_toREC,                   ITM_toPOL,                          //JM re-arranged menu TRIG menu
+                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_toREC2,                  ITM_toPOL2,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
 const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM,                     
@@ -207,7 +207,7 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PGMTST,            -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -507,7 +507,7 @@ const int16_t menu_A_HOME[360]   = { -1,-1,-1,-1,-1,-1,        -1,-1,-1,-1,-1,-1
 const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
 /*HOME0 */
 /*0x18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                     ITM_toREC,           ITM_toPOL,       ITM_PARALLEL,      KEY_CC,           ITM_MAGNITUDE,    ITM_ANGLE,                          //JM HOME
+                                     ITM_toREC2,          ITM_toPOL2,      ITM_PARALLEL,      KEY_CC,           ITM_MAGNITUDE,    ITM_ANGLE,                          //JM HOME
                                      ITM_DEG,             ITM_RAD,         ITM_DMS,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
 /*HOME-1*/                                                                                                                                                             //JM HOME
 /*1*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
@@ -553,7 +553,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
  /*ROW 1    */
                                     ITM_SIGMAPLUS,        ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,           ITM_XEQ,
  /* f       */                      ITM_SIGMAMINUS,       ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
-/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 
 
 
@@ -562,7 +562,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
 /* g       */                       ITM_VIEW,             ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
 /* g       */                       -MNU_STK,             -MNU_PARTS,       -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
 
-/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+/* g       */                       ITM_PROFRC,           KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 /* g       */                       ITM_MAGNITUDE,        ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,          ITM_RTN,      
 /* g       */                       -MNU_PRINT,           -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
@@ -597,7 +597,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
  /*ROW 1    */                      ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
  /* f       */                  //  ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
                                     ITM_NULL,              ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_GTO,    
-/* g       */                       ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC,        ITM_toPOL,    
+/* g       */                       ITM_PROFRC,            KEY_HASH,         ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 
 
 #ifdef XXXX
@@ -626,7 +626,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
                                                                                                                                                                                                                                                 //JM HOME
                                                                    ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                                                    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
-                                                                   ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC,                   ITM_toPOL,                          //JM HOME
+                                                                   ITM_PROFRC,                    KEY_HASH,                   ITM_DOTDEMU,              ITM_ms,                ITM_toREC2,                  ITM_toPOL2,                          //JM HOME
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
 #endif //XXXX
 

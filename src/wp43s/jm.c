@@ -480,47 +480,6 @@ void fnRCL(int16_t inp) {
 
 
 
-void fn_cnst_op_j() {
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(const_1, REGISTER_IMAG34_DATA(REGISTER_X));
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
-}
-
-void fn_cnst_op_aa() {
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 - 0.866
-  realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
-  fnChangeSign(ITM_CHS);
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
-}
-
-void fn_cnst_op_a() {
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 + 0.866i  : op a
-  fnChangeSign(ITM_CHS);
-  realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
-}
-
-void fn_cnst_0_cpx() {
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
-  realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
-}
-
-void fn_cnst_1_cpx() {
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-  realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
-  realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
-  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
-}
 
 
 
@@ -532,114 +491,6 @@ void fn_cnst_1_cpx() {
  ***********************************************/
 void fnJM(uint16_t JM_OPCODE) {
 
-
-
-//********************************************
-/*DEPRECIATED REPLACED WITH PROPER fnXthRoot
-  if(JM_OPCODE == 1) {                                          // JM_OPCODE = 1 : Temporary implementation of xthe root of y, until Martins is done
-
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO TMP
-
-    float tmpr;
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    tmpr = strtof(tmpStr3000, NULL);
-
-    if(tmpr == 3) {           //If 3, rather use the internal third root routine using 39 bits and with some logic allowing (-8)^(1/3)=-2
-      fnDrop(0);
-      fnCubeRoot(0);
-    }
-    else if(tmpr == 2) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
-      fnDrop(0);
-      fnSquareRoot(0);
-    }
-    else if(tmpr == 4) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
-      fnDrop(0);
-      fnSquareRoot(0);
-      fnSquareRoot(0);
-    }
-    else if(tmpr == 6) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
-      fnDrop(0);
-      fnCubeRoot(0);
-      fnSquareRoot(0);
-    }
-    else if(tmpr == 8) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
-      fnDrop(0);
-      fnSquareRoot(0);
-      fnSquareRoot(0);
-      fnSquareRoot(0);
-    }
-    else if(tmpr == 9) {      //If 2, rather use the internal squareroot routine using 39 bits and with some logic allowing sqrt(-1)=i
-      fnDrop(0);
-      fnCubeRoot(0);
-      fnCubeRoot(0);
-    }
-    else {
-      fnInvert(0);
-      fnPower(0);
-    }
-    refreshStack();
-    copySourceRegisterToDestRegister(99, REGISTER_L);           // STO TMP
-
-  } //end OPCODE 1
-  else
-*/
-
-
-
-//********************************************
-//DEPRECIATED, Martin provided proper, Martin removed
-/*
-  if(JM_OPCODE == 2) {                                          // JM_OPCODE = 2 : Angle from complex number.
-    uint16_t cm;
-
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    saveStack();
-    cm = complexMode;
-    STACK_LIFT_ENABLE;
-    liftStack();                                                // Prepare for new X
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    fn_cnst_0_cpx();
-    fnAdd(0);                                                   // +
-    complexMode = CM_POLAR;                                     // SET POLAR
-    fnComplexCCCC_CPX(0);                                       // COMPLEX
-    fnDropY(0);                                                 // DROP Y
-    complexMode = cm;                                           // RCL POLAR MODE
-    refreshStack();
-  }
-  else
-*/
-
-//********************************************
-  if(JM_OPCODE == 3) {                                          //operator a
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    STACK_LIFT_ENABLE;
-    liftStack();
-    fn_cnst_op_a();
-  }
-  else
-
-  if(JM_OPCODE == 4) {                                          //operater a sq
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    STACK_LIFT_ENABLE;
-    liftStack();
-    fn_cnst_op_aa();
-  }
-  else
-
-  if(JM_OPCODE == 5) {                                          //Operator j
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    STACK_LIFT_ENABLE;
-    liftStack();
-    fn_cnst_op_j();
-  }
-  else
 
   if(JM_OPCODE == 6) {                                          //Delta to Star   ZYX to ZYX; destroys IJKL & 99
     saveStack();
@@ -730,12 +581,12 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_a();
+    fn_cnst_op_a(0);
     fnRCL(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_aa();
+    fn_cnst_op_aa(0);
     fnRCL(REGISTER_J);                                       // A1
     fnMultiply(0);                                              // * aa
     fnAdd(0);                                                   // +
@@ -744,12 +595,12 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_aa();
+    fn_cnst_op_aa(0);
     fnRCL(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_a();
+    fn_cnst_op_a(0);
     fnRCL(REGISTER_J);                                       // A1
     fnMultiply(0);                                              // * aa
     fnAdd(0);                                                   // +
@@ -784,12 +635,12 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_a();
+    fn_cnst_op_a(0);
     fnRCL(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_aa();
+    fn_cnst_op_aa(0);
     fnRCL(REGISTER_I);                                       // VC
     fnMultiply(0);                                              // * aa
     fnAdd(0);                                                   // +
@@ -801,12 +652,12 @@ void fnJM(uint16_t JM_OPCODE) {
 
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_aa();
+    fn_cnst_op_aa(0);
     fnRCL(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_a();
+    fn_cnst_op_a(0);
     fnRCL(REGISTER_I);                                       // VC
     fnMultiply(0);                                              // * aa
     fnAdd(0);                                                   // +
@@ -830,7 +681,7 @@ void fnJM(uint16_t JM_OPCODE) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_j();
+    fn_cnst_op_j(0);
     fnMultiply(0);                                              // * aa
     fnExp(0);
     refreshStack();
@@ -941,14 +792,14 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(REGISTER_I);                                          //
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_a();
+    fn_cnst_op_a(0);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
     fnRCL(REGISTER_I);                                          //
     STACK_LIFT_ENABLE;
     liftStack();
-    fn_cnst_op_aa();
+    fn_cnst_op_aa(0);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
@@ -1052,173 +903,62 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
 
-  if(JM_OPCODE == 28) {                                         //toRECT
-    //saveStack();       //Not savestack because both functions already have savestack.
-    if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-      fnComplexMode(CM_RECTANGULAR);
-    }
-    else
-      fnToRect(0);
-  }
-  else
 
-  if(JM_OPCODE == 29) {                                         //toPOLAR
-    //saveStack();       //Not savestack because both functions already have savestack.
-    if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-      fnComplexMode(CM_POLAR);
-    }
-    else
-      fnToPolar(0);
-  }
-  else
-
-  if(JM_OPCODE == 30) {                                         //.ms
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
-
-    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
-    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
-
-      if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
-#ifndef TESTSUITE_BUILD
-        runFunction(ITM_toDMS);
-#endif
-      }
-      else {
-/*    if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {   //JM wait for future HMS
-        runFunction(ITM_toHMS); break;
-      }
-      else { */
-#ifndef TESTSUITE_BUILD
-        switch (getRegisterAngularMode(REGISTER_X)) {
-          case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
-          case AM_DMS   : {runFunction(ITM_DMSto);  } break;
-          case AM_GRAD  : {runFunction(ITM_GRADto); } break;
-          case AM_RADIAN: {runFunction(ITM_RADto);  } break;
-          case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-          default: break;
-        }
-#endif
-      }
-    }
-    copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
-    refreshRegisterLine(REGISTER_X);
-  }
-  else
 
   if(JM_OPCODE == 31) {                                         //UNDO
     restoreStack();
   }
   else
 
-  if(JM_OPCODE == 32) {                                       
-  //REMOVED, NOTHING
-  }
-  else
 
-/*
-DEPRECIATED for Martin
-  if(JM_OPCODE == 33) {                                       //screenshot
-    #ifdef DMCP_BUILD
-    create_screenshot(0);
-    #endif
-  }
-  else
-*/
-
-  if(JM_OPCODE >= 34 && JM_OPCODE <= 42)   {                                       //screenshot
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_L, 99);   // STO TMP
-    switch (JM_OPCODE) {
-      case 34: {
-        fnStrInputLongint("1000000000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 35: {
-        fnStrInputLongint("1000000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 36: {
-        fnStrInputLongint("1000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 37: {
-        fnStrInputLongint("1000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 38: {
-        fnStrInputLongint("1000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 39: {
-        fnStrInputLongint("1000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-
-      case 40: {
-        fnStrInputLongint("1000000000000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 41: {
-        fnStrInputLongint("1000000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      case 42: {
-        fnStrInputLongint("1000000000000");
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-        multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-        adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
-      } break;
-      default: break;
-    }
-    copySourceRegisterToDestRegister(99, REGISTER_L);   // STO TMP
-    refreshRegisterLine(REGISTER_X);
-  }
-
- else
 
  if(JM_OPCODE == 45) {                                         // NEXT |PRIME ROUTINE
-
+    #ifndef TESTSUITE_BUILD
+    uint32_t getUptimeMs0 = getUptimeMs();
     int16_t ix;
-    ix = 40;
+    ix = 0;
     //fnStrInputLongint("4776913109852041418248056622882488319");
     fnStore(ix);
 
-    while (ix < 99) {
-#ifndef TESTSUITE_BUILD
+    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+    clearScreen(false,true,true);
+    print_linestr("Primes:",true);
+    longInteger_t lgInt;
+    longIntegerInit(lgInt);
+
+    while (ix <= 9 ) {
       runFunction(ITM_NEXTP);
       fnStore(ix);
-#endif
+
+      char tmpstr[200];
+      char tmpstr2[300];
+      sprintf(tmpstr2,"[%d]:",ix);
+      longIntegerToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
+      strcat(tmpstr2,tmpstr);
+
+      print_linestr(tmpstr2,false);
+
       ix++;
+
     }
+    getUptimeMs0 = getUptimeMs() - getUptimeMs0;
+
+    STACK_LIFT_ENABLE;
+    liftStack();
+    uIntToLongInteger(getUptimeMs0, lgInt);
+    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    longIntegerFree(lgInt);
+    #endif
 
  } 
 
-
+/*
 else
  if(JM_OPCODE == 46) {                                         // LISTXY
    fnStatList();
  } 
-
+*/
 
 
 // Item 255 is NOP
@@ -1226,19 +966,6 @@ else
 }
 
 
-void fnJM_fnToPolar(uint16_t unusedParamButMandatory) {
-  fnJM(29);
-}
-
-
-void fnJM_fnToRect(uint16_t unusedParamButMandatory) {
-  fnJM(28);
-}
-
-
-void fnJM_ms(uint16_t unusedParamButMandatory) {
-  fnJM(30);
-}
 
 
 /********************************************//**

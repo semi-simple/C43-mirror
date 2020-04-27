@@ -48,7 +48,7 @@ void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called fro
 void graph_setupmemory(void);
 void graph_end        (void);
 
-void fnStatList       (void);
+void fnStatList       (uint16_t unusedParamButMandatory);
 
 
 //TODO

@@ -1779,7 +1779,7 @@
 #define ITM_op_a2                     1740   //JM OPERATORS
 #define ITM_op_j                      1741   //JM OPERATORS
 #define ITM_BASE_HOME                 1742   //JM BASEMENU
-#define ITM_1743                      1743
+#define ITM_PGMTST                    1743   //JM Generic program test
 #define ITM_BASE_AHOME                1744   //JM BASEMENU
 #define ITM_H_SUMRY                   1745   //JMHOME
 #define ITM_H_REPLCA                  1746   //JMHOME
@@ -1803,7 +1803,7 @@
 #define ITM_EE_STO_V_Z                1764   //JM EE
 #define ITM_EE_X2BAL                  1765   //JM EE
 #define KEY_COMPLEX                   1766   //JM CPX
-#define NOT_USED1767                  1767
+#define Not_used1767                  1767   //JM
 #define KEY_TYPCON_UP                 1768   //JM CPX
 #define KEY_TYPCON_DN                 1769   //JM CPX
 #define ITM_HOMEx3T                   1770   //JM HOME.3T
@@ -1994,8 +1994,10 @@
 #define ITM_USER_USER                 1952   //JM USER
 #define ITM_USER_SIGMAPLUS            1953   //JM USER
 #define ITM_LISTXY                    1954   //JMSTAT
+#define ITM_toPOL2                    1955   //JM
+#define ITM_toREC2                    1956   //JM
 
-#define LAST_ITEM                     1955   //JM
+#define LAST_ITEM                     1957   //JM
 
 #define CHR_PROD_SIGN                 9999
 

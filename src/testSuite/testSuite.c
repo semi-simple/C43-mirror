@@ -47,6 +47,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArctan",               fnArctan              },
   {"fnArctanh",              fnArctanh             },
   {"fnArg",                  fnArg                 },
+  {"fnArg_all",              fnArg_all             },
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
   {"fnCb",                   fnCb                  },
@@ -163,8 +164,10 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },
   {"fnTanh",                 fnTanh                },
-  {"fnJM_fnToPolar",         fnJM_fnToPolar        },     //JM
-  {"fnJM_fnToRect",          fnJM_fnToRect         },     //JM
+  {"fnToPolar",              fnToPolar             },
+  {"fnToRect",               fnToRect              },
+  {"fnToPolar2",             fnToPolar2            },     //JM
+  {"fnToRect2",              fnToRect2             },     //JM
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"fnXthRoot",              fnXthRoot             },

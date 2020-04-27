@@ -88,13 +88,6 @@ void fnArg(uint16_t unusedParamButMandatory) {
 
     adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
   }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34 || getRegisterDataType(REGISTER_X) == dtLongInteger) {       //JM vv add the obvious case that a number has 0 degrees. Why error for this.
-
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
-    realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-
-    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  }                                                                                                                //JM ^^
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

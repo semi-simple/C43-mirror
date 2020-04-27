@@ -920,7 +920,7 @@ void graph_prepscreen (void){
 
 
 
-void fnStatList(void) {
+void fnStatList(uint16_t unusedParamButMandatory) {
   char tmpstr[100];
   int16_t ix, ixx, statnum;
 

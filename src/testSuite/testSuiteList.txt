@@ -131,6 +131,8 @@ ultimateQuestionOfLife
 
 rectangularToPolar
 polarToRectangular
+rectangularToPolarB
+polarToRectangularB
 
 ceil
 floor

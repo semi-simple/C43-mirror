@@ -279,31 +279,31 @@ char line[100];               /* Line buffer */
     /* Opens an existing file. If not exist, creates a new file. */
     fr = f_open(&fil, "message.txt", FA_READ | FA_OPEN_ALWAYS);
     if (fr) return (int)fr;
-    sprintf(line,"Opened file read--> %d    \n",fr);        print_line(true);
-    while (f_gets(line, sizeof line, &fil)) {               print_line(false); }
+    sprintf(line,"Opened file read--> %d    \n",fr);        print_linestr(line,true);
+    while (f_gets(line, sizeof line, &fil)) {               print_linestr(line,false); }
     f_close(&fil);
 
 
     /* Prepare to write */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
-    sprintf(line,"Write enable?--> %d    \n",fr);           print_line(false);
+    sprintf(line,"Write enable?--> %d    \n",fr);           print_linestr(line,false);
 
     /* Opens an existing file. If not exist, creates a new file. */
     fr = f_open(&fil, "message.csv", FA_OPEN_APPEND | FA_WRITE);
     if (fr) {
-      sprintf(line,"Open append error--> %d    \n",fr);     print_line(false);
+      sprintf(line,"Open append error--> %d    \n",fr);     print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
     }
 
-    sprintf(line,"Opened file append--> %d    \n",fr);      print_line(false);
+    sprintf(line,"Opened file append--> %d    \n",fr);      print_linestr(line,false);
 
     /* Seek to end of the file to append data */
     fr = f_lseek(&fil, f_size(&fil));
     if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_line(false);
+      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -314,10 +314,10 @@ char line[100];               /* Line buffer */
 //    TCHAR aa;
 //    aa = 48;
 //    fr = f_putc(aa,&fil);
-//    sprintf(line,"puts--> %d    \n",fr);                    print_line(false);
+//    sprintf(line,"puts--> %d    \n",fr);                    print_linestr(line,false);
 
     fr = f_puts("ABCDEF\n",&fil);
-    sprintf(line,"puts--> %d    \n",fr);                    print_line(false);
+    sprintf(line,"puts--> %d    \n",fr);                    print_linestr(line,false);
 
     fr = f_close(&fil);
     sys_disk_write_enable(0);
@@ -348,7 +348,7 @@ char line[100];               /* Line buffer */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);    print_line(true);
+      sprintf(line,"Write access error--> %d    \n",fr);    print_linestr(line,true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -357,7 +357,7 @@ char line[100];               /* Line buffer */
     /* Opens an existing file. If not exist, creates a new file. */
     fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
     if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);       print_line(false);
+      sprintf(line,"File open error--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -366,14 +366,14 @@ char line[100];               /* Line buffer */
     /* Seek to end of the file to append data */
     fr = f_lseek(&fil, f_size(&fil));
     if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_line(false);
+      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
     }
 
 //uses tmpstr3000
-    //sprintf(line,"%f, %f\n",x,y);                           print_line(false);    
+    //sprintf(line,"%f, %f\n",x,y);                           print_linestr(line,false);    
     sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
     fr = f_puts(tmpStr3000, &fil);
 
@@ -381,7 +381,7 @@ char line[100];               /* Line buffer */
     /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);     print_line(false);
+      sprintf(line,"File close error--> %d    \n",fr);     print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -403,7 +403,7 @@ char line[100];               /* Line buffer */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);     print_line(true);
+      sprintf(line,"Write access error--> %d    \n",fr);     print_linestr(line,true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -413,7 +413,7 @@ char line[100];               /* Line buffer */
     /* Opens an existing file. If not exist, creates a new file. */
     fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
     if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);       print_line(false);
+      sprintf(line,"File open error--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -422,7 +422,7 @@ char line[100];               /* Line buffer */
     /* Seek to end of the file to append data */
     fr = f_lseek(&fil, f_size(&fil));
     if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_line(false);
+      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -434,7 +434,7 @@ char line[100];               /* Line buffer */
     /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);      print_line(false);
+      sprintf(line,"File close error--> %d    \n",fr);      print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -468,17 +468,18 @@ int16_t test_xy(float x, float y){
 
 
 int16_t line_y;
-void print_line(bool_t line_init) {
-#ifndef TESTSUITE_BUILD
-char line[100];               /* Line buffer */
-    if(line_init) {line_y = 20;}
-    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
-    line_y += 20;
-#endif
-}
+
+//void print_line(bool_t line_init) {
+//#ifndef TESTSUITE_BUILD
+//char line[100];               /* Line buffer */
+//    if(line_init) {line_y = 20;}
+//    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
+//    line_y += 20;
+//#endif
+//}
 
 
-void print_linestr(const char line1[100], bool_t line_init) {
+void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 

@@ -907,6 +907,72 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/jm_graph.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/jm_graph.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/jm.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/jm.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/addons.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/addons.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/textfiles.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/textfiles.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/keyboardTweak.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/keyboardTweak.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/radioButtonCatalog.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/radioButtonCatalog.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/logicalOps/and.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

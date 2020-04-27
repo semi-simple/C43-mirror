@@ -33,6 +33,6 @@ uint32_t     mem__32;                                 //JM_CSV
 int16_t      testjm(void);
 int16_t      test_xy(float x, float y);
 void         fnP_All_Regs(uint16_t unusedParamButMandatory);
-void         print_line(bool_t line_init);
-void         print_linestr(const char line1[100], bool_t line_init);
+//void         print_line(bool_t line_init);
+void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 int16_t      test_line(char *inputstring);

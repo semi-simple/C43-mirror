@@ -20,16 +20,22 @@
 
 #include "wp43s.h"
 
-// Standard deviations and standard errors
+/* Standard deviations and standard errors.
+ *
+ * The computation involves subtraction of large numbers that quite possible
+ * are close to each other.  Because of this, the start of the computation is
+ * performed with a larger number of significant digits so that the initial
+ * multiplication is exact.  Subsequently, the usual 39 digits are used.
+ */
 static void do_stddev(const real_t *sumXX, const real_t *sumX,
 		      const real_t *numberX, int sample, 
 		      int rootn, int exp, int regIndex) {
   real_t tempReal1, tempReal2, tempReal3;
   const real_t *p = numberX;
 
-  realMultiply(sumX, sumX, &tempReal1, &ctxtReal39);
-  realDivide(&tempReal1, numberX, &tempReal2, &ctxtReal39);
-  realSubtract(sumXX, &tempReal2, &tempReal1, &ctxtReal39);
+  realMultiply(sumX, sumX, &tempReal1, &ctxtReal75);
+  realDivide(&tempReal1, numberX, &tempReal2, &ctxtReal75);
+  realSubtract(sumXX, &tempReal2, &tempReal1, &ctxtReal75);
   if (sample) {
     realSubtract(numberX, const_1, &tempReal3, &ctxtReal39);
     p = &tempReal3;

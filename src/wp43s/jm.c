@@ -916,6 +916,7 @@ void fnJM(uint16_t JM_OPCODE) {
     #ifndef TESTSUITE_BUILD
     uint32_t getUptimeMs0 = getUptimeMs();
     int16_t ix;
+    ix = 0;
     //fnStrInputLongint("4776913109852041418248056622882488319");
 
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph

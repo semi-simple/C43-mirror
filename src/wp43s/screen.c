@@ -495,18 +495,34 @@ void underline(int16_t y) {
    }
 }
 
+char ul[25];
+void clear_ul(void) {
+  ul[24]=0;
+  int8_t iix;
+  for(iix=0; iix<25; iix++) {
+    ul[iix]=32;
+  }
+}
 
-int16_t ul_x, ul_y;                           //JM vv LONGPRESS
+                                                //JM vv LONGPRESS.   false auto clears
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
 
   if(jm_FG_LINE) {
-    if(!dontclear) {                            //Recursively call the same routine to clear the previous line
-      underline_softkey(ul_x, ul_y, true);
-    }
-    ul_x = xSoftkey;                            //Store cell reference for next call to clear previous line
-    ul_y = ySoftKey;
 
+//JMUL all changed  vv  
+    if(!dontclear) {                            //Recursively call the same routine to clear the previous line
+      for(y=0; y<ySoftKey; y++) {
+        if(ul[y*6+xSoftkey]==33) {
+          underline_softkey(xSoftkey,y,true);
+        }
+      }
+    }
+  
+    if(ul[ySoftKey*6+xSoftkey]==33) ul[ySoftKey*6+xSoftkey]=32; else
+      if(ul[ySoftKey*6+xSoftkey]==32) ul[ySoftKey*6+xSoftkey]=33;
+    //print_linestr(ul,true);
+//JMUL all changed  ^^
 
     if(0 <= xSoftkey && xSoftkey <= 5) {
       x1 = 67 * xSoftkey - 1;
@@ -1097,6 +1113,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
     }
 
     if(clearSoftkeys) {
+      clear_ul(); //JMUL
       for(y=167; y<SCREEN_HEIGHT; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
           clearPixel(x, y);
@@ -1115,6 +1132,7 @@ void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearS
     }
 
     if(clearSoftkeys) {
+      clear_ul(); //JMUL
       lcd_fill_rect(0, 167, SCREEN_WIDTH, 73, 0);
     }
   #endif
@@ -1271,6 +1289,7 @@ void resetTemporaryInformation(void) {
 
     case TI_STATISTIC_SUMS:    refreshRegisterLine(REGISTER_Y); break;
 
+    case TI_ms:                                        //JMms
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
@@ -1819,7 +1838,21 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
-            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+
+             if(temporaryInformation == TI_ms) {                             //JMms vv
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "t (ms)" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            if(prefixWidth > 0) {
+              if(regist == REGISTER_X) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              }
+            }                                                               //JMms ^^
+
+           longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION);          //JMms added prefix
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

@@ -153,9 +153,12 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation);
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 char* itoa(int value, char* result, int base);
 
-#define TI_ABC                 30    //JM EE
-#define TI_ABBCCA              31    //JM EE
-#define TI_012                 32    //JM EE
+#define TI_ABC                 96    //JM EE
+#define TI_ABBCCA              97    //JM EE
+#define TI_012                 98    //JM EE
+#define TI_SHOW_REGISTER_BIG   99    //JM_SHOW
+#define TI_ms                 100    //JMms
+
 #define ID_43S                  0    //JM Input Default
 #define ID_DP                   2    //JM Input Default
 #define ID_CPXDP                4    //JM Input Default

@@ -389,6 +389,8 @@ void setupDefaults(void) {
   tmp__32=0;                                                     //JMCSV
   mem__32=0;                                                     //JMCSV
   SHOWregis = 9999;                                              //JM
+  clear_ul();                                                    //JMUL
+
 
 
   

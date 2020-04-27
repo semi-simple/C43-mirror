@@ -2353,7 +2353,7 @@ const item_t indexOfItems[] = {
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1896 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Set BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 /* 1897 */  { fnSigmaAssign,               ITM_PR,                      STD_SIGMA "+PGM",                              STD_SIGMA "+PGM",                              0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER
-/* 1898 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "RND",                                         0,       0,       CAT_NONE, SLS_ENABLED  },
+/* 1898 */  { fnRoundi,                    NOPARAM,                     "ROUNDI",                                      STD_RIGHT_ARROW "I",                          0,       0,       CAT_NONE, SLS_ENABLED  },
 /* 1899 */  { fnSigmaAssign,               ITM_AIM,                     STD_SIGMA "+" STD_alpha,                       STD_SIGMA "+" STD_alpha,                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1900 */  { fnGetSigmaAssignToX,         NOPARAM,                     STD_SIGMA "+ toX",                             STD_SIGMA "+ toX",                             0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1901 */  { fnUserJM,                    JM_ASSIGN,                   "ASSIGN",                                      "ASSIGN",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},

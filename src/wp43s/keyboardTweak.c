@@ -441,15 +441,15 @@ void btnFnPressed(void *w, void *data) {
     FN_timed_out_to_NOP = false;
     if(!shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
-      underline_softkey(FN_key_pressed-38, 0, true /*dontclear at first call*/);
+      underline_softkey(FN_key_pressed-38, 0, !true /*dontclear at first call*/); //JMUL inverted clearflag
     }
     else if(shiftF && !shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,6),0);
-      underline_softkey(FN_key_pressed-38, 1, true /*dontclear at first call*/);
+      underline_softkey(FN_key_pressed-38, 1, !true /*dontclear at first call*/); //JMUL inverted clearflag
     }
     else if(!shiftF && shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,12),0);
-      underline_softkey(FN_key_pressed-38, 2, true /*dontclear at first call*/);
+      underline_softkey(FN_key_pressed-38, 2, !true /*dontclear at first call*/); //JMUL inverted clearflag
     }                                                                      //further shifts are done within FN_handler
   }
 #ifdef INLINE_TEST

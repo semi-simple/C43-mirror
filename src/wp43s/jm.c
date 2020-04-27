@@ -918,11 +918,13 @@ void fnJM(uint16_t JM_OPCODE) {
     int16_t ix;
     ix = 0;
     //fnStrInputLongint("4776913109852041418248056622882488319");
-    fnStore(ix);
 
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+
     clearScreen(false,true,true);
-    print_linestr("Primes:",true);
+    print_linestr("R0-9 Next primes; Y Last prime; X Time, ms:",true);
+    force_refresh();
+
     longInteger_t lgInt;
     longIntegerInit(lgInt);
 
@@ -937,6 +939,7 @@ void fnJM(uint16_t JM_OPCODE) {
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);
+      force_refresh();
 
       ix++;
 
@@ -953,12 +956,6 @@ void fnJM(uint16_t JM_OPCODE) {
 
  } 
 
-/*
-else
- if(JM_OPCODE == 46) {                                         // LISTXY
-   fnStatList();
- } 
-*/
 
 
 // Item 255 is NOP

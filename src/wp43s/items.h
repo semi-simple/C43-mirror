@@ -26,6 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1803,7 +1804,7 @@
 #define ITM_EE_STO_V_Z                1764   //JM EE
 #define ITM_EE_X2BAL                  1765   //JM EE
 #define KEY_COMPLEX                   1766   //JM CPX
-#define Not_used1767                  1767   //JM
+#define Not_used1767                  1767
 #define KEY_TYPCON_UP                 1768   //JM CPX
 #define KEY_TYPCON_DN                 1769   //JM CPX
 #define ITM_HOMEx3T                   1770   //JM HOME.3T
@@ -1937,7 +1938,7 @@
 #define ITM_U_KEY_SIGMA               1895   //JM USER
 #define ITM_SET_TEST_BS               1896   //INLINE_TEST
 #define ITM_U_KEY_PRGM                1897   //JM USER
-#define ITM_RND                       1898   //JM ROUND
+#define ITM_RI                        1898   //JM ROUND
 #define ITM_U_KEY_ALPHA               1899   //JM USER
 #define ITM_SH_NORM_E                 1900   //JM USER NORMAL
 #define ITM_JM_ASN                    1901   //JM ASSIGN

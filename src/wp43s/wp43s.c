@@ -389,10 +389,7 @@ void setupDefaults(void) {
   tmp__32=0;                                                     //JMCSV
   mem__32=0;                                                     //JMCSV
   SHOWregis = 9999;                                              //JM
-  clear_ul();                                                    //JMUL
-
-
-
+  
   
   softmenuStackPointer_MEM = 0;                                  //JM HOME temporary flag to remember and restore state
 
@@ -403,6 +400,7 @@ void setupDefaults(void) {
   telltale = 0;                                                  //JMGRAPH MEM
   
   #ifndef TESTSUITE_BUILD
+    clear_ul();                                                  //JMUL
     showShiftState();
   #endif // TESTSUITE_BUILD
 

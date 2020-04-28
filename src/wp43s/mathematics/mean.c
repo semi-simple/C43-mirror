@@ -20,9 +20,7 @@
 
 #include "wp43s.h"
 
-int checkMinimumDataPoints(uint32_t n) {
-  real_t tempReal1;
-
+int checkMinimumDataPoints(const real_t *n) {
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,8 +29,7 @@ int checkMinimumDataPoints(uint32_t n) {
     #endif
     return 0;
   }
-  uInt32ToReal(n, &tempReal1);
-  if (realCompareLessEqual(SIGMA_N, &tempReal1)) {
+  if (realCompareLessThan(SIGMA_N, n)) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is insufficient statistical data available!");
@@ -59,7 +56,7 @@ int checkMinimumDataPoints(uint32_t n) {
 static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t *sumY, real_t *numberY, void (*transform)(const real_t *operand, real_t *result)) {
   real_t *mean, tempReal1, tempReal2;
 
-  if(checkMinimumDataPoints(1)) {
+  if(checkMinimumDataPoints(const_1)) {
     saveStack();
 
     liftStack();

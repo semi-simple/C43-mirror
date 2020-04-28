@@ -18,7 +18,7 @@
  * \file mean.h
  ***********************************************/
 
-int checkMinimumDataPoints(uint32_t n);
+int checkMinimumDataPoints(const real_t *n);
 void fnMeanXY             (uint16_t unusedParamButMandatory);
 void fnGeometricMeanXY    (uint16_t unusedParamButMandatory);
 void fnWeightedMeanX      (uint16_t unusedParamButMandatory);

@@ -24,13 +24,14 @@
 
 
 /* Test if a number is prime or not using a Miller-Rabin test */
-const uint8_t smallPrimes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+const uint8_t smallPrimes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+                               127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251};
+#define QUICK_CHECK (257*257-1)
 #define NUMBER_OF_SMALL_PRIMES (sizeof(smallPrimes) / sizeof(uint8_t))
-#define QUICK_CHECK (101*101-1)
 
 static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
   uint32_t i;
-  longInteger_t primeCandidateM1, smallPrime, s, temp, mod;
+  longInteger_t primeCandidateMimus1, s, temp, smallPrime, mod;
 
   if(longIntegerCompareUInt(primeCandidate, 2) < 0) {
     return false;
@@ -46,20 +47,21 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
     }
   }
 
-  if(longIntegerCompareInt(primeCandidate, QUICK_CHECK) < 0) {
+  if(longIntegerCompareUInt(primeCandidate, QUICK_CHECK) < 0) {
     return true;
   }
+
+  longIntegerInit(primeCandidateMimus1);
   longIntegerInit(s);
-  longIntegerInit(primeCandidateM1);
   longIntegerInit(temp);
   longIntegerInit(smallPrime);
   longIntegerInit(mod);
-  longIntegerSubtractUInt(primeCandidate, 1, primeCandidateM1);
-  longIntegerCopy(primeCandidateM1, s);
+  longIntegerSubtractUInt(primeCandidate, 1, primeCandidateMimus1);
+  longIntegerCopy(primeCandidateMimus1, s);
 
   // Calculate s such as   primeCandidate - 1 = s×2^d and s odd
   while(longIntegerIsEven(s)) {
-    longIntegerDivideUInt(s, 2, s);
+    longIntegerDivide2Exact(s, s);
   }
 
   // The loop below should only go from 0 to 12 (primes from 2 to 41) ensuring correct result for candidatePrime < 3 317 044 064 679 887 385 961 981
@@ -68,27 +70,27 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
     longIntegerCopy(s, temp);
 
     uIntToLongInteger(smallPrimes[i], smallPrime);
-    longIntegerPowerModuloSec(smallPrime, temp, primeCandidate, mod); // exp (2nd param) must be >0 and modulo (3rd param) must be odd
-    while(longIntegerCompare(temp, primeCandidateM1) != 0 && longIntegerCompareUInt(mod, 1) != 0 && longIntegerCompare(mod, primeCandidateM1) != 0) {
+    longIntegerPowerModulo(smallPrime, temp, primeCandidate, mod);
+    while(longIntegerCompare(temp, primeCandidateMimus1) != 0 && longIntegerCompareUInt(mod, 1) != 0 && longIntegerCompare(mod, primeCandidateMimus1) != 0) {
       longIntegerPowerUIntModulo(mod, 2, primeCandidate, mod);
       longIntegerMultiply2(temp, temp);
     }
 
-    if(longIntegerCompare(mod, primeCandidateM1) != 0 && longIntegerIsEven(temp)) {
+    if(longIntegerCompare(mod, primeCandidateMimus1) != 0 && longIntegerIsEven(temp)) {
+      longIntegerFree(primeCandidateMimus1);
       longIntegerFree(s);
       longIntegerFree(temp);
       longIntegerFree(smallPrime);
       longIntegerFree(mod);
-      longIntegerFree(primeCandidateM1);
       return false;
     }
   }
 
+  longIntegerFree(primeCandidateMimus1);
   longIntegerFree(s);
   longIntegerFree(temp);
   longIntegerFree(smallPrime);
   longIntegerFree(mod);
-  longIntegerFree(primeCandidateM1);
   return true;
 }
 

@@ -933,6 +933,12 @@ void resetTemporaryInformation(void) {
     case TI_GEOMMEANX_GEOMMEANY:
     case TI_HARMMEANX_HARMMEANY:
     case TI_RMSMEANX_RMSMEANY:
+    case TI_SAMPLSTDDEV:
+    case TI_POPLSTDDEV:
+    case TI_STDERR:
+    case TI_GEOMSAMPLSTDDEV:
+    case TI_GEOMPOPLSTDDEV:
+    case TI_GEOMSTDERR:
     case TI_X_Y:
     case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
                                refreshRegisterLine(REGISTER_Y); break;
@@ -944,6 +950,9 @@ void resetTemporaryInformation(void) {
     case TI_VERSION:
     case TI_WHO:
     case TI_WEIGHTEDMEANX:
+    case TI_WEIGHTEDSAMPLSTDDEV:
+    case TI_WEIGHTEDPOPLSTDDEV:
+    case TI_WEIGHTEDSTDERR:
     case TI_FALSE:
     case TI_TRUE:              refreshRegisterLine(REGISTER_X); break;
 
@@ -1019,7 +1028,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
               strcat(string1, "long integer = ");
-              longIntegerToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+              longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
             }
 
             else {
@@ -1286,6 +1295,39 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
             }
 
+            else if(temporaryInformation == TI_SAMPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, "s" STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, "s" STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_POPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_sigma STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_sigma STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_STDERR) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, "s" STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, "s" STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
             else if(temporaryInformation == TI_GEOMMEANX_GEOMMEANY) {
                 if(regist == REGISTER_X) {
                     strcpy(prefix, STD_x_BAR STD_SUB_G STD_SPACE_FIGURE "=");
@@ -1297,9 +1339,63 @@ void refreshRegisterLine(calcRegister_t regist) {
                 }
             }
 
+            else if(temporaryInformation == TI_GEOMSAMPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_epsilon STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_epsilon STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_GEOMPOPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_GEOMSTDERR) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_x STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+                else if(regist == REGISTER_Y) {
+                    strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_y STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
             else if(temporaryInformation == TI_WEIGHTEDMEANX) {
                 if(regist == REGISTER_X) {
                     strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_WEIGHTEDSAMPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, "s" STD_SUB_w STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_WEIGHTEDPOPLSTDDEV) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, STD_sigma STD_SUB_w STD_SPACE_FIGURE "=");
+                    prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                }
+            }
+
+            else if(temporaryInformation == TI_WEIGHTEDSTDERR) {
+                if(regist == REGISTER_X) {
+                    strcpy(prefix, "s" STD_SUB_m STD_SUB_w STD_SPACE_FIGURE "=");
                     prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                 }
             }
@@ -1384,7 +1480,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtLongInteger) {
-            longIntegerToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+            longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

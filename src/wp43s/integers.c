@@ -171,6 +171,19 @@ void longIntegerSubtract(longInteger_t opY, longInteger_t opX, longInteger_t res
 
 
 
+void longIntegerCopy(longInteger_t source, longInteger_t destination) {
+  if(abs(source->_mp_size) > destination->_mp_alloc) {
+    size_t newAllocationInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(abs(source->_mp_size) * LIMB_SIZE));
+    destination->_mp_d = reallocGmp(destination->_mp_d, (destination->_mp_alloc) * LIMB_SIZE, newAllocationInBytes);
+    destination->_mp_alloc = newAllocationInBytes / LIMB_SIZE;
+  }
+
+  destination->_mp_size = source->_mp_size;
+  xcopy(destination->_mp_d, source->_mp_d, abs(source->_mp_size) * LIMB_SIZE);
+}
+
+
+
 
 
 

@@ -315,7 +315,9 @@ void xthRootLonILonI(void) {
   }
 
   if(longIntegerCompareUInt(base, 2147483640) == -1) {
-    int32_t exp = longIntegerToInt(exponent);
+    int32_t exp;
+
+    longIntegerToInt(exponent, exp);
     if(longIntegerIsPositive(base)) {                                 // pos base
       longIntegerInit(l);
       if(longIntegerRoot(base, exp, l)) {                             // if integer xthRoot found, return

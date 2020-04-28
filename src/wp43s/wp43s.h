@@ -383,6 +383,15 @@ typedef int16_t calcRegister_t;
 #define TI_WEIGHTEDMEANX       17
 #define TI_HARMMEANX_HARMMEANY 18
 #define TI_RMSMEANX_RMSMEANY   19
+#define TI_WEIGHTEDSAMPLSTDDEV 20
+#define TI_WEIGHTEDPOPLSTDDEV  21
+#define TI_WEIGHTEDSTDERR      22
+#define TI_SAMPLSTDDEV         23
+#define TI_POPLSTDDEV          24
+#define TI_STDERR              25
+#define TI_GEOMSAMPLSTDDEV     26
+#define TI_GEOMPOPLSTDDEV      27
+#define TI_GEOMSTDERR          28
 
 // Register browser mode
 #define RBR_GLOBAL              0
@@ -685,5 +694,39 @@ extern pcg32_random_t       pcg32_global;
                                  printf("\n=====> good register %d data pointer: %u <===== %s\n", r, reg[r].dataPointer, comment); \
                                } \
                              }
+
+#define PRINT_LI(lint, comment) { \
+                                  int i; \
+                                  printf("\n%s", comment); \
+                                  if((lint)->_mp_size == 0) printf(" lint=0"); \
+                                  else if((lint)->_mp_size < 0) printf(" lint=-"); \
+                                  else printf(" lint=+"); \
+                                  for(i=0; i<abs((lint)->_mp_size); i++) { \
+                                    printf("%lu ", (unsigned long)((lint)->_mp_d[i])); \
+                                  } \
+                                  printf("  _mp_alloc=%dlimbs=", (lint)->_mp_alloc); \
+                                  printf("%lubytes", LIMB_SIZE * (lint)->_mp_alloc); \
+                                  printf(" _mp_size=%dlimbs=", abs((lint)->_mp_size)); \
+                                  printf("%lubytes", LIMB_SIZE * abs((lint)->_mp_size)); \
+                                  printf(" PCaddress=%p", (lint)->_mp_d); \
+                                  printf(" 43address=%d", PCMEMPTR_TO_WP43SMEMPTR((lint)->_mp_d)); \
+                                  printf("\n"); \
+                                }
+
+
+#define PRINT_LI_REG(reg, comment) { \
+                                     int i; \
+                                     mp_limb_t *p; \
+                                     printf("\n%s", comment); \
+                                     if(getRegisterLongIntegerSign(reg) == LI_ZERO) printf("lint=0"); \
+                                     else if(getRegisterLongIntegerSign(reg) == LI_NEGATIVE) printf("lint=-"); \
+                                     else printf("lint=+"); \
+                                     for(i=*REGISTER_DATA_MAX_LEN(reg)/LIMB_SIZE, p=REGISTER_LONG_INTEGER_DATA(reg); i>0; i--, p++) { \
+                                       printf("%lu ", *p); \
+                                     } \
+                                     printf(" maxLen=%dbytes=", *REGISTER_DATA_MAX_LEN(reg)); \
+                                     printf("%lulimbs", *REGISTER_DATA_MAX_LEN(reg) / LIMB_SIZE); \
+                                     printf("\n"); \
+                                    }
 
 #endif // wp43s_H_INCLUDED

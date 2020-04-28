@@ -24,37 +24,37 @@
  *
  * The computation involves subtraction of large numbers that quite possible
  * are close to each other.  Because of this, the start of the computation is
- * performed with a larger number of significant digits so that the initial
- * multiplication is exact.  Subsequently, the usual 39 digits are used.
+ * performed using a FMA for the difference.
  */
 static void do_stddev(const real_t *sumXX, const real_t *sumX,
 		      const real_t *numberX, int sample, 
 		      int rootn, int exp, int regIndex) {
   real_t tempReal1, tempReal2, tempReal3;
   const real_t *p = numberX;
+  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
 
-  realMultiply(sumX, sumX, &tempReal1, &ctxtReal75);
-  realDivide(&tempReal1, numberX, &tempReal2, &ctxtReal75);
-  realSubtract(sumXX, &tempReal2, &tempReal1, &ctxtReal75);
+  realDivide(sumX, numberX, &tempReal2, realContext);
+  realChangeSign(&tempReal2);
+  realFMA(sumX, &tempReal2, sumXX, &tempReal1, realContext);
   if (sample) {
-    realSubtract(numberX, const_1, &tempReal3, &ctxtReal39);
+    realSubtract(numberX, const_1, &tempReal3, realContext);
     p = &tempReal3;
   }
-  realDivide(&tempReal1, p, &tempReal2, &ctxtReal39);
+  realDivide(&tempReal1, p, &tempReal2, realContext);
   if (realIsNegative(&tempReal2) || realIsZero(&tempReal2)) {
     realZero(&tempReal1);
   } else {
-    realSquareRoot(&tempReal2, &tempReal1, &ctxtReal39);
+    realSquareRoot(&tempReal2, &tempReal1, realContext);
   }
 
   p = &tempReal1;
   if (rootn) {
-    realSquareRoot(numberX, &tempReal2, &ctxtReal39);
-    realDivide(&tempReal1, &tempReal2, &tempReal3, &ctxtReal39);
+    realSquareRoot(numberX, &tempReal2, realContext);
+    realDivide(&tempReal1, &tempReal2, &tempReal3, realContext);
     p = &tempReal3;
   }
   if (exp) {
-    realExp(p, &tempReal2, &ctxtReal39);
+    realExp(p, &tempReal2, realContext);
     p = &tempReal2;
   }
   realToReal34(p, REGISTER_REAL34_DATA(regIndex));

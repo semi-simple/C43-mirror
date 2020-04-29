@@ -30,7 +30,7 @@ int checkMinimumDataPoints(const real_t *n) {
     return 0;
   }
   if (realCompareLessThan(SIGMA_N, n)) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is insufficient statistical data available!");
       showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
@@ -152,6 +152,13 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
+    #endif
+  }
+  else if (realCompareLessThan(SIGMA_Y, const_1)) {
+    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is insufficient statistical data available!");
       showInfoDialog("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
     #endif
   }

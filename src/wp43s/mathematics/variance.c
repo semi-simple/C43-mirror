@@ -123,7 +123,7 @@ static int calculateWeightedStandardDeviation(int sample, int rootn, int exp, in
     return 0;
   }
   if (realCompareLessThan(SIGMA_Y, const_2)) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is insufficient statistical data available!");
       showInfoDialog("In function calculateWeightedStandardDeviation:", errorMessage, NULL, NULL);

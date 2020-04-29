@@ -102,7 +102,7 @@ const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,      
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE,
-                                     KEY_TYPCON_DN,                 ITM_DOTDEMU,                KEY_TYPCON_UP,            ITM_toSI,              ITM_RI,                      ITM_NULL                      };    //JM
+                                     KEY_TYPCON_DN,                 ITM_DOTDEMU,                KEY_TYPCON_UP,            ITM_toSI,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };

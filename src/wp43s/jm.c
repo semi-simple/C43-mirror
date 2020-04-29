@@ -1050,7 +1050,8 @@ void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longin
       }
       break;
     case dtReal34:
-      ipReal();                                         //This converts real to longint!
+      //ipReal();                                         //This converts real to longint!
+      fnRoundi(0);
       break;
     case dtShortInteger:
       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!

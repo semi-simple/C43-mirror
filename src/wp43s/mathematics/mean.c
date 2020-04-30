@@ -20,26 +20,6 @@
 
 #include "wp43s.h"
 
-int checkMinimumDataPoints(const real_t *n) {
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
-  if (realCompareLessThan(SIGMA_N, n)) {
-    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is insufficient statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
-  return 1;
-}
-
 /********************************************//**
  * \brief x bar ==> regX, regY
  * enables stack lift and refreshes the stack.

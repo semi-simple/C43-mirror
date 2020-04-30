@@ -1624,7 +1624,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
+void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
@@ -1767,12 +1767,15 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
   str[0] = '0';
   str[1] = 0;
-  if(longIntegerIsZero(lgInt)) {
+  if(lgInt->_mp_size == 0) {
+  //if(longIntegerIsZero(lgInt)) {
     return;
   }
 
-  digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
-  if(longIntegerIsNegative(lgInt)) {
+  //digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
+  digits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
+  //if(longIntegerIsNegative(lgInt)) {
+  if(lgInt->_mp_size < 0) {
     stringLen = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
   }
@@ -1787,15 +1790,25 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
   str[stringLen - 1] = 0;
 
-  longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
-  longIntegerAddUInt(lgInt, 0, x);
-  longIntegerSetPositiveSign(x);
+  //longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
+  mpz_init2(x, mpz_sizeinbase(lgInt, 2));
+
+  //longIntegerAddUInt(lgInt, 0, x);
+  mpz_add_ui(x, lgInt, 0);
+
+  //longIntegerSetPositiveSign(x);
+  x->_mp_size =  abs(x->_mp_size);
+
 
   stringLen -= 2; // set stringLen to the last digit of the base 10 representation
   counter = digits;
-  while(!longIntegerIsZero(x)) {
+  //while(!longIntegerIsZero(x)) {
+  while(x->_mp_size != 0) {
     str[stringLen--] = '0' + mpz_tdiv_ui(x, 10);
-    longIntegerDivideUInt(x, 10, x);
+
+    //longIntegerDivideUInt(x, 10, x);
+    mpz_tdiv_q_ui(x, x, 10);
+
     counter--;
   }
 
@@ -1803,7 +1816,8 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
     xcopy(str + stringLen, str + stringLen + 1, digits);
   }
 
-  longIntegerFree(x);
+  //longIntegerFree(x);
+  mpz_clear(x);
 }
 
 
@@ -1846,7 +1860,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;

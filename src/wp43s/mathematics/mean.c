@@ -20,29 +20,6 @@
 
 #include "wp43s.h"
 
-int checkMinimumDataPoints(uint32_t n) {
-  real_t tempReal1;
-
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
-  uInt32ToReal(n, &tempReal1);
-  if (realCompareLessEqual(SIGMA_N, &tempReal1)) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is insufficient statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
-  return 1;
-}
-
 /********************************************//**
  * \brief x bar ==> regX, regY
  * enables stack lift and refreshes the stack.
@@ -59,7 +36,7 @@ int checkMinimumDataPoints(uint32_t n) {
 static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t *sumY, real_t *numberY, void (*transform)(const real_t *operand, real_t *result)) {
   real_t *mean, tempReal1, tempReal2;
 
-  if(checkMinimumDataPoints(1)) {
+  if(checkMinimumDataPoints(const_1)) {
     saveStack();
 
     liftStack();
@@ -155,6 +132,13 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
+      showInfoDialog("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
+    #endif
+  }
+  else if (realCompareLessThan(SIGMA_Y, const_1)) {
+    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is insufficient statistical data available!");
       showInfoDialog("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
     #endif
   }

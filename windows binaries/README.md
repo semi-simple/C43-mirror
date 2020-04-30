@@ -5,7 +5,7 @@ You must install the latest GTK3+ libraries. If you do not already have them: do
 
 Install or re-install the WP43S_StandardFont.ttf font. The WP43S_NumericFont.ttf font isn't needed.  
 Copy wp43s.exe in a new or pre-existing directory.  
-Copy the entire directory named "artwork" from this repository to the location where you copied wp43s.exe.  
+Copy wp43s_pre.css and the entire directory named "artwork" from this repository to the location where you copied wp43s.exe.  
 If there is a backup.bin file in your already existing directory: delete it.  
 
 Run wp43s.exe and enjoy.

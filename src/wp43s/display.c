@@ -2030,7 +2030,7 @@ char tmpa[60];
 
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
-      longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
 
 //      if (stringByteLength(tmpStr3000 + 2100) < 33) {strcat(tmpStr3000 + 2100,"          ");}    //JMSHOW move short strings into the middle
     while (stringByteLength(tmpStr3000 + 2100) < 30) {

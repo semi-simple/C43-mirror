@@ -346,7 +346,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
     //printf("Xreg %d\n", X_REG);
     Norm_Key_00_VAR = X_REG;
@@ -369,7 +369,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -395,7 +395,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -421,7 +421,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -935,7 +935,7 @@ void fnJM(uint16_t JM_OPCODE) {
       char tmpstr[200];
       char tmpstr2[300];
       sprintf(tmpstr2,"[%d]:",ix);
-      longIntegerToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);

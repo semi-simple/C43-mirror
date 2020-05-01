@@ -97,7 +97,7 @@ void twoPowLonI(void) {
   longIntegerInit(power);
   uIntToLongInteger(1, power);
 
-  for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
+  for(uint32_t i=0; !longIntegerIsZero(exponent) && lastErrorCode == 0; i++) {
     if(longIntegerIsOdd(exponent)) {
      longIntegerMultiply(power, base, power);
     }

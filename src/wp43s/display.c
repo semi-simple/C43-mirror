@@ -351,7 +351,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   realPlus(&value, &value, &ctxtReal39);
   ctxtReal39.digits = 39;
   realToReal34(&value, &value34);
-
+  if(real34IsNegative(real34)) {
+    real34SetNegativeSign(&value34);
+  }
 
   bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
   memset(bcd, 0, MAX_DIGITS);

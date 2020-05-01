@@ -50,6 +50,17 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
     return true;
   }
 
+  #if defined(PC_BUILD) || defined(DMCP_BUILD)
+  if(calcMode == CM_NORMAL) {
+    showHourGlass();
+    #ifdef PC_BUILD
+      refreshScreen(NULL);
+    #else
+      lcd_refresh();
+    #endif // PC_BUILD
+  }
+  #endif
+
   longIntegerInit(primeCandidateMimus1);
   longIntegerInit(s);
   longIntegerInit(temp);
@@ -81,6 +92,11 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
       longIntegerFree(temp);
       longIntegerFree(smallPrime);
       longIntegerFree(mod);
+      #if defined(PC_BUILD) || defined(DMCP_BUILD)
+        if(calcMode == CM_NORMAL) {
+          hideHourGlass();
+        }
+      #endif
       return false;
     }
   }
@@ -90,6 +106,11 @@ static bool_t longIntegerIsPrime(longInteger_t primeCandidate) {
   longIntegerFree(temp);
   longIntegerFree(smallPrime);
   longIntegerFree(mod);
+  #if defined(PC_BUILD) || defined(DMCP_BUILD)
+    if(calcMode == CM_NORMAL) {
+      hideHourGlass();
+    }
+  #endif
   return true;
 }
 

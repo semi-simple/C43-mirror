@@ -624,7 +624,7 @@ void fnReset(uint16_t confirmation) {
     hideUserMode();
 
     // Initialization of user key assignments
-    memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+    xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
 
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);

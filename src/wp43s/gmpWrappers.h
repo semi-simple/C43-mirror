@@ -19,7 +19,6 @@
  ***********************************************/
 
 #define longInteger_t                                                     mpz_t
-#define LONG_INTEGER_POINTER(a)                                           ((longInteger_t *)(a))
 #define REGISTER_LONG_INTEGER_DATA(a)                                     ((void *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
 #define LIMB_SIZE                                                         sizeof(mp_limb_t)
 #define LI_ZERO                                                           0 // 0
@@ -34,7 +33,7 @@
 #define intToLongInteger(source, destination)                             mpz_set_si(destination, source)
 #define longIntegerToUInt(op, uint)                                       {uint = mpz_get_ui(op); }
 #define longIntegerToInt(op, int)                                         {int  = mpz_get_si(op); }
-//#define longIntegerCopy(source, destination)                              mpz_set(destination, source)
+#define longIntegerCopy(source, destination)                              mpz_set(destination, source)
 //#define longIntegerCopy(source, destination)                              mpz_add_ui(destination, source, 0)
 
 #define stringToLongInteger(source, radix, destination)                   mpz_set_str(destination, source, radix)

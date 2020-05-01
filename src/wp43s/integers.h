@@ -25,7 +25,6 @@ void     longIntegerMultiply         (longInteger_t opY, longInteger_t opX, long
 void     longIntegerSquare           (longInteger_t op,  longInteger_t result);
 void     longIntegerAdd              (longInteger_t opY, longInteger_t opX, longInteger_t result);
 void     longIntegerSubtract         (longInteger_t opY, longInteger_t opX, longInteger_t result);
-void     longIntegerCopy             (longInteger_t source, longInteger_t destination);
 
 /*
  * The functions below are borrowed

@@ -115,7 +115,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ChangeSign(operand)                              ((real34_t *)(operand))->bytes[15] ^= 0x80
 #define real34Compare(operand1, operand2, res)                 decQuadCompare           ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 //#define real34Copy(source, destination)                        decQuadCopy            (destination, source)
-//#define real34Copy(source, destination)                        memcpy(destination, source, REAL34_SIZE)
+//#define real34Copy(source, destination)                        xcopy(destination, source, REAL34_SIZE)
 #define real34Copy(source, destination)                        {*(uint64_t *)(destination) = *(uint64_t *)(source); \
                                                                 *(((uint64_t *)(destination))+1) = *(((uint64_t *)(source))+1); \
                                                                }
@@ -145,7 +145,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)(source), destination)
 #define real34ToUInt32(source)                                 decQuadToUInt32          ((real34_t *)(source), &ctxtReal34, DEC_ROUND_DOWN)
 #define real34Zero(destination)                                decQuadZero              (destination)
-//#define real34Zero(destination)                                memcpy                   (destination, const34_0, REAL34_SIZE)
+//#define real34Zero(destination)                                xcopy                    (destination, const34_0, REAL34_SIZE)
 /*#define real34Zero(destination)                                {  *(uint64_t *)(destination)     =   *(uint64_t *)const34_0; \
                                                                   *(((uint64_t *)(destination))+1) = *(((uint64_t *)const34_0)+1); \
                                                                }*/

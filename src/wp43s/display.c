@@ -533,7 +533,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -545,7 +545,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<firstDigit+min(displayHasNDigits - 1 - exponent, numDigits); digitPointer++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -557,7 +557,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       else { // zero or positive exponent
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=lastDigit + max(exponent - numDigits + 1, 0); digitPointer++, digitCount--) {
           if(digitCount != -1 && digitCount != exponent && groupingGap != 0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
 
@@ -655,7 +655,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -667,7 +667,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<=lastDigit; digitPointer++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -679,7 +679,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros after last significant digit
         for(i=1; i<=(int16_t)displayFormatDigits+exponent+1-numDigits; i++, digitCount--) {
           if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -691,7 +691,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       else { // zero or positive exponent
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
 
@@ -783,7 +783,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Significant digits
     for(digitCount=-1, digitPointer=firstDigit+1; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -799,7 +799,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -898,7 +898,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -914,7 +914,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-max(0, numDigits); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {

@@ -208,7 +208,7 @@ void setupDefaults(void) {
   #endif
 
   // Initialization of user key assignments
-  memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+  xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
   //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
   //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
   //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
@@ -395,7 +395,7 @@ int main(int argc, char* argv[]) {
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
@@ -446,7 +446,7 @@ void program_main(void) {
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   // Initialization
   //program_init();
@@ -689,7 +689,7 @@ int main(int argc, char* argv[]) {
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   setupDefaults();
 
@@ -707,7 +707,9 @@ convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
 fnPower(NOPARAM);
 fnSwapXY(NOPARAM);
 fnSubtract(NOPARAM);
+printf("a\n");
 fnIsPrime(NOPARAM);
+printf("b\n");
 longIntegerFree(li);
 return 0;
 */

@@ -250,3 +250,190 @@ void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
 
 
 
+
+
+
+void JM_convertReal34ToLongInteger(uint16_t confirmation) {
+  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34_t x;
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
+    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
+    if(confirmation == NOT_CONFIRMED) {
+      setConfirmationMode(JM_convertReal34ToLongInteger);
+    }
+    else {
+//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      ipReal();                                        //This converts real to longint!
+      refreshStack();
+    }
+  }
+}
+
+
+
+/********************************************//**
+ * \brief CONVERT DATA TYPES UP
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnJMup(uint16_t unusedParamButMandatory) {
+  // >>
+  /*
+  if Angle mode: change to Real as applicable using .d.
+  If SHORTINT: change to Real
+  if Real change to LONGINT
+  */
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    fnToReal(0);  
+  }
+  else
+
+  if(dataTypeX == dtShortInteger) {
+    convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  }
+  else
+
+  if(dataTypeX == dtReal34) {
+    JM_convertReal34ToLongInteger(CONFIRMED);
+  }
+
+  refreshStack();
+}
+
+
+
+
+
+//Integral Part
+void JM_convertReal34ToShortInteger(uint16_t confirmation) {
+  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    real34_t x;
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
+    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
+    if(confirmation == NOT_CONFIRMED) {
+      setConfirmationMode(JM_convertReal34ToShortInteger);
+    }
+    else {
+      //convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      ipReal();                                        //This converts real to longint!
+
+      if(lastIntegerBase != 0) {
+        fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
+      }
+      else {
+        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!
+      }
+
+      refreshStack();
+    }
+  }
+}
+
+
+/********************************************//**
+ * \brief CONVERT DATA TYPES DOWN
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnJMdown(uint16_t unusedParamButMandatory) {
+  // <<
+  /*
+  if Angle mode: change Real, as applicable using .d
+  If LONGINT: change to Real
+  if Real change to ShortInt
+  */
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    fnToReal(0);  
+  }
+  else
+
+  if(dataTypeX == dtLongInteger) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  }
+  else
+
+  if(dataTypeX == dtReal34) {
+    JM_convertReal34ToShortInteger(CONFIRMED);
+  }
+
+  refreshStack();
+}
+
+
+//Rounding
+void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      if(lastIntegerBase != 0) {
+        fnChangeBase(lastIntegerBase);                  //This converts shortint, longint and real to shortint!
+      }
+      else {
+        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!
+      }
+      break;
+    case dtReal34:
+      //ipReal();                                         //This converts real to longint!
+      fnRoundi(0);
+      break;
+    case dtShortInteger:
+      convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
+      break;
+    default:
+      break;
+  }
+  refreshStack();
+}
+
+
+
+
+
+
+/* JM UNIT********************************************//**                                                JM UNIT
+ * \brief Adds the power of 10 using numeric font to displayString                                        JM UNIT
+ *        Converts to units like m, M, k, etc.                                                            JM UNIT
+ * \param[out] displayString char*     Result string                                                      JM UNIT
+ * \param[in]  exponent int32_t Power of 10 to format                                                     JM UNIT
+ * \return void                                                                                           JM UNIT
+ ***********************************************                                                          JM UNIT */
+void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator) {               //JM UNIT
+  if     (exponent == -15) { displayString[0] = ' '; displayString[1] = 'f'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent == -12) { displayString[0] = ' '; displayString[1] = 'p'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent == -9 ) { displayString[0] = ' '; displayString[1] = 'n'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent == -6 ) { displayString[0] = ' '; displayString[1] = STD_mu[0]; displayString[2] = STD_mu[1]; displayString[3] = 0; }   //JM UNIT
+  else if(exponent == -3 ) { displayString[0] = ' '; displayString[1] = 'm'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent ==  3 ) { displayString[0] = ' '; displayString[1] = 'k'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent ==  6 ) { displayString[0] = ' '; displayString[1] = 'M'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent ==  9 ) { displayString[0] = ' '; displayString[1] = 'G'; displayString[2] = 0; }    //JM UNIT
+  else if(exponent == 12 ) { displayString[0] = ' '; displayString[1] = 'T'; displayString[2] = 0; }    //JM UNIT
+  else {                                                                                                //JM UNIT
+    strcpy(displayString, PRODUCT_SIGN);                                                                //JM UNIT Below, copy of
+    displayString += 2;                                                                                 //JM UNIT exponentToDisplayString in display.c
+    strcpy(displayString, STD_SUB_10);                                                                  //JM UNIT
+    displayString += 2;                                                                                 //JM UNIT
+    displayString[0] = 0;                                                                               //JM UNIT
+    if(nimMode) {                                                                                       //JM UNIT
+      if(exponent != 0) {                                                                               //JM UNIT
+        supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                 //JM UNIT
+      }                                                                                                 //JM UNIT
+    }                                                                                                   //JM UNIT
+    else {                                                                                              //JM UNIT
+      supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                   //JM UNIT
+    }                                                                                                   //JM UNIT
+  }                                                                                                     //JM UNIT
+}                                                                                                       //JM UNIT
+

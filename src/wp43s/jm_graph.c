@@ -310,6 +310,9 @@ if (Aspect_Square) {
     if (temp>SCREEN_WIDTH_GRAPH-1) {temp=SCREEN_WIDTH_GRAPH-1;}
     else if (temp<0) {temp=0;}
     //printf("--> %d \n",temp);
+    #ifdef PC_BUILD
+      if(temp<0 || temp>399) {printf("In function screen_window_x JM X EXCEEDED %d",temp);}
+    #endif
     return temp;
   }
 }
@@ -320,6 +323,10 @@ int16_t temp;
   temp = (y-y_min)/(y_max-y_min)*(SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH);
     if (temp>SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH) {temp=SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH;}
   else if (temp<0) {temp=0;}
+
+  #ifdef PC_BUILD
+    if(SCREEN_HEIGHT_GRAPH-1 - temp<0 || SCREEN_HEIGHT_GRAPH-1 - temp>239) {printf("In function screen_window_y JM Y EXCEEDED %d %d",temp,SCREEN_HEIGHT_GRAPH-1 - temp);}
+  #endif
   return (SCREEN_HEIGHT_GRAPH-1 - temp);
 }
 
@@ -459,54 +466,54 @@ void graph_axis (void){
   float y;
   for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
-    setPixel(xzero-1,cnt); //tick
-    setPixel(xzero+1,cnt); //tick
+    setPixel(max(xzero-1,0),cnt); //tick
+    setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
   }  
   for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
-    setPixel(xzero-1,cnt); //tick
-    setPixel(xzero+1,cnt); //tick
+    setPixel(max(xzero-1,0),cnt); //tick
+    setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
   }  
 
   for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,yzero+1); //tick
-      setPixel(cnt,yzero-1); //tick
+      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-1,0)); //tick
    }
   for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,yzero+1); //tick
-      setPixel(cnt,yzero-1); //tick
+      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-1,0)); //tick
    }
 
   for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
-    setPixel(xzero-2,cnt); //tick
-    setPixel(xzero-3,cnt); //tick
-    setPixel(xzero+2,cnt); //tick
-    setPixel(xzero+3,cnt); //tick
+    setPixel(max(xzero-2,0),cnt); //tick
+    setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    setPixel(max(xzero-3,0),cnt); //tick
+    setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
   }  
   for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
-    setPixel(xzero-2,cnt); //tick
-    setPixel(xzero-3,cnt); //tick
-    setPixel(xzero+2,cnt); //tick
-    setPixel(xzero+3,cnt); //tick
+    setPixel(max(xzero-2,0),cnt); //tick
+    setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    setPixel(max(xzero-3,0),cnt); //tick
+    setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
   }  
 
   for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,yzero+2); //tick
-      setPixel(cnt,yzero-2); //tick
-      setPixel(cnt,yzero+3); //tick
-      setPixel(cnt,yzero-3); //tick
+      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-2,0)); //tick
+      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-3,0)); //tick
    }
   for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,yzero+2); //tick
-      setPixel(cnt,yzero-2); //tick
-      setPixel(cnt,yzero+3); //tick
-      setPixel(cnt,yzero-3); //tick
+      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-2,0)); //tick
+      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH)); //tick
+      setPixel(cnt,max(yzero-3,0)); //tick
    }
 
   force_refresh();
@@ -667,20 +674,29 @@ void graph_plotmem(void) {
     printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
-
-    if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+    //Always include the 0 axis
+    if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_min = 0;}}
     if(x_min<0 && x_max<0) {if(x_min>=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
-    if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
+    if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*x_max;} else {y_min = 0;}}
     if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*x_max;} else {y_max = 0;}}
 
     #ifdef STATDEBUG
     printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
-    x_min = 1.05 * x_min;
-    x_max = 1.05 * x_max;
-    y_min = 1.05 * y_min;
-    y_max = 1.05 * y_max;
+    //Create a visible axis on the edge
+//    x_min = 1.05 * x_min;
+//    x_max = 1.05 * x_max;
+//    y_min = 1.05 * y_min;
+//    y_max = 1.05 * y_max;
+   
+    float dx = x_max-x_min;
+    float dy = y_max-y_min;
+    x_min = x_min - dx * 0.015;
+    y_min = y_min - dy * 0.015;
+    x_max = x_max + dx * 0.015;
+    y_max = y_max + dy * 0.015;
+
 
     #ifdef STATDEBUG
     printf("Axis3: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   

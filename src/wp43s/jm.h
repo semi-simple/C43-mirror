@@ -148,10 +148,10 @@ void fnRCL          (int16_t inp);
 void Show_User_Keys (void);
 void fnKEYSELECT    (void);
 void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
-void JM_convertReal34ToShortInteger(uint16_t confirmation);
-void JM_convertReal34ToLongInteger(uint16_t confirmation);
-void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
-char* itoa(int value, char* result, int base);
+//void JM_convertReal34ToShortInteger(uint16_t confirmation);
+//void JM_convertReal34ToLongInteger(uint16_t confirmation);
+//void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
+//char* itoa(int value, char* result, int base);
 
 #define TI_ABC                 96    //JM EE
 #define TI_ABBCCA              97    //JM EE
@@ -207,7 +207,5 @@ void fnBASE_Hash(uint16_t unusedParamButMandatory);
 //void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED
 //void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED 
 
-//display.c
-void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator);
 
 void fnShowJM  (uint16_t jmConfig);

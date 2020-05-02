@@ -308,6 +308,39 @@ void fnShowJM(uint16_t jmConfig) {
 
 
 
+
+
+/** integer to string
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
+ */
+char* itoa(int value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 16) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
+
+
+
 /********************************************//**
  * \brief Get item-value of assigned key to X
  *
@@ -911,12 +944,60 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
 
+  if(JM_OPCODE == 45) {                                         //PRIME stats
 
- if(JM_OPCODE == 45) {                                         // NEXT |PRIME ROUTINE
+    longInteger_t xx3;
+    longIntegerInit(xx3);
+    runFunction(ITM_CLSIGMA);
+
+    //Get maximum loops from X
+    uint16_t ix2;
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, xx3);
+      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
+      longIntegerToInt(xx3,ix2);
+    } else {ix2 = 20;}
+
+    if(ix2 < 1 || ix2 > 399) {ix2 = 20;}
+
+
+    //Outer loop start
+    uint16_t ix1 = 0;
+    while (ix1 < ix2 ) {
+      //printf("--%lld--%lld--\n",ix1,ix1*4);
+      uIntToLongInteger(ix1*4, xx3);
+      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
+      adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+      tenPowLonI();
+
+      fnJM(46);
+
+      STACK_LIFT_ENABLE;
+      liftStack();
+      uIntToLongInteger(ix1*4, xx3);
+      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
+      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
+      adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+
+      runFunction(ITM_SIGMAPLUS);
+
+      ix1++;
+    }
+    longIntegerFree(xx3);
+
+    runFunction(ITM_PLOT);
+
+  }
+  else
+
+
+
+
+
+ if(JM_OPCODE == 46) {                                         // NEXT |PRIME ROUTINE
     #ifndef TESTSUITE_BUILD
     uint32_t getUptimeMs0 = getUptimeMs();
     int16_t ix;
-    ix = 0;
     //fnStrInputLongint("4776913109852041418248056622882488319");
 
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
@@ -928,7 +1009,8 @@ void fnJM(uint16_t JM_OPCODE) {
     longInteger_t lgInt;
     longIntegerInit(lgInt);
 
-    while (ix <= 9 ) {
+    ix = 0;
+    while (ix <= 9-9 ) {
       runFunction(ITM_NEXTP);
       fnStore(ix);
 
@@ -964,103 +1046,6 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
 
-
-/********************************************//**
- * \brief CONVERT DATA TYPES UP
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnJMup(uint16_t unusedParamButMandatory) {
-  // >>
-  /*
-  if Angle mode: change to Real as applicable using .d.
-  If SHORTINT: change to Real
-  if Real change to LONGINT
-  */
-  saveStack();
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    fnToReal(0);  
-  }
-  else
-
-  if(dataTypeX == dtShortInteger) {
-    convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal34) {
-    JM_convertReal34ToLongInteger(CONFIRMED);
-  }
-
-  refreshStack();
-}
-
-
-
-/********************************************//**
- * \brief CONVERT DATA TYPES DOWN
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnJMdown(uint16_t unusedParamButMandatory) {
-  // <<
-  /*
-  if Angle mode: change Real, as applicable using .d
-  If LONGINT: change to Real
-  if Real change to ShortInt
-  */
-  saveStack();
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    fnToReal(0);  
-  }
-  else
-
-  if(dataTypeX == dtLongInteger) {
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal34) {
-    JM_convertReal34ToShortInteger(CONFIRMED);
-  }
-
-  refreshStack();
-}
-
-
-
-void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
-  switch(getRegisterDataType(REGISTER_X)) {
-    case dtLongInteger:
-      if(lastIntegerBase != 0) {
-        fnChangeBase(lastIntegerBase);                  //This converts shortint, longint and real to shortint!
-      }
-      else {
-        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!
-      }
-      break;
-    case dtReal34:
-      //ipReal();                                         //This converts real to longint!
-      fnRoundi(0);
-      break;
-    case dtShortInteger:
-      convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
-      break;
-    default:
-      break;
-  }
-  refreshStack();
-}
 
 
 
@@ -1285,62 +1270,8 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - RE
 
 
 
-void JM_convertReal34ToShortInteger(uint16_t confirmation) {
-  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34_t x;
-    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
-    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
-    if(confirmation == NOT_CONFIRMED) {
-      setConfirmationMode(JM_convertReal34ToShortInteger);
-    }
-    else {
-//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      ipReal();                                        //This converts real to longint!
 
-      if(lastIntegerBase != 0) {
-        fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
-      }
-      else {
-        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!
-      }
-
-      refreshStack();
-
-      //longInteger_t lgInt;
-      //convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-      //if(lastIntegerBase == 0) {
-      //  convertLongIntegerToShortIntegerRegister(lgInt, 10, REGISTER_X);
-      //}
-      //else {
-      //  convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, REGISTER_X);
-      //}
-      //longIntegerFree(lgInt);
-    }
-  }
-}
-
-
-
-void JM_convertReal34ToLongInteger(uint16_t confirmation) {
-  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34_t x;
-    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
-    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
-    if(confirmation == NOT_CONFIRMED) {
-      setConfirmationMode(JM_convertReal34ToLongInteger);
-    }
-    else {
-//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      ipReal();                                        //This converts real to longint!
-      refreshStack();
-    }
-  }
-}
-
-
-
+/*
 void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination) {
   char snum[10];
   itoa(inp, snum, base);
@@ -1361,84 +1292,14 @@ void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcReg
   longIntegerFree(mem);
   refreshStack();
 }
-
-/*char snum[7];                                                 //JM  -- PLACE RESULT ON THE STACK
-  itoa(determineItem(key), snum, 10);
-  longInteger_t mem;
-  longIntegerInit(mem);
-  liftStack();
-  stringToLongInteger(snum,10,mem);
-  convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
-  longIntegerFree(mem);
-  refreshStack();
 */
 
 
 
-/** integer to string
- * C++ version 0.4 char* style "itoa":
- * Written by Lukás Chmela
- * Released under GPLv3.
- */
-char* itoa(int value, char* result, int base) {
-    // check that the base if valid
-    if (base < 2 || base > 16) { *result = '\0'; return result; }
-
-    char* ptr = result, *ptr1 = result, tmp_char;
-    int tmp_value;
-
-    do {
-        tmp_value = value;
-        value /= base;
-        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-    } while ( value );
-
-    // Apply negative sign
-    if (tmp_value < 0) *ptr++ = '-';
-    *ptr-- = '\0';
-    while(ptr1 < ptr) {
-        tmp_char = *ptr;
-        *ptr--= *ptr1;
-        *ptr1++ = tmp_char;
-    }
-    return result;
-}
 
 
 
-/* JM UNIT********************************************//**                                                JM UNIT
- * \brief Adds the power of 10 using numeric font to displayString                                        JM UNIT
- *        Converts to units like m, M, k, etc.                                                            JM UNIT
- * \param[out] displayString char*     Result string                                                      JM UNIT
- * \param[in]  exponent int32_t Power of 10 to format                                                     JM UNIT
- * \return void                                                                                           JM UNIT
- ***********************************************                                                          JM UNIT */
-void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator) {               //JM UNIT
-       if(exponent == -15) { displayString[0] = ' '; displayString[1] = 'f'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent == -12) { displayString[0] = ' '; displayString[1] = 'p'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent == -9 ) { displayString[0] = ' '; displayString[1] = 'n'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent == -6 ) { displayString[0] = ' '; displayString[1] = STD_mu[0]; displayString[2] = STD_mu[1]; displayString[3] = 0; }   //JM UNIT
-  else if(exponent == -3 ) { displayString[0] = ' '; displayString[1] = 'm'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent ==  3 ) { displayString[0] = ' '; displayString[1] = 'k'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent ==  6 ) { displayString[0] = ' '; displayString[1] = 'M'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent ==  9 ) { displayString[0] = ' '; displayString[1] = 'G'; displayString[2] = 0; }    //JM UNIT
-  else if(exponent == 12 ) { displayString[0] = ' '; displayString[1] = 'T'; displayString[2] = 0; }    //JM UNIT
-  else {                                                                                                //JM UNIT
-    strcpy(displayString, PRODUCT_SIGN);                                                                //JM UNIT Below, copy of
-    displayString += 2;                                                                                 //JM UNIT exponentToDisplayString in display.c
-    strcpy(displayString, STD_SUB_10);                                                                  //JM UNIT
-    displayString += 2;                                                                                 //JM UNIT
-    displayString[0] = 0;                                                                               //JM UNIT
-    if(nimMode) {                                                                                       //JM UNIT
-      if(exponent != 0) {                                                                               //JM UNIT
-        supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                 //JM UNIT
-      }                                                                                                 //JM UNIT
-    }                                                                                                   //JM UNIT
-    else {                                                                                              //JM UNIT
-      supNumberToDisplayString(exponent, displayString, NULL, false, separator);                                   //JM UNIT
-    }                                                                                                   //JM UNIT
-  }                                                                                                     //JM UNIT
-}                                                                                                       //JM UNIT
+
 
 
 

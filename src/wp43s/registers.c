@@ -693,7 +693,7 @@ void allocateNamedVariable(const char *variableName) {
 
   setRegisterNamePointer(regist, allocWp43s(len));
   setRegisterNameLength(regist, len>>1);
-  memcpy(getRegisterNamePointer(regist), variableName, len);
+  xcopy(getRegisterNamePointer(regist), variableName, len);
 
   setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
   real34Zero(REGISTER_REAL34_DATA(regist));
@@ -1040,8 +1040,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
  ***********************************************/
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
   if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
-     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)
-     || getRegisterTag(destRegister)      != getRegisterTag(sourceRegister     )) {
+     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)) {
     uint32_t size;
 
     switch(getRegisterDataType(sourceRegister)) {
@@ -1061,10 +1060,11 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
         size = 0;
     }
 
-    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), size, getRegisterTag(sourceRegister));
+    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), size, AM_NONE);
   }
 
-  memcpy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
+  xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
+  setRegisterTag(destRegister, getRegisterTag(sourceRegister));
 }
 
 

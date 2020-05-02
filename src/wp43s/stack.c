@@ -63,7 +63,7 @@ void fnDrop(uint16_t unusedParamButMandatory) {
   }
 
   setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
-  memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
+  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
 
@@ -107,7 +107,7 @@ void fnDropY(uint16_t unusedParamButMandatory) {
   }
 
   setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
-  memcpy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
+  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
   refreshStack();
 }
 
@@ -208,7 +208,7 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
     setRegisterDataType(i, dataTypeX, tag);
     newDataPointer = allocWp43s(dataSizeX);
     setRegisterDataPointer(i, newDataPointer);
-    memcpy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
+    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
   }
 
   refreshStack();

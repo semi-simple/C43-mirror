@@ -744,7 +744,7 @@ void allocateNamedVariable(const char *variableName) {
 
   setRegisterNamePointer(regist, allocWp43s(len));
   setRegisterNameLength(regist, len>>1);
-  memcpy(getRegisterNamePointer(regist), variableName, len);
+  xcopy(getRegisterNamePointer(regist), variableName, len);
 
   setRegisterDataPointer(regist, allocWp43s(REAL34_SIZE));
   real34Zero(REGISTER_REAL34_DATA(regist));
@@ -754,7 +754,7 @@ void allocateNamedVariable(const char *variableName) {
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
     setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
+    xcopy(getRegisterNamePointer(regist), variableName, len);
     setRegisterDataPointer(regist, allocWp43s(COMPLEX34_SIZE));
     real34Zero(REGISTER_REAL34_DATA(regist));
     real34Zero(REGISTER_IMAG34_DATA(regist));
@@ -764,7 +764,7 @@ void allocateNamedVariable(const char *variableName) {
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
     setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
+    xcopy(getRegisterNamePointer(regist), variableName, len);
     setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
@@ -778,7 +778,7 @@ void allocateNamedVariable(const char *variableName) {
     len = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     setRegisterNamePointer(regist, allocWp43s(len));
     setRegisterNameLength(regist, len>>1);
-    memcpy(getRegisterNamePointer(regist), variableName, len);
+    xcopy(getRegisterNamePointer(regist), variableName, len);
     setRegisterDataPointer(regist, allocWp43s(SHORT_INTEGER_SIZE));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
@@ -1165,8 +1165,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
  ***********************************************/
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
   if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
-     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)
-     || getRegisterTag(destRegister)      != getRegisterTag(sourceRegister     )) {
+     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)) {
     uint32_t size;
 
     switch(getRegisterDataType(sourceRegister)) {
@@ -1186,10 +1185,11 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
         size = 0;
     }
 
-    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), size, getRegisterTag(sourceRegister));
+    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), size, AM_NONE);
   }
 
-  memcpy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
+  xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), getRegisterFullSize(sourceRegister));
+  setRegisterTag(destRegister, getRegisterTag(sourceRegister));
 }
 
 
@@ -1811,7 +1811,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       longIntegerFree(lgInt);
       return 9999;
     }
-    value = longIntegerToUInt(lgInt);
+    longIntegerToUInt(lgInt, value);
     longIntegerFree(lgInt);
   }
 

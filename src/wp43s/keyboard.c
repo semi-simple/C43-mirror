@@ -768,7 +768,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         int16_t mem = stringByteLength(aimBuffer);
 
         reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-        memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+        xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 
         if( !eRPN ) {                                    //JM NEWERPN
           STACK_LIFT_ENABLE;
@@ -869,7 +869,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
           reallocateRegister(REGISTER_X, dtString, len, AM_NONE);
 
-          memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
+          xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
           aimBuffer[0] = 0;
 
           STACK_LIFT_ENABLE;

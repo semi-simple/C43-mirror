@@ -24,14 +24,9 @@
 
 void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegister_t regist) {
   dataSize_t sizeInBytes = longIntegerSizeInBytes(lgInt);
-  uint32_t sign = longIntegerSignTag(lgInt);
 
-  reallocateRegister(regist, dtLongInteger, sizeInBytes, sign);
-
-  memcpy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, sizeInBytes);
-  *REGISTER_DATA_MAX_LEN(regist) = sizeInBytes;
-
-  setRegisterLongIntegerSign(regist, sign);
+  reallocateRegister(regist, dtLongInteger, sizeInBytes, longIntegerSignTag(lgInt));
+  xcopy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, sizeInBytes);
 }
 
 
@@ -39,9 +34,9 @@ void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegi
 void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t lgInt) {
   dataSize_t sizeInBytes = *REGISTER_DATA_MAX_LEN(regist);
 
-  longIntegerInitSizeInBits(lgInt, max(sizeInBytes * 8, 64));
+  longIntegerInitSizeInBits(lgInt, 8 * max(sizeInBytes, 8));
 
-  memcpy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), sizeInBytes);
+  xcopy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), sizeInBytes);
 
   if(getRegisterLongIntegerSign(regist) == LI_NEGATIVE) {
     lgInt->_mp_size = -(sizeInBytes / LIMB_SIZE);

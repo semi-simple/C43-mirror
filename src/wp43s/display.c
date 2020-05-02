@@ -376,7 +376,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   realPlus(&value, &value, &ctxtReal39);
   ctxtReal39.digits = 39;
   realToReal34(&value, &value34);
-
+  if(real34IsNegative(real34)) {
+    real34SetNegativeSign(&value34);
+  }
 
   bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
   memset(bcd, 0, MAX_DIGITS);
@@ -601,7 +603,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -613,7 +615,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<firstDigit+min(displayHasNDigits - 1 - exponent, numDigits); digitPointer++, digitCount--) {
           if(digitCount != 0 && groupingGap != 0 && digitCount%(uint16_t)groupingGap == 0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -625,7 +627,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       else { // zero or positive exponent
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=lastDigit + max(exponent - numDigits + 1, 0); digitPointer++, digitCount--) {
           if(digitCount != -1 && digitCount != exponent && groupingGap != 0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
 
@@ -725,7 +727,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros before first significant digit
         for(digitCount=0, i=exponent+1; i<0; i++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -739,7 +741,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<=lastDigit; digitPointer++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0' + bcd[digitPointer];
@@ -752,7 +754,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         // Zeros after last significant digit
         for(i=1; i<=(int16_t)displayFormatDigits+exponent+1-numDigits; i++, digitCount--) {
           if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
           displayString[charIndex++] = '0';
@@ -767,7 +769,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         SigFigCnt = 0;                                                                        //JM SIGFIG
         for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) {
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-            memcpy(displayString + charIndex, separator, 2);
+            xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
           }
 
@@ -863,7 +865,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Significant digits
     for(digitCount=-1, digitPointer=firstDigit+1; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -879,7 +881,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-numDigits; digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -978,7 +980,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Digits after radix mark
     for(digitCount=-1, digitPointer=firstDigit; digitPointer<firstDigit+min(numDigits, digitsToDisplay+1); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -994,7 +996,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // The ending zeros
     for(digitPointer=0; digitPointer<=digitsToDisplay-max(0, numDigits); digitPointer++, digitCount--) {
       if(!firstDigitAfterPeriod && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
-        memcpy(displayString + charIndex, separator, 2);
+        xcopy(displayString + charIndex, separator, 2);
         charIndex += 2;
       }
       else {
@@ -1624,7 +1626,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
 
 
-void longIntegerToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
+void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
@@ -1767,12 +1769,15 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
   str[0] = '0';
   str[1] = 0;
-  if(longIntegerIsZero(lgInt)) {
+  if(lgInt->_mp_size == 0) {
+  //if(longIntegerIsZero(lgInt)) {
     return;
   }
 
-  digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
-  if(longIntegerIsNegative(lgInt)) {
+  //digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
+  digits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
+  //if(longIntegerIsNegative(lgInt)) {
+  if(lgInt->_mp_size < 0) {
     stringLen = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
   }
@@ -1787,15 +1792,25 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
   str[stringLen - 1] = 0;
 
-  longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
-  longIntegerAddUInt(lgInt, 0, x);
-  longIntegerSetPositiveSign(x);
+  //longIntegerInitSizeInBits(x, longIntegerBits(lgInt));
+  mpz_init2(x, mpz_sizeinbase(lgInt, 2));
+
+  //longIntegerAddUInt(lgInt, 0, x);
+  mpz_add_ui(x, lgInt, 0);
+
+  //longIntegerSetPositiveSign(x);
+  x->_mp_size =  abs(x->_mp_size);
+
 
   stringLen -= 2; // set stringLen to the last digit of the base 10 representation
   counter = digits;
-  while(!longIntegerIsZero(x)) {
+  //while(!longIntegerIsZero(x)) {
+  while(x->_mp_size != 0) {
     str[stringLen--] = '0' + mpz_tdiv_ui(x, 10);
-    longIntegerDivideUInt(x, 10, x);
+
+    //longIntegerDivideUInt(x, 10, x);
+    mpz_tdiv_q_ui(x, x, 10);
+
     counter--;
   }
 
@@ -1803,7 +1818,8 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
     xcopy(str + stringLen, str + stringLen + 1, digits);
   }
 
-  longIntegerFree(x);
+  //longIntegerFree(x);
+  mpz_clear(x);
 }
 
 
@@ -1846,7 +1862,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
@@ -2016,7 +2032,7 @@ char tmpa[60];
 
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
-      longIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
 
 //      if (stringByteLength(tmpStr3000 + 2100) < 33) {strcat(tmpStr3000 + 2100,"          ");}    //JMSHOW move short strings into the middle
     while (stringByteLength(tmpStr3000 + 2100) < 30) {

@@ -232,8 +232,10 @@ void showAlphaMode(void) {
  * \return void
  ***********************************************/
 void showHourGlass(void) {
-  hourGlassIconEnabled = true;
-  showGlyph(STD_HOURGLASS, &standardFont, X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide
+  if(!hourGlassIconEnabled) {
+    hourGlassIconEnabled = true;
+    showGlyph(STD_HOURGLASS, &standardFont, X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide
+  }
 }
 
 
@@ -245,8 +247,10 @@ void showHourGlass(void) {
  * \return void
  ***********************************************/
 void hideHourGlass(void) {
-  hourGlassIconEnabled = false;
-  showGlyph(STD_SPACE_EM, &standardFont, X_HOURGLASS, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
+  if(hourGlassIconEnabled) {
+    hourGlassIconEnabled = false;
+    showGlyph(STD_SPACE_EM, &standardFont, X_HOURGLASS, 0, vmNormal, true, true); // STD_SPACE_EM is 12 pixel wide
+  }
 }
 
 

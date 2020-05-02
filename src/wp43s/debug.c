@@ -590,7 +590,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
-      longIntegerToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+      longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
     }
 
     else {
@@ -1412,7 +1412,12 @@ void debugNIM(void) {
     }
 
     if(real34IsZero(real34)) {
-      strcpy(str, "+0.000000000000000000000000000000000e+0");
+      if(real34IsPositive(real34)) {
+        strcpy(str, "+0.000000000000000000000000000000000e+0");
+      }
+      else {
+        strcpy(str, "-0.000000000000000000000000000000000e+0");
+      }
       return;
     }
 

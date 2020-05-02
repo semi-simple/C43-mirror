@@ -20,7 +20,7 @@
 
 #define shortIntegerIsZero(op) (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
 
-void     fnChangeBase               (uint16_t base);
+void     fnChangeBase                (uint16_t base);
 void     longIntegerMultiply         (longInteger_t opY, longInteger_t opX, longInteger_t result);
 void     longIntegerSquare           (longInteger_t op,  longInteger_t result);
 void     longIntegerAdd              (longInteger_t opY, longInteger_t opX, longInteger_t result);

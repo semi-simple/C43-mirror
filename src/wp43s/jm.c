@@ -346,7 +346,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
     //printf("Xreg %d\n", X_REG);
     Norm_Key_00_VAR = X_REG;
@@ -369,7 +369,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -395,7 +395,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -421,7 +421,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
     longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
-    X_REG = longIntegerToInt(lgInt);
+    longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
     if(JM_KEY >= 256) {
@@ -442,7 +442,7 @@ void fnStrtoX(char aimBuffer[]) {
   liftStack();
   int16_t mem = stringByteLength(aimBuffer);
   reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-  memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 }
 
 
@@ -935,7 +935,7 @@ void fnJM(uint16_t JM_OPCODE) {
       char tmpstr[200];
       char tmpstr2[300];
       sprintf(tmpstr2,"[%d]:",ix);
-      longIntegerToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);
@@ -1185,7 +1185,7 @@ void fnUserJM(uint16_t jmUser) {
     break;
 
   case USER_RESET:                                              //USER_RESET 26
-    memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+    xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
     userModeEnabled = false;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);

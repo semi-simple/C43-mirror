@@ -442,7 +442,7 @@ void fnStrtoX(char aimBuffer[]) {
   liftStack();
   int16_t mem = stringByteLength(aimBuffer);
   reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-  memcpy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
 }
 
 
@@ -1185,7 +1185,7 @@ void fnUserJM(uint16_t jmUser) {
     break;
 
   case USER_RESET:                                              //USER_RESET 26
-    memcpy(kbd_usr, kbd_std, sizeof(kbd_std));
+    xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
     userModeEnabled = false;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);

@@ -92,7 +92,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       strcat(tmp2,tmpStr3000);                           //JMCSV
       //strcpy(tmpStr3000,tmp2);                         //JMCSV
       tmp2[TMP_STR_LENGTH-1]=0;                          //JMCSV trying a better way, in case the terminating 0 is not copied
-      memcpy(tmpStr3000,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
+      xcopy(tmpStr3000,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
       strcat(tmpStr3000,"\"");                           //JMCSV
       break;
 
@@ -105,7 +105,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       break;
 
     case dtString:
-      memcpy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
+      xcopy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
       stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       tmp2[0]=0;                                         //JMCSV add apostrophies
       strcat(tmp2,"\"");                                 //JMCSV

@@ -395,8 +395,8 @@ void addStriLonI(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 
@@ -416,8 +416,8 @@ void addStriTime(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 
@@ -437,8 +437,8 @@ void addStriDate(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 
@@ -455,11 +455,11 @@ void addStriStri(void) {
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   len2 = stringByteLength(REGISTER_STRING_DATA(REGISTER_X));
 
-  memcpy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2 + 1));
+  xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2 + 1));
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 
@@ -505,8 +505,8 @@ void addStriShoI(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, errorMessage,                     len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, errorMessage,                     len2 + 1);
 }
 
 
@@ -526,8 +526,8 @@ void addStriReal(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 
@@ -547,8 +547,8 @@ void addStriCplx(void) {
 
   reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
 
-  memcpy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  memcpy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
 }
 
 

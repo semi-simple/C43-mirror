@@ -123,6 +123,7 @@
 		</Compiler>
 		<Linker>
 			<Add option="-m64" />
+			<Add library="m" />
 		</Linker>
 		<Unit filename="COPYING">
 			<Option target="&lt;{~None~}&gt;" />
@@ -2173,9 +2174,6 @@
 			<Option target="wp43s_debug" />
 		</Unit>
 		<Extensions>
-			<code_completion />
-			<debugger />
-			<envvars />
 			<DoxyBlocks>
 				<comment_style block="4" line="2" />
 				<doxyfile_project />

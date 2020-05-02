@@ -1010,7 +1010,7 @@ void fnJM(uint16_t JM_OPCODE) {
     longIntegerInit(lgInt);
 
     ix = 0;
-    while (ix <= 9-9 ) {
+    while (ix <= 9 ) {
       runFunction(ITM_NEXTP);
       fnStore(ix);
 

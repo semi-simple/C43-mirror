@@ -506,9 +506,16 @@ void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
 
 
 
+
 void fnRCL(int16_t inp) {
   STACK_LIFT_ENABLE;
+  if(inp == TEMP_REGISTER) {
+    liftStack();
+    copySourceRegisterToDestRegister(inp, REGISTER_X);
+    refreshStack();
+  } else {
   fnRecall(inp);
+  }
 }
 
 
@@ -523,9 +530,9 @@ uint16_t nprimes = 0;
  * \return void
  ***********************************************/
 void fnJM(uint16_t JM_OPCODE) {
+#define JMTEMP TEMP_REGISTER
 
-
-  if(JM_OPCODE == 6) {                                          //Delta to Star   ZYX to ZYX; destroys IJKL & 99
+  if(JM_OPCODE == 6) {                                          //Delta to Star   ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
     STACK_LIFT_ENABLE;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
@@ -535,21 +542,21 @@ void fnJM(uint16_t JM_OPCODE) {
     fnSwapXY(0);                                                // X<>Y
 
     fnAdd(0);                                                   // +
-    copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO L
+    copySourceRegisterToDestRegister(REGISTER_X, JMTEMP);       // STO JMTEMP
     fnRCL(REGISTER_K);                                          // RCL I
     fnRCL(REGISTER_J);                                          // RCL J     // z = (zx yz) / (x+y+z)
     fnMultiply(0);                                              // *
     fnSwapXY(0);                                                // X<>Y
     fnDivide(0);                                                // /
 
-    fnRCL(99);                                                  // RCL L
+    fnRCL(JMTEMP);                                              // RCL JMTEMP
     fnRCL(REGISTER_I);                                          // RCL J
     fnRCL(REGISTER_J);                                          // RCL K     // y = (xy yz) / (x+y+z)
     fnMultiply(0);                                              // *
     fnSwapXY(0);                                                // X<>Y
     fnDivide(0);                                                // /
 
-    fnRCL(99);                                                  // RCL L
+    fnRCL(JMTEMP);                                              // RCL JMTEMP
     fnRCL(REGISTER_I);                                          // RCL I
     fnRCL(REGISTER_K);                                          // RCL K     // z = (xy zx) / (x+y+z)
     fnMultiply(0);                                              // *
@@ -559,13 +566,17 @@ void fnJM(uint16_t JM_OPCODE) {
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO
 
     temporaryInformation = TI_ABC;
-    refreshRegisterLine(REGISTER_X);
-    refreshRegisterLine(REGISTER_Y);
-    refreshRegisterLine(REGISTER_Z);
+
+    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+    adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
+    adjustResult(REGISTER_Z, false, true, REGISTER_Z, -1, -1);
+//    refreshRegisterLine(REGISTER_X);
+//    refreshRegisterLine(REGISTER_Y);
+//    refreshRegisterLine(REGISTER_Z);
   }
   else
 
-  if(JM_OPCODE == 7) {                                          //Star to Delta ZYX to ZYX; destroys IJKL & 99
+  if(JM_OPCODE == 7) {                                          //Star to Delta ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
     STACK_LIFT_ENABLE;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
@@ -581,29 +592,32 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(REGISTER_K);                                          // RCL K
     fnMultiply(0);                          //JK                // *
     fnAdd(0);
-    copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO K
-                                                                // RCL J    zx = () / y
-    fnRCL(REGISTER_J);                                          // RCL K
-    fnDivide(0);                                                // *
+    copySourceRegisterToDestRegister(REGISTER_X, JMTEMP);       // STO JMTEMP
+                                                                //
+    fnRCL(REGISTER_J);                                          //      zx = () / y
+    fnDivide(0);                                                // 
 
-    fnRCL(99);                                                  // RCL J    yz = () / x
-    fnRCL(REGISTER_I);                                          // RCL K
-    fnDivide(0);                                                // *
+    fnRCL(JMTEMP);                                              // RCL JMTEMP    
+    fnRCL(REGISTER_I);                                          //      yz = () / x
+    fnDivide(0);                                                //
 
-    fnRCL(99);                                                  // RCL J    xy = () / z
-    fnRCL(REGISTER_K);                                          // RCL K
-    fnDivide(0);                                                // *
+    fnRCL(JMTEMP);                                              // RCL JMTEMP    
+    fnRCL(REGISTER_K);                                          //      xy = () / z
+    fnDivide(0);                                                //
 
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO
 
     temporaryInformation = TI_ABBCCA;
-    refreshRegisterLine(REGISTER_X);
-    refreshRegisterLine(REGISTER_Y);
-    refreshRegisterLine(REGISTER_Z);
+    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+    adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
+    adjustResult(REGISTER_Z, false, true, REGISTER_Z, -1, -1);
+//    refreshRegisterLine(REGISTER_X);
+//    refreshRegisterLine(REGISTER_Y);
+//    refreshRegisterLine(REGISTER_Z);
   }
   else
 
-  if(JM_OPCODE == 8) {                                          //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL & 99
+  if(JM_OPCODE == 8) {                                          //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL
     saveStack();
     STACK_LIFT_ENABLE;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I  //A2
@@ -649,7 +663,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
 
-  if(JM_OPCODE == 9) {                                          //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & 99
+  if(JM_OPCODE == 9) {                                          //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
     STACK_LIFT_ENABLE;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //c
@@ -662,7 +676,7 @@ void fnJM(uint16_t JM_OPCODE) {
     stringToReal34("3", REGISTER_REAL34_DATA(REGISTER_X));
     stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      //
     refreshStack();
-    copySourceRegisterToDestRegister(REGISTER_X, 99);           // STO
+    copySourceRegisterToDestRegister(REGISTER_X, JMTEMP);       // STO
     fnDivide(0);
 
 
@@ -679,7 +693,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnAdd(0);                                                   // +
     fnRCL(REGISTER_K);                                       // VA
     fnAdd(0);                                                   // + V1 = (VA +aVb +aaVc) /3
-    fnRCL(99);                                                  // 3
+    fnRCL(JMTEMP);                                              // 3
     fnDivide(0);                                                // /
 
 
@@ -696,7 +710,7 @@ void fnJM(uint16_t JM_OPCODE) {
     fnAdd(0);                                                   // +
     fnRCL(REGISTER_K);                                       // VA
     fnAdd(0);                                                   // + V1 = (VA +aVb +aaVc) /3
-    fnRCL(99);                                                  // 3
+    fnRCL(JMTEMP);                                              // 3
     fnDivide(0);                                                // /
 
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO

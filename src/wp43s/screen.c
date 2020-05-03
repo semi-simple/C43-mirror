@@ -1295,7 +1295,7 @@ void resetTemporaryInformation(void) {
 
     case TI_STATISTIC_SUMS:    refreshRegisterLine(REGISTER_Y); break;
 
-    case TI_ms:                                        //JMms
+    case TI_ms:                                                                          //JMms
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
@@ -1318,6 +1318,15 @@ void resetTemporaryInformation(void) {
                                refreshStack();
                                showSoftmenuCurrentPart();
                                break;                                                   //JMSHOW ^^
+
+    case TI_ABBCCA:
+    case TI_ABC:
+    case TI_012:               //Triple value ELEC output                               //JMELEC vv
+                               refreshRegisterLine(REGISTER_Z);
+                               refreshRegisterLine(REGISTER_Y);
+                               refreshRegisterLine(REGISTER_X);
+                               break;                                                   //JMELEC^^
+
 
     default:                   sprintf(errorMessage, "In function resetTemporaryInformation: %" FMT8U " is an unexpected value for temporaryInformation!", temporaryInformation);
                                displayBugScreen(errorMessage);
@@ -1833,21 +1842,8 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
 
-            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
 
-            w = stringWidth(tmpStr3000, &numericFont, false, true);
-            lineWidth = w;
-            if(prefixWidth > 0) {
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-            }
-            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-          }
-
-          // else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
-          //complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
-
-          else if(getRegisterDataType(regist) == dtComplex34 || getRegisterDataType(regist) == dtReal34) {
-             if(temporaryInformation == TI_ABC) {                             //JM EE \/
+            if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
@@ -1904,6 +1900,82 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }
                                                                        //JM EE ^
+
+
+
+            real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
+
+            w = stringWidth(tmpStr3000, &numericFont, false, true);
+            lineWidth = w;
+            if(prefixWidth > 0) {
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+            }
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+
+          // else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
+          //complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
+
+          else if(getRegisterDataType(regist) == dtComplex34) {
+            if(temporaryInformation == TI_ABC) {                             //JM EE \/
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "c" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "b" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "a" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_ABBCCA) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "ca" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "bc" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "ab" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_012) {
+              if(regist == REGISTER_X) {
+                strcpy(prefix, "sym2" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Y) {
+                strcpy(prefix, "sym1" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_Z) {
+                strcpy(prefix, "sym0" STD_SPACE_FIGURE "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            if(prefixWidth > 0) {
+              if(regist == REGISTER_X) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
+              } else
+              if(regist == REGISTER_Y) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Y_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Y), vmNormal, true, true);
+              } else
+              if(regist == REGISTER_Z) {
+                showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_Z_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_Z), vmNormal, true, true);
+              }
+            }
+                                                                       //JM EE ^
+
+
 
             complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS,true, STD_SPACE_PUNCTUATION);
 

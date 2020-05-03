@@ -27,17 +27,17 @@
  * \return bool_t
  ***********************************************/
 bool_t getFlag(uint16_t f) {
-  if(f < NUMBER_OF_LOCAL_FLAGS) {
+  if(f < NUMBER_OF_GLOBAL_FLAGS) {
     return (flags[f/16] & (1u << (f%16))) != 0;
   }
   else {
-    if(numberOfLocalRegisters > 0) {
-      f -= NUMBER_OF_LOCAL_FLAGS;
-      if(f < 16) {
-        return (*POINTER_TO_LOCAL_FLAGS & (1u << f)) != 0;
+    if(numberOfLocalFlags != 0) {
+      f -= NUMBER_OF_GLOBAL_FLAGS;
+      if(f < NUMBER_OF_LOCAL_FLAGS) {
+        return (allLocalRegisterPointer->localFlags & (1u << f)) != 0;
       }
       else {
-        sprintf(errorMessage, "In function getFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function getFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", f, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -59,7 +59,7 @@ bool_t getFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnSetFlag(uint16_t f) {
-  if(f < NUMBER_OF_LOCAL_FLAGS) {
+  if(f < NUMBER_OF_GLOBAL_FLAGS) {
     flags[f/16] |= 1u << (f%16);
 
     if(f == FLAG_CPXRES) {
@@ -70,13 +70,13 @@ void fnSetFlag(uint16_t f) {
     }
   }
   else {
-    if(numberOfLocalRegisters > 0) {
-      f -= NUMBER_OF_LOCAL_FLAGS;
-      if(f < 16) {
-        *POINTER_TO_LOCAL_FLAGS |=  (1u << f);
+    if(numberOfLocalFlags != 0) {
+      f -= NUMBER_OF_GLOBAL_FLAGS;
+      if(f < NUMBER_OF_LOCAL_FLAGS) {
+        allLocalRegisterPointer->localFlags |=  (1u << f);
       }
       else {
-        sprintf(errorMessage, "In function fnSetFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnSetFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", f, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -99,7 +99,7 @@ void fnSetFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnClearFlag(uint16_t f) {
-  if(f < NUMBER_OF_LOCAL_FLAGS) {
+  if(f < NUMBER_OF_GLOBAL_FLAGS) {
     flags[f/16] &= ~(1u << (f%16));
 
     if(f == FLAG_CPXRES) {
@@ -110,13 +110,13 @@ void fnClearFlag(uint16_t f) {
     }
   }
   else {
-    if(numberOfLocalRegisters > 0) {
-      f -= NUMBER_OF_LOCAL_FLAGS;
-      if(f < 16) {
-        *POINTER_TO_LOCAL_FLAGS &= ~(1u << f);
+    if(numberOfLocalFlags != 0) {
+      f -= NUMBER_OF_GLOBAL_FLAGS;
+      if(f < NUMBER_OF_LOCAL_FLAGS) {
+        allLocalRegisterPointer->localFlags &= ~(1u << f);
       }
       else {
-        sprintf(errorMessage, "In function fnClearFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnClearFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", f, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -139,7 +139,7 @@ void fnClearFlag(uint16_t f) {
  * \return void
  ***********************************************/
 void fnFlipFlag(uint16_t f) {
-  if(f < NUMBER_OF_LOCAL_FLAGS) {
+  if(f < NUMBER_OF_GLOBAL_FLAGS) {
     flags[f/16] ^=  1u << (f%16);
 
     if(f == FLAG_CPXRES) {
@@ -150,13 +150,13 @@ void fnFlipFlag(uint16_t f) {
     }
   }
   else {
-    if(numberOfLocalRegisters > 0) {
-      f -= NUMBER_OF_LOCAL_FLAGS;
-      if(f < 16) {
-        *POINTER_TO_LOCAL_FLAGS ^=  (1u << f);
+    if(numberOfLocalFlags != 0) {
+      f -= NUMBER_OF_GLOBAL_FLAGS;
+      if(f < NUMBER_OF_LOCAL_FLAGS) {
+        allLocalRegisterPointer->localFlags ^=  (1u << f);
       }
       else {
-        sprintf(errorMessage, "In function fnFlipFlag: local flag %" FMT16U " is not defined! Must be from 0 to 15.", f);
+        sprintf(errorMessage, "In function fnFlipFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", f, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -183,8 +183,8 @@ void fnClFAll(uint16_t unusedParamButMandatory) {
   showRealComplexResult();
   showOverflowCarry();
 
-  if(numberOfLocalRegisters != 0) {
-    *POINTER_TO_LOCAL_FLAGS = 0;
+  if(numberOfLocalFlags != 0) {
+    allLocalRegisterPointer->localFlags = 0;
   }
 }
 

@@ -19,7 +19,7 @@
  ***********************************************/
 
 #define longInteger_t                                                     mpz_t
-#define REGISTER_LONG_INTEGER_DATA(a)                                     ((void *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the long integer of a register
+#define REGISTER_LONG_INTEGER_DATA(a)                                     ((void *)(getRegisterDataPointer(a) + 1)) // Memory pointer to the long integer of a register
 #define LIMB_SIZE                                                         sizeof(mp_limb_t)
 #define LI_ZERO                                                           0 // 0
 #define LI_NEGATIVE                                                       1 // -
@@ -43,7 +43,7 @@
 #define longIntegerSetNegativeSign(op)                                    {(op)->_mp_size = -abs((op)->_mp_size);}
 #define longIntegerSetZero(op)                                            {mpz_clear(op); mpz_init(op);}
 #define longIntegerIsZero(op)                                             ((op)->_mp_size == 0)
-#define longIntegerIsZeroRegister(regist)                                 (*REGISTER_DATA_MAX_LEN(regist) == 0)
+#define longIntegerIsZeroRegister(regist)                                 (getRegisterLongIntegerSign(regist) == LI_ZERO)
 #define longIntegerIsPositive(op)                                         ((op)->_mp_size >  0)
 #define longIntegerIsPositiveOrZero(op)                                   ((op)->_mp_size >= 0)
 #define longIntegerIsNegative(op)                                         ((op)->_mp_size <  0)

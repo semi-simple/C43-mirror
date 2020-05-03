@@ -68,42 +68,36 @@ typedef struct {
 #define real_t                                            decNumber
 typedef struct {real34_t real, imag;}                     complex34_t;
 
-#define REAL_SIZE                                         sizeof(real_t)
-#define REAL34_SIZE                                       sizeof(real34_t)
-#define REAL39_SIZE                                       sizeof(real39_t)
-#define REAL51_SIZE                                       sizeof(real51_t)
-#define REAL75_SIZE                                       sizeof(real75_t)
-#define REAL1071_SIZE                                     sizeof(real1071_t)
-//#define REAL2139_SIZE                                     sizeof(real2139_t)
-#define COMPLEX34_SIZE                                    sizeof(complex34_t)
+#define REAL_SIZE                                         TO_BLOCKS(sizeof(real_t))
+#define REAL34_SIZE                                       TO_BLOCKS(sizeof(real34_t))
+#define REAL39_SIZE                                       TO_BLOCKS(sizeof(real39_t))
+#define REAL51_SIZE                                       TO_BLOCKS(sizeof(real51_t))
+#define REAL1071_SIZE                                     TO_BLOCKS(sizeof(real1071_t))
+#define COMPLEX34_SIZE                                    TO_BLOCKS(sizeof(complex34_t))
 
-#define POINTER_TO_LOCAL_FLAGS                            ((dataSize_t  *)(allLocalRegisterPointer))
-#define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + sizeof(dataSize_t) + 4u*(a)))
+#define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + 1 + (a)))
 
-#define POINTER_TO_NAMED_VARIABLE(a)                      ((registerDescriptor_t *)(allNamedVariablePointer      + 6u*(a)))
-#define POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a)      ((uint16_t    *)(allNamedVariablePointer + 4u + 6u*(a)))
+#define POINTER_TO_NAMED_VARIABLE(a)                      ((registerDescriptor_t *)(allNamedVariablePointer + 1 + 2u*(a)))
+#define POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a)      ((dataBlock_t *)(allNamedVariablePointer + 2u + 2u*(a)))
 #define POINTER_TO_NAMED_VARIABLE_NAME(a)                 ((char        *)(*POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a) << 1))
-#define RAM_REAL16(a)                                     ((real16_t    *)(ram + (a)))
-#define RAM_REAL34(a)                                     ((real34_t    *)(ram + (a)))
 
 
-#define REGISTER_DATA(a)                                  ((void        *)(getRegisterDataPointer(a)))
+#define REGISTER_DATA(a)                                  ((dataBlock_t *)(getRegisterDataPointer(a)))
 #define REGISTER_REAL34_DATA(a)                           ((real34_t    *)(getRegisterDataPointer(a)))
 #define REGISTER_IMAG34_DATA(a)                           ((real34_t    *)(getRegisterDataPointer(a) + REAL34_SIZE))
 #define REGISTER_COMPLEX34_DATA(a)                        ((complex34_t *)(getRegisterDataPointer(a)))
 
-#define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + sizeof(dataSize_t))) // Memory pointer to the string of a register
-#define REGISTER_DATA_MAX_LEN(a)                          ((dataSize_t  *)(getRegisterDataPointer(a)))                      // Memory pointer to the lenght of string or long integer
+#define REGISTER_STRING_DATA(a)                           ((char        *)(getRegisterDataPointer(a) + 1)) // Memory pointer to the string of a register
 
 #define REGISTER_SHORT_INTEGER_DATA(a)                    ((uint64_t    *)(getRegisterDataPointer(a)))
 #define VARIABLE_REAL34_DATA(a)                           ((real34_t    *)(a))
-#define VARIABLE_IMAG34_DATA(a)                           ((real34_t    *)((char *)(a) + REAL34_SIZE))
+#define VARIABLE_IMAG34_DATA(a)                           ((real34_t    *)((dataBlock_t *)(a) + REAL34_SIZE))
 #define VARIABLE_COMPLEX34_DATA(a)                        ((complex34_t *)(a))
 
 
 
 #define complex34ChangeSign(operand)                           {real34ChangeSign((real34_t *)(operand)); \
-                                                                real34ChangeSign((real34_t *)((char *)(operand) + REAL34_SIZE)); \
+                                                                real34ChangeSign((real34_t *)((dataBlock_t *)(operand) + REAL34_SIZE)); \
                                                                }
 #define complex34Copy(source, destination)                     {  *(uint64_t *)(destination)     =   *(uint64_t *)(source); \
                                                                 *(((uint64_t *)(destination))+1) = *(((uint64_t *)(source))+1); \
@@ -115,7 +109,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ChangeSign(operand)                              ((real34_t *)(operand))->bytes[15] ^= 0x80
 #define real34Compare(operand1, operand2, res)                 decQuadCompare           ((real34_t *)(res), (real34_t *)(operand1), (real34_t *)(operand2), &ctxtReal34)
 //#define real34Copy(source, destination)                        decQuadCopy            (destination, source)
-//#define real34Copy(source, destination)                        xcopy(destination, source, REAL34_SIZE)
+//#define real34Copy(source, destination)                        xcopy(destination, source, TO_BYTES(REAL34_SIZE))
 #define real34Copy(source, destination)                        {*(uint64_t *)(destination) = *(uint64_t *)(source); \
                                                                 *(((uint64_t *)(destination))+1) = *(((uint64_t *)(source))+1); \
                                                                }
@@ -145,7 +139,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define real34ToString(source, destination)                    decQuadToString          ((real34_t *)(source), destination)
 #define real34ToUInt32(source)                                 decQuadToUInt32          ((real34_t *)(source), &ctxtReal34, DEC_ROUND_DOWN)
 #define real34Zero(destination)                                decQuadZero              (destination)
-//#define real34Zero(destination)                                xcopy                    (destination, const34_0, REAL34_SIZE)
+//#define real34Zero(destination)                                xcopy                    (destination, const34_0, TO_BYTES(REAL34_SIZE))
 /*#define real34Zero(destination)                                {  *(uint64_t *)(destination)     =   *(uint64_t *)const34_0; \
                                                                   *(((uint64_t *)(destination))+1) = *(((uint64_t *)const34_0)+1); \
                                                                }*/
@@ -197,7 +191,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
                                                                 ctxtReal39.round = savedRoundingMode; \
                                                                }
 #define realToReal34(source, destination)                      decQuadFromNumber        ((real34_t *)(destination), source, &ctxtReal34)
-#define realToString(source, destination)                      decNumberToString        (source, destination)
+#define realToString(source, destination)                      decNumberToString        ((real_t *)source, destination)
 #define realZero(destination)                                  decNumberZero            (destination)
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)

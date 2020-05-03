@@ -72,7 +72,7 @@ void generateConstantArray(char *name, char *value) {
 
   printf("generateConstantArray: %-10.10s = %s\n", name, value);
 
-  memset(&real39, 0, REAL39_SIZE);
+  memset(&real39, 0, sizeof(real39_t));
   stringToReal(value, (real_t *)&real39, &ctxtReal39);
 
   strcpy(whiteSpace, "                                        ");
@@ -92,12 +92,12 @@ void generateConstantArray(char *name, char *value) {
   strcat(realPointerDeclarations, whiteSpace);
   strcat(realPointerDeclarations, " = (real_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += REAL39_SIZE;
+  idx += sizeof(real39_t);
   strcat(realPointerDeclarations, temp);
   strcat(realPointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<REAL39_SIZE; i++) {
+  for(uint32_t i=0; i<sizeof(real39_t); i++) {
     sprintf(temp, "0x%02x,", *(((uint8_t *)(&real39)) + i));
     strcat(realArray, temp);
   }
@@ -113,7 +113,7 @@ void generateConstantArray34(char *name, char *value) {
 
   printf("generateConstantArray34: %-10.10s = %s\n", name, value);
 
-  memset(&real34, 0, REAL34_SIZE);
+  memset(&real34, 0, sizeof(real34_t));
   stringToReal34(value, &real34);
 
   strcpy(whiteSpace, "                                        ");
@@ -128,12 +128,12 @@ void generateConstantArray34(char *name, char *value) {
   strcat(real34PointerDeclarations, whiteSpace);
   strcat(real34PointerDeclarations, " = (real34_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += REAL34_SIZE;
+  idx += sizeof(real34_t);
   strcat(real34PointerDeclarations, temp);
   strcat(real34PointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<REAL34_SIZE; i++) {
+  for(uint32_t i=0; i<sizeof(real34_t); i++) {
     sprintf(temp, "0x%02x,", *(((uint8_t *)(&real34)) + i));
     strcat(realArray, temp);
   }
@@ -149,7 +149,7 @@ void generateConstantArray51(char *name, char *value) {
 
   printf("generateConstantArray51: %-10.10s = %s\n", name, value);
 
-  memset(&real51, 0, REAL51_SIZE);
+  memset(&real51, 0, sizeof(real51_t));
   stringToReal(value, (real_t *)&real51, &ctxtReal51);
 
   strcpy(whiteSpace, "                                        ");
@@ -164,12 +164,12 @@ void generateConstantArray51(char *name, char *value) {
   strcat(real51PointerDeclarations, whiteSpace);
   strcat(real51PointerDeclarations, " = (real_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += REAL51_SIZE;
+  idx += sizeof(real51_t);
   strcat(real51PointerDeclarations, temp);
   strcat(real51PointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<REAL51_SIZE; i++) {
+  for(uint32_t i=0; i<sizeof(real51_t); i++) {
     sprintf(temp, "0x%02x,", *(((uint8_t *)(&real51)) + i));
     strcat(realArray, temp);
   }
@@ -185,7 +185,7 @@ void generateConstantArray1071(char *name, char *value) {
 
   printf("generateConstantArray1071: %-9.9s = %s\n", name, value);
 
-  memset(&real1071, 0, REAL1071_SIZE);
+  memset(&real1071, 0, sizeof(real1071_t));
   stringToReal(value, (real_t *)&real1071, &ctxtReal1071);
 
   strcpy(whiteSpace, "                                        ");
@@ -200,12 +200,12 @@ void generateConstantArray1071(char *name, char *value) {
   strcat(real1071PointerDeclarations, whiteSpace);
   strcat(real1071PointerDeclarations, " = (real_t *)(constants + ");
   sprintf(temp, "%5d)", idx);
-  idx += REAL1071_SIZE;
+  idx += sizeof(real1071_t);
   strcat(real1071PointerDeclarations, temp);
   strcat(real1071PointerDeclarations, ";\n");
 
   strcat(realArray, "  ");
-  for(uint32_t i=0; i<REAL1071_SIZE; i++) {
+  for(uint32_t i=0; i<sizeof(real1071_t); i++) {
     sprintf(temp, "0x%02x,", *(((uint8_t *)(&real1071)) + i));
     strcat(realArray, temp);
   }

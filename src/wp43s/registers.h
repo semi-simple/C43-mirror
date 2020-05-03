@@ -53,7 +53,7 @@
 
 #define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
 
-#define freeRegisterData(regist)           freeWp43s(getRegisterDataPointer(regist), getRegisterFullSize(regist))
+#define freeRegisterData(regist)           freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
 
 
 
@@ -79,9 +79,6 @@ typedef enum {
   dtReal34Matrix    =  6,  ///< Double precision vector or matrix
   dtComplex34Matrix =  7,  ///< Double precision complex vector or matrix
   dtShortInteger    =  8,  ///< Short integer (64 bit)
-  //dtReal16          =  1,  ///< R single precision real (64 bits)
-  //dtComplex16       =  2,  ///< C single precision complex (2x 64 bits), RegDataInfo contains rectangular or polar mode
-  //dtAngle           =  3,  ///< Single precision angle. No longer in use
   //dtLabel           = 12,  ///< Label
   //dtSystemInteger   = 13,  ///< System integer (64 bits)
   //dtFlags           = 14,  ///< Flags
@@ -96,67 +93,87 @@ typedef union {
     uint32_t dataPointer     : 16; // Memory block number
     uint32_t dataType        :  4; // dtLongInteger, dtReal16, ...
     uint32_t tag             :  5; // AM_NONE, Short integer base, AM_DEGREE, AM_DMS,...
-    uint32_t notUsed         :  2;
-    uint32_t variableNameLen :  5;
+    uint32_t notUsed         :  7;
   };
 } registerDescriptor_t;
 
+// Header for datatype string, long integer, and matrix
+typedef union {
+  uint32_t data;
+  struct {
+    uint16_t dataMaxLength;          // String max length (includind terminating \0) in blocks or Long integer max length in blocks
+    uint16_t numberOfNamedVariables;
+  };
+  struct {
+    uint16_t variableNameLen;       // Size of the name in blocs: 1 to 4, up to 15 bytes = 7 double byte glyphs + trailing 0
+    uint16_t ptrToVariableName;
+  };
+  struct {
+    uint16_t localFlags;             // 16 local flags
+    uint16_t numberOfLocalRegisters;
+  };
+  struct {
+    uint16_t matrixLines;            // Number of lines in the matrix
+    uint16_t matrixColumns;          // Number of columns in the matrix
+  };
+} dataBlock_t;
 
-uint32_t  getRegisterDataType             (calcRegister_t regist);
-void     *getRegisterDataPointer          (calcRegister_t regist);
-uint32_t  getRegisterTag                  (calcRegister_t regist);
-uint32_t  getRegisterNameLength           (calcRegister_t regist);
-char     *getRegisterNamePointer          (calcRegister_t regist);
-uint32_t  getRegisterMaxDataLength        (calcRegister_t regist);
-void      setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint32_t tag);
-void      setRegisterDataPointer          (calcRegister_t regist, void *memPtr);
-void      setRegisterTag                  (calcRegister_t regist, uint32_t tag);
-void      setRegisterNameLength           (calcRegister_t regist, uint16_t length);
-void      setRegisterNamePointer          (calcRegister_t regist, void *namePointer);
-void      setRegisterMaxDataLength        (calcRegister_t regist, uint32_t maxDataLen);
-void      allocateLocalRegisters          (uint16_t n);
-void      allocateNamedVariable           (const char *variableName);
-uint32_t  getRegisterFullSize             (calcRegister_t regist);
-void      clearRegister                   (calcRegister_t regist);
-void      fnClearRegisters                (uint16_t unusedParamButMandatory);
-void      fnGetLocR                       (uint16_t unusedParamButMandatory);
-void      adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
-void      copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);
-void      fnStore                         (uint16_t r);
-void      fnStoreAdd                      (uint16_t r);
-void      fnStoreSub                      (uint16_t r);
-void      fnStoreMult                     (uint16_t r);
-void      fnStoreDiv                      (uint16_t r);
-void      fnStoreMin                      (uint16_t r);
-void      fnStoreMax                      (uint16_t r);
-void      fnStoreConfig                   (uint16_t r);
-void      fnStoreStack                    (uint16_t r);
-void      fnStoreElement                  (uint16_t unusedParamButMandatory);
-void      fnStoreIJ                       (uint16_t unusedParamButMandatory);
-void      fnRecall                        (uint16_t r);
-void      fnLastX                         (uint16_t unusedParamButMandatory);
-void      fnRecallAdd                     (uint16_t r);
-void      fnRecallSub                     (uint16_t r);
-void      fnRecallMult                    (uint16_t r);
-void      fnRecallDiv                     (uint16_t r);
-void      fnRecallMin                     (uint16_t r);
-void      fnRecallMax                     (uint16_t r);
-void      fnRecallConfig                  (uint16_t r);
-void      fnRecallStack                   (uint16_t r);
-void      fnRecallElement                 (uint16_t unusedParamButMandatory);
-void      fnRecallIJ                      (uint16_t unusedParamButMandatory);
-void      fnXLessThan                     (uint16_t unusedParamButMandatory);
-int16_t   indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
-void      printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
-void      printRealToConsole              (const real_t *value, const char *before, const char *after);
-void      printComplex34ToConsole         (const complex34_t *value, const char *before, const char *after);
-void      printLongIntegerToConsole       (const longInteger_t value, const char *before, const char *after);
-void      reallocateRegister              (calcRegister_t regist, dataSize_t dataType, uint32_t dataSizeWithoutDataLen, uint32_t tag);
-void      printRegisterToConsole          (calcRegister_t regist, const char *before, const char *after);
-void      printRegisterDescriptorToConsole(calcRegister_t regist);
-void      fnToReal                        (uint16_t unusedParamButMandatory);
-void      fnDec                           (uint16_t r);
-void      fnInc                           (uint16_t r);
+
+uint32_t     getRegisterDataType             (calcRegister_t regist);
+dataBlock_t *getRegisterDataPointer          (calcRegister_t regist);
+uint32_t     getRegisterTag                  (calcRegister_t regist);
+uint16_t     getVariableNameLength           (calcRegister_t regist);
+char        *getVariableNamePointer          (calcRegister_t regist);
+uint16_t     getRegisterMaxDataLength        (calcRegister_t regist);
+void         setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint32_t tag);
+void         setRegisterDataPointer          (calcRegister_t regist, void *memPtr);
+void         setRegisterTag                  (calcRegister_t regist, uint32_t tag);
+void         setVariableNameLength           (calcRegister_t regist, uint16_t length);
+void         setVariableNamePointer          (calcRegister_t regist, void *namePointer);
+void         setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
+void         allocateLocalRegisters          (uint16_t n);
+void         allocateNamedVariable           (const char *variableName);
+uint16_t     getRegisterFullSize             (calcRegister_t regist);
+void         clearRegister                   (calcRegister_t regist);
+void         fnClearRegisters                (uint16_t unusedParamButMandatory);
+void         fnGetLocR                       (uint16_t unusedParamButMandatory);
+void         adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
+void         copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);
+void         fnStore                         (uint16_t r);
+void         fnStoreAdd                      (uint16_t r);
+void         fnStoreSub                      (uint16_t r);
+void         fnStoreMult                     (uint16_t r);
+void         fnStoreDiv                      (uint16_t r);
+void         fnStoreMin                      (uint16_t r);
+void         fnStoreMax                      (uint16_t r);
+void         fnStoreConfig                   (uint16_t r);
+void         fnStoreStack                    (uint16_t r);
+void         fnStoreElement                  (uint16_t unusedParamButMandatory);
+void         fnStoreIJ                       (uint16_t unusedParamButMandatory);
+void         fnRecall                        (uint16_t r);
+void         fnLastX                         (uint16_t unusedParamButMandatory);
+void         fnRecallAdd                     (uint16_t r);
+void         fnRecallSub                     (uint16_t r);
+void         fnRecallMult                    (uint16_t r);
+void         fnRecallDiv                     (uint16_t r);
+void         fnRecallMin                     (uint16_t r);
+void         fnRecallMax                     (uint16_t r);
+void         fnRecallConfig                  (uint16_t r);
+void         fnRecallStack                   (uint16_t r);
+void         fnRecallElement                 (uint16_t unusedParamButMandatory);
+void         fnRecallIJ                      (uint16_t unusedParamButMandatory);
+void         fnXLessThan                     (uint16_t unusedParamButMandatory);
+int16_t      indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
+void         printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
+void         printRealToConsole              (const real_t *value, const char *before, const char *after);
+void         printComplex34ToConsole         (const complex34_t *value, const char *before, const char *after);
+void         printLongIntegerToConsole       (const longInteger_t value, const char *before, const char *after);
+void         reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t dataSizeWithoutDataLenBlocks, uint32_t tag);
+void         printRegisterToConsole          (calcRegister_t regist, const char *before, const char *after);
+void         printRegisterDescriptorToConsole(calcRegister_t regist);
+void         fnToReal                        (uint16_t unusedParamButMandatory);
+void         fnDec                           (uint16_t r);
+void         fnInc                           (uint16_t r);
 
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)

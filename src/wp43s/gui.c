@@ -841,7 +841,7 @@ void setupUI(void) {
   numBytes = screenStride * SCREEN_HEIGHT * 4;
   screenData = malloc(numBytes);
   if(screenData == NULL) {
-    sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride*4, SCREEN_HEIGHT, numBytes);
+    sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
     showInfoDialog("In function setupUI:", errorMessage, NULL, NULL);
     exit(1);
   }

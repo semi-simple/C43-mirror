@@ -1360,7 +1360,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
 
     if(bitsPerDigit != 0) {
       maxDigits = shortIntegerWordSize / bitsPerDigit;
-      if(shortIntegerWordSize%bitsPerDigit) {
+      if(shortIntegerWordSize % bitsPerDigit) {
         maxDigits++;
       }
 

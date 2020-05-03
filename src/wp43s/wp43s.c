@@ -42,143 +42,141 @@
   #endif
 #endif
 
-char                 *ram;
-bool_t               allowScreenUpdate;
-bool_t               funcOK;
-bool_t               keyActionProcessed;
+dataBlock_t          *ram;
+bool_t                allowScreenUpdate;
+bool_t                funcOK;
+bool_t                keyActionProcessed;
 
 // Variables stored in RAM
-realContext_t        ctxtReal34;   //   34 digits
-realContext_t        ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
-realContext_t        ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
-realContext_t        ctxtReal75;   //   75 digits: used in SLVQ
-realContext_t        ctxtReal1071; // 1071 digits: used in radian angle reduction
-//realContext_t        ctxtReal2139; // 2139 digits: used for really big modulo
-uint16_t             flags[7];
-char                 tmpStr3000[TMP_STR_LENGTH];
-char                 errorMessage[ERROR_MESSAGE_LENGTH];
-char                 aimBuffer[AIM_BUFFER_LENGTH];
-char                 nimBuffer[NIM_BUFFER_LENGTH];
-char                 nimBufferDisplay[NIM_BUFFER_LENGTH];
-char                 tamBuffer[TAM_BUFFER_LENGTH];
-char                 oldTime[8];
-char                 dateTimeString[12];
-softmenuStack_t      softmenuStack[7];
-registerDescriptor_t reg[112];
-registerDescriptor_t savedStackRegister[9+1];
-int16_t              tamFunction;
-int16_t              tamNumber;
-int16_t              tamNumberMin;
-int16_t              tamNumberMax;
-int16_t              tamDigit;
-int16_t              tamOperation;
-int16_t              tamLetteredRegister;
-int16_t              tamCurrentOperation;
-int16_t              currentRegisterBrowserScreen;
-int16_t              lineTWidth;
-int16_t              rbrRegister;
-int16_t              alphaSelectionMenu;
-int16_t              lastFcnsMenuPos;
-int16_t              lastMenuMenuPos;
-int16_t              lastCnstMenuPos;
-uint16_t             numberOfLocalRegisters;
-uint16_t             numberOfLocalFlags;
-uint16_t             numberOfNamedVariables;
-char                 *allLocalRegisterPointer;
-char                 *allNamedVariablePointer;
-char                 *statisticalSumsPointer;
-uint16_t             programCounter;
-uint16_t             xCursor;
-uint16_t             yCursor;
-uint16_t             tamMode;
-uint32_t             firstGregorianDay;
-uint32_t             denMax;
-uint32_t             lastIntegerBase;
-uint32_t             alphaSelectionTimer;
-uint8_t              softmenuStackPointer;
-uint8_t              transitionSystemState;
-uint8_t              cursorBlinkCounter;
-uint8_t              numScreensStandardFont;
-uint8_t              currentFntScr;
-uint8_t              currentFlgScr;
-uint8_t              displayFormat;
-uint8_t              displayFormatDigits;
-uint8_t              shortIntegerWordSize;
-uint8_t              denominatorMode;
-uint8_t              significantDigits;
-uint8_t              shortIntegerMode;
-uint8_t              previousCalcMode;
-uint8_t              groupingGap;
-uint8_t              dateFormat;
-uint8_t              curveFitting;
-uint8_t              roundingMode;
-uint8_t              calcMode;
-uint8_t              nextChar;
-uint8_t              complexUnit;
-uint8_t              displayStack;
-uint8_t              productSign;
-uint8_t              fractionType;
-uint8_t              radixMark;
-uint8_t              displayModeOverride;
-uint8_t              stackSize;
-uint8_t              complexMode;
-uint8_t              alphaCase;
-uint8_t              numLinesNumericFont;
-uint8_t              numLinesStandardFont;
-uint8_t              cursorEnabled;
-uint8_t              cursorFont;
-uint8_t              nimNumberPart;
-uint8_t              hexDigits;
-uint8_t              lastErrorCode;
-uint8_t              serialIOIconEnabled;
-uint8_t              timeFormat;
-uint8_t              temporaryInformation;
-uint8_t              rbrMode;
-uint8_t              numScreensNumericFont;
-uint8_t              currentAngularMode;
-bool_t               hourGlassIconEnabled;
-bool_t               watchIconEnabled;
-bool_t               userModeEnabled;
-bool_t               printerIconEnabled;
-bool_t               batteryIconEnabled;
-bool_t               shiftF;
-bool_t               shiftG;
-bool_t               shiftStateChanged;
-bool_t               showContent;
-bool_t               stackLiftEnabled;
-bool_t               displayLeadingZeros;
-bool_t               savedStackLiftEnabled;
-bool_t               rbr1stDigit;
-bool_t               updateDisplayValueX;
-calcKey_t            kbd_usr[37];
-calcRegister_t       errorMessageRegisterLine;
-calcRegister_t       errorRegisterLine;
-uint16_t             row[100];
-uint64_t             shortIntegerMask;
-uint64_t             shortIntegerSignBit;
-glyph_t              glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
-char                 transitionSystemOperation[4];
-char                 displayValueX[DISPLAY_VALUE_LEN];
-int16_t              exponentSignLocation;
-int16_t              denominatorLocation;
-int16_t              imaginaryExponentSignLocation;
-int16_t              imaginaryMantissaSignLocation;
-int16_t              exponentLimit;
-size_t               gmpMemInBytes;
-size_t               wp43sMemInBytes;
-freeBlock_t          freeBlocks[MAX_FREE_BLOCKS];
-int32_t              numberOfFreeBlocks;
-int32_t              lgCatalogSelection;
-void                 (*confirmedFunction)(uint16_t);
-real51_t             const *gammaLanczosCoefficients;
-real39_t             const *angle180;
-real39_t             const *angle90;
-real39_t             const *angle45;
-pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
+realContext_t         ctxtReal34;   //   34 digits
+realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
+realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
+realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
+realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
+//realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
+uint16_t              flags[7];
+char                  tmpStr3000[TMP_STR_LENGTH];
+char                  errorMessage[ERROR_MESSAGE_LENGTH];
+char                  aimBuffer[AIM_BUFFER_LENGTH];
+char                  nimBuffer[NIM_BUFFER_LENGTH];
+char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
+char                  tamBuffer[TAM_BUFFER_LENGTH];
+char                  oldTime[8];
+char                  dateTimeString[12];
+softmenuStack_t       softmenuStack[7];
+registerDescriptor_t  reg[112];
+registerDescriptor_t  savedStackRegister[9+1];
+int16_t               tamFunction;
+int16_t               tamNumber;
+int16_t               tamNumberMin;
+int16_t               tamNumberMax;
+int16_t               tamDigit;
+int16_t               tamOperation;
+int16_t               tamLetteredRegister;
+int16_t               tamCurrentOperation;
+int16_t               currentRegisterBrowserScreen;
+int16_t               lineTWidth;
+int16_t               rbrRegister;
+int16_t               alphaSelectionMenu;
+int16_t               lastFcnsMenuPos;
+int16_t               lastMenuMenuPos;
+int16_t               lastCnstMenuPos;
+uint16_t              numberOfLocalFlags;
+dataBlock_t          *allLocalRegisterPointer;
+dataBlock_t          *allNamedVariablePointer;
+dataBlock_t          *statisticalSumsPointer;
+uint16_t              programCounter;
+uint16_t              xCursor;
+uint16_t              yCursor;
+uint16_t              tamMode;
+uint32_t              firstGregorianDay;
+uint32_t              denMax;
+uint32_t              lastIntegerBase;
+uint32_t              alphaSelectionTimer;
+uint8_t               softmenuStackPointer;
+uint8_t               transitionSystemState;
+uint8_t               cursorBlinkCounter;
+uint8_t               numScreensStandardFont;
+uint8_t               currentFntScr;
+uint8_t               currentFlgScr;
+uint8_t               displayFormat;
+uint8_t               displayFormatDigits;
+uint8_t               shortIntegerWordSize;
+uint8_t               denominatorMode;
+uint8_t               significantDigits;
+uint8_t               shortIntegerMode;
+uint8_t               previousCalcMode;
+uint8_t               groupingGap;
+uint8_t               dateFormat;
+uint8_t               curveFitting;
+uint8_t               roundingMode;
+uint8_t               calcMode;
+uint8_t               nextChar;
+uint8_t               complexUnit;
+uint8_t               displayStack;
+uint8_t               productSign;
+uint8_t               fractionType;
+uint8_t               radixMark;
+uint8_t               displayModeOverride;
+uint8_t               stackSize;
+uint8_t               complexMode;
+uint8_t               alphaCase;
+uint8_t               numLinesNumericFont;
+uint8_t               numLinesStandardFont;
+uint8_t               cursorEnabled;
+uint8_t               cursorFont;
+uint8_t               nimNumberPart;
+uint8_t               hexDigits;
+uint8_t               lastErrorCode;
+uint8_t               serialIOIconEnabled;
+uint8_t               timeFormat;
+uint8_t               temporaryInformation;
+uint8_t               rbrMode;
+uint8_t               numScreensNumericFont;
+uint8_t               currentAngularMode;
+bool_t                hourGlassIconEnabled;
+bool_t                watchIconEnabled;
+bool_t                userModeEnabled;
+bool_t                printerIconEnabled;
+bool_t                batteryIconEnabled;
+bool_t                shiftF;
+bool_t                shiftG;
+bool_t                shiftStateChanged;
+bool_t                showContent;
+bool_t                stackLiftEnabled;
+bool_t                displayLeadingZeros;
+bool_t                savedStackLiftEnabled;
+bool_t                rbr1stDigit;
+bool_t                updateDisplayValueX;
+calcKey_t             kbd_usr[37];
+calcRegister_t        errorMessageRegisterLine;
+calcRegister_t        errorRegisterLine;
+uint16_t              row[100];
+uint64_t              shortIntegerMask;
+uint64_t              shortIntegerSignBit;
+glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
+char                  transitionSystemOperation[4];
+char                  displayValueX[DISPLAY_VALUE_LEN];
+int16_t               exponentSignLocation;
+int16_t               denominatorLocation;
+int16_t               imaginaryExponentSignLocation;
+int16_t               imaginaryMantissaSignLocation;
+int16_t               exponentLimit;
+size_t                gmpMemInBytes;
+size_t                wp43sMemInBytes;
+freeBlock_t           freeBlocks[MAX_FREE_BLOCKS];
+int32_t               numberOfFreeBlocks;
+int32_t               lgCatalogSelection;
+void                  (*confirmedFunction)(uint16_t);
+real51_t              const *gammaLanczosCoefficients;
+real39_t              const *angle180;
+real39_t              const *angle90;
+real39_t              const *angle45;
+pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
-  bool_t               backToDMCP;
-  uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
-  #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
+  bool_t              backToDMCP;
+  uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+  #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 
@@ -191,11 +189,11 @@ pcg32_random_t       pcg32_global = PCG32_INITIALIZER;
 void setupDefaults(void) {
   void *memPtr;
 
-  ram = malloc(RAM_SIZE);
-  memset(ram, 0, RAM_SIZE);
+  ram = (dataBlock_t *)malloc(TO_BYTES(RAM_SIZE));
+  memset(ram, 0, TO_BYTES(RAM_SIZE));
   numberOfFreeBlocks = 1;
   freeBlocks[0].address = 0;
-  freeBlocks[0].sizeInBlocks = BYTES_TO_BLOCKS(RAM_SIZE);
+  freeBlocks[0].sizeInBlocks = RAM_SIZE;
 
   glyphNotFound.data   = malloc(38);
   #ifndef __APPLE__
@@ -222,7 +220,7 @@ void setupDefaults(void) {
   // initialize the 112 global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal34, AM_NONE);
-    memPtr = allocWp43s(REAL34_SIZE);
+    memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
     setRegisterDataPointer(regist, memPtr);
     real34Zero(memPtr);
   }
@@ -230,10 +228,20 @@ void setupDefaults(void) {
   // initialize the 9+1 saved stack registers
   for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal34, AM_NONE);
-    memPtr = allocWp43s(REAL34_SIZE);
+    memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
     setRegisterDataPointer(regist, memPtr);
     real34Zero(memPtr);
   }
+
+  // allocating space for the named variable list
+  allNamedVariablePointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of named variables
+  allNamedVariablePointer->numberOfNamedVariables = 0;
+
+  // allocate space for the local register list
+  allLocalRegisterPointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of local registers and the local flags
+  numberOfLocalFlags = 0;
+  allLocalRegisterPointer->numberOfLocalRegisters = 0;
+  allLocalRegisterPointer->localFlags = 0;
 
   #ifdef PC_BUILD
     debugWindow = DBG_REGISTERS;
@@ -327,13 +335,6 @@ void setupDefaults(void) {
 
   oldTime[0] = 0;
 
-  numberOfLocalRegisters = 0;
-  numberOfLocalFlags = 0;
-  allLocalRegisterPointer = NULL;
-
-  numberOfNamedVariables = 0;
-  allNamedVariablePointer = NULL;
-
   STACK_LIFT_ENABLE;
 
   lastErrorCode = 0;
@@ -395,7 +396,7 @@ int main(int argc, char* argv[]) {
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
-  //mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   calcLandscape             = false;
   calcAutoLandscapePortrait = true;
@@ -468,12 +469,28 @@ void program_main(void) {
   lcd_clear_buf();
   setupDefaults();
 
-//longInteger_t mem;
-//longIntegerInit(mem);
-//uIntToLongInteger(sys_free_mem(), mem);
-//convertLongIntegerToShortIntegerRegister(mem, 10, REGISTER_X);
-//refreshRegisterLine(REGISTER_X);
-//longIntegerFree(mem);
+/*longInteger_t li;
+longIntegerInit(li);
+uint32_t addr;
+
+addr = (uint32_t)ram;
+uIntToLongInteger(addr, li);
+convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_T);
+
+addr = (uint32_t)row;
+uIntToLongInteger(addr, li);
+convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_Z);
+
+addr = (uint32_t)(&angle180);
+uIntToLongInteger(addr, li);
+convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_Y);
+
+addr = (uint32_t)indexOfItems;
+uIntToLongInteger(addr, li);
+convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_X);
+
+refreshStack();
+longIntegerFree(li);*/
 
   backToDMCP = false;
 

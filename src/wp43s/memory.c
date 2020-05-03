@@ -28,7 +28,7 @@ int32_t getFreeRamMemory(void) {
     freeMem += freeBlocks[i].sizeInBlocks;
   }
 
-  return freeMem << MEMORY_ALLOCATION_SHIFT;
+  return TO_BYTES(freeMem);
 }
 
 #ifndef DMCP_BUILD
@@ -42,129 +42,106 @@ void debugMemory(void) {
 }
 #endif
 
-void *allocWp43s(size_t sizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("allocWp43s\n");
-  #endif
 
-  sizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(sizeInBytes));
+
+
+
+void *allocWp43s(size_t sizeInBytes) {
+  //if(debugMemAllocation) printf("allocWp43s\n");
+
+  sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   wp43sMemInBytes += sizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("WP43S claims %6" FMTSIZE " bytes\n", sizeInBytes);
-  #endif
-
+  //if(debugMemAllocation) printf("WP43S claims %6" FMTSIZE " bytes\n", sizeInBytes);
   return wp43sAllocate(sizeInBytes);
 }
 
 void *reallocWp43s(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("reallocWp43s\n");
-  #endif
+  //if(debugMemAllocation) printf("reallocWp43s\n");
 
-  newSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(newSizeInBytes));
-  oldSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSizeInBytes));
+  newSizeInBytes = TO_BYTES(TO_BLOCKS(newSizeInBytes));
+  oldSizeInBytes = TO_BYTES(TO_BLOCKS(oldSizeInBytes));
 
   wp43sMemInBytes += newSizeInBytes - oldSizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("WP43S claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSizeInBytes, oldSizeInBytes, wp43sMemInBytes);
-  #endif
-
+  //if(debugMemAllocation) printf("WP43S claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSizeInBytes, oldSizeInBytes, wp43sMemInBytes);
   return wp43sReallocate(pcMemPtr, oldSizeInBytes, newSizeInBytes);
 }
 
 void freeWp43s(void *pcMemPtr, size_t sizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("freeWp43s\n");
-  #endif
+  //if(debugMemAllocation) printf("freeWp43s\n");
 
-  sizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(sizeInBytes));
+  sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   wp43sMemInBytes -= sizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("WP43S frees  %6" FMTSIZE " bytes\n", sizeInBytes);
-  #endif
-
+  //if(debugMemAllocation) printf("WP43S frees  %6" FMTSIZE " bytes\n", sizeInBytes);
   wp43sFree(pcMemPtr, sizeInBytes);
 }
+
+
 
 
 
 void *allocGmp(size_t sizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("allocGmp\n");
-  #endif
+  //if(debugMemAllocation) printf("allocGmp\n");
 
-  sizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(sizeInBytes));
+  sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   gmpMemInBytes += sizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("GMP claimed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", sizeInBytes, gmpMemInBytes);
-  #endif
-
-  return wp43sAllocate(sizeInBytes);
+  //if(debugMemAllocation) printf("GMP claimed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", sizeInBytes, gmpMemInBytes);
+  //return wp43sAllocate(sizeInBytes);
+  return malloc(sizeInBytes);
 }
 
 void *reallocGmp(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("reallocGmp\n");
-  #endif
+  //if(debugMemAllocation) printf("reallocGmp\n");
 
-  newSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(newSizeInBytes));
-  oldSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSizeInBytes));
+  newSizeInBytes = TO_BYTES(TO_BLOCKS(newSizeInBytes));
+  oldSizeInBytes = TO_BYTES(TO_BLOCKS(oldSizeInBytes));
 
   gmpMemInBytes += newSizeInBytes - oldSizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("GMP claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSizeInBytes, oldSizeInBytes, gmpMemInBytes);
-  #endif
-
-  return wp43sReallocate(pcMemPtr, oldSizeInBytes, newSizeInBytes);
+  //if(debugMemAllocation) printf("GMP claimed %6" FMTSIZE " bytes, freed %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", newSizeInBytes, oldSizeInBytes, gmpMemInBytes);
+  //return wp43sReallocate(pcMemPtr, oldSizeInBytes, newSizeInBytes);
+  return realloc(pcMemPtr, newSizeInBytes);
 }
 
 void freeGmp(void *pcMemPtr, size_t sizeInBytes) {
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("freeGmp\n");
-  #endif
+  //if(debugMemAllocation) printf("freeGmp\n");
 
-  sizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(sizeInBytes));
+  sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   gmpMemInBytes -= sizeInBytes;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) printf("GMP freed   %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", sizeInBytes, gmpMemInBytes);
-  #endif
-
-  wp43sFree(pcMemPtr, sizeInBytes);
+  //if(debugMemAllocation) printf("GMP freed   %6" FMTSIZE " bytes and holds now %6" FMTSIZE " bytes\n", sizeInBytes, gmpMemInBytes);
+  //wp43sFree(pcMemPtr, sizeInBytes);
+  free(pcMemPtr);
 }
+
+
 
 
 
 void *wp43sAllocate(size_t sizeInBytes) {
-  uint16_t sizeInBlocks = BYTES_TO_BLOCKS(sizeInBytes);
+  uint16_t sizeInBlocks;
   uint16_t minSizeInBlocks, minBlock;
   int i;
   void *pcMemPtr;
 
-  sizeInBytes = BLOCKS_TO_BYTES(sizeInBlocks);
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) {
-      //printf("Allocating %" FMTSIZE " bytes (%" FMT16U " blocks)\n", sizeInBytes, sizeInBlocks);
-    }
-  #endif
+  if(sizeInBytes == 0) {
+    sizeInBytes = 1;
+  }
+  sizeInBlocks = TO_BLOCKS(sizeInBytes);
+  sizeInBytes = TO_BYTES(sizeInBlocks);
+  //if(debugMemAllocation) printf("Allocating %" FMTSIZE " bytes (%" FMT16U " blocks)\n", sizeInBytes, sizeInBlocks);
 
   // Search the smalest hole where the claimed block fits
   //debugMemory();
   minSizeInBlocks = 65535u;
-  minBlock = 65535u;
+  minBlock = WP43S_NULL;
   for(i=0; i<numberOfFreeBlocks; i++) {
     if(freeBlocks[i].sizeInBlocks == sizeInBlocks) {
-      #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-        if(debugMemAllocation) {
-          //printf("The block found is the size of the one claimed at address %u\n", freeBlocks[i].address);
-        }
-      #endif
-      pcMemPtr = WP43SMEMPTR_TO_PCMEMPTR(freeBlocks[i].address);
+      //if(debugMemAllocation) printf("The block found is the size of the one claimed at address %u\n", freeBlocks[i].address);
+      pcMemPtr = TO_PCMEMPTR(freeBlocks[i].address);
       xcopy(freeBlocks + i, freeBlocks + i + 1, (numberOfFreeBlocks-i-1) * sizeof(freeBlock_t));
       numberOfFreeBlocks--;
       //debugMemory();
@@ -176,13 +153,13 @@ void *wp43sAllocate(size_t sizeInBytes) {
     }
   }
 
-  if(minSizeInBlocks == 65535u) {
+  if(minBlock == WP43S_NULL) {
     minSizeInBlocks = 0;
     for(i=0; i<numberOfFreeBlocks; i++) {
       minSizeInBlocks += freeBlocks[i].sizeInBlocks;
     }
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("\nOUT OF MEMORY\nMemory claimed: %" FMTSIZE " bytes\nFragmented free memory: %u bytes\n", sizeInBytes, minSizeInBlocks * MEMORY_ALLOCATION_ALIGNMENT);
+      printf("\nOUT OF MEMORY\nMemory claimed: %" FMTSIZE " bytes\nFragmented free memory: %u bytes\n", sizeInBytes, TO_BYTES(minSizeInBlocks));
       exit(-3);
     #endif
 
@@ -191,12 +168,8 @@ void *wp43sAllocate(size_t sizeInBytes) {
     #endif
   }
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if(debugMemAllocation) {
-      //printf("The block found is larger than the one claimed\n");
-    }
-  #endif
-  pcMemPtr = WP43SMEMPTR_TO_PCMEMPTR(freeBlocks[minBlock].address);
+  //if(debugMemAllocation) printf("The block found is larger than the one claimed\n");
+  pcMemPtr = TO_PCMEMPTR(freeBlocks[minBlock].address);
   freeBlocks[minBlock].address += sizeInBlocks;
   freeBlocks[minBlock].sizeInBlocks -= sizeInBlocks;
 
@@ -207,8 +180,17 @@ void *wp43sAllocate(size_t sizeInBytes) {
 void *wp43sReallocate(void *oldMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
   void *newMemPtr;
 
-  newSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(newSizeInBytes));
-  oldSizeInBytes = BLOCKS_TO_BYTES(BYTES_TO_BLOCKS(oldSizeInBytes));
+  // GMP never calls realloc with oldMemPtr beeing NULL
+  if(oldSizeInBytes == 0) {
+    oldSizeInBytes = 1;
+  }
+
+  if(newSizeInBytes == 0) {
+    newSizeInBytes = 1;
+  }
+
+  newSizeInBytes = TO_BYTES(TO_BLOCKS(newSizeInBytes));
+  oldSizeInBytes = TO_BYTES(TO_BLOCKS(oldSizeInBytes));
   //printf("Allocating %zd bytes and freeing %zd bytes\n", newSizeInBytes, oldSizeInBytes);
 
   newMemPtr = wp43sAllocate(newSizeInBytes);
@@ -219,14 +201,21 @@ void *wp43sReallocate(void *oldMemPtr, size_t oldSizeInBytes, size_t newSizeInBy
 }
 
 void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
-  uint16_t ramPtr = PCMEMPTR_TO_WP43SMEMPTR(pcMemPtr);
-  uint16_t sizeInBlocks = BYTES_TO_BLOCKS(sizeInBytes);
-  uint16_t addr;
+  uint16_t ramPtr, sizeInBlocks, addr;
   int32_t i, j;
   bool_t done;
 
-  sizeInBytes = BLOCKS_TO_BYTES(sizeInBlocks);
-  //printf("Freeing %zd bytes\n", sizeInBytes);
+  // GMP never calls free with pcMemPtr beeing NULL
+  if(pcMemPtr == NULL) {
+    return;
+  }
+
+  if(sizeInBytes == 0) {
+    sizeInBytes = 1;
+  }
+  ramPtr = TO_WP43SMEMPTR(pcMemPtr);
+  sizeInBlocks = TO_BLOCKS(sizeInBytes);
+  //printf("Freeing %zd bytes\n", TO_BYTES(sizeInBlocks));
 
   done = false;
 

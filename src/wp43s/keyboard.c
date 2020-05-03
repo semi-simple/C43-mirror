@@ -549,6 +549,9 @@ void processKeyAction(int16_t item) {
     case ITM_ENTER:
     case KEY_CC:
     case KEY_dotD:
+      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+        keyActionProcessed = true;
+      }
       break;
 
     default:
@@ -558,7 +561,7 @@ void processKeyAction(int16_t item) {
             addItemToNimBuffer(item);
             keyActionProcessed = true;
           }
-          // Following xommands do not timeout to NOP
+          // Following commands do not timeout to NOP
           else if(item == KEY_UNDO || item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {
             runFunction(item);
             keyActionProcessed = true;
@@ -636,22 +639,6 @@ void processKeyAction(int16_t item) {
             showContent = !showContent;
             registerBrowser(NOPARAM);
           }
-          else if(item == ITM_RS) { // same as previous if! STRANGE
-            rbr1stDigit = true;
-            if(rbrMode == RBR_GLOBAL) {
-              rbrMode = RBR_NAMED;
-              currentRegisterBrowserScreen = 1000;
-            }
-            else if(rbrMode == RBR_LOCAL) {
-              rbrMode = RBR_NAMED;
-              currentRegisterBrowserScreen = 1000;
-            }
-            else if(rbrMode == RBR_NAMED) {
-              rbrMode = RBR_GLOBAL;
-              currentRegisterBrowserScreen = REGISTER_X;
-            }
-            registerBrowser(NOPARAM);
-          }
           else if(item == ITM_RCL) {
             rbr1stDigit = true;
             if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
@@ -680,7 +667,7 @@ void processKeyAction(int16_t item) {
                 registerBrowser(NOPARAM);
               }
               else {
-                rbrRegister = (rbrRegister >= numberOfLocalRegisters ? 0 : rbrRegister);
+                rbrRegister = (rbrRegister >= allLocalRegisterPointer->numberOfLocalRegisters ? 0 : rbrRegister);
                 currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
                 registerBrowser(NOPARAM);
               }
@@ -765,10 +752,10 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         restoreStack();
       }
       else {
-        int16_t mem = stringByteLength(aimBuffer);
+        int16_t len = stringByteLength(aimBuffer) + 1;
 
-        reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-        xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+        reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+        xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
 
         if( !eRPN ) {                                    //JM NEWERPN
           STACK_LIFT_ENABLE;
@@ -865,11 +852,11 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
           restoreStack();
         }
         else {
-          int16_t len = stringByteLength(aimBuffer);
+          int16_t len = stringByteLength(aimBuffer) + 1;
 
-          reallocateRegister(REGISTER_X, dtString, len, AM_NONE);
+          reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
 
-          xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len + 1);
+          xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
           aimBuffer[0] = 0;
 
           STACK_LIFT_ENABLE;
@@ -1162,11 +1149,11 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
         registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_LOCAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_NAMED) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 + 1, numberOfNamedVariables) + 1000;
+        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 + 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
         registerBrowser(NOPARAM);
       }
       else {
@@ -1221,9 +1208,9 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
           {
             showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
+            #ifdef PC_BUILD     //dr - new AIM
+              calcModeAimGui();
+            #endif
           }                                               //^^
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
           showSoftmenuCurrentPart();
@@ -1233,9 +1220,9 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
           {
             showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
+            #ifdef PC_BUILD     //dr - new AIM
+              calcModeAimGui();
+            #endif
           }                                               //^^
         }
       else {
@@ -1286,11 +1273,11 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_LOCAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_NAMED) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, numberOfNamedVariables) + 1000;
+        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
         registerBrowser(NOPARAM);
       }
       else {
@@ -1317,6 +1304,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
   }
   #endif
 }
+
 
 
 /********************************************//**

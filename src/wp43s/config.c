@@ -598,7 +598,7 @@ void fnClPAll(uint16_t confirmation) {
 
 void fnClSigma(uint16_t unusedParamButMandatory) {
   if(statisticalSumsPointer != NULL) {
-    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS*REAL34_SIZE);
+    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
     graph_end();  //JMGRAPH
     statisticalSumsPointer = NULL;
   }
@@ -727,12 +727,12 @@ void fnReset(uint16_t confirmation) {
 
     //allocateLocalRegisters(2);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
-    //fnSetFlag(NUMBER_OF_LOCAL_FLAGS+2);
+    //fnSetFlag(NUMBER_OF_GLOBAL_FLAGS+2);
     //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
     //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, strlen(tmpStr3000), AM_NONE);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpStr3000) + 1), AM_NONE);
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
 
 

@@ -1275,7 +1275,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DOT :
           if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-            if((tamMode == TM_FLAG && numberOfLocalFlags > 0) || (tamMode != TM_FLAG && numberOfLocalRegisters > 0)) {
+            if((tamMode == TM_FLAG && numberOfLocalFlags > 0) || (tamMode != TM_FLAG && allLocalRegisterPointer->numberOfLocalRegisters != 0)) {
               sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
               transitionSystemState = 3;
             }
@@ -1346,7 +1346,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_DOT :
-          if(numberOfLocalRegisters > 0) {
+          if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
             sprintf(tamBuffer, "%s%s .__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
             transitionSystemState = 10;
           }
@@ -1399,8 +1399,8 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           tamNumber = tamDigit;
-          if((tamMode == TM_FLAG && tamNumber < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber < numberOfLocalRegisters)) {
-            if((tamMode == TM_FLAG && tamNumber*10 >= numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 >= numberOfLocalRegisters)) {
+          if((tamMode == TM_FLAG && tamNumber < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber < allLocalRegisterPointer->numberOfLocalRegisters)) {
+            if((tamMode == TM_FLAG && tamNumber*10 >= numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 >= allLocalRegisterPointer->numberOfLocalRegisters)) {
               indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
               calcModeNormal();
               return;
@@ -1429,7 +1429,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       // 0 <= tamNumber < numberOfLocalRegisters  in the case of a register parameter
       switch(tamTransition) {
         case TT_DIGIT :
-          if((tamMode == TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalRegisters)) {
+          if((tamMode == TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters)) {
             indexOfItems[getOperation()].func(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
@@ -1474,7 +1474,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_DOT :
-          if(numberOfLocalRegisters > 0) {
+          if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
             sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
             transitionSystemState = 7;
           }
@@ -1528,8 +1528,8 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           tamNumber = tamDigit;
-          if((tamMode == TM_FLAG && tamNumber < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber < numberOfLocalRegisters)) {
-            if((tamMode == TM_FLAG && tamNumber*10 >= numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 >= numberOfLocalRegisters)) {
+          if((tamMode == TM_FLAG && tamNumber < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber < allLocalRegisterPointer->numberOfLocalRegisters)) {
+            if((tamMode == TM_FLAG && tamNumber*10 >= numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 >= allLocalRegisterPointer->numberOfLocalRegisters)) {
               value = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
 
               if(lastErrorCode == 0) {
@@ -1561,7 +1561,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       // 0 <= tamNumber < numberOfLocalRegisters
       switch(tamTransition) {
         case TT_DIGIT :
-          if((tamMode == TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalRegisters)) {
+          if((tamMode == TM_FLAG && tamNumber*10 + tamDigit < numberOfLocalFlags) || (tamMode != TM_FLAG && tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters)) {
             value = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
 
             if(lastErrorCode == 0) {
@@ -1621,10 +1621,10 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           tamNumber = tamDigit;
-          if(tamNumber < numberOfLocalRegisters) {
+          if(tamNumber < allLocalRegisterPointer->numberOfLocalRegisters) {
             if(tamNumber > tamNumberMax) {
             }
-            else if(tamNumber*10 >= numberOfLocalRegisters) {
+            else if(tamNumber*10 >= allLocalRegisterPointer->numberOfLocalRegisters) {
               indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
               calcModeNormal();
               return;
@@ -1650,7 +1650,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 11 :
       switch(tamTransition) {
         case TT_DIGIT :
-          if(tamNumber*10 + tamDigit < numberOfLocalRegisters) {
+          if(tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             indexOfItems[getOperation()].func(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
@@ -1658,7 +1658,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_ENTER :
-          if(tamNumber < numberOfLocalRegisters) {
+          if(tamNumber < allLocalRegisterPointer->numberOfLocalRegisters) {
             indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
@@ -1679,7 +1679,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 12 :
       switch(tamTransition) {
         case TT_LETTER :
-          regist = indirectAddressing(tamLetteredRegister, 0, FIRST_LOCAL_REGISTER + numberOfLocalRegisters);
+          regist = indirectAddressing(tamLetteredRegister, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
             indexOfItems[getOperation()].func(regist);
@@ -1697,7 +1697,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_DOT :
-          if(numberOfLocalRegisters > 0) {
+          if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
             sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
             transitionSystemState = 14;
           }
@@ -1717,7 +1717,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 13 :
       switch(tamTransition) {
         case TT_DIGIT :
-          regist = indirectAddressing(tamNumber*10 + tamDigit, 0, FIRST_LOCAL_REGISTER + numberOfLocalRegisters);
+          regist = indirectAddressing(tamNumber*10 + tamDigit, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
             indexOfItems[getOperation()].func(regist);
@@ -1726,7 +1726,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_ENTER :
-          regist = indirectAddressing(tamNumber, 0, FIRST_LOCAL_REGISTER + numberOfLocalRegisters);
+          regist = indirectAddressing(tamNumber, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
             indexOfItems[getOperation()].func(regist);
@@ -1750,7 +1750,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       // numberOfLocalRegisters > 0
       switch(tamTransition) {
         case TT_DIGIT :
-          if(tamDigit < numberOfLocalRegisters) {
+          if(tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             tamNumber = tamDigit;
             sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation, tamNumber);
             transitionSystemState = 15;
@@ -1771,8 +1771,8 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 15 :
       switch(tamTransition) {
         case TT_DIGIT :
-          if(tamNumber*10 + tamDigit < numberOfLocalRegisters) {
-            regist = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + numberOfLocalRegisters);
+          if(tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
+            regist = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
             if(lastErrorCode == 0) {
               indexOfItems[getOperation()].func(regist);
@@ -1783,7 +1783,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_ENTER :
-          regist = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + numberOfLocalRegisters);
+          regist = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
             indexOfItems[getOperation()].func(regist);

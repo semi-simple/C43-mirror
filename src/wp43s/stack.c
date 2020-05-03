@@ -59,14 +59,16 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnDrop(uint16_t unusedParamButMandatory) {
+  uint16_t sizeInBytes;
   saveStack();               //JM
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
     reg[regist] = reg[regist + 1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
-  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
+  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
+  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), sizeInBytes);
   refreshStack();
 }
 
@@ -91,7 +93,7 @@ void liftStack(void) {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL34_SIZE));
+  setRegisterDataPointer(REGISTER_X, allocWp43s(TO_BYTES(REAL34_SIZE)));
   setRegisterDataType(REGISTER_X, dtReal34, AM_NONE);
 }
 
@@ -104,13 +106,16 @@ void liftStack(void) {
  * \return void
  ***********************************************/
 void fnDropY(uint16_t unusedParamButMandatory) {
+  uint16_t sizeInBytes;
+
   freeRegisterData(REGISTER_Y);
   for(uint16_t i=REGISTER_Y; i<getStackTop(); i++) {
     reg[i] = reg[i+1];
   }
 
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(getRegisterFullSize(getStackTop())));
-  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), getRegisterFullSize(getStackTop()));
+  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
+  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), sizeInBytes);
   refreshStack();
 }
 
@@ -204,16 +209,16 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
-  uint16_t dataSizeX = getRegisterFullSize(REGISTER_X);
+  uint16_t dataSizeXinBytes = TO_BYTES(getRegisterFullSize(REGISTER_X));
   uint16_t tag       = getRegisterTag(REGISTER_X);
   void *newDataPointer;
 
   for(uint16_t i=REGISTER_Y; i<=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
-    newDataPointer = allocWp43s(dataSizeX);
+    newDataPointer = allocWp43s(dataSizeXinBytes);
     setRegisterDataPointer(i, newDataPointer);
-    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeX);
+    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeXinBytes);
   }
 
   refreshStack();

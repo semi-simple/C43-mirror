@@ -451,7 +451,6 @@ void fnStatList                 (uint16_t unusedParamButMandatory) {}         //
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
 //            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F",   0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C",   0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -1271,7 +1270,7 @@ const item_t indexOfItems[] = {
 /*  816 */  { fnParallel,                  NOPARAM     /*# JM #*/,      "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                    0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM
 /*  817 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  818 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  819 */  { fnArg_all,                   NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  819 */  { fnArg_all,                   NOPARAM     /*# JM #*/,      STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  820 */  { fnCvtToCurrentAngularMode,   AM_MULTPI,                   "MUL" STD_pi STD_RIGHT_ARROW,                  "MUL" STD_pi STD_RIGHT_ARROW,                  0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  821 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "CONV",                                        "CONV",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},   //JM Change to text DRG and change again to CONV
 /*  822 */  { itemToBeCoded,               NOPARAM,                     STD_PRINTER "ADV",                             STD_PRINTER "ADV",                             0,       0,       CAT_FNCT, SLS_UNCHANGED},
@@ -1989,7 +1988,7 @@ const item_t indexOfItems[] = {
 /* 1527 */  { fnKeyDotD,                   NOPARAM,                     ".d",                                          ".d",                                          0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1528 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1529 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1530 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "SP",                          STD_RIGHT_ARROW "SP",                          0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1531 */  { fnShow_SCROLL,               NOPARAM     /*# JM #*/,      "SHOW",                                        "SHOW",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /* 1532 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1533 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    0,       0,       CAT_FNCT, SLS_ENABLED  },

@@ -607,12 +607,12 @@ void graph_plotmem(void) {
   float y;
   float sx, sy;
 
+  statnum = 0;
   if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
 
     runFunction(ITM_NSIGMA);
-    //runFunction(ITM_SUM);
 
     if(plotmode != _VECT) {
       //Convert from real to int
@@ -622,9 +622,19 @@ void graph_plotmem(void) {
       statnum = ix_count;
     }
    
+    runFunction(ITM_DROP);
+
     #ifdef STATDEBUG
     printf("n=%d\n",statnum);
-    #endif
+    #endif 
+
+  }
+
+
+  if(telltale == MEM_INITIALIZED && statnum >= 2) {
+    //GRAPH SETUP
+    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+    clearScreen(false,true,true);
 
     //AUTOSCALE
     x_min = 1e127;
@@ -757,7 +767,6 @@ void graph_plotmem(void) {
         xn = xN;
 
 
-
         if(plotmode != _VECT) {
             plotcross(xn,yn);
         } else {
@@ -769,6 +778,8 @@ void graph_plotmem(void) {
 
       }
     }
+
+
   } else {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -782,16 +793,6 @@ void graph_plotmem(void) {
 
 
 
-void graph_prepscreen (void){
-  #ifndef TESTSUITE_BUILD
-
-  if(telltale == MEM_INITIALIZED) {
-    //GRAPH SETUP
-    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-    clearScreen(false,true,true);
-  }
-  #endif
-}
 
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
@@ -940,7 +941,13 @@ void fnStatList(uint16_t unusedParamButMandatory) {
   char tmpstr[100];
   int16_t ix, ixx, statnum;
 
-  graph_prepscreen();
+  #ifndef TESTSUITE_BUILD
+  if(telltale == MEM_INITIALIZED) {
+    //GRAPH SETUP
+    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+    clearScreen(false,true,true);
+  }
+  #endif
 
   if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
@@ -957,6 +964,10 @@ void fnStatList(uint16_t unusedParamButMandatory) {
     } else {
       statnum = ix_count;
     }
+
+    #ifndef TESTSUITE_BUILD
+    runFunction(ITM_DROP);
+    #endif
    
     print_linestr("Stat data",true);
     #ifdef STATDEBUG
@@ -988,8 +999,7 @@ void fnGraph (uint16_t func){
               break;
 	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
-	  case 4:   graph_prepscreen();
-	            graph_plotmem();
+	  case 4:   graph_plotmem();
 	            break;
 
     case 11:

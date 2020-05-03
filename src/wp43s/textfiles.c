@@ -486,6 +486,7 @@ void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
         showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
     }
     line_y += 20;
+    force_refresh();
 #endif
 }
 

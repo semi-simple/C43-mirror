@@ -515,7 +515,7 @@ void fnRCL(int16_t inp) {
 
 
 
-
+uint16_t nprimes = 0;
 /********************************************//**
  * RPN PROGRAM.
  *
@@ -945,30 +945,70 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
   if(JM_OPCODE == 45) {                                         //PRIME stats
+    #ifndef TESTSUITE_BUILD
 
     longInteger_t xx3;
     longIntegerInit(xx3);
     runFunction(ITM_CLSIGMA);
 
-    //Get maximum loops from X
+    //Get 'from' loop value from Z: 1 to 399 (default 0), for starting number exponents 10^(4*1) through 10^(4*399)
+    uint16_t ix1, ixx1;
+    if(getRegisterDataType(REGISTER_Z) != dtLongInteger) {
+      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Z), REGISTER_Z, DEC_ROUND_DOWN);
+      refreshRegisterLine(REGISTER_Z);
+    }
+    if(getRegisterDataType(REGISTER_Z) == dtLongInteger) {
+      convertLongIntegerRegisterToLongInteger(REGISTER_Z, xx3);
+      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
+      longIntegerToInt(xx3,ix1);
+    } else {ix1 = 0;}
+    if(ix1 > 399) {ix1 = 0;}
+    ixx1 = ix1;
+
+    //Get 'to' (maximum) loops from Y: ix1 to 399  (default 0 or ix1), for starting number exponents 10^ix1 through 10^(4*399)
     uint16_t ix2;
+    if(getRegisterDataType(REGISTER_Y) != dtLongInteger) {
+      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_Y, DEC_ROUND_DOWN);
+      refreshRegisterLine(REGISTER_Y);
+    }
+    if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+      convertLongIntegerRegisterToLongInteger(REGISTER_Y, xx3);
+      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
+      longIntegerToInt(xx3,ix2);
+    } else {ix2 = 0;}
+    if(ix2 < ix1) {ix2 = ix1;}
+    if(ix2 > 399) {ix2 = ix1;}
+
+    //Get number of repeated nextprimes from X from 1 to 100, default 10
+    uint16_t ix3 = 0;
+    if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
+      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
+      refreshRegisterLine(REGISTER_X);
+    }
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToLongInteger(REGISTER_X, xx3);
       longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
-      longIntegerToInt(xx3,ix2);
-    } else {ix2 = 20;}
+      longIntegerToInt(xx3,ix3);
+    } else {ix3 = 10;}
+    if(ix3 < 1 || ix3 > 100) {ix3 = 10;}
+    nprimes = ix3;
 
-    if(ix2 < 1 || ix2 > 399) {ix2 = 20;}
 
 
     //Outer loop start
-    uint16_t ix1 = 0;
-    while (ix1 < ix2 ) {
+    while (ix1 <= ix2 ) {
       //printf("--%lld--%lld--\n",ix1,ix1*4);
       uIntToLongInteger(ix1*4, xx3);
       convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
       adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
       tenPowLonI();
+
+      clearScreen(false,true,true);
+      sprintf(tmpStr3000,"i=10^4Z to i=10^4Y, n primes>i:ZYX %d %d %d|",ix1, ix2,ix3);
+      #ifdef PC_BUILD
+        printf(tmpStr3000);
+      #endif
+      print_linestr(tmpStr3000,true);
 
       fnJM(46);
 
@@ -976,17 +1016,18 @@ void fnJM(uint16_t JM_OPCODE) {
       liftStack();
       uIntToLongInteger(ix1*4, xx3);
       convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
-      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
       adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
       runFunction(ITM_SIGMAPLUS);
+      STACK_LIFT_ENABLE;
 
       ix1++;
     }
     longIntegerFree(xx3);
+    runFunction(ITM_DROP);
 
-    runFunction(ITM_PLOT);
-
+    if(ixx1!=ix2) {runFunction(ITM_PLOT);}
+    #endif
   }
   else
 
@@ -998,19 +1039,14 @@ void fnJM(uint16_t JM_OPCODE) {
     #ifndef TESTSUITE_BUILD
     uint32_t getUptimeMs0 = getUptimeMs();
     int16_t ix;
-    //fnStrInputLongint("4776913109852041418248056622882488319");
 
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-
-    clearScreen(false,true,true);
-    print_linestr("R0-9 Next primes; Y Last prime; X Time, ms:",true);
-    force_refresh();
 
     longInteger_t lgInt;
     longIntegerInit(lgInt);
 
     ix = 0;
-    while (ix <= 9 ) {
+    while (ix < nprimes ) {
       runFunction(ITM_NEXTP);
       fnStore(ix);
 
@@ -1021,7 +1057,6 @@ void fnJM(uint16_t JM_OPCODE) {
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);
-      force_refresh();
 
       ix++;
 

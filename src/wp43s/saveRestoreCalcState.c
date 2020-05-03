@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 31  // 31 = keyActionProcessed
+#define BACKUP_VERSION 32  // 32 = Many memory management changes
 
 void saveCalc(void) {
   size_t size;
@@ -46,7 +46,7 @@ void saveCalc(void) {
 
   size  = fwrite(&backupVersion,                      1, sizeof(backupVersion),                      backup); //printf("%8lu backupVersion\n",                      (unsigned long)size);
   size += fwrite(&ramSize,                            1, sizeof(ramSize),                            backup); //printf("%8lu ramSize\n",                            (unsigned long)size);
-  size += fwrite(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
+  size += fwrite(ram,                                 1, TO_BYTES(RAM_SIZE),                         backup); //printf("%8lu ram\n",                                (unsigned long)size);
   size += fwrite(freeBlocks,                          1, MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup); //printf("%8lu freeBlocks\n",                         (unsigned long)size);
   size += fwrite(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
   size += fwrite(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
@@ -74,14 +74,12 @@ void saveCalc(void) {
   size += fwrite(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
   size += fwrite(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
   size += fwrite(&rbrRegister,                        1, sizeof(rbrRegister),                        backup); //printf("%8lu rbrRegister\n",                        (unsigned long)size);
-  size += fwrite(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
   size += fwrite(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
-  size += fwrite(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
-  ramPtr = PCMEMPTR_TO_WP43SMEMPTR(allLocalRegisterPointer);
+  ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-  ramPtr = PCMEMPTR_TO_WP43SMEMPTR(allNamedVariablePointer);
+  ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-  if(statisticalSumsPointer == NULL) ramPtr = 0; else ramPtr = PCMEMPTR_TO_WP43SMEMPTR(statisticalSumsPointer);
+  ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
   size += fwrite(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
   size += fwrite(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
   size += fwrite(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
@@ -198,7 +196,8 @@ void restoreCalc(void) {
     printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version. Performing RESET\n");
     printf("               Backup file      Program\n");
     printf("backupVersion  %6u           %6u\n", backupVersion, BACKUP_VERSION);
-    printf("ramSize        %6u           %6u\n", ramSize, RAM_SIZE);
+    printf("ramSize blocks %6u           %6u\n", ramSize, RAM_SIZE);
+    printf("ramSize bytes  %6u           %6u\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
 
     fnReset(CONFIRMED);
     return;
@@ -206,7 +205,7 @@ void restoreCalc(void) {
   else {
     printf("Begin of calc's restoration\n");
 
-    size += fread(ram,                                 1, RAM_SIZE,                                   backup); //printf("%8lu ram\n",                                (unsigned long)size);
+    size += fread(ram,                                 1, TO_BYTES(RAM_SIZE),                         backup); //printf("%8lu ram\n",                                (unsigned long)size);
     size += fread(freeBlocks,                          1, MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup); //printf("%8lu freeBlocks\n",                         (unsigned long)size);
     size += fread(&numberOfFreeBlocks,                 1, sizeof(numberOfFreeBlocks),                 backup); //printf("%8lu numberOfFreeBlocks\n",                 (unsigned long)size);
     size += fread(flags,                               1, sizeof(flags),                              backup); //printf("%8lu flags\n",                              (unsigned long)size);
@@ -234,15 +233,13 @@ void restoreCalc(void) {
     size += fread(&tamLetteredRegister,                1, sizeof(tamLetteredRegister),                backup); //printf("%8lu tamLetteredRegister\n",                (unsigned long)size);
     size += fread(&tamCurrentOperation,                1, sizeof(tamCurrentOperation),                backup); //printf("%8lu tamCurrentOperation\n",                (unsigned long)size);
     size += fread(&rbrRegister,                        1, sizeof(rbrRegister),                        backup); //printf("%8lu rbrRegister\n",                        (unsigned long)size);
-    size += fread(&numberOfLocalRegisters,             1, sizeof(numberOfLocalRegisters),             backup); //printf("%8lu numberOfLocalRegisters\n",             (unsigned long)size);
     size += fread(&numberOfLocalFlags,                 1, sizeof(numberOfLocalFlags),                 backup); //printf("%8lu numberOfLocalFlags\n",                 (unsigned long)size);
-    size += fread(&numberOfNamedVariables,             1, sizeof(numberOfNamedVariables),             backup); //printf("%8lu numberOfNamedVariables\n",             (unsigned long)size);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    allLocalRegisterPointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
+    allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    allNamedVariablePointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
+    allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
     size += fread(&ramPtr,                             1, sizeof(ramPtr),                             backup); //printf("%8lu ramPtr\n",                             (unsigned long)size);
-    if(ramPtr == 0) statisticalSumsPointer = 0; else statisticalSumsPointer = WP43SMEMPTR_TO_PCMEMPTR(ramPtr);
+    statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
     size += fread(&programCounter,                     1, sizeof(programCounter),                     backup); //printf("%8lu programCounter\n",                     (unsigned long)size);
     size += fread(&xCursor,                            1, sizeof(xCursor),                            backup); //printf("%8lu xCursor\n",                            (unsigned long)size);
     size += fread(&yCursor,                            1, sizeof(yCursor),                            backup); //printf("%8lu yCursor\n",                            (unsigned long)size);

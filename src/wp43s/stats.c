@@ -51,9 +51,9 @@ int checkMinimumDataPoints(const real_t *n) {
 
 static void initStatisticalSums(void) {
   if(statisticalSumsPointer == NULL) {
-    statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
+    statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
     for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
-      realZero((real_t *)(statisticalSumsPointer + REAL_SIZE*sum));
+      realZero((real_t *)(statisticalSumsPointer + REAL_SIZE * sum));
     }
   }
 }
@@ -309,7 +309,7 @@ void fnStatSum(uint16_t sum) {
   }
   else {
    liftStack();
-   realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE*sum), REGISTER_REAL34_DATA(REGISTER_X));
+   realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
    refreshStack();
   }
 }

@@ -546,8 +546,8 @@ void processKeyAction(int16_t item) {
       keyActionProcessed = true;
       break;
 
-    case ITM_ENTER:
     case KEY_CC:
+    case ITM_ENTER:
     case KEY_dotD:
       if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
         keyActionProcessed = true;

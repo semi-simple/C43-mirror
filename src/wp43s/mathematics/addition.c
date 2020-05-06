@@ -391,12 +391,12 @@ void addStriLonI(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-  len2 = stringByteLength(tmpStr3000);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -412,12 +412,12 @@ void addStriTime(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   timeToDisplayString(REGISTER_X, tmpStr3000);
-  len2 = stringByteLength(tmpStr3000);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -433,12 +433,12 @@ void addStriDate(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   dateToDisplayString(REGISTER_X, tmpStr3000);
-  len2 = stringByteLength(tmpStr3000);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -453,13 +453,13 @@ void addStriStri(void) {
   int16_t len1, len2;
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-  len2 = stringByteLength(REGISTER_STRING_DATA(REGISTER_X));
+  len2 = stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1;
 
-  xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2 + 1));
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2));
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -500,13 +500,13 @@ void addStriShoI(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   font = &standardFont;
-  shortIntegerToDisplayString(REGISTER_X, errorMessage, &font); // We use errorMessage here because this string can become very long
-  len2 = stringByteLength(errorMessage) + 1; // +1 for the trailing 0
+  shortIntegerToDisplayString(REGISTER_X, tmpStr3000, &font);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, errorMessage,                     len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -522,12 +522,12 @@ void addStriReal(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
-  len2 = stringByteLength(tmpStr3000);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 
@@ -543,12 +543,12 @@ void addStriCplx(void) {
 
   len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
   complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
-  len2 = stringByteLength(tmpStr3000);
+  len2 = stringByteLength(tmpStr3000) + 1;
 
-  reallocateRegister(REGISTER_X, dtString, len1 + len2, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
-  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1    );
-  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2 + 1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
 }
 
 

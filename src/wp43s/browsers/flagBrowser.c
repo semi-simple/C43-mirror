@@ -67,7 +67,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 
     showString("Global flag status (continued):", &standardFont, 1, 22-1, vmNormal, true, true);
 
-    for(f=80; f<NUMBER_OF_LOCAL_FLAGS; f++) {
+    for(f=80; f<NUMBER_OF_GLOBAL_FLAGS; f++) {
       if(getFlag(f)) {
         for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
           for(y=22*(f/10)-132-1; y<22*(f/10)-132+20-1; y++) {
@@ -98,13 +98,13 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
       showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)-132-1, getFlag(f) ? vmReverse : vmNormal, true, true);
     }
 
-    if(numberOfLocalRegisters > 0) {
-      sprintf(tmpStr3000, "%" FMT16U " local register%s allocated.", numberOfLocalRegisters, numberOfLocalRegisters==1 ? " is" : "s are");
+    if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
+      sprintf(tmpStr3000, "%" FMT16U " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
       showString(tmpStr3000, &standardFont, 1, 132-1, vmNormal, true, true);
       showString("Local flag status:", &standardFont, 1, 154-1, vmNormal, true, true);
 
       for(f=0; f<16; f++) {
-        if(getFlag(NUMBER_OF_LOCAL_FLAGS+f)) {
+        if(getFlag(NUMBER_OF_GLOBAL_FLAGS+f)) {
           for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
             for(y=22*(f/10)+176-1; y<22*(f/10)+176+20-1; y++) {
              setPixel(x, y);
@@ -113,7 +113,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
         }
 
         sprintf(tmpStr3000, "%d", f);
-        showString(tmpStr3000, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1, getFlag(NUMBER_OF_LOCAL_FLAGS+f) ? vmReverse : vmNormal, true, true);
+        showString(tmpStr3000, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);
       }
     }
   }

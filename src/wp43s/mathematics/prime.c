@@ -148,18 +148,21 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 
 
 void fnNextPrime(uint16_t unusedButMandatoryParameter) {
-  longInteger_t primeCandidate;
+  longInteger_t currentNumber, nextPrime;
+
+  longIntegerInit(currentNumber);
+  longIntegerInit(nextPrime);
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    convertShortIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
+    convertShortIntegerRegisterToLongInteger(REGISTER_X, currentNumber);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, primeCandidate);
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, currentNumber);
   }
 
   else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), primeCandidate, DEC_ROUND_DOWN);
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), currentNumber, DEC_ROUND_DOWN);
   }
 
   else {
@@ -173,25 +176,19 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  longIntegerSetPositiveSign(primeCandidate);
-  if(longIntegerIsEven(primeCandidate)) {
-    longIntegerAddUInt(primeCandidate, 1, primeCandidate);
-  }
-  else {
-    longIntegerAddUInt(primeCandidate, 2, primeCandidate);
-  }
+  // set
+  longIntegerSetPositiveSign(currentNumber);
 
-  while(!longIntegerIsPrime(primeCandidate)) {
-    longIntegerAddUInt(primeCandidate, 2, primeCandidate);
-  }
+  mpz_nextprime(nextPrime, currentNumber);
 
   if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
-    convertLongIntegerToShortIntegerRegister(primeCandidate, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);
+    convertLongIntegerToShortIntegerRegister(nextPrime, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);
   }
   else {
-    convertLongIntegerToLongIntegerRegister(primeCandidate, REGISTER_X);
+    convertLongIntegerToLongIntegerRegister(nextPrime, REGISTER_X);
   }
 
-  longIntegerFree(primeCandidate);
+  longIntegerFree(nextPrime);
+  longIntegerFree(currentNumber);
   refreshStack();
 }

@@ -51,6 +51,10 @@ Modes available in the mode menu:
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
+void testprogram(uint16_t unusedParamButMandatory);
+
+
+
 //keyboard.c  screen.c
 bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
 bool_t JM_auto_clstk_enabled;                     //JM TIMER CLRDROP

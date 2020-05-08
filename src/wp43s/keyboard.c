@@ -473,7 +473,8 @@ void btnPressed(void *notUsed, void *data) {
     processKeyAction(item);
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
-    }
+    } 
+    else printf("JM keyActionProcessed=1: %d %s\n",item,indexOfItems[item].itemCatalogName);  //JM
   }
 }
 

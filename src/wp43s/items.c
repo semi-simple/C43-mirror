@@ -69,7 +69,7 @@ void fnNop(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void runFunction(int16_t func) {
   funcOK = true;
-
+  printf("JM Runfunction: %d: %s\n",func, indexOfItems[func].itemCatalogName);         //JM
   if(func >= LAST_ITEM) {
     #ifdef PC_BUILD
       sprintf(errorMessage, "item (%" FMT16S ") must be below LAST_ITEM", func);
@@ -445,7 +445,8 @@ void fn_cnst_op_aa              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_op_a               (uint16_t unusedParamButMandatory) {}
 void fn_cnst_0_cpx              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_1_cpx              (uint16_t unusedParamButMandatory) {}
-void fnStatList                 (uint16_t unusedParamButMandatory) {}         //^^
+void fnStatList                 (uint16_t unusedParamButMandatory) {}
+void testprogram                (uint16_t unusedParamButMandatory) {}         //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -1122,7 +1123,7 @@ const item_t indexOfItems[] = {
 /*  668 */  { fnCvtHpukW,                  divide,                      "W" STD_RIGHT_ARROW "hp" STD_UK,               "W" STD_RIGHT_ARROW "hp" STD_UK,               0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  669 */  { fnSquare,                    NOPARAM,                     "x" STD_SUP_2,                                 "x" STD_SUP_2,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  670 */  { fnCube,                      NOPARAM,                     "x" STD_SUP_3,                                 "x" STD_SUP_3,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  671 */  { itemToBeCoded,               NOPARAM,                     "XEQ",                                         "XEQ",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  671 */  { testprogram,               NOPARAM,                     "XEQ",                                         "XEQ",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  672 */  { fnLogicalXnor,               NOPARAM,                     "XNOR",                                        "XNOR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  673 */  { fnLogicalXor,                NOPARAM,                     "XOR",                                         "XOR",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  674 */  { fnMeanXY,                    NOPARAM,                     STD_x_BAR,                                     STD_x_BAR,                                     0,       0,       CAT_FNCT, SLS_ENABLED  },

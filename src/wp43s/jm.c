@@ -24,6 +24,54 @@
 #include "wp43s.h"
 
 
+void runkey(uint16_t item){
+    processKeyAction(item);
+    if (!keyActionProcessed){
+      runFunction(item);
+    } 
+}
+
+void sendkeys(const char aa[]) {
+  int16_t ix = 0;
+  while (aa[ix]!=0) {
+    switch (aa[ix]) {
+      case 48: runkey(890); break;
+      case 49: runkey(891); break;
+      case 50: runkey(892); break;
+      case 51: runkey(893); break;
+      case 52: runkey(894); break;
+      case 53: runkey(895); break;
+      case 54: runkey(896); break;
+      case 55: runkey(897); break;
+      case 56: runkey(898); break;
+      case 57: runkey(899); break;
+      case 58: runkey(900); break;
+      case 46: runkey(1310); break; //.
+      default:;
+    }
+  ix++;
+  }
+}
+
+void testprogram(uint16_t unusedParamButMandatory){
+
+
+    sendkeys("2");
+    runkey(KEY_EXIT1); //EXIT
+
+    runkey(684); //X<>Y
+    runkey(698); //Y^X
+
+    sendkeys("1");
+    runkey(KEY_EXIT1); //EXIT
+    runkey(780); //-
+
+    runkey(589);
+    sendkeys("00");
+    
+    runkey(469); //PRIME?
+
+}
 
 
 

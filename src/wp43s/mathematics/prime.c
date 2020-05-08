@@ -176,10 +176,9 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
   saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  // set
   longIntegerSetPositiveSign(currentNumber);
 
-  mpz_nextprime(nextPrime, currentNumber);
+  longIntegerNextPrime(currentNumber, nextPrime);
 
   if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
     convertLongIntegerToShortIntegerRegister(nextPrime, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);

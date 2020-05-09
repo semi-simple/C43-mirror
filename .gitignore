@@ -6,6 +6,8 @@
 *.depend
 202*bmp
 202*.csv
+202*.TSV
+202*.tsv
 .stamp-constantPointers
 .stamp-rasterFontsData
 .stamp-softmenuCatalog
@@ -151,4 +153,4 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,linux,windows
 DM42 binary/Key_stickers.xcf
 DM42 binary/WP43S_overlay.xcf
-Makefile -f
+#Makefile -f

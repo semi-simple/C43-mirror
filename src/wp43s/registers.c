@@ -1880,7 +1880,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 void printRegisterToConsole(calcRegister_t regist, const char *before, const char *after) {
   char str[TMP_STR_LENGTH];     //JM updated from 3000
 
-  printf(before);
+  printf("%s", before);
 
   if(getRegisterDataType(regist) == dtReal34) {
     real34ToString(REGISTER_REAL34_DATA(regist), str);
@@ -1925,7 +1925,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
     displayBugScreen(errorMessage);
   }
 
-  printf(after);
+  printf("%s", after);
 }
 #endif
 

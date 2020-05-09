@@ -8,6 +8,7 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
+
 find . -type f -name "*.dSYM" -exec rm {} \;
 
 

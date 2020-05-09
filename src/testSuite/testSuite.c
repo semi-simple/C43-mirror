@@ -792,7 +792,7 @@ void setParameter(char *p) {
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
-      reallocateRegister(regist, dtString, stringByteLength(r + 1), AM_NONE);
+      reallocateRegister(regist, dtString, TO_BLOCKS(stringByteLength(r + 1) + 1), AM_NONE);
       strcpy(REGISTER_STRING_DATA(regist), r + 1);
     }
     else if(strcmp(l, "SHOI") == 0) {

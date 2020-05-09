@@ -23,18 +23,18 @@
 
 
 void convertLongIntegerToLongIntegerRegister(const longInteger_t lgInt, calcRegister_t regist) {
-  dataSize_t sizeInBytes = longIntegerSizeInBytes(lgInt);
+  uint16_t sizeInBytes = longIntegerSizeInBytes(lgInt);
 
-  reallocateRegister(regist, dtLongInteger, sizeInBytes, longIntegerSignTag(lgInt));
+  reallocateRegister(regist, dtLongInteger, TO_BLOCKS(sizeInBytes), longIntegerSignTag(lgInt));
   xcopy(REGISTER_LONG_INTEGER_DATA(regist), lgInt->_mp_d, sizeInBytes);
 }
 
 
 
 void convertLongIntegerRegisterToLongInteger(calcRegister_t regist, longInteger_t lgInt) {
-  dataSize_t sizeInBytes = *REGISTER_DATA_MAX_LEN(regist);
+  uint32_t sizeInBytes = TO_BYTES(getRegisterMaxDataLength(regist));
 
-  longIntegerInitSizeInBits(lgInt, 8 * max(sizeInBytes, 8));
+  longIntegerInitSizeInBits(lgInt, 8 * max(sizeInBytes, LIMB_SIZE));
 
   xcopy(lgInt->_mp_d, REGISTER_LONG_INTEGER_DATA(regist), sizeInBytes);
 

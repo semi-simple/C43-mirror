@@ -14,7 +14,8 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define NUMBER_OF_LOCAL_FLAGS 112
+#define NUMBER_OF_GLOBAL_FLAGS 112
+#define NUMBER_OF_LOCAL_FLAGS   16
 
 #define FLAG_X        100
 #define FLAG_Y        101

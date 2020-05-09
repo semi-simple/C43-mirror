@@ -32,7 +32,8 @@
 gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
   cairo_surface_t *imageSurface;
 
-  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
+  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
+  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   cairo_set_source_surface(cr, imageSurface, 0, 0);
   cairo_surface_mark_dirty(imageSurface);
   cairo_paint(cr);
@@ -53,7 +54,7 @@ void copyScreenToClipboard(void) {
   gtk_clipboard_clear(clipboard);
   gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
-  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride*4);
+  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
@@ -275,7 +276,7 @@ void copyAllRegistersToClipboard(void) {
     copyRegisterToClipboardString(regist, ptr);
   }
 
-  for(int32_t regist=numberOfLocalRegisters-1; regist>=0; --regist) {
+  for(int32_t regist=allLocalRegisterPointer->numberOfLocalRegisters-1; regist>=0; --regist) {
     ptr += strlen(ptr);
     sprintf(ptr, LINEBREAK "R.%02d = ", regist);
     ptr += strlen(ptr);
@@ -319,7 +320,7 @@ void copyAllRegistersToClipboard(void) {
       ptr += strlen(ptr);
       strcpy(ptr, " = ");
       ptr += strlen(ptr);
-      real34ToString(statisticalSumsPointer + regist*REAL34_SIZE, tmpStr3000);
+      realToString(statisticalSumsPointer + regist * REAL_SIZE, tmpStr3000);
       if(strchr(tmpStr3000, '.') == NULL && strchr(tmpStr3000, 'E') == NULL) {
         strcat(tmpStr3000, ".");
       }
@@ -1000,14 +1001,14 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             if(getRegisterDataType(REGISTER_L) == dtReal34) {
               strcat(string1, "real34 = ");
-              formatReal34Debug(string2, getRegisterDataPointer(REGISTER_L));
+              formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
               strcat(string2, " ");
               strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
               strcat(string1, "complex34 = ");
-              formatComplex34Debug(string2, getRegisterDataPointer(REGISTER_L));
+              formatComplex34Debug(string2, (void *)getRegisterDataPointer(REGISTER_L));
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtString) {

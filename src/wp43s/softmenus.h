@@ -47,7 +47,7 @@ void initSoftmenuStack      (int16_t softmenu);
 void pushSoftmenu           (int16_t softmenu);
 void popSoftmenu            (void);
 void setCatalogLastPos      (void);
-//void Load_HOME              (void);   //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
+//void Load_HOME (void);            //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
+//const int16_t menu_HOME[360];     //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
 
 const int16_t menu_A_HOME[360];
-const int16_t menu_HOME[360];

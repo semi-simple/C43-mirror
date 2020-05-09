@@ -1775,7 +1775,7 @@
 #define CHR_sampi                     1735   //JM GREEK
 #define CHR_case                      1736   //JM CAPS
 #define KEY_HASH                      1737   //JM BASE ## test
-#define Not_used1738                  1738   //JM
+#define MNU_XEQ                       1738   //JM EXEC
 #define ITM_op_a                      1739   //JM OPERATORS
 #define ITM_op_a2                     1740   //JM OPERATORS
 #define ITM_op_j                      1741   //JM OPERATORS
@@ -1997,8 +1997,26 @@
 #define ITM_LISTXY                    1954   //JMSTAT
 #define ITM_toPOL2                    1955   //JM
 #define ITM_toREC2                    1956   //JM
+#define ITM_X_P1                      1957   //JM EXEC
+#define ITM_X_P2                      1958   //JM EXEC
+#define ITM_X_P3                      1959   //JM EXEC
+#define ITM_X_P4                      1960   //JM EXEC
+#define ITM_X_P5                      1961   //JM EXEC
+#define ITM_X_P6                      1962   //JM EXEC
+#define ITM_X_f1                      1963   //JM EXEC
+#define ITM_X_f2                      1964   //JM EXEC
+#define ITM_X_f3                      1965   //JM EXEC
+#define ITM_X_f4                      1966   //JM EXEC
+#define ITM_X_f5                      1967   //JM EXEC
+#define ITM_X_f6                      1968   //JM EXEC
+#define ITM_X_g1                      1969   //JM EXEC
+#define ITM_X_g2                      1970   //JM EXEC
+#define ITM_X_g3                      1971   //JM EXEC
+#define ITM_X_g4                      1972   //JM EXEC
+#define ITM_X_g5                      1973   //JM EXEC
+#define ITM_X_g6                      1974   //JM EXEC
 
-#define LAST_ITEM                     1957   //JM
+#define LAST_ITEM                     1975   //JM
 
 #define CHR_PROD_SIGN                 9999
 

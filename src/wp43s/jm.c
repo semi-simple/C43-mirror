@@ -24,7 +24,14 @@
 #include "wp43s.h"
 
 
+void capture_sequence(char *origin, uint16_t item) {
+   printf("Captured: %4d   /%10s/  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
+}
+
+
+
 void runkey(uint16_t item){
+    //printf("§%d§ ",item);
     processKeyAction(item);
     if (!keyActionProcessed){
       runFunction(item);
@@ -47,31 +54,181 @@ void sendkeys(const char aa[]) {
       case 57: runkey(899); break;
       case 58: runkey(900); break;
       case 46: runkey(1310); break; //.
+      case 69: runkey(1487); break; //E
+      case 101: runkey(1487); break; //e
+      case 45: runkey(779); break; //-
+      case 43: runkey(779); break; //+
       default:;
     }
   ix++;
   }
 }
 
-void testprogram(uint16_t unusedParamButMandatory){
 
+void testprogram2(uint16_t unusedParamButMandatory){
 
-    sendkeys("2");
-    runkey(KEY_EXIT1); //EXIT
-
-    runkey(684); //X<>Y
-    runkey(698); //Y^X
-
-    sendkeys("1");
-    runkey(KEY_EXIT1); //EXIT
-    runkey(780); //-
-
-    runkey(589);
-    sendkeys("00");
-    
-    runkey(469); //PRIME?
-
+    runkey(ITM_TICKS); //622
+    runkey(684);       //X<>Y
+    sendkeys("2"); runkey(KEY_EXIT1); //EXIT
+    runkey(684);   //X<>Y
+    runkey(698);   //Y^X
+    sendkeys("1"); runkey(KEY_EXIT1); //EXIT
+    runkey(780);   //-
+    runkey(589);   sendkeys("00"); //STO 00
+    runkey(469);   //PRIME?
+    runkey(684);   //X<>Y
+    runkey(ITM_TICKS);
+    runkey(684);   //X<>Y
+    runkey(ITM_SUB);
 }
+
+
+bool_t strcompare( char *in1, char *in2) {
+  if (stringByteLength(in1) == stringByteLength(in2)) {
+    int16_t i = 0;
+    bool_t areEqual = true;
+    while (areEqual && in1[i] != 0) {
+      if(in1[i] != in2[i]) {areEqual = false; return false;}
+      i++;
+    }
+    return areEqual;
+  } else return false;
+}
+
+// COMMAND name or number: command to be located in between any of CR, LF, comma, space, tab, i.e. X<>Y, PRIME?, ...
+// COMMENT: comment to be located in between / and /, i.e. /Comment/
+// NUMBER to be located in between quotes: "123.123" or STO "00"
+// Example: "200" EXIT PRIME?
+// Ignores all other ASCII control and white space.
+
+void execute_string(const char *inputstring) {
+   uint16_t ix = 0;
+   uint16_t ix_m1 = 0;
+   uint16_t ix_m2 = 0;
+   uint16_t ix_m3 = 0;
+   uint16_t ix_m4 = 0;
+   uint16_t no = 0;
+   char     commandnumber[20];
+   char aa[2], bb[2];
+   bool_t state_comments, state_commands, state_quotes;
+
+   state_comments = false;
+   state_commands = false;
+   state_quotes = false;
+   commandnumber[0]=0;
+   aa[0]=0;
+   while (inputstring[ix]!=0) {
+     strcpy(bb,aa);
+     aa[0] = inputstring[ix];
+     aa[1] = 0;
+
+     switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
+      case 32:
+      case 8 :
+      case 13:
+      case 10:
+      case 44:
+      case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
+                (      (aa[0]==42 || aa[0]==43  ||  aa[0]==45 || aa[0]==47) 
+                    || (aa[0]>=48 && aa[0]<=57) || (aa[0]>=65 && aa[0]<=90)  )
+                && !state_comments                 //If not inside comments
+                && !state_quotes                   //if not inside quotes
+                ) {
+                    state_commands = true;         // Waiting to open command number or name: nnn
+                  }
+      default:;
+     }
+
+     switch(aa[0]) {
+      case 47: state_comments = !state_comments;        // Toggle comment state
+               state_commands = false;
+               state_quotes   = false;
+     	         break;
+     	case 34: if(!state_comments && !state_commands) { // Toggle quote state
+     	           state_quotes   = !state_quotes;
+     	         }
+     	         break;
+      case 13: //cr
+      case 10: //lf
+      case 8 : //tab
+      case 44: //,
+      case 32: if(state_commands){
+                 state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
+                 //printf("&%s&",commandnumber);
+                 if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                 if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
+                 if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
+                 if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
+                 if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
+                 if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else
+                 if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
+                 if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
+                 if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
+                 if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
+                 if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else
+                 if (strcompare(commandnumber,"MARK2"      )) {ix_m2 = ix;}   else
+                 if (strcompare(commandnumber,"MARK3"      )) {ix_m3 = ix;}   else
+                 if (strcompare(commandnumber,"MARK4"      )) {ix_m4 = ix;}   else
+                 if (strcompare(commandnumber,"GTO_M1_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m1 !=0)) {ix = ix_m1;} } else
+                 if (strcompare(commandnumber,"GTO_M1_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m1 !=0)) {ix = ix_m1;} } else
+                 if (strcompare(commandnumber,"GTO_M2_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m2 !=0)) {ix = ix_m2;} } else
+                 if (strcompare(commandnumber,"GTO_M2_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m2 !=0)) {ix = ix_m2;} } else
+                 if (strcompare(commandnumber,"GTO_M3_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m3 !=0)) {ix = ix_m3;} } else
+                 if (strcompare(commandnumber,"GTO_M3_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m3 !=0)) {ix = ix_m3;} } else
+                 if (strcompare(commandnumber,"GTO_M4_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m4 !=0)) {ix = ix_m4;} } else
+                 if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} }
+                 //printf("±%s±",commandnumber);
+                 no = atoi(commandnumber);       //Will force invalid commands and MARK etc. to 0
+                 if(no > LAST_ITEM-1) {no = 0;}
+                 //printf("@%d@\n",no);
+                 if(no!=0) {runkey(no);} else {printf("Skipping 0 execution ");}
+                 commandnumber[0]=0;
+               }
+               break;
+      default:;           //ignore all other characters
+      }
+   if(state_quotes)   {sendkeys(aa);} else
+   if(state_commands && stringByteLength(commandnumber) < 20) {strcat(commandnumber,aa);}   // accumulate string
+   ix++;
+   }
+}
+
+
+
+void testprogram(uint16_t unusedParamButMandatory){
+char inputstring[512];
+   inputstring[0]=0;
+   strcpy(inputstring,
+ //   "BTN P1 TPRIME /TESTPRIME PROGRAM/"
+    "TICKS "
+    "SWAP "
+    "\"2\" EXIT "
+    "684 "         //SWAP  "
+    "Y^X "
+    "\"1\" 1523  " //EXIT
+    "-   "
+    "STO \"00\"  "
+    "PRIME?      "
+    "X<>Y        "
+    "622  "        //TICKS
+    "X<>Y "
+    "780  "        //-
+
+    "RCL \"00\"  "
+    "MARK4 "
+    "\"1\" EXIT + "
+    "PRIME?       "
+    "GTO_M4_IF_0  "
+    );
+   //printf("%s\n",inputstring);
+   execute_string(inputstring);
+}
+
+
+void fnXEQMENU(uint16_t unusedParamButMandatory) {
+  testprogram(0);
+}
+
 
 
 

@@ -50,8 +50,10 @@ Modes available in the mode menu:
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
-
+void fnXEQMENU(uint16_t unusedParamButMandatory);
 void testprogram(uint16_t unusedParamButMandatory);
+void capture_sequence(char *origin, uint16_t item);
+
 
 
 

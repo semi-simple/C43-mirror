@@ -8,6 +8,10 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
+
+find . -type f -name "*.dSYM" -exec rm {} \;
+
+
 find . -type f -name "* 2.css" -exec rm {} \;
 find . -type f -name "* 3.css" -exec rm {} \;
 find . -type f -name "* 4.css" -exec rm {} \;

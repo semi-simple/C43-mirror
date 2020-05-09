@@ -6,6 +6,8 @@
 *.depend
 202*bmp
 202*.csv
+202*.TSV
+202*.tsv
 .stamp-constantPointers
 .stamp-rasterFontsData
 .stamp-softmenuCatalog
@@ -77,6 +79,29 @@ DMCP_build/build
 .AppleDouble
 .LSOverride
 
+
+
+.DS_Store
+*.dSYM
+*\ 2.c
+*\ 3.c
+*\ 4.c
+*\ 5.c
+*\ 6.c
+*\ 7.c
+*\ 8.c
+*\ 9.c
+c_s\ *
+generateCatalogs\ *
+generateConstants\ *
+ttf2Rasterfonts\ *
+.stamp-constantPointers\ *
+.stamp-rasterFontsData\ *
+.stamp-softmenuCatalog\ *
+
+
+
+
 # Icon must end with two \r
 Icon\r\r
 
@@ -128,4 +153,4 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/osx,linux,windows
 DM42 binary/Key_stickers.xcf
 DM42 binary/WP43S_overlay.xcf
-Makefile -f
+#Makefile -f

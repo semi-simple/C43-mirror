@@ -89,6 +89,7 @@
 #define longIntegerLcm(op1, op2, result)                                  mpz_lcm     (result, op1, op2)
 
 #define longIntegerFactorial(op, result)                                  mpz_fac_ui(result, op)
+#define longIntegerNextPrime(currentNumber, nextPrime)                    mpz_nextprime(nextPrime, currentNumber)
 
 
 //#define longIntegerInit(op)                                               {mpz_init(op); PRINT_LI(op, "after longIntegerInit"); }

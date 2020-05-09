@@ -36,3 +36,19 @@ DMCP_build/build
 /.vscode
 
 .DS_Store
+*.dSYM
+*\ 2.c
+*\ 3.c
+*\ 4.c
+*\ 5.c
+*\ 6.c
+*\ 7.c
+*\ 8.c
+*\ 9.c
+c_s\ *
+generateCatalogs\ *
+generateConstants\ *
+ttf2Rasterfonts\ *
+.stamp-constantPointers\ *
+.stamp-rasterFontsData\ *
+.stamp-softmenuCatalog\ *

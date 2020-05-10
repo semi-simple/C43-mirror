@@ -133,6 +133,7 @@ void execute_string(const char *inputstring) {
                     || (aa[0]>=48 && aa[0]<=57) || (aa[0]>=65 && aa[0]<=90)  )
                 && !state_comments                 //If not inside comments
                 && !state_quotes                   //if not inside quotes
+                && !state_commands                 //Don't re-check until done
                 ) {
                     state_commands = true;         // Waiting to open command number or name: nnn
                   }
@@ -140,9 +141,12 @@ void execute_string(const char *inputstring) {
      }
 
      switch(aa[0]) {
-      case 47: state_comments = !state_comments;        // Toggle comment state
-               state_commands = false;
-               state_quotes   = false;
+      case 47: if(bb[0] == 47) {
+                 state_comments = !state_comments;        // Toggle comment state
+                 state_commands = false;
+                 state_quotes   = false;
+                 commandnumber[0]=0;
+               }
      	         break;
      	case 34: if(!state_comments && !state_commands) { // Toggle quote state
      	           state_quotes   = !state_quotes;
@@ -164,7 +168,10 @@ void execute_string(const char *inputstring) {
                  if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
                  if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
                  if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
+                 if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
+                 if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
                  if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
+                 if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
                  if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else
                  if (strcompare(commandnumber,"MARK2"      )) {ix_m2 = ix;}   else
                  if (strcompare(commandnumber,"MARK3"      )) {ix_m3 = ix;}   else
@@ -176,19 +183,20 @@ void execute_string(const char *inputstring) {
                  if (strcompare(commandnumber,"GTO_M3_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m3 !=0)) {ix = ix_m3;} } else
                  if (strcompare(commandnumber,"GTO_M3_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m3 !=0)) {ix = ix_m3;} } else
                  if (strcompare(commandnumber,"GTO_M4_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m4 !=0)) {ix = ix_m4;} } else
-                 if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} }
+                 if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} } else
+                 if (strcompare(commandnumber,"RETURN"))      {ix = stringByteLength(inputstring)-2;}
                  //printf("±%s±",commandnumber);
                  no = atoi(commandnumber);       //Will force invalid commands and MARK etc. to 0
                  if(no > LAST_ITEM-1) {no = 0;}
                  //printf("@%d@\n",no);
-                 if(no!=0) {runkey(no);} else {printf("Skipping 0 execution ");}
+                 if(no!=0) {runkey(no);} else {printf("Skipping 0 execution |%s|",commandnumber);}
                  commandnumber[0]=0;
                }
                break;
       default:;           //ignore all other characters
       }
    if(state_quotes)   {sendkeys(aa);} else
-   if(state_commands && stringByteLength(commandnumber) < 20) {strcat(commandnumber,aa);}   // accumulate string
+   if(state_commands && stringByteLength(commandnumber) < 20-1) {strcat(commandnumber,aa);}   // accumulate string
    ix++;
    }
 }
@@ -199,7 +207,8 @@ void testprogram(uint16_t unusedParamButMandatory){
 char inputstring[512];
    inputstring[0]=0;
    strcpy(inputstring,
- //   "BTN P1 TPRIME /TESTPRIME PROGRAM/"
+ //   "BTN P1 TPRIME //TESTPRIME PROGRAM//"
+/*
     "TICKS "
     "SWAP "
     "\"2\" EXIT "
@@ -219,6 +228,19 @@ char inputstring[512];
     "\"1\" EXIT + "
     "PRIME?       "
     "GTO_M4_IF_0  "
+*/
+    "TICKS //RPN Program to demostrate PRIME// "
+    "\"2\" EXIT "
+    "\"2203\" "
+    "Y^X "
+    "\"1\" - "
+    "PRIME?  "
+    "X<>Y "
+    "TICKS "
+    "X<>Y - "
+    "\"10.0\" / "    
+    "RETURN"
+    "ABCDEFGHIJKLMNOPQ!@#$%^&*()"
     );
    //printf("%s\n",inputstring);
    execute_string(inputstring);

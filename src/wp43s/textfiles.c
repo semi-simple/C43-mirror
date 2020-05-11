@@ -29,6 +29,10 @@ uint32_t             tmp__32;                                 //JM_CSV
 uint32_t             mem__32;                                 //JM_CSV
 
 
+//#####################################################################################
+
+
+
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
   char csv[TMP_STR_LENGTH];
@@ -152,6 +156,33 @@ TCHAR* f_gets (
 }
 
 
+
+TCHAR* f_getsline (
+  TCHAR* buff,  /* Pointer to the buffer to store read string */
+  int len,    /* Size of string buffer (items) */
+  FIL* fp     /* Pointer to the file object */
+)
+{
+  int nc = 0;
+  TCHAR *p = buff;
+  BYTE s[2];
+  UINT rc;
+  BYTE sc;
+  s[1]=0;
+      /* Byte-by-byte read without any conversion (ANSI/OEM API) */
+  len -= 1; /* Make a room for the terminator */
+  while (nc < len) {
+    f_read(fp, s, 1, &rc);  /* Get a byte */
+    if (rc != 1) break;   /* EOF? */
+    sc = s[0];
+    *p++ = (TCHAR)sc; nc++;
+  }
+
+  *p = 0;   /* Terminate the string */
+  return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
+}
+
+
 /*-----------------------------------------------------------------------*/
 /* Put a Character to the File (sub-functions)                           */
 /*-----------------------------------------------------------------------*/
@@ -267,6 +298,128 @@ int f_puts (
 
 
 
+
+
+//#####################################################################################
+//#####################################################################################
+
+
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+char line[100];               /* Line buffer */
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    //Create file name
+    strcpy(filename_csv,"/PROGRAMS/XEQDEMO1.TSV");      
+
+    /* Prepare to write */
+    sys_disk_write_enable(1);
+    fr = sys_is_disk_write_enable();
+    if (fr==0) {
+      sprintf(line,"Write access error--> %d    \n",fr);    print_linestr(line,true);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
+    if (fr) {
+      sprintf(line,"File open error--> %d    \n",fr);       print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* Seek to end of the file to append data */
+    fr = f_lseek(&fil, f_size(&fil));
+    if (fr) {
+      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* Create string and output */
+    sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
+    fr = f_puts(tmpStr3000, &fil);
+    if (fr == -1) {
+      sprintf(line,"Write error--> %d    \n",fr);            print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    /* close the file */
+    fr = f_close(&fil);
+    if (fr) {
+      sprintf(line,"File close error--> %d    \n",fr);     print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
+    sys_disk_write_enable(0);
+ 
+    return 0;
+  }
+
+
+
+
+int16_t import_string_from_file(char *line1) {
+char line[100];               /* Line buffer */
+
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    //Create file name
+    strcpy(filename_csv,"/PROGRAMS/XEQDEMO2.TSV");      
+
+
+    /* Opens an existing file. */
+    fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
+    if (fr) {
+      sprintf(line,"File read open error--> %d    \n",fr);       print_linestr(line,false);
+      f_close(&fil)
+      ;
+      return (int)fr;
+    }
+
+    /* Read if open */
+    f_getsline(line1, TMP_STR_LENGTH, &fil);
+//       strcpy(line,"|");
+  //     strncat(line,line1,20);
+    //   strcat(line,"|");
+      // print_linestr(line,false); 
+    f_close(&fil);
+ 
+
+ 
+    /* Read if open */
+/*    while (f_gets(line1, sizeof line1, &fil)) {
+       strcpy(line,"|");
+       strncat(line,line1,20);
+       strcat(line,"|");
+       print_linestr(line,false); 
+     }
+    f_close(&fil);
+*/
+    return 0;
+  }
+
+
+
+
+//#####################################################################################
+//#####################################################################################
+
+
+
+
+
+
 /*-----------------------------------------------------------------------*/
 
 
@@ -376,7 +529,12 @@ char line[100];               /* Line buffer */
     //sprintf(line,"%f, %f\n",x,y);                           print_linestr(line,false);    
     sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
     fr = f_puts(tmpStr3000, &fil);
-
+    if (fr == -1) {
+      sprintf(line,"Write error--> %d    \n",fr);            print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
 
     /* close the file */
     fr = f_close(&fil);
@@ -451,13 +609,25 @@ char line[100];               /* Line buffer */
 
 #elif PC_BUILD
 
+
+int16_t import_string_from_file(char *line1) {
+  printf("import_string_from_file: %s\n",line1);
+  return 0;  
+}
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+  printf("export_string_to_file: %s\n",line1);
+  return 0;  
+}
+
+
 int16_t test_line(char *inputstring){
-  printf("%s\n",inputstring);
+  printf("test_line: %s\n",inputstring);
   return 0;
 }
 
 int16_t test_xy(float x, float y){
-  printf("%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
+  printf("test_xy: %f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
   return 0;
 }
 

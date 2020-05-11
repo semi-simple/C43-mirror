@@ -21,23 +21,31 @@
 /* ADDITIONAL WP43C functions and routines */
 
 
+
 #include "wp43s.h"
 
 
 void capture_sequence(char *origin, uint16_t item) {
-   printf("Captured: %4d   /%10s/  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
+   char line1[TMP_STR_LENGTH];
+   printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
+   sprintf(line1, "%4d //%10s//\n",item,indexOfItems[item].itemSoftmenuName);
+
+   export_string_to_file(line1);
 }
 
 
-
+//############################ SEND KEY TO 43S ENGINE ####################
 void runkey(uint16_t item){
     //printf("§%d§ ",item);
     processKeyAction(item);
     if (!keyActionProcessed){
       runFunction(item);
+      refreshStack();
+      lcd_forced_refresh(); // Just redraw from LCD buffer    
     } 
 }
 
+//############################ DECODE NUMBERS AND THEN SEND KEY TO 43S ENGINE ####################
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
@@ -64,23 +72,6 @@ void sendkeys(const char aa[]) {
   }
 }
 
-
-void testprogram2(uint16_t unusedParamButMandatory){
-
-    runkey(ITM_TICKS); //622
-    runkey(684);       //X<>Y
-    sendkeys("2"); runkey(KEY_EXIT1); //EXIT
-    runkey(684);   //X<>Y
-    runkey(698);   //Y^X
-    sendkeys("1"); runkey(KEY_EXIT1); //EXIT
-    runkey(780);   //-
-    runkey(589);   sendkeys("00"); //STO 00
-    runkey(469);   //PRIME?
-    runkey(684);   //X<>Y
-    runkey(ITM_TICKS);
-    runkey(684);   //X<>Y
-    runkey(ITM_SUB);
-}
 
 
 bool_t strcompare( char *in1, char *in2) {
@@ -203,7 +194,29 @@ void execute_string(const char *inputstring) {
 
 
 
-void testprogram(uint16_t unusedParamButMandatory){
+//Fixed test program, dispatching commands
+void testprogram2(uint16_t unusedParamButMandatory){
+
+    runkey(ITM_TICKS); //622
+    runkey(684);       //X<>Y
+    sendkeys("2"); runkey(KEY_EXIT1); //EXIT
+    runkey(684);   //X<>Y
+    runkey(698);   //Y^X
+    sendkeys("1"); runkey(KEY_EXIT1); //EXIT
+    runkey(780);   //-
+    runkey(589);   sendkeys("00"); //STO 00
+    runkey(469);   //PRIME?
+    runkey(684);   //X<>Y
+    runkey(ITM_TICKS);
+    runkey(684);   //X<>Y
+    runkey(ITM_SUB);
+}
+
+
+
+
+//Fixed test program, dispatching commands from text string
+void testprogram_last(uint16_t unusedParamButMandatory){
 char inputstring[512];
    inputstring[0]=0;
    strcpy(inputstring,
@@ -245,6 +258,18 @@ char inputstring[512];
    //printf("%s\n",inputstring);
    execute_string(inputstring);
 }
+
+
+//Fixed test program, dispatching commands loaded from TSV file
+void testprogram(uint16_t unusedParamButMandatory){
+   char line1[TMP_STR_LENGTH];
+   line1[0]=0;
+   strcpy(line1,"ABCDEF");
+   import_string_from_file(line1);
+   execute_string(line1);
+}
+
+
 
 
 void fnXEQMENU(uint16_t unusedParamButMandatory) {

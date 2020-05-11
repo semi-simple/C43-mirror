@@ -36,3 +36,8 @@ void         fnP_All_Regs(uint16_t unusedParamButMandatory);
 //void         print_line(bool_t line_init);
 void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 int16_t      test_line(char *inputstring);
+
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]);
+int16_t import_string_from_file(char *line1);
+

@@ -647,24 +647,26 @@ void displaywords(char *line1) {  //Preprocessor and display
     aa[0]=line1[ix];
     bb[0]=line1[ix+1];
 
-    if ((aa[0]==47 && bb[0]==47)) {
+    if ((aa[0]==47 && bb[0]==47)) {         //start and stop comment mode on double slash
       state_comments=!state_comments;
-      ix++; //skip the second /
+      ix++; //skip the second slash
     } 
     else 
-    if (state_comments && (aa[0]==13 || aa[0]==10))  {
-      state_comments=!state_comments;
+    if (state_comments && (aa[0]==13 || aa[0]==10))  {    //stop comment mode at end of line
+      state_comments=false;
       strcat(tmpStr3000," ");
     } 
     else
-      if(!state_comments) {
+      if(!state_comments) {                //proceed only if not comment mode
         switch(aa[0]) {
-          case 32:
+          case 32:                         //remove all whitespace
           case 8:
           case 13:
           case 10:
-          case 44: if(strlen(tmpStr3000)!=0) if(tmpStr3000[strlen(tmpStr3000)-1] != 32) {
-                     strcat(tmpStr3000," ");
+          case 44: if(strlen(tmpStr3000)!=0) {
+                     if(tmpStr3000[strlen(tmpStr3000)-1] != 32) {
+                       strcat(tmpStr3000," ");
+                     }
                    }
                    break;
           default: strcat(tmpStr3000,aa);
@@ -675,7 +677,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   }
   //printf("5:%s\n",line1);
 
-  aa[0]=0; aa[1]=0;
+  aa[0]=0; aa[1]=0;                  //remove consequtive spaces
   ll[0]=0;
   ix = 1;
   line1[0]=0;

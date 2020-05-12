@@ -67,6 +67,7 @@ void runkey(uint16_t item){
     //printf("§%d§ ",item);
     processKeyAction(item);
     if (!keyActionProcessed){
+      hideFunctionName();
       runFunction(item);
       refreshStack();
 #ifdef DMCP_BUILD
@@ -255,12 +256,10 @@ void testprogram2(uint16_t unusedParamButMandatory){
 
 
 
-#ifdef PC_BUILD
 //Fixed test program, dispatching commands from text string
-void testprogram(uint16_t unusedParamButMandatory){
-char inputstring[512];
-   inputstring[0]=0;
-   strcpy(inputstring,
+void testprogram_mem(uint16_t unusedParamButMandatory){
+char line1[TMP_STR_LENGTH];
+   strcpy(line1,
  //   "BTN P1 TPRIME //TESTPRIME PROGRAM//"
 /*
     "TICKS "
@@ -294,36 +293,92 @@ char inputstring[512];
     "X<>Y - "
     "\"10.0\" / "    
     "RETURN "
-    "ABCDEFGHIJKLMNOPQ!@#$%^&*()"
+    "ABCDEFGHIJKLMNOPQ!@#$%^&*()\n"
     );
-    //printf("%s\n",inputstring);
-    //printf("1:%s\n",inputstring);
-    displaywords(inputstring);
-    //printf("2:%s\n",inputstring);
-    execute_string(inputstring);
-    //printf("3:%s\n",inputstring);
+    displaywords(line1);
+    execute_string(line1);
 }
-#endif
 
 
 
-#ifdef DMCP_BUILD
 //Fixed test program, dispatching commands loaded from TSV file
-void testprogram(uint16_t unusedParamButMandatory){
-   char line1[TMP_STR_LENGTH];
-   line1[0]=0;
+void testprogram_disk(uint16_t unusedParamButMandatory){
+char line1[TMP_STR_LENGTH];
    strcpy(line1,"ABCDEF");
    import_string_from_file(line1);
    displaywords(line1);
    execute_string(line1);
 }
-#endif
-
 
 
 
 void fnXEQMENU(uint16_t unusedParamButMandatory) {
-  testprogram(0);
+char line1[TMP_STR_LENGTH];
+  //strcpy(line1,"ABCDEF");
+  
+  switch(unusedParamButMandatory) {
+
+    case 1: strcpy(line1,"ABCDEF");
+            import_string_from_file(line1);
+            displaywords(line1);
+            temporaryInformation = CM_BUG_ON_SCREEN;
+            break;
+
+    case 7: strcpy(line1,"ABCDEF");
+            import_string_from_file(line1);
+            displaywords(line1);
+            execute_string(line1);
+            temporaryInformation = CM_BUG_ON_SCREEN;
+            break;
+
+    case 13: testprogram_disk(0); 
+            break;
+
+    case 2: strcpy(line1,
+            "TICKS //RPN Hard coded program// "
+            "\"2\" EXIT "
+            "\"2203\" "
+            "Y^X "
+            "\"1\" - "
+            "PRIME?  "
+            "X<>Y "
+            "TICKS "
+            "X<>Y - "
+            "\"10.0\" / "    
+            "RETURN "
+            "//ABCDEFGHIJKLMNOPQ!@#$%^&*() \n"
+            "//72770178037093707037309707()// "            
+            );
+            displaywords(line1);
+            temporaryInformation = CM_BUG_ON_SCREEN;
+            break;
+
+    case 8: strcpy(line1,
+            "TICKS //RPN Hard coded program// "
+            "\"2\" EXIT "
+            "\"2203\" "
+            "Y^X "
+            "\"1\" - "
+            "PRIME?  "
+            "X<>Y "
+            "TICKS "
+            "X<>Y - "
+            "\"10.0\" / "    
+            "RETURN "
+            "//ABCDEFGHIJKLMNOPQ!@#$%^&*() \n"
+            "//72770178037093707037309707()// "            
+            );
+            displaywords(line1);
+            execute_string(line1);
+            temporaryInformation = CM_BUG_ON_SCREEN;
+            break;
+
+    case 14: testprogram_mem(0); 
+            break;
+
+    default:;
+
+  }
 }
 
 

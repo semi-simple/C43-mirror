@@ -5,6 +5,8 @@ PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-u
 make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
+rm ./wp43s
+rm ./DMCP_build/build/*
 
 make -j8 V=1 mrproper
 

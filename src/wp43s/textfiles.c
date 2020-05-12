@@ -368,6 +368,9 @@ char line[100];               /* Line buffer */
 
 
 
+
+
+
 int16_t import_string_from_file(char *line1) {
 char line[100];               /* Line buffer */
 
@@ -388,24 +391,13 @@ char line[100];               /* Line buffer */
     }
 
     /* Read if open */
+    line1[0]=0;
     f_getsline(line1, TMP_STR_LENGTH, &fil);
 //       strcpy(line,"|");
   //     strncat(line,line1,20);
     //   strcat(line,"|");
       // print_linestr(line,false); 
     f_close(&fil);
- 
-
- 
-    /* Read if open */
-/*    while (f_gets(line1, sizeof line1, &fil)) {
-       strcpy(line,"|");
-       strncat(line,line1,20);
-       strcat(line,"|");
-       print_linestr(line,false); 
-     }
-    f_close(&fil);
-*/
     return 0;
   }
 
@@ -611,27 +603,105 @@ char line[100];               /* Line buffer */
 
 
 int16_t import_string_from_file(char *line1) {
-  printf("import_string_from_file: %s\n",line1);
+  printf("import_string_from_file not implemented in sim: %s\n",line1);
   return 0;  
 }
 
 int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
-  printf("export_string_to_file: %s\n",line1);
+  printf("export_string_to_file not implemented in sim: %s\n",line1);
   return 0;  
 }
 
 
 int16_t test_line(char *inputstring){
-  printf("test_line: %s\n",inputstring);
+  printf("test_line not implemented in sim: %s\n",inputstring);
   return 0;
 }
 
 int16_t test_xy(float x, float y){
-  printf("test_xy: %f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
+  printf("test_xy not implemented in sim: %f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
   return 0;
 }
 
 #endif
+
+
+
+
+
+void displaywords(char *line1) {  //Preprocessor and display
+  char ll[50];
+  char bb[2];
+  char aa[2];
+  bool_t state_comments=false;
+  aa[1]=0;
+  bb[1]=0;
+  bb[0]=0;
+  print_linestr("Code:",true);
+  //printf("4:%s\n",line1);
+
+  tmpStr3000[0]=32;tmpStr3000[1]=0;
+  ll[0]=0;
+  int16_t ix = 0;
+  while (line1[ix] != 0) {
+    aa[0]=line1[ix];
+    bb[0]=line1[ix+1];
+
+    if ((aa[0]==47 && bb[0]==47)) {
+      state_comments=!state_comments;
+      ix++; //skip the second /
+    } 
+    else 
+    if (state_comments && (aa[0]==13 || aa[0]==10))  {
+      state_comments=!state_comments;
+      strcat(tmpStr3000," ");
+    } 
+    else
+      if(!state_comments) {
+        switch(aa[0]) {
+          case 32:
+          case 8:
+          case 13:
+          case 10:
+          case 44: if(strlen(tmpStr3000)!=0) if(tmpStr3000[strlen(tmpStr3000)-1] != 32) {
+                     strcat(tmpStr3000," ");
+                   }
+                   break;
+          default: strcat(tmpStr3000,aa);
+        }    
+      }
+
+    ix++;
+  }
+  //printf("5:%s\n",line1);
+
+  aa[0]=0; aa[1]=0;
+  ll[0]=0;
+  ix = 1;
+  line1[0]=0;
+  while (tmpStr3000[ix] != 0) {
+    aa[0]=tmpStr3000[ix];    
+    if (tmpStr3000[ix-1] != 32) {
+      strcat(line1,aa);
+      strcat(ll,aa);
+      if(strlen(ll)>30 && aa[0] == 32) {print_linestr(ll,false);ll[0]=0;}
+    } else {
+      if(aa[0] != 32) {
+      strcat(line1,aa);
+      strcat(ll,aa);          
+      if(strlen(ll)>36) {print_linestr(ll,false);ll[0]=0;}
+      }
+    }
+    ix++;
+  }
+  if(ll[0]!=0) {print_linestr(ll,false);}
+//printf("6:%s\n",line1);
+
+
+}
+
+
+
 
 
 

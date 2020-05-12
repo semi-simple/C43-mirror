@@ -24,13 +24,41 @@
 
 #include "wp43s.h"
 
-
 void capture_sequence(char *origin, uint16_t item) {
    char line1[TMP_STR_LENGTH];
-   printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
-   sprintf(line1, "%4d //%10s//\n",item,indexOfItems[item].itemSoftmenuName);
+   char ll[20];
+   uint16_t ix;
+#ifdef PC_BUILD
+   //printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
+#endif
 
-   export_string_to_file(line1);
+    ll[0]=0; ll[1]=0;
+    switch (item) {
+      case  684: strcpy(ll,"X<>Y"); break;
+      case  698: strcpy(ll,"Y^X" ); break;
+      case  784: strcpy(ll,"/"   ); break;
+      case  890: ll[0]=48; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  891: ll[0]=49; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  892: ll[0]=50; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  893: ll[0]=51; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  894: ll[0]=52; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  895: ll[0]=53; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  896: ll[0]=54; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  897: ll[0]=55; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  898: ll[0]=56; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  899: ll[0]=57; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case 1310: ll[0]=46; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
+      case 1487: ll[0]=69; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
+      default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);
+                 ix = 0;
+                 while (ll[ix] != 0) {
+                   if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
+                   ix++;
+                 }
+                 sprintf(line1, " %4d //%10s//\n",item,ll);
+               }  
+    }
+    export_string_to_file(line1);
 }
 
 
@@ -41,7 +69,9 @@ void runkey(uint16_t item){
     if (!keyActionProcessed){
       runFunction(item);
       refreshStack();
+#ifdef DMCP_BUILD
       lcd_forced_refresh(); // Just redraw from LCD buffer    
+#endif
     } 
 }
 
@@ -60,12 +90,11 @@ void sendkeys(const char aa[]) {
       case 55: runkey(897); break;
       case 56: runkey(898); break;
       case 57: runkey(899); break;
-      case 58: runkey(900); break;
       case 46: runkey(1310); break; //.
       case 69: runkey(1487); break; //E
       case 101: runkey(1487); break; //e
-      case 45: runkey(779); break; //-
-      case 43: runkey(779); break; //+
+      case 45: runkey(780); break; //-
+      case 43: runkey(778); break; //+
       default:;
     }
   ix++;
@@ -114,77 +143,88 @@ void execute_string(const char *inputstring) {
      aa[1] = 0;
 
      switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
-      case 32:
-      case 8 :
-      case 13:
-      case 10:
-      case 44:
-      case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
-                (      (aa[0]==42 || aa[0]==43  ||  aa[0]==45 || aa[0]==47) 
-                    || (aa[0]>=48 && aa[0]<=57) || (aa[0]>=65 && aa[0]<=90)  )
-                && !state_comments                 //If not inside comments
-                && !state_quotes                   //if not inside quotes
-                && !state_commands                 //Don't re-check until done
-                ) {
-                    state_commands = true;         // Waiting to open command number or name: nnn
-                  }
-      default:;
+        case 32:
+        case 8 :
+        case 13:
+        case 10:
+        case 44:
+        case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
+                  (      (aa[0]==42 
+                      ||  aa[0]==43  
+                      ||  aa[0]==45 
+                      ||  aa[0]==47) 
+                      || (aa[0]>=48 && aa[0]<=57) 
+                      || (aa[0]>=65 && aa[0]<=90)  )
+                  && !state_comments                 //If not inside comments
+                  && !state_quotes                   //if not inside quotes
+                  && !state_commands                 //Don't re-check until done
+                  ) {
+                      state_commands = true;         // Waiting to open command number or name: nnn
+                    }
+        default:;
      }
-
+     
+     if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
      switch(aa[0]) {
-      case 47: if(bb[0] == 47) {
-                 state_comments = !state_comments;        // Toggle comment state
-                 state_commands = false;
-                 state_quotes   = false;
-                 commandnumber[0]=0;
-               }
-     	         break;
-     	case 34: if(!state_comments && !state_commands) { // Toggle quote state
-     	           state_quotes   = !state_quotes;
-     	         }
-     	         break;
-      case 13: //cr
-      case 10: //lf
-      case 8 : //tab
-      case 44: //,
-      case 32: if(state_commands){
-                 state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                 //printf("&%s&",commandnumber);
-                 if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
-                 if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
-                 if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
-                 if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
-                 if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
-                 if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else
-                 if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
-                 if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
-                 if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
-                 if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
-                 if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
-                 if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
-                 if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
-                 if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else
-                 if (strcompare(commandnumber,"MARK2"      )) {ix_m2 = ix;}   else
-                 if (strcompare(commandnumber,"MARK3"      )) {ix_m3 = ix;}   else
-                 if (strcompare(commandnumber,"MARK4"      )) {ix_m4 = ix;}   else
-                 if (strcompare(commandnumber,"GTO_M1_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m1 !=0)) {ix = ix_m1;} } else
-                 if (strcompare(commandnumber,"GTO_M1_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m1 !=0)) {ix = ix_m1;} } else
-                 if (strcompare(commandnumber,"GTO_M2_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m2 !=0)) {ix = ix_m2;} } else
-                 if (strcompare(commandnumber,"GTO_M2_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m2 !=0)) {ix = ix_m2;} } else
-                 if (strcompare(commandnumber,"GTO_M3_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m3 !=0)) {ix = ix_m3;} } else
-                 if (strcompare(commandnumber,"GTO_M3_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m3 !=0)) {ix = ix_m3;} } else
-                 if (strcompare(commandnumber,"GTO_M4_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m4 !=0)) {ix = ix_m4;} } else
-                 if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} } else
-                 if (strcompare(commandnumber,"RETURN"))      {ix = stringByteLength(inputstring)-2;}
-                 //printf("±%s±",commandnumber);
-                 no = atoi(commandnumber);       //Will force invalid commands and MARK etc. to 0
-                 if(no > LAST_ITEM-1) {no = 0;}
-                 //printf("@%d@\n",no);
-                 if(no!=0) {runkey(no);} else {printf("Skipping 0 execution |%s|",commandnumber);}
-                 commandnumber[0]=0;
-               }
-               break;
-      default:;           //ignore all other characters
+        case 47: if(bb[0] == 47) {
+                   state_comments = !state_comments;        // Toggle comment state
+                   state_commands = false;
+                   state_quotes   = false;
+                   commandnumber[0]=0;
+                 }
+       	         break;
+       	case 34: if(!state_comments && !state_commands) { // Toggle quote state
+       	           state_quotes   = !state_quotes;
+       	         }
+       	         break;
+
+        case 13: //cr
+        case 10: //lf
+        case 8 : //tab
+        case 44: //,
+        case 32: if(state_commands){
+                   state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
+                   //printf("&%s&",commandnumber);
+                   if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                   if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
+                   if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
+                   if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
+                   if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
+                   if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else
+                   if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
+                   if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
+                   if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
+                   if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
+                   if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
+                   if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
+                   if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
+                   if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else
+                   if (strcompare(commandnumber,"MARK2"      )) {ix_m2 = ix;}   else
+                   if (strcompare(commandnumber,"MARK3"      )) {ix_m3 = ix;}   else
+                   if (strcompare(commandnumber,"MARK4"      )) {ix_m4 = ix;}   else
+                   if (strcompare(commandnumber,"GTO_M1_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m1 !=0)) {ix = ix_m1;} } else
+                   if (strcompare(commandnumber,"GTO_M1_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m1 !=0)) {ix = ix_m1;} } else
+                   if (strcompare(commandnumber,"GTO_M2_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m2 !=0)) {ix = ix_m2;} } else
+                   if (strcompare(commandnumber,"GTO_M2_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m2 !=0)) {ix = ix_m2;} } else
+                   if (strcompare(commandnumber,"GTO_M3_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m3 !=0)) {ix = ix_m3;} } else
+                   if (strcompare(commandnumber,"GTO_M3_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m3 !=0)) {ix = ix_m3;} } else
+                   if (strcompare(commandnumber,"GTO_M4_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m4 !=0)) {ix = ix_m4;} } else
+                   if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} } else
+                   if (strcompare(commandnumber,"RETURN"))      {ix = stringByteLength(inputstring)-2;}
+                   //printf("±%s±",commandnumber);
+                   no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
+                   if(no > LAST_ITEM-1) {no = 0;}
+                   //printf("@%d@\n",no);
+                   if(no!=0) {
+                     runkey(no);
+                   } 
+                   else {
+                     //printf("Skipping 0 execution |%s|",commandnumber);
+                   }
+                   commandnumber[0]=0;
+                 }
+                 break;
+        default:;           //ignore all other characters
       }
    if(state_quotes)   {sendkeys(aa);} else
    if(state_commands && stringByteLength(commandnumber) < 20-1) {strcat(commandnumber,aa);}   // accumulate string
@@ -215,8 +255,9 @@ void testprogram2(uint16_t unusedParamButMandatory){
 
 
 
+#ifdef PC_BUILD
 //Fixed test program, dispatching commands from text string
-void testprogram_last(uint16_t unusedParamButMandatory){
+void testprogram(uint16_t unusedParamButMandatory){
 char inputstring[512];
    inputstring[0]=0;
    strcpy(inputstring,
@@ -252,22 +293,31 @@ char inputstring[512];
     "TICKS "
     "X<>Y - "
     "\"10.0\" / "    
-    "RETURN"
+    "RETURN "
     "ABCDEFGHIJKLMNOPQ!@#$%^&*()"
     );
-   //printf("%s\n",inputstring);
-   execute_string(inputstring);
+    //printf("%s\n",inputstring);
+    //printf("1:%s\n",inputstring);
+    displaywords(inputstring);
+    //printf("2:%s\n",inputstring);
+    execute_string(inputstring);
+    //printf("3:%s\n",inputstring);
 }
+#endif
 
 
+
+#ifdef DMCP_BUILD
 //Fixed test program, dispatching commands loaded from TSV file
 void testprogram(uint16_t unusedParamButMandatory){
    char line1[TMP_STR_LENGTH];
    line1[0]=0;
    strcpy(line1,"ABCDEF");
    import_string_from_file(line1);
+   displaywords(line1);
    execute_string(line1);
 }
+#endif
 
 
 

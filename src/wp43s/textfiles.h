@@ -41,3 +41,4 @@ int16_t      test_line(char *inputstring);
 int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]);
 int16_t import_string_from_file(char *line1);
 
+void displaywords(char *line1);

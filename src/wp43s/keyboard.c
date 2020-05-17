@@ -239,11 +239,11 @@ int16_t determineItem(const char *data) {
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
-  switch(key->primary) {                              //JMSHOW
+  switch(key->primary) {                              //JMSHOW vv
     case      KEY_UP1:
     case      KEY_DOWN1: break;
     default:  SHOWregis = 9999; break;     
-  }
+  }                                                   //JMSHOW ^^
   //printf("###\n"); //JMEXEC
 
   JM_auto_drop_enabled = false;                       //JM TIMER CLRDROP

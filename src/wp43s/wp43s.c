@@ -35,7 +35,7 @@
   int16_t            debugWindow;
   uint32_t           *screenData;
   bool_t             screenChange;
-  char               debugString[10000];   //JMMAX Why is this permanent?
+  char               debugString[10000];
   #if (DEBUG_REGISTER_L == 1)
     GtkWidget        *lblRegisterL1;
     GtkWidget        *lblRegisterL2;

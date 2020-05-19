@@ -28,7 +28,6 @@
 
 
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1650,7 +1649,7 @@
 #define SFL_TRACE                     1611
 #define SFL_USER                      1612
 #define SFL_LOWBAT                    1613
-#define SFL_SPCRES                    1615
+#define SFL_SLOW                      1614
 #define SFL_SPCRES                    1615
 #define SFL_SSIZE8                    1616
 #define SFL_QUIET                     1617

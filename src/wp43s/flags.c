@@ -20,49 +20,121 @@
 
 #include "wp43s.h"
 
-void systemFlagAction(uint16_t systemFlag) {
-  switch(systemFlag) {
-    case FLAG_YMD:
-    case FLAG_DMY:
-    case FLAG_MDY:
-    case FLAG_TDM24:    oldTime[0] = 0;
-                        break;
+void systemFlagAction(uint16_t systemFlag, uint16_t action) {
+switch(systemFlag) {
+case FLAG_YMD:
+case FLAG_DMY:
+case FLAG_MDY:
+case FLAG_TDM24:    oldTime[0] = 0;
+break;
 
-    case FLAG_DECIMP:
-    case FLAG_LEAD0:
-    case FLAG_MULTx:
-    case FLAG_CPXj:     refreshStack();
-                        break;
+case FLAG_DECIMP:
+case FLAG_MULTx:
+case FLAG_CPXj:     refreshStack();
+break;
 
-    case FLAG_RECTN:    showComplexMode();
-                        refreshStack();
-                        break;
+case FLAG_LEAD0:    refreshStack();
+switch(action) {
+case 0: flags[108/16] &= ~(1u << (108%16));
+break;
+case 1: flags[108/16] |=   1u << (108%16);
+break;
+case 2: flags[108/16] ^=   1u << (108%16);
+break;
+default: {}
+}
+break;
 
-    case FLAG_CPXRES:   showRealComplexResult();
-                        break;
+case FLAG_RECTN:    showComplexMode();
+refreshStack();
+switch(action) {
+case 0: flags[100/16] &= ~(1u << (100%16));
+break;
+case 1: flags[100/16] |=   1u << (100%16);
+break;
+case 2: flags[100/16] ^=   1u << (100%16);
+break;
+default: {}
+}
+break;
 
-    case FLAG_FRACT:
-    case FLAG_DENANY:
-    case FLAG_DENFIX:   showFracMode();
-                        refreshStack();
-                        break;
+case FLAG_CPXRES:   showRealComplexResult();
+switch(action) {
+case 0: flags[109/16] &= ~(1u << (109%16));
+break;
+case 1: flags[109/16] |=   1u << (109%16);
+break;
+case 2: flags[109/16] ^=   1u << (109%16);
+break;
+default: {}
+}
+break;
 
-    case FLAG_CARRY:
-    case FLAG_OVERFLOW: showOverflowCarry();
-                        break;
+case FLAG_SPCRES:   switch(action) {
+case 0: flags[107/16] &= ~(1u << (107%16));
+break;
+case 1: flags[107/16] |=   1u << (107%16);
+break;
+case 2: flags[107/16] ^=   1u << (107%16);
+break;
+default: {}
+}
+break;
 
-    case FLAG_USER:     showHideUserMode();
-                        break;
+case FLAG_TRACE:   switch(action) {
+case 0: flags[103/16] &= ~(1u << (103%16));
+break;
+case 1: flags[103/16] |=   1u << (103%16);
+break;
+case 2: flags[103/16] ^=   1u << (103%16);
+break;
+default: {}
+}
+break;
 
-    case FLAG_LOWBAT:   showHideLowBattery();
-                        break;
+case FLAG_FRACT:
+case FLAG_DENANY:
+case FLAG_DENFIX:   showFracMode();
+refreshStack();
+break;
 
-    default: {}
-  }
+case FLAG_CARRY:    showOverflowCarry();
+switch(action) {
+case 0: flags[106/16] &= ~(1u << (106%16));
+break;
+case 1: flags[106/16] |=   1u << (106%16);
+break;
+case 2: flags[106/16] ^=   1u << (106%16);
+break;
+default: {}
+}
+break;
+
+case FLAG_OVERFLOW: showOverflowCarry();
+switch(action) {
+case 0: flags[105/16] &= ~(1u << (105%16));
+break;
+case 1: flags[105/16] |=   1u << (105%16);
+break;
+case 2: flags[105/16] ^=   1u << (105%16);
+break;
+default: {}
+}
+break;
+
+case FLAG_USER:     showHideUserMode();
+break;
+
+case FLAG_LOWBAT:   showHideLowBattery();
+break;
+
+default: {}
+}
 
 
 
-  if(getSystemFlag(systemFlag)) 
+
+  if(getSystemFlag(systemFlag))
     switch (systemFlag) {              //SET
       case FLAG_DMY:     fnRefreshRadioState(RB_DF,DF_DMY);break;
       case FLAG_MDY:     fnRefreshRadioState(RB_DF,DF_MDY);break;
@@ -77,20 +149,20 @@ void systemFlagAction(uint16_t systemFlag) {
       case FLAG_RECTN:   fnRefreshRadioState(RB_CM, CM_RECTANGULAR); showComplexMode(); refreshStack();    break;
       case FLAG_CPXRES:  fnRefreshComboxState(CB_JC, JC_BCR, true);showRealComplexResult(); break;
       default:;
-    } 
+    }
     else
       switch (systemFlag) {          //RESET
       case FLAG_DECIMP:  fnRefreshRadioState (RB_RM, RM_COMMA);refreshStack();break;
       case FLAG_TDM24:   fnRefreshRadioState (RB_TF, TF_H12);break;
       case FLAG_CPXj:    fnRefreshRadioState (RB_CU, CU_I); refreshStack();break;
       case FLAG_LEAD0:   fnRefreshComboxState(CB_JC, JC_BLZ, false); refreshStack();break;
-      case FLAG_MULTx:   fnRefreshRadioState(RB_PS, PS_DOT);break;     
+      case FLAG_MULTx:   fnRefreshRadioState(RB_PS, PS_DOT);break;
       case FLAG_SSIZE8:  fnRefreshRadioState (RB_SS, SS_4);break;
       case FLAG_RECTN:   fnRefreshRadioState (RB_CM, CM_POLAR); showComplexMode(); refreshStack();break;
       case FLAG_CPXRES:  fnRefreshComboxState(CB_JC, JC_BCR, false);showRealComplexResult();break;
       default:;
-    } 
-  
+    }
+
 
 
 

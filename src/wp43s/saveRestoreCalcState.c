@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 33  // 33 = System flags
+#define BACKUP_VERSION 34  // 34 = Lettered flags ovelapping system flags
 
 void saveCalc(void) {
   size_t size;
@@ -338,6 +338,7 @@ void restoreCalc(void) {
     size += fread(&lastFcnsMenuPos,                    1, sizeof(lastFcnsMenuPos),                    backup); //printf("%8lu lastFcnsMenuPos\n",                    (unsigned long)size);
     size += fread(&lastMenuMenuPos,                    1, sizeof(lastMenuMenuPos),                    backup); //printf("%8lu lastMenuMenuPos\n",                    (unsigned long)size);
     size += fread(&lastCnstMenuPos,                    1, sizeof(lastCnstMenuPos),                    backup); //printf("%8lu lastCnstMenuPos\n",                    (unsigned long)size);
+    size += fread(&lastSyFlMenuPos,                    1, sizeof(lastSyFlMenuPos),                    backup); //printf("%8lu lastSyFlMenuPos\n",                    (unsigned long)size);
     size += fread(&lgCatalogSelection,                 1, sizeof(lgCatalogSelection),                 backup); //printf("%8lu lgCatalogSelection\n",                 (unsigned long)size);
     size += fread(displayValueX,                       1, sizeof(displayValueX),                      backup); //printf("%8lu displayValueX\n",                      (unsigned long)size);
     size += fread(&pcg32_global,                       1, sizeof(pcg32_global),                       backup); //printf("%8lu pcg32_global\n",                       (unsigned long)size);

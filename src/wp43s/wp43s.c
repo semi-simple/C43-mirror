@@ -84,6 +84,8 @@ int16_t               alphaSelectionMenu;
 int16_t               lastFcnsMenuPos;
 int16_t               lastMenuMenuPos;
 int16_t               lastCnstMenuPos;
+int16_t               lastSyFlMenuPos;
+int16_t               showFunctionNameItem;
 int16_t               SHOWregis;                   //JMSHOW
 uint16_t              numberOfLocalFlags;
 dataBlock_t          *allLocalRegisterPointer;
@@ -106,24 +108,17 @@ uint8_t               currentFlgScr;
 uint8_t               displayFormat;
 uint8_t               displayFormatDigits;
 uint8_t               shortIntegerWordSize;
-uint8_t               denominatorMode;
 uint8_t               significantDigits;
 uint8_t               shortIntegerMode;
 uint8_t               previousCalcMode;
 uint8_t               groupingGap;
-uint8_t               dateFormat;
 uint8_t               curveFitting;
 uint8_t               roundingMode;
 uint8_t               calcMode;
 uint8_t               nextChar;
-uint8_t               complexUnit;
 uint8_t               displayStack;
 uint8_t               productSign;
-uint8_t               fractionType;
-uint8_t               radixMark;
 uint8_t               displayModeOverride;
-uint8_t               stackSize;
-uint8_t               complexMode;
 uint8_t               alphaCase;
 uint8_t               numLinesNumericFont;
 uint8_t               numLinesStandardFont;
@@ -133,13 +128,11 @@ uint8_t               nimNumberPart;
 uint8_t               hexDigits;
 uint8_t               lastErrorCode;
 uint8_t               serialIOIconEnabled;
-uint8_t               timeFormat;
 uint8_t               temporaryInformation;
 uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
 uint8_t               currentAngularMode;
-
-
+int8_t                showFunctionNameCounter;
 bool_t               jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t               jm_FG_DOTS;                              //JM Screen / keyboard operation setup
 bool_t               jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
@@ -172,15 +165,11 @@ radiocb_t            indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];                   
 
 bool_t                hourGlassIconEnabled;
 bool_t                watchIconEnabled;
-bool_t                userModeEnabled;
 bool_t                printerIconEnabled;
-bool_t                batteryIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
 //bool_t             shiftStateChanged; //dr
 bool_t                showContent;
-bool_t                stackLiftEnabled;
-bool_t                displayLeadingZeros;
 bool_t                savedStackLiftEnabled;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
@@ -190,6 +179,7 @@ calcRegister_t        errorRegisterLine;
 uint16_t              row[100];
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
+uint64_t              systemFlags;
 glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char                  transitionSystemOperation[4];
 char                  displayValueX[DISPLAY_VALUE_LEN];
@@ -212,13 +202,13 @@ pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
 #ifdef DMCP_BUILD
 
   #ifdef JMSHOWCODES 
-  int8_t               telltale_pos;       //JM Test
-  int8_t               telltale_lastkey;   //JM Test
+  int8_t              telltale_pos;      //JM Test
+  int8_t              telltale_lastkey;  //JM Test
   #endif
-  bool_t               backToDMCP;
-  uint32_t             nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
-  uint32_t             nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
-  #define TIMER_IDX_SCREEN_REFRESH 0      // use timer 0 to wake up for screen refresh
+  uint32_t            nextTimerRefresh;  // timer substitute for refreshTimer()                    //dr
+  bool_t              backToDMCP;
+  uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+  #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 
@@ -328,24 +318,29 @@ void setupDefaults(void) {
 
   groupingGap = 3;                                           //JM bug: Overwritten by fnReset. equivalent function, not directly set.
 
-  displayFormat = DF_ALL;                                    //JM bug: Overwritten by fnReset. equivalent function, not directly set.
-  displayFormatDigits = 0;                                   //JM bug: Overwritten by fnReset. equivalent function, not directly set.
-  fnTimeFormat(TF_H24);                                      //JM bug: Overwritten by fnReset
-  fnComplexUnit(CU_I);                                       //JM bug: Overwritten by fnReset
-  fnAngularMode(AM_DEGREE);                                  //JM bug: Overwritten by fnReset
-  fnDenMode(DM_ANY);                                         //JM bug: Overwritten by fnReset
-  denMax = DM_DENMAX;
-  fnCurveFitting(CF_LINEAR_FITTING);                         //JM bug: Overwritten by fnReset
-  fnLeadingZeros(false);                                     //JM bug: Overwritten by fnReset
-  fnProductSign(PS_CROSS);                                   //JM bug: Overwritten by fnReset
-  fractionType = FT_NONE;                                    //JM bug: Overwritten by fnReset
-  fnRadixMark(RM_PERIOD);                                    //JM bug: Overwritten by fnReset
-  fnComplexResult(true);                        //JM change: //JM bug: Overwritten by fnReset. CPXRES set default
-  fnComplexMode(CM_RECTANGULAR);                             //JM bug: Overwritten by fnReset
-  fnDisplayOvr(DO_SCI);                                      //JM bug: Overwritten by fnReset
-  fnStackSize(SS_8);                            //JM change: //JM bug: Overwritten by fnReset. SSTACK Stack size 8 default. Tired of changing it every time I reset. Was SS_4 before.
-  fnDateFormat(DF_YMD);                                      //JM bug: Overwritten by fnReset
-  showFracMode();
+  systemFlags = 0;
+  displayFormat = DF_ALL;
+  displayFormatDigits = 0;
+  setSystemFlag(FLAG_TDM24); // time format = 24H
+  clearSystemFlag(FLAG_CPXj);
+  fnAngularMode(AM_DEGREE);
+  setSystemFlag(FLAG_DENANY);
+  denMax = MAX_DENMAX;
+  fnCurveFitting(CF_LINEAR_FITTING);
+  clearSystemFlag(FLAG_LEAD0);
+  setSystemFlag(FLAG_MULTx);
+  clearSystemFlag(FLAG_FRACT);
+  clearSystemFlag(FLAG_PROPFR);
+  setSystemFlag(FLAG_PROPFR);
+  setSystemFlag(FLAG_DECIMP);
+  setSystemFlag(FLAG_CPXRES);             //JM default
+  setSystemFlag(FLAG_RECTN);
+  setSystemFlag(FLAG_ALLSCI);
+  setSystemFlag(FLAG_AUTOFF);
+  clearSystemFlag(FLAG_SSIZE8);
+  clearSystemFlag(FLAG_MDY); // date format
+  clearSystemFlag(FLAG_DMY); // date format
+  setSystemFlag(FLAG_YMD);   // date format
   significantDigits = 0;
   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN.      //JM bug: Overwritten by fnReset
   fnDisplayStack(4);                                         //JM bug: Overwritten by fnReset
@@ -428,9 +423,8 @@ void setupDefaults(void) {
   aimBuffer[0] = 0;
 
 
-  fnClearFlag(FLAG_OVERFLOW);
-  fnClearFlag(FLAG_CARRY);
-  showOverflowCarry();
+  clearSystemFlag(FLAG_OVERFLOW);
+  clearSystemFlag(FLAG_CARRY);
 
   fnSetFlag(FLAG_CPXRES);                //JM change: Also overwritten by fnReset. CPXRES set default
   showRealComplexResult();
@@ -452,7 +446,7 @@ void setupDefaults(void) {
 
   allowScreenUpdate = true;
 
-  hideUserMode();
+  clearSystemFlag(FLAG_USER);
 
   gammaLanczosCoefficients = (real51_t *)const_gammaC01;
 
@@ -469,11 +463,13 @@ void setupDefaults(void) {
   lastFcnsMenuPos = 0;
   lastMenuMenuPos = 0;
   lastCnstMenuPos = 0;
+  lastSyFlMenuPos = 0;
 
   exponentLimit = 6145;             //JMMAX
 
   #ifdef TESTSUITE_BUILD
     calcMode = CM_NORMAL;
+    clearSystemFlag(FLAG_ALPHA);
   #else
     calcModeNormal();
   #endif // TESTSUITE_BUILD

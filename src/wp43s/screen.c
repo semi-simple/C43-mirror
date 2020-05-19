@@ -428,7 +428,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   }
 
   // Alpha selection timer
-  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM) && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
 
@@ -463,15 +463,15 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
     showDateTime();
 
     if(get_lowbat_state() == 1 || get_vbat() < 2500) {
-      showLowBattery();
+      setSystemFlag(FLAG_LOWBAT);
     }
     else {
-      hideLowBattery();
+      clearSystemFlag(FLAG_LOWBAT);
     }
   }
 
   // Alpha selection timer
-  if(calcMode == CM_ASM && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM) && alphaSelectionTimer != 0 && (getUptimeMs()-alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
 }
@@ -1300,7 +1300,7 @@ void resetTemporaryInformation(void) {
     case TI_RESET:
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
-    //case TI_WHO:
+    //case TI_WHO:                                                                          //JM
     case TI_WEIGHTEDMEANX:
     case TI_WEIGHTEDSAMPLSTDDEV:
     case TI_WEIGHTEDPOPLSTDDEV:
@@ -1549,7 +1549,16 @@ void refreshRegisterLine(calcRegister_t regist) {
 
           else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
             if(lastIntegerBase != 0) {
-              sprintf(lastBase, "#%" FMT32U, lastIntegerBase);
+              lastBase[0] = '#';
+              if(lastIntegerBase > 9) {
+                lastBase[1] = '1';
+                lastBase[2] = '0' + (lastIntegerBase - 10);
+                lastBase[3] = 0;
+              }
+              else {
+                lastBase[1] = '0' + lastIntegerBase;
+                lastBase[2] = 0;
+              }
               wLastBase = stringWidth(lastBase, &numericFont, true, true);
             }
             else {
@@ -1574,7 +1583,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
           }
 
-          else if(   fractionType != FT_NONE
+          else if(   getSystemFlag(FLAG_FRACT)
                   && (    getRegisterDataType(regist) == dtReal34
                        && (
                               (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)

@@ -209,9 +209,9 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
       //The problem was at this point menu_A_HOME[ix0+ix] could be -1.
       //Which means kbd_std or kbd_usr[-1] is looked up.
   
-      if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}  else           
-      if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}  else
-      if(menu_A_HOME[ix0+ix] < 300) {ix_fn = !userModeEnabled ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}  else
+      if(menu_A_HOME[ix0+ix] < 100) {ix_fn = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[ix0+ix]    ].primary ) : (kbd_usr[menu_A_HOME[ix0+ix]    ].primary );}  else           
+      if(menu_A_HOME[ix0+ix] < 200) {ix_fn = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[ix0+ix]-100].fShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-100].fShifted);}  else
+      if(menu_A_HOME[ix0+ix] < 300) {ix_fn = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[ix0+ix]-200].gShifted) : (kbd_usr[menu_A_HOME[ix0+ix]-200].gShifted);}  else
       if(menu_A_HOME[ix0+ix]>= 300) {ix_fn = -9999;}
       //printf("--> MNU_HOME:%d (current menu %d): first item ix0:%d + ix:%d\n",MNU_HOME, ix_sm,ix0,ix);
       //printf("    menu_A_HOME looked up key:%d menu_HOME original softkey function: %d\n", menu_A_HOME[ix0+ix], menu_HOME[ix0+ix]);
@@ -220,7 +220,7 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
       //printf(   "  %s\n", indexOfItems[ix_fn].itemSoftmenuName );
   
       //Handle normal mode key change in dynamic HOME menu
-      if(ix_fn != -9999 && ix == 0 && !userModeEnabled && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+      if(ix_fn != -9999 && ix == 0 && !getSystemFlag(FLAG_USER) && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
         ix_fn = Norm_Key_00_VAR;
         tmp = true;
       }
@@ -236,7 +236,7 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
       //printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
 */  
       *funk = ix_fn;
-      return ix_fn != -9999 && ((userModeEnabled) || (!userModeEnabled && tmp));
+      return ix_fn != -9999 && ((getSystemFlag(FLAG_USER)) || (!getSystemFlag(FLAG_USER) && tmp));
     }
     return false;
   }

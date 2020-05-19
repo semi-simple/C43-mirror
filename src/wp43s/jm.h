@@ -33,6 +33,26 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
+// Radix Mark 1 bit
+ #define RM_PERIOD               103
+ #define RM_COMMA                104
+// Time format 1 bit
+#define TF_H24                  105
+#define TF_H12                  106
+// Complex unit 1 bit
+#define CU_I                    107
+#define CU_J                    108
+// Product sign 1 bit
+#define PS_DOT                  109
+#define PS_CROSS                110
+// Stack size 1 bit
+#define SS_4                    111
+#define SS_8                    112
+// Complex mode 1 bit
+ #define CM_RECTANGULAR          113
+ #define CM_POLAR                114
+
+
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
@@ -112,7 +132,7 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
 void fnJMup(uint16_t unusedParamButMandatory);
 void fnJMdown(uint16_t unusedParamButMandatory);
 void fnJM_2SI(uint16_t unusedParamButMandatory);
-void fnInfo(bool_t Info);
+//void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
 void fnUserJM(uint16_t jmUser);

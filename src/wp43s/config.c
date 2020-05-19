@@ -29,13 +29,14 @@
  * \return void
  ***********************************************/
 void fnConfigChina(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);   //JM
+  setSystemFlag(FLAG_DECIMP);
   groupingGap = 4;
   refreshStack();
-  fnTimeFormat(TF_H24);   //JM
-  fnDateFormat(DF_YMD);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1949; // JDN of the first day in the Gregorian calendar
+  setSystemFlag(FLAG_TDM24); // time format = 24H
+  clearSystemFlag(FLAG_DMY); // date format
+  clearSystemFlag(FLAG_MDY); // date format
+  setSystemFlag(FLAG_YMD);   // date format
+  firstGregorianDay = 1949;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -47,13 +48,14 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigEurope(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_COMMA);   //JM
+  clearSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);   //JM
-  fnDateFormat(DF_DMY);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1582; // JDN of the first day in the Gregorian calendar
+  setSystemFlag(FLAG_TDM24); // time format = 24H
+  clearSystemFlag(FLAG_MDY); // date format
+  clearSystemFlag(FLAG_YMD); // date format
+  setSystemFlag(FLAG_DMY);   // date format
+  firstGregorianDay = 1582;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -65,13 +67,14 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigIndia(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);   //JM
+  setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);   //JM
-  fnDateFormat(DF_DMY);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
+  setSystemFlag(FLAG_TDM24); // time format = 24H
+  clearSystemFlag(FLAG_MDY); // date format
+  clearSystemFlag(FLAG_YMD); // date format
+  setSystemFlag(FLAG_DMY);   // date format
+  firstGregorianDay = 1752;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -83,13 +86,14 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigJapan(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);   //JM
+  setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H24);   //JM
-  fnDateFormat(DF_YMD);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1873; // JDN of the first day in the Gregorian calendar
+  setSystemFlag(FLAG_TDM24); // time format = 24H
+  clearSystemFlag(FLAG_MDY); // date format
+  clearSystemFlag(FLAG_DMY); // date format
+  setSystemFlag(FLAG_YMD);   // date format
+  firstGregorianDay = 1873;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -101,13 +105,14 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUk(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);   //JM
+  setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H12);   //JM
-  fnDateFormat(DF_DMY);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
+  clearSystemFlag(FLAG_TDM24); // time format = 12H
+  clearSystemFlag(FLAG_MDY);   // date format
+  clearSystemFlag(FLAG_YMD);   // date format
+  setSystemFlag(FLAG_DMY);     // date format
+  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -119,13 +124,14 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnConfigUsa(uint16_t unusedParamButMandatory) {
-  fnRadixMark(RM_PERIOD);   //JM
+  setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   refreshStack();
-  fnTimeFormat(TF_H12);   //JM
-  fnDateFormat(DF_MDY);   //JM
-  oldTime[0] = 0;
-  firstGregorianDay = 1752; // JDN of the first day in the Gregorian calendar
+  clearSystemFlag(FLAG_TDM24); // time format = 12H
+  clearSystemFlag(FLAG_YMD);   // date format
+  clearSystemFlag(FLAG_DMY);   // date format
+  setSystemFlag(FLAG_MDY);     // date format
+  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -142,21 +148,6 @@ void fnIntegerMode(uint16_t mode) {
   fnRefreshRadioState(RB_IM, mode);                                            //dr
 
   showIntegerMode();
-  refreshStack();
-}
-
-/********************************************//**
- * \brief Sets the the leading zeros mode in integer mode
- *
- * \param[in] dlz uint16_t
- * \return void
- ***********************************************/
-void fnLeadingZeros(uint16_t dlz) {
-  displayLeadingZeros = dlz;
-
-//fnRefreshRadioState(RB_BLZ, dlz);                                             //dr
-  fnRefreshComboxState(CB_JC, JC_BLZ, displayLeadingZeros);                     //dr
-
   refreshStack();
 }
 
@@ -443,55 +434,23 @@ void fnAngularMode(uint16_t am) {
 
 
 
+void fnFractionType(uint16_t unusedParamButMandatory) {
+  if(getSystemFlag(FLAG_FRACT)) {
+    flipSystemFlag(FLAG_PROPFR);
+  }
+  else {
+    setSystemFlag(FLAG_FRACT);
+  }
+}
+
+
+
 void setConfirmationMode(void (*func)(uint16_t)) {
   previousCalcMode = calcMode;
   calcMode = CM_CONFIRMATION;
+  clearSystemFlag(FLAG_ALPHA);
   confirmedFunction = func;
   temporaryInformation = TI_ARE_YOU_SURE;
-  refreshStack();
-}
-
-
-
-/********************************************//**
- * \brief Defines the complex unit i or j
- *
- * \param[in] complexUnit uint16_t
- * \return void
- ***********************************************/
-void fnComplexUnit(uint16_t cu) {
-  complexUnit = cu;
-
-  fnRefreshRadioState(RB_CU, cu);                                               //dr
-
-  refreshStack();
-}
-
-/********************************************//**
- * \brief Defines if an operation result can be complex or not
- *
- * \param[in] complexRes uint16_t
- * \return void
- ***********************************************/
-void fnComplexResult(uint16_t complexResult) {
-  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
-
-//fnRefreshRadioState(RB_BCR, complexResult);                                   //dr
-  fnRefreshComboxState(CB_JC, JC_BCR, complexResult);                           //dr
-}
-
-/********************************************//**
- * \brief Defines the complex display mode: rectangular or polar
- *
- * \param[in] complexMode uint16_t
- * \return void
- ***********************************************/
-void fnComplexMode(uint16_t cm) {
-  complexMode = cm;
-
-  fnRefreshRadioState(RB_CM, cm);                                               //dr
-
-  showComplexMode();
   refreshStack();
 }
 
@@ -614,36 +573,42 @@ void fnReset(uint16_t confirmation) {
     clearScreen(true, true, true);
 
     fnClAll(CONFIRMED); // Clears pgm and registers
-    fnTimeFormat(TF_H24);              //JMnote This line is over-writing the content of setupdefaults
-    fnIntegerMode(SIM_2COMPL);         //JMnote This line is over-writing the content of setupdefaults
-    fnDisplayFormatAll(3);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
-    fnDisplayFormatGap(3);             //JMnote This line is over-writing the content of setupdefaults
-    fnComplexUnit(CU_I);               //JMnote This line is over-writing the content of setupdefaults
-    fnAngularMode(AM_DEGREE);          //JMnote This line is over-writing the content of setupdefaults
-    fnDenMode(DM_ANY);                 //JMnote This line is over-writing the content of setupdefaults
-    fnDenMax(0);                       //JMnote This line is over-writing the content of setupdefaults
-    fnDisplayStack(4);                 //JMnote This line is over-writing the content of setupdefaults
-    firstGregorianDay = 1752;          //JMnote This line is over-writing the content of setupdefaults
-    fnCurveFitting(CF_LINEAR_FITTING); //JMnote This line is over-writing the content of setupdefaults
-    fnLeadingZeros(false);             //JMnote This line is over-writing the content of setupdefaults
-    fnProductSign(PS_CROSS);           //JMnote This line is over-writing the content of setupdefaults
-    fnRadixMark(RM_PERIOD);            //JMnote This line is over-writing the content of setupdefaults
-    fnRoundingMode(RM_HALF_EVEN);      //JMnote This line is over-writing the content of setupdefaults
-    fnDisplayOvr(DO_SCI);              //JMnote This line is over-writing the content of setupdefaults
-    fnStackSize(SS_8);              //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
-    //tDisp = -1;
-    fnSetWordSize(64);                 //JMnote This line is over-writing the content of setupdefaults
-    fnDateFormat(DF_YMD);              //JMnote This line is over-writing the content of setupdefaults
-    fnComplexMode(CM_RECTANGULAR);     //JMnote This line is over-writing the content of setupdefaults
-    showRealComplexResult();
-    allocateLocalRegisters(0);
-    fnComplexResult(true);          //JM DEFAULT //JMnote This line is over-writing the content of setupdefaults
-    fnSetFlag(FLAG_DANGER);         //JM infinity etc.
 
-    fractionType = FT_NONE;
+    systemFlags = 0;
+    setSystemFlag(FLAG_TDM24);
+    fnIntegerMode(SIM_2COMPL);
+    fnDisplayFormatAll(3);             //JM Default
+    fnDisplayFormatGap(3);
+    clearSystemFlag(FLAG_CPXj);
+    fnAngularMode(AM_DEGREE);
+    setSystemFlag(FLAG_DENANY);
+    fnDenMax(0);
+    fnDisplayStack(4);
+    firstGregorianDay = 1752;
+    fnCurveFitting(CF_LINEAR_FITTING);
+    clearSystemFlag(FLAG_LEAD0);
+    setSystemFlag(FLAG_MULTx);
+    setSystemFlag(FLAG_DECIMP);
+    fnRoundingMode(RM_HALF_EVEN);
+    setSystemFlag(FLAG_ALLSCI);
+    setSystemFlag(FLAG_AUTOFF);
+    setSystemFlag(FLAG_SSIZE8);        //JM Default
+    //tDisp = -1;
+    fnSetWordSize(64);
+    clearSystemFlag(FLAG_MDY); // date format
+    clearSystemFlag(FLAG_DMY); // date format
+    setSystemFlag(FLAG_YMD);   // date format
+    setSystemFlag(FLAG_RECTN);
+    setSystemFlag(FLAG_CPXRES);        //JM Default
+    allocateLocalRegisters(0);
+
+    clearSystemFlag(FLAG_FRACT);
+    clearSystemFlag(FLAG_PROPFR);
+    clearSystemFlag(FLAG_OVERFLOW);
+    clearSystemFlag(FLAG_CARRY);
     STACK_LIFT_DISABLE;
     showOverflowCarry();
-    hideUserMode();
+    clearSystemFlag(FLAG_USER);
 
     graph_xmin = -3*3.14159265;                                    //JM GRAPH
     graph_xmax = +3*3.14159265;                                    //JM GRAPH
@@ -661,9 +626,9 @@ void fnReset(uint16_t confirmation) {
     jm_HOME_MIR = true;                                            //JMHOME
     jm_HOME_FIX = false;                                           //JMHOME
     #endif
-    SHOWregis = 9999;
+    SHOWregis = 9999;                                              //JMSHOW
 
-
+    setSystemFlag(FLAG_SPCRES)         //JM default infinity etc.
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -676,6 +641,7 @@ void fnReset(uint16_t confirmation) {
     lastFcnsMenuPos = 0;
     lastMenuMenuPos = 0;
     lastCnstMenuPos = 0;
+    lastSyFlMenuPos = 0;
 
     currentFntScr = 0;
     currentFlgScr = 0;
@@ -721,9 +687,8 @@ void fnReset(uint16_t confirmation) {
     //fnSetFlag( 62);
     //fnSetFlag( 77);
     //fnSetFlag( 85);
-    //fnSetFlag(FLAG_CARRY);
-    //fnSetFlag(FLAG_DANGER);
-    //showOverflowCarry();
+    //setSystemFlag(FLAG_CARRY);
+    //setSystemFlag(FLAG_SPCRES);
 
     //allocateLocalRegisters(2);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);

@@ -1695,7 +1695,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
   }
 
-  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !userModeEnabled) {                       //JMUSER Change the name inside the Sigma+ button
+  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !getSystemFlag(FLAG_USER)) {                       //JMUSER Change the name inside the Sigma+ button
     stringToUtf8(indexOfItems[max(Norm_Key_00_VAR, -Norm_Key_00_VAR)].itemSoftmenuName, lbl);            //JMUSER
   }                                                                                                      //JM
 
@@ -1709,7 +1709,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 //  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
 //  }                                                          //JM
 
-  if((key->primary == ITM_AIM && userModeEnabled && calcMode == CM_NORMAL ) || (!userModeEnabled && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
+  if((key->primary == ITM_AIM && getSystemFlag(FLAG_USER) && calcMode == CM_NORMAL ) || (!getSystemFlag(FLAG_USER) && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
     gtk_widget_set_name(button, "AlphaKey");                 //JMALPHA Colour the alpha key gold if assigned.
   }
   else if(key->primary == KEY_f) {
@@ -2033,7 +2033,7 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
 void calcModeNormalGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -2287,7 +2287,7 @@ void calcModeNormalGui(void) {
 void calcModeAimGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -2563,7 +2563,7 @@ void calcModeAimGui(void) {
 void calcModeTamGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -3987,7 +3987,7 @@ void fnOff(uint16_t unsuedParamButMandatory) {
  * \return void
  ***********************************************/
 void calcModeNormal(void) {
-  if(calcMode == CM_TAM) {
+  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
     popSoftmenu();
     refreshRegisterLine(TAM_REGISTER_LINE);
     STACK_LIFT_ENABLE;
@@ -3999,6 +3999,7 @@ void calcModeNormal(void) {
 //  if(!SH_BASE_HOME) {}
 
   calcMode = CM_NORMAL;
+  clearSystemFlag(FLAG_ALPHA);
   hideCursor();
   cursorEnabled = false;
   showAlphaMode();
@@ -4030,6 +4031,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
   }
 
   calcMode = CM_AIM;
+  setSystemFlag(FLAG_ALPHA);
   alphaCase = AC_UPPER;
   showAlphaMode();
   nextChar = NC_NORMAL;
@@ -4058,6 +4060,7 @@ void calcModeAsm(void) {
     closeNim();
   }
   calcMode = CM_ASM;
+  clearSystemFlag(FLAG_ALPHA);
   alphaCase = AC_UPPER;
   showAlphaMode();
   nextChar = NC_NORMAL;
@@ -4080,6 +4083,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   saveStack();
 
   calcMode = CM_NIM;
+  clearSystemFlag(FLAG_ALPHA);
 
   liftStack();
   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
@@ -4116,6 +4120,9 @@ void calcModeTam(void) {
   if(calcMode == CM_NIM) {
     closeNim();
   }
+  else if(calcMode == CM_ASM_OVER_TAM) {
+    popSoftmenu();
+  }
 
   if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER) {
     showSoftmenu(NULL, -MNU_TAM, true);
@@ -4123,7 +4130,7 @@ void calcModeTam(void) {
   else if(tamMode == TM_CMP) {
     showSoftmenu(NULL, -MNU_TAMCMP, true);
   }
-  else if(tamMode == TM_FLAG) {
+  else if(tamMode == TM_FLAGR || tamMode == TM_FLAGW) {
     showSoftmenu(NULL, -MNU_TAMFLAG, true);
   }
   else if(tamMode == TM_STORCL) {
@@ -4136,6 +4143,7 @@ void calcModeTam(void) {
   }
 
   calcMode = CM_TAM;
+  clearSystemFlag(FLAG_ALPHA);
 
   strcat(tamBuffer, " __");
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {

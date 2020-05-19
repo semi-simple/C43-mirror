@@ -42,7 +42,7 @@ void showShiftState(void) {
       else {
         refreshRegisterLine(REGISTER_T);
         clear_fg_jm();      //JM
-        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM)) {
+        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
       }
@@ -102,7 +102,7 @@ void executeFunction(int16_t fn, int16_t itemShift) {
       }                                         /*JMEXEC XXX ^^*/
 
       if(func == CHR_PROD_SIGN) {
-        func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+        func = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
       }
 
       if(func < 0) { // softmenu
@@ -136,16 +136,16 @@ void executeFunction(int16_t fn, int16_t itemShift) {
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
       case 1: {resetTemporaryInformation(); func = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
-      case 2: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
-      case 3: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
-      case 4: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
-      case 5: {resetTemporaryInformation(); func = ( !userModeEnabled ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
+      case 2: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
+      case 3: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
+      case 4: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
+      case 5: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
       case 6: {resetTemporaryInformation(); func = ( ITM_XFACT ) ;} break;  //ITM_XTHROOT
       default:{func = 0;} break;
     }
 
     if(func == CHR_PROD_SIGN) {
-      func = (productSign == PS_CROSS ? CHR_DOT : CHR_CROSS);
+      func = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
     }
 
     if(func < 0) { // softmenu
@@ -233,7 +233,7 @@ int16_t determineItem(const char *data) {
   const calcKey_t *key;
 
   //key = userModeEnabled ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
-  key = userModeEnabled && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
 
@@ -261,7 +261,7 @@ int16_t determineItem(const char *data) {
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
-  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM)) {   //JM shifts
+  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
     fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
     if(ShiftTimoutMode) {
@@ -284,7 +284,7 @@ int16_t determineItem(const char *data) {
 
 
   // Shift f pressed 
-  else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -306,7 +306,7 @@ int16_t determineItem(const char *data) {
 
 
   // Shift g pressed 
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM)) {
+  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -331,7 +331,7 @@ int16_t determineItem(const char *data) {
              shiftG ? key->gShifted :
                       key->primary;
   }
-  else if(calcMode == CM_AIM || calcMode == CM_ASM) {
+  else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM) {
     result = shiftF ? key->fShiftedAim :
              shiftG ? key->gShiftedAim :
                       key->primaryAim;
@@ -362,7 +362,7 @@ int16_t determineItem(const char *data) {
   }
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
-  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!userModeEnabled && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
     //printf("%d", stringToKeyNumber(data));
     result = Norm_Key_00_VAR;
   } //JM ^^
@@ -398,7 +398,7 @@ int16_t determineItem(const char *data) {
 
 
   if(result == CHR_PROD_SIGN) {
-    result = (productSign == PS_DOT ? CHR_DOT : CHR_CROSS);
+    result = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
   }
 
   resetShiftState();
@@ -596,6 +596,7 @@ void processKeyAction(int16_t item) {
           break;
 
         case CM_ASM:
+        case CM_ASM_OVER_TAM:
           if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -731,7 +732,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         STACK_LIFT_DISABLE;
       }                                               //JM NEWERPN vv
       else {
-        if(stackLiftEnabled) {
+        if(getSystemFlag(FLAG_ASLIFT)) {
           liftStack();
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           refreshStack();
@@ -765,7 +766,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
           aimBuffer[0] = 0;
           refreshStack();
         } else {
-          if(stackLiftEnabled) {
+          if(getSystemFlag(FLAG_ASLIFT)) {
           liftStack();
           STACK_LIFT_DISABLE;
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -788,7 +789,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         refreshStack();
       } else {
-        if(stackLiftEnabled) {
+        if(getSystemFlag(FLAG_ASLIFT)) {
         liftStack();
         STACK_LIFT_DISABLE;
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -802,6 +803,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_ASM:
+    case CM_ASM_OVER_TAM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -884,6 +886,13 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       calcModeNormal();
       break;
 
+    case CM_ASM_OVER_TAM:
+      transitionSystemState = 0;
+      calcModeTam();
+      sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
+      tamTransitionSystem(TT_NOTHING);
+      break;
+
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -960,6 +969,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using unusedParamButMan
       break;
 
     case CM_ASM:
+    case CM_ASM_OVER_TAM:
       break;
 
     case CM_REGISTER_BROWSER:
@@ -1023,6 +1033,9 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       addItemToBuffer(KEY_BACKSPACE);
       break;
 
+    case CM_ASM_OVER_TAM:
+      break;
+
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -1056,7 +1069,6 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
 
 
-
 /********************************************//**
  * \brief Processing UP key
  *
@@ -1074,6 +1086,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_AIM:
     case CM_NIM:
     case CM_ASM:
+    case CM_ASM_OVER_TAM:
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
@@ -1322,8 +1335,8 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   switch(calcMode) {
     case CM_NORMAL:
-      if(fractionType != FT_NONE) {
-        fractionType = FT_NONE;
+      if(getSystemFlag(FLAG_FRACT)) {
+        clearSystemFlag(FLAG_FRACT);
         refreshStack();
       }
       else {

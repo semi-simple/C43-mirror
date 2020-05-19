@@ -16,7 +16,6 @@
 
 void fnDisplayOvr                      (uint16_t displayOvr);
 void fnProductSign                     (uint16_t productSign);
-void fnRadixMark                       (uint16_t radixMark);
 void fnDisplayFormatFix                (uint16_t displayFormat);
 void fnDisplayFormatSci                (uint16_t displayFormat);
 void fnDisplayFormatEng                (uint16_t displayFormat);
@@ -39,4 +38,3 @@ void supNumberToDisplayString          (int32_t supNumber, char *displayString, 
 void subNumberToDisplayString          (int32_t subNumber, char *displayString, char *displayValueString);
 void longIntegerToAllocatedString      (const longInteger_t lgInt, char *str, int32_t strLg);
 void fnShow_SCROLL                	   (uint16_t fnShow_param);    //JMSHOW
-int16_t SHOWregis;                                            //JMSHOW

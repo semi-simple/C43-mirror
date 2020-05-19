@@ -89,7 +89,9 @@ void fnArg_all(uint16_t unusedParamButMandatory) {
 void fnToPolar2(uint16_t unusedParamButMandatory) {
   //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    fnComplexMode(CM_POLAR);
+//    fnComplexMode(CM_POLAR);
+      fnClearFlag(FLAG_RECTN);
+
   }
   else
     fnToPolar(0);
@@ -100,7 +102,8 @@ void fnToPolar2(uint16_t unusedParamButMandatory) {
 void fnToRect2(uint16_t unusedParamButMandatory) {
   //saveStack();       //Not savestack because fnToRect already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-      fnComplexMode(CM_RECTANGULAR);
+ //     fnComplexMode(CM_RECTANGULAR);
+      fnSetFlag(FLAG_RECTN);
     }
     else
       fnToRect(0);

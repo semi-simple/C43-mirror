@@ -50,7 +50,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
                                      ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,               ITM_MONTH,                   ITM_YEAR,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JonG                      };
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JonG                      };
 
 const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLSTK,                   ITM_CLX,
                                      ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLCVAR,            ITM_CLLCD,                   ITM_CLALL,
@@ -202,46 +202,9 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
-// Following menu is UPPER CASE for lower case: +80
-const int16_t menu_alpha_INTL[]  = { CHR_A,                         CHR_A_MACRON,               CHR_A_ACUTE,              CHR_A_BREVE,           CHR_A_GRAVE,                 CHR_A_DIARESIS,
-                                     CHR_A_TILDE,                   CHR_A_CIRC,                 CHR_A_RING,               CHR_AE,                CHR_A_OGONEK,                CHR_B,
-                                     CHR_C,                         CHR_C_ACUTE,                CHR_C_CARON,              CHR_C_CEDILLA,         CHR_D,                       CHR_D_STROKE,
-                                     CHR_D_CARON,                   CHR_E,                      CHR_E_MACRON,             CHR_E_ACUTE,           CHR_E_BREVE,                 CHR_E_GRAVE,
-                                     CHR_E_DIARESIS,                CHR_E_CIRC,                 CHR_E_DOT,                CHR_E_BREVE,           CHR_E_OGONEK,                CHR_F,
-                                     CHR_G,                         CHR_G_BREVE,                CHR_H,                    CHR_I,                 CHR_I_MACRON,                CHR_I_ACUTE,
-                                     CHR_I_BREVE,                   CHR_I_GRAVE,                CHR_I_DIARESIS,           CHR_I_CIRC,            CHR_I_OGONEK,                CHR_I_DOT,
-                                     CHR_I_DOTLESS,                 CHR_J,                      CHR_K,                    CHR_L,                 CHR_L_STROKE,                CHR_L_ACUTE,
-                                     CHR_L_APOSTROPHE,              CHR_M,                      CHR_N,                    CHR_N_ACUTE,           CHR_N_CARON,                 CHR_N_TILDE,
-                                     CHR_O,                         CHR_O_MACRON,               CHR_O_ACUTE,              CHR_O_BREVE,           CHR_O_GRAVE,                 CHR_O_DIARESIS,
-                                     CHR_O_TILDE,                   CHR_O_CIRC,                 CHR_O_STROKE,             CHR_OE,                CHR_P,                       CHR_Q,
-                                     CHR_R,                         CHR_R_CARON,                CHR_R_ACUTE,              CHR_S,                 ITM_NULL,                    CHR_S_ACUTE,
-                                     CHR_S_CARON,                   CHR_S_CEDILLA,              CHR_T,                    CHR_T_CARON,           CHR_T_CEDILLA,               CHR_U,
-                                     CHR_U_MACRON,                  CHR_U_ACUTE,                CHR_U_BREVE,              CHR_U_GRAVE,           CHR_U_DIARESIS,              CHR_U_TILDE,
-                                     CHR_U_CIRC,                    CHR_U_RING,                 CHR_U_OGONEK,             CHR_V,                 CHR_W,                       CHR_W_CIRC,
-                                     CHR_X,                         CHR_Y,                      CHR_Y_CIRC,               CHR_Y_ACUTE,           CHR_Y_DIARESIS,              CHR_Z,
-                                     CHR_Z_ACUTE,                   CHR_Z_CARON,                CHR_Z_DOT,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_alpha_intl[]  = { CHR_a,                         CHR_a_MACRON,               CHR_a_ACUTE,              CHR_a_BREVE,           CHR_a_GRAVE,                 CHR_a_DIARESIS,
-                                     CHR_a_TILDE,                   CHR_a_CIRC,                 CHR_a_RING,               CHR_ae,                CHR_a_OGONEK,                CHR_b,
-                                     CHR_c,                         CHR_c_ACUTE,                CHR_c_CARON,              CHR_c_CEDILLA,         CHR_d,                       CHR_d_STROKE,
-                                     CHR_d_APOSTROPHE,              CHR_e,                      CHR_e_MACRON,             CHR_e_ACUTE,           CHR_e_BREVE,                 CHR_e_GRAVE,
-                                     CHR_e_DIARESIS,                CHR_e_CIRC,                 CHR_e_DOT,                CHR_e_BREVE,           CHR_e_OGONEK,                CHR_f,
-                                     CHR_g,                         CHR_g_BREVE,                CHR_h,                    CHR_i,                 CHR_i_MACRON,                CHR_i_ACUTE,
-                                     CHR_i_BREVE,                   CHR_i_GRAVE,                CHR_i_DIARESIS,           CHR_i_CIRC,            CHR_i_OGONEK,                CHR_i_DOT,
-                                     CHR_i_DOTLESS,                 CHR_j,                      CHR_k,                    CHR_l,                 CHR_l_STROKE,                CHR_l_ACUTE,
-                                     CHR_l_APOSTROPHE,              CHR_m,                      CHR_n,                    CHR_n_ACUTE,           CHR_n_CARON,                 CHR_n_TILDE,
-                                     CHR_o,                         CHR_o_MACRON,               CHR_o_ACUTE,              CHR_o_BREVE,           CHR_o_GRAVE,                 CHR_o_DIARESIS,
-                                     CHR_o_TILDE,                   CHR_o_CIRC,                 CHR_o_STROKE,             CHR_oe,                CHR_p,                       CHR_q,
-                                     CHR_r,                         CHR_r_CARON,                CHR_r_ACUTE,              CHR_s,                 CHR_s_SHARP,                 CHR_s_ACUTE,
-                                     CHR_s_CARON,                   CHR_s_CEDILLA,              CHR_t,                    CHR_t_APOSTROPHE,      CHR_t_CEDILLA,               CHR_u,
-                                     CHR_u_MACRON,                  CHR_u_ACUTE,                CHR_u_BREVE,              CHR_u_GRAVE,           CHR_u_DIARESIS,              CHR_u_TILDE,
-                                     CHR_u_CIRC,                    CHR_u_RING,                 CHR_u_OGONEK,             CHR_v,                 CHR_w,                       CHR_w_CIRC,
-                                     CHR_x,                         CHR_y,                      CHR_y_CIRC,               CHR_y_ACUTE,           CHR_y_DIARESIS,              CHR_z,
-                                     CHR_z_ACUTE,                   CHR_z_CARON,                CHR_z_DOT,                ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
 const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_SYSFL,                 -MNU_CHARS,               -MNU_PROGS,            -MNU_VARS,                   -MNU_MENUS,
                                      ITM_NULL,                      ITM_NULL,                   -MNU_DIGITS,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
@@ -339,7 +302,6 @@ const int16_t menu_TIMES[]       = { ITM_Not,                       ITM_yet,    
 const int16_t menu_ANGLES[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_SINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_LINTS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_SYSFL[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 const int16_t menu_alphaMATH[]   = { CHR_LESS_THAN,                 CHR_LESS_EQUAL,             CHR_EQUAL,                CHR_ALMOST_EQUAL,      CHR_GREATER_EQUAL,           CHR_GREATER_THAN,
                                      CHR_LEFT_CURLY_BRACKET,        CHR_LEFT_SQUARE_BRACKET,    CHR_LEFT_PARENTHESIS,     CHR_RIGHT_PARENTHESIS, CHR_RIGHT_SQUARE_BRACKET,    CHR_RIGHT_CURLY_BRACKET,
@@ -380,15 +342,14 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,   
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
-const int16_t menu_CFG[]         = { ITM_POLAR,                     ITM_RECT,                   ITM_RDXCOM,               ITM_RDXPER,            ITM_CPXRES,                  ITM_REALRES,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_SCIOVR,
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_LZON,                 ITM_LZOFF,             ITM_QUIET,                   ITM_ENGOVR,
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_SLOW,                 ITM_FAST,              ITM_SSIZE4,                  ITM_SSIZE8                    };
-
 #include "softmenuCatalogs.h"
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
+  {.menuId = -MNU_SYSFL,       .numItems = sizeof(menu_SYSFL      )/sizeof(int16_t), .softkeyItem = menu_SYSFL       },
+  {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
+  {.menuId = -MNU_ALPHAintl,   .numItems = sizeof(menu_alpha_intl )/sizeof(int16_t), .softkeyItem = menu_alpha_intl  },
   {.menuId = -MNU_MyMenu,      .numItems = sizeof(menu_MyMenu     )/sizeof(int16_t), .softkeyItem = menu_MyMenu      },
   {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
   {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
@@ -415,7 +376,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_M_EDIT,      .numItems = sizeof(menu_M_EDIT     )/sizeof(int16_t), .softkeyItem = menu_M_EDIT      },
   {.menuId = -MNU_M_EDITN,     .numItems = sizeof(menu_M_EDITN    )/sizeof(int16_t), .softkeyItem = menu_M_EDITN     },
   {.menuId = -MNU_MODE,        .numItems = sizeof(menu_MODE       )/sizeof(int16_t), .softkeyItem = menu_MODE        },
-  {.menuId = -MNU_CFG,         .numItems = sizeof(menu_CFG        )/sizeof(int16_t), .softkeyItem = menu_CFG         },
   {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
   {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
   {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
@@ -440,8 +400,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TEST,        .numItems = sizeof(menu_TEST       )/sizeof(int16_t), .softkeyItem = menu_TEST        },
   {.menuId = -MNU_XFN,         .numItems = sizeof(menu_XFN        )/sizeof(int16_t), .softkeyItem = menu_XFN         },
   {.menuId = -MNU_ORTHOG,      .numItems = sizeof(menu_Orthog     )/sizeof(int16_t), .softkeyItem = menu_Orthog      },
-  {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
-  {.menuId = -MNU_ALPHAintl,   .numItems = sizeof(menu_alpha_intl )/sizeof(int16_t), .softkeyItem = menu_alpha_intl  },
   {.menuId = -MNU_CATALOG,     .numItems = sizeof(menu_CATALOG    )/sizeof(int16_t), .softkeyItem = menu_CATALOG     },
   {.menuId = -MNU_DIGITS,      .numItems = sizeof(menu_DIGITS     )/sizeof(int16_t), .softkeyItem = menu_DIGITS      },
   {.menuId = -MNU_CHARS,       .numItems = sizeof(menu_CHARS      )/sizeof(int16_t), .softkeyItem = menu_CHARS       },
@@ -461,7 +419,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ANGLES,      .numItems = sizeof(menu_ANGLES     )/sizeof(int16_t), .softkeyItem = menu_ANGLES      },
   {.menuId = -MNU_SINTS,       .numItems = sizeof(menu_SINTS      )/sizeof(int16_t), .softkeyItem = menu_SINTS       },
   {.menuId = -MNU_LINTS,       .numItems = sizeof(menu_LINTS      )/sizeof(int16_t), .softkeyItem = menu_LINTS       },
-  {.menuId = -MNU_SYSFL,       .numItems = sizeof(menu_SYSFL      )/sizeof(int16_t), .softkeyItem = menu_SYSFL       },
   {.menuId = -MNU_ALPHAMATH,   .numItems = sizeof(menu_alphaMATH  )/sizeof(int16_t), .softkeyItem = menu_alphaMATH   },
   {.menuId = -MNU_ALPHADOT,    .numItems = sizeof(menu_alphaDot   )/sizeof(int16_t), .softkeyItem = menu_alphaDot    },
   {.menuId = -MNU_REALS,       .numItems = sizeof(menu_REALS      )/sizeof(int16_t), .softkeyItem = menu_REALS       },
@@ -481,7 +438,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_PRINT,       .numItems = sizeof(menu_PRINT      )/sizeof(int16_t), .softkeyItem = menu_PRINT       },
   {.menuId = -MNU_TAM,         .numItems = sizeof(menu_Tam        )/sizeof(int16_t), .softkeyItem = menu_Tam         },
   {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
-  {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
   {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
@@ -669,7 +625,7 @@ void showSoftmenuCurrentPart(void) {
           }
         }
         else if(item == 9999) {
-          showSoftkey(indexOfItems[productSign == PS_DOT ? CHR_CROSS : CHR_DOT].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
+          showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
         }
         else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
           // item : +10000 -> no top line
@@ -720,7 +676,13 @@ void showSoftmenuCurrentPart(void) {
  ***********************************************/
 void initSoftmenuStack(int16_t softmenu) {
   softmenuStack[0].softmenu = softmenu;
-  softmenuStack[0].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
+  softmenuStack[0].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
+                               (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
+                               (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
+                               (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
+                               (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
+                               (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
+                                0))))));
   softmenuStackPointer = 1;
   showSoftmenuCurrentPart();
 }
@@ -737,7 +699,13 @@ void initSoftmenuStack(int16_t softmenu) {
 void pushSoftmenu(int16_t softmenu) {
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
-    softmenuStack[softmenuStackPointer].firstItem = alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos : (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos : (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos : 0));
+    softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
+                                                    (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
+                                                    (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
+                                                    (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
+                                                    (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
+                                                    (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
+                                                     0))))));
     softmenuStackPointer++;
     showSoftmenuCurrentPart();
   }
@@ -803,6 +771,39 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     alphaSelectionMenu = ASM_MENU;
     calcModeAsm();
   }
+  else if(id == -MNU_SYSFL) {
+    alphaSelectionMenu = ASM_SYFL;
+    if(calcMode == CM_TAM) {
+      calcModeAsm();
+      calcMode = CM_ASM_OVER_TAM;
+      clearSystemFlag(FLAG_ALPHA);
+    }
+    else {
+      calcModeAsm();
+    }
+  }
+  else if(id == -MNU_ALPHAINTL) {
+    alphaSelectionMenu = ASM_AINT;
+    if(calcMode == CM_AIM) {
+      calcModeAsm();
+      calcMode = CM_ASM_OVER_AIM;
+      clearSystemFlag(FLAG_ALPHA);
+    }
+    else {
+      calcModeAsm();
+    }
+  }
+  else if(id == -MNU_ALPHAintl) {
+    alphaSelectionMenu = ASM_aint;
+    if(calcMode == CM_AIM) {
+      calcModeAsm();
+      calcMode = CM_ASM_OVER_AIM;
+      clearSystemFlag(FLAG_ALPHA);
+    }
+    else {
+      calcModeAsm();
+    }
+  }
   else {
     alphaSelectionMenu = ASM_NONE;
   }
@@ -812,8 +813,6 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
     return;
   }
-
-  m = 0;
 
   if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
@@ -828,6 +827,8 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;
   }
+
+  m = 0;
 
   if(id != 0) { // Search by ID
     while(softmenu[m].menuId != 0) {
@@ -856,7 +857,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) {
       if(push) {
         pushSoftmenu(m);
       }
@@ -890,5 +891,8 @@ void setCatalogLastPos(void) {
        if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
   else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
   else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
 }
 #endif

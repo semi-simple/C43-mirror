@@ -18,7 +18,7 @@
  * \file softmenu.h
  ***********************************************/
 
-#define MY_ALPHA_MENU    0  // This is the index of the MyAlpha softmenu in the softmenu[] array
+#define MY_ALPHA_MENU    0  // This is the index of the MyAlpha   softmenu in the softmenu[] array
 #define SOFTMENU_HEIGHT 23
 
 /********************************************//**

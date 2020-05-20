@@ -42,7 +42,7 @@ void showShiftState(void) {
       else {
         refreshRegisterLine(REGISTER_T);
         clear_fg_jm();      //JM
-        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
+        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
       }
@@ -204,6 +204,12 @@ void btnFnClicked(void *w, void *data) {
       if(calcMode == CM_ASM) {
         calcModeNormal();
       }
+        else if(calcMode == CM_ASM_OVER_AIM) {
+          calcModeAim(NOPARAM);
+          addItemToBuffer(item);
+          return;
+        }
+
 
       if(shiftF) {
         resetShiftState();
@@ -261,7 +267,7 @@ int16_t determineItem(const char *data) {
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
-  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {   //JM shifts
+  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {   //JM shifts
     Shft_timeouts = true;                         //JM SHIFT NEW
     fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
     if(ShiftTimoutMode) {
@@ -284,7 +290,7 @@ int16_t determineItem(const char *data) {
 
 
   // Shift f pressed 
-  else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
+  else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -306,7 +312,7 @@ int16_t determineItem(const char *data) {
 
 
   // Shift g pressed 
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM)) {
+  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     resetTemporaryInformation();
 
     if(lastErrorCode != 0) {
@@ -331,7 +337,7 @@ int16_t determineItem(const char *data) {
              shiftG ? key->gShifted :
                       key->primary;
   }
-  else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM) {
+  else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) {
     result = shiftF ? key->fShiftedAim :
              shiftG ? key->gShiftedAim :
                       key->primaryAim;
@@ -498,7 +504,7 @@ void btnReleased(void *notUsed, void *data) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();
     if(item < 0) {
-      showSoftmenu(NULL, item, false);
+      showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
     }
     else {
       runFunction(item);
@@ -597,6 +603,7 @@ void processKeyAction(int16_t item) {
 
         case CM_ASM:
         case CM_ASM_OVER_TAM:
+        case CM_ASM_OVER_AIM:
           if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -804,6 +811,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
 
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -893,6 +901,10 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       tamTransitionSystem(TT_NOTHING);
       break;
 
+    case CM_ASM_OVER_AIM:
+      calcModeAim(NOPARAM);
+      break;
+
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -970,6 +982,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using unusedParamButMan
 
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
       break;
 
     case CM_REGISTER_BROWSER:
@@ -1034,6 +1047,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
       break;
 
     case CM_REGISTER_BROWSER:
@@ -1087,6 +1101,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_NIM:
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
@@ -1218,6 +1233,8 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_AIM:
     case CM_NIM:
     case CM_ASM:
+    case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;

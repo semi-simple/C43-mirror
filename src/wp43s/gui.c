@@ -4018,9 +4018,10 @@ void calcModeNormal(void) {
  * \return void
  ***********************************************/
 void calcModeAim(uint16_t unusedParamButMandatory) {
-  saveStack();
-  liftStack();
-  refreshStack();
+  if(calcMode == CM_ASM_OVER_AIM) {
+    popSoftmenu();
+  }
+  else {
   if(!SH_BASE_AHOME) {
     showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
@@ -4029,18 +4030,24 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
   }
+//    showSoftmenu(NULL, -MNU_MyAlpha, true);     //JM
+    alphaCase = AC_UPPER;
+    showAlphaMode();
+    nextChar = NC_NORMAL;
+
+    saveStack();
+    liftStack();
+    refreshStack();
+
+    clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
+    xCursor = 1;
+    yCursor = Y_POSITION_OF_AIM_LINE + 6;
+    cursorFont = CF_STANDARD;
+    cursorEnabled = true;
+  }
 
   calcMode = CM_AIM;
   setSystemFlag(FLAG_ALPHA);
-  alphaCase = AC_UPPER;
-  showAlphaMode();
-  nextChar = NC_NORMAL;
-
-  clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
-  xCursor = 1;
-  yCursor = Y_POSITION_OF_AIM_LINE + 6;
-  cursorFont = CF_STANDARD;
-  cursorEnabled = true;
 
   #ifdef PC_BUILD
     calcModeAimGui();
@@ -4059,11 +4066,15 @@ void calcModeAsm(void) {
   if(calcMode == CM_NIM) {
     closeNim();
   }
+
+  if(calcMode != CM_AIM) {
+    alphaCase = AC_UPPER;
+    showAlphaMode();
+    nextChar = NC_NORMAL;
+  }
+
   calcMode = CM_ASM;
   clearSystemFlag(FLAG_ALPHA);
-  alphaCase = AC_UPPER;
-  showAlphaMode();
-  nextChar = NC_NORMAL;
   resetAlphaSelectionBuffer();
 
   #ifdef PC_BUILD

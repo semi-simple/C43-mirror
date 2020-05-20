@@ -332,10 +332,14 @@ void fnRebuildRadioState() {
   fnRefreshRadioState(RB_AM, currentAngularMode);
 //  464     { ITM_POLAR,            CM_POLAR,               RB_CM },  //fnComplexMode
 //  507     { ITM_RECT,             CM_RECTANGULAR,         RB_CM },  //fnComplexMode
-  fnRefreshRadioState(RB_CM, getSystemFlag(FLAG_RECTN));
+  uint8_t complexMode = 0;
+  if(getSystemFlag(FLAG_RECTN)) complexMode=CM_RECTANGULAR; else complexMode=CM_POLAR; 
+  fnRefreshRadioState(RB_CM, complexMode);
 //   96     { ITM_CPXI,             CU_I,                   RB_CU },  //fnComplexUnit
-//   97     { ITM_CPXJ,             CU_J,                   RB_CU },  //fnComplexUnit
-  fnRefreshRadioState(RB_CU, getSystemFlag(FLAG_CPXj));
+//   97     { ITM_CPXJ,             CU_J,                   RB_CU },  //fnComplexUnit 
+  uint8_t complexUnit = 0;
+  if(getSystemFlag(FLAG_CPXj)) complexUnit=CU_J; else complexUnit=CU_I; 
+  fnRefreshRadioState(RB_CU, complexUnit);
 //   44     { ITM_BESTF,            CF_BEST_FITTING,        RB_CF },  //fnCurveFitting
 //  161     { ITM_EXPF,             CF_EXPONENTIAL_FITTING, RB_CF },  //fnCurveFitting
 //  308     { ITM_LINF,             CF_LINEAR_FITTING,      RB_CF },  //fnCurveFitting
@@ -345,8 +349,13 @@ void fnRebuildRadioState() {
 //  136     { ITM_DMY,              DF_DMY,                 RB_DF },  //fnDateFormat
 //  383     { ITM_MDY,              DF_MDY,                 RB_DF },  //fnDateFormat
 //  700     { ITM_YMD,              DF_YMD,                 RB_DF },  //fnDateFormat
-  uint8_t dateFormat;
-  if(getSystemFlag(FLAG_DMY)) dateFormat=DF_DMY; else if (getSystemFlag(FLAG_MDY)) dateFormat=DF_MDY; else if(getSystemFlag(FLAG_YMD)) dateFormat=DF_YMD;
+  uint8_t dateFormat = 0;
+  if(getSystemFlag(FLAG_DMY)) 
+    dateFormat=DF_DMY; 
+  else if (getSystemFlag(FLAG_MDY)) 
+    dateFormat=DF_MDY; 
+  else if(getSystemFlag(FLAG_YMD)) 
+    dateFormat=DF_YMD;
   fnRefreshRadioState(RB_DF, dateFormat);
 //  119     { ITM_DENANY,           DM_ANY,                 RB_DM },  //fnDenMode
 //  120     { ITM_DENFAC,           DM_FAC,                 RB_DM },  //fnDenMode
@@ -361,7 +370,7 @@ void fnRebuildRadioState() {
   uint8_t df = displayFormat;
   if(df == DF_FIX && SigFigMode != 0) { df = DF_SF; }
   if(df == DF_ENG && UNITDisplay) { df = DF_UN; }
-//  fnRefreshRadioState(RB_DI, df);
+  fnRefreshRadioState(RB_DI, df);
 //  146     { ITM_ENGOVR,           DO_ENG,                 RB_DO },  //fnDisplayOvr
 //  547     { ITM_SCIOVR,           DO_SCI,                 RB_DO },  //fnDisplayOvr
 //  fnRefreshRadioState(RB_DO, displayModeOverride);
@@ -398,7 +407,7 @@ void fnRebuildRadioState() {
 //   75     { ITM_CLK12,            TF_H12,                 RB_TF },  //fnTimeFormat
 //   76     { ITM_CLK24,            TF_H24,                 RB_TF },  //fnTimeFormat
   fnRefreshRadioState(RB_TF, getSystemFlag(FLAG_TDM24));
-// 1899     { ITM_U_KEY_ALPHA,      ITM_AIM,                RB_SA },  //fnSigmaAssign
+  // 1899     { ITM_U_KEY_ALPHA,      ITM_AIM,                RB_SA },  //fnSigmaAssign
 // 1897     { ITM_U_KEY_PRGM,       ITM_PR,                 RB_SA },  //fnSigmaAssign
 // 1895     { ITM_U_KEY_SIGMA,      ITM_SIGMAPLUS,          RB_SA },  //fnSigmaAssign
 // 1891     { ITM_U_KEY_CC,         KEY_CC,                 RB_SA },  //fnSigmaAssign
@@ -410,9 +419,9 @@ void fnRebuildRadioState() {
 // 1742     { ITM_BASE_HOME,        JC_BASE_HOME,           CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);
 // 1695 */  { ITM_CB_CPXRES,        JC_BCR,                 CB_JC },  //fnSetSetJM
-  fnRefreshComboxState(CB_JC, JC_BCR, getFlag(FLAG_CPXRES));
+  fnRefreshComboxState(CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES));
 // 1696     { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
-  fnRefreshComboxState(CB_JC, JC_BLZ, getFlag(FLAG_LEAD0));
+  fnRefreshComboxState(CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
 // 1678     { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);
 // 1909     { ITM_FG_DOTS,          JC_FG_DOTS,             CB_JC },  //fnSetSetJM
@@ -439,6 +448,41 @@ void fnRebuildRadioState() {
   fnRefreshComboxState(CB_JC, JC_H_MIR, jm_HOME_MIR);
 // 1746     { ITM_H_FIXED,          JC_H_FIX,               CB_JC }   //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_H_FIX, jm_HOME_FIX);
+
+
+#ifdef DEBUG
+  printf("RB_AM, currentAngularMode          %d %d\n",RB_AM, currentAngularMode       );
+  printf("RB_CM, getSystemFlag(FLAG_RECTN)   %d %d\n",RB_CM, getSystemFlag(FLAG_RECTN));
+  printf("RB_CU, getSystemFlag(FLAG_CPXj)    %d %d\n",RB_CU, getSystemFlag(FLAG_CPXj) );
+  printf("RB_DF, dateFormat                  %d %d\n",RB_DF, dateFormat              );
+  printf("RB_DI, displayFormat               %d %d\n",RB_DI, df );
+  printf("RB_ID, Input_Default               %d %d\n",RB_ID, Input_Default);
+  printf("RB_IM, shortIntegerMode            %d %d\n",RB_IM, shortIntegerMode);
+  printf("RB_PS, getSystemFlag(FLAG_MULTx)   %d %d\n",RB_PS, getSystemFlag(FLAG_MULTx));
+  printf("RB_RM, getSystemFlag(FLAG_DECIMP)  %d %d\n",RB_RM, getSystemFlag(FLAG_DECIMP));
+  printf("RB_WS, shortIntegerWordSize)       %d %d\n",RB_WS, shortIntegerWordSize);
+  printf("RB_SS, getSystemFlag(FLAG_SSIZE8)  %d %d\n",RB_SS, getSystemFlag(FLAG_SSIZE8));
+  printf("RB_TF, getSystemFlag(FLAG_TDM24)   %d %d\n",RB_TF, getSystemFlag(FLAG_TDM24));
+  printf("RB_SA, Norm_Key_00_VAR             %d %d\n",RB_SA, Norm_Key_00_VAR);
+  printf("CB_JC, JC_BASE_AHOME, SH_BASE_AHOME        %d %d %d\n",CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);
+  printf("CB_JC, JC_BASE_HOME, SH_BASE_HOME          %d %d %d\n",CB_JC, JC_BASE_HOME, SH_BASE_HOME);
+  printf("CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES)  %d %d %d\n",CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES));
+  printf("CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0)   %d %d %d\n",CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
+  printf("CB_JC, JC_ERPN, eRPN                       %d %d %d\n",CB_JC, JC_ERPN, eRPN);
+  printf("CB_JC, JC_FG_DOTS, jm_FG_DOTS              %d %d %d\n", CB_JC, JC_FG_DOTS, jm_FG_DOTS);
+  printf("CB_JC, JC_FG_LINE, jm_FG_LINE              %d %d %d\n", CB_JC, JC_FG_LINE, jm_FG_LINE);
+  printf("CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP      %d %d %d\n", CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);
+  printf("CB_JC, JC_HOME_TRIPLE, HOME3               %d %d %d\n", CB_JC, JC_HOME_TRIPLE, HOME3 );
+  printf("CB_JC, JC_SH_3T, Home3TimerMode            %d %d %d\n", CB_JC, JC_SH_3T, Home3TimerMode);
+  printf("CB_JC, JC_SHFT_4s, ShiftTimoutMode         %d %d %d\n", CB_JC, JC_SHFT_4s, ShiftTimoutMode);
+#ifdef INLINE_TEST
+  printf("CB_JC, DR_ITM_TST, false                   %d %d %d\n", CB_JC, DR_ITM_TST, false);
+#endif
+  printf("CB_JC, JC_VECT, jm_VECT                    %d %d %d\n",CB_JC, JC_VECT, jm_VECT );
+  printf("CB_JC, JC_H_SUM, jm_HOME_SUM               %d %d %d\n",CB_JC, JC_H_SUM, jm_HOME_SUM);
+  printf("CB_JC, JC_H_MIR, jm_HOME_MIR               %d %d %d\n",CB_JC, JC_H_MIR, jm_HOME_MIR);
+  printf("CB_JC, JC_H_FIX, jm_HOME_FIX               %d %d %d\n",CB_JC, JC_H_FIX, jm_HOME_FIX);
+#endif
 
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);

@@ -74,12 +74,12 @@ const calcKey_t kbd_std[37] = {
 
  #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1C. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_SIGMAPLUS,    ITM_RI/*ITM_RND*/,ITM_TGLFRT,   ITM_NULL,       CHR_A,            -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
+ {21,   ITM_SIGMAPLUS,    ITM_RI/*ITM_RND*/,ITM_TGLFRT,  ITM_NULL,       CHR_A,            -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,    CHR_NUMBER_SIGN,CHR_B,             CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      KEY_dotD,     CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
- {24,   ITM_LOG10,        ITM_10x,         ITM_ms,       ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
- {25,   ITM_LN,           ITM_EX,          ITM_toREC2,    ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
- {26,   ITM_XEQ,          ITM_XTHROOT,     ITM_toPOL2,    ITM_NULL,       CHR_F,             ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,       CHR_CHECK_MARK, CHR_C,             CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
+ {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,     ITM_NULL,       CHR_D,             ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
+ {25,   ITM_LN,           ITM_EX,          ITM_toREC2,   ITM_NULL,       CHR_E,             ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
+ {26,   ITM_XEQ,          ITM_XTHROOT,     ITM_toPOL2,   ITM_NULL,       CHR_F,             ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
 
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       CHR_G,             ITM_NULL,        CHR_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       CHR_H,             ITM_NULL,        CHR_ETA,       ITM_HEX      }, //JM
@@ -125,8 +125,8 @@ const calcKey_t kbd_std[37] = {
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
  {21,   ITM_SIGMAPLUS,    ITM_SIGMAMINUS,  ITM_TGLFRT,    ITM_NULL,       CHR_A,           -MNU_ALPHAintl,   CHR_ALPHA,     ITM_ST_A     }, //JM
  {22,   ITM_1ONX,         ITM_YX,          ITM_toINT,     CHR_NUMBER_SIGN,CHR_B,            CHR_NUMBER_SIGN, CHR_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      KEY_dotD,      CHR_CHECK_MARK, CHR_C,            CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
- {24,   ITM_LOG10,        ITM_10x,         ITM_ms,        ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,        CHR_CHECK_MARK, CHR_C,            CHR_CHECK_MARK,  CHR_CHI,       ITM_ST_C     }, //JM
+ {24,   ITM_LOG10,        ITM_10x,         KEY_dotD,      ITM_NULL,       CHR_D,            ITM_NULL,        CHR_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EX,          ITM_toREC2,    ITM_NULL,       CHR_E,            ITM_NULL,        CHR_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_toPOL2,    ITM_NULL,       CHR_F,            ITM_NULL,        CHR_DIGAMMA,   CHR_alpha    }, //JM
  

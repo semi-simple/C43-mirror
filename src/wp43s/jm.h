@@ -211,10 +211,6 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define JC_H_FIX               26    //JMHOME
 
 
-//items.c
-void fnDisplayFormatSigFig(uint16_t displayFormatN);
-void fnDisplayFormatUnit(uint16_t displayFormatN);
-
 #ifdef PC_BUILD
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);

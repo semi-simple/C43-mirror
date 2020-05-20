@@ -87,44 +87,6 @@ void fnKeyDotDjm(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED
 */
 
 
-/********************************************//**
- * \Set SIGFIG mode
- *
- * FROM DISPLAY.C
- ***********************************************/
-void fnDisplayFormatSigFig(uint16_t displayFormatN) {   //DONE          //JM SIGFIG
-  UNITDisplay = false;                                            //JM SIGFIG display Reset
-  SigFigMode = displayFormatN;                                    //JM SIGFIG
-  fnRefreshRadioState(RB_DI, DF_SF);
-
-  displayFormat = DF_FIX;
-  displayFormatDigits = displayFormatN;
-  fnClearFlag(FLAG_FRACT);
-  refreshStack();
-}                                                                 //JM SIGFIG
-
-
-
-/********************************************//**
- * \Set UNIT mode
- *
- * FROM DISPLAY.C
- ***********************************************/
-void fnDisplayFormatUnit(uint16_t displayFormatN) {    //DONE           //JM UNIT
-  SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
-  UNITDisplay = true;                                             //JM UNIT display
-  fnRefreshRadioState(RB_DI, DF_UN);
-
-  displayFormat = DF_ENG;
-  displayFormatDigits = displayFormatN;
-  fnClearFlag(FLAG_FRACT);
-//  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-//    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-//  }
-  refreshStack();
-}                                                                 //JM UNIT
-
-
 
 /********************************************//**
  * \brief Sets/resets flag

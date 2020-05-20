@@ -33,4 +33,6 @@ void fnJMdown       (uint16_t unusedParamButMandatory);
 void fnJM_2SI       (uint16_t unusedParamButMandatory);
 
 //for display.c
-void exponentToUnitDisplayString(int32_t exponent, char *displayString, bool_t nimMode, const char *separator);
+void fnDisplayFormatSigFig      (uint16_t displayFormatN);
+void fnDisplayFormatUnit        (uint16_t displayFormatN);
+void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode, const char *separator);

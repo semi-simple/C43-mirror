@@ -11,6 +11,25 @@ make -j8 V=1 mrproper
 
 find . -type f -name "*.dSYM" -exec rm {} \;
 
+find . -type f -name "generateCatalogs 2" -exec rm {} \;
+find . -type f -name "generateCatalogs 3" -exec rm {} \;
+find . -type f -name "generateCatalogs 4" -exec rm {} \;
+find . -type f -name "generateCatalogs 5" -exec rm {} \;
+find . -type f -name "generateCatalogs 6" -exec rm {} \;
+find . -type f -name "generateCatalogs 7" -exec rm {} \;
+find . -type f -name "generateCatalogs 8" -exec rm {} \;
+find . -type f -name "generateCatalogs 9" -exec rm {} \;
+find . -type f -name "generateCatalogs 10" -exec rm {} \;
+find . -type f -name "generateCatalogs 11" -exec rm {} \;
+find . -type f -name "generateCatalogs 12" -exec rm {} \;
+find . -type f -name "generateCatalogs 13" -exec rm {} \;
+find . -type f -name "generateCatalogs 14" -exec rm {} \;
+find . -type f -name "generateCatalogs 15" -exec rm {} \;
+find . -type f -name "generateCatalogs 16" -exec rm {} \;
+find . -type f -name "generateCatalogs 17" -exec rm {} \;
+find . -type f -name "generateCatalogs 18" -exec rm {} \;
+find . -type f -name "generateCatalogs 19" -exec rm {} \;
+find . -type f -name "generateCatalogs 20" -exec rm {} \;
 
 find . -type f -name "* 2.css" -exec rm {} \;
 find . -type f -name "* 3.css" -exec rm {} \;

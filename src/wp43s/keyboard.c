@@ -71,110 +71,61 @@ void resetShiftState(void) {
 }
 
 
-
-/********************************************//**
- * \brief Executes one function from a softmenu
- *
- * \param[in] fn int16_t    Function key from 1 to 6
- * \param[in] itemShift int16_t Shift status
- *                          *  0 = not shifted
- *                          *  6 = f shifted
- *                          * 12 = g shifted
- * \return void
- ***********************************************/
-void executeFunction(int16_t fn, int16_t itemShift) {
-  int16_t row, func;
+int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char *data) {
+  int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
-  int16_t ix_fn;             //JMXXX
-  //printf("Exec %d=\n",fn); //JMEXEC
+//  int16_t itemShift, fn = *(data) - '0';
+
+//  if(shiftF) {
+//    itemShift = 6;
+//  }
+//  else if(shiftG) {
+//    itemShift = 12;
+//  }
+//  else {
+//    itemShift = 0;
+//  }
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+      item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
+//      if(item > 0) {
+//        item %= 10000;
+//      }
+
+      int16_t ix_fn;             //JMXXX
       ix_fn = 0;                                /*JMEXEC XXX vv*/
       if(func_lookup(fn,itemShift,&ix_fn)) {
         //printf("---%d\n",ix_fn);
-        func = ix_fn;
+        item = ix_fn;
       }                                         /*JMEXEC XXX ^^*/
 
-      if(func == CHR_PROD_SIGN) {
-        func = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
+      if(item == CHR_PROD_SIGN) {
+        item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
       }
 
-      if(func < 0) { // softmenu
-        showSoftmenu(NULL, func, true);
-      }
-      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
-        addItemToNimBuffer(func);
-      }
-      else if(calcMode == CM_TAM) {
-        addItemToBuffer(func);
-      }
-      else if(func > 0) { // function
-        if(calcMode == CM_NIM && func != KEY_CC ) {
-          closeNim();
-          if(calcMode != CM_NIM) {
-            if(indexOfItems[func % 10000].func == fnConstant) {
-              STACK_LIFT_ENABLE;
-            }
-          }
-        }
 
-        if(lastErrorCode == 0) {
-          resetTemporaryInformation();
-          runFunction(func % 10000);
-        }
-      }
     }
   }
-  else if(lastErrorCode == 0) {                  //JM FN KEYS, when no softmenu is present
-
+  else {
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
-      case 1: {resetTemporaryInformation(); func = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
-      case 2: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
-      case 3: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
-      case 4: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
-      case 5: {resetTemporaryInformation(); func = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
-      case 6: {resetTemporaryInformation(); func = ( ITM_XFACT ) ;} break;  //ITM_XTHROOT
-      default:{func = 0;} break;
+      case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
+      case 2: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
+      case 3: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
+      case 4: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
+      case 5: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
+      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;  //ITM_XTHROOT
+      default:{item = 0;} break;
     }
+  }
 
-    if(func == CHR_PROD_SIGN) {
-      func = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
-    }
-
-    if(func < 0) { // softmenu
-      showSoftmenu(NULL, func, true);
-    }
-    else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=func && func<=CHR_F)) {
-      addItemToNimBuffer(func);
-    }
-    else if(calcMode == CM_TAM) {
-      addItemToBuffer(func);
-    }
-    else if(func > 0) { // function
-      if(calcMode == CM_NIM && func != KEY_CC) {
-        closeNim();
-        if(calcMode != CM_NIM) {
-          if(indexOfItems[func % 10000].func == fnConstant) {
-            STACK_LIFT_ENABLE;
-          }
-        }
-      }
-
-      if(lastErrorCode == 0) {
-        resetTemporaryInformation();
-        runFunction(func % 10000);
-      }
-    }
-  }   // JM FN KEYS ^^
+  return item;
 }
-
 
 
 /********************************************//**
@@ -183,12 +134,13 @@ void executeFunction(int16_t fn, int16_t itemShift) {
  * \param w GtkWidget* The clicked button
  * \param data gpointer String containing the key ID
  * \return void
+ //JM btnFnClicked is called by gui.c keyPressed
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnClicked(GtkWidget *w, gpointer data) {
+void btnFnExec(GtkWidget *w, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnFnClicked(void *w, void *data) {
+void btnFnExec(void *w, void *data) {
 #endif
   int16_t fn = *((char *)data) - '0';
 
@@ -199,17 +151,6 @@ void btnFnClicked(void *w, void *data) {
       lastErrorCode = 0;
       refreshStack();
     }
-
-    if(softmenuStackPointer > 0) {
-      if(calcMode == CM_ASM) {
-        calcModeNormal();
-      }
-        else if(calcMode == CM_ASM_OVER_AIM) {
-          calcModeAim(NOPARAM);
-          addItemToBuffer(item);
-          return;
-        }
-
 
       if(shiftF) {
         resetShiftState();
@@ -228,7 +169,83 @@ void btnFnClicked(void *w, void *data) {
       executeFunction(fn, 0);          //JM FN NOMENU KEYS
     }
   }
+//}
+
+
+
+/********************************************//**
+ * \brief Executes one function from a softmenu
+ *
+ * \param[in] fn int16_t    Function key from 1 to 6
+ * \param[in] itemShift int16_t Shift status
+ *                          *  0 = not shifted
+ *                          *  6 = f shifted
+ *                          * 12 = g shifted
+ * \return void
+ ***********************************************/
+void executeFunction(int16_t fn, int16_t itemShift) {
+      int16_t item = ITM_NOP;
+      //printf("Exec %d=\n",fn); //JMEXEC
+
+  item = determineFunctionKeyItem(fn, itemShift);
+
+printf("%d--\n",calcMode);
+    if(calcMode != CM_CONFIRMATION) {
+      allowScreenUpdate = true;
+
+      if(lastErrorCode != 0) {
+        lastErrorCode = 0;
+        refreshStack();
+      }
+/************************************************** TOCHECK 
+      if(softmenuStackPointer > 0) {
+        if(calcMode == CM_ASM) {
+          calcModeNormal();
+        }
+        else if(calcMode == CM_ASM_OVER_TAM) {
+          indexOfItems[getOperation()].func(indexOfItems[item].param);
+          calcModeNormal();
+          return;
+        }
+        else if(calcMode == CM_ASM_OVER_AIM) {
+          calcModeAim(NOPARAM);
+          addItemToBuffer(item);
+          return;
+        }
+**************************************************/
+ {
+      if(item < 0) { // softmenu
+        if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+          showSoftmenu(NULL, item, true);
+        }
+      }
+      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+        addItemToNimBuffer(item);
+      }
+      else if(calcMode == CM_TAM) {
+        addItemToBuffer(item);
+      }
+      else if(item > 0) { // function
+        if(calcMode == CM_NIM && item != KEY_CC ) {
+          closeNim();
+          if(calcMode != CM_NIM) {
+            if(indexOfItems[item % 10000].func == fnConstant) {
+              STACK_LIFT_ENABLE;
+            }
+          }
+        }
+
+        if(lastErrorCode == 0) { 
+          resetTemporaryInformation();
+          runFunction(item % 10000);
+        }
+      }
+    }
+  }
 }
+
+
+
 
 
 

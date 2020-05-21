@@ -498,7 +498,7 @@ void btnFnReleased(void *w, void *data) {
     refreshRegisterLine(REGISTER_T);
 
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
-      btnFnClicked(w, charKey);                                             //Execute
+      btnFnExec(w, charKey);                                             //Execute
     }
     resetShiftState();
     FN_cancel();
@@ -508,8 +508,6 @@ void btnFnReleased(void *w, void *data) {
   if(testEnabled) { fnSwStop(2); }      //dr
 #endif
 }
-//JM btnFnClicked is called by gui.c keyPressed
-//JM btnFnClicked is called by wp43s.c program_main
 
 
 

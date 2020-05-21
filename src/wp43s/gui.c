@@ -227,22 +227,22 @@ if (calcMode == CM_AIM) {
 switch (event_keyval) {
 //ROW 1
     case 65470: // F1                                                    //**************-- FUNCTION KEYS --***************//
-      btnFnClicked(w, "1");
+      btnFnExec(w, "1");
       break;
     case 65471: // F2
-      btnFnClicked(w, "2");
+      btnFnExec(w, "2");
       break;
     case 65472: // F3
-      btnFnClicked(w, "3");
+      btnFnExec(w, "3");
       break;
     case 65473: // F4
-      btnFnClicked(w, "4");
+      btnFnExec(w, "4");
       break;
     case 65474: // F5
-      btnFnClicked(w, "5");
+      btnFnExec(w, "5");
       break;
     case 65475: // F6
-      btnFnClicked(w, "6");
+      btnFnExec(w, "6");
       break;
 //ROW 2
     case 65:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM.    //**************-- ALPHA KEYS UPPER CASE --***************//
@@ -572,7 +572,7 @@ return FALSE;
 
   switch (event_keyval) {
 //ROW 1
-    case 65470: // F1                       //JM Changed these to btnFnPressed from btnFnClicked
+    case 65470: // F1                       //JM Changed these to btnFnPressed from btnFnExec
       //printf("key pressed: F1\n");
       btnFnPressed(w, "1");
       break;
@@ -2902,12 +2902,12 @@ void setupUI(void) {
   gtk_widget_set_name(btn15, "calcKey");
   gtk_widget_set_name(btn16, "calcKey");
 
-//g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnClicked), "1");     //JM LONGPRESS vv
-//g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnClicked), "2");
-//g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnClicked), "3");
-//g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnClicked), "4");
-//g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
-//g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
+//g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnExec), "1");     //JM LONGPRESS vv
+//g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnExec), "2");
+//g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnExec), "3");
+//g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnExec), "4");
+//g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnExec), "5");
+//g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnExec), "6");
 
   g_signal_connect(btn11, "pressed", G_CALLBACK(btnFnPressed), "1");
   g_signal_connect(btn12, "pressed", G_CALLBACK(btnFnPressed), "2");

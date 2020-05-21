@@ -41,7 +41,7 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
 
 #ifdef PC_BUILD
-  void btnFnClicked (GtkWidget *w, gpointer data);
+  void btnFnExec    (GtkWidget *w, gpointer data);
   void btnFnPressed (GtkWidget *w, gpointer data);
   void btnFnReleased(GtkWidget *w, gpointer data);
   void btnClicked   (GtkWidget *w, gpointer data);
@@ -50,7 +50,7 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 #endif
 
 #ifdef DMCP_BUILD
-  void btnFnClicked (void *w, void *data);
+  void btnFnExec (void *w, void *data);
   void btnFnPressed (void *w, void *data);
   void btnFnReleased(void *w, void *data);
   void btnClicked   (void *w, void *data);

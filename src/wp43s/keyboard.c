@@ -720,6 +720,9 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       }
       else {
        popSoftmenu();
+       if(softmenuStackPointer == 0) {
+         showSoftmenu(NULL, -MNU_MyAlpha, false);
+       }
       }
       break;
 

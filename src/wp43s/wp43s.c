@@ -61,7 +61,7 @@ realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reducti
 uint16_t              flags[7];
 char                  tmpStr3000[TMP_STR_LENGTH];
 char                  errorMessage[ERROR_MESSAGE_LENGTH];
-char                  aimBuffer[AIM_BUFFER_LENGTH];
+char                  aimBuffer[AIM_BUFFER_LENGTH]; /// TODO may be aimBuffer and nimBuffer can be merged
 char                  nimBuffer[NIM_BUFFER_LENGTH];
 char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
 char                  tamBuffer[TAM_BUFFER_LENGTH];
@@ -256,7 +256,7 @@ void setupDefaults(void) {
   // initialize the RadioButton/Checkbox items
   fnRebuildRadioState();                                       //dr build RadioButton, CheckBox
 
-  // initialize the 112 global registers
+  // initialize the global registers
   for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     setRegisterDataType(regist, dtReal34, AM_NONE);
     memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));

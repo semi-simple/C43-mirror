@@ -852,7 +852,8 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
-        if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
+        if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
+        //JM_TOCHECK if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
         calcModeNormal();
         popSoftmenu();
 
@@ -873,9 +874,14 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
         refreshStack();
       }
       else {
-        while(softmenuStackPointer > 0) {         //JMMENU POP OFF ALL MENUS
-          popSoftmenu();
-        }
+popSoftmenu();
+if(softmenuStackPointer == 0) {
+showSoftmenu(NULL, -MNU_MyAlpha, false);
+}
+
+//JM TOCHECK while(softmenuStackPointer > 0) {         //JMMENU POP OFF ALL MENUS
+//          popSoftmenu();
+//        }
       }
       break;
 

@@ -127,6 +127,8 @@ STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCata
 all: 	wp43c
 ifeq '$(detected_OS)' 'Darwin'
 	rsync -u wp43c MacOs\ binaries
+	rsync -u c43_pre.css MacOs\ binaries
+	rsync -u dm42l_L1.png MacOs\ binaries
 endif
 
 rebuild:

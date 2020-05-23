@@ -33,15 +33,15 @@ void showShiftState(void) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-        show_f_jm();        //JM
+        show_f_jm();        //JM KeyboardTweaks.c
       }
       else if(shiftG) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-        show_g_jm();        //JM
+        show_g_jm();        //JM KeyboardTweaks.c
       }
       else {
         refreshRegisterLine(REGISTER_T);
-        clear_fg_jm();      //JM
+        clear_fg_jm();      //JM KeyboardTweaks.c
         if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
           showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
@@ -71,20 +71,25 @@ void resetShiftState(void) {
 }
 
 
-int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char *data) {
+//int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char *data) {
+  //int16_t row, item = ITM_NOP;
+  //const softmenu_t *sm;
+
+int16_t determineFunctionKeyItem(const char *data) {
   int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
-//  int16_t itemShift, fn = *(data) - '0';
+  int16_t itemShift, fn = *(data) - '0';
 
-//  if(shiftF) {
-//    itemShift = 6;
-//  }
-//  else if(shiftG) {
-//    itemShift = 12;
-//  }
-//  else {
-//    itemShift = 0;
-//  }
+  if(shiftF) {
+    itemShift = 6;
+  }
+  else if(shiftG) {
+    itemShift = 12;
+  }
+  else {
+    itemShift = 0;
+  }
+
 
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
@@ -93,9 +98,9 @@ int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
-//      if(item > 0) {
-//        item %= 10000;
-//      }
+      if(item > 0) {          //TO CHECK
+        item %= 10000;
+      }
 
       int16_t ix_fn;             //JMXXX
       ix_fn = 0;                                /*JMEXEC XXX vv*/
@@ -113,13 +118,13 @@ int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char
   }
   else {
     switch(fn) {
-      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP
+      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
       case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
-      case 2: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;
-      case 3: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;
-      case 4: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;
-      case 5: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;
-      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;  //ITM_XTHROOT
+      case 2: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 3: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 4: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 5: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
       default:{item = 0;} break;
     }
   }
@@ -142,7 +147,7 @@ void btnFnExec(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnExec(void *w, void *data) {
 #endif
-  int16_t fn = *((char *)data) - '0';
+//  int16_t fn = *((char *)data) - '0';
 
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
@@ -151,25 +156,9 @@ void btnFnExec(void *w, void *data) {
       lastErrorCode = 0;
       refreshStack();
     }
-
-      if(shiftF) {
-        resetShiftState();
-        executeFunction(fn,  6);
-      }
-      else if(shiftG) {
-        resetShiftState();
-        executeFunction(fn, 12);
-      }
-      else {
-        executeFunction(fn, 0);
-      }
-    }
-    else {
-      resetShiftState();
-      executeFunction(fn, 0);          //JM FN NOMENU KEYS
-    }
+    executeFunction(data);
   }
-//}
+}
 
 
 
@@ -183,13 +172,20 @@ void btnFnExec(void *w, void *data) {
  *                          * 12 = g shifted
  * \return void
  ***********************************************/
-void executeFunction(int16_t fn, int16_t itemShift) {
-      int16_t item = ITM_NOP;
-      //printf("Exec %d=\n",fn); //JMEXEC
+//void executeFunction(int16_t fn, int16_t itemShift) {
+//      int16_t item = ITM_NOP;
+//      //printf("Exec %d=\n",fn); //JMEXEC
 
-  item = determineFunctionKeyItem(fn, itemShift);
+//  item = determineFunctionKeyItem(fn, itemShift);
 
-printf("%d--\n",calcMode);
+
+void executeFunction(const char *data) {
+int16_t item = ITM_NOP;
+item = determineFunctionKeyItem((char *)data);
+resetShiftState();
+
+
+//printf("%d--\n",calcMode);
     if(calcMode != CM_CONFIRMATION) {
       allowScreenUpdate = true;
 
@@ -197,7 +193,9 @@ printf("%d--\n",calcMode);
         lastErrorCode = 0;
         refreshStack();
       }
-/************************************************** TOCHECK 
+
+
+//************************************************** TOCHECK vv 
       if(softmenuStackPointer > 0) {
         if(calcMode == CM_ASM) {
           calcModeNormal();
@@ -208,12 +206,21 @@ printf("%d--\n",calcMode);
           return;
         }
         else if(calcMode == CM_ASM_OVER_AIM) {
-          calcModeAim(NOPARAM);
+          calcMode = CM_AIM;
           addItemToBuffer(item);
+          calcMode = CM_ASM_OVER_AIM;
           return;
         }
-**************************************************/
- {
+
+
+// TO CHECK TOCHECK (2)
+//        else if(calcMode == CM_ASM_OVER_AIM) {
+  //        calcModeAim(NOPARAM);
+    //      addItemToBuffer(item);
+      //    return;
+//        }
+//************************************************* TOCHECK ^^
+//{
       if(item < 0) { // softmenu
         if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
           showSoftmenu(NULL, item, true);
@@ -229,7 +236,7 @@ printf("%d--\n",calcMode);
         if(calcMode == CM_NIM && item != KEY_CC ) {
           closeNim();
           if(calcMode != CM_NIM) {
-            if(indexOfItems[item % 10000].func == fnConstant) {
+            if(indexOfItems[item].func == fnConstant) {   //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
               STACK_LIFT_ENABLE;
             }
           }
@@ -237,7 +244,7 @@ printf("%d--\n",calcMode);
 
         if(lastErrorCode == 0) { 
           resetTemporaryInformation();
-          runFunction(item % 10000);
+          runFunction(item);                              //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
         }
       }
     }
@@ -421,39 +428,13 @@ int16_t determineItem(const char *data) {
 
 
   if(result == CHR_PROD_SIGN) {
-    result = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
+    result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
   }
 
   resetShiftState();
 
   return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -967,7 +948,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using unusedParamButMandatory
+void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using 'unusedParamButMandatory'
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
   uint32_t dataTypeY;

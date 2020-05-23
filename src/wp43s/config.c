@@ -145,7 +145,7 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
   
-  fnRefreshRadioState(RB_IM, mode);                                            //dr
+  fnRefreshRadioState(RB_IM, mode);                            //dr
 
   showIntegerMode();
   refreshStack();
@@ -305,7 +305,7 @@ void fnSetWordSize(uint16_t WS) {
     }
   }
 
-  fnRefreshRadioState(RB_WS, WS);                                               //dr
+  fnRefreshRadioState(RB_WS, WS);                              //dr
 
   refreshStack();
 }
@@ -426,7 +426,7 @@ void fnRoundingMode(uint16_t RM) {
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
 
-  fnRefreshRadioState(RB_AM, am);                                               //dr
+  fnRefreshRadioState(RB_AM, am);                              //dr
 
   showAngularMode();
   refreshStack();
@@ -558,7 +558,7 @@ void fnClPAll(uint16_t confirmation) {
 void fnClSigma(uint16_t unusedParamButMandatory) {
   if(statisticalSumsPointer != NULL) {
     freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    graph_end();  //JMGRAPH
+    graph_end();                                               //JMGRAPH
     statisticalSumsPointer = NULL;
   }
 }
@@ -577,7 +577,7 @@ void fnReset(uint16_t confirmation) {
     systemFlags = 0;
     setSystemFlag(FLAG_TDM24);
     fnIntegerMode(SIM_2COMPL);
-    fnDisplayFormatAll(3);             //JM Default
+    fnDisplayFormatAll(3);                                     //JM Default
     fnDisplayFormatGap(3);
     clearSystemFlag(FLAG_CPXj);
     fnAngularMode(AM_DEGREE);
@@ -592,14 +592,14 @@ void fnReset(uint16_t confirmation) {
     fnRoundingMode(RM_HALF_EVEN);
     setSystemFlag(FLAG_ALLSCI);
     setSystemFlag(FLAG_AUTOFF);
-    setSystemFlag(FLAG_SSIZE8);        //JM Default
+    setSystemFlag(FLAG_SSIZE8);                                //JM Default
     //tDisp = -1;
     fnSetWordSize(64);
     clearSystemFlag(FLAG_MDY); // date format
     clearSystemFlag(FLAG_DMY); // date format
     setSystemFlag(FLAG_YMD);   // date format
     setSystemFlag(FLAG_RECTN);
-    setSystemFlag(FLAG_CPXRES);        //JM Default
+    setSystemFlag(FLAG_CPXRES);                                //JM Default
     allocateLocalRegisters(0);
 
     clearSystemFlag(FLAG_FRACT);
@@ -610,25 +610,23 @@ void fnReset(uint16_t confirmation) {
     showOverflowCarry();
     clearSystemFlag(FLAG_USER);
 
-    graph_xmin = -3*3.14159265;                                    //JM GRAPH
-    graph_xmax = +3*3.14159265;                                    //JM GRAPH
-    graph_ymin = -2;                                               //JM GRAPH
-    graph_ymax = +2;                                               //JM GRAPH
-    graph_dx   = 0;                                                //JM GRAPH
-    graph_dy   = 0;                                                //JM GRAPH
-
-    jm_VECT = false;                                               //JM Screen / keyboard operation setup
-    jm_HOME_SUM = false;                                           //JMHOME
-    jm_HOME_MIR = true;                                            //JMHOME
-    jm_HOME_FIX = false;                                           //JMHOME
-    #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)    //JM LAYOUT 2. DM42 STRICT.
-    jm_HOME_SUM = false;                                           //JMHOME
-    jm_HOME_MIR = true;                                            //JMHOME
-    jm_HOME_FIX = false;                                           //JMHOME
+    SHOWregis = 9999;                                          //JMSHOW
+    graph_xmin = -3*3.14159265;                                //JM GRAPH
+    graph_xmax = +3*3.14159265;                                //JM GRAPH
+    graph_ymin = -2;                                           //JM GRAPH
+    graph_ymax = +2;                                           //JM GRAPH
+    graph_dx   = 0;                                            //JM GRAPH
+    graph_dy   = 0;                                            //JM GRAPH
+    jm_VECT = false;                                           //JM Screen / keyboard operation setup
+    jm_HOME_SUM = false;                                       //JMHOME
+    jm_HOME_MIR = true;                                        //JMHOME
+    jm_HOME_FIX = false;                                       //JMHOME
+    #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)//JM LAYOUT 2. DM42 STRICT.
+    jm_HOME_SUM = false;                                       //JMHOME
+    jm_HOME_MIR = true;                                        //JMHOME
+    jm_HOME_FIX = false;                                       //JMHOME
     #endif
-    SHOWregis = 9999;                                              //JMSHOW
-
-    setSystemFlag(FLAG_SPCRES)         //JM default infinity etc.
+    setSystemFlag(FLAG_SPCRES)                                 //JM default infinity etc.
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -649,7 +647,7 @@ void fnReset(uint16_t confirmation) {
     currentRegisterBrowserScreen = 9999;
 
     // initialize the RadioButton/Checkbox items
-    fnRebuildRadioState();                                                      //dr build RadioButton, Checkbox
+    fnRebuildRadioState();                                     //dr build RadioButton, Checkbox
 
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
@@ -659,15 +657,15 @@ void fnReset(uint16_t confirmation) {
 
     oldTime[0] = 0;
 
-    exponentLimit = 6145;                               //JMMAX
+    exponentLimit = 6145;                                      //JMMAX
 
     temporaryInformation = TI_RESET;
 
     //JM Default USER
-    fnUserJM(USER_RESET);                        //JM USER
-//    kbd_usr[0].primary     = KEY_CC;           //JM CPX TEMP DEFAULT         //JM bug. over-writing the content of setupdefaults
-//    kbd_usr[0].gShifted    = KEY_TYPCON_UP;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
-//    kbd_usr[0].fShifted    = KEY_TYPCON_DN;    //JM TEMP DEFAULT            //JM bug. over-writing the content of setupdefaults
+    fnUserJM(USER_RESET);                                      //JM USER
+//    kbd_usr[0].primary     = KEY_CC;                         //JM CPX TEMP DEFAULT        //JM note. over-writing the content of setupdefaults
+//    kbd_usr[0].gShifted    = KEY_TYPCON_UP;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
+//    kbd_usr[0].fShifted    = KEY_TYPCON_DN;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 
     // The following lines are test data
     //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
@@ -712,7 +710,7 @@ void fnReset(uint16_t confirmation) {
       refreshDebugPanel();
     #endif
 
-    //JM TEMPORARY TEST DATA IN REGISTERS
+    //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
     fnDrop(0);
@@ -770,8 +768,6 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("225251798594466661409915431774713195745814267044878909733007331390393510002687");
     fnStore(27);
     fnDrop(0);
-
-
 
 
     refreshStack();

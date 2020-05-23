@@ -116,6 +116,13 @@ cd ./src
 cd ./wp43s
 
 
+rm "rasterFontsData 2.c" "rasterFontsData 3.c" "rasterFontsData 4.c" "rasterFontsData 5.c" "rasterFontsData 6.c" "rasterFontsData 7.c" "rasterFontsData 8.c" "rasterFontsData 9.c" "rasterFontsData 10.c" "rasterFontsData 11.c"
+rm "addons 2.c" "addons 3.c" "addons 4.c" "addons 5.c" "addons 6.c" "addons 7.c" "addons 8.c" "addons 9.c" "addons 10.c" "addons 11.c"
+rm "textfiles 2.c" "textfiles 3.c" "textfiles 4.c" "textfiles 5.c" "textfiles 6.c" "textfiles 7.c" "textfiles 8.c" "textfiles 9.c" "textfiles 10.c" "textfiles 11.c"
+
+rm "textfiles 2.o" "textfiles 3.o" "textfiles 4.o" "textfiles 5.o" "textfiles 6.o" "textfiles 7.o" "textfiles 8.o" "textfiles 9.o" "textfiles 10.o" "textfiles 11.o"
+rm "rasterFontsData 2.o" "rasterFontsData 3.o" "rasterFontsData 4.o" "rasterFontsData 5.o" "rasterFontsData 6.o" "rasterFontsData 7.o" "rasterFontsData 8.o" "rasterFontsData 9.o" "rasterFontsData 10.o" "rasterFontsData 11.o"
+rm "addons 2.o" "addons 3.o" "addons 4.o" "addons 5.o" "addons 6.o" "addons 7.o" "addons 8.o" "addons 9.o" "addons 10.o" "addons 11.o"
 rm "assign 2.o" "assign 3.o" "assign 4.o" "assign 5.o" "assign 6.o" "assign 7.o" "assign 8.o" "assign 9.o" "assign 10.o" "assign 11.o"
 rm "bufferize 2.o" "bufferize 3.o" "bufferize 4.o" "bufferize 5.o" "bufferize 6.o" "bufferize 7.o" "bufferize 8.o" "bufferize 9.o" "bufferize 10.o" "bufferize 11.o"
 rm "charString 2.o" "charString 3.o" "charString 4.o" "charString 5.o" "charString 6.o" "charString 7.o" "charString 8.o" "charString 9.o" "charString 10.o" "charString 11.o"

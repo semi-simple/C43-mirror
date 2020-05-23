@@ -514,7 +514,7 @@ void btnFnReleased(void *w, void *data) {
 void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
-  int16_t fn = *((char *)charKey) - '0';
+//  int16_t fn = *((char *)charKey) - '0';
 
   if(calcMode != CM_CONFIRMATION) {
     allowScreenUpdate = true;
@@ -523,27 +523,15 @@ void execFnTimeout(uint16_t key) {                          //dr - delayed call 
       lastErrorCode = 0;
       refreshStack();
     }
-
     if(softmenuStackPointer > 0) {
       if(calcMode == CM_ASM) {
         calcModeNormal();
       }
-
-      if(shiftF) {
-        resetShiftState();
-        executeFunction(fn,  6);
-      }
-      else if(shiftG) {
-        resetShiftState();
-        executeFunction(fn, 12);
-      }
-      else {
-        executeFunction(fn, 0);
-      }
+      executeFunction((char *)charKey);
     }
     else {
       resetShiftState();
-      executeFunction(fn, 0);          //JM FN NOMENU KEYS
+      executeFunction((char *)charKey);          //JM FN NOMENU KEYS
     }
   }
 }
@@ -556,14 +544,6 @@ void shiftCutoff(uint16_t unusedParamButMandatory) {        //dr - press shift t
 
 
 //---------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 
 #endif

@@ -924,10 +924,10 @@ void prepareCssData(void) {
 
 
 #if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
-  #define CSSFILE "wp43s_pre_L2.css"              //JM L
+  #define CSSFILE "c43_pre_L2.css"              //JM L
 #endif //JM L
 #if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
-  #define CSSFILE "wp43s_pre.css"
+  #define CSSFILE "c43_pre.css"
 #endif //JM L
 
   // Convert the pre-CSS data to CSS data
@@ -4020,18 +4020,22 @@ void calcModeNormal(void) {
 void calcModeAim(uint16_t unusedParamButMandatory) {
   if(calcMode == CM_ASM_OVER_AIM) {
     popSoftmenu();
+    calcMode = CM_AIM;
   }
   else {
-  if(!SH_BASE_AHOME) {
-    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-    softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+  if(!SH_BASE_AHOME) {  //TOCHECK
+//    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+  //  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+    if(softmenuStackPointer == 0) {
+      showSoftmenu(NULL, -MNU_MyAlpha, false);
+    }
   }
   if(SH_BASE_AHOME) {
     showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
   }
-//    showSoftmenu(NULL, -MNU_MyAlpha, true);     //JM
     alphaCase = AC_UPPER;
+    calcMode = CM_AIM;
     showAlphaMode();
     nextChar = NC_NORMAL;
 
@@ -4046,7 +4050,6 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     cursorEnabled = true;
   }
 
-  calcMode = CM_AIM;
   setSystemFlag(FLAG_ALPHA);
 
   #ifdef PC_BUILD

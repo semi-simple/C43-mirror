@@ -21,115 +21,115 @@
 #include "wp43s.h"
 
 void systemFlagAction(uint16_t systemFlag, uint16_t action) {
-switch(systemFlag) {
-case FLAG_YMD:
-case FLAG_DMY:
-case FLAG_MDY:
-case FLAG_TDM24:    oldTime[0] = 0;
-break;
+  switch(systemFlag) {
+    case FLAG_YMD:
+    case FLAG_DMY:
+    case FLAG_MDY:
+    case FLAG_TDM24:    oldTime[0] = 0;
+                        break;
 
-case FLAG_DECIMP:
-case FLAG_MULTx:
-case FLAG_CPXj:     refreshStack();
-break;
+    case FLAG_DECIMP:
+    case FLAG_MULTx:
+    case FLAG_CPXj:     refreshStack();
+                        break;
 
-case FLAG_LEAD0:    refreshStack();
-switch(action) {
-case 0: flags[108/16] &= ~(1u << (108%16));
-break;
-case 1: flags[108/16] |=   1u << (108%16);
-break;
-case 2: flags[108/16] ^=   1u << (108%16);
-break;
-default: {}
-}
-break;
+    case FLAG_LEAD0:    refreshStack();
+                        switch(action) {
+                          case 0: flags[108/16] &= ~(1u << (108%16));
+                                  break;
+                          case 1: flags[108/16] |=   1u << (108%16);
+                                  break;
+                          case 2: flags[108/16] ^=   1u << (108%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_RECTN:    showComplexMode();
-refreshStack();
-switch(action) {
-case 0: flags[100/16] &= ~(1u << (100%16));
-break;
-case 1: flags[100/16] |=   1u << (100%16);
-break;
-case 2: flags[100/16] ^=   1u << (100%16);
-break;
-default: {}
-}
-break;
+    case FLAG_RECTN:    showComplexMode();
+                        refreshStack();
+                        switch(action) {
+                          case 0: flags[100/16] &= ~(1u << (100%16));
+                                  break;
+                          case 1: flags[100/16] |=   1u << (100%16);
+                                  break;
+                          case 2: flags[100/16] ^=   1u << (100%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_CPXRES:   showRealComplexResult();
-switch(action) {
-case 0: flags[109/16] &= ~(1u << (109%16));
-break;
-case 1: flags[109/16] |=   1u << (109%16);
-break;
-case 2: flags[109/16] ^=   1u << (109%16);
-break;
-default: {}
-}
-break;
+    case FLAG_CPXRES:   showRealComplexResult();
+                        switch(action) {
+                          case 0: flags[109/16] &= ~(1u << (109%16));
+                                  break;
+                          case 1: flags[109/16] |=   1u << (109%16);
+                                  break;
+                          case 2: flags[109/16] ^=   1u << (109%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_SPCRES:   switch(action) {
-case 0: flags[107/16] &= ~(1u << (107%16));
-break;
-case 1: flags[107/16] |=   1u << (107%16);
-break;
-case 2: flags[107/16] ^=   1u << (107%16);
-break;
-default: {}
-}
-break;
+    case FLAG_SPCRES:   switch(action) {
+                          case 0: flags[107/16] &= ~(1u << (107%16));
+                                  break;
+                          case 1: flags[107/16] |=   1u << (107%16);
+                                  break;
+                          case 2: flags[107/16] ^=   1u << (107%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_TRACE:   switch(action) {
-case 0: flags[103/16] &= ~(1u << (103%16));
-break;
-case 1: flags[103/16] |=   1u << (103%16);
-break;
-case 2: flags[103/16] ^=   1u << (103%16);
-break;
-default: {}
-}
-break;
+    case FLAG_TRACE:   switch(action) {
+                          case 0: flags[103/16] &= ~(1u << (103%16));
+                                  break;
+                          case 1: flags[103/16] |=   1u << (103%16);
+                                  break;
+                          case 2: flags[103/16] ^=   1u << (103%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_FRACT:
-case FLAG_DENANY:
-case FLAG_DENFIX:   showFracMode();
-refreshStack();
-break;
+    case FLAG_FRACT:
+    case FLAG_DENANY:
+    case FLAG_DENFIX:   showFracMode();
+                        refreshStack();
+                        break;
 
-case FLAG_CARRY:    showOverflowCarry();
-switch(action) {
-case 0: flags[106/16] &= ~(1u << (106%16));
-break;
-case 1: flags[106/16] |=   1u << (106%16);
-break;
-case 2: flags[106/16] ^=   1u << (106%16);
-break;
-default: {}
-}
-break;
+    case FLAG_CARRY:    showOverflowCarry();
+                        switch(action) {
+                          case 0: flags[106/16] &= ~(1u << (106%16));
+                                  break;
+                          case 1: flags[106/16] |=   1u << (106%16);
+                                  break;
+                          case 2: flags[106/16] ^=   1u << (106%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_OVERFLOW: showOverflowCarry();
-switch(action) {
-case 0: flags[105/16] &= ~(1u << (105%16));
-break;
-case 1: flags[105/16] |=   1u << (105%16);
-break;
-case 2: flags[105/16] ^=   1u << (105%16);
-break;
-default: {}
-}
-break;
+    case FLAG_OVERFLOW: showOverflowCarry();
+                        switch(action) {
+                          case 0: flags[105/16] &= ~(1u << (105%16));
+                                  break;
+                          case 1: flags[105/16] |=   1u << (105%16);
+                                  break;
+                          case 2: flags[105/16] ^=   1u << (105%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
 
-case FLAG_USER:     showHideUserMode();
-break;
+    case FLAG_USER:     showHideUserMode();
+                        break;
 
-case FLAG_LOWBAT:   showHideLowBattery();
-break;
+    case FLAG_LOWBAT:   showHideLowBattery();
+                        break;
 
-default: {}
-}
+    default: {}
+  }
 
 
 
@@ -246,7 +246,16 @@ void fnSetFlag(uint16_t flag) {
     }
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
-    flags[flag/16] |= 1u << (flag%16);
+    switch(flag) {
+      case FLAG_B: setSystemFlag(FLAG_OVERFLOW); break;
+      case FLAG_C: setSystemFlag(FLAG_CARRY);    break;
+      case FLAG_D: setSystemFlag(FLAG_SPCRES);   break;
+      case FLAG_I: setSystemFlag(FLAG_CPXRES);   break;
+      case FLAG_L: setSystemFlag(FLAG_LEAD0);    break;
+      case FLAG_T: setSystemFlag(FLAG_TRACE);    break;
+      case FLAG_X: setSystemFlag(FLAG_RECTN);    break;
+      default: flags[flag/16] |= 1u << (flag%16);
+    }
   }
   else { // Local flag
     if(numberOfLocalFlags != 0) {
@@ -293,7 +302,16 @@ void fnClearFlag(uint16_t flag) {
     }
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
-    flags[flag/16] &= ~(1u << (flag%16));
+    switch(flag) {
+      case FLAG_B: clearSystemFlag(FLAG_OVERFLOW); break;
+      case FLAG_C: clearSystemFlag(FLAG_CARRY);    break;
+      case FLAG_D: clearSystemFlag(FLAG_SPCRES);   break;
+      case FLAG_I: clearSystemFlag(FLAG_CPXRES);   break;
+      case FLAG_L: clearSystemFlag(FLAG_LEAD0);    break;
+      case FLAG_T: clearSystemFlag(FLAG_TRACE);    break;
+      case FLAG_X: clearSystemFlag(FLAG_RECTN);    break;
+      default: flags[flag/16] &= ~(1u << (flag%16));
+    }
   }
   else { // Local flag
     if(numberOfLocalFlags != 0) {
@@ -340,7 +358,16 @@ void fnFlipFlag(uint16_t flag) {
     }
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
-    flags[flag/16] ^=  1u << (flag%16);
+    switch(flag) {
+      case FLAG_B: flipSystemFlag(FLAG_OVERFLOW); break;
+      case FLAG_C: flipSystemFlag(FLAG_CARRY);    break;
+      case FLAG_D: flipSystemFlag(FLAG_SPCRES);   break;
+      case FLAG_I: flipSystemFlag(FLAG_CPXRES);   break;
+      case FLAG_L: flipSystemFlag(FLAG_LEAD0);    break;
+      case FLAG_T: flipSystemFlag(FLAG_TRACE);    break;
+      case FLAG_X: flipSystemFlag(FLAG_RECTN);    break;
+      default: flags[flag/16] ^=  1u << (flag%16);
+    }
   }
   else { // Local flag
     if(numberOfLocalFlags != 0) {

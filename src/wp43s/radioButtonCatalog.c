@@ -32,11 +32,11 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /*  507 */  { ITM_RECT,             CM_RECTANGULAR,         RB_CM },  //fnComplexMode
 /*   96 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnComplexUnit
 /*   97 */  { ITM_CPXJ,             CU_J,                   RB_CU },  //fnComplexUnit
-/*   44 */  { ITM_BESTF,            CF_BEST_FITTING,        RB_CF },  //fnCurveFitting
-/*  161 */  { ITM_EXPF,             CF_EXPONENTIAL_FITTING, RB_CF },  //fnCurveFitting
-/*  308 */  { ITM_LINF,             CF_LINEAR_FITTING,      RB_CF },  //fnCurveFitting
-/*  325 */  { ITM_LOGF,             CF_LOGARITHMIC_FITTING, RB_CF },  //fnCurveFitting
-/*  466 */  { ITM_POWERF,           CF_POWER_FITTING,       RB_CF },  //fnCurveFitting
+/*   44 */ // { ITM_BESTF,            CF_BEST_FITTING,        RB_CF },  //fnCurveFitting
+/*  161 */ // { ITM_EXPF,             CF_EXPONENTIAL_FITTING, RB_CF },  //fnCurveFitting
+/*  308 */ // { ITM_LINF,             CF_LINEAR_FITTING,      RB_CF },  //fnCurveFitting
+/*  325 */ // { ITM_LOGF,             CF_LOGARITHMIC_FITTING, RB_CF },  //fnCurveFitting
+/*  466 */ // { ITM_POWERF,           CF_POWER_FITTING,       RB_CF },  //fnCurveFitting
 /*  136 */  { ITM_DMY,              DF_DMY,                 RB_DF },  //fnDateFormat
 /*  383 */  { ITM_MDY,              DF_MDY,                 RB_DF },  //fnDateFormat
 /*  700 */  { ITM_YMD,              DF_YMD,                 RB_DF },  //fnDateFormat

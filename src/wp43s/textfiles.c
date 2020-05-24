@@ -24,8 +24,7 @@
 #include "wp43s.h"
 #include "math.h"
 
-char                 filename_csv[60];                        //JM_CSV
-uint32_t             tmp__32;                                 //JM_CSV
+char                 filename_csv[40]; //JMMAX                //JM_CSV Changed from 60 to 40 to save 20 bytes.
 uint32_t             mem__32;                                 //JM_CSV
 
 
@@ -327,8 +326,10 @@ char line[100];               /* Line buffer */
 
 
 
+
 int16_t test_xy(float x, float y){
 char line[100];               /* Line buffer */
+uint32_t             tmp__32;                                 //JM_CSV
 
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */

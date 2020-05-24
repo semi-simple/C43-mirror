@@ -178,19 +178,19 @@ void btnFnPressed(void *notUsed, void *data) {
   int16_t item = determineFunctionKeyItem((char *)data);
 
   if(item != ITM_NOP && item != ITM_NULL) {
-    resetShiftState();
+//    resetShiftState();                                 //JM
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
       refreshStack();
     }
 
-    #if(FN_KEY_TIMEOUT_TO_NOP == 1)
-    showFunctionName(item, 10);
-    #else
-//    showFunctionNameItem = item;
-    btnFnPressed_StateMachine(notUsed, data);        //JM This calls my original btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
-    #endif
+//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv
+//      showFunctionName(item, 10);
+//    #else
+//      showFunctionNameItem = item;
+        btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls my original btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+//    #endif
   }
   else {
     showFunctionNameItem = ITM_NOP;

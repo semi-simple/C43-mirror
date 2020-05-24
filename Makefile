@@ -239,7 +239,8 @@ src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
 	@echo -e "\n====> src/ttf2RasterFonts/%.o: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/C43v0_NumericFont.ttf fonts/C43v0_StandardFont.ttf
+.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/C43___NumericFont.ttf fonts/C43___StandardFont.ttf
+#.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
 	./$(TTF2RASTERFONTS_APP) > /dev/null
 	touch $@

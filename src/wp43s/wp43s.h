@@ -19,7 +19,7 @@
  ***********************************************/
 
 //#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
-#define TMP_STR_LENGTH      3000          //JMMAX 3000+ extra to make sure
+#define TMP_STR_LENGTH      3000 //3000         //JMMAX ORG:3000
 
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
@@ -268,7 +268,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     60//73                                               //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     60 //73  //JMMAX                                             //dr build RadioButton, CheckBox
 
 // timer nr for FG and FN use
 #define TO_FG_LONG              0
@@ -576,8 +576,8 @@ extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t              flags[7];
-//#define TMP_STR_LENGTH      3000          //JMMAX 3000+ extra to make sure
-#define ERROR_MESSAGE_LENGTH  512
+//#define TMP_STR_LENGTH       3000 //Move to beginning of file due to errors
+#define ERROR_MESSAGE_LENGTH  384 //512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN      80
 extern char                  tmpStr3000[TMP_STR_LENGTH];
 extern char                  errorMessage[ERROR_MESSAGE_LENGTH];

@@ -2,6 +2,11 @@
 
 PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
 
+
+cd ./DMCP_build
+make clean
+cd ..
+
 make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
@@ -236,5 +241,10 @@ rm "wp43c" "wp43c 2" "wp43c 3" "wp43c 4" "wp43c 5" "wp43c 6" "wp43c 7" "wp43c 8"
 rm "testSuite" "testSuite 2" "testSuite 3" "testSuite 4" "testSuite 5" "testSuite 6" "testSuite 7" "testSuite 8" "testSuite 9" "testSuite 10"
 rm "backup 2.bin" "backup 3.bin" "backup 4.bin" "backup 5.bin" "backup 6.bin" "backup 7.bin" "backup 8.bin" "backup 9.bin" "backup 10.bin"
 rm "wp43s" "wp43s 2" "wp43s 3" "wp43s 4" "wp43s 5" "wp43s 6" "wp43s 7" "wp43s 8" "wp43s 9" "wp43s 10" "wp43s 11"
+
+
+cd ./DMCP_build
+make clean
+cd ..
 
 

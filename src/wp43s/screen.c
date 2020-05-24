@@ -496,33 +496,29 @@ void underline(int16_t y) {
    }
 }
 
-char ul[25];
-void clear_ul(void) {
-  ul[24]=0;
-  int8_t iix;
-  for(iix=0; iix<25; iix++) {
-    ul[iix]=32;
-  }
-}
 
+uint32_t ul;
+void clear_ul(void) {
+  ul = 0;                                       //JM Set all bits 00-23 to zero
+}
                                                 //JM vv LONGPRESS.   false auto clears
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
+  uint32_t tmp;
 
   if(jm_FG_LINE) {
 
 //JMUL all changed  vv  
-    if(!dontclear) {                            //Recursively call the same routine to clear the previous line
+    if(!dontclear) {                            //JM Recursively call the same routine to clear the previous line
       for(y=0; y<ySoftKey; y++) {
-        if(ul[y*6+xSoftkey]==33) {
+        tmp = ul;
+        if( ((tmp >> (y*6+xSoftkey)) & 1U)) {   //JM To check a bit, shift the number n to the right, then bitwise AND it:
           underline_softkey(xSoftkey,y,true);
         }
       }
     }
-  
-    if(ul[ySoftKey*6+xSoftkey]==33) ul[ySoftKey*6+xSoftkey]=32; else
-      if(ul[ySoftKey*6+xSoftkey]==32) ul[ySoftKey*6+xSoftkey]=33;
-    //print_linestr(ul,true);
+    ul ^= 1UL << (ySoftKey*6+xSoftkey);         //JM The XOR operator (^) can be used to toggle a bit.
+
 //JMUL all changed  ^^
 
     if(0 <= xSoftkey && xSoftkey <= 5) {

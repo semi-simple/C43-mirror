@@ -406,8 +406,12 @@ int main(void) {
   ///////////////////////////
   // Generate the C arrays //
   ///////////////////////////
-  exportCStructure("C43v0_NumericFont.ttf");
-  exportCStructure("C43v0_StandardFont.ttf");
+/*
+  exportCStructure("WP43S_NumericFont.ttf");
+  exportCStructure("WP43S_StandardFont.ttf");
+*/
+  exportCStructure("C43___NumericFont.ttf");
+  exportCStructure("C43___StandardFont.ttf");
 
   fclose(cFile);
 

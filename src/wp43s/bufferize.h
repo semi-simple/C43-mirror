@@ -18,9 +18,10 @@
  * \file bufferize.h
  ***********************************************/
 
-#define AIM_BUFFER_LENGTH  200
+                                       //JMMAX ORG: AIM:200, TAM:30, NIM:200
+#define AIM_BUFFER_LENGTH  100 //200
 #define TAM_BUFFER_LENGTH   30
-#define NIM_BUFFER_LENGTH  200
+#define NIM_BUFFER_LENGTH  100 //200
 
 #define TT_OPERATION       0
 #define TT_LETTER          1

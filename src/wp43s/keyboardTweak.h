@@ -23,6 +23,7 @@
 //extern uint32_t nextTimerRefresh;
 //#endif
 
+void     showAlphaModeonGui   (void);
 void     fnKeyCase            (uint16_t unusedParamButMandatory);
 
 
@@ -43,10 +44,13 @@ int16_t  nameFunction   (int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
 #endif
 
 #ifdef PC_BUILD
-gboolean refreshTimer         (gpointer data);
+gboolean refreshTimer              (gpointer data);
+void     btnFnPressed_StateMachine (GtkWidget *w, gpointer data);
+
 #endif
 #ifdef DMCP_BUILD
-void     refreshTimer         (void);
+void     refreshTimer              (void);
+void     btnFnPressed_StateMachine (void *w, void *data);
 #endif
 void     fnTimerReset         (void);
 void     fnTimerDummyTest     (uint16_t param);

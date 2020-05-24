@@ -55,6 +55,12 @@ Modes available in the mode menu:
 
 
 
+//This is to allow the cursors to change the case. Normal on 43S. Off on C43
+#define arrowCasechange    false
+
+
+
+
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
 #define JM_SHIFT_TIMER     4000  //ms TO_FG_TIMR
 #define JM_TO_FG_LONG 	   580   //ms TO_FG_LONG

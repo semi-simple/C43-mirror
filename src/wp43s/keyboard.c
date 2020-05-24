@@ -163,6 +163,45 @@ void btnFnExec(void *w, void *data) {
 
 
 /********************************************//**
+ * \brief A calc function key was pressed
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnFnPressed(GtkWidget *notUsed, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnFnPressed(void *notUsed, void *data) {
+#endif
+  int16_t item = determineFunctionKeyItem((char *)data);
+
+  if(item != ITM_NOP && item != ITM_NULL) {
+    resetShiftState();
+
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
+    }
+
+    #if(FN_KEY_TIMEOUT_TO_NOP == 1)
+    showFunctionName(item, 10);
+    #else
+//    showFunctionNameItem = item;
+    btnFnPressed_StateMachine(notUsed, data);        //JM This calls my original btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+    #endif
+  }
+  else {
+    showFunctionNameItem = ITM_NOP;
+  }
+}
+
+
+
+
+
+/********************************************//**
  * \brief Executes one function from a softmenu
  *
  * \param[in] fn int16_t    Function key from 1 to 6
@@ -531,18 +570,26 @@ void processKeyAction(int16_t item) {
 
   switch(item) {
     case KEY_BACKSPACE:
-//      fnKeyBackspace(NOPARAM);             //JM CLRDROP - removed this, to allow echoing with subsequent execution
-  //    keyActionProcessed = true;           //JM CLRDROP - removed this, to allow echoing with subsequent execution
+//    fnKeyBackspace(NOPARAM);     //JM vv remove this, to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
+//    keyActionProcessed = true;   //JM ^^
       break;
 
     case KEY_UP1:
+      keyActionProcessed = true;   //JM swapped to before fnKeyUp to be able to check if key was processed below. Chose to process it here, as fnKeyUp does not have access to item.
       fnKeyUp(NOPARAM);
-      keyActionProcessed = true;
+      if(!keyActionProcessed){     //JMvv
+         keyActionProcessed = true;
+         addItemToBuffer(CHR_UP_ARROW); 
+      }                            //JM^^
       break;
 
     case KEY_DOWN1:
+      keyActionProcessed = true;   //swapped to before fnKeyUp to be able to check if key was processed below. Chose to process it here, as fnKeyUp does not have access to item.
       fnKeyDown(NOPARAM);
-      keyActionProcessed = true;
+      if(!keyActionProcessed){     //JM
+         keyActionProcessed = true;
+         addItemToBuffer(CHR_DOWN_ARROW);
+      }                            //JM^^
       break;
 
     case KEY_EXIT1:
@@ -566,7 +613,7 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
           // Following commands do not timeout to NOP
-          else if(item == KEY_UNDO || item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {
+          else if(/*item == KEY_UNDO ||*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO should time out
             runFunction(item);
             keyActionProcessed = true;
           }
@@ -607,7 +654,7 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
 
-          else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+          else if(alphaCase==AC_LOWER && ((CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }
@@ -853,7 +900,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_AIM:
         if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
-        //JM_TOCHECK if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
+//JM_TOCHECK if(/*(*/ softmenuStackPointer == 1 /*) && (softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU)*/) {      //JM ALPHA-HOME make sure we are at the bottom of the stack
         calcModeNormal();
         popSoftmenu();
 
@@ -958,6 +1005,8 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using 'unusedParamButMa
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
   uint32_t dataTypeY;
+
+  //JM The switch statement is broken up here, due to multiple conditions.
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (unusedParamButMandatory == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -1109,28 +1158,16 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+        if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
-         if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-         {
-           showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-           calcModeAimGui();
-#endif
-         }                                               //^^
-         softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
-         showSoftmenuCurrentPart();
-       }
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
+          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+          showSoftmenuCurrentPart();
+        }
 
-        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER) {
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
-          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-          {
-            showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
-          }                                               //^^
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -1161,18 +1198,21 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           setCatalogLastPos();
         }
       }
-      else {
-        if(alphaCase != AC_UPPER) {
-          alphaCase = AC_UPPER;
-          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-          {
-            showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
+      else {  //JM Arrow up and down if no menu other than AHOME of MyA
+        if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
+           keyActionProcessed = false;
+        }
+        else {
+          if(alphaCase != AC_UPPER) {
+            alphaCase = AC_UPPER;
+            showAlphaModeonGui(); //dr JM, see keyboardtweaks
           }
-        }                                               //^^
+        }
       }
+      //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
+      if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
+        keyActionProcessed = false;
+      }                                                         //JM^^
       break;
 
     case CM_TAM:
@@ -1242,27 +1282,15 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       resetAlphaSelectionBuffer();
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
-          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-          {
-            showAlphaMode();
-            #ifdef PC_BUILD     //dr - new AIM
-              calcModeAimGui();
-            #endif
-          }                                               //^^
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
           showSoftmenuCurrentPart();
         }
-        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER) {
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
-          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-          {
-            showAlphaMode();
-            #ifdef PC_BUILD     //dr - new AIM
-              calcModeAimGui();
-            #endif
-          }                                               //^^
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
       else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -1287,17 +1315,15 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         }
       }
       else {
-        if(alphaCase != AC_LOWER) {
+        if(alphaCase != AC_LOWER && arrowCasechange) { //JM
           alphaCase = AC_LOWER;
-          if(calcMode == CM_AIM || calcMode == CM_ASM)    //vv dr
-          {
-            showAlphaMode();
-#ifdef PC_BUILD     //dr - new AIM
-            calcModeAimGui();
-#endif
-          }
-        }                                               //^^
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
+        }
       }
+      //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
+      if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
+        keyActionProcessed = false;
+      }                                                         //JM^^
       break;
 
     case CM_TAM:

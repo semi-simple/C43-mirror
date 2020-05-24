@@ -31,20 +31,31 @@ uint32_t    timerLastCalled;
 
 
 
+void showAlphaModeonGui(void) {
+  if(calcMode == CM_AIM || calcMode == CM_ASM || CM_ASM_OVER_TAM || CM_ASM_OVER_AIM)    //vv dr JM
+  {
+    showAlphaMode();
+    #ifdef PC_BUILD     //dr - new AIM
+      calcModeAimGui();
+    #endif
+  }                                               //^^
+}
+
+
+
+
 void fnKeyCase(uint16_t unusedParamButMandatory) {    //JM CASE JM CAPS
   #ifndef TESTSUITE_BUILD
-  if(alphaCase == AC_LOWER) {
-    alphaCase = AC_UPPER;
-  } else {
-    alphaCase = AC_LOWER;
-  }
+    if(alphaCase == AC_LOWER) {
+      alphaCase = AC_UPPER;
+    } else {
+      alphaCase = AC_LOWER;
+    }
 
-  showAlphaMode();                                                          //JM CASE JM CAPS
-#ifdef PC_BUILD     //dr - new AIM
-    calcModeAimGui();
-#endif
-  showSoftmenuCurrentPart();
-  setCatalogLastPos();
+    showAlphaModeonGui(); //dr JM, see keyboardtweaks
+
+    showSoftmenuCurrentPart();
+    setCatalogLastPos();
   #endif
 }
 
@@ -356,10 +367,10 @@ void FN_cancel() {
 
 //*************----------*************------- FN KEY PRESSED -------***************-----------------
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
-void btnFnPressed(GtkWidget *w, gpointer data) { 
+void btnFnPressed_StateMachine(GtkWidget *w, gpointer data) { 
 #endif
 #ifdef DMCP_BUILD
-void btnFnPressed(void *w, void *data) {
+void btnFnPressed_StateMachine(void *w, void *data) {
 #endif
   bool_t exexute_double_g;
   bool_t double_click_detected;

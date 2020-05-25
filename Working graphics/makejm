@@ -1,3 +1,0 @@
-#!/bin/bash
-
-mogrify -resize 526x980 ./source.png

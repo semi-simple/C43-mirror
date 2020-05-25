@@ -1,18 +1,21 @@
-/* This file is part of 43C.
+/* This file is part of WP 43S.
  *
- * 43C is free software: you can redistribute it and/or modify
+ * WP 43S is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * 43C is distributed in the hope that it will be useful,
+ * WP 43S is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with 43C.  If not, see <http://www.gnu.org/licenses/>.
+ * along with WP 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/* ADDITIONAL C43 functions and routines */
+
 
 /********************************************//**
  * \file keyboardTweak.h
@@ -46,12 +49,15 @@ int16_t  nameFunction   (int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
 #ifdef PC_BUILD
 gboolean refreshTimer              (gpointer data);
 void     btnFnPressed_StateMachine (GtkWidget *w, gpointer data);
+void     btnFnReleased_StateMachine(GtkWidget *w, gpointer data);
 
 #endif
 #ifdef DMCP_BUILD
 void     refreshTimer              (void);
 void     btnFnPressed_StateMachine (void *w, void *data);
+void     btnFnReleased_StateMachine(void *w, void *data);
 #endif
+
 void     fnTimerReset         (void);
 void     fnTimerDummyTest     (uint16_t param);
 void     fnTimerConfig        (uint8_t nr, void(*func)(uint16_t), uint16_t param/*, uint32_t time*/);
@@ -60,6 +66,7 @@ void     fnTimerStop          (uint8_t nr);                                     
 void     fnTimerExec          (uint8_t nr);                                     // Execute Timer, 0..n-1
 void     fnTimerDel           (uint8_t nr);                                     // Delete Timer, 0..n-1
 uint8_t  fnTimerGetStatus     (uint8_t nr);
+
 
 
 /********************************************//**

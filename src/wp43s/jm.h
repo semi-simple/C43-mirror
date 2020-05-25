@@ -17,7 +17,7 @@
 //wp43s.h
 
 
-/* ADDITIONAL WP43C functions and routines */
+/* ADDITIONAL C43 functions and routines */
 
 /*
 Modes available in the mode menu:

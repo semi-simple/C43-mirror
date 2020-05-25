@@ -142,10 +142,10 @@ int16_t determineFunctionKeyItem(const char *data) {
  //JM btnFnClicked is called by gui.c keyPressed
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnExec(GtkWidget *w, gpointer data) {
+void btnFnClicked(GtkWidget *w, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnFnExec(void *w, void *data) {
+void btnFnClicked(void *w, void *data) {
 #endif
 //  int16_t fn = *((char *)data) - '0';
 
@@ -178,24 +178,45 @@ void btnFnPressed(void *notUsed, void *data) {
   int16_t item = determineFunctionKeyItem((char *)data);
 
   if(item != ITM_NOP && item != ITM_NULL) {
-//    resetShiftState();                                 //JM
+//    resetShiftState();                                 //JM still need the shifts active prior to cancelling them
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
       refreshStack();
     }
 
-//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv
+//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error
 //      showFunctionName(item, 10);
 //    #else
 //      showFunctionNameItem = item;
-        btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls my original btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+        btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
 //    #endif
   }
   else {
     showFunctionNameItem = ITM_NOP;
   }
 }
+
+
+
+/********************************************//**
+ * \brief A calc function key was released
+ *
+ * \param w GtkWidget*
+ * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+ * \return void
+ ***********************************************/
+#ifdef PC_BUILD
+void btnFnReleased(GtkWidget *w, gpointer data) {
+#endif
+#ifdef DMCP_BUILD
+void btnFnReleased(void *w, void *data) {
+#endif
+
+  btnFnReleased_StateMachine(w, data);
+
+}
+
 
 
 
@@ -235,6 +256,7 @@ resetShiftState();
 
 
 //************************************************** TOCHECK vv 
+
       if(softmenuStackPointer > 0) {
         if(calcMode == CM_ASM) {
           calcModeNormal();
@@ -251,47 +273,43 @@ resetShiftState();
           return;
         }
 
-
 // TO CHECK TOCHECK (2)
 //        else if(calcMode == CM_ASM_OVER_AIM) {
-  //        calcModeAim(NOPARAM);
-    //      addItemToBuffer(item);
-      //    return;
+//          calcModeAim(NOPARAM);
+//          addItemToBuffer(item);
+//          return;
 //        }
 //************************************************* TOCHECK ^^
 //{
-      if(item < 0) { // softmenu
-        if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
-          showSoftmenu(NULL, item, true);
-        }
-      }
-      else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
-        addItemToNimBuffer(item);
-      }
-      else if(calcMode == CM_TAM) {
-        addItemToBuffer(item);
-      }
-      else if(item > 0) { // function
-        if(calcMode == CM_NIM && item != KEY_CC ) {
-          closeNim();
-          if(calcMode != CM_NIM) {
-            if(indexOfItems[item].func == fnConstant) {   //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
-              STACK_LIFT_ENABLE;
-            }
+        if(item < 0) { // softmenu
+          if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+            showSoftmenu(NULL, item, true);
           }
         }
+        else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+          addItemToNimBuffer(item);
+        }
+        else if(calcMode == CM_TAM) {
+          addItemToBuffer(item);
+        }
+        else if(item > 0) { // function
+          if(calcMode == CM_NIM && item != KEY_CC) {
+            closeNim();
+            if(calcMode != CM_NIM) {
+              if(indexOfItems[item].func == fnConstant) {   //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
+                STACK_LIFT_ENABLE;
+              }
+            }
+          }
 
-        if(lastErrorCode == 0) { 
-          resetTemporaryInformation();
-          runFunction(item);                              //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
+          if(lastErrorCode == 0) {
+            resetTemporaryInformation();
+            runFunction(item);                              //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
         }
       }
     }
   }
 }
-
-
-
 
 
 
@@ -301,7 +319,7 @@ int16_t determineItem(const char *data) {
   int16_t result;
   const calcKey_t *key;
 
-  //key = userModeEnabled ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
+  //key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
   key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
@@ -352,7 +370,7 @@ int16_t determineItem(const char *data) {
   }                                                                                                                           //JM shifts
 
 
-  // Shift f pressed 
+  // Shift f pressed and JM REMOVED shift g not active
   else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     resetTemporaryInformation();
 
@@ -365,7 +383,7 @@ int16_t determineItem(const char *data) {
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftF = !shiftF;
-    shiftG = false;                     //JM no shifted menu on g-shift-key as in WP43S
+    shiftG = false;                                         //JM no shifted menu on g-shift-key as in WP43S
 //    shiftStateChanged = true; //JM
 
     showShiftState();
@@ -373,8 +391,7 @@ int16_t determineItem(const char *data) {
     return ITM_NOP;
   }
 
-
-  // Shift g pressed 
+  // Shift g pressed and JM REMOVED shift f not active
   else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     resetTemporaryInformation();
 
@@ -387,7 +404,7 @@ int16_t determineItem(const char *data) {
     fnTimerStop(TO_FG_TIMR);                                //dr
 
     shiftG = !shiftG;
-    shiftF = false;                     //JM no shifted menu on g-shift-key as in WP43S
+    shiftF = false;                                         //JM no shifted menu on g-shift-key as in WP43S
 //    shiftStateChanged = true; //JM
 
     showShiftState();
@@ -413,6 +430,9 @@ int16_t determineItem(const char *data) {
     displayBugScreen("In function determineItem: item was not determined!");
     result = 0;
   }
+
+
+
 
   //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
   if(JM_ASN_MODE == 32766) {            //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
@@ -464,7 +484,6 @@ int16_t determineItem(const char *data) {
           #endif
         }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
   }
-
 
   if(result == CHR_PROD_SIGN) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);

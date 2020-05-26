@@ -189,6 +189,7 @@ void fnVersion(uint16_t unusedParamButMandatory) {
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
   longInteger_t mem;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(mem);
@@ -210,6 +211,7 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
   longInteger_t rounding;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(rounding);
@@ -230,6 +232,7 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
   longInteger_t ism;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(ism);
@@ -251,6 +254,7 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
   longInteger_t wordSize;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(wordSize);
@@ -321,6 +325,7 @@ void fnSetWordSize(uint16_t WS) {
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
   longInteger_t flashMem;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(flashMem);
@@ -342,6 +347,7 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
   real_t value;
 
+  saveStack();
   liftStack();
 
   #ifdef PC_BUILD
@@ -381,6 +387,7 @@ uint32_t getFreeFlash(void) {
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
   longInteger_t sigDigits;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(sigDigits);
@@ -495,6 +502,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
 void fnGetRange(uint16_t unusedParamButMandatory) {
   longInteger_t range;
 
+  saveStack();
   liftStack();
 
   longIntegerInit(range);
@@ -512,7 +520,6 @@ void fnClAll(uint16_t confirmation) {
     setConfirmationMode(fnClAll);
   }
   else {
-//printf("Running CLALL\n");
     calcRegister_t regist;
 
     fnClPAll(CONFIRMED);  // Clears all the programs

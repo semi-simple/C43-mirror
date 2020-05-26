@@ -927,7 +927,7 @@ showSoftmenu(NULL, -MNU_MyAlpha, false);
       oldTime[0] = 0;
       showDateTime();
       if(calcMode == CM_AIM) {
-        clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
+        clearRegisterLine(AIM_REGISTER_LINE, true, true);
         xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
         cursorEnabled = true;
       }
@@ -1037,7 +1037,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       if(stringByteLength(aimBuffer) > 0) {
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
-        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE+6, vmNormal, true, true);
+        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
         for(x=newXCursor; x<xCursor+6; x++) {
           for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
             clearPixel(x, y);

@@ -24,12 +24,12 @@
 #define OFF_PIXEL             0xe0e0e0 // blue red green
 #define SOFTMENU_STACK_SIZE   14 // 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR //JM increased from 7 to 14. Why not. It is not a Babbage machine.
 #define TEMPORARY_INFO_OFFSET 10
-#define REGISTER_LINE_HEIGHT  37
+#define REGISTER_LINE_HEIGHT  36 // was 37
 
 #define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
-#define Y_POSITION_OF_REGISTER_Z_LINE  61
-#define Y_POSITION_OF_REGISTER_Y_LINE  98
-#define Y_POSITION_OF_REGISTER_X_LINE 135
+#define Y_POSITION_OF_REGISTER_Z_LINE  60 // was  61
+#define Y_POSITION_OF_REGISTER_Y_LINE  96 // was  98
+#define Y_POSITION_OF_REGISTER_X_LINE 132 // was 135
 
 // If one of the 4 next defines is changed: change also xxxREG in registers.h
 #define Y_POSITION_OF_AIM_LINE        Y_POSITION_OF_REGISTER_X_LINE
@@ -105,7 +105,8 @@ void     showCursor               (void);
 void     hideCursor               (void);
 void     showFunctionName         (int16_t item, int8_t counter);
 void     hideFunctionName         (void);
-void     clearRegisterLine        (int16_t yStart, int16_t height);
+//void     clearRegisterLine        (int16_t yStart, int16_t height);
+void     clearRegisterLine        (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
 void     resetTemporaryInformation(void);
 void     refreshRegisterLine      (calcRegister_t regist);
 #endif

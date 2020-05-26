@@ -54,7 +54,9 @@ const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 30 */  "Function to be coded for that data type",
 /* 31 */  "Input data types do not match",
 /* 32 */  "This system flag is write protected",
-/* 33 */  "Bad input" // This error is not in the ReM and could theorically not happen
+/* 33 */  "Output would exceed 196 characters",
+/* 34 */  "This does not work with an empty string",
+/* 35 */  "Bad input" // This error is not in the ReM and could theorically not happen
 };
 
 

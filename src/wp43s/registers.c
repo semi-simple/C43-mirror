@@ -1843,10 +1843,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(sign == 1 || val > 180) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        const font_t *font;
-
-        font = &standardFont;
-        shortIntegerToDisplayString(regist, errorMessage, &font);
+        shortIntegerToDisplayString(regist, errorMessage, false);
         sprintf(tmpStr3000, "register %" FMT16S " = %s:", regist, errorMessage);
         showInfoDialog("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
       #endif

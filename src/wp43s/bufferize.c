@@ -196,13 +196,13 @@ void addItemToBuffer(uint16_t item) {
     if(calcMode == CM_AIM) {
       item = convertItemToSubOrSup(item, nextChar);
 
-      if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) {
+      if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
         sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
         displayBugScreen(errorMessage);
       }
       else {
         strncpy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
-        if(stringWidth(aimBuffer, &standardFont, true, true) >= SCREEN_WIDTH-9) {
+        if(stringWidth(aimBuffer, &standardFont, true, true) > SCREEN_WIDTH - 8) { // 8 is the width of the cursor
           btnClicked(NULL, "16"); // back space
           #ifdef PC_BUILD
             showInfoDialog("In function addItemToBuffer:", "the aimBuffer string is too wide!", NULL, NULL);
@@ -1812,7 +1812,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
   }
 
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(Y_POSITION_OF_TAM_LINE, 32);
+    clearRegisterLine(TAM_REGISTER_LINE, false, false);
   }
   showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 }

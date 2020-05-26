@@ -50,6 +50,7 @@ dataBlock_t          *ram;
 bool_t                allowScreenUpdate;
 bool_t                funcOK;
 bool_t                keyActionProcessed;
+const font_t         *fontForShortInteger;
 
 // Variables stored in RAM
 realContext_t         ctxtReal34;   //   34 digits

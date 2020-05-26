@@ -1320,7 +1320,7 @@
 #define CHR_SUP_7                     1284
 #define CHR_SUP_8                     1285
 #define CHR_SUP_9                     1286
-#define CHR_SUP_1_b                   1287
+#define CHR_1287                      1287
 #define CHR_SUP_T                     1288
 #define CHR_SUP_a                     1289
 #define CHR_SUP_f                     1290
@@ -1419,10 +1419,10 @@
 #define CHR_REAL_R                    1382
 #define CHR_LEFT_ARROW                1383
 #define CHR_UP_ARROW                  1384
-#define CHR_UP_ARROW_b                1385
+#define CHR_1385                      1385
 #define CHR_RIGHT_ARROW               1386
 #define CHR_DOWN_ARROW                1387
-#define CHR_DOWN_ARROW_b              1388
+#define CHR_1388                      1388
 #define CHR_SERIAL_IO                 1389
 #define CHR_RIGHT_SHORT_ARROW         1390
 #define CHR_LEFT_RIGHT_ARROWS         1391

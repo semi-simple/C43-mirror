@@ -78,8 +78,8 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
 //keyboard.c  screen.c
-bool_t JM_auto_drop_enabled;                      //JM TIMER CLRDROP
-bool_t JM_auto_clstk_enabled;                     //JM TIMER CLRDROP
+int16_t JM_auto_doublepress_enabled;              //JM TIMER CLRDROP //drop
+int16_t JM_auto_longpress_enabled;                //JM TIMER CLRDROP //clstk
 
 uint8_t JM_SHIFT_HOME_TIMER1;                     //Local to keyboard.c, but defined here
 int16_t JM_ASN_MODE;                              //JM ASSIGN

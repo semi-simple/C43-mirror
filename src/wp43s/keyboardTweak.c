@@ -201,6 +201,51 @@ void fg_processing_jm(void) {
 
 
 
+void  Check_Assign_in_progress(int16_t * result, int16_t tempkey) {
+  //JM ASSIGN - GET FUNCTION NUMBER          // Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+  if(JM_ASN_MODE == 32766) {                 // GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
+    JM_ASN_MODE = *result;                   // The result is the function number, item number, asnd is placed in
+    fnKEYSELECT();                           // Place in auto trigger register, ready for next keypress
+    *result = KEY_EXIT1;                     // EXIT key to exit when done and cancel shifts
+  }
+  //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE // JM_ASN_MODE contains the command to be put on a key. 0 if not active
+  else if(JM_ASN_MODE != 0) {                // GET KEY
+    fnASSIGN(JM_ASN_MODE, tempkey);          // CHECKS FOR INVALID KEYS IN HERE
+    JM_ASN_MODE = 0;                         // Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
+    *result = KEY_EXIT1;                     // EXIT key to exit when done and cancel shifts
+  }
+  //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( tempkey == 0) )) {
+    *result = Norm_Key_00_VAR;
+  }
+}
+
+
+/*
+  //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
+  if(JM_ASN_MODE == 32766) {            //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+                                        //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
+    JM_ASN_MODE = result;               //JM The result is the function number, item number, asnd is placed in
+    fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
+    result = KEY_EXIT1;                      //JM EXIT key to exit when done and cancel shifts
+  }
+
+  //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
+                                             //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
+  else if(JM_ASN_MODE != 0) {                //JM GET KEY
+    fnASSIGN(JM_ASN_MODE, stringToKeyNumber(data));          //JM CHECKS FOR INVALID KEYS IN HERE
+    JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
+    result = KEY_EXIT1;                       //JM EXIT key to exit when done and cancel shifts
+  }
+
+  //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
+    //printf("%d", stringToKeyNumber(data));
+    result = Norm_Key_00_VAR;
+  } //JM ^^
+  //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
+*/
+
 
 
 
@@ -258,7 +303,53 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
 
 
 
+void Setup_MultiPresses(int16_t result){
+  JM_auto_doublepress_enabled = 0;                       //JM TIMER CLRDROP. Autodrop mean double click normal key.
+  int16_t tmp = 0;
+  switch(result) {
+    case KEY_BACKSPACE: tmp = ITM_DROP; break;      //Set up longpress
+    case ITM_CHS      : tmp = ITM_XexY; break;
+    default:;
+  }
+  if(tmp != 0){
+    if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
+      JM_auto_doublepress_enabled = tmp;
+    }
+    fnTimerStart(TO_CL_DROP, TO_CL_DROP, JM_CLRDROP_TIMER);       
+  }
+  fnTimerStop(TO_FG_LONG);                                  //dr
+  fnTimerStop(TO_FN_LONG);                                  //dr
+}
 
+
+
+void Check_MultiPresses(int16_t * result){
+  int16_t tmp = 0;
+  if(calcMode == CM_NORMAL) {
+    switch(*result) {
+      case KEY_BACKSPACE: tmp = ITM_CLSTK; break;      //Set up longpress
+      case ITM_CHS      : tmp = ITM_XexY;  break;
+      default:;
+    }
+    if(tmp !=0) {     //if backspace 
+      JM_auto_longpress_enabled = tmp;
+      fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
+      if(JM_auto_doublepress_enabled != 0) {
+         hideFunctionName();    
+         restoreStack();
+         showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
+         #ifdef PC_BUILD
+           refreshScreen(NULL);            //JM CLRDROP
+         #elif DMCP_BUILD
+           refreshScreen();                //JM CLRDROP
+         #endif
+         *result = JM_auto_doublepress_enabled;
+         fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+         STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+      }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+    }
+  }
+}
 
 
 

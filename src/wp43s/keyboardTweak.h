@@ -36,14 +36,19 @@ void 	 DOT_F();
 void 	 DOT_G();
 void 	 DOT_F_clear();
 void 	 DOT_G_clear();
-void     show_f_jm   (void);
-void     show_g_jm   (void);
-void     clear_fg_jm (void);
-void     fg_processing_jm(void);
-bool_t   func_lookup    (int16_t fn, int16_t itemShift, int16_t *funk);
-void     execFnTimeout  (uint16_t key);                         //dr - delayed call of the primary function key
-void     shiftCutoff    (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
-int16_t  nameFunction   (int16_t fn, int16_t itemShift);   //JM LONGPRESS FN
+void     show_f_jm           (void);
+void     show_g_jm           (void);
+void     clear_fg_jm         (void);
+void     fg_processing_jm    (void);
+void Check_Assign_in_progress(int16_t  * result, int16_t tempkey);
+
+bool_t   func_lookup         (int16_t  fn, int16_t itemShift, int16_t *funk);
+void     execFnTimeout       (uint16_t key                    );                         //dr - delayed call of the primary function key
+void     shiftCutoff         (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
+void     Check_MultiPresses  (int16_t  * result               );
+void     Setup_MultiPresses  (int16_t  result                 );
+int16_t  nameFunction        (int16_t  fn, int16_t itemShift  );   //JM LONGPRESS FN
+
 #endif
 
 #ifdef PC_BUILD

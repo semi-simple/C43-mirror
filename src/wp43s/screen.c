@@ -649,9 +649,9 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 
 void Clx_handler() {
   if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
-    if(JM_auto_clstk_enabled) {
-      showFunctionName(ITM_CLSTK, 10);            //fnClearStack(0);
-      JM_auto_clstk_enabled = false;
+    if(JM_auto_longpress_enabled != 0) {
+      showFunctionName(JM_auto_longpress_enabled, 10);            //fnClearStack(0);
+      JM_auto_longpress_enabled = 0;
     } 
   }
 }

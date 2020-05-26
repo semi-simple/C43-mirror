@@ -333,18 +333,9 @@ int16_t determineItem(const char *data) {
   }                                                   //JMSHOW ^^
   //printf("###\n"); //JMEXEC
 
-  JM_auto_drop_enabled = false;                       //JM TIMER CLRDROP
-  if(key->primary == KEY_BACKSPACE) {
-    if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
-      JM_auto_drop_enabled = true;
-    }
-    fnTimerStart(TO_CL_DROP, TO_CL_DROP, JM_CLRDROP_TIMER);
-  }
+  Setup_MultiPresses( key->primary );
 
-  fnTimerStop(TO_FG_LONG);                                  //dr
-  fnTimerStop(TO_FN_LONG);                                  //dr
 
-                                                                                                                              //JM shifts
 
   // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
   // JM Inserted new section and removed old f and g key processing sections
@@ -431,59 +422,9 @@ int16_t determineItem(const char *data) {
     result = 0;
   }
 
+  Check_Assign_in_progress(&result, stringToKeyNumber(data));
 
-
-
-  //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
-  if(JM_ASN_MODE == 32766) {            //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
-    //printf("%d\n", determineItem(key));    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
-    JM_ASN_MODE = result;        //JM The result is the function number, item number, asnd is placed in
-    fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
-    result = KEY_EXIT1;                      //JM EXIT key to exit when done and cancel shifts
-  }
-
-  //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
-                                             //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
-  else if(JM_ASN_MODE != 0) {                //JM GET KEY
-    fnASSIGN(JM_ASN_MODE, stringToKeyNumber(data));          //JM CHECKS FOR INVALID KEYS IN HERE
-    JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
-    result = KEY_EXIT1;                       //JM EXIT key to exit when done and cancel shifts
-  }
-
-  //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
-  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
-    //printf("%d", stringToKeyNumber(data));
-    result = Norm_Key_00_VAR;
-  } //JM ^^
-  //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
-
-
-  if(result == KEY_BACKSPACE && calcMode == CM_NORMAL ) {
-        JM_auto_clstk_enabled = true;      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-        fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
-        if(JM_auto_drop_enabled) {         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          hideFunctionName();              //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          restoreStack();                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-#define NEWDROP
-          #ifdef OLDDROP
-            fnDrop(NOPARAM);                 //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            result = ITM_NULL;
-            fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            btnReleased(NULL, NULL);
-          #else
-            showFunctionName(ITM_DROP, 10);  //JM CLRDROP
-            #ifdef PC_BUILD
-              refreshScreen(NULL);            //JM CLRDROP
-            #elif DMCP_BUILD
-              refreshScreen();                //JM CLRDROP
-            #endif
-            result = ITM_DROP;
-            fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-            STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-          #endif
-        }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-  }
+  Check_MultiPresses(&result);
 
   if(result == CHR_PROD_SIGN) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
@@ -555,7 +496,7 @@ void btnReleased(GtkWidget *notUsed, gpointer data) {
 void btnReleased(void *notUsed, void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
-  JM_auto_clstk_enabled = false;                 //JM TIMER CLRCLSTK ON LONGPRESS
+  JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;
     hideFunctionName();

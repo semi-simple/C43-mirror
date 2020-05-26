@@ -370,17 +370,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,   
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
-/*
-const int16_t menu_CFG[]         = { ITM_SLOW,                      ITM_FAST,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
-                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_DENANY,               ITM_DENFAC,            ITM_DENFIX,                  ITM_DENMAX,                         //JM sequence change
-                                     ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_QUIET,             ITM_SCIOVR,                  ITM_ENGOVR,                         //JM sequence change
-
-                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
-                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                     ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY,
-
-*/
-const int16_t menu_CFG[]         = { ITM_NULL,                      ITM_NULL,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
+const int16_t menu_CFG[]         = { ITM_SF,                        ITM_CF,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,               ITM_NULL,            ITM_NULL,                  ITM_NULL,                         //JM sequence change
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_NULL,             ITM_NULL,                  ITM_NULL,                         //JM sequence change
 

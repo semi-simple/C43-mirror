@@ -1250,7 +1250,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
 
 
-void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, const font_t **font) {
+void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, bool_t determineFont) {
   int16_t i, j, k, unit, gap, digit, bitsPerDigit, maxDigits, base;
   uint64_t number, sign;
   static const char digits[17] = "0123456789ABCDEF";
@@ -1357,9 +1357,9 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     displayString[i++] = '-';
   }
 
-  if(*font == NULL) { // The font is not yet determined
+  if(determineFont) { // The font is not yet determined
     // 1st try: numeric font digits from 30 to 39
-    *font = &numericFont;
+    fontForShortInteger = &numericFont;
 
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
       if(displayString[k] == ' ') {
@@ -1375,7 +1375,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
@@ -1398,12 +1398,12 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
     // 3rd try: standard font digits from 30 to 39
-    *font = &standardFont;
+    fontForShortInteger = &standardFont;
 
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
       if(displayString[k] == ' ') {
@@ -1419,7 +1419,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
@@ -1446,7 +1446,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, &standardFont, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
@@ -1458,7 +1458,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
   }
 
   else { // the font is already determined (standard font)
-    *font = &standardFont;
+    fontForShortInteger = &standardFont;
 
     // 1st try: standard font digits from 30 to 39
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1475,7 +1475,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
@@ -1502,7 +1502,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, con
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(stringWidth(displayString, *font, false, false) < SCREEN_WIDTH) {
+    if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
 
@@ -1724,9 +1724,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 void fnShow(uint16_t unusedParamButMandatory) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
-  int16_t source, dest, last, d, maxWidth;
+  int16_t source, dest, last, d, maxWidth, offset, bytesProcessed;
   real34_t real34;
   char *separator;
+  bool_t thereIsANextLine;
 
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
@@ -1812,6 +1813,23 @@ void fnShow(uint16_t unusedParamButMandatory) {
         xcopy(tmpStr3000 + last, tmpStr3000 +  300, strlen(tmpStr3000 + 300) + 1);
         xcopy(tmpStr3000 + 300, tmpStr3000 + 600, strlen(tmpStr3000 + 600) + 1);
         tmpStr3000[600] = 0;
+      }
+      break;
+
+    case dtString:
+      offset = 0;
+      thereIsANextLine = true;
+      bytesProcessed = 0;
+      while(thereIsANextLine) {
+        xcopy(tmpStr3000 + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
+        thereIsANextLine = false;
+        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+          thereIsANextLine = true;
+        }
+        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        offset += 300;
+        tmpStr3000[offset] = 0;
       }
       break;
 

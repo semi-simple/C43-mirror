@@ -201,6 +201,7 @@ typedef int16_t calcRegister_t;
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
+#include "stringFuncs.h"
 #include "timer.h"
 
 #define min(a,b)                ((a)<(b)?(a):(b))
@@ -494,6 +495,7 @@ extern const item_t          indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t       kbd_std[37];
 extern const font_t          standardFont, numericFont;
+extern const font_t         *fontForShortInteger;
 extern void                  (* const addition[9][9])(void);
 extern void                  (* const subtraction[9][9])(void);
 extern void                  (* const multiplication[9][9])(void);
@@ -508,9 +510,10 @@ extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t              flags[7];
-#define TMP_STR_LENGTH       3000
-#define ERROR_MESSAGE_LENGTH  512
-#define DISPLAY_VALUE_LEN      80
+#define TMP_STR_LENGTH                3000
+#define ERROR_MESSAGE_LENGTH           512
+#define DISPLAY_VALUE_LEN               80
+#define MAX_NUMBER_OF_GLYPHS_IN_STRING 196
 extern char                  tmpStr3000[TMP_STR_LENGTH];
 extern char                  errorMessage[ERROR_MESSAGE_LENGTH];
 extern char                  aimBuffer[AIM_BUFFER_LENGTH];

@@ -552,11 +552,9 @@ void debugNIM(void) {
 
     else if(getRegisterDataType(regist) == dtString) {
       if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkHexaString))) {
-        sprintf(string + n, "%" FMT32U, TO_BYTES(getRegisterMaxDataLength(regist)));
-        k = 4;
-        for(i=2; i<TO_BYTES(getRegisterFullSize(regist)); i++) {
-          sprintf(string + n + k, STD_SPACE_3_PER_EM "%02x", *((unsigned char *)REGISTER_DATA(regist)) + i);
-          k += 4;
+        k = stringByteLength(REGISTER_STRING_DATA(regist));
+        for(i=0, p=REGISTER_STRING_DATA(regist); i<=k; i++, p++) {
+          sprintf(string + n + 4*i, STD_SPACE_3_PER_EM "%02x", *p);
         }
       }
       else {
@@ -567,9 +565,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtShortInteger) {
-      const font_t *font = &standardFont;
-
-      shortIntegerToDisplayString(regist, string + n, &font);
+      shortIntegerToDisplayString(regist, string + n, false);
       strcat(string + n, STD_SPACE_3_PER_EM);
       strcat(string + n, getShortIntegerModeName(shortIntegerMode));
     }

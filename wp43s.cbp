@@ -2086,6 +2086,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/stringFuncs.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/stringFuncs.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/timer.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

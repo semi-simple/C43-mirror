@@ -18,8 +18,8 @@
  * \file bufferize.h
  ***********************************************/
 
-#define AIM_BUFFER_LENGTH  200
-#define TAM_BUFFER_LENGTH   30
+#define AIM_BUFFER_LENGTH  200 // 99 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
+#define TAM_BUFFER_LENGTH   32
 #define NIM_BUFFER_LENGTH  200
 
 #define TT_OPERATION       0

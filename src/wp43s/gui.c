@@ -1421,7 +1421,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     liftStack();
     refreshStack();
 
-    clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
+    clearRegisterLine(AIM_REGISTER_LINE, true, true);
     xCursor = 1;
     yCursor = Y_POSITION_OF_AIM_LINE + 6;
     cursorFont = CF_STANDARD;
@@ -1484,7 +1484,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   nimBuffer[0] = 0;
   hexDigits = 0;
 
-  clearRegisterLine(Y_POSITION_OF_NIM_LINE - 4, REGISTER_LINE_HEIGHT);
+  clearRegisterLine(NIM_REGISTER_LINE, true, true);
   xCursor = 1;
   yCursor = Y_POSITION_OF_NIM_LINE;
   cursorFont = CF_NUMERIC;
@@ -1536,7 +1536,7 @@ void calcModeTam(void) {
 
   strcat(tamBuffer, " __");
   if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
+    clearRegisterLine(REGISTER_T, true, false);
   }
   showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 

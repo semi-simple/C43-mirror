@@ -2252,10 +2252,8 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
 
     case dtShortInteger:
       temporaryInformation = TI_SHOW_REGISTER_BIG;
-      const font_t *font_tmp;
-      font_tmp = &numericFont; //&numericFont;
-      shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, &font_tmp);
 
+      shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, true);
     
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
@@ -2350,6 +2348,26 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
         }
       }
       break;
+
+/*
+    case dtString:
+      offset = 0;
+      thereIsANextLine = true;
+      bytesProcessed = 0;
+      while(thereIsANextLine) {
+        xcopy(tmpStr3000 + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
+        thereIsANextLine = false;
+        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+          thereIsANextLine = true;
+        }
+        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        offset += 300;
+        tmpStr3000[offset] = 0;
+      }
+      break;
+*/
+
 
     default:
       temporaryInformation = TI_NO_INFO;

@@ -27,7 +27,6 @@
 #define SLS_UNCHANGED 2
 
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2

@@ -488,7 +488,7 @@ void btnFnPressed_StateMachine(void *w, void *data) {
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     hideFunctionName();
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+    clearRegisterLine(REGISTER_T, true,false); //JM FN clear the previous shift function name
     refreshRegisterLine(REGISTER_T);
 
     //IF 2-->3 is longer than double click time, then move back to state 1
@@ -601,7 +601,7 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     hideFunctionName();
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
+    clearRegisterLine(REGISTER_T, true,false);  //JM FN clear the previous shift function name
     refreshRegisterLine(REGISTER_T);
 
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {

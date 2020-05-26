@@ -103,7 +103,7 @@
 #define ITM_CLFALL                      73
 #define MNU_CLK                         74
 #define ITM_TGLFRT                      75
-#define ITM_0076                        76
+#define MNU_REGIST                      76
 #define ITM_CLLCD                       77
 #define ITM_CLMENU                      78
 #define ITM_CLP                         79
@@ -2020,16 +2020,17 @@
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define CAT_NONE 0
-#define CAT_FNCT 1 // Function
-#define CAT_MENU 2 // Menu
-#define CAT_CNST 3 // Constant
-#define CAT_FREE 4 // To identify and find the free items
-#define CAT_RVAR 5 // Reserved variable
-#define CAT_DUPL 6 // Duplicate of another item e.g. acus->m^2
-#define CAT_SYFL 7 // System flags
-#define CAT_AINT 8 // Upper case alpha_INTL
-#define CAT_aint 9 // Lower case alpha_intl
+#define CAT_NONE  0
+#define CAT_FNCT  1 // Function
+#define CAT_MENU  2 // Menu
+#define CAT_CNST  3 // Constant
+#define CAT_FREE  4 // To identify and find the free items
+#define CAT_REGS  5 // Registers
+#define CAT_RVAR  6 // Reserved variable
+#define CAT_DUPL  7 // Duplicate of another item e.g. acus->m^2
+#define CAT_SYFL  8 // System flags
+#define CAT_AINT  9 // Upper case alpha_INTL
+#define CAT_aint 10 // Lower case alpha_intl
 typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the item
   uint16_t param;             ///< 1st parameter to the above function

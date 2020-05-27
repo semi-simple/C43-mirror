@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 35  // 35 = alphaINTL becomes a catalog
+#define BACKUP_VERSION 36  // 36 = added softmenuStackPointerBefore AIM
 
 void saveCalc(void) {
   size_t size;
@@ -87,6 +87,7 @@ void saveCalc(void) {
   size += fwrite(&firstGregorianDay,                  1, sizeof(firstGregorianDay),                  backup); //printf("%8lu firstGregorianDay\n",                  (unsigned long)size);
   size += fwrite(&denMax,                             1, sizeof(denMax),                             backup); //printf("%8lu denMax\n",                             (unsigned long)size);
   size += fwrite(&softmenuStackPointer,               1, sizeof(softmenuStackPointer),               backup); //printf("%8lu softmenuStackPointer\n",               (unsigned long)size);
+  size += fwrite(&softmenuStackPointerBeforeAIM,      1, sizeof(softmenuStackPointerBeforeAIM),      backup); //printf("%8lu softmenuStackPointerBeforeAIM\n",      (unsigned long)size);
   size += fwrite(&transitionSystemState,              1, sizeof(transitionSystemState),              backup); //printf("%8lu transitionSystemState\n",              (unsigned long)size);
   size += fwrite(&cursorBlinkCounter,                 1, sizeof(cursorBlinkCounter),                 backup); //printf("%8lu cursorBlinkCounter\n",                 (unsigned long)size);
   size += fwrite(&currentRegisterBrowserScreen,       1, sizeof(currentRegisterBrowserScreen),       backup); //printf("%8lu currentRegisterBrowserScreen\n",       (unsigned long)size);
@@ -237,6 +238,7 @@ void restoreCalc(void) {
     size += fread(&firstGregorianDay,                  1, sizeof(firstGregorianDay),                  backup); //printf("%8lu firstGregorianDay\n",                  (unsigned long)size);
     size += fread(&denMax,                             1, sizeof(denMax),                             backup); //printf("%8lu denMax\n",                             (unsigned long)size);
     size += fread(&softmenuStackPointer,               1, sizeof(softmenuStackPointer),               backup); //printf("%8lu softmenuStackPointer\n",               (unsigned long)size);
+    size += fread(&softmenuStackPointerBeforeAIM,      1, sizeof(softmenuStackPointerBeforeAIM),      backup); //printf("%8lu softmenuStackPointerBeforeAIM\n",      (unsigned long)size);
     size += fread(&transitionSystemState,              1, sizeof(transitionSystemState),              backup); //printf("%8lu transitionSystemState\n",              (unsigned long)size);
     size += fread(&cursorBlinkCounter,                 1, sizeof(cursorBlinkCounter),                 backup); //printf("%8lu cursorBlinkCounter\n",                 (unsigned long)size);
     size += fread(&currentRegisterBrowserScreen,       1, sizeof(currentRegisterBrowserScreen),       backup); //printf("%8lu currentRegisterBrowserScreen\n",       (unsigned long)size);

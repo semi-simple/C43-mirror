@@ -1409,6 +1409,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     calcMode = CM_AIM;
   }
   else {
+    softmenuStackPointerBeforeAIM = softmenuStackPointer;
     if(softmenuStackPointer == 0) {
       showSoftmenu(NULL, -MNU_MyAlpha, false);
     }

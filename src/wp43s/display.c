@@ -1960,7 +1960,8 @@ void fnShow(uint16_t unusedParamButMandatory) {
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
-  int16_t source, dest, last, d, maxWidth, i;
+  bool_t thereIsANextLine;
+  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed;
   real34_t real34;
   char *separator;
 
@@ -2303,6 +2304,30 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
 
 
     case dtString:
+      SHOW_reset();
+      offset = 0;
+      thereIsANextLine = true;
+      bytesProcessed = 0;
+        strcpy(tmpStr3000 + 2103, "'");
+        strncat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+        strcat(tmpStr3000 + 2100, "'");
+
+      while(thereIsANextLine) {
+        xcopy(tmpStr3000 + offset, tmpStr3000 + (2100+bytesProcessed), stringByteLength(tmpStr3000 + (2100+bytesProcessed + 1)));
+        thereIsANextLine = false;
+        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+          thereIsANextLine = true;
+        }
+        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        offset += 300;
+        tmpStr3000[offset] = 0;
+      }
+      break;
+
+
+/*
+    case dtString:
 
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       strcpy(tmpStr3000 + 2103, "'");
@@ -2348,7 +2373,7 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
         }
       }
       break;
-
+*/
 /*
     case dtString:
       offset = 0;

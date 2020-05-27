@@ -1271,7 +1271,7 @@ void hideFunctionName(void) {
  * \return void
  ***********************************************/
 void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
-    int16_t yStart, height, x, y;
+    int16_t yStart, height;
 
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
@@ -1290,6 +1290,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
       }
 
     #ifdef PC_BUILD
+      int16_t  x, y;
       for(x=0; x<SCREEN_WIDTH; x++) {
         for(y=yStart; y<yStart+height; y++) {
           clearPixel(x, y);

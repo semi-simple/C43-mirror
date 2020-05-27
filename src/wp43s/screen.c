@@ -1208,12 +1208,15 @@ void hideCursor(void) {
  * \return void
  ***********************************************/
 void showFunctionName(int16_t item, int8_t counter) {
+  char padding[20];                                          //JM
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
+  strcpy(padding,indexOfItems[abs(item)].itemCatalogName);  //JM
+  strcat(padding,"   ");                                    //JM
+  if(stringWidth(padding, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(REGISTER_T, true, false);
   }
-  showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);      //JM
+  showString(padding, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);      //JM
 }
 
 

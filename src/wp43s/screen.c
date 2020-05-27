@@ -1290,7 +1290,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
       }
 
     #ifdef PC_BUILD
-      int16_t  x, y;
+      int16_t x, y;
       for(x=0; x<SCREEN_WIDTH; x++) {
         for(y=yStart; y<yStart+height; y++) {
           clearPixel(x, y);

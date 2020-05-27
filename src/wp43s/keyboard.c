@@ -177,7 +177,7 @@ void btnFnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineFunctionKeyItem((char *)data);
 
-  if(item != ITM_NOP && item != ITM_NULL) {
+  if(item != ITM_NOP /*&& item != ITM_NULL*/) {            //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 //    resetShiftState();                                 //JM still need the shifts active prior to cancelling them
 
     if(lastErrorCode != 0) {

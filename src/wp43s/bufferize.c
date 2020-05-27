@@ -1106,29 +1106,29 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
 
   int16_t groupingGapM = groupingGap;                       //JMGAP vv
   switch(nimNumberPart) {
-    case NP_INT_10:                     // +12345 longint
-    case NP_INT_BASE:                   // +123AB#16
+    case NP_INT_10:                     // +12345 longint; Do not change groupingGap. Leave at user setting, default 3.
+    case NP_INT_BASE:                   // +123AB#16.    ; Change groupinggap from user selection to this table, for entry
       switch(lastIntegerBase) {
         case  0: groupingGap = groupingGapM; break;
         case  2: groupingGap = 4; break;
         case  3: groupingGap = 3; break;
         case  4: groupingGap = 2; break;
-        case  5: groupingGap = 3; break;
-        case  6: groupingGap = 3; break;
-        case  7: groupingGap = 3; break;
-        case  8: groupingGap = 3; break;
-        case  9: groupingGap = 3; break;
-        case 10: groupingGap = 3; break;
-        case 11: groupingGap = 3; break;
-        case 12: groupingGap = 3; break;
-        case 13: groupingGap = 3; break;
-        case 14: groupingGap = 3; break;
+        case  5:
+        case  6:
+        case  7:
+        case  8:
+        case  9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
         case 15: groupingGap = 3; break;
         case 16: groupingGap = 2; break;
         default: break;
       }
       break;
-    case NP_INT_16:                     // +123AB
+    case NP_INT_16:                     // +123AB.       ; Change to 2 for hex.
       groupingGap = 2;
       break;
     default:
@@ -1862,7 +1862,7 @@ void closeNim(void) {
       }
 
       if(nimNumberPart == NP_COMPLEX_INT_PART && (nimBuffer[lastChar] == 'i' || nimBuffer[lastChar-1]*256 + nimBuffer[lastChar]*256 == 0xa221)) { // complex i or measured angle
-        nimBuffer[++lastChar] = '0'; //Change from 1 to 0 to make imaginary part rather default to 0 if EXIT is pressed
+        nimBuffer[++lastChar] = '0';                    //JMCPX. CHANGED FROM "1" to '0'. PLEASE CONSIDER KEEPING IT '0'. IT MAKES NO SENSE DEFAULTING TO 0+1xi IF ABORTING CC ENTRY.
         nimBuffer[lastChar + 1] = 0;
       }
 

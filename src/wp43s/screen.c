@@ -1494,7 +1494,8 @@ void refreshRegisterLine(calcRegister_t regist) {
           real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
         }
 
-                                                                         //JM vv JMSHOW
+
+                                                                         //JMSHOW vv
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
           #define line_h 38
           switch(regist) {
@@ -1525,7 +1526,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
           }
         }
-                                                                         //JM ^^
+                                                                         //JMSHOW ^^
 
 
         else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
@@ -1986,6 +1987,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           else if(getRegisterDataType(regist) == dtString) {
             w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
             lineWidth = w;
+            strcpy(tmpStr3000, REGISTER_STRING_DATA(regist));  //JMSTR
 
             if(w > SCREEN_WIDTH) {
               strcpy(tmpStr3000, "String is too wide!");
@@ -1993,7 +1995,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               lineWidth = w;
             }
 
-            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);  //JMSTR
           }
 
           else if(getRegisterDataType(regist) == dtShortInteger) {

@@ -449,6 +449,9 @@ typedef int16_t calcRegister_t;
 #define TI_GEOMPOPLSTDDEV      27
 #define TI_GEOMSTDERR          28
 
+#define TI_SHOW_REGISTER_BIG   99    //JM_SHOW temporary high number not to clash with new codes
+
+
 // Register browser mode
 #define RBR_GLOBAL              0
 #define RBR_LOCAL               1
@@ -638,6 +641,7 @@ extern int16_t               alphaSelectionMenu;
 extern int16_t               lastFcnsMenuPos;
 extern int16_t               lastMenuMenuPos;
 extern int16_t               lastCnstMenuPos;
+extern int16_t               SHOWregis;                   //JMSHOW
 extern uint16_t              numberOfLocalFlags;
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;

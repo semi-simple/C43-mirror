@@ -4041,6 +4041,8 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
   if(!SH_BASE_AHOME) {  //TOCHECK
 //    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
   //  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+
+    softmenuStackPointerBeforeAIM = softmenuStackPointer;
     if(softmenuStackPointer == 0) {
       showSoftmenu(NULL, -MNU_MyAlpha, false);
     }

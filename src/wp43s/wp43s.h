@@ -556,6 +556,7 @@ extern uint32_t              denMax;
 extern uint32_t              lastIntegerBase;
 extern uint32_t              alphaSelectionTimer;
 extern uint8_t               softmenuStackPointer;
+extern uint8_t               softmenuStackPointerBeforeAIM;
 extern uint8_t               transitionSystemState;
 extern uint8_t               cursorBlinkCounter;
 extern uint8_t               numScreensStandardFont;

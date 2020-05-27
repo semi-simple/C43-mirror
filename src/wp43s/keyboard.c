@@ -615,8 +615,11 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
+    case CM_ASM_OVER_AIM:
       calcModeNormal();
-      popSoftmenu();
+      while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {
+        popSoftmenu();
+      }
 
       if(aimBuffer[0] == 0) {
         restoreStack();
@@ -656,7 +659,6 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
 
     case CM_ASM:
     case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_AIM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -722,6 +724,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       else {
        popSoftmenu();
        if(softmenuStackPointer == 0) {
+         softmenuStackPointerBeforeAIM = 0;
          showSoftmenu(NULL, -MNU_MyAlpha, false);
        }
       }
@@ -867,6 +870,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
+    case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
@@ -893,7 +897,6 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_AIM:
       break;
 
     case CM_REGISTER_BROWSER:

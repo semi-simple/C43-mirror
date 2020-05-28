@@ -18,6 +18,5 @@
  * \file timer.h
  ***********************************************/
 
-#ifndef TESTSUITE_BUILD
-  uint32_t getUptimeMs(void);
-#endif
+uint32_t getUptimeMs(void);
+void     fnTicks    (uint16_t unusedParamButMandatory);

@@ -306,10 +306,12 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
 void Setup_MultiPresses(int16_t result){
   JM_auto_doublepress_enabled = 0;                   //JM TIMER CLRDROP. Autodrop mean double click normal key.
   int16_t tmp = 0;
-  switch(result) {
-    case KEY_BACKSPACE: tmp = ITM_DROP; break;      //Set up backspace double click
-    case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
-    default:;
+  if(calcMode == CM_NORMAL) {
+    switch(result) {
+      case KEY_BACKSPACE: tmp = ITM_DROP; break;      //Set up backspace double click
+      case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
+      default:;
+    }
   }
   if(tmp != 0){
     if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
@@ -333,7 +335,7 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
       default:;
     }
 
-  if(calcMode == CM_NORMAL) {
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM) {
       if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
       if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
       if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else

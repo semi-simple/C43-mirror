@@ -423,9 +423,9 @@ int16_t determineItem(const char *data) {
     result = 0;
   }
 
-  Check_Assign_in_progress(&result, stringToKeyNumber(data));
+  Check_Assign_in_progress(&result, stringToKeyNumber(data));  //JM
 
-  Check_MultiPresses(&result);
+  Check_MultiPresses(&result);                                 //JM
 
   if(result == CHR_PROD_SIGN) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);

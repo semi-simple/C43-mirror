@@ -564,7 +564,6 @@ void btnFnPressed_StateMachine(void *w, void *data) {
     fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);    //dr
     FN_timed_out_to_NOP = false;
     if(!shiftF && !shiftG) {
-printf("##1\n");
       showFunctionName(nameFunction(FN_key_pressed-37,0),0);
       underline_softkey(FN_key_pressed-38, 0, !true /*dontclear at first call*/); //JMUL inverted clearflag
     }

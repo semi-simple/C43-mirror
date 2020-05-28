@@ -497,8 +497,8 @@ void processKeyAction(int16_t item) {
           break;
 
         case CM_NIM:
-          addItemToNimBuffer(item);
           keyActionProcessed = true;
+          addItemToNimBuffer(item);
           break;
 
         case CM_REGISTER_BROWSER:

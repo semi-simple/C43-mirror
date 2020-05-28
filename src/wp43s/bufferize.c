@@ -885,7 +885,7 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    default : {}
+    default : keyActionProcessed = false;
   }
 
   if(done) {

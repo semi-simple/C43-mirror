@@ -272,6 +272,7 @@ resetShiftState();
           calcMode = CM_ASM_OVER_AIM;
           return;
         }
+      }
 
 // TO CHECK TOCHECK (2)
 //        else if(calcMode == CM_ASM_OVER_AIM) {
@@ -280,7 +281,7 @@ resetShiftState();
 //          return;
 //        }
 //************************************************* TOCHECK ^^
-//{
+      {
         if(item < 0) { // softmenu
           if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
             showSoftmenu(NULL, item, true);

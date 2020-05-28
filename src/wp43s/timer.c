@@ -20,13 +20,28 @@
 
 #include "wp43s.h"
 
-#ifndef TESTSUITE_BUILD
-  uint32_t getUptimeMs(void) {
-    #ifdef DMCP_BUILD
-      return (uint32_t)sys_current_ms();
-    #endif
-    #ifdef PC_BUILD
-      return (uint32_t)(g_get_monotonic_time() / 1000);
-    #endif
-  }
-#endif
+uint32_t getUptimeMs(void) {
+  #ifdef DMCP_BUILD
+    return (uint32_t)sys_current_ms();
+  #elifndef TESTSUITE_BUILD
+    return (uint32_t)(g_get_monotonic_time() / 1000);
+  #else
+    return 0;
+  #endif
+}
+
+
+void fnTicks(uint16_t unusedParamButMandatory) {
+  uint32_t tim;
+  longInteger_t lgInt;
+
+  tim = getUptimeMs() / 100;
+
+  liftStack();
+  longIntegerInit(lgInt);
+  uIntToLongInteger(tim, lgInt);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  longIntegerFree(lgInt);
+
+  refreshStack();
+}

@@ -423,6 +423,7 @@ void fnAlphaRL                  (uint16_t unusedParamButMandatory) {}
 void fnAlphaPos                 (uint16_t unusedParamButMandatory) {}
 void fnXToAlpha                 (uint16_t unusedParamButMandatory) {}
 void fnAlphaToX                 (uint16_t unusedParamButMandatory) {}
+void fnTicks                    (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnCvtmmhgPa                (uint16_t unusedParamButMandatory) {}
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
@@ -1084,7 +1085,7 @@ const item_t indexOfItems[] = {
 /*  619 */  { fnTanh,                      NOPARAM,                     "tanh",                                        "tanh",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  620 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  621 */  { itemToBeCoded,               NOPARAM,                     "TEST",                                        "TEST",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  622 */  { itemToBeCoded,               NOPARAM,                     "TICKS",                                       "TICKS",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  622 */  { fnTicks,                     NOPARAM,                     "TICKS",                                       "TICKS",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  623 */  { itemToBeCoded,               NOPARAM,                     "TIME",                                        "TIME",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  624 */  { itemToBeCoded,               NOPARAM,                     "TIMER",                                       "TIMER",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  625 */  { itemToBeCoded,               NOPARAM,                     "TIMES",                                       "TIMES",                                       0,       0,       CAT_MENU, SLS_UNCHANGED},

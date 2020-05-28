@@ -911,7 +911,7 @@ void addItemToNimBuffer(int16_t item) {
       }
       break;
 
-    default : keyActionProcessed = false;        //JMEXEC. Added because keyActionProcessed must be cleared if it falls through unprocessed.
+    default : keyActionProcessed = false;
   }
 
   if(done) {

@@ -39,10 +39,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
+    if(dt == dtConfig          ) return "a config             ";
     //if(dt == dtLabel           ) return "a label              ";
     //if(dt == dtSystemInteger   ) return "a system integer     ";
     //if(dt == dtFlags           ) return "a flags              ";
-    //if(dt == dtConfig          ) return "a config             ";
     //if(dt == dtPgmStep         ) return "a pgm step           ";
     //if(dt == dtDirectory       ) return "a directory          ";
     return                              "a ???                ";
@@ -57,10 +57,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
+    if(dt == dtConfig          ) return "a config";
     //if(dt == dtLabel           ) return "a label";
     //if(dt == dtSystemInteger   ) return "a system integer";
     //if(dt == dtFlags           ) return "a flags";
-    //if(dt == dtConfig          ) return "a config";
     //if(dt == dtPgmStep         ) return "a pgm step";
     //if(dt == dtDirectory       ) return "a directory";
     return                              "a ???";
@@ -75,10 +75,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
+    if(dt == dtConfig          ) return "config               ";
     //if(dt == dtLabel           ) return "label                ";
     //if(dt == dtSystemInteger   ) return "system integer       ";
     //if(dt == dtFlags           ) return "flags                ";
-    //if(dt == dtConfig          ) return "config               ";
     //if(dt == dtPgmStep         ) return "pgm step             ";
     //if(dt == dtDirectory       ) return "directory            ";
     return                              "???                  ";
@@ -93,10 +93,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
+    if(dt == dtConfig          ) return "config";
     //if(dt == dtLabel           ) return "label";
     //if(dt == dtSystemInteger   ) return "system integer";
     //if(dt == dtFlags           ) return "flags";
-    //if(dt == dtConfig          ) return "config";
     //if(dt == dtPgmStep         ) return "pgm step";
     //if(dt == dtDirectory       ) return "directory";
     return                              "???";
@@ -572,6 +572,10 @@ void debugNIM(void) {
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
       longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+    }
+
+    else if(getRegisterDataType(regist) == dtConfig) {
+      sprintf(string + n, "Calculator configuration");
     }
 
     else {

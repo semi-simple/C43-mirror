@@ -56,7 +56,8 @@
 
 #define freeRegisterData(regist)           freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
 
-
+#define getRecalledSystemFlag(sf)          ((configToRecal->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
+#define setSystemFlagToRecalled(sf)        (getRecalledSystemFlag(sf)) ? (setSystemFlag(sf)) : (clearSystemFlag(sf));
 
 ///////////////////////////////////////////////////////
 // Register numbering:
@@ -83,10 +84,15 @@ typedef enum {
   //dtLabel           = 12,  ///< Label
   //dtSystemInteger   = 13,  ///< System integer (64 bits)
   //dtFlags           = 14,  ///< Flags
-  //dtConfig          = 15,  ///< Configuration
+  dtConfig          = 15,  ///< Configuration
   //dtPgmStep         = 16,  ///< Program step
   //dtDirectory       = 17,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
+
+typedef struct {
+    uint64_t  systemFlags;
+    calcKey_t kbd_usr[37];
+} dtConfigDescriptor_t;
 
 typedef union {
   uint32_t descriptor;

@@ -446,6 +446,7 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
   bool_t wp43sKbdLayout;
+  uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -650,8 +651,29 @@ longIntegerFree(li);*/
     //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
 
     if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-      resetShiftState(); // to avoid f or g top left of the screen
-      create_screenshot(0);
+      resetShiftState();                  //To avoid f or g top left of the screen, clear again to make sure
+
+      currentVolumeSetting = get_beep_volume();
+      savedVoluleSetting = currentVolumeSetting;
+      while(currentVolumeSetting < 11) {
+        beep_volume_up();
+        currentVolumeSetting = get_beep_volume();
+      }
+
+      start_buzzer_freq(100000); //Click before screen dump
+      sys_delay(5);
+      stop_buzzer();
+
+      create_screenshot(0);      //Screen dump
+
+      start_buzzer_freq(400000); //Click after screen dump
+      sys_delay(5);
+      stop_buzzer();
+
+      while(currentVolumeSetting != savedVoluleSetting) { //Restore volume
+        beep_volume_down();
+        currentVolumeSetting = get_beep_volume();
+      }
     }
 
     if(38 <= key && key <=43) {

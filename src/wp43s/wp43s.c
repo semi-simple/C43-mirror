@@ -574,6 +574,7 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
+uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;

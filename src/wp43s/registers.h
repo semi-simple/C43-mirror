@@ -92,6 +92,7 @@ typedef enum {
 typedef struct {
     uint64_t  systemFlags;
     calcKey_t kbd_usr[37];
+    int16_t   Norm_Key_00;                                                     //JMCFG
 } dtConfigDescriptor_t;
 
 typedef union {

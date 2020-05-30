@@ -1414,6 +1414,7 @@ void fnStoreConfig(uint16_t r) {
   dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
   configToStore->systemFlags = systemFlags;
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
+  configToStore->Norm_Key_00 = Norm_Key_00_VAR;                                //JMCFG
 }
 
 
@@ -1684,6 +1685,8 @@ void fnRecallMax(uint16_t regist) {
 void fnRecallConfig(uint16_t r) {
   if (getRegisterDataType(r) == dtConfig) {
     dtConfigDescriptor_t *configToRecal = REGISTER_CONFIG_DATA(r);
+
+    Norm_Key_00_VAR = configToRecal->Norm_Key_00;                             //JMCFG
 
     xcopy(kbd_usr, configToRecal->kbd_usr, sizeof(kbd_usr));
 

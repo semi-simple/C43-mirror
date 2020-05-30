@@ -1518,7 +1518,7 @@ void dumpScreenToConsole(void) {
 
 
 
-#if defined(PC_BUILD )|| defined(TESTSUITE_BUILD)
+#if defined(PC_BUILD ) || defined(TESTSUITE_BUILD)
 void testRegisters(const char *text) {
   calcRegister_t i;
   bool_t situationIsBad;

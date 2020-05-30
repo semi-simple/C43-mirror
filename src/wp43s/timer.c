@@ -23,7 +23,7 @@
 uint32_t getUptimeMs(void) {
   #ifdef DMCP_BUILD
     return (uint32_t)sys_current_ms();
-  #elifndef TESTSUITE_BUILD
+  #elif !defined(TESTSUITE_BUILD)
     return (uint32_t)(g_get_monotonic_time() / 1000);
   #else
     return 0;

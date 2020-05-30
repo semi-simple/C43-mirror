@@ -334,23 +334,23 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
       case ITM_CHS      : tmp = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
+  }
 
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM) {
-      if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
-      if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
-      if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else
-      if (*result == kbd_usr[ 3].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 3].fShifted) : (kbd_usr[ 3].fShifted); } else
-      if (*result == kbd_usr[ 4].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 4].fShifted) : (kbd_usr[ 4].fShifted); } else
-      if (*result == kbd_usr[ 5].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 5].fShifted) : (kbd_usr[ 5].fShifted); } else
-      if (*result == kbd_usr[ 6].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 6].fShifted) : (kbd_usr[ 6].fShifted); } else
-      if (*result == kbd_usr[ 7].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 7].fShifted) : (kbd_usr[ 7].fShifted); } else
-      if (*result == kbd_usr[ 8].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 8].fShifted) : (kbd_usr[ 8].fShifted); } else
-      if (*result == kbd_usr[ 9].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 9].fShifted) : (kbd_usr[ 9].fShifted); } else
-      if (*result == kbd_usr[10].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[10].fShifted) : (kbd_usr[10].fShifted); } else
-      if (*result == kbd_usr[11].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[11].fShifted) : (kbd_usr[11].fShifted); } else
-      if (*result == kbd_usr[12].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[12].fShifted) : (kbd_usr[12].fShifted); } else
-      if (*result == kbd_usr[13].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[13].fShifted) : (kbd_usr[13].fShifted); }
-    }
+  if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {
+    if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
+    if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
+    if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else
+    if (*result == kbd_usr[ 3].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 3].fShifted) : (kbd_usr[ 3].fShifted); } else
+    if (*result == kbd_usr[ 4].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 4].fShifted) : (kbd_usr[ 4].fShifted); } else
+    if (*result == kbd_usr[ 5].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 5].fShifted) : (kbd_usr[ 5].fShifted); } else
+    if (*result == kbd_usr[ 6].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 6].fShifted) : (kbd_usr[ 6].fShifted); } else
+    if (*result == kbd_usr[ 7].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 7].fShifted) : (kbd_usr[ 7].fShifted); } else
+    if (*result == kbd_usr[ 8].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 8].fShifted) : (kbd_usr[ 8].fShifted); } else
+    if (*result == kbd_usr[ 9].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 9].fShifted) : (kbd_usr[ 9].fShifted); } else
+    if (*result == kbd_usr[10].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[10].fShifted) : (kbd_usr[10].fShifted); } else
+    if (*result == kbd_usr[11].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[11].fShifted) : (kbd_usr[11].fShifted); } else
+    if (*result == kbd_usr[12].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[12].fShifted) : (kbd_usr[12].fShifted); } else
+    if (*result == kbd_usr[13].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[13].fShifted) : (kbd_usr[13].fShifted); }
   }
 
   if(tmp !=0) {                                      //if activated key pressed 

@@ -2151,7 +2151,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
     case dtComplex34:
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-      // Real part
+      // Real part into +0
       separator = STD_SPACE_4_PER_EM;
       real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), AM_NONE, tmpStr3000, &numericFont, 2000, 34, false, separator);
       for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
@@ -2160,14 +2160,15 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
   
-      real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
+      // +/- i× into +300
+      real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
       last = 300;
       while(tmpStr3000[last]) last++;
       xcopy(tmpStr3000 + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
       xcopy(tmpStr3000 + last++, COMPLEX_UNIT, 1);
-      xcopy(tmpStr3000 + last, PRODUCT_SIGN, 3);
+      xcopy(tmpStr3000 + last,   PRODUCT_SIGN, 3);
 
-      // Imaginary part
+      // Imaginary part into +600
       real34SetPositiveSign(&real34);
       real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &numericFont, 2000, 34, false, separator);
       for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
@@ -2179,21 +2180,26 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 //vv      strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299); //add +i. and imag
 //vv      tmpStr3000[600] = 0;
 
+      //Concatenate +ix and IMAG into 300
       last = 300;
       while(tmpStr3000[last]) last++;
       xcopy(tmpStr3000 + last, tmpStr3000 + 600,  strlen(tmpStr3000 + 600) + 1);
       tmpStr3000[600] = 0;
 //^^
-
+      //Check if REAL + IMAG fits into two lines
       if(stringWidth(tmpStr3000, &numericFont, true, true) + stringWidth(tmpStr3000 + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
+      //  if it fits, copy all into +0
         strncat(tmpStr3000, tmpStr3000 +  300, 299);
         tmpStr3000[300] = 0;
+      }
   
 //vv      strncat(tmpStr3000 + 2103, tmpStr3000 + 0, 299-3);  //COPY REAL
 //vv      tmpStr3000[0] = 0;
 
-      last = 2103;
-      while(tmpStr3000[last]) last++;
+
+      //copy +0 REAL or REAL+IMAG result into destination 2100 (label already in 2100-2102)
+      last = 2100;
+      while(tmpStr3000[last]) last++; 
       xcopy(tmpStr3000 + last, tmpStr3000 + 0,  strlen(tmpStr3000 + 0) + 1);
       tmpStr3000[0] = 0;
 //^^
@@ -2201,12 +2207,16 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 //vv      strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);        //COPY IMAG
 //vv      tmpStr3000[300] = 0;
 //new
+
+      //copy IMAG result into +2400
       last = 2400;
 //      while(tmpStr3000[last]) last++;
       xcopy(tmpStr3000 + last, tmpStr3000 + 300,  strlen(tmpStr3000 + 300) + 1);
       tmpStr3000[300] = 0;
 //^^
   
+
+      //write 2100+ into two lines, 0+ and 300+
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
       for(d=0; d<=300 ; d+=300) {
@@ -2221,6 +2231,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
       
+      //write 2400+ into two lines, 300+ and 900+
       last = 2400 + stringByteLength(tmpStr3000 + 2400);
       source = 2400;
       for(d=600; d<=900 ; d+=300) {
@@ -2236,16 +2247,16 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       }
   
       if (tmpStr3000[300]==0) {                          //shift up if line is empty
-//vv new       strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
-xcopy(tmpStr3000 + 300, tmpStr3000 + 600,  min(300,strlen(tmpStr3000 + 600) + 1));
-//vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
-xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
+        //vv new       strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
+        xcopy(tmpStr3000 + 300, tmpStr3000 + 600,  min(300,strlen(tmpStr3000 + 600) + 1));
+        //vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
+        xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
         tmpStr3000[900] = 0;
       }
   
       if (tmpStr3000[600]==0) {                          //shift up if line is empty
-//vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
-xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
+        //vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
+        xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
         tmpStr3000[900] = 0;
       }
       break;
@@ -2308,12 +2319,11 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
       offset = 0;
       thereIsANextLine = true;
       bytesProcessed = 0;
-        strcpy(tmpStr3000 + 2103, "'");
-        strncat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
-        strcat(tmpStr3000 + 2100, "'");
-
+      strcat(tmpStr3000 + 2100, "'");
+      strcat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+      strcat(tmpStr3000 + 2100, "'");
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, tmpStr3000 + (2100+bytesProcessed), stringByteLength(tmpStr3000 + (2100+bytesProcessed + 1)));
+        xcopy(tmpStr3000 + offset, tmpStr3000 + (2100 + bytesProcessed), stringByteLength(tmpStr3000 + (2100+bytesProcessed)) + 1);
         thereIsANextLine = false;
         while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
           tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
@@ -2402,7 +2412,7 @@ xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1)
         showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
-    }
+    
   }
 
 

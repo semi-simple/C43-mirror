@@ -1425,7 +1425,8 @@ void fnStoreConfig(uint16_t r) {
   storeToDtConfigDescriptor(roundingMode);  
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
-  configToStore->Norm_Key_00 = Norm_Key_00_VAR;                                //JMCFG
+
+  storeToDtConfigDescriptor(Norm_Key_00_VAR);                                //JMCFG
 }
 
 
@@ -1697,21 +1698,7 @@ void fnRecallConfig(uint16_t r) {
   if (getRegisterDataType(r) == dtConfig) {
     dtConfigDescriptor_t *configToRecall = REGISTER_CONFIG_DATA(r);
 
-    Norm_Key_00_VAR = configToRecal->Norm_Key_00;                             //JMCFG
-
     xcopy(kbd_usr, configToRecall->kbd_usr, sizeof(kbd_usr));
-    recallFromDtConfigDescriptor(shortIntegerMode);
-    recallFromDtConfigDescriptor(shortIntegerWordSize);
-    recallFromDtConfigDescriptor(displayFormat);
-    recallFromDtConfigDescriptor(displayFormatDigits);
-    recallFromDtConfigDescriptor(groupingGap);
-    recallFromDtConfigDescriptor(currentAngularMode);
-    recallFromDtConfigDescriptor(denMax);
-    recallFromDtConfigDescriptor(displayStack);
-    recallFromDtConfigDescriptor(firstGregorianDay);
-    recallFromDtConfigDescriptor(curveFitting);
-    recallFromDtConfigDescriptor(roundingMode);
-
     recallFromDtConfigDescriptor(shortIntegerMode);
     recallFromDtConfigDescriptor(shortIntegerWordSize);
     recallFromDtConfigDescriptor(displayFormat);
@@ -1747,7 +1734,9 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_AUTOFF);
     setSystemFlagToRecalled(FLAG_AUTXEQ);
     setSystemFlagToRecalled(FLAG_IGN1ER);
-    
+
+    recallFromDtConfigDescriptor(Norm_Key_00_VAR);
+
     refreshStack();
     showAngularMode();
     showIntegerMode();

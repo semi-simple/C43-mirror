@@ -583,10 +583,10 @@ void setVariableNamePointer(calcRegister_t regist, void *namePointer) {
  * \return void
  ***********************************************/
 void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
-  if(numberOfRegistersToAllocate > 100) {
+  if(numberOfRegistersToAllocate > 99) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "You can allocate up to 100 registers, you requested %" FMT16U, numberOfRegistersToAllocate);
+      sprintf(errorMessage, "You can allocate up to 99 registers, you requested %" FMT16U, numberOfRegistersToAllocate);
       showInfoDialog("In function allocateLocalRegisters:", errorMessage, NULL, NULL);
     #endif
     return;
@@ -1695,7 +1695,7 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_MDY);
     setSystemFlagToRecalled(FLAG_YMD);
     setSystemFlagToRecalled(FLAG_CPXRES);
-    setSystemFlagToRecalled(FLAG_RECTN);
+    setSystemFlagToRecalled(FLAG_POLAR);
     setSystemFlagToRecalled(FLAG_FRACT);
     setSystemFlagToRecalled(FLAG_PROPFR);
     setSystemFlagToRecalled(FLAG_DENANY);
@@ -1708,7 +1708,7 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_SSIZE8);
     setSystemFlagToRecalled(FLAG_QUIET);
     setSystemFlagToRecalled(FLAG_DECIMP);
-    setSystemFlagToRecalled(FLAG_ALLSCI);
+    setSystemFlagToRecalled(FLAG_ALLENG);
     setSystemFlagToRecalled(FLAG_GROW);
     setSystemFlagToRecalled(FLAG_AUTOFF);
     setSystemFlagToRecalled(FLAG_AUTXEQ);

@@ -217,11 +217,11 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
      break;
 
    case CM_RECTANGULAR:          //DONE
-     fnSetFlag(FLAG_RECTN);
+     fnClearFlag(FLAG_POLAR);
      break;
 
    case CM_POLAR:                 //DONE
-     fnClearFlag(FLAG_RECTN);
+     fnSetFlag(FLAG_POLAR);
      break;
 
    case JC_BCR:                                              //JM bit ComplexResult

@@ -70,11 +70,11 @@ void showRealComplexResult(void) {
  * \return void
  ***********************************************/
 void showComplexMode(void) {
-  if(getSystemFlag(FLAG_RECTN)) { // rectangular mode
-   showGlyph(STD_RIGHT_ANGLE,   &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Right angle is 0+12+2 pixel wide
-  }
-  else { // polar mode
+  if(getSystemFlag(FLAG_POLAR)) { // polar mode
    showGlyph(STD_SUN,           &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Sun         is 0+12+2 pixel wide
+  }
+  else { // rectangular mode
+   showGlyph(STD_RIGHT_ANGLE,   &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Right angle is 0+12+2 pixel wide
   }
 }
 

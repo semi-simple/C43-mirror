@@ -1632,7 +1632,7 @@
 #define SFL_MDY                       1595
 #define SFL_CPXRES                    1596
 #define SFL_CPXj                      1597
-#define SFL_RECTN                     1598
+#define SFL_POLAR                     1598
 #define SFL_FRACT                     1599
 #define SFL_PROPFR                    1600
 #define SFL_DENANY                    1601
@@ -1654,7 +1654,7 @@
 #define SFL_QUIET                     1617
 #define SFL_DECIMP                    1618
 #define SFL_MULTx                     1619
-#define SFL_ALLSCI                    1620
+#define SFL_ALLENG                    1620
 #define SFL_GROW                      1621
 #define SFL_AUTOFF                    1622
 #define SFL_AUTXEQ                    1623

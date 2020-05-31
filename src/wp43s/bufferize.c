@@ -988,7 +988,13 @@ void addItemToNimBuffer(int16_t item) {
         nimNumberPart = savedNimNumberPart;
 
         // Complex "separator"
-        if(getSystemFlag(FLAG_RECTN)) {
+        if(getSystemFlag(FLAG_POLAR)) { // polar mode
+          strcat(nimBufferDisplay, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
+          if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
+            strcat(nimBufferDisplay, "-");
+          }
+        }
+        else { // rectangular mode
           if(strncmp(nimBufferDisplay + stringByteLength(nimBufferDisplay) - 2, STD_SPACE_HAIR, 2) != 0) {
             strcat(nimBufferDisplay, STD_SPACE_HAIR);
           }
@@ -1001,12 +1007,6 @@ void addItemToNimBuffer(int16_t item) {
           }
           strcat(nimBufferDisplay, COMPLEX_UNIT);
           strcat(nimBufferDisplay, PRODUCT_SIGN);
-        }
-        else {
-          strcat(nimBufferDisplay, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-          if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
-            strcat(nimBufferDisplay, "-");
-          }
         }
 
         // Imaginary part
@@ -2138,7 +2138,7 @@ void closeNim(void) {
             real34SetNegativeSign(REGISTER_IMAG34_DATA(REGISTER_X));
           }
 
-          if(!getSystemFlag(FLAG_RECTN)) { // polar mode
+          if(getSystemFlag(FLAG_POLAR)) { // polar mode
             if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
               real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
             }

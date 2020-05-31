@@ -337,8 +337,8 @@ void setupDefaults(void) {
   setSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
   setSystemFlag(FLAG_CPXRES);                                  //JM default
-  setSystemFlag(FLAG_RECTN);
-  setSystemFlag(FLAG_ALLSCI);
+  clearSystemFlag(FLAG_POLAR);
+  clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
   clearSystemFlag(FLAG_SSIZE8);
   clearSystemFlag(FLAG_MDY); // date format

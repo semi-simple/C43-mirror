@@ -290,8 +290,8 @@ void setupDefaults(void) {
   setSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
   clearSystemFlag(FLAG_CPXRES);
-  setSystemFlag(FLAG_RECTN);
-  setSystemFlag(FLAG_ALLSCI);
+  clearSystemFlag(FLAG_POLAR);
+  clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
   clearSystemFlag(FLAG_SSIZE8);
   clearSystemFlag(FLAG_MDY); // date format

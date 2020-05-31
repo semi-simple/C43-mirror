@@ -225,7 +225,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     // System flags
     firstFlag = true;
     tmpStr3000[CHARS_PER_LINE * ++line] = 0;
-    oneSystemFlag(FLAG_ALLSCI,  "ALLSCI",         &line, &firstFlag);
+    oneSystemFlag(FLAG_ALLENG,  "ALLENG",         &line, &firstFlag);
     oneSystemFlag(FLAG_ALPIN,   "ALP.IN",         &line, &firstFlag);
     oneSystemFlag(FLAG_AUTOFF,  "AUTOFF",         &line, &firstFlag);
     oneSystemFlag(FLAG_AUTXEQ,  "AUTXEQ",         &line, &firstFlag);

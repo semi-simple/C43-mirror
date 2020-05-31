@@ -799,7 +799,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "FLAG_RECTN (complex mode)                 = %s = %s",     getBooleanName(getSystemFlag(FLAG_RECTN)), getTimeFormatName(getSystemFlag(FLAG_RECTN)));
+        sprintf(string, "FLAG_POLAR (complex mode)                 = %s = %s",     getBooleanName(getSystemFlag(FLAG_POLAR)), getTimeFormatName(getSystemFlag(FLAG_POLAR)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

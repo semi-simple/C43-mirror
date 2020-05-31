@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-#define BACKUP_VERSION 36  // 36 = added softmenuStackPointerBefore AIM
+#define BACKUP_VERSION 37  // 37 = changed 2 system flags
 
 void saveCalc(void) {
   size_t size;

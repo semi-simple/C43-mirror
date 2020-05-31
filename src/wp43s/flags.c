@@ -45,7 +45,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
-    case FLAG_RECTN:    showComplexMode();
+    case FLAG_POLAR:    showComplexMode();
                         refreshStack();
                         switch(action) {
                           case 0: flags[100/16] &= ~(1u << (100%16));
@@ -216,7 +216,7 @@ void fnSetFlag(uint16_t flag) {
       case FLAG_I: setSystemFlag(FLAG_CPXRES);   break;
       case FLAG_L: setSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: setSystemFlag(FLAG_TRACE);    break;
-      case FLAG_X: setSystemFlag(FLAG_RECTN);    break;
+      case FLAG_X: setSystemFlag(FLAG_POLAR);    break;
       default: flags[flag/16] |= 1u << (flag%16);
     }
   }
@@ -272,7 +272,7 @@ void fnClearFlag(uint16_t flag) {
       case FLAG_I: clearSystemFlag(FLAG_CPXRES);   break;
       case FLAG_L: clearSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: clearSystemFlag(FLAG_TRACE);    break;
-      case FLAG_X: clearSystemFlag(FLAG_RECTN);    break;
+      case FLAG_X: clearSystemFlag(FLAG_POLAR);    break;
       default: flags[flag/16] &= ~(1u << (flag%16));
     }
   }
@@ -328,7 +328,7 @@ void fnFlipFlag(uint16_t flag) {
       case FLAG_I: flipSystemFlag(FLAG_CPXRES);   break;
       case FLAG_L: flipSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: flipSystemFlag(FLAG_TRACE);    break;
-      case FLAG_X: flipSystemFlag(FLAG_RECTN);    break;
+      case FLAG_X: flipSystemFlag(FLAG_POLAR);    break;
       default: flags[flag/16] ^=  1u << (flag%16);
     }
   }
@@ -363,8 +363,13 @@ void fnFlipFlag(uint16_t flag) {
  ***********************************************/
 void fnClFAll(uint16_t unusedParamButMandatory) {
   memset(flags, 0, sizeof(flags));
-  showRealComplexResult();
-  showOverflowCarry();
+  clearSystemFlag(FLAG_OVERFLOW);
+  clearSystemFlag(FLAG_CARRY);
+  clearSystemFlag(FLAG_SPCRES);
+  clearSystemFlag(FLAG_CPXRES);
+  clearSystemFlag(FLAG_LEAD0);
+  clearSystemFlag(FLAG_TRACE);
+  clearSystemFlag(FLAG_POLAR);
 
   if(numberOfLocalFlags != 0) {
     allLocalRegisterPointer->localFlags = 0;

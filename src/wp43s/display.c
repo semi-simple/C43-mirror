@@ -716,9 +716,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   // SCI mode //
   //////////////
-  if(getSystemFlag(FLAG_ALLSCI) || displayFormat == DF_SCI) {
+  if(!getSystemFlag(FLAG_ALLENG) || displayFormat == DF_SCI) {
     // Round the displayed number
-    if(!getSystemFlag(FLAG_ALLSCI)) {
+    if(getSystemFlag(FLAG_ALLENG)) {
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + (int16_t)displayFormatDigits, lastDigit);
     }
@@ -815,9 +815,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   // ENG mode //
   //////////////
-  if(!getSystemFlag(FLAG_ALLSCI) || displayFormat == DF_ENG) {
+  if(getSystemFlag(FLAG_ALLENG) || displayFormat == DF_ENG) {
     // Round the displayed number
-    if(getSystemFlag(FLAG_ALLSCI)) {
+    if(!getSystemFlag(FLAG_ALLENG)) {
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
     }
@@ -967,11 +967,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   real34_t real34, imag34;
   real_t real, imagIc;
 
-  if(getSystemFlag(FLAG_RECTN)) { // rectangular mode
-    real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
-    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
-  }
-  else { // polar mode
+  if(getSystemFlag(FLAG_POLAR)) { // polar mode
     real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
     real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
     realRectangularToPolar(&real, &imagIc, &real, &imagIc, &ctxtReal39); // imagIc in radian
@@ -979,21 +975,29 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     realToReal34(&real, &real34);
     realToReal34(&imagIc, &imag34);
   }
+  else { // rectangular mode
+    real34Copy(VARIABLE_REAL34_DATA(complex34), &real34);
+    real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
+  }
 
   realToDisplayString2(&real34, displayString, displayHasNDigits, limitExponent, separator);
 
   if(updateDisplayValueX) {
-    if(getSystemFlag(FLAG_RECTN)) {
-      strcat(displayValueX, "i");
+    if(getSystemFlag(FLAG_POLAR)) {
+      strcat(displayValueX, "j");
     }
     else {
-      strcat(displayValueX, "j");
+      strcat(displayValueX, "i");
     }
   }
 
   realToDisplayString2(&imag34, displayString + i, displayHasNDigits, limitExponent, separator);
 
-  if(getSystemFlag(FLAG_RECTN)) { // rectangular mode
+  if(getSystemFlag(FLAG_POLAR)) { // polar mode
+    strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
+    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString), displayHasNDigits, limitExponent, separator);
+  }
+  else { // rectangular mode
     if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
       strcat(displayString, STD_SPACE_HAIR);
     }
@@ -1009,10 +1013,6 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     strcat(displayString, COMPLEX_UNIT);
     strcat(displayString, PRODUCT_SIGN);
     xcopy(strchr(displayString, '\0'), displayString + i, strlen(displayString + i) + 1);
-  }
-  else { // polar mode
-    strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString), displayHasNDigits, limitExponent, separator);
   }
 }
 

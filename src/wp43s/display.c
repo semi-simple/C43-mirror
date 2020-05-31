@@ -328,7 +328,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   uint8_t *bcd;
   int16_t digitsToDisplay=0, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
-  bool_t  firstDigitAfterPeriod=true;
+  bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
   real_t value;
 
@@ -468,6 +468,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     if(exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
       digitsToDisplay = numDigits - 1;
       digitToRound    = firstDigit + digitsToDisplay;
+      ovrSCI = !getSystemFlag(FLAG_ALLENG);
+      ovrENG = getSystemFlag(FLAG_ALLENG);
     }
     else { // display all digits without ten exponent factor
       // Number of digits to truncate
@@ -588,6 +590,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
+      ovrSCI = !getSystemFlag(FLAG_ALLENG);
+      ovrENG = getSystemFlag(FLAG_ALLENG);
     }
     else { // display fix number of digits without ten exponent factor
       // Number of digits to truncate
@@ -716,9 +720,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   // SCI mode //
   //////////////
-  if(!getSystemFlag(FLAG_ALLENG) || displayFormat == DF_SCI) {
+  if(ovrSCI  || displayFormat == DF_SCI) {
     // Round the displayed number
-    if(getSystemFlag(FLAG_ALLENG)) {
+    if(!ovrSCI) {
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + (int16_t)displayFormatDigits, lastDigit);
     }
@@ -815,9 +819,9 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   // ENG mode //
   //////////////
-  if(getSystemFlag(FLAG_ALLENG) || displayFormat == DF_ENG) {
+  if(ovrENG || displayFormat == DF_ENG) {
     // Round the displayed number
-    if(!getSystemFlag(FLAG_ALLENG)) {
+    if(!ovrENG) {
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
     }

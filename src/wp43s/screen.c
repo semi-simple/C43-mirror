@@ -1529,8 +1529,6 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             default: {}
           }
-
-          real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
         }
 
 

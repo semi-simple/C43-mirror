@@ -74,7 +74,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define REAL51_SIZE                                       TO_BLOCKS(sizeof(real51_t))
 #define REAL1071_SIZE                                     TO_BLOCKS(sizeof(real1071_t))
 #define COMPLEX34_SIZE                                    TO_BLOCKS(sizeof(complex34_t))
-#define CONFIG_SIZE                                       TO_BLOCKS(sizeof(kbd_usr) + sizeof(uint64_t) + sizeof(int16_t))         //JMCFG add normal mode config
+#define CONFIG_SIZE                                       TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
 #define POINTER_TO_LOCAL_REGISTER(a)                      ((registerDescriptor_t *)(allLocalRegisterPointer + 1 + (a)))
 

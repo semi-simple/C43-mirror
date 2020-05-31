@@ -21,6 +21,7 @@ void fnDropY       (uint16_t unusedParamButMandatory);
 void fnRollUp      (uint16_t unusedParamButMandatory);
 void fnRollDown    (uint16_t unusedParamButMandatory);
 void fnDisplayStack(uint16_t numberOfStackLines);
+void fnSwapX       (uint16_t r);
 void fnSwapXY      (uint16_t unusedParamButMandatory);
 void fnFillStack   (uint16_t unusedParamButMandatory);
 void fnGetStackSize(uint16_t unusedParamButMandatory);

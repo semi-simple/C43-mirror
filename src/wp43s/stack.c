@@ -169,6 +169,30 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
 
 
 /********************************************//**
+ * \brief Swaps X with the target register
+ *
+ * \param[in] r uint16_t
+ * \return void
+ ***********************************************/
+void fnSwapX(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    refreshStack();
+  } 
+
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnSwapX:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
+}
+
+
+
+/********************************************//**
  * \brief Swaps X and Y and refreshes the stack
  *
  * \param[in] unusedParamButMandatory uint16_t

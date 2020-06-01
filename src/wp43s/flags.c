@@ -28,6 +28,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
     case FLAG_TDM24:    oldTime[0] = 0;
                         break;
 
+    case FLAG_ALLENG:
     case FLAG_DECIMP:
     case FLAG_MULTx:
     case FLAG_CPXj:     refreshStack();

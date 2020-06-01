@@ -730,7 +730,7 @@ void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
     if(alphaSelectionMenu != ASM_NONE) {
       alphaSelectionMenu = ASM_NONE;
-      if(calcMode != CM_ASM_OVER_AIM) {
+      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM) {
         calcModeNormal();
       }
     }

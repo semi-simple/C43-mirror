@@ -346,8 +346,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
-//JM  bool_t displayoverflow = false;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
-
   uint8_t charIndex, valueIndex, digitToRound=0;
   uint8_t *bcd;
   int16_t digitsToDisplay=0, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
@@ -648,7 +646,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       }
       return;
     }
-//JM  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
   }
 
   //////////////
@@ -795,17 +792,14 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       }
       return;
     }
-//JM  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
   }
 
   //////////////
   // SCI mode //
   //////////////
   if(ovrSCI  || displayFormat == DF_SCI) {
-  //JM if((displayoverflow && !getSystemFlag(FLAG_ALLENG)) || displayFormat == DF_SCI) {
     // Round the displayed number
     if(!ovrSCI) {
-    //JM if((!displayoverflow /*&& getSystemFlag(FLAG_ALLENG)*/)) {                      //JM The only condition needed is whether it was in FIX/ALL or not
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + (int16_t)displayFormatDigits, lastDigit);
     }
@@ -903,10 +897,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   // ENG mode //
   //////////////
   if(ovrENG || displayFormat == DF_ENG) {
-  //JMif((displayoverflow && getSystemFlag(FLAG_ALLENG)) || displayFormat == DF_ENG) {
     // Round the displayed number
     if(!ovrENG) {
-    //JMif((!displayoverflow /*&& !getSystemFlag(FLAG_ALLENG)*/)) {                      //JM The only condition needed is whether it was in FIX/ALL or not
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
     }

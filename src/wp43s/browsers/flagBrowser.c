@@ -265,8 +265,13 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
       }
     }
     else {
-      currentFlgScr = 1;
+      currentFlgScr = 2;
     }
+  }
+
+  if(currentFlgScr == 3) {        //JMvv
+    currentFlgScr = 0;
+    flagBrowser_old(0);           //JM^^
   }
 }
 #endif
@@ -284,9 +289,9 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned from last old version JM
   int16_t f, x, y;
 
-  if(calcMode != CM_FLAG_BROWSER) {
+  if(calcMode != CM_FLAG_BROWSER_OLD) {
     previousCalcMode = calcMode;
-    calcMode = CM_FLAG_BROWSER;
+    calcMode = CM_FLAG_BROWSER_OLD;
   }
 
   if(currentFlgScr == 0) { // Init
@@ -296,33 +301,33 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
   if(currentFlgScr == 1) { // Memory and flags from 0 to 79
     clearScreen(false, true, true);
 
-    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", getFreeRamMemory() / 2, getFreeFlash() / 2);
-    showString(tmpStr3000, &standardFont, 1, 22-1, vmNormal, true, true);
-    showString("Global flag status:", &standardFont, 1, 44-1, vmNormal, true, true);
+//JM    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", getFreeRamMemory() / 2, getFreeFlash() / 2);
+//JM    showString(tmpStr3000, &standardFont, 1, 22-1, vmNormal, true, true);
+//JM    showString("Global flag status:", &standardFont, 1, 44-1, vmNormal, true, true);
 
-    for(f=0; f<=79; f++) {
+    for(f=0; f<=99/*79*/; f++) {                                          //JM 99
       if(getFlag(f)) {
         for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-          for(y=22*(f/10)+66-1; y<22*(f/10)+66+20-1; y++) {
+          for(y=22*(f/10)+66-1-44; y<22*(f/10)+66+20-1-44; y++) {         //JM-44
             setPixel(x, y);
           }
         }
       }
 
       sprintf(tmpStr3000, "%d", f);
-      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)+66-1, getFlag(f) ? vmReverse : vmNormal, true, true);
+      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)+66-1-44, getFlag(f) ? vmReverse : vmNormal, true, true); //JM-44
     }
   }
 
-  if(currentFlgScr == 2) { // Flags from 80 to GLOBALFLAGS, local registers and local flags
+  if(currentFlgScr == 2) { // Flags from 100 to GLOBALFLAGS, local registers and local flags
     clearScreen(false, true, true);
 
     showString("Global flag status (continued):", &standardFont, 1, 22-1, vmNormal, true, true);
 
-    for(f=80; f<NUMBER_OF_GLOBAL_FLAGS; f++) {
+    for(f=100/*80*/; f<NUMBER_OF_GLOBAL_FLAGS; f++) {                     //JM100
       if(getFlag(f)) {
         for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-          for(y=22*(f/10)-132-1; y<22*(f/10)-132+20-1; y++) {
+          for(y=22*(f/10)-132-1-44; y<22*(f/10)-132+20-1-44; y++) {       //JM-44
            setPixel(x, y);
           }
         }
@@ -347,7 +352,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
         sprintf(tmpStr3000, "%d", f);
       }
 
-      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)-132-1, getFlag(f) ? vmReverse : vmNormal, true, true);
+      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)-132-1-44, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
     }
 
     if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
@@ -358,16 +363,21 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
       for(f=0; f<16; f++) {
         if(getFlag(NUMBER_OF_GLOBAL_FLAGS+f)) {
           for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-            for(y=22*(f/10)+176-1; y<22*(f/10)+176+20-1; y++) {
+            for(y=22*(f/10)+176-1-44; y<22*(f/10)+176+20-1-44; y++) {                 //JM-44
              setPixel(x, y);
             }
           }
         }
 
         sprintf(tmpStr3000, "%d", f);
-        showString(tmpStr3000, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);
+        showString(tmpStr3000, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1-44, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);     //JM-44
       }
     }
+  }
+
+  if(currentFlgScr == 3) { // Change over to STATUS
+  currentFlgScr = 0;
+  flagBrowser(0);
   }
 }
 #endif

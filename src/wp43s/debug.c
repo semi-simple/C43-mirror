@@ -345,6 +345,7 @@ void debugNIM(void) {
     if(cm == CM_ASSIGN)           return "ASSIGN      ";
     if(cm == CM_REGISTER_BROWSER) return "REG.BROWSER ";
     if(cm == CM_FLAG_BROWSER)     return "FLAG.BROWSER";
+    if(cm == CM_FLAG_BROWSER_OLD) return "FLG.BRWR.OLD";    //JM
     if(cm == CM_FONT_BROWSER)     return "FONT.BROWSER";
     if(cm == CM_ERROR_MESSAGE)    return "ERROR.MSG   ";
     if(cm == CM_BUG_ON_SCREEN)    return "BUG.ON.SCR  ";

@@ -29,7 +29,7 @@
  * \return void
  ***********************************************/
 void showShiftState(void) {
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
@@ -71,9 +71,6 @@ void resetShiftState(void) {
 }
 
 
-//int16_t determineFunctionKeyItem(int16_t fn, int16_t itemShift) { //, const char *data) {
-  //int16_t row, item = ITM_NOP;
-  //const softmenu_t *sm;
 
 int16_t determineFunctionKeyItem(const char *data) {
   int16_t row, item = ITM_NOP;
@@ -90,7 +87,6 @@ int16_t determineFunctionKeyItem(const char *data) {
     itemShift = 0;
   }
 
-
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
@@ -102,7 +98,7 @@ int16_t determineFunctionKeyItem(const char *data) {
         item %= 10000;
       }
 
-      int16_t ix_fn;             //JMXXX
+      int16_t ix_fn;                            //JMXXX
       ix_fn = 0;                                /*JMEXEC XXX vv*/
       if(func_lookup(fn,itemShift,&ix_fn)) {
         //printf("---%d\n",ix_fn);
@@ -134,9 +130,9 @@ int16_t determineFunctionKeyItem(const char *data) {
 
 
 /********************************************//**
- * \brief One of the function keys was clicked
+ * \brief Simulate a function key click.
  *
- * \param w GtkWidget* The clicked button
+ * \param w GtkWidget* The button to pass to btnFnPressed and btnFnReleased
  * \param data gpointer String containing the key ID
  * \return void
  //JM btnFnClicked is called by gui.c keyPressed
@@ -219,40 +215,24 @@ void btnFnReleased(void *w, void *data) {
 
 
 
-
-
-
 /********************************************//**
  * \brief Executes one function from a softmenu
- *
- * \param[in] fn int16_t    Function key from 1 to 6
- * \param[in] itemShift int16_t Shift status
- *                          *  0 = not shifted
- *                          *  6 = f shifted
- *                          * 12 = g shifted
  * \return void
  ***********************************************/
-//void executeFunction(int16_t fn, int16_t itemShift) {
-//      int16_t item = ITM_NOP;
-//      //printf("Exec %d=\n",fn); //JMEXEC
-
-//  item = determineFunctionKeyItem(fn, itemShift);
-
-
 void executeFunction(const char *data) {
-int16_t item = ITM_NOP;
-item = determineFunctionKeyItem((char *)data);
-resetShiftState();
+  int16_t item = ITM_NOP;
+  item = determineFunctionKeyItem((char *)data);
+  resetShiftState();
 
 
-//printf("%d--\n",calcMode);
-    if(calcMode != CM_CONFIRMATION) {
-      allowScreenUpdate = true;
+  //printf("%d--\n",calcMode);
+  if(calcMode != CM_CONFIRMATION) {
+    allowScreenUpdate = true;
 
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-        refreshStack();
-      }
+    if(lastErrorCode != 0) {
+      lastErrorCode = 0;
+      refreshStack();
+    }
 
 
 //************************************************** TOCHECK vv 
@@ -297,7 +277,7 @@ resetShiftState();
           if(calcMode == CM_NIM && item != KEY_CC) {
             closeNim();
             if(calcMode != CM_NIM) {
-              if(indexOfItems[item].func == fnConstant) {   //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
+              if(indexOfItems[item].func == fnConstant) {
                 STACK_LIFT_ENABLE;
               }
             }
@@ -305,12 +285,12 @@ resetShiftState();
 
           if(lastErrorCode == 0) {
             resetTemporaryInformation();
-            runFunction(item);                              //TOCHECK removed % 10000, because moved to determinefunctionkeyitem
+            runFunction(item);
+          }
         }
       }
     }
   }
-}
 
 
 
@@ -404,7 +384,7 @@ int16_t determineItem(const char *data) {
     return ITM_NOP;
   }
 
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
     result = shiftF ? key->fShifted :
              shiftG ? key->gShifted :
                       key->primary;
@@ -528,7 +508,6 @@ void processKeyAction(int16_t item) {
   }
 
   resetTemporaryInformation();
-
   switch(item) {
     case KEY_BACKSPACE:
 //    fnKeyBackspace(NOPARAM);     //JM vv remove this, to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
@@ -561,10 +540,29 @@ void processKeyAction(int16_t item) {
     case KEY_CC:
     case ITM_ENTER:
     case KEY_dotD:
-      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER) {
         keyActionProcessed = true;
       }
       break;
+
+    case CHR_case: {
+      int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                                       //JMvv
+      if(alphaCase == AC_LOWER) {
+        alphaCase = AC_UPPER;
+        if(sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) {
+          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch case menu
+        }
+      } else {
+        alphaCase = AC_LOWER;
+        if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) {
+          softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch case menu
+        }
+      }
+      showAlphaModeonGui(); //dr JM, see keyboardtweaks
+      showSoftmenuCurrentPart();
+      keyActionProcessed = true;
+      }
+      break;                                                                        //JM^^
 
     default:
       switch(calcMode) {
@@ -692,6 +690,7 @@ void processKeyAction(int16_t item) {
           break;
 
         case CM_FLAG_BROWSER:
+        case CM_FLAG_BROWSER_OLD:           //JM
         case CM_FONT_BROWSER:
         case CM_ERROR_MESSAGE:
         case CM_BUG_ON_SCREEN:
@@ -758,7 +757,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
     case CM_AIM:
     case CM_ASM_OVER_AIM:
       calcModeNormal();
-while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {                   //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
+        while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {                   //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
         popSoftmenu();
       }
 
@@ -819,6 +818,7 @@ while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {                   
     case CM_ASM_OVER_TAM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
+    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
     case CM_ERROR_MESSAGE:
     case CM_BUG_ON_SCREEN:
@@ -881,7 +881,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
         refreshStack();
       }
       else {
-popSoftmenu();
+popSoftmenu();                        //TOCHECK
 if(softmenuStackPointer == 0) {
 softmenuStackPointerBeforeAIM = 0;
 showSoftmenu(NULL, -MNU_MyAlpha, false);
@@ -919,6 +919,7 @@ showSoftmenu(NULL, -MNU_MyAlpha, false);
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
+    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
       calcMode = previousCalcMode;
@@ -962,13 +963,13 @@ showSoftmenu(NULL, -MNU_MyAlpha, false);
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using 'unusedParamButMandatory'
+void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' complex_Type=KEY_COMPLEX
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
   uint32_t dataTypeY;
 
   //JM The switch statement is broken up here, due to multiple conditions.
-  if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (unusedParamButMandatory == KEY_COMPLEX))) {
+  if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
 
@@ -1001,6 +1002,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {    //JM Using 'unusedParamButMa
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
+    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       break;
 
@@ -1066,6 +1068,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
+    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       calcMode = previousCalcMode;
       clearScreen(false, true, true);
@@ -1117,7 +1120,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      if((softmenuStackPointer > 0)  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
@@ -1136,31 +1139,33 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
             //JM Include or exclude HOME menu screens  //JMHOME
-              #define A1 3   //HAAKON //jm_HOME_MIR
-              #define A2 9   //HAAKON
-              #define B1 10  //NIGEL  //jm_HOME_SUM
-              #define B2 11  //NIGEL
-              #define C1 12  //JACO   //jm_HOME_FIX
-              #define C2 18  //JACO
-              int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-              //printf("--1:%d %d %d menuId:%d item:%d  \n",jm_HOME_MIR,jm_HOME_SUM,jm_HOME_FIX,smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
-              if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
-              if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
-              if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
-              //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-              //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
+            #define A1 3   //HAAKON //jm_HOME_MIR
+            #define A2 9   //HAAKON
+            #define B1 10  //NIGEL  //jm_HOME_SUM
+            #define B2 11  //NIGEL
+            #define C1 12  //JACO   //jm_HOME_FIX
+            #define C2 18  //JACO
+            int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+            //printf("--1:%d %d %d menuId:%d item:%d  \n",jm_HOME_MIR,jm_HOME_SUM,jm_HOME_FIX,smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
+            if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
+            if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
+            if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
+            //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+            //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
             showSoftmenuCurrentPart();
           }
           else {
             softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+
             showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();
         }
       }
-      else {  //JM Arrow up and down if no menu other than AHOME of MyA
-        if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
+      else {
+        //JM Arrow up and down if no menu other than AHOME of MyA
+        if(!arrowCasechange && (softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_ALPHA)) {
            keyActionProcessed = false;
         }
         else {
@@ -1170,10 +1175,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           }
         }
       }
-      //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
-      if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
-        keyActionProcessed = false;
-      }                                                         //JM^^
       break;
 
     case CM_TAM:
@@ -1201,9 +1202,16 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_FLAG_BROWSER:
-      currentFlgScr = 3 - currentFlgScr;
+      currentFlgScr--;                          //JM removed the 3-x part
+      if(currentFlgScr==0) {currentFlgScr=3;}   //JM
       flagBrowser(NOPARAM);
      break;
+
+    case CM_FLAG_BROWSER_OLD:              //JMvv
+      currentFlgScr--;
+      if(currentFlgScr==0) {currentFlgScr=3;}
+      flagBrowser_old(NOPARAM);
+      break;                               //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr >= 2) {
@@ -1241,7 +1249,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      if((softmenuStackPointer > 0)  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1263,28 +1271,33 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
             if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
             if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
-          }
-          else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
-            softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+/*JM*/      showSoftmenuCurrentPart();
           }
           else {
-            softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
+            if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
+              softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+            }
+            else {
+              softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
+            }
+            showSoftmenuCurrentPart();
           }
-          showSoftmenuCurrentPart();
 
           setCatalogLastPos();
         }
       }
       else {
-        if(alphaCase != AC_LOWER && arrowCasechange) { //JM
-          alphaCase = AC_LOWER;
-          showAlphaModeonGui(); //dr JM, see keyboardtweaks
+        //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
+        if(!arrowCasechange && (softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_ALPHA)) {
+          keyActionProcessed = false;
+        }                                                         //JM^^
+        else {
+          if(alphaCase != AC_LOWER && arrowCasechange) { //JM
+            alphaCase = AC_LOWER;
+            showAlphaModeonGui(); //dr JM, see keyboardtweaks
+          }
         }
       }
-      //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
-      if((!arrowCasechange) && ((softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU) || (softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MNU_ALPHA)) ) {
-        keyActionProcessed = false;
-      }                                                         //JM^^
       break;
 
     case CM_TAM:
@@ -1313,9 +1326,16 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_FLAG_BROWSER:
-      currentFlgScr = 3 - currentFlgScr;
+      currentFlgScr++;                          //JM removed the 3-x part
+      if(currentFlgScr==4) {currentFlgScr=1;}   //JM
       flagBrowser(NOPARAM);
       break;
+
+    case CM_FLAG_BROWSER_OLD:              //JMvv
+      currentFlgScr++;
+      if(currentFlgScr==4) {currentFlgScr=1;}
+      flagBrowser_old(NOPARAM);
+      break;                               //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr < numScreensNumericFont+numScreensStandardFont) {
@@ -1360,6 +1380,7 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
+    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       break;
 

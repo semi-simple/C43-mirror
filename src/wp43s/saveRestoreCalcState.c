@@ -397,6 +397,7 @@ void restoreCalc(void) {
     else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
     else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
     else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
+    else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
     else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
     else {
       sprintf(errorMessage, "In function restoreCalc: %" FMT8U " is an unexpected value for calcMode", calcMode);

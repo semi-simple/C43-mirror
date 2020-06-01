@@ -629,9 +629,9 @@ const int16_t menu_ST_GRAPH[]        = {
 
 const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_alpha_omega,         -MNU_ALPHADOT,        -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
-                                     ITM_ASSIGN,                    KEY_USERMODE,               -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                   ITM_NULL,                           //JM 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
+/* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_A_Z,                -MNU_ALPHADOT,         -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
+                                     CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS,                           //JM 
+                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 #include "softmenuCatalogs.h"
 

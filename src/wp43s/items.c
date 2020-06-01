@@ -77,8 +77,10 @@ void runFunction(int16_t func) {
     #endif
   }
 
-  tamMode = indexOfItems[func].param;
-  if(calcMode != CM_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
+  if(calcMode != CM_ASM_OVER_TAM) {
+    tamMode = indexOfItems[func].param;
+  }
+  if(calcMode != CM_TAM && calcMode != CM_ASM_OVER_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
     tamFunction = func;
     strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
     tamNumberMin = indexOfItems[func].tamMin;
@@ -288,8 +290,11 @@ void fnVersion                  (uint16_t unusedParamButMandatory) {}
 void fnSquare                   (uint16_t unusedParamButMandatory) {}
 void fnCube                     (uint16_t unusedParamButMandatory) {}
 void fnFactorial                (uint16_t unusedParamButMandatory) {}
-void fnSwapXY                   (uint16_t unusedParamButMandatory) {}
 void fnSwapX                    (uint16_t unusedParamButMandatory) {}
+void fnSwapY                    (uint16_t unusedParamButMandatory) {}
+void fnSwapZ                    (uint16_t unusedParamButMandatory) {}
+void fnSwapT                    (uint16_t unusedParamButMandatory) {}
+void fnSwapXY                   (uint16_t unusedParamButMandatory) {}
 void fnWho                      (uint16_t unusedParamButMandatory) {}
 void fnGetSignificantDigits     (uint16_t unusedParamButMandatory) {}
 void fnCvtToCurrentAngularMode  (uint16_t unusedParamButMandatory) {}
@@ -1066,7 +1071,7 @@ const item_t indexOfItems[] = {
 /*  638 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    "tr.oz",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  639 */  { itemToBeCoded,               NOPARAM,                     "TVM",                                         "TVM",                                         0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  640 */  { itemToBeCoded,               NOPARAM,                     "t:",                                          "t:",                                          0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  641 */  { itemToBeCoded,               NOPARAM,                     "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                     0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  641 */  { fnSwapT,                     TM_REGISTER,                 "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                     0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  642 */  { fnUlp,                       NOPARAM,                     "ULP?",                                        "ULP?",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  643 */  { itemToBeCoded,               NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  644 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -1127,9 +1132,9 @@ const item_t indexOfItems[] = {
 /*  698 */  { fnPower,                     NOPARAM,                     "y" STD_SUP_x,                                 "y" STD_SUP_x,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  699 */  { itemToBeCoded,               NOPARAM,                     STD_y_CIRC,                                    STD_y_CIRC,                                    0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  700 */  { fnSetDateFormat,             ITM_YMD,                     "Y.MD",                                        "Y.MD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  701 */  { itemToBeCoded,               NOPARAM,                     "y" STD_LEFT_RIGHT_ARROWS,                     "y" STD_LEFT_RIGHT_ARROWS,                     0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  701 */  { fnSwapY,                     TM_REGISTER,                 "y" STD_LEFT_RIGHT_ARROWS,                     "y" STD_LEFT_RIGHT_ARROWS,                     0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  702 */  { fnConstant,                  54,                          "Z" STD_SUB_0,                                 "Z" STD_SUB_0,                                 0,       0,       CAT_CNST, SLS_ENABLED  },
-/*  703 */  { itemToBeCoded,               NOPARAM,                     "z" STD_LEFT_RIGHT_ARROWS,                     "z" STD_LEFT_RIGHT_ARROWS,                     0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  703 */  { fnSwapZ,                     TM_REGISTER,                 "z" STD_LEFT_RIGHT_ARROWS,                     "z" STD_LEFT_RIGHT_ARROWS,                     0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  704 */  { fnConstant,                  55,                          STD_alpha,                                     STD_alpha,                                     0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  705 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "INTL",                              STD_alpha "INTL",                              0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  706 */  { fnAlphaLeng,                 TM_REGISTER,                 STD_alpha "LENG?",                             STD_alpha "LENG?",                             0,      99,       CAT_FNCT, SLS_ENABLED  },

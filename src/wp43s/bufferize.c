@@ -177,7 +177,7 @@ int32_t findFirstItem(const char *twoLetters) {
 void resetAlphaSelectionBuffer(void) {
   lgCatalogSelection = 0;
   alphaSelectionTimer = 0;
-  tamBuffer[0] = 0;
+  asmBuffer[0] = 0;
 }
 
 
@@ -273,17 +273,17 @@ void addItemToBuffer(uint16_t item) {
       else {
         if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1) {
           pos = lgCatalogSelection++;
-          if(tamBuffer[pos] != 0) {
+          if(asmBuffer[pos] != 0) {
             pos++;
           }
 
-          tamBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
+          asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
           if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
-            tamBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
+            asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
           }
-          tamBuffer[pos] = 0;
+          asmBuffer[pos] = 0;
 
-          firstItem = findFirstItem(tamBuffer);
+          firstItem = findFirstItem(asmBuffer);
         }
       }
 

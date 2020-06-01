@@ -66,6 +66,7 @@ char                  aimBuffer[AIM_BUFFER_LENGTH]; /// TODO may be aimBuffer an
 char                  nimBuffer[NIM_BUFFER_LENGTH];
 char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
 char                  tamBuffer[TAM_BUFFER_LENGTH];
+char                  asmBuffer[5];
 char                  oldTime[8];
 char                  dateTimeString[12];
 softmenuStack_t       softmenuStack[7];

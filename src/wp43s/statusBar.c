@@ -457,8 +457,8 @@ void showHideUserMode(void) {
   #ifdef PC_BUILD
     showSoftmenuCurrentPart();                       //JM TOCHECK. Suspect in here to force icon update in Gui
     if(calcMode == CM_NORMAL) calcModeNormalGui();
-    else if(calcMode == CM_AIM) calcModeAimGui();
-    else if(calcMode == CM_TAM) calcModeTamGui();
+    else if(calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM) calcModeAimGui();
+    else if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) calcModeTamGui();
   #endif
 }
 #endif

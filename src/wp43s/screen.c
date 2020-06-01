@@ -1233,7 +1233,7 @@ void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
   refreshRegisterLine(REGISTER_T);
-  if(calcMode == CM_TAM) {
+  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
     if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
       clearRegisterLine(TAM_REGISTER_LINE, false, false);
     }

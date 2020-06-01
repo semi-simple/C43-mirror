@@ -329,7 +329,7 @@ int16_t determineItem(const char *data) {
 
   switch(key->primary) {                              //JMSHOW vv
     case      KEY_UP1:
-    case      KEY_DOWN1: break;
+    case      KEY_DOWN1: break;                       //JM SHOWregis unchanged
     default:  SHOWregis = 9999; break;     
   }                                                   //JMSHOW ^^
   //printf("###\n"); //JMEXEC
@@ -540,7 +540,7 @@ void processKeyAction(int16_t item) {
       fnKeyUp(NOPARAM);
       if(!keyActionProcessed){     //JMvv
          keyActionProcessed = true;
-         addItemToBuffer(CHR_UP_ARROW); 
+         addItemToBuffer(CHR_UP_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
       }                            //JM^^
       break;
 
@@ -549,7 +549,7 @@ void processKeyAction(int16_t item) {
       fnKeyDown(NOPARAM);
       if(!keyActionProcessed){     //JM
          keyActionProcessed = true;
-         addItemToBuffer(CHR_DOWN_ARROW);
+         addItemToBuffer(CHR_DOWN_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
       }                            //JM^^
       break;
 
@@ -574,7 +574,7 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
           // Following commands do not timeout to NOP
-          else if(/*item == KEY_UNDO ||*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO should time out
+          else if(/*item == KEY_UNDO ||JM*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO should time out
             runFunction(item);
             keyActionProcessed = true;
           }

@@ -370,7 +370,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,   
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
-const int16_t menu_CFG[]         = { ITM_SF,                        ITM_CF,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
+const int16_t menu_CFG[]         = { ITM_NULL,                      ITM_NULL,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_CB_CPXRES,               ITM_CB_LEADING_ZERO,
                                      ITM_CPXI,                      ITM_CPXJ,                   ITM_NULL,               ITM_NULL,            ITM_NULL,                  ITM_NULL,                         //JM sequence change
                                      ITM_MULTCR,                    ITM_MULTDOT,                ITM_RM,                   ITM_NULL,             ITM_NULL,                  ITM_NULL,                         //JM sequence change
 

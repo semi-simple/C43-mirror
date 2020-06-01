@@ -457,7 +457,8 @@ void fn_cnst_op_aa              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_op_a               (uint16_t unusedParamButMandatory) {}
 void fn_cnst_0_cpx              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_1_cpx              (uint16_t unusedParamButMandatory) {}
-void fnStatList                 (uint16_t unusedParamButMandatory) {}         //^^
+void fnStatList                 (uint16_t unusedParamButMandatory) {}
+void flagBrowser_old            (uint16_t unusedParamButMandatory) {}         //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -1051,7 +1052,7 @@ const item_t indexOfItems[] = {
 /*  584 */  { itemToBeCoded,               NOPARAM,                     "0584",                                        "0584",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
 /*  585 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  586 */  { itemToBeCoded,               NOPARAM,                     "STAT",                                        "STAT",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  587 */  { flagBrowser,                 NOPARAM     /*# JM #*/,      "FLAGS.V",                                     "FLGS",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
+/*  587 */  { flagBrowser,                 NOPARAM,                     "STATUS",                                      "STATUS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  588 */  { itemToBeCoded,               NOPARAM,                     "STK",                                         "STK",                                         0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  589 */  { fnStore,                     TM_STORCL,                   "STO",                                         "STO",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED},
 /*  590 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
@@ -2447,7 +2448,7 @@ const item_t indexOfItems[] = {
 /* 1967 */  { fnSetSetJM,                  RM_PERIOD,                   "RDX.",                                        "RDX.",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM Replacements
 /* 1968 */  { fnSetSetJM,                  SS_8,                        "SSIZE8",                                      "SSIZE8",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /* 1969 */  { fnSetSetJM,                  CM_RECTANGULAR,              "RECT",                                        "RECT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM Replacements
-/* 1970 */  { itemToBeCoded,               NOPARAM,                     "1970",                                        "1970",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/* 1970 */  { flagBrowser_old,             NOPARAM,                     "FLAGS.V",                                     "FLGS",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM Changed STATUS
 
 /* 1971 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

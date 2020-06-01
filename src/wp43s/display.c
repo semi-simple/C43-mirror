@@ -346,7 +346,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
-  bool_t displayoverflow = false;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
+//JM  bool_t displayoverflow = false;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
 
   uint8_t charIndex, valueIndex, digitToRound=0;
   uint8_t *bcd;
@@ -648,7 +648,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       }
       return;
     }
-  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
+//JM  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
   }
 
   //////////////
@@ -795,7 +795,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       }
       return;
     }
-  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
+//JM  displayoverflow = true;  //JM Need to know if overflowing. Otherwise UNIT cannot work.
   }
 
   //////////////

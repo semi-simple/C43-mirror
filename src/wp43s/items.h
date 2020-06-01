@@ -26,6 +26,7 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -2009,7 +2010,7 @@
 #define ITM_RDXPER                    1967   //JM Replacements
 #define ITM_SSIZE8                    1968
 #define ITM_RECT                      1969   //JM Replacements
-#define ITM_1970                      1970
+#define ITM_FLGSV                     1970
 
 #define LAST_ITEM                     1971   //JM
 

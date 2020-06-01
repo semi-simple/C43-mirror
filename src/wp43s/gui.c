@@ -23,7 +23,9 @@
 #ifdef PC_BUILD
 GtkWidget *grid;
 GtkWidget *backgroundImage;
-GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
+#ifdef S43
+  GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
+#endif
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
 GtkWidget *lblEKey;
@@ -45,10 +47,11 @@ GtkWidget *lbl21Fa, *lbl22Fa, *lbl23Fa;                                 //JM
 GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
 GtkWidget *lbl31G,  *lbl32G,  *lbl33G,  *lbl34G,  *lbl35G,  *lbl36G;
-GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L;
-GtkWidget                     *lbl33H,  *lbl34H;
+GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L; 
+GtkWidget                     *lbl33H;                                  //JMALPHA2 Removed lbl34H, to be replaced with lbl34Fa
 GtkWidget *lbl31Gr, *lbl32Gr, *lbl33Gr, *lbl34Gr, *lbl35Gr, *lbl36Gr;
 GtkWidget *btn31A,  *btn32A,  *btn33A,  *btn34A,  *btn35A,  *btn36A;    //dr - new AIM
+GtkWidget                               *lbl34Fa;                                 //JMALPHA2
 
 GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
 GtkWidget *lbl41F,  *lbl42F,  *lbl43F,  *lbl44F,  *lbl45F;
@@ -924,10 +927,10 @@ void prepareCssData(void) {
 
 
 #if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
-  #define CSSFILE "wp43s_pre_L2.css"              //JM L
+  #define CSSFILE "c43_pre_L2.css"              //JM L
 #endif //JM L
 #if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
-  #define CSSFILE "wp43s_pre.css"
+  #define CSSFILE "c43_pre.css"
 #endif //JM L
 
   // Convert the pre-CSS data to CSS data
@@ -1081,7 +1084,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl33L);
   gtk_widget_hide(lbl34F);
   gtk_widget_hide(lbl34G);
-  gtk_widget_hide(lbl34H);  //JM CAPS
+//  gtk_widget_hide(lbl34H);  //JM CAPS //JMALPHA2 temporary remove A from J
   gtk_widget_hide(lbl34L);
   gtk_widget_hide(lbl35F);
   gtk_widget_hide(lbl35G);
@@ -1095,6 +1098,7 @@ void hideAllWidgets(void) {
   gtk_widget_hide(lbl34Gr);
   gtk_widget_hide(lbl35Gr);
   gtk_widget_hide(lbl36Gr);
+  gtk_widget_hide(lbl34Fa); //JMALPHA2
 
   gtk_widget_hide(btn41);
   gtk_widget_hide(btn42);
@@ -1390,6 +1394,8 @@ void moveLabels(void) {
   gtk_fixed_move(GTK_FIXED(grid), lbl34G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);
   gtk_widget_get_preferred_size(  lbl34Gr, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl34Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);
+  gtk_widget_get_preferred_size(  lbl34Fa, NULL, &lblF);                                                                          //vv JMALPHA2
+  gtk_fixed_move(GTK_FIXED(grid), lbl34Fa, (2*xPos+2*KEY_WIDTH_1+2)/2 + 2, yPos);    //JMALPHA2 SPECIAL Position for template on the side. 
 
   xPos += DELTA_KEYS_X;
   gtk_widget_get_preferred_size(  lbl35F, NULL, &lblF);
@@ -1507,8 +1513,9 @@ void moveLabels(void) {
   gtk_widget_get_preferred_size(  lbl61G, NULL, &lblG);
   gtk_fixed_move(GTK_FIXED(grid), lbl61F, (2*xPos+KEY_WIDTH_1-lblF.width-GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
   gtk_fixed_move(GTK_FIXED(grid), lbl61G, (2*xPos+KEY_WIDTH_1+lblF.width+GAP-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);   //JM align [f] arrowDn (*0-40)
-  //gtk_widget_get_preferred_size(  lbl61Gr, NULL, &lblG);                                                                       //JM10
+  gtk_widget_get_preferred_size(  lbl61Gr, NULL, &lblG); //JMAHOME2                                                                       //JM10
   //gtk_fixed_move(GTK_FIXED(grid), lbl61Gr, xPos+KEY_WIDTH_1*2/3,                              yPos - Y_OFFSET_GREEK);          //JM10
+  gtk_fixed_move(GTK_FIXED(grid), lbl61Gr, (2*xPos+KEY_WIDTH_2+lblF.width+GAP*6-lblG.width+2)/2, yPos - Y_OFFSET_SHIFTED_LABEL);      //JM JMAHOME2 ALPHA BLUE MENU LABELS //^^
 
   xPos += DELTA_KEYS_X + 18;
   gtk_widget_get_preferred_size(  lbl62F, NULL, &lblF);
@@ -1695,7 +1702,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
     stringToUtf8(indexOfItems[max(key->primary, -key->primary)].itemSoftmenuName, lbl);
   }
 
-  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !userModeEnabled) {                       //JMUSER Change the name inside the Sigma+ button
+  if(key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && !getSystemFlag(FLAG_USER)) {                       //JMUSER Change the name inside the Sigma+ button
     stringToUtf8(indexOfItems[max(Norm_Key_00_VAR, -Norm_Key_00_VAR)].itemSoftmenuName, lbl);            //JMUSER
   }                                                                                                      //JM
 
@@ -1709,7 +1716,7 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
 //  gtk_button_set_label(GTK_BUTTON(button), "÷");             //JM DIV
 //  }                                                          //JM
 
-  if((key->primary == ITM_AIM && userModeEnabled && calcMode == CM_NORMAL ) || (!userModeEnabled && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
+  if((key->primary == ITM_AIM && getSystemFlag(FLAG_USER) && calcMode == CM_NORMAL ) || (!getSystemFlag(FLAG_USER) && key->primary == ITM_SIGMAPLUS && calcMode == CM_NORMAL && Norm_Key_00_VAR == ITM_AIM)) {
     gtk_widget_set_name(button, "AlphaKey");                 //JMALPHA Colour the alpha key gold if assigned.
   }
   else if(key->primary == KEY_f) {
@@ -2033,7 +2040,7 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
 void calcModeNormalGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -2143,7 +2150,7 @@ void calcModeNormalGui(void) {
   gtk_widget_show(lbl33L);
   gtk_widget_show(lbl34F);
   gtk_widget_show(lbl34G);
-  gtk_widget_show(lbl34H);
+  //gtk_widget_show(lbl34H);//JMALPHA2 temporary remove A from J
   gtk_widget_show(lbl34L);
 //#ifdef JM_LAYOUT_2_DM42_STRICT //JM LAYOUT 2. DM42 STRICT.
   gtk_widget_show(lbl35L); // JM !!
@@ -2287,7 +2294,7 @@ void calcModeNormalGui(void) {
 void calcModeAimGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -2307,6 +2314,7 @@ void calcModeAimGui(void) {
   labelCaptionAim(keys++, btn31A, lbl31Gr, lbl31L);
   labelCaptionAim(keys++, btn32A, lbl32Gr, lbl32L);
   labelCaptionAim(keys++, btn33A, lbl33Gr, lbl33L);
+  labelCaptionAimFaChr(   keys,   lbl34Fa, CHR_case);          //JMALPHA2 new
   labelCaptionAim(keys++, btn34A, lbl34Gr, lbl34L);
   labelCaptionAim(keys++, btn35A, lbl35Gr, lbl35L);
   labelCaptionAim(keys++, btn36A, lbl36Gr, lbl36L);     //^^
@@ -2404,6 +2412,7 @@ void calcModeAimGui(void) {
   gtk_widget_show(btn34A);
   gtk_widget_show(btn35A);
   gtk_widget_show(btn36A);      //^^
+  gtk_widget_show(lbl34Fa);    //JMALPHA2
 
   //gtk_widget_show(lbl31F);  JM
   //gtk_widget_show(lbl31L);    //dr - new AIM
@@ -2415,7 +2424,7 @@ void calcModeAimGui(void) {
   //gtk_widget_show(lbl35L); // JM !!    //dr - new AIM
   //gtk_widget_show(lbl36L); // JM !!    //dr - new AIM
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
-  gtk_widget_show(lbl34H);  //JM reinstate CAPS
+  //gtk_widget_show(lbl34H);  //JMALPHA2 reinstate CAPS //JMALPHA2 temporary remove A from J
   gtk_widget_show(lbl31Gr);
   gtk_widget_show(lbl32Gr);
   gtk_widget_show(lbl33Gr);
@@ -2489,7 +2498,7 @@ void calcModeAimGui(void) {
   //gtk_widget_show(lbl61G); //JM_
   //gtk_widget_show(lbl65F); //JM
   //gtk_widget_show(lbl65G);
-  gtk_widget_show(lbl61Gr);
+  gtk_widget_show(lbl61Gr); //JMAHOME2
   gtk_widget_show(lbl62Gr);
   gtk_widget_show(lbl63Gr);
   gtk_widget_show(lbl64Gr);
@@ -2563,7 +2572,7 @@ void calcModeAimGui(void) {
 void calcModeTamGui(void) {
   const calcKey_t *keys;
 
-  keys = userModeEnabled ? kbd_usr : kbd_std;
+  keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
 
@@ -2738,7 +2747,7 @@ void setupUI(void) {
 
   gtk_widget_set_name(frmCalc, "mainWindow");
   gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
-  gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43C");                   //JM NAME
+  gtk_window_set_title(GTK_WINDOW(frmCalc), "C43");                   //JM NAME
   g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
   g_signal_connect(frmCalc, "key_release_event", G_CALLBACK(keyReleased), NULL);  //JM CTRL
@@ -2770,6 +2779,9 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), backgroundImage,  0, 0);
 
 #if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
+
+
+#ifdef S43
   // Areas for the g shifted softkeys
   lblGSoftkeyArea = gtk_label_new("");
   gtk_widget_set_name(lblGSoftkeyArea, "gSoftkeyArea");
@@ -2783,6 +2795,7 @@ void setupUI(void) {
   gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
   gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
   gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
+#endif
 
   // Frame around the f key
   lblFKey2 = gtk_label_new("");  
@@ -3140,6 +3153,7 @@ void setupUI(void) {
   lbl34F  = gtk_label_new("");
   lbl35F  = gtk_label_new("");
   lbl36F  = gtk_label_new("");
+  lbl34Fa  = gtk_label_new("");  //JMALPHA2
   lbl31G  = gtk_label_new("");
   lbl32G  = gtk_label_new("");
   lbl33G  = gtk_label_new("");
@@ -3147,7 +3161,7 @@ void setupUI(void) {
   lbl35G  = gtk_label_new("");
   lbl36G  = gtk_label_new("");
   lbl33H  = gtk_label_new("\u21e9"); // Hollow down
-  lbl34H  = gtk_label_new("\u2102"); //JM CAPS LOCK                          // ("\u03b7"); // eta          //JM removed1
+//  lbl34H  = gtk_label_new("\u2102"); //JM CAPS LOCK    //JMALPHA2 REMOVED                          // ("\u03b7"); // eta          //JM removed1
 //JM  lbl35H  = gtk_label_new("");                                               // ("\u03b7"); // eta          //JM removed1
 
   lbl31L  = gtk_label_new("");
@@ -3178,7 +3192,7 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn36A, KEY_WIDTH_1, 0);  //^^
 
   gtk_widget_set_name(lbl33H,  "fShifted");
-  gtk_widget_set_name(lbl34H,  "fShifted");  //JM CAPS
+  //gtk_widget_set_name(lbl34H,  "fShifted");  //JM CAPS JMALPHA2
   // gtk_widget_set_name(lbl34H,  "gShifted");   //JM removed1
 
   g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
@@ -3210,6 +3224,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl32F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl33F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl34F,  0, 0);
+  gtk_fixed_put(GTK_FIXED(grid), lbl34Fa, 0, 0);            //JMALPHA2
   gtk_fixed_put(GTK_FIXED(grid), lbl35F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl36F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl31G,  0, 0);
@@ -3246,7 +3261,7 @@ void setupUI(void) {
   xPos += DELTA_KEYS_X;
   gtk_fixed_put(GTK_FIXED(grid), btn34,  xPos,                         yPos);
   gtk_fixed_put(GTK_FIXED(grid), lbl34L, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos + Y_OFFSET_LETTER);
-  gtk_fixed_put(GTK_FIXED(grid), lbl34H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);               //JM CAPS
+//  gtk_fixed_put(GTK_FIXED(grid), lbl34H, xPos + KEY_WIDTH_1 + X_OFFSET_LETTER, yPos -  1);               //JM CAPS //JMALPHA temporary remove A from J
   gtk_fixed_put(GTK_FIXED(grid), btn34A, xPos,                         yPos);   //dr - new AIM
 
   xPos += DELTA_KEYS_X;
@@ -3987,7 +4002,7 @@ void fnOff(uint16_t unsuedParamButMandatory) {
  * \return void
  ***********************************************/
 void calcModeNormal(void) {
-  if(calcMode == CM_TAM) {
+  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
     popSoftmenu();
     refreshRegisterLine(TAM_REGISTER_LINE);
     STACK_LIFT_ENABLE;
@@ -3999,6 +4014,7 @@ void calcModeNormal(void) {
 //  if(!SH_BASE_HOME) {}
 
   calcMode = CM_NORMAL;
+  clearSystemFlag(FLAG_ALPHA);
   hideCursor();
   cursorEnabled = false;
   showAlphaMode();
@@ -4017,28 +4033,41 @@ void calcModeNormal(void) {
  * \return void
  ***********************************************/
 void calcModeAim(uint16_t unusedParamButMandatory) {
-  saveStack();
-  liftStack();
-  refreshStack();
-  if(!SH_BASE_AHOME) {
-    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-    softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+  if(calcMode == CM_ASM_OVER_AIM) {
+    popSoftmenu();
+    calcMode = CM_AIM;
+  }
+  else {
+  if(!SH_BASE_AHOME) {  //TOCHECK
+//    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+  //  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+
+    softmenuStackPointerBeforeAIM = softmenuStackPointer;
+    if(softmenuStackPointer == 0) {
+      showSoftmenu(NULL, -MNU_MyAlpha, false);
+    }
   }
   if(SH_BASE_AHOME) {
     showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
   }
+    alphaCase = AC_UPPER;
+    calcMode = CM_AIM;
+    showAlphaMode();
+    nextChar = NC_NORMAL;
 
-  calcMode = CM_AIM;
-  alphaCase = AC_UPPER;
-  showAlphaMode();
-  nextChar = NC_NORMAL;
+    saveStack();
+    liftStack();
+    refreshStack();
 
-  clearRegisterLine(Y_POSITION_OF_AIM_LINE - 4, REGISTER_LINE_HEIGHT);
-  xCursor = 1;
-  yCursor = Y_POSITION_OF_AIM_LINE + 6;
-  cursorFont = CF_STANDARD;
-  cursorEnabled = true;
+    clearRegisterLine(AIM_REGISTER_LINE, true, true);
+    xCursor = 1;
+    yCursor = Y_POSITION_OF_AIM_LINE + 6;
+    cursorFont = CF_STANDARD;
+    cursorEnabled = true;
+  }
+
+  setSystemFlag(FLAG_ALPHA);
 
   #ifdef PC_BUILD
     calcModeAimGui();
@@ -4057,10 +4086,15 @@ void calcModeAsm(void) {
   if(calcMode == CM_NIM) {
     closeNim();
   }
+
+  if(calcMode != CM_AIM) {
+    alphaCase = AC_UPPER;
+    showAlphaMode();
+    nextChar = NC_NORMAL;
+  }
+
   calcMode = CM_ASM;
-  alphaCase = AC_UPPER;
-  showAlphaMode();
-  nextChar = NC_NORMAL;
+  clearSystemFlag(FLAG_ALPHA);
   resetAlphaSelectionBuffer();
 
   #ifdef PC_BUILD
@@ -4080,6 +4114,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   saveStack();
 
   calcMode = CM_NIM;
+  clearSystemFlag(FLAG_ALPHA);
 
   liftStack();
   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
@@ -4091,7 +4126,7 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   nimBuffer[0] = 0;
   hexDigits = 0;
 
-  clearRegisterLine(Y_POSITION_OF_NIM_LINE - 4, REGISTER_LINE_HEIGHT);
+  clearRegisterLine(NIM_REGISTER_LINE, true, true);
   xCursor = 1;
   yCursor = Y_POSITION_OF_NIM_LINE;
   cursorFont = CF_NUMERIC;
@@ -4116,32 +4151,48 @@ void calcModeTam(void) {
   if(calcMode == CM_NIM) {
     closeNim();
   }
+  else if(calcMode == CM_ASM_OVER_TAM) {
+    popSoftmenu();
+  }
 
-  if(tamMode == TM_VALUE || tamMode == TM_VALUE_CHB || tamMode == TM_REGISTER) {
-    showSoftmenu(NULL, -MNU_TAM, true);
+  switch(tamMode) {
+    case TM_VALUE:
+    case TM_VALUE_CHB:
+    case TM_REGISTER:
+      showSoftmenu(NULL, -MNU_TAM, true);
+      break;
+
+    case TM_CMP:
+      showSoftmenu(NULL, -MNU_TAMCMP, true);
+      break;
+
+    case TM_FLAGR:
+    case TM_FLAGW:
+      if(calcMode != CM_ASM_OVER_TAM) {
+        showSoftmenu(NULL, -MNU_TAMFLAG, true);
+      }
+      break;
+
+    case TM_STORCL:
+      showSoftmenu(NULL, -MNU_TAMSTORCL, true);
+      break;
+
+    default:
+      sprintf(errorMessage, "In function calcModeTam: %" FMT8U " is an unexpected value for tamMode!", tamMode);
+      displayBugScreen(errorMessage);
+      return;
   }
-  else if(tamMode == TM_CMP) {
-    showSoftmenu(NULL, -MNU_TAMCMP, true);
-  }
-  else if(tamMode == TM_FLAG) {
-    showSoftmenu(NULL, -MNU_TAMFLAG, true);
-  }
-  else if(tamMode == TM_STORCL) {
-    showSoftmenu(NULL, -MNU_TAMSTORCL, true);
-  }
-  else {
-    sprintf(errorMessage, "In function calcModeTam: %" FMT8U " is an unexpected value for tamMode!", tamMode);
-    displayBugScreen(errorMessage);
-    return;
+
+  if(calcMode != CM_ASM_OVER_TAM) {
+    strcat(tamBuffer, " __");
+    if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+      clearRegisterLine(REGISTER_T, true, false);
+    }
+    showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
   }
 
   calcMode = CM_TAM;
-
-  strcat(tamBuffer, " __");
-  if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT);
-  }
-  showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  clearSystemFlag(FLAG_ALPHA);
 
   transitionSystemState = 0;
   tamCurrentOperation = 0;

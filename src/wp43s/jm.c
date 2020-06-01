@@ -18,7 +18,7 @@
  * \file jm.c JM_TEST
  ***********************************************/
 
-/* ADDITIONAL WP43C functions and routines */
+/* ADDITIONAL C43 functions and routines */
 
 
 
@@ -381,7 +381,29 @@ char line1[TMP_STR_LENGTH];
   }
 }
 
+/*
+void fnAngularMode(uint16_t am) {
+  currentAngularMode = am;
 
+  showAngularMode();
+  refreshStack();
+}
+
+void fnComplexUnit(uint16_t cu) {
+  complexUnit = cu;
+  refreshStack();
+}
+
+void fnComplexResult(uint16_t complexResult) {
+  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
+}
+
+void fnComplexMode(uint16_t cm) {
+  complexMode = cm;
+  showComplexMode();
+  refreshStack();
+}
+*/
 
 
 /********************************************//**
@@ -389,10 +411,7 @@ char line1[TMP_STR_LENGTH];
  *
  * FROM keyboard.c
  ***********************************************/
-bool_t userModeEnabledMEM;
-
-
-void fnBASE_Hash(uint16_t unusedParamButMandatory) {
+void fnBASE_Hash(uint16_t unusedParamButMandatory) {  //DONE
   int16_t lastChar;
   lastChar = strlen(nimBuffer) - 1;
   if(lastChar >= 1) {
@@ -425,44 +444,6 @@ void fnKeyDotDjm(uint16_t unusedParamButMandatory) {      //FOR   HARDWIRED
 */
 
 
-/********************************************//**
- * \Set SIGFIG mode
- *
- * FROM DISPLAY.C
- ***********************************************/
-void fnDisplayFormatSigFig(uint16_t displayFormatN) {             //JM SIGFIG
-  UNITDisplay = false;                                            //JM SIGFIG display Reset
-  SigFigMode = displayFormatN;                                    //JM SIGFIG
-  fnRefreshRadioState(RB_DI, DF_SF);
-
-  displayFormat = DF_FIX;
-  displayFormatDigits = displayFormatN;
-  fractionType = FT_NONE;
-  refreshStack();
-}                                                                 //JM SIGFIG
-
-
-
-/********************************************//**
- * \Set UNIT mode
- *
- * FROM DISPLAY.C
- ***********************************************/
-void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
-  SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
-  UNITDisplay = true;                                             //JM UNIT display
-  fnRefreshRadioState(RB_DI, DF_UN);
-
-  displayFormat = DF_ENG;
-  displayFormatDigits = displayFormatN;
-  fractionType = FT_NONE;
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-  refreshStack();
-}                                                                 //JM UNIT
-
-
 
 /********************************************//**
  * \brief Sets/resets flag
@@ -470,7 +451,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {               //JM UNIT
  * \param[in] jmConfig uint16_t
  * \return void
  ***********************************************/
-void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setting
+void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset setting
   switch(jmConfig) {
   case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
@@ -523,20 +504,10 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-  case JC_BCR:                                              //JM bit ComplexResult
-    fnComplexResult(!getFlag(FLAG_CPXRES));                                     //dr
-    break;
-
-  case JC_BLZ:                                              //JM bit LeadingZeros
-    fnLeadingZeros(!displayLeadingZeros);                                       //dr
-    break;
-
   case JC_VECT:                                      //JM
     jm_VECT = !jm_VECT;
     fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
     break;
-
-
 
   case JC_H_SUM:                                      //JM
     jm_HOME_SUM = !jm_HOME_SUM;
@@ -558,6 +529,64 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
 
 
 
+   case RM_COMMA:               //DONR
+     fnClearFlag(FLAG_DECIMP);
+     break;
+
+   case RM_PERIOD:               //DONR
+     fnSetFlag(FLAG_DECIMP);
+     break;
+
+   case TF_H12:               //DONR
+     fnClearFlag(FLAG_TDM24);
+     break;
+
+   case TF_H24:               //DONR
+     fnSetFlag(FLAG_TDM24);
+     break;
+
+   case CU_I:               //DONR
+     fnClearFlag(FLAG_CPXj);
+     break;
+
+   case CU_J:               //DONR
+     fnSetFlag(FLAG_CPXj);
+     break;
+
+  case JC_BLZ:                                              //JM bit LeadingZeros
+    fnFlipFlag(FLAG_LEAD0);                                       //dr
+    break;
+
+   case PS_CROSS:               //DONR
+     fnSetFlag(FLAG_MULTx);
+     break;
+
+   case PS_DOT:
+     fnClearFlag(FLAG_MULTx);
+     break;
+
+   case SS_8:          //DONE
+     fnSetFlag(FLAG_SSIZE8);
+     break;
+
+   case SS_4:                 //DONE
+     fnClearFlag(FLAG_SSIZE8);
+     break;
+
+   case CM_RECTANGULAR:          //DONE
+     fnClearFlag(FLAG_POLAR);
+     break;
+
+   case CM_POLAR:                 //DONE
+     fnSetFlag(FLAG_POLAR);
+     break;
+
+   case JC_BCR:                                              //JM bit ComplexResult
+     fnFlipFlag(FLAG_CPXRES);                                     //dr
+     break;
+
+
+
 
   default:
     break;
@@ -572,7 +601,7 @@ void fnSetSetJM(uint16_t jmConfig) {                        //JM Set/Reset setti
  * \param[in] inputDefault uint16_t
  * \return void
  ***********************************************/
-void fnInDefault(uint16_t inputDefault) {
+void fnInDefault(uint16_t inputDefault) {              //DONE
   Input_Default = inputDefault;
 
   if(Input_Default == ID_SI) {
@@ -587,30 +616,16 @@ void fnInDefault(uint16_t inputDefault) {
 
 
 
-
-
-void Show_User_Keys(void) {
-  userModeEnabled = false;
-  toggleUserMode();
-}
-
-
-void Show_Normal_Keys(void) {
-  userModeEnabled = true;
-  toggleUserMode();
-}
-
-
 /********************************************//** XXX
  * \brief Set Norm_Key_00_VAR
  *
  * \param[in] sigmaAssign uint16_t
  * \return void
  ***********************************************/
-void fnSigmaAssign(uint16_t sigmaAssign) {
+void fnSigmaAssign(uint16_t sigmaAssign) {             //DONE
   Norm_Key_00_VAR = sigmaAssign;
   fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-  Show_Normal_Keys();
+  fnClearFlag(FLAG_USER);
 }
 
 
@@ -621,11 +636,11 @@ void fnSigmaAssign(uint16_t sigmaAssign) {
  * \param[in] f bool_t
  * \return void
  ***********************************************/
-void fnInfo(bool_t f) {
-  temporaryInformation = f ? TI_TRUE : TI_FALSE;
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(REGISTER_X);
-}
+//void fnInfo(bool_t f) {
+//  temporaryInformation = f ? TI_TRUE : TI_FALSE;
+//  refreshRegisterLine(TAM_REGISTER_LINE);
+//  refreshRegisterLine(REGISTER_X);
+//}
 
 
 
@@ -634,7 +649,7 @@ void fnInfo(bool_t f) {
  * \param[in] jmConfig to display uint16_t
  * \return void
  ***********************************************/
-void fnShowJM(uint16_t jmConfig) {
+void fnShowJM(uint16_t jmConfig) {                               //DONE
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
@@ -672,7 +687,7 @@ void fnShowJM(uint16_t jmConfig) {
  * Written by Lukás Chmela
  * Released under GPLv3.
  */
-char* itoa(int value, char* result, int base) {
+char* itoa(int value, char* result, int base) {      //DONE
     // check that the base if valid
     if (base < 2 || base > 16) { *result = '\0'; return result; }
 
@@ -704,7 +719,7 @@ char* itoa(int value, char* result, int base) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {
+void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {       //DONE
   char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
@@ -729,7 +744,7 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
+void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {      //DONE
   int16_t X_REG;
   longInteger_t lgInt;
 
@@ -740,7 +755,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
     longIntegerFree(lgInt);
     //printf("Xreg %d\n", X_REG);
     Norm_Key_00_VAR = X_REG;
-    Show_Normal_Keys();
+    fnClearFlag(FLAG_USER);
   }
 }
 
@@ -752,7 +767,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {
  * \param[in] JM_KEY uint16_t
  * \return void
  ***********************************************/
-void fnJMUSERmode(uint16_t JM_KEY) {
+void fnJMUSERmode(uint16_t JM_KEY) {      //DONE
   int16_t X_REG;
   longInteger_t lgInt;
 
@@ -765,7 +780,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
     if(JM_KEY >= 256) {
       kbd_usr[JM_KEY - 256].primary = X_REG;
     //printf(".primary %d\n", kbd_usr[JM_KEY - 256].primary);
-      Show_User_Keys();
+      fnSetFlag(FLAG_USER);
     }
   }
 }
@@ -778,7 +793,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {
  * \param[in] JM_KEY uint16_t
  * \return void
  ***********************************************/
-void fnJMUSERmode_f(uint16_t JM_KEY) {
+void fnJMUSERmode_f(uint16_t JM_KEY) {      //DONE
   int16_t X_REG;
   longInteger_t lgInt;
 
@@ -791,7 +806,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
     if(JM_KEY >= 256) {
       kbd_usr[JM_KEY - 256].fShifted = X_REG;
     //printf(".fShifted %d\n", kbd_usr[JM_KEY - 256].fShifted);
-      Show_User_Keys();
+      fnSetFlag(FLAG_USER);
     }
   }
 }
@@ -804,7 +819,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {
  * \param[in] JM_KEY uint16_t
  * \return void
  ***********************************************/
-void fnJMUSERmode_g(uint16_t JM_KEY) {
+void fnJMUSERmode_g(uint16_t JM_KEY) {      //DONE
   int16_t X_REG;
   longInteger_t lgInt;
 
@@ -817,7 +832,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
     if(JM_KEY >= 256) {
       kbd_usr[JM_KEY - 256].gShifted = X_REG;
       //printf(".gShifted %d\n", kbd_usr[JM_KEY - 256].gShifted);
-      Show_User_Keys();
+      fnSetFlag(FLAG_USER);
     }
   }
 }
@@ -827,7 +842,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {
 //---------------------------------------------
 
 
-void fnStrtoX(char aimBuffer[]) {
+void fnStrtoX(char aimBuffer[]) {      //DONE
   STACK_LIFT_ENABLE;   // 5
   liftStack();
   int16_t mem = stringByteLength(aimBuffer);
@@ -837,7 +852,7 @@ void fnStrtoX(char aimBuffer[]) {
 
 
 
-void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
+void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
   tmpStr3000[0] = 0;
   strcat(tmpStr3000, inp1);
   STACK_LIFT_ENABLE;   // 5
@@ -848,7 +863,7 @@ void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X
 
 
 
-void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
+void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
   tmpStr3000[0]=0;
   strcat(tmpStr3000, inp1);
   STACK_LIFT_ENABLE;   // 5
@@ -864,7 +879,7 @@ void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X
 
 
 
-void fnRCL(int16_t inp) {
+void fnRCL(int16_t inp) {      //DONE
   STACK_LIFT_ENABLE;
   if(inp == TEMP_REGISTER) {
     liftStack();
@@ -1469,7 +1484,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
 
@@ -1481,14 +1496,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[0].primary     = KEY_CC;
     Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 #endif
 
@@ -1500,14 +1515,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = KEY_TYPCON_DN;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[0].primary     = KEY_CC;
     Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 #endif
 
@@ -1527,7 +1542,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[11].gShifted   = ITM_NULL;
     Norm_Key_00_VAR        = KEY_USERMODE;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
 
@@ -1535,35 +1550,35 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].primary     = ITM_SIGMAPLUS;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_PRGM:                                              //USER_DEFAULTS FOR USER: E+ PRGM
     kbd_usr[0].primary     = ITM_PR;
     Norm_Key_00_VAR        = ITM_PR;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_USER:                                              //USER_DEFAULTS FOR USER: E+ USER
     kbd_usr[0].primary     = KEY_USERMODE;
     Norm_Key_00_VAR        = KEY_USERMODE;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
     kbd_usr[0].primary     = ITM_AIM;
     Norm_Key_00_VAR        = ITM_AIM;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
     kbd_usr[0].primary     = -MNU_MyMenu;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_GSHFT:                                           //USER_DEFAULTS FOR USER: E+ SHIFT G
@@ -1572,15 +1587,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = ITM_NULL;
     Norm_Key_00_VAR        = KEY_g;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnSetFlag(FLAG_USER);
     break;
 
   case USER_RESET:                                              //USER_RESET 26
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-    userModeEnabled = false;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
-    Show_User_Keys();
+    fnClearFlag(FLAG_USER); //userModeEnabled = false;
     break;
 
 /*
@@ -1617,8 +1631,12 @@ void fnKEYSELECT(void) {                                        //JM ASSIGN - RE
     showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
     showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
 #endif
-    userModeEnabled = true;                                     //JM Get out ouf USER MODE to select key in next step
-    toggleUserMode();
+
+      fnFlipFlag(FLAG_USER);
+      fnFlipFlag(FLAG_USER);
+
+//    userModeEnabled = true;                                     //JM Get out ouf USER MODE to select key in next step
+  //  toggleUserMode();
   }
 }
 
@@ -1662,7 +1680,7 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - RE
         (kbd_usr + tempkey)->primary = JM_ASN_MODE;   //Assign function into keyboard array
       }
 
-      Show_User_Keys();
+      fnSetFlag(FLAG_USER);
       refreshStack();
       break;
     default:

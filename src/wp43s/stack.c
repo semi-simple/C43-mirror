@@ -83,7 +83,7 @@ void fnDrop(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void liftStack(void) {
-  if(stackLiftEnabled) {
+  if(getSystemFlag(FLAG_ASLIFT)) {
     freeRegisterData(getStackTop());
     for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
       reg[i] = reg[i-1];
@@ -128,9 +128,9 @@ void fnDropY(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnRollUp(uint16_t unusedParamButMandatory) {
-  registerDescriptor_t savedRegister = reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D];
+  registerDescriptor_t savedRegister = reg[getStackTop()];
 
-  for(uint16_t i=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i>REGISTER_X; i--) {
+  for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
     reg[i] = reg[i-1];
   }
   reg[REGISTER_X] = savedRegister;
@@ -148,25 +148,11 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
 void fnRollDown(uint16_t unusedParamButMandatory) {
   registerDescriptor_t savedRegister = reg[REGISTER_X];
 
-  for(uint16_t i=REGISTER_X; i<(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
+  for(uint16_t i=REGISTER_X; i<getStackTop(); i++) {
     reg[i] = reg[i+1];
   }
-  reg[stackSize==SS_4 ? REGISTER_T : REGISTER_D] = savedRegister;
+  reg[getStackTop()] = savedRegister;
   refreshStack();
-}
-
-
-
-/********************************************//**
- * \brief Sets the stack size
- *
- * \param[in] stackSize uint16_t
- * \return void
- ***********************************************/
-void fnStackSize(uint16_t ss) {
-  stackSize = ss;
-
-  fnRefreshRadioState(RB_SS, ss);                                               //dr
 }
 
 
@@ -182,6 +168,99 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
   refreshStack();
 }
 
+
+
+/********************************************//**
+ * \brief Swaps X with the target register
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnSwapX(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(regist, REGISTER_X);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    refreshStack();
+  } 
+
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnSwapX:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
+}
+
+
+
+/********************************************//**
+ * \brief Swaps Y with the target register
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnSwapY(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(regist, REGISTER_Y);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    refreshStack();
+  } 
+
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnSwapY:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
+}
+
+
+/********************************************//**
+ * \brief Swaps Z with the target register
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnSwapZ(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(regist, REGISTER_Z);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    refreshStack();
+  } 
+
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
+}
+
+
+/********************************************//**
+ * \brief Swaps T with the target register
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnSwapT(uint16_t regist) {
+  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(regist, REGISTER_T);
+    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    refreshStack();
+  } 
+
+  #ifdef PC_BUILD
+  else {
+    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    showInfoDialog("In function fnSwapT:", errorMessage, "is not defined!", NULL);
+  }
+  #endif
+}
 
 
 /********************************************//**
@@ -213,7 +292,7 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t tag       = getRegisterTag(REGISTER_X);
   void *newDataPointer;
 
-  for(uint16_t i=REGISTER_Y; i<=(stackSize==SS_4 ? REGISTER_T : REGISTER_D); i++) {
+  for(uint16_t i=REGISTER_Y; i<=getStackTop(); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
     newDataPointer = allocWp43s(dataSizeXinBytes);
@@ -238,7 +317,7 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
   liftStack();
 
   longIntegerInit(stack);
-  uIntToLongInteger(stackSize == SS_4 ? 4 : 8, stack);
+  uIntToLongInteger(getSystemFlag(FLAG_SSIZE8) ? 8 : 4, stack);
   convertLongIntegerToLongIntegerRegister(stack, REGISTER_X);
   longIntegerFree(stack);
 
@@ -263,7 +342,7 @@ void refreshStack(void) {
 
 
 void saveStack(void) {
-  savedStackLiftEnabled = stackLiftEnabled;
+  savedStackLiftEnabled = getSystemFlag(FLAG_ASLIFT);
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     //printf("save %" FMT16S " to %" FMT16S " : ", regist, SAVED_REGISTER_X - REGISTER_X + regist); printRegisterToConsole(regist, 0); printf("\n");
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
@@ -277,7 +356,13 @@ void saveStack(void) {
 
 
 void restoreStack(void) {
-  stackLiftEnabled = savedStackLiftEnabled;
+  if(savedStackLiftEnabled) {
+    setSystemFlag(FLAG_ASLIFT);
+  }
+  else {
+    clearSystemFlag(FLAG_ASLIFT);
+  }
+
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X - REGISTER_X + regist, regist);
     //printf("restore %" FMT16S " to %" FMT16S " : ", SAVED_REGISTER_X - REGISTER_X + regist, regist); printRegisterToConsole(regist, 0); printf("\n");
@@ -293,8 +378,8 @@ void restoreStack(void) {
 #ifdef PC_BUILD
 void stackLiftEnable(void) {
   //printf("Stack lift enabled\n");
-  stackLiftEnabled = true;
-  hideLowBattery();
+  clearSystemFlag(FLAG_LOWBAT);
+  setSystemFlag(FLAG_ASLIFT);
 
   // Draw S
   setPixel(392,  1);
@@ -331,7 +416,7 @@ void stackLiftEnable(void) {
 
 void stackLiftDisable(void) {
   //printf("Stack lift disabled\n");
-  stackLiftEnabled = false;
-  hideLowBattery();
+  clearSystemFlag(FLAG_LOWBAT);
+  clearSystemFlag(FLAG_ASLIFT);
 }
 #endif

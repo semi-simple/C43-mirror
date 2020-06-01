@@ -36,20 +36,20 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
     STACK_LIFT_ENABLE;
-    if(complexMode == CM_RECTANGULAR) {
-      real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-      liftStack();
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
-      temporaryInformation = TI_RE_IM;
-    }
-    else { // CM_POLAR mode
+    if(getSystemFlag(FLAG_POLAR)) { // polar mode
       liftStack();
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X)); // X in radians
       convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
       temporaryInformation = TI_THETA_RADIUS;
+    }
+    else { // rectangular mode
+      real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
+      temporaryInformation = TI_RE_IM;
     }
 
     refreshStack();

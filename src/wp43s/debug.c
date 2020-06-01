@@ -39,10 +39,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
+    if(dt == dtConfig          ) return "a config             ";
     //if(dt == dtLabel           ) return "a label              ";
     //if(dt == dtSystemInteger   ) return "a system integer     ";
     //if(dt == dtFlags           ) return "a flags              ";
-    //if(dt == dtConfig          ) return "a config             ";
     //if(dt == dtPgmStep         ) return "a pgm step           ";
     //if(dt == dtDirectory       ) return "a directory          ";
     return                              "a ???                ";
@@ -57,10 +57,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
+    if(dt == dtConfig          ) return "a config";
     //if(dt == dtLabel           ) return "a label";
     //if(dt == dtSystemInteger   ) return "a system integer";
     //if(dt == dtFlags           ) return "a flags";
-    //if(dt == dtConfig          ) return "a config";
     //if(dt == dtPgmStep         ) return "a pgm step";
     //if(dt == dtDirectory       ) return "a directory";
     return                              "a ???";
@@ -75,10 +75,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
+    if(dt == dtConfig          ) return "config               ";
     //if(dt == dtLabel           ) return "label                ";
     //if(dt == dtSystemInteger   ) return "system integer       ";
     //if(dt == dtFlags           ) return "flags                ";
-    //if(dt == dtConfig          ) return "config               ";
     //if(dt == dtPgmStep         ) return "pgm step             ";
     //if(dt == dtDirectory       ) return "directory            ";
     return                              "???                  ";
@@ -93,10 +93,10 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
+    if(dt == dtConfig          ) return "config";
     //if(dt == dtLabel           ) return "label";
     //if(dt == dtSystemInteger   ) return "system integer";
     //if(dt == dtFlags           ) return "flags";
-    //if(dt == dtConfig          ) return "config";
     //if(dt == dtPgmStep         ) return "pgm step";
     //if(dt == dtDirectory       ) return "directory";
     return                              "???";
@@ -217,21 +217,6 @@ void debugNIM(void) {
 
 #if (DEBUG_PANEL == 1)
   /********************************************//**
-   * \brief Returns the name of a denominator mode
-   *
-   * \param[in] dm uint16_t Denominator mode
-   * \return char*          Name of the denominator mode
-   ***********************************************/
-  char * getDenModeName(uint16_t dm) {
-    if(dm == DM_ANY) return "any";
-    if(dm == DM_FAC) return "fac";
-    if(dm == DM_FIX) return "fix";
-
-    return "???";
-  }
-
-
-  /********************************************//**
    * \brief Returns the name of a display format
    *
    * \param[in] df uint16_t Display format
@@ -250,14 +235,11 @@ void debugNIM(void) {
   /********************************************//**
    * \brief Returns the name of a time format
    *
-   * \param[in] tf uint16_t Time format
-   * \return char*          Name of the time format
+   * \param[in] tf bool_t Time format
+   * \return char*        Name of the time format
    ***********************************************/
-  char * getTimeFormatName(uint16_t tf) {
-    if(tf == TF_H12) return "H12";
-    if(tf == TF_H24) return "H24";
-
-    return "???";
+  char * getTimeFormatName(bool_t tf) {
+    return (tf ? "H24" : "H12");
   }
 
 
@@ -280,8 +262,8 @@ void debugNIM(void) {
   /********************************************//**
    * \brief Returns the name of a boolean
    *
-   * \param[in] b uint16_t Boolean
-   * \return char*         Name of the boolean
+   * \param[in] b bool_t Boolean
+   * \return char*       Name of the boolean
    ***********************************************/
   char * getBooleanName(bool_t b) {
     return (b ? "true" : "false");
@@ -358,9 +340,12 @@ void debugNIM(void) {
     if(cm == CM_TAM)              return "TAM         ";
     if(cm == CM_NIM)              return "NIM         ";
     if(cm == CM_ASM)              return "ASM         ";
+    if(cm == CM_ASM_OVER_TAM)     return "ASM.OVR.TAM ";
+    if(cm == CM_ASM_OVER_AIM)     return "ASM.OVR.AIM ";
     if(cm == CM_ASSIGN)           return "ASSIGN      ";
     if(cm == CM_REGISTER_BROWSER) return "REG.BROWSER ";
     if(cm == CM_FLAG_BROWSER)     return "FLAG.BROWSER";
+    if(cm == CM_FLAG_BROWSER_OLD) return "FLG.BRWR.OLD";    //JM
     if(cm == CM_FONT_BROWSER)     return "FONT.BROWSER";
     if(cm == CM_ERROR_MESSAGE)    return "ERROR.MSG   ";
     if(cm == CM_BUG_ON_SCREEN)    return "BUG.ON.SCR  ";
@@ -373,15 +358,15 @@ void debugNIM(void) {
   /********************************************//**
    * \brief Returns the name of a TAM mode
    *
-   * \param[in] cm uint16_t TAM
+   * \param[in] tmm uint16_t TAM mode
    * \return char*          Name of the TAM mode
    ***********************************************/
-  char * getTamModeName(uint16_t cm) {
-    if(cm == TM_VALUE)     return "Value   ";
-    if(cm == TM_VALUE_CHB) return "Valuechb"; // change base (->#)
-    if(cm == TM_REGISTER)  return "Register";
-    if(cm == TM_CMP)       return "Compare ";
-    if(cm == TM_STORCL)    return "STORCL  ";
+  char * getTamModeName(uint16_t tmm) {
+    if(tmm == TM_VALUE)     return "Value   ";
+    if(tmm == TM_VALUE_CHB) return "Valuechb"; // change base (->#)
+    if(tmm == TM_REGISTER)  return "Register";
+    if(tmm == TM_CMP)       return "Compare ";
+    if(tmm == TM_STORCL)    return "STORCL  ";
 
     return "???     ";
   }
@@ -405,98 +390,99 @@ void debugNIM(void) {
   /********************************************//**
    * \brief Returns the name of a complex unit
    *
-   * \param[in] cu uint16_t Complex unit
-   * \return char*          Name of the complex unit
+   * \param[in] cu bool_t Complex unit
+   * \return char*        Name of the complex unit
    ***********************************************/
-  char * getComplexUnitName(uint16_t cu) {
-    if(cu == CU_I) return "i";
-    if(cu == CU_J) return "j";
-
-    return "?";
+  char * getComplexUnitName(bool_t cu) {
+    return (cu ? "j" : "i");
   }
 
 
   /********************************************//**
    * \brief Returns the name of a Product sign
    *
-   * \param[in] ps uint16_t Product sign
-   * \return char*          Name of the product sign
+   * \param[in] ps bool_t Product sign
+   * \return char*        Name of the product sign
    ***********************************************/
-  char * getProductSignName(uint16_t ps) {
-    if(ps == PS_CROSS) return "cross";
-    if(ps == PS_DOT)   return "dot  ";
-
-    return "???  ";
+  char * getProductSignName(bool_t ps) {
+    return (ps ? "cross" : "dot  ");
   }
 
 
   /********************************************//**
    * \brief returns the name of a fraction type
    *
-   * \param[in] ft uint16_t Fraction type
-   * \return char*          Name of the fraction type
+   * \param[in] ft bool_t Fraction type
+   * \return char*        Name of the fraction type
    ***********************************************/
-  char * getFractionTypeName(uint16_t ft) {
-    if(ft == FT_IMPROPER) return "improper d/c";
-    if(ft == FT_PROPER)   return "proper a b/c";
+  char * getFractionTypeName(bool_t ft) {
+    return (ft ? "proper a b/c" : "improper d/c");
+  }
 
-    return "???         ";
+
+  /********************************************//**
+   * \brief returns the name of denominator mode 1 type
+   *
+   * \param[in] ft bool_t Fraction type
+   * \return char*        Name of the fraction type
+   ***********************************************/
+  char * getFractionDenom1ModeName(bool_t ft) {
+    return (ft ? "up to DENMAX  " : "DENMAX or fact");
+  }
+
+
+  /********************************************//**
+   * \brief returns the name of denominator mode 2 type
+   *
+   * \param[in] ft bool_t Fraction type
+   * \return char*        Name of the fraction type
+   ***********************************************/
+  char * getFractionDenom2ModeName(bool_t ft) {
+    return (ft ? "DENMAX        " : "fact of DENMAX");
   }
 
 
   /********************************************//**
    * \brief returns the name of a radix mark
    *
-   * \param[in] rm uint16_t Radix mark
-   * \return char*          Name of the radix mark
+   * \param[in] rm bool_t Radix mark
+   * \return char*        Name of the radix mark
    ***********************************************/
-  char * getRadixMarkName(uint16_t rm) {
-    if(rm == RM_COMMA)  return "comma ";
-    if(rm == RM_PERIOD) return "period";
-
-    return "???   ";
+  char * getRadixMarkName(bool_t rm) {
+    return (rm ? "period" :"comma ");
   }
 
 
   /********************************************//**
    * \brief returns the name of a display override mode
    *
-   * \param[in] dio uint16_t Display override mode
-   * \return char*           Name of the override mode
+   * \param[in] dio bool_t Display override mode
+   * \return char*         Name of the override mode
    ***********************************************/
-  char * getDisplayOvrName(uint16_t dio) {
-    if(dio == DO_ENG) return "engOvr";
-    if(dio == DO_SCI) return "sciOvr";
-
-    return "???   ";
+  char * getDisplayOvrName(bool_t dio) {
+    return (dio ? "sciOvr" : "engOvr");
   }
 
 
   /********************************************//**
    * \brief returns the name of a stack size
    *
-   * \param[in] ss uint16_t Stack size
-   * \return char*          Name of the stack size
+   * \param[in] ss bool_t Stack size
+   * \return char*        Name of the stack size
    ***********************************************/
-  char * getStackSizeName(uint16_t ss) {
-    if(ss == SS_4) return "4 levels";
-    if(ss == SS_8) return "8 levels";
-
-    return "? levels";
+  char * getStackSizeName(bool_t ss) {
+    return (ss ? "8 levels" : "4 levels");
   }
 
 
   /********************************************//**
    * \brief returns the name of a complex mode
    *
-   * \param[in] cm uint16_t Complex mode
-   * \return char*          Name of the complex mode
+   * \param[in] cm bool_t Complex mode
+   * \return char*        Name of the complex mode
    ***********************************************/
-  char * getComplexModeName(uint16_t cm) {
-    if(cm == CM_POLAR)       return "polar      ";
-    if(cm == CM_RECTANGULAR) return "rectangular";
-
-    return "???        ";
+  char * getComplexModeName(bool_t cm) {
+    return (cm ? "rectangular" : "polar      ");
   }
 
 
@@ -567,11 +553,9 @@ void debugNIM(void) {
 
     else if(getRegisterDataType(regist) == dtString) {
       if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkHexaString))) {
-        sprintf(string + n, "%" FMT32U, TO_BYTES(getRegisterMaxDataLength(regist)));
-        k = 4;
-        for(i=2; i<TO_BYTES(getRegisterFullSize(regist)); i++) {
-          sprintf(string + n + k, STD_SPACE_3_PER_EM "%02x", *((unsigned char *)REGISTER_DATA(regist)) + i);
-          k += 4;
+        k = stringByteLength(REGISTER_STRING_DATA(regist));
+        for(i=0, p=REGISTER_STRING_DATA(regist); i<=k; i++, p++) {
+          sprintf(string + n + 4*i, STD_SPACE_3_PER_EM "%02x", *p);
         }
       }
       else {
@@ -582,15 +566,17 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtShortInteger) {
-      const font_t *font = &standardFont;
-
-      shortIntegerToDisplayString(regist, string + n, &font);
+      shortIntegerToDisplayString(regist, string + n, false);
       strcat(string + n, STD_SPACE_3_PER_EM);
       strcat(string + n, getShortIntegerModeName(shortIntegerMode));
     }
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
       longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+    }
+
+    else if(getRegisterDataType(regist) == dtConfig) {
+      sprintf(string + n, "Calculator configuration");
     }
 
     else {
@@ -634,13 +620,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "TO_WP43SMEMPTR(allLocalRegisterPointer)  = %6u",        TO_WP43SMEMPTR(allLocalRegisterPointer));
+        sprintf(string, "TO_WP43SMEMPTR(allLocalRegisterPointer)   = %6u",        TO_WP43SMEMPTR(allLocalRegisterPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "TO_WP43SMEMPTR(statisticalSumsPointer)  = %6u",         TO_WP43SMEMPTR(statisticalSumsPointer));
+        sprintf(string, "TO_WP43SMEMPTR(statisticalSumsPointer)    = %6u",         TO_WP43SMEMPTR(statisticalSumsPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -652,13 +638,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "TO_WP43SMEMPTR(allNamedVariablePointer) = %6u",        TO_WP43SMEMPTR(allNamedVariablePointer));
+        sprintf(string, "TO_WP43SMEMPTR(allNamedVariablePointer)   = %6u",        TO_WP43SMEMPTR(allNamedVariablePointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "stackSize                                 = %6u = %s",    stackSize,            getStackSizeName(stackSize));
+        sprintf(string, "FLAG_SSIZE8                               = %s",          getBooleanName(getSystemFlag(FLAG_SSIZE8)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -670,13 +656,25 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "fractionType                              = %6u = %s",    fractionType,         getFractionTypeName(fractionType));
+        sprintf(string, "FLAG_FRACT                                = %s",          getBooleanName(getSystemFlag(FLAG_FRACT)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "denominatorMode                           = %6u = %s",    denominatorMode,      getDenModeName(denominatorMode));
+        sprintf(string, "FLAG_PROPFR                               = %s = %s",     getBooleanName(getSystemFlag(FLAG_PROPFR)), getFractionTypeName(getSystemFlag(FLAG_PROPFR)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_DENANY                               = %s = %s",     getBooleanName(getSystemFlag(FLAG_DENANY)), getFractionDenom1ModeName(getSystemFlag(FLAG_DENANY)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_DENFIX                               = %s = %s",     getBooleanName(getSystemFlag(FLAG_DENFIX)), getFractionDenom2ModeName(getSystemFlag(FLAG_DENFIX)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -748,13 +746,25 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "timeFormat                                = %6u = %s",    timeFormat,           getTimeFormatName(timeFormat));
+        sprintf(string, "FLAG_TDM24 (time format)                  = %s = %s",     getBooleanName(getSystemFlag(FLAG_TDM24)), getTimeFormatName(getSystemFlag(FLAG_TDM24)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "dateFormat                                = %6u = %s",    dateFormat,           getDateFormatName(dateFormat));
+        sprintf(string, "FLAG_YMD (date format)                    = %s",          getBooleanName(getSystemFlag(FLAG_YMD)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_DMY (date format)                    = %s",          getBooleanName(getSystemFlag(FLAG_DMY)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_MDY (date format)                    = %s",          getBooleanName(getSystemFlag(FLAG_MDY)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -766,13 +776,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "complexUnit                               = %6u = %s",    complexUnit,          getComplexUnitName(complexUnit));
+        sprintf(string, "FLAG_CPXj                                 = %s = %s",     getBooleanName(getSystemFlag(FLAG_CPXj)), getTimeFormatName(getSystemFlag(FLAG_CPXj)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "displayLeadingZeros                       = %6u = %s",    displayLeadingZeros,  getBooleanName(displayLeadingZeros));
+        sprintf(string, "FLAG_LEAD.0                               = %s",          getBooleanName(getSystemFlag(FLAG_CPXj)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -784,13 +794,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "radixMark                                 = %6u = %s",    radixMark,            getRadixMarkName(radixMark));
+        sprintf(string, "FLAG_DECIM.                               = %s",          getBooleanName(getSystemFlag(FLAG_DECIMP)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "complexMode                               = %6u = %s",    complexMode,          getComplexModeName(complexMode));
+        sprintf(string, "FLAG_POLAR (complex mode)                 = %s = %s",     getBooleanName(getSystemFlag(FLAG_POLAR)), getTimeFormatName(getSystemFlag(FLAG_POLAR)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -814,7 +824,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "userModeEnabled                           = %6u = %s",    userModeEnabled,      getBooleanName(userModeEnabled));
+        sprintf(string, "FLAG_USER                                 = %s",          getBooleanName(getSystemFlag(FLAG_USER)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -832,13 +842,13 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "batteryIconEnabled                        = %6u = %s",    batteryIconEnabled,   getBooleanName(batteryIconEnabled));
+        sprintf(string, "FLAG_LOWBAT                               = %s",          getBooleanName(getSystemFlag(FLAG_LOWBAT)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "stackLiftEnabled                          = %6u = %s",    stackLiftEnabled,     getBooleanName(stackLiftEnabled));
+        sprintf(string, "FLAG_ASLIFT                               = %s",          getBooleanName(getSystemFlag(FLAG_ASLIFT)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }
@@ -1509,7 +1519,7 @@ void dumpScreenToConsole(void) {
 
 
 
-#if defined(PC_BUILD )|| defined(TESTSUITE_BUILD)
+#if defined(PC_BUILD ) || defined(TESTSUITE_BUILD)
 void testRegisters(const char *text) {
   calcRegister_t i;
   bool_t situationIsBad;

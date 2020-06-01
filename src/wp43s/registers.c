@@ -21,7 +21,6 @@
 #include "wp43s.h"
 
 
-
 /********************************************//**
  * \brief returns the data type of a register
  *
@@ -584,6 +583,15 @@ void setVariableNamePointer(calcRegister_t regist, void *namePointer) {
  * \return void
  ***********************************************/
 void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
+  if(numberOfRegistersToAllocate > 99) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "You can allocate up to 99 registers, you requested %" FMT16U, numberOfRegistersToAllocate);
+      showInfoDialog("In function allocateLocalRegisters:", errorMessage, NULL, NULL);
+    #endif
+    return;
+  }
+
   if(numberOfRegistersToAllocate != allLocalRegisterPointer->numberOfLocalRegisters) { // There is something to do
     uint16_t numRegs, r;
 
@@ -939,6 +947,7 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
     case dtShortInteger: return SHORT_INTEGER_SIZE;
     case dtReal34:       return REAL34_SIZE;
     case dtComplex34:    return COMPLEX34_SIZE;
+    case dtConfig:       return CONFIG_SIZE;
 
     default:
       sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(getRegisterDataType(regist), false, false));
@@ -1018,7 +1027,7 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
     clearRegister(FIRST_LOCAL_REGISTER + regist);
   }
 
-  if(stackSize == SS_4) {
+  if(!getSystemFlag(FLAG_SSIZE8)) { // Stack size = 4
     for(regist=REGISTER_A; regist<=REGISTER_D; regist++) {
       clearRegister(regist);
     }
@@ -1075,7 +1084,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   }
 
   resultDataType = getRegisterDataType(res);
-  if(getFlag(FLAG_DANGER) == false) {
+  if(getSystemFlag(FLAG_SPCRES) == false) {
     // D is clear: test infinite values and -0 values
     switch(resultDataType) {
       case dtReal34:
@@ -1400,13 +1409,24 @@ void fnStoreMax(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreConfig(uint16_t r) {
-#ifdef PC_BUILD
-printf("fnStoreConfig %" FMT16U "\n", r);
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnStoreConfig:", "To be coded", NULL, NULL);
-  #endif
+  reallocateRegister(r, dtConfig, CONFIG_SIZE, AM_NONE);
+  dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
+  
+  storeToDtConfigDescriptor(shortIntegerMode);
+  storeToDtConfigDescriptor(shortIntegerWordSize);
+  storeToDtConfigDescriptor(displayFormat);
+  storeToDtConfigDescriptor(displayFormatDigits);
+  storeToDtConfigDescriptor(groupingGap);
+  storeToDtConfigDescriptor(currentAngularMode);
+  storeToDtConfigDescriptor(denMax);
+  storeToDtConfigDescriptor(displayStack);
+  storeToDtConfigDescriptor(firstGregorianDay);
+  storeToDtConfigDescriptor(curveFitting);
+  storeToDtConfigDescriptor(roundingMode);  
+  storeToDtConfigDescriptor(systemFlags);
+  xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
+
+  storeToDtConfigDescriptor(Norm_Key_00_VAR);                                //JMCFG
 }
 
 
@@ -1418,7 +1438,7 @@ printf("fnStoreConfig %" FMT16U "\n", r);
  * \return void
  ***********************************************/
 void fnStoreStack(uint16_t r) {
-  uint16_t size = stackSize==SS_4 ? 4 : 8;
+  uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
   if(r + size >= REGISTER_X) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
@@ -1675,13 +1695,60 @@ void fnRecallMax(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallConfig(uint16_t r) {
-#ifdef PC_BUILD
-printf("fnRecallConfig %" FMT16U "\n", r);
-#endif
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    showInfoDialog("In function fnRecallConfig:", "To be coded", NULL, NULL);
-  #endif
+  if (getRegisterDataType(r) == dtConfig) {
+    dtConfigDescriptor_t *configToRecall = REGISTER_CONFIG_DATA(r);
+
+    xcopy(kbd_usr, configToRecall->kbd_usr, sizeof(kbd_usr));
+    recallFromDtConfigDescriptor(shortIntegerMode);
+    recallFromDtConfigDescriptor(shortIntegerWordSize);
+    recallFromDtConfigDescriptor(displayFormat);
+    recallFromDtConfigDescriptor(displayFormatDigits);
+    recallFromDtConfigDescriptor(groupingGap);
+    recallFromDtConfigDescriptor(currentAngularMode);
+    recallFromDtConfigDescriptor(denMax);
+    recallFromDtConfigDescriptor(displayStack);
+    recallFromDtConfigDescriptor(firstGregorianDay);
+    recallFromDtConfigDescriptor(curveFitting);
+    recallFromDtConfigDescriptor(roundingMode);
+
+    setSystemFlagToRecalled(FLAG_TDM24);
+    setSystemFlagToRecalled(FLAG_DMY);
+    setSystemFlagToRecalled(FLAG_MDY);
+    setSystemFlagToRecalled(FLAG_YMD);
+    setSystemFlagToRecalled(FLAG_CPXRES);
+    setSystemFlagToRecalled(FLAG_POLAR);
+    setSystemFlagToRecalled(FLAG_FRACT);
+    setSystemFlagToRecalled(FLAG_PROPFR);
+    setSystemFlagToRecalled(FLAG_DENANY);
+    setSystemFlagToRecalled(FLAG_DENFIX);
+    setSystemFlagToRecalled(FLAG_LEAD0);
+    setSystemFlagToRecalled(FLAG_TRACE);
+    setSystemFlagToRecalled(FLAG_USER);
+    setSystemFlagToRecalled(FLAG_SLOW);
+    setSystemFlagToRecalled(FLAG_SPCRES);
+    setSystemFlagToRecalled(FLAG_SSIZE8);
+    setSystemFlagToRecalled(FLAG_QUIET);
+    setSystemFlagToRecalled(FLAG_DECIMP);
+    setSystemFlagToRecalled(FLAG_ALLENG);
+    setSystemFlagToRecalled(FLAG_GROW);
+    setSystemFlagToRecalled(FLAG_AUTOFF);
+    setSystemFlagToRecalled(FLAG_AUTXEQ);
+    setSystemFlagToRecalled(FLAG_IGN1ER);
+
+    recallFromDtConfigDescriptor(Norm_Key_00_VAR);
+
+    refreshStack();
+    showAngularMode();
+    showIntegerMode();
+  }
+
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "data type %s cannot be used to recall a configuration!", getRegisterDataTypeName(r, false, false));
+        showInfoDialog("In function fnRecallConfig:", errorMessage, NULL, NULL);
+      #endif
+  }
 }
 
 
@@ -1693,7 +1760,7 @@ printf("fnRecallConfig %" FMT16U "\n", r);
  * \return void
  ***********************************************/
 void fnRecallStack(uint16_t r) {
-  uint16_t size = stackSize==SS_4 ? 4 : 8;
+  uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
   if(r + size >= REGISTER_X) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
@@ -1799,9 +1866,9 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(real34CompareLessThan(REGISTER_REAL34_DATA(regist), const34_0) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(regist), &maxValue34)) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        real34ToString(REGISTER_REAL34_DATA(regist), errorMessage + 200);
-        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
-        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+        real34ToString(REGISTER_REAL34_DATA(regist), errorMessage);
+        sprintf(tmpStr3000, "register %" FMT16S " = %s:", regist, errorMessage);
+        showInfoDialog("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
       #endif
       return 9999;
     }
@@ -1815,9 +1882,9 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(longIntegerIsNegative(lgInt) || longIntegerCompareUInt(lgInt, maxValue) >= 0) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        longIntegerToAllocatedString(lgInt, errorMessage + 200, sizeof(errorMessage) - 200);
-        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
-        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+        longIntegerToAllocatedString(lgInt, errorMessage, sizeof(errorMessage));
+        sprintf(tmpStr3000, "register %" FMT16S " = %s:", regist, errorMessage);
+        showInfoDialog("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
       #endif
       longIntegerFree(lgInt);
       return 9999;
@@ -1834,12 +1901,9 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     if(sign == 1 || val > 180) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        const font_t *font;
-
-        font = &standardFont;
-        shortIntegerToDisplayString(regist, errorMessage + 200, &font);
-        sprintf(errorMessage, "register %" FMT16S " = %s:", regist, errorMessage + 200);
-        showInfoDialog("In function indirectAddressing:", errorMessage, "this value is negative or too big!", NULL);
+        shortIntegerToDisplayString(regist, errorMessage, false);
+        sprintf(tmpStr3000, "register %" FMT16S " = %s:", regist, errorMessage);
+        showInfoDialog("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
       #endif
       return 9999;
     }

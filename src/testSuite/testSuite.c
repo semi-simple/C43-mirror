@@ -27,6 +27,10 @@
 extern const int16_t menu_FCNS[];
 extern const int16_t menu_CONST[];
 extern const int16_t menu_MENUS[];
+extern const int16_t menu_SYSFL[];
+extern const int16_t menu_alpha_INTL[];
+extern const int16_t menu_alpha_intl[];
+extern const int16_t menu_REGIST[];
 extern const softmenu_t softmenu[];
 char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal, failedTests;
@@ -447,22 +451,22 @@ void setParameter(char *p) {
   }
 
   //Setting a flag
-  if(l[0] == 'F') {
+  if(!strncmp(l, "FL_", 3)) {
     if(r[0] != '0' && r[0] != '1' && r[1] != 0) {
       printf("\nMissformed flag setting. The rvalue must be 0 or 1\n");
       abortTest();
     }
 
     //Lettered flag
-    if(l[1] >= 'A' && l[2] == 0) {
-      if(strstr("XYZTABCDLIJK", l + 1) != NULL) {
+    if(l[3] >= 'A' && l[4] == 0) {
+      if(strstr("XYZTABCDLIJK", l + 3) != NULL) {
         uint16_t flg;
 
-        flg = l[1] == 'T' ? 103 :
-              l[1] == 'L' ? 108 :
-              l[1] <= 'D' ? l[1] + 39 :
-              l[1] <= 'K' ? l[1] + 36 :
-                            l[1] + 12;
+        flg = l[3] == 'T' ? 103 :
+              l[3] == 'L' ? 108 :
+              l[3] <= 'D' ? l[3] + 39 :
+              l[3] <= 'K' ? l[3] + 36 :
+                            l[3] + 12;
 
         if(r[0] == '1') {
           fnSetFlag(flg);
@@ -474,16 +478,16 @@ void setParameter(char *p) {
         }
       }
       else {
-        printf("\nMissformed flag setting. After F there shall be a number from 0 to 111 or a lettered flag\n");
+        printf("\nMissformed flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
       }
     }
 
     //Numbered flag
-    else if(   (l[1] >= '0' && l[1] <= '9' && l[2] == 0)
-            || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] == 0)
-            || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] >= '0' && l[3] <= '9' && l[4] == 0)) {
-      uint16_t flg = atoi(l + 1);
+    else if(   (l[3] >= '0' && l[3] <= '9' && l[4] == 0)
+            || (l[3] >= '0' && l[3] <= '9' && l[4] >= '0' && l[4] <= '9' && l[5] == 0)
+            || (l[3] >= '0' && l[3] <= '9' && l[4] >= '0' && l[4] <= '9' && l[5] >= '0' && l[5] <= '9' && l[6] == 0)) {
+      uint16_t flg = atoi(l + 3);
       if(flg <= 111) {
         if(r[0] == '1') {
           fnSetFlag(flg);
@@ -495,34 +499,34 @@ void setParameter(char *p) {
         }
       }
       else {
-        printf("\nMissformed flag setting. After the after F shall be a number from 0 to 111\n");
+        printf("\nMissformed flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
       }
     }
 
+    //System flag
     else {
-      printf("\nMissformed numbered flag setting. After F there shall be a number from 0 to 111\n");
-      abortTest();
+      if(!strcmp(l+3, "SPCRES")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_SPCRES);}   else {setSystemFlag(FLAG_SPCRES);}
+      }
+      else if(!strcmp(l+3, "CPXRES")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_CPXRES);}   else {setSystemFlag(FLAG_CPXRES);}
+      }
+      else if(!strcmp(l+3, "CARRY")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_CARRY);}    else {setSystemFlag(FLAG_CARRY);}
+      }
+      else if(!strcmp(l+3, "OVERFL")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_OVERFLOW);} else {setSystemFlag(FLAG_OVERFLOW);}
+      }
+      else if(!strcmp(l+3, "ASLIFT")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_ASLIFT);} else {setSystemFlag(FLAG_ASLIFT);}
+      }
+      else {
+        printf("\nMissformed numbered flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
+        abortTest();
+      }
     }
   }
-
-  //Setting Stack Lift
-  else if(strcmp(l, "SL") == 0) {
-    if(r[0] != '0' && r[0] != '1' && r[1] != 0) {
-      printf("\nMissformed stack lift setting. The rvalue must be 0 or 1");
-      abortTest();
-    }
-
-    if(r[0] == '1') {
-      STACK_LIFT_ENABLE;
-      //printf("  Stack lift enabled\n");
-    }
-    else {
-      STACK_LIFT_DISABLE;
-      //printf("  Stack lift disabled\n");
-    }
-  }
-
   //Setting integer mode
   else if(strcmp(l, "IM") == 0) {
     if(strcmp(r, "1COMPL") == 0) {
@@ -550,11 +554,11 @@ void setParameter(char *p) {
   //Setting Complex mode
   else if(strcmp(l, "CM") == 0) {
     if(strcmp(r, "RECT") == 0) {
-      complexMode = CM_RECTANGULAR;
+      clearSystemFlag(FLAG_POLAR);
       //printf("  Set complex mode to RECT\n");
     }
     else if(strcmp(r, "POLAR") == 0) {
-      complexMode = CM_POLAR;
+      setSystemFlag(FLAG_POLAR);
       //printf("  Set complex mode to POLAR\n");
     }
     else {
@@ -594,11 +598,11 @@ void setParameter(char *p) {
   //Setting stack size
   else if(strcmp(l, "SS") == 0) {
     if(strcmp(r, "4") == 0) {
-      stackSize = SS_4;
+      clearSystemFlag(FLAG_SSIZE8);
       //printf("  Set stack size to 4\n");
     }
     else if(strcmp(r, "8") == 0) {
-      stackSize = SS_8;
+      setSystemFlag(FLAG_SSIZE8);
       //printf("  Set stack size to 8\n");
     }
     else {
@@ -1092,22 +1096,22 @@ void checkExpectedOutParameter(char *p) {
   }
 
   //Checking a flag
-  if(l[0] == 'F') {
+  if(!strncmp(l, "FL_", 3)) {
     if(r[0] != '0' && r[0] != '1' && r[1] != 0) {
       printf("\nMissformed flag checking. The rvalue must be 0 or 1.\n");
       abortTest();
     }
 
     //Lettered flag
-    if(l[1] >= 'A' && l[2] == 0) {
-      if(strstr("XYZTABCDLIJK", l + 1) != NULL) {
+    if(l[3] >= 'A' && l[4] == 0) {
+      if(strstr("XYZTABCDLIJK", l + 3) != NULL) {
         uint16_t flg;
 
-        flg = l[1] == 'T' ? 103 :
-              l[1] == 'L' ? 108 :
-              l[1] <= 'D' ? l[1] + 39 :
-              l[1] <= 'K' ? l[1] + 36 :
-                            l[1] + 12;
+        flg = l[3] == 'T' ? 103 :
+              l[3] == 'L' ? 108 :
+              l[3] <= 'D' ? l[3] + 39 :
+              l[3] <= 'K' ? l[3] + 36 :
+                            l[3] + 12;
 
         if(r[0] == '1') {
           if(!getFlag(flg)) {
@@ -1123,54 +1127,86 @@ void checkExpectedOutParameter(char *p) {
         }
       }
       else {
-        printf("\nMissformed flag checking. After F there shall be a number from 0 to 111 or a lettered flag.\n");
+        printf("\nMissformed flag checking. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
       }
     }
 
     //Numbered flag
-    else if(   (l[1] >= '0' && l[1] <= '9' && l[2] == 0)
-            || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] == 0)
-            || (l[1] >= '0' && l[1] <= '9' && l[2] >= '0' && l[2] <= '9' && l[3] >= '0' && l[3] <= '9' && l[4] == 0)) {
-      uint16_t flg = atoi(l + 1);
+    else if(   (l[3] >= '0' && l[3] <= '9' && l[4] == 0)
+            || (l[3] >= '0' && l[3] <= '9' && l[4] >= '0' && l[4] <= '9' && l[5] == 0)
+            || (l[3] >= '0' && l[3] <= '9' && l[4] >= '0' && l[4] <= '9' && l[5] >= '0' && l[5] <= '9' && l[6] == 0)) {
+      uint16_t flg = atoi(l + 3);
       if(flg <= 111) {
-        if(r[0] == '1') {
+        if(r[0] == '1' && !getFlag(flg)) {
           printf("\nFlag %d should be set but it is clear!\n", flg);
           abortTest();
         }
-        else {
+        else if(r[0] == '0' && getFlag(flg)) {
           printf("\nFlag %d should be clear but it is set!\n", flg);
           abortTest();
         }
       }
       else {
-        printf("\nMissformed flag checking in line. After the after F shall be a number from 0 to 111.\n");
+        printf("\nMissformed flag checking in line. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
       }
     }
 
+    //System flag
     else {
-      printf("\nMissformed numbered flag checking. After F there shall be a number from 0 to 111.\n");
-      abortTest();
-    }
-  }
-
-  //Checking Stack Lift
-  else if(strcmp(l, "SL") == 0) {
-    if(r[0] != '0' && r[0] != '1' && r[1] != 0) {
-      printf("\nMissformed stack lift checking. The rvalue must be 0 or 1.\n");
-      abortTest();
-    }
-
-    if(r[0] == '1') {
-      if(!stackLiftEnabled) {
-        printf("\nStack lift should be enabled but it is disabled!\n");
-        abortTest();
+      if(!strcmp(l+3, "SPCRES")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_SPCRES)) {
+          printf("\nSystem flag SPCRES should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_SPCRES)) {
+          printf("\nSystem flag SPCRES should be clear but it is set!\n");
+          abortTest();
+        }
       }
-    }
-    else {
-      if(stackLiftEnabled) {
-        printf("\nStack lift should be disabled but it is enabled!\n");
+      else if(!strcmp(l+3, "CPXRES")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_CPXRES)) {
+          printf("\nSystem flag CPXRES should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_CPXRES)) {
+          printf("\nSystem flag CPXRES should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "CARRY")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_CARRY)) {
+          printf("\nSystem flag CARRY should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_CARRY)) {
+          printf("\nSystem flag CARRY should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "OVERFL")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_OVERFLOW)) {
+          printf("\nSystem flag OVERFL should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_OVERFLOW)) {
+          printf("\nSystem flag OVERFL should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "ASLIFT")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_ASLIFT)) {
+          printf("\nSystem flag ASLIFT should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_ASLIFT)) {
+          printf("\nSystem flag ASLIFT should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else {
+        printf("\nMissformed numbered flag checking. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
       }
     }
@@ -1211,13 +1247,13 @@ void checkExpectedOutParameter(char *p) {
   //Checking complex mode
   else if(strcmp(l, "CM") == 0) {
     if(strcmp(r, "RECT") == 0) {
-      if(complexMode != CM_RECTANGULAR) {
+      if(getSystemFlag(FLAG_POLAR)) {
         printf("\ncomplex mode should be RECT but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "POLAR") == 0) {
-      if(complexMode != CM_POLAR) {
+      if(!getSystemFlag(FLAG_POLAR)) {
         printf("\ncomplex mode should be POLAR but it is not!\n");
         abortTest();
       }
@@ -1269,13 +1305,13 @@ void checkExpectedOutParameter(char *p) {
   //Checking stack size
   else if(strcmp(l, "SS") == 0) {
     if(strcmp(r, "4") == 0) {
-      if(stackSize != SS_4) {
+      if(getSystemFlag(FLAG_SSIZE8)) {
         printf("\nStack size should be 4 but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "8") == 0) {
-      if(stackSize != SS_8) {
+      if(!getSystemFlag(FLAG_SSIZE8)) {
         printf("\nStack size should be 8 but it is not!\n");
         abortTest();
       }
@@ -1677,10 +1713,10 @@ void callFunction(void) {
   if(lastErrorCode == 0) {
     if(functionIndex < LAST_ITEM) {
       if(indexOfItems[functionIndex].stackLiftStatus == SLS_DISABLED) {
-        stackLiftEnabled = false;
+        clearSystemFlag(FLAG_ASLIFT);
       }
       else if(indexOfItems[functionIndex].stackLiftStatus == SLS_ENABLED) {
-        stackLiftEnabled = true;
+        setSystemFlag(FLAG_ASLIFT);
       }
     }
   }
@@ -1936,7 +1972,8 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
 
   for(i=1; i<nbElements; i++) {
     if((cmp = compareString(indexOfItems[abs(catalog[i - 1])].itemCatalogName, indexOfItems[abs(catalog[i])].itemCatalogName, CMP_EXTENSIVE)) >= 0) {
-      printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n", catalogName, i - 1, catalog[i - 1], i, catalog[i], cmp);
+      printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n",
+                         catalogName, i - 1,  catalog[i - 1],             i,       catalog[i],cmp);
       //exit(1);
     }
   }
@@ -1945,10 +1982,14 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
 
 
 void checkCatalogsSorting(void) {
-  //compareString(indexOfItems[234].itemCatalogName, indexOfItems[245].itemCatalogName, CMP_EXTENSIVE);
-  checkOneCatalogSorting(menu_FCNS,  MNU_FCNS,  "FCNS");
-  checkOneCatalogSorting(menu_CONST, MNU_CONST, "CONST");
-  checkOneCatalogSorting(menu_MENUS, MNU_MENUS, "MENUS");
+  //compareString(indexOfItems[1048].itemCatalogName, indexOfItems[1049].itemCatalogName, CMP_EXTENSIVE);
+  checkOneCatalogSorting(menu_FCNS,       MNU_FCNS,      "FCNS");
+  checkOneCatalogSorting(menu_CONST,      MNU_CONST,     "CONST");
+  checkOneCatalogSorting(menu_MENUS,      MNU_MENUS,     "MENUS");
+  checkOneCatalogSorting(menu_SYSFL,      MNU_SYSFL,     "SYS.FL");
+  checkOneCatalogSorting(menu_alpha_INTL, MNU_ALPHAINTL, "alphaINTL");
+  checkOneCatalogSorting(menu_alpha_intl, MNU_ALPHAintl, "alphaIntl");
+  checkOneCatalogSorting(menu_REGIST,     MNU_REGIST,    "REGIST");
 }
 
 

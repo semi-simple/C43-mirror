@@ -52,16 +52,20 @@
 #define LAST_SAVED_REGISTER 2009
 #define TEMP_REGISTER       2009
 
-#define getStackTop()                      (stackSize == SS_4 ? REGISTER_T : REGISTER_D)
+#define getStackTop()                         (getSystemFlag(FLAG_SSIZE8) ? REGISTER_D : REGISTER_T)
 
-#define freeRegisterData(regist)           freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
+#define freeRegisterData(regist)              freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
 
+#define storeToDtConfigDescriptor(config)     (configToStore->config = config)
+#define recallFromDtConfigDescriptor(config)  (config = configToRecall->config)
 
+#define getRecalledSystemFlag(sf)             ((configToRecall->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
+#define setSystemFlagToRecalled(sf)           (getRecalledSystemFlag(sf)) ? (setSystemFlag(sf)) : (clearSystemFlag(sf))
 
 ///////////////////////////////////////////////////////
 // Register numbering:
 //    0 to  111 global resisters
-//  112 to  199 local registers (.00 to .87)
+//  112 to  211 local registers (from .00 to .99) this are 100 local registers but TAM allows only a parameter from 0 to 99 (without indirection)
 // 1000 to 1999 named variables
 // 2000 to 2009 saved stack registers (UNDO item)
 
@@ -83,10 +87,27 @@ typedef enum {
   //dtLabel           = 12,  ///< Label
   //dtSystemInteger   = 13,  ///< System integer (64 bits)
   //dtFlags           = 14,  ///< Flags
-  //dtConfig          = 15,  ///< Configuration
+  dtConfig          = 15,  ///< Configuration
   //dtPgmStep         = 16,  ///< Program step
   //dtDirectory       = 17,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
+
+typedef struct {
+    uint8_t   shortIntegerMode;
+    uint8_t   shortIntegerWordSize;
+    uint8_t   displayFormat;
+    uint8_t   displayFormatDigits;
+    uint8_t   groupingGap;
+    uint8_t   currentAngularMode;
+    uint8_t   displayStack;
+    uint8_t   curveFitting;
+    uint8_t   roundingMode;
+    uint32_t  denMax;
+    uint32_t  firstGregorianDay;
+    uint64_t  systemFlags;
+    calcKey_t kbd_usr[37];
+    int16_t   Norm_Key_00_VAR;                                                     //JMCFG
+} dtConfigDescriptor_t;
 
 typedef union {
   uint32_t descriptor;

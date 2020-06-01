@@ -77,8 +77,10 @@ void runFunction(int16_t func) {
     #endif
   }
 
-  tamMode = indexOfItems[func].param;
-  if(calcMode != CM_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
+  if(calcMode != CM_ASM_OVER_TAM) {
+    tamMode = indexOfItems[func].param;
+  }
+  if(calcMode != CM_TAM && calcMode != CM_ASM_OVER_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
     tamFunction = func;
     strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
     tamNumberMin = indexOfItems[func].tamMin;

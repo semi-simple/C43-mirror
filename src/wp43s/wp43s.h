@@ -520,6 +520,7 @@ extern char                  aimBuffer[AIM_BUFFER_LENGTH];
 extern char                  nimBuffer[NIM_BUFFER_LENGTH];
 extern char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
 extern char                  tamBuffer[TAM_BUFFER_LENGTH];
+extern char                  asmBuffer[5];
 extern char                  oldTime[8];
 extern char                  dateTimeString[12];
 extern softmenuStack_t       softmenuStack[7];

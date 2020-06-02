@@ -673,6 +673,7 @@ extern bool_t                showContent;
 extern bool_t                savedStackLiftEnabled;
 extern bool_t                rbr1stDigit;
 extern bool_t                updateDisplayValueX;
+extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
 extern calcKey_t             kbd_usr[37];
 extern calcRegister_t        errorMessageRegisterLine;
 extern calcRegister_t        errorRegisterLine;

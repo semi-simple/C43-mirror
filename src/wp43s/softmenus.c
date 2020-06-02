@@ -1431,6 +1431,18 @@ void showSoftmenuCurrentPart(void) {
             }
           }
         }
+        
+        else                                                                   //JMvv
+        if(softmenu[m].menuId == -MNU_SYSFL) {
+          //printf("%s %d %d\n",indexOfItems[item%10000].itemCatalogName, indexOfItems[item%10000].param, getSystemFlag(indexOfItems[item%10000].param));
+          if(getSystemFlag(indexOfItems[item%10000].param)) {
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, CB_TRUE, -1);
+          } 
+          else {
+            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, CB_FALSE, -1);
+          }
+        }                                                                      //JM^^
+
         else if(item == 9999) {
           showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb, showValue);
         }

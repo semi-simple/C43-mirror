@@ -1068,7 +1068,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
       case dtComplex34:    sizeInBlocks = COMPLEX34_SIZE;                                        break;
 
       default:
-        sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), true, false));
+        sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), false, false));
         displayBugScreen(errorMessage);
         sizeInBlocks = 0;
     }
@@ -1283,7 +1283,7 @@ void fnStoreMax(uint16_t regist) {
 void fnStoreConfig(uint16_t r) {
   reallocateRegister(r, dtConfig, CONFIG_SIZE, AM_NONE);
   dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
-  
+
   storeToDtConfigDescriptor(shortIntegerMode);
   storeToDtConfigDescriptor(shortIntegerWordSize);
   storeToDtConfigDescriptor(displayFormat);
@@ -1294,7 +1294,7 @@ void fnStoreConfig(uint16_t r) {
   storeToDtConfigDescriptor(displayStack);
   storeToDtConfigDescriptor(firstGregorianDay);
   storeToDtConfigDescriptor(curveFitting);
-  storeToDtConfigDescriptor(roundingMode);  
+  storeToDtConfigDescriptor(roundingMode);
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
 }
@@ -1579,7 +1579,7 @@ void fnRecallConfig(uint16_t r) {
     recallFromDtConfigDescriptor(displayStack);
     recallFromDtConfigDescriptor(firstGregorianDay);
     recallFromDtConfigDescriptor(curveFitting);
-    recallFromDtConfigDescriptor(roundingMode); 
+    recallFromDtConfigDescriptor(roundingMode);
 
     setSystemFlagToRecalled(FLAG_TDM24);
     setSystemFlagToRecalled(FLAG_DMY);
@@ -1604,7 +1604,7 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_AUTOFF);
     setSystemFlagToRecalled(FLAG_AUTXEQ);
     setSystemFlagToRecalled(FLAG_IGN1ER);
-    
+
     refreshStack();
     showAngularMode();
     showIntegerMode();

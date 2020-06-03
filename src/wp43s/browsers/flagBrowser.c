@@ -271,6 +271,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 
   if(currentFlgScr == 3) {        //JMvv
     currentFlgScr = 0;
+    calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
     flagBrowser_old(0);           //JM^^
   }
 }
@@ -292,6 +293,8 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
   if(calcMode != CM_FLAG_BROWSER_OLD) {
     previousCalcMode = calcMode;
     calcMode = CM_FLAG_BROWSER_OLD;
+    clearSystemFlag(FLAG_ALPHA);          //JM
+    currentFlgScr = 0;                    //JM
   }
 
   if(currentFlgScr == 0) { // Init
@@ -326,13 +329,29 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
 
     for(f=100/*80*/; f<NUMBER_OF_GLOBAL_FLAGS; f++) {                     //JM100
       if(getFlag(f)) {
-        for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-          for(y=22*(f/10)-132-1-44; y<22*(f/10)-132+20-1-44; y++) {       //JM-44
+        for(x=2*40*(f%5)+1+16; x<2*40*(f%5)+39+16; x++) {
+          for(y=22*(f/5)-132-1-44-220; y<22*(f/5)-132+20-1-44-220; y++) {       //JM-44
            setPixel(x, y);
           }
         }
       }
 
+      switch(f) {
+      	case 100: strcpy(tmpStr3000, "POLAR_x "); break;
+      	case 101: strcpy(tmpStr3000, "   101y "); break;
+      	case 102: strcpy(tmpStr3000, "   102z "); break;
+      	case 103: strcpy(tmpStr3000, "TRACE_t "); break;
+      	case 104: strcpy(tmpStr3000, "ENGAL_a "); break;
+      	case 105: strcpy(tmpStr3000, "OVRFL_b "); break;
+      	case 106: strcpy(tmpStr3000, "CARRY_c "); break;
+      	case 107: strcpy(tmpStr3000, "SpcRs_d "); break;
+      	case 108: strcpy(tmpStr3000, "LEAD0_e "); break;
+      	case 109: strcpy(tmpStr3000, "CpxRs_f "); break;
+      	case 110: strcpy(tmpStr3000, "   110j "); break;
+      	case 111: strcpy(tmpStr3000, "   111k "); break;
+      	default:  sprintf(tmpStr3000,"   %d ", f);break;
+      }
+/*
       if(f == 103) {
         strcpy(tmpStr3000, "103t");
       }
@@ -351,8 +370,8 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
       else {
         sprintf(tmpStr3000, "%d", f);
       }
-
-      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)-132-1-44, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
+*/
+      showString(tmpStr3000, &standardFont, max(0,16-1+2*40*(f%5) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
     }
 
     if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
@@ -377,6 +396,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
 
   if(currentFlgScr == 3) { // Change over to STATUS
   currentFlgScr = 0;
+  calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
   flagBrowser(0);
   }
 }

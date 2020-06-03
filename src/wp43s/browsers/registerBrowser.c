@@ -137,6 +137,9 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             sprintf(tmpStr3000, "%" FMT32U " character%s := 4+%" FMT32U " bytes", (uint32_t)stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", (uint32_t)TO_BYTES(getRegisterMaxDataLength(regist)));
           }
         }
+        else if(getRegisterDataType(regist) == dtConfig) {
+          sprintf(tmpStr3000, "Configuration");
+        }
         else {
           sprintf(tmpStr3000, "Data type %s: to be coded", getDataTypeName(getRegisterDataType(regist), false, true));
         }

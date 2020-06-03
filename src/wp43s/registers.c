@@ -1180,32 +1180,32 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
  * \return void
  ***********************************************/
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
-  if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
-     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)) {
-    uint32_t sizeInBlocks;
+    if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
+      || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)) {
+      uint32_t sizeInBlocks;
 
-    switch(getRegisterDataType(sourceRegister)) {
-      case dtLongInteger:  sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-      //case dtTime:
-      //case dtDate:
-      case dtString:       sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-      //case dtReal16Matrix:
-      //case dtComplex16Matrix:
-      case dtShortInteger: sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
-      case dtReal34:       sizeInBlocks = REAL34_SIZE;                                           break;
-      case dtComplex34:    sizeInBlocks = COMPLEX34_SIZE;                                        break;
+      switch(getRegisterDataType(sourceRegister)) {
+        case dtLongInteger:  sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
+        //case dtTime:
+        //case dtDate:
+        case dtString:       sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
+        //case dtReal16Matrix:
+        //case dtComplex16Matrix:
+        case dtShortInteger: sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
+        case dtReal34:       sizeInBlocks = REAL34_SIZE;                                           break;
+        case dtComplex34:    sizeInBlocks = COMPLEX34_SIZE;                                        break;
+        case dtConfig:       sizeInBlocks = CONFIG_SIZE;                                           break;
 
-      default:
-        sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), false, false));
-        displayBugScreen(errorMessage);
-        sizeInBlocks = 0;
+        default:
+          sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), false, false));
+          displayBugScreen(errorMessage);
+          sizeInBlocks = 0;
+      }
+      reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, AM_NONE);
     }
 
-    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, AM_NONE);
-  }
-
-  xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), TO_BYTES(getRegisterFullSize(sourceRegister)));
-  setRegisterTag(destRegister, getRegisterTag(sourceRegister));
+    xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), TO_BYTES(getRegisterFullSize(sourceRegister)));
+    setRegisterTag(destRegister, getRegisterTag(sourceRegister));
 }
 
 
@@ -1409,24 +1409,53 @@ void fnStoreMax(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreConfig(uint16_t r) {
-  reallocateRegister(r, dtConfig, CONFIG_SIZE, AM_NONE);
-  dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
+  if (r<REGISTER_X || r > REGISTER_K) {
+    reallocateRegister(r, dtConfig, CONFIG_SIZE, AM_NONE);
+    dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
 
-  storeToDtConfigDescriptor(shortIntegerMode);
-  storeToDtConfigDescriptor(shortIntegerWordSize);
-  storeToDtConfigDescriptor(displayFormat);
-  storeToDtConfigDescriptor(displayFormatDigits);
-  storeToDtConfigDescriptor(groupingGap);
-  storeToDtConfigDescriptor(currentAngularMode);
-  storeToDtConfigDescriptor(denMax);
-  storeToDtConfigDescriptor(displayStack);
-  storeToDtConfigDescriptor(firstGregorianDay);
-  storeToDtConfigDescriptor(curveFitting);
-  storeToDtConfigDescriptor(roundingMode);
-  storeToDtConfigDescriptor(systemFlags);
-  xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
+    storeToDtConfigDescriptor(shortIntegerMode);
+    storeToDtConfigDescriptor(shortIntegerWordSize);
+    storeToDtConfigDescriptor(displayFormat);
+    storeToDtConfigDescriptor(displayFormatDigits);
+    storeToDtConfigDescriptor(groupingGap);
+    storeToDtConfigDescriptor(currentAngularMode);
+    storeToDtConfigDescriptor(denMax);
+    storeToDtConfigDescriptor(displayStack);
+    storeToDtConfigDescriptor(firstGregorianDay);
+    storeToDtConfigDescriptor(curveFitting);
+    storeToDtConfigDescriptor(roundingMode);
+    storeToDtConfigDescriptor(systemFlags);
+    xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
 
-  storeToDtConfigDescriptor(Norm_Key_00_VAR);                                //JMCFG
+    //    storeToDtConfigDescriptor(Norm_Key_00_VAR);                          //JMCFG
+    storeToDtConfigDescriptor(SigFigMode);      
+    storeToDtConfigDescriptor(eRPN);             
+    storeToDtConfigDescriptor(HOME3);            
+    storeToDtConfigDescriptor(ShiftTimoutMode);  
+    storeToDtConfigDescriptor(Home3TimerMode);   
+    storeToDtConfigDescriptor(UNITDisplay);      
+    storeToDtConfigDescriptor(SH_BASE_HOME);     
+    storeToDtConfigDescriptor(SH_BASE_AHOME);    
+    storeToDtConfigDescriptor(Norm_Key_00_VAR); 
+    storeToDtConfigDescriptor(Input_Default);   
+    storeToDtConfigDescriptor(jm_FG_LINE);       
+    storeToDtConfigDescriptor(jm_FG_DOTS);       
+    storeToDtConfigDescriptor(jm_G_DOUBLETAP);   
+    storeToDtConfigDescriptor(graph_xmin);        
+    storeToDtConfigDescriptor(graph_xmax);        
+    storeToDtConfigDescriptor(graph_ymin);        
+    storeToDtConfigDescriptor(graph_ymax);        
+    storeToDtConfigDescriptor(graph_dx);          
+    storeToDtConfigDescriptor(graph_dy);          
+    storeToDtConfigDescriptor(jm_VECT);          
+    storeToDtConfigDescriptor(jm_HOME_SUM);      
+    storeToDtConfigDescriptor(jm_HOME_MIR);      
+    storeToDtConfigDescriptor(jm_HOME_FIX);                                    //JMCFG^^
+
+  }
+  else {
+    displayCalcErrorMessage(ERROR_STOCFG_TO_LETTERED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+  }
 }
 
 
@@ -1735,7 +1764,33 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_AUTXEQ);
     setSystemFlagToRecalled(FLAG_IGN1ER);
 
-    setSystemFlagToRecalled(Norm_Key_00_VAR);                             //JMCFG
+    //    setSystemFlagToRecalled(Norm_Key_00_VAR);                            //JMCFG vv
+    recallFromDtConfigDescriptor(SigFigMode);      
+    recallFromDtConfigDescriptor(eRPN);             
+    recallFromDtConfigDescriptor(HOME3);            
+    recallFromDtConfigDescriptor(ShiftTimoutMode);  
+    recallFromDtConfigDescriptor(Home3TimerMode);   
+    recallFromDtConfigDescriptor(UNITDisplay);      
+    recallFromDtConfigDescriptor(SH_BASE_HOME);     
+    recallFromDtConfigDescriptor(SH_BASE_AHOME);    
+    recallFromDtConfigDescriptor(Norm_Key_00_VAR); 
+    recallFromDtConfigDescriptor(Input_Default);   
+    recallFromDtConfigDescriptor(jm_FG_LINE);       
+    recallFromDtConfigDescriptor(jm_FG_DOTS);       
+    recallFromDtConfigDescriptor(jm_G_DOUBLETAP);   
+    recallFromDtConfigDescriptor(graph_xmin);        
+    recallFromDtConfigDescriptor(graph_xmax);        
+    recallFromDtConfigDescriptor(graph_ymin);        
+    recallFromDtConfigDescriptor(graph_ymax);        
+    recallFromDtConfigDescriptor(graph_dx);          
+    recallFromDtConfigDescriptor(graph_dy);          
+    recallFromDtConfigDescriptor(jm_VECT);          
+    recallFromDtConfigDescriptor(jm_HOME_SUM);      
+    recallFromDtConfigDescriptor(jm_HOME_MIR);      
+    recallFromDtConfigDescriptor(jm_HOME_FIX);
+    fnRebuildRadioState();                                                     //JMCFG^^ //dr build RadioButton, CheckBox
+
+
     refreshStack();
     showAngularMode();
     showIntegerMode();

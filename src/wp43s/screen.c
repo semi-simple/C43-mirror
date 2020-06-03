@@ -2118,6 +2118,13 @@ void refreshRegisterLine(calcRegister_t regist) {
             }
           }
 
+          else if (getRegisterDataType(regist) == dtConfig) {
+            sprintf(tmpStr3000, "Configuration");
+            w = stringWidth(tmpStr3000, &numericFont, false, true);
+            lineWidth = w;
+            showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+          
           else {
             sprintf(tmpStr3000, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);

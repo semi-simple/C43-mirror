@@ -106,7 +106,32 @@ typedef struct {
     uint32_t  firstGregorianDay;
     uint64_t  systemFlags;
     calcKey_t kbd_usr[37];
-    int16_t   Norm_Key_00_VAR;                                                     //JMCFG
+
+    //    int16_t   Norm_Key_00_VAR;                                           //JMCFGvv
+    uint8_t SigFigMode;      
+    bool_t eRPN;             
+    bool_t HOME3;            
+    bool_t ShiftTimoutMode;  
+    bool_t Home3TimerMode;   
+    bool_t UNITDisplay;      
+    bool_t SH_BASE_HOME;     
+    bool_t SH_BASE_AHOME;    
+    int16_t Norm_Key_00_VAR; 
+    uint8_t Input_Default;   
+    bool_t jm_FG_LINE;       
+    bool_t jm_FG_DOTS;       
+    bool_t jm_G_DOUBLETAP;   
+    float graph_xmin;        
+    float graph_xmax;        
+    float graph_ymin;        
+    float graph_ymax;        
+    float graph_dx;          
+    float graph_dy;          
+    bool_t jm_VECT;          
+    bool_t jm_HOME_SUM;      
+    bool_t jm_HOME_MIR;       
+    bool_t jm_HOME_FIX;                                                        //JMCFG^^
+
 } dtConfigDescriptor_t;
 
 typedef union {

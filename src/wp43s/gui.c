@@ -4004,6 +4004,9 @@ void fnOff(uint16_t unsuedParamButMandatory) {
 void calcModeNormal(void) {
   if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
     popSoftmenu();
+    if(calcMode == CM_ASM_OVER_TAM) {
+      popSoftmenu();
+    }
     refreshRegisterLine(TAM_REGISTER_LINE);
     STACK_LIFT_ENABLE;
   }

@@ -2010,9 +2010,11 @@
 #define ITM_RDXPER                    1967   //JM Replacements
 #define ITM_SSIZE8                    1968
 #define ITM_RECT                      1969   //JM Replacements
-#define ITM_FLGSV                     1970
+#define ITM_SCIOVR                    1970
+#define ITM_ENGOVR                    1971
+#define ITM_FLGSV                     1972
 
-#define LAST_ITEM                     1971   //JM
+#define LAST_ITEM                     1973   //JM
 
 #define CHR_PROD_SIGN                 9999
 

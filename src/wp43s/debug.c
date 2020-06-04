@@ -39,7 +39,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer      ";
     if(dt == dtReal34          ) return "a real34             ";
     if(dt == dtComplex34       ) return "a complex34          ";
-    if(dt == dtConfig          ) return "a config             ";
+    if(dt == dtConfig          ) return "a config data        ";
     //if(dt == dtLabel           ) return "a label              ";
     //if(dt == dtSystemInteger   ) return "a system integer     ";
     //if(dt == dtFlags           ) return "a flags              ";
@@ -57,7 +57,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "a short integer";
     if(dt == dtReal34          ) return "a real34";
     if(dt == dtComplex34       ) return "a complex34";
-    if(dt == dtConfig          ) return "a config";
+    if(dt == dtConfig          ) return "a config data";
     //if(dt == dtLabel           ) return "a label";
     //if(dt == dtSystemInteger   ) return "a system integer";
     //if(dt == dtFlags           ) return "a flags";
@@ -75,7 +75,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer        ";
     if(dt == dtReal34          ) return "real34               ";
     if(dt == dtComplex34       ) return "complex34            ";
-    if(dt == dtConfig          ) return "config               ";
+    if(dt == dtConfig          ) return "config data          ";
     //if(dt == dtLabel           ) return "label                ";
     //if(dt == dtSystemInteger   ) return "system integer       ";
     //if(dt == dtFlags           ) return "flags                ";
@@ -93,7 +93,7 @@ char * getDataTypeName(uint16_t dt, bool_t article, bool_t padWithBlanks) {
     if(dt == dtShortInteger    ) return "short integer";
     if(dt == dtReal34          ) return "real34";
     if(dt == dtComplex34       ) return "complex34";
-    if(dt == dtConfig          ) return "config";
+    if(dt == dtConfig          ) return "config data";
     //if(dt == dtLabel           ) return "label";
     //if(dt == dtSystemInteger   ) return "system integer";
     //if(dt == dtFlags           ) return "flags";
@@ -149,6 +149,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
     case dtComplex34Matrix:
     case dtDate:
     case dtTime:
+    case dtConfig:
       switch(getRegisterTag(regist)) {
         case AM_NONE:               return "        ";
         default:                    return "???     ";
@@ -627,7 +628,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtConfig) {
-      sprintf(string + n, "Calculator configuration");
+      sprintf(string + n, "Configuration data");
     }
 
     else {

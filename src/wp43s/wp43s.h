@@ -156,8 +156,9 @@ typedef int16_t calcRegister_t;
   extern int decGetInt(const decNumber *x);
 #endif
 
-#define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328
+#define NUMBER_OF_DISPLAY_DIGITS                16
+#define MAX_LONG_INTEGER_SIZE_IN_BITS         3328
+#define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS   10
 
 #if (LIBGMP == 1)
   #include <gmp.h>
@@ -497,10 +498,10 @@ extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t       kbd_std[37];
 extern const font_t          standardFont, numericFont;
 extern const font_t         *fontForShortInteger;
-extern void                  (* const addition[9][9])(void);
-extern void                  (* const subtraction[9][9])(void);
-extern void                  (* const multiplication[9][9])(void);
-extern void                  (* const division[9][9])(void);
+extern void                  (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+extern void                  (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+extern void                  (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+extern void                  (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern const softmenu_t      softmenu[];
 
 // Variables stored in RAM

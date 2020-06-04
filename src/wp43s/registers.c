@@ -1364,7 +1364,7 @@ void fnStoreMin(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     registerMin(REGISTER_X, regist, regist);
 
-    if(REGISTER_X <= regist && regist <= REGISTER_T) {
+    if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
       refreshRegisterLine(regist);
     }
   }
@@ -1388,7 +1388,7 @@ void fnStoreMax(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     registerMax(REGISTER_X, regist, regist);
 
-    if(REGISTER_X <= regist && regist <= REGISTER_T) {
+    if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
       refreshRegisterLine(regist);
     }
   }
@@ -1408,53 +1408,52 @@ void fnStoreMax(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreConfig(uint16_t r) {
-  if (r<REGISTER_X || r > REGISTER_K) {
-    reallocateRegister(r, dtConfig, CONFIG_SIZE, AM_NONE);
-    dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(r);
+void fnStoreConfig(uint16_t regist) {
+  reallocateRegister(regist, dtConfig, CONFIG_SIZE, AM_NONE);
+  dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(regist);
 
-    storeToDtConfigDescriptor(shortIntegerMode);
-    storeToDtConfigDescriptor(shortIntegerWordSize);
-    storeToDtConfigDescriptor(displayFormat);
-    storeToDtConfigDescriptor(displayFormatDigits);
-    storeToDtConfigDescriptor(groupingGap);
-    storeToDtConfigDescriptor(currentAngularMode);
-    storeToDtConfigDescriptor(denMax);
-    storeToDtConfigDescriptor(displayStack);
-    storeToDtConfigDescriptor(firstGregorianDay);
-    storeToDtConfigDescriptor(curveFitting);
-    storeToDtConfigDescriptor(roundingMode);
-    storeToDtConfigDescriptor(systemFlags);
-    xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
+  storeToDtConfigDescriptor(shortIntegerMode);
+  storeToDtConfigDescriptor(shortIntegerWordSize);
+  storeToDtConfigDescriptor(displayFormat);
+  storeToDtConfigDescriptor(displayFormatDigits);
+  storeToDtConfigDescriptor(groupingGap);
+  storeToDtConfigDescriptor(currentAngularMode);
+  storeToDtConfigDescriptor(denMax);
+  storeToDtConfigDescriptor(displayStack);
+  storeToDtConfigDescriptor(firstGregorianDay);
+  storeToDtConfigDescriptor(curveFitting);
+  storeToDtConfigDescriptor(roundingMode);
+  storeToDtConfigDescriptor(systemFlags);
+  xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
 
-    //    storeToDtConfigDescriptor(Norm_Key_00_VAR);                          //JMCFG
-    storeToDtConfigDescriptor(SigFigMode);      
-    storeToDtConfigDescriptor(eRPN);             
-    storeToDtConfigDescriptor(HOME3);            
-    storeToDtConfigDescriptor(ShiftTimoutMode);  
-    storeToDtConfigDescriptor(Home3TimerMode);   
-    storeToDtConfigDescriptor(UNITDisplay);      
-    storeToDtConfigDescriptor(SH_BASE_HOME);     
-    storeToDtConfigDescriptor(SH_BASE_AHOME);    
-    storeToDtConfigDescriptor(Norm_Key_00_VAR); 
-    storeToDtConfigDescriptor(Input_Default);   
-    storeToDtConfigDescriptor(jm_FG_LINE);       
-    storeToDtConfigDescriptor(jm_FG_DOTS);       
-    storeToDtConfigDescriptor(jm_G_DOUBLETAP);   
-    storeToDtConfigDescriptor(graph_xmin);        
-    storeToDtConfigDescriptor(graph_xmax);        
-    storeToDtConfigDescriptor(graph_ymin);        
-    storeToDtConfigDescriptor(graph_ymax);        
-    storeToDtConfigDescriptor(graph_dx);          
-    storeToDtConfigDescriptor(graph_dy);          
-    storeToDtConfigDescriptor(jm_VECT);          
-    storeToDtConfigDescriptor(jm_HOME_SUM);      
-    storeToDtConfigDescriptor(jm_HOME_MIR);      
-    storeToDtConfigDescriptor(jm_HOME_FIX);                                    //JMCFG^^
+//    storeToDtConfigDescriptor(Norm_Key_00_VAR);                          //JMCFG
+  storeToDtConfigDescriptor(SigFigMode);
+  storeToDtConfigDescriptor(eRPN);
+  storeToDtConfigDescriptor(HOME3);
+  storeToDtConfigDescriptor(ShiftTimoutMode);
+  storeToDtConfigDescriptor(Home3TimerMode);
+  storeToDtConfigDescriptor(UNITDisplay);
+  storeToDtConfigDescriptor(SH_BASE_HOME);
+  storeToDtConfigDescriptor(SH_BASE_AHOME);
+  storeToDtConfigDescriptor(Norm_Key_00_VAR);
+  storeToDtConfigDescriptor(Input_Default);
+  storeToDtConfigDescriptor(jm_FG_LINE);
+  storeToDtConfigDescriptor(jm_FG_DOTS);
+  storeToDtConfigDescriptor(jm_G_DOUBLETAP);
+  storeToDtConfigDescriptor(graph_xmin);
+  storeToDtConfigDescriptor(graph_xmax);
+  storeToDtConfigDescriptor(graph_ymin);
+  storeToDtConfigDescriptor(graph_ymax);
+  storeToDtConfigDescriptor(graph_dx);
+  storeToDtConfigDescriptor(graph_dy);
+  storeToDtConfigDescriptor(jm_VECT);
+  storeToDtConfigDescriptor(jm_HOME_SUM);
+  storeToDtConfigDescriptor(jm_HOME_MIR);
+  storeToDtConfigDescriptor(jm_HOME_FIX);                                    //JMCFG^^
 
-  }
-  else {
-    displayCalcErrorMessage(ERROR_STOCFG_TO_LETTERED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+
+  if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
+    refreshRegisterLine(regist);
   }
 }
 
@@ -1466,19 +1465,19 @@ void fnStoreConfig(uint16_t r) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreStack(uint16_t r) {
+void fnStoreStack(uint16_t regist) {
   uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
-  if(r + size >= REGISTER_X) {
+  if(regist + size >= REGISTER_X) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Cannot execute STOS, destination register is out of range: %d", r);
+      sprintf(errorMessage, "Cannot execute STOS, destination register is out of range: %d", regist);
       showInfoDialog("In function fnStoreStack:", errorMessage, NULL, NULL);
     #endif
   }
   else {
     for(int i=0; i<size; i++) {
-      copySourceRegisterToDestRegister(REGISTER_X + i, r + i);
+      copySourceRegisterToDestRegister(REGISTER_X + i, regist + i);
     }
   }
 }
@@ -2029,6 +2028,10 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
     printf("short integer %08x-%08x (base %" FMT32U ")", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
   }
 
+  else if(getRegisterDataType(regist) == dtConfig) {
+    printf("Configuration data");
+  }
+
   else if(getRegisterDataType(regist) == dtLongInteger) {
     longInteger_t lgInt;
 
@@ -2088,6 +2091,10 @@ void printRegisterToString(calcRegister_t regist, char *registerContent) {
     uint64_t value = *(REGISTER_SHORT_INTEGER_DATA(regist));
 
     sprintf(registerContent, "short integer %08x-%08x (base %u)", (unsigned int)(value>>32), (unsigned int)(value&0xffffffff), getRegisterTag(regist));
+  }
+
+  else if(getRegisterDataType(regist) == dtConfig) {
+    strcpy(registerContent, "Configuration data");
   }
 
   else if(getRegisterDataType(regist) == dtLongInteger) {
@@ -2256,6 +2263,10 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
     sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for an integer! It should be SHORT_INTEGER_SIZE=%" FMT16U "!", dataSizeWithoutDataLenBlocks, (uint16_t)SHORT_INTEGER_SIZE);
     displayBugScreen(errorMessage);
   }
+  else if(dataType == dtConfig && dataSizeWithoutDataLenBlocks != CONFIG_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" FMT16U " is an unexpected numByte value for a configuration! It should be CONFIG_SIZE=%" FMT16U "!", dataSizeWithoutDataLenBlocks, (uint16_t)CONFIG_SIZE);
+    displayBugScreen(errorMessage);
+  }
   else if(dataType == dtString) {
     dataSizeWithDataLenBlocks = dataSizeWithoutDataLenBlocks + 1; // +1 for the max length of the string
   }
@@ -2373,10 +2384,10 @@ static void incShoI(uint16_t regist, uint8_t flag) {
   convertUInt64ToShortIntegerRegister(r_sign, r_value, getRegisterTag(regist), regist);
 }
 
-static void (* const increment[9])(uint16_t, uint8_t) = {
-// reg ==>   1            2        3         4         5         6         7          8            9
-//           Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m  Short integer
-             incLonI,     incReal, incCplx,  incError, incError, incError, incError,  incError,    incShoI
+static void (* const increment[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t, uint8_t) = {
+// reg ==>   1            2        3         4         5         6         7          8            9              10
+//           Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m  Short integer  Config data
+             incLonI,     incReal, incCplx,  incError, incError, incError, incError,  incError,    incShoI,       incError
 };
 
 
@@ -2575,18 +2586,19 @@ static void registerCmpRealReal(calcRegister_t regist1, calcRegister_t regist2, 
     *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
-static void (* const cmpFunc[9][9])(calcRegister_t reg1, calcRegister_t reg2, int8_t*) = {
-// reg1 |    reg2 ==>    1                    2                    3          4                    5                    6                    7              8               9
-//      V                Long integer         Real34               Complex34  Time                 Date                 String               Real34 mat     Complex34 mat   Short integer
-/*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpLonIShoI },
-/*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpRealShoI },
-/*  3 Complex34     */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
-/*  4 Time          */ { NULL,                NULL,                NULL,      registerCmpTimeTime, NULL,                NULL,                NULL,          NULL,           NULL                },
-/*  5 Date          */ { NULL,                NULL,                NULL,      NULL,                registerCmpDateDate, NULL,                NULL,          NULL,           NULL                },
-/*  6 String        */ { NULL,                NULL,                NULL,      NULL,                NULL,                registerCmpStriStri, NULL,          NULL,           NULL                },
-/*  7 Real34 mat    */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
-/*  8 Complex34 mat */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL                },
-/*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpShoIShoI }
+static void (* const cmpFunc[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(calcRegister_t reg1, calcRegister_t reg2, int8_t*) = {
+// reg1 |    reg2 ==>    1                    2                    3          4                    5                    6                    7              8               9                    10
+//      V                Long integer         Real34               Complex34  Time                 Date                 String               Real34 mat     Complex34 mat   Short integer        Config data
+/*  1 Long integer  */ { registerCmpLonILonI, registerCmpLonIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpLonIShoI, NULL},
+/*  2 Real34        */ { registerCmpRealLonI, registerCmpRealReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpRealShoI, NULL},
+/*  3 Complex34     */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL,                NULL},
+/*  4 Time          */ { NULL,                NULL,                NULL,      registerCmpTimeTime, NULL,                NULL,                NULL,          NULL,           NULL,                NULL},
+/*  5 Date          */ { NULL,                NULL,                NULL,      NULL,                registerCmpDateDate, NULL,                NULL,          NULL,           NULL,                NULL},
+/*  6 String        */ { NULL,                NULL,                NULL,      NULL,                NULL,                registerCmpStriStri, NULL,          NULL,           NULL,                NULL},
+/*  7 Real34 mat    */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL,                NULL},
+/*  8 Complex34 mat */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL,                NULL},
+/*  9 Short integer */ { registerCmpShoILonI, registerCmpShoIReal, NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           registerCmpShoIShoI, NULL},
+/* 10 Config data   */ { NULL,                NULL,                NULL,      NULL,                NULL,                NULL,                NULL,          NULL,           NULL,                NULL}
 };
 
 void registerCmpError(calcRegister_t regist1, calcRegister_t regist2) {

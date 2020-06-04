@@ -84,12 +84,12 @@ typedef enum {
   dtReal34Matrix    =  6,  ///< Double precision vector or matrix
   dtComplex34Matrix =  7,  ///< Double precision complex vector or matrix
   dtShortInteger    =  8,  ///< Short integer (64 bit)
-  //dtLabel           = 12,  ///< Label
-  //dtSystemInteger   = 13,  ///< System integer (64 bits)
-  //dtFlags           = 14,  ///< Flags
-  dtConfig          = 15,  ///< Configuration
-  //dtPgmStep         = 16,  ///< Program step
-  //dtDirectory       = 17,  ///< Program
+  dtConfig          =  9,  ///< Configuration
+  //dtLabel           = 10,  ///< Label
+  //dtSystemInteger   = 11,  ///< System integer (64 bits)
+  //dtFlags           = 12,  ///< Flags
+  //dtPgmStep         = 13,  ///< Program step
+  //dtDirectory       = 14,  ///< Program
 } dataType_t; // 4 bits (NOT 5 BITS)
 
 typedef struct {
@@ -101,7 +101,7 @@ typedef struct {
   uint8_t   currentAngularMode;
   uint8_t   displayStack;
   uint8_t   curveFitting;
-  uint8_t   roundingMode; 
+  uint8_t   roundingMode;
   uint32_t  denMax;
   uint32_t  firstGregorianDay;
   uint64_t  systemFlags;

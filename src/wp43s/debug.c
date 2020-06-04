@@ -387,6 +387,58 @@ void debugNIM(void) {
 
 
   /********************************************//**
+   * \brief Returns the name of a system flag
+   *
+   * \param[in] sf uint16_t System flag
+   * \return char*          Name of the system flag
+   ***********************************************/
+  char * getSystemFlagName(uint16_t sf) {
+    if(sf == FLAG_TDM24)    return "TDM24";
+    if(sf == FLAG_YMD)      return "YMD";
+    if(sf == FLAG_DMY)      return "DMY";
+    if(sf == FLAG_MDY)      return "MDY";
+    if(sf == FLAG_CPXRES)   return "CPXRES";
+    if(sf == FLAG_CPXj)     return "CPXf";
+    if(sf == FLAG_POLAR)    return "POLAR";
+    if(sf == FLAG_FRACT)    return "FRACT";
+    if(sf == FLAG_PROPFR)   return "PROPFR";
+    if(sf == FLAG_DENANY)   return "DENANY";
+    if(sf == FLAG_DENFIX)   return "DENFIX";
+    if(sf == FLAG_CARRY)    return "CARRY";
+    if(sf == FLAG_OVERFLOW) return "OVERFLOW";
+    if(sf == FLAG_LEAD0)    return "LEAD.0";
+    if(sf == FLAG_ALPHA)    return "ALPHA";
+    if(sf == FLAG_alphaCAP) return STD_alpha "CAP";
+    if(sf == FLAG_RUNTIM)   return "RUNTIM";
+    if(sf == FLAG_RUNIO)    return "RUNIO";
+    if(sf == FLAG_PRINT)    return "PRINT";
+    if(sf == FLAG_TRACE)    return "TRACE";
+    if(sf == FLAG_USER)     return "USER";
+    if(sf == FLAG_LOWBAT)   return "LOWBAT";
+    if(sf == FLAG_SLOW)     return "SLOW";
+    if(sf == FLAG_SPCRES)   return "SPCRES";
+    if(sf == FLAG_SSIZE8)   return "SSIZE8";
+    if(sf == FLAG_QUIET)    return "QUIET";
+    if(sf == FLAG_DECIMP)   return "DECIM.";
+    if(sf == FLAG_MULTx)    return "MULT" STD_CROSS;
+    if(sf == FLAG_ALLENG)   return "ALLENG";
+    if(sf == FLAG_GROW)     return "GROW";
+    if(sf == FLAG_AUTOFF)   return "AUTOF";
+    if(sf == FLAG_AUTXEQ)   return "AUTXEQ";
+    if(sf == FLAG_PRTACT)   return "PRTACT";
+    if(sf == FLAG_NUMIN)    return "NUM.IN";
+    if(sf == FLAG_ALPIN)    return "ALP.IN";
+    if(sf == FLAG_ASLIFT)   return "ASLIFT";
+    if(sf == FLAG_IGN1ER)   return "IGN1ER";
+    if(sf == FLAG_INTING)   return "INTING";
+    if(sf == FLAG_SOLVING)  return "SOLVING";
+    if(sf == FLAG_VMDISP)   return "VMDISP";
+
+    return "???        ";
+  }
+
+
+  /********************************************//**
    * \brief Returns the name of a complex unit
    *
    * \param[in] cu bool_t Complex unit

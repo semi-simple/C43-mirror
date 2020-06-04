@@ -288,9 +288,9 @@ void setupDefaults(void) {
   setSystemFlag(FLAG_MULTx);
   clearSystemFlag(FLAG_FRACT);
   clearSystemFlag(FLAG_PROPFR);
-  setSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
   clearSystemFlag(FLAG_CPXRES);
+  showRealComplexResult();
   clearSystemFlag(FLAG_POLAR);
   clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
@@ -298,6 +298,10 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_DMY); // date format
   setSystemFlag(FLAG_YMD);   // date format
+  clearSystemFlag(FLAG_OVERFLOW);
+  clearSystemFlag(FLAG_CARRY);
+  clearSystemFlag(FLAG_USER);
+
   significantDigits = 0;
   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
   fnDisplayStack(4);
@@ -319,13 +323,6 @@ void setupDefaults(void) {
 
   aimBuffer[0] = 0;
 
-
-  clearSystemFlag(FLAG_OVERFLOW);
-  clearSystemFlag(FLAG_CARRY);
-
-  clearSystemFlag(FLAG_CPXRES);
-  showRealComplexResult();
-
   showAlphaMode();
 
   programCounter = 0;
@@ -342,8 +339,6 @@ void setupDefaults(void) {
   refreshStack();
 
   allowScreenUpdate = true;
-
-  clearSystemFlag(FLAG_USER);
 
   gammaLanczosCoefficients = (real51_t *)const_gammaC01;
 

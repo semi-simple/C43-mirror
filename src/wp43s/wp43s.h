@@ -270,7 +270,7 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     60 //73  //JMMAX                                             //dr build RadioButton, CheckBox
+#define MAX_RADIO_CB_ITEMS     67 //73  //JMMAX                                             //dr build RadioButton, CheckBox
 
 // timer nr for FG and FN use
 #define TO_FG_LONG              0

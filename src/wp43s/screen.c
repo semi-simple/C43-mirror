@@ -475,9 +475,10 @@ void refreshScreen(void) {// This function is called roughly every 100 ms from t
   // Alpha selection timer
   if(AlphaSelectionBufferTimerRunning) {         //JMvv
     if(calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) { // More than 3 seconds elapsed since last keypress
-    timeoutAlphaSelectionBuffer();               //JM^^
+      timeoutAlphaSelectionBuffer();             //JM^^
     }
   }
+}
 #endif
 
 

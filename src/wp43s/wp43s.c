@@ -360,18 +360,8 @@ void setupDefaults(void) {
   shiftG = false;
 //shiftStateChanged = false;                                   //dr
 
-  jm_FG_LINE = true;                                           //JM Screen / keyboard operation setup
-  jm_FG_DOTS = false;                                          //JM Screen / keyboard operation setup
-  jm_G_DOUBLETAP = false;                                      //JM Screen / keyboard operation setup
-  jm_VECT = false;                                             //JM Screen / keyboard operation setup
-  jm_HOME_SUM = false;                                         //JMHOME
-  jm_HOME_MIR = true;                                          //JMHOME
-  jm_HOME_FIX = false;                                         //JMHOME
-  #if defined(DMCP_BUILD) || defined(JM_LAYOUT_2_DM42_STRICT)  //JM LAYOUT 2. DM42 STRICT.
-    jm_HOME_SUM = false;                                       //JMHOME
-    jm_HOME_MIR = true;                                        //JMHOME
-    jm_HOME_FIX = false;                                       //JMHOME
-  #endif
+  reset_jm_defaults();
+
   ULFL = false;                                                //JM Underline
   ULGL = false;                                                //JM Underline
   FN_state = ST_0_INIT;                                        //JM FN-DOUBLE
@@ -381,31 +371,13 @@ void setupDefaults(void) {
   Shft_timeouts = false;                                       //JM SHIFT NEW
   FN_timed_out_to_RELEASE_EXEC = false;                        //JM LONGPRESS FN
   FN_timed_out_to_NOP = false;                                 //JM LONGPRESS FN
-  SigFigMode = 0;                                              //JM SIGFIG Default 0.
-  eRPN = false;                                                //JM eRPN Default. Create a flag to enable or disable eRPN. See bufferize.c
-  HOME3 = true;                                                //JM HOME Default. Create a flag to enable or disable triple shift HOME3.
-  ShiftTimoutMode = true;                                      //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
-  Home3TimerMode = true;                                       //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
-  UNITDisplay = false;                                         //JM HOME Default. Create a flag to enable or disable UNIT display
 #ifdef INLINE_TEST                                             //vv dr
   testEnabled = false;                                         //dr
   testBitset = 0x0000;                                         //dr
 #endif                                                         //^^
-  SH_BASE_HOME   = true;                                       //JM
-  SH_BASE_AHOME  = true;                                       //JM
-  Norm_Key_00_VAR  = ITM_SIGMAPLUS;                            //JM
-  Input_Default =  ID_43S;                                     //JM Input Default
-  graph_xmin = -3*3.14159;                                     //JM GRAPH
-  graph_xmax = +3*3.14159;                                     //JM GRAPH
-  graph_ymin = -2;                                             //JM GRAPH
-  graph_ymax = +2;                                             //JM GRAPH
-  graph_dx   = 0;                                              //JM GRAPH
-  graph_dy   = 0;                                              //JM GRAPH
   strcpy(filename_csv,"DEFAULT.CSV");                          //JMCSV
   tmp__32=0;                                                   //JMCSV
   mem__32=0;                                                   //JMCSV
-  
-  
   softmenuStackPointer_MEM = 0;                                //JM HOME temporary flag to remember and restore state
 
   JM_SHIFT_HOME_TIMER1 = 1;                                    //JM TIMER
@@ -423,7 +395,6 @@ void setupDefaults(void) {
   currentFntScr = 0;
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
-  SHOWregis = 9999;                                            //JMSHOW
 
 
   softmenuStackPointer = 0;

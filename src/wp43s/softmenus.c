@@ -65,8 +65,17 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
                         /*KEY_CC1 removed this one*/
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    -MNU_CFG,                           //JM added CFG
-                                     ITM_DSTACK,                    ITM_GAP,                    ITM_RANGE,                ITM_GETRANGE,              ITM_RECT,                    ITM_POLAR                     };    //JM added SIGFIG & UNIT
+                                     ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_SCIOVR,                  ITM_ENGOVR,                        //JM added CFG
+                                     ITM_DSTACK,                    ITM_GAP,                    ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                           //JM added SIGFIG & UNIT
+
+                                     ITM_CPXI,                      ITM_CPXJ,                   ITM_SSIZE4,               ITM_SSIZE8,            ITM_MULTCR,                  ITM_MULTDOT,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RNG,                     ITM_GETRANGE,                          //JM sequence change
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_CFG,                         //JM sequence change
+
+                                     ITM_SETCHN,                    ITM_SETEUR,                 ITM_SETIND,               ITM_SETJPN,            ITM_SETUK,                   ITM_SETUSA,                    
+                                     ITM_CLK12,                     ITM_CLK24,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_RDXPER,                    ITM_RDXCOM,                 ITM_GAP,                  ITM_DMY,               ITM_YMD,                     ITM_MDY                       };
+
 
 const int16_t menu_EQN[]         = { ITM_EQ_EDI,                    ITM_EQ_NEW,                 -MNU_2NDDERIV,            -MNU_1STDERIV,         -MNU_Sf,                     -MNU_Solver,
                                      ITM_EQ_DEL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              -MNU_GRAPH,                  ITM_NULL                      };
@@ -125,14 +134,23 @@ const int16_t menu_M_EDIT[]      = { CHR_LEFT_ARROW,                CHR_UP_ARROW
 const int16_t menu_M_EDITN[]     = { CHR_LEFT_ARROW,                CHR_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            CHR_DOWN_ARROW,              CHR_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_NULL,
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              -MNU_CFG,                           //JM
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CB_CPXRES,
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_CB_LEADING_ZERO,                           //JM
 #ifndef DMCP_BUILD
-                                     ITM_NULL,                      ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };    //JM modifoed
+                                     ITM_NULL,                      ITM_ERPN,                   ITM_SETSIG,               ITM_RM,                ITM_RECT,                    ITM_POLAR,                         //JM modifoed
 #endif
 #ifdef DMCP_BUILD
-                                     ITM_SYSTEM,                    ITM_ERPN,                   ITM_SETSIG,               ITM_NULL,              ITM_RECT,                    ITM_POLAR                     };
+                                     ITM_SYSTEM,                    ITM_ERPN,                   ITM_SETSIG,               ITM_RM,                ITM_RECT,                    ITM_POLAR,                     
 #endif
+
+#if !defined(DMCP_BUILD) && defined (INLINE_TEST)                               //vv dr
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+#else                                                                           //^^
+                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+#endif                                                                          //dr
+                                     -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
+
+
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_MAGNITUDE,
                                      ITM_ROUNDI,                    ITM_ROUND,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DECOMP,

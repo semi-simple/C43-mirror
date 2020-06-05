@@ -208,14 +208,11 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
 
 
 
-
-
-
-   case RM_COMMA:               //DONR
+   case RX_COMMA:               //DONR
      fnClearFlag(FLAG_DECIMP);
      break;
 
-   case RM_PERIOD:               //DONR
+   case RX_PERIOD:               //DONR
      fnSetFlag(FLAG_DECIMP);
      break;
 
@@ -235,24 +232,20 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
      fnSetFlag(FLAG_CPXj);
      break;
 
-  case JC_BLZ:                                              //JM bit LeadingZeros
-    fnFlipFlag(FLAG_LEAD0);                                       //dr
-    break;
+   case PS_DOT:
+     fnClearFlag(FLAG_MULTx);
+     break;
 
    case PS_CROSS:               //DONR
      fnSetFlag(FLAG_MULTx);
      break;
 
-   case PS_DOT:
-     fnClearFlag(FLAG_MULTx);
+   case SS_4:                 //DONE
+     fnClearFlag(FLAG_SSIZE8);
      break;
 
    case SS_8:          //DONE
      fnSetFlag(FLAG_SSIZE8);
-     break;
-
-   case SS_4:                 //DONE
-     fnClearFlag(FLAG_SSIZE8);
      break;
 
    case CM_RECTANGULAR:          //DONE
@@ -263,10 +256,23 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
      fnSetFlag(FLAG_POLAR);
      break;
 
+   case DO_SCI:
+     fnClearFlag(FLAG_ALLENG);
+     break;
+
+   case DO_ENG:
+     fnSetFlag(FLAG_ALLENG);
+     break;
+
+
+
+   case JC_BLZ:                                              //JM bit LeadingZeros
+     fnFlipFlag(FLAG_LEAD0);                                       //dr
+     break;
+
    case JC_BCR:                                              //JM bit ComplexResult
      fnFlipFlag(FLAG_CPXRES);                                     //dr
      break;
-
 
 
 

@@ -337,18 +337,18 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned fr
       }
 
       switch(f) {
-      	case 100: strcpy(tmpStr3000, " POLAR.x"); break;
-      	case 101: strcpy(tmpStr3000, "   101.y"); break;
-      	case 102: strcpy(tmpStr3000, "   102.z"); break;
-      	case 103: strcpy(tmpStr3000, " TRACE.t"); break;
-      	case 104: strcpy(tmpStr3000, "ALLENG.a"); break;
-      	case 105: strcpy(tmpStr3000, "OVRFLO.b"); break;
-      	case 106: strcpy(tmpStr3000, " CARRY.c"); break;
-      	case 107: strcpy(tmpStr3000, "SPCRES.d"); break;
-      	case 108: strcpy(tmpStr3000, " LEAD0.e"); break;
-      	case 109: strcpy(tmpStr3000, "CPXRES.f"); break;
-      	case 110: strcpy(tmpStr3000, "   110.j"); break;
-      	case 111: strcpy(tmpStr3000, "   111.k"); break;
+      	case 100: strcpy(tmpStr3000, " POLAR.X"); break;
+      	case 101: strcpy(tmpStr3000, "   101.Y"); break;
+      	case 102: strcpy(tmpStr3000, "   102.Z"); break;
+      	case 103: strcpy(tmpStr3000, " TRACE.T"); break;
+      	case 104: strcpy(tmpStr3000, "ALLENG.A"); break;
+      	case 105: strcpy(tmpStr3000, "OVRFLO.B"); break;
+      	case 106: strcpy(tmpStr3000, " CARRY.C"); break;
+      	case 107: strcpy(tmpStr3000, "SPCRES.D"); break;
+      	case 108: strcpy(tmpStr3000, " LEAD0.E"); break;
+      	case 109: strcpy(tmpStr3000, "CPXRES.F"); break;
+      	case 110: strcpy(tmpStr3000, "   110.J"); break;
+      	case 111: strcpy(tmpStr3000, "   111.K"); break;
       	default:  sprintf(tmpStr3000,"   %d ", f);break;
       }
 

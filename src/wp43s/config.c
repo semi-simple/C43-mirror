@@ -495,6 +495,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
 
   longIntegerFree(longInt);
   refreshStack();
+  showSoftmenuCurrentPart();                       //JM
 }
 
 

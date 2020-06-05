@@ -301,6 +301,17 @@ void use_base_glyphs(char* tmp1, int16_t xx) {                         //Needs n
     add_digitglyph_to_tmp2(tmp2, xx % 10);
     strcat(tmp1, tmp2);
   }
+  else if(xx ==999) {
+    add_digitglyph_to_tmp2(tmp2, 9);   strcat(tmp1, tmp2);
+    add_digitglyph_to_tmp2(tmp2, 9);   strcat(tmp1, tmp2);
+    add_digitglyph_to_tmp2(tmp2, 9);   strcat(tmp1, tmp2);
+  }
+  else if(xx ==6145) {
+    add_digitglyph_to_tmp2(tmp2, 6);   strcat(tmp1, tmp2);
+    add_digitglyph_to_tmp2(tmp2, 1);   strcat(tmp1, tmp2);
+    add_digitglyph_to_tmp2(tmp2, 4);   strcat(tmp1, tmp2);
+    add_digitglyph_to_tmp2(tmp2, 5);   strcat(tmp1, tmp2);
+  }
   else {
     snprintf(tmp1, 12, "%d", xx);
   }

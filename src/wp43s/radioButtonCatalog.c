@@ -253,6 +253,12 @@ int8_t fnCbIsSet(int16_t item) {
             }
             break;
 
+          case JC_BSR:                                     //JMvv
+            {
+              cb_param = getSystemFlag(FLAG_SPCRES);
+            }
+            break;                                         //JM^^
+
           case JC_BLZ:
             {
               cb_param = getSystemFlag(FLAG_LEAD0);
@@ -731,6 +737,7 @@ void fnRebuildRadioState() {
   printf("CB_JC, JC_BASE_AHOME, SH_BASE_AHOME        %d %d %d\n",CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);
   printf("CB_JC, JC_BASE_HOME, SH_BASE_HOME          %d %d %d\n",CB_JC, JC_BASE_HOME, SH_BASE_HOME);
   printf("CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES)  %d %d %d\n",CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES));
+  printf("CB_JC, JC_BSR, getSystemFlag(FLAG_SPCRES)  %d %d %d\n",CB_JC, JC_BSR, getSystemFlag(FLAG_SPCRES));
   printf("CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0)   %d %d %d\n",CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
   printf("CB_JC, JC_ERPN, eRPN                       %d %d %d\n",CB_JC, JC_ERPN, eRPN);
   printf("CB_JC, JC_FG_DOTS, jm_FG_DOTS              %d %d %d\n", CB_JC, JC_FG_DOTS, jm_FG_DOTS);
@@ -1069,6 +1076,10 @@ void fnRebuildRadioState() {
       case JC_BCR:
         rb.state = getFlag(FLAG_CPXRES)? 3 : 2;
         break;
+
+      case JC_BSR:                                 //JM
+        rb.state = getFlag(FLAG_SPCRES)? 3 : 2;
+        break;                                     //JM
 
       case JC_BLZ:
         rb.state = displayLeadingZeros? 3 : 2;

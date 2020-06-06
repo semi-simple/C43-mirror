@@ -28,10 +28,21 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
     case FLAG_TDM24:    oldTime[0] = 0;
                         break;
 
-    case FLAG_ALLENG:
     case FLAG_DECIMP:
     case FLAG_MULTx:
     case FLAG_CPXj:     refreshStack();
+                        break;
+
+    case FLAG_ALLENG:   refreshStack();
+                        switch(action) {
+                          case 0: flags[104/16] &= ~(1u << (104%16));
+                                  break;
+                          case 1: flags[104/16] |=   1u << (104%16);
+                                  break;
+                          case 2: flags[104/16] ^=   1u << (104%16);
+                                  break;
+                          default: {}
+                        }
                         break;
 
     case FLAG_LEAD0:    refreshStack();
@@ -148,7 +159,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
       case FLAG_POLAR:   fnRefreshRadioState (RB_CM, CM_POLAR); showComplexMode(); refreshStack(); break;
       case FLAG_LEAD0:   fnRefreshComboxState(CB_JC, JC_BLZ, true); refreshStack(); break;
       case FLAG_SSIZE8:  fnRefreshRadioState (RB_SS, SS_8); break;
-      case FLAG_DECIMP:  fnRefreshRadioState (RB_RM, RX_PERIOD); refreshStack(); break;
+      case FLAG_DECIMP:  fnRefreshRadioState (RB_RX, RX_PERIOD); refreshStack(); break;
       case FLAG_MULTx:   fnRefreshRadioState (RB_PS, PS_CROSS); break;
       case FLAG_ALLENG:  fnRefreshRadioState (RB_DO, DO_ENG); break;
       default:;
@@ -163,7 +174,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
       case FLAG_POLAR:   fnRefreshRadioState (RB_CM, CM_RECTANGULAR); showComplexMode(); refreshStack(); break;
       case FLAG_LEAD0:   fnRefreshComboxState(CB_JC, JC_BLZ, false); refreshStack(); break;
       case FLAG_SSIZE8:  fnRefreshRadioState (RB_SS, SS_4); break;
-      case FLAG_DECIMP:  fnRefreshRadioState (RB_RM, RX_COMMA); refreshStack(); break;
+      case FLAG_DECIMP:  fnRefreshRadioState (RB_RX, RX_COMMA); refreshStack(); break;
       case FLAG_MULTx:   fnRefreshRadioState (RB_PS, PS_DOT); break;
       case FLAG_ALLENG:  fnRefreshRadioState (RB_DO, DO_SCI); break;
       default:;

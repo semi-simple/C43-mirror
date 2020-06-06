@@ -271,7 +271,6 @@ typedef int16_t calcRegister_t;
 #else
 #define LCD_REFRESH_TIMEOUT   100 //timeout for lcd refresh in ms
 #endif 
-#define MAX_RADIO_CB_ITEMS     68 //73  //JMMAX                                             //dr build RadioButton, CheckBox
 
 // timer nr for FG and FN use
 #define TO_FG_LONG              0
@@ -667,8 +666,6 @@ extern bool_t                printerIconEnabled;
 extern bool_t                shiftF;
 extern bool_t                shiftG;
 //extern bool_t              shiftStateChanged;    //dr
-extern radiocb_t             indexOfRadioCbItems[MAX_RADIO_CB_ITEMS];            //vv dr build RadioButton, CheckBox
-//extern uint16_t            cntOfRadioCbItems;                                  //^^
 extern bool_t                showContent;
 extern bool_t                savedStackLiftEnabled;
 extern bool_t                rbr1stDigit;

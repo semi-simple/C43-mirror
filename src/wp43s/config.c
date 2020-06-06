@@ -639,9 +639,6 @@ void fnReset(uint16_t confirmation) {
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 
-    // initialize the RadioButton/Checkbox items
-    fnRebuildRadioState();                                     //dr build RadioButton, Checkbox
-
     #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
         popSoftmenu();

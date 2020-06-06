@@ -69,7 +69,7 @@ const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM 
 
 
-                                     ITM_DSTACK,                    ITM_SCIOVR,                 ITM_ENGOVR,               ITM_CB_LEADING_ZERO,   ITM_MULTCR,                  ITM_MULTDOT,                        //JM 
+                                     ITM_SCIOVR,                    ITM_ENGOVR,                 ITM_DSTACK,               ITM_CB_LEADING_ZERO,   ITM_MULTCR,                  ITM_MULTDOT,                        //JM 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_CPXI,                    ITM_CPXJ,                           //JM 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM 
 

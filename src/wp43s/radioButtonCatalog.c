@@ -86,6 +86,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1744 */  { ITM_BASE_AHOME,       JC_BASE_AHOME,          CB_JC },  //fnSetSetJM
 /* 1742 */  { ITM_BASE_HOME,        JC_BASE_HOME,           CB_JC },  //fnSetSetJM
 /* 1695 */  { ITM_CB_CPXRES,        JC_BCR,                 CB_JC },  //fnSetSetJM
+/* 1748 */  { ITM_CB_SPCRES,        JC_BSR,                 CB_JC },  //fnSetSetJM
 /* 1696 */  { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
 /* 1678 */  { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
 /* 1909 */  { ITM_FG_DOTS,          JC_FG_DOTS,             CB_JC },  //fnSetSetJM
@@ -445,6 +446,8 @@ void fnRebuildRadioState() {
 // 1695 */  { ITM_CB_CPXRES,        JC_BCR,                 CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_BCR, getSystemFlag(FLAG_CPXRES));
 // 1696     { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_BSR, getSystemFlag(FLAG_SPCRES));
+// 1748     { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
 // 1678     { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);

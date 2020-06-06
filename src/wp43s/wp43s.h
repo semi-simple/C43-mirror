@@ -110,6 +110,7 @@
   #define registerBrowser fnNop
   #define flagBrowser     fnNop
   #define fontBrowser     fnNop
+  #define flagBrowser_old fnNop      //JM
   #define refreshRegisterLine(a)  {}
   #define clearScreen(a, b, c)    {}
   #define toggleUserMode()        {}
@@ -125,7 +126,7 @@
   #define showAlphaMode()         {}
   #define showHideUserMode()      {}
   #define showHideLowBattery()    {}
-  #define JM_LAYOUT_1A               //Preferred layout
+  #define JM_LAYOUT_1A               //JM Preferred layout
 #endif
 
 #ifndef TESTSUITE_BUILD                 //vv dr

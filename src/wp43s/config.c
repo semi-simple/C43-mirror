@@ -495,7 +495,9 @@ void fnRange(uint16_t unusedParamButMandatory) {
 
   longIntegerFree(longInt);
   refreshStack();
+#ifndef TESTSUITE_BUILD
   showSoftmenuCurrentPart();                       //JM
+#endif
 }
 
 

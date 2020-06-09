@@ -276,6 +276,42 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
   refreshRegisterLine(REGISTER_Y);
 }
 
+/********************************************//**
+ * \brief Shuffles the registers
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnShuffle(uint16_t unusedParamButMandatory) {
+
+  registerDescriptor_t savedRegister_x = reg[REGISTER_X];
+  registerDescriptor_t savedRegister_y = reg[REGISTER_Y];
+  registerDescriptor_t savedRegister_z = reg[REGISTER_Z];
+  registerDescriptor_t savedRegister_t = reg[REGISTER_T];
+  
+  
+  for (int i = 0; i < 4; i++) {
+    if (tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
+      reg[REGISTER_X+i] =  savedRegister_x;
+    } else if (tamBuffer[strlen(tamBuffer) - 4  + i] == 'y') {
+      reg[REGISTER_X+i] =  savedRegister_y;
+    } else if (tamBuffer[strlen(tamBuffer) - 4 + i] == 'z') {
+      reg[REGISTER_X+i] =  savedRegister_z;
+    } else if (tamBuffer[strlen(tamBuffer) - 4 + i] == 't') {
+      reg[REGISTER_X+i] =  savedRegister_t;
+    }
+  }
+  
+  refreshStack();
+  
+  /*registerDescriptor_t savedRegister = reg[REGISTER_X];
+  
+  reg[REGISTER_X] = reg[REGISTER_Y];
+  reg[REGISTER_Y] = savedRegister;
+  refreshRegisterLine(REGISTER_X);
+  refreshRegisterLine(REGISTER_Y); */
+}
+
 
 
 /********************************************//**

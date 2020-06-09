@@ -1746,6 +1746,47 @@ void tamTransitionSystem(uint16_t tamTransition) {
       break;
 
     //////////////////////////////
+    // OP ____
+    case 16:
+      switch(tamTransition) {
+        case TT_LETTER :
+          
+          for (int i = 4; i > 0; i--) {
+            if (tamBuffer[strlen(tamBuffer)-i] == '_') {
+              tamBuffer[strlen(tamBuffer)-i] = "xyzt"[tamLetteredRegister-REGISTER_X];
+              i = 0;
+            }
+          }
+          break;
+        case TT_BACKSPACE :
+          
+          for (int i = 1; i < 5; i++) {
+            if (tamBuffer[strlen(tamBuffer)-i] != '_') {
+              tamBuffer[strlen(tamBuffer)-i] = '_';
+              i = 5;
+            }
+          }
+          break;
+          
+        case TT_ENTER :
+          if (tamBuffer[strlen(tamBuffer)-1] != '_') {
+            if(lastErrorCode == 0) {
+              indexOfItems[getOperation()].func(NOPARAM);
+            }
+            calcModeNormal();
+            return;
+          }
+          break;
+          
+        default : {
+          sprintf(errorMessage, "In function tamTransitionSystem: unhandled tamTransistion in case 16!", transitionSystemState);
+          displayBugScreen(errorMessage);
+        }
+      }
+      break;
+          
+      
+    //////////////////////////////
     // This should never happen
     default :
       sprintf(errorMessage, "In function tamTransitionSystem: unknown state %" FMT16U " of the TAM transition system! This should never happen!", transitionSystemState);
@@ -1758,8 +1799,6 @@ void tamTransitionSystem(uint16_t tamTransition) {
   }
   showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 }
-
-
 
 void closeNim(void) {
   if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {

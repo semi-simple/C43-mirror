@@ -417,9 +417,9 @@ const int16_t menu_ASN_N[]       = {
                                      -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_SH_NORM_E,               ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
 
 const int16_t menu_ASN[]         = { 
-                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_SHIFTS,          ITM_USER_RESET,        ITM_NULL,                    KEY_USERMODE,         /*ITM_JM_ASN*/
-                                     ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_NULL,                    ITM_JM_SEEK,
-                                     ITM_USER_PRGM,                 ITM_USER_USER,              ITM_NULL,                 ITM_USER_SIGMAPLUS,    ITM_NULL,                    -MNU_ASN_N,
+                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_NULL,                 ITM_USER_SHIFTS,      ITM_USER_RESET,              KEY_USERMODE,         /*ITM_JM_ASN*/
+                                     ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_USER_V43,                ITM_JM_SEEK,
+                                     ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_USER_V43MIN,             -MNU_ASN_N,
                                                                           
                                      K_00U,                         K_01U,                      K_02U,                    K_03U,                 K_04U,                       K_05U,  //JM USER
                                      Kf00U,                         Kf01U,                      Kf02U,                    Kf03U,                 Kf04U,                       Kf05U,  //JM USER

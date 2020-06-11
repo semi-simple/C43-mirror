@@ -27,6 +27,7 @@
 #define SLS_UNCHANGED 2
 
 
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1785,8 +1786,8 @@
 #define ITM_H_SUMRY                   1745   //JMHOME
 #define ITM_H_REPLCA                  1746   //JMHOME
 #define ITM_H_FIXED                   1747   //JMHOME
-#define Not_used1748                  1748
-#define Not_used1749                  1749
+#define ITM_CB_SPCRES                 1748
+#define ITM_USER_V43                  1749   //V43
 #define ITM_EE_D2Y                    1750   //JM EE
 #define ITM_EE_Y2D                    1751   //JM EE
 #define ITM_EE_A2S                    1752   //JM EE
@@ -1804,7 +1805,7 @@
 #define ITM_EE_STO_V_Z                1764   //JM EE
 #define ITM_EE_X2BAL                  1765   //JM EE
 #define KEY_COMPLEX                   1766   //JM CPX
-#define Not_used1767                  1767
+#define ITM_RNG                       1767   //JM RANGE
 #define KEY_TYPCON_UP                 1768   //JM CPX
 #define KEY_TYPCON_DN                 1769   //JM CPX
 #define ITM_HOMEx3T                   1770   //JM HOME.3T
@@ -1984,7 +1985,7 @@
 #define ITM_DEMO6                     1941   //JM USER
 #define MNU_ST_GRAPH                  1942   //JM USER
 #define ITM_VECT                      1943   //JMVECT
-#define ITM_TOFILE                    1944   //TOFILE
+#define ITM_1944                      1944
 #define ITM_P_ALLREGS                 1945   //JM Print all regs
 #define ITM_SI_f                      1946   //JM PRE UNIT
 #define ITM_SI_G                      1947   //JM PRE UNIT
@@ -1997,7 +1998,7 @@
 #define ITM_LISTXY                    1954   //JMSTAT
 #define ITM_toPOL2                    1955   //JM
 #define ITM_toREC2                    1956   //JM
-#define MNU_CFG                       1957   //JM Replacements
+#define ITM_CFG                       1957   //JM Replacements
 #define ITM_CLK12                     1958   //JM Replacements
 #define ITM_CLK24                     1959   //JM Replacements
 #define ITM_CPXI                      1960
@@ -2011,26 +2012,32 @@
 #define ITM_SSIZE8                    1968
 #define ITM_RECT                      1969   //JM Replacements
 #define ITM_FLGSV                     1970
-#define ITM_X_P1                      1971   //JM EXEC
-#define ITM_X_P2                      1972   //JM EXEC
-#define ITM_X_P3                      1973   //JM EXEC
-#define ITM_X_P4                      1974   //JM EXEC
-#define ITM_X_P5                      1975   //JM EXEC
-#define ITM_X_P6                      1976   //JM EXEC
-#define ITM_X_f1                      1977   //JM EXEC
-#define ITM_X_f2                      1978   //JM EXEC
-#define ITM_X_f3                      1979   //JM EXEC
-#define ITM_X_f4                      1980   //JM EXEC
-#define ITM_X_f5                      1981   //JM EXEC
-#define ITM_X_f6                      1982   //JM EXEC
-#define ITM_X_g1                      1983   //JM EXEC
-#define ITM_X_g2                      1984   //JM EXEC
-#define ITM_X_g3                      1985   //JM EXEC
-#define ITM_X_g4                      1986   //JM EXEC
-#define ITM_X_g5                      1987   //JM EXEC
-#define ITM_X_g6                      1988   //JM EXEC
+#define ITM_SCIOVR                    1971   //JM Replacements
+#define ITM_ENGOVR                    1972   //JM Replacements
+#define ITM_USER_V43MIN               1973   //V43
+#define ITM_USER_SHIFTS2              1974   //V43
+#define ITM_USER_HOME                 1975   //JM USER
+#define ITM_USER_WP43S                1976   //V43
+#define ITM_X_P1                      1977   //JM EXEC
+#define ITM_X_P2                      1978   //JM EXEC
+#define ITM_X_P3                      1979   //JM EXEC
+#define ITM_X_P4                      1980   //JM EXEC
+#define ITM_X_P5                      1981   //JM EXEC
+#define ITM_X_P6                      1982   //JM EXEC
+#define ITM_X_f1                      1983   //JM EXEC
+#define ITM_X_f2                      1984   //JM EXEC
+#define ITM_X_f3                      1985   //JM EXEC
+#define ITM_X_f4                      1986   //JM EXEC
+#define ITM_X_f5                      1987   //JM EXEC
+#define ITM_X_f6                      1988   //JM EXEC
+#define ITM_X_g1                      1989   //JM EXEC
+#define ITM_X_g2                      1990   //JM EXEC
+#define ITM_X_g3                      1991   //JM EXEC
+#define ITM_X_g4                      1992   //JM EXEC
+#define ITM_X_g5                      1993   //JM EXEC
+#define ITM_X_g6                      1994   //JM EXEC
 
-#define LAST_ITEM                     1989   //JM
+#define LAST_ITEM                     1995   //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -440,7 +440,38 @@ void reset_jm_defaults(void) {
     #endif
     setSystemFlag(FLAG_SPCRES)                                 //JM default infinity etc.
     //JM defaults ^^
+
+    fnXEQMENUpos = 0;
+    while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {
+       fnXEQMENUpos++;
+    }
+    printf("###>>> %d\n",fnXEQMENUpos);
+
 }
+
+    int16_t fnXEQMENUpos = 0;
+item_t indexOfItemsXEQM[] = {
+
+/* 1977 */  { fnXEQMENU,                   1,                           "$$P1",                                        "$$P1",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1978 */  { fnXEQMENU,                   2,                           "$$P2",                                        "$$P2",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1979 */  { fnXEQMENU,                   3,                           "$$P3",                                        "$$P3",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1980 */  { fnXEQMENU,                   4,                           "$$P4",                                        "$$P4",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1981 */  { fnXEQMENU,                   5,                           "$$P5",                                        "$$P5",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1982 */  { fnXEQMENU,                   6,                           "$$P6",                                        "$$P6",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1983 */  { fnXEQMENU,                   7,                           "$$f1",                                        "$$f1",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1984 */  { fnXEQMENU,                   8,                           "$$f2",                                        "$$f2",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1985 */  { fnXEQMENU,                   9,                           "$$f3",                                        "$$f3",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1986 */  { fnXEQMENU,                   10,                          "$$f4",                                        "$$f4",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1987 */  { fnXEQMENU,                   11,                          "$$f5",                                        "$$f5",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1988 */  { fnXEQMENU,                   12,                          "$$f6",                                        "$$f6",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1989 */  { fnXEQMENU,                   13,                          "$$g1",                                        "$$g1",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1990 */  { fnXEQMENU,                   14,                          "$$g2",                                        "$$g2",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1991 */  { fnXEQMENU,                   15,                          "$$g3",                                        "$$g3",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1992 */  { fnXEQMENU,                   16,                          "$$g4",                                        "$$g4",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1993 */  { fnXEQMENU,                   17,                          "$$g5",                                        "$$g5",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1994 */  { fnXEQMENU,                   18,                          "$$g6",                                        "$$g6",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+
+};
 
 
 

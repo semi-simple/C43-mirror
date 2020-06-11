@@ -88,6 +88,8 @@ void capture_sequence(char *origin, uint16_t item);
 
 
 
+
+
 //keyboard.c  screen.c
 int16_t JM_auto_doublepress_enabled;              //JM TIMER CLRDROP //drop
 int16_t JM_auto_longpress_enabled;                //JM TIMER CLRDROP //clstk
@@ -137,6 +139,8 @@ extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
 
+extern int16_t fnXEQMENUpos;   //to save still //JMXEQ
+extern item_t  indexOfItemsXEQM[]; //tosave still //JMXEQ
 
 
 // Additional routines needed in jm.c

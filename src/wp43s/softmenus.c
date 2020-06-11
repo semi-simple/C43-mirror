@@ -1441,6 +1441,13 @@ void showSoftmenuCurrentPart(void) {
           }
         }
         
+        else                                                                   //JMXEQvv
+        if(softmenu[m].menuId == -MNU_XEQ) {
+          if(indexOfItems[item%10000].func == fnXEQMENU)
+            showSoftkey(indexOfItemsXEQM[item%10000-fnXEQMENUpos].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          else
+            showSoftkey(indexOfItems    [item%10000             ].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+        }                                                                      //JMXEQ^^
         else                                                                   //JMvv
         if(softmenu[m].menuId == -MNU_SYSFL) {
           if(indexOfItems[item%10000].itemCatalogName[0] == 0)

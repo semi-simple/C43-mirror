@@ -80,8 +80,10 @@ void runkey(uint16_t item){
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
+    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else
+    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else
     switch (aa[ix]) {
-      case 48: runkey(890); break;
+/*      case 48: runkey(890); break;
       case 49: runkey(891); break;
       case 50: runkey(892); break;
       case 51: runkey(893); break;
@@ -90,12 +92,13 @@ void sendkeys(const char aa[]) {
       case 54: runkey(896); break;
       case 55: runkey(897); break;
       case 56: runkey(898); break;
-      case 57: runkey(899); break;
+      case 57: runkey(899); break; */
       case 46: runkey(1310); break; //.
       case 69: runkey(1487); break; //E
       case 101: runkey(1487); break; //e
       case 45: runkey(780); break; //-
       case 43: runkey(778); break; //+
+      case 32: runkey(1295); break; //space
       default:;
     }
   ix++;
@@ -175,7 +178,7 @@ void execute_string(const char *inputstring, bool_t exec) {
                    commandnumber[0]=0;
                  }
        	         break;
-       	case 34: if(!state_comments && !state_commands) { // Toggle quote state
+       	case 34: if(!state_comments && !state_commands) {   // Toggle quote state
        	           state_quotes   = !state_quotes;
        	         }
        	         break;
@@ -188,11 +191,18 @@ void execute_string(const char *inputstring, bool_t exec) {
                    state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
                    //printf("&%s&",commandnumber);
                    if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                   if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
                    if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
                    if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
                    if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
                    if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
+                   if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
+               //    if (strcompare(commandnumber,"STO-"  )) {strcpy(commandnumber, "596");} else  not yet working. TAM not handled right
+               //    if (strcompare(commandnumber,"STO+"  )) {strcpy(commandnumber, "595");} else
+                   if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else
+                   if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else
                    if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
+                   if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
                    if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else
                    if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
                    if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
@@ -219,29 +229,35 @@ void execute_string(const char *inputstring, bool_t exec) {
                    switch(xeqlblinprogress) {
                      case 1:                  //IN PROGRESS: got command
                        xeqlblinprogress = 2;
-                       printf("$$$ case1:\n");
+                       //printf("$$$ case1:\n");
                        commandnumber[0]=0;
                      break;
                      case 2:                  //IN PROGRESS: get softkeynumber
                        no = atoi(commandnumber);
                        xeqlblinprogress = 3;
-                       printf("$$$ case2: no=%d\n",no);
+                       //printf("$$$ case2: no=%d\n",no);
                        commandnumber[0]=0;   //Processed
                      break;
                      case 3:                  //IN PROGRESS: get label
                        if (no>=1 && no<=18) {
                          strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
                          xeqlblinprogress = 0;
-                         printf("$$$ case3: no=%d %s\n",no, commandnumber);
+                         //printf("$$$ case3: no=%d %s\n",no, commandnumber);
                          commandnumber[0]=0;   //Processed
                          showSoftmenuCurrentPart();
                        }
                      break;
                      default:                 //NOT IN PROGRESS
                        no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
-                       printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
+                       //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
                        if(no > LAST_ITEM-1) {no = 0;}
-                       if(no!=0 && exec) runkey(no); else printf("Skip execution |%s|",commandnumber);
+                       if(no!=0 && exec) {
+                         runkey(no); 
+                         printf(">>> %d\n",temporaryInformation);
+                       } 
+                       else {
+                         //printf("Skip execution |%s|",commandnumber);
+                       }
                        commandnumber[0]=0;   //Processed
                      break;
                    }
@@ -250,9 +266,9 @@ void execute_string(const char *inputstring, bool_t exec) {
         default:;           //ignore all other characters
       }
    if(state_quotes)   {
-     if (exec) sendkeys(aa); else printf("Skip sending |%s|",aa);
+     if (exec) sendkeys(aa); //else printf("Skip sending |%s|",aa);
    } else
-   if(state_commands && stringByteLength(commandnumber) < 20-1) {strcat(commandnumber,aa);}   // accumulate string
+     if(state_commands && stringByteLength(commandnumber) < 20-1) {strcat(commandnumber,aa);}   // accumulate string
    ix++;
    }
 }
@@ -324,59 +340,34 @@ char line1[TMP_STR_LENGTH];
 }
 
 
-
-//Fixed test program, dispatching commands loaded from TSV file
-void testprogram_disk(uint16_t unusedParamButMandatory){
-char line1[TMP_STR_LENGTH];
-   strcpy(line1,"ABCDEF");
-   import_string_from_file(line1);
-   displaywords(line1);
-   execute_string(line1,true);
-}
-
-
-
 void fnXEQMENU(uint16_t unusedParamButMandatory) {
 char line1[TMP_STR_LENGTH];
-  //strcpy(line1,"ABCDEF");
   
   switch(unusedParamButMandatory) {
+    case  1:import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,true); break;
+    case  2:import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,true); break;
+    case  3:import_string_from_filename(line1,"XEQM03"); displaywords(line1); execute_string(line1,true); break;
+    case  4:import_string_from_filename(line1,"XEQM04"); displaywords(line1); execute_string(line1,true); break;
+    case  5:import_string_from_filename(line1,"XEQM05"); displaywords(line1); execute_string(line1,true); break;
+    case  6:import_string_from_filename(line1,"XEQM06"); displaywords(line1); execute_string(line1,true); break;
+    case  7:import_string_from_filename(line1,"XEQM07"); displaywords(line1); execute_string(line1,true); break;
+    case  8:import_string_from_filename(line1,"XEQM08"); displaywords(line1); execute_string(line1,true); break;
+    case  9:import_string_from_filename(line1,"XEQM09"); displaywords(line1); execute_string(line1,true); break;
+    case 10:import_string_from_filename(line1,"XEQM10"); displaywords(line1); execute_string(line1,true); break;
+    case 11:import_string_from_filename(line1,"XEQM11"); displaywords(line1); execute_string(line1,true); break;
+    case 12:import_string_from_filename(line1,"XEQM12"); displaywords(line1); execute_string(line1,true); break;
+    case 13:import_string_from_filename(line1,"XEQM13"); displaywords(line1); execute_string(line1,true); break;
+    case 14:import_string_from_filename(line1,"XEQM14"); displaywords(line1); execute_string(line1,true); break;
+    case 15:import_string_from_filename(line1,"XEQM15"); displaywords(line1); execute_string(line1,true); break;
+    case 16:import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,true); break;
+    case 17:import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,true); break;
+    case 18:import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,true); break;
+    default:;
+  }
+  temporaryInformation = CM_BUG_ON_SCREEN;
+}
+
 /*
-    case 1: strcpy(line1,"WWWW XEQLBL05 ");
-            import_string_from_file(line1);
-            displaywords(line1);
-            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
-
-    case 7: strcpy(line1,"WWWW XEQLBL05 ");
-            import_string_from_file(line1);
-            displaywords(line1);
-            execute_string(line1,true);
-            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
-
-    case 13: testprogram_disk(0); 
-            break;
-
-    case 2: strcpy(line1,
-            "TICKS //RPN Hard coded program// "
-            "\"2\" EXIT "
-            "\"2203\" "
-            "Y^X "
-            "\"1\" - "
-            "PRIME?  "
-            "X<>Y "
-            "TICKS "
-            "X<>Y - "
-            "\"10.0\" / "    
-            "RETURN "
-            "//ABCDEFGHIJKLMNOPQ!@#$%^&*() \n"
-            "//72770178037093707037309707()// "            
-            );
-            displaywords(line1);
-            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
-
     case 8: strcpy(line1,
             "TICKS //RPN Hard coded program// "
             "\"2\" EXIT "
@@ -396,65 +387,14 @@ char line1[TMP_STR_LENGTH];
             execute_string(line1,true);
             temporaryInformation = CM_BUG_ON_SCREEN;
             break;
-
-    case 14: testprogram_mem(0); 
-            break;
 */
 
 
 
-    case  1:import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,true); break;
-    case  2:import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,true); break;
-    case  3:import_string_from_filename(line1,"XEQM03"); displaywords(line1); execute_string(line1,true); break;
-    case  4:import_string_from_filename(line1,"XEQM04"); displaywords(line1); execute_string(line1,true); break;
-    case  5:import_string_from_filename(line1,"XEQM05"); displaywords(line1); execute_string(line1,true); break;
-    case  6:import_string_from_filename(line1,"XEQM06"); displaywords(line1); execute_string(line1,true); break;
-    case  7:import_string_from_filename(line1,"XEQM07"); displaywords(line1); execute_string(line1,true); break;
-    case  8:import_string_from_filename(line1,"XEQM08"); displaywords(line1); execute_string(line1,true); break;
-    case  9:import_string_from_filename(line1,"XEQM09"); displaywords(line1); execute_string(line1,true); break;
-    case 10:import_string_from_filename(line1,"XEQM10"); displaywords(line1); execute_string(line1,true); break;
-    case 11:import_string_from_filename(line1,"XEQM11"); displaywords(line1); execute_string(line1,true); break;
-    case 12:import_string_from_filename(line1,"XEQM12"); displaywords(line1); execute_string(line1,true); break;
-    case 13:import_string_from_filename(line1,"XEQM13"); displaywords(line1); execute_string(line1,true); break;
-    case 14:import_string_from_filename(line1,"XEQM14"); displaywords(line1); execute_string(line1,true); break;
-    case 15:import_string_from_filename(line1,"XEQM15"); displaywords(line1); execute_string(line1,true); break;
-    case 16:import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,true); break;
-
-    case 17:import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM03"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM04"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM05"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM06"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM07"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM08"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM09"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM10"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM11"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM12"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM13"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM14"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM15"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,false);
-            import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,false);
-//            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
 
 
 
-    case 18: strcpy(line1,"XEQLBL 18 TEST001 \"1\" ENTER \"81\" / ");
-            import_string_from_file(line1);
-            displaywords(line1);
-            execute_string(line1,true);
-            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
 
-
-    default:;
-
-  }
-}
 
 /*
 void fnAngularMode(uint16_t am) {
@@ -529,7 +469,27 @@ void reset_jm_defaults(void) {
       strcpy(indexOfItemsXEQM +12*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
       ix++;    
     }
-    
+    char line1[TMP_STR_LENGTH];
+    import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM03"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM04"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM05"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM06"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM07"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM08"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM09"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM10"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM11"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM12"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM13"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM14"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM15"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,false);
+    import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,false);
+    clearScreen(false,true,false);
+
 }
 
     int16_t fnXEQMENUpos = 0;

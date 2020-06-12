@@ -641,12 +641,12 @@ int16_t import_string_from_filename(char *line1,  char *filename) {
 
   if (strcompare(filename,"XEQM01")) strcpy(line1,"XEQLBL 01 TEST01 \"3\" ENTER \"4\" CHS Y^X "); else
   if (strcompare(filename,"XEQM02")) strcpy(line1,"XEQLBL 02 TEST02 \"1\" ENTER \"81\" /   "); else
-  if (strcompare(filename,"XEQM03")) strcpy(line1,"XEQLBL 03 MP2203 \"2\" ENTER \"2203\" Y^X \"1\" - ENTER PRIME? "); else
-  if (strcompare(filename,"XEQM04")) strcpy(line1,"XEQLBL 04 MP2281 \"2\" ENTER \"2281\" Y^X \"1\" - ENTER PRIME? "); else
-  if (strcompare(filename,"XEQM05")) strcpy(line1,"XEQLBL 05 MP3217 \"2\" ENTER \"3217\" Y^X \"1\" - ENTER PRIME? "); else
-  if (strcompare(filename,"XEQM06")) strcpy(line1,"XEQLBL 06 CUBE   RCL \"11\" \"3\" Y^X RCL \"12\" \"3\" Y^X RCL \"13\" \"3\" Y^X + + "); else
-  if (strcompare(filename,"XEQM07")) strcpy(line1,"XEQLBL 07 LBL07 "); else
-  if (strcompare(filename,"XEQM08")) strcpy(line1,"XEQLBL 08 LBL08 "); else
+  if (strcompare(filename,"XEQM03")) strcpy(line1,"XEQLBL 03 MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+  if (strcompare(filename,"XEQM04")) strcpy(line1,"XEQLBL 04 MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+  if (strcompare(filename,"XEQM05")) strcpy(line1,"XEQLBL 05 MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+  if (strcompare(filename,"XEQM06")) strcpy(line1,"XEQLBL 06 CUBE RCL \"11\" \"3\" Y^X RCL \"12\" \"3\" Y^X RCL \"13\" \"3\" Y^X + + "); else
+  if (strcompare(filename,"XEQM07")) strcpy(line1,"XEQLBL 07 //PROGRAM TO GENERATE FIRST 4 PRIMES AFTER 1E500// LOOPTST TICKS STO \"01\" \"500\" 10^X EXIT \"4\" EXIT STO \"00\"  DROP MARK1 NPRIME ENTER DEC \"00\" GTO_M1_IF_0 TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); else
+  if (strcompare(filename,"XEQM08")) strcpy(line1,"XEQLBL 08 42 \"12075974\" EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT "); else
   if (strcompare(filename,"XEQM09")) strcpy(line1,"XEQLBL 09 LBL09 "); else
   if (strcompare(filename,"XEQM10")) strcpy(line1,"XEQLBL 10 LBL10 "); else
   if (strcompare(filename,"XEQM11")) strcpy(line1,"XEQLBL 11 LBL11 "); else

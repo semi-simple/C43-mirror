@@ -406,6 +406,38 @@ char line[100];               /* Line buffer */
 
 
 
+
+int16_t import_string_from_filename(char *line1, const char *filename) {
+char line[TMP_STR_LENGTH];        /* Line buffer */
+
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    //Create file name
+    strcpy(filename_csv,"/PROGRAMS/");
+    strcat(filename_csv,filename);
+    strcat(filename_csv,".TSV");
+
+    /* Opens an existing file. */
+    fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
+    if (fr) {
+      sprintf(line,"File read open error--> %d    \n",fr);       print_linestr(line,false);
+      f_close(&fil)
+      ;
+      return (int)fr;
+    }
+
+    /* Read if open */
+    line1[0]=0;
+    f_getsline(line1, TMP_STR_LENGTH, &fil);
+    f_close(&fil);
+    return 0;
+  }
+
+
+
+
+
 //#####################################################################################
 //#####################################################################################
 
@@ -604,6 +636,31 @@ char line[100];               /* Line buffer */
 
 
 #elif PC_BUILD
+
+int16_t import_string_from_filename(char *line1,  char *filename) {
+
+  if (strcompare(filename,"XEQM01")) strcpy(line1,"XEQLBL 01 TEST01 \"3\" ENTER \"4\" CHS Y^X "); else
+  if (strcompare(filename,"XEQM02")) strcpy(line1,"XEQLBL 02 TEST02 \"1\" ENTER \"81\" /   "); else
+  if (strcompare(filename,"XEQM03")) strcpy(line1,"XEQLBL 03 MP2203 \"2\" ENTER \"2203\" Y^X \"1\" - ENTER PRIME? "); else
+  if (strcompare(filename,"XEQM04")) strcpy(line1,"XEQLBL 04 MP2281 \"2\" ENTER \"2281\" Y^X \"1\" - ENTER PRIME? "); else
+  if (strcompare(filename,"XEQM05")) strcpy(line1,"XEQLBL 05 MP3217 \"2\" ENTER \"3217\" Y^X \"1\" - ENTER PRIME? "); else
+  if (strcompare(filename,"XEQM06")) strcpy(line1,"XEQLBL 06 CUBE   RCL \"11\" \"3\" Y^X RCL \"12\" \"3\" Y^X RCL \"13\" \"3\" Y^X + + "); else
+  if (strcompare(filename,"XEQM07")) strcpy(line1,"XEQLBL 07 LBL07 "); else
+  if (strcompare(filename,"XEQM08")) strcpy(line1,"XEQLBL 08 LBL08 "); else
+  if (strcompare(filename,"XEQM09")) strcpy(line1,"XEQLBL 09 LBL09 "); else
+  if (strcompare(filename,"XEQM10")) strcpy(line1,"XEQLBL 10 LBL10 "); else
+  if (strcompare(filename,"XEQM11")) strcpy(line1,"XEQLBL 11 LBL11 "); else
+  if (strcompare(filename,"XEQM12")) strcpy(line1,"XEQLBL 12 LBL12 "); else
+  if (strcompare(filename,"XEQM13")) strcpy(line1,"XEQLBL 13 LBL13 "); else
+  if (strcompare(filename,"XEQM14")) strcpy(line1,"XEQLBL 14 LBL14 "); else
+  if (strcompare(filename,"XEQM15")) strcpy(line1,"XEQLBL 15 LBL15 "); else
+  if (strcompare(filename,"XEQM16")) strcpy(line1,"XEQLBL 16 LBL16 "); else
+  if (strcompare(filename,"XEQM17")) strcpy(line1,"XEQLBL 17 LBL17 "); else
+  if (strcompare(filename,"XEQM18")) strcpy(line1,"XEQLBL 18 LBL18 ");
+
+return 0;
+}
+
 
 
 int16_t import_string_from_file(char *line1) {

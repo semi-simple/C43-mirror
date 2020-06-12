@@ -2473,7 +2473,7 @@ const item_t indexOfItems[] = {
 /* 1991 */  { fnXEQMENU,                   15,                          "X_g3",                                        "X_g3",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1992 */  { fnXEQMENU,                   16,                          "X_g4",                                        "X_g4",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1993 */  { fnXEQMENU,                   17,                          "X_g5",                                        "X_g5",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1994 */  { fnXEQMENU,                   18,                          "X_g6",                                        "X_g6",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1994 */  { fnXEQMENU,                   18,                          "LOAD",                                        "LOAD",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 
 /* 1995 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

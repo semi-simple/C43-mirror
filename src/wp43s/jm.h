@@ -78,6 +78,9 @@ Modes available in the mode menu:
 #define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
 void reset_jm_defaults(void);
+bool_t strcompare( char *in1, char *in2);
+
+
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
@@ -140,7 +143,7 @@ extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
 
 extern int16_t fnXEQMENUpos;   //to save still //JMXEQ
-extern item_t  indexOfItemsXEQM[]; //tosave still //JMXEQ
+char  indexOfItemsXEQM[18*12]; //tosave still //JMXEQ
 
 
 // Additional routines needed in jm.c

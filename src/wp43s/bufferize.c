@@ -1750,38 +1750,33 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 16:
       switch(tamTransition) {
         case TT_LETTER :
-          
-          for (int i = 4; i > 0; i--) {
-            if (tamBuffer[strlen(tamBuffer)-i] == '_') {
-              tamBuffer[strlen(tamBuffer)-i] = "xyzt"[tamLetteredRegister-REGISTER_X];
-              i = 0;
+          if (tamLetteredRegister >= REGISTER_X && tamLetteredRegister <= REGISTER_T) {
+            for (int i = 4; i > 0; i--) {
+              if (tamBuffer[strlen(tamBuffer)-i] == '_') {
+                tamBuffer[strlen(tamBuffer)-i] = "xyzt"[tamLetteredRegister-REGISTER_X];
+                if (i == 1) {
+                  indexOfItems[getOperation()].func(NOPARAM);
+                  calcModeNormal();
+                  return;
+                }
+                break;
+              }
             }
           }
           break;
         case TT_BACKSPACE :
-          
-          for (int i = 1; i < 5; i++) {
+          for (int i = 1; i <= 5; i++) {
+            if (i == 5) {
+                calcModeNormal();
+                return;
+                break;
+              }
             if (tamBuffer[strlen(tamBuffer)-i] != '_') {
               tamBuffer[strlen(tamBuffer)-i] = '_';
-              i = 5;
+              break;
             }
           }
           break;
-          
-        case TT_ENTER :
-          if (tamBuffer[strlen(tamBuffer)-1] != '_') {
-            if(lastErrorCode == 0) {
-              indexOfItems[getOperation()].func(NOPARAM);
-            }
-            calcModeNormal();
-            return;
-          }
-          break;
-          
-        default : {
-          sprintf(errorMessage, "In function tamTransitionSystem: unhandled tamTransistion in case 16!", transitionSystemState);
-          displayBugScreen(errorMessage);
-        }
       }
       break;
           

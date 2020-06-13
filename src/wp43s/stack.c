@@ -277,39 +277,30 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
 }
 
 /********************************************//**
- * \brief Shuffles the registers
+ * \brief Shuffles the registers and and refreshes the stack.
+ * the Shuffle order is in the last four chars of the tamBuffer
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnShuffle(uint16_t unusedParamButMandatory) {
 
-  registerDescriptor_t savedRegister_x = reg[REGISTER_X];
-  registerDescriptor_t savedRegister_y = reg[REGISTER_Y];
-  registerDescriptor_t savedRegister_z = reg[REGISTER_Z];
-  registerDescriptor_t savedRegister_t = reg[REGISTER_T];
-  
+  saveStack(); 
   
   for (int i = 0; i < 4; i++) {
     if (tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
-      reg[REGISTER_X+i] =  savedRegister_x;
+      copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X + i);
     } else if (tamBuffer[strlen(tamBuffer) - 4  + i] == 'y') {
-      reg[REGISTER_X+i] =  savedRegister_y;
+      copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_X + i);
     } else if (tamBuffer[strlen(tamBuffer) - 4 + i] == 'z') {
-      reg[REGISTER_X+i] =  savedRegister_z;
+      copySourceRegisterToDestRegister(SAVED_REGISTER_Z, REGISTER_X + i);
     } else if (tamBuffer[strlen(tamBuffer) - 4 + i] == 't') {
-      reg[REGISTER_X+i] =  savedRegister_t;
+      copySourceRegisterToDestRegister(SAVED_REGISTER_T, REGISTER_X + i);
     }
   }
   
   refreshStack();
   
-  /*registerDescriptor_t savedRegister = reg[REGISTER_X];
-  
-  reg[REGISTER_X] = reg[REGISTER_Y];
-  reg[REGISTER_Y] = savedRegister;
-  refreshRegisterLine(REGISTER_X);
-  refreshRegisterLine(REGISTER_Y); */
 }
 
 

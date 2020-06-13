@@ -50,14 +50,15 @@ void capture_sequence(char *origin, uint16_t item) {
       case 1310: ll[0]=46; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
       case 1487: ll[0]=69; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
       default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);
-                 ix = 0;
-                 while (ll[ix] != 0) {
-                   if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
-                   ix++;
-                 }
-                 sprintf(line1, " %4d //%10s//\n",item,ll);
                }  
     }
+    ix = 0;
+    while (ll[ix] != 0) {
+      if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
+      ix++;
+    }
+    sprintf(line1, " %4d //%10s//\n",item,ll);
+
     export_string_to_file(line1);
 }
 
@@ -97,6 +98,8 @@ void sendkeys(const char aa[]) {
 
 
 
+
+
 bool_t strcompare( char *in1, char *in2) {
   if (stringByteLength(in1) == stringByteLength(in2)) {
     int16_t i = 0;
@@ -115,153 +118,237 @@ bool_t strcompare( char *in1, char *in2) {
 // Example: "200" EXIT PRIME?
 // Ignores all other ASCII control and white space.
 
-void execute_string(const char *inputstring, bool_t exec) {
-   uint16_t ix = 0;
-   uint16_t ix_m1 = 0;
-   uint16_t ix_m2 = 0;
-   uint16_t ix_m3 = 0;
-   uint16_t ix_m4 = 0;
-   uint16_t no = 0;
-   char     commandnumber[20];
-   char aa[2], bb[2];
-   bool_t state_comments, state_commands, state_quotes;
-   uint16_t xeqlblinprogress = 0;
+void execute_string(const char *inputstring, bool_t exec1) {
+      uint16_t ix, ix_m;
+      uint16_t ix_m1 = 0;
+      uint16_t ix_m2 = 0;
+      uint16_t ix_m3 = 0;
+      uint16_t ix_m4 = 0;
+      uint16_t no;
+      char     commandnumber[20];
+      char     aa[2], bb[2];
+      bool_t   state_comments, state_commands, state_quotes;
+      uint16_t xeqlblinprogress;
+      uint16_t gotoinprogress;
+      bool_t gotlabels = false;
+      bool_t exec = false;
+      bool_t go;
 
-   state_comments = false;
-   state_commands = false;
-   state_quotes = false;
-   commandnumber[0]=0;
-   aa[0]=0;
-   while (inputstring[ix]!=0) {
-     strcpy(bb,aa);
-     aa[0] = inputstring[ix];
-     aa[1] = 0;
+    while(!gotlabels || (gotlabels && exec) ){
+      printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+      xeqlblinprogress = 0;
+      gotoinprogress   = 0;
+      go = false;
+      ix = 0;
+      ix_m = 0;
+      no = 0;
+      state_comments = false;
+      state_commands = false;
+      state_quotes = false;
+      commandnumber[0]=0;
+      aa[0]=0;
+      while (inputstring[ix]!=0) {
+        strcpy(bb,aa);
+        aa[0] = inputstring[ix];
+        aa[1] = 0;
 
-     switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
-        case 32:
-        case 8 :
-        case 13:
-        case 10:
-        case 44:
-        case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
-                  (      (aa[0]==42 
-                      ||  aa[0]==43  
-                      ||  aa[0]==45 
-                      ||  aa[0]==47) 
-                      || (aa[0]>=48 && aa[0]<=57) 
-                      || (aa[0]>=65 && aa[0]<=90)  )
-                  && !state_comments                 //If not inside comments
-                  && !state_quotes                   //if not inside quotes
-                  && !state_commands                 //Don't re-check until done
-                  ) {
-                      state_commands = true;         // Waiting to open command number or name: nnn
+        switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
+          case 32:
+          case 8 :
+          case 13:
+          case 10:
+          case 44:
+          case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
+                    (      (aa[0]==42 
+                        ||  aa[0]==43  
+                        ||  aa[0]==45 
+                        ||  aa[0]==47) 
+                        || (aa[0]>=48 && aa[0]<=57) 
+                        || (aa[0]>=65 && aa[0]<=90)  )
+                    && !state_comments                 //If not inside comments
+                    && !state_quotes                   //if not inside quotes
+                    && !state_commands                 //Don't re-check until done
+                    ) {
+                        state_commands = true;         // Waiting to open command number or name: nnn
+                      }
+          default:;
+        }
+        
+        if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
+        switch(aa[0]) {
+          case 47: if(bb[0] == 47) {
+                      state_comments = !state_comments;        // Toggle comment state
+                      state_commands = false;
+                      state_quotes   = false;
+                      commandnumber[0]=0;
                     }
-        default:;
-     }
-     
-     if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
-     switch(aa[0]) {
-        case 47: if(bb[0] == 47) {
-                   state_comments = !state_comments;        // Toggle comment state
-                   state_commands = false;
-                   state_quotes   = false;
-                   commandnumber[0]=0;
-                 }
-       	         break;
-       	case 34: if(!state_comments && !state_commands) {   // Toggle quote state
-       	           state_quotes   = !state_quotes;
-       	         }
-       	         break;
+          	         break;
+          case 34: if(!state_comments && !state_commands) {   // Toggle quote state
+          	           state_quotes   = !state_quotes;
+          	         }
+          	         break;
 
-        case 13: //cr
-        case 10: //lf
-        case 8 : //tab
-        case 44: //,
-        case 32: if(state_commands){
-                   state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                   //printf("&%s&",commandnumber);
-                   if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
-                   if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
-                   if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
-                   if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
-                   if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
-                   if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
-                   if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
-               //    if (strcompare(commandnumber,"STO-"  )) {strcpy(commandnumber, "596");} else  not yet working. TAM not handled right
-               //    if (strcompare(commandnumber,"STO+"  )) {strcpy(commandnumber, "595");} else
-                   if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else
-                   if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else
-                   if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
-                   if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
-                   if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else
-                   if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
-                   if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
-                   if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
-                   if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
-                   if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
-                   if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
-                   if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
-                   if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
-                   if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else
-                   if (strcompare(commandnumber,"MARK2"      )) {ix_m2 = ix;}   else
-                   if (strcompare(commandnumber,"MARK3"      )) {ix_m3 = ix;}   else
-                   if (strcompare(commandnumber,"MARK4"      )) {ix_m4 = ix;}   else
-                   if (strcompare(commandnumber,"GTO_M1_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m1 !=0)) {ix = ix_m1;} } else
-                   if (strcompare(commandnumber,"GTO_M1_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m1 !=0)) {ix = ix_m1;} } else
-                   if (strcompare(commandnumber,"GTO_M2_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m2 !=0)) {ix = ix_m2;} } else
-                   if (strcompare(commandnumber,"GTO_M2_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m2 !=0)) {ix = ix_m2;} } else
-                   if (strcompare(commandnumber,"GTO_M3_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m3 !=0)) {ix = ix_m3;} } else
-                   if (strcompare(commandnumber,"GTO_M3_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m3 !=0)) {ix = ix_m3;} } else
-                   if (strcompare(commandnumber,"GTO_M4_IF_0")) {if((temporaryInformation == TI_FALSE) && (ix_m4 !=0)) {ix = ix_m4;} } else
-                   if (strcompare(commandnumber,"GTO_M4_IF_1")) {if((temporaryInformation == TI_TRUE ) && (ix_m4 !=0)) {ix = ix_m4;} } else
-                   if (strcompare(commandnumber,"XEQLBL"))      {xeqlblinprogress = 1; } else
-                   if (strcompare(commandnumber,"RETURN"))      {ix = stringByteLength(inputstring)-2;} 
-                   // 
-                   switch(xeqlblinprogress) {
-                     case 1:                  //IN PROGRESS: got command
-                       xeqlblinprogress = 2;
-                       //printf("$$$ case1:\n");
-                       commandnumber[0]=0;
-                     break;
-                     case 2:                  //IN PROGRESS: get softkeynumber
-                       no = atoi(commandnumber);
-                       xeqlblinprogress = 3;
-                       //printf("$$$ case2: no=%d\n",no);
-                       commandnumber[0]=0;   //Processed
-                     break;
-                     case 3:                  //IN PROGRESS: get label
-                       if (no>=1 && no<=18) {
-                         strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
-                         xeqlblinprogress = 0;
-                         //printf("$$$ case3: no=%d %s\n",no, commandnumber);
-                         commandnumber[0]=0;   //Processed
-                         showSoftmenuCurrentPart();
-                       }
-                     break;
-                     default:                 //NOT IN PROGRESS
-                       no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
-                       //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
-                       if(no > LAST_ITEM-1) {no = 0;}
-                       if(no!=0 && exec) {
-                         runkey(no); 
-                         printf(">>> %d\n",temporaryInformation);
-                       } 
-                       else {
-                         //printf("Skip execution |%s|",commandnumber);
-                       }
-                       commandnumber[0]=0;   //Processed
-                     break;
-                   }
-                 }
-                 break;
-        default:;           //ignore all other characters
+          case 13: //cr
+          case 10: //lf
+          case 8 : //tab
+          case 44: //,
+          case 32: if(state_commands){
+                      state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
+                      //printf("&%s&",commandnumber);
+                      
+                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {                   //It is now the command that may or may not be skipped
+                          go = (temporaryInformation == TI_FALSE); //As per GTO_SZ
+                          gotoinprogress = 1;                      //As per GTO_SZ
+                          commandnumber[0]=0;                      //As per GTO_SZ
+                      } else //NOT gotoinprogress == 11
+
+                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
+                      if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
+                      if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
+                      if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
+                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
+                      if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
+                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber,  "83");} else
+                      if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
+                      if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
+                      if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
+                      if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
+                      if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
+                      if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
+                      if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
+                      if (strcompare(commandnumber,"SUM+"  )) {strcpy(commandnumber, "762");} else
+                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
+                      if (strcompare(commandnumber,"PLOT"  )) {strcpy(commandnumber, "455");} else
+                      if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
+                      if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
+                      if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
+
+                      if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+                      if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
+                      if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else
+                      if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else
+
+                      if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "115"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "252"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
+                      if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; }                                   //EXPECTING 2 OPERANDS nn XXXXXX
+
+                      if (strcompare(commandnumber,"GTO"   ))    {
+                        if(exec) {
+                          gotoinprogress = 1;
+                          /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
+                          else                   */  {go = true;}
+                        }
+                      } else
+                      if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else
+                      if (strcompare(commandnumber,"RTN"   ))    {if(exec) {ix = ix_m; ix_m = 0;}}                      else
+                      if (strcompare(commandnumber,"GTO_SZ"))    {if(exec) {go = (temporaryInformation == TI_FALSE); gotoinprogress = 1; }}
+
+                      if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;}
+                      if (strcompare(commandnumber,"RETURN"))    if(exec) {ix = stringByteLength(inputstring)-2;} 
+                      
+                      switch(gotoinprogress) {
+                        case 1:                  //GOTO IN PROGRESS: got command GOTO
+                          gotoinprogress = 2;
+                          commandnumber[0]=0;
+                        break;
+                        case 2:                  //GOTO IN PROGRESS: get softkeynumber 01 - 04
+                          if(strcompare(commandnumber,"M1") && exec && go && (ix_m1 !=0)) ix = ix_m1; else
+                          if(strcompare(commandnumber,"M2") && exec && go && (ix_m2 !=0)) ix = ix_m2; else 
+                          if(strcompare(commandnumber,"M3") && exec && go && (ix_m3 !=0)) ix = ix_m3; else
+                          if(strcompare(commandnumber,"M4") && exec && go && (ix_m4 !=0)) ix = ix_m4;
+                          gotoinprogress = 0;
+                          commandnumber[0]=0;   //Processed
+                          go = false;
+                        break;
+
+                        case 13:                  //GOTO IN PROGRESS: eat one word
+                          gotoinprogress = 0;
+                          commandnumber[0]=0;
+                        break;
+
+
+                        default:;
+                      }
+
+
+
+                      switch(xeqlblinprogress) {
+                        case 1:                  //XEQMLABEL IN PROGRESS: got command XEQLBL
+                          xeqlblinprogress = 2;
+                          commandnumber[0]=0;
+                        break;
+                        case 2:                  //XEQMLABEL IN PROGRESS: get softkeynumber 01 - 18
+                          no = atoi(commandnumber);
+                          if(no>=1 && no <=18) {
+                            xeqlblinprogress = 3;
+                            commandnumber[0]=0;   //Processed
+                          } 
+                          else {
+                            xeqlblinprogress = 0;
+                            commandnumber[0]=0;   //Processed
+                          }
+                        break;
+                        case 3:                  //XEQMLABEL IN PROGRESS: get label
+                          if (no>=1 && no<=18) {
+                            strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
+                            xeqlblinprogress = 0;
+                            commandnumber[0]=0;   //Processed
+                            showSoftmenuCurrentPart();
+                          }
+                        break;
+
+
+
+
+                        case 10:                  //LABEL IN PROGRESS: got command XEQLBL
+                          xeqlblinprogress = 11;
+                          commandnumber[0]=0;
+                        break;
+                        case 11:                  //LABEL IN PROGRESS: get label M1-M4
+                          printf("LABEL %s\n",commandnumber);
+                          if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
+                          if(strcompare(commandnumber,"M2")) ix_m2 = ix; else
+                          if(strcompare(commandnumber,"M3")) ix_m3 = ix; else
+                          if(strcompare(commandnumber,"M4")) ix_m4 = ix;
+                          xeqlblinprogress = 0;
+                          commandnumber[0]=0;   //Processed
+                        break;
+
+                        default:                 //NOT IN PROGRESS
+                          no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
+                          //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
+                          if(no > LAST_ITEM-1) {no = 0;}
+                          if(no!=0 && exec) {
+                            if(exec) runkey(no); 
+                            //printf(">>> %d\n",temporaryInformation);
+                            if(gotoinprogress==10) {gotoinprogress = 11;}
+                          } 
+                          else {
+                            //printf("Skip execution |%s|",commandnumber);
+                          }
+                          commandnumber[0]=0;   //Processed
+                        break;
+                      }
+                    }
+                    break;
+          default:;           //ignore all other characters
+        }
+        if(state_quotes) {
+          if (exec) sendkeys(aa); //else printf("Skip sending |%s|",aa);
+        } 
+        else { 
+          if(state_commands && stringByteLength(commandnumber) < 20-1) {
+            strcat(commandnumber,aa);
+          }   // accumulate string
+        }
+        ix++;
       }
-   if(state_quotes)   {
-     if (exec) sendkeys(aa); //else printf("Skip sending |%s|",aa);
-   } else
-     if(state_commands && stringByteLength(commandnumber) < 20-1) {strcat(commandnumber,aa);}   // accumulate string
-   ix++;
-   }
+
+      gotlabels = true;                              //allow to run only once, unless
+      if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
+    }
 }
 
 
@@ -480,6 +567,7 @@ void reset_jm_defaults(void) {
     import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,false);
     import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,false);
     clearScreen(false,true,false);
+    showSoftmenuCurrentPart();
 
 }
 

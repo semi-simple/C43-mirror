@@ -416,7 +416,7 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     //Create file name
     strcpy(filename_csv,"/PROGRAMS/");
     strcat(filename_csv,filename);
-    strcat(filename_csv,".TSV");
+    strcat(filename_csv,".TXT");
 
     /* Opens an existing file. */
     fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
@@ -639,24 +639,47 @@ char line[100];               /* Line buffer */
 
 int16_t import_string_from_filename(char *line1,  char *filename) {
 
-  if (strcompare(filename,"XEQM01")) strcpy(line1,"XEQLBL 01 TEST01 \"3\" ENTER \"4\" CHS Y^X "); else
-  if (strcompare(filename,"XEQM02")) strcpy(line1,"XEQLBL 02 TEST02 \"1\" ENTER \"81\" /   "); else
-  if (strcompare(filename,"XEQM03")) strcpy(line1,"XEQLBL 03 MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
-  if (strcompare(filename,"XEQM04")) strcpy(line1,"XEQLBL 04 MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
-  if (strcompare(filename,"XEQM05")) strcpy(line1,"XEQLBL 05 MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
-  if (strcompare(filename,"XEQM06")) strcpy(line1,"XEQLBL 06 CUBE RCL \"11\" \"3\" Y^X RCL \"12\" \"3\" Y^X RCL \"13\" \"3\" Y^X + + "); else
-  if (strcompare(filename,"XEQM07")) strcpy(line1,"XEQLBL 07 //PROGRAM TO GENERATE FIRST 4 PRIMES AFTER 1E500// LOOPTST TICKS STO \"01\" \"500\" 10^X EXIT \"4\" EXIT STO \"00\"  DROP MARK1 NPRIME ENTER DEC \"00\" GTO_M1_IF_0 TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); else
-  if (strcompare(filename,"XEQM08")) strcpy(line1,"XEQLBL 08 CUBE42 \"80538738812075974\" CHS EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT "); else
-  if (strcompare(filename,"XEQM09")) strcpy(line1,"XEQLBL 09 LBL09 "); else
-  if (strcompare(filename,"XEQM10")) strcpy(line1,"XEQLBL 10 LBL10 "); else
-  if (strcompare(filename,"XEQM11")) strcpy(line1,"XEQLBL 11 LBL11 "); else
-  if (strcompare(filename,"XEQM12")) strcpy(line1,"XEQLBL 12 LBL12 "); else
-  if (strcompare(filename,"XEQM13")) strcpy(line1,"XEQLBL 13 LBL13 "); else
-  if (strcompare(filename,"XEQM14")) strcpy(line1,"XEQLBL 14 LBL14 "); else
-  if (strcompare(filename,"XEQM15")) strcpy(line1,"XEQLBL 15 LBL15 "); else
-  if (strcompare(filename,"XEQM16")) strcpy(line1,"XEQLBL 16 LBL16 "); else
-  if (strcompare(filename,"XEQM17")) strcpy(line1,"XEQLBL 17 LBL17 "); else
-  if (strcompare(filename,"XEQM18")) strcpy(line1,"XEQLBL 18 LBL18 ");
+  FILE *infile;
+  char dirfile[40];
+  char onechar[2];
+
+  strcpy(dirfile,"PROGRAMS/");
+  strcat(dirfile,filename);
+  strcat(dirfile,".TXT");
+  
+  infile = fopen(dirfile, "rb");
+  if (infile == NULL) {
+    printf("Cannot load %s\n",dirfile);
+	if (strcompare(filename,"XEQM01")) strcpy(line1,"XEQLBL 01 3^-4 \"3\" ENTER \"4\" CHS Y^X "); else
+	if (strcompare(filename,"XEQM02")) strcpy(line1,"XEQLBL 02 1/81 \"1\" ENTER \"81\" /   "); else
+	if (strcompare(filename,"XEQM03")) strcpy(line1,"XEQLBL 03 MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+	if (strcompare(filename,"XEQM04")) strcpy(line1,"XEQLBL 04 MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+	if (strcompare(filename,"XEQM05")) strcpy(line1,"XEQLBL 05 MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / "); else
+	if (strcompare(filename,"XEQM06")) strcpy(line1,"XEQLBL 06 CUBE3 \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); else
+	if (strcompare(filename,"XEQM07")) strcpy(line1,"XEQLBL 07 LOOPTST TICKS STO \"01\" \"50\" 10^X EXIT \"4\" EXIT STO \"00\"  DROP XEQMLBL M1 NPRIME ENTER DEC \"00\" GTO_SZ M1 TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); else
+	if (strcompare(filename,"XEQM08")) strcpy(line1,"XEQLBL 08 XEQM08"); else
+	if (strcompare(filename,"XEQM09")) strcpy(line1,"XEQLBL 09 XEQM09 "); else
+	if (strcompare(filename,"XEQM10")) strcpy(line1,"XEQLBL 10 XEQM10 "); else
+	if (strcompare(filename,"XEQM11")) strcpy(line1,"XEQLBL 11 XEQM11 "); else
+	if (strcompare(filename,"XEQM12")) strcpy(line1,"XEQLBL 12 CUBE42 \"80538738812075974\" CHS EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT  "); else
+	if (strcompare(filename,"XEQM13")) strcpy(line1,"XEQLBL 13 XEQM13 "); else
+	if (strcompare(filename,"XEQM14")) strcpy(line1,"XEQLBL 14 XEQM14 "); else
+	if (strcompare(filename,"XEQM15")) strcpy(line1,"XEQLBL 15 XEQM15 "); else
+	if (strcompare(filename,"XEQM16")) strcpy(line1,"XEQLBL 16 XEQM16 "); else
+	if (strcompare(filename,"XEQM17")) strcpy(line1,"XEQLBL 17 XEQM17 "); else
+	if (strcompare(filename,"XEQM18")) strcpy(line1,"XEQLBL 18 XEQM18 ");
+    return 0;
+  }
+
+  tmpStr3000[0]=0;
+  onechar[1]=0;
+  while(fread(&onechar,1,1,infile)) {
+  	strcat(tmpStr3000,onechar);
+  }
+  fclose(infile);
+  printf("Loaded >>> %s |%s|\n",dirfile,tmpStr3000);
+
+  strcpy(line1,tmpStr3000);
 
 return 0;
 }

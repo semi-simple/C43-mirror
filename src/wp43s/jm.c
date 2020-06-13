@@ -80,19 +80,9 @@ void runkey(uint16_t item){
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
-    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else
-    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else
+    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else //A..Z
+    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-/*      case 48: runkey(890); break;
-      case 49: runkey(891); break;
-      case 50: runkey(892); break;
-      case 51: runkey(893); break;
-      case 52: runkey(894); break;
-      case 53: runkey(895); break;
-      case 54: runkey(896); break;
-      case 55: runkey(897); break;
-      case 56: runkey(898); break;
-      case 57: runkey(899); break; */
       case 46: runkey(1310); break; //.
       case 69: runkey(1487); break; //E
       case 101: runkey(1487); break; //e
@@ -209,6 +199,7 @@ void execute_string(const char *inputstring, bool_t exec) {
                    if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
                    if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
                    if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
+                   if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
                    if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
                    if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
                    if (strcompare(commandnumber,"MARK1"      )) {ix_m1 = ix;}   else

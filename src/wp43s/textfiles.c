@@ -89,7 +89,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
-  make_date_filename(filename_csv,"/SCREENS/",".TSV");
+  make_date_filename(filename_csv,"/DATA/",".REGS.TSV");
   #endif
 
 
@@ -379,9 +379,9 @@ uint32_t tmp__32;                                                 //JM_CSV
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
     if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
       //Create file name
-      make_date_filename(filename_csv,"/SCREENS/",".TSV");
+      make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
       //filename_csv[19+3]=0;                                     //20200331-180STATS
-      strcat(filename_csv,"STATS.TSV");      
+      //strcat(filename_csv,"STATS.TSV");      
     }
     mem__32 = tmp__32;
 
@@ -431,81 +431,6 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
 //#####################################################################################
 //#####################################################################################
 
-
-
-
-
-
-int16_t export_append_xy_old(float x, float y){
-char line[100];               /* Line buffer */
-uint32_t             tmp__32;                                 //JM_CSV
-
-    FIL fil;                      /* File object */
-    FRESULT fr;                   /* FatFs return code */
-
-    tmp__32 = getUptimeMs();
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
-      //Create file name
-      make_date_filename(filename_csv,"/SCREENS/",".TSV");
-      //filename_csv[19+3]=0;                                     //20200331-180STATS
-      strcat(filename_csv,"STATS.TSV");      
-    }
-    mem__32 = tmp__32;
-
-
-
-    /* Prepare to write */
-    sys_disk_write_enable(1);
-    fr = sys_is_disk_write_enable();
-    if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);    print_linestr(line,true);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
-    if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);       print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    /* Seek to end of the file to append data */
-    fr = f_lseek(&fil, f_size(&fil));
-    if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-//uses tmpstr3000
-    //sprintf(line,"%f, %f\n",x,y);                           print_linestr(line,false);    
-    sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
-    fr = f_puts(tmpStr3000, &fil);
-    if (fr == -1) {
-      sprintf(line,"Write error--> %d    \n",fr);            print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    /* close the file */
-    fr = f_close(&fil);
-    if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);     print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    sys_disk_write_enable(0);
- 
-    return 0;
-  }
 
 
 

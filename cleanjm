@@ -62,6 +62,26 @@ find . -type f -name "* 18.css" -exec rm {} \;
 find . -type f -name "* 19.css" -exec rm {} \;
 find . -type f -name "* 20.css" -exec rm {} \;
 
+find . -type f -name "* 2.c" -exec rm {} \;
+find . -type f -name "* 3.c" -exec rm {} \;
+find . -type f -name "* 4.c" -exec rm {} \;
+find . -type f -name "* 5.c" -exec rm {} \;
+find . -type f -name "* 6.c" -exec rm {} \;
+find . -type f -name "* 7.c" -exec rm {} \;
+find . -type f -name "* 8.c" -exec rm {} \;
+find . -type f -name "* 9.c" -exec rm {} \;
+find . -type f -name "* 10.c" -exec rm {} \;
+find . -type f -name "* 11.c" -exec rm {} \;
+find . -type f -name "* 12.c" -exec rm {} \;
+find . -type f -name "* 13.c" -exec rm {} \;
+find . -type f -name "* 14.c" -exec rm {} \;
+find . -type f -name "* 15.c" -exec rm {} \;
+find . -type f -name "* 16.c" -exec rm {} \;
+find . -type f -name "* 17.c" -exec rm {} \;
+find . -type f -name "* 18.c" -exec rm {} \;
+find . -type f -name "* 19.c" -exec rm {} \;
+find . -type f -name "* 20.c" -exec rm {} \;
+
 find . -type f -name "* 2.txt" -exec rm {} \;
 find . -type f -name "* 3.txt" -exec rm {} \;
 find . -type f -name "* 4.txt" -exec rm {} \;

@@ -371,7 +371,6 @@ void setupDefaults(void) {
   testBitset = 0x0000;                                         //dr
 #endif                                                         //^^
   strcpy(filename_csv,"DEFAULT.CSV");                          //JMCSV
-  tmp__32=0;                                                   //JMCSV
   mem__32=0;                                                   //JMCSV
   softmenuStackPointer_MEM = 0;                                //JM HOME temporary flag to remember and restore state
 

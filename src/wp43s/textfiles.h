@@ -24,7 +24,6 @@
 /* ADDITIONAL WP43C functions and routines */
 
 char         filename_csv[40]; //JMMAX                //JM_CSV
-uint32_t     tmp__32;                                 //JM_CSV
 uint32_t     mem__32;                                 //JM_CSV
 
 #define      CSV_NEWLINE "\n"

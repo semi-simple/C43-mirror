@@ -1665,8 +1665,9 @@
 #define SFL_INTING                    1629
 #define SFL_SOLVING                   1630
 #define SFL_VMDISP                    1631
+#define MNU_TAMSHUFFLE                1632
 
-#define LAST_ITEM                     1632
+#define LAST_ITEM                     1633
 
 #define CHR_PROD_SIGN                 9999
 

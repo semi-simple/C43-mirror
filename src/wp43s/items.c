@@ -293,6 +293,7 @@ void fnSwapY                    (uint16_t unusedParamButMandatory) {}
 void fnSwapZ                    (uint16_t unusedParamButMandatory) {}
 void fnSwapT                    (uint16_t unusedParamButMandatory) {}
 void fnSwapXY                   (uint16_t unusedParamButMandatory) {}
+void fnShuffle                  (uint16_t unusedParamButMandatory) {}
 void fnWho                      (uint16_t unusedParamButMandatory) {}
 void fnGetSignificantDigits     (uint16_t unusedParamButMandatory) {}
 void fnCvtToCurrentAngularMode  (uint16_t unusedParamButMandatory) {}
@@ -2102,7 +2103,7 @@ const item_t indexOfItems[] = {
 /* 1629 */  { fnGetSystemFlag,             FLAG_INTING,                 "INTING",                                      "INTING",                                      0,       0,       CAT_SYFL, SLS_UNCHANGED},
 /* 1630 */  { fnGetSystemFlag,             FLAG_SOLVING,                "SOLVING",                                     "SOLVING",                                     0,       0,       CAT_SYFL, SLS_UNCHANGED},
 /* 1631 */  { fnGetSystemFlag,             FLAG_VMDISP,                 "VMDISP",                                      "VMDISP",                                      0,       0,       CAT_SYFL, SLS_UNCHANGED},
-/* 1632 */  { itemToBeCoded,               NOPARAM,                     "1632",                                        "1632",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1632 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamShuffle",                                  0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1633 */  { itemToBeCoded,               NOPARAM,                     "1633",                                        "1633",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1634 */  { itemToBeCoded,               NOPARAM,                     "1634",                                        "1634",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1635 */  { itemToBeCoded,               NOPARAM,                     "1635",                                        "1635",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin

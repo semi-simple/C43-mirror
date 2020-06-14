@@ -253,7 +253,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
   //printf("x=%f ",x);
 
   #ifndef TESTSUITE_BUILD
-  test_xy(x,y);               //Write to CSV file
+  export_xy_to_file(x,y);     //Write to CSV file
   #endif
 
   if(plotmode == _VECT ) {

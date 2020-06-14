@@ -18,7 +18,7 @@
 
 
 /********************************************//** //JM
- * \file jmgraph.c Graphing module
+ * \file jmgraph.c TEXTFILES module
  ***********************************************/
 
 /* ADDITIONAL WP43C functions and routines */
@@ -33,16 +33,13 @@ uint32_t     mem__32;                                 //JM_CSV
 #define      CSV_SLASH   "\\"
 #define      CSV_STR     "\""
  
-int16_t      testjm(void);
-int16_t      test_xy(float x, float y);
 void         fnP_All_Regs(uint16_t unusedParamButMandatory);
-//void         print_line(bool_t line_init);
 void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
-int16_t      test_line(char *inputstring);
 
+void         displaywords(char *line1);
+int16_t      import_string_from_filename(char *line1, char *filename);
+int16_t      export_append_line(char *inputstring);
 
-int16_t import_string_from_filename(char *line1,  char *filename);
-int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]);
-int16_t import_string_from_file(char *line1);
+int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);
+int16_t      export_xy_to_file(float x, float y);
 
-void displaywords(char *line1);

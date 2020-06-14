@@ -59,22 +59,26 @@ void capture_sequence(char *origin, uint16_t item) {
     }
     sprintf(line1, " %4d //%10s//\n",item,ll);
 
+    #ifndef TESTSUITE_BUILD
     export_string_to_file(line1);
+    #endif
 }
 
 
 //############################ SEND KEY TO 43S ENGINE ####################
 void runkey(uint16_t item){
+  #ifndef TESTSUITE_BUILD
     //printf("§%d§ ",item);
     processKeyAction(item);
     if (!keyActionProcessed){
       hideFunctionName();
       runFunction(item);
       refreshStack();
-#ifdef DMCP_BUILD
-      lcd_forced_refresh(); // Just redraw from LCD buffer    
-#endif
+      #ifdef DMCP_BUILD
+        lcd_forced_refresh(); // Just redraw from LCD buffer    
+      #endif
     } 
+  #endif
 }
 
 //############################ DECODE NUMBERS AND THEN SEND KEY TO 43S ENGINE ####################
@@ -295,7 +299,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
                             xeqlblinprogress = 0;
                             commandnumber[0]=0;   //Processed
+                            #ifndef TESTSUITE_BUILD
                             showSoftmenuCurrentPart();
+                            #endif
                           }
                         break;
 
@@ -419,8 +425,8 @@ char line1[TMP_STR_LENGTH];
 
 
 void fnXEQMENU(uint16_t unusedParamButMandatory) {
-char line1[TMP_STR_LENGTH];
-  
+  #ifndef TESTSUITE_BUILD
+  char line1[TMP_STR_LENGTH];
   switch(unusedParamButMandatory) {
     case  1:import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,true); break;
     case  2:import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,true); break;
@@ -443,60 +449,10 @@ char line1[TMP_STR_LENGTH];
     default:;
   }
   temporaryInformation = CM_BUG_ON_SCREEN;
+  #endif
 }
 
-/*
-    case 8: strcpy(line1,
-            "TICKS //RPN Hard coded program// "
-            "\"2\" EXIT "
-            "\"2203\" "
-            "Y^X "
-            "\"1\" - "
-            "PRIME?  "
-            "X<>Y "
-            "TICKS "
-            "X<>Y - "
-            "\"10.0\" / "    
-            "RETURN "
-            "//ABCDEFGHIJKLMNOPQ!@#$%^&*() \n"
-            "//72770178037093707037309707()// "            
-            );
-            displaywords(line1);
-            execute_string(line1,true);
-            temporaryInformation = CM_BUG_ON_SCREEN;
-            break;
-*/
 
-
-
-
-
-
-
-
-/*
-void fnAngularMode(uint16_t am) {
-  currentAngularMode = am;
-
-  showAngularMode();
-  refreshStack();
-}
-
-void fnComplexUnit(uint16_t cu) {
-  complexUnit = cu;
-  refreshStack();
-}
-
-void fnComplexResult(uint16_t complexResult) {
-  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
-}
-
-void fnComplexMode(uint16_t cm) {
-  complexMode = cm;
-  showComplexMode();
-  refreshStack();
-}
-*/
 
 
 void reset_jm_defaults(void) {
@@ -547,6 +503,7 @@ void reset_jm_defaults(void) {
       strcpy(indexOfItemsXEQM +12*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
       ix++;    
     }
+/*    #ifndef TESTSUITE_BUILD
     char line1[TMP_STR_LENGTH];
     import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,false);
     import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,false);
@@ -566,9 +523,10 @@ void reset_jm_defaults(void) {
     import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,false);
     import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,false);
     import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,false);
-    clearScreen(false,true,false);
+    clearScreen(false,true,true);
     showSoftmenuCurrentPart();
-
+    #endif
+*/
 }
 
     int16_t fnXEQMENUpos = 0;

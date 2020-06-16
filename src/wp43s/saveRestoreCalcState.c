@@ -582,6 +582,9 @@ void fnSave(uint16_t unusedParamButMandatory) {
   #else
     fclose(backup);
   #endif
+
+  temporaryInformation = TI_SAVED;
+  refreshStack();
 }
 
 
@@ -1028,6 +1031,9 @@ void fnLoad(uint16_t loadMode) {
   #ifndef TESTSUITE_BUILD
     clearScreen(true, true, true);
     refreshStatusBar();
+    if(loadMode == LM_ALL) {
+      temporaryInformation = TI_BACKUP_RESTORED;
+    }
     refreshStack();
     showSoftmenuCurrentPart();
   #endif

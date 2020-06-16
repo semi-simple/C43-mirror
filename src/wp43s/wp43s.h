@@ -94,19 +94,22 @@
   #define fontBrowser     fnNop
   #define refreshRegisterLine(a)  {}
   #define clearScreen(a, b, c)    {}
-  #define toggleUserMode()        {}
+  #define showHideUserMode()      {}
   #define showIntegerMode()       {}
   #define showAngularMode()       {}
   #define showComplexMode()       {}
-  #define showPgmBegin()          {}
+  #define showHidePgmBegin()      {}
   #define showFracMode()          {}
   #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
   #define showRealComplexResult() {}
   #define showOverflowCarry()     {}
   #define showDateTime()          {}
-  #define showAlphaMode()         {}
+  #define showHideAlphaMode()     {}
   #define showHideUserMode()      {}
   #define showHideLowBattery()    {}
+  #define showHideHourGlass()     {}
+  #define refreshStatusBar()      {}
+  #define initFontBrowser()       {}
 #endif
 
 #include <stdlib.h>
@@ -380,6 +383,13 @@ typedef int16_t calcRegister_t;
 #define CP_PERMUTATION 0
 #define CP_COMBINATION 1
 
+// Load mode
+#define LM_ALL          0
+#define LM_PROGRAMS     1
+#define LM_REGISTERS    2
+#define LM_SUMS         3
+#define LM_SYSTEM_STATE 4
+
 // Statistical sums
 #define NUMBER_OF_STATISTICAL_SUMS 23
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer))
@@ -512,11 +522,12 @@ extern realContext_t         ctxtReal51;   //   51 digits: used for 34 digits in
 extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-extern uint16_t              flags[7];
+extern uint16_t              globalFlags[7];
 #define TMP_STR_LENGTH                3000
 #define ERROR_MESSAGE_LENGTH           512
 #define DISPLAY_VALUE_LEN               80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING 196
+#define NUMBER_OF_GLYPH_ROWS           100
 extern char                  tmpStr3000[TMP_STR_LENGTH];
 extern char                  errorMessage[ERROR_MESSAGE_LENGTH];
 extern char                  aimBuffer[AIM_BUFFER_LENGTH];
@@ -548,6 +559,7 @@ extern int16_t               lastSyFlMenuPos;
 extern int16_t               lastAIntMenuPos;
 extern int16_t               showFunctionNameItem;
 extern uint16_t              numberOfLocalFlags;
+extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
@@ -578,8 +590,6 @@ extern uint8_t               roundingMode;
 extern uint8_t               calcMode;
 extern uint8_t               nextChar;
 extern uint8_t               displayStack;
-extern uint8_t               productSign;
-extern uint8_t               displayModeOverride;
 extern uint8_t               alphaCase;
 extern uint8_t               numLinesNumericFont;
 extern uint8_t               numLinesStandardFont;
@@ -607,7 +617,6 @@ extern bool_t                updateDisplayValueX;
 extern calcKey_t             kbd_usr[37];
 extern calcRegister_t        errorMessageRegisterLine;
 extern calcRegister_t        errorRegisterLine;
-extern uint16_t              row[100];
 extern uint64_t              shortIntegerMask;
 extern uint64_t              shortIntegerSignBit;
 extern uint64_t              systemFlags;

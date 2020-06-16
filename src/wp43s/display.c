@@ -20,31 +20,6 @@
 
 #include "wp43s.h"
 
-/********************************************//**
- * \brief Sets the display override mode and refreshes the stack
- *
- * \param[in] displayOvr uint16_t Display override mode
- * \return void
- ***********************************************/
-void fnDisplayOvr(uint16_t displayOvr) {
-  displayModeOverride = displayOvr;
-  refreshStack();
-}
-
-
-
-/********************************************//**
- * \brief Sets the product sign and refreshes the stack
- *
- * \param[in] productSign uint16_t Product sign
- * \return void
- ***********************************************/
-void fnProductSign(uint16_t ps) {
-  productSign = ps;
-  showFracMode();
-  refreshStack();
-}
-
 
 
 /********************************************//**

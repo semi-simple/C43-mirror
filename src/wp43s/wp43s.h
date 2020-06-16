@@ -351,6 +351,8 @@ typedef int16_t calcRegister_t;
 #define TI_GEOMSAMPLSTDDEV     26
 #define TI_GEOMPOPLSTDDEV      27
 #define TI_GEOMSTDERR          28
+#define TI_SAVED               29
+#define TI_BACKUP_RESTORED     30
 
 // Register browser mode
 #define RBR_GLOBAL              0

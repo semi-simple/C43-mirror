@@ -450,6 +450,7 @@ void fnSave(uint16_t unusedParamButMandatory) {
     FRESULT result;
 
     sys_disk_write_enable(1);
+    check_create_dir("SAVFILES");
     result = f_open(backup, "SAVFILES\\wp43s.sav", FA_CREATE_ALWAYS | FA_WRITE);
     if(result != FR_OK) {
       sys_disk_write_enable(0);

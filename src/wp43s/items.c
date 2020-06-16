@@ -427,6 +427,8 @@ void fnAlphaPos                 (uint16_t unusedParamButMandatory) {}
 void fnXToAlpha                 (uint16_t unusedParamButMandatory) {}
 void fnAlphaToX                 (uint16_t unusedParamButMandatory) {}
 void fnTicks                    (uint16_t unusedParamButMandatory) {}
+void fnSave                     (uint16_t unusedParamButMandatory) {}
+void fnLoad                     (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {

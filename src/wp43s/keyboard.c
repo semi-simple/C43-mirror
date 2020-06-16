@@ -954,13 +954,13 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
-          showAlphaMode();
+          showHideAlphaMode();
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
           showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
-          showAlphaMode();
+          showHideAlphaMode();
         }
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -980,7 +980,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       else {
         if(alphaCase != AC_UPPER) {
           alphaCase = AC_UPPER;
-          showAlphaMode();
+          showHideAlphaMode();
         }
       }
       break;
@@ -1052,13 +1052,13 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
-          showAlphaMode();
+          showHideAlphaMode();
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
           showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
-          showAlphaMode();
+          showHideAlphaMode();
         }
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -1080,7 +1080,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       else {
         if(alphaCase != AC_LOWER) {
           alphaCase = AC_LOWER;
-          showAlphaMode();
+          showHideAlphaMode();
         }
       }
       break;

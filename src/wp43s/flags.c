@@ -36,11 +36,11 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
     case FLAG_LEAD0:    refreshStack();
                         switch(action) {
-                          case 0: flags[108/16] &= ~(1u << (108%16));
+                          case 0: globalFlags[108/16] &= ~(1u << (108%16));
                                   break;
-                          case 1: flags[108/16] |=   1u << (108%16);
+                          case 1: globalFlags[108/16] |=   1u << (108%16);
                                   break;
-                          case 2: flags[108/16] ^=   1u << (108%16);
+                          case 2: globalFlags[108/16] ^=   1u << (108%16);
                                   break;
                           default: {}
                         }
@@ -49,11 +49,11 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
     case FLAG_POLAR:    showComplexMode();
                         refreshStack();
                         switch(action) {
-                          case 0: flags[100/16] &= ~(1u << (100%16));
+                          case 0: globalFlags[100/16] &= ~(1u << (100%16));
                                   break;
-                          case 1: flags[100/16] |=   1u << (100%16);
+                          case 1: globalFlags[100/16] |=   1u << (100%16);
                                   break;
-                          case 2: flags[100/16] ^=   1u << (100%16);
+                          case 2: globalFlags[100/16] ^=   1u << (100%16);
                                   break;
                           default: {}
                         }
@@ -61,33 +61,33 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
     case FLAG_CPXRES:   showRealComplexResult();
                         switch(action) {
-                          case 0: flags[109/16] &= ~(1u << (109%16));
+                          case 0: globalFlags[109/16] &= ~(1u << (109%16));
                                   break;
-                          case 1: flags[109/16] |=   1u << (109%16);
+                          case 1: globalFlags[109/16] |=   1u << (109%16);
                                   break;
-                          case 2: flags[109/16] ^=   1u << (109%16);
+                          case 2: globalFlags[109/16] ^=   1u << (109%16);
                                   break;
                           default: {}
                         }
                         break;
 
     case FLAG_SPCRES:   switch(action) {
-                          case 0: flags[107/16] &= ~(1u << (107%16));
+                          case 0: globalFlags[107/16] &= ~(1u << (107%16));
                                   break;
-                          case 1: flags[107/16] |=   1u << (107%16);
+                          case 1: globalFlags[107/16] |=   1u << (107%16);
                                   break;
-                          case 2: flags[107/16] ^=   1u << (107%16);
+                          case 2: globalFlags[107/16] ^=   1u << (107%16);
                                   break;
                           default: {}
                         }
                         break;
 
     case FLAG_TRACE:   switch(action) {
-                          case 0: flags[103/16] &= ~(1u << (103%16));
+                          case 0: globalFlags[103/16] &= ~(1u << (103%16));
                                   break;
-                          case 1: flags[103/16] |=   1u << (103%16);
+                          case 1: globalFlags[103/16] |=   1u << (103%16);
                                   break;
-                          case 2: flags[103/16] ^=   1u << (103%16);
+                          case 2: globalFlags[103/16] ^=   1u << (103%16);
                                   break;
                           default: {}
                         }
@@ -101,11 +101,11 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
     case FLAG_CARRY:    showOverflowCarry();
                         switch(action) {
-                          case 0: flags[106/16] &= ~(1u << (106%16));
+                          case 0: globalFlags[106/16] &= ~(1u << (106%16));
                                   break;
-                          case 1: flags[106/16] |=   1u << (106%16);
+                          case 1: globalFlags[106/16] |=   1u << (106%16);
                                   break;
-                          case 2: flags[106/16] ^=   1u << (106%16);
+                          case 2: globalFlags[106/16] ^=   1u << (106%16);
                                   break;
                           default: {}
                         }
@@ -113,11 +113,11 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
     case FLAG_OVERFLOW: showOverflowCarry();
                         switch(action) {
-                          case 0: flags[105/16] &= ~(1u << (105%16));
+                          case 0: globalFlags[105/16] &= ~(1u << (105%16));
                                   break;
-                          case 1: flags[105/16] |=   1u << (105%16);
+                          case 1: globalFlags[105/16] |=   1u << (105%16);
                                   break;
-                          case 2: flags[105/16] ^=   1u << (105%16);
+                          case 2: globalFlags[105/16] ^=   1u << (105%16);
                                   break;
                           default: {}
                         }
@@ -144,7 +144,7 @@ bool_t getFlag(uint16_t flag) {
     return getSystemFlag(flag);
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
-    return (flags[flag/16] & (1u << (flag%16))) != 0;
+    return (globalFlags[flag/16] & (1u << (flag%16))) != 0;
   }
   else { // Local flag
     if(numberOfLocalFlags != 0) {
@@ -218,7 +218,7 @@ void fnSetFlag(uint16_t flag) {
       case FLAG_L: setSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: setSystemFlag(FLAG_TRACE);    break;
       case FLAG_X: setSystemFlag(FLAG_POLAR);    break;
-      default: flags[flag/16] |= 1u << (flag%16);
+      default: globalFlags[flag/16] |= 1u << (flag%16);
     }
   }
   else { // Local flag
@@ -274,7 +274,7 @@ void fnClearFlag(uint16_t flag) {
       case FLAG_L: clearSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: clearSystemFlag(FLAG_TRACE);    break;
       case FLAG_X: clearSystemFlag(FLAG_POLAR);    break;
-      default: flags[flag/16] &= ~(1u << (flag%16));
+      default: globalFlags[flag/16] &= ~(1u << (flag%16));
     }
   }
   else { // Local flag
@@ -330,7 +330,7 @@ void fnFlipFlag(uint16_t flag) {
       case FLAG_L: flipSystemFlag(FLAG_LEAD0);    break;
       case FLAG_T: flipSystemFlag(FLAG_TRACE);    break;
       case FLAG_X: flipSystemFlag(FLAG_POLAR);    break;
-      default: flags[flag/16] ^=  1u << (flag%16);
+      default: globalFlags[flag/16] ^=  1u << (flag%16);
     }
   }
   else { // Local flag
@@ -363,7 +363,7 @@ void fnFlipFlag(uint16_t flag) {
  * \return void
  ***********************************************/
 void fnClFAll(uint16_t unusedParamButMandatory) {
-  memset(flags, 0, sizeof(flags));
+  memset(globalFlags, 0, sizeof(globalFlags));
   clearSystemFlag(FLAG_OVERFLOW);
   clearSystemFlag(FLAG_CARRY);
   clearSystemFlag(FLAG_SPCRES);

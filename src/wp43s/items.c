@@ -185,7 +185,6 @@ void fnIsFlagSet                (uint16_t unusedParamButMandatory) {}
 void fnIsFlagSetClear           (uint16_t unusedParamButMandatory) {}
 void fnIsFlagSetFlip            (uint16_t unusedParamButMandatory) {}
 void fnIsFlagSetSet             (uint16_t unusedParamButMandatory) {}
-void fnDisplayOvr               (uint16_t unusedParamButMandatory) {}
 void fnKeyEnter                 (uint16_t unusedParamButMandatory) {}
 void fnKeyExit                  (uint16_t unusedParamButMandatory) {}
 void fnKeyUp                    (uint16_t unusedParamButMandatory) {}
@@ -248,7 +247,6 @@ void fnLnGamma                  (uint16_t unusedParamButMandatory) {}
 void fnGamma                    (uint16_t unusedParamButMandatory) {}
 void fnIDiv                     (uint16_t unusedParamButMandatory) {}
 void fnIDivR                    (uint16_t unusedParamButMandatory) {}
-void fnProductSign              (uint16_t unusedParamButMandatory) {}
 void fnMirror                   (uint16_t unusedParamButMandatory) {}
 void fnMod                      (uint16_t unusedParamButMandatory) {}
 void fnPower                    (uint16_t unusedParamButMandatory) {}
@@ -750,11 +748,11 @@ const item_t indexOfItems[] = {
 /*  313 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                   0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  314 */  { itemToBeCoded,               NOPARAM,                     "LN" STD_beta,                                 "ln" STD_beta,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  315 */  { fnLnGamma,                   NOPARAM,                     "LN" STD_GAMMA,                                "ln" STD_GAMMA,                                0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  316 */  { itemToBeCoded,               NOPARAM,                     "LOAD",                                        "LOAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  317 */  { itemToBeCoded,               NOPARAM,                     "LOADP",                                       "LOADP",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  318 */  { itemToBeCoded,               NOPARAM,                     "LOADR",                                       "LOADR",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  319 */  { itemToBeCoded,               NOPARAM,                     "LOADSS",                                      "LOADSS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  320 */  { itemToBeCoded,               NOPARAM,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                              0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  316 */  { fnLoad,                      LM_ALL,                      "LOAD",                                        "LOAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  317 */  { fnLoad,                      LM_PROGRAMS,                 "LOADP",                                       "LOADP",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  318 */  { fnLoad,                      LM_REGISTERS,                "LOADR",                                       "LOADR",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  319 */  { fnLoad,                      LM_SYSTEM_STATE,             "LOADSS",                                      "LOADSS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  320 */  { fnLoad,                      LM_SUMS,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                              0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  321 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                        0,      99,       CAT_FNCT, SLS_UNCHANGED},
 /*  322 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "lg",                                          0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -976,7 +974,7 @@ const item_t indexOfItems[] = {
 /*  539 */  { fnConstant,                  44,                          "R" STD_SUB_EARTH,                             "R" STD_SUB_EARTH,                             0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  540 */  { fnSampleStdDev,              NOPARAM,                     "s",                                           "s",                                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  541 */  { fnConstant,                  45,                          "Sa",                                          "Sa",                                          0,       0,       CAT_CNST, SLS_ENABLED  },
-/*  542 */  { itemToBeCoded,               NOPARAM,                     "SAVE",                                        "SAVE",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  542 */  { fnSave,                      NOPARAM,                     "SAVE",                                        "SAVE",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  543 */  { fnSb,                        TM_VALUE,                    "SB",                                          "SB",                                          1,      64,       CAT_FNCT, SLS_ENABLED  },
 /*  544 */  { fnConstant,                  46,                          "Sb",                                          "Sb",                                          0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  545 */  { fnDisplayFormatSci,          TM_VALUE,                    "SCI",                                         "SCI",                                         0,      15,       CAT_FNCT, SLS_UNCHANGED},
@@ -1241,7 +1239,7 @@ const item_t indexOfItems[] = {
 /*  799 */  { fnCvtDegToDms,               NOPARAM,                     "D" STD_RIGHT_ARROW "D.MS",                    "D" STD_RIGHT_ARROW "D.MS",                    0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  800 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            0,       0,       CAT_RVAR, SLS_UNCHANGED},
 /*  801 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                          0,       0,       CAT_RVAR, SLS_UNCHANGED},
-/*  802 */  { fnShuffle,                   TM_SHUFFLE,                  STD_LEFT_RIGHT_ARROWS,                         STD_LEFT_RIGHT_ARROWS,                         0,       0,       CAT_FNCT, SLS_DISABLED },
+/*  802 */  { fnShuffle,                   TM_SHUFFLE,                  STD_LEFT_RIGHT_ARROWS,                         STD_LEFT_RIGHT_ARROWS,                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  803 */  { fnPercent,                   NOPARAM,                     "%",                                           "%",                                           0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  804 */  { fnPercentMRR,                NOPARAM,                     "%MRR",                                        "%MRR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  805 */  { fnPercentT,                  NOPARAM,                     "%T",                                          "%T",                                          0,       0,       CAT_FNCT, SLS_ENABLED  },

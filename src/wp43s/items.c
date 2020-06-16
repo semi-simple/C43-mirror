@@ -342,6 +342,7 @@ void fnCvtFToC                  (uint16_t unusedParamButMandatory) {}
 void fnCvtNmiM                  (uint16_t unusedParamButMandatory) {}
 void fnCvtPsiPa                 (uint16_t unusedParamButMandatory) {}
 void fnCvtShortcwtKg            (uint16_t unusedParamButMandatory) {}
+void fnCvtLbfftNm               (uint16_t unusedParamButMandatory) {}
 void fnCvtRadToDeg              (uint16_t unusedParamButMandatory) {}
 void fnCvtFromCurrentAngularMode(uint16_t unusedParamButMandatory) {}
 void fnCvtYearS                 (uint16_t unusedParamButMandatory) {}
@@ -529,8 +530,8 @@ const item_t indexOfItems[] = {
 /*   93 */  { fnCosh,                      NOPARAM,                     "cosh",                                        "cosh",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*   94 */  { itemToBeCoded,               NOPARAM,                     "COV",                                         "cov",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                         0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*   96 */  { itemToBeCoded,               NOPARAM,                     "0096",                                        "0096",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
-/*   97 */  { itemToBeCoded,               NOPARAM,                     "0097",                                        "0097",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*   96 */  { fnCvtLbfftNm,                multiply,                    "lbft" STD_RIGHT_ARROW "Nm",                   "lbf" STD_CROSS "ft",                          0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*   97 */  { fnCvtLbfftNm,                multiply,                    "lbft" STD_RIGHT_ARROW "Nm",                   STD_RIGHT_ARROW " Nm",                         0,       0,       CAT_DUPL, SLS_ENABLED  },
 /*   98 */  { itemToBeCoded,               NOPARAM,                     "0098",                                        "0098",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
@@ -552,8 +553,8 @@ const item_t indexOfItems[] = {
 /*  116 */  { fnDecomp,                    NOPARAM,                     "DECOMP",                                      "DECOMP",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  117 */  { fnAngularMode,               AM_DEGREE,                   "DEG",                                         "DEG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  118 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  119 */  { itemToBeCoded,               NOPARAM,                     "0119",                                        "0119",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
-/*  120 */  { itemToBeCoded,               NOPARAM,                     "0120",                                        "0120",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*  119 */  { fnCvtLbfftNm,                divide,                      "Nm" STD_RIGHT_ARROW "lbft",                   "Nm " STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  120 */  { fnCvtLbfftNm,                divide,                      "Nm" STD_RIGHT_ARROW "lbft",                   "lbf" STD_CROSS "ft",                          0,       0,       CAT_DUPL, SLS_ENABLED  },
 /*  121 */  { itemToBeCoded,               NOPARAM,                     "0121",                                        "0121",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
 /*  122 */  { fnDenMax,                    NOPARAM,                     "DENMAX",                                      "DENMAX",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  123 */  { itemToBeCoded,               NOPARAM,                     "DIGITS",                                      "DIGITS",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},

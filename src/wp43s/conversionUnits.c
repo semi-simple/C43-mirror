@@ -347,6 +347,11 @@ void fnCvtHectareM2(uint16_t multiplyDivide) {
 }
 
 
+void fnCvtLbfftNm(uint16_t multiplyDivide) {
+  unitConversion(const_LbfftToNm, multiplyDivide);
+}
+
+
 
 /********************************************//**
  * \brief Converts power or field ratio to dB

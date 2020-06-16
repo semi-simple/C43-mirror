@@ -213,7 +213,7 @@ typedef int16_t calcRegister_t;
 //#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
-#define NUMBER_OF_CONSTANTS_39   175
+#define NUMBER_OF_CONSTANTS_39   176
 #define NUMBER_OF_CONSTANTS_51    30
 #define NUMBER_OF_CONSTANTS_1071   1
 #define NUMBER_OF_CONSTANTS_34     7

@@ -122,8 +122,8 @@
 #define ITM_cosh                        93
 #define ITM_COV                         94
 #define MNU_CPX                         95
-#define ITM_0096                        96
-#define ITM_0097                        97
+#define ITM_LBFFTtoNM                   96
+#define ITM_LBFFTtoNMb                  97
 #define ITM_0098                        98
 #define MNU_CPXS                        99
 #define ITM_CPX                        100
@@ -145,8 +145,8 @@
 #define ITM_DECOMP                     116
 #define ITM_DEG                        117
 #define ITM_DEGto                      118
-#define ITM_0119                       119
-#define ITM_0120                       120
+#define ITM_NMtoLBFFT                  119
+#define ITM_NMtoLBFFTb                 120
 #define ITM_0121                       121
 #define ITM_DENMAX                     122
 #define MNU_DIGITS                     123

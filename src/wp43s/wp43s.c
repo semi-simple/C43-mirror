@@ -55,7 +55,7 @@ realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermedi
 realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-uint16_t              flags[7];
+uint16_t              globalFlags[7];
 char                  tmpStr3000[TMP_STR_LENGTH];
 char                  errorMessage[ERROR_MESSAGE_LENGTH];
 char                  aimBuffer[AIM_BUFFER_LENGTH]; /// TODO may be aimBuffer and nimBuffer can be merged
@@ -87,6 +87,7 @@ int16_t               lastSyFlMenuPos;
 int16_t               lastAIntMenuPos;
 int16_t               showFunctionNameItem;
 uint16_t              numberOfLocalFlags;
+uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 dataBlock_t          *allLocalRegisterPointer;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
@@ -117,8 +118,6 @@ uint8_t               roundingMode;
 uint8_t               calcMode;
 uint8_t               nextChar;
 uint8_t               displayStack;
-uint8_t               productSign;
-uint8_t               displayModeOverride;
 uint8_t               alphaCase;
 uint8_t               numLinesNumericFont;
 uint8_t               numLinesStandardFont;
@@ -146,7 +145,6 @@ bool_t                updateDisplayValueX;
 calcKey_t             kbd_usr[37];
 calcRegister_t        errorMessageRegisterLine;
 calcRegister_t        errorRegisterLine;
-uint16_t              row[100];
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;
@@ -169,6 +167,7 @@ real39_t              const *angle180;
 real39_t              const *angle90;
 real39_t              const *angle45;
 pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
+const char            digits[17] = "0123456789ABCDEF";
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
@@ -192,14 +191,7 @@ void setupDefaults(void) {
   freeBlocks[0].sizeInBlocks = RAM_SIZE;
 
   glyphNotFound.data   = malloc(38);
-  #ifndef __APPLE__
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wstringop-truncation"
-  #endif
-  strncpy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
-  #ifndef __APPLE__
-    #pragma GCC diagnostic pop
-  #endif
+  xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
   // Initialization of user key assignments
   xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -301,12 +293,17 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_OVERFLOW);
   clearSystemFlag(FLAG_CARRY);
   clearSystemFlag(FLAG_USER);
+  clearSystemFlag(FLAG_LOWBAT);
+
+  hourGlassIconEnabled = false;
+  programCounter = 0;
+  watchIconEnabled = false;
+  serialIOIconEnabled = false;
+  printerIconEnabled = false;
 
   significantDigits = 0;
   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
   fnDisplayStack(4);
-
-  showDateTime();
 
   shiftF = false;
   shiftG = false;
@@ -315,18 +312,13 @@ void setupDefaults(void) {
     showShiftState();
   #endif // TESTSUITE_BUILD
 
-  currentFntScr = 0;
+  initFontBrowser();
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
 
   softmenuStackPointer = 0;
 
   aimBuffer[0] = 0;
-
-  showAlphaMode();
-
-  programCounter = 0;
-  showPgmBegin();
 
   cursorBlinkCounter = 0;
 
@@ -336,6 +328,7 @@ void setupDefaults(void) {
 
   lastErrorCode = 0;
 
+  refreshStatusBar();
   refreshStack();
 
   allowScreenUpdate = true;
@@ -425,7 +418,6 @@ int main(int argc, char* argv[]) {
   setupUI();
 
   setupDefaults();
-
   restoreCalc();
   //fnReset(CONFIRMED);
 

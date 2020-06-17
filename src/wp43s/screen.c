@@ -78,7 +78,6 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
-  static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
@@ -996,6 +995,8 @@ void resetTemporaryInformation(void) {
     case TI_ARE_YOU_SURE:
     case TI_VERSION:
     case TI_WHO:
+    case TI_SAVED:
+    case TI_BACKUP_RESTORED:
     case TI_WEIGHTEDMEANX:
     case TI_WEIGHTEDSAMPLSTDDEV:
     case TI_WEIGHTEDPOPLSTDDEV:
@@ -1130,6 +1131,14 @@ void refreshRegisterLine(calcRegister_t regist) {
           sprintf(tmpStr3000, "Data, programs, and definitions cleared");
           w = stringWidth(tmpStr3000, &standardFont, true, true);
           showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+        }
+
+        else if(temporaryInformation == TI_SAVED && regist == REGISTER_X) {
+          showString("Saved", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+        }
+
+        else if(temporaryInformation == TI_BACKUP_RESTORED && regist == REGISTER_X) {
+          showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         }
 
         else if(temporaryInformation == TI_SHOW_REGISTER) {

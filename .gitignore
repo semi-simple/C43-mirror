@@ -10,6 +10,7 @@
 .stamp-softmenuCatalog
 callgrind.out*
 gmon.out
+wp43s.sav
 bin/
 obj/
 #*build*/

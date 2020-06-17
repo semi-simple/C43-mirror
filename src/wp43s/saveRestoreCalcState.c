@@ -20,7 +20,8 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION 39  // 39 = removed screenData
+#define BACKUP_VERSION         39  // 39 = removed screenData
+#define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
   #ifdef DMCP_BUILD
@@ -372,28 +373,29 @@ static void registerToSaveString(calcRegister_t regist) {
   longInteger_t lgInt;
   int16_t sign;
   uint64_t value;
+  char *str, *cfg;
 
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
-      longIntegerToAllocatedString(lgInt, tmpStr3000 + 2000, 1000);
+      longIntegerToAllocatedString(lgInt, tmpStr3000 + START_REGISTER_VALUE, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
       longIntegerFree(lgInt);
       strcpy(nimBuffer, "LonI");
       break;
 
     case dtString:
-      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpStr3000 + 2000));
+      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpStr3000 + START_REGISTER_VALUE));
       strcpy(nimBuffer, "Stri");
       break;
 
     case dtShortInteger:
       convertShortIntegerRegisterToUInt64(regist, &sign, &value);
-      sprintf(tmpStr3000 + 2000, "%c%" FMT64U " %" FMT32U, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
+      sprintf(tmpStr3000 + START_REGISTER_VALUE, "%c%" FMT64U " %" FMT32U, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
       strcpy(nimBuffer, "ShoI");
       break;
 
     case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + 2000);
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE);
       switch(getRegisterAngularMode(regist)) {
         case AM_DEGREE:
           strcpy(nimBuffer, "Real:DEG");
@@ -426,14 +428,21 @@ static void registerToSaveString(calcRegister_t regist) {
       break;
 
     case dtComplex34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + 2000);
-      strcat(tmpStr3000 + 2000, " ");
-      real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + 2000 + strlen(tmpStr3000 + 2000));
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE);
+      strcat(tmpStr3000 + START_REGISTER_VALUE, " ");
+      real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE + strlen(tmpStr3000 + START_REGISTER_VALUE));
       strcpy(nimBuffer, "Cplx");
       break;
 
+    case dtConfig:
+      for(str=tmpStr3000 + START_REGISTER_VALUE, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
+        sprintf(str, "%02X", *cfg);
+      }
+      strcpy(nimBuffer, "Conf");
+      break;
+
     default:
-      strcpy(tmpStr3000 + 2000, "???");
+      strcpy(tmpStr3000 + START_REGISTER_VALUE, "???");
       strcpy(nimBuffer, "????");
   }
 }
@@ -472,7 +481,7 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
-    sprintf(tmpStr3000, "R%03" FMT16S "\n%s\n%s\n", regist, nimBuffer, tmpStr3000 + 2000);
+    sprintf(tmpStr3000, "R%03" FMT16S "\n%s\n%s\n", regist, nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
@@ -494,7 +503,7 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allLocalRegisterPointer->numberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
-    sprintf(tmpStr3000, "R.%02" FMT32U "\n%s\n%s\n", i, nimBuffer, tmpStr3000 + 2000);
+    sprintf(tmpStr3000, "R.%02" FMT32U "\n%s\n%s\n", i, nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
@@ -509,7 +518,7 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allNamedVariablePointer->numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
-    sprintf(tmpStr3000, "%s\n%s\n%s\n", "name", nimBuffer, tmpStr3000 + 2000);
+    sprintf(tmpStr3000, "%s\n%s\n%s\n", "name", nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
@@ -517,8 +526,8 @@ void fnSave(uint16_t unusedParamButMandatory) {
   sprintf(tmpStr3000, "STATISTICAL_SUMS\n%" FMT16U "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
-    realToString(statisticalSumsPointer + i, tmpStr3000 + 2000);
-    sprintf(tmpStr3000, "%s\n", tmpStr3000 + 2000);
+    realToString(statisticalSumsPointer + i, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "%s\n", tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
   #pragma GCC diagnostic pop
@@ -760,6 +769,15 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
     *(imaginaryPart++) = 0;
     stringToReal34(value, REGISTER_REAL34_DATA(regist));
     stringToReal34(imaginaryPart, REGISTER_IMAG34_DATA(regist));
+  }
+
+  else if(strcmp(type, "Conf") == 0) {
+    char *cfg;
+
+    reallocateRegister(regist, dtConfig, CONFIG_SIZE, AM_NONE);
+    for(cfg=(char *)REGISTER_CONFIG_DATA(regist), tag=0; tag<sizeof(dtConfigDescriptor_t); tag++, value+=2, cfg++) {
+      *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 8) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
+    }
   }
 
   else {

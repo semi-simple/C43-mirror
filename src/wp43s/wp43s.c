@@ -167,6 +167,7 @@ real39_t              const *angle180;
 real39_t              const *angle90;
 real39_t              const *angle45;
 pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
+const char            digits[17] = "0123456789ABCDEF";
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff

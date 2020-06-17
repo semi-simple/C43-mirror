@@ -78,7 +78,6 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
   longInteger_t lgInt;
   int16_t base, sign, n;
   uint64_t shortInt;
-  static const char digits[17] = "0123456789ABCDEF";
 
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:

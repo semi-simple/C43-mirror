@@ -31,6 +31,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
     case FLAG_ALLENG:
     case FLAG_DECIMP:
     case FLAG_MULTx:
+    case FLAG_PROPFR:
     case FLAG_CPXj:     refreshStack();
                         break;
 

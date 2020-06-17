@@ -641,6 +641,7 @@ extern real39_t       const *angle180;
 extern real39_t       const *angle90;
 extern real39_t       const *angle45;
 extern pcg32_random_t        pcg32_global;
+extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD

@@ -138,7 +138,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       bool_t exec = false;
       bool_t go;
 
-    while(!gotlabels || (gotlabels && exec) ){
+    while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
       printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
       xeqlblinprogress = 0;
       gotoinprogress   = 0;
@@ -163,12 +163,13 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 10:
           case 44:
           case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
-                    (      (aa[0]==42 
-                        ||  aa[0]==43  
-                        ||  aa[0]==45 
-                        ||  aa[0]==47) 
-                        || (aa[0]>=48 && aa[0]<=57) 
-                        || (aa[0]>=65 && aa[0]<=90)  )
+                    (      (aa[0]==42 // *
+                        ||  aa[0]==43 // +
+                        ||  aa[0]==45 // -
+                        ||  aa[0]==47 // /
+                        ||  aa[0]==126) //~
+                        || (aa[0]>=48 && aa[0]<=57) //0-9
+                        || (aa[0]>=65 && aa[0]<=90)  ) //A-Z
                     && !state_comments                 //If not inside comments
                     && !state_quotes                   //if not inside quotes
                     && !state_commands                 //Don't re-check until done
@@ -427,18 +428,18 @@ char line1[TMP_STR_LENGTH];
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   switch(selection) {
-    case  1:import_string_from_filename(line1,"XEQM01","XEQLBL 01 3^-4 \"3\" ENTER \"4\" CHS Y^X "                                                 ); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"XEQM02","XEQLBL 02 1/81 \"1\" ENTER \"81\" /   "                                                    ); displaywords(line1); execute_string(line1,exec); break;
-    case  3:import_string_from_filename(line1,"XEQM03","XEQLBL 03 MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  4:import_string_from_filename(line1,"XEQM04","XEQLBL 04 MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  5:import_string_from_filename(line1,"XEQM05","XEQLBL 05 MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  6:import_string_from_filename(line1,"XEQM06","XEQLBL 06 CUBE3 \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
-    case  7:import_string_from_filename(line1,"XEQM07","XEQLBL 07 LOOPTST TICKS STO \"01\" \"50\" 10^X \"4\" EXIT STO \"00\"  DROP XEQMLBL M1 NPRIME ENTER DEC \"00\" GTO_SZ M1 TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); displaywords(line1); execute_string(line1,exec); break;
+    case  1:import_string_from_filename(line1,"XEQM01","XEQLBL 01 ~3^-4 \"3\" ENTER \"4\" CHS Y^X "                                                 ); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"XEQM02","XEQLBL 02 ~1/81 \"1\" ENTER \"81\" /   "                                                    ); displaywords(line1); execute_string(line1,exec); break;
+    case  3:import_string_from_filename(line1,"XEQM03","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  4:import_string_from_filename(line1,"XEQM04","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  5:import_string_from_filename(line1,"XEQM05","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  6:import_string_from_filename(line1,"XEQM06","XEQLBL 06 ~CUBE3 \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
+    case  7:import_string_from_filename(line1,"XEQM07","XEQLBL 07 ~LOOP TICKS STO \"01\" \"50\" 10^X \"4\" EXIT STO \"00\"  DROP LBL M1 NPRIME ENTER DEC \"00\" GTO_SZ M1 DROP TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); displaywords(line1); execute_string(line1,exec); break;
     case  8:import_string_from_filename(line1,"XEQM08","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
     case  9:import_string_from_filename(line1,"XEQM09","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
     case 10:import_string_from_filename(line1,"XEQM10","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
     case 11:import_string_from_filename(line1,"XEQM11","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
-    case 12:import_string_from_filename(line1,"XEQM12","XEQLBL 12 CUBE42 \"80538738812075974\" CHS EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT  "); displaywords(line1); execute_string(line1,exec); break;
+    case 12:import_string_from_filename(line1,"XEQM12","XEQLBL 12 ~CUBE42 \"80538738812075974\" CHS EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT  "); displaywords(line1); execute_string(line1,exec); break;
     case 13:import_string_from_filename(line1,"XEQM13","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
     case 14:import_string_from_filename(line1,"XEQM14","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
     case 15:import_string_from_filename(line1,"XEQM15","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
@@ -509,53 +510,29 @@ void reset_jm_defaults(void) {
       strcpy(indexOfItemsXEQM +12*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
       ix++;    
     }
-/*    #ifndef TESTSUITE_BUILD
 
-
-  XEQMENU_Selection( 1, line1, true);
-  XEQMENU_Selection( 2, line1, true);
-  XEQMENU_Selection( 3, line1, true);
-  XEQMENU_Selection( 4, line1, true);
-  XEQMENU_Selection( 5, line1, true);
-  XEQMENU_Selection( 6, line1, true);
-  XEQMENU_Selection( 7, line1, true);
-  XEQMENU_Selection( 8, line1, true);
-  XEQMENU_Selection( 9, line1, true);
-  XEQMENU_Selection(10, line1, true);
-  XEQMENU_Selection(11, line1, true);
-  XEQMENU_Selection(12, line1, true);
-  XEQMENU_Selection(13, line1, true);
-  XEQMENU_Selection(14, line1, true);
-  XEQMENU_Selection(15, line1, true);
-  XEQMENU_Selection(16, line1, true);
-  XEQMENU_Selection(17, line1, true);
-  XEQMENU_Selection(18, line1, true);
-
-
-
-    char line1[TMP_STR_LENGTH];
-    import_string_from_filename(line1,"XEQM01"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM02"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM03"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM04"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM05"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM06"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM07"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM08"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM09"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM10"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM11"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM12"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM13"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM14"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM15"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM16"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM17"); displaywords(line1); execute_string(line1,false);
-    import_string_from_filename(line1,"XEQM18"); displaywords(line1); execute_string(line1,false);
-    clearScreen(false,true,true);
-    showSoftmenuCurrentPart();
+    #ifndef TESTSUITE_BUILD
+      char line1[TMP_STR_LENGTH];
+      XEQMENU_Selection( 1, line1, false);
+      XEQMENU_Selection( 2, line1, false);
+      XEQMENU_Selection( 3, line1, false);
+      XEQMENU_Selection( 4, line1, false);
+      XEQMENU_Selection( 5, line1, false);
+      XEQMENU_Selection( 6, line1, false);
+      XEQMENU_Selection( 7, line1, false);
+      XEQMENU_Selection( 8, line1, false);
+      XEQMENU_Selection( 9, line1, false);
+      XEQMENU_Selection(10, line1, false);
+      XEQMENU_Selection(11, line1, false);
+      XEQMENU_Selection(12, line1, false);
+      XEQMENU_Selection(13, line1, false);
+      XEQMENU_Selection(14, line1, false);
+      XEQMENU_Selection(15, line1, false);
+      XEQMENU_Selection(16, line1, false);
+      XEQMENU_Selection(17, line1, false);
+      XEQMENU_Selection(18, line1, false);
+      clearScreen(false, true, true);
     #endif
-*/
 }
 
     int16_t fnXEQMENUpos = 0;

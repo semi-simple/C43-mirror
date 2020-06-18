@@ -65,7 +65,7 @@ const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,     
                         /*KEY_CC1 removed this one*/
 
 const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_SIGFIG,                  ITM_UNIT,
-                                     ITM_ROUND,                     ITM_ROUNDI,                 ITM_RDP,                  ITM_RSD,               ITM_NULL,                    ITM_NULL,                           //JM 
+                                     ITM_SDL,                       ITM_SDR,                    ITM_ROUND,                ITM_ROUNDI,            ITM_RDP,                     ITM_RSD,                            //JM 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM 
 
 
@@ -145,7 +145,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 #endif
 
                                      ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_NULL,                    ITM_CFG,                       //JM sequence change
-                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_NULL,                    ITM_NULL,                      //JM sequence change
+                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENMAX,                  ITM_NULL,                      //JM sequence change
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                      //JM
 
 

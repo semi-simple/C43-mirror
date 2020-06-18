@@ -166,10 +166,14 @@ void fnClPAll                   (uint16_t unusedParamButMandatory) {}
 void fnClSigma                  (uint16_t unusedParamButMandatory) {}
 void fnClearStack               (uint16_t unusedParamButMandatory) {}
 void fnClearRegisters           (uint16_t unusedParamButMandatory) {}
+void fnTimeFormat               (uint16_t unusedParamButMandatory) {}
 void fnSetDateFormat            (uint16_t unusedParamButMandatory) {}
+void fnComplexUnit              (uint16_t unusedParamButMandatory) {}
+void fnComplexMode              (uint16_t unusedParamButMandatory) {}
 void fnComplexResult            (uint16_t unusedParamButMandatory) {}
 void fnConjugate                (uint16_t unusedParamButMandatory) {}
 void fnAngularMode              (uint16_t unusedParamButMandatory) {}
+void fnDenMode                  (uint16_t unusedParamButMandatory) {}
 void fnDenMax                   (uint16_t unusedParamButMandatory) {}
 void fnExp                      (uint16_t unusedParamButMandatory) {}
 void fnExpM1                    (uint16_t unusedParamButMandatory) {}
@@ -220,6 +224,7 @@ void fnRecallMult               (uint16_t unusedParamButMandatory) {}
 void fnRecallDiv                (uint16_t unusedParamButMandatory) {}
 void fnRecallMin                (uint16_t unusedParamButMandatory) {}
 void fnRecallMax                (uint16_t unusedParamButMandatory) {}
+void fnRadixMark                (uint16_t unusedParamButMandatory) {}
 void fnReset                    (uint16_t unusedParamButMandatory) {}
 void fnRealPart                 (uint16_t unusedParamButMandatory) {}
 void fnRmd                      (uint16_t unusedParamButMandatory) {}
@@ -234,6 +239,7 @@ void fnConfigIndia              (uint16_t unusedParamButMandatory) {}
 void fnConfigJapan              (uint16_t unusedParamButMandatory) {}
 void fnConfigUk                 (uint16_t unusedParamButMandatory) {}
 void fnConfigUsa                (uint16_t unusedParamButMandatory) {}
+void fnToggleFractionType       (uint16_t unusedParamButMandatory) {}
 void fnLcm                      (uint16_t unusedParamButMandatory) {}
 void fnSign                     (uint16_t unusedParamButMandatory) {}
 void fnSlvq                     (uint16_t unusedParamButMandatory) {}
@@ -271,6 +277,7 @@ void fnGetRoundingMode          (uint16_t unusedParamButMandatory) {}
 void fnSetWordSize              (uint16_t unusedParamButMandatory) {}
 void fnGetWordSize              (uint16_t unusedParamButMandatory) {}
 void fnGetStackSize             (uint16_t unusedParamButMandatory) {}
+void fnStackSize                (uint16_t unusedParamButMandatory) {}
 void fnStore                    (uint16_t unusedParamButMandatory) {}
 void fnStoreConfig              (uint16_t unusedParamButMandatory) {}
 void fnStoreElement             (uint16_t unusedParamButMandatory) {}
@@ -465,8 +472,7 @@ void flagBrowser_old            (uint16_t unusedParamButMandatory) {}         //
 
 const item_t indexOfItems[] = {
 //            *func                        param                        itemCatalogName (also FN DISPLAY (NOP))        itemSoftmenuName                               catalog.  stackLiftStatus   //JM
-//            function                     parameter                    item in catalog                                item in softmenu                               CATALOG   stackLift
-
+//            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F",   0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C",   0,       0,       CAT_FNCT, SLS_ENABLED  },

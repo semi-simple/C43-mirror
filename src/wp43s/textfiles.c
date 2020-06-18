@@ -86,9 +86,9 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 }
 
 
-
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
+  check_create_dir("DATA");  
   make_date_filename(filename_csv,"/DATA/",".REGS.TSV");
   #endif
 
@@ -364,7 +364,7 @@ char dirfile[40];
     //Create file name
     strcpy(dirfile,"/PROGRAMS/C43_LOG.TXT");
     sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
-      
+    check_create_dir("PROGRAMS");      
     if(export_append_string_to_file(tmpStr3000, dirfile) != 0) {
       //ERROR ALREADY ANNOUNCED
       return 1;
@@ -379,7 +379,10 @@ uint32_t tmp__32;                                                 //JM_CSV
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
     if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
       //Create file name
+
+      check_create_dir("DATA");  
       make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
+      check_create_dir("DATA");  
       //filename_csv[19+3]=0;                                     //20200331-180STATS
       //strcat(filename_csv,"STATS.TSV");      
     }
@@ -408,7 +411,8 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     strcpy(filename_csv,"/PROGRAMS/");
     strcat(filename_csv,filename);
     strcat(filename_csv,".TXT");
-
+    check_create_dir("PROGRAMS");  
+    
     /* Opens an existing file. */
     fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
     if (fr) {
@@ -488,17 +492,13 @@ char line[100];               /* Line buffer */
 
 
 
-
+//**********************************************************************************************************
 #elif PC_BUILD
 
 int16_t import_string_from_file(char *line1) {
   printf("import_string_from_file not implemented in sim: %s\n",line1);
   return 0;  
 }
-
-
-
-
 
 
 int16_t import_string_from_filename(char *line1,  char *filename, char *fallback) {

@@ -76,7 +76,7 @@ void runFunction(int16_t func) {
       showInfoDialog("In function runFunction:", errorMessage, NULL, NULL);
     #endif
   }
-
+  
   if(calcMode != CM_ASM_OVER_TAM) {
     tamMode = indexOfItems[func].param;
   }

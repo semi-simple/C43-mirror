@@ -61,6 +61,11 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     clearSystemFlag(FLAG_ALPHA);
     currentFlgScr = 0;
   }
+  
+  if (softmenuStackPointer != 0) {
+      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
+      softmenuStackPointer = 0;
+  }
 
   if(currentFlgScr == 0) { // Init
     currentFlgScr = 1;

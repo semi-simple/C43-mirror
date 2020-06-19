@@ -38,6 +38,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       hideCursor();
     }
 
+    if (softmenuStackPointer != 0) {
+      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
+      softmenuStackPointer = 0;
+    }
+    
     previousCalcMode = calcMode;
     calcMode = CM_REGISTER_BROWSER;
     clearSystemFlag(FLAG_ALPHA);

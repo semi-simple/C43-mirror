@@ -147,7 +147,7 @@ void btnFnPressed(GtkWidget *notUsed, gpointer data) {
 void btnFnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineFunctionKeyItem((char *)data);
-
+  
   if(item != ITM_NOP && item != ITM_NULL) {
     resetShiftState();
 
@@ -758,6 +758,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
+      softmenuStackPointer = softmenuStackPointerBeforeBrowser;
       calcMode = previousCalcMode;
       clearScreen(false, true, true);
       refreshStack();

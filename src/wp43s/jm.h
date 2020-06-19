@@ -130,6 +130,7 @@ extern bool_t jm_VECT;                                               //JM GRAPH 
 extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
+extern bool_t jm_LARGELI;                                           //JM
 
 
 
@@ -225,6 +226,8 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define JC_H_SUM               24    //JMHOME
 #define JC_H_MIR               25    //JMHOME
 #define JC_H_FIX               26    //JMHOME
+
+#define JC_LARGELI             27
 
 
 #ifdef PC_BUILD

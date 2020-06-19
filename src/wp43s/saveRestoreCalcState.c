@@ -203,6 +203,7 @@ void saveCalc(void) {
   save(&graph_ymax,                         sizeof(graph_ymax),                         backup);
   save(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
   save(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
+  save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
 
 
   fclose(backup);

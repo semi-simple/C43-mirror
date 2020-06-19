@@ -1625,7 +1625,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
     }
   }
 
-  if(stringWidth(displayString, &standardFont, false, false) > maxWidth) {
+  if(stringWidth(displayString, jm_LARGELI ? &numericFont : &standardFont, false, false) > maxWidth) {      //JM
     char exponentString[14], lastRemovedDigit;
     int16_t lastChar, stringStep, tenExponent;
 
@@ -1639,7 +1639,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
     }
     exponentString[0] = 0;
     exponentToDisplayString(tenExponent, exponentString, NULL, false, separator);
-    while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
+    while(stringWidth(displayString,  jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,  jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {  //JM
       lastChar -= stringStep;
       tenExponent += exponentStep;
       lastRemovedDigit = displayString[lastChar + 2];

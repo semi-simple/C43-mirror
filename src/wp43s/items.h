@@ -124,7 +124,7 @@
 #define MNU_CPX                         95
 #define ITM_LBFFTtoNM                   96
 #define ITM_LBFFTtoNMb                  97
-#define ITM_0098                        98
+#define ITM_BESTFQ                      98
 #define MNU_CPXS                        99
 #define ITM_CPX                        100
 #define ITM_CROSS                      101
@@ -147,7 +147,7 @@
 #define ITM_DEGto                      118
 #define ITM_NMtoLBFFT                  119
 #define ITM_NMtoLBFFTb                 120
-#define ITM_0121                       121
+#define ITM_SA                         121
 #define ITM_DENMAX                     122
 #define MNU_DIGITS                     123
 #define MNU_DSP                        124

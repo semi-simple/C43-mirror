@@ -38,6 +38,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       hideCursor();
     }
 
+    if (softmenuStackPointer != 0) {
+      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
+      softmenuStackPointer = 0;
+    }
+    
     previousCalcMode = calcMode;
     calcMode = CM_REGISTER_BROWSER;
     clearSystemFlag(FLAG_ALPHA);
@@ -102,10 +107,10 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
         else if(getRegisterDataType(regist) == dtLongInteger) {
           if(showContent) {
             if(getRegisterLongIntegerSign(regist) == LI_NEGATIVE) {
-              longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+              longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM, false);   //JM added last parameter: Allow LARGELI
             }
             else {
-              longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 9 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+              longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 9 - registerNameWidth, 50, STD_SPACE_4_PER_EM, false);   //JM added last parameter: Allow LARGELI
             }
           }
           else {
@@ -191,7 +196,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
             }
             else if(getRegisterDataType(regist) == dtLongInteger) {
               if(showContent) {
-                longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM);
+                longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - 1 - registerNameWidth, 50, STD_SPACE_4_PER_EM, false);   //JM added last parameter: Allow LARGELI
               }
               else {
                 sprintf(tmpStr3000, "%" FMT32U " bits := 4+4+%" FMT32U " bytes", (uint32_t)TO_BYTES(getRegisterMaxDataLength(regist)) * 8, (uint32_t)TO_BYTES(getRegisterMaxDataLength(regist)));

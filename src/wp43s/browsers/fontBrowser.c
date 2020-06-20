@@ -82,7 +82,13 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
   uint16_t x, y, first;
 
   if(calcMode != CM_FONT_BROWSER) {
-    previousCalcMode = calcMode;
+    
+    if (softmenuStackPointer != 0) {
+      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
+      softmenuStackPointer = 0;
+    }
+    
+    previousCalcMode = calcMode;    
     calcMode = CM_FONT_BROWSER;
     clearSystemFlag(FLAG_ALPHA);
   }

@@ -106,6 +106,7 @@ uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
+uint8_t               softmenuStackPointerBeforeBrowser;
 uint8_t               transitionSystemState;
 uint8_t               cursorBlinkCounter;
 uint8_t               numScreensStandardFont;
@@ -144,6 +145,7 @@ bool_t                jm_VECT;                                 //JM GRAPH
 bool_t                jm_HOME_SUM;                             //JMHOME
 bool_t                jm_HOME_MIR;                             //JMHOME
 bool_t                jm_HOME_FIX;                             //JMHOME
+bool_t                jm_LARGELI;
 uint8_t               SigFigMode;                              //JM SIGFIG
 bool_t                eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t                HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.
@@ -383,7 +385,9 @@ void setupDefaults(void) {
     showShiftState();
   #endif // TESTSUITE_BUILD
 
-  initFontBrowser();
+  #ifndef TESTSUITE_BUILD
+    initFontBrowser();
+  #endif // TESTSUITE_BUILD
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
 
@@ -399,7 +403,9 @@ void setupDefaults(void) {
 
   lastErrorCode = 0;
 
-  refreshStatusBar();
+  #ifndef TESTSUITE_BUILD
+    refreshStatusBar();
+  #endif
   refreshStack();
 
   allowScreenUpdate = true;

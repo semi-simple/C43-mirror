@@ -626,7 +626,9 @@ void fnReset(uint16_t confirmation) {
     watchIconEnabled = false;
     serialIOIconEnabled = false;
     printerIconEnabled = false;
-    refreshStatusBar();
+    #ifndef TESTSUITE_BUILD
+      refreshStatusBar();
+    #endif
 
     showRealComplexResult();                                   //JM, from wp43s.c
     reset_jm_defaults();
@@ -645,7 +647,9 @@ void fnReset(uint16_t confirmation) {
     lastSyFlMenuPos = 0;
     lastAIntMenuPos = 0;
 
-    initFontBrowser();
+    #ifndef TESTSUITE_BUILD
+      initFontBrowser();
+    #endif
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
 

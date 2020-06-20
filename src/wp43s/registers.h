@@ -132,7 +132,8 @@ typedef struct {
   bool_t jm_VECT;
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;
-  bool_t jm_HOME_FIX;                                                        //JMCFG^^
+  bool_t jm_HOME_FIX;     
+  bool_t jm_LARGELI;                                                   //JMCFG^^
 
 } dtConfigDescriptor_t;
 

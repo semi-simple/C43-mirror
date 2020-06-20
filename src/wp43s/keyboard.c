@@ -94,7 +94,7 @@ int16_t determineFunctionKeyItem(const char *data) {
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
 
-      if(item > 0) {          //TO CHECK
+      if(item > 0) {
         item %= 10000;
       }
 
@@ -112,7 +112,7 @@ int16_t determineFunctionKeyItem(const char *data) {
 
     }
   }
-  else {
+  else {              //if there is no SoftMenu up
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
       case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
@@ -143,17 +143,8 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnClicked(void *w, void *data) {
 #endif
-//  int16_t fn = *((char *)data) - '0';
 
-  if(calcMode != CM_CONFIRMATION) {
-    allowScreenUpdate = true;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-      refreshStack();
-    }
-    executeFunction(data);
-  }
+  executeFunction(data);
 }
 
 
@@ -173,7 +164,7 @@ void btnFnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineFunctionKeyItem((char *)data);
 
-  if(item != ITM_NOP /*&& item != ITM_NULL*/) {            //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
+  if(item != ITM_NOP /*&& item != ITM_NULL*/) {          //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 //    resetShiftState();                                 //JM still need the shifts active prior to cancelling them
 
     if(lastErrorCode != 0) {
@@ -181,10 +172,10 @@ void btnFnPressed(void *notUsed, void *data) {
       refreshStack();
     }
 
-//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error
-//      showFunctionName(item, 10);
+//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
+//    showFunctionName(item, 10);
 //    #else
-//      showFunctionNameItem = item;
+//    showFunctionNameItem = item;
         btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
 //    #endif
   }
@@ -225,17 +216,14 @@ void executeFunction(const char *data) {
   resetShiftState();
 
 
-  //printf("%d--\n",calcMode);
-  if(calcMode != CM_CONFIRMATION) {
-    allowScreenUpdate = true;
+    //printf("%d--\n",calcMode);
+    if(calcMode != CM_CONFIRMATION) {
+      allowScreenUpdate = true;
 
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-      refreshStack();
-    }
-
-
-//************************************************** TOCHECK vv 
+      if(lastErrorCode != 0) {
+        lastErrorCode = 0;
+        refreshStack();
+      }
 
       if(softmenuStackPointer > 0) {
         if(calcMode == CM_ASM) {
@@ -253,14 +241,7 @@ void executeFunction(const char *data) {
           return;
         }
       }
-
-// TO CHECK TOCHECK (2)
-//        else if(calcMode == CM_ASM_OVER_AIM) {
-//          calcModeAim(NOPARAM);
-//          addItemToBuffer(item);
-//          return;
-//        }
-//************************************************* TOCHECK ^^
+       // Broken IF, because I want the FN keys to be active if there are no softmenus
       {
         if(item < 0) { // softmenu
           if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
@@ -933,6 +914,7 @@ showSoftmenu(NULL, -MNU_MyAlpha, false);
     case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
+      softmenuStackPointer = softmenuStackPointerBeforeBrowser;
       calcMode = previousCalcMode;
       clearScreen(false, true, true);
       refreshStack();

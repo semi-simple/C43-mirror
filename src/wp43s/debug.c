@@ -625,7 +625,7 @@ void debugNIM(void) {
     }
 
     else if(getRegisterDataType(regist) == dtLongInteger) {
-      longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+      longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
     }
 
     else if(getRegisterDataType(regist) == dtConfig) {

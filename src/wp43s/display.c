@@ -1573,7 +1573,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
 
 
-void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
+void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator, bool_t allowLARGELI) { //JM mod max_Width;   //JM added last parameter: Allow LARGELI
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
@@ -1624,8 +1624,8 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
       }
     }
   }
-
-  if(stringWidth(displayString, &standardFont, false, false) > maxWidth) {
+//print_linestr("#",true);
+  if(stringWidth(displayString, allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, false, false) > maxWidth) {      //JM
     char exponentString[14], lastRemovedDigit;
     int16_t lastChar, stringStep, tenExponent;
 
@@ -1639,7 +1639,9 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
     }
     exponentString[0] = 0;
     exponentToDisplayString(tenExponent, exponentString, NULL, false, separator);
-    while(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
+//print_linestr("@",false);
+    while(stringWidth(displayString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {  //JM jm_LARGELI
+//print_inlinestr("-",false);
       lastChar -= stringStep;
       tenExponent += exponentStep;
       lastRemovedDigit = displayString[lastChar + 2];
@@ -1671,7 +1673,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
           }
 
           // Has the string become too long?
-          if(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
+          if(stringWidth(displayString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {   //JM jm_LARGELI
             lastChar = strlen(displayString) - stringStep;
             tenExponent += exponentStep;
             displayString[lastChar] = 0;
@@ -1811,7 +1813,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator, false);//JM added last parameter: Allow LARGELI
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
@@ -1977,7 +1979,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
     tmpStr3000[1500] = 0; // L6
     tmpStr3000[1800] = 0; // L7
 
-    temporaryInformation = TI_SHOW_REGISTER;
+    temporaryInformation = TI_SHOW_REGISTER_SMALL;
 
     tmpStr3000[   0] = 0; // JM Initialise
     tmpStr3000[2100] = 0; // JM temp
@@ -2004,13 +2006,13 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
     }
   }
 
-  clearScreen(false, true, false); //Comment out to retain screen content while SHOW
+  clearScreen(false, true, false); //Clear screen content while NEW SHOW
   SHOW_reset();
   
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
       last = 2100 + stringByteLength(tmpStr3000 + 2100);
       source = 2100;
@@ -2029,7 +2031,8 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           maxWidth = SCREEN_WIDTH - stringWidth(tmp , &numericFont, true, true);          //Add the separator that gets added to the last character
         }
 
-        for(d=0; d<=1800 ; d+=300) {
+        for(d=0; d<=1200 ; d+=300) {                                                      //LARGE font, fill 7 lines at 0, 300, 600, 900, 1200
+                                                                                          //   fill all lines, and check if the 5th line  contains any characters.
           dest = d;
           while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <=  maxWidth) {
             tmpStr3000[dest] = tmpStr3000[source];
@@ -2047,7 +2050,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
             }
           tmpStr3000[dest] = 0;
 
-          if(!(source < last) && groupingGap!=0 && !(tmpStr3000[dest+0] == *(separator + 0) && (tmpStr3000[dest+1] == *(separator + 1)))) {               //Last line
+          if(!(source < last) && groupingGap!=0 && (tmpStr3000[dest+0] != 0) && !(tmpStr3000[dest+0] == *(separator + 0) && (tmpStr3000[dest+1] == *(separator + 1)))) {               //Last line
             tmpStr3000[dest+0] = *(separator + 0); //0xa0;       //Add a space to the very end to space last line nicely.
             tmpStr3000[dest+1] = *(separator + 1); //0x05;
             tmpStr3000[dest+2] = 0;
@@ -2056,10 +2059,11 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }      
 
-      if(stringByteLength(tmpStr3000 + 1200) != 2) { 
+      //printf("### %d %d %d\n",(uint8_t) tmpStr3000[1200],(uint8_t)  tmpStr3000[1201],(uint8_t) tmpStr3000[1202]);
+      if(tmpStr3000[1200] != 0) {
 
         SHOW_reset();
-        longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM);
+        longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
         source = 2100;
@@ -2074,7 +2078,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true)*groupingGap - stringWidth(separator, &standardFont, true, true);
         }
 
-        for(d=0; d<=1800 ; d+=300) {
+        for(d=0; d<=1800 ; d+=300) {                                                      //Small font, fill 7 lines at 0, 300, 600, 900, 1200, 1500, 1800
           dest = d;
           while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
             do {
@@ -2380,17 +2384,18 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
-    
   }
 
 
-    if (temporaryInformation == TI_SHOW_REGISTER) {
+    //printf("TI_SHOW_REGISTER     300 %d 900 %d 1500 %d\n", (uint8_t) tmpStr3000[ 300], (uint8_t) tmpStr3000[ 900], (uint8_t) tmpStr3000[ 1500]);
+    //printf("TI_SHOW_REGISTER_BIG 300 %d 600 %d  900 %d\n", (uint8_t) tmpStr3000[ 300], (uint8_t) tmpStr3000[ 600], (uint8_t) tmpStr3000[ 900]);
+    if (temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) {
       refreshRegisterLine(REGISTER_T);
       if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
       if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
       if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
-    } else
-    if (temporaryInformation == TI_SHOW_REGISTER_BIG) {
+    }
+    else if (temporaryInformation == TI_SHOW_REGISTER_BIG  ) {
       refreshRegisterLine(REGISTER_T);
       if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
       if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);

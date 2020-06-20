@@ -494,6 +494,7 @@ void reset_jm_defaults(void) {
     jm_HOME_MIR = true;                                        //JMHOME
     jm_HOME_FIX = false;                                       //JMHOME
     #endif
+    jm_LARGELI=true;
     setSystemFlag(FLAG_SPCRES)                                 //JM default infinity etc.
     //JM defaults ^^
 
@@ -656,6 +657,12 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_H_FIX:                                      //JM
     jm_HOME_FIX = !jm_HOME_FIX;
     fnRefreshComboxState(CB_JC, JC_H_FIX, jm_HOME_FIX);                //jm
+    break;
+
+  case JC_LARGELI:                                      //JM
+    jm_LARGELI = !jm_LARGELI;
+    fnRefreshComboxState(CB_JC, JC_LARGELI, jm_LARGELI);                //jm
+    refreshStack();
     break;
 
 
@@ -1582,7 +1589,7 @@ void fnJM(uint16_t JM_OPCODE) {
       char tmpstr[200];
       char tmpstr2[300];
       sprintf(tmpstr2,"[%d]:",ix);
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);

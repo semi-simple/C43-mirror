@@ -28,7 +28,7 @@ void complex34ToDisplayString2         (const complex34_t *complex34, char *disp
 void fractionToDisplayString           (calcRegister_t regist, char *displayString);
 void angle34ToDisplayString2           (const real34_t *angle34, uint8_t mode, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator);
 void shortIntegerToDisplayString       (calcRegister_t regist, char *displayString, bool_t determineFont);
-void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp, const char *separator);
+void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp, const char *separator, bool_t allowLARGELI);    //JM added last parameter: Allow LARGELI
 void dateToDisplayString               (calcRegister_t regist, char *displayString);
 void timeToDisplayString               (calcRegister_t regist, char *displayString);
 void exponentToDisplayString           (int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode, const char *separator);

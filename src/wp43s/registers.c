@@ -1449,7 +1449,8 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(jm_VECT);
   storeToDtConfigDescriptor(jm_HOME_SUM);
   storeToDtConfigDescriptor(jm_HOME_MIR);
-  storeToDtConfigDescriptor(jm_HOME_FIX);                                    //JMCFG^^
+  storeToDtConfigDescriptor(jm_HOME_FIX);
+  storeToDtConfigDescriptor(jm_LARGELI);                                   //JMCFG^^
 
 
   if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
@@ -1786,7 +1787,8 @@ void fnRecallConfig(uint16_t r) {
     recallFromDtConfigDescriptor(jm_VECT);          
     recallFromDtConfigDescriptor(jm_HOME_SUM);      
     recallFromDtConfigDescriptor(jm_HOME_MIR);      
-    recallFromDtConfigDescriptor(jm_HOME_FIX);                                 //JMCFG^^
+    recallFromDtConfigDescriptor(jm_HOME_FIX);
+    recallFromDtConfigDescriptor(jm_LARGELI);                                  //JMCFG^^         
 
 
     refreshStack();

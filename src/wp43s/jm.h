@@ -141,6 +141,7 @@ extern bool_t jm_VECT;                                               //JM GRAPH 
 extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
+extern bool_t jm_LARGELI;                                           //JM
 
 extern int16_t fnXEQMENUpos;   //to save still //JMXEQ
 char  indexOfItemsXEQM[18*12]; //tosave still //JMXEQ
@@ -201,11 +202,12 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 //void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 //char* itoa(int value, char* result, int base);
 
-#define TI_ABC                 96    //JM EE
-#define TI_ABBCCA              97    //JM EE
-#define TI_012                 98    //JM EE
-#define TI_SHOW_REGISTER_BIG   99    //JM_SHOW
-#define TI_ms                 100    //JMms
+#define TI_ABC                  96    //JM EE
+#define TI_ABBCCA               97    //JM EE
+#define TI_012                  98    //JM EE
+#define TI_SHOW_REGISTER_BIG    99    //JM_SHOW
+#define TI_SHOW_REGISTER_SMALL 100
+#define TI_ms                  101    //JMms
 
 #define ID_43S                  0    //JM Input Default
 #define ID_DP                   2    //JM Input Default
@@ -238,6 +240,8 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define JC_H_SUM               24    //JMHOME
 #define JC_H_MIR               25    //JMHOME
 #define JC_H_FIX               26    //JMHOME
+
+#define JC_LARGELI             27
 
 
 #ifdef PC_BUILD

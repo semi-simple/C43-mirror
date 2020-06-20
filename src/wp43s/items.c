@@ -76,7 +76,7 @@ void runFunction(int16_t func) {
       showInfoDialog("In function runFunction:", errorMessage, NULL, NULL);
     #endif
   }
-  
+
   if(calcMode != CM_ASM_OVER_TAM) {
     tamMode = indexOfItems[func].param;
   }
@@ -532,7 +532,7 @@ const item_t indexOfItems[] = {
 /*   95 */  { itemToBeCoded,               NOPARAM,                     "CPX",                                         "CPX",                                         0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*   96 */  { fnCvtLbfftNm,                multiply,                    "lbft" STD_RIGHT_ARROW "Nm",                   "lbf" STD_CROSS "ft",                          0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*   97 */  { fnCvtLbfftNm,                multiply,                    "lbft" STD_RIGHT_ARROW "Nm",                   STD_RIGHT_ARROW " Nm",                         0,       0,       CAT_DUPL, SLS_ENABLED  },
-/*   98 */  { itemToBeCoded,               NOPARAM,                     "0098",                                        "0098",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*   98 */  { itemToBeCoded,               NOPARAM,                     "BestF?",                                      "BestF?",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*   99 */  { itemToBeCoded,               NOPARAM,                     "CPXS",                                        "CPXS",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  100 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  101 */  { fnCross,                     NOPARAM,                     "CROSS",                                       "cross",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -555,7 +555,7 @@ const item_t indexOfItems[] = {
 /*  118 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  119 */  { fnCvtLbfftNm,                divide,                      "Nm" STD_RIGHT_ARROW "lbft",                   "Nm " STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  120 */  { fnCvtLbfftNm,                divide,                      "Nm" STD_RIGHT_ARROW "lbft",                   "lbf" STD_CROSS "ft",                          0,       0,       CAT_DUPL, SLS_ENABLED  },
-/*  121 */  { itemToBeCoded,               NOPARAM,                     "0121",                                        "0121",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*  121 */  { itemToBeCoded,               NOPARAM,                     "s(a)",                                        "s(a)",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  122 */  { fnDenMax,                    NOPARAM,                     "DENMAX",                                      "DENMAX",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  123 */  { itemToBeCoded,               NOPARAM,                     "DIGITS",                                      "DIGITS",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  124 */  { itemToBeCoded,               NOPARAM,                     "DISP",                                        "DISP",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},

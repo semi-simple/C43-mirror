@@ -298,8 +298,6 @@ void fnSwapXY                   (uint16_t unusedParamButMandatory) {}
 void fnShuffle                  (uint16_t unusedParamButMandatory) {}
 void fnWho                      (uint16_t unusedParamButMandatory) {}
 void fnGetSignificantDigits     (uint16_t unusedParamButMandatory) {}
-void fnSdl                      (uint16_t unusedParamButMandatory) {}
-void fnSdr                      (uint16_t unusedParamButMandatory) {}
 void fnCvtToCurrentAngularMode  (uint16_t unusedParamButMandatory) {}
 void fnCvtAcreM2                (uint16_t unusedParamButMandatory) {}
 void fnCvtAcreusM2              (uint16_t unusedParamButMandatory) {}
@@ -985,8 +983,8 @@ const item_t indexOfItems[] = {
 /*  546 */  { fnCvtShortcwtKg,             multiply,                    "scw" STD_RIGHT_ARROW "kg",                    "short",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  547 */  { itemToBeCoded,               NOPARAM,                     "0547",                                        "0457",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
 /*  548 */  { fnGetSignificantDigits,      NOPARAM,                     "SDIGS?",                                      "SDIGS?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  549 */  { fnSdl,                       TM_VALUE,                    "SDL",                                         "SDL",                                         0,      33,       CAT_FNCT, SLS_ENABLED  },
-/*  550 */  { fnSdr,                       TM_VALUE,                    "SDR",                                         "SDR",                                         0,      33,       CAT_FNCT, SLS_ENABLED  },
+/*  549 */  { itemToBeCoded,               NOPARAM,                     "SDL",                                         "SDL",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  550 */  { itemToBeCoded,               NOPARAM,                     "SDR",                                         "SDR",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  551 */  { fnConstant,                  47,                          "Se" STD_SUP_2,                                "Se" STD_SUP_2,                                0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  552 */  { fnSeed,                      NOPARAM,                     "SEED",                                        "SEED",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  553 */  { itemToBeCoded,               NOPARAM,                     "SEND",                                        "SEND",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},

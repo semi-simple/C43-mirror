@@ -124,7 +124,7 @@
 #define MNU_CPX                         95
 #define ITM_LBFFTtoNM                   96
 #define ITM_LBFFTtoNMb                  97
-#define ITM_0098                        98
+#define ITM_BESTFQ                      98
 #define MNU_CPXS                        99
 #define ITM_CPX                        100
 #define ITM_CROSS                      101
@@ -135,7 +135,7 @@
 #define MNU_DATES                      106
 #define ITM_DATEto                     107
 #define ITM_DAY                        108
-#define ITM_DBL                        109
+#define ITM_0109                       109
 #define ITM_DBLR                       110
 #define ITM_DBLCROSS                   111
 #define ITM_DBLSLASH                   112
@@ -147,7 +147,7 @@
 #define ITM_DEGto                      118
 #define ITM_NMtoLBFFT                  119
 #define ITM_NMtoLBFFTb                 120
-#define ITM_0121                       121
+#define ITM_SA                         121
 #define ITM_DENMAX                     122
 #define MNU_DIGITS                     123
 #define MNU_DSP                        124
@@ -198,7 +198,7 @@
 #define CST_10                         169
 #define MNU_CONVE                      170
 #define CST_11                         171
-#define ITM_FAST                       172
+#define ITM_0172                       172
 #define ITM_FB                         173
 #define MNU_FCNS                       174
 #define ITM_FC                         175
@@ -507,7 +507,7 @@
 #define MNU_PFN                        478
 #define MNU_PFN2                       479
 #define MNU_CONVP                      480
-#define ITM_QUIET                      481
+#define ITM_0481                       481
 #define CST_40                         482
 #define ITM_RAD                        483
 #define ITM_RADto                      484
@@ -600,7 +600,7 @@
 #define ITM_sinh                       571
 #define ITM_SKIP                       572
 #define ITM_SL                         573
-#define ITM_SLOW                       574
+#define ITM_0574                       574
 #define ITM_SLVQ                       575
 #define ITM_SM                         576
 #define ITM_SMODE                      577
@@ -734,8 +734,8 @@
 #define MNU_ALPHAINTL                  705
 #define ITM_ALPHALENG                  706
 #define MNU_ALPHAMATH                  707
-#define ITM_ALPHAOFF                   708
-#define ITM_ALPHAON                    709
+#define ITM_0708                       708
+#define ITM_0709                       709
 #define ITM_ALPHAPOS                   710
 #define ITM_ALPHARL                    711
 #define ITM_ALPHARR                    712

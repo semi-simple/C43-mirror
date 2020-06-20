@@ -110,6 +110,7 @@ void saveCalc(void) {
   save(&denMax,                             sizeof(denMax),                             backup);
   save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
   save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
+  save(&softmenuStackPointerBeforeBrowser,  sizeof(softmenuStackPointerBeforeBrowser),  backup);
   save(&transitionSystemState,              sizeof(transitionSystemState),              backup);
   save(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
   save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);
@@ -255,6 +256,7 @@ void restoreCalc(void) {
     restore(&denMax,                             sizeof(denMax),                             backup);
     restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
     restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
+    restore(&softmenuStackPointerBeforeBrowser,  sizeof(softmenuStackPointerBeforeBrowser),  backup);
     restore(&transitionSystemState,              sizeof(transitionSystemState),              backup);
     restore(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
     restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);

@@ -471,7 +471,7 @@ int16_t test_xy(float x, float y){
 
 
 
-int16_t line_y;
+int16_t line_x,line_y;
 
 //void print_line(bool_t line_init) {
 //#ifndef TESTSUITE_BUILD
@@ -482,14 +482,27 @@ int16_t line_y;
 //#endif
 //}
 
+void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
+#ifndef TESTSUITE_BUILD
+    if(line_y < SCREEN_HEIGHT) { 
+        line_x = showString(line1, &standardFont, line_x, line_y, vmNormal, true, true);
+    }
+    if(endline) {
+      line_y += 20;
+      line_x = 0;
+    }
+    force_refresh();
+#endif
+}
 
 void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 
-        showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+        line_x = showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
     }
     line_y += 20;
+    line_x = 0;
     force_refresh();
 #endif
 }

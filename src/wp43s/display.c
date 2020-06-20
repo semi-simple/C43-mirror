@@ -1573,7 +1573,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
 
 
-void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod
+void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator) { //JM mod max_Width
   int16_t len, exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
@@ -1624,7 +1624,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
       }
     }
   }
-
+//print_linestr("#",true);
   if(stringWidth(displayString, jm_LARGELI ? &numericFont : &standardFont, false, false) > maxWidth) {      //JM
     char exponentString[14], lastRemovedDigit;
     int16_t lastChar, stringStep, tenExponent;
@@ -1639,7 +1639,9 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
     }
     exponentString[0] = 0;
     exponentToDisplayString(tenExponent, exponentString, NULL, false, separator);
-    while(stringWidth(displayString,  jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,  jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {  //JM
+//print_linestr("@",false);
+    while(stringWidth(displayString,  jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,  jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {  //JM jm_LARGELI
+//print_inlinestr("-",false);
       lastChar -= stringStep;
       tenExponent += exponentStep;
       lastRemovedDigit = displayString[lastChar + 2];
@@ -1671,7 +1673,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
           }
 
           // Has the string become too long?
-          if(stringWidth(displayString, &standardFont, false, true) + stringWidth(exponentString, &standardFont, true, false) > maxWidth) {
+          if(stringWidth(displayString,  jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,  jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {   //JM jm_LARGELI
             lastChar = strlen(displayString) - stringStep;
             tenExponent += exponentStep;
             displayString[lastChar] = 0;

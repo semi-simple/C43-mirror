@@ -106,6 +106,7 @@ uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
+uint8_t               softmenuStackPointerBeforeBrowser;
 uint8_t               transitionSystemState;
 uint8_t               cursorBlinkCounter;
 uint8_t               numScreensStandardFont;

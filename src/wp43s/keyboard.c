@@ -182,9 +182,9 @@ void btnFnPressed(void *notUsed, void *data) {
     }
 
 //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error
-//      showFunctionName(item, 10);
+//    showFunctionName(item, 10);
 //    #else
-//      showFunctionNameItem = item;
+//    showFunctionNameItem = item;
         btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
 //    #endif
   }
@@ -930,6 +930,7 @@ showSoftmenu(NULL, -MNU_MyAlpha, false);
     case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
+      softmenuStackPointer = softmenuStackPointerBeforeBrowser;
       calcMode = previousCalcMode;
       clearScreen(false, true, true);
       refreshStack();

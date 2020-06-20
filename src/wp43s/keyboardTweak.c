@@ -645,26 +645,8 @@ void btnFnReleased_StateMachine(void *w, void *data) {
 void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
-//  int16_t fn = *((char *)charKey) - '0';
 
-  if(calcMode != CM_CONFIRMATION) {
-    allowScreenUpdate = true;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-      refreshStack();
-    }
-    if(softmenuStackPointer > 0) {
-      if(calcMode == CM_ASM) {
-        calcModeNormal();
-      }
-      executeFunction((char *)charKey);
-    }
-    else {
-      resetShiftState();
-      executeFunction((char *)charKey);          //JM FN NOMENU KEYS
-    }
-  }
+  executeFunction((char *)charKey);
 }
 
 

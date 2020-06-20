@@ -199,7 +199,7 @@ void fnMultiplySI(uint16_t multiplier) {
         fnDivide(0);
     }
 
-    adjustResult(REGISTER_X, true, false, REGISTER_X, REGISTER_Y, -1);
+    adjustResult(REGISTER_X, false, false, REGISTER_X, REGISTER_Y, -1);
     copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
     refreshRegisterLine(REGISTER_X);
 

@@ -386,7 +386,9 @@ void setupDefaults(void) {
     showShiftState();
   #endif // TESTSUITE_BUILD
 
-  initFontBrowser();
+  #ifndef TESTSUITE_BUILD
+    initFontBrowser();
+  #endif // TESTSUITE_BUILD
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
 
@@ -402,7 +404,9 @@ void setupDefaults(void) {
 
   lastErrorCode = 0;
 
-  refreshStatusBar();
+  #ifndef TESTSUITE_BUILD
+    refreshStatusBar();
+  #endif
   refreshStack();
 
   allowScreenUpdate = true;

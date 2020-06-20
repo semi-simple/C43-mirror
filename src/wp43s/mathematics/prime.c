@@ -160,7 +160,9 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
 
   longIntegerSetPositiveSign(primeCandidate);
   hourGlassIconEnabled = true;
-  showHideHourGlass();
+  #ifndef TESTSUITE_BUILD
+    showHideHourGlass();
+  #endif
   //temporaryInformation = (longIntegerIsPrime1(primeCandidate) ? TI_TRUE : TI_FALSE);
   //temporaryInformation = (longIntegerIsPrime2(primeCandidate) ? TI_TRUE : TI_FALSE);
 //printf("Before longIntegerIsPrime()\n");
@@ -169,7 +171,9 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   longIntegerFree(primeCandidate);
   refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
   hourGlassIconEnabled = false;
-  showHideHourGlass();
+  #ifndef TESTSUITE_BUILD
+    showHideHourGlass();
+  #endif
 }
 
 
@@ -206,10 +210,14 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
   longIntegerSetPositiveSign(currentNumber);
 
   hourGlassIconEnabled = true;
-  showHideHourGlass();
+  #ifndef TESTSUITE_BUILD
+    showHideHourGlass();
+  #endif
   longIntegerNextPrime(currentNumber, nextPrime);
   hourGlassIconEnabled = false;
-  showHideHourGlass();
+  #ifndef TESTSUITE_BUILD
+    showHideHourGlass();
+  #endif
 
   if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
     convertLongIntegerToShortIntegerRegister(nextPrime, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);

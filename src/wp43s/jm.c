@@ -1137,7 +1137,7 @@ void fnJM(uint16_t JM_OPCODE) {
       char tmpstr[200];
       char tmpstr2[300];
       sprintf(tmpstr2,"[%d]:",ix);
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
       strcat(tmpstr2,tmpstr);
 
       print_linestr(tmpstr2,false);

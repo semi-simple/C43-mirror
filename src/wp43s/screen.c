@@ -1365,7 +1365,8 @@ void resetTemporaryInformation(void) {
                                if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
                                break;
 
-    case TI_SHOW_REGISTER_BIG: //refresh the complete screen                            //JMSHOW vv
+    case TI_SHOW_REGISTER_SMALL: //refresh the complete screen                          //JMSHOW vv
+    case TI_SHOW_REGISTER_BIG:   //refresh the complete screen 
                                clearScreen(false, true, true);
                                refreshStack();
                                showSoftmenuCurrentPart();
@@ -1444,7 +1445,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
             else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
               strcat(string1, "long integer = ");
-              longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+              longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, true);  //JM added last parameter: Allow LARGELI
             }
 
             else if(getRegisterDataType(REGISTER_L) == dtConfig) {
@@ -1512,7 +1513,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         }
 
-        else if(temporaryInformation == TI_SHOW_REGISTER) {
+        else if(temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) {
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpStr3000, &standardFont, true, true);
@@ -2115,7 +2116,7 @@ void refreshRegisterLine(calcRegister_t regist) {
               }
             }                                                               //JMms ^^
 
-           longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION);          //JMms added prefix
+           longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION, true);          //JMms added prefix   //JM added last parameter: Allow LARGELI
 
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;

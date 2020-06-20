@@ -390,7 +390,7 @@ void addRealDate(void) {
 void addStriLonI(void) {
   int16_t len1, len2;
 
-  longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+  longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
 
   if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);

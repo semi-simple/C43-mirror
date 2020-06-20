@@ -416,7 +416,6 @@ typedef int16_t calcRegister_t;
 #define TI_GEOMSTDERR          28
 #define TI_SAVED               29
 #define TI_BACKUP_RESTORED     30
-#define TI_SHOW_REGISTER_BIG   99    //JM_SHOW temporary high number not to clash with new codes
 
 // Register browser mode
 #define RBR_GLOBAL              0

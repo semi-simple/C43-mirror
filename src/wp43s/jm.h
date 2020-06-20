@@ -189,11 +189,12 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 //void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 //char* itoa(int value, char* result, int base);
 
-#define TI_ABC                 96    //JM EE
-#define TI_ABBCCA              97    //JM EE
-#define TI_012                 98    //JM EE
-#define TI_SHOW_REGISTER_BIG   99    //JM_SHOW
-#define TI_ms                 100    //JMms
+#define TI_ABC                  96    //JM EE
+#define TI_ABBCCA               97    //JM EE
+#define TI_012                  98    //JM EE
+#define TI_SHOW_REGISTER_BIG    99    //JM_SHOW
+#define TI_SHOW_REGISTER_SMALL 100
+#define TI_ms                  101    //JMms
 
 #define ID_43S                  0    //JM Input Default
 #define ID_DP                   2    //JM Input Default

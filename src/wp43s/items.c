@@ -757,7 +757,7 @@ const item_t indexOfItems[] = {
 /*  320 */  { fnLoad,                      LM_SUMS,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                              0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  321 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                        0,      99,       CAT_FNCT, SLS_UNCHANGED},
 /*  322 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_10,                              "lg",                                          0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  323 */  { fnLog10,                     NOPARAM,                     "LOG" STD_SUB_1 STD_SUB_0,                     "lg",                                          0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  324 */  { fnLog2,                      NOPARAM,                     "LOG" STD_SUB_2,                               "lb x",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  325 */  { fnCurveFitting,              CF_LOGARITHMIC_FITTING,      "LogF",                                        "LogF",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  326 */  { itemToBeCoded,               NOPARAM,                     "Logis" STD_SUB_p,                             "Logis" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED},

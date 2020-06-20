@@ -399,8 +399,8 @@
 #define ITM_MSG                        370
 #define CST_32                         371
 #define CST_33                         372
-#define ITM_0373                       373
-#define ITM_0374                       374
+#define MNU_SIMEQ                      373
+#define MNU_EDITM                      374
 #define ITM_MULPI                      375
 #define ITM_MVAR                       376
 #define MNU_MyMenu                     377
@@ -411,8 +411,8 @@
 #define ITM_M_DIMQ                     382
 #define ITM_MDY                        383
 #define ITM_M_EDI                      384
-#define MNU_M_EDITN                    385
-#define MNU_M_EDIT                     386
+#define ITM_M_EDITN                    385
+#define ITM_M_EDIT                     386
 #define ITM_M_GET                      387
 #define ITM_M_GOTO                     388
 #define ITM_M_GROW                     389
@@ -422,7 +422,7 @@
 #define ITM_M_OLD                      393
 #define ITM_M_PUT                      394
 #define ITM_M_R                        395
-#define ITM_M_SIMQ                     396
+#define ITM_0396                       396
 #define ITM_M_SQR                      397
 #define ITM_M_WRAP                     398
 #define MNU_CONVM                      399
@@ -594,7 +594,7 @@
 #define CST_51                         565
 #define ITM_SIGN                       566
 #define ITM_SIGNMT                     567
-#define MNU_SIM_EQ                     568
+#define ITM_SIM_EQ                     568
 #define ITM_sin                        569
 #define ITM_sinc                       570
 #define ITM_sinh                       571

@@ -427,6 +427,7 @@ char line1[TMP_STR_LENGTH];
 
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
+#ifndef TESTSUITE_BUILD
   switch(selection) {
     case  1:import_string_from_filename(line1,"XEQM01","XEQLBL 01 ~3^-4 \"3\" ENTER \"4\" CHS Y^X "                                                 ); displaywords(line1); execute_string(line1,exec); break;
     case  2:import_string_from_filename(line1,"XEQM02","XEQLBL 02 ~1/81 \"1\" ENTER \"81\" /   "                                                    ); displaywords(line1); execute_string(line1,exec); break;
@@ -448,6 +449,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
     case 18:import_string_from_filename(line1,"XEQM18","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
     default:;
   }
+#endif
 }
 
 

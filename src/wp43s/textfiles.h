@@ -33,6 +33,7 @@ uint32_t     mem__32;                                 //JM_CSV
 #define      CSV_STR     "\""
  
 void         fnP_All_Regs(uint16_t unusedParamButMandatory);
+void         print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline);
 void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 
 void         displaywords(char *line1);

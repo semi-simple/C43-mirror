@@ -437,7 +437,6 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
 
 
 
-
 int16_t export_append_line(char *inputstring){
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
@@ -664,17 +663,32 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 
 
+int16_t line_x,line_y;
 
 
-int16_t line_y;
+void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
+#ifndef TESTSUITE_BUILD
+    if(line_y < SCREEN_HEIGHT) { 
+        line_x = showString(line1, &standardFont, line_x, line_y, vmNormal, true, true);
+    }
+    if(endline) {
+      line_y += 20;
+      line_x = 0;
+    }
+    force_refresh();
+#endif
+}
+
+
 
 void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 
-        showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+        line_x = showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
     }
     line_y += 20;
+    line_x = 0;
     force_refresh();
 #endif
 }

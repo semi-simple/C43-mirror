@@ -10,37 +10,96 @@ cd ..
 make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
-rm ./wp43s
-rm ./DMCP_build/build/*
 
 make -j8 V=1 mrproper
 
 
-find *.dSYM -type f -name "*.dSYM" -exec rm {} \;
+find . -type f -name "*.dSYM" -exec rm {} \;
 find . -type f -name "WP43S\ *.elf" -exec rm {} \;
 find . -type f -name "rasterFontsData\ *.c" -exec rm {} \;
 
+find . -type f -name ".stamp-constantPointers 2" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 3" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 4" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 5" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 6" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 7" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 8" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 9" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 10" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 11" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 12" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 13" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 14" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 15" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 16" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 17" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 18" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 19" -exec rm {} \;
+find . -type f -name ".stamp-constantPointers 20" -exec rm {} \;
 
-find . -type f -name "generateCatalogs\ 1" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 2" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 3" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 4" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 5" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 6" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 7" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 8" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 9" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 10" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 11" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 12" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 13" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 14" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 15" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 16" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 17" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 18" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 19" -exec rm {} \;
-find . -type f -name "generateCatalogs\ 20" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 2" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 3" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 4" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 5" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 6" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 7" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 8" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 9" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 10" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 11" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 12" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 13" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 14" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 15" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 16" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 17" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 18" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 19" -exec rm {} \;
+find . -type f -name ".stamp-rasterFontsData 20" -exec rm {} \;
+
+find . -type f -name ".DS_Store" -exec rm {} \;
+
+
+find . -type f -name ".stamp-softmenuCatalog 2" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 3" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 4" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 5" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 6" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 7" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 8" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 9" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 10" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 11" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 12" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 13" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 14" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 15" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 16" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 17" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 18" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 19" -exec rm {} \;
+find . -type f -name ".stamp-softmenuCatalog 20" -exec rm {} \;
+
+find . -type f -name "generateCatalogs 2" -exec rm {} \;
+find . -type f -name "generateCatalogs 3" -exec rm {} \;
+find . -type f -name "generateCatalogs 4" -exec rm {} \;
+find . -type f -name "generateCatalogs 5" -exec rm {} \;
+find . -type f -name "generateCatalogs 6" -exec rm {} \;
+find . -type f -name "generateCatalogs 7" -exec rm {} \;
+find . -type f -name "generateCatalogs 8" -exec rm {} \;
+find . -type f -name "generateCatalogs 9" -exec rm {} \;
+find . -type f -name "generateCatalogs 10" -exec rm {} \;
+find . -type f -name "generateCatalogs 11" -exec rm {} \;
+find . -type f -name "generateCatalogs 12" -exec rm {} \;
+find . -type f -name "generateCatalogs 13" -exec rm {} \;
+find . -type f -name "generateCatalogs 14" -exec rm {} \;
+find . -type f -name "generateCatalogs 15" -exec rm {} \;
+find . -type f -name "generateCatalogs 16" -exec rm {} \;
+find . -type f -name "generateCatalogs 17" -exec rm {} \;
+find . -type f -name "generateCatalogs 18" -exec rm {} \;
+find . -type f -name "generateCatalogs 19" -exec rm {} \;
+find . -type f -name "generateCatalogs 20" -exec rm {} \;
 
 find . -type f -name "* 2.css" -exec rm {} \;
 find . -type f -name "* 3.css" -exec rm {} \;
@@ -61,26 +120,6 @@ find . -type f -name "* 17.css" -exec rm {} \;
 find . -type f -name "* 18.css" -exec rm {} \;
 find . -type f -name "* 19.css" -exec rm {} \;
 find . -type f -name "* 20.css" -exec rm {} \;
-
-find . -type f -name "* 2.c" -exec rm {} \;
-find . -type f -name "* 3.c" -exec rm {} \;
-find . -type f -name "* 4.c" -exec rm {} \;
-find . -type f -name "* 5.c" -exec rm {} \;
-find . -type f -name "* 6.c" -exec rm {} \;
-find . -type f -name "* 7.c" -exec rm {} \;
-find . -type f -name "* 8.c" -exec rm {} \;
-find . -type f -name "* 9.c" -exec rm {} \;
-find . -type f -name "* 10.c" -exec rm {} \;
-find . -type f -name "* 11.c" -exec rm {} \;
-find . -type f -name "* 12.c" -exec rm {} \;
-find . -type f -name "* 13.c" -exec rm {} \;
-find . -type f -name "* 14.c" -exec rm {} \;
-find . -type f -name "* 15.c" -exec rm {} \;
-find . -type f -name "* 16.c" -exec rm {} \;
-find . -type f -name "* 17.c" -exec rm {} \;
-find . -type f -name "* 18.c" -exec rm {} \;
-find . -type f -name "* 19.c" -exec rm {} \;
-find . -type f -name "* 20.c" -exec rm {} \;
 
 find . -type f -name "* 2.txt" -exec rm {} \;
 find . -type f -name "* 3.txt" -exec rm {} \;

@@ -226,7 +226,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
                       if (strcompare(commandnumber,"PLOT"  )) {strcpy(commandnumber, "455");} else
                       if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
-                      if (strcompare(commandnumber,"NPRIME")) {strcpy(commandnumber, "422");} else
+                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
                       if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
 
                       if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""

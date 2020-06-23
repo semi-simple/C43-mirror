@@ -29,19 +29,15 @@
  * \return void
  ***********************************************/
 void fnSdl(uint16_t numberOfShifts) {
-  int32_t i;
-  
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real_t real;
+
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    
-    real34_t base_real_34;
-    int32ToReal34((int32_t) 10, &base_real_34);
-    
-    for(i=1; i<=numberOfShifts; i++) {
-      real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &base_real_34, REGISTER_REAL34_DATA(REGISTER_X));
-    }
 
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
+    real.exponent += numberOfShifts;
+    realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
   else {
@@ -63,21 +59,18 @@ void fnSdl(uint16_t numberOfShifts) {
  * \return void
  ***********************************************/
 void fnSdr(uint16_t numberOfShifts) {
-  int32_t i;
-  
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real_t real;
+
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    real34_t base_real_34;
-    int32ToReal34((int32_t) 10, &base_real_34);
-    
-    for(i=1; i<=numberOfShifts; i++) {
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &base_real_34, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
+    real.exponent -= numberOfShifts;
+    realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
     refreshRegisterLine(REGISTER_X);
   }
-  
+
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

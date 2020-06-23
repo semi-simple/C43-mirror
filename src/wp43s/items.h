@@ -362,8 +362,8 @@
 #define MNU_LOOP                       332
 #define CST_24                         333
 #define ITM_LYtoM                      334
-#define ITM_0335                       335
-#define ITM_0336                       336
+#define ITM_MMHGtoPA                   335
+#define ITM_MMHGtoPAb                  336
 #define ITM_LR                         337
 #define ITM_M2toAC                     338
 #define ITM_M2toACUS                   339
@@ -400,8 +400,8 @@
 #define ITM_MSG                        370
 #define CST_32                         371
 #define CST_33                         372
-#define MNU_SIMEQ                      373
-#define MNU_EDITM                      374
+#define MNU_SIMQ                       373
+#define MNU_M_EDIT                     374
 #define ITM_MULPI                      375
 #define ITM_MVAR                       376
 #define MNU_MyMenu                     377
@@ -412,8 +412,8 @@
 #define ITM_M_DIMQ                     382
 #define ITM_MDY                        383
 #define ITM_M_EDI                      384
-#define ITM_M_EDITN                    385
-#define ITM_M_EDIT                     386
+#define ITM_M_EDIN                     385
+#define ITM_PAtoMMHG                   386
 #define ITM_M_GET                      387
 #define ITM_M_GOTO                     388
 #define ITM_M_GROW                     389
@@ -422,8 +422,8 @@
 #define ITM_M_NEW                      392
 #define ITM_M_OLD                      393
 #define ITM_M_PUT                      394
-#define ITM_M_R                        395
-#define ITM_0396                       396
+#define ITM_M_RR                       395
+#define ITM_PAtoMMHGb                  396
 #define ITM_M_SQR                      397
 #define ITM_M_WRAP                     398
 #define MNU_CONVM                      399
@@ -1710,10 +1710,10 @@
 #define Not_used1673                  1673
 
 
-#define ITM_mmHGtoPA                  1674   // 248 //JM
-#define ITM_PAtommHG                  1675   // 445
-#define ITM_mmHGtoPAb                 1676   // 850
-#define ITM_PAtommHGb                 1677   // 863
+#define Not_used1674                  1674
+#define Not_used1675                  1675
+#define Not_used1676                  1676
+#define Not_used1677                  1677
 
 #define ITM_ERPN                      1678   //JM eRPN
 #define ITM_HOMEx3                    1679   //JM HOME.3

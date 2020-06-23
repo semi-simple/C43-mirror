@@ -228,6 +228,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
                       if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
                       if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
+                      if (strcompare(commandnumber,"SNAP"  )) {strcpy(commandnumber,   "5");} else
 
                       if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
                       if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else

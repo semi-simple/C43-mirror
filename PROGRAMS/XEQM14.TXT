@@ -2,15 +2,14 @@ XEQLBL 14 PRIxr04     //RE-BINDS THE TEXT TO THE SOFTMENU
                       //PROGRAM TO PLOT 20 PRIME NUMBER CALC TIMES ON A LINE
 CLSUM                 //CLEAR STATS DATA
            
-"20" STO "00"         //CHOOSE LOOP COUNTER STARTING AT 20 AND DECREMENTS TO 0
+"40" STO "00"         //CHOOSE LOOP COUNTER STARTING AT nn=40 AND DECREMENTS TO 0
 STO "02"              //LOOP COUNTER START VALUE
    
 LBL M1                //CREATE LOOPING LABEL. FOUR LABELS AVAILABLE M1, M2, M3, M4   
 TICKS STO "01"        //GET CURRENT TIME IN 0.1 SECOND UNITS
 
-RCL "02"              //GET THE START VALUE OF THE LOOP COUNTER 20
-RCL "00" -            //REVERSE THE X RANGE TO 1 TO 20
-ENTER
+RCL "02"              //GET THE START VALUE OF THE LOOP COUNTER nn
+RCL "00" -            //REVERSE THE X RANGE TO 1 TO nn
 
 XEQ M4                //CALL SUBROUTINE TO PRODUCE Y AND X. NO NESTING POSSIBLE.
 
@@ -24,14 +23,16 @@ SUM+
 DSZ "00"              //DSZ, DECREMENT AND SKIP NEXT COMMAND IF RESULT WAS ZERO
 GTO M1                //THE GTO IS SKIPPED IF THE RESULT WAS 0          
 PLOT                  //PLOTS THE STATS DATA
+SNAP
 RETURN                //STOPS PROCESSING
 
 //-------------------------------------------------------------------------------------
 LBL M4                // X = 0 TO 19 COUNTER
 RCL "04" *            // X = 0 TO 19*r04
+ENTER                 // RETAIN ACTUAL X FOR GRAPH
 10^X
 NEXTP 
-STO "05"
+STO "05"              //STO last prime just to check
 DROP
 
 RTN                   //RETURN TO MAIN PROGRAM

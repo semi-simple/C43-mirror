@@ -192,6 +192,11 @@ void fnCvtInhgPa(uint16_t multiplyDivide) {
 }
 
 
+void fnCvtMmhgPa(uint16_t multiplyDivide) {
+  unitConversion(const_MmhgToPa, multiplyDivide);
+}
+
+
 void fnCvtTorrPa(uint16_t multiplyDivide) {
   unitConversion(const_TorrToPa, multiplyDivide);
 }

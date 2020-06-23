@@ -48,6 +48,7 @@ void fnCvtLbfN      (uint16_t multiplyDivide);
 void fnCvtBarPa     (uint16_t multiplyDivide);
 void fnCvtPsiPa     (uint16_t multiplyDivide);
 void fnCvtInhgPa    (uint16_t multiplyDivide);
+void fnCvtMmhgPa    (uint16_t multiplyDivide);
 void fnCvtTorrPa    (uint16_t multiplyDivide);
 void fnCvtAtmPa     (uint16_t multiplyDivide);
 

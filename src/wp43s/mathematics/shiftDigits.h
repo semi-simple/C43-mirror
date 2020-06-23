@@ -18,6 +18,5 @@
  * \file shiftDigits.h
  ***********************************************/
 
-void fnSdr   (uint16_t numberOfShifts);
-void fnSdl   (uint16_t numberOfShifts);
-
+void fnSdr(uint16_t numberOfShifts);
+void fnSdl(uint16_t numberOfShifts);

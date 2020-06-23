@@ -87,6 +87,7 @@
 #include "reToCx.h"
 #include "round.h"
 #include "roundi.h"
+#include "shiftDigits.h"
 #include "sign.h"
 #include "sin.h"
 #include "sinc.h"

@@ -227,6 +227,7 @@ extern const real_t * const const_BtuToJ;
 extern const real_t * const const_WhToJ;
 extern const real_t * const const_LbfToN;
 extern const real_t * const const_TorrToPa;
+extern const real_t * const const_MmhgToPa;
 extern const real_t * const const_InhgToPa;
 extern const real_t * const const_PsiToPa;
 extern const real_t * const const_BarToPa;

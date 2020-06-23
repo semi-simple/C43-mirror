@@ -188,40 +188,13 @@ void fnCvtPsiPa(uint16_t multiplyDivide) {
 
 
 void fnCvtInhgPa(uint16_t multiplyDivide) {
-//  unitConversion(const_InhgToPa, multiplyDivide);                   //JM vv in.Hg
-  if(multiplyDivide == divide) {
-    STACK_LIFT_ENABLE;
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("3386.3886403410", REGISTER_REAL34_DATA(REGISTER_X));
-    fnDivide(0);    
-  }
-  else {
-    STACK_LIFT_ENABLE;
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("3386.3886403410", REGISTER_REAL34_DATA(REGISTER_X));
-    fnMultiply(0);    
-  }                                                                 //JM ^^ in.Hg
+  unitConversion(const_InhgToPa, multiplyDivide);
 }
 
 
-void fnCvtmmhgPa(uint16_t multiplyDivide) {                         //JM vv mm.Hg
-  if(multiplyDivide == divide) {
-    STACK_LIFT_ENABLE;
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("133.322387415", REGISTER_REAL34_DATA(REGISTER_X));
-    fnDivide(0);    
-  }
-  else {
-    STACK_LIFT_ENABLE;
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    stringToReal34("133.322387415", REGISTER_REAL34_DATA(REGISTER_X));
-    fnMultiply(0);    
-  }
-}                                                                 //JM ^^ mm.Hg
+void fnCvtMmhgPa(uint16_t multiplyDivide) {
+  unitConversion(const_MmhgToPa, multiplyDivide);
+}
 
 
 void fnCvtTorrPa(uint16_t multiplyDivide) {

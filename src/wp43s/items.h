@@ -2017,8 +2017,10 @@
 #define ITM_USER_SHIFTS2              1974   //V43
 #define ITM_USER_HOME                 1975   //JM USER
 #define ITM_USER_WP43S                1976   //V43
+#define ITM_USER_DM42                 1977   //V43
+#define MNU_ASN_U                     1978   //V43
 
-#define LAST_ITEM                     1977   //JM
+#define LAST_ITEM                     1979   //JM
 
 #define CHR_PROD_SIGN                 9999
 

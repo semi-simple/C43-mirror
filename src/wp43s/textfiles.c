@@ -491,12 +491,6 @@ char line[100];               /* Line buffer */
 //**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t import_string_from_file(char *line1) {
-  printf("import_string_from_file not implemented in sim: %s\n",line1);
-  return 0;  
-}
-
-
 int16_t import_string_from_filename(char *line1,  char *filename, char *fallback) {
 
   FILE *infile;
@@ -526,9 +520,6 @@ int16_t import_string_from_filename(char *line1,  char *filename, char *fallback
 
 return 0;
 }
-
-
-
 
 
 
@@ -566,6 +557,13 @@ int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
 }
 
 
+
+int16_t export_append_line(char *inputstring){
+  printf("export_append_line not implemented in sim: %s\n",inputstring);
+  return 0;
+}
+
+
 int16_t export_xy_to_file(double x, double y){
   char line[100];               /* Line buffer */
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
@@ -573,10 +571,6 @@ int16_t export_xy_to_file(double x, double y){
   return 0;
 }
 
-int16_t export_append_line(char *inputstring){
-  printf("export_append_line not implemented in sim: %s\n",inputstring);
-  return 0;
-}
 
 #endif
 

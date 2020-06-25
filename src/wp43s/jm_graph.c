@@ -29,6 +29,18 @@
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
 
+  float    tick_int_x;
+  float    tick_int_y;
+  float    x_min; 
+  float    x_max;
+  float    y_min;
+  float    y_max;
+  uint16_t xzero;
+  uint8_t  yzero;
+
+
+
+
 void autoscale(void) {
 }
 
@@ -294,7 +306,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 //###################################################################################
 #ifndef TESTSUITE_BUILD
-int16_t screen_window_x(double x_min, double x, double x_max) {
+int16_t screen_window_x(float x_min, double x, double x_max) {
 int16_t temp;
 if (Aspect_Square) {
   temp = (x-x_min)/(x_max-x_min)*(SCREEN_HEIGHT_GRAPH-1);
@@ -318,7 +330,7 @@ if (Aspect_Square) {
 }
 #endif
 
-int16_t screen_window_y(double y_min, double y, double y_max) {
+int16_t screen_window_y(float y_min, double y, double y_max) {
 int16_t temp;
   temp = (y-y_min)/(y_max-y_min)*(SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH);
     if (temp>SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH) {temp=SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH;}
@@ -334,7 +346,7 @@ int16_t temp;
 
 //###################################################################################
 //GRAPH  // Build test data 
-void graph_demo(uint8_t nbr, double x_min, double x_max) {
+void graph_demo(uint8_t nbr, float x_min, float x_max) {
   #ifndef TESTSUITE_BUILD
   double x; 
   fnClearStack(0);
@@ -351,7 +363,7 @@ void graph_demo(uint8_t nbr, double x_min, double x_max) {
 
     //convert double to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
     stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
     //leaving y in Y and x in X
@@ -374,7 +386,7 @@ void placePixel(uint16_t x, uint8_t y) {
 
 
 //###################################################################################
-double auto_tick(double tick_int_f) {
+float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
   //double tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
@@ -397,23 +409,6 @@ double auto_tick(double tick_int_f) {
   //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpStr3000, tx);
   return tick_int_f;
 }
-//--------------------------------------------------------------------------------
-
-
-
-//###################################################################################
-  double tick_int_x;
-  double tick_int_y;
-
-  double x_min; 
-  double x_max;
-  double y_min;
-  double y_max;
-//  double tick_x;
-//  double tick_y;
-  uint16_t xzero;
-  uint8_t yzero;
-
 
 
 //###################################################################################
@@ -567,7 +562,7 @@ void graph_plotmem(void) {
 
 
       void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        double dx, dy, ddx, ddy, zz, zzz;
+        float dx, dy, ddx, ddy, zz, zzz;
         ddy = yn-yo;
         ddx = xn-xo;
         zz  = sqrt(ddy*ddy+ddx*ddx);
@@ -637,10 +632,10 @@ void graph_plotmem(void) {
     clearScreen(false,true,true);
 
     //AUTOSCALE
-    x_min = 1e127;
-    x_max = -1e127;
-    y_min = 1e127;
-    y_max = -1e127;
+    x_min = 1e38;
+    x_max = -1e38;
+    y_min = 1e38;
+    y_max = -1e38;
     #ifdef STATDEBUG
     printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
@@ -700,8 +695,8 @@ void graph_plotmem(void) {
 //    y_min = 1.05 * y_min;
 //    y_max = 1.05 * y_max;
    
-    double dx = x_max-x_min;
-    double dy = y_max-y_min;
+    float dx = x_max-x_min;
+    float dy = y_max-y_min;
     x_min = x_min - dx * 0.015;
     y_min = y_min - dy * 0.015;
     x_max = x_max + dx * 0.015;
@@ -797,7 +792,7 @@ void graph_plotmem(void) {
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
 
-                    void graph_draw(uint8_t nbr, double x_min, double x_max, double y_min, double y_max, double tick_x, double tick_y, uint16_t xzero, uint8_t yzero) {
+                    void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
                       #ifndef TESTSUITE_BUILD
                       uint16_t cnt;
                       real_t tmpy;
@@ -821,10 +816,10 @@ void graph_plotmem(void) {
                       cnt = 0;
                       for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
 
-                        double a_ft = (x/( tick_x));          //Draw ticks
+                        float a_ft = (x/( tick_x));          //Draw ticks
                         if(a_ft<0) { a_ft=-a_ft; }
                         int16_t a_int = (int) a_ft;
-                        double a_frac = a_ft - a_int;
+                        float a_frac = a_ft - a_int;
                         if(a_frac < (x_max-x_min)/300) {               //Frac < 6.6 % is deemed close enough
                           setPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+1)); //tick
                           setPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-1)); //tick
@@ -912,14 +907,14 @@ void graph_plotmem(void) {
 
                       force_refresh();
 
-                      double tick_int_x;
+                      float tick_int_x;
                       if(graph_dx == 0) {
                         tick_int_x = auto_tick((graph_xmax-graph_xmin)/20);
                       } else {
                         tick_int_x = graph_dx;
                       }
 
-                      double tick_int_y;
+                      float tick_int_y;
                       if(graph_dy == 0) {
                         tick_int_y = auto_tick((graph_ymax-graph_ymin)/20);
                       } else {

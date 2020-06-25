@@ -23,9 +23,9 @@
 //graph.h
 
 //Memory structure
-float*   gr_x;
-float*   gr_y;
-float    telltale;
+double*   gr_x;
+double*   gr_y;
+double    telltale;
 uint16_t ix_count;
 #define  LIM               400                 //Number of points
 #define  MEM_INITIALIZED   199

@@ -330,7 +330,7 @@ char line[100];               /* Line buffer */
 
 
 
-int16_t test_xy(float x, float y){
+int16_t test_xy(double x, double y){
 char line[100];               /* Line buffer */
 uint32_t             tmp__32;                                 //JM_CSV
 
@@ -460,7 +460,7 @@ int16_t test_line(char *inputstring){
   return 0;
 }
 
-int16_t test_xy(float x, float y){
+int16_t test_xy(double x, double y){
   printf("%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
   return 0;
 }

@@ -156,12 +156,12 @@ bool_t                SH_BASE_HOME;                            //JM BASEHOME
 bool_t                SH_BASE_AHOME;                           //JM BASEHOME
 int16_t               Norm_Key_00_VAR;                         //JM USER NORMAL
 uint8_t               Input_Default;                           //JM Input Default
-float                 graph_xmin;                              //JM Graph
-float                 graph_xmax;                              //JM Graph
-float                 graph_ymin;                              //JM Graph
-float                 graph_ymax;                              //JM Graph
-float                 graph_dx;                                //JM Graph
-float                 graph_dy;                                //JM Graph
+double                 graph_xmin;                              //JM Graph
+double                 graph_xmax;                              //JM Graph
+double                 graph_ymin;                              //JM Graph
+double                 graph_ymax;                              //JM Graph
+double                 graph_dx;                                //JM Graph
+double                 graph_dy;                                //JM Graph
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //

@@ -86,6 +86,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 }
 
 
+
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
   check_create_dir("DATA");  
@@ -373,7 +374,7 @@ char dirfile[40];
 }
 
 
-int16_t export_xy_to_file(float x, float y){
+int16_t export_xy_to_file(double x, double y){
 uint32_t tmp__32;                                                 //JM_CSV
 
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
@@ -388,7 +389,7 @@ uint32_t tmp__32;                                                 //JM_CSV
     }
     mem__32 = tmp__32;
 
-    sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
+    sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
 
     if(export_append_string_to_file(tmpStr3000, filename_csv) != 0) {
       //ERROR ALREADY ANNOUNCED
@@ -569,13 +570,15 @@ int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
 }
 
 
-int16_t export_append_line(char *inputstring){
-  printf("export_append_line not implemented in sim: %s\n",inputstring);
+int16_t export_xy_to_file(double x, double y){
+  char line[100];               /* Line buffer */
+  sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+  export_append_line(line);
   return 0;
 }
 
-int16_t export_xy_to_file(float x, float y){
-  printf("export_xy_to_file not implemented in sim: %f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
+int16_t export_append_line(char *inputstring){
+  printf("export_append_line not implemented in sim: %s\n",inputstring);
   return 0;
 }
 
@@ -583,7 +586,7 @@ int16_t export_xy_to_file(float x, float y){
 
 
 
-
+//################################################################################################
 
 void displaywords(char *line1) {  //Preprocessor and display
   char ll[50];
@@ -665,7 +668,6 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 int16_t line_x,line_y;
 
-
 void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #ifndef TESTSUITE_BUILD
     if(line_y < SCREEN_HEIGHT) { 
@@ -679,8 +681,6 @@ void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #endif
 }
 
-
-
 void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
@@ -693,6 +693,23 @@ void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #endif
 }
 
+void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND .
+#ifndef TESTSUITE_BUILD
+    if(line_init) {line_y = 20;}
+    if(line_y < SCREEN_HEIGHT) { 
+        int16_t cnt = 0;
+        char tt[2];
+        while(line1[cnt] != 0) {
+          tt[0]=line1[cnt]; tt[1]=0;
+          line_x = showString(tt, &standardFont, cnt * 8, line_y, vmNormal, true, true);
+          cnt++;
+        }
+    }
+    line_y += 20;
+    line_x = 0;
+    force_refresh();
+#endif
+}
 
 
 

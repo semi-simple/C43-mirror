@@ -459,7 +459,7 @@ void graph_axis (void){
     tick_int_y = graph_dy;
   }
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/div  y: %.3f/div", tick_int_x,tick_int_y);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
   showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
 
   double x; 
@@ -477,13 +477,13 @@ void graph_axis (void){
 
   for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-1,0)); //tick
+      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-1,SCREEN_MIN_GRAPH)); //tick
    }
   for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-1,0)); //tick
+      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-1,SCREEN_MIN_GRAPH)); //tick
    }
 
   for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
@@ -503,17 +503,17 @@ void graph_axis (void){
 
   for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-2,0)); //tick
-      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-3,0)); //tick
+      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-2,SCREEN_MIN_GRAPH)); //tick
+      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-3,SCREEN_MIN_GRAPH)); //tick
    }
   for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
     cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-2,0)); //tick
-      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH)); //tick
-      setPixel(cnt,max(yzero-3,0)); //tick
+      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-2,SCREEN_MIN_GRAPH)); //tick
+      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+      setPixel(cnt,max(yzero-3,SCREEN_MIN_GRAPH)); //tick
    }
 
   force_refresh();
@@ -811,10 +811,10 @@ void graph_plotmem(void) {
 
                       for(y=y_min; y<=y_max; y+=tick_y) {
                         cnt = screen_window_y(y_min,y,y_max);
-                        setPixel(xzero-1,cnt); //tick
-                        setPixel(xzero-2,cnt); //tick
-                        setPixel(xzero+1,cnt); //tick
-                        setPixel(xzero+1,cnt); //tick
+                        setPixel(max(0,xzero-1),cnt); //tick
+                        setPixel(max(0,xzero-2),cnt); //tick
+                        setPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
+                        setPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
                       }  
 
                       //GRAPH
@@ -826,16 +826,16 @@ void graph_plotmem(void) {
                         int16_t a_int = (int) a_ft;
                         double a_frac = a_ft - a_int;
                         if(a_frac < (x_max-x_min)/300) {               //Frac < 6.6 % is deemed close enough
-                          setPixel(cnt,yzero+1); //tick
-                          setPixel(cnt,yzero-1); //tick
-                          setPixel(cnt,yzero+2); //tick
-                          setPixel(cnt,yzero-2); //tick
+                          setPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+1)); //tick
+                          setPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-1)); //tick
+                          setPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+2)); //tick
+                          setPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-2)); //tick
                           force_refresh();
                         }
 
                         //convert double to X register
                         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-                        snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
+                        snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
                         stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
                         execute_rpn_function(nbr);
@@ -849,7 +849,6 @@ void graph_plotmem(void) {
                         yn = screen_window_y(y_min,y,y_max);
 
                         //printf("Calc: cnt = %d xy[%f %f]  yold->new(%d -> %d)\n",cnt, x, y, yo, yn);
-                        cnt++;
 
 
                       if(cnt > 0) {       //Fill in all y coords if coords are skipped due to large dy/dx.
@@ -868,9 +867,10 @@ void graph_plotmem(void) {
                           } else {
                             setPixel(x1,yn);
                           }
-                        setPixel(cnt,SCREEN_HEIGHT_GRAPH- (0)       );
-                        setPixel(cnt,SCREEN_HEIGHT_GRAPH- (SCREEN_HEIGHT_GRAPH-SCREEN_MIN_GRAPH-1) );
+                        setPixel(cnt,SCREEN_HEIGHT_GRAPH-1 );
+                        setPixel(cnt,SCREEN_MIN_GRAPH);
                         }
+                      cnt++;                      
                       }
                     fnDrop(0);
                     #endif
@@ -926,10 +926,9 @@ void graph_plotmem(void) {
                         tick_int_y = graph_dy;
                       }
 
-                      snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/div  y: %.3f/div", tick_int_x,tick_int_y);
+                      snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
                       showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
                       graph_draw(selection, graph_xmin, graph_xmax, graph_ymin, graph_ymax, tick_int_x, tick_int_y, xzero, yzero);
-
                       #endif
                     }
 
@@ -938,7 +937,7 @@ void graph_plotmem(void) {
 
 
 void fnStatList(uint16_t unusedParamButMandatory) {
-  char tmpstr[100];
+  char tmpstr1[100], tmpstr2[100];
   int16_t ix, ixx, statnum;
 
   #ifndef TESTSUITE_BUILD
@@ -976,10 +975,22 @@ void fnStatList(uint16_t unusedParamButMandatory) {
 
     for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
       ixx = statnum - ix - 1;
-      sprintf(tmpstr,"[%d]  x:%f,  y:%f",ixx+1, gr_x[ixx],gr_y[ixx]);
-      print_linestr(tmpstr,false);
+
+      if((fabs(gr_x[ixx]) > 0.0000001 && fabs(gr_x[ixx]) < 1000000)) 
+        sprintf(tmpstr1,"[%d] x:%19.7f, ",ixx+1, gr_x[ixx]);
+      else
+        sprintf(tmpstr1,"[%d] x:%19.7e, ",ixx+1, round(gr_x[ixx]*1e10)/1e10);
+
+      if((fabs(gr_y[ixx]) > 0.0000001 && fabs(gr_y[ixx]) < 1000000))
+        sprintf(tmpstr2,"y:%19.7f", gr_y[ixx]);
+      else
+        sprintf(tmpstr2,"y:%19.7e", round(gr_y[ixx]*1e10)/1e10);
+
+      strcat(tmpstr1,tmpstr2);
+
+      print_numberstr(tmpstr1,false);
       #ifdef STATDEBUG
-      printf("%d:%s\n",ixx,tmpstr);
+      printf("%d:%s\n",ixx,tmpstr1);
       #endif
     }
   }

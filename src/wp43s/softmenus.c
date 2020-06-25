@@ -458,7 +458,6 @@ const int16_t menu_ASN[]         = {
  */
       };
 
-
 const int16_t menu_XEQ[]         = { 
                                      ITM_X_P1,                      ITM_X_P2,                   ITM_X_P3,                 ITM_X_P4,              ITM_X_P5,                    ITM_X_P6,
                                      ITM_X_f1,                      ITM_X_f2,                   ITM_X_f3,                 ITM_X_f4,              ITM_X_f5,                    ITM_X_f6,

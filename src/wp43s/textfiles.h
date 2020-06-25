@@ -35,11 +35,12 @@ uint32_t     mem__32;                                 //JM_CSV
 void         fnP_All_Regs(uint16_t unusedParamButMandatory);
 void         print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline);
 void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
+void         print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 
 void         displaywords(char *line1);
 int16_t      import_string_from_filename(char *line1, char *filename, char *fallback);
 int16_t      export_append_line(char *inputstring);
 
 int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);
-int16_t      export_xy_to_file(float x, float y);
+int16_t      export_xy_to_file(double x, double y);
 

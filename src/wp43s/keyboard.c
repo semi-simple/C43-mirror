@@ -448,7 +448,7 @@ void btnPressed(void *notUsed, void *data) {
     processKeyAction(item);
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
-    } 
+    }
   }
 }
 

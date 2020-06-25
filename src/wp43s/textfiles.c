@@ -31,10 +31,6 @@ char                 filename_csv[40]; //JMMAX                //JM_CSV Changed f
 uint32_t             mem__32;                                 //JM_CSV
 
 
-//#####################################################################################
-
-
-
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
   char csv[TMP_STR_LENGTH];

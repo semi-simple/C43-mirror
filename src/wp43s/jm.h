@@ -131,12 +131,12 @@ extern uint8_t Input_Default;                                        //JM Input 
 extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_FG_DOTS;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
-extern float graph_xmin;                                             //JM Graph
-extern float graph_xmax;                                             //JM Graph
-extern float graph_ymin;                                             //JM Graph
-extern float graph_ymax;                                             //JM Graph
-extern float graph_dx;                                               //JM Graph
-extern float graph_dy;                                               //JM Graph
+extern double graph_xmin;                                             //JM Graph
+extern double graph_xmax;                                             //JM Graph
+extern double graph_ymin;                                             //JM Graph
+extern double graph_ymax;                                             //JM Graph
+extern double graph_dx;                                               //JM Graph
+extern double graph_dy;                                               //JM Graph
 extern bool_t jm_VECT;                                               //JM GRAPH setup
 extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
@@ -183,6 +183,7 @@ void fnUserJM(uint16_t jmUser);
 #define USER_HOME        42
 #define USER_V43LT       43
 #define USER_43S         44
+#define USER_DM42        45
  //last number
 
 

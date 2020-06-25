@@ -193,8 +193,8 @@ void execute_rpn_function(int16_t nbr){
 void graph_setupmemory(void) {
   int i;
   if(telltale != MEM_INITIALIZED) {
-    gr_x = (float*)malloc(LIM * sizeof(float)); 
-    gr_y = (float*)malloc(LIM * sizeof(float)); 
+    gr_x = (double*)malloc(LIM * sizeof(double)); 
+    gr_y = (double*)malloc(LIM * sizeof(double)); 
     telltale = MEM_INITIALIZED;
     ix_count = 0;
   }
@@ -229,8 +229,8 @@ void graph_end(void) {
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
-  float x; 
-  float y;
+  double x; 
+  double y;
 
   if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
@@ -240,13 +240,13 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
   }
 
 
-  //Convert from X register to float
+  //Convert from X register to double
   realToString(yy, tmpStr3000);
   y = strtof (tmpStr3000, NULL);
 
   //printf("y=%f ",y);
 
-  //Convert from X register to float
+  //Convert from X register to double
   realToString(xx, tmpStr3000);
   x = strtof (tmpStr3000, NULL);
 
@@ -294,7 +294,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 //###################################################################################
 #ifndef TESTSUITE_BUILD
-int16_t screen_window_x(float x_min, float x, float x_max) {
+int16_t screen_window_x(double x_min, double x, double x_max) {
 int16_t temp;
 if (Aspect_Square) {
   temp = (x-x_min)/(x_max-x_min)*(SCREEN_HEIGHT_GRAPH-1);
@@ -318,7 +318,7 @@ if (Aspect_Square) {
 }
 #endif
 
-int16_t screen_window_y(float y_min, float y, float y_max) {
+int16_t screen_window_y(double y_min, double y, double y_max) {
 int16_t temp;
   temp = (y-y_min)/(y_max-y_min)*(SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH);
     if (temp>SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH) {temp=SCREEN_HEIGHT_GRAPH-1 - SCREEN_MIN_GRAPH;}
@@ -334,9 +334,9 @@ int16_t temp;
 
 //###################################################################################
 //GRAPH  // Build test data 
-void graph_demo(uint8_t nbr, float x_min, float x_max) {
+void graph_demo(uint8_t nbr, double x_min, double x_max) {
   #ifndef TESTSUITE_BUILD
-  float x; 
+  double x; 
   fnClearStack(0);
 
   if(telltale != MEM_INITIALIZED) {
@@ -349,7 +349,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
   for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
 
-    //convert float to X register
+    //convert double to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
     stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
@@ -374,9 +374,9 @@ void placePixel(uint16_t x, uint8_t y) {
 
 
 //###################################################################################
-float auto_tick(float tick_int_f) {
+double auto_tick(double tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
-  //float tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
+  //double tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
   char tx[4];
   tx[0] = tmpStr3000[0];
@@ -402,15 +402,15 @@ float auto_tick(float tick_int_f) {
 
 
 //###################################################################################
-  float tick_int_x;
-  float tick_int_y;
+  double tick_int_x;
+  double tick_int_y;
 
-  float x_min; 
-  float x_max;
-  float y_min;
-  float y_max;
-//  float tick_x;
-//  float tick_y;
+  double x_min; 
+  double x_max;
+  double y_min;
+  double y_max;
+//  double tick_x;
+//  double tick_y;
   uint16_t xzero;
   uint8_t yzero;
 
@@ -462,8 +462,8 @@ void graph_axis (void){
   snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/div  y: %.3f/div", tick_int_x,tick_int_y);
   showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
 
-  float x; 
-  float y;
+  double x; 
+  double y;
   for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
     cnt = screen_window_y(y_min,y,y_max);
     setPixel(max(xzero-1,0),cnt); //tick
@@ -567,7 +567,7 @@ void graph_plotmem(void) {
 
 
       void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        float dx, dy, ddx, ddy, zz, zzz;
+        double dx, dy, ddx, ddy, zz, zzz;
         ddy = yn-yo;
         ddx = xn-xo;
         zz  = sqrt(ddy*ddy+ddx*ddx);
@@ -603,9 +603,9 @@ void graph_plotmem(void) {
   uint16_t cnt, ix, statnum;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
-  float x; 
-  float y;
-  float sx, sy;
+  double x; 
+  double y;
+  double sx, sy;
 
   statnum = 0;
   if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
@@ -700,8 +700,8 @@ void graph_plotmem(void) {
 //    y_min = 1.05 * y_min;
 //    y_max = 1.05 * y_max;
    
-    float dx = x_max-x_min;
-    float dy = y_max-y_min;
+    double dx = x_max-x_min;
+    double dy = y_max-y_min;
     x_min = x_min - dx * 0.015;
     y_min = y_min - dy * 0.015;
     x_max = x_max + dx * 0.015;
@@ -797,15 +797,15 @@ void graph_plotmem(void) {
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
 
-                    void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
+                    void graph_draw(uint8_t nbr, double x_min, double x_max, double y_min, double y_max, double tick_x, double tick_y, uint16_t xzero, uint8_t yzero) {
                       #ifndef TESTSUITE_BUILD
                       uint16_t cnt;
                       real_t tmpy;
                       uint8_t yo; 
                       uint8_t yn;
                       yn = 0;
-                      float x; 
-                      float y;
+                      double x; 
+                      double y;
                       uint16_t x1;  //range 0-399
                       uint8_t  y1;  //range 0-239
 
@@ -821,10 +821,10 @@ void graph_plotmem(void) {
                       cnt = 0;
                       for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
 
-                        float a_ft = (x/( tick_x));          //Draw ticks
+                        double a_ft = (x/( tick_x));          //Draw ticks
                         if(a_ft<0) { a_ft=-a_ft; }
                         int16_t a_int = (int) a_ft;
-                        float a_frac = a_ft - a_int;
+                        double a_frac = a_ft - a_int;
                         if(a_frac < (x_max-x_min)/300) {               //Frac < 6.6 % is deemed close enough
                           setPixel(cnt,yzero+1); //tick
                           setPixel(cnt,yzero-1); //tick
@@ -833,14 +833,14 @@ void graph_plotmem(void) {
                           force_refresh();
                         }
 
-                        //convert float to X register
+                        //convert double to X register
                         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
                         snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16f", x);
                         stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
 
                         execute_rpn_function(nbr);
 
-                        //Convert from X register to float
+                        //Convert from X register to double
                         real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
                         realToString(&tmpy, tmpStr3000);
                         y = strtof (tmpStr3000, NULL);
@@ -912,14 +912,14 @@ void graph_plotmem(void) {
 
                       force_refresh();
 
-                      float tick_int_x;
+                      double tick_int_x;
                       if(graph_dx == 0) {
                         tick_int_x = auto_tick((graph_xmax-graph_xmin)/20);
                       } else {
                         tick_int_x = graph_dx;
                       }
 
-                      float tick_int_y;
+                      double tick_int_y;
                       if(graph_dy == 0) {
                         tick_int_y = auto_tick((graph_ymax-graph_ymin)/20);
                       } else {

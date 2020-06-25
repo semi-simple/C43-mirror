@@ -389,9 +389,19 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,   
 const int16_t menu_TamShuffle[]  = { ITM_ST_X,                      ITM_ST_Y,                   ITM_ST_Z,                 ITM_ST_T,              ITM_NULL,                    ITM_NULL,                     };
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
-const int16_t menu_BASE[]        = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
+const int16_t menu_BASE[]        = { 
                                      ITM_toSI,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,                      };    //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,
+                                     CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
+
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
+                                     CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
+                                     ITM_toSI,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+
+                                     CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
+                                     ITM_toSI,                      KEY_HASH,                   ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8
+                                                                                                                                                                                                            };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -409,12 +419,18 @@ const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,   
 const int16_t menu_ASN_N[]       = { 
                                      ITM_U_KEY_USER,                ITM_U_KEY_SIGMA,            ITM_U_KEY_CC,             ITM_U_KEY_PRGM,        ITM_U_KEY_MM,                ITM_U_KEY_ALPHA,                    //JM USER NAORMAL MODE
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM USER NAORMAL MODE
-                                     -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_SH_NORM_E,               ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_SH_NORM_E,               ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
+
+const int16_t menu_ASN_U[]       = { 
+                                     
+                                     ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_NULL,                    ITM_NULL,
+                                     ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_NULL,                    ITM_NULL                     };
+
 
 const int16_t menu_ASN[]         = { 
-                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_RESET,           ITM_USER_SHIFTS,       ITM_USER_WP43S,              KEY_USERMODE,         /*ITM_JM_ASN*/
-                                     ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_USER_V43,                ITM_JM_SEEK,
-                                     ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_USER_V43MIN,             -MNU_ASN_N,
+                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_RESET,           ITM_USER_V43,             ITM_USER_WP43S,          ITM_USER_DM42,         /*ITM_JM_ASN*/
+                                     ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          ITM_USER_V43MIN,          ITM_NULL,                ITM_JM_SEEK,
+                                     -MNU_ASN_U,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,                 ITM_NULL,                 -MNU_ASN_N,
                                                                           
                                      K_00U,                         K_01U,                      K_02U,                    K_03U,                 K_04U,                       K_05U,  //JM USER
                                      Kf00U,                         Kf01U,                      Kf02U,                    Kf03U,                 Kf04U,                       Kf05U,  //JM USER
@@ -739,6 +755,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
   {.menuId = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
   {.menuId = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
+  {.menuId = -MNU_ASN_U,       .numItems = sizeof(menu_ASN_U      )/sizeof(int16_t), .softkeyItem = menu_ASN_U       },  //JM USER 
   {.menuId = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
   {.menuId = -MNU_XEQ,         .numItems = sizeof(menu_XEQ        )/sizeof(int16_t), .softkeyItem = menu_XEQ         },  //JM EXEC
   {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME

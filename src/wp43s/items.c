@@ -2394,7 +2394,7 @@ const item_t indexOfItems[] = {
 /* 1900 */  { fnGetSigmaAssignToX,         NOPARAM,                     STD_SIGMA "+ toX",                             STD_SIGMA "+ toX",                             0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1901 */  { fnUserJM,                    JM_ASSIGN,                   "ASSIGN",                                      "ASSIGN",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1902 */  { fnUserJM,                    JM_SEEK_FN,                  "FN" STD_DOT "ASN",                            "FN" STD_DOT "ASN",                            0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 1903 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+ ASN",                             0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 1903 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+NRM",                              0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 1904 */  { fnJM_GetXToNORMmode,         NOPARAM,                     "X to" STD_SIGMA "+",                          "X to" STD_SIGMA "+",                          0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER NORMAL
 /* 1905 */  { fnInDefault,                 ID_43S,                      "i" STD_SPACE_3_PER_EM "LI/RL",                "i" STD_SPACE_3_PER_EM "LI/RL",                0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM INPUT DEFAULT
 /* 1906 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM UNDERLINING
@@ -2468,6 +2468,8 @@ const item_t indexOfItems[] = {
 /* 1974 */  { fnUserJM,                    USER_SHIFTS2,                "LT SHFT",                                     "LT SHFT",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=V43
 /* 1975 */  { fnUserJM,                    USER_HOME,                   "U" STD_SIGMA STD_DOT "HOME",                  "U" STD_SIGMA STD_DOT "HOME",                  0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1976 */  { fnUserJM,                    USER_43S,                    "WP43S",                                       "WP43S",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=V43
+/* 1977 */  { fnUserJM,                    USER_DM42,                   "DM42",                                        "DM42",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=V43
+/* 1978 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+U&N",                              0,       0,       CAT_MENU, SLS_UNCHANGED},   //J=V43
 
 /* 1977 */  { fnXEQMENU,                   1,                           "XEQM01",                                        "XEQM01",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1978 */  { fnXEQMENU,                   2,                           "XEQM02",                                        "XEQM02",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },

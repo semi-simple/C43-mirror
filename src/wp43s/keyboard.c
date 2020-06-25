@@ -115,12 +115,14 @@ int16_t determineFunctionKeyItem(const char *data) {
   else {              //if there is no SoftMenu up
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-      case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
+//      case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
+      case 1: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[0].fShifted) : (kbd_usr[0].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 2: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 3: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 4: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 5: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
+//      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
+      case 6: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[5].fShifted) : (kbd_usr[5].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       default:{item = 0;} break;
     }
   }

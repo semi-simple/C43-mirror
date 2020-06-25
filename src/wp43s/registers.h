@@ -123,12 +123,12 @@ typedef struct {
   bool_t jm_FG_LINE;
   bool_t jm_FG_DOTS;
   bool_t jm_G_DOUBLETAP;
-  float graph_xmin;
-  float graph_xmax;
-  float graph_ymin;
-  float graph_ymax;
-  float graph_dx;
-  float graph_dy;
+  double graph_xmin;
+  double graph_xmax;
+  double graph_ymin;
+  double graph_ymax;
+  double graph_dx;
+  double graph_dy;
   bool_t jm_VECT;
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;

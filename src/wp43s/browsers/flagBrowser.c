@@ -292,7 +292,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Returned from last old version JM
+void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected from last old version JM
   int16_t f, x, y, i;
 
   if(calcMode != CM_FLAG_BROWSER_OLD) {

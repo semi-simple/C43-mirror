@@ -34,9 +34,10 @@ uint32_t     mem__32;                                 //JM_CSV
 #define      CSV_STR     "\""
  
 int16_t      testjm(void);
-int16_t      test_xy(double x, double y);
 void         fnP_All_Regs(uint16_t unusedParamButMandatory);
-//void         print_line(bool_t line_init);
 void         print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline);
 void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
-int16_t      test_line(char *inputstring);
+void         print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init);
+
+int16_t      append_line_to_csv_file(char *inputstring);
+int16_t      append_xy_to_csv_file(double x, double y);

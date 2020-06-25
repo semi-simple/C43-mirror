@@ -73,7 +73,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       strcat(csv, CSV_NEWLINE);
     }
 
-    test_line(csv);                    //Output append to CSV file
+    append_line_to_csv_file(csv);                    //Output append to CSV file
 
     ++ix;
   }
@@ -330,7 +330,7 @@ char line[100];               /* Line buffer */
 
 
 
-int16_t test_xy(double x, double y){
+int16_t append_xy_to_csv_file(double x, double y){
 char line[100];               /* Line buffer */
 uint32_t             tmp__32;                                 //JM_CSV
 
@@ -340,65 +340,21 @@ uint32_t             tmp__32;                                 //JM_CSV
     tmp__32 = getUptimeMs();
     if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
       //Create file name
-      make_date_filename(filename_csv,"/SCREENS/",".TSV");
+      make_date_filename(filename_csv,"/DATA/",".TSV");
       //filename_csv[19+3]=0;                                     //20200331-180STATS
       strcat(filename_csv,"STATS.TSV");      
     }
     mem__32 = tmp__32;
 
-
-
-    /* Prepare to write */
-    sys_disk_write_enable(1);
-    fr = sys_is_disk_write_enable();
-    if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);    print_linestr(line,true);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, filename_csv, FA_OPEN_APPEND | FA_WRITE);
-    if (fr) {
-      sprintf(line,"File open error--> %d    \n",fr);       print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    /* Seek to end of the file to append data */
-    fr = f_lseek(&fil, f_size(&fil));
-    if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-//uses tmpstr3000
-    //sprintf(line,"%f, %f\n",x,y);                           print_linestr(line,false);    
-    sprintf(tmpStr3000,"%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
-    fr = f_puts(tmpStr3000, &fil);
-
-
-    /* close the file */
-    fr = f_close(&fil);
-    if (fr) {
-      sprintf(line,"File close error--> %d    \n",fr);     print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
-    }
-
-    sys_disk_write_enable(0);
+    sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+    append_line_to_csv_file(tmpStr3000);
  
     return 0;
   }
 
 
 
-int16_t test_line(char *inputstring){
+int16_t append_line_to_csv_file(char *inputstring){
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
@@ -455,13 +411,15 @@ char line[100];               /* Line buffer */
 
 #elif PC_BUILD
 
-int16_t test_line(char *inputstring){
-  printf("%s\n",inputstring);
+int16_t append_xy_to_csv_file(double x, double y){
+  char line[100];               /* Line buffer */
+  sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+  append_line_to_csv_file(line);
   return 0;
 }
 
-int16_t test_xy(double x, double y){
-  printf("%f%s%f%s",x,CSV_TAB,y,CSV_NEWLINE);
+int16_t append_line_to_csv_file(char *inputstring){
+  printf("%s\n",inputstring);
   return 0;
 }
 
@@ -469,18 +427,9 @@ int16_t test_xy(double x, double y){
 
 
 
-
+//################################################################################################
 
 int16_t line_x,line_y;
-
-//void print_line(bool_t line_init) {
-//#ifndef TESTSUITE_BUILD
-//char line[100];               /* Line buffer */
-//    if(line_init) {line_y = 20;}
-//    showString(line, &standardFont, 1, line_y, vmNormal, true, true);
-//    line_y += 20;
-//#endif
-//}
 
 void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #ifndef TESTSUITE_BUILD
@@ -507,6 +456,23 @@ void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #endif
 }
 
+void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND .
+#ifndef TESTSUITE_BUILD
+    if(line_init) {line_y = 20;}
+    if(line_y < SCREEN_HEIGHT) { 
+        int16_t cnt = 0;
+        char tt[2];
+        while(line1[cnt] != 0) {
+          tt[0]=line1[cnt]; tt[1]=0;
+          line_x = showString(tt, &standardFont, cnt * 8, line_y, vmNormal, true, true);
+          cnt++;
+        }
+    }
+    line_y += 20;
+    line_x = 0;
+    force_refresh();
+#endif
+}
 
 
 

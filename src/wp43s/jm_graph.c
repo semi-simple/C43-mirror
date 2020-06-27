@@ -972,14 +972,14 @@ void fnStatList(uint16_t unusedParamButMandatory) {
       ixx = statnum - ix - 1;
 
       if((fabs(gr_x[ixx]) > 0.0000001 && fabs(gr_x[ixx]) < 1000000)) 
-        sprintf(tmpstr1,"[%d] x:%19.7f, ",ixx+1, gr_x[ixx]);
+        sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, gr_x[ixx]);
       else
-        sprintf(tmpstr1,"[%d] x:%19.7e, ",ixx+1, round(gr_x[ixx]*1e10)/1e10);
+        sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, round(gr_x[ixx]*1e10)/1e10);
 
       if((fabs(gr_y[ixx]) > 0.0000001 && fabs(gr_y[ixx]) < 1000000))
-        sprintf(tmpstr2,"y:%19.7f", gr_y[ixx]);
+        sprintf(tmpstr2,"y%19.7f", gr_y[ixx]);
       else
-        sprintf(tmpstr2,"y:%19.7e", round(gr_y[ixx]*1e10)/1e10);
+        sprintf(tmpstr2,"y%19.7e", round(gr_y[ixx]*1e10)/1e10);
 
       strcat(tmpstr1,tmpstr2);
 

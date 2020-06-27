@@ -370,27 +370,29 @@ char dirfile[40];
 }
 
 
-int16_t export_xy_to_file(double x, double y){
-uint32_t tmp__32;                                                 //JM_CSV
+
+void make_TSV_dir_name(void){
+    uint32_t tmp__32;                                                 //JM_CSV
 
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
     if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
       //Create file name
-
       check_create_dir("DATA");  
       make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
       check_create_dir("DATA");  
-      //filename_csv[19+3]=0;                                     //20200331-180STATS
-      //strcat(filename_csv,"STATS.TSV");      
     }
     mem__32 = tmp__32;
+}
 
-    sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
 
-    if(export_append_string_to_file(tmpStr3000, filename_csv) != 0) {
-      //ERROR ALREADY ANNOUNCED
-      return 1;
-    }
+int16_t export_xy_to_file(double x, double y){
+  make_TSV_dir_name();
+
+  sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+  if(export_append_string_to_file(tmpStr3000, filename_csv) != 0) {
+    //ERROR ALREADY ANNOUNCED
+    return 1;
+  }
   return 0;
 }
 
@@ -514,7 +516,8 @@ int16_t import_string_from_filename(char *line1,  char *filename, char *fallback
   	strcat(tmpStr3000,onechar);
   }
   fclose(infile);
-  printf("Loaded >>> %s |%s|\n",dirfile,tmpStr3000);
+  printf("Loaded >>> %s\n",dirfile);
+  //printf("Loaded >>> %s |%s|\n",dirfile,tmpStr3000);
 
   strcpy(line1,tmpStr3000);
 
@@ -559,13 +562,56 @@ int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
 
 
 int16_t export_append_line(char *inputstring){
-  printf("export_append_line not implemented in sim: %s\n",inputstring);
-  return 0;
+
+  FILE *outfile;
+  uint16_t fr = 0;
+  char line[100];               /* Line buffer */
+
+//  strcpy(dirfile,"PROGRAMS/C43_LOG.TXT");
+
+  outfile = fopen(filename_csv, "ab");
+  if (outfile == NULL) {
+    printf("export_string_to_file: Cannot open to append: %s %s\n",filename_csv,inputstring);
+    return 1;
+  }
+
+  fr = fputs(inputstring, outfile);
+
+  if (fr == 0) {
+    sprintf(line,"export_string_to_file: Write error--> %d %s\n",fr,inputstring);            
+    //print_linestr(line,false);
+    printf(line);
+    fclose(outfile);
+    return (int)fr;
+  } else {
+    printf("Exported to %s: %s\n",filename_csv,inputstring);
+    fclose(outfile);
+  }
+  return 0;  
+}
+
+
+void make_TSV_dir_name(void){
+    uint32_t tmp__32;                                                 //JM_CSV
+    time_t rawTime;
+    struct tm *timeInfo;
+    
+
+    tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
+      //Create file name
+      //make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
+      time(&rawTime);
+      timeInfo = localtime(&rawTime);
+      strftime(filename_csv, filenamelen, "%Y%m%d-%H%M%S00.STAT.TSV", timeInfo);
+    }
+    mem__32 = tmp__32;
 }
 
 
 int16_t export_xy_to_file(double x, double y){
   char line[100];               /* Line buffer */
+  make_TSV_dir_name();
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
   export_append_line(line);
   return 0;
@@ -635,17 +681,25 @@ void displaywords(char *line1) {  //Preprocessor and display
     if (tmpStr3000[ix-1] != 32) {
       strcat(line1,aa);
       strcat(ll,aa);
-      if(strlen(ll)>30 && aa[0] == 32) {print_linestr(ll,false);ll[0]=0;}
+      if(strlen(ll)>30 && aa[0] == 32) {
+        print_linestr(ll,false);
+        ll[0]=0;
+      }
     } else {
       if(aa[0] != 32) {
-      strcat(line1,aa);
-      strcat(ll,aa);          
-      if(strlen(ll)>36) {print_linestr(ll,false);ll[0]=0;}
+        strcat(line1,aa);
+        strcat(ll,aa);          
+        if(strlen(ll)>36) {
+          print_linestr(ll,false);
+          ll[0]=0;
+        }
       }
     }
     ix++;
   }
-  if(ll[0]!=0) {print_linestr(ll,false);}
+  if(ll[0]!=0) {
+    print_linestr(ll,false);
+  }
 //printf("6:%s\n",line1);
 
 
@@ -660,8 +714,13 @@ int16_t line_x,line_y;
 
 void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #ifndef TESTSUITE_BUILD
+    char l1[TMP_STR_LENGTH];    //Clip the string at 40
+    strcpy(l1, line1);
+    l1[40]=0;    l1[41]=0;    l1[42]=0;
+
+
     if(line_y < SCREEN_HEIGHT) { 
-        line_x = showString(line1, &standardFont, line_x, line_y, vmNormal, true, true);
+        line_x = showString(l1, &standardFont, line_x, line_y, vmNormal, true, true);
     }
     if(endline) {
       line_y += 20;
@@ -673,9 +732,13 @@ void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 
 void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #ifndef TESTSUITE_BUILD
+    char l1[TMP_STR_LENGTH];    //Clip the string at 40
+    strcpy(l1, line1);
+    l1[40]=0;    l1[41]=0;    l1[42]=0;
+
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 
-        line_x = showString(line1, &standardFont, 1, line_y, vmNormal, true, true);
+        line_x = showString(l1, &standardFont, 1, line_y, vmNormal, true, true);
     }
     line_y += 20;
     line_x = 0;

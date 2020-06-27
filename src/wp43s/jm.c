@@ -139,7 +139,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       bool_t go;
 
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
-      printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+      //printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
       xeqlblinprogress = 0;
       gotoinprogress   = 0;
       go = false;
@@ -315,7 +315,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           commandnumber[0]=0;
                         break;
                         case 11:                  //LABEL IN PROGRESS: get label M1-M4
-                          printf("LABEL %s\n",commandnumber);
+                          //printf("LABEL %s\n",commandnumber);
                           if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
                           if(strcompare(commandnumber,"M2")) ix_m2 = ix; else
                           if(strcompare(commandnumber,"M3")) ix_m3 = ix; else
@@ -452,7 +452,6 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   }
 #endif
 }
-
 
 void fnXEQMENU(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD

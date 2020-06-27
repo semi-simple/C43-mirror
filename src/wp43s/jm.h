@@ -61,6 +61,8 @@ Modes available in the mode menu:
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43
 #define arrowCasechange    false
 
+//This is to allow the creation of a logfile
+//#define RECORDLOG
 
 
 

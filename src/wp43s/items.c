@@ -69,7 +69,9 @@ void fnNop(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void runFunction(int16_t func) {
   funcOK = true;
+  #ifdef RECORDLOG
   capture_sequence("runFunction:", func);        //JMEXEC
+  #endif
 
   if(func >= LAST_ITEM) {
     #ifdef PC_BUILD
@@ -2225,7 +2227,7 @@ const item_t indexOfItems[] = {
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1736 */  { fnKeyCase,                   NOPARAM,                     "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
 /* 1737 */  { fnBASE_Hash,                 NOPARAM,                     "##" STD_RIGHT_ARROW "INT",                    "##" STD_RIGHT_ARROW "INT",                    0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM ##
-/* 1738 */  { itemToBeCoded,               NOPARAM,                     "XEQMENU",                                     "XEQM",                                     0,       0,       CAT_MENU, SLS_UNCHANGED},
+/* 1738 */  { itemToBeCoded,               NOPARAM,                     "XEQMENU",                                     "XEQMENU",                                     0,       0,       CAT_MENU, SLS_UNCHANGED},
 
 /* 1739 */  { fn_cnst_op_a,                NOPARAM,                     "op_a",                                        "a",                                           0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM Operator a
 /* 1740 */  { fn_cnst_op_aa,               NOPARAM,                     "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM Operator a.a
@@ -2470,25 +2472,24 @@ const item_t indexOfItems[] = {
 /* 1976 */  { fnUserJM,                    USER_43S,                    "WP43S",                                       "WP43S",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=V43
 /* 1977 */  { fnUserJM,                    USER_DM42,                   "DM42",                                        "DM42",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=V43
 /* 1978 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+U&N",                              0,       0,       CAT_MENU, SLS_UNCHANGED},   //J=V43
-
-/* 1979 */  { fnXEQMENU,                   1,                           "XEQM01",                                        "XEQM01",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1980 */  { fnXEQMENU,                   2,                           "XEQM02",                                        "XEQM02",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1981 */  { fnXEQMENU,                   3,                           "XEQM03",                                        "XEQM03",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1982 */  { fnXEQMENU,                   4,                           "XEQM04",                                        "XEQM04",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1983 */  { fnXEQMENU,                   5,                           "XEQM05",                                        "XEQM05",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1984 */  { fnXEQMENU,                   6,                           "XEQM06",                                        "XEQM06",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1985 */  { fnXEQMENU,                   7,                           "XEQM07",                                        "XEQM07",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1986 */  { fnXEQMENU,                   8,                           "XEQM08",                                        "XEQM08",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1987 */  { fnXEQMENU,                   9,                           "XEQM09",                                        "XEQM09",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1988 */  { fnXEQMENU,                   10,                          "XEQM10",                                        "XEQM10",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1989 */  { fnXEQMENU,                   11,                          "XEQM11",                                        "XEQM11",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1990 */  { fnXEQMENU,                   12,                          "XEQM12",                                        "XEQM12",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1991 */  { fnXEQMENU,                   13,                          "XEQM13",                                        "XEQM13",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1992 */  { fnXEQMENU,                   14,                          "XEQM14",                                        "XEQM14",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1993 */  { fnXEQMENU,                   15,                          "XEQM15",                                        "XEQM15",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1994 */  { fnXEQMENU,                   16,                          "XEQM16",                                        "XEQM16",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1995 */  { fnXEQMENU,                   17,                          "XEQM17",                                        "XEQM17",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1996 */  { fnXEQMENU,                   18,                          "XEQM18",                                        "XEQM18",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1979 */  { fnXEQMENU,                   1,                           "XEQM01",                                      "XEQM01",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1980 */  { fnXEQMENU,                   2,                           "XEQM02",                                      "XEQM02",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1981 */  { fnXEQMENU,                   3,                           "XEQM03",                                      "XEQM03",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1982 */  { fnXEQMENU,                   4,                           "XEQM04",                                      "XEQM04",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1983 */  { fnXEQMENU,                   5,                           "XEQM05",                                      "XEQM05",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1984 */  { fnXEQMENU,                   6,                           "XEQM06",                                      "XEQM06",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1985 */  { fnXEQMENU,                   7,                           "XEQM07",                                      "XEQM07",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1986 */  { fnXEQMENU,                   8,                           "XEQM08",                                      "XEQM08",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1987 */  { fnXEQMENU,                   9,                           "XEQM09",                                      "XEQM09",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1988 */  { fnXEQMENU,                   10,                          "XEQM10",                                      "XEQM10",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1989 */  { fnXEQMENU,                   11,                          "XEQM11",                                      "XEQM11",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1990 */  { fnXEQMENU,                   12,                          "XEQM12",                                      "XEQM12",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1991 */  { fnXEQMENU,                   13,                          "XEQM13",                                      "XEQM13",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1992 */  { fnXEQMENU,                   14,                          "XEQM14",                                      "XEQM14",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1993 */  { fnXEQMENU,                   15,                          "XEQM15",                                      "XEQM15",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1994 */  { fnXEQMENU,                   16,                          "XEQM16",                                      "XEQM16",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1995 */  { fnXEQMENU,                   17,                          "XEQM17",                                      "XEQM17",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1996 */  { fnXEQMENU,                   18,                          "XEQM18",                                      "XEQM18",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
 
 /* 1997 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

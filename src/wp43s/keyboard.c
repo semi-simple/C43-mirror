@@ -710,9 +710,11 @@ void processKeyAction(int16_t item) {
           displayBugScreen(errorMessage);
       }
   }
+  #ifdef RECORDLOG
   if(keyActionProcessed) {                         //JMEXEC
     capture_sequence("keyActionProcessed:", item);  //JMEXEC
   }                                                //JMEXEC
+  #endif
 }
 #endif // TESTSUITE_BUILD
 

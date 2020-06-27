@@ -806,7 +806,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, nimBuffer); // Register data type
       readLine(stream, tmpStr3000); // Register value
 
-      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X) || (loadMode == LM_SYSTEM_STATE && regist >= REGISTER_X)) {
+      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X)) {
         restoreRegister(regist, nimBuffer, tmpStr3000);
       }
     }

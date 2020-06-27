@@ -23,6 +23,7 @@
 
 /* ADDITIONAL C43 functions and routines */
 
+//#define DISPLOADING
 
 #include "wp43s.h"
 #include "math.h"
@@ -407,15 +408,16 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     FRESULT fr;                   /* FatFs return code */
 
     //Create file name
+    check_create_dir("PROGRAMS");  
     strcpy(filename_csv,"/PROGRAMS/");
     strcat(filename_csv,filename);
     strcat(filename_csv,".TXT");
-    check_create_dir("PROGRAMS");  
     
     /* Opens an existing file. */
     fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
     if (fr) {
-      sprintf(line,"File read open error ID003--> %d    \n",fr);       print_linestr(line,false);
+      sprintf(line,"File read open error ID003--> %d    \n",fr);
+      print_linestr(line,false);
       f_close(&fil);
       //return (int)fr;
       strcpy(line1, fallback);
@@ -625,7 +627,6 @@ int16_t export_xy_to_file(double x, double y){
 //################################################################################################
 
 void displaywords(char *line1) {  //Preprocessor and display
-  char ll[50];
   char bb[2];
   char aa[2];
   bool_t state_comments=false;
@@ -636,7 +637,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   //printf("4:%s\n",line1);
 
   tmpStr3000[0]=32;tmpStr3000[1]=0;
-  ll[0]=0;
+
   int16_t ix = 0;
   while (line1[ix] != 0) {
     aa[0]=line1[ix];
@@ -672,34 +673,44 @@ void displaywords(char *line1) {  //Preprocessor and display
   }
   //printf("5:%s\n",line1);
 
-  aa[0]=0; aa[1]=0;                  //remove consequtive spaces
+  #ifdef DISPLOADING
+  char ll[50];
   ll[0]=0;
+  ll[0]=0;
+  #endif
+  aa[0]=0; aa[1]=0;                  //remove consequtive spaces
   ix = 1;
   line1[0]=0;
   while (tmpStr3000[ix] != 0) {
     aa[0]=tmpStr3000[ix];    
     if (tmpStr3000[ix-1] != 32) {
       strcat(line1,aa);
+      #ifdef DISPLOADING
       strcat(ll,aa);
       if(strlen(ll)>30 && aa[0] == 32) {
         print_linestr(ll,false);
         ll[0]=0;
       }
+      #endif
     } else {
       if(aa[0] != 32) {
         strcat(line1,aa);
+        #ifdef DISPLOADING
         strcat(ll,aa);          
         if(strlen(ll)>36) {
           print_linestr(ll,false);
           ll[0]=0;
         }
+        #endif
       }
     }
     ix++;
   }
+  #ifdef DISPLOADING
   if(ll[0]!=0) {
     print_linestr(ll,false);
   }
+  #endif
 //printf("6:%s\n",line1);
 
 

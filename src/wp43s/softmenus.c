@@ -459,9 +459,10 @@ const int16_t menu_ASN[]         = {
       };
 
 const int16_t menu_XEQ[]         = { 
-                                     ITM_XEQ,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL      };
+                                     ITM_X_P1,                      ITM_X_P2,                   ITM_X_P3,                 ITM_X_P4,              ITM_X_P5,                    ITM_X_P6,
+                                     ITM_X_f1,                      ITM_X_f2,                   ITM_X_f3,                 ITM_X_f4,              ITM_X_f5,                    ITM_X_f6,
+                                     ITM_X_g1,                      ITM_X_g2,                   ITM_X_g3,                 ITM_X_g4,              ITM_X_g5,                    ITM_X_g6   };
+
 
 
 //##################################################################################################################################################################################################################################
@@ -506,7 +507,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
                                      ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
 /*HOME-2*/                                                                                                                                                             //JM HOME
 /*2*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                     -MNU_TRI,            -MNU_CPX,        -MNU_EXP,          -MNU_XFN,         -MNU_MyMenu,      -MNU_EE,                            //JM HOME
+                                     -MNU_TRI,            -MNU_CPX,        -MNU_EXP,          -MNU_XEQ,         -MNU_MyMenu,      -MNU_EE,                            //JM HOME
                                      -MNU_CONST,          ITM_RBR,         ITM_FLGSV,         ITM_H_SUMRY,      ITM_H_REPLCA,     ITM_H_FIXED,                        //JM HOME
                                        
 
@@ -1452,6 +1453,13 @@ void showSoftmenuCurrentPart(void) {
           }
         }
         
+        else                                                                   //JMXEQvv
+        if(softmenu[m].menuId == -MNU_XEQ) {
+          if(indexOfItems[item%10000].func == fnXEQMENU) {
+            showSoftkey(indexOfItemsXEQM + 12*(item%10000-fnXEQMENUpos),  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          } else
+            showSoftkey(indexOfItems    [item%10000].itemSoftmenuName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+        }                                                                      //JMXEQ^^
         else                                                                   //JMvv
         if(softmenu[m].menuId == -MNU_SYSFL) {
           if(indexOfItems[item%10000].itemCatalogName[0] == 0 || isSystemFlagWriteProtected(indexOfItems[item%10000].param) )

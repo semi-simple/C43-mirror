@@ -50,4 +50,4 @@ void setCatalogLastPos      (void);
 //void Load_HOME              (void);   //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
 
 const int16_t menu_A_HOME[360];   //JM
-const int16_t menu_HOME[360];     //JM
+//const int16_t menu_HOME[360];     //JM

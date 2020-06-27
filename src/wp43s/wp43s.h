@@ -183,9 +183,9 @@ typedef int16_t calcRegister_t;
 #endif
 
 #define NUMBER_OF_DISPLAY_DIGITS 16
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 9965 //9965   // 43S:3328 //JMMAX
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 //9965   // 43S:3328 //JMMAX
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS   10
-#define MAX_FACTORIAL                 1000 //1142   // 43S: 450 //JMMAX
+#define MAX_FACTORIAL                 449 //1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98

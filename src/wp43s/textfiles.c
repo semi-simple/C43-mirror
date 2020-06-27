@@ -73,7 +73,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       strcat(csv, CSV_NEWLINE);
     }
 
-    append_line_to_csv_file(csv);                    //Output append to CSV file
+    export_append_line(csv);                    //Output append to CSV file
 
     ++ix;
   }
@@ -85,7 +85,8 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 
 void fnP_All_Regs(uint16_t unusedParamButMandatory){
   #if defined (DMCP_BUILD)
-  make_date_filename(filename_csv,"/SCREENS/",".TSV");
+  check_create_dir("DATA");  
+  make_date_filename(filename_csv,"/DATA/",".REGS.TSV");
   #endif
 
 
@@ -147,6 +148,33 @@ TCHAR* f_gets (
     if (dc == '\r') continue;
     *p++ = (TCHAR)dc; nc++;
     if (dc == '\n') break;
+  }
+
+  *p = 0;   /* Terminate the string */
+  return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
+}
+
+
+
+TCHAR* f_getsline (
+  TCHAR* buff,  /* Pointer to the buffer to store read string */
+  int len,    /* Size of string buffer (items) */
+  FIL* fp     /* Pointer to the file object */
+)
+{
+  int nc = 0;
+  TCHAR *p = buff;
+  BYTE s[2];
+  UINT rc;
+  BYTE sc;
+  s[1]=0;
+      /* Byte-by-byte read without any conversion (ANSI/OEM API) */
+  len -= 1; /* Make a room for the terminator */
+  while (nc < len) {
+    f_read(fp, s, 1, &rc);  /* Get a byte */
+    if (rc != 1) break;   /* EOF? */
+    sc = s[0];
+    *p++ = (TCHAR)sc; nc++;
   }
 
   *p = 0;   /* Terminate the string */
@@ -267,61 +295,58 @@ int f_puts (
 //###################################################################################
 
 
-
-
-/*-----------------------------------------------------------------------*/
-
-
-int16_t testjm(void){
+int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], const char filedir[40]) {
 char line[100];               /* Line buffer */
-
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
-
-    /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, "message.txt", FA_READ | FA_OPEN_ALWAYS);
-    if (fr) return (int)fr;
-    sprintf(line,"Opened file read--> %d    \n",fr);        print_linestr(line,true);
-    while (f_gets(line, sizeof line, &fil)) {               print_linestr(line,false); }
-    f_close(&fil);
 
 
     /* Prepare to write */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
-    sprintf(line,"Write enable?--> %d    \n",fr);           print_linestr(line,false);
-
-    /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, "message.csv", FA_OPEN_APPEND | FA_WRITE);
-    if (fr) {
-      sprintf(line,"Open append error--> %d    \n",fr);     print_linestr(line,false);
+    if (fr==0) {
+      sprintf(line,"Write access error ID001--> %d    \n",fr);    print_linestr(line,true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
     }
 
-    sprintf(line,"Opened file append--> %d    \n",fr);      print_linestr(line,false);
+    /* Opens an existing file. If not exist, creates a new file. */
+    fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE);
+    if (fr) {
+      sprintf(line,"File open error ID001--> %d    \n",fr);       print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
 
     /* Seek to end of the file to append data */
     fr = f_lseek(&fil, f_size(&fil));
     if (fr) {
-      sprintf(line,"Seek error--> %d    \n",fr);            print_linestr(line,false);
+      sprintf(line,"Seek error ID001--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
     }
 
+    /* Create string and output */
+    fr = f_puts(line1, &fil);
+    if (fr == -1) {
+      sprintf(line,"Write error ID001--> %d    \n",fr);            print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
 
-
-//    TCHAR aa;
-//    aa = 48;
-//    fr = f_putc(aa,&fil);
-//    sprintf(line,"puts--> %d    \n",fr);                    print_linestr(line,false);
-
-    fr = f_puts("ABCDEF\n",&fil);
-    sprintf(line,"puts--> %d    \n",fr);                    print_linestr(line,false);
-
+    /* close the file */
     fr = f_close(&fil);
+    if (fr) {
+      sprintf(line,"File close error ID001--> %d    \n",fr);     print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
+
     sys_disk_write_enable(0);
  
     return 0;
@@ -330,31 +355,86 @@ char line[100];               /* Line buffer */
 
 
 
-int16_t append_xy_to_csv_file(double x, double y){
-char line[100];               /* Line buffer */
-uint32_t             tmp__32;                                 //JM_CSV
 
-    FIL fil;                      /* File object */
-    FRESULT fr;                   /* FatFs return code */
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+char dirfile[40];
+    //Create file name
+    strcpy(dirfile,"/PROGRAMS/C43_LOG.TXT");
+    sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
+    check_create_dir("PROGRAMS");      
+    if(export_append_string_to_file(tmpStr3000, dirfile) != 0) {
+      //ERROR ALREADY ANNOUNCED
+      return 1;
+    }
+  return 0;
+}
 
-    tmp__32 = getUptimeMs();
+
+int16_t export_xy_to_file(double x, double y){
+uint32_t tmp__32;                                                 //JM_CSV
+
+    tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
     if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
       //Create file name
-      make_date_filename(filename_csv,"/DATA/",".TSV");
+
+      check_create_dir("DATA");  
+      make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
+      check_create_dir("DATA");  
       //filename_csv[19+3]=0;                                     //20200331-180STATS
-      strcat(filename_csv,"STATS.TSV");      
+      //strcat(filename_csv,"STATS.TSV");      
     }
     mem__32 = tmp__32;
 
     sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
-    append_line_to_csv_file(tmpStr3000);
- 
+
+    if(export_append_string_to_file(tmpStr3000, filename_csv) != 0) {
+      //ERROR ALREADY ANNOUNCED
+      return 1;
+    }
+  return 0;
+}
+
+
+
+
+
+int16_t import_string_from_filename(char *line1, char *filename, char *fallback) {
+char line[TMP_STR_LENGTH];        /* Line buffer */
+
+    FIL fil;                      /* File object */
+    FRESULT fr;                   /* FatFs return code */
+
+    //Create file name
+    strcpy(filename_csv,"/PROGRAMS/");
+    strcat(filename_csv,filename);
+    strcat(filename_csv,".TXT");
+    check_create_dir("PROGRAMS");  
+    
+    /* Opens an existing file. */
+    fr = f_open(&fil, filename_csv, FA_READ | FA_OPEN_EXISTING);
+    if (fr) {
+      sprintf(line,"File read open error ID003--> %d    \n",fr);       print_linestr(line,false);
+      f_close(&fil);
+      //return (int)fr;
+      strcpy(line1, fallback);
+      return 0;
+    }
+
+    /* Read if open */
+    line1[0]=0;
+    f_getsline(line1, TMP_STR_LENGTH, &fil);
+    f_close(&fil);
     return 0;
   }
 
 
 
-int16_t append_line_to_csv_file(char *inputstring){
+//#####################################################################################
+//#####################################################################################
+
+
+
+int16_t export_append_line(char *inputstring){
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
@@ -408,26 +488,173 @@ char line[100];               /* Line buffer */
 
 
 
-
+//**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t append_xy_to_csv_file(double x, double y){
+int16_t import_string_from_filename(char *line1,  char *filename, char *fallback) {
+
+  FILE *infile;
+  char dirfile[40];
+  char onechar[2];
+
+  strcpy(dirfile,"PROGRAMS/");
+  strcat(dirfile,filename);
+  strcat(dirfile,".TXT");
+  
+  infile = fopen(dirfile, "rb");
+  if (infile == NULL) {
+    printf("Cannot load %s\n",dirfile);
+    strcpy(line1, fallback);
+    return 0;
+  }
+
+  tmpStr3000[0]=0;
+  onechar[1]=0;
+  while(fread(&onechar,1,1,infile)) {
+  	strcat(tmpStr3000,onechar);
+  }
+  fclose(infile);
+  printf("Loaded >>> %s |%s|\n",dirfile,tmpStr3000);
+
+  strcpy(line1,tmpStr3000);
+
+return 0;
+}
+
+
+
+
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+
+  FILE *outfile;
+  char dirfile[40];
+  uint16_t fr = 0;
   char line[100];               /* Line buffer */
-  sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
-  append_line_to_csv_file(line);
+
+  strcpy(dirfile,"PROGRAMS/C43_LOG.TXT");
+
+  outfile = fopen(dirfile, "ab");
+  if (outfile == NULL) {
+    printf("export_string_to_file: Cannot open to append: %s %s\n",dirfile,line1);
+    return 1;
+  }
+
+  sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
+  fr = fputs(tmpStr3000, outfile);
+  //printf(">>> %d\n",fr);
+  if (fr == 0) {
+    sprintf(line,"export_string_to_file: Write error--> %d    \n",fr);            
+    //print_linestr(line,false);
+    printf(line1);
+    fclose(outfile);
+    return (int)fr;
+  } else {
+    printf("Exported to %s: %s\n",dirfile,line1);
+    fclose(outfile);
+  }
+  return 0;  
+}
+
+
+
+int16_t export_append_line(char *inputstring){
+  printf("export_append_line not implemented in sim: %s\n",inputstring);
   return 0;
 }
 
-int16_t append_line_to_csv_file(char *inputstring){
-  printf("%s\n",inputstring);
+
+int16_t export_xy_to_file(double x, double y){
+  char line[100];               /* Line buffer */
+  sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+  export_append_line(line);
   return 0;
 }
+
 
 #endif
 
 
 
 //################################################################################################
+
+void displaywords(char *line1) {  //Preprocessor and display
+  char ll[50];
+  char bb[2];
+  char aa[2];
+  bool_t state_comments=false;
+  aa[1]=0;
+  bb[1]=0;
+  bb[0]=0;
+  print_linestr("Code:",true);
+  //printf("4:%s\n",line1);
+
+  tmpStr3000[0]=32;tmpStr3000[1]=0;
+  ll[0]=0;
+  int16_t ix = 0;
+  while (line1[ix] != 0) {
+    aa[0]=line1[ix];
+    bb[0]=line1[ix+1];
+
+    if ((aa[0]==47 && bb[0]==47)) {         //start and stop comment mode on double slash
+      state_comments=!state_comments;
+      ix++; //skip the second slash
+    } 
+    else 
+    if (state_comments && (aa[0]==13 || aa[0]==10))  {    //stop comment mode at end of line
+      state_comments=false;
+      strcat(tmpStr3000," ");
+    } 
+    else
+      if(!state_comments) {                //proceed only if not comment mode
+        switch(aa[0]) {
+          case 32:                         //remove all whitespace
+          case 8:
+          case 13:
+          case 10:
+          case 44: if(strlen(tmpStr3000)!=0) {
+                     if(tmpStr3000[strlen(tmpStr3000)-1] != 32) {
+                       strcat(tmpStr3000," ");
+                     }
+                   }
+                   break;
+          default: strcat(tmpStr3000,aa);
+        }    
+      }
+
+    ix++;
+  }
+  //printf("5:%s\n",line1);
+
+  aa[0]=0; aa[1]=0;                  //remove consequtive spaces
+  ll[0]=0;
+  ix = 1;
+  line1[0]=0;
+  while (tmpStr3000[ix] != 0) {
+    aa[0]=tmpStr3000[ix];    
+    if (tmpStr3000[ix-1] != 32) {
+      strcat(line1,aa);
+      strcat(ll,aa);
+      if(strlen(ll)>30 && aa[0] == 32) {print_linestr(ll,false);ll[0]=0;}
+    } else {
+      if(aa[0] != 32) {
+      strcat(line1,aa);
+      strcat(ll,aa);          
+      if(strlen(ll)>36) {print_linestr(ll,false);ll[0]=0;}
+      }
+    }
+    ix++;
+  }
+  if(ll[0]!=0) {print_linestr(ll,false);}
+//printf("6:%s\n",line1);
+
+
+}
+
+
+
+
+
 
 int16_t line_x,line_y;
 

@@ -2019,8 +2019,26 @@
 #define ITM_USER_WP43S                1976   //V43
 #define ITM_USER_DM42                 1977   //V43
 #define MNU_ASN_U                     1978   //V43
+#define ITM_X_P1                      1979   //JM EXEC
+#define ITM_X_P2                      1980   //JM EXEC
+#define ITM_X_P3                      1981   //JM EXEC
+#define ITM_X_P4                      1982   //JM EXEC
+#define ITM_X_P5                      1983   //JM EXEC
+#define ITM_X_P6                      1984   //JM EXEC
+#define ITM_X_f1                      1985   //JM EXEC
+#define ITM_X_f2                      1986   //JM EXEC
+#define ITM_X_f3                      1987   //JM EXEC
+#define ITM_X_f4                      1988   //JM EXEC
+#define ITM_X_f5                      1989   //JM EXEC
+#define ITM_X_f6                      1990   //JM EXEC
+#define ITM_X_g1                      1991   //JM EXEC
+#define ITM_X_g2                      1992   //JM EXEC
+#define ITM_X_g3                      1993   //JM EXEC
+#define ITM_X_g4                      1994   //JM EXEC
+#define ITM_X_g5                      1995   //JM EXEC
+#define ITM_X_g6                      1996   //JM EXEC
 
-#define LAST_ITEM                     1979   //JM
+#define LAST_ITEM                     1997   //JM
 
 #define CHR_PROD_SIGN                 9999
 

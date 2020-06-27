@@ -21,32 +21,448 @@
 /* ADDITIONAL C43 functions and routines */
 
 
+
 #include "wp43s.h"
 
+void capture_sequence(char *origin, uint16_t item) {
+   char line1[TMP_STR_LENGTH];
+   char ll[20];
+   uint16_t ix;
+#ifdef PC_BUILD
+   //printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
+#endif
 
+    ll[0]=0; ll[1]=0;
+    switch (item) {
+      case  684: strcpy(ll,"X<>Y"); break;
+      case  698: strcpy(ll,"Y^X" ); break;
+      case  784: strcpy(ll,"/"   ); break;
+      case  890: ll[0]=48; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  891: ll[0]=49; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  892: ll[0]=50; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  893: ll[0]=51; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  894: ll[0]=52; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  895: ll[0]=53; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  896: ll[0]=54; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  897: ll[0]=55; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  898: ll[0]=56; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  899: ll[0]=57; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case 1310: ll[0]=46; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
+      case 1487: ll[0]=69; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
+      default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);
+               }  
+    }
+    ix = 0;
+    while (ll[ix] != 0) {
+      if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
+      ix++;
+    }
+    sprintf(line1, " %4d //%10s//\n",item,ll);
+
+    #ifndef TESTSUITE_BUILD
+    export_string_to_file(line1);
+    #endif
+}
+
+
+//############################ SEND KEY TO 43S ENGINE ####################
+void runkey(uint16_t item){
+  #ifndef TESTSUITE_BUILD
+    //printf("§%d§ ",item);
+    processKeyAction(item);
+    if (!keyActionProcessed){
+      hideFunctionName();
+      runFunction(item);
+      refreshStack();
+      #ifdef DMCP_BUILD
+        lcd_forced_refresh(); // Just redraw from LCD buffer    
+      #endif
+    } 
+  #endif
+}
+
+//############################ DECODE NUMBERS AND THEN SEND KEY TO 43S ENGINE ####################
+void sendkeys(const char aa[]) {
+  int16_t ix = 0;
+  while (aa[ix]!=0) {
+    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else //A..Z
+    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else //0..9
+    switch (aa[ix]) {
+      case 46: runkey(1310); break; //.
+      case 69: runkey(1487); break; //E
+      case 101: runkey(1487); break; //e
+      case 45: runkey(780); break; //-
+      case 43: runkey(778); break; //+
+      case 32: runkey(1295); break; //space
+      default:;
+    }
+  ix++;
+  }
+}
+
+
+
+
+
+bool_t strcompare( char *in1, char *in2) {
+  if (stringByteLength(in1) == stringByteLength(in2)) {
+    int16_t i = 0;
+    bool_t areEqual = true;
+    while (areEqual && in1[i] != 0) {
+      if(in1[i] != in2[i]) {areEqual = false; return false;}
+      i++;
+    }
+    return areEqual;
+  } else return false;
+}
+
+// COMMAND name or number: command to be located in between any of CR, LF, comma, space, tab, i.e. X<>Y, PRIME?, ...
+// COMMENT: comment to be located in between / and /, i.e. /Comment/
+// NUMBER to be located in between quotes: "123.123" or STO "00"
+// Example: "200" EXIT PRIME?
+// Ignores all other ASCII control and white space.
+
+void execute_string(const char *inputstring, bool_t exec1) {
+      uint16_t ix, ix_m;
+      uint16_t ix_m1 = 0;
+      uint16_t ix_m2 = 0;
+      uint16_t ix_m3 = 0;
+      uint16_t ix_m4 = 0;
+      uint16_t no;
+      char     commandnumber[20];
+      char     aa[2], bb[2];
+      bool_t   state_comments, state_commands, state_quotes;
+      uint16_t xeqlblinprogress;
+      uint16_t gotoinprogress;
+      bool_t gotlabels = false;
+      bool_t exec = false;
+      bool_t go;
+
+    while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
+      printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+      xeqlblinprogress = 0;
+      gotoinprogress   = 0;
+      go = false;
+      ix = 0;
+      ix_m = 0;
+      no = 0;
+      state_comments = false;
+      state_commands = false;
+      state_quotes = false;
+      commandnumber[0]=0;
+      aa[0]=0;
+      while (inputstring[ix]!=0) {
+        strcpy(bb,aa);
+        aa[0] = inputstring[ix];
+        aa[1] = 0;
+
+        switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
+          case 32:
+          case 8 :
+          case 13:
+          case 10:
+          case 44:
+          case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
+                    (      (aa[0]==42 // *
+                        ||  aa[0]==43 // +
+                        ||  aa[0]==45 // -
+                        ||  aa[0]==47 // /
+                        ||  aa[0]==126) //~
+                        || (aa[0]>=48 && aa[0]<=57) //0-9
+                        || (aa[0]>=65 && aa[0]<=90)  ) //A-Z
+                    && !state_comments                 //If not inside comments
+                    && !state_quotes                   //if not inside quotes
+                    && !state_commands                 //Don't re-check until done
+                    ) {
+                        state_commands = true;         // Waiting to open command number or name: nnn
+                      }
+          default:;
+        }
+        
+        if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
+        switch(aa[0]) {
+          case 47: if(bb[0] == 47) {
+                      state_comments = !state_comments;        // Toggle comment state
+                      state_commands = false;
+                      state_quotes   = false;
+                      commandnumber[0]=0;
+                    }
+          	         break;
+          case 34: if(!state_comments && !state_commands) {   // Toggle quote state
+          	           state_quotes   = !state_quotes;
+          	         }
+          	         break;
+
+          case 13: //cr
+          case 10: //lf
+          case 8 : //tab
+          case 44: //,
+          case 32: if(state_commands){
+                      state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
+                      //printf("&%s&",commandnumber);
+                      
+                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {                   //It is now the command that may or may not be skipped
+                          go = (temporaryInformation == TI_FALSE); //As per GTO_SZ
+                          gotoinprogress = 1;                      //As per GTO_SZ
+                          commandnumber[0]=0;                      //As per GTO_SZ
+                      } else //NOT gotoinprogress == 11
+
+                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
+                      if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
+                      if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
+                      if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
+                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
+                      if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
+                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber,  "83");} else
+                      if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
+                      if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
+                      if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
+                      if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
+                      if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
+                      if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
+                      if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
+                      if (strcompare(commandnumber,"SUM+"  )) {strcpy(commandnumber, "762");} else
+                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
+                      if (strcompare(commandnumber,"PLOT"  )) {strcpy(commandnumber, "455");} else
+                      if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
+                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
+                      if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
+                      if (strcompare(commandnumber,"SNAP"  )) {strcpy(commandnumber,   "5");} else
+
+                      if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+                      if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
+                      if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else
+                      if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else
+
+                      if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "115"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "252"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
+                      if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; }                                   //EXPECTING 2 OPERANDS nn XXXXXX
+
+                      if (strcompare(commandnumber,"GTO"   ))    {
+                        if(exec) {
+                          gotoinprogress = 1;
+                          /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
+                          else                   */  {go = true;}
+                        }
+                      } else
+                      if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else
+                      if (strcompare(commandnumber,"RTN"   ))    {if(exec) {ix = ix_m; ix_m = 0;}}                      else
+                      if (strcompare(commandnumber,"GTO_SZ"))    {if(exec) {go = (temporaryInformation == TI_FALSE); gotoinprogress = 1; }}
+
+                      if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;}
+                      if (strcompare(commandnumber,"RETURN"))    if(exec) {ix = stringByteLength(inputstring)-2;} 
+                      
+                      switch(gotoinprogress) {
+                        case 1:                  //GOTO IN PROGRESS: got command GOTO
+                          gotoinprogress = 2;
+                          commandnumber[0]=0;
+                        break;
+                        case 2:                  //GOTO IN PROGRESS: get softkeynumber 01 - 04
+                          if(strcompare(commandnumber,"M1") && exec && go && (ix_m1 !=0)) ix = ix_m1; else
+                          if(strcompare(commandnumber,"M2") && exec && go && (ix_m2 !=0)) ix = ix_m2; else 
+                          if(strcompare(commandnumber,"M3") && exec && go && (ix_m3 !=0)) ix = ix_m3; else
+                          if(strcompare(commandnumber,"M4") && exec && go && (ix_m4 !=0)) ix = ix_m4;
+                          gotoinprogress = 0;
+                          commandnumber[0]=0;   //Processed
+                          go = false;
+                        break;
+
+                        case 13:                  //GOTO IN PROGRESS: eat one word
+                          gotoinprogress = 0;
+                          commandnumber[0]=0;
+                        break;
+
+
+                        default:;
+                      }
+
+
+
+                      switch(xeqlblinprogress) {
+                        case 1:                  //XEQMLABEL IN PROGRESS: got command XEQLBL
+                          xeqlblinprogress = 2;
+                          commandnumber[0]=0;
+                        break;
+                        case 2:                  //XEQMLABEL IN PROGRESS: get softkeynumber 01 - 18
+                          no = atoi(commandnumber);
+                          if(no>=1 && no <=18) {
+                            xeqlblinprogress = 3;
+                            commandnumber[0]=0;   //Processed
+                          } 
+                          else {
+                            xeqlblinprogress = 0;
+                            commandnumber[0]=0;   //Processed
+                          }
+                        break;
+                        case 3:                  //XEQMLABEL IN PROGRESS: get label
+                          if (no>=1 && no<=18) {
+                            strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
+                            xeqlblinprogress = 0;
+                            commandnumber[0]=0;   //Processed
+                            #ifndef TESTSUITE_BUILD
+                            showSoftmenuCurrentPart();
+                            #endif
+                          }
+                        break;
+
+
+
+
+                        case 10:                  //LABEL IN PROGRESS: got command XEQLBL
+                          xeqlblinprogress = 11;
+                          commandnumber[0]=0;
+                        break;
+                        case 11:                  //LABEL IN PROGRESS: get label M1-M4
+                          printf("LABEL %s\n",commandnumber);
+                          if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
+                          if(strcompare(commandnumber,"M2")) ix_m2 = ix; else
+                          if(strcompare(commandnumber,"M3")) ix_m3 = ix; else
+                          if(strcompare(commandnumber,"M4")) ix_m4 = ix;
+                          xeqlblinprogress = 0;
+                          commandnumber[0]=0;   //Processed
+                        break;
+
+                        default:                 //NOT IN PROGRESS
+                          no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
+                          //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
+                          if(no > LAST_ITEM-1) {no = 0;}
+                          if(no!=0 && exec) {
+                            if(exec) runkey(no); 
+                            //printf(">>> %d\n",temporaryInformation);
+                            if(gotoinprogress==10) {gotoinprogress = 11;}
+                          } 
+                          else {
+                            //printf("Skip execution |%s|",commandnumber);
+                          }
+                          commandnumber[0]=0;   //Processed
+                        break;
+                      }
+                    }
+                    break;
+          default:;           //ignore all other characters
+        }
+        if(state_quotes) {
+          if (exec) sendkeys(aa); //else printf("Skip sending |%s|",aa);
+        } 
+        else { 
+          if(state_commands && stringByteLength(commandnumber) < 20-1) {
+            strcat(commandnumber,aa);
+          }   // accumulate string
+        }
+        ix++;
+      }
+
+      gotlabels = true;                              //allow to run only once, unless
+      if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
+    }
+}
+
+
+
+//Fixed test program, dispatching commands
+void testprogram2(uint16_t unusedParamButMandatory){
+
+    runkey(ITM_TICKS); //622
+    runkey(684);       //X<>Y
+    sendkeys("2"); runkey(KEY_EXIT1); //EXIT
+    runkey(684);   //X<>Y
+    runkey(698);   //Y^X
+    sendkeys("1"); runkey(KEY_EXIT1); //EXIT
+    runkey(780);   //-
+    runkey(589);   sendkeys("00"); //STO 00
+    runkey(469);   //PRIME?
+    runkey(684);   //X<>Y
+    runkey(ITM_TICKS);
+    runkey(684);   //X<>Y
+    runkey(ITM_SUB);
+}
+
+
+
+
+//Fixed test program, dispatching commands from text string
+void testprogram_mem(uint16_t unusedParamButMandatory){
+char line1[TMP_STR_LENGTH];
+   strcpy(line1,
+ //   "BTN P1 TPRIME //TESTPRIME PROGRAM//"
 /*
-void fnAngularMode(uint16_t am) {
-  currentAngularMode = am;
+    "TICKS "
+    "SWAP "
+    "\"2\" EXIT "
+    "684 "         //SWAP  "
+    "Y^X "
+    "\"1\" 1523  " //EXIT
+    "-   "
+    "STO \"00\"  "
+    "PRIME?      "
+    "X<>Y        "
+    "622  "        //TICKS
+    "X<>Y "
+    "780  "        //-
 
-  showAngularMode();
-  refreshStack();
-}
-
-void fnComplexUnit(uint16_t cu) {
-  complexUnit = cu;
-  refreshStack();
-}
-
-void fnComplexResult(uint16_t complexResult) {
-  complexResult ? fnSetFlag(FLAG_CPXRES) : fnClearFlag(FLAG_CPXRES);
-}
-
-void fnComplexMode(uint16_t cm) {
-  complexMode = cm;
-  showComplexMode();
-  refreshStack();
-}
+    "RCL \"00\"  "
+    "MARK4 "
+    "\"1\" EXIT + "
+    "PRIME?       "
+    "GTO_M4_IF_0  "
 */
+    "TICKS //RPN Program to demostrate PRIME// "
+    "\"2\" EXIT "
+    "\"2203\" "
+    "Y^X "
+    "\"1\" - "
+    "PRIME?  "
+    "X<>Y "
+    "TICKS "
+    "X<>Y - "
+    "\"10.0\" / "    
+    "RETURN "
+    "ABCDEFGHIJKLMNOPQ!@#$%^&*()\n"
+    );
+    displaywords(line1);
+    execute_string(line1,true);
+}
+
+
+
+void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
+#ifndef TESTSUITE_BUILD
+  switch(selection) {
+    case  1:import_string_from_filename(line1,"XEQM01","XEQLBL 01 ~3^-4 \"3\" ENTER \"4\" CHS Y^X "                                                 ); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"XEQM02","XEQLBL 02 ~1/81 \"1\" ENTER \"81\" /   "                                                    ); displaywords(line1); execute_string(line1,exec); break;
+    case  3:import_string_from_filename(line1,"XEQM03","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  4:import_string_from_filename(line1,"XEQM04","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  5:import_string_from_filename(line1,"XEQM05","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  6:import_string_from_filename(line1,"XEQM06","XEQLBL 06 ~CUBE3 \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
+    case  7:import_string_from_filename(line1,"XEQM07","XEQLBL 07 ~LOOP TICKS STO \"01\" \"50\" 10^X \"4\" EXIT STO \"00\"  DROP LBL M1 NPRIME ENTER DEC \"00\" GTO_SZ M1 DROP TICKS RCL \"01\" - \"10\" / ALPHA \"SECONDS FOR FOUR PRIMES\" EXIT EXIT "); displaywords(line1); execute_string(line1,exec); break;
+    case  8:import_string_from_filename(line1,"XEQM08","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
+    case  9:import_string_from_filename(line1,"XEQM09","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
+    case 10:import_string_from_filename(line1,"XEQM10","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
+    case 11:import_string_from_filename(line1,"XEQM11","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
+    case 12:import_string_from_filename(line1,"XEQM12","XEQLBL 12 ~CUBE42 \"80538738812075974\" CHS EXIT \"80435758145817515\" EXIT \"12602123297335631\" EXIT  "); displaywords(line1); execute_string(line1,exec); break;
+    case 13:import_string_from_filename(line1,"XEQM13","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
+    case 14:import_string_from_filename(line1,"XEQM14","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
+    case 15:import_string_from_filename(line1,"XEQM15","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
+    case 16:import_string_from_filename(line1,"XEQM16","XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
+    case 17:import_string_from_filename(line1,"XEQM17","XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
+    case 18:import_string_from_filename(line1,"XEQM18","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
+    default:;
+  }
+#endif
+}
+
+
+void fnXEQMENU(uint16_t unusedParamButMandatory) {
+  #ifndef TESTSUITE_BUILD
+  char line1[TMP_STR_LENGTH];
+  XEQMENU_Selection( unusedParamButMandatory, line1, true);
+  temporaryInformation = CM_BUG_ON_SCREEN;
+  #endif
+}
+
+
 
 
 void reset_jm_defaults(void) {
@@ -84,7 +500,46 @@ void reset_jm_defaults(void) {
     jm_LARGELI=true;
     setSystemFlag(FLAG_SPCRES)                                 //JM default infinity etc.
     //JM defaults ^^
+
+
+    fnXEQMENUpos = 0;
+    while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {
+       fnXEQMENUpos++;
+    }
+
+    uint16_t ix;
+    ix = 0;
+    while(ix<18) {
+      indexOfItemsXEQM[+12*ix]=0;
+      strcpy(indexOfItemsXEQM +12*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
+      ix++;    
+    }
+
+    #ifndef TESTSUITE_BUILD
+      char line1[TMP_STR_LENGTH];
+      XEQMENU_Selection( 1, line1, false);
+      XEQMENU_Selection( 2, line1, false);
+      XEQMENU_Selection( 3, line1, false);
+      XEQMENU_Selection( 4, line1, false);
+      XEQMENU_Selection( 5, line1, false);
+      XEQMENU_Selection( 6, line1, false);
+      XEQMENU_Selection( 7, line1, false);
+      XEQMENU_Selection( 8, line1, false);
+      XEQMENU_Selection( 9, line1, false);
+      XEQMENU_Selection(10, line1, false);
+      XEQMENU_Selection(11, line1, false);
+      XEQMENU_Selection(12, line1, false);
+      XEQMENU_Selection(13, line1, false);
+      XEQMENU_Selection(14, line1, false);
+      XEQMENU_Selection(15, line1, false);
+      XEQMENU_Selection(16, line1, false);
+      XEQMENU_Selection(17, line1, false);
+      XEQMENU_Selection(18, line1, false);
+      clearScreen(false, true, true);
+    #endif
 }
+
+    int16_t fnXEQMENUpos = 0;
 
 
 

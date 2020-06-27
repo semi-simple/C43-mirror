@@ -29,6 +29,7 @@ ifeq ($(detected_OS),Windows)
 else ifeq ($(detected_OS),Darwin)        # Mac OS X
 	CFLAGS += -D OSX
 	CFLAGS += -I/usr/local/include/
+#	CFLAGS += -g -O0 -v
 	LDFLAGS += -L/usr/local/lib
 else ifeq ($(detected_OS),Linux)
 	CFLAGS += -D LINUX

@@ -24,7 +24,6 @@ void fnChangeBase(uint16_t base) {
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     if(2 <= base && base <= 16) {
       setRegisterTag(REGISTER_X, base);
-      refreshStack();
     }
     else {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);
@@ -39,7 +38,6 @@ void fnChangeBase(uint16_t base) {
     if(2 <= base && base <= 16) {
       convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
       setRegisterShortIntegerBase(REGISTER_X, base);
-      refreshStack();
     }
     else {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);
@@ -690,10 +688,10 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
     return 0;
   }
 
-  if(exponentSign) {
-    setSystemFlag(FLAG_CARRY);
-    return 0;
-  }
+  //if(exponentSign) { when WP34S_intPower is called, exponent cannot be negative
+  //  setSystemFlag(FLAG_CARRY);
+  //  return 0;
+  //}
 
   powerSign = (baseSign && (exponent & 1))?1:0; // Determine the sign of the result
   return WP34S_build_value(WP34S_int_power_helper(base, exponent, 0), powerSign);

@@ -50,10 +50,6 @@ void fnConstant(const uint16_t cnst) {
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-
-  refreshRegisterLine(REGISTER_Y);
-  refreshRegisterLine(REGISTER_Z);
-  refreshRegisterLine(REGISTER_T);
 }
 
 
@@ -71,8 +67,4 @@ void fnPi(uint16_t unusedParamButMandatory) {
 
   realToReal34(const_pi, REGISTER_REAL34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-
-  refreshRegisterLine(REGISTER_Y);
-  refreshRegisterLine(REGISTER_Z);
-  refreshRegisterLine(REGISTER_T);
 }

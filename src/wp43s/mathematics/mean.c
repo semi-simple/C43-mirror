@@ -40,7 +40,7 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
     saveStack();
 
     liftStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
 
     realDivide(sumX, numberX, &tempReal1, &ctxtReal39);
@@ -57,7 +57,6 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
     realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = displayInfo;
-    refreshStack();
   }
 }
 
@@ -146,12 +145,11 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
     saveStack();
 
     liftStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
 
     realDivide(SIGMA_XY, SIGMA_Y, &mean, &ctxtReal39);
     realToReal34(&mean, REGISTER_REAL34_DATA(REGISTER_X));
 
     temporaryInformation = TI_WEIGHTEDMEANX;
-    refreshStack();
   }
 }

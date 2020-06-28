@@ -22,21 +22,7 @@
 
 void systemFlagAction(uint16_t systemFlag, uint16_t action) {
   switch(systemFlag) {
-    case FLAG_YMD:
-    case FLAG_DMY:
-    case FLAG_MDY:
-    case FLAG_TDM24:    oldTime[0] = 0;
-                        break;
-
-    case FLAG_ALLENG:
-    case FLAG_DECIMP:
-    case FLAG_MULTx:
-    case FLAG_PROPFR:
-    case FLAG_CPXj:     refreshStack();
-                        break;
-
-    case FLAG_LEAD0:    refreshStack();
-                        switch(action) {
+    case FLAG_LEAD0:    switch(action) {
                           case 0: globalFlags[108/16] &= ~(1u << (108%16));
                                   break;
                           case 1: globalFlags[108/16] |=   1u << (108%16);
@@ -47,9 +33,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
-    case FLAG_POLAR:    showComplexMode();
-                        refreshStack();
-                        switch(action) {
+    case FLAG_POLAR:    switch(action) {
                           case 0: globalFlags[100/16] &= ~(1u << (100%16));
                                   break;
                           case 1: globalFlags[100/16] |=   1u << (100%16);
@@ -60,8 +44,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
-    case FLAG_CPXRES:   showRealComplexResult();
-                        switch(action) {
+    case FLAG_CPXRES:   switch(action) {
                           case 0: globalFlags[109/16] &= ~(1u << (109%16));
                                   break;
                           case 1: globalFlags[109/16] |=   1u << (109%16);
@@ -94,14 +77,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
-    case FLAG_FRACT:
-    case FLAG_DENANY:
-    case FLAG_DENFIX:   showFracMode();
-                        refreshStack();
-                        break;
-
-    case FLAG_CARRY:    showOverflowCarry();
-                        switch(action) {
+    case FLAG_CARRY:    switch(action) {
                           case 0: globalFlags[106/16] &= ~(1u << (106%16));
                                   break;
                           case 1: globalFlags[106/16] |=   1u << (106%16);
@@ -112,8 +88,7 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
-    case FLAG_OVERFLOW: showOverflowCarry();
-                        switch(action) {
+    case FLAG_OVERFLOW: switch(action) {
                           case 0: globalFlags[105/16] &= ~(1u << (105%16));
                                   break;
                           case 1: globalFlags[105/16] |=   1u << (105%16);
@@ -122,12 +97,6 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                                   break;
                           default: {}
                         }
-                        break;
-
-    case FLAG_USER:     showHideUserMode();
-                        break;
-
-    case FLAG_LOWBAT:   showHideLowBattery();
                         break;
 
     default: {}
@@ -182,9 +151,6 @@ void fnGetSystemFlag(uint16_t systemFlag) {
   else {
     temporaryInformation = TI_FALSE;
   }
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(REGISTER_X);
  }
 
 
@@ -239,8 +205,6 @@ void fnSetFlag(uint16_t flag) {
     }
     #endif
   }
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
 }
 
 
@@ -295,8 +259,6 @@ void fnClearFlag(uint16_t flag) {
     }
    #endif
   }
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
 }
 
 
@@ -351,8 +313,6 @@ void fnFlipFlag(uint16_t flag) {
     }
     #endif
   }
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
 }
 
 
@@ -382,9 +342,6 @@ void fnClFAll(uint16_t unusedParamButMandatory) {
 
 void fnIsFlagClear(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_FALSE : TI_TRUE);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -392,9 +349,6 @@ void fnIsFlagClear(uint16_t flag) {
 void fnIsFlagClearClear(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_FALSE : TI_TRUE);
   fnClearFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -402,9 +356,6 @@ void fnIsFlagClearClear(uint16_t flag) {
 void fnIsFlagClearSet(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_FALSE : TI_TRUE);
   fnSetFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -412,18 +363,12 @@ void fnIsFlagClearSet(uint16_t flag) {
 void fnIsFlagClearFlip(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_FALSE : TI_TRUE);
   fnFlipFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
 
 void fnIsFlagSet(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_TRUE : TI_FALSE);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -432,9 +377,6 @@ void fnIsFlagSet(uint16_t flag) {
 void fnIsFlagSetClear(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_TRUE : TI_FALSE);
   fnClearFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -443,9 +385,6 @@ void fnIsFlagSetClear(uint16_t flag) {
 void fnIsFlagSetSet(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_TRUE : TI_FALSE);
   fnSetFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }
 
 
@@ -454,7 +393,4 @@ void fnIsFlagSetSet(uint16_t flag) {
 void fnIsFlagSetFlip(uint16_t flag) {
   temporaryInformation = (getFlag(flag) ? TI_TRUE : TI_FALSE);
   fnFlipFlag(flag);
-
-  refreshRegisterLine(TAM_REGISTER_LINE);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
 }

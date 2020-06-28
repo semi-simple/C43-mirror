@@ -59,12 +59,8 @@ void fnFp(uint16_t unusedParamButMandatory) {
 
   fp[getRegisterDataType(REGISTER_X)]();
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
+  if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
   }
 }
 

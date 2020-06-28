@@ -59,12 +59,8 @@ void fnIp(uint16_t unusedParamButMandatory) {
 
   ip[getRegisterDataType(REGISTER_X)]();
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
+  if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
   }
 }
 

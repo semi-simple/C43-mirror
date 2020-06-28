@@ -41,7 +41,6 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
       showInfoDialog("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -85,7 +84,6 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnCvtCToF:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -124,7 +122,6 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnCvtFToC:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -384,7 +381,6 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -424,7 +420,6 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 

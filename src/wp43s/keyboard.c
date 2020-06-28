@@ -21,62 +21,6 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-/********************************************//**
- * \brief Displays the f or g shift state in the
- * upper left corner of the T register line
- *
- * \param void
- * \return void
- ***********************************************/
-void showShiftState(void) {
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-    if(shiftStateChanged) {
-      if(shiftF) {
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-      }
-      else if(shiftG) {
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-      }
-      else {
-        refreshRegisterLine(REGISTER_T);
-
-        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
-          showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-        }
-      }
-
-      shiftStateChanged = false;
-    }
-  }
-}
-
-
-
-
-/********************************************//**
- * \brief Resets shift keys status and clears the
- * corresponding area on the screen
- *
- * \param void
- * \return void
- *
- ***********************************************/
-void resetShiftState(void) {
-  if(shiftF) {
-    shiftF = false;
-    shiftStateChanged = true;
-  }
-
-  if(shiftG) {
-    shiftG = false;
-    shiftStateChanged = true;
-  }
-
-  showShiftState();
-}
-
-
-
 int16_t determineFunctionKeyItem(const char *data) {
   int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
@@ -146,24 +90,26 @@ void btnFnPressed(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnPressed(void *notUsed, void *data) {
 #endif
-  int16_t item = determineFunctionKeyItem((char *)data);
-  
-  if(item != ITM_NOP && item != ITM_NULL) {
-    resetShiftState();
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+    int16_t item = determineFunctionKeyItem((char *)data);
 
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-      refreshStack();
+    if(item != ITM_NOP && item != ITM_NULL) {
+      shiftF = false;
+      shiftG = false;
+
+      if(lastErrorCode != 0) {
+        lastErrorCode = 0;
+      }
+
+      #if(FN_KEY_TIMEOUT_TO_NOP == 1)
+      showFunctionName(item, 10);
+      #else
+      showFunctionNameItem = item;
+      #endif
     }
-
-    #if(FN_KEY_TIMEOUT_TO_NOP == 1)
-    showFunctionName(item, 10);
-    #else
-    showFunctionNameItem = item;
-    #endif
-  }
-  else {
-    showFunctionNameItem = ITM_NOP;
+    else {
+      showFunctionNameItem = ITM_NOP;
+    }
   }
 }
 
@@ -182,64 +128,67 @@ void btnFnReleased(GtkWidget *notUsed, gpointer data) {
 #ifdef DMCP_BUILD
 void btnFnReleased(void *notUsed, void *data) {
 #endif
-  if(showFunctionNameItem != 0) {
-    int16_t item = showFunctionNameItem;
-    #if(FN_KEY_TIMEOUT_TO_NOP == 1)
-    hideFunctionName();
-    #endif
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+    if(showFunctionNameItem != 0) {
+      int16_t item = showFunctionNameItem;
+      #if(FN_KEY_TIMEOUT_TO_NOP == 1)
+      hideFunctionName();
+      #endif
 
-    if(calcMode != CM_CONFIRMATION) {
-      allowScreenUpdate = true;
+      if(calcMode != CM_CONFIRMATION) {
+        allowScreenUpdate = true;
 
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-        refreshStack();
-      }
-
-      if(softmenuStackPointer > 0) {
-        if(calcMode == CM_ASM) {
-          calcModeNormal();
-        }
-        else if(calcMode == CM_ASM_OVER_TAM) {
-          indexOfItems[getOperation()].func(indexOfItems[item].param);
-          calcModeNormal();
-          return;
-        }
-        else if(calcMode == CM_ASM_OVER_AIM) {
-          calcMode = CM_AIM;
-          addItemToBuffer(item);
-          calcMode = CM_ASM_OVER_AIM;
-          return;
+        if(lastErrorCode != 0) {
+          lastErrorCode = 0;
         }
 
-        if(item < 0) { // softmenu
-          if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
-            showSoftmenu(NULL, item, true);
+        if(softmenuStackPointer > 0) {
+          if(calcMode == CM_ASM) {
+            calcModeNormal();
           }
-        }
-        else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
-          addItemToNimBuffer(item);
-        }
-        else if(calcMode == CM_TAM) {
-          addItemToBuffer(item);
-        }
-        else if(item > 0) { // function
-          if(calcMode == CM_NIM && item != KEY_CC) {
-            closeNim();
-            if(calcMode != CM_NIM) {
-              if(indexOfItems[item].func == fnConstant) {
-                STACK_LIFT_ENABLE;
-              }
+          else if(calcMode == CM_ASM_OVER_TAM) {
+            indexOfItems[getOperation()].func(indexOfItems[item].param);
+            calcModeNormal();
+            return;
+          }
+          else if(calcMode == CM_ASM_OVER_AIM) {
+            calcMode = CM_AIM;
+            addItemToBuffer(item);
+            calcMode = CM_ASM_OVER_AIM;
+            return;
+          }
+
+          if(item < 0) { // softmenu
+            if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+              showSoftmenu(NULL, item, true);
             }
           }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+            addItemToNimBuffer(item);
+          }
+          else if(calcMode == CM_TAM) {
+            addItemToBuffer(item);
+          }
+          else if(item > 0) { // function
+            if(calcMode == CM_NIM && item != KEY_CC) {
+              closeNim();
+              if(calcMode != CM_NIM) {
+                if(indexOfItems[item].func == fnConstant) {
+                  setSystemFlag(FLAG_ASLIFT);
+                }
+              }
+            }
 
-          if(lastErrorCode == 0) {
-            resetTemporaryInformation();
-            runFunction(item);
+            if(lastErrorCode == 0) {
+              temporaryInformation = TI_NO_INFO;
+              runFunction(item);
+            }
           }
         }
       }
     }
+
+    refreshScreen();
   }
 }
 
@@ -256,35 +205,25 @@ int16_t determineItem(const char *data) {
 
   // Shift f pressed and shift g not active
   if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
-    resetTemporaryInformation();
+    temporaryInformation = TI_NO_INFO;
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
-      refreshStack();
     }
 
     shiftF = !shiftF;
-    shiftStateChanged = true;
-
-    showShiftState();
-
     return ITM_NOP;
   }
 
   // Shift g pressed and shift f not active
   else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
-    resetTemporaryInformation();
+    temporaryInformation = TI_NO_INFO;
 
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
-      refreshStack();
     }
 
     shiftG = !shiftG;
-    shiftStateChanged = true;
-
-    showShiftState();
-
     return ITM_NOP;
   }
 
@@ -311,7 +250,8 @@ int16_t determineItem(const char *data) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
   }
 
-  resetShiftState();
+  shiftF = false;
+  shiftG = false;
 
   return result;
 }
@@ -386,6 +326,8 @@ void btnReleased(void *notUsed, void *data) {
       runFunction(item);
     }
   }
+
+  refreshScreen();
 }
 
 
@@ -402,10 +344,9 @@ void processKeyAction(int16_t item) {
 
   if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
     lastErrorCode = 0;
-    refreshStack();
   }
 
-  resetTemporaryInformation();
+  temporaryInformation = TI_NO_INFO;
 
   switch(item) {
     case KEY_BACKSPACE:
@@ -505,34 +446,40 @@ void processKeyAction(int16_t item) {
           if(item == CHR_PERIOD) {
             rbr1stDigit = true;
             if(rbrMode == RBR_GLOBAL) {
-              rbrMode = RBR_LOCAL;
-              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+              if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
+                rbrMode = RBR_LOCAL;
+                currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+              }
+              else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                rbrMode = RBR_NAMED;
+                currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+              }
             }
             else if(rbrMode == RBR_LOCAL) {
+              if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                rbrMode = RBR_NAMED;
+                currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+              }
+              else {
+                rbrMode = RBR_GLOBAL;
+                currentRegisterBrowserScreen = REGISTER_X;
+              }
+            }
+            else if(rbrMode == RBR_NAMED) {
               rbrMode = RBR_GLOBAL;
               currentRegisterBrowserScreen = REGISTER_X;
             }
-            else if(rbrMode == RBR_NAMED) {
-              rbrMode = RBR_LOCAL;
-              currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
-            }
-            registerBrowser(NOPARAM);
           }
           else if(item == ITM_RS) {
             rbr1stDigit = true;
             showContent = !showContent;
-            registerBrowser(NOPARAM);
           }
           else if(item == ITM_RCL) {
             rbr1stDigit = true;
             if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
               calcMode = previousCalcMode;
-              oldTime[0] = 0;
-              showDateTime();
-              clearScreen(false, true, true);
               fnRecall(currentRegisterBrowserScreen);
-              STACK_LIFT_ENABLE;
-              refreshStack();
+              setSystemFlag(FLAG_ASLIFT);
             }
             else if(rbrMode == RBR_NAMED) {
             }
@@ -548,12 +495,10 @@ void processKeyAction(int16_t item) {
 
               if(rbrMode == RBR_GLOBAL) {
                 currentRegisterBrowserScreen = rbrRegister;
-                registerBrowser(NOPARAM);
               }
               else {
                 rbrRegister = (rbrRegister >= allLocalRegisterPointer->numberOfLocalRegisters ? 0 : rbrRegister);
                 currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
-                registerBrowser(NOPARAM);
               }
             }
           }
@@ -573,13 +518,11 @@ void processKeyAction(int16_t item) {
             calcMode = previousCalcMode;
             temporaryInformation = TI_NO_INFO;
             confirmedFunction(CONFIRMED);
-            refreshStack();
           }
 
           else if(item == CHR_7) { // No
             calcMode = previousCalcMode;
             temporaryInformation = TI_NO_INFO;
-            refreshStack();
           }
 
           keyActionProcessed = true;
@@ -605,13 +548,12 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   switch(calcMode) {
     case CM_NORMAL:
-      STACK_LIFT_ENABLE;
+      setSystemFlag(FLAG_ASLIFT);
 
       liftStack();
       copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-      refreshStack();
 
-      STACK_LIFT_DISABLE;
+      clearSystemFlag(FLAG_ASLIFT);
       break;
 
     case CM_AIM:
@@ -630,27 +572,23 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
         xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
 
-        STACK_LIFT_ENABLE;
+        setSystemFlag(FLAG_ASLIFT);
         liftStack();
-        STACK_LIFT_DISABLE;
+        clearSystemFlag(FLAG_ASLIFT);
 
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         aimBuffer[0] = 0;
       }
-
-      refreshStack();
       break;
 
     case CM_NIM:
       closeNim();
 
-      STACK_LIFT_ENABLE;
+      setSystemFlag(FLAG_ASLIFT);
       liftStack();
-      STACK_LIFT_DISABLE;
+      clearSystemFlag(FLAG_ASLIFT);
 
       copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-
-      refreshStack();
       break;
 
     case CM_TAM:
@@ -669,7 +607,6 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
       confirmedFunction(CONFIRMED);
-      refreshStack();
       break;
 
     default:
@@ -693,7 +630,6 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
     case CM_NORMAL:
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
-        refreshStack();
       }
       else if(softmenuStackPointer > 0) {
         popSoftmenu();
@@ -716,10 +652,8 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
           xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
           aimBuffer[0] = 0;
 
-          STACK_LIFT_ENABLE;
+          setSystemFlag(FLAG_ASLIFT);
         }
-
-        refreshStack();
       }
       else {
        popSoftmenu();
@@ -735,10 +669,6 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_TAM:
-      calcModeNormal();
-      refreshStack();
-      break;
-
     case CM_ASM:
       calcModeNormal();
       break;
@@ -758,31 +688,16 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
-      softmenuStackPointer = softmenuStackPointerBeforeBrowser;
       calcMode = previousCalcMode;
-      clearScreen(false, true, true);
-      refreshStack();
-      showSoftmenuCurrentPart();
-      oldTime[0] = 0;
-      showDateTime();
-      if(calcMode == CM_AIM) {
-        clearRegisterLine(AIM_REGISTER_LINE, true, true);
-        xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-        cursorEnabled = true;
-      }
       break;
 
     case CM_BUG_ON_SCREEN:
       calcMode = previousCalcMode;
-      clearScreen(false, true, true);
-      refreshStack();
-      showSoftmenuCurrentPart();
       break;
 
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
       temporaryInformation = TI_NO_INFO;
-      refreshStack();
       break;
 
     default:
@@ -863,7 +778,6 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
     case CM_NORMAL:
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
-        refreshStack();
       }
       else {
         runFunction(ITM_CLX);
@@ -904,24 +818,15 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
       calcMode = previousCalcMode;
-      clearScreen(false, true, true);
-      refreshStack();
-      showSoftmenuCurrentPart();
-      oldTime[0] = 0;
-      showDateTime();
       break;
 
     case CM_BUG_ON_SCREEN:
       calcMode = previousCalcMode;
-      clearScreen(false, true, true);
-      refreshStack();
-      showSoftmenuCurrentPart();
       break;
 
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
       temporaryInformation = TI_NO_INFO;
-      refreshStack();
       break;
 
     default:
@@ -955,24 +860,19 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
-          showHideAlphaMode();
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
-          showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
-          showHideAlphaMode();
         }
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
-            showSoftmenuCurrentPart();
           }
           else {
             softmenuStack[softmenuStackPointer - 1].firstItem = 0;
-            showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();
@@ -981,7 +881,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       else {
         if(alphaCase != AC_UPPER) {
           alphaCase = AC_UPPER;
-          showHideAlphaMode();
         }
       }
       break;
@@ -994,15 +893,12 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       rbr1stDigit = true;
       if(rbrMode == RBR_GLOBAL) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
-        registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_LOCAL) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
-        registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_NAMED) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 + 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
-        registerBrowser(NOPARAM);
+        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
       }
       else {
         sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
@@ -1012,14 +908,12 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr = 3 - currentFlgScr;
-      flagBrowser(NOPARAM);
      break;
 
     case CM_FONT_BROWSER:
       if(currentFntScr >= 2) {
         currentFntScr--;
       }
-      fontBrowser(NOPARAM);
       break;
 
     default:
@@ -1053,13 +947,10 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
-          showHideAlphaMode();
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
-          showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;
-          showHideAlphaMode();
         }
         else {
           itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
@@ -1073,7 +964,6 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           else {
             softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
           }
-          showSoftmenuCurrentPart();
 
           setCatalogLastPos();
         }
@@ -1081,7 +971,6 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       else {
         if(alphaCase != AC_LOWER) {
           alphaCase = AC_LOWER;
-          showHideAlphaMode();
         }
       }
       break;
@@ -1095,15 +984,12 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       rbr1stDigit = true;
       if(rbrMode == RBR_GLOBAL) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
-        registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_LOCAL) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
-        registerBrowser(NOPARAM);
       }
       else if(rbrMode == RBR_NAMED) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
-        registerBrowser(NOPARAM);
       }
       else {
         sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
@@ -1113,14 +999,12 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr = 3 - currentFlgScr;
-      flagBrowser(NOPARAM);
       break;
 
     case CM_FONT_BROWSER:
       if(currentFntScr < numScreensNumericFont+numScreensStandardFont) {
         currentFntScr++;
       }
-      fontBrowser(NOPARAM);
       break;
 
     default:
@@ -1144,7 +1028,6 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
     case CM_NORMAL:
       if(getSystemFlag(FLAG_FRACT)) {
         clearSystemFlag(FLAG_FRACT);
-        refreshStack();
       }
       else {
         runFunction(ITM_toREAL);

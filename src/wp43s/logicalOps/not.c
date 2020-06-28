@@ -62,10 +62,6 @@ void fnLogicalNot(uint16_t unusedParamButMandatory) {
 
     if(lastErrorCode != 0) {
       restoreStack();
-      refreshStack();
-    }
-    else {
-      refreshRegisterLine(REGISTER_X);
     }
   }
   else {

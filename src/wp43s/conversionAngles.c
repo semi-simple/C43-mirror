@@ -45,7 +45,6 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
           showInfoDialog("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
         #endif
         restoreStack();
-        refreshStack();
         return;
       }
       break;
@@ -57,11 +56,8 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
         showInfoDialog("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 or an angle34", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -89,11 +85,8 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
         showInfoDialog("In function fnCvtFromCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 or an angle34", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -120,7 +113,6 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
           showInfoDialog("In function fnCvtDegToRad:", "cannot use an angle34 not tagged degree as an input of fnCvtDegToRad", NULL, NULL);
         #endif
         restoreStack();
-        refreshStack();
         return;
       }
       break;
@@ -132,11 +124,8 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -163,7 +152,6 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
           showInfoDialog("In function fnCvtRadToDeg:", "cannot use an angle34 not tagged degree as an input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
-        refreshStack();
         return;
       }
       break;
@@ -175,11 +163,8 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -206,7 +191,6 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
           showInfoDialog("In function fnCvtDegToDms:", "cannot use an angle34 not tagged degree as an input of fnCvtDegToDms", NULL, NULL);
         #endif
         restoreStack();
-        refreshStack();
         return;
       }
       break;
@@ -218,11 +202,8 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -249,7 +230,6 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
           showInfoDialog("In function fnCvtRadToDeg:", "cannot use an angle34 not tagged degree as an input of fnCvtRadToDeg", NULL, NULL);
         #endif
         restoreStack();
-        refreshStack();
         return;
       }
       break;
@@ -261,11 +241,8 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
         showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
       #endif
       restoreStack();
-      refreshStack();
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 

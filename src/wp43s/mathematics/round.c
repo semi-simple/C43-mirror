@@ -70,7 +70,6 @@ void roundLonI(void) {
 
   updateDisplayValueX = true;
   displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
   pos = 0;
@@ -139,7 +138,6 @@ void roundCxma(void) {
 void roundReal(void) {
   updateDisplayValueX = true;
   displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
   if(getSystemFlag(FLAG_FRACT)) {
@@ -182,7 +180,6 @@ void roundCplx(void) {
 
   updateDisplayValueX = true;
   displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
   posI = DISPLAY_VALUE_LEN - 1;

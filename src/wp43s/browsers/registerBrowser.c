@@ -38,14 +38,10 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       hideCursor();
     }
 
-    if (softmenuStackPointer != 0) {
-      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
-      softmenuStackPointer = 0;
-    }
-    
     previousCalcMode = calcMode;
     calcMode = CM_REGISTER_BROWSER;
     clearSystemFlag(FLAG_ALPHA);
+    return;
   }
 
   if(currentRegisterBrowserScreen == 9999) { // Init
@@ -53,12 +49,11 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
     rbrMode = RBR_GLOBAL;
     showContent = true;
     rbr1stDigit = true;
+    return;
   }
 
   if(currentRegisterBrowserScreen < 9999) {
     if(rbrMode == RBR_GLOBAL) { // Global registers
-      clearScreen(false, true, true);
-
       calcRegister_t regist;
       for(int16_t row=0; row<10; row++) {
         regist = (currentRegisterBrowserScreen + row) % FIRST_LOCAL_REGISTER;
@@ -160,8 +155,6 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
     else if(rbrMode == RBR_LOCAL) { // Local registers
       if(allLocalRegisterPointer->numberOfLocalRegisters != 0) { // Local registers are allocated
-        clearScreen(false, true, true);
-
         calcRegister_t regist;
         for(int16_t row=0; row<10; row++) {
           regist = currentRegisterBrowserScreen + row;
@@ -245,6 +238,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       }
       else { // no local register allocated
         rbrMode = RBR_GLOBAL;
+        registerBrowser(NOPARAM);
       }
     }
   }

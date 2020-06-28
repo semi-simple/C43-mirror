@@ -337,29 +337,6 @@ void copyAllRegistersToClipboard(void) {
 
 
 /********************************************//**
- * \brief Stops the program, wait for ENTER on the PC's
- *        keyboard or click on close button
- *
- * \param void
- * \return void
- ***********************************************/
-void waitAndSee(void) {
-  refreshStack();
-  #if (DEBUG_PANEL == 1)
-    refreshDebugPanel();
-  #endif
-  refreshScreen(NULL);
-
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
-
-  showInfoDialog("Click close to continue", NULL, NULL, NULL);
-}
-
-
-
-/********************************************//**
  * \brief Refreshes calc's screen. This function is
  * called every 100 ms by a GTK timer.
  * * make the cursor blink if needed
@@ -373,7 +350,7 @@ void waitAndSee(void) {
  *                          * true  = timer will call this function again
  *                          * false = timer stops calling this function
  ***********************************************/
-gboolean refreshScreen(gpointer data) {// This function is called every 100 ms by a GTK timer
+gboolean refreshLcd(gpointer data) {// This function is called every 100 ms by a GTK timer
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -421,7 +398,7 @@ gboolean refreshScreen(gpointer data) {// This function is called every 100 ms b
   return TRUE;
 }
 #elif defined DMCP_BUILD
-void refreshScreen(void) {// This function is called roughly every 100 ms from the main loop
+void refreshLcd(void) {// This function is called roughly every 100 ms from the main loop
   // Cursor blinking
   if(cursorEnabled) {
     cursorBlinkCounter = (cursorBlinkCounter + 1) % 10;
@@ -742,60 +719,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 /********************************************//**
- * \brief Clears parts of the screen
- *
- * \param[in] clearStatusBar bool_t Clear the status bar
- * \param[in] clearRegLines bool_t  Clear the register lines
- * \param[in] clearSoftkeys bool_t  Clear the softkey area
- * \return void
- ***********************************************/
-void clearScreen(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {
-  #ifdef PC_BUILD
-    int16_t x, y;
-
-    if(clearStatusBar) {
-      for(y=0; y<20; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-         clearPixel(x, y);
-        }
-      }
-    }
-
-    if(clearRegisterLines) {
-      for(y=20; y<171; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          clearPixel(x, y);
-        }
-      }
-    }
-
-    if(clearSoftkeys) {
-      for(y=171; y<SCREEN_HEIGHT; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          clearPixel(x, y);
-        }
-      }
-    }
-  #endif
-
-  #if DMCP_BUILD
-    if(clearStatusBar) {
-      lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
-    }
-
-    if(clearRegisterLines) {
-      lcd_fill_rect(0, 20, SCREEN_WIDTH, 151, 0);
-    }
-
-    if(clearSoftkeys) {
-      lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
-    }
-  #endif
-}
-
-
-
-/********************************************//**
  * \brief Displays the cursor at it's coordinates using
  * the correct font
  *
@@ -887,13 +810,6 @@ void showFunctionName(int16_t item, int8_t counter) {
 void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
-  refreshRegisterLine(REGISTER_T);
-  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-    if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-      clearRegisterLine(TAM_REGISTER_LINE, false, false);
-    }
-    showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-  }
 }
 
 
@@ -904,48 +820,24 @@ void hideFunctionName(void) {
  * \param[in] yStart int16_t y coordinate from where starting to clear
  * \return void
  ***********************************************/
-/*void clearRegisterLine(int16_t yStart, int16_t height) {
-  #ifdef PC_BUILD                                         // Dani Rau
-    int16_t x, y;
+void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
+  int16_t yStart, height;
 
-    for(x=0; x<SCREEN_WIDTH; x++) {
-      for(y=yStart; y<yStart+height; y++) {
-        clearPixel(x, y);
+  if(REGISTER_X <= regist && regist <= REGISTER_T) {
+    yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
+    height = 32;
+
+    if(clearTop) {
+      yStart -= 4;
+      height += 4;
+    }
+
+    if(clearBottom) {
+      height += 4;
+      if(regist == REGISTER_X) {
+        height += 3;
       }
     }
-  #endif                                                  // vv Dani Rau
-
-  #ifdef DMCP_BUILD
-    lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
-  #endif                                                  // ^^ Dani Rau
-}*/
-
-
-
-/********************************************//**
- * \brief Clears one register line
- *
- * \param[in] yStart int16_t y coordinate from where starting to clear
- * \return void
- ***********************************************/
-void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
-    int16_t yStart, height;
-
-    if(REGISTER_X <= regist && regist <= REGISTER_T) {
-      yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
-      height = 32;
-
-      if(clearTop) {
-        yStart -= 4;
-        height += 4;
-      }
-
-      if(clearBottom) {
-        height += 4;
-        if(regist == REGISTER_X) {
-          height += 3;
-        }
-      }
 
     #ifdef PC_BUILD
       int16_t x, y;
@@ -959,60 +851,6 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
     #ifdef DMCP_BUILD
       lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
     #endif
-  }
-}
-
-
-
-void resetTemporaryInformation(void) {
-  uint8_t tempInfo = temporaryInformation;
-
-  temporaryInformation = TI_NO_INFO;
-
-  switch(tempInfo) {
-    case TI_NO_INFO:           break;
-
-    case TI_RADIUS_THETA:
-    case TI_THETA_RADIUS:
-    case TI_SUMX_SUMY:
-    case TI_MEANX_MEANY:
-    case TI_GEOMMEANX_GEOMMEANY:
-    case TI_HARMMEANX_HARMMEANY:
-    case TI_RMSMEANX_RMSMEANY:
-    case TI_SAMPLSTDDEV:
-    case TI_POPLSTDDEV:
-    case TI_STDERR:
-    case TI_GEOMSAMPLSTDDEV:
-    case TI_GEOMPOPLSTDDEV:
-    case TI_GEOMSTDERR:
-    case TI_X_Y:
-    case TI_RE_IM:             refreshRegisterLine(REGISTER_X);
-                               refreshRegisterLine(REGISTER_Y); break;
-
-    case TI_STATISTIC_SUMS:    refreshRegisterLine(REGISTER_Y); break;
-
-    case TI_RESET:
-    case TI_ARE_YOU_SURE:
-    case TI_VERSION:
-    case TI_WHO:
-    case TI_SAVED:
-    case TI_BACKUP_RESTORED:
-    case TI_WEIGHTEDMEANX:
-    case TI_WEIGHTEDSAMPLSTDDEV:
-    case TI_WEIGHTEDPOPLSTDDEV:
-    case TI_WEIGHTEDSTDERR:    refreshRegisterLine(REGISTER_X); break;
-
-    case TI_FALSE:
-    case TI_TRUE:              refreshRegisterLine(TRUE_FALSE_REGISTER_LINE); break;
-
-    case TI_SHOW_REGISTER:     refreshRegisterLine(REGISTER_T);
-                               if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-                               if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-                               if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
-                               break;
-
-    default:                   sprintf(errorMessage, "In function resetTemporaryInformation: %" FMT8U " is an unexpected value for temporaryInformation!", temporaryInformation);
-                               displayBugScreen(errorMessage);
   }
 }
 
@@ -1141,44 +979,38 @@ void refreshRegisterLine(calcRegister_t regist) {
           showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         }
 
-        else if(temporaryInformation == TI_SHOW_REGISTER) {
-          switch(regist) {
-            // L1
-            case REGISTER_T: w = stringWidth(tmpStr3000, &standardFont, true, true);
-                             showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
-                             break;
+        else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
+          w = stringWidth(tmpStr3000, &standardFont, true, true);
+          showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
+        }
 
-            // L2 & L3
-            case REGISTER_Z: w = stringWidth(tmpStr3000 + 300, &standardFont, true, true);
-                             showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
+        else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Z && tmpStr3000[300] != 0) { // L2 & L3
+          w = stringWidth(tmpStr3000 + 300, &standardFont, true, true);
+          showString(tmpStr3000 + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
-                             if(tmpStr3000[600]) {
-                               w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);
-                               showString(tmpStr3000 + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
-                             }
-                             break;
+          if(tmpStr3000[600]) {
+            w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);
+            showString(tmpStr3000 + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+          }
+        }
 
-            // L4 & L5
-            case REGISTER_Y: w = stringWidth(tmpStr3000 + 900, &standardFont, true, true);
-                             showString(tmpStr3000 + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
+        else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Y && tmpStr3000[900] != 0) { // L4 & L5
+          w = stringWidth(tmpStr3000 + 900, &standardFont, true, true);
+          showString(tmpStr3000 + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
 
-                             if(tmpStr3000[1200]) {
-                               w = stringWidth(tmpStr3000 + 1200, &standardFont, true, true);
-                               showString(tmpStr3000 + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
-                             }
-                             break;
+          if(tmpStr3000[1200]) {
+            w = stringWidth(tmpStr3000 + 1200, &standardFont, true, true);
+            showString(tmpStr3000 + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
+          }
+        }
 
-            // L6 & L7
-            case REGISTER_X: w = stringWidth(tmpStr3000 + 1500, &standardFont, true, true);
-                             showString(tmpStr3000 + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
+        else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_X && tmpStr3000[1500] != 0) { // L6 & L7
+          w = stringWidth(tmpStr3000 + 1500, &standardFont, true, true);
+          showString(tmpStr3000 + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
 
-                             if(tmpStr3000[1800]) {
-                               w = stringWidth(tmpStr3000 + 1800, &standardFont, true, true);
-                               showString(tmpStr3000 + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
-                             }
-                             break;
-
-            default: {}
+          if(tmpStr3000[1800]) {
+            w = stringWidth(tmpStr3000 + 1800, &standardFont, true, true);
+            showString(tmpStr3000 + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
           }
         }
 
@@ -1234,6 +1066,11 @@ void refreshRegisterLine(calcRegister_t regist) {
                 showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
               }
             }
+          }
+
+          else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM) {
+            xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+            cursorEnabled = true;
           }
 
           else if(   getSystemFlag(FLAG_FRACT)
@@ -1594,7 +1431,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
 
           else if(getRegisterDataType(regist) == dtConfig) {
-            sprintf(tmpStr3000, "Configuration data");
+            xcopy(tmpStr3000, "Configuration data", 19);
             w = stringWidth(tmpStr3000, &numericFont, false, true);
             lineWidth = w;
             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
@@ -1616,6 +1453,104 @@ void refreshRegisterLine(calcRegister_t regist) {
       displayBugScreen(errorMessage);
     }
   }
+}
+
+
+
+void clearScreen(void) {
+  #ifdef PC_BUILD
+    int16_t x, y;
+
+    for(y=0; y<SCREEN_HEIGHT; y++) {
+      for(x=0; x<SCREEN_WIDTH; x++) {
+        clearPixel(x, y);
+      }
+    }
+  #endif
+
+  #if DMCP_BUILD
+    lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
+  #endif
+}
+
+
+
+void refreshScreen(void) {
+  switch(calcMode) {
+    case CM_FLAG_BROWSER:
+      clearScreen();
+      flagBrowser(NOPARAM);
+      refreshStatusBar();
+      break;
+
+    case CM_FONT_BROWSER:
+      clearScreen();
+      fontBrowser(NOPARAM);
+      refreshStatusBar();
+      break;
+
+    case CM_REGISTER_BROWSER:
+      clearScreen();
+      registerBrowser(NOPARAM);
+      refreshStatusBar();
+      break;
+
+    case CM_BUG_ON_SCREEN:
+      break;
+
+    case CM_NORMAL:
+    case CM_AIM:
+    case CM_TAM:
+    case CM_NIM:
+    case CM_ASM:
+    case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_AIM:
+    case CM_ASSIGN:
+    case CM_ERROR_MESSAGE:
+    case CM_CONFIRMATION:
+      clearScreen();
+
+      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
+      refreshRegisterLine(REGISTER_T);
+      refreshRegisterLine(REGISTER_Z);
+      refreshRegisterLine(REGISTER_Y);
+      refreshRegisterLine(REGISTER_X);
+
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
+      else {
+        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) {
+          #ifdef PC_BUILD
+            int16_t x, y;
+
+            for(y=Y_POSITION_OF_TAM_LINE; y<Y_POSITION_OF_TAM_LINE+32; y++) {
+              for(x=0; x<100; x++) {
+                clearPixel(x, y);
+              }
+            }
+          #endif
+
+          #if DMCP_BUILD
+            lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, 0);
+          #endif
+
+          showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+        }
+      }
+
+      showSoftmenuCurrentPart();
+
+      hourGlassIconEnabled = false;
+      refreshStatusBar();
+      break;
+
+    default: {}
+  }
+
 }
 #endif
 
@@ -1736,7 +1671,6 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 #endif
 
 #ifdef DMCP_BUILD
-  //resetShiftState(); // to avoid f or g top left of the screen
   create_screenshot(0);
 #endif
 }

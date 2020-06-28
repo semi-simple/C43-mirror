@@ -103,7 +103,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   longIntegerToUInt(regX, maxRand);
   longIntegerAddUInt(mini, boundedRand(maxRand), maxi);
 
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
   liftStack();
   convertLongIntegerToLongIntegerRegister(maxi, REGISTER_X);
 
@@ -111,8 +111,6 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   longIntegerFree(regY);
   longIntegerFree(maxi);
   longIntegerFree(mini);
-
-  refreshStack();
 }
 
 
@@ -139,9 +137,6 @@ void fnRandom(uint16_t unusedParamButMandatory) {
   realToReal34(&x1, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshRegisterLine(REGISTER_Y);
-  refreshRegisterLine(REGISTER_Z);
-  refreshRegisterLine(REGISTER_T);
 }
 
 

@@ -70,8 +70,9 @@ static bool_t longIntegerIsPrime1(longInteger_t primeCandidate) {
   #if defined(PC_BUILD) || defined(DMCP_BUILD)
   if(calcMode == CM_NORMAL) {
     hourGlassIconEnabled = true;
+    showHideHourGlass();
     #ifdef PC_BUILD
-      refreshScreen(NULL);
+      refreshLcd(NULL);
     #else
       lcd_refresh();
     #endif // PC_BUILD
@@ -109,12 +110,6 @@ static bool_t longIntegerIsPrime1(longInteger_t primeCandidate) {
       longIntegerFree(temp);
       longIntegerFree(smallPrime);
       longIntegerFree(mod);
-      #if defined(PC_BUILD) || defined(DMCP_BUILD)
-        if(calcMode == CM_NORMAL) {
-          hourGlassIconEnabled = false;
-          showHideHourGlass();
-        }
-      #endif
       return false;
     }
   }
@@ -124,12 +119,6 @@ static bool_t longIntegerIsPrime1(longInteger_t primeCandidate) {
   longIntegerFree(temp);
   longIntegerFree(smallPrime);
   longIntegerFree(mod);
-  #if defined(PC_BUILD) || defined(DMCP_BUILD)
-    if(calcMode == CM_NORMAL) {
-      hourGlassIconEnabled = false;
-      showHideHourGlass();
-    }
-  #endif
   return true;
 } */
 
@@ -161,15 +150,15 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   longIntegerSetPositiveSign(primeCandidate);
   hourGlassIconEnabled = true;
   showHideHourGlass();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+  #else
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
   //temporaryInformation = (longIntegerIsPrime1(primeCandidate) ? TI_TRUE : TI_FALSE);
   //temporaryInformation = (longIntegerIsPrime2(primeCandidate) ? TI_TRUE : TI_FALSE);
-//printf("Before longIntegerIsPrime()\n");
   temporaryInformation = (longIntegerIsPrime(primeCandidate) ? TI_TRUE : TI_FALSE);
-//printf("After  longIntegerIsPrime()\n");
   longIntegerFree(primeCandidate);
-  refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
-  hourGlassIconEnabled = false;
-  showHideHourGlass();
 }
 
 
@@ -207,9 +196,12 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
 
   hourGlassIconEnabled = true;
   showHideHourGlass();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+  #else
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
   longIntegerNextPrime(currentNumber, nextPrime);
-  hourGlassIconEnabled = false;
-  showHideHourGlass();
 
   if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
     convertLongIntegerToShortIntegerRegister(nextPrime, getRegisterShortIntegerBase(REGISTER_L), REGISTER_X);
@@ -220,7 +212,6 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
 
   longIntegerFree(nextPrime);
   longIntegerFree(currentNumber);
-  refreshStack();
 }
 
 

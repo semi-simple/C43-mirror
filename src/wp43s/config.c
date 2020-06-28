@@ -31,7 +31,6 @@
 void fnConfigChina(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 4;
-  refreshStack();
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_DMY); // date format
   clearSystemFlag(FLAG_MDY); // date format
@@ -50,7 +49,6 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
 void fnConfigEurope(uint16_t unusedParamButMandatory) {
   clearSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
-  refreshStack();
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
@@ -69,7 +67,6 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
 void fnConfigIndia(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
-  refreshStack();
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
@@ -88,7 +85,6 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
 void fnConfigJapan(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
-  refreshStack();
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_DMY); // date format
@@ -107,7 +103,6 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
 void fnConfigUk(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
-  refreshStack();
   clearSystemFlag(FLAG_TDM24); // time format = 12H
   clearSystemFlag(FLAG_MDY);   // date format
   clearSystemFlag(FLAG_YMD);   // date format
@@ -126,7 +121,6 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
 void fnConfigUsa(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
-  refreshStack();
   clearSystemFlag(FLAG_TDM24); // time format = 12H
   clearSystemFlag(FLAG_YMD);   // date format
   clearSystemFlag(FLAG_DMY);   // date format
@@ -144,8 +138,6 @@ void fnConfigUsa(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
-  showIntegerMode();
-  refreshStack();
 }
 
 
@@ -159,7 +151,6 @@ void fnIntegerMode(uint16_t mode) {
  ***********************************************/
 void fnWho(uint16_t unusedParamButMandatory) {
   temporaryInformation = TI_WHO;
-  refreshRegisterLine(REGISTER_X);
  }
 
 
@@ -172,7 +163,6 @@ void fnWho(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnVersion(uint16_t unusedParamButMandatory) {
   temporaryInformation = TI_VERSION;
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -193,8 +183,6 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(getFreeRamMemory(), mem);
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
-
-  refreshStack();
 }
 
 
@@ -215,8 +203,6 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(roundingMode, rounding);
   convertLongIntegerToLongIntegerRegister(rounding, REGISTER_X);
   longIntegerFree(rounding);
-
-  refreshStack();
 }
 
 
@@ -236,8 +222,6 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
   uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), ism);
   convertLongIntegerToLongIntegerRegister(ism, REGISTER_X);
   longIntegerFree(ism);
-
-  refreshStack();
 }
 
 
@@ -258,8 +242,6 @@ void fnGetWordSize(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(shortIntegerWordSize, wordSize);
   convertLongIntegerToLongIntegerRegister(wordSize, REGISTER_X);
   longIntegerFree(wordSize);
-
-  refreshStack();
 }
 
 
@@ -279,7 +261,6 @@ void fnSetWordSize(uint16_t WS) {
   reduceWordSize = (WS < shortIntegerWordSize);
 
   shortIntegerWordSize = WS;
-  showIntegerMode();
 
   if(shortIntegerWordSize == 64) {
     shortIntegerMask    = -1;
@@ -305,8 +286,6 @@ void fnSetWordSize(uint16_t WS) {
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_L)) &= shortIntegerMask;
     }
   }
-
-  refreshStack();
 }
 
 
@@ -327,8 +306,6 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(getFreeFlash(), flashMem);
   convertLongIntegerToLongIntegerRegister(flashMem, REGISTER_X);
   longIntegerFree(flashMem);
-
-  refreshStack();
 }
 
 
@@ -355,7 +332,6 @@ void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
   realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
-  refreshStack();
 }
 
 
@@ -389,8 +365,6 @@ void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(significantDigits, sigDigits);
   convertLongIntegerToLongIntegerRegister(sigDigits, REGISTER_X);
   longIntegerFree(sigDigits);
-
-  refreshStack();
 }
 
 
@@ -427,9 +401,6 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
-
-  showAngularMode();
-  refreshStack();
 }
 
 
@@ -451,7 +422,6 @@ void setConfirmationMode(void (*func)(uint16_t)) {
   clearSystemFlag(FLAG_ALPHA);
   confirmedFunction = func;
   temporaryInformation = TI_ARE_YOU_SURE;
-  refreshStack();
 }
 
 
@@ -487,7 +457,6 @@ void fnRange(uint16_t unusedParamButMandatory) {
   }
 
   longIntegerFree(longInt);
-  refreshStack();
 }
 
 
@@ -502,8 +471,6 @@ void fnGetRange(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(exponentLimit, range);
   convertLongIntegerToLongIntegerRegister(range, REGISTER_X);
   longIntegerFree(range);
-
-  refreshStack();
 }
 
 
@@ -548,7 +515,6 @@ void fnClPAll(uint16_t confirmation) {
     //printf("Running CLPALL\n");
     // TODO: actually clear all programs
     programCounter = 0;
-    showHidePgmBegin();
     temporaryInformation = TI_NO_INFO;
   }
 }
@@ -569,8 +535,6 @@ void fnReset(uint16_t confirmation) {
     setConfirmationMode(fnReset);
   }
   else {
-    clearScreen(true, true, true);
-
     fnClAll(CONFIRMED); // Clears pgm and registers
 
     systemFlags = 0;
@@ -605,8 +569,7 @@ void fnReset(uint16_t confirmation) {
     clearSystemFlag(FLAG_PROPFR);
     clearSystemFlag(FLAG_OVERFLOW);
     clearSystemFlag(FLAG_CARRY);
-    STACK_LIFT_DISABLE;
-    showOverflowCarry();
+    clearSystemFlag(FLAG_ASLIFT);
     clearSystemFlag(FLAG_USER);
     clearSystemFlag(FLAG_LOWBAT);
 
@@ -615,7 +578,6 @@ void fnReset(uint16_t confirmation) {
     watchIconEnabled = false;
     serialIOIconEnabled = false;
     printerIconEnabled = false;
-    refreshStatusBar();
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -640,8 +602,6 @@ void fnReset(uint16_t confirmation) {
         popSoftmenu();
       }
     #endif // TESTSUITE_BUILD
-
-    oldTime[0] = 0;
 
     exponentLimit = 6145;
 
@@ -689,8 +649,6 @@ void fnReset(uint16_t confirmation) {
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
     #endif
-
-    refreshStack();
   }
 }
 

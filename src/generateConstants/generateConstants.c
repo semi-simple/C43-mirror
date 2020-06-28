@@ -341,58 +341,58 @@ void generateAllConstants(void) {
   generateConstantArray("1on4",          "+2.500000000000000000000000000000000000000000000000000000e-01"); // cnst90
 
   // All the formulas are 100% exact conversion formulas
-  generateConstantArray("PointToM",      "+3.527777777777777777777777777777777777777777777777777778e-04"); // cnst91       m      = pt * 0.0254 / 72
-  generateConstantArray("InchToM",       "+2.540000000000000000000000000000000000000000000000000000e-02"); // cnst92       m      = inch * 0,0254
-  generateConstantArray("FtToM",         "+3.048000000000000000000000000000000000000000000000000000e-01"); // cnst93       m      = ft * 12 * 0.0254
-  generateConstantArray("SfeetToM",      "+3.048006096012192024384048768097536195072390144780289561e-01"); // cnst94       m      = sfeetus * (1200 / 3937)
-  generateConstantArray("YardToM",       "+9.144000000000000000000000000000000000000000000000000000e-01"); // cnst95       m      = yard * 3 * 12 * 0.0254
-  generateConstantArray("FathomToM",     "+1.828800000000000000000000000000000000000000000000000000e+00"); // cnst96       m      = fathom * 6 * 12 * 0.0254
-  generateConstantArray("MiToM",         "+1.609344000000000000000000000000000000000000000000000000e+03"); // cnst97       m      = mile * 63360 * 0.0254
-  generateConstantArray("NmiToM",        "+1.852000000000000000000000000000000000000000000000000000e+03"); // cnst98       m      = nmi * 1852
-  generateConstantArray("AuToM",         "+1.495978707000000000000000000000000000000000000000000000e+11"); // cnst99       m      = au * 149597870700
-  generateConstantArray("LyToM",         "+9.460730472580800000000000000000000000000000000000000000e+15"); // cnst100      m      = ly * 299792458 * 3600 * 24 * 365.25
-  generateConstantArray("PcToM",         "+3.085677581491367278913937957796471610731921160409179801e+16"); // cnst101      m      = pc * 149597870700 * 648000 / pi
+  generateConstantArray("PointToM",      "+3.527777777777777777777777777777777777777777777777777778e-04"); // cnst91       m      = pt × 0.0254 / 72
+  generateConstantArray("InchToM",       "+2.540000000000000000000000000000000000000000000000000000e-02"); // cnst92       m      = inch × 0.0254
+  generateConstantArray("FtToM",         "+3.048000000000000000000000000000000000000000000000000000e-01"); // cnst93       m      = ft × 12 × 0.0254
+  generateConstantArray("SfeetToM",      "+3.048006096012192024384048768097536195072390144780289561e-01"); // cnst94       m      = sfeetus × (1200 / 3937)
+  generateConstantArray("YardToM",       "+9.144000000000000000000000000000000000000000000000000000e-01"); // cnst95       m      = yard × 3 × 12 × 0.0254
+  generateConstantArray("FathomToM",     "+1.828800000000000000000000000000000000000000000000000000e+00"); // cnst96       m      = fathom × 6 × 12 × 0.0254
+  generateConstantArray("MiToM",         "+1.609344000000000000000000000000000000000000000000000000e+03"); // cnst97       m      = mile × 63360 × 0.0254
+  generateConstantArray("NmiToM",        "+1.852000000000000000000000000000000000000000000000000000e+03"); // cnst98       m      = nmi × 1852
+  generateConstantArray("AuToM",         "+1.495978707000000000000000000000000000000000000000000000e+11"); // cnst99       m      = au × 149597870700
+  generateConstantArray("LyToM",         "+9.460730472580800000000000000000000000000000000000000000e+15"); // cnst100      m      = ly × 299792458 × 3600 × 24 × 365.25
+  generateConstantArray("PcToM",         "+3.085677581491367278913937957796471610731921160409179801e+16"); // cnst101      m      = pc × 149597870700 × 648000 / pi
 
-  generateConstantArray("AccreToM2",     "+4.046856422400000000000000000000000000000000000000000000e+03"); // cnst102      m²     = acre * 0.0254² * 12² * 43560
-  generateConstantArray("AccreusToM2",   "+4.046872609874252006568529266090790246096621225500515517e+03"); // cnst103      m²     = acreus * (1200 / 3937)² * 43560
+  generateConstantArray("AccreToM2",     "+4.046856422400000000000000000000000000000000000000000000e+03"); // cnst102      m²     = acre × 0.0254² × 12² × 43560
+  generateConstantArray("AccreusToM2",   "+4.046872609874252006568529266090790246096621225500515517e+03"); // cnst103      m²     = acreus × (1200 / 3937)² × 43560
 
-  generateConstantArray("FlozukToM3",    "+2.841306250000000000000000000000000000000000000000000000e-05"); // cnst104      m³     = flozuk * 4,54609e-3 / 160
-  generateConstantArray("FlozusToM3",    "+2.957352956250000000000000000000000000000000000000000000e-05"); // cnst105      m³     = flozus * 231 * 0.0254³ / 128
-  generateConstantArray("GalusToM3",     "+3.785411784000000000000000000000000000000000000000000000e-03"); // cnst106      m³     = galus * 231 * 0.0254³
-  generateConstantArray("GalukToM3",     "+4.546090000000000000000000000000000000000000000000000000e-03"); // cnst107      m³     = galuk * 4,54609e-3
-  generateConstantArray("QuartToM3",     "+1.136522500000000000000000000000000000000000000000000000e-03"); // cnst108      m³     = quart * 4,54609e-3 / 4
-  generateConstantArray("BarrelToM3",    "+1.589872949280000000000000000000000000000000000000000000e-01"); // cnst109      m³     = barrel * 42 * 231 * 0.0254³
+  generateConstantArray("FlozukToM3",    "+2.841306250000000000000000000000000000000000000000000000e-05"); // cnst104      m³     = flozuk × 4.54609e-3 / 160
+  generateConstantArray("FlozusToM3",    "+2.957352956250000000000000000000000000000000000000000000e-05"); // cnst105      m³     = flozus × 231 × 0.0254³ / 128
+  generateConstantArray("GalusToM3",     "+3.785411784000000000000000000000000000000000000000000000e-03"); // cnst106      m³     = galus × 231 × 0.0254³
+  generateConstantArray("GalukToM3",     "+4.546090000000000000000000000000000000000000000000000000e-03"); // cnst107      m³     = galuk × 4.54609e-3
+  generateConstantArray("QuartToM3",     "+1.136522500000000000000000000000000000000000000000000000e-03"); // cnst108      m³     = quart × 4.54609e-3 / 4
+  generateConstantArray("BarrelToM3",    "+1.589872949280000000000000000000000000000000000000000000e-01"); // cnst109      m³     = barrel × 42 × 231 × 0.0254³
 
-  generateConstantArray("CaratToKg",     "+2.000000000000000000000000000000000000000000000000000000e-04"); // cnst110      kg     = carat * 0.0002
-  generateConstantArray("OzToKg",        "+2.834952312500000000000000000000000000000000000000000000e-02"); // cnst111      kg     = oz * (0,45359237 / 16)
-  generateConstantArray("TrozToKg",      "+3.110347680000000000000000000000000000000000000000000000e-02"); // cnst112      kg     = tr.oz * 0.45359237 * 175 / 12
-  generateConstantArray("LbToKg",        "+4.535923700000000000000000000000000000000000000000000000e-01"); // cnst113      kg     = lb * 0,45359237     (1 Lbs (pound) = 16 oz)
-  generateConstantArray("StoneToKg",     "+6.350293180000000000000000000000000000000000000000000000e+00"); // cnst114      kg     = stone * 14 * 0,45359237
-  generateConstantArray("ShortcwtToKg",  "+4.535923700000000000000000000000000000000000000000000000e+01"); // cnst115      kg     = short cwt * 100 * 0.45359237 (short cwt = short hundredweight)
-  generateConstantArray("CwtToKg",       "+5.080234544000000000000000000000000000000000000000000000e+01"); // cnst116      kg     = cwt * 112 * 0,45359237       (cwt = long hundredWeight)
-  generateConstantArray("ShorttonToKg",  "+9.071847400000000000000000000000000000000000000000000000e+02"); // cnst117      kg     = short ton * 2000 * 0,45359237
-  generateConstantArray("TonToKg",       "+1.016046908800000000000000000000000000000000000000000000e+03"); // cnst118      kg     = ton * 2240 * 0,45359237
+  generateConstantArray("CaratToKg",     "+2.000000000000000000000000000000000000000000000000000000e-04"); // cnst110      kg     = carat × 0.0002
+  generateConstantArray("OzToKg",        "+2.834952312500000000000000000000000000000000000000000000e-02"); // cnst111      kg     = oz × (0.45359237 / 16)
+  generateConstantArray("TrozToKg",      "+3.110347680000000000000000000000000000000000000000000000e-02"); // cnst112      kg     = tr.oz × 0.45359237 × 175 / 12
+  generateConstantArray("LbToKg",        "+4.535923700000000000000000000000000000000000000000000000e-01"); // cnst113      kg     = lb × 0.45359237     (1 lb (pound) = 16 oz)
+  generateConstantArray("StoneToKg",     "+6.350293180000000000000000000000000000000000000000000000e+00"); // cnst114      kg     = stone × 14 × 0.45359237
+  generateConstantArray("ShortcwtToKg",  "+4.535923700000000000000000000000000000000000000000000000e+01"); // cnst115      kg     = short cwt × 100 × 0.45359237 (short cwt = short hundredweight)
+  generateConstantArray("CwtToKg",       "+5.080234544000000000000000000000000000000000000000000000e+01"); // cnst116      kg     = cwt × 112 × 0.45359237       (cwt = long hundredweight)
+  generateConstantArray("ShorttonToKg",  "+9.071847400000000000000000000000000000000000000000000000e+02"); // cnst117      kg     = short ton × 2000 × 0.45359237
+  generateConstantArray("TonToKg",       "+1.016046908800000000000000000000000000000000000000000000e+03"); // cnst118      kg     = ton × 2240 × 0.45359237
 
-  generateConstantArray("CalToJ",        "+4.186800000000000000000000000000000000000000000000000000e+00"); // cnst119      joule  = calorie * 4,1868
-  generateConstantArray("BtuToJ",        "+1.055055852620000000000000000000000000000000000000000000e+03"); // cnst120      joule  = Btu * 1055,05585262
-  generateConstantArray("WhToJ",         "+3.600000000000000000000000000000000000000000000000000000e+03"); // cnst121      joule  = Wh * 3600
+  generateConstantArray("CalToJ",        "+4.186800000000000000000000000000000000000000000000000000e+00"); // cnst119      joule  = calorie × 4.1868
+  generateConstantArray("BtuToJ",        "+1.055055852620000000000000000000000000000000000000000000e+03"); // cnst120      joule  = Btu × 1055.05585262
+  generateConstantArray("WhToJ",         "+3.600000000000000000000000000000000000000000000000000000e+03"); // cnst121      joule  = Wh × 3600
 
-  generateConstantArray("LbfToN",        "+4.448221615260500000000000000000000000000000000000000000e+00"); // cnst122      newton = lbf * 9,80665 * 0,45359237
+  generateConstantArray("LbfToN",        "+4.448221615260500000000000000000000000000000000000000000e+00"); // cnst122      newton = lbf × 9.80665 × 0.45359237
 
-  generateConstantArray("TorrToPa",      "+1.333223684210526315789473684210526315789473684210526316e+02"); // cnst123      pascal = torr * 101325 / 760
-  generateConstantArray("MmhgToPa",      "+1.333223874150000000000000000000000000000000000000000000e+02"); // cnst125      pascal = mm.Hg * 13.5951 * 9.80665
-  generateConstantArray("InhgToPa",      "+3.386388640341000000000000000000000000000000000000000000e+03"); // cnst124      pascal = in.Hg * 13.5951 * 9.80665 * 2.54   was pascal = in.Hg * 101325 / 760 * 25.4
-  generateConstantArray("PsiToPa",       "+6.894757293168361336722673445346890693781387562775125550e+03"); // cnst126      pascal = psi * 0.45359237 * 9.80665 / 0.0254²
-  generateConstantArray("BarToPa",       "+1.000000000000000000000000000000000000000000000000000000e+05"); // cnst127      pascal = bar  * 100000
-  generateConstantArray("AtmToPa",       "+1.013250000000000000000000000000000000000000000000000000e+05"); // cnst128      pascal = atm * 101325
+  generateConstantArray("TorrToPa",      "+1.333223684210526315789473684210526315789473684210526316e+02"); // cnst123      pascal = torr × 101325 / 760
+  generateConstantArray("MmhgToPa",      "+1.333223874150000000000000000000000000000000000000000000e+02"); // cnst125      pascal = mm.Hg × 13.5951 × 9.80665
+  generateConstantArray("InhgToPa",      "+3.386388640341000000000000000000000000000000000000000000e+03"); // cnst124      pascal = in.Hg × 13.5951 × 9.80665 × 2.54   was pascal = in.Hg × 101325 / 760 × 25.4
+  generateConstantArray("PsiToPa",       "+6.894757293168361336722673445346890693781387562775125550e+03"); // cnst126      pascal = psi × 0.45359237 × 9.80665 / 0.0254²
+  generateConstantArray("BarToPa",       "+1.000000000000000000000000000000000000000000000000000000e+05"); // cnst127      pascal = bar  × 100000
+  generateConstantArray("AtmToPa",       "+1.013250000000000000000000000000000000000000000000000000e+05"); // cnst128      pascal = atm × 101325
 
-  generateConstantArray("HpmToW",        "+7.354987500000000000000000000000000000000000000000000000e+02"); // cnst129      watt   = HPM * 75 * 9,80665
-  generateConstantArray("HpukToW",       "+7.456998715822702200000000000000000000000000000000000000e+02"); // cnst130      watt   = HPUK * 550 * 0,3048 * 9,80665 * 0,45359237
-  generateConstantArray("HpeToW",        "+7.460000000000000000000000000000000000000000000000000000e+02"); // cnst131      watt   = HPE * 746
+  generateConstantArray("HpmToW",        "+7.354987500000000000000000000000000000000000000000000000e+02"); // cnst129      watt   = HPM × 75 × 9.80665
+  generateConstantArray("HpukToW",       "+7.456998715822702200000000000000000000000000000000000000e+02"); // cnst130      watt   = HPUK × 550 × 0.3048 × 9.80665 × 0.45359237
+  generateConstantArray("HpeToW",        "+7.460000000000000000000000000000000000000000000000000000e+02"); // cnst131      watt   = HPE × 746
 
-  generateConstantArray("YearToS",       "+3.155695200000000000000000000000000000000000000000000000e+07"); // cnst132      second = year  * (365,2425 * 24 * 3600)
+  generateConstantArray("YearToS",       "+3.155695200000000000000000000000000000000000000000000000e+07"); // cnst132      second = year  × (365.2425 × 24 × 3600)
 
-  generateConstantArray("LbfftToNm",     "+1.355817948331400400000000000000000000000000000000000000e+00"); // cnst133      Nm = lbf×ft * 9,80665 * 0,45359237 * 12 * 0.0254
+  generateConstantArray("LbfftToNm",     "+1.355817948331400400000000000000000000000000000000000000e+00"); // cnst133      Nm = lbf×ft × 9.80665 × 0.45359237 × 12 × 0.0254
 
   generateConstantArray("_4",            "-4.000000000000000000000000000000000000000000000000000000e+00"); // cnst134
   generateConstantArray("_1",            "-1.000000000000000000000000000000000000000000000000000000e+00"); // cnst135

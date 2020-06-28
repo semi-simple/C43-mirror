@@ -42,8 +42,6 @@ void fnAlphaLeng(uint16_t regist) {
 
   convertLongIntegerToLongIntegerRegister(stringSize, REGISTER_X);
   longIntegerFree(stringSize);
-
-  refreshStack();
 }
 
 
@@ -94,8 +92,6 @@ void fnAlphaToX(uint16_t regist) {
     }
     xcopy(REGISTER_STRING_DATA(regist), REGISTER_STRING_DATA(regist) + (char1 & 0x80 ? 2 : 1), stringByteLength(REGISTER_STRING_DATA(regist) + (char1 & 0x80 ? 2 : 1)) + 1);
   }
-
-  refreshStack();
 }
 
 
@@ -165,8 +161,6 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
   *(REGISTER_STRING_DATA(REGISTER_X))     = char1;
   *(REGISTER_STRING_DATA(REGISTER_X) + 1) = char2;
   *(REGISTER_STRING_DATA(REGISTER_X) + 2) = 0;
-
-  refreshStack();
 }
 
 
@@ -231,8 +225,6 @@ void fnAlphaPos(uint16_t regist) {
   liftStack();
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
-
-  refreshStack();
 }
 
 
@@ -313,8 +305,6 @@ void fnAlphaRR(uint16_t regist) {
     xcopy(tmpStr3000 + stringByteLength(tmpStr3000), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
     xcopy(REGISTER_STRING_DATA(regist), tmpStr3000, stringByteLength(tmpStr3000) + 1);
   }
-
-  refreshStack();
 }
 
 
@@ -395,8 +385,6 @@ void fnAlphaRL(uint16_t regist) {
     xcopy(tmpStr3000 + stringByteLength(tmpStr3000), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
     xcopy(REGISTER_STRING_DATA(regist), tmpStr3000, stringByteLength(tmpStr3000) + 1);
   }
-
-  refreshStack();
 }
 
 
@@ -470,8 +458,6 @@ void fnAlphaSR(uint16_t regist) {
 
     *(REGISTER_STRING_DATA(regist) + glyphPointer) = 0;
   }
-
-  refreshStack();
 }
 
 
@@ -547,6 +533,4 @@ void fnAlphaSL(uint16_t regist) {
 
    xcopy(ptr, ptr + glyphPointer, stringByteLength(ptr + glyphPointer) + 1);
   }
-
-  refreshStack();
 }

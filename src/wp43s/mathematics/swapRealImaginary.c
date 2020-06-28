@@ -59,12 +59,8 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
 
   swapReIm[getRegisterDataType(REGISTER_X)]();
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
+  if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
   }
 }
 

@@ -87,8 +87,6 @@ void fnLogicalAnd(uint16_t unusedParamButMandatory) {
   else {
     fnDropY(NOPARAM);
   }
-
-  refreshStack();
 }
 
 

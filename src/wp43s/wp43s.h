@@ -93,22 +93,10 @@
   #define flagBrowser     fnNop
   #define fontBrowser     fnNop
   #define refreshRegisterLine(a)  {}
-  #define clearScreen(a, b, c)    {}
-  #define showHideUserMode()      {}
-  #define showIntegerMode()       {}
-  #define showAngularMode()       {}
-  #define showComplexMode()       {}
-  #define showHidePgmBegin()      {}
-  #define showFracMode()          {}
   #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
-  #define showRealComplexResult() {}
-  #define showOverflowCarry()     {}
-  #define showDateTime()          {}
-  #define showHideAlphaMode()     {}
-  #define showHideUserMode()      {}
-  #define showHideLowBattery()    {}
   #define showHideHourGlass()     {}
-  #define refreshStatusBar()      {}
+  #define refreshScreen()         {}
+  #define refreshLcd(a)           {}
   #define initFontBrowser()       {}
 #endif
 
@@ -216,7 +204,7 @@ typedef int16_t calcRegister_t;
 //#define modulo(n, d)            ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)            ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
 
-#define NUMBER_OF_CONSTANTS_39   176
+#define NUMBER_OF_CONSTANTS_39   177
 #define NUMBER_OF_CONSTANTS_51    30
 #define NUMBER_OF_CONSTANTS_1071   1
 #define NUMBER_OF_CONSTANTS_34     7
@@ -469,14 +457,6 @@ typedef int16_t calcRegister_t;
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
 //#define setTamMode(x)              *bits5 = (*bits5 & ~(((1 << LENGTH_TAMMODE        ) - 1) << OFFSET_TAMMODE        )) | ((x) << OFFSET_TAMMODE        )
 
-#ifdef PC_BUILD
-  #define STACK_LIFT_ENABLE  stackLiftEnable();
-  #define STACK_LIFT_DISABLE stackLiftDisable();
-#else
-  #define STACK_LIFT_ENABLE  setSystemFlag(FLAG_ASLIFT);
-  #define STACK_LIFT_DISABLE clearSystemFlag(FLAG_ASLIFT);
-#endif
-
 // Variables for the simulator
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
   extern bool_t             debugMemAllocation;
@@ -575,7 +555,6 @@ extern uint32_t              lastIntegerBase;
 extern uint32_t              alphaSelectionTimer;
 extern uint8_t               softmenuStackPointer;
 extern uint8_t               softmenuStackPointerBeforeAIM;
-extern uint8_t               softmenuStackPointerBeforeBrowser;
 extern uint8_t               transitionSystemState;
 extern uint8_t               cursorBlinkCounter;
 extern uint8_t               numScreensStandardFont;
@@ -612,7 +591,6 @@ extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;
 extern bool_t                shiftF;
 extern bool_t                shiftG;
-extern bool_t                shiftStateChanged;
 extern bool_t                showContent;
 extern bool_t                savedStackLiftEnabled;
 extern bool_t                rbr1stDigit;

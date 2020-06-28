@@ -563,8 +563,6 @@ void showSoftmenuCurrentPart(void) {
   bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0) {
-    clearScreen(false, false, true);
-
     m                = softmenuStack[softmenuStackPointer-1].softmenu;
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
@@ -685,7 +683,6 @@ void initSoftmenuStack(int16_t softmenu) {
                                (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
                                 0))))));
   softmenuStackPointer = 1;
-  showSoftmenuCurrentPart();
 }
 
 
@@ -708,7 +705,6 @@ void pushSoftmenu(int16_t softmenu) {
                                                     (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
                                                      0))))));
     softmenuStackPointer++;
-    showSoftmenuCurrentPart();
   }
   else {
     displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in wp43s.h");
@@ -735,12 +731,6 @@ void popSoftmenu(void) {
       }
     }
     softmenuStackPointer--;
-    if(softmenuStackPointer > 0) {
-      showSoftmenuCurrentPart();
-    }
-    else {
-      clearScreen(false, false, true);
-    }
   }
   else {
     displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");
@@ -812,7 +802,6 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   }
 
   if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
-    clearScreen(false, false, true);
     displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
     return;
   }

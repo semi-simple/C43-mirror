@@ -101,7 +101,6 @@ uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
-uint8_t               softmenuStackPointerBeforeBrowser;
 uint8_t               transitionSystemState;
 uint8_t               cursorBlinkCounter;
 uint8_t               numScreensStandardFont;
@@ -138,7 +137,6 @@ bool_t                watchIconEnabled;
 bool_t                printerIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
-bool_t                shiftStateChanged;
 bool_t                showContent;
 bool_t                savedStackLiftEnabled;
 bool_t                rbr1stDigit;
@@ -171,7 +169,7 @@ pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
 const char            digits[17] = "0123456789ABCDEF";
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
-  uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+  uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
@@ -283,7 +281,6 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
   clearSystemFlag(FLAG_CPXRES);
-  showRealComplexResult();
   clearSystemFlag(FLAG_POLAR);
   clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
@@ -308,10 +305,6 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
-  shiftStateChanged = false;
-  #ifndef TESTSUITE_BUILD
-    showShiftState();
-  #endif // TESTSUITE_BUILD
 
   initFontBrowser();
   currentFlgScr = 0;
@@ -323,14 +316,9 @@ void setupDefaults(void) {
 
   cursorBlinkCounter = 0;
 
-  oldTime[0] = 0;
-
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
 
   lastErrorCode = 0;
-
-  refreshStatusBar();
-  refreshStack();
 
   allowScreenUpdate = true;
 
@@ -422,7 +410,9 @@ int main(int argc, char* argv[]) {
   restoreCalc();
   //fnReset(CONFIRMED);
 
-  gdk_threads_add_timeout(100, refreshScreen, NULL); // refreshScreen is called every 100 ms
+  refreshScreen();
+
+  gdk_threads_add_timeout(100, refreshLcd, NULL); // refreshLcd is called every 100 ms
 
   gtk_main();
 
@@ -458,6 +448,9 @@ void program_main(void) {
   lcd_clear_buf();
   setupDefaults();
 
+  fnReset(CONFIRMED);
+  refreshScreen();
+
 /*longInteger_t li;
 longIntegerInit(li);
 uint32_t addr;
@@ -478,7 +471,7 @@ addr = (uint32_t)indexOfItems;
 uIntToLongInteger(addr, li);
 convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_X);
 
-refreshStack();
+refreshScreen();
 longIntegerFree(li);*/
 
   backToDMCP = false;
@@ -637,7 +630,8 @@ longIntegerFree(li);*/
     //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
 
     if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-      resetShiftState();                  //To avoid f or g top left of the screen, clear again to make sure
+      shiftF = false;
+      shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
 
       currentVolumeSetting = get_beep_volume();
       savedVoluleSetting = currentVolumeSetting;
@@ -687,7 +681,7 @@ longIntegerFree(li);*/
         nextScreenRefresh += 100;
         if(nextScreenRefresh < now)
           nextScreenRefresh = now + 100; // we were out longer than expected; just skip ahead.
-        refreshScreen();
+        refreshLcd();
         lcd_refresh();
     }
   }

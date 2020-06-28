@@ -85,19 +85,10 @@ void fnPower(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void powLonILonI(void) {
-  int32_t exponentSign, baseSign;
   longInteger_t base, exponent;
-  bool_t exponentIsOdd;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
   convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
-  exponentIsOdd = longIntegerIsOdd(exponent);
-
-  baseSign = longIntegerSign(base);
-  longIntegerSetPositiveSign(base);
-
-  exponentSign = longIntegerSign(exponent);
-  longIntegerSetPositiveSign(exponent);
 
   if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -124,38 +115,32 @@ void powLonILonI(void) {
     longIntegerFree(exponent);
     return;
   }
-  else if(exponentSign == -1) {
-    uIntToLongInteger(0, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
+  else if(longIntegerIsNegative(exponent)) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    powLonIReal();
     return;
   }
 
-  longInteger_t power;
+  longInteger_t result;
 
-  longIntegerInit(power);
-  uIntToLongInteger(1, power);
+  longIntegerInit(result);
+  uIntToLongInteger(1, result);
 
-  for(uint32_t i=0; !longIntegerIsZero(exponent) && lastErrorCode == 0; i++) {
+  while(!longIntegerIsZero(exponent) && lastErrorCode == 0) {
     if(longIntegerIsOdd(exponent)) {
-     longIntegerMultiply(power, base, power);
+     longIntegerMultiply(result, base, result);
     }
 
-    longIntegerDivideUInt(exponent, 2, exponent);
+    longIntegerDivide2(exponent, exponent);
 
     if(!longIntegerIsZero(exponent)) {
       longIntegerSquare(base, base);
     }
   }
 
-  if(baseSign == -1 && exponentIsOdd) {
-    longIntegerSetNegativeSign(power);
-  }
+  convertLongIntegerToLongIntegerRegister(result, REGISTER_X);
 
-  convertLongIntegerToLongIntegerRegister(power, REGISTER_X);
-
-  longIntegerFree(power);
+  longIntegerFree(result);
   longIntegerFree(base);
   longIntegerFree(exponent);
 }
@@ -169,80 +154,8 @@ void powLonILonI(void) {
  * \return void
  ***********************************************/
 void powLonIShoI(void) {
-  int32_t exponentSign, baseSign;
-  longInteger_t base, exponent;
-  bool_t exponentIsOdd;
-
   convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, base);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
-  exponentIsOdd = longIntegerIsOdd(exponent);
-
-  baseSign = longIntegerSign(base);
-  longIntegerSetPositiveSign(base);
-
-  exponentSign = longIntegerSign(exponent);
-  longIntegerSetPositiveSign(exponent);
-
-  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powLonIShoI: Cannot calculate 0^0!", NULL, NULL, NULL);
-    #endif
-
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-
-  if(longIntegerIsZero(exponent)) {
-    uIntToLongInteger(1, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-  else if(longIntegerIsZero(base)) {
-    uIntToLongInteger(0, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-  else if(exponentSign == -1) {
-    uIntToLongInteger(0, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-
-  longInteger_t power;
-
-  longIntegerInit(power);
-  uIntToLongInteger(1, power);
-
-  for(uint32_t i=0; !longIntegerIsZero(exponent) && lastErrorCode == 0; i++) {
-    if(longIntegerIsOdd(exponent)) {
-     longIntegerMultiply(power, base, power);
-    }
-
-    longIntegerDivideUInt(exponent, 2, exponent);
-
-    if(!longIntegerIsZero(exponent)) {
-      longIntegerSquare(base, base);
-    }
-  }
-
-  if(baseSign == -1 && exponentIsOdd) {
-    longIntegerSetNegativeSign(power);
-  }
-
-  convertLongIntegerToLongIntegerRegister(power, REGISTER_X);
-
-  longIntegerFree(power);
-  longIntegerFree(base);
-  longIntegerFree(exponent);
+  powLonILonI();
 }
 
 
@@ -254,79 +167,8 @@ void powLonIShoI(void) {
  * \return void
  ***********************************************/
 void powShoILonI(void) {
-  int32_t exponentSign, baseSign;
-  longInteger_t base, exponent;
-  bool_t exponentIsOdd;
-
-  convertShortIntegerRegisterToLongInteger(REGISTER_Y, base);
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, exponent);
-  exponentIsOdd = longIntegerIsOdd(exponent);
-
-  baseSign = longIntegerSign(base);
-  longIntegerSetPositiveSign(base);
-
-  exponentSign = longIntegerSign(exponent);
-  longIntegerSetPositiveSign(exponent);
-
-  if(longIntegerIsZero(exponent) && longIntegerIsZero(base)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function powShoILonI: Cannot calculate 0^0!", NULL, NULL, NULL);
-    #endif
-
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-
-  if(longIntegerIsZero(exponent)) {
-    uIntToLongInteger(1, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-  else if(longIntegerIsZero(base)) {
-    uIntToLongInteger(0, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-  else if(exponentSign == -1) {
-    uIntToLongInteger(0, base);
-    convertLongIntegerToLongIntegerRegister(base, REGISTER_X);
-    longIntegerFree(base);
-    longIntegerFree(exponent);
-    return;
-  }
-
-  longInteger_t power;
-
-  longIntegerInit(power);
-  uIntToLongInteger(1, power);
-
-  for(uint32_t i=0; !longIntegerIsZero(exponent); i++) {
-    if(longIntegerIsOdd(exponent)) {
-     longIntegerMultiply(power, base, power);
-    }
-
-    longIntegerDivideUInt(exponent, 2, exponent);
-
-    if(!longIntegerIsZero(exponent)) {
-      longIntegerSquare(base, base);
-    }
-  }
-
-  if(baseSign == -1 && exponentIsOdd) {
-    longIntegerSetNegativeSign(power);
-  }
-
-  convertLongIntegerToLongIntegerRegister(power, REGISTER_X);
-
-  longIntegerFree(power);
-  longIntegerFree(base);
-  longIntegerFree(exponent);
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_Y, REGISTER_Y);
+  powLonILonI();
 }
 
 
@@ -338,30 +180,8 @@ void powShoILonI(void) {
  * \return void
  ***********************************************/
 void powLonIReal(void) {
-  real_t y, x;
-
-  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  realPower(&y, &x, &x, &ctxtReal39);
-
-  if(getFlag(FLAG_CPXRES) && realIsNaN(&x)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-
-    reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-    realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
-    real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
-
-    powCplxCplx();
-    return;
-  }
-
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  powRealReal();
 }
 
 
@@ -373,41 +193,8 @@ void powLonIReal(void) {
  * \return void
  ***********************************************/
 void powRealLonI(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZeroRegister(REGISTER_X)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      if(getRegisterLongIntegerSign(REGISTER_X) == LI_POSITIVE) {
-        longInteger_t lgInt;
-        convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        if(longIntegerIsEven(lgInt)) {
-          realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-        }
-        else {
-          realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-        }
-        longIntegerFree(lgInt);
-      }
-      else {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      }
-    }
-    return;
-  }
-
-  real_t y, x;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-
-  realPower(&y, &x, &x, &ctxtReal39);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  powRealReal();
 }
 
 
@@ -422,11 +209,9 @@ void powLonICplx(void) {
   real_t y;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-
   reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
   real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
-
   powCplxCplx();
 }
 
@@ -439,43 +224,13 @@ void powLonICplx(void) {
  * \return void
  ***********************************************/
 void powCplxLonI(void) {
-/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(longIntegerIsZeroRegister(REGISTER_X)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }*/
+  real_t x;
 
-  real_t a, b, c, d;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  convertLongIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-
-  // ln(a + bi) --> a + bi
-  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  // c * ln(a + bi) -- > a + bi
-  realMultiply(&c, &a, &a, &ctxtReal39);
-  realMultiply(&c, &b, &b, &ctxtReal39);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realExp(&a, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
+  powCplxCplx();
 }
 
 
@@ -607,8 +362,19 @@ void powCxmaCplx(void) {
  * \return void
  ***********************************************/
 void powShoIShoI(void) {
-  setRegisterShortIntegerBase(REGISTER_X, getRegisterShortIntegerBase(REGISTER_Y));
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intPower(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  int32_t exponentSign;
+
+  WP34S_extract_value(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)), &exponentSign);
+
+  if(exponentSign) { // exponent is negative
+    convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    powRealReal();
+  }
+  else {
+    setRegisterShortIntegerBase(REGISTER_X, getRegisterShortIntegerBase(REGISTER_Y));
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = WP34S_intPower(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)), *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)));
+  }
 }
 
 
@@ -620,14 +386,8 @@ void powShoIShoI(void) {
  * \return void
  ***********************************************/
 void powShoIReal(void) {
-  real_t y, x;
-
-  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  realPower(&y, &x, &x, &ctxtReal39);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  powRealReal();
 }
 
 
@@ -639,28 +399,8 @@ void powShoIReal(void) {
  * \return void
  ***********************************************/
 void powRealShoI(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    return;
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
-  }
-
-  real_t y, x;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-
-  realPower(&y, &x, &x, &ctxtReal39);
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  powRealReal();
 }
 
 
@@ -672,27 +412,13 @@ void powRealShoI(void) {
  * \return void
  ***********************************************/
 void powShoICplx(void) {
-  real_t a, c, d;
+  real_t y;
 
-  convertShortIntegerRegisterToReal(REGISTER_Y, &a, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
-
-  // ln(a) --> a
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  // (c + di) * ln(a) --> c +di
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  // exp((c + di) * ln(a)) --> c +di
-  realExp(&c, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &d, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
+  powCplxCplx();
 }
 
 
@@ -704,43 +430,13 @@ void powShoICplx(void) {
  * \return void
  ***********************************************/
 void powCplxShoI(void) {
-/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(shortIntegerIsZero(REGISTER_LONG_INTEGER_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }*/
+  real_t x;
 
-  real_t a, b, c, d;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  convertShortIntegerRegisterToReal(REGISTER_X, &c, &ctxtReal39);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-
-  // ln(a + bi) --> a + bi
-  realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  // c * ln(a + bi) -- > a + bi
-  realMultiply(&c, &a, &a, &ctxtReal39);
-  realMultiply(&c, &b, &b, &ctxtReal39);
-
-  // exp(c * ln(a + bi)) -- > c + di
-  realExp(&a, &a, &ctxtReal39);
-  realPolarToRectangular(const_1, &b, &c, &d, &ctxtReal39);
-  realMultiply(&a, &c, &c, &ctxtReal39);
-  realMultiply(&a, &d, &d, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
+  powCplxCplx();
 }
 
 
@@ -815,27 +511,12 @@ void powRealReal(void) {
  * \return void
  ***********************************************/
 void powRealCplx(void) {
-/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }*/
-
   real_t y;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
   real34Zero(REGISTER_IMAG34_DATA(REGISTER_Y));
-
   powCplxCplx();
 }
 
@@ -848,27 +529,12 @@ void powRealCplx(void) {
  * \return void
  ***********************************************/
 void powCplxReal(void) {
-/*  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-    return;
-  }*/
-
   real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-
   powCplxCplx();
 }
 

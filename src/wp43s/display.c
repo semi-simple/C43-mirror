@@ -32,8 +32,6 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-
-  refreshStack();
 }
 
 
@@ -48,8 +46,6 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-
-  refreshStack();
 }
 
 
@@ -64,8 +60,6 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-
-  refreshStack();
 }
 
 
@@ -81,8 +75,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-
-  refreshStack();
 }
 
 
@@ -105,8 +97,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
       showInfoDialog("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
   #endif
-
-  refreshStack();
 }*/
 
 
@@ -122,7 +112,6 @@ void fnDisplayFormatGap(uint16_t gap) {
    gap = 0;
  }
   groupingGap = gap;
-  refreshStack();
 }
 
 
@@ -1811,6 +1800,10 @@ void fnShow(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case dtConfig:
+      xcopy(tmpStr3000, "Configuration data", 19);
+      break;
+
     default:
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -1820,11 +1813,6 @@ void fnShow(uint16_t unusedParamButMandatory) {
       #endif
       return;
   }
-
-  refreshRegisterLine(REGISTER_T);
-  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;

@@ -97,10 +97,10 @@ void runFunction(int16_t func) {
   indexOfItems[func].func(indexOfItems[func].param);
 
   if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
-    STACK_LIFT_DISABLE;
+    clearSystemFlag(FLAG_ASLIFT);
   }
   else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
   }
 
   if(!funcOK) {

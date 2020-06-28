@@ -161,8 +161,8 @@ void showFracMode(void) {
   }
   else {
     if((getSystemFlag(FLAG_DENANY) && denMax!=MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
-      sprintf(tmpStr3000, "/%" FMT32U, denMax);
-      x = showString(tmpStr3000, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+      sprintf(errorMessage, "/%" FMT32U, denMax);
+      x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
     }
 
     if(!getSystemFlag(FLAG_DENANY)) {
@@ -186,13 +186,13 @@ void showFracMode(void) {
  ***********************************************/
 void showIntegerMode(void) {
   if(shortIntegerWordSize <= 9) {
-    sprintf(tmpStr3000, STD_SPACE_FIGURE "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
+    sprintf(errorMessage, STD_SPACE_FIGURE "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
   else {
-    sprintf(tmpStr3000, "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
+    sprintf(errorMessage, "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
 
-  showString(tmpStr3000, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
+  showString(errorMessage, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
 }
 
 
@@ -367,11 +367,78 @@ void showHideUserMode(void) {
  * \return void
  ***********************************************/
 void showHideLowBattery(void) {
-  if(getSystemFlag(FLAG_LOWBAT)) {
-    showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
-  }
-  else {
-    showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
-  }
+  #ifdef DMCP_BUILD
+    if(getSystemFlag(FLAG_LOWBAT)) {
+      showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+    }
+    else {
+      showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+    }
+  #endif
+
+  #ifdef PC_BUILD
+    if(getSystemFlag(FLAG_ASLIFT)) {
+      // Draw S
+      setPixel(392,  1);
+      setPixel(393,  1);
+      setPixel(394,  1);
+      setPixel(391,  2);
+      setPixel(395,  2);
+      setPixel(391,  3);
+      setPixel(392,  4);
+      setPixel(393,  4);
+      setPixel(394,  4);
+      setPixel(395,  5);
+      setPixel(391,  6);
+      setPixel(395,  6);
+      setPixel(392,  7);
+      setPixel(393,  7);
+      setPixel(394,  7);
+
+      // Draw L
+      setPixel(391, 10);
+      setPixel(391, 11);
+      setPixel(391, 12);
+      setPixel(391, 13);
+      setPixel(391, 14);
+      setPixel(391, 15);
+      setPixel(391, 16);
+      setPixel(392, 16);
+      setPixel(393, 16);
+      setPixel(394, 16);
+      setPixel(395, 16);
+    }
+    else {
+      // Draw S
+      clearPixel(392,  1);
+      clearPixel(393,  1);
+      clearPixel(394,  1);
+      clearPixel(391,  2);
+      clearPixel(395,  2);
+      clearPixel(391,  3);
+      clearPixel(392,  4);
+      clearPixel(393,  4);
+      clearPixel(394,  4);
+      clearPixel(395,  5);
+      clearPixel(391,  6);
+      clearPixel(395,  6);
+      clearPixel(392,  7);
+      clearPixel(393,  7);
+      clearPixel(394,  7);
+
+      // Draw L
+      clearPixel(391, 10);
+      clearPixel(391, 11);
+      clearPixel(391, 12);
+      clearPixel(391, 13);
+      clearPixel(391, 14);
+      clearPixel(391, 15);
+      clearPixel(391, 16);
+      clearPixel(392, 16);
+      clearPixel(393, 16);
+      clearPixel(394, 16);
+      clearPixel(395, 16);
+    }
+  #endif
 }
 #endif

@@ -38,7 +38,6 @@ void fnSdl(uint16_t numberOfShifts) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
     real.exponent += numberOfShifts;
     realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -68,7 +67,6 @@ void fnSdr(uint16_t numberOfShifts) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
     real.exponent -= numberOfShifts;
     realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
-    refreshRegisterLine(REGISTER_X);
   }
 
   else {

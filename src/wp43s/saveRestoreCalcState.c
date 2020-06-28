@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         39  // 39 = removed screenData
+#define BACKUP_VERSION         40  // 40 = removed softmenuStackPointerBeforeBrowser
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -61,7 +61,7 @@ void saveCalc(void) {
 
   if(calcMode == CM_CONFIRMATION) {
     calcMode = previousCalcMode;
-    refreshRegisterLine(REGISTER_X);
+    refreshScreen();
   }
 
   printf("Begin of calc's backup\n");
@@ -110,7 +110,6 @@ void saveCalc(void) {
   save(&denMax,                             sizeof(denMax),                             backup);
   save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
   save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
-  save(&softmenuStackPointerBeforeBrowser,  sizeof(softmenuStackPointerBeforeBrowser),  backup);
   save(&transitionSystemState,              sizeof(transitionSystemState),              backup);
   save(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
   save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);
@@ -138,7 +137,6 @@ void saveCalc(void) {
   save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        backup);
   save(&shiftF,                             sizeof(shiftF),                             backup);
   save(&shiftG,                             sizeof(shiftG),                             backup);
-  save(&shiftStateChanged,                  sizeof(shiftStateChanged),                  backup);
   save(&tamMode,                            sizeof(tamMode),                            backup);
   save(&rbrMode,                            sizeof(rbrMode),                            backup);
   save(&showContent,                        sizeof(showContent),                        backup);
@@ -256,7 +254,6 @@ void restoreCalc(void) {
     restore(&denMax,                             sizeof(denMax),                             backup);
     restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
     restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
-    restore(&softmenuStackPointerBeforeBrowser,  sizeof(softmenuStackPointerBeforeBrowser),  backup);
     restore(&transitionSystemState,              sizeof(transitionSystemState),              backup);
     restore(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
     restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);
@@ -284,7 +281,6 @@ void restoreCalc(void) {
     restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        backup);
     restore(&shiftF,                             sizeof(shiftF),                             backup);
     restore(&shiftG,                             sizeof(shiftG),                             backup);
-    restore(&shiftStateChanged,                  sizeof(shiftStateChanged),                  backup);
     restore(&tamMode,                            sizeof(tamMode),                            backup);
     restore(&rbrMode,                            sizeof(rbrMode),                            backup);
     restore(&showContent,                        sizeof(showContent),                        backup);
@@ -335,9 +331,7 @@ void restoreCalc(void) {
     printf("End of calc's restoration\n");
 
     #if (DEBUG_REGISTER_L == 1)
-      //if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        refreshRegisterLine(REGISTER_X); // to show L register
-      //}
+      refreshRegisterLine(REGISTER_X); // to show L register
     #endif
 
     if(calcMode == CM_NORMAL)                calcModeNormalGui();
@@ -355,16 +349,13 @@ void restoreCalc(void) {
       displayBugScreen(errorMessage);
     }
 
-    clearScreen(true, true, true);
-    refreshStatusBar();
-    refreshStack();
-    showSoftmenuCurrentPart();
+    refreshScreen();
 
     if(getSystemFlag(FLAG_ASLIFT)) {
-      STACK_LIFT_ENABLE;
+      setSystemFlag(FLAG_ASLIFT);
     }
     else {
-     STACK_LIFT_DISABLE;
+      clearSystemFlag(FLAG_ASLIFT);
     }
   }
 }
@@ -595,7 +586,6 @@ void fnSave(uint16_t unusedParamButMandatory) {
   #endif
 
   temporaryInformation = TI_SAVED;
-  refreshStack();
 }
 
 
@@ -806,7 +796,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, nimBuffer); // Register data type
       readLine(stream, tmpStr3000); // Register value
 
-      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X) || (loadMode == LM_SYSTEM_STATE && regist >= REGISTER_X)) {
+      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X)) {
         restoreRegister(regist, nimBuffer, tmpStr3000);
       }
     }
@@ -1049,19 +1039,8 @@ void fnLoad(uint16_t loadMode) {
   #endif
 
   #ifndef TESTSUITE_BUILD
-    clearScreen(true, true, true);
-    refreshStatusBar();
     if(loadMode == LM_ALL) {
       temporaryInformation = TI_BACKUP_RESTORED;
     }
-    refreshStack();
-    showSoftmenuCurrentPart();
   #endif
-
-  if(getSystemFlag(FLAG_ASLIFT)) {
-    STACK_LIFT_ENABLE;
-  }
-  else {
-   STACK_LIFT_DISABLE;
-  }
 }

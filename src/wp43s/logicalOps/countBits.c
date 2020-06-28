@@ -49,7 +49,5 @@ void fnCountBits(uint16_t unusedParamButMandatory) {
     w = (w & 0x3333333333333333) + ((w >> 2) & 0x3333333333333333);
     w = (w + (w >> 4)) & 0x0f0f0f0f0f0f0f0f;
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = (w * 0x0101010101010101) >> 56;
-
-    refreshRegisterLine(REGISTER_X);
   }
 }

@@ -52,8 +52,6 @@ void fnMaskl(uint16_t numberOfBits) {
 
     reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
-
-    refreshStack();
   }
 }
 
@@ -89,7 +87,5 @@ void fnMaskr(uint16_t numberOfBits) {
 
     reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, 2);
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = mask;
-
-    refreshStack();
   }
 }

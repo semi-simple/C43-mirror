@@ -70,7 +70,6 @@ void fnMod(uint16_t unusedParamButMandatory) {
   mod[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, false, REGISTER_X, REGISTER_Y, -1);
-  refreshRegisterLine(REGISTER_Y);
 }
 
 

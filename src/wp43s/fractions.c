@@ -43,7 +43,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -53,7 +52,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
       showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
     #endif
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -77,9 +75,6 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
       denMax = den;
     }
   }
-
-  showFracMode();
-  refreshStack();
 }
 
 
@@ -97,8 +92,6 @@ void fnToggleFractionType(uint16_t unusedParamButMandatory) {
   else {
     setSystemFlag(FLAG_FRACT);
   }
-
-  refreshStack();
 }
 
 

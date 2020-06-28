@@ -50,8 +50,6 @@ void fnAsr(uint16_t numberOfShifts) {
 
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) >> 1) | sign;
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -90,8 +88,6 @@ void fnSl(uint16_t numberOfShifts) {
 
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) <<= 1;
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -130,8 +126,6 @@ void fnSr(uint16_t numberOfShifts) {
 
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) >>= 1;
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -172,8 +166,6 @@ void fnRl(uint16_t numberOfShifts) {
 
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) << 1) | sign;
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -212,8 +204,6 @@ void fnRr(uint16_t numberOfShifts) {
 
       *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) >> 1) | ((*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & 1) << (shortIntegerWordSize - 1));
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -254,8 +244,6 @@ void fnRlc(uint16_t numberOfShifts) {
     else {
       clearSystemFlag(FLAG_CARRY);
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -296,8 +284,6 @@ void fnRrc(uint16_t numberOfShifts) {
     else {
       clearSystemFlag(FLAG_CARRY);
     }
-
-    refreshRegisterLine(REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -334,12 +320,10 @@ void fnLj(uint16_t numberOfShifts) {
     longIntegerInit(regX);
     intToLongInteger(count, regX);
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     convertLongIntegerToLongIntegerRegister(regX, REGISTER_X);
     longIntegerFree(regX);
-
-    refreshStack();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -376,12 +360,10 @@ void fnRj(uint16_t numberOfShifts) {
     longIntegerInit(regX);
     intToLongInteger(count, regX);
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     convertLongIntegerToLongIntegerRegister(regX, REGISTER_X);
     longIntegerFree(regX);
-
-    refreshStack();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -420,6 +402,4 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
       showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
     #endif
   }
-
-  refreshRegisterLine(NIM_REGISTER_LINE);
 }

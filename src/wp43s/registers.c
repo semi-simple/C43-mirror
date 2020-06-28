@@ -930,8 +930,6 @@ void fnGetLocR(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(allLocalRegisterPointer->numberOfLocalRegisters, locR);
   convertLongIntegerToLongIntegerRegister(locR, REGISTER_X);
   longIntegerFree(locR);
-
-  refreshStack();
 }
 
 
@@ -954,7 +952,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -993,7 +990,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
     return;
   }
 
@@ -1035,10 +1031,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
   if(dropY) {
     fnDropY(NOPARAM);
-    refreshStack();
-  }
-  else {
-    refreshRegisterLine(res);
   }
 }
 
@@ -1100,8 +1092,6 @@ void fnStore(uint16_t r) {
     showInfoDialog("In function fnStore:", errorMessage, "is not defined!", NULL);
   }
   #endif
-
-  refreshStack();
 }
 
 
@@ -1235,10 +1225,6 @@ void fnStoreDiv(uint16_t regist) {
 void fnStoreMin(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     registerMin(REGISTER_X, regist, regist);
-
-    if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
-      refreshRegisterLine(regist);
-    }
   }
   #ifdef PC_BUILD
   else {
@@ -1259,10 +1245,6 @@ void fnStoreMin(uint16_t regist) {
 void fnStoreMax(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     registerMax(REGISTER_X, regist, regist);
-
-    if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
-      refreshRegisterLine(regist);
-    }
   }
   #ifdef PC_BUILD
   else {
@@ -1297,10 +1279,6 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(roundingMode);
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
-
-  if(REGISTER_X <= regist && regist < REGISTER_X + displayStack) {
-    refreshRegisterLine(regist);
-  }
 }
 
 
@@ -1378,7 +1356,6 @@ void fnRecall(uint16_t regist) {
       liftStack();
       copySourceRegisterToDestRegister(regist, REGISTER_X);
     }
-    refreshStack();
   }
   #ifdef PC_BUILD
   else {
@@ -1528,7 +1505,6 @@ void fnRecallMin(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     registerMin(REGISTER_X, regist, REGISTER_X);
-    refreshRegisterLine(REGISTER_X);
   }
   #ifdef PC_BUILD
   else {
@@ -1550,7 +1526,6 @@ void fnRecallMax(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     registerMax(REGISTER_X, regist, REGISTER_X);
-    refreshRegisterLine(REGISTER_X);
   }
   #ifdef PC_BUILD
   else {
@@ -1608,10 +1583,6 @@ void fnRecallConfig(uint16_t r) {
     setSystemFlagToRecalled(FLAG_AUTOFF);
     setSystemFlagToRecalled(FLAG_AUTXEQ);
     setSystemFlagToRecalled(FLAG_IGN1ER);
-
-    refreshStack();
-    showAngularMode();
-    showIntegerMode();
   }
 
   else {
@@ -2138,8 +2109,6 @@ void fnToReal(uint16_t unusedParamButMandatory) {
       #endif
       return;
   }
-
-  refreshRegisterLine(REGISTER_X);
 }
 
 //=============================================================================
@@ -2220,10 +2189,6 @@ static void (* const increment[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t,
 void fnDec(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     increment[getRegisterDataType(regist)](regist, DEC_FLAG);
-
-    if(REGISTER_X <= regist && regist <= REGISTER_T) {
-      refreshRegisterLine(regist);
-    }
   }
   #ifdef PC_BUILD
   else {
@@ -2242,10 +2207,6 @@ void fnDec(uint16_t regist) {
 void fnInc(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     increment[getRegisterDataType(regist)](regist, INC_FLAG);
-
-    if(REGISTER_X <= regist && regist <= REGISTER_T) {
-      refreshRegisterLine(regist);
-    }
   }
   #ifdef PC_BUILD
   else {

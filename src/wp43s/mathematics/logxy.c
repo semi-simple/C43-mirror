@@ -57,12 +57,11 @@ static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DAT
  * \return void
  ***********************************************/
 void logxyError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Log of %s with base %s", getRegisterDataTypeName(REGISTER_Y, true, false),
-            getRegisterDataTypeName(REGISTER_X, true, false));
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate Log of %s with base %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
     showInfoDialog("In function fnLogXY:", errorMessage, NULL, NULL);
-#endif
+  #endif
 }
 
 /********************************************//**
@@ -73,45 +72,48 @@ void logxyError(void) {
  * \return void
  ***********************************************/
 void fnLogXY(uint16_t unusedParamButMandatory) {
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  saveStack();
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
-    adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
 static void logXYComplex(const real_t *xReal, const real_t *xImag, const real_t *yReal, const real_t *yImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
-    real_t lnxReal, lnxImag;
+  real_t lnxReal, lnxImag;
 
-    // lnComplex handle the case where y = 0+i0.
-    lnComplex(yReal, yImag, rReal, rImag, realContext);                             //   r = Ln(y)
-    lnComplex(xReal, xImag, &lnxReal, &lnxImag, realContext);                       // lnx = Ln(x)
-    divComplexComplex(rReal, rImag, &lnxReal, &lnxImag, rReal, rImag, realContext); // r = Ln(y) / Ln(x)
+  // lnComplex handle the case where y = 0+i0.
+  lnComplex(yReal, yImag, rReal, rImag, realContext);                             //   r = Ln(y)
+  lnComplex(xReal, xImag, &lnxReal, &lnxImag, realContext);                       // lnx = Ln(x)
+  divComplexComplex(rReal, rImag, &lnxReal, &lnxImag, rReal, rImag, realContext); // r = Ln(y) / Ln(x)
 }
 
 #define COMPLEX_IS_ZERO(real, imag) (realIsZero(real) && (imag==NULL || realIsZero(imag)))
 
 static bool_t checkArgs(const real_t *xReal, const real_t *xImag, const real_t *yReal, const real_t *yImag) {
-    /*
-     * Log(0, 0) = +Inf
-     * Log(x, 0) = -Inf x!=0
-     * Log(0, y) = NaN  y!=0
-     */
-    if (COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
-        displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
-        EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y=0");
-    } else if (!COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
-        displayCalcErrorMessage(ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
-        EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y!=0");
-    } else if (COMPLEX_IS_ZERO(xReal, xImag) && !COMPLEX_IS_ZERO(yReal, yImag)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-    } else {
-        return true;
-    }
+  /*
+   * Log(0, 0) = +Inf
+   * Log(x, 0) = -Inf x!=0
+   * Log(0, y) = NaN  y!=0
+   */
+  if(COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
+    displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
+    EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y=0");
+  }
+  else if(!COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
+    displayCalcErrorMessage(ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
+    EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y!=0");
+  }
+  else if(COMPLEX_IS_ZERO(xReal, xImag) && !COMPLEX_IS_ZERO(yReal, yImag)) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    return true;
+  }
 
-    return false;
+  return false;
 }
 
 //static bool_t logXYReal(const real_t *xReal, const real_t *yReal, real_t *rReal, real_t *rImag, realContext_t *realContext) {
@@ -126,32 +128,34 @@ static bool_t checkArgs(const real_t *xReal, const real_t *xImag, const real_t *
 //}
 
 static void logxy(const real_t *xReal, const real_t *yReal, realContext_t *realContext) {
-    real_t rReal, rImag;
+  real_t rReal, rImag;
 
-    /*
-     * Log(0, 0) = +Inf
-     * Log(x, 0) = -Inf x!=0
-     * Log(0, y) = NaN  y!=0
-     */
-    if(checkArgs(xReal, NULL, yReal, NULL)) {
-        if (realIsNegative(xReal)) {
-            logXYComplex(xReal, const_0, yReal, const_0, &rReal, &rImag, realContext);
+  /*
+   * Log(0, 0) = +Inf
+   * Log(x, 0) = -Inf x!=0
+   * Log(0, y) = NaN  y!=0
+   */
+  if(checkArgs(xReal, NULL, yReal, NULL)) {
+    if(realIsNegative(xReal)) {
+      logXYComplex(xReal, const_0, yReal, const_0, &rReal, &rImag, realContext);
 
-            if (realIsZero(&rImag)) {
-                reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-                realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-            } else {
-                reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-                realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-                realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-            }
-        } else {
-            WP34S_Logxy(yReal, xReal, &rReal, realContext);
-
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-            realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        }
+      if(realIsZero(&rImag)) {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+      }
     }
+    else {
+      WP34S_Logxy(yReal, xReal, &rReal, realContext);
+
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+  }
 }
 
 
@@ -178,237 +182,281 @@ static void logxy(const real_t *xReal, const real_t *yReal, realContext_t *realC
 //}
 
 void logxyLonILonI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyRealLonI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyCplxLonI(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyShoILonI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyLonIReal(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyRealReal(void) {
-    real_t x, y;
+  real_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyCplxReal(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(const34_0, &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(const34_0, &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyShoIReal(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyLonICplx(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyRealCplx(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(const34_0, &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(const34_0, &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyCplxCplx(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyShoICplx(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
-    real34ToReal(const34_0, &yImag);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
+  real34ToReal(const34_0, &yImag);
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
+
+
 
 void logxyLonIShoI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyRealShoI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-    convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
+
+
 
 void logxyCplxShoI(void) {
-    real_t xReal, xImag, yReal, yImag, rReal, rImag;
+  real_t xReal, xImag, yReal, yImag, rReal, rImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
 
-    convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
-    real34ToReal(const34_0, &xImag);
+  convertShortIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
+  real34ToReal(const34_0, &xImag);
 
-    if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
-        logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
+  if(checkArgs(&xReal, &xImag, &yReal, &yImag)) {
+    logXYComplex(&xReal, &xImag, &yReal, &yImag, &rReal, &rImag, &ctxtReal39);
 
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
 }
 
+
+
 void logxyShoIShoI(void) {
-    real_t x, y;
+  real_t x, y;
 
-    convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-    convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-    logxy(&x, &y, &ctxtReal39);
+  logxy(&x, &y, &ctxtReal39);
 }
 
 
 void logxyRemaLonI(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyCxmaLonI(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyRemaReal(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyCxmaReal(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyRemaCplx(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyCxmaCplx(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
+
+
 
 void logxyRemaShoI(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }
 
+
+
 void logxyCxmaShoI(void) {
-    fnToBeCoded();
+  fnToBeCoded();
 }

@@ -30,5 +30,6 @@ void fnShuffle     (uint16_t unusedParamButMandatory);
 void fnFillStack   (uint16_t unusedParamButMandatory);
 void fnGetStackSize(uint16_t unusedParamButMandatory);
 void fnClearStack  (uint16_t unusedParamButMandatory);
+void fnUndo        (uint16_t unusedParamButMandatory);
 void saveStack     (void);
 void restoreStack  (void);

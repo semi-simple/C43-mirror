@@ -33,6 +33,7 @@ void   WP34S_LnGamma         (const real_t *x, real_t *res, realContext_t *realC
 void   WP34S_Gamma           (const real_t *x, real_t *res, realContext_t *realContext);
 void   WP34S_Ln              (const real_t *x, real_t *res, realContext_t *realContext);
 void   WP34S_Log10           (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_Logxy           (const real_t *yin, const real_t *xin, real_t *res, realContext_t *realContext);
 void   WP34S_SinhCosh        (const real_t *x, real_t *sinOut, real_t *cosOut, realContext_t *realContext);
 void   WP34S_Tanh            (const real_t *x, real_t *res, realContext_t *realContext);
 void   WP34S_ArcSinh         (const real_t *x, real_t *res, realContext_t *realContext);

@@ -335,13 +335,15 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
 void saveStack(void) {
   savedStackLiftEnabled = getSystemFlag(FLAG_ASLIFT);
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
-    //printf("save %" FMT16S " to %" FMT16S " : ", regist, SAVED_REGISTER_X - REGISTER_X + regist); printRegisterToConsole(regist, 0); printf("\n");
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
   }
-  //printf("save %" FMT16S " to %" FMT16S " : ", REGISTER_L, SAVED_REGISTER_L); printRegisterToConsole(REGISTER_L, 0); printf("\n");
   copySourceRegisterToDestRegister(REGISTER_L, SAVED_REGISTER_L);
-  //printf("\n");
-  //refreshDebugPanel();
+}
+
+
+
+void fnUndo(uint16_t unusedParamButMandatory) {
+  restoreStack();
 }
 
 
@@ -356,9 +358,6 @@ void restoreStack(void) {
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X - REGISTER_X + regist, regist);
-    //printf("restore %" FMT16S " to %" FMT16S " : ", SAVED_REGISTER_X - REGISTER_X + regist, regist); printRegisterToConsole(regist, 0); printf("\n");
   }
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
-  //printf("restore %" FMT16S " to %" FMT16S " : ", SAVED_REGISTER_L, REGISTER_L); printRegisterToConsole(REGISTER_L, 0); printf("\n");
-  //printf("\n");
 }

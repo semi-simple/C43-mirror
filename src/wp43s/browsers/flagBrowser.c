@@ -56,15 +56,16 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
   bool_t firstFlag;
 
   if(calcMode != CM_FLAG_BROWSER) {
+    if(calcMode == CM_AIM) {
+      cursorEnabled = false;
+      hideCursor();
+    }
+
     previousCalcMode = calcMode;
     calcMode = CM_FLAG_BROWSER;
     clearSystemFlag(FLAG_ALPHA);
     currentFlgScr = 0;
-  }
-  
-  if (softmenuStackPointer != 0) {
-      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
-      softmenuStackPointer = 0;
+    return;
   }
 
   if(currentFlgScr == 0) { // Init
@@ -254,8 +255,6 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 
 
   if(currentFlgScr == 1) {
-    clearScreen(false, true, true);
-
     for(f=0; f<min(9, line); f++) {
       showString(tmpStr3000 + CHARS_PER_LINE * f, &standardFont, 1, 22*f + 43, vmNormal, true, false);
     }
@@ -263,8 +262,6 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 
   if(currentFlgScr == 2) {
     if(line > 9) {
-      clearScreen(false, true, true);
-
       for(f=9; f<line; f++) {
         showString(tmpStr3000 + CHARS_PER_LINE * f, &standardFont, 1, 22*(f-9) + 43, vmNormal, true, false);
       }
@@ -278,6 +275,9 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     currentFlgScr = 0;
     calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
     flagBrowser_old(0);           //JM^^
+  }
+  else {
+    flagBrowser(NOPARAM);
   }
 }
 #endif
@@ -296,10 +296,15 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
   int16_t f, x, y, i;
 
   if(calcMode != CM_FLAG_BROWSER_OLD) {
+    if(calcMode == CM_AIM) {
+      cursorEnabled = false;
+      hideCursor();
+    }
     previousCalcMode = calcMode;
     calcMode = CM_FLAG_BROWSER_OLD;
     clearSystemFlag(FLAG_ALPHA);          //JM
     currentFlgScr = 0;                    //JM
+    return;
   }
 
   if(currentFlgScr == 0) { // Init
@@ -389,9 +394,12 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
   }
 
   if(currentFlgScr == 3) { // Change over to STATUS
-  currentFlgScr = 0;
-  calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
-  flagBrowser(0);
+    currentFlgScr = 0;
+    calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
+    flagBrowser(0);
+  }
+  else {
+    flagBrowser_old(NOPARAM);
   }
 }
 #endif

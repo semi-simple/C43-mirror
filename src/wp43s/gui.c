@@ -2865,7 +2865,6 @@ void setupUI(void) {
     exit(1);
   }
 
-  clearScreen(true, true, true);
   g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
 
 
@@ -3978,7 +3977,8 @@ void setupUI(void) {
 
 #ifndef TESTSUITE_BUILD
 void fnOff(uint16_t unsuedParamButMandatory) {
-  resetShiftState();
+  shiftF = false;
+  shiftG = false;
 
   #ifdef PC_BUILD
     saveCalc();
@@ -4004,8 +4004,7 @@ void calcModeNormal(void) {
     if(calcMode == CM_ASM_OVER_TAM) {
       popSoftmenu();
     }
-    refreshRegisterLine(TAM_REGISTER_LINE);
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
   }
 
 //  if(SH_BASE_HOME && (softmenuStackPointer_MEM == -1)) {  //JM HOMEBASE
@@ -4017,7 +4016,6 @@ void calcModeNormal(void) {
   clearSystemFlag(FLAG_ALPHA);
   hideCursor();
   cursorEnabled = false;
-  showHideAlphaMode();
 
   #ifdef PC_BUILD
     calcModeNormalGui();
@@ -4053,12 +4051,10 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
   }
     alphaCase = AC_UPPER;
     calcMode = CM_AIM;
-    showHideAlphaMode();
     nextChar = NC_NORMAL;
 
     saveStack();
     liftStack();
-    refreshStack();
 
     clearRegisterLine(AIM_REGISTER_LINE, true, true);
     xCursor = 1;
@@ -4089,7 +4085,6 @@ void calcModeAsm(void) {
 
   if(calcMode != CM_AIM) {
     alphaCase = AC_UPPER;
-    showHideAlphaMode();
     nextChar = NC_NORMAL;
   }
 
@@ -4118,10 +4113,6 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
 
   liftStack();
   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-//refreshStack();                       //vv dr
-  refreshRegisterLine(REGISTER_Y);
-  refreshRegisterLine(REGISTER_Z);
-  refreshRegisterLine(REGISTER_T);      //^^
 
   nimBuffer[0] = 0;
   hexDigits = 0;
@@ -4198,15 +4189,10 @@ void calcModeTam(void) {
       strcat(tamBuffer, " ____");
       transitionSystemState = 16;
     }
-    if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-      clearRegisterLine(REGISTER_T, true, false);
-    }
-    showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
   }
 
   calcMode = CM_TAM;
   clearSystemFlag(FLAG_ALPHA);
-
 
   tamCurrentOperation = 0;
 

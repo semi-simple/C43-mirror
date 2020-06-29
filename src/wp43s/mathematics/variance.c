@@ -27,7 +27,7 @@
  * performed using a FMA for the difference.
  */
 static void do_stddev(const real_t *sumXX, const real_t *sumX,
-		      const real_t *numberX, int sample, 
+		      const real_t *numberX, int sample,
 		      int rootn, int exp, int regIndex) {
   real_t tempReal1, tempReal2, tempReal3;
   const real_t *p = numberX;
@@ -69,14 +69,13 @@ static void calculateStandardDeviation(const real_t *sumX2, const real_t *sumX,
     saveStack();
 
     liftStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
 
     do_stddev(sumX2, sumX, number, sample, rootn, exp, REGISTER_X);
     do_stddev(sumY2, sumY, number, sample, rootn, exp, REGISTER_Y);
 
     temporaryInformation = displayInfo;
-    refreshStack();
   }
 }
 
@@ -133,11 +132,10 @@ static int calculateWeightedStandardDeviation(int sample, int rootn, int exp, in
 
   saveStack();
   liftStack();
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
   do_stddev(SIGMA_X2Y, SIGMA_XY, SIGMA_Y, sample, rootn, exp, REGISTER_X);
 
   temporaryInformation = display;
-  refreshStack();
   return 1;
 }
 

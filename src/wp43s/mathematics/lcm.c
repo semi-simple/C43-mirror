@@ -74,8 +74,6 @@ void fnLcm(uint16_t unusedParamButMandatory) {
   else {
     restoreStack();
   }
-
-  refreshStack();
 }
 
 

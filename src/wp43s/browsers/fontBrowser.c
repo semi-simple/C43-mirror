@@ -82,20 +82,13 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
   uint16_t x, y, first;
 
   if(calcMode != CM_FONT_BROWSER) {
-    
-    if (softmenuStackPointer != 0) {
-      softmenuStackPointerBeforeBrowser = softmenuStackPointer;
-      softmenuStackPointer = 0;
-    }
-    
-    previousCalcMode = calcMode;    
+    previousCalcMode = calcMode;
     calcMode = CM_FONT_BROWSER;
     clearSystemFlag(FLAG_ALPHA);
+    return;
   }
 
   if(currentFntScr>=1 && currentFntScr<=numScreensNumericFont) { // Numeric font
-    clearScreen(false, true, true);
-
     for(x=0; x<=9; x++) {
       showGlyphCode('0'+x, &standardFont, 50+20*x,     20, vmNormal, false, false);
     }
@@ -124,8 +117,6 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
   }
 
   else if(currentFntScr>numScreensNumericFont && currentFntScr<=numScreensNumericFont+numScreensStandardFont) { // Standard font
-    clearScreen(false, true, true);
-
     for(x=0; x<=9; x++) {
       showGlyphCode('0'+x, &standardFont, 50+20*x,     20, vmNormal, false, false);
     }
@@ -153,7 +144,6 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
     showString(tmpStr3000, &standardFont, SCREEN_WIDTH-stringWidth(tmpStr3000, &standardFont, false, true), 220, vmNormal, false, true);
   }
   else {
-    clearScreen(false, true, true);
     displayBugScreen("In function showFonts: This should never happen!");
   }
 }

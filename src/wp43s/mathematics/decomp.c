@@ -61,7 +61,7 @@ void decompError(void) {
 
 
 void decompReal(void) {
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
   liftStack();
 
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
@@ -100,6 +100,4 @@ void decompReal(void) {
 
     longIntegerFree(lgInt);
   }
-
-  refreshStack();
 }

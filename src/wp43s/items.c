@@ -100,10 +100,10 @@ void runFunction(int16_t func) {
   indexOfItems[func].func(indexOfItems[func].param);
 
   if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
-    STACK_LIFT_DISABLE;
+    clearSystemFlag(FLAG_ASLIFT);
   }
   else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
   }
 
   if((func == ITM_ENTER) && (eRPN)) {      //JM NEWERPN 
@@ -250,6 +250,7 @@ void fnGetIntegerSignMode       (uint16_t unusedParamButMandatory) {}
 void fnLog2                     (uint16_t unusedParamButMandatory) {}
 void fnLog10                    (uint16_t unusedParamButMandatory) {}
 void fnLn                       (uint16_t unusedParamButMandatory) {}
+void fnLogXY                    (uint16_t unusedParamButMandatory) {}
 void fnLnP1                     (uint16_t unusedParamButMandatory) {}
 void fnLnGamma                  (uint16_t unusedParamButMandatory) {}
 void fnGamma                    (uint16_t unusedParamButMandatory) {}
@@ -440,6 +441,7 @@ void fnAlphaToX                 (uint16_t unusedParamButMandatory) {}
 void fnTicks                    (uint16_t unusedParamButMandatory) {}
 void fnSave                     (uint16_t unusedParamButMandatory) {}
 void fnLoad                     (uint16_t unusedParamButMandatory) {}
+void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -811,7 +813,7 @@ const item_t indexOfItems[] = {
 /*  328 */  { itemToBeCoded,               NOPARAM,                     "Logis" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Logis" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  329 */  { itemToBeCoded,               NOPARAM,                     "Logis" STD_SUP_MINUS_1,                       "Logis" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  330 */  { itemToBeCoded,               NOPARAM,                     "Logis:",                                      "Logis:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  331 */  { itemToBeCoded,               NOPARAM,                     "LOG" STD_SUB_x "y",                           "log" STD_SUB_x "y",                           0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/*  331 */  { fnLogXY,                     NOPARAM,                     "LOG" STD_SUB_x "y",                           "log" STD_SUB_x "y",                           0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  332 */  { itemToBeCoded,               NOPARAM,                     "LOOP",                                        "LOOP",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  333 */  { fnConstant,                  22,                          "l" STD_SUB_P STD_SUB_L,                       "l" STD_SUB_P STD_SUB_L,                       0,       0,       CAT_CNST, SLS_ENABLED  },
 /*  334 */  { fnCvtLyM,                    multiply,                    "ly" STD_RIGHT_ARROW "m",                      "ly" STD_RIGHT_ARROW "m",                      0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -1988,7 +1990,7 @@ const item_t indexOfItems[] = {
 /* 1503 */  { addItemToBuffer,             ITM_MA34,                    "",                                            "",                                            0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1504 */  { addItemToBuffer,             ITM_MA35,                    "",                                            "",                                            0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1505 */  { addItemToBuffer,             ITM_MA36,                    "",                                            "",                                            0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 1506 */  { fnJM,                        31     /*# JM #*/,           "UNDO",                                        STD_UNDO,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM added temporary routine for undo
+/* 1506 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM added temporary routine for undo
 /* 1507 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "PRGM",                                        "PRGM",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM Change P/R to PRGM
 /* 1508 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1509 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},

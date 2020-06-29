@@ -395,6 +395,9 @@
 		<Unit filename="src/testSuite/log2.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/logxy.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/magnitude.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1566,6 +1569,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/log2.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/logxy.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/logxy.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -112,20 +112,12 @@
   #define fontBrowser     fnNop
   #define flagBrowser_old fnNop      //JM
   #define refreshRegisterLine(a)  {}
-  #define clearScreen(a, b, c)    {}
-  #define showHideUserMode()      {}
-  #define showIntegerMode()       {}
-  #define showAngularMode()       {}
-  #define showComplexMode()       {}
-  #define showHidePgmBegin()      {}
-  #define showFracMode()          {}
   #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
-  #define showRealComplexResult() {}
-  #define showOverflowCarry()     {}
-  #define showDateTime()          {}
-  #define showHideAlphaMode()     {}
-  #define showHideUserMode()      {}
-  #define showHideLowBattery()    {}
+  #define showHideHourGlass()     {}
+  #define refreshScreen()         {}
+  #define refreshLcd(a)           {}
+  #define initFontBrowser()       {}
+
   #define JM_LAYOUT_1A               //JM Preferred layout
 #endif
 
@@ -532,14 +524,6 @@ typedef int16_t calcRegister_t;
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
 //#define setTamMode(x)              *bits5 = (*bits5 & ~(((1 << LENGTH_TAMMODE        ) - 1) << OFFSET_TAMMODE        )) | ((x) << OFFSET_TAMMODE        )
 
-#ifdef PC_BUILD
-  #define STACK_LIFT_ENABLE  stackLiftEnable();
-  #define STACK_LIFT_DISABLE stackLiftDisable();
-#else
-  #define STACK_LIFT_ENABLE  setSystemFlag(FLAG_ASLIFT);
-  #define STACK_LIFT_DISABLE clearSystemFlag(FLAG_ASLIFT);
-#endif
-
 // Variables for the simulator
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
   extern bool_t             debugMemAllocation;
@@ -592,7 +576,7 @@ extern uint16_t              globalFlags[7];
 #define ERROR_MESSAGE_LENGTH           384 //512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN               80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING 196
-#define NUMBER_OF_GLYPH_ROWS           106  //JM
+#define NUMBER_OF_GLYPH_ROWS           106  //JM 100-->106
 extern char                  tmpStr3000[TMP_STR_LENGTH];
 extern char                  errorMessage[ERROR_MESSAGE_LENGTH];
 extern char                  aimBuffer[AIM_BUFFER_LENGTH];
@@ -639,7 +623,6 @@ extern uint32_t              lastIntegerBase;
 extern uint32_t              alphaSelectionTimer;
 extern uint8_t               softmenuStackPointer;
 extern uint8_t               softmenuStackPointerBeforeAIM;
-extern uint8_t               softmenuStackPointerBeforeBrowser;
 extern uint8_t               transitionSystemState;
 extern uint8_t               cursorBlinkCounter;
 extern uint8_t               numScreensStandardFont;
@@ -676,7 +659,6 @@ extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;
 extern bool_t                shiftF;
 extern bool_t                shiftG;
-//extern bool_t              shiftStateChanged;    //dr
 extern bool_t                showContent;
 extern bool_t                savedStackLiftEnabled;
 extern bool_t                rbr1stDigit;

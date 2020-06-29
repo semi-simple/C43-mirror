@@ -35,8 +35,6 @@ void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= ~((uint64_t)1 << (bit - 1));
-
-    refreshStack();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -62,8 +60,6 @@ void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) |= (uint64_t)1 << (bit - 1);
-
-    refreshStack();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -89,8 +85,6 @@ void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) ^= (uint64_t)1 << (bit - 1);
-
-    refreshStack();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -112,7 +106,6 @@ void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
 void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_FALSE : TI_TRUE);
-    refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -134,7 +127,6 @@ void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
 void fnBs(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_TRUE : TI_FALSE);
-    refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);

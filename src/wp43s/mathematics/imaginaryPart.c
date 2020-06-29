@@ -59,12 +59,8 @@ void fnImaginaryPart(uint16_t unusedParamButMandatory) {
 
   imagPart[getRegisterDataType(REGISTER_X)]();
 
-  if(lastErrorCode == 0) {
-    refreshRegisterLine(REGISTER_X);
-  }
-  else {
+  if(lastErrorCode != 0) {
     restoreStack();
-    refreshStack();
   }
 }
 

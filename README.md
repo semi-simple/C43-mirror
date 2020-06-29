@@ -1,8 +1,8 @@
-# WP43C
+# C43
 
 This fork of the WP43S project is to make the user interface of the calculator closer to that of the HP42S, at least from the keyboard point of view. Additionally, it is to make it work on the DM42 hardware without a key change.
 
-Two options for the WP43C are being developed:
+Two options for the C43 are being developed:
 
   Version L1 needs only a keyboard overlay for the yellow and blue shifted functions.
 

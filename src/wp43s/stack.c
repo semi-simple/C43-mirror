@@ -29,7 +29,6 @@
 void fnClX(uint16_t unusedParamButMandatory) {
   saveStack();               //JM
   clearRegister(REGISTER_X);
-  refreshRegisterLine(REGISTER_X);
 }
 
 
@@ -46,8 +45,6 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
   }
-
-  refreshStack();
 }
 
 
@@ -69,7 +66,6 @@ void fnDrop(uint16_t unusedParamButMandatory) {
   sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
   setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
   xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), sizeInBytes);
-  refreshStack();
 }
 
 
@@ -116,7 +112,6 @@ void fnDropY(uint16_t unusedParamButMandatory) {
   sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
   setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
   xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), sizeInBytes);
-  refreshStack();
 }
 
 
@@ -134,7 +129,6 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
     reg[i] = reg[i-1];
   }
   reg[REGISTER_X] = savedRegister;
-  refreshStack();
 }
 
 
@@ -152,7 +146,6 @@ void fnRollDown(uint16_t unusedParamButMandatory) {
     reg[i] = reg[i+1];
   }
   reg[getStackTop()] = savedRegister;
-  refreshStack();
 }
 
 
@@ -165,7 +158,6 @@ void fnRollDown(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnDisplayStack(uint16_t numberOfStackLines) {
   displayStack = numberOfStackLines;
-  refreshStack();
 }
 
 
@@ -181,7 +173,6 @@ void fnSwapX(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
     copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
-    refreshStack();
   }
 
   #ifdef PC_BUILD
@@ -205,7 +196,6 @@ void fnSwapY(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
     copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
-    refreshStack();
   }
 
   #ifdef PC_BUILD
@@ -228,7 +218,6 @@ void fnSwapZ(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER);
     copySourceRegisterToDestRegister(regist, REGISTER_Z);
     copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
-    refreshStack();
   }
 
   #ifdef PC_BUILD
@@ -251,7 +240,6 @@ void fnSwapT(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER);
     copySourceRegisterToDestRegister(regist, REGISTER_T);
     copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
-    refreshStack();
   }
 
   #ifdef PC_BUILD
@@ -274,8 +262,6 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
 
   reg[REGISTER_X] = reg[REGISTER_Y];
   reg[REGISTER_Y] = savedRegister;
-  refreshRegisterLine(REGISTER_X);
-  refreshRegisterLine(REGISTER_Y);
 }
 
 /********************************************//**
@@ -302,9 +288,6 @@ void fnShuffle(uint16_t unusedParamButMandatory) {
       copySourceRegisterToDestRegister(SAVED_REGISTER_T, REGISTER_X + i);
     }
   }
-
-  refreshStack();
-
 }
 
 
@@ -328,8 +311,6 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
     setRegisterDataPointer(i, newDataPointer);
     xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeXinBytes);
   }
-
-  refreshStack();
 }
 
 
@@ -349,23 +330,6 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
   uIntToLongInteger(getSystemFlag(FLAG_SSIZE8) ? 8 : 4, stack);
   convertLongIntegerToLongIntegerRegister(stack, REGISTER_X);
   longIntegerFree(stack);
-
-  refreshStack();
-}
-
-
-
-/********************************************//**
- * \brief Refreshes the screen
- *
- * \param void
- * \return void
- ***********************************************/
-void refreshStack(void) {
-  refreshRegisterLine(REGISTER_X);
-  refreshRegisterLine(REGISTER_Y);
-  refreshRegisterLine(REGISTER_Z);
-  refreshRegisterLine(REGISTER_T);
 }
 
 
@@ -373,13 +337,15 @@ void refreshStack(void) {
 void saveStack(void) {
   savedStackLiftEnabled = getSystemFlag(FLAG_ASLIFT);
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
-    //printf("save %" FMT16S " to %" FMT16S " : ", regist, SAVED_REGISTER_X - REGISTER_X + regist); printRegisterToConsole(regist, 0); printf("\n");
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
   }
-  //printf("save %" FMT16S " to %" FMT16S " : ", REGISTER_L, SAVED_REGISTER_L); printRegisterToConsole(REGISTER_L, 0); printf("\n");
   copySourceRegisterToDestRegister(REGISTER_L, SAVED_REGISTER_L);
-  //printf("\n");
-  //refreshDebugPanel();
+}
+
+
+
+void fnUndo(uint16_t unusedParamButMandatory) {
+  restoreStack();
 }
 
 
@@ -394,58 +360,6 @@ void restoreStack(void) {
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X - REGISTER_X + regist, regist);
-    //printf("restore %" FMT16S " to %" FMT16S " : ", SAVED_REGISTER_X - REGISTER_X + regist, regist); printRegisterToConsole(regist, 0); printf("\n");
   }
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
-  //printf("restore %" FMT16S " to %" FMT16S " : ", SAVED_REGISTER_L, REGISTER_L); printRegisterToConsole(REGISTER_L, 0); printf("\n");
-  //printf("\n");
-  refreshStack();
 }
-
-
-
-#ifdef PC_BUILD
-void stackLiftEnable(void) {
-  //printf("Stack lift enabled\n");
-  clearSystemFlag(FLAG_LOWBAT);
-  setSystemFlag(FLAG_ASLIFT);
-
-  // Draw S
-  setPixel(392,  1);
-  setPixel(393,  1);
-  setPixel(394,  1);
-  setPixel(391,  2);
-  setPixel(395,  2);
-  setPixel(391,  3);
-  setPixel(392,  4);
-  setPixel(393,  4);
-  setPixel(394,  4);
-  setPixel(395,  5);
-  setPixel(391,  6);
-  setPixel(395,  6);
-  setPixel(392,  7);
-  setPixel(393,  7);
-  setPixel(394,  7);
-
-  // Draw L
-  setPixel(391, 10);
-  setPixel(391, 11);
-  setPixel(391, 12);
-  setPixel(391, 13);
-  setPixel(391, 14);
-  setPixel(391, 15);
-  setPixel(391, 16);
-  setPixel(392, 16);
-  setPixel(393, 16);
-  setPixel(394, 16);
-  setPixel(395, 16);
-}
-
-
-
-void stackLiftDisable(void) {
-  //printf("Stack lift disabled\n");
-  clearSystemFlag(FLAG_LOWBAT);
-  clearSystemFlag(FLAG_ASLIFT);
-}
-#endif

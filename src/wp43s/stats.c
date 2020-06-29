@@ -71,7 +71,6 @@ void initStatisticalSums(void) {
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
   real_t tmpReal1, tmpReal2, tmpReal3, x, y;
-  bool_t refreshLineX;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
@@ -84,11 +83,9 @@ void fnSigma(uint16_t plusMinus) {
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToReal(REGISTER_X, &x, realContext);
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      refreshLineX = true;
     }
     else {
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-      refreshLineX = false;
     }
 
     if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
@@ -287,10 +284,6 @@ void fnSigma(uint16_t plusMinus) {
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;
-    refreshRegisterLine(REGISTER_Y);
-    if(refreshLineX) {
-      refreshRegisterLine(REGISTER_X);
-    }
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
@@ -317,7 +310,6 @@ void fnStatSum(uint16_t sum) {
   else {
    liftStack();
    realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
-   refreshStack();
   }
 }
 
@@ -341,13 +333,12 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
     saveStack();
 
     liftStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
 
     realToReal34(SIGMA_X, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_SUMX_SUMY;
-    refreshStack();
   }
 }

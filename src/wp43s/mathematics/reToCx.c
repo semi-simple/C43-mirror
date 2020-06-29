@@ -95,8 +95,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
     }
 
     fnDropY(NOPARAM);
-    STACK_LIFT_ENABLE;
-    refreshStack();
+    setSystemFlag(FLAG_ASLIFT);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation

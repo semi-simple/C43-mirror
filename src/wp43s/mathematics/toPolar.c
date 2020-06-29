@@ -60,8 +60,6 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_RADIUS_THETA;
-    refreshRegisterLine(REGISTER_X);
-    refreshRegisterLine(REGISTER_Y);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);

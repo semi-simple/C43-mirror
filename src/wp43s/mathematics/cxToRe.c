@@ -35,7 +35,7 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
       liftStack();
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -51,8 +51,6 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
       temporaryInformation = TI_RE_IM;
     }
-
-    refreshStack();
   }
 
   else {

@@ -24,7 +24,8 @@
 
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
-  resetShiftState();
+  shiftF = false;
+  shiftG = false;
   calcModeAim(NOPARAM); // Alpha Input Mode
 }
 
@@ -256,9 +257,6 @@ void addItemToBuffer(uint16_t item) {
             showInfoDialog("In function addItemToBuffer:", "the aimBuffer string is too wide!", NULL, NULL);
           #endif
         }
-        else {
-          xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-        }
       }
     }
 
@@ -336,7 +334,6 @@ void addItemToBuffer(uint16_t item) {
       }
 
       softmenuStack[softmenuStackPointer-1].firstItem = firstItem;
-      showSoftmenuCurrentPart();
       setCatalogLastPos();
       startAlphaSelectionBuffer();               //JM
     }
@@ -910,7 +907,7 @@ void addItemToNimBuffer(int16_t item) {
       done = true;
       closeNim();
       if(calcMode != CM_NIM && lastErrorCode == 0) {
-        STACK_LIFT_ENABLE;
+        setSystemFlag(FLAG_ASLIFT);
         return;
       }
       break;
@@ -952,8 +949,7 @@ void addItemToNimBuffer(int16_t item) {
           checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
           setRegisterAngularMode(REGISTER_X, AM_DMS);
 
-          refreshRegisterLine(REGISTER_X);
-          STACK_LIFT_ENABLE;
+          setSystemFlag(FLAG_ASLIFT);
           return;
         }
       }
@@ -1099,15 +1095,13 @@ void addItemToNimBuffer(int16_t item) {
         }
       }
     }
-
-    refreshRegisterLine(NIM_REGISTER_LINE);
   }
 
   else {
     closeNim();
     if(calcMode != CM_NIM) {
       if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
-        STACK_LIFT_ENABLE;
+        setSystemFlag(FLAG_ASLIFT);
       }
 
       if(lastErrorCode == 0) {
@@ -1894,11 +1888,6 @@ void tamTransitionSystem(uint16_t tamTransition) {
       displayBugScreen(errorMessage);
       return;
   }
-
-  if(stringWidth(tamBuffer, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(TAM_REGISTER_LINE, false, false);
-  }
-  showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
 }
 
 void closeNim(void) {
@@ -2252,7 +2241,5 @@ void closeNim(void) {
       }
     }
   }
-
-  refreshRegisterLine(NIM_REGISTER_LINE);
 }
 #endif

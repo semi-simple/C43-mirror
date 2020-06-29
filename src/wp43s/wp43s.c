@@ -106,7 +106,6 @@ uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
-uint8_t               softmenuStackPointerBeforeBrowser;
 uint8_t               transitionSystemState;
 uint8_t               cursorBlinkCounter;
 uint8_t               numScreensStandardFont;
@@ -172,7 +171,6 @@ bool_t                watchIconEnabled;
 bool_t                printerIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
-//bool_t             shiftStateChanged;                        //dr
 bool_t                showContent;
 bool_t                savedStackLiftEnabled;
 bool_t                rbr1stDigit;
@@ -211,7 +209,7 @@ const char            digits[17] = "0123456789ABCDEF";
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()                    //dr
   bool_t              backToDMCP;
-  uint32_t            nextScreenRefresh; // timer substitute for refreshScreen(), which does cursor blinking and other stuff
+  uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
@@ -327,7 +325,6 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
   setSystemFlag(FLAG_CPXRES);                                  //JM default
-  showRealComplexResult();
   clearSystemFlag(FLAG_POLAR);
   clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
@@ -352,7 +349,6 @@ void setupDefaults(void) {
 
   shiftF = false;
   shiftG = false;
-//shiftStateChanged = false;                                   //dr
 
   reset_jm_defaults();
 
@@ -385,9 +381,9 @@ void setupDefaults(void) {
     showShiftState();
   #endif // TESTSUITE_BUILD
 
-  #ifndef TESTSUITE_BUILD
+//  #ifndef TESTSUITE_BUILD    //checkjm
     initFontBrowser();
-  #endif // TESTSUITE_BUILD
+//  #endif // TESTSUITE_BUILD  //checkjm
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
 
@@ -397,16 +393,9 @@ void setupDefaults(void) {
 
   cursorBlinkCounter = 0;
 
-  oldTime[0] = 0;
-
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
 
   lastErrorCode = 0;
-
-  #ifndef TESTSUITE_BUILD
-    refreshStatusBar();
-  #endif
-  refreshStack();
 
   allowScreenUpdate = true;
 
@@ -556,6 +545,10 @@ void program_main(void) {
 
   lcd_clear_buf();*/                                           //^^
   setupDefaults();
+
+  fnReset(CONFIRMED);
+  refreshScreen();
+
   #ifdef JMSHOWCODES                                           //JM test
   telltale_lastkey = 0;                                        //JM test
   telltale_pos = 0;                                            //JM test
@@ -581,7 +574,7 @@ addr = (uint32_t)indexOfItems;
 uIntToLongInteger(addr, li);
 convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_X);
 
-refreshStack();
+refreshScreen();
 longIntegerFree(li);*/
 
   backToDMCP = false;
@@ -679,7 +672,8 @@ longIntegerFree(li);*/
    #endif
 
     if(sys_last_key() == 44 ) {                                //JM DISP for special SCREEN DUMP key code. To be 16 but shift decoding already to 44
-      resetShiftState();                                       //JM to avoid f or g top left of the screen
+      shiftF = false;
+      shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
       fnScreenDump(0);                                         //JM
     }                                                          //JM
    
@@ -733,7 +727,7 @@ longIntegerFree(li);*/
       if(nextScreenRefresh < now) {
         nextScreenRefresh = now + LCD_REFRESH_TIMEOUT;                // we were out longer than expected; just skip ahead.
       }
-      refreshScreen();
+      refreshLcd();
       if(key >= 0) {
         lcd_refresh();
       }

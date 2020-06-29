@@ -36,8 +36,6 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   fnRefreshRadioState(RB_DI, DF_FIX);                                           //dr
-
-  refreshStack();
 }
 
 
@@ -56,8 +54,6 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   fnRefreshRadioState(RB_DI, DF_SCI);                                           //dr
-
-  refreshStack();
 }
 
 
@@ -76,8 +72,6 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   fnRefreshRadioState(RB_DI, DF_ENG);                                           //dr
-
-  refreshStack();
 }
 
 
@@ -97,8 +91,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   UNITDisplay = false;                                           //JM UNIT display Reset
 
   fnRefreshRadioState(RB_DI, DF_ALL);                                         //dr
-
-  refreshStack();
 }
 
 
@@ -121,8 +113,6 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
       showInfoDialog("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
   #endif
-
-  refreshStack();
 }*/
 
 
@@ -138,7 +128,6 @@ void fnDisplayFormatGap(uint16_t gap) {
    gap = 0;
  }
   groupingGap = gap;
-  refreshStack();
 }
 
 
@@ -1624,7 +1613,6 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
       }
     }
   }
-//print_linestr("#",true);
   if(stringWidth(displayString, allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, false, false) > maxWidth) {      //JM
     char exponentString[14], lastRemovedDigit;
     int16_t lastChar, stringStep, tenExponent;
@@ -1639,9 +1627,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
     }
     exponentString[0] = 0;
     exponentToDisplayString(tenExponent, exponentString, NULL, false, separator);
-//print_linestr("@",false);
     while(stringWidth(displayString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, false, true) + stringWidth(exponentString,   allowLARGELI && jm_LARGELI ? &numericFont : &standardFont, true, false) > maxWidth) {  //JM jm_LARGELI
-//print_inlinestr("-",false);
       lastChar -= stringStep;
       tenExponent += exponentStep;
       lastRemovedDigit = displayString[lastChar + 2];
@@ -1901,6 +1887,10 @@ void fnShow(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case dtConfig:
+      xcopy(tmpStr3000, "Configuration data", 19);
+      break;
+
     default:
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -1910,11 +1900,6 @@ void fnShow(uint16_t unusedParamButMandatory) {
       #endif
       return;
   }
-
-  refreshRegisterLine(REGISTER_T);
-  if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-  if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-  if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;
@@ -2375,6 +2360,10 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       break;
 */
 
+    case dtConfig:
+      xcopy(tmpStr3000, "Configuration data", 19);
+      break;
+
 
     default:
       temporaryInformation = TI_NO_INFO;
@@ -2387,26 +2376,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   }
 
 
-    //printf("TI_SHOW_REGISTER     300 %d 900 %d 1500 %d\n", (uint8_t) tmpStr3000[ 300], (uint8_t) tmpStr3000[ 900], (uint8_t) tmpStr3000[ 1500]);
-    //printf("TI_SHOW_REGISTER_BIG 300 %d 600 %d  900 %d\n", (uint8_t) tmpStr3000[ 300], (uint8_t) tmpStr3000[ 600], (uint8_t) tmpStr3000[ 900]);
-    if (temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) {
-      refreshRegisterLine(REGISTER_T);
-      if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-      if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_Y);
-      if(tmpStr3000[1500]) refreshRegisterLine(REGISTER_X);
-    }
-    else if (temporaryInformation == TI_SHOW_REGISTER_BIG  ) {
-      refreshRegisterLine(REGISTER_T);
-      if(tmpStr3000[ 300]) refreshRegisterLine(REGISTER_Z);
-      if(tmpStr3000[ 600]) refreshRegisterLine(REGISTER_Y);
-      if(tmpStr3000[ 900]) refreshRegisterLine(REGISTER_X);  
-    }
- 
   displayFormat = savedDisplayFormat;
   displayFormatDigits = savedDisplayFormatDigits;
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
 
-
 }
-

@@ -1476,12 +1476,6 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
 
-  if(JM_OPCODE == 31) {                                         //UNDO
-    restoreStack();
-  }
-  else
-
-
   if(JM_OPCODE == 45) {                                         //PRIME stats
     #ifndef TESTSUITE_BUILD
 

@@ -217,3 +217,5 @@ percentT
 percentSigma
 percentPlusMG
 deltaPercent
+
+logxy

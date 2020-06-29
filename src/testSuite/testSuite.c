@@ -119,6 +119,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLnGamma",              fnLnGamma             },
   {"fnLog10",                fnLog10               },
   {"fnLog2",                 fnLog2                },
+  {"fnLogXY",                fnLogXY               },
   {"fnLogicalAnd",           fnLogicalAnd          },
   {"fnLogicalNand",          fnLogicalNand         },
   {"fnLogicalNor",           fnLogicalNor          },

@@ -1,0 +1,336 @@
+;*************************************************************
+;*************************************************************
+;**                                                         **
+;**                        Log(x, y)                        **
+;**                                                         **
+;*************************************************************
+;*************************************************************
+In: FL_SPCRES=0 FL_CPXRES=0 SD=0 RM=0 IM=2compl SS=4 WS=64
+Func: fnLogXY
+
+;
+; Log(0, 0) = +Inf
+; Log(x, 0) = -Inf x!=0
+; Log(0, y) = NaN  y!=0
+;
+
+
+;************************************************************************************************************************************************************
+; LogXYX(Long Integer, *) -> Real or Complex
+;************************************************************************************************************************************************************
+
+;=======================================
+; LogXY(Long Integer, Long Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"50" RX=LonI:"15"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"15" RX=Real:"1.444590282645389700621867685662017211405206323226340287415821378567276873194026901753498001625844279"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"50" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"0.615815165502830655618481366468059850256 i -0.7144034475895065711983899723172602538"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"-50" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"1.18952462977035565729631783818825203333788096764003931559755820258642 i -0.21986637630223244095896137591972106727833517879947085757501417099599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"50" RX=LonI:"0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=LonI:"0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=LonI:"0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=LonI:"10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=LonI:"10"
+
+;=======================================
+; LogXY(Long Integer, Real) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0 RY=LonI:"123" RX=Real:"10.1234"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=0 RL=Real:"10.1234" RX=Real:"2.0788324242106272739526574359693196273054198186263000312707361196135792367314376887201874492341977909"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0  RY=LonI:"123" RX=Real:"-10.1234"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Real:"-10.1234" RX=Cplx:"0.7315068067258356208691859472391377 i -0.9927627410747316225060659019386146"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"123" RX=Real:"0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=Real:"0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=Real:"0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=Real:"10.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=Real:"10.0"
+
+;=======================================
+; LogXY(Long Integer, Complex) --> Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0  RY=LonI:"123" RX=Cplx:"10.1234 i +1.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Cplx:"10.1234 i +1.0" RX=Cplx:"2.070750626745408061380412049168649 i -0.08789457175783785708709692458835297"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"123" RX=Cplx:"0.0 i +0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Cplx:"0.0 i +0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=Cplx:"0.0 i +0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=Cplx:"0.0 i +0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=Cplx:"10.1234 i +1.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=Cplx:"10.1234 i +1.0"
+
+;=======================================
+; LogXY(Long Integer, Short Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"10" RX=ShoI:"5#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"5#10" RX=Real:"1.430676558073393050670106568763966"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"10" RX=ShoI:"-5#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"-5#10" RX=Cplx:"0.2974236786282204714008003076901836 i -0.5805654486968773153089419362776599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"123" RX=ShoI:"0#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"0#10" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=ShoI:"0#10"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=LonI:"0" RX=ShoI:"0#10"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=ShoI:"5#10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=LonI:"0" RX=ShoI:"5#10"
+
+;************************************************************************************************************************************************************
+; LogXYX(Real, *) -> Real or Complex
+;************************************************************************************************************************************************************
+
+;=======================================
+; LogXY(Real, Long Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"50.0" RX=LonI:"15"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"15" RX=Real:"1.444590282645389700621867685662017211405206323226340287415821378567276873194026901753498001625844279"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"50.0" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"0.615815165502830655618481366468059850256 i -0.7144034475895065711983899723172602538"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"-50.0" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"1.18952462977035565729631783818825203333788096764003931559755820258642 i -0.21986637630223244095896137591972106727833517879947085757501417099599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"50.0" RX=LonI:"0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=LonI:"0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=LonI:"0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=LonI:"10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=LonI:"10"
+
+;=======================================
+; LogXY(Real, Real) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0 RY=Real:"123.0" RX=Real:"10.1234"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=0 RL=Real:"10.1234" RX=Real:"2.0788324242106272739526574359693196273054198186263000312707361196135792367314376887201874492341977909"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0  RY=Real:"123.0" RX=Real:"-10.1234"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Real:"-10.1234" RX=Cplx:"0.7315068067258356208691859472391377 i -0.9927627410747316225060659019386146"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"123.0" RX=Real:"0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=Real:"0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=Real:"0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=Real:"10.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=Real:"10.0"
+
+;=======================================
+; LogXY(Real, Complex) --> Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"123.0" RX=Cplx:"10.1234 i +1.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Cplx:"10.1234 i +1.0" RX=Cplx:"2.070750626745408061380412049168649 i -0.08789457175783785708709692458835297"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"123.0" RX=Cplx:"0.0 i +0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Cplx:"0.0 i +0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=Cplx:"0.0 i +0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=Cplx:"0.0 i +0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=Cplx:"10.1234 i +1.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=Cplx:"10.1234 i +1.0"
+
+;=======================================
+; LogXY(Real, Short Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"10.0" RX=ShoI:"5#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"5#10" RX=Real:"1.430676558073393050670106568763966"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"10.0" RX=ShoI:"-5#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"-5#10" RX=Cplx:"0.2974236786282204714008003076901836 i -0.5805654486968773153089419362776599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"123.0" RX=ShoI:"0#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"0#10" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=ShoI:"0#10"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=Real:"0.0" RX=ShoI:"0#10"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=ShoI:"5#10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Real:"0.0" RX=ShoI:"5#10"
+
+;************************************************************************************************************************************************************
+; LogXYX(Complex, *) -> Real or Complex
+;************************************************************************************************************************************************************
+
+;=======================================
+; LogXY(Complex, Long Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"50.0 i +1.0" RX=LonI:"15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"15" RX=Cplx:"1.444664121753166240909957612412913 i +0.007384402979313813963117310470350482"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"50.0 i +1.0" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"0.6194985034382376000290637647634738 i -0.7112920626634966765733288081266286"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"-50.0 i +1.0" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"1.185904245660572851526142720697242 i -0.2230507935804548868281218393095478"
+
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"50.0 i +1.0" RX=LonI:"0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=LonI:"0"
+Out: EC=4  FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=LonI:"0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=LonI:"10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=LonI:"10"
+
+;=======================================
+; LogXY(Complex, Real) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"50.0 i +1.0" RX=Real:"10.1234"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Real:"10.1234" RX=Cplx:"1.690054941934210968363124666257788 i +0.008638718550909890811043118970642693"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"50.0 i +1.0" RX=Real:"-10.1234"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Real:"-10.1234" RX=Cplx:"0.5988279176212027134147175391531533 i -0.8040591804482878053383869275676676"
+
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"50.0 i +1.0" RX=Real:"0.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=Real:"0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i 0.0" RX=Real:"0.0"
+Out: EC=4  FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i 0.0" RX=Real:"0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i 0.0" RX=Real:"10.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i 0.0" RX=Real:"10.0"
+
+;=======================================
+; LogXY(Complex, Complex) --> Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"123.0 i +1.0" RX=Cplx:"10.1234 i +1.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Cplx:"10.1234 i +1.0" RX=Cplx:"2.070913340477535414614593725144223 i -0.08439676409919160686764808654635822"
+
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"123.0 i +1.0" RX=Cplx:"0.0 i +0.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"0.0 i +0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=Cplx:"0.0 i +0.0"
+Out: EC=4  FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=Cplx:"0.0 i +0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=Cplx:"10.1234 i +1.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=Cplx:"10.1234 i +1.0"
+
+;=======================================
+; LogXY(Complex, Short Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"10.0 i +1.0" RX=ShoI:"5#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"5#10" RX=Cplx:"1.433767802158142889226746330846978 i +0.06192761567324084895581881412401969"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"10.0 i +1.0" RX=ShoI:"-5#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"-5#10" RX=Cplx:"0.3231964103887385812818870974100808 i -0.5689457225894598410289375215633755"
+
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"123.0 i +1.0" RX=ShoI:"0#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"0#10" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=ShoI:"0#10"
+Out: EC=4  FL_CPXRES=1 FL_ASLIFT=1 RY=Cplx:"0.0 i +0.0" RX=ShoI:"0#10"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=ShoI:"5#10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=Cplx:"0.0 i +0.0" RX=ShoI:"5#10"
+
+;************************************************************************************************************************************************************
+; LogXYX(Short Integer, *) -> Real or Complex
+;************************************************************************************************************************************************************
+
+;=======================================
+; LogXY(Short Integer, Long Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"50#10" RX=LonI:"15"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"15" RX=Real:"1.444590282645389700621867685662017211405206323226340287415821378567276873194026901753498001625844279"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"50#10" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"0.615815165502830655618481366468059850256 i -0.7144034475895065711983899723172602538"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"-50#10" RX=LonI:"-15"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"-15" RX=Cplx:"1.18952462977035565729631783818825203333788096764003931559755820258642 i -0.21986637630223244095896137591972106727833517879947085757501417099599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"50#10" RX=LonI:"0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=LonI:"0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=LonI:"0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=LonI:"10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=LonI:"10"
+
+;=======================================
+; LogXY(Short Integer, Real) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"123#10" RX=Real:"10.1234"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=0 RL=Real:"10.1234" RX=Real:"2.0788324242106272739526574359693196273054198186263000312707361196135792367314376887201874492341977909"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"123#10" RX=Real:"-10.1234"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Real:"-10.1234" RX=Cplx:"0.7315068067258356208691859472391377 i -0.9927627410747316225060659019386146"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"123#10" RX=Real:"0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=Real:"0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=Real:"0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=Real:"10.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=Real:"10.0"
+
+;=======================================
+; LogXY(Short Integer, Complex) --> Complex
+;=======================================
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"123#10" RX=Cplx:"10.1234 i +1.0"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=0 RL=Cplx:"10.1234 i +1.0" RX=Cplx:"2.070750626745408061380412049168649 i -0.08789457175783785708709692458835297"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"123#10" RX=Cplx:"0.0 i +0.0"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=Cplx:"0.0 i +0.0" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=Cplx:"0.0 i +0.0"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=Cplx:"0.0 i +0.0"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=Cplx:"10.1234 i +1.0"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=Cplx:"10.1234 i +1.0"
+
+;=======================================
+; LogXY(Short Integer, Short Integer) --> Real & Complex
+;=======================================
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"10#10" RX=ShoI:"5#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"5#10" RX=Real:"1.430676558073393050670106568763966"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"10#10" RX=ShoI:"-5#10"
+Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"-5#10" RX=Cplx:"0.2974236786282204714008003076901836 i -0.5805654486968773153089419362776599"
+
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"123#10" RX=ShoI:"0#10"
+Out: EC=0  FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"0#10" RX=Real:"NaN"
+
+In:  WS=64 FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=ShoI:"0#10"
+Out: EC=4  FL_CPXRES=0 FL_ASLIFT=1 RY=ShoI:"0#10" RX=ShoI:"0#10"
+
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=ShoI:"5#10"
+Out: EC=5  FL_CPXRES=1 FL_ASLIFT=0 RY=ShoI:"0#10" RX=ShoI:"5#10"

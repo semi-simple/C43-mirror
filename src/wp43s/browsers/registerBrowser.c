@@ -238,6 +238,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
       }
       else { // no local register allocated
         rbrMode = RBR_GLOBAL;
+        registerBrowser(NOPARAM);
       }
     }
   }

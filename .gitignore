@@ -17,7 +17,8 @@ gmon.out
 wp43s.sav
 bin/
 obj/
-#*build*/
+*build*/
+wp43s.dSYM
 gmp-6.2.0/
 gmp-6.2.0.tar.bz2
 DMCP_build/src

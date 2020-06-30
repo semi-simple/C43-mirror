@@ -41,7 +41,6 @@ void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_F
 // Error handling
 //-----------------------------------------------------------------------------
 
-#define DOMAIN_ERROR            1
 
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 

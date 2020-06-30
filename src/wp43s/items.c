@@ -107,7 +107,7 @@ void runFunction(int16_t func) {
   }
 
   if((func == ITM_ENTER) && (eRPN)) {      //JM NEWERPN 
-    STACK_LIFT_ENABLE;                     //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+    setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
     //printf("Forced ERPN items.c\n");
   }                                        //JM NEWERPN 
 

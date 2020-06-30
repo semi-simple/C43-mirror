@@ -73,7 +73,6 @@ void runkey(uint16_t item){
     if (!keyActionProcessed){
       hideFunctionName();
       runFunction(item);
-      refreshStack();
       #ifdef DMCP_BUILD
         lcd_forced_refresh(); // Just redraw from LCD buffer    
       #endif
@@ -534,7 +533,7 @@ void reset_jm_defaults(void) {
       XEQMENU_Selection(16, line1, false);
       XEQMENU_Selection(17, line1, false);
       XEQMENU_Selection(18, line1, false);
-      clearScreen(false, true, true);
+//      clearScreen(false, true, true);
     #endif
 }
 
@@ -664,7 +663,6 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_LARGELI:                                      //JM
     jm_LARGELI = !jm_LARGELI;
     fnRefreshComboxState(CB_JC, JC_LARGELI, jm_LARGELI);                //jm
-    refreshStack();
     break;
 
 
@@ -827,7 +825,6 @@ void fnShowJM(uint16_t jmConfig) {                               //DONE
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
 
-  refreshStack();
 }
 
 
@@ -883,7 +880,6 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {       //DONE
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
 
-  refreshStack();
 }
 
 
@@ -995,7 +991,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {      //DONE
 
 
 void fnStrtoX(char aimBuffer[]) {      //DONE
-  STACK_LIFT_ENABLE;   // 5
+  setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
   int16_t mem = stringByteLength(aimBuffer);
   reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
@@ -1007,7 +1003,7 @@ void fnStrtoX(char aimBuffer[]) {      //DONE
 void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
   tmpStr3000[0] = 0;
   strcat(tmpStr3000, inp1);
-  STACK_LIFT_ENABLE;   // 5
+  setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1018,7 +1014,7 @@ void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
 void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
   tmpStr3000[0]=0;
   strcat(tmpStr3000, inp1);
-  STACK_LIFT_ENABLE;   // 5
+  setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
 
   longInteger_t lgInt;
@@ -1032,11 +1028,10 @@ void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DON
 
 
 void fnRCL(int16_t inp) {      //DONE
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
   if(inp == TEMP_REGISTER) {
     liftStack();
     copySourceRegisterToDestRegister(inp, REGISTER_X);
-    refreshStack();
   } else {
   fnRecall(inp);
   }
@@ -1058,7 +1053,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 6) {                                          //Delta to Star   ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J
     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);   // STO K
@@ -1094,15 +1089,12 @@ void fnJM(uint16_t JM_OPCODE) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
     adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
     adjustResult(REGISTER_Z, false, true, REGISTER_Z, -1, -1);
-//    refreshRegisterLine(REGISTER_X);
-//    refreshRegisterLine(REGISTER_Y);
-//    refreshRegisterLine(REGISTER_Z);
   }
   else
 
   if(JM_OPCODE == 7) {                                          //Star to Delta ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J
     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);   // STO K
@@ -1135,27 +1127,24 @@ void fnJM(uint16_t JM_OPCODE) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
     adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
     adjustResult(REGISTER_Z, false, true, REGISTER_Z, -1, -1);
-//    refreshRegisterLine(REGISTER_X);
-//    refreshRegisterLine(REGISTER_Y);
-//    refreshRegisterLine(REGISTER_Z);
   }
   else
 
   if(JM_OPCODE == 8) {                                          //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL
     saveStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I  //A2
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J  //A1
     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);   // STO K  //A0
     fnAdd(0);                                                   // +
     fnAdd(0);                                                   // + Va = Vao + Va1 +Va2
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_a(0);
     fnRCL(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_aa(0);
     fnRCL(REGISTER_J);                                       // A1
@@ -1164,12 +1153,12 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(REGISTER_K);                                       // A0
     fnAdd(0);                                                   // + Vb = Vao + aaVa1 +aVa2
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_aa(0);
     fnRCL(REGISTER_I);                                       // A2
     fnMultiply(0);                                              // * a
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_a(0);
     fnRCL(REGISTER_J);                                       // A1
@@ -1181,15 +1170,12 @@ void fnJM(uint16_t JM_OPCODE) {
     copySourceRegisterToDestRegister(REGISTER_I, REGISTER_L);   // STO
 
     temporaryInformation = TI_ABC;
-    refreshRegisterLine(REGISTER_X);
-    refreshRegisterLine(REGISTER_Y);
-    refreshRegisterLine(REGISTER_Z);
   }
   else
 
   if(JM_OPCODE == 9) {                                          //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & JMTEMP
     saveStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //c
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //b
     copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_K);  // STO K  //a
@@ -1199,17 +1185,16 @@ void fnJM(uint16_t JM_OPCODE) {
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
     stringToReal34("3", REGISTER_REAL34_DATA(REGISTER_X));
     stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));      //
-    refreshStack();
     copySourceRegisterToDestRegister(REGISTER_X, JMTEMP);       // STO
     fnDivide(0);
 
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_a(0);
     fnRCL(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_aa(0);
     fnRCL(REGISTER_I);                                       // VC
@@ -1221,12 +1206,12 @@ void fnJM(uint16_t JM_OPCODE) {
     fnDivide(0);                                                // /
 
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_aa(0);
     fnRCL(REGISTER_J);                                       // VB
     fnMultiply(0);                                              // * a
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_a(0);
     fnRCL(REGISTER_I);                                       // VC
@@ -1241,27 +1226,23 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
     temporaryInformation = TI_012;
-    refreshRegisterLine(REGISTER_X);
-    refreshRegisterLine(REGISTER_Y);
-    refreshRegisterLine(REGISTER_Z);
   }
   else
 
   if(JM_OPCODE == 10) {                                         //e^theta.j j
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_j(0);
     fnMultiply(0);                                              // * aa
     fnExp(0);
-    refreshStack();
   }
   else
 
   if(JM_OPCODE == 11) {                                         //STO Z
     saveStack();
-    STACK_LIFT_ENABLE;                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
+    setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 90);
     copySourceRegisterToDestRegister(REGISTER_Y, 91);
     copySourceRegisterToDestRegister(REGISTER_Z, 92);
@@ -1270,7 +1251,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 13) {                                         //STO V
     saveStack();
-    STACK_LIFT_ENABLE;                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
+    setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 93);
     copySourceRegisterToDestRegister(REGISTER_Y, 94);
     copySourceRegisterToDestRegister(REGISTER_Z, 95);
@@ -1279,7 +1260,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 15) {                                         //STO I
     saveStack();
-    STACK_LIFT_ENABLE;                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
+    setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 96);
     copySourceRegisterToDestRegister(REGISTER_Y, 97);
     copySourceRegisterToDestRegister(REGISTER_Z, 98);
@@ -1321,7 +1302,6 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(93);
     fnRCL(96);
     fnDivide(0);
-    refreshStack();
   }
   else
 
@@ -1336,7 +1316,6 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(96);
     fnRCL(91);
     fnMultiply(0);
-    refreshStack();
   }
   else
 
@@ -1351,30 +1330,27 @@ void fnJM(uint16_t JM_OPCODE) {
     fnRCL(93);
     fnRCL(90);
     fnDivide(0);
-    refreshStack();
   }
   else
 
   if(JM_OPCODE == 20) {                                         //Copy Create X>ABC
     saveStack();
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
 
     fnRCL(REGISTER_I);                                          //
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_a(0);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
 
     fnRCL(REGISTER_I);                                          //
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     fn_cnst_op_aa(0);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
     fnMultiply(0);
-
-    refreshStack();
   }
   else
 
@@ -1470,7 +1446,6 @@ void fnJM(uint16_t JM_OPCODE) {
     strcat(tmpStr3000,tmp);
     fnStrtoX(tmpStr3000);
     fnStrtoX("[PLOT] graphs, [SNAP] saves screen");
-    refreshStack();
   }
   else
 
@@ -1487,7 +1462,6 @@ void fnJM(uint16_t JM_OPCODE) {
     uint16_t ix1, ixx1;
     if(getRegisterDataType(REGISTER_Z) != dtLongInteger) {
       convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Z), REGISTER_Z, DEC_ROUND_DOWN);
-      refreshRegisterLine(REGISTER_Z);
     }
     if(getRegisterDataType(REGISTER_Z) == dtLongInteger) {
       convertLongIntegerRegisterToLongInteger(REGISTER_Z, xx3);
@@ -1501,7 +1475,6 @@ void fnJM(uint16_t JM_OPCODE) {
     uint16_t ix2;
     if(getRegisterDataType(REGISTER_Y) != dtLongInteger) {
       convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_Y, DEC_ROUND_DOWN);
-      refreshRegisterLine(REGISTER_Y);
     }
     if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
       convertLongIntegerRegisterToLongInteger(REGISTER_Y, xx3);
@@ -1515,7 +1488,6 @@ void fnJM(uint16_t JM_OPCODE) {
     uint16_t ix3 = 0;
     if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
       convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      refreshRegisterLine(REGISTER_X);
     }
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToLongInteger(REGISTER_X, xx3);
@@ -1535,7 +1507,7 @@ void fnJM(uint16_t JM_OPCODE) {
       adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
       tenPowLonI();
 
-      clearScreen(false,true,true);
+//      clearScreen(false,true,true);
       sprintf(tmpStr3000,"i=10^4Z to i=10^4Y, n primes>i:ZYX %d %d %d|",ix1, ix2,ix3);
       #ifdef PC_BUILD
         printf(tmpStr3000);
@@ -1544,14 +1516,14 @@ void fnJM(uint16_t JM_OPCODE) {
 
       fnJM(46);
 
-      STACK_LIFT_ENABLE;
+      setSystemFlag(FLAG_ASLIFT);
       liftStack();
       uIntToLongInteger(ix1*4, xx3);
       convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
       adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
       runFunction(ITM_SIGMAPLUS);
-      STACK_LIFT_ENABLE;
+      setSystemFlag(FLAG_ASLIFT);
 
       ix1++;
     }
@@ -1595,7 +1567,7 @@ void fnJM(uint16_t JM_OPCODE) {
     }
     getUptimeMs0 = getUptimeMs() - getUptimeMs0;
 
-    STACK_LIFT_ENABLE;
+    setSystemFlag(FLAG_ASLIFT);
     liftStack();
     uIntToLongInteger(getUptimeMs0, lgInt);
     convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
@@ -2059,7 +2031,7 @@ void fnUserJM(uint16_t jmUser) {
   case JM_SEEK_FN:      //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,         //USER_RESET 27
     JM_ASN_MODE = 32766;
 #ifndef TESTSUITE_BUILD
-    clearScreen(false,true,false);
+//    clearScreen(false,true,false);
     showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
 #endif
     break;
@@ -2134,11 +2106,10 @@ void fnASSIGN(int16_t JM_ASN_MODE, int16_t tempkey) {           //JM ASSIGN - RE
       }
 
       fnSetFlag(FLAG_USER);
-      refreshStack();
       break;
     default:
 #ifndef TESTSUITE_BUILD
-        clearScreen(false,true,false);
+//        clearScreen(false,true,false);
         showString("Invalid key", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
 #endif
     break;
@@ -2167,7 +2138,6 @@ void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcReg
   }
 
   longIntegerFree(mem);
-  refreshStack();
 }
 */
 

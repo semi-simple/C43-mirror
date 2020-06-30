@@ -629,7 +629,7 @@ void graph_plotmem(void) {
   if(telltale == MEM_INITIALIZED && statnum >= 2) {
     //GRAPH SETUP
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-    clearScreen(false,true,true);
+    clearScreen_old(false,true,true);
 
     //AUTOSCALE
     x_min = 1e38;
@@ -781,7 +781,6 @@ void graph_plotmem(void) {
       sprintf(errorMessage, "There is no statistical data available!");
       showInfoDialog("In function graph_plotmem:", errorMessage, NULL, NULL);
     #endif
-    refreshStack();
   }
 #endif
 }
@@ -885,7 +884,7 @@ void graph_plotmem(void) {
 
                       //GRAPH SETUP
                       calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-                      clearScreen(false,true,true);
+                      clearScreen_old(false,true,true);
 
                       //GRAPH ZERO AXIS
                       uint8_t  yzero;
@@ -939,7 +938,7 @@ void fnStatList(uint16_t unusedParamButMandatory) {
   if(telltale == MEM_INITIALIZED) {
     //GRAPH SETUP
     calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-    clearScreen(false,true,true);
+    clearScreen_old(false,true,true);
   }
   #endif
 

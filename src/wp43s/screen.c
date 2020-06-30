@@ -546,7 +546,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
       FN_handle_timed_out_to_EXEC = false;
       if(!shiftF && !shiftG) {                            //   Current shift state
         shiftF = true;        //S_shF();                  //   New shift state
-        showShiftState();
+//        showShiftState();
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,6),0);
         FN_timed_out_to_RELEASE_EXEC = true;
@@ -559,7 +559,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
       else if(shiftF && !shiftG) {
         shiftG = true;        //S_shG();
         shiftF = false;       //R_shF();
-        showShiftState();
+//        showShiftState();
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);
         FN_timed_out_to_RELEASE_EXEC = true;
@@ -594,22 +594,20 @@ void Shft_handler() {                        //JM SHIFT NEW vv
       if(!shiftF && !shiftG) {
         shiftF = true;
         fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
-        showShiftState();
+//        showShiftState();
       }
       else if(shiftF && !shiftG) {
         shiftG = true;
         shiftF = false;
         fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);
-        showShiftState();
+//        showShiftState();
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         Shft_timeouts = false;
         fnTimerStop(TO_FG_LONG);
         fnTimerStop(TO_FG_TIMR);
-      //shiftG = false;
-      //shiftF = false;
-        resetShiftState();                        //force into no shift state, i.e. to wait
-      //showShiftState();
+        shiftG = false;
+        shiftF = false;                          //force into no shift state, i.e. to wait
         if(HOME3) {
           if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                            //JM shifts
             popSoftmenu();                                                                                                  //JM shifts
@@ -646,8 +644,8 @@ void Shft_stop() {
   Shft_timeouts = false;
   fnTimerStop(TO_FG_LONG);
   fnTimerStop(TO_FG_TIMR);
-  resetShiftState();
-//showShiftState();                     // no need to call because of resetShiftState()
+  shiftF=false;
+  shiftG=false;
 }
 
 

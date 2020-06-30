@@ -1991,7 +1991,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
     }
   }
 
-  clearScreen(false, true, false); //Clear screen content while NEW SHOW
+  #ifndef TESTSUITE_BUILD
+  clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
+  #endif
   SHOW_reset();
   
   switch(getRegisterDataType(SHOWregis)) {

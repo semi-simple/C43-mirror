@@ -500,7 +500,9 @@ int main(int argc, char* argv[]) {
   restoreCalc();
   //fnReset(CONFIRMED);
 
-  gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshScreen, NULL); //dr refreshScreen is called every 100 ms //vv
+  refreshScreen();
+
+  gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshLcd, NULL); //dr refreshLcd is called every 100 ms //vv
   fnTimerReset();                                                    //dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
@@ -523,7 +525,7 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
-//uint16_t currentVolumeSetting, savedVoluleSetting;           //JM not - used for beep signaling screen shot
+uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -671,11 +673,32 @@ longIntegerFree(li);*/
     showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
    #endif
 
-    if(sys_last_key() == 44 ) {                                //JM DISP for special SCREEN DUMP key code. To be 16 but shift decoding already to 44
+    if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
       shiftF = false;
       shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
-      fnScreenDump(0);                                         //JM
-    }                                                          //JM
+
+      currentVolumeSetting = get_beep_volume();
+      savedVoluleSetting = currentVolumeSetting;
+      while(currentVolumeSetting < 11) {
+        beep_volume_up();
+        currentVolumeSetting = get_beep_volume();
+      }
+
+      start_buzzer_freq(100000); //Click before screen dump
+      sys_delay(5);
+      stop_buzzer();
+
+      create_screenshot(0);      //Screen dump
+
+      start_buzzer_freq(400000); //Click after screen dump
+      sys_delay(5);
+      stop_buzzer();
+
+      while(currentVolumeSetting != savedVoluleSetting) { //Restore volume
+        beep_volume_down();
+        currentVolumeSetting = get_beep_volume();
+      }
+    }
    
    #ifdef JMSHOWCODES 
     //Show key codes
@@ -699,13 +722,13 @@ longIntegerFree(li);*/
       btnFnPressed(NULL, charKey);                             //JM Changed from Clicked to Pressed
       lcd_refresh_dma();
     }
-    else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
-      btnFnReleased(NULL,NULL);                                //    in short, it can only execute FN release after there was a FN press.
-      lcd_refresh_dma();
-    }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(NULL, charKey);
+      lcd_refresh_dma();
+    }
+    else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
+      btnFnReleased(NULL,NULL);                                //    in short, it can only execute FN release after there was a FN press.
       lcd_refresh_dma();
     }
     else if(key == 0) {
@@ -732,7 +755,7 @@ longIntegerFree(li);*/
         lcd_refresh();
       }
       else {
-        lcd_refresh_wait();
+        lcd_refresh_wait();                                   //JM dr?
       }
     }
   }

@@ -592,7 +592,7 @@ void fnReset(uint16_t confirmation) {
     serialIOIconEnabled = false;
     printerIconEnabled = false;
 
-    showRealComplexResult();                                   //JM, from wp43s.c
+//    showRealComplexResult();                                   //JM, from wp43s.c
     reset_jm_defaults();
 
     // Initialization of user key assignments

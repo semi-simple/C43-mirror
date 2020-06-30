@@ -95,13 +95,13 @@ int16_t determineFunctionKeyItem(const char *data) {
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
 //      case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
-      case 1: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[0].fShifted) : (kbd_usr[0].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-      case 2: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-      case 3: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-      case 4: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-      case 5: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 1: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[0].fShifted) : (kbd_usr[0].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 2: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 3: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 4: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 5: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
 //      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
-      case 6: {resetTemporaryInformation(); item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[5].fShifted) : (kbd_usr[5].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
+      case 6: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[5].fShifted) : (kbd_usr[5].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       default:{item = 0;} break;
     }
   }
@@ -160,9 +160,10 @@ void btnFnPressed(void *notUsed, void *data) {
 //    showFunctionNameItem = item;
         btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
 //    #endif
-  }
-  else {
-    showFunctionNameItem = ITM_NOP;
+    }
+    else {
+      showFunctionNameItem = ITM_NOP;
+    }
   }
 }
 
@@ -197,8 +198,8 @@ void btnFnReleased(void *w, void *data) {
 void executeFunction(const char *data) {
   int16_t item = ITM_NOP;
   item = determineFunctionKeyItem((char *)data);
-  resetShiftState();
-
+  shiftF=false;
+  shiftG=false;
 
     //printf("%d--\n",calcMode);
     if(calcMode != CM_CONFIRMATION) {
@@ -710,7 +711,6 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
 
         liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-        refreshStack();
         //printf("ERPN--1\n");
         clearSystemFlag(FLAG_ASLIFT);
       }                                               //JM NEWERPN vv

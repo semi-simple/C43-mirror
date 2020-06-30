@@ -312,7 +312,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
   }
 
   if(currentFlgScr == 1) { // Memory and flags from 0 to 79
-    clearScreen(false, true, true);
+//    clearScreen(false, true, true);
 
 //JM    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", getFreeRamMemory() / 2, getFreeFlash() / 2);
 //JM    showString(tmpStr3000, &standardFont, 1, 22-1, vmNormal, true, true);
@@ -333,7 +333,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
   }
 
   if(currentFlgScr == 2) { // Flags from 100 to GLOBALFLAGS, local registers and local flags
-    clearScreen(false, true, true);
+//    clearScreen(false, true, true);
 
     showString("Global flag status (continued):", &standardFont, 1, 22-1, vmNormal, true, true);
 

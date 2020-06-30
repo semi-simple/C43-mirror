@@ -149,7 +149,6 @@ void fnTo_ms(uint16_t unusedParamButMandatory) {
       }
     }
     copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
-    refreshRegisterLine(REGISTER_X);
   }
 
 
@@ -181,7 +180,7 @@ void fnMultiplySI(uint16_t multiplier) {
 		default: break;
 	}
 
-	STACK_LIFT_ENABLE;
+	setSystemFlag(FLAG_ASLIFT);
 	liftStack();
 	longInteger_t lgInt;
 	longIntegerInit(lgInt);
@@ -201,7 +200,6 @@ void fnMultiplySI(uint16_t multiplier) {
 
     adjustResult(REGISTER_X, false, false, REGISTER_X, REGISTER_Y, -1);
     copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
-    refreshRegisterLine(REGISTER_X);
 
 }
 
@@ -210,13 +208,12 @@ void fnMultiplySI(uint16_t multiplier) {
 
 void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
   saveStack();
-  STACK_LIFT_ENABLE;
+  setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(const_1, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
 }
 
 void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
@@ -225,7 +222,6 @@ void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
   fnChangeSign(ITM_CHS);
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
 }
 
 void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
@@ -234,7 +230,6 @@ void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
   fnChangeSign(ITM_CHS);
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
 }
 
 void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
@@ -242,7 +237,6 @@ void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
 }
 
 void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
@@ -250,7 +244,6 @@ void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
   realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  refreshStack();
 }
 
 
@@ -270,7 +263,6 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
     else {
 //      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
       ipReal();                                        //This converts real to longint!
-      refreshStack();
     }
   }
 }
@@ -309,7 +301,6 @@ void fnJMup(uint16_t unusedParamButMandatory) {
     JM_convertReal34ToLongInteger(CONFIRMED);
   }
 
-  refreshStack();
 }
 
 
@@ -337,7 +328,6 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
         fnChangeBase(10);                              //This converts shortint, longint and real to shortint!
       }
 
-      refreshStack();
     }
   }
 }
@@ -374,8 +364,6 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   if(dataTypeX == dtReal34) {
     JM_convertReal34ToShortInteger(CONFIRMED);
   }
-
-  refreshStack();
 }
 
 
@@ -400,7 +388,6 @@ void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longin
     default:
       break;
   }
-  refreshStack();
 }
 
 
@@ -421,8 +408,6 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {   //DONE          //JM SIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
 
   fnRefreshRadioState(RB_DI, DF_SF);
-
-  refreshStack();
 }                                                                 //JM SIGFIG
 
 
@@ -444,7 +429,6 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {    //DONE           //JM UNI
 //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
 //    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
 //  }
-  refreshStack();
 }                                                                 //JM UNIT
 
 

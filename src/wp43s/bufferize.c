@@ -363,7 +363,7 @@ void addItemToNimBuffer(int16_t item) {
       case ITM_EXPONENT :
         if( eRPN ) {                 //JM NEWERPN vv  NOTE: Rather force a stack lift before NIM (than after ENTER) so that normal ENTER SLS can be used for cancelling ENTER using NOP
             calcModeNim(NOPARAM);
-            STACK_LIFT_DISABLE;      
+            clearSystemFlag(FLAG_ASLIFT);      
         } 
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);
@@ -379,7 +379,7 @@ void addItemToNimBuffer(int16_t item) {
       case CHR_PERIOD :
         if( eRPN ) {                 //JM NEWERPN vv
             calcModeNim(NOPARAM);
-            STACK_LIFT_DISABLE;      
+            clearSystemFlag(FLAG_ASLIFT);      
         } 
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);
@@ -408,7 +408,7 @@ void addItemToNimBuffer(int16_t item) {
       case CHR_F :
         if( eRPN ) {                 //JM NEWERPN vv
             calcModeNim(NOPARAM);
-            STACK_LIFT_DISABLE;      
+            clearSystemFlag(FLAG_ASLIFT);      
         } 
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);

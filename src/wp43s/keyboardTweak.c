@@ -36,7 +36,9 @@ uint32_t    timerLastCalled;
 void showAlphaModeonGui(void) {
   if(calcMode == CM_AIM || calcMode == CM_ASM || CM_ASM_OVER_TAM || CM_ASM_OVER_AIM)    //vv dr JM
   {
+    #ifndef TESTSUITE_BUILD
     showHideAlphaMode();
+    #endif
     #ifdef PC_BUILD     //dr - new AIM
       calcModeAimGui();
     #endif
@@ -362,15 +364,11 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        hideFunctionName();    
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
-       #ifdef PC_BUILD
-         refreshScreen(NULL);            //JM CLRDROP
-       #elif DMCP_BUILD
-         refreshScreen();                //JM CLRDROP
-       #endif
+       refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-       STACK_LIFT_ENABLE;               //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-    }                                  //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+       setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+    }                                   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
   }
 
 }
@@ -631,7 +629,8 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
       btnFnClicked(w, charKey);                                             //Execute
     }
-    resetShiftState();
+    shiftF=false;
+    shiftG=false;
     FN_cancel();
   }
 //**************JM LONGPRESS AND JM DOUBLE ^^ *********************************************   // JM FN-DOUBLE

@@ -25,7 +25,7 @@
 void (* const Round[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2          3          4          5          6           7          8           9             10
 //          Long integer Real34     Complex34  Time       Date       String      Real34 mat Complex34 m Short integer Config data
-            roundLonI,   roundReal, roundCplx, roundTime, roundDate, roundError, roundRema, roundCxma,  roundError,   roundError
+            roundError,  roundReal, roundCplx, roundTime, roundDate, roundError, roundRema, roundCxma,  roundError,   roundError
 };
 
 
@@ -64,53 +64,6 @@ void fnRound(uint16_t unusedParamButMandatory) {
 
 
 
-void roundLonI(void) {
-  int32_t pos, posE;
-  longInteger_t lgInt;
-
-  updateDisplayValueX = true;
-  displayValueX[0] = 0;
-  updateDisplayValueX = false;
-
-  pos = 0;
-  posE = -1;
-  while(displayValueX[pos] != 0) {
-    if(displayValueX[pos] == 'e') {
-      posE = pos;
-      break;
-    }
-    pos++;
-  }
-
-  longIntegerInit(lgInt);
-  if(posE == -1) { // There is no exponent
-    stringToLongInteger(displayValueX, 10, lgInt);
-  }
-  else { // There is an exponent
-    displayValueX[posE] = 0;
-    stringToLongInteger(displayValueX, 10, lgInt);
-
-    pos = stringToInt32(displayValueX + posE + 1);
-    while(pos >= 9) {
-      longIntegerMultiplyUInt(lgInt, 1000000000, lgInt);
-      pos -= 9;
-    }
-    while(pos >= 4) {
-      longIntegerMultiplyUInt(lgInt, 10000, lgInt);
-      pos -= 4;
-    }
-    while(pos >= 1) {
-      longIntegerMultiplyUInt(lgInt, 10, lgInt);
-      pos -= 1;
-    }
-  }
-
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
-}
-
-
-
 void roundTime(void) {
   fnToBeCoded();
 }
@@ -138,6 +91,7 @@ void roundCxma(void) {
 void roundReal(void) {
   updateDisplayValueX = true;
   displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
   if(getSystemFlag(FLAG_FRACT)) {
@@ -180,6 +134,7 @@ void roundCplx(void) {
 
   updateDisplayValueX = true;
   displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
   updateDisplayValueX = false;
 
   posI = DISPLAY_VALUE_LEN - 1;

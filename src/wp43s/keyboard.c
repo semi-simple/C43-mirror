@@ -138,7 +138,7 @@ int16_t determineFunctionKeyItem(const char *data) {
  * \param w GtkWidget* The button to pass to btnFnPressed and btnFnReleased
  * \param data gpointer String containing the key ID
  * \return void
- //JM btnFnClicked is called by gui.c keyPressed
+ //JM btnFnClicked is called by gui.c keyPressed, and by btnFnReleased_StateMachine
  ***********************************************/
 #ifdef PC_BUILD
 void btnFnClicked(GtkWidget *w, gpointer data) {
@@ -169,7 +169,7 @@ void btnFnPressed(void *notUsed, void *data) {
     int16_t item = determineFunctionKeyItem((char *)data);
 
     if(item != ITM_NOP /*&& item != ITM_NULL*/) {          //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
-//    resetShiftState();                                 //JM still need the shifts active prior to cancelling them
+//    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
 
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
@@ -206,7 +206,7 @@ void btnFnReleased(void *w, void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
 
-    btnFnReleased_StateMachine(w, data);
+    btnFnReleased_StateMachine(w, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below
   }
 
 }
@@ -218,9 +218,11 @@ void btnFnReleased(void *w, void *data) {
  * \return void
  ***********************************************/
 void executeFunction(const char *data) {
-  int16_t item = ITM_NOP;
-  item = determineFunctionKeyItem((char *)data);
-  resetShiftState();
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+
+    int16_t item = ITM_NOP;
+    item = determineFunctionKeyItem((char *)data);
+    resetShiftState();
 
 
     //printf("%d--\n",calcMode);
@@ -277,8 +279,11 @@ void executeFunction(const char *data) {
         }
       }
     }
-  }
 
+
+    refreshScreen();
+  }
+}
 
 
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
@@ -1157,12 +1162,12 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr--;                          //JM removed the 3-x part
-      if(currentFlgScr==0) {currentFlgScr=3;}   //JM
+//      if(currentFlgScr==0) {currentFlgScr=4;}   //JM
      break;
 
     case CM_FLAG_BROWSER_OLD:              //JMvv
       currentFlgScr--;
-      if(currentFlgScr==0) {currentFlgScr=3;}
+//      if(currentFlgScr==0) {currentFlgScr=4;}
       break;                               //JM^^
 
     case CM_FONT_BROWSER:
@@ -1275,12 +1280,12 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr++;                          //JM removed the 3-x part
-      if(currentFlgScr==4) {currentFlgScr=1;}   //JM
+//      if(currentFlgScr==5) {currentFlgScr=1;}   //JM
       break;
 
     case CM_FLAG_BROWSER_OLD:              //JMvv
       currentFlgScr++;
-      if(currentFlgScr==4) {currentFlgScr=1;}
+//      if(currentFlgScr==5) {currentFlgScr=1;}
       break;                               //JM^^
 
     case CM_FONT_BROWSER:

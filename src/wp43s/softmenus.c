@@ -1358,6 +1358,8 @@ void showSoftmenuCurrentPart(void) {
   bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0) {
+    clearScreen_old(false, false, true);
+
     m                = softmenuStack[softmenuStackPointer-1].softmenu;
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 

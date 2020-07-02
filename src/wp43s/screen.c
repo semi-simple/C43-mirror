@@ -553,7 +553,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,1, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-        printf("Handler 1, KEY=%d \n",FN_key_pressed);
+          printf("Handler 1, KEY=%d \n",FN_key_pressed);
         #endif
       }
       else if(shiftF && !shiftG) {
@@ -566,7 +566,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,2, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-        printf("Handler 2, KEY=%d \n",FN_key_pressed);
+          printf("Handler 2, KEY=%d \n",FN_key_pressed);
         #endif
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
@@ -577,7 +577,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         FN_timeouts_in_progress = false;
         fnTimerStop(TO_FN_LONG);                                      //dr
         #ifdef FN_TIME_DEBUG1
-        printf("Handler 3, KEY=%d \n",FN_key_pressed);
+          printf("Handler 3, KEY=%d \n",FN_key_pressed);
         #endif
       }
     }

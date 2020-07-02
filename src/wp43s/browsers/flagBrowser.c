@@ -266,18 +266,15 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
         showString(tmpStr3000 + CHARS_PER_LINE * f, &standardFont, 1, 22*(f-9) + 43, vmNormal, true, false);
       }
     }
-    else {
-      currentFlgScr = 2;
-    }
   }
 
+  //printf("1: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpStr3000);  //JM
   if(currentFlgScr == 3) {        //JMvv
     currentFlgScr = 0;
-    calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
-    flagBrowser_old(0);           //JM^^
-  }
-  else {
-    flagBrowser(NOPARAM);
+    //printf("leave new\n");
+    calcMode = CM_FLAG_BROWSER_OLD;
+    //return;
+    flagBrowser_old(NOPARAM);     //JM^^
   }
 }
 #endif
@@ -308,15 +305,11 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
   }
 
   if(currentFlgScr == 0) { // Init
-    currentFlgScr = 1;
+    currentFlgScr = 3;
   }
 
-  if(currentFlgScr == 1) { // Memory and flags from 0 to 79
+  if(currentFlgScr == 3) { // flags from 0 to 99
 //    clearScreen(false, true, true);
-
-//JM    sprintf(tmpStr3000, "%" FMT32U " words free in RAM, %" FMT32U " in flash.", getFreeRamMemory() / 2, getFreeFlash() / 2);
-//JM    showString(tmpStr3000, &standardFont, 1, 22-1, vmNormal, true, true);
-//JM    showString("Global flag status:", &standardFont, 1, 44-1, vmNormal, true, true);
 
     for(f=0; f<=99/*79*/; f++) {                                          //JM 99
       if(getFlag(f)) {
@@ -332,7 +325,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
     }
   }
 
-  if(currentFlgScr == 2) { // Flags from 100 to GLOBALFLAGS, local registers and local flags
+  if(currentFlgScr == 4) { // Flags from 100 to GLOBALFLAGS, local registers and local flags
 //    clearScreen(false, true, true);
 
     showString("Global flag status (continued):", &standardFont, 1, 22-1, vmNormal, true, true);
@@ -392,14 +385,14 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
       }
     }
   }
+  //printf("2: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpStr3000);
 
-  if(currentFlgScr == 3) { // Change over to STATUS
+  if(currentFlgScr == 5) { // Change over to STATUS
     currentFlgScr = 0;
-    calcMode = previousCalcMode;  //JM needed to preserve the previous state, only when jumping from the old to new STATUS, and vice versa
-    flagBrowser(0);
-  }
-  else {
-    flagBrowser_old(NOPARAM);
+    //printf("leave old\n");
+    calcMode = CM_FLAG_BROWSER;
+    //return;
+    flagBrowser(NOPARAM);
   }
 }
 #endif

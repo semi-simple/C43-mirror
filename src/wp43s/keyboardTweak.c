@@ -618,6 +618,7 @@ void btnFnReleased_StateMachine(void *w, void *data) {
   char charKey[3];
   bool_t EXEC_pri;
   EXEC_pri = (FN_timeouts_in_progress && (FN_key_pressed != 0));
+printf("!!!\n");
   // EXEC_FROM_LONGPRESS_RELEASE     EXEC_FROM_LONGPRESS_TIMEOUT  EXEC FN primary
   if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line

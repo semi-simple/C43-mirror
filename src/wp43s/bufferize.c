@@ -24,8 +24,7 @@
 
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
-  shiftF = false;
-  shiftG = false;
+  resetShiftState();
   calcModeAim(NOPARAM); // Alpha Input Mode
 }
 

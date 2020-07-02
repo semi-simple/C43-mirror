@@ -21,54 +21,6 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-/********************************************//**
- * \brief Displays the f or g shift state in the
- * upper left corner of the T register line
- *
- * \param void
- * \return void
- ***********************************************/
-void showShiftState(void) {
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-//  if(shiftStateChanged) {                                                     //dr
-      if(shiftF) {
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-        show_f_jm();        //JM KeyboardTweaks.c
-      }
-      else if(shiftG) {
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-        show_g_jm();        //JM KeyboardTweaks.c
-      }
-      else {
-        refreshRegisterLine(REGISTER_T);
-        clear_fg_jm();      //JM KeyboardTweaks.c
-        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
-          showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-        }
-      }
-//    shiftStateChanged = false;                                                //vv dr
-//  }                                                                           //^^
-  }
-}
-
-
-
-
-/********************************************//**  //JM Retain this because of convenience
- * \brief Resets shift keys status and clears the
- * corresponding area on the screen
- *
- * \param void
- * \return void
- *
- ***********************************************/
-void resetShiftState(void) {
-  if(shiftF || shiftG) {                                                        //vv dr
-    shiftF = false;
-    shiftG = false;
-    showShiftState();
-  }                                                                             //^^
-}
 
 
 
@@ -98,35 +50,30 @@ int16_t determineFunctionKeyItem(const char *data) {
         item %= 10000;
       }
 
-      int16_t ix_fn;                            //JMXXX
-      ix_fn = 0;                                /*JMEXEC XXX vv*/
-      if(func_lookup(fn,itemShift,&ix_fn)) {
-        //printf("---%d\n",ix_fn);
-        item = ix_fn;
-      }                                         /*JMEXEC XXX ^^*/
+      int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
+      if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
+                                                         /*JMEXEC XXX ^^*/
 
       if(item == CHR_PROD_SIGN) {
         item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
       }
-
-
     }
   }
-  else {              //if there is no SoftMenu up
+
+  else {              //if there is no SoftMenu showing
     switch(fn) {
       //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-//      case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
+      //case 1: {resetTemporaryInformation(); item = ( ITM_SIGMAMINUS ) ;} break;  //ITM_pi
       case 1: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[0].fShifted) : (kbd_usr[0].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 2: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[1].fShifted) : (kbd_usr[1].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 3: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[2].fShifted) : (kbd_usr[2].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 4: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[3].fShifted) : (kbd_usr[3].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       case 5: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[4].fShifted) : (kbd_usr[4].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
-//      case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
+      //case 6: {resetTemporaryInformation(); item = ( ITM_XFACT ) ;} break;       //ITM_XTHROOT
       case 6: {temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[5].fShifted) : (kbd_usr[5].fShifted) ) ;} break;  //Function key follows if the yellow key top 4 buttons are changed from default.
       default:{item = 0;} break;
     }
   }
-
   return item;
 }
 
@@ -168,12 +115,11 @@ void btnFnPressed(void *notUsed, void *data) {
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
     int16_t item = determineFunctionKeyItem((char *)data);
 
-    if(item != ITM_NOP /*&& item != ITM_NULL*/) {          //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
+    if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
 
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
-//--        refreshStack();
       }
 
 //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
@@ -205,10 +151,8 @@ void btnFnReleased(GtkWidget *w, gpointer data) {
 void btnFnReleased(void *w, void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-
-    btnFnReleased_StateMachine(w, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below
+    btnFnReleased_StateMachine(w, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
   }
-
 }
 
 
@@ -224,62 +168,62 @@ void executeFunction(const char *data) {
     item = determineFunctionKeyItem((char *)data);
     resetShiftState();
 
+      //printf("%d--\n",calcMode);
+    {
+      if(calcMode != CM_CONFIRMATION) {
+        allowScreenUpdate = true;
 
-    //printf("%d--\n",calcMode);
-    if(calcMode != CM_CONFIRMATION) {
-      allowScreenUpdate = true;
+        if(lastErrorCode != 0) {
+          lastErrorCode = 0;
+        }
 
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-      }
-
-      if(softmenuStackPointer > 0) {
-        if(calcMode == CM_ASM) {
-          calcModeNormal();
-        }
-        else if(calcMode == CM_ASM_OVER_TAM) {
-          indexOfItems[getOperation()].func(indexOfItems[item].param);
-          calcModeNormal();
-          return;
-        }
-        else if(calcMode == CM_ASM_OVER_AIM) {
-          calcMode = CM_AIM;
-          addItemToBuffer(item);
-          calcMode = CM_ASM_OVER_AIM;
-          return;
-        }
-      }
-       // Broken IF, because I want the FN keys to be active if there are no softmenus
-      {
-        if(item < 0) { // softmenu
-          if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
-            showSoftmenu(NULL, item, true);
+        if(softmenuStackPointer > 0) {
+          if(calcMode == CM_ASM) {
+            calcModeNormal();
+          }
+          else if(calcMode == CM_ASM_OVER_TAM) {
+            indexOfItems[getOperation()].func(indexOfItems[item].param);
+            calcModeNormal();
+            return;
+          }
+          else if(calcMode == CM_ASM_OVER_AIM) {
+            calcMode = CM_AIM;
+            addItemToBuffer(item);
+            calcMode = CM_ASM_OVER_AIM;
+            return;
           }
         }
-        else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
-          addItemToNimBuffer(item);
-        }
-        else if(calcMode == CM_TAM) {
-          addItemToBuffer(item);
-        }
-        else if(item > 0) { // function
-          if(calcMode == CM_NIM && item != KEY_CC) {
-            closeNim();
-            if(calcMode != CM_NIM) {
-              if(indexOfItems[item].func == fnConstant) {
-                setSystemFlag(FLAG_ASLIFT);
-              }
+         // Broke the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
+        {
+          if(item < 0) { // softmenu
+            if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+              showSoftmenu(NULL, item, true);
             }
           }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+            addItemToNimBuffer(item);
+          }
+          else if(calcMode == CM_TAM) {
+            addItemToBuffer(item);
+          }
+          else if(item > 0) { // function
+            if(calcMode == CM_NIM && item != KEY_CC) {
+              closeNim();
+              if(calcMode != CM_NIM) {
+                if(indexOfItems[item].func == fnConstant) {
+                  setSystemFlag(FLAG_ASLIFT);
+                }
+              }
+            }
 
-          if(lastErrorCode == 0) {
-            temporaryInformation = TI_NO_INFO;
-            runFunction(item);
+            if(lastErrorCode == 0) {
+              temporaryInformation = TI_NO_INFO;
+              runFunction(item);
+            }
           }
         }
       }
     }
-
 
     refreshScreen();
   }
@@ -300,9 +244,6 @@ int16_t determineItem(const char *data) {
   else
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
-
-
-
   allowScreenUpdate = true;
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
@@ -318,31 +259,8 @@ int16_t determineItem(const char *data) {
 
 
 
-  // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
-  // JM Inserted new section and removed old f and g key processing sections
-  if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {   //JM shifts
-    Shft_timeouts = true;                         //JM SHIFT NEW
-    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
-    if(ShiftTimoutMode) {
-      fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
-    }
-    temporaryInformation = TI_NO_INFO;
-                                                                                                                              //JM shifts
-    if(lastErrorCode != 0) {                                                                                                  //JM shifts
-      lastErrorCode = 0;                                                                                                      //JM shifts
-    }                                                                                                                         //JM shifts
-
-    fg_processing_jm();
-
-    showShiftState();                                                                                                         //JM shifts
-
-    return ITM_NOP;
-
-  }                                                                                                                           //JM shifts
-
-
   // Shift f pressed and JM REMOVED shift g not active
-  else if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     temporaryInformation = TI_NO_INFO;
 
     if(lastErrorCode != 0) {
@@ -376,6 +294,29 @@ int16_t determineItem(const char *data) {
 
     return ITM_NOP;
   }
+
+
+  // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
+  // JM Inserted new section and removed old f and g key processing sections
+  else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {   //JM shifts
+    Shft_timeouts = true;                         //JM SHIFT NEW
+    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
+    if(ShiftTimoutMode) {
+      fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
+    }
+    temporaryInformation = TI_NO_INFO;
+                                                                                                                              //JM shifts
+    if(lastErrorCode != 0) {                                                                                                  //JM shifts
+      lastErrorCode = 0;                                                                                                      //JM shifts
+    }                                                                                                                         //JM shifts
+
+    fg_processing_jm();
+
+    showShiftState();                                                                                                         //JM shifts
+
+    return ITM_NOP;
+  }                                                                                                                           //JM shifts
+
 
   if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
     result = shiftF ? key->fShifted :
@@ -445,7 +386,7 @@ void btnPressed(void *notUsed, void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
-  showFunctionNameItem = 0;        //JM TOCHECK
+  showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
     if(!keyActionProcessed) {
@@ -567,7 +508,7 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
           // Following commands do not timeout to NOP
-          else if(/*item == KEY_UNDO ||JM*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO should time out
+          else if(/*item == KEY_UNDO ||JM*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
             runFunction(item);
             keyActionProcessed = true;
           }
@@ -940,7 +881,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
   uint32_t dataTypeX;
   uint32_t dataTypeY;
 
-  //JM The switch statement is broken up here, due to multiple conditions.
+  // The switch statement is broken up here, due to multiple conditions.                      //JM
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -1082,7 +1023,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if((softmenuStackPointer > 0)  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
@@ -1162,13 +1103,11 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr--;                          //JM removed the 3-x part
-//      if(currentFlgScr==0) {currentFlgScr=4;}   //JM
      break;
 
-    case CM_FLAG_BROWSER_OLD:              //JMvv
+    case CM_FLAG_BROWSER_OLD:                   //JMvv
       currentFlgScr--;
-//      if(currentFlgScr==0) {currentFlgScr=4;}
-      break;                               //JM^^
+      break;                                    //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr >= 2) {
@@ -1205,7 +1144,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if((softmenuStackPointer > 0)  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1280,13 +1219,11 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 
     case CM_FLAG_BROWSER:
       currentFlgScr++;                          //JM removed the 3-x part
-//      if(currentFlgScr==5) {currentFlgScr=1;}   //JM
       break;
 
-    case CM_FLAG_BROWSER_OLD:              //JMvv
+    case CM_FLAG_BROWSER_OLD:                   //JMvv
       currentFlgScr++;
-//      if(currentFlgScr==5) {currentFlgScr=1;}
-      break;                               //JM^^
+      break;                                    //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr < numScreensNumericFont+numScreensStandardFont) {

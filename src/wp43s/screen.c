@@ -1139,7 +1139,7 @@ void showFunctionName(int16_t item, int8_t counter) {
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
   strcpy(padding,indexOfItems[abs(item)].itemCatalogName);  //JM
-  strcat(padding,"   ");                                    //JM
+  strcat(padding,"    ");                                    //JM
   if(stringWidth(padding, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(REGISTER_T, true, false);
   }

@@ -65,6 +65,57 @@ void fnKeyCase(uint16_t unusedParamButMandatory) {    //JM CASE JM CAPS
 
 
 
+/********************************************//**
+ * \brief Displays the f or g shift state in the
+ * upper left corner of the T register line
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void showShiftState(void) {
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+//  if(shiftStateChanged) {                                                     //dr
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+        show_f_jm();        //JM KeyboardTweaks.c
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+        show_g_jm();        //JM KeyboardTweaks.c
+      }
+      else {
+        refreshRegisterLine(REGISTER_T);
+        clear_fg_jm();      //JM KeyboardTweaks.c
+        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+          showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+        }
+      }
+//    shiftStateChanged = false;                                                //vv dr
+//  }                                                                           //^^
+  }
+}
+
+
+
+
+/********************************************//**  //JM Retain this because of convenience
+ * \brief Resets shift keys status and clears the
+ * corresponding area on the screen
+ *
+ * \param void
+ * \return void
+ *
+ ***********************************************/
+void resetShiftState(void) {
+  if(shiftF || shiftG) {                                                        //vv dr
+    shiftF = false;
+    shiftG = false;
+    showShiftState();
+  }                                                                             //^^
+}
+
+
+
 
 
 #ifndef TESTSUITE_BUILD
@@ -618,7 +669,6 @@ void btnFnReleased_StateMachine(void *w, void *data) {
   char charKey[3];
   bool_t EXEC_pri;
   EXEC_pri = (FN_timeouts_in_progress && (FN_key_pressed != 0));
-printf("!!!\n");
   // EXEC_FROM_LONGPRESS_RELEASE     EXEC_FROM_LONGPRESS_TIMEOUT  EXEC FN primary
   if( (FN_timed_out_to_RELEASE_EXEC || FN_timed_out_to_NOP || EXEC_pri ))  {                  //JM DOUBLE: If slower ON-OFF than half the limit (250 ms)
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line

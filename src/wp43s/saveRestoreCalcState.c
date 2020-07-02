@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         40  // 40 = removed softmenuStackPointerBeforeBrowser
+#define BACKUP_VERSION         41  // 41 = removed errorRegisterLine
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -150,7 +150,6 @@ void saveCalc(void) {
   save(&displayStack,                       sizeof(displayStack),                       backup);
   save(&hexDigits,                          sizeof(hexDigits),                          backup);
   save(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           backup);
-  save(&errorRegisterLine,                  sizeof(errorRegisterLine),                  backup);
   save(&shortIntegerMask,                   sizeof(shortIntegerMask),                   backup);
   save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                backup);
   save(&temporaryInformation,               sizeof(temporaryInformation),               backup);
@@ -320,7 +319,6 @@ void restoreCalc(void) {
     restore(&displayStack,                       sizeof(displayStack),                       backup);
     restore(&hexDigits,                          sizeof(hexDigits),                          backup);
     restore(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           backup);
-    restore(&errorRegisterLine,                  sizeof(errorRegisterLine),                  backup);
     restore(&shortIntegerMask,                   sizeof(shortIntegerMask),                   backup);
     restore(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                backup);
     restore(&temporaryInformation,               sizeof(temporaryInformation),               backup);

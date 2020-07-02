@@ -143,7 +143,6 @@ bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
 calcKey_t             kbd_usr[37];
 calcRegister_t        errorMessageRegisterLine;
-calcRegister_t        errorRegisterLine;
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;

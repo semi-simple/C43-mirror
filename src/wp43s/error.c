@@ -130,7 +130,6 @@ void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegiste
   else {
     lastErrorCode            = errorCode;
     errorMessageRegisterLine = errMessageRegisterLine;
-    errorRegisterLine        = errRegisterLine;
   }
 }
 

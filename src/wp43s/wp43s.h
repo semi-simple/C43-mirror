@@ -597,7 +597,6 @@ extern bool_t                rbr1stDigit;
 extern bool_t                updateDisplayValueX;
 extern calcKey_t             kbd_usr[37];
 extern calcRegister_t        errorMessageRegisterLine;
-extern calcRegister_t        errorRegisterLine;
 extern uint64_t              shortIntegerMask;
 extern uint64_t              shortIntegerSignBit;
 extern uint64_t              systemFlags;

@@ -514,6 +514,7 @@ void reset_jm_defaults(void) {
     }
 
     #ifndef TESTSUITE_BUILD
+      clearScreen();
       char line1[TMP_STR_LENGTH];
       XEQMENU_Selection( 1, line1, false);
       XEQMENU_Selection( 2, line1, false);

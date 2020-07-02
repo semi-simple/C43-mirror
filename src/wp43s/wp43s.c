@@ -674,8 +674,7 @@ longIntegerFree(li);*/
    #endif
 
     if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-      shiftF = false;
-      shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
+      resetShiftState();                                       //JM to avoid f or g top left of the screen
 
       currentVolumeSetting = get_beep_volume();
       savedVoluleSetting = currentVolumeSetting;

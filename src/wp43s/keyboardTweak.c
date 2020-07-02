@@ -629,8 +629,7 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
       btnFnClicked(w, charKey);                                             //Execute
     }
-    shiftF=false;
-    shiftG=false;
+    resetShiftState();
     FN_cancel();
   }
 //**************JM LONGPRESS AND JM DOUBLE ^^ *********************************************   // JM FN-DOUBLE

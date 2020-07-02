@@ -51,6 +51,27 @@ void showShiftState(void) {
   }
 }
 
+
+
+
+/********************************************//**  //JM Retain this because of convenience
+ * \brief Resets shift keys status and clears the
+ * corresponding area on the screen
+ *
+ * \param void
+ * \return void
+ *
+ ***********************************************/
+void resetShiftState(void) {
+  if(shiftF || shiftG) {                                                        //vv dr
+    shiftF = false;
+    shiftG = false;
+    showShiftState();
+  }                                                                             //^^
+}
+
+
+
 int16_t determineFunctionKeyItem(const char *data) {
   int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
@@ -148,10 +169,11 @@ void btnFnPressed(void *notUsed, void *data) {
     int16_t item = determineFunctionKeyItem((char *)data);
 
     if(item != ITM_NOP /*&& item != ITM_NULL*/) {          //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
-//    shiftF = false;                                      //JM still need the shifts active prior to cancelling them
-//    shiftG = false;
+//    resetShiftState();                                 //JM still need the shifts active prior to cancelling them
+
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
+//--        refreshStack();
       }
 
 //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
@@ -198,8 +220,8 @@ void btnFnReleased(void *w, void *data) {
 void executeFunction(const char *data) {
   int16_t item = ITM_NOP;
   item = determineFunctionKeyItem((char *)data);
-  shiftF=false;
-  shiftG=false;
+  resetShiftState();
+
 
     //printf("%d--\n",calcMode);
     if(calcMode != CM_CONFIRMATION) {
@@ -307,6 +329,8 @@ int16_t determineItem(const char *data) {
 
     fg_processing_jm();
 
+    showShiftState();                                                                                                         //JM shifts
+
     return ITM_NOP;
 
   }                                                                                                                           //JM shifts
@@ -325,6 +349,7 @@ int16_t determineItem(const char *data) {
 
     shiftF = !shiftF;
     shiftG = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+    showShiftState();
 
     return ITM_NOP;
   }
@@ -342,6 +367,7 @@ int16_t determineItem(const char *data) {
 
     shiftG = !shiftG;
     shiftF = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+    showShiftState();
 
     return ITM_NOP;
   }
@@ -373,8 +399,7 @@ int16_t determineItem(const char *data) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
   }
 
-  shiftF = false;
-  shiftG = false;
+  resetShiftState();
 
   return result;
 }

@@ -144,6 +144,26 @@ void fnToRect2(uint16_t unusedParamButMandatory) {
 
 
 
+void fnRoundi2(uint16_t unusedParamButMandatory) {
+  //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    //nothing
+  }
+  else
+    fnRoundi(0);
+}
+
+
+void fnRound2(uint16_t unusedParamButMandatory) {
+  //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    //nothing
+  }
+  else
+    fnRound(0);
+}
+
+
 
 
 void fnTo_ms(uint16_t unusedParamButMandatory) {

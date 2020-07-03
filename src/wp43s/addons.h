@@ -33,6 +33,8 @@ void fn_cnst_1_cpx  (uint16_t unusedParamButMandatory);
 void fnJMup         (uint16_t unusedParamButMandatory);
 void fnJMdown       (uint16_t unusedParamButMandatory);
 void fnJM_2SI       (uint16_t unusedParamButMandatory);
+void fnRoundi2      (uint16_t unusedParamButMandatory);
+void fnRound2       (uint16_t unusedParamButMandatory);
 
 //for display.c
 void fnDisplayFormatSigFig      (uint16_t displayFormatN);

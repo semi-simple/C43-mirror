@@ -476,6 +476,8 @@ void fn_cnst_1_cpx              (uint16_t unusedParamButMandatory) {}
 void fnStatList                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMENU                  (uint16_t unusedParamButMandatory) {}         //^^
 void flagBrowser_old            (uint16_t unusedParamButMandatory) {}         //^^
+void fnRound2                   (uint16_t unusedParamButMandatory) {}
+void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1004,8 +1006,8 @@ const item_t indexOfItems[] = {
 /*  519 */  { fnGetRoundingMode,           NOPARAM     /*# JM #*/,      "RMODE?",                                      "RMODE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  520 */  { fnRmd,                       NOPARAM,                     "RMD",                                         "RMD",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  522 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  523 */  { fnRoundi,                    NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  522 */  { fnRound2,                    NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  523 */  { fnRoundi2,                   NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  524 */  { fnRr,                        TM_VALUE,                    "RR",                                          "RR",                                          0,      63,       CAT_FNCT, SLS_ENABLED  },
 /*  525 */  { fnRrc,                       TM_VALUE,                    "RRC",                                         "RRC",                                         0,      63,       CAT_FNCT, SLS_ENABLED  },
 /*  526 */  { itemToBeCoded,               NOPARAM,                     "RSD",                                         "RSD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},

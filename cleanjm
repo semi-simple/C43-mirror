@@ -13,6 +13,14 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
+ls src/wp43s/*\ [0-9].c
+ls src/generateCatalogs/*\ [0-9].c
+ls src/generateConstants/*\ [0-9].c
+ls src/ttf2RasterFonts/*\ [0-9].c
+
+
+
+
 
 find . -type f -name "*.dSYM" -exec rm {} \;
 find . -type f -name "WP43S\ *.elf" -exec rm {} \;

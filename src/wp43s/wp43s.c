@@ -717,20 +717,20 @@ longIntegerFree(li);*/
 
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
-      btnFnPressed(NULL, charKey);                             //JM Changed from Clicked to Pressed
+      btnFnPressed(charKey);                                  //JM Changed from Clicked to Pressed
       lcd_refresh_dma();
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
-      btnPressed(NULL, charKey);
+      btnPressed(charKey);
       lcd_refresh_dma();
     }
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
-      btnFnReleased(NULL,NULL);                                //    in short, it can only execute FN release after there was a FN press.
+      btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
       lcd_refresh_dma();
     }
     else if(key == 0) {
-      btnReleased(NULL,NULL);
+      btnReleased(NULL);
       lcd_refresh_dma();
     }
 

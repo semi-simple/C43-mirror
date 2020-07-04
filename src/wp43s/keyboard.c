@@ -149,12 +149,14 @@ void btnFnReleased(void *notUsed, void *data) {
           else if(calcMode == CM_ASM_OVER_TAM) {
             indexOfItems[getOperation()].func(indexOfItems[item].param);
             calcModeNormal();
+            refreshScreen();
             return;
           }
           else if(calcMode == CM_ASM_OVER_AIM) {
             calcMode = CM_AIM;
             addItemToBuffer(item);
             calcMode = CM_ASM_OVER_AIM;
+            refreshScreen();
             return;
           }
 
@@ -392,12 +394,12 @@ void processKeyAction(int16_t item) {
           break;
 
         case CM_AIM:
-          if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+          if(alphaCase == AC_LOWER && (CHR_A <= item && item <= CHR_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
           }
 
-          else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+          else if(alphaCase == AC_LOWER && (CHR_ALPHA <= item && item <= CHR_OMEGA)) {
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }

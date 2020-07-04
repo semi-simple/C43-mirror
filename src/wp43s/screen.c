@@ -1453,7 +1453,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
         }
 
-        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM) {
+        else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
           xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
           cursorEnabled = true;
         }
@@ -2106,7 +2106,7 @@ void refreshScreen(void) {
         showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
       }
       else {
-        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) {
+        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
           #ifdef PC_BUILD
             int16_t x, y;
 

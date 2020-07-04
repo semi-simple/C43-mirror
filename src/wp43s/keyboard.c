@@ -21,9 +21,6 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-
-
-
 int16_t determineFunctionKeyItem(const char *data) {
   int16_t row, item = ITM_NOP;
   const softmenu_t *sm;
@@ -184,12 +181,14 @@ void executeFunction(const char *data) {
           else if(calcMode == CM_ASM_OVER_TAM) {
             indexOfItems[getOperation()].func(indexOfItems[item].param);
             calcModeNormal();
+            refreshScreen();
             return;
           }
           else if(calcMode == CM_ASM_OVER_AIM) {
             calcMode = CM_AIM;
             addItemToBuffer(item);
             calcMode = CM_ASM_OVER_AIM;
+            refreshScreen();
             return;
           }
         }
@@ -515,12 +514,12 @@ void processKeyAction(int16_t item) {
           break;
 
         case CM_AIM:
-          if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+          if(alphaCase == AC_LOWER && (CHR_A <= item && item <= CHR_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
           }
 
-          else if(alphaCase==AC_LOWER && ( (CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
+          else if(alphaCase == AC_LOWER && ( (CHR_ALPHA <= item && item <= CHR_OMEGA) || (CHR_QOPPA <= item && item <= CHR_SAMPI) ))  {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }

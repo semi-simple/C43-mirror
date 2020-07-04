@@ -24,7 +24,7 @@
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
-#define YEARMONTH "2020.06"
+#define YEARMONTH "2020.07"
 #define VERSION   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT "The WP43S team"
 #define WHO       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
@@ -441,11 +441,12 @@ typedef int16_t calcRegister_t;
 #define CP_COMBINATION 1
 
 // Load mode
-#define LM_ALL          0
-#define LM_PROGRAMS     1
-#define LM_REGISTERS    2
-#define LM_SUMS         3
-#define LM_SYSTEM_STATE 4
+#define LM_ALL             0
+#define LM_PROGRAMS        1
+#define LM_REGISTERS       2
+#define LM_NAMED_VARIABLES 3
+#define LM_SUMS            4
+#define LM_SYSTEM_STATE    5
 
 // Statistical sums
 #define NUMBER_OF_STATISTICAL_SUMS 23

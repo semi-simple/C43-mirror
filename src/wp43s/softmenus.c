@@ -328,7 +328,7 @@ const int16_t menu_2ndDeriv[]    = { ITM_Not,                       ITM_yet,    
 const int16_t menu_Sf[]          = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_Solver[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_IO[]          = { ITM_BEEP,                      ITM_LOAD,                   ITM_LOADP,                ITM_LOADR,             ITM_LOADSS,                  ITM_LOADSIGMA,
-                                     ITM_TONE,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RECV,                    ITM_SEND                      };
+                                     ITM_TONE,                      ITM_NULL,                   ITM_NULL,                 ITM_LOADV,             ITM_RECV,                    ITM_SEND                      };
 const int16_t menu_PRINT[]       = { ITM_PRINTERX,                  ITM_PRINTERR,               ITM_PRINTERSIGMA,         ITM_PRINTERADV,        ITM_PRINTERLCD,              ITM_PRINTERPROG,
                                      ITM_PRINTERSTK,                ITM_PRINTERREGS,            ITM_PRINTERUSER,          ITM_PRINTERTAB,        ITM_PRINTERHASH,             ITM_PRINTERCHAR,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };

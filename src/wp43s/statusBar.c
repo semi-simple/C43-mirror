@@ -350,12 +350,6 @@ void showHideUserMode(void) {
   else {
     showString(STD_SPACE_EM, &standardFont, X_USER_MODE, 0, vmNormal, true, true);   // STD_SPACE_EM is 12 pixel wide
   }
-
-  #ifdef PC_BUILD
-    if(calcMode == CM_NORMAL) calcModeNormalGui();
-    else if(calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM) calcModeAimGui();
-    else if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) calcModeTamGui();
-  #endif
 }
 
 
@@ -409,7 +403,7 @@ void showHideLowBattery(void) {
       setPixel(395, 16);
     }
     else {
-      // Draw S
+      // Erase S
       clearPixel(392,  1);
       clearPixel(393,  1);
       clearPixel(394,  1);
@@ -426,7 +420,7 @@ void showHideLowBattery(void) {
       clearPixel(393,  7);
       clearPixel(394,  7);
 
-      // Draw L
+      // Erase L
       clearPixel(391, 10);
       clearPixel(391, 11);
       clearPixel(391, 12);

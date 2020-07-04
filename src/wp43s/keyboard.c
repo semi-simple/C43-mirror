@@ -86,6 +86,10 @@ void btnFnClicked(GtkWidget *w, gpointer data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 2) { // Middle click
+    shiftF = true;
+    shiftG = false;
+  }
   if(event->button.button == 3) { // Right click
     shiftF = false;
     shiftG = true;
@@ -297,6 +301,10 @@ void btnClicked(void *unused, void *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 2) { // Middle click
+    shiftF = true;
+    shiftG = false;
+  }
   if(event->button.button == 3) { // Right click
     shiftF = false;
     shiftG = true;

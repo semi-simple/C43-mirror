@@ -456,7 +456,8 @@ void fnXEQMENU(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   char line1[TMP_STR_LENGTH];
   XEQMENU_Selection( unusedParamButMandatory, line1, true);
-  temporaryInformation = CM_BUG_ON_SCREEN;
+  //calcMode = CM_BUG_ON_SCREEN;
+  //temporaryInformation = TI_NO_INFO;
   #endif
 }
 

@@ -417,7 +417,7 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     fr = f_open(&fil, filename_csv, FA_READ );   //| FA_OPEN_EXISTING
     if (fr != FR_OK) {
       if(fr == 4) {
-        sprintf(line,"File not found PGM--> %d    \n",fr);
+        sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
         print_linestr(line,false);
         sprintf(line,"File: %s \n",filename_csv);
         print_linestr(line,false);
@@ -686,7 +686,6 @@ void displaywords(char *line1) {  //Preprocessor and display
 
   #ifdef DISPLOADING
   char ll[50];
-  ll[0]=0;
   ll[0]=0;
   #endif
   aa[0]=0; aa[1]=0;                  //remove consequtive spaces

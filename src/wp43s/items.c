@@ -903,7 +903,7 @@ const item_t indexOfItems[] = {
 /*  461 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Poiss" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  462 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_SUP_MINUS_1,                       "Poiss" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  463 */  { itemToBeCoded,               NOPARAM,                     "Poiss:",                                      "Poiss:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  464 */  { itemToBeCoded,               NOPARAM,                     "0464",                                        "0464",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*  464 */  { fnLoad,                      LM_NAMED_VARIABLES,          "LOADV",                                       "LOADV",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  465 */  { itemToBeCoded,               NOPARAM,                     "PopLR",                                       "PopLR",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  466 */  { fnCurveFitting,              CF_POWER_FITTING,            "PowerF",                                      "PowerF",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},
 /*  467 */  { fnCvtRatioDb,                10,                          "pr" STD_RIGHT_ARROW "dB",                     "power",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },

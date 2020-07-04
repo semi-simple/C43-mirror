@@ -657,20 +657,20 @@ longIntegerFree(li);*/
 
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
-      btnFnPressed(NULL, charKey);
+      btnFnPressed(charKey);
       lcd_refresh();
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
-      btnPressed(NULL, charKey);
+      btnPressed(charKey);
       lcd_refresh();
     }
     else if(key == 0) {
       if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
-        btnFnReleased(NULL, NULL);
+        btnFnReleased(NULL);
       }
       else { // Last key pressed was not one of the 6 function keys
-        btnReleased(NULL, NULL);
+        btnReleased(NULL);
       }
       lcd_refresh();
     }

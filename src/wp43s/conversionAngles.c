@@ -227,7 +227,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       else {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnCvtRadToDeg:", "cannot use an angle34 not tagged degree as an input of fnCvtRadToDeg", NULL, NULL);
+          showInfoDialog("In function fnCvtDmsToDeg:", "cannot use an angle34 not tagged degree as an input of fnCvtDmsToDeg", NULL, NULL);
         #endif
         restoreStack();
         return;
@@ -238,7 +238,7 @@ void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        showInfoDialog("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
       #endif
       restoreStack();
       return;

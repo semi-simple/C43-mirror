@@ -67,13 +67,13 @@ int16_t determineFunctionKeyItem(const char *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnFnClicked(GtkWidget *w, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnFnClicked(void *w, void *data) {
-#endif
-  btnFnPressed(w, data);
-  btnFnReleased(w, data);
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+
+  btnFnPressed(w, &mouseButton, data);
+  btnFnReleased(w, &mouseButton, data);
 }
+#endif
 
 
 
@@ -85,18 +85,21 @@ void btnFnClicked(void *w, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnPressed(GtkWidget *notUsed, gpointer data) {
+void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 3) { // Right click
+    shiftF = false;
+    shiftG = true;
+  }
 #endif
 #ifdef DMCP_BUILD
-void btnFnPressed(void *notUsed, void *data) {
+void btnFnPressed(void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     int16_t item = determineFunctionKeyItem((char *)data);
 
+    shiftF = false;
+    shiftG = false;
     if(item != ITM_NOP && item != ITM_NULL) {
-      shiftF = false;
-      shiftG = false;
-
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
       }
@@ -123,10 +126,10 @@ void btnFnPressed(void *notUsed, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnReleased(GtkWidget *notUsed, gpointer data) {
+void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnFnReleased(void *notUsed, void *data) {
+void btnFnReleased(void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     if(showFunctionNameItem != 0) {
@@ -269,13 +272,19 @@ int16_t determineItem(const char *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnClicked(GtkWidget *w, gpointer data) {
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+
+  btnPressed(w, &mouseButton, data);
+  btnReleased(w, &mouseButton, data);
+}
 #endif
 #ifdef DMCP_BUILD
-void btnClicked(void *w, void *data) {
-#endif
-  btnPressed(w, data);
-  btnReleased(w, data);
+void btnClicked(void *unused, void *data) {
+  btnPressed(data);
+  btnReleased(data);
 }
+#endif
 
 
 
@@ -287,10 +296,14 @@ void btnClicked(void *w, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnPressed(GtkWidget *notUsed, gpointer data) {
+void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 3) { // Right click
+    shiftF = false;
+    shiftG = true;
+  }
 #endif
 #ifdef DMCP_BUILD
-void btnPressed(void *notUsed, void *data) {
+void btnPressed(void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
@@ -313,10 +326,10 @@ void btnPressed(void *notUsed, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnReleased(GtkWidget *notUsed, gpointer data) {
+void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnReleased(void *notUsed, void *data) {
+void btnReleased(void *data) {
 #endif
   if(showFunctionNameItem != 0) {
     int16_t item = showFunctionNameItem;

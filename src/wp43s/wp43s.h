@@ -374,11 +374,12 @@ typedef int16_t calcRegister_t;
 #define CP_COMBINATION 1
 
 // Load mode
-#define LM_ALL          0
-#define LM_PROGRAMS     1
-#define LM_REGISTERS    2
-#define LM_SUMS         3
-#define LM_SYSTEM_STATE 4
+#define LM_ALL             0
+#define LM_PROGRAMS        1
+#define LM_REGISTERS       2
+#define LM_NAMED_VARIABLES 3
+#define LM_SUMS            4
+#define LM_SYSTEM_STATE    5
 
 // Statistical sums
 #define NUMBER_OF_STATISTICAL_SUMS 23

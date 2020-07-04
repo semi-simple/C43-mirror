@@ -867,7 +867,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, nimBuffer); // Variable data type
       readLine(stream, tmpStr3000); // Variable value
 
-      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+      if(loadMode == LM_ALL || loadMode == LM_NAMED_VARIABLES) {
         printf("Variable %s ", tmpStr3000 + 2900);
         printf("%s = ", nimBuffer);
         printf("%s\n", tmpStr3000);

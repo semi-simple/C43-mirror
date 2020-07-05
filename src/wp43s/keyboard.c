@@ -144,7 +144,7 @@ void btnFnPressed(void *data) {
 //    showFunctionName(item, 10);
 //    #else
 //    showFunctionNameItem = item;
-        btnFnPressed_StateMachine(notUsed, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+        btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
 //    #endif
     }
     else {
@@ -169,7 +169,7 @@ void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 void btnFnReleased(void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-    btnFnReleased_StateMachine(notUsed, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
+    btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
   }
 }
 

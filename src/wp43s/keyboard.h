@@ -53,6 +53,7 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 #endif
 
 #ifdef DMCP_BUILD
+  void btnFnClicked (void *w, void *data);
   void btnFnPressed (void *data);
   void btnFnReleased(void *data);
   void btnClicked   (void *w, void *data);

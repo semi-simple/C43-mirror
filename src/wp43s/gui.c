@@ -128,8 +128,7 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 //JM ALPHA SECTION FOR ALPHAMODE - LOWER CASE PC LETTER INPUT. USE LETTER
 void btnClicked_LC(GtkWidget *w, gpointer data) {
-  btnPressed(w, data);
-  btnReleased(w, data);
+  btnClicked(w, data);
 }
 
 
@@ -139,8 +138,7 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
   alphaCase_MEM = alphaCase;
   if(alphaCase == AC_UPPER) {alphaCase = AC_LOWER;}
   else if(alphaCase == AC_LOWER) {alphaCase = AC_UPPER;}
-  btnPressed(w, data);
-  btnReleased(w, data);
+  btnClicked(w, data);
   alphaCase = alphaCase_MEM;
 }
 
@@ -149,8 +147,7 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   shiftF = true;       //JM
   shiftG = false;      //JM
-  btnPressed(w, data);
-  btnReleased(w, data);
+  btnClicked(w, data);
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
@@ -179,37 +176,37 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
 
     case 65470: // F1                      //JM Added this portion to be able to go to NOP on emulator
       //printf("key pressed: F1\n");
-      btnFnReleased(w, "1");
+      btnFnClickedR(w, "1");
       break;
-      
+
     case 65471: // F2
       //printf("key pressed: F2\n");
-      btnFnReleased(w, "2");
+      btnFnClickedR(w, "2");
       break;
 
     case 65472: // F3
       //printf("key pressed: F3\n");
-      btnFnReleased(w, "3");
+      btnFnClickedR(w, "3");
       break;
 
     case 65473: // F4
       //printf("key pressed: F4\n");
-      btnFnReleased(w, "4");
+      btnFnClickedR(w, "4");
       break;
 
     case 65474: // F5
       //printf("key pressed: F5\n");
-      btnFnReleased(w, "5");
+      btnFnClickedR(w, "5");
       break;
 
     case 65475: // F6
       //printf("key pressed: F6\n");
-      btnFnReleased(w, "6");
+      btnFnClickedR(w, "6");
       break;
 
     case 65505: // left shift  //JM Added this portion to be able to repeat f key on emulator
       //printf("key pressed: Shift\n"); //dr
-      btnReleased(w, "27");
+      btnClickedR(w, "27");
       break;
 
 
@@ -577,32 +574,32 @@ return FALSE;
 //ROW 1
     case 65470: // F1                       //JM Changed these to btnFnPressed from btnFnClicked
       //printf("key pressed: F1\n");
-      btnFnPressed(w, "1");
+      btnFnClickedP(w, "1");
       break;
 
     case 65471: // F2
       //printf("key pressed: F2\n");
-      btnFnPressed(w, "2");
+      btnFnClickedP(w, "2");
       break;
 
     case 65472: // F3
       //printf("key pressed: F3\n");
-      btnFnPressed(w, "3");
+      btnFnClickedP(w, "3");
       break;
 
     case 65473: // F4
       //printf("key pressed: F4\n");
-      btnFnPressed(w, "4");
+      btnFnClickedP(w, "4");
       break;
 
     case 65474: // F5
       //printf("key pressed: F5\n");
-      btnFnPressed(w, "5");
+      btnFnClickedP(w, "5");
       break;
 
     case 65475: // F6
       //printf("key pressed: F6\n");
-      btnFnPressed(w, "6");
+      btnFnClickedP(w, "6");
       break;
 //ROW 2
     case 97:  // a  //dr
@@ -770,7 +767,7 @@ return FALSE;
     case 65505: // left shift  //JM
 //    case 65506: //JM right shift. 65453: // -  //JM Remove Right Shift, to allow * & +
       //printf("key pressed: Shift\n"); //dr
-      btnPressed(w, "27");                         //JM PRESSED FOR KEYBOARD F REPEAT
+      btnClickedP(w, "27");                         //JM PRESSED FOR KEYBOARD F REPEAT
       break;
 
     case 49:    // 1
@@ -2912,25 +2909,18 @@ void setupUI(void) {
   gtk_widget_set_name(btn15, "calcKey");
   gtk_widget_set_name(btn16, "calcKey");
 
-//g_signal_connect(btn11, "clicked", G_CALLBACK(btnFnClicked), "1");     //JM LONGPRESS vv
-//g_signal_connect(btn12, "clicked", G_CALLBACK(btnFnClicked), "2");
-//g_signal_connect(btn13, "clicked", G_CALLBACK(btnFnClicked), "3");
-//g_signal_connect(btn14, "clicked", G_CALLBACK(btnFnClicked), "4");
-//g_signal_connect(btn15, "clicked", G_CALLBACK(btnFnClicked), "5");
-//g_signal_connect(btn16, "clicked", G_CALLBACK(btnFnClicked), "6");
-
-  g_signal_connect(btn11, "pressed", G_CALLBACK(btnFnPressed), "1");
-  g_signal_connect(btn12, "pressed", G_CALLBACK(btnFnPressed), "2");
-  g_signal_connect(btn13, "pressed", G_CALLBACK(btnFnPressed), "3");
-  g_signal_connect(btn14, "pressed", G_CALLBACK(btnFnPressed), "4");
-  g_signal_connect(btn15, "pressed", G_CALLBACK(btnFnPressed), "5");
-  g_signal_connect(btn16, "pressed", G_CALLBACK(btnFnPressed), "6");
-  g_signal_connect(btn11, "released", G_CALLBACK(btnFnReleased), "1");
-  g_signal_connect(btn12, "released", G_CALLBACK(btnFnReleased), "2");
-  g_signal_connect(btn13, "released", G_CALLBACK(btnFnReleased), "3");
-  g_signal_connect(btn14, "released", G_CALLBACK(btnFnReleased), "4");
-  g_signal_connect(btn15, "released", G_CALLBACK(btnFnReleased), "5");
-  g_signal_connect(btn16, "released", G_CALLBACK(btnFnReleased), "6");   //JM LONGPRESS ^^
+  g_signal_connect(btn11, "button-press-event", G_CALLBACK(btnFnPressed), "1");
+  g_signal_connect(btn12, "button-press-event", G_CALLBACK(btnFnPressed), "2");
+  g_signal_connect(btn13, "button-press-event", G_CALLBACK(btnFnPressed), "3");
+  g_signal_connect(btn14, "button-press-event", G_CALLBACK(btnFnPressed), "4");
+  g_signal_connect(btn15, "button-press-event", G_CALLBACK(btnFnPressed), "5");
+  g_signal_connect(btn16, "button-press-event", G_CALLBACK(btnFnPressed), "6");
+  g_signal_connect(btn11, "button-release-event", G_CALLBACK(btnFnReleased), "1");
+  g_signal_connect(btn12, "button-release-event", G_CALLBACK(btnFnReleased), "2");
+  g_signal_connect(btn13, "button-release-event", G_CALLBACK(btnFnReleased), "3");
+  g_signal_connect(btn14, "button-release-event", G_CALLBACK(btnFnReleased), "4");
+  g_signal_connect(btn15, "button-release-event", G_CALLBACK(btnFnReleased), "5");
+  g_signal_connect(btn16, "button-release-event", G_CALLBACK(btnFnReleased), "6");
 
   gtk_widget_set_focus_on_click(btn11, FALSE);
   gtk_widget_set_focus_on_click(btn12, FALSE);
@@ -3030,18 +3020,18 @@ void setupUI(void) {
 //  gtk_widget_set_name(lbl21Fa,  "fShiftedUnderline"); //JMALPHA2
 
 
-  g_signal_connect(btn21, "pressed", G_CALLBACK(btnPressed), "00");
-  g_signal_connect(btn22, "pressed", G_CALLBACK(btnPressed), "01");
-  g_signal_connect(btn23, "pressed", G_CALLBACK(btnPressed), "02");
-  g_signal_connect(btn24, "pressed", G_CALLBACK(btnPressed), "03");
-  g_signal_connect(btn25, "pressed", G_CALLBACK(btnPressed), "04");
-  g_signal_connect(btn26, "pressed", G_CALLBACK(btnPressed), "05");
-  g_signal_connect(btn21, "released", G_CALLBACK(btnReleased), "00");
-  g_signal_connect(btn22, "released", G_CALLBACK(btnReleased), "01");
-  g_signal_connect(btn23, "released", G_CALLBACK(btnReleased), "02");
-  g_signal_connect(btn24, "released", G_CALLBACK(btnReleased), "03");
-  g_signal_connect(btn25, "released", G_CALLBACK(btnReleased), "04");
-  g_signal_connect(btn26, "released", G_CALLBACK(btnReleased), "05");
+  g_signal_connect(btn21, "button-press-event", G_CALLBACK(btnPressed), "00");
+  g_signal_connect(btn22, "button-press-event", G_CALLBACK(btnPressed), "01");
+  g_signal_connect(btn23, "button-press-event", G_CALLBACK(btnPressed), "02");
+  g_signal_connect(btn24, "button-press-event", G_CALLBACK(btnPressed), "03");
+  g_signal_connect(btn25, "button-press-event", G_CALLBACK(btnPressed), "04");
+  g_signal_connect(btn26, "button-press-event", G_CALLBACK(btnPressed), "05");
+  g_signal_connect(btn21, "button-release-event", G_CALLBACK(btnReleased), "00");
+  g_signal_connect(btn22, "button-release-event", G_CALLBACK(btnReleased), "01");
+  g_signal_connect(btn23, "button-release-event", G_CALLBACK(btnReleased), "02");
+  g_signal_connect(btn24, "button-release-event", G_CALLBACK(btnReleased), "03");
+  g_signal_connect(btn25, "button-release-event", G_CALLBACK(btnReleased), "04");
+  g_signal_connect(btn26, "button-release-event", G_CALLBACK(btnReleased), "05");
   g_signal_connect(btn21A, "pressed", G_CALLBACK(btnPressed), "00");    //vv dr - new AIM
   g_signal_connect(btn22A, "pressed", G_CALLBACK(btnPressed), "01");
   g_signal_connect(btn23A, "pressed", G_CALLBACK(btnPressed), "02");
@@ -3191,18 +3181,18 @@ void setupUI(void) {
   //gtk_widget_set_name(lbl34H,  "fShifted");  //JM CAPS JMALPHA2
   // gtk_widget_set_name(lbl34H,  "gShifted");   //JM removed1
 
-  g_signal_connect(btn31, "pressed", G_CALLBACK(btnPressed), "06");
-  g_signal_connect(btn32, "pressed", G_CALLBACK(btnPressed), "07");
-  g_signal_connect(btn33, "pressed", G_CALLBACK(btnPressed), "08");
-  g_signal_connect(btn34, "pressed", G_CALLBACK(btnPressed), "09");
-  g_signal_connect(btn35, "pressed", G_CALLBACK(btnPressed), "10");
-  g_signal_connect(btn36, "pressed", G_CALLBACK(btnPressed), "11");
-  g_signal_connect(btn31, "released", G_CALLBACK(btnReleased), "06");
-  g_signal_connect(btn32, "released", G_CALLBACK(btnReleased), "07");
-  g_signal_connect(btn33, "released", G_CALLBACK(btnReleased), "08");
-  g_signal_connect(btn34, "released", G_CALLBACK(btnReleased), "09");
-  g_signal_connect(btn35, "released", G_CALLBACK(btnReleased), "10");
-  g_signal_connect(btn36, "released", G_CALLBACK(btnReleased), "11");
+  g_signal_connect(btn31, "button-press-event", G_CALLBACK(btnPressed), "06");
+  g_signal_connect(btn32, "button-press-event", G_CALLBACK(btnPressed), "07");
+  g_signal_connect(btn33, "button-press-event", G_CALLBACK(btnPressed), "08");
+  g_signal_connect(btn34, "button-press-event", G_CALLBACK(btnPressed), "09");
+  g_signal_connect(btn35, "button-press-event", G_CALLBACK(btnPressed), "10");
+  g_signal_connect(btn36, "button-press-event", G_CALLBACK(btnPressed), "11");
+  g_signal_connect(btn31, "button-release-event", G_CALLBACK(btnReleased), "06");
+  g_signal_connect(btn32, "button-release-event", G_CALLBACK(btnReleased), "07");
+  g_signal_connect(btn33, "button-release-event", G_CALLBACK(btnReleased), "08");
+  g_signal_connect(btn34, "button-release-event", G_CALLBACK(btnReleased), "09");
+  g_signal_connect(btn35, "button-release-event", G_CALLBACK(btnReleased), "10");
+  g_signal_connect(btn36, "button-release-event", G_CALLBACK(btnReleased), "11");
   g_signal_connect(btn31A, "pressed", G_CALLBACK(btnPressed), "06");    //vv dr - new AIM
   g_signal_connect(btn32A, "pressed", G_CALLBACK(btnPressed), "07");
   g_signal_connect(btn33A, "pressed", G_CALLBACK(btnPressed), "08");
@@ -3327,16 +3317,16 @@ void setupUI(void) {
   gtk_widget_set_name(lbl43P,  "fShifted");
   gtk_widget_set_name(lbl44P,  "fShifted");
 
-  g_signal_connect(btn41, "pressed", G_CALLBACK(btnPressed), "12");
-  g_signal_connect(btn42, "pressed", G_CALLBACK(btnPressed), "13");
-  g_signal_connect(btn43, "pressed", G_CALLBACK(btnPressed), "14");
-  g_signal_connect(btn44, "pressed", G_CALLBACK(btnPressed), "15");
-  g_signal_connect(btn45, "pressed", G_CALLBACK(btnPressed), "16");
-  g_signal_connect(btn41, "released", G_CALLBACK(btnReleased), "12");
-  g_signal_connect(btn42, "released", G_CALLBACK(btnReleased), "13");
-  g_signal_connect(btn43, "released", G_CALLBACK(btnReleased), "14");
-  g_signal_connect(btn44, "released", G_CALLBACK(btnReleased), "15");
-  g_signal_connect(btn45, "released", G_CALLBACK(btnReleased), "16");
+  g_signal_connect(btn41, "button-press-event", G_CALLBACK(btnPressed), "12");
+  g_signal_connect(btn42, "button-press-event", G_CALLBACK(btnPressed), "13");
+  g_signal_connect(btn43, "button-press-event", G_CALLBACK(btnPressed), "14");
+  g_signal_connect(btn44, "button-press-event", G_CALLBACK(btnPressed), "15");
+  g_signal_connect(btn45, "button-press-event", G_CALLBACK(btnPressed), "16");
+  g_signal_connect(btn41, "button-release-event", G_CALLBACK(btnReleased), "12");
+  g_signal_connect(btn42, "button-release-event", G_CALLBACK(btnReleased), "13");
+  g_signal_connect(btn43, "button-release-event", G_CALLBACK(btnReleased), "14");
+  g_signal_connect(btn44, "button-release-event", G_CALLBACK(btnReleased), "15");
+  g_signal_connect(btn45, "button-release-event", G_CALLBACK(btnReleased), "16");
   g_signal_connect(btn42A, "pressed", G_CALLBACK(btnPressed), "13");    //vv dr - new AIM
   g_signal_connect(btn43A, "pressed", G_CALLBACK(btnPressed), "14");
   g_signal_connect(btn44A, "pressed", G_CALLBACK(btnPressed), "15");
@@ -3446,16 +3436,16 @@ void setupUI(void) {
   gtk_widget_set_size_request(btn54A, KEY_WIDTH_2, 0);
   gtk_widget_set_size_request(btn55A, KEY_WIDTH_2, 0);  //^^
 
-  g_signal_connect(btn51, "pressed", G_CALLBACK(btnPressed), "17");
-  g_signal_connect(btn52, "pressed", G_CALLBACK(btnPressed), "18");
-  g_signal_connect(btn53, "pressed", G_CALLBACK(btnPressed), "19");
-  g_signal_connect(btn54, "pressed", G_CALLBACK(btnPressed), "20");
-  g_signal_connect(btn55, "pressed", G_CALLBACK(btnPressed), "21");
-  g_signal_connect(btn51, "released", G_CALLBACK(btnReleased), "17");
-  g_signal_connect(btn52, "released", G_CALLBACK(btnReleased), "18");
-  g_signal_connect(btn53, "released", G_CALLBACK(btnReleased), "19");
-  g_signal_connect(btn54, "released", G_CALLBACK(btnReleased), "20");
-  g_signal_connect(btn55, "released", G_CALLBACK(btnReleased), "21");
+  g_signal_connect(btn51, "button-press-event", G_CALLBACK(btnPressed), "17");
+  g_signal_connect(btn52, "button-press-event", G_CALLBACK(btnPressed), "18");
+  g_signal_connect(btn53, "button-press-event", G_CALLBACK(btnPressed), "19");
+  g_signal_connect(btn54, "button-press-event", G_CALLBACK(btnPressed), "20");
+  g_signal_connect(btn55, "button-press-event", G_CALLBACK(btnPressed), "21");
+  g_signal_connect(btn51, "button-release-event", G_CALLBACK(btnReleased), "17");
+  g_signal_connect(btn52, "button-release-event", G_CALLBACK(btnReleased), "18");
+  g_signal_connect(btn53, "button-release-event", G_CALLBACK(btnReleased), "19");
+  g_signal_connect(btn54, "button-release-event", G_CALLBACK(btnReleased), "20");
+  g_signal_connect(btn55, "button-release-event", G_CALLBACK(btnReleased), "21");
   g_signal_connect(btn52A, "pressed", G_CALLBACK(btnPressed), "18");    //vv dr - new AIM
   g_signal_connect(btn53A, "pressed", G_CALLBACK(btnPressed), "19");
   g_signal_connect(btn54A, "pressed", G_CALLBACK(btnPressed), "20");
@@ -3570,16 +3560,16 @@ void setupUI(void) {
 
   gtk_widget_set_name(lbl65H,  "gShifted");  //JM
 
-  g_signal_connect(btn61, "pressed", G_CALLBACK(btnPressed), "22");
-  g_signal_connect(btn62, "pressed", G_CALLBACK(btnPressed), "23");
-  g_signal_connect(btn63, "pressed", G_CALLBACK(btnPressed), "24");
-  g_signal_connect(btn64, "pressed", G_CALLBACK(btnPressed), "25");
-  g_signal_connect(btn65, "pressed", G_CALLBACK(btnPressed), "26");
-  g_signal_connect(btn61, "released", G_CALLBACK(btnReleased), "22");
-  g_signal_connect(btn62, "released", G_CALLBACK(btnReleased), "23");
-  g_signal_connect(btn63, "released", G_CALLBACK(btnReleased), "24");
-  g_signal_connect(btn64, "released", G_CALLBACK(btnReleased), "25");
-  g_signal_connect(btn65, "released", G_CALLBACK(btnReleased), "26");
+  g_signal_connect(btn61, "button-press-event", G_CALLBACK(btnPressed), "22");
+  g_signal_connect(btn62, "button-press-event", G_CALLBACK(btnPressed), "23");
+  g_signal_connect(btn63, "button-press-event", G_CALLBACK(btnPressed), "24");
+  g_signal_connect(btn64, "button-press-event", G_CALLBACK(btnPressed), "25");
+  g_signal_connect(btn65, "button-press-event", G_CALLBACK(btnPressed), "26");
+  g_signal_connect(btn61, "button-release-event", G_CALLBACK(btnReleased), "22");
+  g_signal_connect(btn62, "button-release-event", G_CALLBACK(btnReleased), "23");
+  g_signal_connect(btn63, "button-release-event", G_CALLBACK(btnReleased), "24");
+  g_signal_connect(btn64, "button-release-event", G_CALLBACK(btnReleased), "25");
+  g_signal_connect(btn65, "button-release-event", G_CALLBACK(btnReleased), "26");
   g_signal_connect(btn62A, "pressed", G_CALLBACK(btnPressed), "23");    //vv - new AIM
   g_signal_connect(btn63A, "pressed", G_CALLBACK(btnPressed), "24");
   g_signal_connect(btn64A, "pressed", G_CALLBACK(btnPressed), "25");
@@ -3698,16 +3688,16 @@ void setupUI(void) {
   //JM Removed1 gtk_widget_set_name(lbl72H,  "gShiftedUnderline"); //JM
   //JM Removed1   gtk_widget_set_name(lbl73H,  "gShifted");  //JM
 
-  g_signal_connect(btn71, "pressed", G_CALLBACK(btnPressed), "27");
-  g_signal_connect(btn72, "pressed", G_CALLBACK(btnPressed), "28");
-  g_signal_connect(btn73, "pressed", G_CALLBACK(btnPressed), "29");
-  g_signal_connect(btn74, "pressed", G_CALLBACK(btnPressed), "30");
-  g_signal_connect(btn75, "pressed", G_CALLBACK(btnPressed), "31");
-  g_signal_connect(btn71, "released", G_CALLBACK(btnReleased), "27");
-  g_signal_connect(btn72, "released", G_CALLBACK(btnReleased), "28");
-  g_signal_connect(btn73, "released", G_CALLBACK(btnReleased), "29");
-  g_signal_connect(btn74, "released", G_CALLBACK(btnReleased), "30");
-  g_signal_connect(btn75, "released", G_CALLBACK(btnReleased), "31");
+  g_signal_connect(btn71, "button-press-event", G_CALLBACK(btnPressed), "27");
+  g_signal_connect(btn72, "button-press-event", G_CALLBACK(btnPressed), "28");
+  g_signal_connect(btn73, "button-press-event", G_CALLBACK(btnPressed), "29");
+  g_signal_connect(btn74, "button-press-event", G_CALLBACK(btnPressed), "30");
+  g_signal_connect(btn75, "button-press-event", G_CALLBACK(btnPressed), "31");
+  g_signal_connect(btn71, "button-release-event", G_CALLBACK(btnReleased), "27");
+  g_signal_connect(btn72, "button-release-event", G_CALLBACK(btnReleased), "28");
+  g_signal_connect(btn73, "button-release-event", G_CALLBACK(btnReleased), "29");
+  g_signal_connect(btn74, "button-release-event", G_CALLBACK(btnReleased), "30");
+  g_signal_connect(btn75, "button-release-event", G_CALLBACK(btnReleased), "31");
   g_signal_connect(btn72A, "pressed", G_CALLBACK(btnPressed), "28");    //vv dr - new AIM
   g_signal_connect(btn73A, "pressed", G_CALLBACK(btnPressed), "29");
   g_signal_connect(btn74A, "pressed", G_CALLBACK(btnPressed), "30");
@@ -3835,16 +3825,16 @@ void setupUI(void) {
   gtk_widget_set_name(lbl85H, "greekUnderline");    //JM
   gtk_widget_set_name(lblOn,  "On");
 
-  g_signal_connect(btn81, "pressed", G_CALLBACK(btnPressed), "32");
-  g_signal_connect(btn82, "pressed", G_CALLBACK(btnPressed), "33");
-  g_signal_connect(btn83, "pressed", G_CALLBACK(btnPressed), "34");
-  g_signal_connect(btn84, "pressed", G_CALLBACK(btnPressed), "35");
-  g_signal_connect(btn85, "pressed", G_CALLBACK(btnPressed), "36");
-  g_signal_connect(btn81, "released", G_CALLBACK(btnReleased), "32");
-  g_signal_connect(btn82, "released", G_CALLBACK(btnReleased), "33");
-  g_signal_connect(btn83, "released", G_CALLBACK(btnReleased), "34");
-  g_signal_connect(btn84, "released", G_CALLBACK(btnReleased), "35");
-  g_signal_connect(btn85, "released", G_CALLBACK(btnReleased), "36");
+  g_signal_connect(btn81, "button-press-event", G_CALLBACK(btnPressed), "32");
+  g_signal_connect(btn82, "button-press-event", G_CALLBACK(btnPressed), "33");
+  g_signal_connect(btn83, "button-press-event", G_CALLBACK(btnPressed), "34");
+  g_signal_connect(btn84, "button-press-event", G_CALLBACK(btnPressed), "35");
+  g_signal_connect(btn85, "button-press-event", G_CALLBACK(btnPressed), "36");
+  g_signal_connect(btn81, "button-release-event", G_CALLBACK(btnReleased), "32");
+  g_signal_connect(btn82, "button-release-event", G_CALLBACK(btnReleased), "33");
+  g_signal_connect(btn83, "button-release-event", G_CALLBACK(btnReleased), "34");
+  g_signal_connect(btn84, "button-release-event", G_CALLBACK(btnReleased), "35");
+  g_signal_connect(btn85, "button-release-event", G_CALLBACK(btnReleased), "36");
   g_signal_connect(btn82A, "pressed", G_CALLBACK(btnPressed), "33");    //vv dr - new AIM
   g_signal_connect(btn83A, "pressed", G_CALLBACK(btnPressed), "34");
   g_signal_connect(btn84A, "pressed", G_CALLBACK(btnPressed), "35");

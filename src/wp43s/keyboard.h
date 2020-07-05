@@ -29,8 +29,7 @@ void fnKeyUp         (uint16_t unusedParamButMandatory);
 void fnKeyDown       (uint16_t unusedParamButMandatory);
 void fnKeyDotD       (uint16_t unusedParamButMandatory);
 
-//void executeFunction(int16_t fn, int16_t itemShift);   //JM copied here
-void executeFunction(const char *data);
+void executeFunction (const char *data);
 
 #define ST_0_INIT     0     //STATE 0 INIT             //JM vv FN-DOUBLE
 #define ST_1_PRESS1   1     //STATE 1 FIRST PRESS
@@ -42,9 +41,13 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
 #ifdef PC_BUILD
   void btnFnClicked  (GtkWidget *w, gpointer data);
+  void btnFnClickedP (GtkWidget *w, gpointer data);                     //JM
+  void btnFnClickedR (GtkWidget *w, gpointer data);                     //JM
   void btnFnPressed  (GtkWidget *w, GdkEvent *event, gpointer data);
   void btnFnReleased (GtkWidget *w, GdkEvent *event, gpointer data);
   void btnClicked    (GtkWidget *w, gpointer data);
+  void btnClickedP   (GtkWidget *w, gpointer data);                     //JM
+  void btnClickedR   (GtkWidget *w, gpointer data);                     //JM
   void btnPressed    (GtkWidget *w, GdkEvent *event, gpointer data);
   void btnReleased   (GtkWidget *w, GdkEvent *event, gpointer data);
 #endif

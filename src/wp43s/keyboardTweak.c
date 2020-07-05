@@ -695,7 +695,7 @@ void execFnTimeout(uint16_t key) {                          //dr - delayed call 
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
 
-  executeFunction((char *)charKey);
+  btnFnClicked(NULL, (char *)charKey);
 }
 
 

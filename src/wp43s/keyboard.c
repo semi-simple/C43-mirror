@@ -94,6 +94,19 @@ void btnFnClicked(void *w, void *data) {
   executeFunction(data);
 }
 
+#ifdef PC_BUILD
+void btnFnClickedP(GtkWidget *w, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+  btnFnPressed(w, &mouseButton, data);
+}
+void btnFnClickedR(GtkWidget *w, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+  btnFnReleased(w, &mouseButton, data);
+}
+#endif
+
 
 
 /********************************************//**
@@ -104,16 +117,24 @@ void btnFnClicked(void *w, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnPressed(GtkWidget *notUsed, gpointer data) {
+void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 2) { // Middle click
+    shiftF = true;
+    shiftG = false;
+  }
+  if(event->button.button == 3) { // Right click
+    shiftF = false;
+    shiftG = true;
+  }
 #endif
 #ifdef DMCP_BUILD
-void btnFnPressed(void *notUsed, void *data) {
+void btnFnPressed(void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
     int16_t item = determineFunctionKeyItem((char *)data);
 
-    if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
+    if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
@@ -142,13 +163,13 @@ void btnFnPressed(void *notUsed, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnReleased(GtkWidget *w, gpointer data) {
+void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnFnReleased(void *w, void *data) {
+void btnFnReleased(void *data) {
 #endif
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-    btnFnReleased_StateMachine(w, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
+    btnFnReleased_StateMachine(notUsed, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
   }
 }
 
@@ -360,13 +381,34 @@ int16_t determineItem(const char *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnClicked(GtkWidget *w, gpointer data) {
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+
+  btnPressed(w, &mouseButton, data);
+  btnReleased(w, &mouseButton, data);
+}
 #endif
 #ifdef DMCP_BUILD
-void btnClicked(void *w, void *data) {
-#endif
-  btnPressed(w, data);
-  btnReleased(w, data);
+void btnClicked(void *unused, void *data) {
+  btnPressed(data);
+  btnReleased(data);
 }
+#endif
+
+
+#ifdef PC_BUILD
+void btnClickedP(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+  btnPressed(w, &mouseButton, data);
+}
+
+void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
+  GdkEvent mouseButton;
+  mouseButton.button.button = 1;
+  btnReleased(w, &mouseButton, data);
+}
+#endif
 
 
 
@@ -378,10 +420,18 @@ void btnClicked(void *w, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnPressed(GtkWidget *notUsed, gpointer data) {
+void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->button.button == 2) { // Middle click
+    shiftF = true;
+    shiftG = false;
+  }
+  if(event->button.button == 3) { // Right click
+    shiftF = false;
+    shiftG = true;
+  }
 #endif
 #ifdef DMCP_BUILD
-void btnPressed(void *notUsed, void *data) {
+void btnPressed(void *data) {
 #endif
   int16_t item = determineItem((char *)data);
 
@@ -404,10 +454,10 @@ void btnPressed(void *notUsed, void *data) {
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnReleased(GtkWidget *notUsed, gpointer data) {
+void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnReleased(void *notUsed, void *data) {
+void btnReleased(void *data) {
 #endif
   Shft_timeouts = false;                         //JM SHIFT NEW
   JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS

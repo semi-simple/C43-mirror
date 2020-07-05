@@ -20,8 +20,10 @@
 
 
 
-void fnSigma                     (uint16_t plusMinus);
-void fnStatSum                   (uint16_t sum);
-void fnSumXY                     (uint16_t unusedParamButMandatory);
-int  checkMinimumDataPoints      (const real_t *n);
-void initStatisticalSums         (void);
+void   fnSigma               (uint16_t plusMinus);
+void   fnStatSum             (uint16_t sum);
+void   fnSumXY               (uint16_t unusedParamButMandatory);
+void   fnXmin                (uint16_t unusedParamButMandatory);
+void   fnXmax                (uint16_t unusedParamButMandatory);
+bool_t checkMinimumDataPoints(const real_t *n);
+void   initStatisticalSums   (void);

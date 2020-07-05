@@ -27,8 +27,8 @@
  * performed using a FMA for the difference.
  */
 static void do_stddev(const real_t *sumXX, const real_t *sumX,
-		      const real_t *numberX, int sample,
-		      int rootn, int exp, int regIndex) {
+		     const real_t *numberX, int sample,
+		     int rootn, int exp, int regIndex) {
   real_t tempReal1, tempReal2, tempReal3;
   const real_t *p = numberX;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
@@ -36,24 +36,25 @@ static void do_stddev(const real_t *sumXX, const real_t *sumX,
   realDivide(sumX, numberX, &tempReal2, realContext);
   realChangeSign(&tempReal2);
   realFMA(sumX, &tempReal2, sumXX, &tempReal1, realContext);
-  if (sample) {
+  if(sample) {
     realSubtract(numberX, const_1, &tempReal3, realContext);
     p = &tempReal3;
   }
   realDivide(&tempReal1, p, &tempReal2, realContext);
-  if (realIsNegative(&tempReal2) || realIsZero(&tempReal2)) {
+  if(realIsNegative(&tempReal2) || realIsZero(&tempReal2)) {
     realZero(&tempReal1);
-  } else {
+  }
+  else {
     realSquareRoot(&tempReal2, &tempReal1, realContext);
   }
 
   p = &tempReal1;
-  if (rootn) {
+  if(rootn) {
     realSquareRoot(numberX, &tempReal2, realContext);
     realDivide(&tempReal1, &tempReal2, &tempReal3, realContext);
     p = &tempReal3;
   }
-  if (exp) {
+  if(exp) {
     realExp(p, &tempReal2, realContext);
     p = &tempReal2;
   }
@@ -65,7 +66,7 @@ static void calculateStandardDeviation(const real_t *sumX2, const real_t *sumX,
                                        const real_t *sumY2, const real_t *sumY,
                                        int sample, int rootn, int exp,
                                        int displayInfo) {
-  if (checkMinimumDataPoints(const_2)) {
+  if(checkMinimumDataPoints(const_2)) {
     saveStack();
 
     liftStack();
@@ -81,72 +82,50 @@ static void calculateStandardDeviation(const real_t *sumX2, const real_t *sumX,
 
 /* Standard deviation (sample and population) and standard error for arithmetic mean */
 void fnSampleStdDev(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y,
-                               1, 0, 0, TI_SAMPLSTDDEV);
+  calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y, 1, 0, 0, TI_SAMPLSTDDEV);
 }
 
 void fnPopulationStdDev(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y,
-                               0, 0, 0, TI_POPLSTDDEV);
+  calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y, 0, 0, 0, TI_POPLSTDDEV);
 }
 
 void fnStandardError(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y,
-                               1, 1, 0, TI_STDERR);
+  calculateStandardDeviation(SIGMA_X2, SIGMA_X, SIGMA_N, SIGMA_Y2, SIGMA_Y, 1, 1, 0, TI_STDERR);
 }
 
 /* Standard deviation (sample and population) and standard error for geometric mean */
 void fnGeometricSampleStdDev(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY,
-                               1, 0, 1, TI_GEOMSAMPLSTDDEV);
+  calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY, 1, 0, 1, TI_GEOMSAMPLSTDDEV);
 }
 
 void fnGeometricPopulationStdDev(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY,
-                               0, 0, 1, TI_GEOMPOPLSTDDEV);
+  calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY, 0, 0, 1, TI_GEOMPOPLSTDDEV);
 }
 
 void fnGeometricStandardError(uint16_t unusedParamButMandatory) {
-    calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY,
-                               1, 1, 1, TI_GEOMSTDERR);
+  calculateStandardDeviation(SIGMA_ln2X, SIGMA_lnX, SIGMA_N, SIGMA_ln2Y, SIGMA_lnY, 1, 1, 1, TI_GEOMSTDERR);
 }
 
 // Weighted standard deviation, standard error
-static int calculateWeightedStandardDeviation(int sample, int rootn, int exp, int display) {
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function calculateWeightedStandardDeviation:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
-  if (realCompareLessThan(SIGMA_Y, const_2)) {
-    displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is insufficient statistical data available!");
-      showInfoDialog("In function calculateWeightedStandardDeviation:", errorMessage, NULL, NULL);
-    #endif
-    return 0;
-  }
+static void calculateWeightedStandardDeviation(int sample, int rootn, int exp, int display) {
+  if(checkMinimumDataPoints(const_2)) {
+    saveStack();
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    do_stddev(SIGMA_X2Y, SIGMA_XY, SIGMA_Y, sample, rootn, exp, REGISTER_X);
 
-  saveStack();
-  liftStack();
-  setSystemFlag(FLAG_ASLIFT);
-  do_stddev(SIGMA_X2Y, SIGMA_XY, SIGMA_Y, sample, rootn, exp, REGISTER_X);
-
-  temporaryInformation = display;
-  return 1;
+    temporaryInformation = display;
+  }
 }
 
 void fnWeightedSampleStdDev(uint16_t unusedParamButMandatory) {
-    calculateWeightedStandardDeviation(1, 0, 0, TI_WEIGHTEDSAMPLSTDDEV);
+  calculateWeightedStandardDeviation(1, 0, 0, TI_WEIGHTEDSAMPLSTDDEV);
 }
 
 void fnWeightedPopulationStdDev(uint16_t unusedParamButMandatory) {
-    calculateWeightedStandardDeviation(0, 0, 0, TI_WEIGHTEDPOPLSTDDEV);
+  calculateWeightedStandardDeviation(0, 0, 0, TI_WEIGHTEDPOPLSTDDEV);
 }
 
 void fnWeightedStandardError(uint16_t unusedParamButMandatory) {
-    calculateWeightedStandardDeviation(1, 1, 0, TI_WEIGHTEDSTDERR);
+  calculateWeightedStandardDeviation(1, 1, 0, TI_WEIGHTEDSTDERR);
 }

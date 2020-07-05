@@ -341,6 +341,8 @@ typedef int16_t calcRegister_t;
 #define TI_GEOMSTDERR          28
 #define TI_SAVED               29
 #define TI_BACKUP_RESTORED     30
+#define TI_XMIN_YMIN           31
+#define TI_XMAX_YMAX           32
 
 // Register browser mode
 #define RBR_GLOBAL              0
@@ -382,7 +384,7 @@ typedef int16_t calcRegister_t;
 #define LM_SYSTEM_STATE    5
 
 // Statistical sums
-#define NUMBER_OF_STATISTICAL_SUMS 23
+#define NUMBER_OF_STATISTICAL_SUMS 27
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer))
 #define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE))
 #define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2))
@@ -406,6 +408,10 @@ typedef int16_t calcRegister_t;
 #define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
 #define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
 #define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24))
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
 
 #if defined(__arm__)
   #define FMT64U  "llu"

@@ -351,8 +351,8 @@ void showHideUserMode(void) {
     showString(STD_SPACE_EM, &standardFont, X_USER_MODE, 0, vmNormal, true, true);   // STD_SPACE_EM is 12 pixel wide
   }
 
-  #ifdef PC_BUILD_TOCHECK_JM
-    showSoftmenuCurrentPart();                       //JM TOCHECK. Suspect in here to force icon update in Gui
+  #ifdef PC_BUILD
+    showSoftmenuCurrentPart();                       //JM Added here to force icon update in Gui
     if(calcMode == CM_NORMAL) calcModeNormalGui();
     else if(calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM) calcModeAimGui();
     else if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) calcModeTamGui();

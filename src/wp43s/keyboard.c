@@ -118,6 +118,9 @@ void btnFnClickedR(GtkWidget *w, gpointer data) { //JM Added this portion to be 
  ***********************************************/
 #ifdef PC_BUILD
 void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
+    return;
+  }
   if(event->button.button == 2) { // Middle click
     shiftF = true;
     shiftG = false;
@@ -421,6 +424,9 @@ void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PR
  ***********************************************/
 #ifdef PC_BUILD
 void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
+    return;
+  }
   if(event->button.button == 2) { // Middle click
     shiftF = true;
     shiftG = false;
@@ -544,7 +550,7 @@ void processKeyAction(int16_t item) {
         }
       }
       showAlphaModeonGui(); //dr JM, see keyboardtweaks
-      showSoftmenuCurrentPart();
+//JMXX      showSoftmenuCurrentPart();
       keyActionProcessed = true;
       }
       break;                                                                        //JM^^
@@ -1078,7 +1084,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           alphaCase = AC_UPPER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
-          showSoftmenuCurrentPart();
+//JMXX          showSoftmenuCurrentPart();
         }
 
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
@@ -1104,12 +1110,12 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
             //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
             //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
-            showSoftmenuCurrentPart();
+//JMXX            showSoftmenuCurrentPart();
           }
           else {
             softmenuStack[softmenuStackPointer - 1].firstItem = 0;
 
-            showSoftmenuCurrentPart();
+//JMXX            showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();
@@ -1199,7 +1205,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           alphaCase = AC_LOWER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
-          showSoftmenuCurrentPart();
+//JMXX          showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1215,7 +1221,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
             if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
             if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
-/*JM*/      showSoftmenuCurrentPart();
+//JMXX/*JM*/      showSoftmenuCurrentPart();
           }
           else {
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
@@ -1224,7 +1230,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
             else {
               softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
             }
-            showSoftmenuCurrentPart();
+//JMXX            showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();

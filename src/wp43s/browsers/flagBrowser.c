@@ -236,12 +236,14 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     oneSystemFlag(FLAG_AUTOFF,  "AUTOFF",         &line, &firstFlag);
     oneSystemFlag(FLAG_AUTXEQ,  "AUTXEQ",         &line, &firstFlag);
     oneSystemFlag(FLAG_CPXj,    "CPXj",           &line, &firstFlag);
+    oneSystemFlag(FLAG_CPXRES,  "CPXRES",         &line, &firstFlag);  //JM
     oneSystemFlag(FLAG_FRACT,   "FRACT",          &line, &firstFlag);
     oneSystemFlag(FLAG_GROW,    "GROW",           &line, &firstFlag);
     oneSystemFlag(FLAG_IGN1ER,  "IGN1ER",         &line, &firstFlag);
     oneSystemFlag(FLAG_INTING,  "INTING",         &line, &firstFlag);
     oneSystemFlag(FLAG_LEAD0,   "LEAD.0",         &line, &firstFlag);
     oneSystemFlag(FLAG_NUMIN,   "NUM.IN",         &line, &firstFlag);
+    oneSystemFlag(FLAG_POLAR,   "POLAR",          &line, &firstFlag);   //JM
     oneSystemFlag(FLAG_PRTACT,  "PRTACT",         &line, &firstFlag);
     oneSystemFlag(FLAG_QUIET,   "QUIET",          &line, &firstFlag);
     oneSystemFlag(FLAG_SLOW,    "SLOW",           &line, &firstFlag);
@@ -340,18 +342,18 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
       }
 
       switch(f) {
-      	case 100: strcpy(tmpStr3000, " POLAR.X"); break;
-      	case 101: strcpy(tmpStr3000, "   101.Y"); break;
-      	case 102: strcpy(tmpStr3000, "   102.Z"); break;
-      	case 103: strcpy(tmpStr3000, " TRACE.T"); break;
-      	case 104: strcpy(tmpStr3000, "ALLENG.A"); break;
-      	case 105: strcpy(tmpStr3000, " OVRFL.B"); break;
-      	case 106: strcpy(tmpStr3000, " CARRY.C"); break;
-      	case 107: strcpy(tmpStr3000, "SPCRES.D"); break;
-      	case 108: strcpy(tmpStr3000, " LEAD0.L"); break;
-      	case 109: strcpy(tmpStr3000, "CPXRES.I"); break;
-      	case 110: strcpy(tmpStr3000, "   110.J"); break;
-      	case 111: strcpy(tmpStr3000, "   111.K"); break;
+      	case 100: strcpy(tmpStr3000, "X:POLAR "); break;
+      	case 101: strcpy(tmpStr3000, "Y:101   "); break;
+      	case 102: strcpy(tmpStr3000, "Z:102   "); break;
+      	case 103: strcpy(tmpStr3000, "T:TRACE "); break;
+      	case 104: strcpy(tmpStr3000, "A:ALLENG"); break;
+      	case 105: strcpy(tmpStr3000, "B:OVRFL "); break;
+      	case 106: strcpy(tmpStr3000, "C:CARRY "); break;
+      	case 107: strcpy(tmpStr3000, "D:SPCRES"); break;
+      	case 108: strcpy(tmpStr3000, "L:LEAD0 "); break;
+      	case 109: strcpy(tmpStr3000, "I:CPXRES"); break;
+      	case 110: strcpy(tmpStr3000, "J:110   "); break;
+      	case 111: strcpy(tmpStr3000, "K:111   "); break;
       	default:  sprintf(tmpStr3000,"   %d ", f);break;
       }
 

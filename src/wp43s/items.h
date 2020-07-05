@@ -2037,8 +2037,10 @@
 #define ITM_X_g4                      1994   //JM EXEC
 #define ITM_X_g5                      1995   //JM EXEC
 #define ITM_X_g6                      1996   //JM EXEC
+#define ITM_ROUND2                    1997
+#define ITM_ROUNDI2                   1998
 
-#define LAST_ITEM                     1997   //JM
+#define LAST_ITEM                     1999   //JM
 
 #define CHR_PROD_SIGN                 9999
 

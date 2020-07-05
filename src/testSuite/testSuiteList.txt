@@ -135,7 +135,9 @@ polarToRectangularB
 ceil
 floor
 ;round
+;roundB
 roundi
+roundiB
 
 idiv
 idivr

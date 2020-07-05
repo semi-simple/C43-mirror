@@ -620,6 +620,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
             }                                                                                                               //JM shifts
             softmenuStackPointer_MEM = softmenuStackPointer;                                                                //JM shifts
           }
+        showSoftmenuCurrentPart();
         }
       }
     }

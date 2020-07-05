@@ -73,6 +73,7 @@ void fnKeyCase(uint16_t unusedParamButMandatory) {    //JM CASE JM CAPS
  * \return void
  ***********************************************/
 void showShiftState(void) {
+#ifndef TESTSUITE_BUILD
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
 //  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
@@ -93,6 +94,7 @@ void showShiftState(void) {
 //    shiftStateChanged = false;                                                //vv dr
 //  }                                                                           //^^
   }
+#endif
 }
 
 

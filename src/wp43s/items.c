@@ -1006,8 +1006,8 @@ const item_t indexOfItems[] = {
 /*  519 */  { fnGetRoundingMode,           NOPARAM     /*# JM #*/,      "RMODE?",                                      "RMODE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  520 */  { fnRmd,                       NOPARAM,                     "RMD",                                         "RMD",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  521 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/*  522 */  { fnRound2,                    NOPARAM     /*# JM #*/,      "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  523 */  { fnRoundi2,                   NOPARAM     /*# JM #*/,      "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  522 */  { fnRound,                     NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  523 */  { fnRoundi,                    NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  524 */  { fnRr,                        TM_VALUE,                    "RR",                                          "RR",                                          0,      63,       CAT_FNCT, SLS_ENABLED  },
 /*  525 */  { fnRrc,                       TM_VALUE,                    "RRC",                                         "RRC",                                         0,      63,       CAT_FNCT, SLS_ENABLED  },
 /*  526 */  { itemToBeCoded,               NOPARAM,                     "RSD",                                         "RSD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
@@ -2494,6 +2494,8 @@ const item_t indexOfItems[] = {
 /* 1994 */  { fnXEQMENU,                   16,                          "XEQM16",                                      "XEQM16",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
 /* 1995 */  { fnXEQMENU,                   17,                          "XEQM17",                                      "XEQM17",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
 /* 1996 */  { fnXEQMENU,                   18,                          "XEQM18",                                      "XEQM18",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
+/* 1997 */  { fnRound2,                    NOPARAM     /*# JM #*/,      "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1998 */  { fnRoundi2,                   NOPARAM     /*# JM #*/,      "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 
-/* 1997 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 1999 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

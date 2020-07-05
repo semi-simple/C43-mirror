@@ -194,7 +194,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
                                                                 ctxtReal39.round = savedRoundingMode; \
                                                                }
 #define realToReal34(source, destination)                      decQuadFromNumber        ((real34_t *)(destination), source, &ctxtReal34)
-#define realToString(source, destination)                      decNumberToString        ((real_t *)source, destination)
+#define realToString(source, destination)                      decNumberToString        ((real_t *)(source), destination)
 #define realZero(destination)                                  decNumberZero            (destination)
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)

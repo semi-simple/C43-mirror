@@ -424,7 +424,7 @@ void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PR
  ***********************************************/
 #ifdef PC_BUILD
 void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
+  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
     return;
   }
   if(event->button.button == 2) { // Middle click

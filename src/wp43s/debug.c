@@ -1339,6 +1339,38 @@ void debugNIM(void) {
         formatRealDebug(string, SIGMA_X4);
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, "Xmin");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatRealDebug(string, SIGMA_XMIN);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, "Xmax");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatRealDebug(string, SIGMA_XMAX);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, "Ymin");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatRealDebug(string, SIGMA_YMIN);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
+        sprintf(string, "Ymax");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatRealDebug(string, SIGMA_YMAX);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
       }
     }
 

@@ -23,7 +23,7 @@
 #define ON_PIXEL              0x303030 // blue red green
 #define OFF_PIXEL             0xe0e0e0 // blue red green
 #define SOFTMENU_STACK_SIZE   14 // 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR //JM increased from 7 to 14. Why not. It is not a Babbage machine.
-#define TEMPORARY_INFO_OFFSET 10
+#define TEMPORARY_INFO_OFFSET 10 // I find 4 looks better
 #define REGISTER_LINE_HEIGHT  36 // was 37
 
 #define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)

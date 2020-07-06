@@ -26,35 +26,42 @@
  * An appropriate error message is displayed if either condition fails
  *
  * \param[in] unusedParamButMandatory uint16_t
- * \return int
+ * \return bool_t
  ***********************************************/
-int checkMinimumDataPoints(const real_t *n) {
+bool_t checkMinimumDataPoints(const real_t *n) {
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
+      showInfoDialog("In function checkMinimumDataPoints:", "There is no statistical data available!", NULL, NULL);
     #endif
-    return 0;
+    return false;
   }
+
   if (realCompareLessThan(SIGMA_N, n)) {
     displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is insufficient statistical data available!");
-      showInfoDialog("In function checkMinimumDataPoints:", errorMessage, NULL, NULL);
+      showInfoDialog("In function checkMinimumDataPoints:", "There is insufficient statistical data available!", NULL, NULL);
     #endif
-    return 0;
+    return false;
   }
-  return 1;
+
+  return true;
 }
 
 
 void initStatisticalSums(void) {
+  int32_t sum;
+
   if(statisticalSumsPointer == NULL) {
     statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
+    for(sum=0; sum<NUMBER_OF_STATISTICAL_SUMS - 4; sum++) {
       realZero((real_t *)(statisticalSumsPointer + REAL_SIZE * sum));
     }
+
+    realCopy(const_plusInfinity,  SIGMA_XMIN);
+    realCopy(const_plusInfinity,  SIGMA_YMIN);
+    realCopy(const_minusInfinity, SIGMA_XMAX);
+    realCopy(const_minusInfinity, SIGMA_YMAX);
   }
   if(telltale != MEM_INITIALIZED) {   //JMSTATS
     graph_setupmemory();
@@ -97,6 +104,26 @@ void fnSigma(uint16_t plusMinus) {
     }
 
     if(plusMinus == 1) { // SIGMA+
+      // xmin
+      if(realCompareLessThan(&x, SIGMA_XMIN)) {
+        realCopy(&x, SIGMA_XMIN);
+      }
+
+      // xmax
+      if(realCompareGreaterThan(&x, SIGMA_XMAX)) {
+        realCopy(&x, SIGMA_XMAX);
+      }
+
+      // ymin
+      if(realCompareLessThan(&y, SIGMA_YMIN)) {
+        realCopy(&y, SIGMA_YMIN);
+      }
+
+      // ymax
+      if(realCompareGreaterThan(&y, SIGMA_YMAX)) {
+        realCopy(&y, SIGMA_YMAX);
+      }
+
       // n
       realAdd(SIGMA_N, const_1, SIGMA_N, realContext);
 
@@ -292,44 +319,30 @@ void fnSigma(uint16_t plusMinus) {
       showInfoDialog("In function fnSigma:", errorMessage, NULL, NULL);
     #endif
   }
-//for(int i=0; i<NUMBER_OF_STATISTICAL_SUMS; i++) {
-//printf("sum %02d ", i); printRealToConsole(((real_t *)statisticalSumsPointer) + i); printf("\n");
-//}
 }
 
 
 
 void fnStatSum(uint16_t sum) {
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnStatSum:", errorMessage, NULL, NULL);
-    #endif
-  }
-  else {
-   liftStack();
-   realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
+  if(checkMinimumDataPoints(const_1)) {
+    saveStack();
+
+    liftStack();
+    realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
 
+
+
 /********************************************//**
  * \brief SUM ==> regX, regY
- * enables stack lift and refreshes the stack.
  * regX = SUM x, regY = SUM y
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnSumXY(uint16_t unusedParamButMandatory) {
-  if(statisticalSumsPointer == NULL) {
-    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnSumXY:", errorMessage, NULL, NULL);
-    #endif
-  }
-  else {
+  if(checkMinimumDataPoints(const_1)) {
     saveStack();
 
     liftStack();
@@ -340,5 +353,53 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
     realToReal34(SIGMA_Y, REGISTER_REAL34_DATA(REGISTER_Y));
 
     temporaryInformation = TI_SUMX_SUMY;
+  }
+}
+
+
+
+/********************************************//**
+ * \brief Xmin ==> regX, regY
+ * regX = min x, regY = min y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnXmin(uint16_t unusedParamButMandatory) {
+  if(checkMinimumDataPoints(const_1)) {
+    saveStack();
+
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+
+    realToReal34(SIGMA_XMIN, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(SIGMA_YMIN, REGISTER_REAL34_DATA(REGISTER_Y));
+
+    temporaryInformation = TI_XMIN_YMIN;
+  }
+}
+
+
+
+/********************************************//**
+ * \brief Xmax ==> regX, regY
+ * regX = max x, regY = max y
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnXmax(uint16_t unusedParamButMandatory) {
+  if(checkMinimumDataPoints(const_1)) {
+    saveStack();
+
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+
+    realToReal34(SIGMA_XMAX, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(SIGMA_YMAX, REGISTER_REAL34_DATA(REGISTER_Y));
+
+    temporaryInformation = TI_XMAX_YMAX;
   }
 }

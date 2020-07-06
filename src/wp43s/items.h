@@ -735,8 +735,8 @@
 #define MNU_ALPHAINTL                  705
 #define ITM_ALPHALENG                  706
 #define MNU_ALPHAMATH                  707
-#define ITM_0708                       708
-#define ITM_0709                       709
+#define ITM_XMAX                       708
+#define ITM_XMIN                       709
 #define ITM_ALPHAPOS                   710
 #define ITM_ALPHARL                    711
 #define ITM_ALPHARR                    712

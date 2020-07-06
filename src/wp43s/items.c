@@ -442,6 +442,8 @@ void fnTicks                    (uint16_t unusedParamButMandatory) {}
 void fnSave                     (uint16_t unusedParamButMandatory) {}
 void fnLoad                     (uint16_t unusedParamButMandatory) {}
 void fnUndo                     (uint16_t unusedParamButMandatory) {}
+void fnXmax                     (uint16_t unusedParamButMandatory) {}
+void fnXmin                     (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -1192,8 +1194,8 @@ const item_t indexOfItems[] = {
 /*  705 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "INTL",                              STD_alpha "INTL",                              0,       0,       CAT_MENU, SLS_UNCHANGED},
 /*  706 */  { fnAlphaLeng,                 TM_REGISTER,                 STD_alpha "LENG?",                             STD_alpha "LENG?",                             0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  707 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "MATH",                              STD_alpha "MATH",                              0,       0,       CAT_MENU, SLS_UNCHANGED},
-/*  708 */  { itemToBeCoded,               NOPARAM,                     "0708",                                        "0708",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
-/*  709 */  { itemToBeCoded,               NOPARAM,                     "0709",                                        "0709",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/*  708 */  { fnXmax,                      NOPARAM,                     "x" STD_SUB_m STD_SUB_a STD_SUB_x,             "x" STD_SUB_m STD_SUB_a STD_SUB_x,             0,       0,       CAT_FNCT, SLS_ENABLED  },
+/*  709 */  { fnXmin,                      NOPARAM,                     "x" STD_SUB_m STD_SUB_i STD_SUB_n,             "x" STD_SUB_m STD_SUB_i STD_SUB_n,             0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  710 */  { fnAlphaPos,                  TM_REGISTER,                 STD_alpha "POS?",                              STD_alpha "POS?",                              0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  711 */  { fnAlphaRL,                   TM_REGISTER,                 STD_alpha "RL",                                STD_alpha "RL",                                0,      99,       CAT_FNCT, SLS_ENABLED  },
 /*  712 */  { fnAlphaRR,                   TM_REGISTER,                 STD_alpha "RR",                                STD_alpha "RR",                                0,      99,       CAT_FNCT, SLS_ENABLED  },

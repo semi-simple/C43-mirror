@@ -48,23 +48,6 @@ void showAlphaModeonGui(void) {
 
 
 
-void fnKeyCase(uint16_t unusedParamButMandatory) {    //JM CASE JM CAPS
-  #ifndef TESTSUITE_BUILD
-    if(alphaCase == AC_LOWER) {
-      alphaCase = AC_UPPER;
-    } else {
-      alphaCase = AC_LOWER;
-    }
-
-    showAlphaModeonGui(); //dr JM, see keyboardtweaks
-
-    showSoftmenuCurrentPart();
-    setCatalogLastPos();
-  #endif
-}
-
-
-
 /********************************************//**
  * \brief Displays the f or g shift state in the
  * upper left corner of the T register line
@@ -417,6 +400,7 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        hideFunctionName();    
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
+printf(">>>refreshScreen from keyboardTweak.c Check_MultiPresses\n");
        refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE

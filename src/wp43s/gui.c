@@ -3032,18 +3032,18 @@ void setupUI(void) {
   g_signal_connect(btn24, "button-release-event", G_CALLBACK(btnReleased), "03");
   g_signal_connect(btn25, "button-release-event", G_CALLBACK(btnReleased), "04");
   g_signal_connect(btn26, "button-release-event", G_CALLBACK(btnReleased), "05");
-  g_signal_connect(btn21A, "pressed", G_CALLBACK(btnPressed), "00");    //vv dr - new AIM
-  g_signal_connect(btn22A, "pressed", G_CALLBACK(btnPressed), "01");
-  g_signal_connect(btn23A, "pressed", G_CALLBACK(btnPressed), "02");
-  g_signal_connect(btn24A, "pressed", G_CALLBACK(btnPressed), "03");
-  g_signal_connect(btn25A, "pressed", G_CALLBACK(btnPressed), "04");
-  g_signal_connect(btn26A, "pressed", G_CALLBACK(btnPressed), "05");
-  g_signal_connect(btn21A, "released", G_CALLBACK(btnReleased), "00");
-  g_signal_connect(btn22A, "released", G_CALLBACK(btnReleased), "01");
-  g_signal_connect(btn23A, "released", G_CALLBACK(btnReleased), "02");
-  g_signal_connect(btn24A, "released", G_CALLBACK(btnReleased), "03");
-  g_signal_connect(btn25A, "released", G_CALLBACK(btnReleased), "04");
-  g_signal_connect(btn26A, "released", G_CALLBACK(btnReleased), "05");  //^^
+  g_signal_connect(btn21A, "button-press-event", G_CALLBACK(btnPressed), "00");    //vv dr - new AIM
+  g_signal_connect(btn22A, "button-press-event", G_CALLBACK(btnPressed), "01");
+  g_signal_connect(btn23A, "button-press-event", G_CALLBACK(btnPressed), "02");
+  g_signal_connect(btn24A, "button-press-event", G_CALLBACK(btnPressed), "03");
+  g_signal_connect(btn25A, "button-press-event", G_CALLBACK(btnPressed), "04");
+  g_signal_connect(btn26A, "button-press-event", G_CALLBACK(btnPressed), "05");
+  g_signal_connect(btn21A, "button-release-event", G_CALLBACK(btnReleased), "00");
+  g_signal_connect(btn22A, "button-release-event", G_CALLBACK(btnReleased), "01");
+  g_signal_connect(btn23A, "button-release-event", G_CALLBACK(btnReleased), "02");
+  g_signal_connect(btn24A, "button-release-event", G_CALLBACK(btnReleased), "03");
+  g_signal_connect(btn25A, "button-release-event", G_CALLBACK(btnReleased), "04");
+  g_signal_connect(btn26A, "button-release-event", G_CALLBACK(btnReleased), "05");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl21F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl21Fa, 0, 0);            //JM
@@ -3193,18 +3193,18 @@ void setupUI(void) {
   g_signal_connect(btn34, "button-release-event", G_CALLBACK(btnReleased), "09");
   g_signal_connect(btn35, "button-release-event", G_CALLBACK(btnReleased), "10");
   g_signal_connect(btn36, "button-release-event", G_CALLBACK(btnReleased), "11");
-  g_signal_connect(btn31A, "pressed", G_CALLBACK(btnPressed), "06");    //vv dr - new AIM
-  g_signal_connect(btn32A, "pressed", G_CALLBACK(btnPressed), "07");
-  g_signal_connect(btn33A, "pressed", G_CALLBACK(btnPressed), "08");
-  g_signal_connect(btn34A, "pressed", G_CALLBACK(btnPressed), "09");
-  g_signal_connect(btn35A, "pressed", G_CALLBACK(btnPressed), "10");
-  g_signal_connect(btn36A, "pressed", G_CALLBACK(btnPressed), "11");
-  g_signal_connect(btn31A, "released", G_CALLBACK(btnReleased), "06");
-  g_signal_connect(btn32A, "released", G_CALLBACK(btnReleased), "07");
-  g_signal_connect(btn33A, "released", G_CALLBACK(btnReleased), "08");
-  g_signal_connect(btn34A, "released", G_CALLBACK(btnReleased), "09");
-  g_signal_connect(btn35A, "released", G_CALLBACK(btnReleased), "10");
-  g_signal_connect(btn36A, "released", G_CALLBACK(btnReleased), "11");  //^^
+  g_signal_connect(btn31A, "button-press-event", G_CALLBACK(btnPressed), "06");    //vv dr - new AIM
+  g_signal_connect(btn32A, "button-press-event", G_CALLBACK(btnPressed), "07");
+  g_signal_connect(btn33A, "button-press-event", G_CALLBACK(btnPressed), "08");
+  g_signal_connect(btn34A, "button-press-event", G_CALLBACK(btnPressed), "09");
+  g_signal_connect(btn35A, "button-press-event", G_CALLBACK(btnPressed), "10");
+  g_signal_connect(btn36A, "button-press-event", G_CALLBACK(btnPressed), "11");
+  g_signal_connect(btn31A, "button-release-event", G_CALLBACK(btnReleased), "06");
+  g_signal_connect(btn32A, "button-release-event", G_CALLBACK(btnReleased), "07");
+  g_signal_connect(btn33A, "button-release-event", G_CALLBACK(btnReleased), "08");
+  g_signal_connect(btn34A, "button-release-event", G_CALLBACK(btnReleased), "09");
+  g_signal_connect(btn35A, "button-release-event", G_CALLBACK(btnReleased), "10");
+  g_signal_connect(btn36A, "button-release-event", G_CALLBACK(btnReleased), "11");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl31F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl32F,  0, 0);
@@ -3327,12 +3327,12 @@ void setupUI(void) {
   g_signal_connect(btn43, "button-release-event", G_CALLBACK(btnReleased), "14");
   g_signal_connect(btn44, "button-release-event", G_CALLBACK(btnReleased), "15");
   g_signal_connect(btn45, "button-release-event", G_CALLBACK(btnReleased), "16");
-  g_signal_connect(btn42A, "pressed", G_CALLBACK(btnPressed), "13");    //vv dr - new AIM
-  g_signal_connect(btn43A, "pressed", G_CALLBACK(btnPressed), "14");
-  g_signal_connect(btn44A, "pressed", G_CALLBACK(btnPressed), "15");
-  g_signal_connect(btn42A, "released", G_CALLBACK(btnReleased), "13");
-  g_signal_connect(btn43A, "released", G_CALLBACK(btnReleased), "14");
-  g_signal_connect(btn44A, "released", G_CALLBACK(btnReleased), "15");  //^^
+  g_signal_connect(btn42A, "button-press-event", G_CALLBACK(btnPressed), "13");    //vv dr - new AIM
+  g_signal_connect(btn43A, "button-press-event", G_CALLBACK(btnPressed), "14");
+  g_signal_connect(btn44A, "button-press-event", G_CALLBACK(btnPressed), "15");
+  g_signal_connect(btn42A, "button-release-event", G_CALLBACK(btnReleased), "13");
+  g_signal_connect(btn43A, "button-release-event", G_CALLBACK(btnReleased), "14");
+  g_signal_connect(btn44A, "button-release-event", G_CALLBACK(btnReleased), "15");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl41F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl42F,  0, 0);
@@ -3446,14 +3446,14 @@ void setupUI(void) {
   g_signal_connect(btn53, "button-release-event", G_CALLBACK(btnReleased), "19");
   g_signal_connect(btn54, "button-release-event", G_CALLBACK(btnReleased), "20");
   g_signal_connect(btn55, "button-release-event", G_CALLBACK(btnReleased), "21");
-  g_signal_connect(btn52A, "pressed", G_CALLBACK(btnPressed), "18");    //vv dr - new AIM
-  g_signal_connect(btn53A, "pressed", G_CALLBACK(btnPressed), "19");
-  g_signal_connect(btn54A, "pressed", G_CALLBACK(btnPressed), "20");
-  g_signal_connect(btn55A, "pressed", G_CALLBACK(btnPressed), "21");
-  g_signal_connect(btn52A, "released", G_CALLBACK(btnReleased), "18");
-  g_signal_connect(btn53A, "released", G_CALLBACK(btnReleased), "19");
-  g_signal_connect(btn54A, "released", G_CALLBACK(btnReleased), "20");
-  g_signal_connect(btn55A, "released", G_CALLBACK(btnReleased), "21");  //^^
+  g_signal_connect(btn52A, "button-press-event", G_CALLBACK(btnPressed), "18");    //vv dr - new AIM
+  g_signal_connect(btn53A, "button-press-event", G_CALLBACK(btnPressed), "19");
+  g_signal_connect(btn54A, "button-press-event", G_CALLBACK(btnPressed), "20");
+  g_signal_connect(btn55A, "button-press-event", G_CALLBACK(btnPressed), "21");
+  g_signal_connect(btn52A, "button-release-event", G_CALLBACK(btnReleased), "18");
+  g_signal_connect(btn53A, "button-release-event", G_CALLBACK(btnReleased), "19");
+  g_signal_connect(btn54A, "button-release-event", G_CALLBACK(btnReleased), "20");
+  g_signal_connect(btn55A, "button-release-event", G_CALLBACK(btnReleased), "21");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl51F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl52F,  0, 0);
@@ -3570,14 +3570,14 @@ void setupUI(void) {
   g_signal_connect(btn63, "button-release-event", G_CALLBACK(btnReleased), "24");
   g_signal_connect(btn64, "button-release-event", G_CALLBACK(btnReleased), "25");
   g_signal_connect(btn65, "button-release-event", G_CALLBACK(btnReleased), "26");
-  g_signal_connect(btn62A, "pressed", G_CALLBACK(btnPressed), "23");    //vv - new AIM
-  g_signal_connect(btn63A, "pressed", G_CALLBACK(btnPressed), "24");
-  g_signal_connect(btn64A, "pressed", G_CALLBACK(btnPressed), "25");
-  g_signal_connect(btn65A, "pressed", G_CALLBACK(btnPressed), "26");
-  g_signal_connect(btn62A, "released", G_CALLBACK(btnReleased), "23");
-  g_signal_connect(btn63A, "released", G_CALLBACK(btnReleased), "24");
-  g_signal_connect(btn64A, "released", G_CALLBACK(btnReleased), "25");
-  g_signal_connect(btn65A, "released", G_CALLBACK(btnReleased), "26");  //^^
+  g_signal_connect(btn62A, "button-press-event", G_CALLBACK(btnPressed), "23");    //vv - new AIM
+  g_signal_connect(btn63A, "button-press-event", G_CALLBACK(btnPressed), "24");
+  g_signal_connect(btn64A, "button-press-event", G_CALLBACK(btnPressed), "25");
+  g_signal_connect(btn65A, "button-press-event", G_CALLBACK(btnPressed), "26");
+  g_signal_connect(btn62A, "button-release-event", G_CALLBACK(btnReleased), "23");
+  g_signal_connect(btn63A, "button-release-event", G_CALLBACK(btnReleased), "24");
+  g_signal_connect(btn64A, "button-release-event", G_CALLBACK(btnReleased), "25");
+  g_signal_connect(btn65A, "button-release-event", G_CALLBACK(btnReleased), "26");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl61F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl62F,  0, 0);
@@ -3698,14 +3698,14 @@ void setupUI(void) {
   g_signal_connect(btn73, "button-release-event", G_CALLBACK(btnReleased), "29");
   g_signal_connect(btn74, "button-release-event", G_CALLBACK(btnReleased), "30");
   g_signal_connect(btn75, "button-release-event", G_CALLBACK(btnReleased), "31");
-  g_signal_connect(btn72A, "pressed", G_CALLBACK(btnPressed), "28");    //vv dr - new AIM
-  g_signal_connect(btn73A, "pressed", G_CALLBACK(btnPressed), "29");
-  g_signal_connect(btn74A, "pressed", G_CALLBACK(btnPressed), "30");
-  g_signal_connect(btn75A, "pressed", G_CALLBACK(btnPressed), "31");
-  g_signal_connect(btn72A, "released", G_CALLBACK(btnReleased), "28");
-  g_signal_connect(btn73A, "released", G_CALLBACK(btnReleased), "29");
-  g_signal_connect(btn74A, "released", G_CALLBACK(btnReleased), "30");
-  g_signal_connect(btn75A, "released", G_CALLBACK(btnReleased), "31");  //^^
+  g_signal_connect(btn72A, "button-press-event", G_CALLBACK(btnPressed), "28");    //vv dr - new AIM
+  g_signal_connect(btn73A, "button-press-event", G_CALLBACK(btnPressed), "29");
+  g_signal_connect(btn74A, "button-press-event", G_CALLBACK(btnPressed), "30");
+  g_signal_connect(btn75A, "button-press-event", G_CALLBACK(btnPressed), "31");
+  g_signal_connect(btn72A, "button-release-event", G_CALLBACK(btnReleased), "28");
+  g_signal_connect(btn73A, "button-release-event", G_CALLBACK(btnReleased), "29");
+  g_signal_connect(btn74A, "button-release-event", G_CALLBACK(btnReleased), "30");
+  g_signal_connect(btn75A, "button-release-event", G_CALLBACK(btnReleased), "31");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl71F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl72F,  0, 0);
@@ -3835,14 +3835,14 @@ void setupUI(void) {
   g_signal_connect(btn83, "button-release-event", G_CALLBACK(btnReleased), "34");
   g_signal_connect(btn84, "button-release-event", G_CALLBACK(btnReleased), "35");
   g_signal_connect(btn85, "button-release-event", G_CALLBACK(btnReleased), "36");
-  g_signal_connect(btn82A, "pressed", G_CALLBACK(btnPressed), "33");    //vv dr - new AIM
-  g_signal_connect(btn83A, "pressed", G_CALLBACK(btnPressed), "34");
-  g_signal_connect(btn84A, "pressed", G_CALLBACK(btnPressed), "35");
-  g_signal_connect(btn85A, "pressed", G_CALLBACK(btnPressed), "36");
-  g_signal_connect(btn82A, "released", G_CALLBACK(btnReleased), "33");
-  g_signal_connect(btn83A, "released", G_CALLBACK(btnReleased), "34");
-  g_signal_connect(btn84A, "released", G_CALLBACK(btnReleased), "35");
-  g_signal_connect(btn85A, "released", G_CALLBACK(btnReleased), "36");  //^^
+  g_signal_connect(btn82A, "button-press-event", G_CALLBACK(btnPressed), "33");    //vv dr - new AIM
+  g_signal_connect(btn83A, "button-press-event", G_CALLBACK(btnPressed), "34");
+  g_signal_connect(btn84A, "button-press-event", G_CALLBACK(btnPressed), "35");
+  g_signal_connect(btn85A, "button-press-event", G_CALLBACK(btnPressed), "36");
+  g_signal_connect(btn82A, "button-release-event", G_CALLBACK(btnReleased), "33");
+  g_signal_connect(btn83A, "button-release-event", G_CALLBACK(btnReleased), "34");
+  g_signal_connect(btn84A, "button-release-event", G_CALLBACK(btnReleased), "35");
+  g_signal_connect(btn85A, "button-release-event", G_CALLBACK(btnReleased), "36");  //^^
 
   gtk_fixed_put(GTK_FIXED(grid), lbl81F,  0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl82F,  0, 0);

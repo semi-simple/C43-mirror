@@ -2231,7 +2231,7 @@ const item_t indexOfItems[] = {
 /* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                   0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
-/* 1736 */  { fnKeyCase,                   NOPARAM,                     "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
+/* 1736 */  { addItemToBuffer,             CHR_case,                    "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
 /* 1737 */  { fnBASE_Hash,                 NOPARAM,                     "##" STD_RIGHT_ARROW "INT",                    "##" STD_RIGHT_ARROW "INT",                    0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM ##
 /* 1738 */  { itemToBeCoded,               NOPARAM,                     "XEQMENU",                                     "XEQMENU",                                     0,       0,       CAT_MENU, SLS_UNCHANGED},
 

@@ -27,7 +27,6 @@
 //#endif
 
 void     showAlphaModeonGui   (void);
-void     fnKeyCase            (uint16_t unusedParamButMandatory);
 void     resetShiftState      (void);
 void     showShiftState       (void);
 

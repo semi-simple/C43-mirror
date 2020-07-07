@@ -2031,6 +2031,7 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
 }                                                       //JM ^^
 
 
+int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void clearScreen(void) {
   #ifdef PC_BUILD
     int16_t x, y;
@@ -2040,16 +2041,20 @@ void clearScreen(void) {
         clearPixel(x, y);
       }
     }
+  printf(">>>clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
   #endif
 
   #if DMCP_BUILD
     lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
   #endif
+
 }
 
 
 
+int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
 void refreshScreen(void) {
+printf(">>>refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       clearScreen();

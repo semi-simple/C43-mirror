@@ -205,6 +205,7 @@ void executeFunction(const char *data) {
           else if(calcMode == CM_ASM_OVER_TAM) {
             indexOfItems[getOperation()].func(indexOfItems[item].param);
             calcModeNormal();
+printf(">>>refreshScreen1 from keyboard.c executeFunction\n");
             refreshScreen();
             return;
           }
@@ -212,6 +213,7 @@ void executeFunction(const char *data) {
             calcMode = CM_AIM;
             addItemToBuffer(item);
             calcMode = CM_ASM_OVER_AIM;
+printf(">>>refreshScreen2 from keyboard.c executeFunction\n");
             refreshScreen();
             return;
           }
@@ -247,7 +249,7 @@ void executeFunction(const char *data) {
         }
       }
     }
-
+printf(">>>refreshScreen3 from keyboard.c executeFunction\n");
     refreshScreen();
   }
 }
@@ -444,6 +446,10 @@ void btnPressed(void *data) {
   showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
+
+printf(">>>refreshScreen from keyboard.c btnpressed (added by JM to instantly display numbers)\n");
+  refreshScreen(); //JM NEW, TO DISPLAY NUMBER DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE
+
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
     }
@@ -477,6 +483,7 @@ void btnReleased(void *data) {
       runFunction(item);
     }
   }
+printf(">>>refreshScreen from keyboard.c btnReleased which is the main normal place for it.\n");
 
   refreshScreen();
 }
@@ -537,7 +544,7 @@ void processKeyAction(int16_t item) {
       break;
 
     case CHR_case: {
-      int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                                       //JMvv
+      int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                      //JMvv
       if(alphaCase == AC_LOWER) {
         alphaCase = AC_UPPER;
         if(sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) {
@@ -553,7 +560,7 @@ void processKeyAction(int16_t item) {
 //JMXX      showSoftmenuCurrentPart();
       keyActionProcessed = true;
       }
-      break;                                                                        //JM^^
+      break;                                                                                                               //JM^^
 
     default:
       switch(calcMode) {

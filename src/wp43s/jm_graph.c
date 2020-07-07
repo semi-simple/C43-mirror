@@ -24,7 +24,7 @@
 #include "wp43s.h"
 #include "math.h"
 
-//#define STATDEBUG
+#define STATDEBUG
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
@@ -421,6 +421,60 @@ void graph_axis (void){
   //  graph_ymin= -2;          graph_ymax= +2;
 
 
+  graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
+  graph_dy = 0;
+
+  if(graph_dx == 0) {
+    tick_int_x = auto_tick((x_max-x_min)/20);
+  } else {
+    tick_int_x = graph_dx;
+  }
+
+  if(graph_dy == 0) {
+    tick_int_y = auto_tick((y_max-y_min)/20);
+  } else {
+    tick_int_y = graph_dy;
+  }
+
+
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "x %.3f/tick  y %.3f/tick", tick_int_x,tick_int_y);
+
+  char outstr[300];
+  uint16_t ii = 0;
+  uint16_t oo = 0;
+    outstr[0]=0;
+  while (tmpStr3000[ii] != 0) {
+    switch (tmpStr3000[ii]) {
+      case  48: outstr[oo++] = 0xa0; outstr[oo++] = 0x80; break; //.
+      case  49: outstr[oo++] = 0xa0; outstr[oo++] = 0x81; break; //.
+      case  50: outstr[oo++] = 0xa0; outstr[oo++] = 0x82; break; //.
+      case  51: outstr[oo++] = 0xa0; outstr[oo++] = 0x83; break; //.
+      case  52: outstr[oo++] = 0xa0; outstr[oo++] = 0x84; break; //.
+      case  53: outstr[oo++] = 0xa0; outstr[oo++] = 0x85; break; //.
+      case  54: outstr[oo++] = 0xa0; outstr[oo++] = 0x86; break; //.
+      case  55: outstr[oo++] = 0xa0; outstr[oo++] = 0x87; break; //.
+      case  56: outstr[oo++] = 0xa0; outstr[oo++] = 0x88; break; //.
+      case  57: outstr[oo++] = 0xa0; outstr[oo++] = 0x89; break; //.
+
+      case 120: outstr[oo++] = 0xa4; outstr[oo++] = 0xb3; break; //x
+      case 121: outstr[oo++] = 0xa4; outstr[oo++] = 0xb4; break; //y
+      case  58: outstr[oo++] = 0xa2; outstr[oo++] = 0x36; break; //:
+      case  43: outstr[oo++] = 0xa0; outstr[oo++] = 0x8a; break; //+
+      case  45: outstr[oo++] = 0xa0; outstr[oo++] = 0x8b; break; //-
+      case  46: outstr[oo++] = 0xa0; outstr[oo++] = 0x1a; break; //.
+      case  47: outstr[oo++] = 0xa4; outstr[oo++] = 0x25; break; ///
+      case 116: outstr[oo++] = 0xa0; outstr[oo++] = 0x9c; break; //t
+      case 105: outstr[oo++] = 0xa4; outstr[oo++] = 0xa4; break; //i
+      case 99 : outstr[oo++] = 0xa4; outstr[oo++] = 0x9e; break; //c
+      case 107: outstr[oo++] = 0xa4; outstr[oo++] = 0xa6; break; //k
+      default : outstr[oo++] = tmpStr3000[ii];
+    }
+    ii++;
+  }
+  outstr[oo]=0;
+  showString(outstr, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+
+
   //GRAPH ZERO AXIS
   yzero = screen_window_y(y_min,0,y_max);
   xzero = screen_window_x(x_min,0,x_max);
@@ -437,25 +491,11 @@ void graph_axis (void){
       cnt++; 
     }
 
+
+
   force_refresh();
 
-  graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
-  graph_dy = 0;
 
-  if(graph_dx == 0) {
-    tick_int_x = auto_tick((x_max-x_min)/20);
-  } else {
-    tick_int_x = graph_dx;
-  }
-
-  if(graph_dy == 0) {
-    tick_int_y = auto_tick((y_max-y_min)/20);
-  } else {
-    tick_int_y = graph_dy;
-  }
-
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
-  showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
 
   double x; 
   double y;
@@ -694,9 +734,21 @@ void graph_plotmem(void) {
 //    x_max = 1.05 * x_max;
 //    y_min = 1.05 * y_min;
 //    y_max = 1.05 * y_max;
-   
+
     float dx = x_max-x_min;
     float dy = y_max-y_min;
+
+    if (dy == 0) {
+      dy = 1;
+      y_max = y_min + dy/2;
+      y_min = y_max - dy;
+    }
+    if (dx == 0) {
+      dx = 1;
+      x_max = x_min + dx/2;
+      x_min = x_max - dx;
+    }
+   
     x_min = x_min - dx * 0.015;
     y_min = y_min - dy * 0.015;
     x_max = x_max + dx * 0.015;

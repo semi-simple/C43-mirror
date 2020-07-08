@@ -2035,6 +2035,7 @@ int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void clearScreen(void) {
   #ifdef PC_BUILD
     int16_t x, y;
+    clear_ul(); //JMUL
 
     for(y=0; y<SCREEN_HEIGHT; y++) {
       for(x=0; x<SCREEN_WIDTH; x++) {

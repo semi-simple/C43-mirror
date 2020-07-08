@@ -48,17 +48,9 @@ void showAlphaModeonGui(void) {
 
 
 
-/********************************************//**
- * \brief Displays the f or g shift state in the
- * upper left corner of the T register line
- *
- * \param void
- * \return void
- ***********************************************/
 void showShiftState(void) {
 #ifndef TESTSUITE_BUILD
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-//  if(shiftStateChanged) {                                                     //dr
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
         show_f_jm();        //JM KeyboardTweaks.c
@@ -68,14 +60,9 @@ void showShiftState(void) {
         show_g_jm();        //JM KeyboardTweaks.c
       }
       else {
-        refreshRegisterLine(REGISTER_T);
+        showGlyph(" ", &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // space clears the f and g
         clear_fg_jm();      //JM KeyboardTweaks.c
-        if(TAM_REGISTER_LINE == REGISTER_T && (calcMode == CM_TAM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
-          showString(tamBuffer, &standardFont, 25, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-        }
       }
-//    shiftStateChanged = false;                                                //vv dr
-//  }                                                                           //^^
   }
 #endif
 }
@@ -179,10 +166,22 @@ void show_g_jm(void){
 
 
 void clear_fg_jm(void){
-        //DOT_G_clear(); //cancel dots
-        showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
+      //DOT_G_clear(); //cancel dots
+      //  showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
         DOT_G_painted = false;
         DOT_F_painted = false;
+
+        if(!FN_timeouts_in_progress) {        //Cancel lines
+          if(ULFL) {
+            underline(1);
+            ULFL = !ULFL;
+          }
+          if(ULGL) {
+            underline(2);
+            ULGL = !ULGL;
+          }
+        }
+
 }
 
 

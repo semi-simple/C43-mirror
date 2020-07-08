@@ -497,8 +497,10 @@ void reset_jm_defaults(void) {
     jm_HOME_FIX = false;                                       //JMHOME
     #endif
     jm_LARGELI=true;
-    setSystemFlag(FLAG_SPCRES)                                 //JM default infinity etc.
-    //JM defaults ^^
+    setSystemFlag(FLAG_SPCRES);                                //JM default infinity etc.
+    clearSystemFlag(FLAG_DENFIX);                              //JM default
+    denMax = 64;                                               //JM default
+     //JM defaults ^^
 
 
     fnXEQMENUpos = 0;
@@ -1234,8 +1236,6 @@ void fnJM(uint16_t JM_OPCODE) {
   if(JM_OPCODE == 10) {                                         //e^theta.j j
     saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
-    setSystemFlag(FLAG_ASLIFT);
-    liftStack();
     fn_cnst_op_j(0);
     fnMultiply(0);                                              // * aa
     fnExp(0);

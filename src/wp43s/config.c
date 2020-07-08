@@ -557,8 +557,8 @@ void fnReset(uint16_t confirmation) {
     fnDisplayFormatGap(3);
     clearSystemFlag(FLAG_CPXj);
     fnAngularMode(AM_DEGREE);
-    setSystemFlag(FLAG_DENANY);
-    fnDenMax(0);
+    clearSystemFlag(FLAG_DENANY);                              //JM Default
+    fnDenMax(0);                                               //JM Default
     fnDisplayStack(4);
     firstGregorianDay = 1752;
     fnCurveFitting(CF_LINEAR_FITTING);
@@ -593,7 +593,7 @@ void fnReset(uint16_t confirmation) {
     printerIconEnabled = false;
 
 //    showRealComplexResult();                                   //JM, from wp43s.c
-    reset_jm_defaults();
+    reset_jm_defaults(); 
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));

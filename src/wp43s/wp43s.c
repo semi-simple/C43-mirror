@@ -19,7 +19,6 @@
  ***********************************************/
 
 //#define JMSHOWCODES
-//#define _43S_SHOWCODES
 
 
 #include "wp43s.h"
@@ -303,11 +302,10 @@ void setupDefaults(void) {
 
   statisticalSumsPointer = NULL;
 
-//JM Where commented, fnReset is over-writing the content of setupdefaults. fnReset is in config.c
-  fnSetWordSize(64); // word size from 1 to 64                 //JM note: Overwritten by fnReset
-  fnIntegerMode(SIM_2COMPL);                                   //JM note: Overwritten by fnReset
+  fnSetWordSize(64); // word size from 1 to 64
+  fnIntegerMode(SIM_2COMPL);
 
-  groupingGap = 3;                                             //JM note: Overwritten by fnReset. equivalent function, not directly set.
+  groupingGap = 3;
 
   systemFlags = 0;
   displayFormat = DF_ALL;
@@ -323,7 +321,7 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_FRACT);
   clearSystemFlag(FLAG_PROPFR);
   setSystemFlag(FLAG_DECIMP);
-  setSystemFlag(FLAG_CPXRES);                                  //JM default
+  clearSystemFlag(FLAG_CPXRES);
   clearSystemFlag(FLAG_POLAR);
   clearSystemFlag(FLAG_ALLENG);
   setSystemFlag(FLAG_AUTOFF);
@@ -343,8 +341,8 @@ void setupDefaults(void) {
   printerIconEnabled = false;
 
   significantDigits = 0;
-  fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN.        //JM note: Overwritten by fnReset
-  fnDisplayStack(4);                                           //JM note: Overwritten by fnReset
+  fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
+  fnDisplayStack(4);
 
   shiftF = false;
   shiftG = false;
@@ -377,12 +375,9 @@ void setupDefaults(void) {
   #endif // TESTSUITE_BUILD                                    //JM
 
   #ifndef TESTSUITE_BUILD
-    showShiftState();
+//    showShiftState();
   #endif // TESTSUITE_BUILD
-
-//  #ifndef TESTSUITE_BUILD    //checkjm
-    initFontBrowser();
-//  #endif // TESTSUITE_BUILD  //checkjm
+  initFontBrowser();
   currentFlgScr = 0;
   currentRegisterBrowserScreen = 9999;
 
@@ -665,12 +660,10 @@ longIntegerFree(li);*/
     // == 0 -> Key released
     key = key_pop();
 
-   #ifdef _43S_SHOWCODES 
     //The 3 lines below to see in the top left screen corner the pressed keycode
-    char sysLastKeyCh[5];
-    sprintf(sysLastKeyCh, "%2d", sys_last_key());
-    showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
-   #endif
+    //char sysLastKeyCh[5];
+    //sprintf(sysLastKeyCh, "%2d", sys_last_key());
+    //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
 
     if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
       resetShiftState();                                       //JM to avoid f or g top left of the screen

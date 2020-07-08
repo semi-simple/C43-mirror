@@ -447,7 +447,7 @@ void btnPressed(void *data) {
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
 
-printf(">>>refreshScreen from keyboard.c btnpressed (added by JM to instantly display numbers)\n");
+printf(">>> btnpressed:    refreshScreen from keyboard.c  (added by JM to instantly display numbers)\n");
   refreshScreen(); //JM NEW, TO DISPLAY NUMBER DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE
 
     if(!keyActionProcessed) {
@@ -483,7 +483,7 @@ void btnReleased(void *data) {
       runFunction(item);
     }
   }
-printf(">>>refreshScreen from keyboard.c btnReleased which is the main normal place for it.\n");
+printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
 
   refreshScreen();
 }

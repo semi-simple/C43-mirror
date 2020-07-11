@@ -397,7 +397,7 @@ void fnRefreshRadioState(char rb, uint16_t mode) {
   }*/
 
 #ifndef TESTSUITE_BUILD
-  showSoftmenuCurrentPart();
+//JMXX if(!running_program_jm)  showSoftmenuCurrentPart();
 #endif
 }
 
@@ -430,7 +430,7 @@ void fnRefreshComboxState(char rb, uint16_t param, bool_t state) {
   }*/
 
 #ifndef TESTSUITE_BUILD
-  showSoftmenuCurrentPart();
+//JMXX if(!running_program_jm)  showSoftmenuCurrentPart();
 #endif
 }
 

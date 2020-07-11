@@ -2425,7 +2425,7 @@ const item_t indexOfItems[] = {
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI",   0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
-/* 1926 */  { fnTo_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM DMS HMS
+/* 1926 */  { fnTo_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM DMS HMS
 /* 1927 */  { fnMultiplySI,                88,                          STD_DOT "p",                                   STD_DOT "p",                                   0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1928 */  { fnMultiplySI,                91,                          STD_DOT "n",                                   STD_DOT "n",                                   0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1929 */  { fnMultiplySI,                94,                          STD_DOT STD_mu,                                STD_DOT STD_mu,                                0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
@@ -2496,8 +2496,9 @@ const item_t indexOfItems[] = {
 /* 1994 */  { fnXEQMENU,                   16,                          "XEQM16",                                      "XEQM16",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
 /* 1995 */  { fnXEQMENU,                   17,                          "XEQM17",                                      "XEQM17",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
 /* 1996 */  { fnXEQMENU,                   18,                          "XEQM18",                                      "XEQM18",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EXEC
-/* 1997 */  { fnRound2,                    NOPARAM     /*# JM #*/,      "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
-/* 1998 */  { fnRoundi2,                   NOPARAM     /*# JM #*/,      "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1997 */  { fnRound2,                    NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1998 */  { fnRoundi2,                   NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
+/* 1999 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=C43
 
-/* 1999 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2000 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

@@ -90,6 +90,7 @@ void fnXEQMENU(uint16_t unusedParamButMandatory);
 void testprogram(uint16_t unusedParamButMandatory);
 void capture_sequence(char *origin, uint16_t item);
 
+bool_t running_program_jm;
 
 
 
@@ -186,6 +187,7 @@ void fnUserJM(uint16_t jmUser);
 #define USER_V43LT       43
 #define USER_43S         44
 #define USER_DM42        45
+#define USER_C43         46
  //last number
 
 

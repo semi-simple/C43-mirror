@@ -428,8 +428,8 @@ const int16_t menu_ASN_U[]       = {
 
 
 const int16_t menu_ASN[]         = { 
-                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_RESET,           ITM_USER_V43,             ITM_USER_WP43S,          ITM_USER_DM42,         /*ITM_JM_ASN*/
-                                     ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          ITM_USER_V43MIN,          ITM_NULL,                ITM_JM_SEEK,
+                                     ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_C43,             ITM_USER_V43,             ITM_USER_DM42,           ITM_USER_RESET,         /*ITM_JM_ASN*/
+                                     ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          ITM_USER_V43MIN,          ITM_USER_WP43S,          ITM_JM_SEEK,
                                      -MNU_ASN_U,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,                 ITM_NULL,                 -MNU_ASN_N,
                                                                           
                                      K_00U,                         K_01U,                      K_02U,                    K_03U,                 K_04U,                       K_05U,  //JM USER
@@ -1359,7 +1359,7 @@ void showSoftmenuCurrentPart(void) {
 
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
   clearScreen_old(false, false, true); //JM
-
+printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
     m                = softmenuStack[softmenuStackPointer-1].softmenu;
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 

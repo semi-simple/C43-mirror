@@ -69,9 +69,10 @@ void capture_sequence(char *origin, uint16_t item) {
 void runkey(uint16_t item){
   #ifndef TESTSUITE_BUILD
     //printf("§%d§ ",item);
+    hideFunctionName();           //Clear in case active
     processKeyAction(item);
     if (!keyActionProcessed){
-      hideFunctionName();
+      hideFunctionName();         //Clear in case activated during process
       runFunction(item);
       #ifdef DMCP_BUILD
         lcd_forced_refresh(); // Just redraw from LCD buffer    
@@ -121,6 +122,10 @@ bool_t strcompare( char *in1, char *in2) {
 // Example: "200" EXIT PRIME?
 // Ignores all other ASCII control and white space.
 
+
+bool_t running_program_jm = false;
+
+
 void execute_string(const char *inputstring, bool_t exec1) {
       uint16_t ix, ix_m;
       uint16_t ix_m1 = 0;
@@ -136,6 +141,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
       bool_t gotlabels = false;
       bool_t exec = false;
       bool_t go;
+      uint16_t indic_x = 0;
+      uint16_t indic_y = SCREEN_HEIGHT-1;
+      running_program_jm = true;
+
 
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
       //printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
@@ -206,14 +215,13 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           commandnumber[0]=0;                      //As per GTO_SZ
                       } else //NOT gotoinprogress == 11
 
+// FAST TRACKED FOR QUICKER RESPONSE DUPLICATED ************************************************************************
+                      
                       if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
-                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
-                      if (strcompare(commandnumber,"SWAP"  )) {strcpy(commandnumber, "684");} else
                       if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
                       if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
                       if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
                       if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
-                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber,  "83");} else
                       if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
                       if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
                       if (strcompare(commandnumber,"SQRT"  )) {strcpy(commandnumber, "808");} else
@@ -221,30 +229,325 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
                       if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
                       if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
-                      if (strcompare(commandnumber,"X!"    )) {strcpy(commandnumber, "679");} else
                       if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
                       if (strcompare(commandnumber,"SUM+"  )) {strcpy(commandnumber, "762");} else
                       if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
-                      if (strcompare(commandnumber,"PLOT"  )) {strcpy(commandnumber, "455");} else
                       if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
                       if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
                       if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
-                      if (strcompare(commandnumber,"SNAP"  )) {strcpy(commandnumber,   "5");} else
                       if (strcompare(commandnumber,"PHI"   )) {strcpy(commandnumber, "764");} else
                       if (strcompare(commandnumber,"e"     )) {strcpy(commandnumber, "139");} else
                       if (strcompare(commandnumber,"ABS"   )) {strcpy(commandnumber, "815");} else
                       if (strcompare(commandnumber,"ARG"   )) {strcpy(commandnumber, "819");} else
                       if (strcompare(commandnumber,"RE"    )) {strcpy(commandnumber, "503");} else
                       if (strcompare(commandnumber,"IM"    )) {strcpy(commandnumber, "250");} else
-
                       if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
-                      if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else
-                      if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else
-                      if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else
+                      if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+//                    if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+//                    if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+
+// FROM SPREADSHEET vvv ****************************************************************************************************
+                      if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
+                      if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
+                      if (strcompare(commandnumber,"1/X" )) {strcpy(commandnumber, "6");} else
+                      if (strcompare(commandnumber,"2^X" )) {strcpy(commandnumber, "8");} else
+                      if (strcompare(commandnumber,"CUBERT" )) {strcpy(commandnumber, "9");} else
+                      if (strcompare(commandnumber,"a" )) {strcpy(commandnumber, "11");} else
+                      if (strcompare(commandnumber,"AGM" )) {strcpy(commandnumber, "18");} else
+                      if (strcompare(commandnumber,"AND" )) {strcpy(commandnumber, "22");} else
+                      if (strcompare(commandnumber,"ARCCOS" )) {strcpy(commandnumber, "24");} else
+                      if (strcompare(commandnumber,"ARCOSH" )) {strcpy(commandnumber, "25");} else
+                      if (strcompare(commandnumber,"ARCSIN" )) {strcpy(commandnumber, "26");} else
+                      if (strcompare(commandnumber,"ARCTAN" )) {strcpy(commandnumber, "27");} else
+                      if (strcompare(commandnumber,"ARSINH" )) {strcpy(commandnumber, "28");} else
+                      if (strcompare(commandnumber,"ARTANH" )) {strcpy(commandnumber, "29");} else
+                      if (strcompare(commandnumber,"ASR" )) {strcpy(commandnumber, "30");} else
+                      if (strcompare(commandnumber,"BC?" )) {strcpy(commandnumber, "41");} else
+                      if (strcompare(commandnumber,"BS?" )) {strcpy(commandnumber, "53");} else
+                      if (strcompare(commandnumber,"c" )) {strcpy(commandnumber, "56");} else
+                      if (strcompare(commandnumber,"CB" )) {strcpy(commandnumber, "67");} else
+                      if (strcompare(commandnumber,"CEIL" )) {strcpy(commandnumber, "68");} else
+                      if (strcompare(commandnumber,"CLFALL" )) {strcpy(commandnumber, "73");} else
+                      if (strcompare(commandnumber,"CLLCD" )) {strcpy(commandnumber, "77");} else
+                      if (strcompare(commandnumber,"CLMENU" )) {strcpy(commandnumber, "78");} else
+                      if (strcompare(commandnumber,"CLREGS" )) {strcpy(commandnumber, "82");} else
+                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber, "83");} else
+                      if (strcompare(commandnumber,"CLX" )) {strcpy(commandnumber, "84");} else
+                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber, "85");} else
+                      if (strcompare(commandnumber,"COMB" )) {strcpy(commandnumber, "87");} else
+                      if (strcompare(commandnumber,"CONJ" )) {strcpy(commandnumber, "88");} else
+                      if (strcompare(commandnumber,"CNST" )) {strcpy(commandnumber, "89");} else
+                      if (strcompare(commandnumber,"COS" )) {strcpy(commandnumber, "92");} else
+                      if (strcompare(commandnumber,"COSH" )) {strcpy(commandnumber, "93");} else
+                      if (strcompare(commandnumber,"CROSS" )) {strcpy(commandnumber, "101");} else
+                      if (strcompare(commandnumber,"CX>RE" )) {strcpy(commandnumber, "103");} else
+                      if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "115");} else
+                      if (strcompare(commandnumber,"DECOMP" )) {strcpy(commandnumber, "116");} else
+                      if (strcompare(commandnumber,"DEG" )) {strcpy(commandnumber, "117");} else
+                      if (strcompare(commandnumber,"DEG>" )) {strcpy(commandnumber, "118");} else
+                      if (strcompare(commandnumber,"DOT" )) {strcpy(commandnumber, "125");} else
+                      if (strcompare(commandnumber,"DROP" )) {strcpy(commandnumber, "127");} else
+                      if (strcompare(commandnumber,"DROPY" )) {strcpy(commandnumber, "128");} else
+                      if (strcompare(commandnumber,"D.MS" )) {strcpy(commandnumber, "134");} else
+                      if (strcompare(commandnumber,"D.MS>" )) {strcpy(commandnumber, "135");} else
+                      if (strcompare(commandnumber,"D>R" )) {strcpy(commandnumber, "138");} else
+                      if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "139");} else
+                      if (strcompare(commandnumber,"ENG" )) {strcpy(commandnumber, "145");} else
+                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
+                      if (strcompare(commandnumber,"E^X" )) {strcpy(commandnumber, "158");} else
+                      if (strcompare(commandnumber,"EXPT" )) {strcpy(commandnumber, "167");} else
+                      if (strcompare(commandnumber,"E^X-1" )) {strcpy(commandnumber, "168");} else
+                      if (strcompare(commandnumber,"FB" )) {strcpy(commandnumber, "173");} else
+                      if (strcompare(commandnumber,"FF" )) {strcpy(commandnumber, "180");} else
+                      if (strcompare(commandnumber,"FILL" )) {strcpy(commandnumber, "182");} else
+                      if (strcompare(commandnumber,"FIX" )) {strcpy(commandnumber, "185");} else
+                      if (strcompare(commandnumber,"FLASH?" )) {strcpy(commandnumber, "188");} else
+                      if (strcompare(commandnumber,"FLOOR" )) {strcpy(commandnumber, "189");} else
+                      if (strcompare(commandnumber,"FP" )) {strcpy(commandnumber, "190");} else
+                      if (strcompare(commandnumber,"FR>DB" )) {strcpy(commandnumber, "196");} else
+                      if (strcompare(commandnumber,"GCD" )) {strcpy(commandnumber, "217");} else
+                      if (strcompare(commandnumber,"ge" )) {strcpy(commandnumber, "220");} else
+                      if (strcompare(commandnumber,"GRAD>" )) {strcpy(commandnumber, "230");} else
+                      if (strcompare(commandnumber,"gEARTH" )) {strcpy(commandnumber, "233");} else
+                      if (strcompare(commandnumber,"IDIV" )) {strcpy(commandnumber, "247");} else
+                      if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "250");} else
+                      if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "252");} else
+                      if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "259");} else
+                      if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "296");} else
+                      if (strcompare(commandnumber,"LCM" )) {strcpy(commandnumber, "301");} else
+                      if (strcompare(commandnumber,"LJ" )) {strcpy(commandnumber, "309");} else
+                      if (strcompare(commandnumber,"LN" )) {strcpy(commandnumber, "310");} else
+                      if (strcompare(commandnumber,"LN(1+X)" )) {strcpy(commandnumber, "312");} else
+                      if (strcompare(commandnumber,"LNBETA" )) {strcpy(commandnumber, "314");} else
+                      if (strcompare(commandnumber,"LNGAMMA" )) {strcpy(commandnumber, "315");} else
+                      if (strcompare(commandnumber,"LOCR?" )) {strcpy(commandnumber, "322");} else
+                      if (strcompare(commandnumber,"LOG10" )) {strcpy(commandnumber, "323");} else
+                      if (strcompare(commandnumber,"LOG2" )) {strcpy(commandnumber, "324");} else
+                      if (strcompare(commandnumber,"LOGXY" )) {strcpy(commandnumber, "331");} else
+                      if (strcompare(commandnumber,"MANT" )) {strcpy(commandnumber, "344");} else
+                      if (strcompare(commandnumber,"MASKL" )) {strcpy(commandnumber, "345");} else
+                      if (strcompare(commandnumber,"MASKR" )) {strcpy(commandnumber, "346");} else
+                      if (strcompare(commandnumber,"MAX" )) {strcpy(commandnumber, "353");} else
+                      if (strcompare(commandnumber,"MEM?" )) {strcpy(commandnumber, "355");} else
+                      if (strcompare(commandnumber,"MIN" )) {strcpy(commandnumber, "358");} else
+                      if (strcompare(commandnumber,"MIRROR" )) {strcpy(commandnumber, "359");} else
+                      if (strcompare(commandnumber,"MOD" )) {strcpy(commandnumber, "364");} else
+                      if (strcompare(commandnumber,"NAND" )) {strcpy(commandnumber, "414");} else
+                      if (strcompare(commandnumber,"NEIGHB" )) {strcpy(commandnumber, "421");} else
+                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
+                      if (strcompare(commandnumber,"NOR" )) {strcpy(commandnumber, "425");} else
+                      if (strcompare(commandnumber,"NOT" )) {strcpy(commandnumber, "431");} else
+                      if (strcompare(commandnumber,"NSUM" )) {strcpy(commandnumber, "433");} else
+                      if (strcompare(commandnumber,"OR" )) {strcpy(commandnumber, "437");} else
+                      if (strcompare(commandnumber,"PERM" )) {strcpy(commandnumber, "450");} else
+                      if (strcompare(commandnumber,"PLOT" )) {strcpy(commandnumber, "455");} else
+                      if (strcompare(commandnumber,"PR>DB" )) {strcpy(commandnumber, "467");} else
+                      if (strcompare(commandnumber,"PRIME?" )) {strcpy(commandnumber, "469");} else
+                      if (strcompare(commandnumber,"RAD" )) {strcpy(commandnumber, "483");} else
+                      if (strcompare(commandnumber,"RAD>" )) {strcpy(commandnumber, "484");} else
+                      if (strcompare(commandnumber,"RAN#" )) {strcpy(commandnumber, "486");} else
+                      if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "488");} else
+                      if (strcompare(commandnumber,"RCLEL" )) {strcpy(commandnumber, "490");} else
+                      if (strcompare(commandnumber,"RCLIJ" )) {strcpy(commandnumber, "491");} else
+                      if (strcompare(commandnumber,"RCLS" )) {strcpy(commandnumber, "492");} else
+                      if (strcompare(commandnumber,"RCL+" )) {strcpy(commandnumber, "493");} else
+                      if (strcompare(commandnumber,"RCL-" )) {strcpy(commandnumber, "494");} else
+                      if (strcompare(commandnumber,"RCLx" )) {strcpy(commandnumber, "495");} else
+                      if (strcompare(commandnumber,"RCL/" )) {strcpy(commandnumber, "496");} else
+                      if (strcompare(commandnumber,"RCLMAX" )) {strcpy(commandnumber, "497");} else
+                      if (strcompare(commandnumber,"RCLMIN" )) {strcpy(commandnumber, "498");} else
+                      if (strcompare(commandnumber,"RE" )) {strcpy(commandnumber, "503");} else
+                      if (strcompare(commandnumber,"RE>CX" )) {strcpy(commandnumber, "511");} else
+                      if (strcompare(commandnumber,"RE<>IM" )) {strcpy(commandnumber, "512");} else
+                      if (strcompare(commandnumber,"RJ" )) {strcpy(commandnumber, "513");} else
+                      if (strcompare(commandnumber,"RL" )) {strcpy(commandnumber, "515");} else
+                      if (strcompare(commandnumber,"RLC" )) {strcpy(commandnumber, "516");} else
+                      if (strcompare(commandnumber,"RMODE?" )) {strcpy(commandnumber, "519");} else
+                      if (strcompare(commandnumber,"RMD" )) {strcpy(commandnumber, "520");} else
+                      if (strcompare(commandnumber,"RR" )) {strcpy(commandnumber, "524");} else
+                      if (strcompare(commandnumber,"RRC" )) {strcpy(commandnumber, "525");} else
+                      if (strcompare(commandnumber,"R>D" )) {strcpy(commandnumber, "534");} else
+                      if (strcompare(commandnumber,"SB" )) {strcpy(commandnumber, "543");} else
+                      if (strcompare(commandnumber,"SCI" )) {strcpy(commandnumber, "545");} else
+                      if (strcompare(commandnumber,"SDIGS?" )) {strcpy(commandnumber, "548");} else
+                      if (strcompare(commandnumber,"SDL" )) {strcpy(commandnumber, "549");} else
+                      if (strcompare(commandnumber,"SDR" )) {strcpy(commandnumber, "550");} else
+                      if (strcompare(commandnumber,"SEED" )) {strcpy(commandnumber, "552");} else
+                      if (strcompare(commandnumber,"SIGN" )) {strcpy(commandnumber, "566");} else
+                      if (strcompare(commandnumber,"SIN" )) {strcpy(commandnumber, "569");} else
+                      if (strcompare(commandnumber,"SINC" )) {strcpy(commandnumber, "570");} else
+                      if (strcompare(commandnumber,"SINH" )) {strcpy(commandnumber, "571");} else
+                      if (strcompare(commandnumber,"SL" )) {strcpy(commandnumber, "573");} else
+                      if (strcompare(commandnumber,"SLVQ" )) {strcpy(commandnumber, "575");} else
+                      if (strcompare(commandnumber,"SMODE?" )) {strcpy(commandnumber, "577");} else
+                      if (strcompare(commandnumber,"SR" )) {strcpy(commandnumber, "582");} else
+                      if (strcompare(commandnumber,"SSIZE?" )) {strcpy(commandnumber, "585");} else
+                      if (strcompare(commandnumber,"STO" )) {strcpy(commandnumber, "589");} else
+                      if (strcompare(commandnumber,"STOEL" )) {strcpy(commandnumber, "591");} else
+                      if (strcompare(commandnumber,"STOIJ" )) {strcpy(commandnumber, "592");} else
+                      if (strcompare(commandnumber,"STOS" )) {strcpy(commandnumber, "594");} else
+                      if (strcompare(commandnumber,"SUM" )) {strcpy(commandnumber, "612");} else
+                      if (strcompare(commandnumber,"TAN" )) {strcpy(commandnumber, "618");} else
+                      if (strcompare(commandnumber,"TANH" )) {strcpy(commandnumber, "619");} else
+                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
+                      if (strcompare(commandnumber,"T<>" )) {strcpy(commandnumber, "641");} else
+                      if (strcompare(commandnumber,"ULP?" )) {strcpy(commandnumber, "642");} else
+                      if (strcompare(commandnumber,"UNITV" )) {strcpy(commandnumber, "644");} else
+                      if (strcompare(commandnumber,"WSIZE" )) {strcpy(commandnumber, "664");} else
+                      if (strcompare(commandnumber,"WSIZE?" )) {strcpy(commandnumber, "665");} else
+                      if (strcompare(commandnumber,"X^2" )) {strcpy(commandnumber, "669");} else
+                      if (strcompare(commandnumber,"X^3" )) {strcpy(commandnumber, "670");} else
+                      if (strcompare(commandnumber,"XNOR" )) {strcpy(commandnumber, "672");} else
+                      if (strcompare(commandnumber,"XOR" )) {strcpy(commandnumber, "673");} else
+                      if (strcompare(commandnumber,"X_MEAN" )) {strcpy(commandnumber, "674");} else
+                      if (strcompare(commandnumber,"X_GEO" )) {strcpy(commandnumber, "675");} else
+                      if (strcompare(commandnumber,"X_WEIGHTD" )) {strcpy(commandnumber, "676");} else
+                      if (strcompare(commandnumber,"X!" )) {strcpy(commandnumber, "679");} else
+                      if (strcompare(commandnumber,"X>ALPHA" )) {strcpy(commandnumber, "682");} else
+                      if (strcompare(commandnumber,"X<>" )) {strcpy(commandnumber, "683");} else
+                      if (strcompare(commandnumber,"X<>Y" )) {strcpy(commandnumber, "684");} else
+                      if (strcompare(commandnumber,"XRTY" )) {strcpy(commandnumber, "694");} else
+                      if (strcompare(commandnumber,"Y^X" )) {strcpy(commandnumber, "698");} else
+                      if (strcompare(commandnumber,"Y<>" )) {strcpy(commandnumber, "701");} else
+                      if (strcompare(commandnumber,"Z<>" )) {strcpy(commandnumber, "703");} else
+                      if (strcompare(commandnumber,"XMAX" )) {strcpy(commandnumber, "708");} else
+                      if (strcompare(commandnumber,"XMIN" )) {strcpy(commandnumber, "709");} else
+                      if (strcompare(commandnumber,"GAMMA(X)" )) {strcpy(commandnumber, "724");} else
+                      if (strcompare(commandnumber,"DELTA%" )) {strcpy(commandnumber, "726");} else
+                      if (strcompare(commandnumber,"mu0" )) {strcpy(commandnumber, "735");} else
+                      if (strcompare(commandnumber,"PI" )) {strcpy(commandnumber, "744");} else
+                      if (strcompare(commandnumber,"SUMLN^2X" )) {strcpy(commandnumber, "748");} else
+                      if (strcompare(commandnumber,"SUMLN^2Y" )) {strcpy(commandnumber, "749");} else
+                      if (strcompare(commandnumber,"SUMLNX" )) {strcpy(commandnumber, "750");} else
+                      if (strcompare(commandnumber,"SUMLNXY" )) {strcpy(commandnumber, "751");} else
+                      if (strcompare(commandnumber,"SUMLNY" )) {strcpy(commandnumber, "752");} else
+                      if (strcompare(commandnumber,"SUMX" )) {strcpy(commandnumber, "754");} else
+                      if (strcompare(commandnumber,"SUMX^2" )) {strcpy(commandnumber, "755");} else
+                      if (strcompare(commandnumber,"SUMX^2Y" )) {strcpy(commandnumber, "756");} else
+                      if (strcompare(commandnumber,"SUMXLNY" )) {strcpy(commandnumber, "757");} else
+                      if (strcompare(commandnumber,"SUMXY" )) {strcpy(commandnumber, "758");} else
+                      if (strcompare(commandnumber,"SUMY" )) {strcpy(commandnumber, "759");} else
+                      if (strcompare(commandnumber,"SUMY^2" )) {strcpy(commandnumber, "760");} else
+                      if (strcompare(commandnumber,"SUMYLNX" )) {strcpy(commandnumber, "761");} else
+                      if (strcompare(commandnumber,"SUM+" )) {strcpy(commandnumber, "762");} else
+                      if (strcompare(commandnumber,"PHI" )) {strcpy(commandnumber, "764");} else
+                      if (strcompare(commandnumber,"RANI#" )) {strcpy(commandnumber, "766");} else
+                      if (strcompare(commandnumber,"RANGE" )) {strcpy(commandnumber, "769");} else
+                      if (strcompare(commandnumber,"RANGE?" )) {strcpy(commandnumber, "770");} else
+                      if (strcompare(commandnumber,"(-1)^X" )) {strcpy(commandnumber, "777");} else
+                      if (strcompare(commandnumber,"+" )) {strcpy(commandnumber, "778");} else
+                      if (strcompare(commandnumber,"CHS" )) {strcpy(commandnumber, "779");} else
+                      if (strcompare(commandnumber,"-" )) {strcpy(commandnumber, "780");} else
+                      if (strcompare(commandnumber,"-INFINITY" )) {strcpy(commandnumber, "781");} else
+                      if (strcompare(commandnumber,"*" )) {strcpy(commandnumber, "782");} else
+                      if (strcompare(commandnumber,"/" )) {strcpy(commandnumber, "784");} else
+                      if (strcompare(commandnumber,">DEG" )) {strcpy(commandnumber, "788");} else
+                      if (strcompare(commandnumber,">D.MS" )) {strcpy(commandnumber, "789");} else
+                      if (strcompare(commandnumber,">GRAD" )) {strcpy(commandnumber, "790");} else
+                      if (strcompare(commandnumber,">HR" )) {strcpy(commandnumber, "791");} else
+                      if (strcompare(commandnumber,">H.MS" )) {strcpy(commandnumber, "792");} else
+                      if (strcompare(commandnumber,">INT" )) {strcpy(commandnumber, "793");} else
+                      if (strcompare(commandnumber,">MULPI" )) {strcpy(commandnumber, "794");} else
+                      if (strcompare(commandnumber,">RAD" )) {strcpy(commandnumber, "796");} else
+                      if (strcompare(commandnumber,">REAL" )) {strcpy(commandnumber, "797");} else
+                      if (strcompare(commandnumber,"D>D.MS" )) {strcpy(commandnumber, "799");} else
+                      if (strcompare(commandnumber,"<>" )) {strcpy(commandnumber, "802");} else
+                      if (strcompare(commandnumber,"%" )) {strcpy(commandnumber, "803");} else
+                      if (strcompare(commandnumber,"%MRR" )) {strcpy(commandnumber, "804");} else
+                      if (strcompare(commandnumber,"%T" )) {strcpy(commandnumber, "805");} else
+                      if (strcompare(commandnumber,"%SUM" )) {strcpy(commandnumber, "806");} else
+                      if (strcompare(commandnumber,"%+MG" )) {strcpy(commandnumber, "807");} else
+                      if (strcompare(commandnumber,"SQRT" )) {strcpy(commandnumber, "808");} else
+                      if (strcompare(commandnumber,"INFINITY" )) {strcpy(commandnumber, "812");} else
+                      if (strcompare(commandnumber,"ABS" )) {strcpy(commandnumber, "815");} else
+                      if (strcompare(commandnumber,"PARL" )) {strcpy(commandnumber, "816");} else
+                      if (strcompare(commandnumber,"ARG" )) {strcpy(commandnumber, "819");} else
+                      if (strcompare(commandnumber,"MULPI>" )) {strcpy(commandnumber, "820");} else
+                      if (strcompare(commandnumber,"#B" )) {strcpy(commandnumber, "837");} else
+                      if (strcompare(commandnumber,"CC" )) {strcpy(commandnumber, "1516");} else
+                      if (strcompare(commandnumber,"EXIT" )) {strcpy(commandnumber, "1523");} else
+                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
+                      if (strcompare(commandnumber,".D" )) {strcpy(commandnumber, "1527");} else
+                      if (strcompare(commandnumber,"D.MS>D" )) {strcpy(commandnumber, "1533");} else
+                      if (strcompare(commandnumber,"X_HARM" )) {strcpy(commandnumber, "1559");} else
+                      if (strcompare(commandnumber,"X_RMS" )) {strcpy(commandnumber, "1560");} else
+                      if (strcompare(commandnumber,"SUMLNY/X" )) {strcpy(commandnumber, "1567");} else
+                      if (strcompare(commandnumber,"SUMX^2/Y" )) {strcpy(commandnumber, "1568");} else
+                      if (strcompare(commandnumber,"SUM^1/X" )) {strcpy(commandnumber, "1569");} else
+                      if (strcompare(commandnumber,"SUM^1/X^2" )) {strcpy(commandnumber, "1570");} else
+                      if (strcompare(commandnumber,"SUMX/Y" )) {strcpy(commandnumber, "1571");} else
+                      if (strcompare(commandnumber,"SUM^1/Y" )) {strcpy(commandnumber, "1572");} else
+                      if (strcompare(commandnumber,"SUM^1/Y^2" )) {strcpy(commandnumber, "1573");} else
+                      if (strcompare(commandnumber,"SUMX^3" )) {strcpy(commandnumber, "1574");} else
+                      if (strcompare(commandnumber,"SUMX^4" )) {strcpy(commandnumber, "1575");} else
+                      if (strcompare(commandnumber,"IDIVR" )) {strcpy(commandnumber, "1577");} else
+                      if (strcompare(commandnumber,"DET" )) {strcpy(commandnumber, "1581");} else
+                      if (strcompare(commandnumber,"INVRT" )) {strcpy(commandnumber, "1582");} else
+                      if (strcompare(commandnumber,"TRANS" )) {strcpy(commandnumber, "1583");} else
+                      if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "1678");} else
+                      if (strcompare(commandnumber,"SIG" )) {strcpy(commandnumber, "1682");} else
+                      if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1693");} else
+                      if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1694");} else
+                      if (strcompare(commandnumber,"CASE" )) {strcpy(commandnumber, "1736");} else
+                      if (strcompare(commandnumber,"##>INT" )) {strcpy(commandnumber, "1737");} else
+                      if (strcompare(commandnumber,"OP_A" )) {strcpy(commandnumber, "1739");} else
+                      if (strcompare(commandnumber,"OP_A^2" )) {strcpy(commandnumber, "1740");} else
+                      if (strcompare(commandnumber,"OP_J" )) {strcpy(commandnumber, "1741");} else
+                      if (strcompare(commandnumber,"D>Y" )) {strcpy(commandnumber, "1750");} else
+                      if (strcompare(commandnumber,"Y>D" )) {strcpy(commandnumber, "1751");} else
+                      if (strcompare(commandnumber,"ATOSYM" )) {strcpy(commandnumber, "1752");} else
+                      if (strcompare(commandnumber,"SYMTOA" )) {strcpy(commandnumber, "1753");} else
+                      if (strcompare(commandnumber,"E^THETAJ" )) {strcpy(commandnumber, "1755");} else
+                      if (strcompare(commandnumber,"STO3Z" )) {strcpy(commandnumber, "1756");} else
+                      if (strcompare(commandnumber,"RCL3Z" )) {strcpy(commandnumber, "1757");} else
+                      if (strcompare(commandnumber,"STO3V" )) {strcpy(commandnumber, "1758");} else
+                      if (strcompare(commandnumber,"RCL3V" )) {strcpy(commandnumber, "1759");} else
+                      if (strcompare(commandnumber,"STO3I" )) {strcpy(commandnumber, "1760");} else
+                      if (strcompare(commandnumber,"RCL3I" )) {strcpy(commandnumber, "1761");} else
+                      if (strcompare(commandnumber,"3V/3I" )) {strcpy(commandnumber, "1762");} else
+                      if (strcompare(commandnumber,"3Ix3Z" )) {strcpy(commandnumber, "1763");} else
+                      if (strcompare(commandnumber,"3V/3Z" )) {strcpy(commandnumber, "1764");} else
+                      if (strcompare(commandnumber,"X>BAL" )) {strcpy(commandnumber, "1765");} else
+                      if (strcompare(commandnumber,"COMPLEX" )) {strcpy(commandnumber, "1766");} else
+                      if (strcompare(commandnumber,"CONVUP" )) {strcpy(commandnumber, "1768");} else
+                      if (strcompare(commandnumber,"CONVDN" )) {strcpy(commandnumber, "1769");} else
+                      if (strcompare(commandnumber,">LI<>SI" )) {strcpy(commandnumber, "1925");} else
+                      if (strcompare(commandnumber,".MS" )) {strcpy(commandnumber, "1926");} else
+                      if (strcompare(commandnumber,">POLAR" )) {strcpy(commandnumber, "1955");} else
+                      if (strcompare(commandnumber,">RECT" )) {strcpy(commandnumber, "1956");} else
+                      if (strcompare(commandnumber,"CPXI" )) {strcpy(commandnumber, "1960");} else
+                      if (strcompare(commandnumber,"CPXJ" )) {strcpy(commandnumber, "1961");} else
+                      if (strcompare(commandnumber,"SSIZE4" )) {strcpy(commandnumber, "1964");} else
+                      if (strcompare(commandnumber,"SSIZE8" )) {strcpy(commandnumber, "1968");} else
+                      if (strcompare(commandnumber,"XEQM01" ) && exec) {strcpy(commandnumber, "1979");} else
+                      if (strcompare(commandnumber,"XEQM02" ) && exec) {strcpy(commandnumber, "1980");} else
+                      if (strcompare(commandnumber,"XEQM03" ) && exec) {strcpy(commandnumber, "1981");} else
+                      if (strcompare(commandnumber,"XEQM04" ) && exec) {strcpy(commandnumber, "1982");} else
+                      if (strcompare(commandnumber,"XEQM05" ) && exec) {strcpy(commandnumber, "1983");} else
+                      if (strcompare(commandnumber,"XEQM06" ) && exec) {strcpy(commandnumber, "1984");} else
+                      if (strcompare(commandnumber,"XEQM07" ) && exec) {strcpy(commandnumber, "1985");} else
+                      if (strcompare(commandnumber,"XEQM08" ) && exec) {strcpy(commandnumber, "1986");} else
+                      if (strcompare(commandnumber,"XEQM09" ) && exec) {strcpy(commandnumber, "1987");} else
+                      if (strcompare(commandnumber,"XEQM10" ) && exec) {strcpy(commandnumber, "1988");} else
+                      if (strcompare(commandnumber,"XEQM11" ) && exec) {strcpy(commandnumber, "1989");} else
+                      if (strcompare(commandnumber,"XEQM12" ) && exec) {strcpy(commandnumber, "1990");} else
+                      if (strcompare(commandnumber,"XEQM13" ) && exec) {strcpy(commandnumber, "1991");} else
+                      if (strcompare(commandnumber,"XEQM14" ) && exec) {strcpy(commandnumber, "1992");} else
+                      if (strcompare(commandnumber,"XEQM15" ) && exec) {strcpy(commandnumber, "1993");} else
+                      if (strcompare(commandnumber,"XEQM16" ) && exec) {strcpy(commandnumber, "1994");} else
+                      if (strcompare(commandnumber,"XEQM17" ) && exec) {strcpy(commandnumber, "1995");} else
+                      if (strcompare(commandnumber,"XEQM18" ) && exec) {strcpy(commandnumber, "1996");} else
+                      if (strcompare(commandnumber,"ROUND" )) {strcpy(commandnumber, "1997");} else
+                      if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "1998");} else
+// FROM SPREADSHEET ^^^ ****************************************************************************************************
+
+
+
 
                       if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "115"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
                       if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "252"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
                       if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
+                      
                       if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; }                                   //EXPECTING 2 OPERANDS nn XXXXXX
 
                       if (strcompare(commandnumber,"GTO"   ))    {
@@ -329,6 +632,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           if(strcompare(commandnumber,"M4")) ix_m4 = ix;
                           xeqlblinprogress = 0;
                           commandnumber[0]=0;   //Processed
+                          invertPixel(indic_x, indic_y-1);
                         break;
 
                         default:                 //NOT IN PROGRESS
@@ -336,6 +640,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
                           if(no > LAST_ITEM-1) {no = 0;}
                           if(no!=0 && exec) {
+                            invertPixel(indic_x++, indic_y);
+                            if(indic_x==SCREEN_WIDTH) {indic_x=0;indic_y--;indic_y--;}
+
                             if(exec) runkey(no); 
                             //printf(">>> %d\n",temporaryInformation);
                             if(gotoinprogress==10) {gotoinprogress = 11;}
@@ -364,6 +671,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       gotlabels = true;                              //allow to run only once, unless
       if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
     }
+running_program_jm = false;
 }
 
 
@@ -1927,10 +2235,53 @@ void fnUserJM(uint16_t jmUser) {
     break;
 
 
+  case USER_C43:          //USER
+    fnUserJM(USER_RESET);
+    kbd_usr[0].primary=ITM_SIGMAPLUS;   kbd_usr[0].fShifted=ITM_RI;   kbd_usr[0].gShifted=ITM_TGLFRT;   kbd_usr[0].keyLblAim=ITM_NULL;  kbd_usr[0].primaryAim=CHR_A;  kbd_usr[0].fShiftedAim=-MNU_ALPHAINTL;  kbd_usr[0].gShiftedAim=CHR_ALPHA;   kbd_usr[0].primaryTam=ITM_ST_A; 
+    kbd_usr[1].primary=ITM_1ONX;  kbd_usr[1].fShifted=ITM_YX;   kbd_usr[1].gShifted=ITM_toINT;  kbd_usr[1].keyLblAim=CHR_NUMBER_SIGN;   kbd_usr[1].primaryAim=CHR_B;  kbd_usr[1].fShiftedAim=CHR_NUMBER_SIGN;   kbd_usr[1].gShiftedAim=CHR_BETA;  kbd_usr[1].primaryTam=ITM_ST_B; 
+    kbd_usr[2].primary=ITM_SQUAREROOTX;   kbd_usr[2].fShifted=ITM_SQUARE;   kbd_usr[2].gShifted=ITM_ms;   kbd_usr[2].keyLblAim=CHR_CHECK_MARK;  kbd_usr[2].primaryAim=CHR_C;  kbd_usr[2].fShiftedAim=CHR_CHECK_MARK;  kbd_usr[2].gShiftedAim=CHR_CHI;   kbd_usr[2].primaryTam=ITM_ST_C; 
+    kbd_usr[3].primary=ITM_LOG10;   kbd_usr[3].fShifted=ITM_10x;  kbd_usr[3].gShifted=KEY_dotD;   kbd_usr[3].keyLblAim=ITM_NULL;  kbd_usr[3].primaryAim=CHR_D;  kbd_usr[3].fShiftedAim=ITM_NULL;  kbd_usr[3].gShiftedAim=CHR_DELTA;   kbd_usr[3].primaryTam=ITM_ST_D; 
+    kbd_usr[4].primary=ITM_LN;  kbd_usr[4].fShifted=ITM_EX;   kbd_usr[4].gShifted=ITM_toREC2;   kbd_usr[4].keyLblAim=ITM_NULL;  kbd_usr[4].primaryAim=CHR_E;  kbd_usr[4].fShiftedAim=ITM_NULL;  kbd_usr[4].gShiftedAim=CHR_EPSILON;   kbd_usr[4].primaryTam=ITM_NULL; 
+    kbd_usr[5].primary=ITM_XEQ;   kbd_usr[5].fShifted=ITM_XTHROOT;  kbd_usr[5].gShifted=ITM_toPOL2;   kbd_usr[5].keyLblAim=ITM_NULL;  kbd_usr[5].primaryAim=CHR_F;  kbd_usr[5].fShiftedAim=ITM_NULL;  kbd_usr[5].gShiftedAim=CHR_DIGAMMA;   kbd_usr[5].primaryTam=CHR_alpha; 
+    kbd_usr[6].primary=ITM_STO;   kbd_usr[6].fShifted=ITM_MAGNITUDE;  kbd_usr[6].gShifted=ITM_ANGLE;  kbd_usr[6].keyLblAim=ITM_NULL;  kbd_usr[6].primaryAim=CHR_G;  kbd_usr[6].fShiftedAim=ITM_NULL;  kbd_usr[6].gShiftedAim=CHR_GAMMA;   kbd_usr[6].primaryTam=ITM_NULL; 
+    kbd_usr[7].primary=ITM_RCL;   kbd_usr[7].fShifted=ITM_PC;   kbd_usr[7].gShifted=ITM_DELTAPC;  kbd_usr[7].keyLblAim=ITM_NULL;  kbd_usr[7].primaryAim=CHR_H;  kbd_usr[7].fShiftedAim=ITM_NULL;  kbd_usr[7].gShiftedAim=CHR_ETA;   kbd_usr[7].primaryTam=ITM_HEX; 
+    kbd_usr[8].primary=ITM_Rdown;   kbd_usr[8].fShifted=ITM_pi;   kbd_usr[8].gShifted=ITM_Rup;  kbd_usr[8].keyLblAim=ITM_NULL;  kbd_usr[8].primaryAim=CHR_I;  kbd_usr[8].fShiftedAim=CHR_DOWN_ARROW;  kbd_usr[8].gShiftedAim=CHR_IOTA;  kbd_usr[8].primaryTam=ITM_REGI; 
+    kbd_usr[9].primary=ITM_sin;   kbd_usr[9].fShifted=ITM_arcsin;   kbd_usr[9].gShifted=ITM_GTO;  kbd_usr[9].keyLblAim=ITM_NULL;  kbd_usr[9].primaryAim=CHR_J;  kbd_usr[9].fShiftedAim=CHR_case;  kbd_usr[9].gShiftedAim=CHR_THETA;   kbd_usr[9].primaryTam=ITM_REGJ; 
+    kbd_usr[10].primary=ITM_cos;  kbd_usr[10].fShifted=ITM_arccos;  kbd_usr[10].gShifted=ITM_LBL;   kbd_usr[10].keyLblAim=ITM_NULL;   kbd_usr[10].primaryAim=CHR_K;   kbd_usr[10].fShiftedAim=ITM_NULL;   kbd_usr[10].gShiftedAim=CHR_KAPPA;  kbd_usr[10].primaryTam=ITM_REGK; 
+    kbd_usr[11].primary=ITM_tan;  kbd_usr[11].fShifted=ITM_arctan;  kbd_usr[11].gShifted=ITM_RTN;   kbd_usr[11].keyLblAim=ITM_NULL;   kbd_usr[11].primaryAim=CHR_L;   kbd_usr[11].fShiftedAim=ITM_NULL;   kbd_usr[11].gShiftedAim=CHR_LAMBDA;   kbd_usr[11].primaryTam=ITM_REGL; 
+    kbd_usr[12].primary=ITM_ENTER;  kbd_usr[12].fShifted=KEY_COMPLEX;   kbd_usr[12].gShifted=-MNU_CPX;  kbd_usr[12].keyLblAim=ITM_ENTER;  kbd_usr[12].primaryAim=ITM_ENTER;   kbd_usr[12].fShiftedAim=ITM_NULL;   kbd_usr[12].gShiftedAim=ITM_NULL;   kbd_usr[12].primaryTam=ITM_ENTER; 
+    kbd_usr[13].primary=ITM_XexY;   kbd_usr[13].fShifted=ITM_LASTX;   kbd_usr[13].gShifted=-MNU_EXP;  kbd_usr[13].keyLblAim=CHR_ex;   kbd_usr[13].primaryAim=CHR_M;   kbd_usr[13].fShiftedAim=CHR_ex;   kbd_usr[13].gShiftedAim=CHR_MU;   kbd_usr[13].primaryTam=ITM_NULL; 
+    kbd_usr[14].primary=ITM_CHS;  kbd_usr[14].fShifted=-MNU_MODE;   kbd_usr[14].gShifted=-MNU_BASE;   kbd_usr[14].keyLblAim=CHR_PLUS_MINUS;   kbd_usr[14].primaryAim=CHR_N;   kbd_usr[14].fShiftedAim=CHR_PLUS_MINUS;   kbd_usr[14].gShiftedAim=CHR_NU;   kbd_usr[14].primaryTam=ITM_NULL; 
+    kbd_usr[15].primary=ITM_EXPONENT;   kbd_usr[15].fShifted=-MNU_DSP;  kbd_usr[15].gShifted=-MNU_FIN;  kbd_usr[15].keyLblAim=ITM_NULL;   kbd_usr[15].primaryAim=CHR_O;   kbd_usr[15].fShiftedAim=CHR_UP_ARROW;   kbd_usr[15].gShiftedAim=CHR_OMICRON;  kbd_usr[15].primaryTam=ITM_NULL; 
+    kbd_usr[16].primary=KEY_BACKSPACE;  kbd_usr[16].fShifted=KEY_UNDO;  kbd_usr[16].gShifted=-MNU_CLR;  kbd_usr[16].keyLblAim=KEY_BACKSPACE;  kbd_usr[16].primaryAim=KEY_BACKSPACE;   kbd_usr[16].fShiftedAim=KEY_UNDO;   kbd_usr[16].gShiftedAim=-MNU_CLR;   kbd_usr[16].primaryTam=KEY_BACKSPACE; 
+    kbd_usr[17].primary=KEY_UP1;  kbd_usr[17].fShifted=KEY_BST;   kbd_usr[17].gShifted=ITM_RBR;   kbd_usr[17].keyLblAim=KEY_UP1;  kbd_usr[17].primaryAim=KEY_UP1;   kbd_usr[17].fShiftedAim=KEY_BST;  kbd_usr[17].gShiftedAim=-MNU_ALPHA;   kbd_usr[17].primaryTam=KEY_UP1; 
+    kbd_usr[18].primary=CHR_7;  kbd_usr[18].fShifted=-MNU_EQN;  kbd_usr[18].gShifted=-MNU_HOME;   kbd_usr[18].keyLblAim=CHR_7;  kbd_usr[18].primaryAim=CHR_P;   kbd_usr[18].fShiftedAim=CHR_7;  kbd_usr[18].gShiftedAim=CHR_PI;   kbd_usr[18].primaryTam=CHR_7; 
+    kbd_usr[19].primary=CHR_8;  kbd_usr[19].fShifted=-MNU_ADV;  kbd_usr[19].gShifted=-MNU_CONST;  kbd_usr[19].keyLblAim=CHR_8;  kbd_usr[19].primaryAim=CHR_Q;   kbd_usr[19].fShiftedAim=CHR_8;  kbd_usr[19].gShiftedAim=CHR_QOPPA;  kbd_usr[19].primaryTam=CHR_8; 
+    kbd_usr[20].primary=CHR_9;  kbd_usr[20].fShifted=-MNU_MATX;   kbd_usr[20].gShifted=-MNU_XFN;  kbd_usr[20].keyLblAim=CHR_9;  kbd_usr[20].primaryAim=CHR_R;   kbd_usr[20].fShiftedAim=CHR_9;  kbd_usr[20].gShiftedAim=CHR_RHO;  kbd_usr[20].primaryTam=CHR_9; 
+    kbd_usr[21].primary=ITM_DIV;  kbd_usr[21].fShifted=-MNU_STAT;   kbd_usr[21].gShifted=-MNU_SUMS;   kbd_usr[21].keyLblAim=CHR_DIVIDE;   kbd_usr[21].primaryAim=CHR_S;   kbd_usr[21].fShiftedAim=CHR_DIVIDE;   kbd_usr[21].gShiftedAim=CHR_SIGMA;  kbd_usr[21].primaryTam=ITM_DIV; 
+    kbd_usr[22].primary=KEY_DOWN1;  kbd_usr[22].fShifted=KEY_SST;   kbd_usr[22].gShifted=ITM_FLGSV;   kbd_usr[22].keyLblAim=KEY_DOWN1;  kbd_usr[22].primaryAim=KEY_DOWN1;   kbd_usr[22].fShiftedAim=KEY_SST;  kbd_usr[22].gShiftedAim=CHR_case;   kbd_usr[22].primaryTam=KEY_DOWN1; 
+    kbd_usr[23].primary=CHR_4;  kbd_usr[23].fShifted=ITM_AIM;   kbd_usr[23].gShifted=-MNU_CLK;  kbd_usr[23].keyLblAim=CHR_4;  kbd_usr[23].primaryAim=CHR_T;   kbd_usr[23].fShiftedAim=CHR_4;  kbd_usr[23].gShiftedAim=CHR_TAU;  kbd_usr[23].primaryTam=CHR_4; 
+    kbd_usr[24].primary=CHR_5;  kbd_usr[24].fShifted=-MNU_ANGLECONV;  kbd_usr[24].gShifted=-MNU_UNITCONV;   kbd_usr[24].keyLblAim=CHR_5;  kbd_usr[24].primaryAim=CHR_U;   kbd_usr[24].fShiftedAim=CHR_5;  kbd_usr[24].gShiftedAim=CHR_PHI;  kbd_usr[24].primaryTam=CHR_5; 
+    kbd_usr[25].primary=CHR_6;  kbd_usr[25].fShifted=-MNU_FLAGS;  kbd_usr[25].gShifted=-MNU_BITS;   kbd_usr[25].keyLblAim=CHR_6;  kbd_usr[25].primaryAim=CHR_V;   kbd_usr[25].fShiftedAim=CHR_6;  kbd_usr[25].gShiftedAim=CHR_PSI;  kbd_usr[25].primaryTam=CHR_6; 
+    kbd_usr[26].primary=ITM_MULT;   kbd_usr[26].fShifted=-MNU_PROB;   kbd_usr[26].gShifted=-MNU_INTS;   kbd_usr[26].keyLblAim=CHR_CROSS;  kbd_usr[26].primaryAim=CHR_W;   kbd_usr[26].fShiftedAim=CHR_CROSS;  kbd_usr[26].gShiftedAim=CHR_OMEGA;  kbd_usr[26].primaryTam=ITM_MULT; 
+    kbd_usr[27].primary=KEY_fg;   kbd_usr[27].fShifted=ITM_NULL;  kbd_usr[27].gShifted=ITM_NULL;  kbd_usr[27].keyLblAim=KEY_fg;   kbd_usr[27].primaryAim=KEY_fg;  kbd_usr[27].fShiftedAim=ITM_NULL;   kbd_usr[27].gShiftedAim=ITM_NULL;   kbd_usr[27].primaryTam=KEY_fg; 
+    kbd_usr[28].primary=CHR_1;  kbd_usr[28].fShifted=ITM_ASSIGN;  kbd_usr[28].gShifted=-MNU_ASN;  kbd_usr[28].keyLblAim=CHR_1;  kbd_usr[28].primaryAim=CHR_X;   kbd_usr[28].fShiftedAim=CHR_1;  kbd_usr[28].gShiftedAim=CHR_XI;   kbd_usr[28].primaryTam=CHR_1; 
+    kbd_usr[29].primary=CHR_2;  kbd_usr[29].fShifted=KEY_USERMODE;  kbd_usr[29].gShifted=-MNU_LOOP;   kbd_usr[29].keyLblAim=CHR_2;  kbd_usr[29].primaryAim=CHR_Y;   kbd_usr[29].fShiftedAim=CHR_2;  kbd_usr[29].gShiftedAim=CHR_UPSILON;  kbd_usr[29].primaryTam=CHR_2; 
+    kbd_usr[30].primary=CHR_3;  kbd_usr[30].fShifted=-MNU_PARTS;  kbd_usr[30].gShifted=-MNU_TEST;   kbd_usr[30].keyLblAim=CHR_3;  kbd_usr[30].primaryAim=CHR_Z;   kbd_usr[30].fShiftedAim=CHR_3;  kbd_usr[30].gShiftedAim=CHR_ZETA;   kbd_usr[30].primaryTam=CHR_3; 
+    kbd_usr[31].primary=ITM_SUB;  kbd_usr[31].fShifted=-MNU_STK;  kbd_usr[31].gShifted=-MNU_ALPHAFN;  kbd_usr[31].keyLblAim=CHR_MINUS;  kbd_usr[31].primaryAim=CHR_UNDERSCORE;  kbd_usr[31].fShiftedAim=CHR_MINUS;  kbd_usr[31].gShiftedAim=CHR_SAMPI;  kbd_usr[31].primaryTam=ITM_SUB; 
+    kbd_usr[32].primary=KEY_EXIT1;  kbd_usr[32].fShifted=ITM_OFF;   kbd_usr[32].gShifted=-MNU_PRINT;  kbd_usr[32].keyLblAim=KEY_EXIT1;  kbd_usr[32].primaryAim=KEY_EXIT1;   kbd_usr[32].fShiftedAim=ITM_OFF;  kbd_usr[32].gShiftedAim=CHR_PRINTER;  kbd_usr[32].primaryTam=KEY_EXIT1; 
+    kbd_usr[33].primary=CHR_0;  kbd_usr[33].fShifted=ITM_VIEW;  kbd_usr[33].gShifted=ITM_TIMER;   kbd_usr[33].keyLblAim=CHR_0;  kbd_usr[33].primaryAim=CHR_COLON;   kbd_usr[33].fShiftedAim=CHR_0;  kbd_usr[33].gShiftedAim=-MNU_ALPHA;   kbd_usr[33].primaryTam=CHR_0; 
+    kbd_usr[34].primary=CHR_PERIOD;   kbd_usr[34].fShifted=ITM_SHOW;  kbd_usr[34].gShifted=-MNU_INFO;   kbd_usr[34].keyLblAim=CHR_PERIOD;   kbd_usr[34].primaryAim=CHR_COMMA;   kbd_usr[34].fShiftedAim=CHR_PERIOD;   kbd_usr[34].gShiftedAim=-MNU_ALPHADOT;  kbd_usr[34].primaryTam=CHR_PERIOD; 
+    kbd_usr[35].primary=ITM_RS;   kbd_usr[35].fShifted=ITM_PR;  kbd_usr[35].gShifted=-MNU_PFN;  kbd_usr[35].keyLblAim=ITM_NULL;   kbd_usr[35].primaryAim=CHR_QUESTION_MARK;   kbd_usr[35].fShiftedAim=CHR_SLASH;  kbd_usr[35].gShiftedAim=-MNU_ALPHAMATH;   kbd_usr[35].primaryTam=ITM_NULL; 
+    kbd_usr[36].primary=ITM_ADD;  kbd_usr[36].fShifted=-MNU_CATALOG;  kbd_usr[36].gShifted=-MNU_IO;   kbd_usr[36].keyLblAim=CHR_PLUS;   kbd_usr[36].primaryAim=CHR_SPACE;   kbd_usr[36].fShiftedAim=CHR_PLUS;   kbd_usr[36].gShiftedAim=-MNU_ALPHAINTL;   kbd_usr[36].primaryTam=ITM_ADD; 
+    fnSetFlag(FLAG_USER);
+    break;
+
+
 
   case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
   
-    fnUserJM(USER_RESET);
+    fnUserJM(USER_C43);
   
     kbd_usr[0].primary     = KEY_USERMODE;
     kbd_usr[9].primary     = -MNU_TRI;

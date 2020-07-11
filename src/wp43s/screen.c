@@ -2055,6 +2055,7 @@ void clearScreen(void) {
 
 int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
 void refreshScreen(void) {
+if (running_program_jm) return;          //JM TEST PROGRAM!
 printf(">>>refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   switch(calcMode) {
     case CM_FLAG_BROWSER:

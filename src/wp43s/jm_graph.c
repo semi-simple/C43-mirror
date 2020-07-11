@@ -24,7 +24,7 @@
 #include "wp43s.h"
 #include "math.h"
 
-#define STATDEBUG
+//#define STATDEBUG
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH

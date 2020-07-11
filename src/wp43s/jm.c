@@ -216,10 +216,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber,  "83");} else
                       if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
                       if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
+                      if (strcompare(commandnumber,"SQRT"  )) {strcpy(commandnumber, "808");} else
                       if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
                       if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
                       if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
                       if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
+                      if (strcompare(commandnumber,"X!"    )) {strcpy(commandnumber, "679");} else
                       if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
                       if (strcompare(commandnumber,"SUM+"  )) {strcpy(commandnumber, "762");} else
                       if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
@@ -228,6 +230,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
                       if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
                       if (strcompare(commandnumber,"SNAP"  )) {strcpy(commandnumber,   "5");} else
+                      if (strcompare(commandnumber,"PHI"   )) {strcpy(commandnumber, "764");} else
+                      if (strcompare(commandnumber,"e"     )) {strcpy(commandnumber, "139");} else
+                      if (strcompare(commandnumber,"ABS"   )) {strcpy(commandnumber, "815");} else
+                      if (strcompare(commandnumber,"ARG"   )) {strcpy(commandnumber, "819");} else
+                      if (strcompare(commandnumber,"RE"    )) {strcpy(commandnumber, "503");} else
+                      if (strcompare(commandnumber,"IM"    )) {strcpy(commandnumber, "250");} else
 
                       if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
                       if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else

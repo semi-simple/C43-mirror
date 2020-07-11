@@ -22,3 +22,5 @@ void fnSwapRealImaginary(uint16_t unusedParamButMandatory);
 void swapReImError      (void);
 void swapReImCxma       (void);
 void swapReImCplx       (void);
+void swapRealReal       (void);
+void swapLongintReal    (void);

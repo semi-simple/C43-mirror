@@ -1,0 +1,8 @@
+XEQLBL 11 BINET  //RE-BINDS THE PROGRAM NAME TO THE SOFTMENU
+                 //BRIEF:  Y =( (phi)^n - (-phi)^-n ) /sqrt(5)
+
+ENTER ENTER      //in case not eRPN
+PHI X<>Y Y^X
+X<>Y
+PHI CHS X<>Y CHS Y^X
+- "5" SQRT /

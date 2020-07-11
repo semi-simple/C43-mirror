@@ -22,3 +22,4 @@ void fnRealPart   (uint16_t unusedParamButMandatory);
 void realPartError(void);
 void realPartCxma (void);
 void realPartCplx (void);
+void realPartReal (void);     //JM

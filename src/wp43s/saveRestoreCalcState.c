@@ -178,7 +178,7 @@ void saveCalc(void) {
   save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 backup);
   save(&systemFlags,                        sizeof(systemFlags),                        backup);
 
-  save(&eRPN,                               sizeof(eRPN),                               backup);
+  save(&eRPN,                               sizeof(eRPN),                               backup);    //JM vv
   save(&HOME3,                              sizeof(HOME3),                              backup);
   save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    backup);
   save(&UNITDisplay,                        sizeof(UNITDisplay),                        backup);
@@ -202,7 +202,9 @@ void saveCalc(void) {
   save(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
   save(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
   save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
-
+  save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
+  save(&indic_x,                            sizeof(indic_x),                            backup);
+  save(&indic_y,                            sizeof(indic_y),                            backup);   //JM ^^
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -351,7 +353,7 @@ void restoreCalc(void) {
     restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 backup);
     restore(&systemFlags,                        sizeof(systemFlags),                        backup);
 
-    restore(&eRPN,                               sizeof(eRPN),                               backup);
+    restore(&eRPN,                               sizeof(eRPN),                               backup);    //JM vv
     restore(&HOME3,                              sizeof(HOME3),                              backup);
     restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    backup);
     restore(&UNITDisplay,                        sizeof(UNITDisplay),                        backup);
@@ -374,6 +376,10 @@ void restoreCalc(void) {
     restore(&graph_ymax,                         sizeof(graph_ymax),                         backup);
     restore(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
     restore(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
+    restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
+    restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
+    restore(&indic_x,                            sizeof(indic_x),                            backup);
+    restore(&indic_y,                            sizeof(indic_y),                            backup);    //JM ^^
 
 
     fclose(backup);

@@ -64,6 +64,8 @@ Modes available in the mode menu:
 //This is to allow the creation of a logfile
 //#define RECORDLOG
 
+//This is to really see what the LCD in the SIM does. UGLY.
+#define FULLUPDATE
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
@@ -89,11 +91,6 @@ uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 void fnXEQMENU(uint16_t unusedParamButMandatory);
 void testprogram(uint16_t unusedParamButMandatory);
 void capture_sequence(char *origin, uint16_t item);
-
-bool_t running_program_jm;
-uint16_t indic_x;
-uint16_t indic_y;
-
 
 
 
@@ -146,10 +143,13 @@ extern bool_t jm_VECT;                                               //JM GRAPH 
 extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
-extern bool_t jm_LARGELI;                                           //JM
+extern bool_t jm_LARGELI;                                           //JM flag to keep large font numbers on screen
+extern bool_t running_program_jm;                                   //JM program is running flag
+extern uint16_t indic_x;                                            //JM program progress indicators
+extern uint16_t indic_y;                                            //JM program progress indicators
 
-extern int16_t fnXEQMENUpos;   //to save still //JMXEQ
-char  indexOfItemsXEQM[18*12]; //tosave still //JMXEQ
+extern int16_t fnXEQMENUpos;   //to save still if needed//JMXEQ
+char  indexOfItemsXEQM[18*12]; //tosave still if needed//JMXEQ
 
 
 // Additional routines needed in jm.c

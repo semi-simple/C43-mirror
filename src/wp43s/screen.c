@@ -1058,10 +1058,21 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 void force_refresh(void) {                                      //JM vv
 #ifdef PC_BUILD
   gtk_widget_queue_draw(screen);
+
+//FULL UPDATE (UGLY)
+#ifdef FULLUPDATE
+  while(gtk_events_pending()) {
+    gtk_main_iteration();
+  }
+#endif
+
 #endif
 #if DMCP_BUILD
   lcd_forced_refresh ();
 #endif
+
+printf(">>> screenc:force_refresh\n");
+
 }                                                              //JM ^^
 
 

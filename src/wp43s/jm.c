@@ -129,6 +129,7 @@ uint16_t indic_y = SCREEN_HEIGHT-1;
 
 
 void execute_string(const char *inputstring, bool_t exec1) {
+#ifndef TESTSUITE_BUILD
       uint16_t ix, ix_m;
       uint16_t ix_m1 = 0;
       uint16_t ix_m2 = 0;
@@ -645,7 +646,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             invertPixel(indic_x++, indic_y);
                             if(indic_x==SCREEN_WIDTH) {indic_x=0;indic_y--;indic_y--;}
 
-                            if(exec) runkey(no); 
+                            if(exec) {
+                              runkey(no); 
+                              force_refresh();
+                            }
                             //printf(">>> %d\n",temporaryInformation);
                             if(gotoinprogress==10) {gotoinprogress = 11;}
                           } 
@@ -660,7 +664,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
           default:;           //ignore all other characters
         }
         if(state_quotes) {
-          if (exec) sendkeys(aa); //else printf("Skip sending |%s|",aa);
+          if (exec) {
+            sendkeys(aa); //else printf("Skip sending |%s|",aa);
+            force_refresh();
+          }
         } 
         else { 
           if(state_commands && stringByteLength(commandnumber) < 20-1) {
@@ -674,6 +681,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
     }
 running_program_jm = false;
+#endif
 }
 
 
@@ -815,6 +823,10 @@ void reset_jm_defaults(void) {
     jm_HOME_FIX = false;                                       //JMHOME
     #endif
     jm_LARGELI=true;
+    running_program_jm=false;                                  //JM program is running flag
+    indic_x=0;                                                 //JM program progress indicators
+    indic_y=0;                                                 //JM program progress indicators
+
     setSystemFlag(FLAG_SPCRES);                                //JM default infinity etc.
     clearSystemFlag(FLAG_DENFIX);                              //JM default
     denMax = 64;                                               //JM default

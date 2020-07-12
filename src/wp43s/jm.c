@@ -124,6 +124,8 @@ bool_t strcompare( char *in1, char *in2) {
 
 
 bool_t running_program_jm = false;
+uint16_t indic_x = 0;
+uint16_t indic_y = SCREEN_HEIGHT-1;
 
 
 void execute_string(const char *inputstring, bool_t exec1) {
@@ -141,9 +143,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
       bool_t gotlabels = false;
       bool_t exec = false;
       bool_t go;
-      uint16_t indic_x = 0;
-      uint16_t indic_y = SCREEN_HEIGHT-1;
       running_program_jm = true;
+      indic_x = 0;
+      indic_y = SCREEN_HEIGHT-1;
 
 
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
@@ -189,7 +191,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
         
         if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
         switch(aa[0]) {
-          case 47: if(bb[0] == 47) {
+          case 47: if(bb[0] == 47 && state_comments == false) {//ADDED  STATE, SO //always switches on the comment, but not off. CR/LF cancels it
                       state_comments = !state_comments;        // Toggle comment state
                       state_commands = false;
                       state_quotes   = false;

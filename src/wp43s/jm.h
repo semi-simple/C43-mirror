@@ -91,6 +91,8 @@ void testprogram(uint16_t unusedParamButMandatory);
 void capture_sequence(char *origin, uint16_t item);
 
 bool_t running_program_jm;
+uint16_t indic_x;
+uint16_t indic_y;
 
 
 

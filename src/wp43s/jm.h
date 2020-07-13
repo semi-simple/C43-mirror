@@ -65,7 +65,7 @@ Modes available in the mode menu:
 //#define RECORDLOG
 
 //This is to really see what the LCD in the SIM does. UGLY.
-#define FULLUPDATE
+//#define FULLUPDATE
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here
@@ -82,17 +82,8 @@ Modes available in the mode menu:
 #define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
 void reset_jm_defaults(void);
-bool_t strcompare( char *in1, char *in2);
-
-
 
 uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
-
-void fnXEQMENU(uint16_t unusedParamButMandatory);
-void testprogram(uint16_t unusedParamButMandatory);
-void capture_sequence(char *origin, uint16_t item);
-
-
 
 
 //keyboard.c  screen.c

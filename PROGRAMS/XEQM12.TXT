@@ -1,6 +1,7 @@
 //PROGRAM TO PLOT BINET'S FORMULA: PLOT ( (phi)^n - (-phi)^-n ) /sqrt(5) IN COMPLEX PLANE FOR N IS RATIONAL
 
 XEQLBL 12 B.PLOT         // BINDS THE PROGRAM NAME TO THE SOFTMENU BUTTON ON SCREEN
+
   CLSUM                  // CLEAR STATS DATA. CLΣ.
   TICKS STO "01"         // GET CURRENT TIME IN 0.1 SECOND UNITS           
   "101" STO "00"         // 100 LOOPS, COUNTER REG00, 101 (STARTNO) DECREMENTS TO 1, AT 0 IT SKIPS
@@ -26,7 +27,7 @@ LBL M4                   // CALC SUBROUTINE: N IS 0 TO (STARTNO-1)
   RCL "02" "1" - / "7" * // SCALE THE RANGE
   "2" -                  // SHIFT THE X RANGE
 
-  ENTER ENTER            // EXTRA DUPLICATE N IN CASE NOT eRPN
+  ENTER ENTER            // DUPLICATE N
   PHI X<>Y Y^X           // PHI^N
   X<>Y                   // GET N
   PHI CHS X<>Y CHS Y^X   // (-PHI)^-N

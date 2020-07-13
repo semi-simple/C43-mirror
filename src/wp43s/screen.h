@@ -90,6 +90,7 @@ void     refreshFn                            (uint16_t timerType);             
 uint8_t  compressString;                                                                                        //JM compressString
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
+void     refresh_gui                          (void);
 void     force_refresh                        (void);                                                  		//JM SCREEN
 void     clearScreen                          (void);
 void     refreshScreen                        (void);

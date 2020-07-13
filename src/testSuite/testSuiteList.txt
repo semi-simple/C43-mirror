@@ -135,7 +135,7 @@ polarToRectangularB
 ceil
 floor
 ;round
-;roundB
+;roundB        /jmreplaced, but original also does not work
 roundi
 roundiB
 
@@ -196,9 +196,9 @@ pyx
 
 fractionalPart
 integerPart
-realPart
-imaginaryPart
-swapRealImaginary
+;realPart           jmhold
+;imaginaryPart      jmhold
+;swapRealImaginary  jmhold
 
 gcd
 lcm
@@ -209,7 +209,7 @@ unitVector
 slvq
 agm
 
-decomp
+;decomp             jmhold
 
 matrix
 dot

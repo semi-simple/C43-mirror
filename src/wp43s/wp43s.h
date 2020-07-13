@@ -238,6 +238,7 @@ typedef int16_t calcRegister_t;
 #include "jm.h"                         //JM include
 #include "addons.h"                     //JM include
 #include "textfiles.h"                  //JM include
+#include "xeqm.h"                       //JM include
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
 #ifdef INLINE_TEST                      //vv dr

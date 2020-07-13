@@ -1055,15 +1055,22 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
-void force_refresh(void) {                                      //JM vv
+void refresh_gui(void) {                                        //JM vv
+#ifdef PC_BUILD
+  while(gtk_events_pending()) {
+    gtk_main_iteration();
+  }
+#endif
+}
+
+
+void force_refresh(void) {
 #ifdef PC_BUILD
   gtk_widget_queue_draw(screen);
 
 //FULL UPDATE (UGLY)
 #ifdef FULLUPDATE
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
+   refresh_gui();
 #endif
 
 #endif
@@ -1071,7 +1078,7 @@ void force_refresh(void) {                                      //JM vv
   lcd_forced_refresh ();
 #endif
 
-printf(">>> screenc:force_refresh\n");
+//printf(">>> screenc:force_refresh\n");
 
 }                                                              //JM ^^
 
@@ -1154,12 +1161,12 @@ void showFunctionName(int16_t item, int8_t counter) {
   char padding[20];                                          //JM
   showFunctionNameItem = item;
   showFunctionNameCounter = counter;
-  strcpy(padding,indexOfItems[abs(item)].itemCatalogName);  //JM
+  strcpy(padding,indexOfItems[abs(item)].itemCatalogName);   //JM
   strcat(padding,"    ");                                    //JM
   if(stringWidth(padding, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(REGISTER_T, true, false);
   }
-  showString(padding, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);      //JM
+  showString(padding, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
 
 
@@ -1175,6 +1182,7 @@ void showFunctionName(int16_t item, int8_t counter) {
 void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
+  showString("           ", &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
 
 

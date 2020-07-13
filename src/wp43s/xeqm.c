@@ -74,9 +74,9 @@ void runkey(uint16_t item){
     if (!keyActionProcessed){
       hideFunctionName();         //Clear in case activated during process
       runFunction(item);
-      #ifdef DMCP_BUILD
-        lcd_forced_refresh(); // Just redraw from LCD buffer    
-      #endif
+//      #ifdef DMCP_BUILD
+//        lcd_forced_refresh(); // Just redraw from LCD buffer    
+//      #endif
     } 
   #endif
 }
@@ -575,7 +575,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
                           else                   */  {go = true;}
                           if(go) {
-                            refresh_gui();
+                            force_refresh();
                             printf(">>> Loop:go\n");
                           }
                         }
@@ -671,7 +671,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
 
                             if(exec) {
                               runkey(no); 
-                              force_refresh();
                             }
                             //printf(">>> %d\n",temporaryInformation);
                             if(gotoinprogress==10) {gotoinprogress = 11;}
@@ -689,7 +688,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
         if(state_quotes) {
           if (exec) {
             sendkeys(aa); //else printf("Skip sending |%s|",aa);
-            force_refresh();
           }
         } 
         else { 

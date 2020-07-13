@@ -65,7 +65,7 @@ Modes available in the mode menu:
 //#define RECORDLOG
 
 //This is to really see what the LCD in the SIM does. UGLY.
-//#define FULLUPDATE
+#define FULLUPDATE
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here

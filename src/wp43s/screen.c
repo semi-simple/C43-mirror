@@ -1160,6 +1160,7 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int8_t counter) {
   char padding[20];                                          //JM
   showFunctionNameItem = item;
+  if(running_program_jm) return;                             //JM
   showFunctionNameCounter = counter;
   strcpy(padding,indexOfItems[abs(item)].itemCatalogName);   //JM
   strcat(padding,"    ");                                    //JM
@@ -2061,7 +2062,7 @@ void clearScreen(void) {
         clearPixel(x, y);
       }
     }
-  printf(">>>clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
+  printf(">>> clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
   #endif
 
   #if DMCP_BUILD
@@ -2075,7 +2076,9 @@ void clearScreen(void) {
 int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
-printf(">>>refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
+#ifdef PC_BUILD
+printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
+#endif
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       clearScreen();

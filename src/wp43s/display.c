@@ -1992,7 +1992,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   }
 
   #ifndef TESTSUITE_BUILD
+#ifdef PC_BUILD
 printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
+#endif
   clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
   #endif
   SHOW_reset();

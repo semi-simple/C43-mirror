@@ -205,7 +205,9 @@ void executeFunction(const char *data) {
           else if(calcMode == CM_ASM_OVER_TAM) {
             indexOfItems[getOperation()].func(indexOfItems[item].param);
             calcModeNormal();
-printf(">>>refreshScreen1 from keyboard.c executeFunction\n");
+#ifdef PC_BUILD
+printf(">>>   refreshScreen1 from keyboard.c executeFunction\n");
+#endif
             refreshScreen();
             return;
           }
@@ -213,7 +215,9 @@ printf(">>>refreshScreen1 from keyboard.c executeFunction\n");
             calcMode = CM_AIM;
             addItemToBuffer(item);
             calcMode = CM_ASM_OVER_AIM;
-printf(">>>refreshScreen2 from keyboard.c executeFunction\n");
+#ifdef PC_BUILD
+printf(">>>   refreshScreen2 from keyboard.c executeFunction\n");
+#endif
             refreshScreen();
             return;
           }
@@ -249,7 +253,9 @@ printf(">>>refreshScreen2 from keyboard.c executeFunction\n");
         }
       }
     }
-printf(">>>refreshScreen3 from keyboard.c executeFunction\n");
+#ifdef PC_BUILD
+printf(">>>  refreshScreen3 from keyboard.c executeFunction\n");
+#endif
     refreshScreen();
   }
 }
@@ -437,6 +443,7 @@ void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
     shiftF = false;
     shiftG = true;
   }
+printf(">>> btnpressed:    refreshScreen from keyboard.c  (added by JM to instantly display numbers)\n");
 #endif
 #ifdef DMCP_BUILD
 void btnPressed(void *data) {
@@ -447,8 +454,7 @@ void btnPressed(void *data) {
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
 
-printf(">>> btnpressed:    refreshScreen from keyboard.c  (added by JM to instantly display numbers)\n");
-  refreshScreen(); //JM NEW, TO DISPLAY NUMBER DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE
+    refreshScreen(); //JM NEW, TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE
 
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
@@ -467,6 +473,7 @@ printf(">>> btnpressed:    refreshScreen from keyboard.c  (added by JM to instan
  ***********************************************/
 #ifdef PC_BUILD
 void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
@@ -483,7 +490,6 @@ void btnReleased(void *data) {
       runFunction(item);
     }
   }
-printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
 
   refreshScreen();
 }

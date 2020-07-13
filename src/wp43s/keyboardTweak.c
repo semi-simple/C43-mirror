@@ -399,7 +399,9 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        hideFunctionName();    
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
-printf(">>>refreshScreen from keyboardTweak.c Check_MultiPresses\n");
+#ifdef PC_BUILD
+printf(">>> refreshScreen from keyboardTweak.c Check_MultiPresses\n");
+#endif
        refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE

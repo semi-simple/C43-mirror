@@ -13,11 +13,48 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
-ls src/wp43s/*\ [0-9].c
-ls src/generateCatalogs/*\ [0-9].c
-ls src/generateConstants/*\ [0-9].c
-ls src/ttf2RasterFonts/*\ [0-9].c
-
+rm src/wp43s/*\ [0-9]\.[ch]
+rm DM42\ binary/*\ [0-9]\.pgm
+rm DM42\ binary/*\ [0-9]\.md
+rm DM42\ binary/*\ [0-9]\.bin
+rm DMCP_build/*\ [0-9]
+rm DMCP_build/*\ [0-9]\.md
+rm DMCP_build/*\ [0-9]\.ld
+rm draft\ documentation/*\ [0-9].txt
+rm draft\ documentation/*\ [0-9]\.pdf
+rm draft\ documentation/*\ [0-9]\.JPG
+rm fonts/2020-05-24\ backup\ during\ update/*\ [0-9]\.ttf
+rm fonts/*\ [0-9]\.ttf
+rm fonts/*\ [0-9]\.txt
+rm fonts/*\ [0-9]\.csv
+rm fonts/*\ [0-9]\.png
+rm fonts/*\ [0-9]\.ods
+rm offimg/*\ [0-9]\.bmp
+rm src/*\ [0-9]\.xlsx
+rm src/*\ [0-9]\.png
+rm src/wp43s/*\ [0-9]\.[ch]
+rm MacOs\ binaries/*\ [0-9]\.bin
+rm MacOs\ binaries/*\ [0-9]\.css
+rm MacOs\ binaries/*\ [0-9]\.png
+rm MacOs\ binaries/*\ [0-9]
+rm windows\ binaries/*\ [0-9]\.png
+rm windows\ binaries/*\ [0-9]\.exe
+rm windows\ binaries/*\ [0-9]\.css
+rm windows\ binaries/*\ [0-9]\.txt
+rm windows\ binaries/*\ [0-9]\.md
+rm windows\ binaries/C43/*\ [0-9]\.cmd
+rm windows\ binaries/C43/*\ [0-9]\.txt
+rm windows\ binaries/C43/*\ [0-9]\.exe
+rm windows\ binaries/C43/*\ [0-9]\.reg
+rm windows\ binaries/C43/*\ [0-9]\.cmd
+rm windows\ binaries/C43/*\ [0-9]\.ttf
+rm windows\ binaries/C43/*\ [0-9]\.png
+rm src/generateCatalogs/*\ [0-9]\.[ch]
+rm src/generateConstants/*\ [0-9]\.[ch]
+rm src/ttf2RasterFonts/*\ [0-9]\.[ch]
+rm PROGRAMS/*\ [0-9]\.TXT
+rm .//*\ [0-9]
+rm .//*\ [0-9]\.png
 
 
 

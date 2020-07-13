@@ -576,7 +576,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           else                   */  {go = true;}
                           if(go) {
                             force_refresh();
+                            #ifdef PC_BUILD
                             printf(">>> Loop:go\n");
+                            #endif
                           }
                         }
                       } else
@@ -638,7 +640,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             xeqlblinprogress = 0;
                             commandnumber[0]=0;   //Processed
                             #ifndef TESTSUITE_BUILD
-                            showSoftmenuCurrentPart();
+//JMXX                            showSoftmenuCurrentPart(); //Redisplay because softkey content changed
                             #endif
                           }
                         break;

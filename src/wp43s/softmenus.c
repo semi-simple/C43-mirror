@@ -1458,7 +1458,7 @@ printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
         else                                                                   //JMXEQvv
         if(softmenu[m].menuId == -MNU_XEQ) {
           if(indexOfItems[item%10000].func == fnXEQMENU) {
-            showSoftkey(indexOfItemsXEQM + 10*(item%10000-fnXEQMENUpos),  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+            showSoftkey(indexOfItemsXEQM + 8*(item%10000-fnXEQMENUpos),  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           } else
             showSoftkey(indexOfItems    [item%10000].itemSoftmenuName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
         }                                                                      //JMXEQ^^

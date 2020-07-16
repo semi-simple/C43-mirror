@@ -140,7 +140,7 @@ extern uint16_t indic_x;                                            //JM program
 extern uint16_t indic_y;                                            //JM program progress indicators
 
 extern int16_t fnXEQMENUpos;   //to save still if needed//JMXEQ
-char  indexOfItemsXEQM[18*10]; //tosave still if needed//JMXEQ
+char  indexOfItemsXEQM[18*8];  //tosave still if needed//JMXEQ
 
 
 // Additional routines needed in jm.c
@@ -198,7 +198,7 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 //void JM_convertReal34ToShortInteger(uint16_t confirmation);
 //void JM_convertReal34ToLongInteger(uint16_t confirmation);
 //void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
-//char* itoa(int value, char* result, int base);
+char* itoa(int value, char* result, int base);
 
 #define TI_ABC                  96    //JM EE
 #define TI_ABBCCA               97    //JM EE

@@ -75,8 +75,8 @@ void reset_jm_defaults(void) {
     uint16_t ix;
     ix = 0;
     while(ix<18) {
-      indexOfItemsXEQM[+10*ix]=0;
-      strcpy(indexOfItemsXEQM +10*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
+      indexOfItemsXEQM[+8*ix]=0;
+      strcpy(indexOfItemsXEQM +8*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
       ix++;    
     }
 

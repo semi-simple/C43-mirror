@@ -241,9 +241,9 @@ typedef int16_t calcRegister_t;
 #include "xeqm.h"                       //JM include
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
-#ifdef INLINE_TEST                      //vv dr
+//#ifdef INLINE_TEST                      //vv dr
 #include "inlineTest.h"
-#endif                                  //^^
+//#endif                                  //^^
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))

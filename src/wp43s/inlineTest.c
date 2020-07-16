@@ -68,7 +68,7 @@ void fnSwStop(uint8_t nr) {
   strcat(snum, "         ");
   showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
 }
-
+#endif
 
 
 /********************************************//**
@@ -78,6 +78,7 @@ void fnSwStop(uint8_t nr) {
  * \return void
  ***********************************************/
 void fnSetInlineTest(uint16_t drConfig) {
+#ifdef INLINE_TEST
   switch(drConfig) {
   case DR_ITM_TST:
     testEnabled = !testEnabled;
@@ -87,8 +88,8 @@ void fnSetInlineTest(uint16_t drConfig) {
   default:
     break;
   }
+#endif
 }
-
 
 
 /********************************************//**
@@ -98,6 +99,7 @@ void fnSetInlineTest(uint16_t drConfig) {
  * \return void
  ***********************************************/
 void fnGetInlineTestBsToX(uint16_t unusedParamButMandatory) {
+#ifdef INLINE_TEST
   char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
@@ -110,8 +112,8 @@ void fnGetInlineTestBsToX(uint16_t unusedParamButMandatory) {
   longIntegerFree(mem);
 
 //refreshStack(); --
+#endif
 }
-
 
 
 /********************************************//**
@@ -121,6 +123,7 @@ void fnGetInlineTestBsToX(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
+#ifdef INLINE_TEST
   uint16_t X_REG;
   longInteger_t lgInt;
 
@@ -131,10 +134,11 @@ void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
     longIntegerFree(lgInt);
     testBitset = mod(X_REG, 0x10000);
   }
+#endif
 }
 
 
-
+#ifdef INLINE_TEST
 /********************************************//**
  * \brief Test if bit is set in testBitset
  *

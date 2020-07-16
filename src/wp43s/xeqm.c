@@ -636,7 +636,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                         break;
                         case 3:                  //XEQMLABEL IN PROGRESS: get label
                           if (no>=1 && no<=18) {
-                            strcpy(indexOfItemsXEQM + (no-1)*12, commandnumber);
+                            strcpy(indexOfItemsXEQM + (no-1)*10, commandnumber);
                             xeqlblinprogress = 0;
                             commandnumber[0]=0;   //Processed
                             #ifndef TESTSUITE_BUILD

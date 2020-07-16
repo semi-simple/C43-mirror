@@ -145,7 +145,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                      //JM
 
 
-#if !defined(DMCP_BUILD) && defined (INLINE_TEST)                               //vv dr
+#if defined (INLINE_TEST)                                                       //vv dr
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
 #else                                                                           //^^
                                      ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
@@ -1458,7 +1458,7 @@ printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
         else                                                                   //JMXEQvv
         if(softmenu[m].menuId == -MNU_XEQ) {
           if(indexOfItems[item%10000].func == fnXEQMENU) {
-            showSoftkey(indexOfItemsXEQM + 12*(item%10000-fnXEQMENUpos),  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+            showSoftkey(indexOfItemsXEQM + 10*(item%10000-fnXEQMENUpos),  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           } else
             showSoftkey(indexOfItems    [item%10000].itemSoftmenuName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
         }                                                                      //JMXEQ^^

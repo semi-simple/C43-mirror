@@ -2074,57 +2074,146 @@ void clearScreen(void) {
 
 
 int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
+uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
 printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #endif
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(3); }     //dr
+#endif
+
   switch(calcMode) {
     case CM_FLAG_BROWSER:
+      last_CM = calcMode;
       clearScreen();
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_FLAG_BROWSER_OLD:        //JM vv
+      last_CM = calcMode;
       clearScreen();
       flagBrowser_old(NOPARAM);
       refreshStatusBar();            //JM ^^
       break;
 
     case CM_FONT_BROWSER:
+      last_CM = calcMode;
       clearScreen();
       fontBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_REGISTER_BROWSER:
+      last_CM = calcMode;
       clearScreen();
       registerBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_BUG_ON_SCREEN:
+      last_CM = calcMode;
+      break;
+
+    case CM_NIM:
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(0); }     //dr
+#endif
+      if(last_CM != calcMode) {
+        clearScreen();
+        refreshRegisterLine(REGISTER_T);
+        refreshRegisterLine(REGISTER_Z);
+        refreshRegisterLine(REGISTER_Y);
+      }
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(0); }      //dr
+#endif
+
+      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(1); }     //dr
+#endif
+      refreshRegisterLine(REGISTER_X);
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(1); }      //dr
+#endif
+
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(2); }     //dr
+#endif
+      if(last_CM != calcMode) {
+        last_CM = calcMode;
+        if(shiftF) {
+          showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+        }
+        else if(shiftG) {
+          showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+        }
+        else {
+          if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+            #ifdef PC_BUILD
+              int16_t x, y;
+
+              for(y=Y_POSITION_OF_TAM_LINE; y<Y_POSITION_OF_TAM_LINE+32; y++) {
+                for(x=0; x<100; x++) {
+                  clearPixel(x, y);
+                }
+              }
+            #endif
+
+            #if DMCP_BUILD
+              lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, 0);
+            #endif
+
+            showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+          }
+        }
+
+        showSoftmenuCurrentPart();
+
+        hourGlassIconEnabled = false;
+        refreshStatusBar();
+      }
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(2); }      //dr
+#endif
       break;
 
     case CM_NORMAL:
     case CM_AIM:
     case CM_TAM:
-    case CM_NIM:
     case CM_ASM:
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(0); }     //dr
+#endif
+      last_CM = calcMode;
       clearScreen();
 
       // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
       refreshRegisterLine(REGISTER_T);
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(0); }      //dr
+#endif
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(1); }     //dr
+#endif
       refreshRegisterLine(REGISTER_X);
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(1); }      //dr
+#endif
 
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStart(2); }     //dr
+#endif
       if(shiftF) {
         showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
       }
@@ -2155,11 +2244,17 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 
       hourGlassIconEnabled = false;
       refreshStatusBar();
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(2); }      //dr
+#endif
       break;
 
     default: {}
   }
 
+#ifdef INLINE_TEST
+  if(testEnabled) { fnSwStop(3); }      //dr
+#endif
 }
 #endif
 

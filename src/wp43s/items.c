@@ -480,6 +480,9 @@ void fnXEQMENU                  (uint16_t unusedParamButMandatory) {}         //
 void flagBrowser_old            (uint16_t unusedParamButMandatory) {}         //^^
 void fnRound2                   (uint16_t unusedParamButMandatory) {}
 void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
+void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
+void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
+void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
 #endif
 
 const item_t indexOfItems[] = {
@@ -2391,11 +2394,23 @@ const item_t indexOfItems[] = {
 /* 1889 */  { fnSigmaAssign,               KEY_USERMODE,                STD_SIGMA "+USR",                              STD_SIGMA "+USR",                              0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1891 */  { fnSigmaAssign,               KEY_CC,                      STD_SIGMA "+CC",                               STD_SIGMA "+CC",                               0,       0,       CAT_NONE, SLS_UNCHANGED},
+#ifdef INLINE_TEST
+/* 1892 */  { fnSetInlineTest,             DR_ITM_TST,                  "",                                            "Test",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
+#else
 /* 1892 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Test",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
+#endif
 /* 1893 */  { fnSigmaAssign,               -MNU_MyMenu,                 STD_SIGMA "+MyM",                              STD_SIGMA "+MyM",                              0,       0,       CAT_NONE, SLS_UNCHANGED},
+#ifdef INLINE_TEST
+/* 1894 */  { fnGetInlineTestBsToX,        NOPARAM,                     "",                                            "Get BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
+#else
 /* 1894 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Get BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
+#endif
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER
+#ifdef INLINE_TEST
+/* 1896 */  { fnSetInlineTestXToBs,        NOPARAM,                     "",                                            "Set BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
+#else
 /* 1896 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Set BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
+#endif
 /* 1897 */  { fnSigmaAssign,               ITM_PR,                      STD_SIGMA "+PGM",                              STD_SIGMA "+PGM",                              0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER
 /* 1898 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "I",                           STD_RIGHT_ARROW "I",                           0,       0,       CAT_NONE, SLS_ENABLED  },   //JM Copy of 1925, fnJM_2SI, -> "LI" -> "SI"
 /* 1899 */  { fnSigmaAssign,               ITM_AIM,                     STD_SIGMA "+" STD_alpha,                       STD_SIGMA "+" STD_alpha,                       0,       0,       CAT_NONE, SLS_UNCHANGED},

@@ -575,7 +575,6 @@ longIntegerFree(li);*/
 
   backToDMCP = false;
 
-  fnTimerReset();                                              //JM Suspects timers not resetting. Duplicating reset. Trying no response on first FN bug.
   lcd_forced_refresh();                                        //JM 
   nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;    //dr
   fnTimerReset();                                              //vv dr timeouts for kb handling
@@ -598,7 +597,8 @@ longIntegerFree(li);*/
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
+    }
+    else if ((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
       uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
       if(nextTimerRefresh != 0) {
         uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
@@ -711,23 +711,24 @@ longIntegerFree(li);*/
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
       btnFnPressed(charKey);                                  //JM Changed from Clicked to Pressed
-      lcd_refresh_dma();
+    //lcd_refresh_dma();
     }
     else if(1 <= key && key <= 37) {
       sprintf(charKey, "%02d", key - 1);
       btnPressed(charKey);
-      lcd_refresh_dma();
+    //lcd_refresh_dma();
     }
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
       btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
-      lcd_refresh_dma();
+    //lcd_refresh_dma();
     }
     else if(key == 0) {
       btnReleased(NULL);
-      lcd_refresh_dma();
+    //lcd_refresh_dma();
     }
 
     if(key >= 0) {                                             //JM dr
+      lcd_refresh_dma();
       fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);     //JM dr
     }
 

@@ -123,7 +123,7 @@
 
 #ifndef TESTSUITE_BUILD                 //vv dr
 #define INLINE_TEST
-#undef INLINE_TEST
+//#undef INLINE_TEST
 #endif                                  //^^
 
 #include <stdlib.h>

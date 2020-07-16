@@ -140,7 +140,7 @@ extern uint16_t indic_x;                                            //JM program
 extern uint16_t indic_y;                                            //JM program progress indicators
 
 extern int16_t fnXEQMENUpos;   //to save still if needed//JMXEQ
-char  indexOfItemsXEQM[18*12]; //tosave still if needed//JMXEQ
+char  indexOfItemsXEQM[18*10]; //tosave still if needed//JMXEQ
 
 
 // Additional routines needed in jm.c

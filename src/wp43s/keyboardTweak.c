@@ -399,7 +399,9 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        hideFunctionName();    
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
-printf(">>>refreshScreen from keyboardTweak.c Check_MultiPresses\n");
+#ifdef PC_BUILD
+printf(">>> refreshScreen from keyboardTweak.c Check_MultiPresses\n");
+#endif
        refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
@@ -526,9 +528,9 @@ void btnFnPressed_StateMachine(void *w, void *data) {
   bool_t exexute_double_g;
   bool_t double_click_detected;
 
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(1); }     //dr
-#endif
+//#ifdef INLINE_TEST
+//  if(testEnabled) { fnSwStart(1); }     //dr
+//#endif
 
   FN_timed_out_to_RELEASE_EXEC = false;
 
@@ -614,9 +616,9 @@ void btnFnPressed_StateMachine(void *w, void *data) {
       underline_softkey(FN_key_pressed-38, 2, !true /*dontclear at first call*/); //JMUL inverted clearflag
     }                                                                      //further shifts are done within FN_handler
   }
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(1); }      //dr
-#endif
+//#ifdef INLINE_TEST
+//  if(testEnabled) { fnSwStop(1); }      //dr
+//#endif
 }
 
 
@@ -631,9 +633,9 @@ void btnFnReleased_StateMachine(GtkWidget *w, gpointer data) {              //JM
 #ifdef DMCP_BUILD
 void btnFnReleased_StateMachine(void *w, void *data) {
 #endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(2); }     //dr
-#endif
+//#ifdef INLINE_TEST
+//  if(testEnabled) { fnSwStart(2); }     //dr
+//#endif
 
   if(FN_state == ST_3_PRESS2) {
     FN_state =  ST_4_REL2;
@@ -669,9 +671,9 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     FN_cancel();
   }
 //**************JM LONGPRESS AND JM DOUBLE ^^ *********************************************   // JM FN-DOUBLE
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(2); }      //dr
-#endif
+//#ifdef INLINE_TEST
+//  if(testEnabled) { fnSwStop(2); }      //dr
+//#endif
 }
 
 

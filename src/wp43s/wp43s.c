@@ -136,6 +136,7 @@ uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
 uint8_t               currentAngularMode;
 int8_t                showFunctionNameCounter;
+bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup
 bool_t                jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
@@ -163,6 +164,10 @@ float                 graph_dy;                                //JM Graph
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
+#else
+void fnSetInlineTest          (unsigned short drConfig) {};
+void fnGetInlineTestBsToX     (unsigned short unusedParamButMandatory)  {};
+void fnSetInlineTestXToBs     (unsigned short unusedParamButMandatory)  {};
 #endif                                                         //^^
 
 bool_t                hourGlassIconEnabled;
@@ -349,6 +354,7 @@ void setupDefaults(void) {
 
   reset_jm_defaults();
 
+  doRefreshSoftMenu = true;                                    //dr
   ULFL = false;                                                //JM Underline
   ULGL = false;                                                //JM Underline
   FN_state = ST_0_INIT;                                        //JM FN-DOUBLE

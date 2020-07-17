@@ -636,9 +636,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
                         break;
                         case 3:                  //XEQMLABEL IN PROGRESS: get label
                           if (no>=1 && no<=18) {
-                            strcpy(indexOfItemsXEQM + (no-1)*10, commandnumber);
+                            char tmpp[20];
+                            strcpy(tmpp,commandnumber);
+                            tmpp[8-1]=0;         //Limit to length of indexOfItemsXEQM
+                            strcpy(indexOfItemsXEQM + (no-1)*8, tmpp);
                             xeqlblinprogress = 0;
-                            commandnumber[0]=0;   //Processed
+                            commandnumber[0]=0;  //Processed
                             #ifndef TESTSUITE_BUILD
 //JMXX                            showSoftmenuCurrentPart(); //Redisplay because softkey content changed
                             #endif

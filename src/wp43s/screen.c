@@ -2117,6 +2117,7 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
       last_CM = calcMode;
       break;
 
+    case CM_AIM:
     case CM_NIM:
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
@@ -2143,8 +2144,9 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
-      if(last_CM != calcMode) {
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         last_CM = calcMode;
+        doRefreshSoftMenu = false;
         if(shiftF) {
           showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
         }
@@ -2182,7 +2184,6 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
       break;
 
     case CM_NORMAL:
-    case CM_AIM:
     case CM_TAM:
     case CM_ASM:
     case CM_ASM_OVER_TAM:

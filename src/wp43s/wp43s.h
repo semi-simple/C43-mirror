@@ -124,6 +124,12 @@
 #ifndef TESTSUITE_BUILD                 //vv dr
 #define INLINE_TEST
 //#undef INLINE_TEST
+#ifndef INLINE_TEST
+  #define DR_ITM_TST             32
+  void fnSetInlineTest          (unsigned short drConfig);
+  void fnGetInlineTestBsToX     (unsigned short unusedParamButMandatory);
+  void fnSetInlineTestXToBs     (unsigned short unusedParamButMandatory);
+#endif
 #endif                                  //^^
 
 #include <stdlib.h>
@@ -241,9 +247,9 @@ typedef int16_t calcRegister_t;
 #include "xeqm.h"                       //JM include
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
-//#ifdef INLINE_TEST                      //vv dr
+#ifdef INLINE_TEST                      //vv dr
 #include "inlineTest.h"
-//#endif                                  //^^
+#endif                                  //^^
 
 #define min(a,b)                ((a)<(b)?(a):(b))
 #define max(a,b)                ((a)>(b)?(a):(b))

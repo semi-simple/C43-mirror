@@ -1549,6 +1549,7 @@ void initSoftmenuStack(int16_t softmenu) {
                                (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
                                 0))))));
   softmenuStackPointer = 1;
+  doRefreshSoftMenu = true;     //dr
 }
 
 
@@ -1571,6 +1572,7 @@ void pushSoftmenu(int16_t softmenu) {
                                                     (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
                                                      0))))));
     softmenuStackPointer++;
+    doRefreshSoftMenu = true;     //dr
   }
   else {
     displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in wp43s.h");
@@ -1597,6 +1599,7 @@ void popSoftmenu(void) {
       }
     }
     softmenuStackPointer--;
+    doRefreshSoftMenu = true;     //dr
   }
   else {
     displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");

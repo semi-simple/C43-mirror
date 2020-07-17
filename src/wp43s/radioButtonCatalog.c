@@ -398,6 +398,7 @@ void fnRefreshRadioState(char rb, uint16_t mode) {
 
 #ifndef TESTSUITE_BUILD
 //JMXX if(!running_program_jm)  showSoftmenuCurrentPart();
+  doRefreshSoftMenu = true;
 #endif
 }
 

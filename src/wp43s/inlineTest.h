@@ -24,14 +24,14 @@ extern bool_t   testEnabled;
 extern uint16_t testBitset;
 
 
+#define DR_ITM_TST             32
 
 
 void     fnSwStart            (uint8_t nr);       // Start StopWatch, 0..3
 void     fnSwStop             (uint8_t nr);       // Stop StopWatch, 0..3
-bool_t   fnTestBitIsSet       (uint8_t bit);
-#endif
 
-#define DR_ITM_TST             32
 void fnSetInlineTest          (uint16_t drConfig);
 void fnGetInlineTestBsToX     (uint16_t unusedParamButMandatory);
 void fnSetInlineTestXToBs     (uint16_t unusedParamButMandatory);
+bool_t fnTestBitIsSet         (uint8_t bit);
+#endif

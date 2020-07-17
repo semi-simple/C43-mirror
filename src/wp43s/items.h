@@ -2075,3 +2075,10 @@ void runFunction  (int16_t func);
 void fnToBeCoded  (void);
 void itemToBeCoded(uint16_t unusedParamButMandatory);
 void fnNop        (uint16_t unusedParamButMandatory);
+
+#ifndef INLINE_TEST
+  #define DR_ITM_TST             32
+  void fnSetInlineTest          (unsigned short drConfig);
+  void fnGetInlineTestBsToX     (unsigned short unusedParamButMandatory);
+  void fnSetInlineTestXToBs     (unsigned short unusedParamButMandatory);
+#endif

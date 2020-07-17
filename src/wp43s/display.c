@@ -2280,12 +2280,12 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       SHOW_reset();
       offset = 0;
       thereIsANextLine = true;
-      bytesProcessed = 0;
+      bytesProcessed = 2100;
       strcat(tmpStr3000 + 2100, "'");
       strcat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
       strcat(tmpStr3000 + 2100, "'");
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, tmpStr3000 + (2100 + bytesProcessed), stringByteLength(tmpStr3000 + (2100+bytesProcessed)) + 1);
+        xcopy(tmpStr3000 + offset, tmpStr3000 + bytesProcessed, stringByteLength(tmpStr3000 + bytesProcessed) + 1);
         thereIsANextLine = false;
         while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
           tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;

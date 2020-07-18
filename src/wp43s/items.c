@@ -483,6 +483,8 @@ void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
+void fneRPN                     (uint16_t unusedParamButMandatory) {}
+
 #endif
 
 const item_t indexOfItems[] = {
@@ -2502,6 +2504,8 @@ const item_t indexOfItems[] = {
 /* 1997 */  { fnRound2,                    NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1998 */  { fnRoundi2,                   NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1999 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=C43
+/* 2000 */  { fneRPN,                      1,                           "eRPN",                                        "eRPN",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2001 */  { fneRPN,                      0,                           "RPN",                                         "RPN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2000 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2002 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

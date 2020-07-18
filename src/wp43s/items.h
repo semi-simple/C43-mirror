@@ -2040,8 +2040,10 @@
 #define ITM_ROUND2                    1997
 #define ITM_ROUNDI2                   1998
 #define ITM_USER_C43                  1999
+#define ITM_eRPN_ON                   2000
+#define ITM_eRPN_OFF                  2001
 
-#define LAST_ITEM                     2000   //JM
+#define LAST_ITEM                     2002   //JM
 
 #define CHR_PROD_SIGN                 9999
 

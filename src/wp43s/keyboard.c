@@ -453,6 +453,8 @@ void btnPressed(void *data) {
   showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
+//refreshScreen();
+//refreshRegisterLine(REGISTER_X);
 
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
@@ -512,8 +514,9 @@ void processKeyAction(int16_t item) {
 
   switch(item) {
     case KEY_BACKSPACE:
-    keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
-    fnKeyBackspace(NOPARAM);
+      keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
+      fnKeyBackspace(NOPARAM);
+      if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
       break;
 
     case KEY_UP1:
@@ -635,7 +638,6 @@ void processKeyAction(int16_t item) {
         case CM_NIM:
           keyActionProcessed = true;
           addItemToNimBuffer(item);
-          refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
           break;
 
         case CM_REGISTER_BROWSER:

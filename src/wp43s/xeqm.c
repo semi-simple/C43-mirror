@@ -504,7 +504,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"DET" )) {strcpy(commandnumber, "1581");} else
                       if (strcompare(commandnumber,"INVRT" )) {strcpy(commandnumber, "1582");} else
                       if (strcompare(commandnumber,"TRANS" )) {strcpy(commandnumber, "1583");} else
-                      if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "1678");} else
                       if (strcompare(commandnumber,"SIG" )) {strcpy(commandnumber, "1682");} else
                       if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1693");} else
                       if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1694");} else
@@ -559,6 +558,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"XEQM18" ) && exec) {strcpy(commandnumber, "1996");} else
                       if (strcompare(commandnumber,"ROUND" )) {strcpy(commandnumber, "1997");} else
                       if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "1998");} else
+                      if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "2000");} else
+                      if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2001");} else                      
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 
@@ -639,7 +640,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             char tmpp[20];
                             strcpy(tmpp,commandnumber);
                             tmpp[8-1]=0;         //Limit to length of indexOfItemsXEQM
-                            strcpy(indexOfItemsXEQM + (no-1)*8, tmpp);
+                            //printf(">>> Exec:%d no:%d ComndNo:%s tmpp:%s>>XEQM:%s\n",exec, no,commandnumber, tmpp,indexOfItemsXEQM + (no-1)*8);
+                            if(!exec) strcpy(indexOfItemsXEQM + (no-1)*8, tmpp);        // At Exec time, the XEQM label is changed to the command number. So the re-allocation of the name can only happen in the !exec state
                             xeqlblinprogress = 0;
                             commandnumber[0]=0;  //Processed
                             #ifndef TESTSUITE_BUILD

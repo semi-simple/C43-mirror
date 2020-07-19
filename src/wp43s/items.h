@@ -2042,8 +2042,15 @@
 #define ITM_USER_C43                  1999
 #define ITM_eRPN_ON                   2000
 #define ITM_eRPN_OFF                  2001
+#define ITM_T_LEFT_ARROW              2002
+#define ITM_T_RIGHT_ARROW             2003
+#define ITM_T_UP_ARROW                2004
+#define ITM_T_DOWN_ARROW              2005
+#define ITM_T_INSERT                  2006
+#define ITM_T_DELETE                  2007
+#define MNU_T_EDIT                    2008
 
-#define LAST_ITEM                     2002   //JM
+#define LAST_ITEM                     2009   //JM
 
 #define CHR_PROD_SIGN                 9999
 

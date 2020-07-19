@@ -651,7 +651,13 @@ const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
 /* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_A_Z,                -MNU_ALPHADOT,         -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
                                      CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS,                           //JM 
-                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
+                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    -MNU_T_EDIT                      };    //JM
+
+
+const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+                                     ITM_NULL,                      CHR_CIRCUMFLEX,             CHR_UNDERSCORE,          CHR_LESS_THAN,         CHR_GREATER_THAN,             ITM_NULL                      }; 
+
+
 
 #include "softmenuCatalogs.h"
 
@@ -763,6 +769,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
+  {.menuId = -MNU_T_EDIT,      .numItems = sizeof(menu_T_EDIT     )/sizeof(int16_t), .softkeyItem = menu_T_EDIT      },  //JM TEXTEDIT
 #ifdef INLINE_TEST                                                              //vv dr
   {.menuId = -MNU_INL_TST,     .numItems = sizeof(menu_Inl_Tst    )/sizeof(int16_t), .softkeyItem = menu_Inl_Tst     },
 #endif                                                                          //^^

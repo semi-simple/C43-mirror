@@ -559,7 +559,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ROUND" )) {strcpy(commandnumber, "1997");} else
                       if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "1998");} else
                       if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "2000");} else
-                      if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2001");} else                      
+                      if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2001");} else
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 

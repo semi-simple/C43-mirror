@@ -45,3 +45,7 @@ int16_t      export_append_line(char *inputstring);
 int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);
 int16_t      export_xy_to_file(double x, double y);
 
+
+int16_t T_cursorPos;
+#define T_CR            "\x0D"
+void fnT_ARROW(uint16_t command);

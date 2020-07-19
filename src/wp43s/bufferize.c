@@ -249,7 +249,24 @@ void addItemToBuffer(uint16_t item) {
         displayBugScreen(errorMessage);
       }
       else {
-        xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+//JMCURSOR vv add the character mid-string
+        uint16_t ix = 0; 
+        uint16_t in = 0;
+        while (ix<T_cursorPos && in<T_cursorPos) {  //find the ix position in aimBuffer before the cursor
+          in = stringNextGlyph(aimBuffer, in);      //find the in position in aimBuffer which is then the cursor position
+          ix++;  
+        }
+        T_cursorPos = in;
+        char ixaa[500]; 
+        xcopy(ixaa, aimBuffer,in);                  //copy everything up to the cursor position
+        ixaa[in]=0;
+        strcat(ixaa,indexOfItems[item].itemSoftmenuName);  //add new character
+        strcat(ixaa,aimBuffer + in);                //copy rest of the aimbuffer
+        strcpy(aimBuffer,ixaa);
+        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
+//JMCURSOR ^^ replace the following xcopy which adds tio the end of the string
+
+        // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
         if(stringWidth(aimBuffer, &standardFont, true, true) > SCREEN_WIDTH - 8) { // 8 is the width of the cursor
           btnClicked(NULL, "16"); // back space
           #ifdef PC_BUILD

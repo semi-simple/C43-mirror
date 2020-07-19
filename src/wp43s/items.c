@@ -484,6 +484,8 @@ void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
 void fneRPN                     (uint16_t unusedParamButMandatory) {}
+void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
+
 
 #endif
 
@@ -2506,6 +2508,13 @@ const item_t indexOfItems[] = {
 /* 1999 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=C43
 /* 2000 */  { fneRPN,                      1,                           "eRPN",                                        "eRPN",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2001 */  { fneRPN,                      0,                           "RPN",                                         "RPN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2002 */  { fnT_ARROW,                   1,                           STD_LEFT_ARROW,                                STD_LEFT_ARROW,                                0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2003 */  { fnT_ARROW,                   2,                           STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2004 */  { fnT_ARROW,                   3,                           STD_UP_ARROW,                                  STD_UP_ARROW,                                  0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2005 */  { fnT_ARROW,                   4,                           STD_DOWN_ARROW,                                STD_DOWN_ARROW,                                0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2006 */  { fnT_ARROW,                   0,                           "INS",                                         "INS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2007 */  { fnT_ARROW,                   6,                           "DEL",                                         "DEL",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 
-/* 2002 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2009 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

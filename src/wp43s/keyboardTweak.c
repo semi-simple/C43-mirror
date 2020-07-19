@@ -43,6 +43,7 @@ void showAlphaModeonGui(void) {
       calcModeAimGui();
     #endif
   }                                               //^^
+doRefreshSoftMenu = true;     //jm
 }
 
 

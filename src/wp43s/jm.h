@@ -241,6 +241,8 @@ char* itoa(int value, char* result, int base);
 
 #define JC_LARGELI             27
 
+#define JC_ITM_TST             31    //dr
+
 
 #ifdef PC_BUILD
 //keyboard.c

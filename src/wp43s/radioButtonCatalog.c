@@ -99,11 +99,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1744 */  { ITM_H_SUMRY,          JC_H_SUM,               CB_JC },  //fnSetSetJM
 /* 1745 */  { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
 /* 1746 */  { ITM_H_FIXED,          JC_H_FIX,               CB_JC },  //fnSetSetJM
-/*      */  { ITM_LARGELI,          JC_LARGELI,             CB_JC }   //fnSetSetJM
-
-#ifdef INLINE_TEST
-/* 1892 */, { ITM_TEST,             DR_ITM_TST,             CB_JC }   //fnSetInlineTest
-#endif
+/*      */  { ITM_LARGELI,          JC_LARGELI,             CB_JC },  //fnSetSetJM
+/* 1892 */  { ITM_TEST,             JC_ITM_TST,             CB_JC }   //fnSetInlineTest
 };
 
 
@@ -339,12 +336,13 @@ int8_t fnCbIsSet(int16_t item) {
             break;
 
 #ifdef INLINE_TEST
-          case DR_ITM_TST:
+          case JC_ITM_TST:
             {
               cb_param = testEnabled;
             }
             break;
 #endif
+
           default:
             break;
           }
@@ -432,6 +430,7 @@ void fnRefreshComboxState(char rb, uint16_t param, bool_t state) {
 
 #ifndef TESTSUITE_BUILD
 //JMXX if(!running_program_jm)  showSoftmenuCurrentPart();
+  doRefreshSoftMenu = true;
 #endif
 }
 
@@ -715,10 +714,8 @@ void fnRebuildRadioState() {
   fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);
 // 1680     { ITM_SHTIM,            JC_SHFT_4s,             CB_JC }   //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_SHFT_4s, ShiftTimoutMode);
-#ifdef INLINE_TEST
-// 1892   , { ITM_TEST,             DR_ITM_TST,             CB_JC }   //fnSetInlineTest
-  fnRefreshComboxState(CB_JC, DR_ITM_TST, false);
-#endif
+// 1892   , { ITM_TEST,             JC_ITM_TST,             CB_JC }   //fnSetInlineTest
+  fnRefreshComboxState(CB_JC, JC_ITM_TST, false);
 // 1943     { ITM_VECT,             JC_VECT,                CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);
 // 1744     { ITM_H_SUMRY,          JC_H_SUM,               CB_JC },  //fnSetSetJM
@@ -755,9 +752,7 @@ void fnRebuildRadioState() {
   printf("CB_JC, JC_HOME_TRIPLE, HOME3               %d %d %d\n", CB_JC, JC_HOME_TRIPLE, HOME3 );
   printf("CB_JC, JC_SH_3T, Home3TimerMode            %d %d %d\n", CB_JC, JC_SH_3T, Home3TimerMode);
   printf("CB_JC, JC_SHFT_4s, ShiftTimoutMode         %d %d %d\n", CB_JC, JC_SHFT_4s, ShiftTimoutMode);
-#ifdef INLINE_TEST
-  printf("CB_JC, DR_ITM_TST, false                   %d %d %d\n", CB_JC, DR_ITM_TST, false);
-#endif
+  printf("CB_JC, JC_ITM_TST, false                   %d %d %d\n", CB_JC, JC_ITM_TST, false);
   printf("CB_JC, JC_VECT, jm_VECT                    %d %d %d\n",CB_JC, JC_VECT, jm_VECT );
   printf("CB_JC, JC_H_SUM, jm_HOME_SUM               %d %d %d\n",CB_JC, JC_H_SUM, jm_HOME_SUM);
   printf("CB_JC, JC_H_MIR, jm_HOME_MIR               %d %d %d\n",CB_JC, JC_H_MIR, jm_HOME_MIR);
@@ -1110,7 +1105,7 @@ void fnRebuildRadioState() {
       rb.param = indexOfItems[k].param;
       switch (rb.param)
       {
-      case DR_ITM_TST:
+      case JC_ITM_TST:
         rb.state = testEnabled? 3 : 2;
         break;
 

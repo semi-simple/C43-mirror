@@ -1011,7 +1011,8 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, x, y, newXCursor;
+  uint16_t lg, newXCursor;
+//  uint16_t x, y;   //JMCURSOR removed these variables
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -1026,15 +1027,34 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_AIM:
     case CM_ASM_OVER_AIM:
+
       if(stringByteLength(aimBuffer) > 0) {
-        lg = stringLastGlyph(aimBuffer);
-        aimBuffer[lg] = 0;
-        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-        for(x=newXCursor; x<xCursor+6; x++) {
-          for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
-            clearPixel(x, y);
+//JMCURSORvv SPLIT STRING AT CURSOR POSITION
+          uint8_t T_cursorPos_tmp;
+          T_cursorPos_tmp = aimBuffer[T_cursorPos];
+          aimBuffer[T_cursorPos] = 0;                  //break it at the current cursor
+          lg = stringLastGlyph(aimBuffer);             //find beginning of last glyoh, to delete
+          aimBuffer[lg] = 0;                           //delete it
+          newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+          if(newXCursor !=0) newXCursor--;             //Adjust cursor position marginally closer to letter on left
+          aimBuffer[T_cursorPos] = T_cursorPos_tmp;    //Restore broken glyph in middle at break point
+          uint16_t ix = 0;
+          while(aimBuffer[ix+T_cursorPos] != 0) {      //copy second part to append to first part
+            aimBuffer[ix+lg] = aimBuffer[ix+T_cursorPos];
+            ix++;
           }
-        }
+          aimBuffer[ix+lg]=0;                          //end new buffer
+          T_cursorPos_tmp = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 6 /*Normally 8, reduced either side by 1*/, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+          fnT_ARROW(1);                               //move cursor one left
+//JMCURSOR^^ REPLACE STATEMENT BELOW
+//        lg = stringLastGlyph(aimBuffer);
+//        aimBuffer[lg] = 0;
+//        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+//        for(x=newXCursor; x<xCursor+6; x++) {
+//          for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
+//            clearPixel(x, y);
+//          }
+//        }
         xCursor = newXCursor;
       }
       break;

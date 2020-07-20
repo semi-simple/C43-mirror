@@ -485,6 +485,8 @@ void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
 void fneRPN                     (uint16_t unusedParamButMandatory) {}
 void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
+void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
+void fnXEQMLOAD                 (uint16_t unusedParamButMandatory) {}
 
 
 #endif
@@ -2515,6 +2517,8 @@ const item_t indexOfItems[] = {
 /* 2006 */  { fnT_ARROW,                   0,                           "INS",                                         "INS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2007 */  { fnT_ARROW,                   6,                           "DEL",                                         "DEL",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
+/* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
+/* 2010 */  { fnXEQMLOAD,                  TM_VALUE,                    "X.LOAD",                                      "X.LOAD",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2009 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2011 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

@@ -795,3 +795,31 @@ char line1[TMP_STR_LENGTH];
 */
 
 
+
+
+void fnXEQMSAVE                  (uint16_t unusedParamButMandatory) {
+printf("SAVE not yet implemented %d\n",unusedParamButMandatory);
+
+//  if(getRegisterDataType(regist) == dtString) {
+  //  stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)tmpStr3000);
+//  }
+}
+
+
+void fnXEQMLOAD (uint16_t XEQM_no) {
+  printf("LOAD %d\n",XEQM_no);
+  char line1[TMP_STR_LENGTH];
+  line1[0]=0;
+
+  XEQMENU_Selection(XEQM_no, line1, false);
+
+  printf("loaded:%s\n",line1);  
+  int16_t len = stringByteLength(line1);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), line1, len);
+
+}
+
+
+
+

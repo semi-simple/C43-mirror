@@ -1,8 +1,8 @@
 XEQLBL 18 PRIM_LP   //RE-BINDS THE TEXT TO THE SOFTMENU 18, i.e. G[FN6]
                     //PROGRAM TO DEMO DSZ AND GOTO. GET FIRST 4 PRIMES AFTER 1E100 TO STACK
 
-CLSTK                      /CLEAR STACK
-TICKS                      /GET CURRENT TIME IN 0.1 SECOND UNITS
+CLSTK                      //CLEAR STACK
+TICKS                      //GET CURRENT TIME IN 0.1 SECOND UNITS
 STO "01"        
         
 GTO M2        
@@ -19,16 +19,16 @@ RCL "01"                   //GET OLD CLOCK STATUS
 "10" /                     //DIVIDE BY 10 TO GET SECONDS
 
 ALPHA                      //CHANGE TO ALPHA MODE
-"TIME "  //SEND TEXT TO C43
+"TIME "                    //SEND TEXT TO C43
 EXIT EXIT                  //EXIT FROM ALPHA MODE
 X<>Y
 +
 ALPHA                      //CHANGE TO ALPHA MODE
-" SECONDS FOR FOUR PRIMES"  //SEND TEXT TO C43
+" SEC"                     //SEND TEXT TO C43
 EXIT EXIT                  //EXIT FROM ALPHA MODE
 +
 ALPHA                      //CHANGE TO ALPHA MODE
-"ARROW UP AND DOWN TO START SHOW"
+" ARROWS START SHOW"
 EXIT EXIT                  //SENT TO C43
 RETURN                     //STOPS EXECUTION
 

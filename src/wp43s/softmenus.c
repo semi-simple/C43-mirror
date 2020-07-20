@@ -655,7 +655,7 @@ const int16_t menu_ALPHA[]        = {
 
 
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
-                                     ITM_NULL,                      CHR_CIRCUMFLEX,             CHR_UNDERSCORE,          CHR_LESS_THAN,         CHR_GREATER_THAN,             ITM_NULL                      }; 
+                                     ITM_XSAVE,                     ITM_XLOAD,                  CHR_CIRCUMFLEX,          CHR_UNDERSCORE,        CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
 
 
 

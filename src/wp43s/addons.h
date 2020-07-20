@@ -20,6 +20,7 @@
  * \file arctan.h
  ***********************************************/
 
+void fneRPN         (uint16_t unusedParamButMandatory);
 void fnArg_all      (uint16_t unusedParamButMandatory);
 void fnToPolar2     (uint16_t unusedParamButMandatory);
 void fnToRect2      (uint16_t unusedParamButMandatory);

@@ -483,6 +483,8 @@ void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
 void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
+void fneRPN                     (uint16_t unusedParamButMandatory) {}
+
 #endif
 
 const item_t indexOfItems[] = {
@@ -2394,7 +2396,7 @@ const item_t indexOfItems[] = {
 /* 1889 */  { fnSigmaAssign,               KEY_USERMODE,                STD_SIGMA "+USR",                              STD_SIGMA "+USR",                              0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1890 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Inl. Tst",                                    0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1891 */  { fnSigmaAssign,               KEY_CC,                      STD_SIGMA "+CC",                               STD_SIGMA "+CC",                               0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 1892 */  { fnSetInlineTest,             DR_ITM_TST,                  "",                                            "Test",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
+/* 1892 */  { fnSetInlineTest,             JC_ITM_TST,                  "",                                            "Test",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},   //INLINE_TEST
 /* 1893 */  { fnSigmaAssign,               -MNU_MyMenu,                 STD_SIGMA "+MyM",                              STD_SIGMA "+MyM",                              0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1894 */  { fnGetInlineTestBsToX,        NOPARAM,                     "",                                            "Get BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  },   //INLINE_TEST
 /* 1895 */  { fnSigmaAssign,               ITM_SIGMAPLUS,               STD_SIGMA "+",                                 STD_SIGMA "+",                                 0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM USER
@@ -2502,6 +2504,8 @@ const item_t indexOfItems[] = {
 /* 1997 */  { fnRound2,                    NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1998 */  { fnRoundi2,                   NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1999 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=C43
+/* 2000 */  { fneRPN,                      1,                           "eRPN",                                        "eRPN",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2001 */  { fneRPN,                      0,                           "RPN",                                         "RPN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2000 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2002 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

@@ -71,6 +71,16 @@ All the below: because both Last x and savestack does not work due to multiple s
 #include "wp43s.h"
 
 
+void fneRPN(uint16_t state) {
+   if(state == 1) eRPN = true;
+   else if (state == 0) eRPN = false;
+}
+
+
+
+
+
+
 //fnArg for real and longints in addition to the standard complex. Simply returns 0 angle
 
 void fnArg_all(uint16_t unusedParamButMandatory) {

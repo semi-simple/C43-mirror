@@ -24,8 +24,6 @@ extern bool_t   testEnabled;
 extern uint16_t testBitset;
 
 
-#define DR_ITM_TST             32
-
 
 void     fnSwStart            (uint8_t nr);       // Start StopWatch, 0..3
 void     fnSwStop             (uint8_t nr);       // Stop StopWatch, 0..3

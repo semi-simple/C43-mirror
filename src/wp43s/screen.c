@@ -1416,9 +1416,9 @@ void refreshRegisterLine(calcRegister_t regist) {
             default: {}
           }
 
-          if(getRegisterDataType(REGISTER_X) == dtReal34) {
-            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
-          }
+//          if(getRegisterDataType(REGISTER_X) == dtReal34) {
+//            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
+//          }
         }
                                                                          //JMSHOW ^^
 
@@ -2124,6 +2124,8 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #endif
       if(last_CM != calcMode) {
         clearScreen();
+
+        // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
         refreshRegisterLine(REGISTER_T);
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);
@@ -2132,7 +2134,6 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStop(0); }      //dr
 #endif
 
-      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
@@ -2195,9 +2196,8 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       last_CM = calcMode;
-      clearScreen();
+      clearScreen();      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
 
-      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
       refreshRegisterLine(REGISTER_T);
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);

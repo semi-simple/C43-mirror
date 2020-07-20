@@ -54,19 +54,23 @@ void fnSwStop(uint8_t nr) {
 #ifdef PC_BUILD
   swStop[nr] = g_get_monotonic_time();
 #endif
+#ifndef TESTSUITE_BUILD
   uint32_t swTime = swStop[nr] - swStart[nr];
   char snum[50];
+#endif
 #ifdef DMCP_BUILD
   showString("ms:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
 #ifdef PC_BUILD
   showString(STD_mu "s:", &standardFont, 30, 40 +nr*20, vmNormal, false, false);
 #endif
+#ifndef TESTSUITE_BUILD
   itoa(nr, snum, 10);
   showString(snum, &standardFont, 20, 40 +nr*20, vmNormal, false, false);
   itoa(swTime, snum, 10);
   strcat(snum, "         ");
   showString(snum, &standardFont, 60, 40 +nr*20, vmNormal, false, false);
+#endif
 }
 
 
@@ -79,9 +83,9 @@ void fnSwStop(uint8_t nr) {
  ***********************************************/
 void fnSetInlineTest(uint16_t drConfig) {
   switch(drConfig) {
-  case DR_ITM_TST:
+  case JC_ITM_TST:
     testEnabled = !testEnabled;
-  //fnRefreshComboxState(CB_JC, DR_ITM_TST, testEnabled);
+    fnRefreshComboxState(CB_JC, JC_ITM_TST, testEnabled);
     break;
 
   default:

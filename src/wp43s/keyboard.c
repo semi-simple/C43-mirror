@@ -453,8 +453,8 @@ void btnPressed(void *data) {
   showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
-
-    refreshScreen(); //JM NEW, TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE
+//refreshScreen();
+//refreshRegisterLine(REGISTER_X);
 
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
@@ -514,8 +514,9 @@ void processKeyAction(int16_t item) {
 
   switch(item) {
     case KEY_BACKSPACE:
-    keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
-    fnKeyBackspace(NOPARAM);
+      keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
+      fnKeyBackspace(NOPARAM);
+      if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
       break;
 
     case KEY_UP1:
@@ -588,6 +589,11 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
 
+          else if(CHR_A <= item && item <= CHR_Z)  {  //JM vv DIRECT LETTERS
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }                                           //JM ^^
+
           else if(alphaCase == AC_LOWER && ( (CHR_ALPHA <= item && item <= CHR_OMEGA) || (CHR_QOPPA <= item && item <= CHR_SAMPI) ))  {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
@@ -602,6 +608,7 @@ void processKeyAction(int16_t item) {
             nextChar = NC_SUPERSCRIPT;
             keyActionProcessed = true;
           }
+          refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
           break;
 
         case CM_TAM:
@@ -1082,7 +1089,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   int16_t itemShift;
 
-  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1);}             //JMSHOW
+  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -1203,7 +1210,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   int16_t itemShift;
 
-  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(2);}             //JMSHOW
+  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(2); return;}             //JMSHOW
 
   switch(calcMode) {
     case CM_NORMAL:                     //JMSHOW vv

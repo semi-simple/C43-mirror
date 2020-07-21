@@ -453,8 +453,8 @@ void btnPressed(void *data) {
   showFunctionNameItem = 0;
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
-//refreshScreen();
-//refreshRegisterLine(REGISTER_X);
+	//refreshScreen();
+	//refreshRegisterLine(REGISTER_X);       //JM Removed this one, for direct presses, add it in processKeyAction
 
     if(!keyActionProcessed) {
       showFunctionName(item, 10);
@@ -575,6 +575,7 @@ void processKeyAction(int16_t item) {
           if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
             addItemToNimBuffer(item);
             keyActionProcessed = true;
+            refreshRegisterLine(REGISTER_X);           //JM to force direct display
           }
           // Following commands do not timeout to NOP
           else if(/*item == KEY_UNDO ||JM*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
@@ -589,7 +590,7 @@ void processKeyAction(int16_t item) {
             keyActionProcessed = true;
           }
 
-          else if(CHR_A <= item && item <= CHR_Z)  {  //JM vv DIRECT LETTERS
+          else if((CHR_A <= item && item <= CHR_Z) || item == CHR_COLON || item == CHR_COMMA || item == CHR_QUESTION_MARK || item == CHR_SPACE || item == CHR_UNDERSCORE )  {  //JM vv DIRECT LETTERS
             addItemToBuffer(item);
             keyActionProcessed = true;
           }                                           //JM ^^
@@ -638,6 +639,10 @@ void processKeyAction(int16_t item) {
         case CM_NIM:
           keyActionProcessed = true;
           addItemToNimBuffer(item);
+
+          if((CHR_0 <= item && item <= CHR_9) || item == ITM_CHS || item == ITM_EXPONENT || item == CHR_PERIOD) {   //JMvv Direct keypresses
+            refreshRegisterLine(REGISTER_X);
+          }                                                                                   //JM^^
           break;
 
         case CM_REGISTER_BROWSER:

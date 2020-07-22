@@ -140,6 +140,32 @@ void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief sys_free_mem
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnSysFreeMem(uint16_t unusedParamButMandatory) {
+  real_t value;
+
+  saveStack();
+  liftStack();
+
+  #ifdef PC_BUILD
+    int32ToReal(2147483647, &value);
+  #endif
+
+  #ifdef DMCP_BUILD
+    int32ToReal(sys_free_mem(), &value);
+  #endif
+
+//realDivide(&value, const_1000, &value, &ctxtReal39);
+  realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+
+/********************************************//**
  * \brief Test if bit is set in testBitset
  *
  * \param[in] bit uint8_t

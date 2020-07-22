@@ -43,6 +43,7 @@ void showAlphaModeonGui(void) {
       calcModeAimGui();
     #endif
   }                                               //^^
+doRefreshSoftMenu = true;     //jm
 }
 
 
@@ -375,7 +376,7 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
     }
   }
 
-  if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {
+  if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
     if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
     if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
     if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else
@@ -400,9 +401,9 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
 #ifdef PC_BUILD
-printf(">>> refreshScreen from keyboardTweak.c Check_MultiPresses\n");
+printf(">>> refreshScreen ### REMOVED ### from keyboardTweak.c Check_MultiPresses\n");
 #endif
-       refreshScreen();                //JM CLRDROP
+//JMXX       refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
        setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE

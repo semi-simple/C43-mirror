@@ -787,3 +787,49 @@ void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     /
 
 
 
+int16_t T_cursorPos = 0;
+void fnT_ARROW(uint16_t command) {
+                                uint16_t ix = 0; 
+                                uint16_t in = 0;
+                                uint16_t in_old;
+
+  switch (command) {
+     case 1 /*STD_LEFT_ARROW */ : 
+                                  ix = 0; 
+                                  in = 0;
+                                  in_old = 0;
+                                  while (ix<T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
+                                    in_old = in;
+                                    in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
+                                    ix++;
+                                  }
+                                  T_cursorPos = in_old;
+                                  break;
+
+     case 2 /*STD_RIGHT_ARROW*/ : 
+                                  ix = 0; 
+                                  in = 0;
+                                  while (ix < T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
+                                    in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
+                                    ix++;
+                                  }
+                                  T_cursorPos = stringNextGlyph(aimBuffer, in);
+                                  break;
+
+     case 3 /*STD_UP_ARROW   */ : break;
+     case 4 /*STD_DOWN_ARROW */ : break;
+     case 0 /*INS            */ : break;
+#ifndef TESTSUITE_BUILD
+     case 6 /*DELETE         */ : btnClicked(NULL, "16"); break;
+#endif
+     default: break;
+  }
+  //printf(">>> T_cursorPos %d",T_cursorPos);
+  if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
+  if(T_cursorPos < 0) T_cursorPos = 0;
+  //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
+}
+
+
+
+

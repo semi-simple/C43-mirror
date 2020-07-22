@@ -1713,7 +1713,7 @@
 #define Not_used1674                  1674
 #define Not_used1675                  1675
 #define Not_used1676                  1676
-#define Not_used1677                  1677
+#define ITM_SYS_FREE_RAM              1677
 
 #define ITM_ERPN                      1678   //JM eRPN
 #define ITM_HOMEx3                    1679   //JM HOME.3
@@ -2042,8 +2042,17 @@
 #define ITM_USER_C43                  1999
 #define ITM_eRPN_ON                   2000
 #define ITM_eRPN_OFF                  2001
+#define ITM_T_LEFT_ARROW              2002
+#define ITM_T_RIGHT_ARROW             2003
+#define ITM_T_UP_ARROW                2004
+#define ITM_T_DOWN_ARROW              2005
+#define ITM_T_INSERT                  2006
+#define ITM_T_DELETE                  2007
+#define MNU_T_EDIT                    2008
+#define ITM_XSAVE                     2009
+#define ITM_XLOAD                     2010
 
-#define LAST_ITEM                     2002   //JM
+#define LAST_ITEM                     2011   //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -59,6 +59,15 @@ void fnNop(uint16_t unusedParamButMandatory) {
 }
 
 
+
+#if !defined(GENERATE_CATALOGS) && !defined(INLINE_TEST)    //vv dr
+  void fnSetInlineTest      (uint16_t drConfig)                {};
+  void fnGetInlineTestBsToX (uint16_t unusedParamButMandatory) {};
+  void fnSetInlineTestXToBs (uint16_t unusedParamButMandatory) {};
+  void fnSysFreeMem         (uint16_t unusedParamButMandatory) {};
+#endif                                                      //^^
+
+
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 //#error runFunction
 /********************************************//**
@@ -482,8 +491,12 @@ void fnRound2                   (uint16_t unusedParamButMandatory) {}
 void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
-void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
+void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}
+void fnSysFreeMem               (uint16_t unusedParamButMandatory) {}           //^^
 void fneRPN                     (uint16_t unusedParamButMandatory) {}
+void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
+void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
+void fnXEQMLOAD                 (uint16_t unusedParamButMandatory) {}
 
 #endif
 
@@ -2175,7 +2188,7 @@ const item_t indexOfItems[] = {
 /* 1674 */  { itemToBeCoded,               NOPARAM,                     "1674",                                        "1674",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1675 */  { itemToBeCoded,               NOPARAM,                     "1675",                                        "1675",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1676 */  { itemToBeCoded,               NOPARAM,                     "1676",                                        "1676",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
-/* 1677 */  { itemToBeCoded,               NOPARAM,                     "1677",                                        "1677",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1677 */  { fnSysFreeMem,                NOPARAM,                     "",                                            "HEAP",                                        0,       0,       CAT_NONE, SLS_ENABLED  },
 
 /* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "eRPN",                                        "eRPN",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "HOME.3",                                      "HOME.3",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM HOME.3
@@ -2506,6 +2519,15 @@ const item_t indexOfItems[] = {
 /* 1999 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},   //J=C43
 /* 2000 */  { fneRPN,                      1,                           "eRPN",                                        "eRPN",                                        0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2001 */  { fneRPN,                      0,                           "RPN",                                         "RPN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2002 */  { fnT_ARROW,                   1,                           STD_LEFT_ARROW,                                STD_LEFT_ARROW,                                0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2003 */  { fnT_ARROW,                   2,                           STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2004 */  { fnT_ARROW,                   3,                           STD_UP_ARROW,                                  STD_UP_ARROW,                                  0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2005 */  { fnT_ARROW,                   4,                           STD_DOWN_ARROW,                                STD_DOWN_ARROW,                                0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2006 */  { fnT_ARROW,                   0,                           "INS",                                         "INS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2007 */  { fnT_ARROW,                   6,                           "DEL",                                         "DEL",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
+/* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
+/* 2010 */  { fnXEQMLOAD,                  TM_VALUE,                    "X.LOAD",                                      "X.LOAD",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2002 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2011 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

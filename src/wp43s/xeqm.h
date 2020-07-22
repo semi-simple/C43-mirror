@@ -26,3 +26,6 @@ void testprogram(uint16_t unusedParamButMandatory);
 void capture_sequence(char *origin, uint16_t item);
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec);
 void runkey(uint16_t item);
+
+void fnXEQMSAVE (uint16_t unusedParamButMandatory);
+void fnXEQMLOAD (uint16_t unusedParamButMandatory);

@@ -122,12 +122,7 @@
 #endif
 
 #define INLINE_TEST                     //vv dr
-//#undef INLINE_TEST
-#ifndef INLINE_TEST
-  void fnSetInlineTest          (unsigned short drConfig);
-  void fnGetInlineTestBsToX     (unsigned short unusedParamButMandatory);
-  void fnSetInlineTestXToBs     (unsigned short unusedParamButMandatory);
-#endif                                  //^^
+//#undef INLINE_TEST                    //^^
 
 #include <stdlib.h>
 #include <stdio.h>

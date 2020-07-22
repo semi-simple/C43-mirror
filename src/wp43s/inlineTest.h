@@ -31,5 +31,6 @@ void     fnSwStop             (uint8_t nr);       // Stop StopWatch, 0..3
 void fnSetInlineTest          (uint16_t drConfig);
 void fnGetInlineTestBsToX     (uint16_t unusedParamButMandatory);
 void fnSetInlineTestXToBs     (uint16_t unusedParamButMandatory);
+void fnSysFreeMem             (uint16_t unusedParamButMandatory);
 bool_t fnTestBitIsSet         (uint8_t bit);
 #endif

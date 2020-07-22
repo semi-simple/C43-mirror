@@ -59,6 +59,15 @@ void fnNop(uint16_t unusedParamButMandatory) {
 }
 
 
+
+#if !defined(GENERATE_CATALOGS) && !defined(INLINE_TEST)    //vv dr
+  void fnSetInlineTest      (uint16_t drConfig)                {};
+  void fnGetInlineTestBsToX (uint16_t unusedParamButMandatory) {};
+  void fnSetInlineTestXToBs (uint16_t unusedParamButMandatory) {};
+  void fnSysFreeMem         (uint16_t unusedParamButMandatory) {};
+#endif                                                      //^^
+
+
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 //#error runFunction
 /********************************************//**
@@ -482,7 +491,8 @@ void fnRound2                   (uint16_t unusedParamButMandatory) {}
 void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
 void fnSetInlineTestXToBs       (uint16_t unusedParamButMandatory) {}
-void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}           //^^
+void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}
+void fnSysFreeMem               (uint16_t unusedParamButMandatory) {}           //^^
 void fneRPN                     (uint16_t unusedParamButMandatory) {}
 void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
 void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
@@ -2179,7 +2189,7 @@ const item_t indexOfItems[] = {
 /* 1674 */  { itemToBeCoded,               NOPARAM,                     "1674",                                        "1674",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1675 */  { itemToBeCoded,               NOPARAM,                     "1675",                                        "1675",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1676 */  { itemToBeCoded,               NOPARAM,                     "1676",                                        "1676",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
-/* 1677 */  { itemToBeCoded,               NOPARAM,                     "1677",                                        "1677",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1677 */  { fnSysFreeMem,                NOPARAM,                     "",                                            "HEAP",                                        0,       0,       CAT_NONE, SLS_ENABLED  },
 
 /* 1678 */  { fnSetSetJM,                  JC_ERPN,                     "eRPN",                                        "eRPN",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM eRPN
 /* 1679 */  { fnSetSetJM,                  JC_HOME_TRIPLE,              "HOME.3",                                      "HOME.3",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM HOME.3

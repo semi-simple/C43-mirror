@@ -412,7 +412,7 @@ const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,   
                                      ITM_EE_STO_Z,                  ITM_EE_RCL_Z,               ITM_EE_STO_V,             ITM_EE_RCL_V,          ITM_EE_STO_I,                ITM_EE_RCL_I                  };    //JM EE
 
 #ifdef INLINE_TEST
-const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_GET_TEST_BS,             ITM_SET_TEST_BS               };    //dr
+const int16_t menu_Inl_Tst[]     = { ITM_TEST,                      ITM_NULL,                   ITM_NULL,                 ITM_SYS_FREE_RAM,      ITM_GET_TEST_BS,             ITM_SET_TEST_BS               };    //dr
 #endif
 
 
@@ -656,7 +656,6 @@ const int16_t menu_ALPHA[]        = {
 
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      ITM_XSAVE,                     ITM_XLOAD,                  CHR_CIRCUMFLEX,          CHR_UNDERSCORE,        CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
-
 
 
 #include "softmenuCatalogs.h"

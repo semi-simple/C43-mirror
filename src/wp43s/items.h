@@ -1713,7 +1713,7 @@
 #define Not_used1674                  1674
 #define Not_used1675                  1675
 #define Not_used1676                  1676
-#define Not_used1677                  1677
+#define ITM_SYS_FREE_RAM              1677   //dr
 
 #define ITM_ERPN                      1678   //JM eRPN
 #define ITM_HOMEx3                    1679   //JM HOME.3

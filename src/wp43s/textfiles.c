@@ -819,7 +819,9 @@ void fnT_ARROW(uint16_t command) {
      case 3 /*STD_UP_ARROW   */ : break;
      case 4 /*STD_DOWN_ARROW */ : break;
      case 0 /*INS            */ : break;
+#ifndef TESTSUITE_BUILD
      case 6 /*DELETE         */ : btnClicked(NULL, "16"); break;
+#endif
      default: break;
   }
   //printf(">>> T_cursorPos %d",T_cursorPos);

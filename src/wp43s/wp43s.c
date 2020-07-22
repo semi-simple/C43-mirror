@@ -164,10 +164,6 @@ float                 graph_dy;                                //JM Graph
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
-#else
-void fnSetInlineTest          (unsigned short drConfig) {};
-void fnGetInlineTestBsToX     (unsigned short unusedParamButMandatory)  {};
-void fnSetInlineTestXToBs     (unsigned short unusedParamButMandatory)  {};
 #endif                                                         //^^
 
 bool_t                hourGlassIconEnabled;

@@ -653,9 +653,13 @@ const int16_t menu_ALPHA[]        = {
                                      CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS,                           //JM 
                                      ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    -MNU_T_EDIT                      };    //JM
 
-
+/*
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      ITM_XSAVE,                     ITM_XLOAD,                  CHR_CIRCUMFLEX,          CHR_UNDERSCORE,        CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
+*/
+const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+                                     -MNU_MyAlpha,                  ITM_XSAVE,                  ITM_XLOAD,               ITM_XEDIT,             ITM_XXEQ,                     ITM_NULL,   
+                                     CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
 
 
 #include "softmenuCatalogs.h"

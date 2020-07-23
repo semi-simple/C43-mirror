@@ -377,6 +377,19 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
   }
 
   if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
+    bool_t flag_user = getSystemFlag(FLAG_USER);
+    for(int i=0; i<14; i++) {
+      if(*result == kbd_usr[i].primary) {
+        if(flag_user) {
+          tmp = kbd_usr[i].fShifted;
+        }
+        else {
+          tmp = kbd_std[i].fShifted;
+        }
+        break;
+      }
+    }
+/*
     if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
     if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
     if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else
@@ -391,6 +404,7 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
     if (*result == kbd_usr[11].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[11].fShifted) : (kbd_usr[11].fShifted); } else
     if (*result == kbd_usr[12].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[12].fShifted) : (kbd_usr[12].fShifted); } else
     if (*result == kbd_usr[13].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[13].fShifted) : (kbd_usr[13].fShifted); }
+*/
   }
 
   if(tmp !=0) {                                      //if activated key pressed 

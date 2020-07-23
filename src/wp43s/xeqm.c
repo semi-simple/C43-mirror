@@ -821,5 +821,30 @@ void fnXEQMLOAD (uint16_t XEQM_no) {
 }
 
 
+void fnXEQMEDIT                 (uint16_t unusedParamButMandatory) {
+/*  if(getRegisterDataType(REGISTER_X) == dtString) {
+    xcopy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
+    printf(">>>Aim %s\n",aimBuffer);
+    fnDrop(0);
+  }
+*/
+}
+
+
+void fnXEQMXXEQ                 (uint16_t unusedParamButMandatory) {
+  char line1[3000];
+  if(getRegisterDataType(REGISTER_X) == dtString) {
+    xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
+    fnDrop(0);
+    displaywords(line1); 
+    execute_string(line1,false); 
+    execute_string(line1,true);
+  }
+
+}
+
+
+
+
 
 

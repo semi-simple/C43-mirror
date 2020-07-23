@@ -497,6 +497,8 @@ void fneRPN                     (uint16_t unusedParamButMandatory) {}
 void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
 void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMLOAD                 (uint16_t unusedParamButMandatory) {}
+void fnXEQMEDIT                 (uint16_t unusedParamButMandatory) {}
+void fnXEQMXXEQ                 (uint16_t unusedParamButMandatory) {}
 
 
 #endif
@@ -1176,7 +1178,7 @@ const item_t indexOfItems[] = {
 /*  668 */  { fnCvtHpukW,                  divide,                      "W" STD_RIGHT_ARROW "hp" STD_UK,               "W" STD_RIGHT_ARROW "hp" STD_UK,               0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  669 */  { fnSquare,                    NOPARAM,                     "x" STD_SUP_2,                                 "x" STD_SUP_2,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  670 */  { fnCube,                      NOPARAM,                     "x" STD_SUP_3,                                 "x" STD_SUP_3,                                 0,       0,       CAT_FNCT, SLS_ENABLED  },
-/*  671 */  { fnRecall,                    TM_STORCL    /*# JM #*/,     "XEQ",                                         "XEQ",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED},   //TEMPORARY PLACEHOLDER FOR XEQ
+/*  671 */  { fnXEQMXXEQ,                  NOPARAM    /*# JM #*/,       "XEQ",                                         "XEQ",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED},   //TEMPORARY PLACEHOLDER FOR XEQ
 /*  672 */  { fnLogicalXnor,               NOPARAM,                     "XNOR",                                        "XNOR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  673 */  { fnLogicalXor,                NOPARAM,                     "XOR",                                         "XOR",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },
 /*  674 */  { fnMeanXY,                    NOPARAM,                     STD_x_BAR,                                     STD_x_BAR,                                     0,       0,       CAT_FNCT, SLS_ENABLED  },
@@ -2529,6 +2531,8 @@ const item_t indexOfItems[] = {
 /* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
 /* 2010 */  { fnXEQMLOAD,                  TM_VALUE,                    "X.LOAD",                                      "X.LOAD",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
+/* 2011 */  { fnXEQMEDIT,                  NOPARAM,                     "X.EDIT",                                      "X.EDIT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2012 */  { fnXEQMXXEQ,                  NOPARAM,                     "X.XEQ",                                       "X.XEQ",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2011 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2013 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

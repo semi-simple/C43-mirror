@@ -29,3 +29,5 @@ void runkey(uint16_t item);
 
 void fnXEQMSAVE (uint16_t unusedParamButMandatory);
 void fnXEQMLOAD (uint16_t unusedParamButMandatory);
+void fnXEQMEDIT (uint16_t unusedParamButMandatory);
+void fnXEQMXXEQ (uint16_t unusedParamButMandatory);

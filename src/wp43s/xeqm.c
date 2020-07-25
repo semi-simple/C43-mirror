@@ -717,24 +717,24 @@ running_program_jm = false;
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
   switch(selection) {
-    case  1:import_string_from_filename(line1,"XEQM01","XEQLBL 01 ~3^-4   \"3\" ENTER \"4\" CHS Y^X "                                               ); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"XEQM02","XEQLBL 02 ~1/81   \"1\" ENTER \"81\" /   "                                                  ); displaywords(line1); execute_string(line1,exec); break;
-    case  3:import_string_from_filename(line1,"XEQM03","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  4:import_string_from_filename(line1,"XEQM04","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  5:import_string_from_filename(line1,"XEQM05","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  6:import_string_from_filename(line1,"XEQM06","XEQLBL 06 ~CUBE3  \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
-    case  7:import_string_from_filename(line1,"XEQM07","XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
-    case  8:import_string_from_filename(line1,"XEQM08","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
-    case  9:import_string_from_filename(line1,"XEQM09","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
-    case 10:import_string_from_filename(line1,"XEQM10","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
-    case 11:import_string_from_filename(line1,"XEQM11","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
-    case 12:import_string_from_filename(line1,"XEQM12","XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
-    case 13:import_string_from_filename(line1,"XEQM13","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
-    case 14:import_string_from_filename(line1,"XEQM14","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
-    case 15:import_string_from_filename(line1,"XEQM15","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
-    case 16:import_string_from_filename(line1,"XEQM16","XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
-    case 17:import_string_from_filename(line1,"XEQM17","XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
-    case 18:import_string_from_filename(line1,"XEQM18","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
+    case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 ~3^-4   \"3\" ENTER \"4\" CHS Y^X "                                               ); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 ~1/81   \"1\" ENTER \"81\" /   "                                                  ); displaywords(line1); execute_string(line1,exec); break;
+    case  3:import_string_from_filename(line1,"PROGRAMS","XEQM03.TXT","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  4:import_string_from_filename(line1,"PROGRAMS","XEQM04.TXT","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  5:import_string_from_filename(line1,"PROGRAMS","XEQM05.TXT","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
+    case  6:import_string_from_filename(line1,"PROGRAMS","XEQM06.TXT","XEQLBL 06 ~CUBE3  \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
+    case  7:import_string_from_filename(line1,"PROGRAMS","XEQM07.TXT","XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
+    case  8:import_string_from_filename(line1,"PROGRAMS","XEQM08.TXT","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
+    case  9:import_string_from_filename(line1,"PROGRAMS","XEQM09.TXT","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
+    case 10:import_string_from_filename(line1,"PROGRAMS","XEQM10.TXT","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
+    case 11:import_string_from_filename(line1,"PROGRAMS","XEQM11.TXT","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
+    case 12:import_string_from_filename(line1,"PROGRAMS","XEQM12.TXT","XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
+    case 13:import_string_from_filename(line1,"PROGRAMS","XEQM13.TXT","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
+    case 14:import_string_from_filename(line1,"PROGRAMS","XEQM14.TXT","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
+    case 15:import_string_from_filename(line1,"PROGRAMS","XEQM15.TXT","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
+    case 16:import_string_from_filename(line1,"PROGRAMS","XEQM16.TXT","XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
+    case 17:import_string_from_filename(line1,"PROGRAMS","XEQM17.TXT","XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
+    case 18:import_string_from_filename(line1,"PROGRAMS","XEQM18.TXT","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
     default:;
   }
 #endif
@@ -797,12 +797,37 @@ char line1[TMP_STR_LENGTH];
 
 
 
-void fnXEQMSAVE                  (uint16_t unusedParamButMandatory) {
-printf("SAVE not yet implemented %d\n",unusedParamButMandatory);
-
-//  if(getRegisterDataType(regist) == dtString) {
-  //  stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)tmpStr3000);
-//  }
+void fnXEQMSAVE (uint16_t XEQM_no) {
+  char tt[40];
+  if(getRegisterDataType(REGISTER_X) == dtString) {
+    xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
+    tt[0]=0;
+    switch(XEQM_no) {
+      case  1:strcpy(tt, "XEQM01.TXT"); break;
+      case  2:strcpy(tt, "XEQM02.TXT"); break;
+      case  3:strcpy(tt, "XEQM03.TXT"); break;
+      case  4:strcpy(tt, "XEQM04.TXT"); break;
+      case  5:strcpy(tt, "XEQM05.TXT"); break;
+      case  6:strcpy(tt, "XEQM06.TXT"); break;
+      case  7:strcpy(tt, "XEQM07.TXT"); break;
+      case  8:strcpy(tt, "XEQM08.TXT"); break;
+      case  9:strcpy(tt, "XEQM09.TXT"); break;
+      case 10:strcpy(tt, "XEQM10.TXT"); break;
+      case 11:strcpy(tt, "XEQM11.TXT"); break;
+      case 12:strcpy(tt, "XEQM12.TXT"); break;
+      case 13:strcpy(tt, "XEQM13.TXT"); break;
+      case 14:strcpy(tt, "XEQM14.TXT"); break;
+      case 15:strcpy(tt, "XEQM15.TXT"); break;
+      case 16:strcpy(tt, "XEQM16.TXT"); break;
+      case 17:strcpy(tt, "XEQM17.TXT"); break;
+      case 18:strcpy(tt, "XEQM18.TXT"); break;
+      default:;
+    }
+    printf(">>>## %s:%s\n",tt,tmpStr3000);
+    #ifndef TESTSUITE_BUILD
+      if(tt[0]!=0) export_string_to_filename(tmpStr3000, overwrite, "PROGRAMS", tt);
+    #endif
+  }
 }
 
 
@@ -810,28 +835,32 @@ void fnXEQMLOAD (uint16_t XEQM_no) {
   printf("LOAD %d\n",XEQM_no);
   char line1[TMP_STR_LENGTH];
   line1[0]=0;
-
   XEQMENU_Selection(XEQM_no, line1, false);
-
   printf("loaded:%s\n",line1);  
+
   int16_t len = stringByteLength(line1);
+  liftStack();
   reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-  xcopy(REGISTER_STRING_DATA(REGISTER_X), line1, len);
+//  xcopy(REGISTER_STRING_DATA(REGISTER_X), line1, len);
+  strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);
 
 }
 
 
-void fnXEQMEDIT                 (uint16_t unusedParamButMandatory) {
-/*  if(getRegisterDataType(REGISTER_X) == dtString) {
-    xcopy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
-    printf(">>>Aim %s\n",aimBuffer);
+void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
+  if(getRegisterDataType(REGISTER_X) == dtString) {
+//    xcopy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
+    strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X));
     fnDrop(0);
+    fnAim(0);
+    #ifndef TESTSUITE_BUILD
+      showSoftmenu(NULL, -MNU_T_EDIT, true);
+    #endif
   }
-*/
 }
 
 
-void fnXEQMXXEQ                 (uint16_t unusedParamButMandatory) {
+void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
   char line1[3000];
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);

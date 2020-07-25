@@ -39,10 +39,15 @@ void         print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 void         print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init);
 
 void         displaywords(char *line1);
-int16_t      import_string_from_filename(char *line1, char *filename, char *fallback);
+
+#define      append  0
+#define      overwrite 1
+
+int16_t      import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback);
 int16_t      export_append_line(char *inputstring);
 
 int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);
+int16_t      export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename);
 int16_t      export_xy_to_file(double x, double y);
 
 

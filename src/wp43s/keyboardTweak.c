@@ -347,7 +347,7 @@ void Setup_MultiPresses(int16_t result){
   if(calcMode == CM_NORMAL) {
     switch(result) {
       case KEY_BACKSPACE: tmp = ITM_DROP; break;      //Set up backspace double click to DROP
-      case ITM_XEQ      : tmp = -MNU_XEQ; break;      //XEQ XEQMENU
+      case ITM_XEQ      : tmp = -MNU_XXEQ; break;      //XEQ XEQMENU
       //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
@@ -370,7 +370,7 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
   if(calcMode == CM_NORMAL) {
     switch(*result) {
       case KEY_BACKSPACE: tmp = ITM_CLSTK; break;   //backspace longpress to CLSTK
-      case ITM_XEQ      : tmp = -MNU_XEQ;  break;   //XEQ longpress to XEQMENU 
+      case ITM_XEQ      : tmp = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
       //case ITM_CHS      : tmp = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }

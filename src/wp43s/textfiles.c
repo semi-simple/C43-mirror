@@ -296,7 +296,7 @@ int f_puts (
 //###################################################################################
 
 
-int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], const char filedir[40]) {
+int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], uint8_t mode, const char filedir[40]) {
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
@@ -313,7 +313,7 @@ char line[100];               /* Line buffer */
     }
 
     /* Opens an existing file. If not exist, creates a new file. */
-    fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE);
+    if(mode == append) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_CREATE_ALWAYS | FA_WRITE);
     if (fr) {
       sprintf(line,"File open error ID001--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
@@ -322,12 +322,14 @@ char line[100];               /* Line buffer */
     }
 
     /* Seek to end of the file to append data */
-    fr = f_lseek(&fil, f_size(&fil));
-    if (fr) {
-      sprintf(line,"Seek error ID001--> %d    \n",fr);            print_linestr(line,false);
-      f_close(&fil);
-      sys_disk_write_enable(0);
-      return (int)fr;
+    if(mode == append) {
+      fr = f_lseek(&fil, f_size(&fil));
+      if (fr) {
+        sprintf(line,"Seek error ID001--> %d    \n",fr);            print_linestr(line,false);
+        f_close(&fil);
+        sys_disk_write_enable(0);
+        return (int)fr;
+      }
     }
 
     /* Create string and output */
@@ -354,21 +356,27 @@ char line[100];               /* Line buffer */
   }
 
 
-
-
-
-int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename) {
 char dirfile[40];
     //Create file name
-    strcpy(dirfile,"PROGRAMS\\C43_LOG.TXT");
+    strcpy(dirfile,dirname);
+    strcat(dirfile,"\\");
+    strcat(dirfile,filename);
+    
     sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
-    check_create_dir("PROGRAMS");      
-    if(export_append_string_to_file(tmpStr3000, dirfile) != 0) {
+    check_create_dir(dirname);      
+    if(export_append_string_to_file(tmpStr3000, mode, dirfile) != 0) {
       //ERROR ALREADY ANNOUNCED
       return 1;
     }
   return 0;
 }
+
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+  return export_string_to_filename(line1, append, "PROGRAMS", "C43_LOG.TXT");
+}
+
 
 
 
@@ -390,7 +398,7 @@ int16_t export_xy_to_file(double x, double y){
   make_TSV_dir_name();
 
   sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
-  if(export_append_string_to_file(tmpStr3000, filename_csv) != 0) {
+  if(export_append_string_to_file(tmpStr3000, append, filename_csv) != 0) {
     //ERROR ALREADY ANNOUNCED
     return 1;
   }
@@ -401,17 +409,17 @@ int16_t export_xy_to_file(double x, double y){
 
 
 
-int16_t import_string_from_filename(char *line1, char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
 char line[TMP_STR_LENGTH];        /* Line buffer */
 
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
     //Create file name
-    check_create_dir("PROGRAMS");  
-    strcpy(filename_csv,"PROGRAMS\\");
+    check_create_dir(dirname);  
+    strcpy(filename_csv,dirname);
+    strcat(filename_csv,"\\");
     strcat(filename_csv,filename);
-    strcat(filename_csv,".TXT");
     
     /* Opens an existing file. */
     fr = f_open(&fil, filename_csv, FA_READ );   //| FA_OPEN_EXISTING
@@ -437,11 +445,6 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     f_close(&fil);
     return 0;
   }
-
-
-
-//#####################################################################################
-//#####################################################################################
 
 
 
@@ -502,16 +505,16 @@ char line[100];               /* Line buffer */
 //**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t import_string_from_filename(char *line1,  char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
 
   FILE *infile;
   char dirfile[40];
   char onechar[2];
 
-  strcpy(dirfile,"PROGRAMS/");
+  strcpy(dirfile,dirname);
+  strcat(dirfile,"/");
   strcat(dirfile,filename);
-  strcat(dirfile,".TXT");
-  
+    
   infile = fopen(dirfile, "rb");
   if (infile == NULL) {
     printf("Cannot load %s\n",dirfile);
@@ -536,19 +539,20 @@ return 0;
 
 
 
-
-int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename) {
 
   FILE *outfile;
   char dirfile[40];
   uint16_t fr = 0;
   char line[100];               /* Line buffer */
 
-  strcpy(dirfile,"PROGRAMS/C43_LOG.TXT");
-
-  outfile = fopen(dirfile, "ab");
+  strcpy(dirfile,dirname);
+  strcat(dirfile,"/");
+  strcat(dirfile,filename);
+    
+  if(mode == append) outfile = fopen(dirfile, "ab"); else outfile = fopen(dirfile, "wb"); 
   if (outfile == NULL) {
-    printf("export_string_to_file: Cannot open to append: %s %s\n",dirfile,line1);
+    printf("export_string_to_filename: Cannot open to append: %s %s\n",dirfile,line1);
     return 1;
   }
 
@@ -567,6 +571,15 @@ int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
   }
   return 0;  
 }
+
+
+
+int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
+  return export_string_to_filename(line1, append, "PROGRAMS", "C43_LOG.TXT");
+}
+
+
+
 
 
 

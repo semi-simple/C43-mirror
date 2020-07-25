@@ -2053,8 +2053,9 @@
 #define ITM_XLOAD                     2010
 #define ITM_XEDIT                     2011
 #define ITM_XXEQ                      2012
+#define MNU_XXEQ                      2013
 
-#define LAST_ITEM                     2013   //JM
+#define LAST_ITEM                     2014   //JM
 
 #define CHR_PROD_SIGN                 9999
 

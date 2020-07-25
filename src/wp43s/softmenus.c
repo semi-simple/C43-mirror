@@ -226,7 +226,7 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PGMTST,            -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
+                                     ITM_NULL,                      ITM_NULL,                   -MNU_XXEQ,                ITM_PGMTST,            -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -653,13 +653,11 @@ const int16_t menu_ALPHA[]        = {
                                      CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS,                           //JM 
                                      ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    -MNU_T_EDIT                      };    //JM
 
-/*
+
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
-                                     ITM_XSAVE,                     ITM_XLOAD,                  CHR_CIRCUMFLEX,          CHR_UNDERSCORE,        CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
-*/
-const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
-                                     -MNU_MyAlpha,                  ITM_XSAVE,                  ITM_XLOAD,               ITM_XEDIT,             ITM_XXEQ,                     ITM_NULL,   
                                      CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
+
+const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XXEQ,              ITM_XEQ,                      -MNU_XEQ                                                };   //JM
 
 
 #include "softmenuCatalogs.h"
@@ -773,6 +771,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
   {.menuId = -MNU_T_EDIT,      .numItems = sizeof(menu_T_EDIT     )/sizeof(int16_t), .softkeyItem = menu_T_EDIT      },  //JM TEXTEDIT
+  {.menuId = -MNU_XXEQ,        .numItems = sizeof(menu_XXEQ       )/sizeof(int16_t), .softkeyItem = menu_XXEQ        },  //JM TEXTEDIT
 #ifdef INLINE_TEST                                                              //vv dr
   {.menuId = -MNU_INL_TST,     .numItems = sizeof(menu_Inl_Tst    )/sizeof(int16_t), .softkeyItem = menu_Inl_Tst     },
 #endif                                                                          //^^

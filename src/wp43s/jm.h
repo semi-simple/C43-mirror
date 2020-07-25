@@ -64,7 +64,7 @@ Modes available in the mode menu:
 //This is to allow the creation of a logfile
 //#define RECORDLOG
 
-//This is to really see what the LCD in the SIM does. UGLY.
+//This is to really see what the LCD in the SIM does while programs are running. UGLY.
 #define FULLUPDATE
 
 

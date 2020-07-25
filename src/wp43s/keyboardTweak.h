@@ -31,6 +31,9 @@ void     resetShiftState      (void);
 void     showShiftState       (void);
 
 
+void     fnCase              (uint16_t unusedParamButMandatory);
+void     processKeyAction    (int16_t item); //JM
+
 #ifndef TESTSUITE_BUILD
 bool_t   DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
 void 	 DOT_F();
@@ -99,3 +102,8 @@ typedef struct {
 #endif
   uint8_t  state;             ///<
 } kb_timer_t;
+
+
+void fnT_ARROW(uint16_t command);
+
+

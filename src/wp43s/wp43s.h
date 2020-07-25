@@ -613,6 +613,7 @@ extern int16_t               lastCnstMenuPos;
 extern int16_t               lastSyFlMenuPos;
 extern int16_t               lastAIntMenuPos;
 extern int16_t               showFunctionNameItem;
+extern int16_t               T_cursorPos;                 //JMCURSOR
 extern int16_t               SHOWregis;                   //JMSHOW
 extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];

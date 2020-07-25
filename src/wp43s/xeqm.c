@@ -848,14 +848,27 @@ void fnXEQMLOAD (uint16_t XEQM_no) {
 
 
 void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
-  if(getRegisterDataType(REGISTER_X) == dtString) {
-//    xcopy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
-    strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X));
-    fnDrop(0);
-    fnAim(0);
-    #ifndef TESTSUITE_BUILD
-      showSoftmenu(NULL, -MNU_T_EDIT, true);
-    #endif
+  if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
+    if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
+      strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_Y)); 
+      T_cursorPos = stringByteLength(aimBuffer);
+      fnDrop(0);
+      refreshRegisterLine(REGISTER_T);
+      refreshRegisterLine(REGISTER_Z);
+      refreshRegisterLine(REGISTER_Y);
+      refreshRegisterLine(REGISTER_X);
+    }
+  }
+  else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
+    if(stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) < AIM_BUFFER_LENGTH) {
+      strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X));
+      T_cursorPos = stringByteLength(aimBuffer);
+      fnDrop(0);
+      fnAim(0);
+      #ifndef TESTSUITE_BUILD
+        showSoftmenu(NULL, -MNU_T_EDIT, true);
+      #endif
+    }
   }
 }
 

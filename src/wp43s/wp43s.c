@@ -89,6 +89,7 @@ int16_t               lastCnstMenuPos;
 int16_t               lastSyFlMenuPos;
 int16_t               lastAIntMenuPos;
 int16_t               showFunctionNameItem;
+int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
 uint16_t              numberOfLocalFlags;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
@@ -348,8 +349,8 @@ void setupDefaults(void) {
   shiftF = false;
   shiftG = false;
 
-  reset_jm_defaults();
-
+  reset_jm_defaults();                                         //JM
+  T_cursorPos = 0;                                             //JMCURSOR
   doRefreshSoftMenu = true;                                    //dr
   ULFL = false;                                                //JM Underline
   ULGL = false;                                                //JM Underline

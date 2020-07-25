@@ -1478,17 +1478,27 @@ void refreshRegisterLine(calcRegister_t regist) {
         }
 
         else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
-//JMCURSORvv SPLIT STRING AT CURSOR POSITION
-          uint8_t T_cursorPos_tmp;
+          //JMCURSORvv SPLIT STRING AT CURSOR POSITION AND CHANGE CURSOR TYPE TO STATIC LINE INDICATING MID STRING POSITION
+          int16_t T_cursorPos_tmp, tmpxy, tmp;
+          tmp = 0;                                                                                       //Determine offset to be able to display the latter part of the string
+          while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > SCREEN_WIDTH-6)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
+            tmp = stringNextGlyph(aimBuffer, tmp);
+          }
+          if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
+          if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
           T_cursorPos_tmp = aimBuffer[T_cursorPos];
-          aimBuffer[T_cursorPos] = 0;
-          xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-          if(xCursor !=0) xCursor--;   //Adjust cursor position marginally closer to letter on left
-          aimBuffer[T_cursorPos] = T_cursorPos_tmp;
-          T_cursorPos_tmp = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 6 /*Normally 8, reduced either side by 1*/, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-//JMCURSOR^^ REPLACE STATEMENT BELOW
+          aimBuffer[T_cursorPos] = 0;                                                                    //Block aimbuffer at the cursor
+          xCursor = showString(aimBuffer + tmp, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);  //display up to the cursor
+          aimBuffer[T_cursorPos] = T_cursorPos_tmp;                                                      //Restore aimbuffer
+          if(xCursor !=0) xCursor--;                                                                     //Adjust cursor position marginally closer to the letter on the left
+          if(T_cursorPos <  stringByteLength(aimBuffer)) {tmpxy = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 3, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);}
+          if(T_cursorPos == stringByteLength(aimBuffer)) {cursorEnabled = true;}
+          else {
+            cursorEnabled = false;
+            tmpxy = Y_POSITION_OF_AIM_LINE + 6; while (tmpxy < Y_POSITION_OF_AIM_LINE + 26) {setPixel(xCursor,tmpxy); setPixel(xCursor+1,tmpxy); tmpxy++;}
+          }
+          //JMCURSOR^^ REPLACES THE STATEMENT BELOW
           //xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-          cursorEnabled = true;
         }
 
         else if(   getSystemFlag(FLAG_FRACT)

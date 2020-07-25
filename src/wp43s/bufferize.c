@@ -249,30 +249,31 @@ void addItemToBuffer(uint16_t item) {
         displayBugScreen(errorMessage);
       }
       else {
-//JMCURSOR vv add the character mid-string
+        //JMCURSOR vv ADD THE CHARACTER MID-STRING
         uint16_t ix = 0; 
         uint16_t in = 0;
-        while (ix<T_cursorPos && in<T_cursorPos) {  //find the ix position in aimBuffer before the cursor
-          in = stringNextGlyph(aimBuffer, in);      //find the in position in aimBuffer which is then the cursor position
+        while (ix<T_cursorPos && in<T_cursorPos) {              //search the ix position in aimBuffer before the cursor
+          in = stringNextGlyph(aimBuffer, in);                  //find the in position in aimBuffer which is then the cursor position
           ix++;  
         }
         T_cursorPos = in;
-        char ixaa[500]; 
-        xcopy(ixaa, aimBuffer,in);                  //copy everything up to the cursor position
-        ixaa[in]=0;
-        strcat(ixaa,indexOfItems[item].itemSoftmenuName);  //add new character
-        strcat(ixaa,aimBuffer + in);                //copy rest of the aimbuffer
-        strcpy(aimBuffer,ixaa);
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
-//JMCURSOR ^^ replace the following xcopy which adds tio the end of the string
-
+        char ixaa[AIM_BUFFER_LENGTH];                           //prepare temporary aimBuffer
+        xcopy(ixaa, aimBuffer,in);                              //copy everything up to the cursor position
+        ixaa[in]=0;                                             //stop new buffer at cursor position to be able to insert new character 
+        strcat(ixaa,indexOfItems[item].itemSoftmenuName);       //add new character
+        strcat(ixaa,aimBuffer + in);                            //copy rest of the aimbuffer
+        strcpy(aimBuffer,ixaa);                                 //return temporary string to aimBuffer
+        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
+        //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
         // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
-        if(stringWidth(aimBuffer, &standardFont, true, true) > SCREEN_WIDTH - 8) { // 8 is the width of the cursor
+
+/*        if(stringWidth(aimBuffer, &standardFont, true, true) > SCREEN_WIDTH - 8) { // 8 is the width of the cursor
           btnClicked(NULL, "16"); // back space
           #ifdef PC_BUILD
             showInfoDialog("In function addItemToBuffer:", "the aimBuffer string is too wide!", NULL, NULL);
           #endif
         }
+*/
       }
     }
 

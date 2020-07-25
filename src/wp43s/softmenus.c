@@ -29,7 +29,7 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_MA14,              ITM_MA15,                    ITM_MA16,
+const int16_t menu_MyAlpha[]     = { ITM_MA11,                      ITM_MA12,                   ITM_MA13,                 ITM_XEDIT,             ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW, /*ITM_MA14,              ITM_MA15,                    ITM_MA16,*/ //JM TEMPORARY
                                      ITM_MA21,                      ITM_MA22,                   ITM_MA23,                 ITM_MA24,              ITM_MA25,                    ITM_MA26,
                                      ITM_MA31,                      ITM_MA32,                   ITM_MA33,                 ITM_MA34,              ITM_MA35,                    ITM_MA36                      };
 
@@ -649,12 +649,12 @@ const int16_t menu_ST_GRAPH[]        = {
 
 const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_A_Z,                -MNU_ALPHADOT,         -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
-                                     CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS,                           //JM 
-                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 ITM_NULL,              ITM_NULL,                    -MNU_T_EDIT                      };    //JM
+/* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_A_Z,                 ITM_XEDIT,             ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW, 
+                                     CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                 -MNU_ALPHADOT,         -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
+                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS                     };    //JM
 
 
-const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_T_DELETE,               ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT, /*ITM_T_DELETE,*/ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
 
 const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XXEQ,              ITM_XEQ,                      -MNU_XEQ                                                };   //JM

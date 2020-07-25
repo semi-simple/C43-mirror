@@ -476,7 +476,6 @@ void fnShow_SCROLL              (uint16_t unusedParamButMandatory) {}
 void fnP_All_Regs               (uint16_t unusedParamButMandatory) {}
 void fnToPolar2                 (uint16_t unusedParamButMandatory) {}
 void fnToRect2                  (uint16_t unusedParamButMandatory) {}
-void fnKeyCase                  (uint16_t unusedParamButMandatory) {}
 void fnArg_all                  (uint16_t unusedParamButMandatory) {}
 void fnMultiplySI               (uint16_t unusedParamButMandatory) {}
 void fn_cnst_op_j               (uint16_t unusedParamButMandatory) {}
@@ -485,8 +484,8 @@ void fn_cnst_op_a               (uint16_t unusedParamButMandatory) {}
 void fn_cnst_0_cpx              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_1_cpx              (uint16_t unusedParamButMandatory) {}
 void fnStatList                 (uint16_t unusedParamButMandatory) {}
-void fnXEQMENU                  (uint16_t unusedParamButMandatory) {}         //^^
-void flagBrowser_old            (uint16_t unusedParamButMandatory) {}         //^^
+void fnXEQMENU                  (uint16_t unusedParamButMandatory) {}
+void flagBrowser_old            (uint16_t unusedParamButMandatory) {}
 void fnRound2                   (uint16_t unusedParamButMandatory) {}
 void fnRoundi2                  (uint16_t unusedParamButMandatory) {}
 void fnSetInlineTest            (uint16_t unusedParamButMandatory) {}           //vv dr
@@ -499,7 +498,8 @@ void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMLOAD                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMEDIT                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMXXEQ                 (uint16_t unusedParamButMandatory) {}
-
+void fnCase                     (uint16_t unusedParamButMandatory) {}
+                                                                                //JM ^^
 
 #endif
 
@@ -2252,7 +2252,7 @@ const item_t indexOfItems[] = {
 /* 1733 */  { addItemToBuffer,             CHR_qoppa,                   "",                                            STD_qoppa,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                   0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
-/* 1736 */  { addItemToBuffer,             CHR_case,                    "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
+/* 1736 */  { fnCase,                      NOPARAM,                     "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
 /* 1737 */  { fnBASE_Hash,                 NOPARAM,                     "##" STD_RIGHT_ARROW "INT",                    "##" STD_RIGHT_ARROW "INT",                    0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM ##
 /* 1738 */  { itemToBeCoded,               NOPARAM,                     "XEQM",                                        "XEQM",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 

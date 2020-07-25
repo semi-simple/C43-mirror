@@ -204,7 +204,8 @@ void saveCalc(void) {
   save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
   save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
   save(&indic_x,                            sizeof(indic_x),                            backup);
-  save(&indic_y,                            sizeof(indic_y),                            backup);   //JM ^^
+  save(&indic_y,                            sizeof(indic_y),                            backup);
+  save(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -379,7 +380,8 @@ void restoreCalc(void) {
     restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
     restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
     restore(&indic_x,                            sizeof(indic_x),                            backup);
-    restore(&indic_y,                            sizeof(indic_y),                            backup);    //JM ^^
+    restore(&indic_y,                            sizeof(indic_y),                            backup);
+    restore(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
 
 
     fclose(backup);

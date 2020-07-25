@@ -51,6 +51,4 @@ int16_t      export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t
 int16_t      export_xy_to_file(double x, double y);
 
 
-int16_t T_cursorPos;
 #define T_CR            "\x0D"
-void fnT_ARROW(uint16_t command);

@@ -798,12 +798,12 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           aimBuffer[0] = 0;
         } else {
-          if(getSystemFlag(FLAG_ASLIFT)) {
-          liftStack();
-          clearSystemFlag(FLAG_ASLIFT);
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          aimBuffer[0] = 0;
-          }
+//          if(getSystemFlag(FLAG_ASLIFT)) {
+  //          liftStack();
+    //        clearSystemFlag(FLAG_ASLIFT);               //TOCHECK
+      //      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+            aimBuffer[0] = 0;
+//          }
         }
       }
       break;
@@ -818,9 +818,9 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
-        liftStack();
-        clearSystemFlag(FLAG_ASLIFT);
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          liftStack();
+          clearSystemFlag(FLAG_ASLIFT);               //TOCHECK
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         }
       }
       break;

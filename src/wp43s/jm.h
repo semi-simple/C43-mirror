@@ -81,9 +81,8 @@ Modes available in the mode menu:
 #define JM_TO_3S_CTFF 	   600   //ms TO_3S_CTFF
 #define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
+void jm_show_calc_state(char comment[]);
 void reset_jm_defaults(void);
-
-uint8_t softmenuStackPointer_MEM; //For popping on and off the HOME menu
 
 
 //keyboard.c  screen.c

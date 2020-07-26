@@ -2881,12 +2881,12 @@ void setupUI(void) {
   #endif
 
   // 1st row: F1 to F6 buttons
-  btn11 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
-  btn12 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
-  btn13 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
-  btn14 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
-  btn15 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
-  btn16 = gtk_button_new_with_label(" ");        //JM I prefer blank to "^"
+  btn11 = gtk_button_new_with_label("");
+  btn12 = gtk_button_new_with_label("");
+  btn13 = gtk_button_new_with_label("");
+  btn14 = gtk_button_new_with_label("");
+  btn15 = gtk_button_new_with_label("");
+  btn16 = gtk_button_new_with_label("");
 
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
   gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
@@ -4026,19 +4026,19 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     calcMode = CM_AIM;
   }
   else {
-  if(!SH_BASE_AHOME) {  //TOCHECK
-//    showSoftmenu(NULL, -MNU_MyAlpha, false);      //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-  //  softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
-
+  if(!SH_BASE_AHOME) {
     softmenuStackPointerBeforeAIM = softmenuStackPointer;
     if(softmenuStackPointer == 0) {
       showSoftmenu(NULL, -MNU_MyAlpha, false);
     }
-  }
+  } else
   if(SH_BASE_AHOME) {
-    showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-    softmenuStackPointer_MEM = -1;                //JM ALPHA-HOME  Initialize also the pointer
+    softmenuStackPointerBeforeAIM = softmenuStackPointer;
+    if(softmenuStackPointer == 0) {
+      showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+    }
   }
+
     alphaCase = AC_UPPER;
     calcMode = CM_AIM;
     nextChar = NC_NORMAL;

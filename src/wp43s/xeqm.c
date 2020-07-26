@@ -27,40 +27,44 @@
 void capture_sequence(char *origin, uint16_t item) {
    char line1[TMP_STR_LENGTH];
    char ll[20];
-   uint16_t ix;
 #ifdef PC_BUILD
    //printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
 #endif
 
+    line1[0]=0;
     ll[0]=0; ll[1]=0;
     switch (item) {
       case  684: strcpy(ll,"X<>Y"); break;
       case  698: strcpy(ll,"Y^X" ); break;
       case  784: strcpy(ll,"/"   ); break;
-      case  890: ll[0]=48; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  891: ll[0]=49; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  892: ll[0]=50; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  893: ll[0]=51; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  894: ll[0]=52; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  895: ll[0]=53; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  896: ll[0]=54; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  897: ll[0]=55; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  898: ll[0]=56; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  899: ll[0]=57; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case 1310: ll[0]=46; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
-      case 1487: ll[0]=69; strcpy(line1," \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
+      case  890: ll[0]=48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  891: ll[0]=49; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  892: ll[0]=50; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  893: ll[0]=51; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  894: ll[0]=52; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  895: ll[0]=53; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  896: ll[0]=54; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  897: ll[0]=55; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  898: ll[0]=56; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  899: ll[0]=57; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case 1310: ll[0]=46; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
+      case 1487: ll[0]=69; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
       default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);
                }  
     }
-    ix = 0;
-    while (ll[ix] != 0) {
-      if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
-      ix++;
-    }
-    sprintf(line1, " %4d //%10s//\n",item,ll);
+
+//    uint16_t ix;
+//    ix = 0;                  //CONVERT OUTPUT ## for >128 characters
+//    while (ll[ix] != 0) {
+//    if (( (ll[ix] & 128) == 128) || ll[ix] < 32) {ll[ix] = 35;}
+//    ix++;
+//    }
+
+    if(line1[0]==0) sprintf(line1, " %4d //%10s",item,ll);
 
     #ifndef TESTSUITE_BUILD
-    export_string_to_file(line1);
+    stringToUtf8(line1, (uint8_t *)tmpStr3000);
+    export_string_to_file(tmpStr3000);
     #endif
 }
 
@@ -797,10 +801,10 @@ char line1[TMP_STR_LENGTH];
 
 
 
-void fnXEQMSAVE (uint16_t XEQM_no) {
-  char tt[40];
+void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGISTER TO DISK
+  char tt[40]; 
   if(getRegisterDataType(REGISTER_X) == dtString) {
-    xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
+    xcopy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
     tt[0]=0;
     switch(XEQM_no) {
       case  1:strcpy(tt, "XEQM01.TXT"); break;
@@ -823,7 +827,13 @@ void fnXEQMSAVE (uint16_t XEQM_no) {
       case 18:strcpy(tt, "XEQM18.TXT"); break;
       default:;
     }
-    printf(">>>## %s:%s\n",tt,tmpStr3000);
+
+    printf(">>> str ## %s:%s\n",tt,tmpStr3000 + TMP_STR_LENGTH/2);
+    //uint16_t ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,tmpStr3000[ix]);ix++;}
+    stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
+    printf(">>> utf ## %s:%s\n",tt, tmpStr3000);
+    //ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,ll[ix]);ix++;}
+
     #ifndef TESTSUITE_BUILD
       if(tt[0]!=0) export_string_to_filename(tmpStr3000, overwrite, "PROGRAMS", tt);
     #endif
@@ -831,18 +841,19 @@ void fnXEQMSAVE (uint16_t XEQM_no) {
 }
 
 
-void fnXEQMLOAD (uint16_t XEQM_no) {
+void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to X-REGISTER
   printf("LOAD %d\n",XEQM_no);
   char line1[TMP_STR_LENGTH];
   line1[0]=0;
   XEQMENU_Selection(XEQM_no, line1, false);
-  printf("loaded:%s\n",line1);  
-
-  int16_t len = stringByteLength(line1);
+  uint16_t ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}
+  printf(">>> loaded: utf:%s\n",line1);  
+  utf8ToString((uint8_t *)line1,line1 + TMP_STR_LENGTH/2);
+  ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}  printf(">>> loaded: str:%s\n",line1 + TMP_STR_LENGTH/2);  
+  int16_t len = stringByteLength(line1 + TMP_STR_LENGTH/2);
   liftStack();
   reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-//  xcopy(REGISTER_STRING_DATA(REGISTER_X), line1, len);
-  strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);
+  strcpy(REGISTER_STRING_DATA(REGISTER_X),line1 + TMP_STR_LENGTH/2);
 
 }
 

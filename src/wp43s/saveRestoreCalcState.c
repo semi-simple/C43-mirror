@@ -206,6 +206,11 @@ void saveCalc(void) {
   save(&indic_x,                            sizeof(indic_x),                            backup);
   save(&indic_y,                            sizeof(indic_y),                            backup);
   save(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
+  save(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
+  save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
+  save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
+  save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
+
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -382,10 +387,18 @@ void restoreCalc(void) {
     restore(&indic_x,                            sizeof(indic_x),                            backup);
     restore(&indic_y,                            sizeof(indic_y),                            backup);
     restore(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
+    restore(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
+    restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
+    restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
+    restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
 
 
     fclose(backup);
     printf("End of calc's restoration\n");
+
+    if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
+    
+
 
     #if (DEBUG_REGISTER_L == 1)
       refreshRegisterLine(REGISTER_X); // to show L register

@@ -801,90 +801,6 @@ void JM_LINE2(int16_t xx, int16_t yy) {                          // To draw the 
 #endif
 
 
-/*
-void JM_DOT2(int16_t xx, int16_t yy) {                          // To draw the dots for radiobutton on screen
-
-  setPixel (xx+5,yy+9);
-  setPixel (xx+6,yy+9);
-  setPixel (xx+7,yy+9);
-  setPixel (xx+8,yy+8);
-  setPixel (xx+9,yy+7);
-  setPixel (xx+9,yy+6);
-  setPixel (xx+9,yy+5);
-  setPixel (xx+9,yy+4);
-  setPixel (xx+9,yy+3);
-  setPixel (xx+8,yy+2);
-  setPixel (xx+7,yy+1);
-  setPixel (xx+6,yy+1);
-  setPixel (xx+5,yy+1);
-  setPixel (xx+4,yy+1);
-  setPixel (xx+3,yy+1);
-  setPixel (xx+2,yy+2);
-  setPixel (xx+1,yy+3);
-  setPixel (xx+1,yy+4);
-  setPixel (xx+1,yy+5);
-  setPixel (xx+1,yy+6);
-  setPixel (xx+1,yy+7);
-  setPixel (xx+2,yy+8);
-  setPixel (xx+3,yy+9);
-  setPixel (xx+4,yy+9);
-  setPixel (xx+5,yy+8);
-  setPixel (xx+6,yy+8);
-  setPixel (xx+7,yy+8);
-  setPixel (xx+7,yy+7);
-  setPixel (xx+8,yy+7);
-  setPixel (xx+8,yy+6);
-  setPixel (xx+8,yy+5);
-  setPixel (xx+8,yy+4);
-  setPixel (xx+8,yy+3);
-  setPixel (xx+7,yy+3);
-  setPixel (xx+7,yy+2);
-  setPixel (xx+6,yy+2);
-  setPixel (xx+5,yy+2);
-  setPixel (xx+4,yy+2);
-  setPixel (xx+3,yy+2);
-  setPixel (xx+3,yy+3);
-  setPixel (xx+2,yy+3);
-  setPixel (xx+2,yy+4);
-  setPixel (xx+2,yy+5);
-  setPixel (xx+2,yy+6);
-  setPixel (xx+2,yy+7);
-  setPixel (xx+3,yy+7);
-  setPixel (xx+3,yy+8);
-  setPixel (xx+4,yy+8);
-  clearPixel (xx+5,yy+7);
-  clearPixel (xx+6,yy+7);
-//clearPixel (xx+6,yy+6);
-  clearPixel (xx+7,yy+6);
-  clearPixel (xx+7,yy+5);
-  clearPixel (xx+7,yy+4);
-//clearPixel (xx+6,yy+4);
-  clearPixel (xx+6,yy+3);
-  clearPixel (xx+5,yy+3);
-  clearPixel (xx+4,yy+3);
-//clearPixel (xx+4,yy+4);
-  clearPixel (xx+3,yy+4);
-  clearPixel (xx+3,yy+5);
-  clearPixel (xx+3,yy+6);
-//clearPixel (xx+4,yy+6);
-  clearPixel (xx+4,yy+7);
-//clearPixel (xx+5,yy+6);
-//clearPixel (xx+6,yy+5);
-//clearPixel (xx+5,yy+4);
-//clearPixel (xx+4,yy+5);
-  setPixel (xx+5,yy+5);
-  setPixel (xx+5,yy+6);
-  setPixel (xx+6,yy+6);
-  setPixel (xx+6,yy+5);
-  setPixel (xx+6,yy+4);
-  setPixel (xx+5,yy+4);
-  setPixel (xx+4,yy+4);
-  setPixel (xx+4,yy+5);
-  setPixel (xx+4,yy+6);
-}
-*/
-
-
 #define RB_EXTRA_BORDER
 //#undef RB_EXTRA_BORDER
 #define RB_CLEAR_CENTER
@@ -1531,6 +1447,68 @@ printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
 }
 
 
+
+void rolloutSoftmenus(void) {                                       //JM vv
+  int8_t ix;
+  if(softmenuStackPointer == 0) return; 
+  else {
+    doRefreshSoftMenu = true;     //dr
+    ix = 1;
+    while(ix <= softmenuStackPointer) {
+      softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
+      softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
+      ix++;
+    }
+    softmenuStackPointer--;
+  }
+}
+
+#define ROLLOUTDEBUG
+void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
+  int8_t ix;
+  #ifdef ROLLOUTDEBUG
+  printf(">>> softmenuStackPointer  PRE=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
+  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
+  #endif
+  if(softmenuStackPointer == 0) return; 
+  else {
+    ix = softmenuStackPointer;
+    while(ix>1 && softmenuStack[ix-1].softmenu != target) {
+      ix--;
+    }
+    if(softmenuStack[ix-1].softmenu == target) {
+      rolloutSoftmenus();
+      rolloutSoftmenusIncluding(target);
+    }
+  }
+  #ifdef ROLLOUTDEBUG
+  printf(">>> softmenuStackPointer POST=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
+  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
+  #endif
+}
+
+
+int16_t mm(int16_t id) {
+  int16_t m;
+  m = 0;
+  if(id != 0) { // Search by ID
+    while(softmenu[m].menuId != 0) {
+      //printf(">>> mm %d %d %s \n",id, softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemSoftmenuName);
+      if(softmenu[m].menuId == id) {
+       break;
+      }
+      m++;
+    }
+  }
+  return m;
+}
+
+
+
+                                                              //JM ^^
+
+
+
 //JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
 //        Here a HOME menu config can be loaded from disk
 /*void Load_HOME(void) {
@@ -1571,6 +1549,9 @@ void initSoftmenuStack(int16_t softmenu) {
  * \return void
  ***********************************************/
 void pushSoftmenu(int16_t softmenu) {
+printf(">>> ###### pushing %d\n",softmenu);
+  rolloutSoftmenusIncluding(softmenu);   //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
+ 
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
     softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
@@ -1629,6 +1610,7 @@ void popSoftmenu(void) {
  ***********************************************/
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
+printf(">>> ###### showsoftmenu %d\n",id);
 
   if(id == -MNU_FCNS) {
     alphaSelectionMenu = ASM_FCNS;

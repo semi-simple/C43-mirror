@@ -203,17 +203,20 @@ void fg_processing_jm(void) {
             shiftF = false;  // Set it up, for flags to be cleared below.
             shiftG = true;
             if(HOME3) {
-              if((softmenuStackPointer > 0) && (softmenuStackPointer_MEM == softmenuStackPointer)) {                          //JM shifts
+#ifdef PC_BUILD
+printf(">>> ktweak ####### mmMNU_HOME=%d, mmMNU_ALPHA=%d, softmenuStackPointer=%d, stack: ",mm_MNU_HOME, mm_MNU_ALPHA, softmenuStackPointer);
+int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d:%d ",ix,softmenuStack[ix].softmenu); ix++;} printf("\n");
+#endif
+              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {                          //JM shifts
                 popSoftmenu();                                                                                                //JM shifts
               }
               else {
                 if(calcMode == CM_AIM) {                                                                                      //JM shifts
-                  showSoftmenu(NULL, -MNU_ALPHA, true);                                                                       //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
+//CHECK                showSoftmenu(NULL, -MNU_ALPHA, true);                                                                       //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
                 }
                 else {                                                                                                        //JM SHIFTS
                   showSoftmenu(NULL, -MNU_HOME, true);                                                                        //JM shifts  //JM ALPHA-HOME
                 }                                                                                                             //JM shifts                                                                                                                              //JM shifts
-                softmenuStackPointer_MEM = softmenuStackPointer;                                                              //JM shifts
               }
             }                                                                                                                 //JM shifts
           }

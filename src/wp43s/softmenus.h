@@ -18,7 +18,7 @@
  * \file softmenu.h
  ***********************************************/
 
-#define MY_ALPHA_MENU    0  // This is the index of the MyAlpha   softmenu in the softmenu[] array
+#define MY_ALPHA_MENU_CNST    0  // This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT 23
 
 /********************************************//**
@@ -47,7 +47,11 @@ void initSoftmenuStack      (int16_t softmenu);
 void pushSoftmenu           (int16_t softmenu);
 void popSoftmenu            (void);
 void setCatalogLastPos      (void);
-//void Load_HOME              (void);   //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
+
+void rolloutSoftmenusIncluding(int16_t target);      //JM
+int16_t mm(int16_t id);                              //JM
+
+//void Load_HOME              (void);              //JMHOMEDEMO: NOTE REMOVE comment TO MAKE JMHOME DEMO WORK
 
 const int16_t menu_A_HOME[360];   //JM
 //const int16_t menu_HOME[360];     //JM

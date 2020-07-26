@@ -592,7 +592,7 @@ extern char                  tamBuffer[TAM_BUFFER_LENGTH];
 extern char                  asmBuffer[5];
 extern char                  oldTime[8];
 extern char                  dateTimeString[12];
-extern softmenuStack_t       softmenuStack[7];
+extern softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];         //JM Bugfix was 7. Needs to be the same as in screen.h
 extern registerDescriptor_t  reg[112];
 extern registerDescriptor_t  savedStackRegister[9+1];
 extern int16_t               tamFunction;
@@ -615,6 +615,9 @@ extern int16_t               lastAIntMenuPos;
 extern int16_t               showFunctionNameItem;
 extern int16_t               T_cursorPos;                 //JMCURSOR
 extern int16_t               SHOWregis;                   //JMSHOW
+extern int16_t               mm_MNU_HOME;                 //JM
+extern int16_t               mm_MNU_ALPHA;                    //JM
+extern int16_t               MY_ALPHA_MENU;
 extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern dataBlock_t          *allLocalRegisterPointer;

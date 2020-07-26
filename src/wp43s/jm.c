@@ -24,6 +24,18 @@
 
 #include "wp43s.h"
 
+
+void jm_show_calc_state(char comment[]) {
+
+  printf("%s\n",comment);
+  printf("calcMode: %d (CM_AIM=%d) softmenuStackPointer=%d\n",calcMode, CM_AIM, softmenuStackPointer);
+  printf("softmenuStack[softmenuStackPointer-1].softmenu=%d MY_ALPHA_MENU=%d    softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId=%d -MNU_ALPHA=%d\n",softmenuStack[softmenuStackPointer-1].softmenu,MY_ALPHA_MENU,softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId, -MNU_ALPHA);
+  int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d:%d ",ix, softmenuStack[ix].softmenu); ix++;} printf("\n");
+
+}
+
+
+
 void reset_jm_defaults(void) {
     SHOWregis = 9999;                                          //JMSHOW
 
@@ -199,6 +211,8 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
     //fnInfo(SH_BASE_AHOME);
+    if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA;
+    else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
     fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 

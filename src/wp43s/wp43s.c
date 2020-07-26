@@ -68,7 +68,7 @@ char                  tamBuffer[TAM_BUFFER_LENGTH];
 char                  asmBuffer[5];
 char                  oldTime[8];
 char                  dateTimeString[12];
-softmenuStack_t       softmenuStack[7];
+softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];          //JM bugfix
 registerDescriptor_t  reg[112];
 registerDescriptor_t  savedStackRegister[9+1];
 int16_t               tamFunction;
@@ -91,6 +91,9 @@ int16_t               lastAIntMenuPos;
 int16_t               showFunctionNameItem;
 int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
+int16_t               mm_MNU_HOME;                 //JM
+int16_t               mm_MNU_ALPHA;                //JM
+int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
 uint16_t              numberOfLocalFlags;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 dataBlock_t          *allLocalRegisterPointer;
@@ -350,6 +353,9 @@ void setupDefaults(void) {
   shiftG = false;
 
   reset_jm_defaults();                                         //JM
+  mm_MNU_HOME       = mm(-MNU_HOME);                           //JM
+  mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM
+  if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
   T_cursorPos = 0;                                             //JMCURSOR
   doRefreshSoftMenu = true;                                    //dr
   ULFL = false;                                                //JM Underline
@@ -367,7 +373,6 @@ void setupDefaults(void) {
 #endif                                                         //^^
   strcpy(filename_csv,"DEFAULT.CSV");                          //JMCSV
   mem__32=0;                                                   //JMCSV
-  softmenuStackPointer_MEM = 0;                                //JM HOME temporary flag to remember and restore state
 
   JM_SHIFT_HOME_TIMER1 = 1;                                    //JM TIMER
   JM_ASN_MODE = 0;                                             //JM ASSIGN

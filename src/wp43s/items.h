@@ -26,7 +26,6 @@
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -2047,7 +2046,7 @@
 #define ITM_T_UP_ARROW                2004
 #define ITM_T_DOWN_ARROW              2005
 #define ITM_T_INSERT                  2006
-#define ITM_T_DELETE                  2007
+#define ITM_XNEW                      2007
 #define MNU_T_EDIT                    2008
 #define ITM_XSAVE                     2009
 #define ITM_XLOAD                     2010

@@ -58,19 +58,22 @@ doRefreshSoftMenu = true;     //jm
 
 void showShiftState(void) {
 #ifndef TESTSUITE_BUILD
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-      if(shiftF) {          //SEE screen.c:refreshScreen
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-        show_f_jm();        //JM KeyboardTweaks.c
-      }
-      else if(shiftG) {     //SEE screen.c:refreshScreen
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-        show_g_jm();        //JM KeyboardTweaks.c
-      }
-      else {
-        showGlyph(" ", &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // space clears the f and g
-        clear_fg_jm();      //JM KeyboardTweaks.c
-      }
+#ifdef PC_BUILD
+printf("    >>> showShiftState: calcMode=%d\n",calcMode );
+#endif
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER && temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
+    if(shiftF) {          //SEE screen.c:refreshScreen
+      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      show_f_jm();
+    }
+    else if(shiftG) {     //SEE screen.c:refreshScreen
+      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      show_g_jm();
+    }
+    else {
+      showGlyph(" ", &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // space clears the f and g
+      clear_fg_jm();
+    }
   }
 #endif
 }
@@ -144,10 +147,12 @@ void show_f_jm(void){
             if(!ULFL) {
               underline(1);
               ULFL = !ULFL;
+              doRefreshSoftMenu = true;
             }
             if(ULGL) {
               underline(2);
               ULGL = !ULGL;
+              doRefreshSoftMenu = true;
             }
           }
         }                                                                         //JM - Display dot in the f - line
@@ -163,10 +168,12 @@ void show_g_jm(void){
             if(ULFL) {
               underline(1);
               ULFL = !ULFL;
+              doRefreshSoftMenu = true;
             }
             if(!ULGL) {
               underline(2);
               ULGL = !ULGL;
+              doRefreshSoftMenu = true;
             }
           }
         }                                                                         //JM - Display dot in the g - line
@@ -183,10 +190,12 @@ void clear_fg_jm(void){
           if(ULFL) {
             underline(1);
             ULFL = !ULFL;
+            doRefreshSoftMenu = true;
           }
           if(ULGL) {
             underline(2);
             ULGL = !ULGL;
+            doRefreshSoftMenu = true;
           }
         }
 
@@ -203,10 +212,7 @@ void fg_processing_jm(void) {
             shiftF = false;  // Set it up, for flags to be cleared below.
             shiftG = true;
             if(HOME3) {
-#ifdef PC_BUILD
-printf(">>> ktweak ####### mmMNU_HOME=%d, mmMNU_ALPHA=%d, softmenuStackPointer=%d, stack: ",mm_MNU_HOME, mm_MNU_ALPHA, softmenuStackPointer);
-int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d:%d ",ix,softmenuStack[ix].softmenu); ix++;} printf("\n");
-#endif
+              jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
               if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {                          //JM shifts
                 popSoftmenu();                                                                                                //JM shifts
               }
@@ -399,22 +405,6 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
         break;
       }
     }
-/*
-    if (*result == kbd_usr[ 0].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 0].fShifted) : (kbd_usr[ 0].fShifted); } else
-    if (*result == kbd_usr[ 1].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 1].fShifted) : (kbd_usr[ 1].fShifted); } else
-    if (*result == kbd_usr[ 2].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 2].fShifted) : (kbd_usr[ 2].fShifted); } else
-    if (*result == kbd_usr[ 3].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 3].fShifted) : (kbd_usr[ 3].fShifted); } else
-    if (*result == kbd_usr[ 4].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 4].fShifted) : (kbd_usr[ 4].fShifted); } else
-    if (*result == kbd_usr[ 5].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 5].fShifted) : (kbd_usr[ 5].fShifted); } else
-    if (*result == kbd_usr[ 6].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 6].fShifted) : (kbd_usr[ 6].fShifted); } else
-    if (*result == kbd_usr[ 7].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 7].fShifted) : (kbd_usr[ 7].fShifted); } else
-    if (*result == kbd_usr[ 8].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 8].fShifted) : (kbd_usr[ 8].fShifted); } else
-    if (*result == kbd_usr[ 9].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[ 9].fShifted) : (kbd_usr[ 9].fShifted); } else
-    if (*result == kbd_usr[10].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[10].fShifted) : (kbd_usr[10].fShifted); } else
-    if (*result == kbd_usr[11].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[11].fShifted) : (kbd_usr[11].fShifted); } else
-    if (*result == kbd_usr[12].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[12].fShifted) : (kbd_usr[12].fShifted); } else
-    if (*result == kbd_usr[13].primary)  { tmp =  !getSystemFlag(FLAG_USER) ? (kbd_std[13].fShifted) : (kbd_usr[13].fShifted); }
-*/
   }
 
   if(tmp !=0) {                                      //if activated key pressed 
@@ -424,14 +414,10 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
        hideFunctionName();    
        restoreStack();
        showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
-#ifdef PC_BUILD
-printf(">>> refreshScreen ### REMOVED ### from keyboardTweak.c Check_MultiPresses\n");
-#endif
-//JMXX       refreshScreen();                //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
        setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-    }                                   //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+    }
   }
 
 }
@@ -573,8 +559,6 @@ void btnFnPressed_StateMachine(void *w, void *data) {
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     hideFunctionName();
-    clearRegisterLine(REGISTER_T, true,false); //JM FN clear the previous shift function name
-    refreshRegisterLine(REGISTER_T);
 
     //IF 2-->3 is longer than double click time, then move back to state 1
     FN_timeouts_in_progress = false;
@@ -686,8 +670,6 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
     sprintf(charKey, "%c", FN_key_pressed + 11);
     hideFunctionName();
-    clearRegisterLine(REGISTER_T, true,false);  //JM FN clear the previous shift function name
-    refreshRegisterLine(REGISTER_T);
 
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
       btnFnClicked(w, charKey);                                             //Execute

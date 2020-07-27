@@ -270,6 +270,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ARSINH" )) {strcpy(commandnumber, "28");} else
                       if (strcompare(commandnumber,"ARTANH" )) {strcpy(commandnumber, "29");} else
                       if (strcompare(commandnumber,"ASR" )) {strcpy(commandnumber, "30");} else
+                      if (strcompare(commandnumber,"BATT?" )) {strcpy(commandnumber, "40");} else
                       if (strcompare(commandnumber,"BC?" )) {strcpy(commandnumber, "41");} else
                       if (strcompare(commandnumber,"BS?" )) {strcpy(commandnumber, "53");} else
                       if (strcompare(commandnumber,"c" )) {strcpy(commandnumber, "56");} else
@@ -287,6 +288,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CNST" )) {strcpy(commandnumber, "89");} else
                       if (strcompare(commandnumber,"COS" )) {strcpy(commandnumber, "92");} else
                       if (strcompare(commandnumber,"COSH" )) {strcpy(commandnumber, "93");} else
+                      if (strcompare(commandnumber,"CPX?" )) {strcpy(commandnumber, "100");} else
                       if (strcompare(commandnumber,"CROSS" )) {strcpy(commandnumber, "101");} else
                       if (strcompare(commandnumber,"CX>RE" )) {strcpy(commandnumber, "103");} else
                       if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "115");} else
@@ -302,6 +304,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "139");} else
                       if (strcompare(commandnumber,"ENG" )) {strcpy(commandnumber, "145");} else
                       if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
+                      if (strcompare(commandnumber,"ENTRY?" )) {strcpy(commandnumber, "149");} else
                       if (strcompare(commandnumber,"E^X" )) {strcpy(commandnumber, "158");} else
                       if (strcompare(commandnumber,"EXPT" )) {strcpy(commandnumber, "167");} else
                       if (strcompare(commandnumber,"E^X-1" )) {strcpy(commandnumber, "168");} else
@@ -321,6 +324,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "250");} else
                       if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "252");} else
                       if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "259");} else
+                      if (strcompare(commandnumber,"KEY?" )) {strcpy(commandnumber, "284");} else
                       if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "296");} else
                       if (strcompare(commandnumber,"LCM" )) {strcpy(commandnumber, "301");} else
                       if (strcompare(commandnumber,"LJ" )) {strcpy(commandnumber, "309");} else
@@ -365,6 +369,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"RCLMAX" )) {strcpy(commandnumber, "497");} else
                       if (strcompare(commandnumber,"RCLMIN" )) {strcpy(commandnumber, "498");} else
                       if (strcompare(commandnumber,"RE" )) {strcpy(commandnumber, "503");} else
+                      if (strcompare(commandnumber,"REAL?" )) {strcpy(commandnumber, "506");} else
                       if (strcompare(commandnumber,"RE>CX" )) {strcpy(commandnumber, "511");} else
                       if (strcompare(commandnumber,"RE<>IM" )) {strcpy(commandnumber, "512");} else
                       if (strcompare(commandnumber,"RJ" )) {strcpy(commandnumber, "513");} else
@@ -828,11 +833,13 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
       default:;
     }
 
-    printf(">>> str ## %s:%s\n",tt,tmpStr3000 + TMP_STR_LENGTH/2);
+    #ifdef PC_BUILD
+    printf(">>> string ready  ## %s:%s\n",tt,tmpStr3000 + TMP_STR_LENGTH/2);
     //uint16_t ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,tmpStr3000[ix]);ix++;}
     stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-    printf(">>> utf ## %s:%s\n",tt, tmpStr3000);
+    printf(">>> string in utf ## %s:%s\n",tt, tmpStr3000);
     //ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,ll[ix]);ix++;}
+    #endif
 
     #ifndef TESTSUITE_BUILD
       if(tt[0]!=0) export_string_to_filename(tmpStr3000, overwrite, "PROGRAMS", tt);
@@ -847,9 +854,9 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
   line1[0]=0;
   XEQMENU_Selection(XEQM_no, line1, false);
   uint16_t ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}
-  printf(">>> loaded: utf:%s\n",line1);  
+  //printf(">>> loaded: utf:%s\n",line1);  
   utf8ToString((uint8_t *)line1,line1 + TMP_STR_LENGTH/2);
-  ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}  printf(">>> loaded: str:%s\n",line1 + TMP_STR_LENGTH/2);  
+  //ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}  printf(">>> loaded: str:%s\n",line1 + TMP_STR_LENGTH/2);  
   int16_t len = stringByteLength(line1 + TMP_STR_LENGTH/2);
   liftStack();
   reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
@@ -898,6 +905,9 @@ void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
 
 
 
+void fnXEQNEW                   (uint16_t unusedParamButMandatory) {
+  fnStrtoX("XEQLBL 01 XXXXXX \"20\" STO \"00\" LBL M1 BATT? DSZ \"00\" GTO M1");
+}
 
 
 

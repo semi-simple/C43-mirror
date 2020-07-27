@@ -494,6 +494,7 @@ void fnGetInlineTestBsToX       (uint16_t unusedParamButMandatory) {}
 void fnSysFreeMem               (uint16_t unusedParamButMandatory) {}           //^^
 void fneRPN                     (uint16_t unusedParamButMandatory) {}
 void fnT_ARROW                  (uint16_t unusedParamButMandatory) {}
+void fnXEQNEW                   (uint16_t unusedParamButMandatory) {}
 void fnXEQMSAVE                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMLOAD                 (uint16_t unusedParamButMandatory) {}
 void fnXEQMEDIT                 (uint16_t unusedParamButMandatory) {}
@@ -2527,7 +2528,7 @@ const item_t indexOfItems[] = {
 /* 2004 */  { fnT_ARROW,                   3,                           STD_UP_ARROW,                                  STD_UP_ARROW,                                  0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2005 */  { fnT_ARROW,                   4,                           STD_DOWN_ARROW,                                STD_DOWN_ARROW,                                0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2006 */  { fnT_ARROW,                   0,                           "INS",                                         "INS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 2007 */  { fnT_ARROW,                   6,                           "DEL",                                         "DEL",                                         0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2007 */  { fnXEQNEW,                    NOPARAM,                     "X.NEW",                                       "X.NEW",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},
 /* 2010 */  { fnXEQMLOAD,                  TM_VALUE,                    "X.LOAD",                                      "X.LOAD",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},

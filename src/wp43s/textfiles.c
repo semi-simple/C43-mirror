@@ -313,7 +313,7 @@ char line[100];               /* Line buffer */
     }
 
     /* Opens an existing file. If not exist, creates a new file. */
-    if(mode == append) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_CREATE_ALWAYS | FA_WRITE);
+    if(mode == append) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_WRITE|FA_CREATE_ALWAYS);
     if (fr) {
       sprintf(line,"File open error ID001--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
@@ -659,6 +659,10 @@ void displaywords(char *line1) {  //Preprocessor and display
   bb[0]=0;
   print_linestr("Code:",true);
   //printf("4:%s\n",line1);
+
+  if(line1[stringByteLength(line1)-1] != 32) {
+    strcat(line1," ");
+  }
 
   tmpStr3000[0]=32;tmpStr3000[1]=0;
 

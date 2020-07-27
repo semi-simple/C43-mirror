@@ -487,6 +487,8 @@ void underline(int16_t y) {                     //JM
 
 uint32_t ul;
 void clear_ul(void) {
+  ULGL = false;
+  ULFL = false;
   ul = 0;                                       //JM Set all bits 00-23 to zero
 }
                                                 //JM vv LONGPRESS.   false auto clears
@@ -612,10 +614,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
         fnTimerStop(TO_FG_TIMR);
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
-#ifdef PC_BUILD
-printf(">>> screen ####### mmMNU_HOME=%d, mmMNU_ALPHA=%d, softmenuStackPointer=%d, stack: ",mm_MNU_HOME, mm_MNU_ALPHA, softmenuStackPointer);
-int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d:%d ",ix,softmenuStack[ix].softmenu); ix++;} printf("\n");
-#endif
+          jm_show_calc_state("screen.c: Shft_handler: HOME3");
           if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {                            //JM shifts
             popSoftmenu();                                                                                                  //JM shifts
           }
@@ -1186,7 +1185,9 @@ void showFunctionName(int16_t item, int8_t counter) {
 void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
-  showString("           ", &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
+  if(running_program_jm) return;                             //JM
+  refreshRegisterLine(REGISTER_T);                           //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
+  //  showString("           ", &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
 
 
@@ -2088,6 +2089,7 @@ void clearScreen(void) {
   #endif
 
   #if DMCP_BUILD
+    clear_ul(); //JMUL
     lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
   #endif
 
@@ -2145,9 +2147,8 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        clearScreen();
+        clearScreen();      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
 
-        // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
         refreshRegisterLine(REGISTER_T);
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);
@@ -2155,7 +2156,6 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }      //dr
 #endif
-
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
@@ -2171,10 +2171,10 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
         last_CM = calcMode;
         doRefreshSoftMenu = false;
         if(shiftF) {
-          showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+//          showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
         }
         else if(shiftG) {
-          showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+//          showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
         }
         else {
           if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
@@ -2238,10 +2238,10 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
       if(shiftF) {
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+//        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
       }
       else if(shiftG) {
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+//        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
       }
       else {
         if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {

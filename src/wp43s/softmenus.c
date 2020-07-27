@@ -655,9 +655,10 @@ const int16_t menu_ALPHA[]        = {
 
 
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT, /*ITM_T_DELETE,*/ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
-                                     CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN                 }; 
+                                     CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN,
+                                     CHR_ASTERISK,                  CHR_SLASH,                  ITM_NULL,                ITM_NULL,              ITM_NULL,                     ITM_NULL                        }; 
 
-const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XXEQ,              ITM_XEQ,                      -MNU_XEQ                                                };   //JM
+const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XNEW,              ITM_XXEQ,                     -MNU_XEQ                                                };   //JM
 
 
 #include "softmenuCatalogs.h"
@@ -1284,9 +1285,7 @@ void showSoftmenuCurrentPart(void) {
 
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
   clearScreen_old(false, false, true); //JM
-#ifdef PC_BUILD
-printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
-#endif
+// printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
     m                = softmenuStack[softmenuStackPointer-1].softmenu;
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
@@ -1463,13 +1462,10 @@ void rolloutSoftmenus(void) {                                       //JM vv
   }
 }
 
-#define ROLLOUTDEBUG
 void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
   int8_t ix;
-  #ifdef ROLLOUTDEBUG
-  printf(">>> softmenuStackPointer  PRE=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
-  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
-  #endif
+//  printf(">>> softmenuStackPointer  PRE=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
+//  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
   if(softmenuStackPointer == 0) return; 
   else {
     ix = softmenuStackPointer;
@@ -1481,10 +1477,8 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
       rolloutSoftmenusIncluding(target);
     }
   }
-  #ifdef ROLLOUTDEBUG
-  printf(">>> softmenuStackPointer POST=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
-  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
-  #endif
+//  printf(">>> softmenuStackPointer POST=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
+//  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
 }
 
 
@@ -1549,7 +1543,7 @@ void initSoftmenuStack(int16_t softmenu) {
  * \return void
  ***********************************************/
 void pushSoftmenu(int16_t softmenu) {
-printf(">>> ###### pushing %d\n",softmenu);
+//printf(">>> ###### pushing %d\n",softmenu);
   rolloutSoftmenusIncluding(softmenu);   //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
  
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
@@ -1610,7 +1604,7 @@ void popSoftmenu(void) {
  ***********************************************/
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
-printf(">>> ###### showsoftmenu %d\n",id);
+//printf(">>> ###### showsoftmenu %d\n",id);
 
   if(id == -MNU_FCNS) {
     alphaSelectionMenu = ASM_FCNS;

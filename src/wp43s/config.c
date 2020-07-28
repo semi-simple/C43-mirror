@@ -733,7 +733,7 @@ void fnReset(uint16_t confirmation) {
     fnStore(27);
     fnDrop(0);
 
-    showSoftmenu(NULL, -MNU_HOME, false); //JM Reset to BASE MENU HOME;   
+    if(SH_BASE_HOME) showSoftmenu(NULL, -MNU_HOME, false); //JM Reset to BASE MENU HOME;   
 
   }
 }

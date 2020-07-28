@@ -17,6 +17,7 @@
 /********************************************//**
  * \file config.h
  ***********************************************/
+void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);  //JM repeat here to make DMCP compile
 
 void     fnConfigChina         (uint16_t unusedParamButMandatory);
 void     fnConfigEurope        (uint16_t unusedParamButMandatory);

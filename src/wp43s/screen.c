@@ -620,7 +620,6 @@ void Shft_handler() {                        //JM SHIFT NEW vv
           }
           else {
             if(calcMode == CM_AIM) {                                                                                        //JM shifts
-//CHECK            showSoftmenu(NULL, -MNU_ALPHA, true);                                                                         //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
             }
             else {                                                                                                          //JM SHIFTS
               showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME

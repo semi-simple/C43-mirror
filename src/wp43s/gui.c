@@ -3997,11 +3997,6 @@ void calcModeNormal(void) {
     setSystemFlag(FLAG_ASLIFT);
   }
 
-//  if(SH_BASE_HOME && (softmenuStackPointer_MEM == -1)) {  //JM HOMEBASE
-//     showSoftmenu(NULL, -MNU_HOME, false);      //JM HOME  Change to initialize the menu stack. it was true.
-//  }
-//  if(!SH_BASE_HOME) {}
-
   calcMode = CM_NORMAL;
   clearSystemFlag(FLAG_ALPHA);
   hideCursor();
@@ -4034,9 +4029,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
   } else
   if(SH_BASE_AHOME) {
     softmenuStackPointerBeforeAIM = softmenuStackPointer;
-    if(softmenuStackPointer == 0) {
-      showSoftmenu(NULL, -MNU_ALPHA, false);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
-    }
+      showSoftmenu(NULL, -MNU_ALPHA, true);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
   }
 
     alphaCase = AC_UPPER;

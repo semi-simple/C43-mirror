@@ -278,22 +278,31 @@ void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
+  saveStack();
+  setSystemFlag(FLAG_ASLIFT);
+  liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 - 0.866
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
-  fnChangeSign(ITM_CHS);
+  chsCplx();
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
 void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
+  saveStack();
+  setSystemFlag(FLAG_ASLIFT);
+  liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 + 0.866i  : op a
-  fnChangeSign(ITM_CHS);
+  chsReal();
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
 void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
+  saveStack();
+  setSystemFlag(FLAG_ASLIFT);
+  liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -301,6 +310,9 @@ void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
+  saveStack();
+  setSystemFlag(FLAG_ASLIFT);
+  liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));

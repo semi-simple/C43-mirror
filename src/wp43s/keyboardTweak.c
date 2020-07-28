@@ -218,7 +218,6 @@ void fg_processing_jm(void) {
               }
               else {
                 if(calcMode == CM_AIM) {                                                                                      //JM shifts
-//CHECK                showSoftmenu(NULL, -MNU_ALPHA, true);                                                                       //JM shifts //JM ALPHA-HOME  ALPHA AIM OR NIM
                 }
                 else {                                                                                                        //JM SHIFTS
                   showSoftmenu(NULL, -MNU_HOME, true);                                                                        //JM shifts  //JM ALPHA-HOME
@@ -914,10 +913,8 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 //########################################
 
 void fnT_ARROW(uint16_t command) {
-                                uint16_t ix = 0; 
-                                uint16_t in = 0;
-                                uint16_t in_old;
 
+  uint16_t ix, in, ixx, in_old;
   switch (command) {
      case 1 /*STD_LEFT_ARROW */ : 
                                   ix = 0; 
@@ -941,9 +938,25 @@ void fnT_ARROW(uint16_t command) {
                                   T_cursorPos = stringNextGlyph(aimBuffer, in);
                                   break;
 
-     case 3 /*STD_UP_ARROW   */ : break;
-     case 4 /*STD_DOWN_ARROW */ : break;
-     case 0 /*INS            */ : break;
+     case 3 /*STD_FARLEFT_ARROW */ :
+                                  ixx = 0;
+                                  while(ixx<10) {
+                                    fnT_ARROW(1);
+                                    ixx++;
+                                  }
+                                  break;
+
+     case 4 /*STD_FARRIGHT_ARROW*/ :
+                                  ixx = 0;
+                                  while(ixx<10) {
+                                    fnT_ARROW(2);
+                                    ixx++;
+                                  }
+                                  break;
+
+     case 0 /*INS            */ :
+                                  break;
+
 #ifndef TESTSUITE_BUILD
      case 6 /*DELETE         */ : btnClicked(NULL, "16"); break;
 #endif

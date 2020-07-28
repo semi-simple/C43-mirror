@@ -654,7 +654,7 @@ const int16_t menu_ALPHA[]        = {
                                      ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS                     };    //JM
 
 
-const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT, /*ITM_T_DELETE,*/ITM_T_UP_ARROW,          ITM_T_DOWN_ARROW,      ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT,                  ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN,
                                      CHR_ASTERISK,                  CHR_SLASH,                  ITM_NULL,                ITM_NULL,              ITM_NULL,                     ITM_NULL                        }; 
 
@@ -778,6 +778,24 @@ const softmenu_t softmenu[] = {
 #endif                                                                          //^^
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
+
+
+
+//JM To determine the menu number for a given menuId
+int16_t mm(int16_t id) {
+  int16_t m;
+  m = 0;
+  if(id != 0) { // Search by ID
+    while(softmenu[m].menuId != 0) {
+      //printf(">>> mm %d %d %s \n",id, softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemSoftmenuName);
+      if(softmenu[m].menuId == id) {
+       break;
+      }
+      m++;
+    }
+  }
+  return m;
+}
 
 
 
@@ -1481,21 +1499,6 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
 //  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenu); ix++;} printf("\n");
 }
 
-
-int16_t mm(int16_t id) {
-  int16_t m;
-  m = 0;
-  if(id != 0) { // Search by ID
-    while(softmenu[m].menuId != 0) {
-      //printf(">>> mm %d %d %s \n",id, softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemSoftmenuName);
-      if(softmenu[m].menuId == id) {
-       break;
-      }
-      m++;
-    }
-  }
-  return m;
-}
 
 
 

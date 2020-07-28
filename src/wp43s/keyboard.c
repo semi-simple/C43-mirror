@@ -478,6 +478,7 @@ void btnPressed(void *data) {
 #ifdef PC_BUILD
 void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
+jm_show_calc_state("btnReleased");
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
@@ -873,8 +874,25 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       if(lastErrorCode != 0) {
         lastErrorCode = 0;
       }
-      else if(softmenuStackPointer > 0) {
-        popSoftmenu();
+      else {                                 //JM
+        if(!SH_BASE_HOME) {                  //JM
+          if(softmenuStackPointer > 0) {
+            popSoftmenu();
+          }                                  //JM
+        }                                    //JMvv
+        else {
+          if(softmenuStackPointer > 0 && !(softmenuStackPointer == 1 && softmenuStack[0].softmenu == mm_MNU_HOME)) {
+            popSoftmenu();
+            if(softmenuStackPointer == 0) {
+              showSoftmenu(NULL, -MNU_HOME, false); //Reset to BASE MENU HOME
+            }
+          } 
+          else {
+            if(softmenuStackPointer == 1 && softmenuStack[0].softmenu == mm_MNU_HOME) {
+              softmenuStack[0].firstItem=0;        //Reset to default screen of HOME
+            }
+          }
+        }                                    //JM^^
       }
       break;
 

@@ -727,7 +727,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
   switch(selection) {
     case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 ~3^-4   \"3\" ENTER \"4\" CHS Y^X "                                               ); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 ~1/81   \"1\" ENTER \"81\" /   "                                                  ); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 BATTPLT \"50\" STO \"00\" CLSUM LBL M1 BATT? RCL \"00\" SUM+ DSZ \"00\" GTO M1 PLOT "); displaywords(line1); execute_string(line1,exec); break;
     case  3:import_string_from_filename(line1,"PROGRAMS","XEQM03.TXT","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
     case  4:import_string_from_filename(line1,"PROGRAMS","XEQM04.TXT","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
     case  5:import_string_from_filename(line1,"PROGRAMS","XEQM05.TXT","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
@@ -842,6 +842,7 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
     #endif
 
     #ifndef TESTSUITE_BUILD
+      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
       if(tt[0]!=0) export_string_to_filename(tmpStr3000, overwrite, "PROGRAMS", tt);
     #endif
   }
@@ -906,7 +907,7 @@ void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
 
 
 void fnXEQNEW                   (uint16_t unusedParamButMandatory) {
-  fnStrtoX("XEQLBL 01 XXXXXX \"20\" STO \"00\" LBL M1 BATT? DSZ \"00\" GTO M1");
+  fnStrtoX("XEQLBL 01 XXXXXX ");
 }
 
 

@@ -151,7 +151,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       running_program_jm = true;
       indic_x = 0;
       indic_y = SCREEN_HEIGHT-1;
-
+      uint8_t starttoken = 0;
 
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
       //printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
@@ -569,6 +569,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "1998");} else
                       if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "2000");} else
                       if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2001");} else
+                      if (strcompare(commandnumber,"X.SAVE" )) {strcpy(commandnumber, "2009");} else
+                      if (strcompare(commandnumber,"X.LOAD" )) {strcpy(commandnumber, "2010");} else
+                      if (strcompare(commandnumber,"X.XEQ" )) {strcpy(commandnumber, "2012");} else
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 
@@ -577,8 +580,14 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "115"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
                        if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "252"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
                         if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
-                         if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; }                                   //EXPECTING 2 OPERANDS nn XXXXXX
+                          if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                     else //EXPECTING FOLLOWING OPERAND Mn
+                           if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}           //EXPECTING 2 OPERANDS nn XXXXXX
 //         END ELSE
+                      if(starttoken == 0) {                        //if not started with XEQLBL or XEQC43
+                        running_program_jm = false;
+                        return;
+                      }
+
                       if (strcompare(commandnumber,"GTO"   ))    {
                         if(exec) {
                           gotoinprogress = 1;
@@ -678,7 +687,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                         break;
 //HERE DEFAULT !!
                         default:                 //NOT IN PROGRESS
-                          no = atoi(commandnumber);       //Will force invalid commands and RETURN MARK etc. to 0
+                          no = atoi(commandnumber);       //Will force all unknown commands to have no number, and invalid command and RETURN MARK etc. to 0
                           //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
                           if(no > LAST_ITEM-1) {no = 0;}
                           if(no!=0 && exec) {

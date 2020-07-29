@@ -201,6 +201,8 @@ void saveCalc(void) {
   save(&graph_ymax,                         sizeof(graph_ymax),                         backup);
   save(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
   save(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
+  save(&extentx   ,                         sizeof(extentx   ),                         backup);
+  save(&extenty   ,                         sizeof(extenty   ),                         backup);
   save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
   save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
   save(&indic_x,                            sizeof(indic_x),                            backup);
@@ -382,6 +384,8 @@ void restoreCalc(void) {
     restore(&graph_ymax,                         sizeof(graph_ymax),                         backup);
     restore(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
     restore(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
+    restore(&extentx   ,                         sizeof(extentx   ),                         backup);
+    restore(&extenty   ,                         sizeof(extenty   ),                         backup);
     restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
     restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
     restore(&indic_x,                            sizeof(indic_x),                            backup);

@@ -2535,6 +2535,8 @@ const item_t indexOfItems[] = {
 /* 2011 */  { fnXEQMEDIT,                  NOPARAM,                     "X.EDIT",                                      "X.EDIT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2012 */  { fnXEQMXXEQ,                  NOPARAM,                     "X.XEQ",                                       "X.XEQ",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2013 */  { itemToBeCoded,               NOPARAM,                     "XXEQ",                                        "XXEQ",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
+/* 2014 */  { fnSetSetJM,                  JC_EXTENTX,                  "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
+/* 2015 */  { fnSetSetJM,                  JC_EXTENTY,                  "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
 
-/* 2014 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
+/* 2016 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

@@ -898,6 +898,16 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
       #endif
     }
   }
+  else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) != dtString) {
+    char line1[TMP_STR_LENGTH];
+    line1[0]=0;
+    strcpy(line1," ");
+    int16_t len = stringByteLength(line1);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+    strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);
+    fnXEQMEDIT(0);
+  }
 }
 
 

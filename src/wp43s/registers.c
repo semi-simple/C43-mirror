@@ -1428,6 +1428,8 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(graph_ymax);
   storeToDtConfigDescriptor(graph_dx);
   storeToDtConfigDescriptor(graph_dy);
+  storeToDtConfigDescriptor(extentx);
+  storeToDtConfigDescriptor(extenty);
   storeToDtConfigDescriptor(jm_VECT);
   storeToDtConfigDescriptor(jm_HOME_SUM);
   storeToDtConfigDescriptor(jm_HOME_MIR);
@@ -1758,6 +1760,8 @@ void fnRecallConfig(uint16_t r) {
     recallFromDtConfigDescriptor(graph_ymax);        
     recallFromDtConfigDescriptor(graph_dx);          
     recallFromDtConfigDescriptor(graph_dy);          
+    recallFromDtConfigDescriptor(extentx);
+    recallFromDtConfigDescriptor(extenty);
     recallFromDtConfigDescriptor(jm_VECT);          
     recallFromDtConfigDescriptor(jm_HOME_SUM);      
     recallFromDtConfigDescriptor(jm_HOME_MIR);      

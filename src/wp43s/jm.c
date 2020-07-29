@@ -60,6 +60,8 @@ void reset_jm_defaults(void) {
     graph_ymax = +2;                                           //JM GRAPH
     graph_dx   = 0;                                            //JM GRAPH
     graph_dy   = 0;                                            //JM GRAPH
+    extentx   = false;                                        //JM GRAPH
+    extenty   = false;                                        //JM GRAPH
     jm_VECT = false;                                           //JM Screen / keyboard operation setup
     jm_HOME_SUM = false;                                       //JMHOME
     jm_HOME_MIR = true;                                        //JMHOME
@@ -248,6 +250,15 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     fnRefreshComboxState(CB_JC, JC_LARGELI, jm_LARGELI);                //jm
     break;
 
+  case JC_EXTENTX:                                      //JM
+    extentx = !extentx;
+    fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
+    break;
+
+  case JC_EXTENTY:                                      //JM
+    extenty = !extenty;
+    fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
+    break;
 
 
    case RX_COMMA:               //DONR

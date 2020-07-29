@@ -641,10 +641,8 @@ const int16_t menu_GRAPH[]        = {
 const int16_t menu_ST_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
                                      ITM_SIGMAMINUS,                ITM_SUM,                    ITM_LISTXY,               ITM_P_ALLREGS,         ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
-                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_GRF_X0,            ITM_GRF_X1,                  ITM_GRF_HLP,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_NULL,              ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
-
-
 
 
 const int16_t menu_ALPHA[]        = {
@@ -658,7 +656,7 @@ const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT,  
                                      CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN,
                                      CHR_ASTERISK,                  CHR_SLASH,                  CHR_QUESTION_MARK,       ITM_NULL,              ITM_NULL,                     ITM_NULL                        }; 
 
-const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XNEW,              ITM_XXEQ,                     -MNU_XEQ                                                };   //JM
+const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XNEW,              ITM_XXEQ,                     -MNU_XEQ                        };   //JM
 
 
 #include "softmenuCatalogs.h"

@@ -100,6 +100,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1745 */  { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
 /* 1746 */  { ITM_H_FIXED,          JC_H_FIX,               CB_JC },  //fnSetSetJM
 /*      */  { ITM_LARGELI,          JC_LARGELI,             CB_JC },  //fnSetSetJM
+/*      */  { ITM_EXTX,             JC_EXTENTX,             CB_JC },  //fnSetSetJM
+/*      */  { ITM_EXTY,             JC_EXTENTY,             CB_JC },  //fnSetSetJM
 /* 1892 */  { ITM_TEST,             JC_ITM_TST,             CB_JC }   //fnSetInlineTest
 };
 
@@ -332,6 +334,18 @@ int8_t fnCbIsSet(int16_t item) {
           case JC_LARGELI:
             {
               cb_param = jm_LARGELI;
+            }
+            break;
+
+          case JC_EXTENTX:
+            {
+              cb_param = extentx;
+            }
+            break;
+
+          case JC_EXTENTY:
+            {
+              cb_param = extenty;
             }
             break;
 

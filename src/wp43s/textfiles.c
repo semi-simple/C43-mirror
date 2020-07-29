@@ -384,7 +384,7 @@ void make_TSV_dir_name(void){
     uint32_t tmp__32;                                                 //JM_CSV
 
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000) || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),".STAT.TSV"  ) ) ) {
       //Create file name
       check_create_dir("DATA");  
       make_date_filename(filename_csv,"DATA\\",".STAT.TSV");
@@ -622,9 +622,8 @@ void make_TSV_dir_name(void){
     time_t rawTime;
     struct tm *timeInfo;
     
-
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)) {
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)  || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),".STAT.TSV"  ) ) ) {
       //Create file name
       //make_date_filename(filename_csv,"/DATA/",".STAT.TSV");
       time(&rawTime);

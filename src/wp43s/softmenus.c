@@ -656,7 +656,7 @@ const int16_t menu_ALPHA[]        = {
 
 const int16_t menu_T_EDIT[]      = { ITM_T_INSERT,                  ITM_XEDIT,                  ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      CHR_CIRCUMFLEX,                CHR_UNDERSCORE,             CHR_QUOTE,               CHR_DOUBLE_QUOTE,      CHR_LESS_THAN,                CHR_GREATER_THAN,
-                                     CHR_ASTERISK,                  CHR_SLASH,                  ITM_NULL,                ITM_NULL,              ITM_NULL,                     ITM_NULL                        }; 
+                                     CHR_ASTERISK,                  CHR_SLASH,                  CHR_QUESTION_MARK,       ITM_NULL,              ITM_NULL,                     ITM_NULL                        }; 
 
 const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XNEW,              ITM_XXEQ,                     -MNU_XEQ                                                };   //JM
 

@@ -47,4 +47,5 @@ void showHideSerialIO     (void);
 void showHidePrinter      (void);
 void showHideUserMode     (void);
 void showHideLowBattery   (void);
+void showHideUSB          (void);
 #endif

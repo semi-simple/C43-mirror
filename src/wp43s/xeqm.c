@@ -256,6 +256,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
 //                    if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
 
 // FROM SPREADSHEET vvv ****************************************************************************************************
+
+
                       if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
                       if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
                       if (strcompare(commandnumber,"1/X" )) {strcpy(commandnumber, "6");} else
@@ -293,12 +295,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CX>RE" )) {strcpy(commandnumber, "103");} else
                       if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "115");} else
                       if (strcompare(commandnumber,"DECOMP" )) {strcpy(commandnumber, "116");} else
-                      if (strcompare(commandnumber,"DEG" )) {strcpy(commandnumber, "117");} else
                       if (strcompare(commandnumber,"DEG>" )) {strcpy(commandnumber, "118");} else
                       if (strcompare(commandnumber,"DOT" )) {strcpy(commandnumber, "125");} else
                       if (strcompare(commandnumber,"DROP" )) {strcpy(commandnumber, "127");} else
                       if (strcompare(commandnumber,"DROPY" )) {strcpy(commandnumber, "128");} else
-                      if (strcompare(commandnumber,"D.MS" )) {strcpy(commandnumber, "134");} else
                       if (strcompare(commandnumber,"D.MS>" )) {strcpy(commandnumber, "135");} else
                       if (strcompare(commandnumber,"D>R" )) {strcpy(commandnumber, "138");} else
                       if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "139");} else
@@ -315,7 +315,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"FLASH?" )) {strcpy(commandnumber, "188");} else
                       if (strcompare(commandnumber,"FLOOR" )) {strcpy(commandnumber, "189");} else
                       if (strcompare(commandnumber,"FP" )) {strcpy(commandnumber, "190");} else
-                      if (strcompare(commandnumber,"FR>DB" )) {strcpy(commandnumber, "196");} else
                       if (strcompare(commandnumber,"GCD" )) {strcpy(commandnumber, "217");} else
                       if (strcompare(commandnumber,"ge" )) {strcpy(commandnumber, "220");} else
                       if (strcompare(commandnumber,"GRAD>" )) {strcpy(commandnumber, "230");} else
@@ -353,9 +352,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"OR" )) {strcpy(commandnumber, "437");} else
                       if (strcompare(commandnumber,"PERM" )) {strcpy(commandnumber, "450");} else
                       if (strcompare(commandnumber,"PLOT" )) {strcpy(commandnumber, "455");} else
-                      if (strcompare(commandnumber,"PR>DB" )) {strcpy(commandnumber, "467");} else
                       if (strcompare(commandnumber,"PRIME?" )) {strcpy(commandnumber, "469");} else
-                      if (strcompare(commandnumber,"RAD" )) {strcpy(commandnumber, "483");} else
                       if (strcompare(commandnumber,"RAD>" )) {strcpy(commandnumber, "484");} else
                       if (strcompare(commandnumber,"RAN#" )) {strcpy(commandnumber, "486");} else
                       if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "488");} else
@@ -517,7 +514,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1693");} else
                       if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1694");} else
                       if (strcompare(commandnumber,"CASE" )) {strcpy(commandnumber, "1736");} else
-                      if (strcompare(commandnumber,"##>INT" )) {strcpy(commandnumber, "1737");} else
                       if (strcompare(commandnumber,"OP_A" )) {strcpy(commandnumber, "1739");} else
                       if (strcompare(commandnumber,"OP_A^2" )) {strcpy(commandnumber, "1740");} else
                       if (strcompare(commandnumber,"OP_J" )) {strcpy(commandnumber, "1741");} else
@@ -572,6 +568,13 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"X.SAVE" )) {strcpy(commandnumber, "2009");} else
                       if (strcompare(commandnumber,"X.LOAD" )) {strcpy(commandnumber, "2010");} else
                       if (strcompare(commandnumber,"X.XEQ" )) {strcpy(commandnumber, "2012");} else
+                      if (strcompare(commandnumber,"DEG" )) {strcpy(commandnumber, "2016");} else
+                      if (strcompare(commandnumber,"D.MS" )) {strcpy(commandnumber, "2017");} else
+                      if (strcompare(commandnumber,"GRAD" )) {strcpy(commandnumber, "2018");} else
+                      if (strcompare(commandnumber,"MULPI" )) {strcpy(commandnumber, "2019");} else
+                      if (strcompare(commandnumber,"RAD" )) {strcpy(commandnumber, "2020");} else
+                      if (strcompare(commandnumber,"H.MS" )) {strcpy(commandnumber, "2021");} else
+
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 

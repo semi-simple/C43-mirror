@@ -1774,7 +1774,7 @@
 #define CHR_digamma                   1734   //JM GREEK
 #define CHR_sampi                     1735   //JM GREEK
 #define CHR_case                      1736   //JM CAPS
-#define KEY_HASH                      1737   //JM BASE ## test
+#define Not_used1737                  1737
 #define MNU_XEQ                       1738   //JM EXEC
 #define ITM_op_a                      1739   //JM OPERATORS
 #define ITM_op_a2                     1740   //JM OPERATORS

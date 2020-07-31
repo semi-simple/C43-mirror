@@ -572,6 +572,7 @@ void fnReset(uint16_t confirmation) {
     clearSystemFlag(FLAG_ASLIFT);
     clearSystemFlag(FLAG_USER);
     clearSystemFlag(FLAG_LOWBAT);
+    clearSystemFlag(FLAG_USB);
 
     hourGlassIconEnabled = false;
     programCounter = 0;

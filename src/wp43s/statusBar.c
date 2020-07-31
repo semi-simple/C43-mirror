@@ -45,6 +45,7 @@ void refreshStatusBar(void) {
   showHidePrinter();
   showHideUserMode();
   showHideLowBattery();
+  showHideUSB();
 }
 
 
@@ -434,5 +435,22 @@ void showHideLowBattery(void) {
       clearPixel(395, 16);
     }
   #endif
+}
+
+
+
+/********************************************//**
+ * \brief Shows or hides the USB icon in the status bar
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void showHideUSB(void) {
+  if(getSystemFlag(FLAG_USB)) {
+    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+  }
+  else {
+    showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+  }
 }
 #endif

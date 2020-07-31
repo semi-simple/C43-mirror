@@ -433,6 +433,7 @@ void debugNIM(void) {
     if(sf == FLAG_IGN1ER)   return "IGN1ER";
     if(sf == FLAG_INTING)   return "INTING";
     if(sf == FLAG_SOLVING)  return "SOLVING";
+    if(sf == FLAG_USB)      return "USB";
     if(sf == FLAG_VMDISP)   return "VMDISP";
 
     return "???        ";
@@ -883,6 +884,12 @@ void debugNIM(void) {
 
       if(row < DEBUG_LINES) {
         sprintf(string, "FLAG_LOWBAT                               = %s",          getBooleanName(getSystemFlag(FLAG_LOWBAT)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_USB                                  = %s",          getBooleanName(getSystemFlag(FLAG_USB)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

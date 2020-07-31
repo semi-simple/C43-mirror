@@ -291,6 +291,7 @@ void setupDefaults(void) {
   clearSystemFlag(FLAG_CARRY);
   clearSystemFlag(FLAG_USER);
   clearSystemFlag(FLAG_LOWBAT);
+  clearSystemFlag(FLAG_USB);
 
   hourGlassIconEnabled = false;
   programCounter = 0;

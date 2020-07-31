@@ -540,3 +540,47 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
   }                                                                                                     //JM UNIT
 }                                                                                                       //JM UNIT
 
+
+
+
+void fnAngularModeJM(uint16_t AMODE) {
+  if (AMODE == AM_HMS) AMODE = AM_DMS;
+  fnCvtFromCurrentAngularMode(AMODE);
+  fnAngularMode(AMODE);
+  fnRefreshRadioState(0, 0);
+
+}
+
+void fnChangeBaseJM (uint16_t BASE) {
+  if(BASE == lastIntegerBase) {
+    lastIntegerBase = 0;
+  }
+  else {
+    fnChangeBase(BASE);
+    lastIntegerBase = BASE;
+  }
+  fnRefreshRadioState(0, 0);
+}
+
+
+/********************************************//**
+ * \brief Set Input_Default
+ *
+ * \param[in] inputDefault uint16_t
+ * \return void
+ ***********************************************/
+void fnInDefault(uint16_t inputDefault) {              //DONE
+  Input_Default = inputDefault;
+
+  if(Input_Default == ID_SI) {
+    lastIntegerBase = 10;
+  }
+  else {
+    lastIntegerBase = 0;
+  }
+
+  fnRefreshRadioState(RB_ID, inputDefault);
+}
+
+
+

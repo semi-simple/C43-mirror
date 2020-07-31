@@ -620,18 +620,18 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if(Input_Default == ID_43S || Input_Default == ID_DP) {                 //JM defaults JMZERO
+        if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
         setRegisterDataType(r, dtReal34, AM_NONE);
         setRegisterDataPointer(r, allocWp43s(TO_BYTES(REAL34_SIZE)));
         real34Zero(REGISTER_REAL34_DATA(r));
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_CPXDP) {                //JM defaults vv
+        else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_SI) {                   //JM defaults vv
+        else if(lastIntegerBase !=0 || Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           uint16_t val =0;
@@ -639,7 +639,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_LI) {                   //JM defaults vv
+        else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           uint16_t val =0;
@@ -658,18 +658,18 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real16s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumRegs; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        if(Input_Default == ID_43S || Input_Default == ID_DP) {                 //JM defaults JMZERO
+        if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
         setRegisterDataType(r, dtReal34, AM_NONE);
         setRegisterDataPointer(r, allocWp43s(TO_BYTES(REAL34_SIZE)));
         real34Zero(REGISTER_REAL34_DATA(r));
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_CPXDP) {                //JM defaults vv
+        else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
           setRegisterDataType(r, dtComplex34, AM_NONE);
           setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_SI) {                   //JM defaults vv
+        else if(lastIntegerBase !=0 || Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           uint16_t val =0;
@@ -677,7 +677,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
-        else if(Input_Default == ID_LI) {                   //JM defaults vv
+        else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                   //JM defaults vv
           longInteger_t lgInt;
           longIntegerInit(lgInt);
           uint16_t val =0;
@@ -746,7 +746,7 @@ void allocateNamedVariable(const char *variableName) {
   // The new named variable is a real34 initialized to 0.0
   setRegisterDataType(regist, dtReal34, AM_NONE);
 
-  if(Input_Default == ID_43S || Input_Default == ID_DP) {                       //JM defaults JMZERO
+  if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                       //JM defaults JMZERO
     setRegisterDataType(regist, dtReal34, AM_NONE);
 
   len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
@@ -759,7 +759,7 @@ void allocateNamedVariable(const char *variableName) {
   setRegisterDataPointer(regist, allocWp43s(TO_BYTES(REAL34_SIZE)));
   real34Zero(REGISTER_REAL34_DATA(regist));
   }                                                         //JM defaults
-  else if(Input_Default == ID_CPXDP) {                      //JM defaults vv
+  else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                      //JM defaults vv
     setRegisterDataType(regist, dtComplex34, AM_NONE);
     len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     namePtr = allocWp43s(len);
@@ -770,7 +770,7 @@ void allocateNamedVariable(const char *variableName) {
     real34Zero(REGISTER_REAL34_DATA(regist));
     real34Zero(REGISTER_IMAG34_DATA(regist));
   }                                                         //JM defaults ^^
-  else if(Input_Default == ID_SI) {                         //JM defaults vv
+  else if(lastIntegerBase != 0 || Input_Default == ID_SI) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
     len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     namePtr = allocWp43s(len);
@@ -785,7 +785,7 @@ void allocateNamedVariable(const char *variableName) {
     convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                         //JM defaults ^^
-  else if(Input_Default == ID_LI) {                         //JM defaults vv
+  else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
     len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
     namePtr = allocWp43s(len);
@@ -965,7 +965,7 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
-  if(Input_Default == ID_43S || Input_Default == ID_DP) {                       //JM defaults JMZERO
+  if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                       //JM defaults JMZERO
     if(getRegisterDataType(regist) == dtReal34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       setRegisterTag(regist, AM_NONE);
@@ -975,7 +975,7 @@ void clearRegister(calcRegister_t regist) {
       real34Zero(REGISTER_REAL34_DATA(regist));
     }
   }                                                                             //JM defaults ^^
-  else if(Input_Default == ID_CPXDP) {                                          //JM defaults vv
+  else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                                          //JM defaults vv
     if(getRegisterDataType(regist) == dtComplex34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       real34Zero(REGISTER_IMAG34_DATA(regist));
@@ -987,7 +987,7 @@ void clearRegister(calcRegister_t regist) {
       real34Zero(REGISTER_IMAG34_DATA(regist));
     }
   }                                                                             //JM defaults ^^
-  else if(Input_Default == ID_SI) {                                             //JM defaults vv
+  else if(lastIntegerBase !=0 || Input_Default == ID_SI) {                                             //JM defaults vv
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);
@@ -996,7 +996,7 @@ void clearRegister(calcRegister_t regist) {
     convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                                             //JM defaults ^^
-  else if(Input_Default == ID_LI) {                                             //JM defaults vv
+  else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                                             //JM defaults vv
     //JM comment: Not checking if already the correct type, just changing it. Wasting some steps.
     longInteger_t lgInt;
     longIntegerInit(lgInt);

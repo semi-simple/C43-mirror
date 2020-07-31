@@ -2056,8 +2056,14 @@
 #define MNU_XXEQ                      2013
 #define ITM_EXTX                      2014
 #define ITM_EXTY                      2015
+#define ITM_DEG2                      2016
+#define ITM_DMS2                      2017
+#define ITM_GRAD2                     2018
+#define ITM_MULPI2                    2019
+#define ITM_RAD2                      2020
+#define ITM_HMS2                      2021
 
-#define LAST_ITEM                     2016   //JM
+#define LAST_ITEM                     2022   //JM
 
 #define CHR_PROD_SIGN                 9999
 

@@ -336,16 +336,6 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
         tmp = true;
       }
   
-      //Change direct entry functions from key allocation to special allocation
-      if (ix_fn == ITM_toINT)  {    //  793   fnChangeBase, TM_VALUE_CHB, STD_RIGHT_ARROW "INT",                         "#"
-          ix_fn = KEY_HASH;         //  1737  fnBASE_Hash,  NOPARAM, "##" STD_RIGHT_ARROW "INT", 
-      }
-/* else
-      if (ix_fn == KEY_dotD) {      //  1527 fnJM, 255, "", ".d",
-         ix_fn = ITM_DOTDEMU;       //  1935 fnKeyDotD, NOPARAM, "Dot.d"
-      }
-      //printf("    Function on key: %d. Use this function: %d %s\n", ix_fn, (userModeEnabled && (menu_A_HOME[ix0+ix]!=-1)), indexOfItems[ix_fn].itemSoftmenuName );
-*/  
       *funk = ix_fn;
       return ix_fn != -9999 && ((getSystemFlag(FLAG_USER)) || (!getSystemFlag(FLAG_USER) && tmp));
     }

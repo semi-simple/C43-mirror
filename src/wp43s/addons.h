@@ -36,8 +36,13 @@ void fnJMdown       (uint16_t unusedParamButMandatory);
 void fnJM_2SI       (uint16_t unusedParamButMandatory);
 void fnRoundi2      (uint16_t unusedParamButMandatory);
 void fnRound2       (uint16_t unusedParamButMandatory);
+void fnAngularModeJM(uint16_t unusedParamButMandatory);
+void fnChangeBaseJM (uint16_t unusedParamButMandatory);
+void fnInDefault    (uint16_t inputDefault);
+
 
 //for display.c
 void fnDisplayFormatSigFig      (uint16_t displayFormatN);
 void fnDisplayFormatUnit        (uint16_t displayFormatN);
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode, const char *separator);
+

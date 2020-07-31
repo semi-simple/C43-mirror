@@ -148,12 +148,9 @@ char  indexOfItemsXEQM[18*8];  //tosave still if needed//JMXEQ
 //void fnSeteRPN(uint16_t unusedParamButMandatory);         //dr - unused
 //void fnSetHOME3(uint16_t unusedParamButMandatory);        //dr - unused
 void fnSetSetJM(uint16_t jmConfig);
-void fnInDefault(uint16_t inputDefault);
 void fnSigmaAssign(uint16_t sigmaAssign);
 void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
-void fnJMup(uint16_t unusedParamButMandatory);
-void fnJMdown(uint16_t unusedParamButMandatory);
-void fnJM_2SI(uint16_t unusedParamButMandatory);
+
 //void fnInfo(bool_t Info);
 
 void fnJM(uint16_t JM_OPCODE);
@@ -251,13 +248,5 @@ char* itoa(int value, char* result, int base);
 //keyboard.c
 void JM_DOT(int16_t xx, int16_t yy);
 #endif
-
-void fnBASE_Hash(uint16_t unusedParamButMandatory);
-//void fnKeyDotDjm  (uint16_t unusedParamButMandatory);
-
-
-//void fnComplexCCCC_CPX  (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED
-//void fnComplexCCCC_CC   (uint16_t unusedParamButMandatory);  //JM CPX NOT NEEDED 
-
 
 void fnShowJM  (uint16_t jmConfig);

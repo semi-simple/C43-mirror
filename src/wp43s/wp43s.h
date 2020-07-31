@@ -301,6 +301,7 @@ typedef int16_t calcRegister_t;
 #define AM_MULTPI               3 // multpi must be 3
 #define AM_DMS                  4 // dms    must be 4
 #define AM_NONE                 5
+#define AM_HMS                  6   //JM
 
 // Date format 2 bits
 #define DF_DMY                  0

@@ -152,3 +152,6 @@
            Swapped glyphs 1/2 and 1/4 (U+00BC is 1/4 and U+00BD is 1/2).
            New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
+
+2020-07-31 added USB symbol U+2434
+           New WP43S_StandardFont.ttf generated.

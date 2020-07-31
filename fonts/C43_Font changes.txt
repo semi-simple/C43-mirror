@@ -66,3 +66,6 @@ WP43S font:
            New WP43S_NumericFont.ttf generated.
            New WP43S_StandardFont.ttf generated.
 
+WP43S font:
+2020-07-31 added USB symbol U+2434
+           New WP43S_StandardFont.ttf generated.

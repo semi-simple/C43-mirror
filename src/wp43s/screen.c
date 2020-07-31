@@ -447,12 +447,31 @@ void refreshLcd(void) {// This function is called roughly every 100 ms from the 
     allowScreenUpdate = true;
     strcpy(oldTime, dateTimeString);
     showDateTime();
+  }
 
-    if(get_lowbat_state() == 1 || get_vbat() < 2500) {
+  if(get_lowbat_state() == 1 || get_vbat() < 2500) {
+    if(!getSystemFlag(FLAG_LOWBAT)) {
       setSystemFlag(FLAG_LOWBAT);
+      showHideLowBattery();
     }
-    else {
+  }
+  else {
+    if(getSystemFlag(FLAG_LOWBAT)) {
       clearSystemFlag(FLAG_LOWBAT);
+      showHideLowBattery();
+    }
+  }
+
+  if(usb_powered() == 1) {
+    if(!getSystemFlag(FLAG_USB)) {
+      setSystemFlag(FLAG_USB);
+      showHideUSB();
+    }
+  }
+  else {
+    if(getSystemFlag(FLAG_USB)) {
+      clearSystemFlag(FLAG_USB);
+      showHideUSB();
     }
   }
 

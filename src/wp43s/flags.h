@@ -72,7 +72,8 @@
 #define FLAG_INTING   0xc025
 #define FLAG_SOLVING  0xc026
 #define FLAG_VMDISP   0xc027
-#define NUMBER_OF_SYSTEM_FLAGS 40
+#define FLAG_USB      0xc028
+#define NUMBER_OF_SYSTEM_FLAGS 41
 
 #define isSystemFlagWriteProtected(sf)  ((sf & 0x4000) != 0)
 #define getSystemFlag(sf)               ((systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)

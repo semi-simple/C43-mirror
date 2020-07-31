@@ -2039,7 +2039,7 @@ const item_t indexOfItems[] = {
 /* 1588 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1589 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 1590 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamFlag",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 1591 */  { itemToBeCoded,               NOPARAM,                     "1591",                                        "1591",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/* 1591 */  { fnGetSystemFlag,             FLAG_USB,                    "USB",                                         "USB",                                         0,       0,       CAT_SYFL, SLS_UNCHANGED},
 /* 1592 */  { fnGetSystemFlag,             FLAG_TDM24,                  "TDM24",                                       "TDM24",                                       0,       0,       CAT_SYFL, SLS_UNCHANGED},
 /* 1593 */  { fnGetSystemFlag,             FLAG_YMD,                    "YMD",                                         "YMD",                                         0,       0,       CAT_SYFL, SLS_UNCHANGED},
 /* 1594 */  { fnGetSystemFlag,             FLAG_DMY,                    "DMY",                                         "DMY",                                         0,       0,       CAT_SYFL, SLS_UNCHANGED},

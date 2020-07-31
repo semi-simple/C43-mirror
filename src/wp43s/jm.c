@@ -47,7 +47,7 @@ void reset_jm_defaults(void) {
     ShiftTimoutMode = true;                                      //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER CANCEL.
     Home3TimerMode = true;                                       //JM SHIFT Default. Create a flag to enable or disable SHIFT TIMER MODE FOR HOME.
     UNITDisplay = false;                                         //JM HOME Default. Create a flag to enable or disable UNIT display
-    SH_BASE_HOME   = true;                                       //JM
+    SH_BASE_HOME   = false;                                      //JM
     SH_BASE_AHOME  = true;                                       //JM
     Norm_Key_00_VAR  = ITM_SIGMAPLUS;                            //JM
     Input_Default =  ID_43S;                                     //JM Input Default

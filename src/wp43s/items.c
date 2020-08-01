@@ -2258,7 +2258,7 @@ const item_t indexOfItems[] = {
 /* 1734 */  { addItemToBuffer,             CHR_digamma,                 "",                                            STD_digamma,                                   0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1735 */  { addItemToBuffer,             CHR_sampi,                   "",                                            STD_sampi,                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GREEK
 /* 1736 */  { fnCase,                      NOPARAM,                     "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM CASE
-/* 1670 */  { itemToBeCoded,               NOPARAM,                     "1670",                                        "1670",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
+/* 1737 */  { itemToBeCoded,               NOPARAM,                     "1737",                                        "1737",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},
 /* 1738 */  { itemToBeCoded,               NOPARAM,                     "XEQM",                                        "XEQM",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 
 /* 1739 */  { fn_cnst_op_a,                NOPARAM,                     "op_a",                                        "a",                                           0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM Operator a
@@ -2541,12 +2541,12 @@ const item_t indexOfItems[] = {
 /* 2013 */  { itemToBeCoded,               NOPARAM,                     "XXEQ",                                        "XXEQ",                                        0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 2014 */  { fnSetSetJM,                  JC_EXTENTX,                  "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2015 */  { fnSetSetJM,                  JC_EXTENTY,                  "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 2016 */  { fnAngularModeJM,             AM_DEGREE,                   "DEG",                                         "DEG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 2017 */  { fnAngularModeJM,             AM_DMS,                      "D.MS",                                        "d.ms",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 2018 */  { fnAngularModeJM,             AM_GRAD,                     "GRAD",                                        "GRAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 2019 */  { fnAngularModeJM,             AM_MULTPI,                   "MUL" STD_pi,                                  "MUL" STD_pi,                                  0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 2020 */  { fnAngularModeJM,             AM_RADIAN,                   "RAD",                                         "RAD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED},
-/* 2021 */  { fnAngularModeJM,             AM_HMS,                      "H.MS",                                        "h.ms",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2016 */  { fnAngularModeJM,             AM_DEGREE,                   STD_RIGHT_DOUBLE_ANGLE "DEG",                  STD_RIGHT_DOUBLE_ANGLE "DEG",                  0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2017 */  { fnAngularModeJM,             AM_DMS,                      STD_RIGHT_DOUBLE_ANGLE "D.MS",                 STD_RIGHT_DOUBLE_ANGLE "d.ms",                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2018 */  { fnAngularModeJM,             AM_GRAD,                     STD_RIGHT_DOUBLE_ANGLE "GRAD",                 STD_RIGHT_DOUBLE_ANGLE "GRAD",                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2019 */  { fnAngularModeJM,             AM_MULTPI,                   STD_RIGHT_DOUBLE_ANGLE "MUL" STD_pi,           STD_RIGHT_DOUBLE_ANGLE "MUL" STD_pi,           0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2020 */  { fnAngularModeJM,             AM_RADIAN,                   STD_RIGHT_DOUBLE_ANGLE "RAD",                  STD_RIGHT_DOUBLE_ANGLE "RAD",                  0,       0,       CAT_FNCT, SLS_UNCHANGED},
+/* 2021 */  { fnAngularModeJM,             AM_HMS,                      STD_RIGHT_DOUBLE_ANGLE "H.MS",                 STD_RIGHT_DOUBLE_ANGLE "h.ms",                 0,       0,       CAT_FNCT, SLS_UNCHANGED},
 
 /* 2022 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,         0,         CAT_NONE, SLS_UNCHANGED}       //JM
 };

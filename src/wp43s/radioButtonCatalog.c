@@ -104,12 +104,12 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /*      */  { ITM_EXTY,             JC_EXTENTY,             CB_JC },  //fnSetSetJM
 /* 1892 */  { ITM_TEST,             JC_ITM_TST,             CB_JC },  //fnSetInlineTest
 
-/*      */  { ITM_DEG2,             AM_DEGREE,              RB_AM2 },  //fnAngularModeJM
-/*      */  { ITM_DMS2,             AM_DMS,                 RB_AM2 },  //fnAngularModeJM
-/*      */  { ITM_GRAD2,            AM_GRAD,                RB_AM2 },  //fnAngularModeJM
-/*      */  { ITM_MULPI2,           AM_MULTPI,              RB_AM2 },  //fnAngularModeJM
-/*      */  { ITM_RAD2,             AM_RADIAN,              RB_AM2 },  //fnAngularModeJM
-/*      */  { ITM_HMS2,             AM_HMS,                 RB_AM2 },  //fnAngularModeJM
+/*        { ITM_DEG2,             AM_DEGREE,              RB_AM2 },  //fnAngularModeJM  */
+/*        { ITM_DMS2,             AM_DMS,                 RB_AM2 },  //fnAngularModeJM  */
+/*        { ITM_GRAD2,            AM_GRAD,                RB_AM2 },  //fnAngularModeJM  */
+/*        { ITM_MULPI2,           AM_MULTPI,              RB_AM2 },  //fnAngularModeJM  */
+/*        { ITM_RAD2,             AM_RADIAN,              RB_AM2 },  //fnAngularModeJM  */
+/*        { ITM_HMS2,             AM_HMS,                 RB_AM2 },  //fnAngularModeJM  */
 
 /* 1685 */  { ITM_2BIN,               2,                     RB_HX  },  //fnChangeBaseJM
 /* 1686 */  { ITM_2OCT,               8,                     RB_HX  },  //fnChangeBaseJM
@@ -142,7 +142,7 @@ int8_t fnCbIsSet(int16_t item) {
 
       switch (indexOfRadioCbEepromItems[i].radioButton)
       {
-      case RB_AM2:
+//      case RB_AM2: //JM temporarily removed
       case RB_AM:
         {
           rb_param = currentAngularMode;

@@ -442,13 +442,19 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
 
 //Rounding
 void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
+
+
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      if(lastIntegerBase != 0) {
-        fnChangeBase(lastIntegerBase);                  //This converts shortint, longint and real to shortint!
+      if(lastIntegerBase >= 2 && lastIntegerBase <= 16) {
+//        fnChangeBase(lastIntegerBase);                  //This converts shortint, longint and real to shortint!
+        convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+        setRegisterShortIntegerBase(REGISTER_X, lastIntegerBase);
       }
       else {
-        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!
+//        fnChangeBase(10);                               //This converts shortint, longint and real to shortint!
+        convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
+        setRegisterShortIntegerBase(REGISTER_X, 10);
       }
       break;
     case dtReal34:

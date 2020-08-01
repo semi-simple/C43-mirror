@@ -21,6 +21,7 @@
 /* ADDITIONAL C43 functions and routines */
 
 #define PC_BUILD_TELLTALE
+#undef PC_BUILD_TELLTALE
 
 #include "wp43s.h"
 
@@ -34,6 +35,27 @@ void jm_show_calc_state(char comment[]) {
   printf(".  mmMNU_HOME=%d, mmMNU_ALPHA=%d\n",mm_MNU_HOME, mm_MNU_ALPHA);
 #endif  
 }
+
+/*
+char ss[100];
+copyRegisterToClipboardString(REGISTER_X, ss);
+strcat(ss,":1");
+print_linestr(ss,true);
+
+copyRegisterToClipboardString(REGISTER_X, ss);
+strcat(ss,"2"); 
+print_linestr(ss,false);
+
+copyRegisterToClipboardString(REGISTER_X, ss);
+strcat(ss,":3");
+print_linestr(ss,false);
+
+copyRegisterToClipboardString(REGISTER_X, ss);
+strcat(ss,":4");
+print_linestr(ss,false);
+calcMode = CM_BUG_ON_SCREEN;
+
+*/
 
 
 

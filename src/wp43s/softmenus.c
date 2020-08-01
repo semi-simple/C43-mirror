@@ -1404,12 +1404,15 @@ void showSoftmenuCurrentPart(void) {
         }                                                                      //JMXEQ^^
         else                                                                   //JMvv
         if(softmenu[m].menuId == -MNU_SYSFL) {
-          if(indexOfItems[item%10000].itemCatalogName[0] == 0 || isSystemFlagWriteProtected(indexOfItems[item%10000].param) )
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          else
-            showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, getSystemFlag(indexOfItems[item%10000].param) ?  CB_TRUE : CB_FALSE, -1);
+          if(indexOfItems[item%10000].itemCatalogName[0] != 0) {
+            if(isSystemFlagWriteProtected(indexOfItems[item%10000].param)) {
+              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, getSystemFlag(indexOfItems[item%10000].param) ?  1 : 0);
+            }
+            else {
+              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, getSystemFlag(indexOfItems[item%10000].param) ?  CB_TRUE : CB_FALSE, -1);
+            }
+          }
         }                                                                      //JM^^
-
         else if(item == 9999) {
           showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, showCb, showValue);
         }

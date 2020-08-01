@@ -20,7 +20,7 @@
 
 /* ADDITIONAL C43 functions and routines */
 
-
+#define PC_BUILD_TELLTALE
 
 #include "wp43s.h"
 
@@ -96,7 +96,7 @@ void reset_jm_defaults(void) {
     }
 
     #ifndef TESTSUITE_BUILD
-      clearScreen();
+      clearScreen_old(false, true, true);
       char line1[TMP_STR_LENGTH];
       XEQMENU_Selection( 1, line1, false);
       XEQMENU_Selection( 2, line1, false);
@@ -116,7 +116,6 @@ void reset_jm_defaults(void) {
       XEQMENU_Selection(16, line1, false);
       XEQMENU_Selection(17, line1, false);
       XEQMENU_Selection(18, line1, false);
-//      clearScreen(false, true, true);
     #endif
 }
 

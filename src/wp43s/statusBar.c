@@ -456,8 +456,13 @@ void showHideUSB(void) {
   if(getSystemFlag(FLAG_USB)) {
     showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
   }
-  else {
+#ifdef PC_BUILD
+  else if(!getSystemFlag(FLAG_ASLIFT)) {
     showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+#elif DMCP_BUILD
+  else if(!getSystemFlag(FLAG_LOWBAT)) {
+    showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+#endif
   }
 }
 #endif

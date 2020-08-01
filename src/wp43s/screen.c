@@ -2120,6 +2120,7 @@ uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
+jm_show_calc_state("refreshScreen\n");
 printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #endif
 #ifdef INLINE_TEST
@@ -2177,7 +2178,7 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
-      refreshRegisterLine(REGISTER_X);
+        refreshRegisterLine(REGISTER_X);
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
 #endif
@@ -2189,10 +2190,10 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
         last_CM = calcMode;
         doRefreshSoftMenu = false;
         if(shiftF) {
-//          showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
+          showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
         }
         else if(shiftG) {
-//          showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
+          showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
         }
         else {
           if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
@@ -2256,10 +2257,10 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
       if(shiftF) {
-//        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide     //JM SEE keyboardtweak.c
       }
       else if(shiftG) {
-//        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide    //JM SEE keyboardtweak.c
       }
       else {
         if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {

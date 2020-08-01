@@ -1300,7 +1300,7 @@ void showSoftmenuCurrentPart(void) {
   bool_t dottedTopLine;
 
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
-  clearScreen_old(false, false, true); //JM
+  clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 // printf(">>> softmenus.c: showSoftmenuCurrentPart\n");
     m                = softmenuStack[softmenuStackPointer-1].softmenu;
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;

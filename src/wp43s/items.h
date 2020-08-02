@@ -2046,7 +2046,7 @@
 #define ITM_T_RIGHT_ARROW             2003
 #define ITM_T_LLEFT_ARROW             2004
 #define ITM_T_RRIGHT_ARROW            2005
-#define ITM_T_INSERT                  2006
+#define Not_used1671                  2006
 #define ITM_XNEW                      2007
 #define MNU_T_EDIT                    2008
 #define ITM_XSAVE                     2009

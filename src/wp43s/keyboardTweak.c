@@ -907,49 +907,43 @@ void fnT_ARROW(uint16_t command) {
   uint16_t ix, in, ixx, in_old;
   switch (command) {
      case 1 /*STD_LEFT_ARROW */ : 
-                                  ix = 0; 
-                                  in = 0;
-                                  in_old = 0;
-                                  while (ix<T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
-                                    in_old = in;
-                                    in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
-                                    ix++;
-                                  }
-                                  T_cursorPos = in_old;
-                                  break;
+       ix = 0; 
+       in = 0;
+       in_old = 0;
+       while (ix<T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
+         in_old = in;
+         in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
+         ix++;
+       }
+       T_cursorPos = in_old;
+       break;
 
      case 2 /*STD_RIGHT_ARROW*/ : 
-                                  ix = 0; 
-                                  in = 0;
-                                  while (ix < T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
-                                    in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
-                                    ix++;
-                                  }
-                                  T_cursorPos = stringNextGlyph(aimBuffer, in);
-                                  break;
+        ix = 0; 
+        in = 0;
+        while (ix < T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
+          in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
+          ix++;
+        }
+        T_cursorPos = stringNextGlyph(aimBuffer, in);
+        break;
 
      case 3 /*STD_FARLEFT_ARROW */ :
-                                  ixx = 0;
-                                  while(ixx<10) {
-                                    fnT_ARROW(1);
-                                    ixx++;
-                                  }
-                                  break;
+        ixx = 0;
+        while(ixx<10) {
+          fnT_ARROW(1);
+          ixx++;
+        }
+        break;
 
      case 4 /*STD_FARRIGHT_ARROW*/ :
-                                  ixx = 0;
-                                  while(ixx<10) {
-                                    fnT_ARROW(2);
-                                    ixx++;
-                                  }
-                                  break;
+        ixx = 0;
+        while(ixx<10) {
+          fnT_ARROW(2);
+          ixx++;
+        }
+        break;
 
-     case 0 /*INS            */ :
-                                  break;
-
-#ifndef TESTSUITE_BUILD
-     case 6 /*DELETE         */ : btnClicked(NULL, "16"); break;
-#endif
      default: break;
   }
   //printf(">>> T_cursorPos %d",T_cursorPos);

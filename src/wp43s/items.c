@@ -2531,7 +2531,7 @@ const item_t indexOfItems[] = {
 /* 2003 */  { fnT_ARROW,                   2,                           STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2004 */  { fnT_ARROW,                   3,                           STD_LEFT_ARROW STD_LEFT_ARROW,                 STD_LEFT_ARROW STD_LEFT_ARROW,                 0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2005 */  { fnT_ARROW,                   4,                           STD_RIGHT_ARROW STD_RIGHT_ARROW,               STD_RIGHT_ARROW STD_RIGHT_ARROW,               0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 2006 */  { itemToBeCoded,               NOPARAM,                     "2006",                                        "2006",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers
+/* 2006 */  { fnJM,                        50,                          "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //Spare numbers
 /* 2007 */  { fnXEQNEW,                    NOPARAM,                     "X.NEW",                                       "X.NEW",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED},
 /* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED},

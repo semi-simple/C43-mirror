@@ -49,7 +49,8 @@ typedef enum {
 
 extern bool_t   doRefreshSoftMenu;                             //dr
 
-void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
+void     fnScreenDump                       (uint16_t unusedButMandatoryParameter);
+void     fnDumpMenus(void);                      //JM
 
 void     FN_handler();                       //JM LONGPRESS
 void     Shft_handler();                     //JM LONGPRESS f/g

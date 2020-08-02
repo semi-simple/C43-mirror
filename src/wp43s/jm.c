@@ -1154,6 +1154,16 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
 
+ else
+
+ if(JM_OPCODE == 50) {                                         // 
+    #ifndef TESTSUITE_BUILD
+      fnDumpMenus();
+    #endif
+  }
+
+
+
 // Item 255 is NOP
 
 }

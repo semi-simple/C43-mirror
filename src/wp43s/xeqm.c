@@ -566,13 +566,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"X.SAVE" )) {strcpy(commandnumber, "2009");} else
                       if (strcompare(commandnumber,"X.LOAD" )) {strcpy(commandnumber, "2010");} else
                       if (strcompare(commandnumber,"X.XEQ" )) {strcpy(commandnumber, "2012");} else
-                      if (strcompare(commandnumber,"">>DEG"" )) {strcpy(commandnumber, "2016");} else
-                      if (strcompare(commandnumber,"">>D.MS"" )) {strcpy(commandnumber, "2017");} else
-                      if (strcompare(commandnumber,"">>GRAD"" )) {strcpy(commandnumber, "2018");} else
-                      if (strcompare(commandnumber,"">>MUL" STD_PI" )) {strcpy(commandnumber, "2019");} else
-                      if (strcompare(commandnumber,"">>RAD"" )) {strcpy(commandnumber, "2020");} else
-                      if (strcompare(commandnumber,"">>H.MS"" )) {strcpy(commandnumber, "2021");} else
-
+                      if (strcompare(commandnumber,">>DEG" )) {strcpy(commandnumber, "2016");} else
+                      if (strcompare(commandnumber,">>D.MS" )) {strcpy(commandnumber, "2017");} else
+                      if (strcompare(commandnumber,">>GRAD" )) {strcpy(commandnumber, "2018");} else
+                      if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2019");} else
+                      if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2020");} else
+                      if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2021");} else
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 

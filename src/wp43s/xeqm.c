@@ -735,8 +735,8 @@ running_program_jm = false;
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
   switch(selection) {
-    case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 ~3^-4   \"3\" ENTER \"4\" CHS Y^X "                                               ); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 BATTPLT \"50\" STO \"00\" CLSUM LBL M1 BATT? RCL \"00\" SUM+ DSZ \"00\" GTO M1 PLOT "); displaywords(line1); execute_string(line1,exec); break;
+    case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 XEQM01 "); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 ~BATPLT \"400\" STO \"00\" TICKS STO \"01\" CLSUM LBL M1 BATT? RCL \"00\" TICKS \"10\" RCL \"01\" - / SUM+ DSZ \"00\" GTO M1 PLOT "); displaywords(line1); execute_string(line1,exec); break;
     case  3:import_string_from_filename(line1,"PROGRAMS","XEQM03.TXT","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
     case  4:import_string_from_filename(line1,"PROGRAMS","XEQM04.TXT","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
     case  5:import_string_from_filename(line1,"PROGRAMS","XEQM05.TXT","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
@@ -878,6 +878,9 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
+      if(eRPN) {      //JM NEWERPN 
+        setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+      }                                        //JM NEWERPN 
       strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_Y)); 
       T_cursorPos = stringByteLength(aimBuffer);
       fnDrop(0);
@@ -889,6 +892,9 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
   }
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) < AIM_BUFFER_LENGTH) {
+      if(eRPN) {      //JM NEWERPN 
+        setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+      }                                        //JM NEWERPN 
       strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X));
       T_cursorPos = stringByteLength(aimBuffer);
       fnDrop(0);
@@ -903,6 +909,9 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
     line1[0]=0;
     strcpy(line1," ");
     int16_t len = stringByteLength(line1);
+    if(eRPN) {      //JM NEWERPN 
+      setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+    }                                        //JM NEWERPN 
     liftStack();
     reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
     strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);

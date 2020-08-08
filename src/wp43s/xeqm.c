@@ -780,7 +780,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   }
   strcat(fn_short,".TXT");                        //Add .TXT
   strcat(fn_long,".TXT");                         //Add .TXT
-  printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
+//  printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
   switch(selection) {
     case  1:import_string_from_filename(line1,pgmpath,   fn_short,fn_long,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
 //  case  2:import_string_from_filename(line1,"PROGRAMS",fn_short,fn_long,"XEQLBL 02 XEQM02 "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
@@ -792,7 +792,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
       strcat(line2,nn);
       strcat(line2," ");
       import_string_from_filename(line1,pgmpath,fn_short,fn_long,line2); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec);
-  printf(">>>    final string:|%s|\n",line1);
+  //printf(">>>    final string:|%s|\n",line1);
       break;
   }
 #endif

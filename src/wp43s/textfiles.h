@@ -43,7 +43,7 @@ void         displaywords(char *line1);
 #define      append  0
 #define      overwrite 1
 
-int16_t      import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback);
+int16_t      import_string_from_filename(char *line1, char *dirname,  char *filename_short, char *filename, char *fallback);
 int16_t      export_append_line(char *inputstring);
 
 int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);

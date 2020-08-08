@@ -409,34 +409,62 @@ int16_t export_xy_to_file(double x, double y){
 
 
 
-int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1, char *dirname, char *filename_short, char *filename, char *fallback) {
 char line[TMP_STR_LENGTH];        /* Line buffer */
-
+    char dirfile[200];
+    dirfile[0]=0;
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
-    //Create file name
+    //Create dir name
     check_create_dir(dirname);  
-    strcpy(filename_csv,dirname);
-    strcat(filename_csv,"\\");
-    strcat(filename_csv,filename);
+
+    strcpy(dirfile,dirname);
+    strcat(dirfile,"\\");
+    strcat(dirfile,filename_short);
     
     /* Opens an existing file. */
-    fr = f_open(&fil, filename_csv, FA_READ );   //| FA_OPEN_EXISTING
+    fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
     if (fr != FR_OK) {
       if(fr == 4) {
         sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
         print_linestr(line,false);
-        sprintf(line,"File: %s \n",filename_csv);
+        sprintf(line,"File: %s \n",dirfile);
         print_linestr(line,false);
       } else {
-        sprintf(line,"File read open error ID004 PGM--> %d    \n",fr);        
+        sprintf(line,"File read open error PGM--> %d    \n",fr);        
         print_linestr(line,false);
       }
       f_close(&fil);
-      //return (int)fr;
-      strcpy(line1, fallback);
-      return 0;
+      
+      if(filename[0]!=0) {
+        strcpy(dirfile,dirname);
+        strcat(dirfile,"\\");
+        strcat(dirfile,filename);
+
+        /* Opens an existing file. */
+        fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
+        if (fr != FR_OK) {
+          if(fr == 4) {
+            sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
+            print_linestr(line,false);
+            sprintf(line,"File: %s \n",dirfile);
+            print_linestr(line,false);
+          } else {
+            sprintf(line,"File read open error PGM--> %d    \n",fr);        
+            print_linestr(line,false);
+          }
+          f_close(&fil);
+
+          strcpy(line1, fallback);
+          return 0;
+        }
+      }
+      else {
+        strcpy(line1, fallback);
+        return 0;        
+      }
+
     }
 
     /* Read if open */
@@ -505,21 +533,37 @@ char line[100];               /* Line buffer */
 //**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1, char *dirname,  char *filename_short, char *filename, char *fallback) {
 
   FILE *infile;
-  char dirfile[40];
+  char dirfile[200];
   char onechar[2];
 
   strcpy(dirfile,dirname);
   strcat(dirfile,"/");
-  strcat(dirfile,filename);
+  strcat(dirfile,filename_short);
     
   infile = fopen(dirfile, "rb");
   if (infile == NULL) {
     printf("Cannot load %s\n",dirfile);
-    strcpy(line1, fallback);
-    return 0;
+
+    if(filename[0]!=0) {
+      strcpy(dirfile,dirname);
+      strcat(dirfile,"/");
+      strcat(dirfile,filename);
+        
+      infile = fopen(dirfile, "rb");
+      if (infile == NULL) {
+        printf("Cannot load %s\n",dirfile);
+        strcpy(line1, fallback);
+        return 0;
+      }
+    }
+    else {
+      printf("Cannot load %s\n",dirfile);
+      strcpy(line1, fallback);
+      return 0;
+    }
   }
 
   tmpStr3000[0]=0;

@@ -89,15 +89,16 @@ void runkey(uint16_t item){
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
-    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else //A..Z
-    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else //0..9
+    if(aa[ix]>=65 && aa[ix]<= 90){runkey(900+aa[ix]-65);} else //A..Z
+    if(aa[ix]>=97 && aa[ix]<=122){runkey(900+aa[ix]-65-32);} else //a..z converted to A..Z
+    if(aa[ix]>=48 && aa[ix]<= 57){runkey(890+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-      case 46: runkey(1310); break; //.
-      case 69: runkey(1487); break; //E
+      case 46:  runkey(1310); break; //.
+      case 69:  runkey(1487); break; //E
       case 101: runkey(1487); break; //e
-      case 45: runkey(780); break; //-
-      case 43: runkey(778); break; //+
-      case 32: runkey(1295); break; //space
+      case 45:  runkey( 780); break; //-
+      case 43:  runkey( 778); break; //+
+      case 32:  runkey(1295); break; //space
       default:;
     }
   ix++;
@@ -734,25 +735,54 @@ running_program_jm = false;
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
+  char line2[2400]; //allow >3x18x40 chars
+  line2[0]=0;
+  import_string_from_filename(line2,"PROGRAMS","XEQMINDEX.TXT",line2,"XEQM01:XEQM01 HELP;");
+  char nn[6];
+  nn[0]=0;
+  char fn[100];
+  char fn_short[10];  
+  int16_t ix = 0;
+  int16_t iy = 0;
+  sprintf(nn,"%2d",selection);
+  if(nn[0]==32) {nn[0]=48;}
+  if(nn[1]==32) {nn[1]=48;}
+  strcpy(fn,"XEQM");                        //Create default file name XEQMnn
+  strcat(fn,nn);
+  strcpy(fn_short,fn);
+  printf(">>>### XEQMINDEX:|%s|, Default file name:|%s|\n",line2,fn_short);           
+  while(line2[ix] != 0 && ix+6<stringByteLength(line2)) {
+     if(line2[ix]==88 /*X*/ && line2[ix+1]==69 /*E*/ && line2[ix+2]==81 /*Q*/ && line2[ix+3]==77 /*M*/ && line2[ix+4]==nn[0] && line2[ix+5]==nn[1] && line2[ix+6]==58 /*:*/) {
+       ix = ix + 7;
+       iy = ix;
+       while(line2[ix] != 0 && ix<stringByteLength(line2)) {
+          if(line2[ix] == 59) {line2[ix]=0; strcpy(fn,line2 + iy); break;}     //Replace file name with content from replacement string
+          ix++;
+       }
+     } 
+     ix++;
+  }
+  strcat(fn,".TXT");                        //Add .TXT
+  printf(">>> replacement file name:|%s|\n",fn);           
   switch(selection) {
-    case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 XEQM01 "); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 ~BATPLT \"400\" STO \"00\" TICKS STO \"01\" CLSUM LBL M1 BATT? RCL \"00\" TICKS \"10\" RCL \"01\" - / SUM+ DSZ \"00\" GTO M1 PLOT "); displaywords(line1); execute_string(line1,exec); break;
-    case  3:import_string_from_filename(line1,"PROGRAMS","XEQM03.TXT","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  4:import_string_from_filename(line1,"PROGRAMS","XEQM04.TXT","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  5:import_string_from_filename(line1,"PROGRAMS","XEQM05.TXT","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  6:import_string_from_filename(line1,"PROGRAMS","XEQM06.TXT","XEQLBL 06 ~CUBE3  \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
-    case  7:import_string_from_filename(line1,"PROGRAMS","XEQM07.TXT","XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
-    case  8:import_string_from_filename(line1,"PROGRAMS","XEQM08.TXT","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
-    case  9:import_string_from_filename(line1,"PROGRAMS","XEQM09.TXT","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
-    case 10:import_string_from_filename(line1,"PROGRAMS","XEQM10.TXT","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
-    case 11:import_string_from_filename(line1,"PROGRAMS","XEQM11.TXT","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
-    case 12:import_string_from_filename(line1,"PROGRAMS","XEQM12.TXT","XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
-    case 13:import_string_from_filename(line1,"PROGRAMS","XEQM13.TXT","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
-    case 14:import_string_from_filename(line1,"PROGRAMS","XEQM14.TXT","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
-    case 15:import_string_from_filename(line1,"PROGRAMS","XEQM15.TXT","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
-    case 16:import_string_from_filename(line1,"PROGRAMS","XEQM16.TXT","XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
-    case 17:import_string_from_filename(line1,"PROGRAMS","XEQM17.TXT","XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
-    case 18:import_string_from_filename(line1,"PROGRAMS","XEQM18.TXT","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
+    case  1:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT "); displaywords(line1); execute_string(line1,exec); break;
+    case  2:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 02 XEQM02"); displaywords(line1); execute_string(line1,exec); break;
+    case  3:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 03 XEQM03"); displaywords(line1); execute_string(line1,exec); break;
+    case  4:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 04 XEQM04"); displaywords(line1); execute_string(line1,exec); break;
+    case  5:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 05 XEQM05"); displaywords(line1); execute_string(line1,exec); break;
+    case  6:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 06 XEQM06 "); displaywords(line1); execute_string(line1,exec); break;
+    case  7:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
+    case  8:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
+    case  9:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
+    case 10:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
+    case 11:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
+    case 12:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
+    case 13:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
+    case 14:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
+    case 15:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
+    case 16:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
+    case 17:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
+    case 18:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
     default:;
   }
 #endif

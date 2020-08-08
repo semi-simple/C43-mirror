@@ -1,0 +1,15 @@
+XEQLBL 04 MP2281 //RE-BINDS THE PROGRAM NAME TO THE SOFTMENU
+TICKS 
+"2" EXIT 
+"2281" 
+Y^X 
+"1" - 
+PRIME? 
+X<>Y TICKS X<>Y - "10" /
+ALPHA "The program ran for " EXIT
+X<>Y + 
+ALPHA CASE " s" EXIT
++
+
+
+

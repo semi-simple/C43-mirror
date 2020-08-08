@@ -732,58 +732,68 @@ running_program_jm = false;
 }
 
 
+ 
+void replaceFF(char* FF, char* line2) {
+  int16_t ix =0;
+  if(FF[0]>=48 && FF[0]<=57 && FF[1]>=48 && FF[1]<=57 && FF[2]==0) {
+    while(line2[ix] != 0 && ix+10<stringByteLength(line2)) {
+      if(line2[ix]==88 /*X*/ && line2[ix+1]==69 /*E*/ && line2[ix+2]==81 /*Q*/ && line2[ix+3]==76 /*L*/ && line2[ix+4]==66 /*B*/ && line2[ix+5]==76 /*L*/ && line2[ix+6]==32 && line2[ix+7]==70 /*F*/ && line2[ix+8]==70 /*F*/) {
+        line2[ix+7]=FF[0];
+        line2[ix+8]=FF[1];
+      }
+      ix++;
+    }
+  }
+}
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
-  char line2[2400]; //allow >3x18x40 chars
+                                            //Read in XEQMINDEX.TXT file, with default XEQMnn file name replacements
+  char line2[2400];                         //  allow >3x18x40 chars
   line2[0]=0;
-  import_string_from_filename(line2,"PROGRAMS","XEQMINDEX.TXT",line2,"XEQM01:XEQM01 HELP;");
   char nn[6];
   nn[0]=0;
-  char fn[100];
-  char fn_short[10];  
+  #define pgmpath "PROGRAMS"
+  import_string_from_filename(line2,"PROGRAMS","XEQMINDEX.TXT",nn,"XEQM01:XEQM01 HELP;");
+  char fn_long[200];
+  char fn_short[16];  
   int16_t ix = 0;
   int16_t iy = 0;
   sprintf(nn,"%2d",selection);
   if(nn[0]==32) {nn[0]=48;}
   if(nn[1]==32) {nn[1]=48;}
-  strcpy(fn,"XEQM");                        //Create default file name XEQMnn
-  strcat(fn,nn);
-  strcpy(fn_short,fn);
-  printf(">>>### XEQMINDEX:|%s|, Default file name:|%s|\n",line2,fn_short);           
+  strcpy(fn_long,"XEQM");                        //Build default file name XEQMnn
+  strcat(fn_long,nn);
+  strcpy(fn_short,fn_long);
+  //printf(">>>XEQMINDEX:|%s|, Default file name:|%s|\n",line2,fn_short);  
+                                            //Find XEQMnn in the replacement token file         
   while(line2[ix] != 0 && ix+6<stringByteLength(line2)) {
      if(line2[ix]==88 /*X*/ && line2[ix+1]==69 /*E*/ && line2[ix+2]==81 /*Q*/ && line2[ix+3]==77 /*M*/ && line2[ix+4]==nn[0] && line2[ix+5]==nn[1] && line2[ix+6]==58 /*:*/) {
        ix = ix + 7;
-       iy = ix;
+       iy = ix;                             //If found, find the replacement text after the colon until before the semi-colon
        while(line2[ix] != 0 && ix<stringByteLength(line2)) {
-          if(line2[ix] == 59) {line2[ix]=0; strcpy(fn,line2 + iy); break;}     //Replace file name with content from replacement string
+          if(line2[ix] == 59) {line2[ix]=0; strcpy(fn_long,line2 + iy); break;}     //Replace file name with content from replacement string
           ix++;
        }
      } 
      ix++;
   }
-  strcat(fn,".TXT");                        //Add .TXT
-  printf(">>> replacement file name:|%s|\n",fn);           
+  strcat(fn_short,".TXT");                        //Add .TXT
+  strcat(fn_long,".TXT");                         //Add .TXT
+  printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
   switch(selection) {
-    case  1:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT "); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 02 XEQM02"); displaywords(line1); execute_string(line1,exec); break;
-    case  3:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 03 XEQM03"); displaywords(line1); execute_string(line1,exec); break;
-    case  4:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 04 XEQM04"); displaywords(line1); execute_string(line1,exec); break;
-    case  5:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 05 XEQM05"); displaywords(line1); execute_string(line1,exec); break;
-    case  6:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 06 XEQM06 "); displaywords(line1); execute_string(line1,exec); break;
-    case  7:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
-    case  8:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
-    case  9:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
-    case 10:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
-    case 11:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
-    case 12:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
-    case 13:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
-    case 14:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
-    case 15:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
-    case 16:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
-    case 17:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
-    case 18:import_string_from_filename(line1,"PROGRAMS",fn_short,fn,"XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
-    default:;
+    case  1:import_string_from_filename(line1,pgmpath,   fn_short,fn_long,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
+//  case  2:import_string_from_filename(line1,"PROGRAMS",fn_short,fn_long,"XEQLBL 02 XEQM02 "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
+    default: 
+      line2[0]=0;
+      strcat(line2,"XEQLBL ");
+      strcat(line2,nn);
+      strcat(line2,"XEQM");
+      strcat(line2,nn);
+      strcat(line2," ");
+      import_string_from_filename(line1,pgmpath,fn_short,fn_long,line2); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec);
+  printf(">>>    final string:|%s|\n",line1);
+      break;
   }
 #endif
 }

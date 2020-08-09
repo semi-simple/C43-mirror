@@ -117,28 +117,8 @@ void reset_jm_defaults(void) {
       ix++;    
     }
 
-    #ifndef TESTSUITE_BUILD
-      clearScreen_old(false, true, true);
-      char line1[TMP_STR_LENGTH];
-      XEQMENU_Selection( 1, line1, false);
-      XEQMENU_Selection( 2, line1, false);
-      XEQMENU_Selection( 3, line1, false);
-      XEQMENU_Selection( 4, line1, false);
-      XEQMENU_Selection( 5, line1, false);
-      XEQMENU_Selection( 6, line1, false);
-      XEQMENU_Selection( 7, line1, false);
-      XEQMENU_Selection( 8, line1, false);
-      XEQMENU_Selection( 9, line1, false);
-      XEQMENU_Selection(10, line1, false);
-      XEQMENU_Selection(11, line1, false);
-      XEQMENU_Selection(12, line1, false);
-      XEQMENU_Selection(13, line1, false);
-      XEQMENU_Selection(14, line1, false);
-      XEQMENU_Selection(15, line1, false);
-      XEQMENU_Selection(16, line1, false);
-      XEQMENU_Selection(17, line1, false);
-      XEQMENU_Selection(18, line1, false);
-    #endif
+//    XEQMENU_loadAllfromdisk();
+
 }
 
     int16_t fnXEQMENUpos = 0;

@@ -409,8 +409,12 @@ int16_t export_xy_to_file(double x, double y){
 
 
 
-int16_t import_string_from_filename(char *line1, char *dirname, char *filename_short, char *filename, char *fallback) {
-char line[TMP_STR_LENGTH];        /* Line buffer */
+int16_t import_string_from_filename(char *line1, const char *dirname, const char *filename_short, const char *filename, const char *fallback) {
+
+//print_inlinestr(">>> 00:",false);
+//print_inlinestr(dirname,false);
+
+    char line[300];               /* Line buffer */
     char dirfile[200];
     dirfile[0]=0;
     FIL fil;                      /* File object */
@@ -422,10 +426,12 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
     strcpy(dirfile,dirname);
     strcat(dirfile,"\\");
     strcat(dirfile,filename_short);
-    
+//print_linestr(">>> A:",false);
+//print_inlinestr(dirfile,false);
     /* Opens an existing file. */
     fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
     if (fr != FR_OK) {
+//print_linestr(">>> B: fail",false);
       if(fr == 4) {
         sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
         print_linestr(line,false);
@@ -441,10 +447,13 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
         strcpy(dirfile,dirname);
         strcat(dirfile,"\\");
         strcat(dirfile,filename);
+//print_linestr(">>> C:",false);
+//print_inlinestr(dirfile,false);
 
         /* Opens an existing file. */
         fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
         if (fr != FR_OK) {
+//print_linestr(">>> D: fail",false);
           if(fr == 4) {
             sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
             print_linestr(line,false);
@@ -455,17 +464,17 @@ char line[TMP_STR_LENGTH];        /* Line buffer */
             print_linestr(line,false);
           }
           f_close(&fil);
-
           strcpy(line1, fallback);
-          return 0;
+          return 1;
         }
       }
       else {
         strcpy(line1, fallback);
-        return 0;        
+        return 1;        
       }
-
     }
+//print_linestr(">>> E: reading:",false);
+//print_inlinestr(line1,false);
 
     /* Read if open */
     line1[0]=0;
@@ -533,7 +542,7 @@ char line[100];               /* Line buffer */
 //**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t import_string_from_filename(char *line1, char *dirname,  char *filename_short, char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1, const char *dirname,  const char *filename_short, const char *filename, const char *fallback) {
 
   FILE *infile;
   char dirfile[200];
@@ -556,13 +565,13 @@ int16_t import_string_from_filename(char *line1, char *dirname,  char *filename_
       if (infile == NULL) {
         printf("Cannot load %s\n",dirfile);
         strcpy(line1, fallback);
-        return 0;
+        return 1;
       }
     }
     else {
       printf("Cannot load %s\n",dirfile);
       strcpy(line1, fallback);
-      return 0;
+      return 1;
     }
   }
 
@@ -793,7 +802,7 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 int16_t line_x,line_y;
 
-void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
+void print_inlinestr(const char *line1, bool_t endline) {
 #ifndef TESTSUITE_BUILD
     char l1[TMP_STR_LENGTH];    //Clip the string at 40
     strcpy(l1, line1);
@@ -811,7 +820,7 @@ void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #endif
 }
 
-void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
+void print_linestr(const char *line1, bool_t line_init) {
 #ifndef TESTSUITE_BUILD
     char l1[TMP_STR_LENGTH];    //Clip the string at 40
     strcpy(l1, line1);
@@ -827,7 +836,7 @@ void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #endif
 }
 
-void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND .
+void print_numberstr(const char *line1, bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND .
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 

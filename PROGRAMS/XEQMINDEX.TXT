@@ -1,10 +1,5 @@
 //C43 XEQM softkey index file 
 //This file to allocate XEQM softkeys to text files in the PROGRAMS directory
-//
-//XEQM01:NNNN
-//XEQM01        01 through 54 indices 3 x 18 screens of softkeys
-//      :       Colon preceeds file name start.
-//       NNNN   Long file name (TXT imlied, not stated).
 
 XEQM01:XEQM01 HELP;
 XEQM02:Battery usage plot;

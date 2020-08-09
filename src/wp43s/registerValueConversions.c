@@ -91,39 +91,17 @@ void convertLongIntegerToReal(longInteger_t source, real_t *destination, realCon
 void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base, calcRegister_t destination) {
   reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, base);
 
-//char ss[100];
-//copyRegisterToClipboardString(destination, ss);
-//strcat(ss,":20 convertLongIntegerToShortIntegerRegister");
-//print_linestr(ss,false);
-
-//sprintf(ss,"%lld:20A shortintegermask",shortIntegerMask);
-//print_linestr(ss,false);
-
   if(longIntegerIsZero(lgInt)) {
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = 0;
   }
   else {
-//    *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
-    uint64_t tt;
-    longIntegerToUInt(lgInt, tt);
-//sprintf(ss,"%lld:20B UI",tt);
-//print_linestr(ss,false);
-
-    convertUInt64ToShortIntegerRegister(0, tt, base, destination);  //Changing to this method via UInt, as the above default code does not wotk on the DM42.
-
-//copyRegisterToClipboardString(destination, ss);
-//strcat(ss,":21");
-//print_linestr(ss,false);
+    *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
 
     if(longIntegerIsNegative(lgInt)) {
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
 
-//copyRegisterToClipboardString(destination, ss);
-//strcat(ss,":22");
-//print_linestr(ss,false);
     }
   }
-//calcMode = CM_BUG_ON_SCREEN;
 }
 
 

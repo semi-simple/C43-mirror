@@ -883,7 +883,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 void XEQMENU_loadAllfromdisk(void) {
 #ifndef TESTSUITE_BUILD
       clearScreen_old(false, true, true);
-      print_linestr("Loading XEQM program files:",true);
+      print_inlinestr("Loading XEQM program files:",true);
 
       char line[TMP_STR_LENGTH];
       
@@ -891,7 +891,7 @@ void XEQMENU_loadAllfromdisk(void) {
       uint8_t ix = 1;
       while(ix<=18) {
         sprintf(tmp,"%2d ",ix);
-        print_linestr(tmp,false);
+        print_inlinestr(tmp,false);
         XEQMENU_Selection( ix, line, false);
         ix++;
       }

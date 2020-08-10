@@ -33,6 +33,10 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
+
+#define verbose_default 1               //0 = no text; 1 = essential text; 2 = extra debugging
+uint8_t verbose_jm;
+
 // Radix Mark 1 bit
 #define RX_PERIOD               103
 #define RX_COMMA                104

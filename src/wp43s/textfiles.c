@@ -315,7 +315,7 @@ char line[100];               /* Line buffer */
     /* Opens an existing file. If not exist, creates a new file. */
     if(mode == append) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_WRITE|FA_CREATE_ALWAYS);
     if (fr) {
-      sprintf(line,"File open error ID001--> %d    \n",fr);       print_linestr(line,false);
+      sprintf(line,"File open error ID002--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -325,7 +325,7 @@ char line[100];               /* Line buffer */
     if(mode == append) {
       fr = f_lseek(&fil, f_size(&fil));
       if (fr) {
-        sprintf(line,"Seek error ID001--> %d    \n",fr);            print_linestr(line,false);
+        sprintf(line,"Seek error ID003--> %d    \n",fr);            print_linestr(line,false);
         f_close(&fil);
         sys_disk_write_enable(0);
         return (int)fr;
@@ -335,7 +335,7 @@ char line[100];               /* Line buffer */
     /* Create string and output */
     fr = f_puts(line1, &fil);
     if (fr == -1) {
-      sprintf(line,"Write error ID001--> %d    \n",fr);            print_linestr(line,false);
+      sprintf(line,"Write error ID004--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -344,7 +344,7 @@ char line[100];               /* Line buffer */
     /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error ID001--> %d    \n",fr);     print_linestr(line,false);
+      sprintf(line,"File close error ID005--> %d    \n",fr);     print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -395,10 +395,10 @@ void make_TSV_dir_name(void){
 
 
 int16_t export_xy_to_file(double x, double y){
+  char line[100];               /* Line buffer */
   make_TSV_dir_name();
-
-  sprintf(tmpStr3000,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
-  if(export_append_string_to_file(tmpStr3000, append, filename_csv) != 0) {
+  sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
+  if(export_append_string_to_file(line, append, filename_csv) != 0) {
     //ERROR ALREADY ANNOUNCED
     return 1;
   }
@@ -409,40 +409,107 @@ int16_t export_xy_to_file(double x, double y){
 
 
 
-int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
-char line[TMP_STR_LENGTH];        /* Line buffer */
-
+int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename_short,  char *filename,  char *fallback) {
+    
+    if(verbose_jm>=2) {
+      print_inlinestr("From dir:",false);
+      print_inlinestr(dirname,false);
+      print_inlinestr(", ",true);
+    }
+  
+    char line[300];               /* Line buffer */
+    char dirfile[200];
+    dirfile[0]=0;
     FIL fil;                      /* File object */
     FRESULT fr;                   /* FatFs return code */
 
-    //Create file name
+    //Create dir name
     check_create_dir(dirname);  
-    strcpy(filename_csv,dirname);
-    strcat(filename_csv,"\\");
-    strcat(filename_csv,filename);
-    
+
+    strcpy(dirfile,dirname);
+    strcat(dirfile,"\\");
+    strcat(dirfile,filename_short);
+
+    if(verbose_jm>=1) {
+      print_inlinestr("1: reading:",false);
+      print_inlinestr(dirfile,false);
+      print_inlinestr(" ",true);
+    }
+
     /* Opens an existing file. */
-    fr = f_open(&fil, filename_csv, FA_READ );   //| FA_OPEN_EXISTING
+    fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
     if (fr != FR_OK) {
-      if(fr == 4) {
-        sprintf(line,"File not found ID004 PGM--> %d    \n",fr);
-        print_linestr(line,false);
-        sprintf(line,"File: %s \n",filename_csv);
-        print_linestr(line,false);
-      } else {
-        sprintf(line,"File read open error ID004 PGM--> %d    \n",fr);        
-        print_linestr(line,false);
+      if(verbose_jm>=1) {
+        print_inlinestr("Not open. ",false);
+        if(verbose_jm>=2) {
+          if(fr == 4) {
+            sprintf(line,"Not found ID006 --> %d ",fr); print_inlinestr(line,false);
+            sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
+          } else {
+            sprintf(line,"File open error --> %d ",fr); print_inlinestr(line,false);
+          }
+        }
+      }
+      if(verbose_jm>=2) {
+        print_inlinestr(".",true);
       }
       f_close(&fil);
-      //return (int)fr;
-      strcpy(line1, fallback);
-      return 0;
+      
+      if(filename[0]!=0) {
+        strcpy(dirfile,dirname);
+        strcat(dirfile,"\\");
+        strcat(dirfile,filename);
+
+        if(verbose_jm>=1) {
+          print_inlinestr("2: reading:",false);
+          print_inlinestr(dirfile,false);
+          print_inlinestr(" ",true);
+        }
+
+        /* Opens an existing file. */
+        fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
+        if (fr != FR_OK) {
+          if(verbose_jm>=1) {
+            print_inlinestr("Not open. ",false);
+            if(verbose_jm>=2) {
+              if(fr == 4) {
+                sprintf(line,"Not found ID007 --> %d ",fr); print_inlinestr(line,false);
+                sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
+              } else {
+                sprintf(line,"File open error --> %d ",fr); print_inlinestr(line,false);
+              }
+            }
+          }
+
+          if(verbose_jm>=1) {
+            print_inlinestr(". Using fallback.",true);
+          }
+          f_close(&fil);
+          strcpy(line1, fallback);
+          return 1;
+        }
+      }
+      else {
+        if(verbose_jm>=1) {
+          print_inlinestr("Using fallback.",true);
+        }
+        strcpy(line1, fallback);
+        return 1;        
+      }
     }
+
+    if(verbose_jm>=1) {print_inlinestr("Open and reading...",false);}
 
     /* Read if open */
     line1[0]=0;
     f_getsline(line1, TMP_STR_LENGTH, &fil);
     f_close(&fil);
+
+    if(verbose_jm>=1) {
+      print_inlinestr("read:",true);
+      print_inlinestr(line1,true);
+    }
+
     return 0;
   }
 
@@ -505,33 +572,98 @@ char line[100];               /* Line buffer */
 //**********************************************************************************************************
 #elif PC_BUILD
 
-int16_t import_string_from_filename(char *line1, char *dirname, char *filename, char *fallback) {
+int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback) {
 
+  if(verbose_jm>=2) {
+    print_inlinestr("From dir:",false);
+    print_inlinestr(dirname,false);
+    print_inlinestr(", ",true);
+  }
+  
+  char dirfile[200];
+  dirfile[0]=0;
   FILE *infile;
-  char dirfile[40];
   char onechar[2];
 
   strcpy(dirfile,dirname);
   strcat(dirfile,"/");
-  strcat(dirfile,filename);
+  strcat(dirfile,filename_short);
     
+  if(verbose_jm>=1) {
+    print_inlinestr("1: reading:",false);
+    print_inlinestr(dirfile,false);
+    print_inlinestr(" ",true);
+  }
+
+  /* Opens an existing file. */
   infile = fopen(dirfile, "rb");
   if (infile == NULL) {
-    printf("Cannot load %s\n",dirfile);
-    strcpy(line1, fallback);
-    return 0;
+    if(verbose_jm>=1) {
+      #ifdef PC_BUILD
+        printf("Cannot load %s\n",dirfile);
+      #endif
+      print_inlinestr("Not open. ",true);
+    }
+
+    if(filename[0]!=0) {
+      strcpy(dirfile,dirname);
+      strcat(dirfile,"/");
+      strcat(dirfile,filename);
+        
+      if(verbose_jm>=1) {
+        print_inlinestr("2: reading:",false);
+        print_inlinestr(dirfile,false);
+        print_inlinestr(" ",true);
+      }
+
+      /* Opens an existing file. */
+      infile = fopen(dirfile, "rb");
+      if (infile == NULL) {
+        if(verbose_jm>=1) {
+          #ifdef PC_BUILD
+            printf("Cannot load %s\n",dirfile);
+          #endif
+          print_inlinestr("Not open. Using fallback.",true);
+        }
+        strcpy(line1, fallback);
+        return 1;
+      }
+    }
+    else {
+      if(verbose_jm>=1) {
+        #ifdef PC_BUILD
+          printf("Cannot load %s\n",dirfile);
+        #endif
+        print_inlinestr("Using fallback.",true);
+      }
+      strcpy(line1, fallback);
+      return 1;
+    }
   }
 
-  tmpStr3000[0]=0;
+  if(verbose_jm>=1) {print_inlinestr("Open and reading...",false);}
+
+  /* Read if open */
+  line1[0]=0;
   onechar[1]=0;
   while(fread(&onechar,1,1,infile)) {
-  	strcat(tmpStr3000,onechar);
+  	strcat(line1,onechar);
   }
   fclose(infile);
-  printf("Loaded >>> %s\n",dirfile);
-  //printf("Loaded >>> %s |%s|\n",dirfile,tmpStr3000);
+  if(verbose_jm>=1) {
+    #ifdef PC_BUILD
+      printf("Loaded >>> %s\n",dirfile);
+    #endif
+    print_inlinestr("read:",true);
+    print_inlinestr(line1,true);
+  }
 
-  strcpy(line1,tmpStr3000);
+  if(verbose_jm>=2) {
+    #ifdef PC_BUILD
+      printf("Loaded %s |%s|\n",dirfile,line1);
+    #endif
+    }
+
 
 return 0;
 }
@@ -656,7 +788,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   aa[1]=0;
   bb[1]=0;
   bb[0]=0;
-  print_linestr("Code:",true);
+  if(verbose_jm >=1) {print_linestr("Code:",true);}
   //printf("4:%s\n",line1);
 
   if(line1[stringByteLength(line1)-1] != 32) {
@@ -714,7 +846,7 @@ void displaywords(char *line1) {  //Preprocessor and display
       #ifdef DISPLOADING
       strcat(ll,aa);
       if(strlen(ll)>30 && aa[0] == 32) {
-        print_linestr(ll,false);
+        if(verbose_jm>=1) {print_linestr(ll,false);}
         ll[0]=0;
       }
       #endif
@@ -724,7 +856,7 @@ void displaywords(char *line1) {  //Preprocessor and display
         #ifdef DISPLOADING
         strcat(ll,aa);          
         if(strlen(ll)>36) {
-          print_linestr(ll,false);
+         if(verbose_jm>=1){print_linestr(ll,false);}
           ll[0]=0;
         }
         #endif
@@ -734,7 +866,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   }
   #ifdef DISPLOADING
   if(ll[0]!=0) {
-    print_linestr(ll,false);
+    if(verbose_jm>=1) {print_linestr(ll,false);}
   }
   #endif
 //printf("6:%s\n",line1);
@@ -749,13 +881,18 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 int16_t line_x,line_y;
 
-void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
+void print_inlinestr(const char *line1, bool_t endline) {
 #ifndef TESTSUITE_BUILD
-    char l1[TMP_STR_LENGTH];    //Clip the string at 40
-    strcpy(l1, line1);
-    l1[40]=0;    l1[41]=0;    l1[42]=0;
-
-
+    char l1[100];    //Clip the string at 40
+    l1[0]=0;
+    int16_t ix = 0;
+    int16_t ixx;
+    ixx = stringByteLength(line1);
+    while(ix<ixx && ix<98 && line_x+stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
+       xcopy(l1, line1, ix+1);
+       l1[ix+1]=0;
+       ix = stringNextGlyph(line1, ix);
+    }
     if(line_y < SCREEN_HEIGHT) { 
         line_x = showString(l1, &standardFont, line_x, line_y, vmNormal, true, true);
     }
@@ -767,15 +904,21 @@ void print_inlinestr(const char line1[TMP_STR_LENGTH], bool_t endline) {
 #endif
 }
 
-void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
+void print_linestr(const char *line1, bool_t line_init) {
 #ifndef TESTSUITE_BUILD
-    char l1[TMP_STR_LENGTH];    //Clip the string at 40
-    strcpy(l1, line1);
-    l1[40]=0;    l1[41]=0;    l1[42]=0;
-
+    char l1[100];
+    l1[0]=0;
+    int16_t ix = 0;
+    int16_t ixx;
+    ixx = stringByteLength(line1);
+    while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
+       xcopy(l1, line1, ix+1);
+       l1[ix+1]=0;
+       ix = stringNextGlyph(line1, ix);
+    }
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 
-        line_x = showString(l1, &standardFont, 1, line_y, vmNormal, true, true);
+        line_x = showString(l1, &standardFont, 0, line_y, vmNormal, true, true);
     }
     line_y += 20;
     line_x = 0;
@@ -783,13 +926,13 @@ void print_linestr(const char line1[TMP_STR_LENGTH], bool_t line_init) {
 #endif
 }
 
-void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND .
+void print_numberstr(const char *line1, bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND . //FIXED FONT
 #ifndef TESTSUITE_BUILD
     if(line_init) {line_y = 20;}
     if(line_y < SCREEN_HEIGHT) { 
         int16_t cnt = 0;
         char tt[2];
-        while(line1[cnt] != 0) {
+        while(line1[cnt] != 0 && line_x < SCREEN_WIDTH-8 +1) {
           tt[0]=line1[cnt]; tt[1]=0;
           line_x = showString(tt, &standardFont, cnt * 8, line_y, vmNormal, true, true);
           cnt++;
@@ -802,6 +945,17 @@ void print_numberstr(const char line1[TMP_STR_LENGTH], bool_t line_init) {     /
 }
 
 
+void print_Register_line(calcRegister_t regist, const char *before, const char *after, bool_t line_init) {
+#ifndef TESTSUITE_BUILD
+    char str[200];
+    char dest[1000];
 
+    strcpy(dest,before);
+    copyRegisterToClipboardString(regist, str);
+    strcat(dest,str);
+    strcat(dest,after);
 
+    print_numberstr(dest, line_init);
 
+#endif
+}

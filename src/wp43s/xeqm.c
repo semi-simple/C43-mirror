@@ -89,15 +89,16 @@ void runkey(uint16_t item){
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
-    if(aa[ix]>=65 && aa[ix]<=90){runkey(900+aa[ix]-65);} else //A..Z
-    if(aa[ix]>=48 && aa[ix]<=57){runkey(890+aa[ix]-48);} else //0..9
+    if(aa[ix]>=65 && aa[ix]<= 90){runkey(900+aa[ix]-65);} else //A..Z
+    if(aa[ix]>=97 && aa[ix]<=122){runkey(900+aa[ix]-65-32);} else //a..z converted to A..Z
+    if(aa[ix]>=48 && aa[ix]<= 57){runkey(890+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-      case 46: runkey(1310); break; //.
-      case 69: runkey(1487); break; //E
+      case 46:  runkey(1310); break; //.
+      case 69:  runkey(1487); break; //E
       case 101: runkey(1487); break; //e
-      case 45: runkey(780); break; //-
-      case 43: runkey(778); break; //+
-      case 32: runkey(1295); break; //space
+      case 45:  runkey( 780); break; //-
+      case 43:  runkey( 778); break; //+
+      case 32:  runkey(1295); break; //space
       default:;
     }
   ix++;
@@ -731,42 +732,171 @@ running_program_jm = false;
 }
 
 
+ 
+void replaceFF(char* FF, char* line2) {
+  int16_t ix =0;
+  if(FF[0]>=48 && FF[0]<=57 && FF[1]>=48 && FF[1]<=57 && FF[2]==0) {
+    while(line2[ix] != 0 && ix+10<stringByteLength(line2)) {
+      if(line2[ix]==88 /*X*/ && line2[ix+1]==69 /*E*/ && line2[ix+2]==81 /*Q*/ && line2[ix+3]==76 /*L*/ && line2[ix+4]==66 /*B*/ && line2[ix+5]==76 /*L*/ && line2[ix+6]==32 && line2[ix+7]==70 /*F*/ && line2[ix+8]==70 /*F*/) {
+        line2[ix+7]=FF[0];
+        line2[ix+8]=FF[1];
+      }
+      ix++;
+    }
+  }
+}
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
-  switch(selection) {
-    case  1:import_string_from_filename(line1,"PROGRAMS","XEQM01.TXT","XEQLBL 01 XEQM01 "); displaywords(line1); execute_string(line1,exec); break;
-    case  2:import_string_from_filename(line1,"PROGRAMS","XEQM02.TXT","XEQLBL 02 ~BATPLT \"400\" STO \"00\" TICKS STO \"01\" CLSUM LBL M1 BATT? RCL \"00\" TICKS \"10\" RCL \"01\" - / SUM+ DSZ \"00\" GTO M1 PLOT "); displaywords(line1); execute_string(line1,exec); break;
-    case  3:import_string_from_filename(line1,"PROGRAMS","XEQM03.TXT","XEQLBL 03 ~MP2203 TICKS \"2\" EXIT \"2203\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  4:import_string_from_filename(line1,"PROGRAMS","XEQM04.TXT","XEQLBL 04 ~MP2281 TICKS \"2\" EXIT \"2281\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  5:import_string_from_filename(line1,"PROGRAMS","XEQM05.TXT","XEQLBL 05 ~MP3217 TICKS \"2\" EXIT \"3217\" Y^X \"1\" - PRIME? X<>Y TICKS X<>Y - \"10\" / " ); displaywords(line1); execute_string(line1,exec); break;
-    case  6:import_string_from_filename(line1,"PROGRAMS","XEQM06.TXT","XEQLBL 06 ~CUBE3  \"569936821221962380720\" EXIT \"3\" Y^X \"569936821113563493509\" CHS EXIT \"3\" Y^X \"472715493453327032\" CHS EXIT \"3\" Y^X + + "); displaywords(line1); execute_string(line1,exec); break;
-    case  7:import_string_from_filename(line1,"PROGRAMS","XEQM07.TXT","XEQLBL 07 XEQM07 "); displaywords(line1); execute_string(line1,exec); break;
-    case  8:import_string_from_filename(line1,"PROGRAMS","XEQM08.TXT","XEQLBL 08 XEQM08 "); displaywords(line1); execute_string(line1,exec); break;
-    case  9:import_string_from_filename(line1,"PROGRAMS","XEQM09.TXT","XEQLBL 09 XEQM09 "); displaywords(line1); execute_string(line1,exec); break;
-    case 10:import_string_from_filename(line1,"PROGRAMS","XEQM10.TXT","XEQLBL 10 XEQM10 "); displaywords(line1); execute_string(line1,exec); break;
-    case 11:import_string_from_filename(line1,"PROGRAMS","XEQM11.TXT","XEQLBL 11 XEQM11 "); displaywords(line1); execute_string(line1,exec); break;
-    case 12:import_string_from_filename(line1,"PROGRAMS","XEQM12.TXT","XEQLBL 12 XEQM12 "); displaywords(line1); execute_string(line1,exec); break;
-    case 13:import_string_from_filename(line1,"PROGRAMS","XEQM13.TXT","XEQLBL 13 XEQM13 "); displaywords(line1); execute_string(line1,exec); break;
-    case 14:import_string_from_filename(line1,"PROGRAMS","XEQM14.TXT","XEQLBL 14 XEQM14 "); displaywords(line1); execute_string(line1,exec); break;
-    case 15:import_string_from_filename(line1,"PROGRAMS","XEQM15.TXT","XEQLBL 15 XEQM15 "); displaywords(line1); execute_string(line1,exec); break;
-    case 16:import_string_from_filename(line1,"PROGRAMS","XEQM16.TXT","XEQLBL 16 XEQM16 "); displaywords(line1); execute_string(line1,exec); break;
-    case 17:import_string_from_filename(line1,"PROGRAMS","XEQM17.TXT","XEQLBL 17 XEQM17 "); displaywords(line1); execute_string(line1,exec); break;
-    case 18:import_string_from_filename(line1,"PROGRAMS","XEQM18.TXT","XEQLBL 18 XEQM18 "); displaywords(line1); execute_string(line1,exec); break;
-    default:;
+                                            //Read in XEQMINDEX.TXT file, with default XEQMnn file name replacements
+  line1[0]=0;                               //Clear incoming/outgoing string data
+  char nn[6];
+  nn[0]=0;
+  char fallback[130];     //Fallback text
+  char fn_long[200];      //Long file name
+  char fn_short[16];      //standard file name
+  char tmp[400];          //Messages
+
+
+  #define pgmpath "PROGRAMS"
+  strcpy(fn_short,"XEQMINDEX.TXT");
+  strcpy(fn_long, "");
+  strcpy(fallback,"XEQM01:XEQM01 HELP;");
+
+  if(verbose_jm>=1) {
+    strcpy(tmp,fn_short); strcat(tmp," A: Loading XEQMENU mapping"); print_linestr(tmp,false);
   }
+
+  import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback);
+  if(verbose_jm>=1) {print_inlinestr(" B: Loaded. ",false);}
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
+  int16_t ix = 0;
+  int16_t iy = 0;
+  sprintf(nn,"%2d",selection);                   //Create string value for 00
+  if(nn[0]==32) {nn[0]=48;}
+  if(nn[1]==32) {nn[1]=48;}
+  strcpy(fn_short,"XEQM");                        //Build default short file name XEQMnn
+  strcat(fn_short,nn);
+  strcpy(fn_long,fn_short);
+
+                                            //Find XEQMnn in the replacement token file         
+  while(line1[ix] != 0 && ix+6<stringByteLength(line1)) {
+     if(line1[ix]==88 /*X*/ && line1[ix+1]==69 /*E*/ && line1[ix+2]==81 /*Q*/ && line1[ix+3]==77 /*M*/ && line1[ix+4]==nn[0] && line1[ix+5]==nn[1] && line1[ix+6]==58 /*:*/) {
+       ix = ix + 7;
+       iy = ix;                             //If found, find the replacement text after the colon until before the semi-colon
+       while(line1[ix] != 0 && ix<stringByteLength(line1)) {
+          if(line1[ix] == 59) {line1[ix]=0; strcpy(fn_long,line1 + iy); break;}     //Replace file name with content from replacement string
+          ix++;
+       }
+     } 
+     ix++;
+  }
+  strcat(fn_short,".TXT");                        //Add .TXT
+  strcat(fn_long,".TXT");                         //Add .TXT
+
+  if(verbose_jm>=1) {
+    sprintf(tmp,"C: Trying %s then %s.",fn_short,fn_long);
+    print_linestr(tmp,true);
+  }
+
+  line1[0]=0;                                     //Clear incoming/outgoing string data
+
+  //printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
+  if(selection==1) {
+    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT ");
+  } 
+  else {
+    sprintf(fallback,"XEQLBL %s XEQM-%s ",nn,nn);
+  }
+
+  if(verbose_jm>=2) {
+    sprintf(tmp,"  Fallback:%s",fallback); print_inlinestr(tmp,false);
+  }
+
+  import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback); 
+  replaceFF(nn,line1); 
+  if(verbose_jm>=1) {
+    print_inlinestr(line1,true);
+  }
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
+  displaywords(line1);
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
+  execute_string(line1,exec);
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue",true);
+      wait_for_key_press();
+      clearScreen_old(false, true, true);
+    #endif
+  }
+
 #endif
 }
 
-void fnXEQMENU(uint16_t unusedParamButMandatory) {
+
+
+void fnXEQMENU(uint16_t XEQM_no) {
   #ifndef TESTSUITE_BUILD
-  char line1[TMP_STR_LENGTH];
-  XEQMENU_Selection( unusedParamButMandatory, line1, true);
+  clearScreen_old(false, true, true);
+  print_linestr("Loading XEQM program file:",true);
+
+  char line[TMP_STR_LENGTH];
+  XEQMENU_Selection( XEQM_no, line, true);
+
   //calcMode = CM_BUG_ON_SCREEN;
   //temporaryInformation = TI_NO_INFO;
   #endif
 }
 
+
+
+void XEQMENU_loadAllfromdisk(void) {
+#ifndef TESTSUITE_BUILD
+      clearScreen_old(false, true, true);
+      print_linestr("Loading XEQM program files:",true);
+
+      char line[TMP_STR_LENGTH];
+      
+      char tmp[10];
+      uint8_t ix = 1;
+      while(ix<=18) {
+        sprintf(tmp,"%2d ",ix);
+        print_linestr(tmp,false);
+        XEQMENU_Selection( ix, line, false);
+        ix++;
+      }
+    #endif
+}
 
 
 

@@ -48,6 +48,7 @@ void pushSoftmenu           (int16_t softmenu);
 void popSoftmenu            (void);
 void setCatalogLastPos      (void);
 
+void     fnDumpMenus(void);                          //JM
 void rolloutSoftmenusIncluding(int16_t target);      //JM
 int16_t mm(int16_t id);                              //JM
 

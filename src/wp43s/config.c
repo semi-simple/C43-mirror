@@ -620,6 +620,7 @@ void fnReset(uint16_t confirmation) {
       while(softmenuStackPointer > 0) {
         popSoftmenu();
       }
+      if(SH_BASE_HOME && softmenuStackPointer == 0) pushSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;   
     #endif // TESTSUITE_BUILD
 
     exponentLimit = 6145;                                      //JMMAX
@@ -734,8 +735,7 @@ void fnReset(uint16_t confirmation) {
     fnStore(27);
     fnDrop(0);
 
-    if(SH_BASE_HOME) showSoftmenu(NULL, -MNU_HOME, false); //JM Reset to BASE MENU HOME;   
-
+    doRefreshSoftMenu = true;     //jm dr
   }
 }
 

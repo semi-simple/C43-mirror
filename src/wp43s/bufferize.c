@@ -178,21 +178,29 @@ int32_t findFirstItem(const char *twoLetters) {
 
 #ifndef TESTSUITE_BUILD                          //JMvv
 void light_ASB_icon(void) {
-  uint8_t ix = 0;
-  while(ix < 9) {
-    setPixel(X_ALPHA_MODE+ix,   19);
-    setPixel(X_ALPHA_MODE+ix,   18);
+  int16_t ix = 0;
+  while(ix <= 9) {
+  int16_t iy = 18;
+    while(iy <= 19) {
+      setPixel(X_ALPHA_MODE+ix,iy);
+      iy++;
+    }
     ix++;
   }
+  force_refresh();
 }
 
 void kill_ASB_icon(void) {
-  uint8_t ix = 0;
-  while(ix < 9) {
-    clearPixel(X_ALPHA_MODE+ix,   19);
-    clearPixel(X_ALPHA_MODE+ix,   18);
+  int16_t ix = 0;
+  while(ix <= 9) {
+  int16_t iy = 18;
+    while(iy <= 19) {
+      clearPixel(X_ALPHA_MODE+ix,iy);
+      iy++;
+    }
     ix++;
   }
+  force_refresh();
 }
 #endif                                           //JM^^
 

@@ -46,6 +46,7 @@ void refreshStatusBar(void) {
   showHideUserMode();
   showHideLowBattery();
   showHideUSB();
+  showHideASB();                //JM
 }
 
 
@@ -338,6 +339,20 @@ void showHidePrinter(void) {
 
 
 
+
+void showHideASB(void) {                     //JMvv
+  if(AlphaSelectionBufferTimerRunning) {
+    light_ASB_icon();
+  }
+  else {
+    kill_ASB_icon();
+  }
+
+}                                             //JM^^
+
+
+
+
 /********************************************//**
  * \brief Shows or hides the user mode icon in the status bar
  *
@@ -466,3 +481,9 @@ void showHideUSB(void) {
   }
 }
 #endif
+
+
+
+
+
+

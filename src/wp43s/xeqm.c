@@ -749,42 +749,52 @@ void replaceFF(char* FF, char* line2) {
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 #ifndef TESTSUITE_BUILD
                                             //Read in XEQMINDEX.TXT file, with default XEQMnn file name replacements
-  char line2[TMP_STR_LENGTH];                         //  allow >3x18x40 chars
-  line2[0]=0;
+  line1[0]=0;                               //Clear incoming/outgoing string data
   char nn[6];
   nn[0]=0;
+  char fallback[130];     //Fallback text
+  char fn_long[200];      //Long file name
+  char fn_short[16];      //standard file name
+  char tmp[400];          //Messages
+
+
   #define pgmpath "PROGRAMS"
-  #ifdef DMCP_BUILD
-    char tmp[400];
-    print_inlinestr(">>> 0",false);
-    wait_for_key_press();
-  #endif
-  import_string_from_filename(line2,"PROGRAMS","XEQMINDEX.TXT","","XEQM01:XEQM01 HELP;");
-  #ifdef DMCP_BUILD
-    print_inlinestr(">>> 0a",false);
-    wait_for_key_press();
-  #endif
-  char fn_long[200];
-  char fn_short[16];  
+  strcpy(fn_short,"XEQMINDEX.TXT");
+  strcpy(fn_long, "");
+  strcpy(fallback,"XEQM01:XEQM01 HELP;");
+
+  if(verbose_jm>=1) {
+    strcpy(tmp,fn_short); strcat(tmp," A: Loading XEQMENU mapping"); print_linestr(tmp,false);
+  }
+
+  import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback);
+  if(verbose_jm>=1) {print_inlinestr(" B: Loaded. ",false);}
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
   int16_t ix = 0;
   int16_t iy = 0;
   sprintf(nn,"%2d",selection);                   //Create string value for 00
   if(nn[0]==32) {nn[0]=48;}
   if(nn[1]==32) {nn[1]=48;}
-  strcpy(fn_long,"XEQM");                        //Build default short file name XEQMnn
-  strcat(fn_long,nn);
-  strcpy(fn_short,fn_long);
-  #ifdef DMCP_BUILD
-    print_inlinestr(">>> 1",false);
-  #endif
-  //printf(">>>XEQMINDEX:|%s|, Default file name:|%s|\n",line2,fn_short);  
+  strcpy(fn_short,"XEQM");                        //Build default short file name XEQMnn
+  strcat(fn_short,nn);
+  strcpy(fn_long,fn_short);
+
                                             //Find XEQMnn in the replacement token file         
-  while(line2[ix] != 0 && ix+6<stringByteLength(line2)) {
-     if(line2[ix]==88 /*X*/ && line2[ix+1]==69 /*E*/ && line2[ix+2]==81 /*Q*/ && line2[ix+3]==77 /*M*/ && line2[ix+4]==nn[0] && line2[ix+5]==nn[1] && line2[ix+6]==58 /*:*/) {
+  while(line1[ix] != 0 && ix+6<stringByteLength(line1)) {
+     if(line1[ix]==88 /*X*/ && line1[ix+1]==69 /*E*/ && line1[ix+2]==81 /*Q*/ && line1[ix+3]==77 /*M*/ && line1[ix+4]==nn[0] && line1[ix+5]==nn[1] && line1[ix+6]==58 /*:*/) {
        ix = ix + 7;
        iy = ix;                             //If found, find the replacement text after the colon until before the semi-colon
-       while(line2[ix] != 0 && ix<stringByteLength(line2)) {
-          if(line2[ix] == 59) {line2[ix]=0; strcpy(fn_long,line2 + iy); break;}     //Replace file name with content from replacement string
+       while(line1[ix] != 0 && ix<stringByteLength(line1)) {
+          if(line1[ix] == 59) {line1[ix]=0; strcpy(fn_long,line1 + iy); break;}     //Replace file name with content from replacement string
           ix++;
        }
      } 
@@ -792,36 +802,64 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   }
   strcat(fn_short,".TXT");                        //Add .TXT
   strcat(fn_long,".TXT");                         //Add .TXT
-  #ifdef DMCP_BUILD
-    sprintf(tmp,">>> 2: fn_short:%s, fn_long:%s",fn_short,fn_long); print_linestr(tmp,false);
-  #endif
-  //Die fout is tussen >>>2 en >>>3.
-  //printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
-  char fallback[100];
-  switch(selection) {
-    case  1:
-      import_string_from_filename(line1,pgmpath,fn_short,fn_long,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
-//  case  2:import_string_from_filename(line1,"PROGRAMS",fn_short,fn_long,"XEQLBL 02 XEQM02 "); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec); break;
-    default: 
-      fallback[0]=0;
-      strcat(fallback,"XEQLBL ");
-      strcat(fallback,nn);
-      strcat(fallback,"XEQM");
-      strcat(fallback,nn);
-      strcat(fallback," ");
-      #ifdef DMCP_BUILD
-        sprintf(tmp,">>> 2b: fallback:%s",fallback); print_linestr(tmp,false);
-      #endif
-      import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback); replaceFF(nn,line1); displaywords(line1); execute_string(line1,exec);
-      break;
+
+  if(verbose_jm>=1) {
+    sprintf(tmp,"C: Trying %s then %s.",fn_short,fn_long);
+    print_linestr(tmp,true);
   }
-  #ifdef DMCP_BUILD
-    print_linestr(">>> 3:",false);
-    print_linestr(line1,false);
-  #endif
-  #ifdef PC_BUILD
-    printf(">>> 3:   final string selected:|%s|\n",line1);
-  #endif
+
+  line1[0]=0;                                     //Clear incoming/outgoing string data
+
+  //printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
+  if(selection==1) {
+    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT ");
+  } 
+  else {
+    sprintf(fallback,"XEQLBL %s XEQM-%s ",nn,nn);
+  }
+
+  if(verbose_jm>=2) {
+    sprintf(tmp,"  Fallback:%s",fallback); print_inlinestr(tmp,false);
+  }
+
+  import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback); 
+  replaceFF(nn,line1); 
+  if(verbose_jm>=1) {
+    print_inlinestr(line1,true);
+  }
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
+  displaywords(line1);
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue.",true);
+      wait_for_key_press();
+    #endif
+  }
+  if(verbose_jm>=1) {
+    clearScreen_old(false, true, true);
+  }
+
+  execute_string(line1,exec);
+
+  if(verbose_jm>=2) {
+    #ifdef DMCP_BUILD
+      print_inlinestr("Press a key to continue",true);
+      wait_for_key_press();
+      clearScreen_old(false, true, true);
+    #endif
+  }
+
 #endif
 }
 
@@ -829,11 +867,12 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 
 void fnXEQMENU(uint16_t XEQM_no) {
   #ifndef TESTSUITE_BUILD
-  char line1[TMP_STR_LENGTH];
-#ifdef DMCP_BUILD
-  print_linestr(">>> AA:",true);
-#endif
-  XEQMENU_Selection( XEQM_no, line1, true);
+  clearScreen_old(false, true, true);
+  print_linestr("Loading XEQM program file:",true);
+
+  char line[TMP_STR_LENGTH];
+  XEQMENU_Selection( XEQM_no, line, true);
+
   //calcMode = CM_BUG_ON_SCREEN;
   //temporaryInformation = TI_NO_INFO;
   #endif
@@ -842,30 +881,20 @@ void fnXEQMENU(uint16_t XEQM_no) {
 
 
 void XEQMENU_loadAllfromdisk(void) {
-    #ifndef TESTSUITE_BUILD
+#ifndef TESTSUITE_BUILD
       clearScreen_old(false, true, true);
-#ifdef DMCP_BUILD
-  print_linestr(">>> BB:",true);
-#endif
-      char line1[TMP_STR_LENGTH];
-      XEQMENU_Selection( 1, line1, false);
-      XEQMENU_Selection( 2, line1, false);
-      XEQMENU_Selection( 3, line1, false);
-      XEQMENU_Selection( 4, line1, false);
-      XEQMENU_Selection( 5, line1, false);
-      XEQMENU_Selection( 6, line1, false);
-      XEQMENU_Selection( 7, line1, false);
-      XEQMENU_Selection( 8, line1, false);
-      XEQMENU_Selection( 9, line1, false);
-      XEQMENU_Selection(10, line1, false);
-      XEQMENU_Selection(11, line1, false);
-      XEQMENU_Selection(12, line1, false);
-      XEQMENU_Selection(13, line1, false);
-      XEQMENU_Selection(14, line1, false);
-      XEQMENU_Selection(15, line1, false);
-      XEQMENU_Selection(16, line1, false);
-      XEQMENU_Selection(17, line1, false);
-      XEQMENU_Selection(18, line1, false);
+      print_linestr("Loading XEQM program files:",true);
+
+      char line[TMP_STR_LENGTH];
+      
+      char tmp[10];
+      uint8_t ix = 1;
+      while(ix<=18) {
+        sprintf(tmp,"%2d ",ix);
+        print_linestr(tmp,false);
+        XEQMENU_Selection( ix, line, false);
+        ix++;
+      }
     #endif
 }
 

@@ -1504,7 +1504,7 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
 
 
 
-void fnMenuDump(uint16_t menu) {        //JM
+void fnMenuDump(uint16_t menu) {                              //JMvv procedure to dump all menus. First page only. To mod todump all pages
 
   doRefreshSoftMenu = true;
   showSoftmenu(NULL, softmenu[menu].menuId, true);
@@ -1636,7 +1636,7 @@ void fnDumpMenus(void) {                      //JM
       fnMenuDump(m);
       m++;
     }
-}
+}                                                         //JM^^
 
 
 

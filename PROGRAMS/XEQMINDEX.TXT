@@ -1,9 +1,13 @@
-//C43 XEQM softkey index file 
-//This file to allocate XEQM softkeys to text files in the PROGRAMS directory
-
 XEQM01:XEQM01 HELP;
 XEQM02:Battery usage plot;
 XEQM03:Mersenne Prime 2203;
 XEQM04:Mersenne Prime 2281;
 XEQM05:Mersenne Prime 3217;
 XEQM06:CUBEs;
+
+
+// C43 XEQM softkey index file 
+// This file to allocate XEQM softkeys to text files in the PROGRAMS directory
+// nnnnn:mmmmmmmm; nnnnn=button; mmmmmmmm=file name; Colon and semicolon important.
+// .TXT is automatically appended.
+

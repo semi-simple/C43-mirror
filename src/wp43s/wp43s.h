@@ -580,7 +580,7 @@ extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle 
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t              globalFlags[7];
 //#define TMP_STR_LENGTH              3000 //Move to beginning of file due to errors
-#define ERROR_MESSAGE_LENGTH           384 //512          //JMMAX Temporarily reduced - ORG:512.
+#define ERROR_MESSAGE_LENGTH           250 //512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN               80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING 196
 #define NUMBER_OF_GLYPH_ROWS           106  //JM 100-->106

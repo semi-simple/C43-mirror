@@ -60,6 +60,8 @@ calcMode = CM_BUG_ON_SCREEN;
 
 
 void reset_jm_defaults(void) {
+    verbose_jm = verbose_default;
+
     SHOWregis = 9999;                                          //JMSHOW
 
     //JM defaults vv: CONFIG STO/RCL
@@ -117,7 +119,9 @@ void reset_jm_defaults(void) {
       ix++;    
     }
 
-//    XEQMENU_loadAllfromdisk();
+    verbose_jm = 0;
+    XEQMENU_loadAllfromdisk();
+    verbose_jm = verbose_default;
 
 }
 

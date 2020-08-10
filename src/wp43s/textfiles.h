@@ -37,13 +37,15 @@ void         fnP_All_Regs(uint16_t unusedParamButMandatory);
 void         print_inlinestr(const char *line1, bool_t endline);
 void         print_linestr  (const char *line1, bool_t line_init);
 void         print_numberstr(const char *line1, bool_t line_init);
+void         print_Register_line(calcRegister_t regist, const char *before, const char *after, bool_t line_init);
+
 
 void         displaywords(char *line1);
 
 #define      append  0
 #define      overwrite 1
 
-int16_t      import_string_from_filename(char *line1, const char *dirname,  const char *filename_short, const char *filename, const char *fallback);
+int16_t      import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback);
 int16_t      export_append_line(char *inputstring);
 
 int16_t      export_string_to_file(const char line1[TMP_STR_LENGTH]);

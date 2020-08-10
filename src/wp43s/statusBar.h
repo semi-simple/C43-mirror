@@ -48,4 +48,5 @@ void showHidePrinter      (void);
 void showHideUserMode     (void);
 void showHideLowBattery   (void);
 void showHideUSB          (void);
+void showHideASB          (void);       //JM
 #endif

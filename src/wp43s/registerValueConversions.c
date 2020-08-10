@@ -231,8 +231,8 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
     }
   }
 
-  reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = value & shortIntegerMask;
+  reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);
+  *(REGISTER_SHORT_INTEGER_DATA(regist)) = value & shortIntegerMask;
 }
 
 

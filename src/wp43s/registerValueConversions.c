@@ -95,12 +95,22 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = 0;
   }
   else {
+/*
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
 
     if(longIntegerIsNegative(lgInt)) {
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
 
     }
+*/
+    uint64_t tt;                                                      //JMvv bugfix
+    longIntegerToUInt(lgInt, tt);
+    if(longIntegerIsNegative(lgInt)) {
+      convertUInt64ToShortIntegerRegister(1, tt, base, destination);  //JM Changing to this method via UInt, as the above default code does not wotk on the DM42.
+    } 
+    else {
+      convertUInt64ToShortIntegerRegister(0, tt, base, destination);  //JM Changing to this method via UInt, as the above default code does not wotk on the DM42.      
+    }                                                                 //JM^^
   }
 }
 
@@ -234,8 +244,8 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
     }
   }
 
-  reallocateRegister(REGISTER_X, dtShortInteger, SHORT_INTEGER_SIZE, base);
-  *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = value & shortIntegerMask;
+  reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);      //JM bug fixed regist
+  *(REGISTER_SHORT_INTEGER_DATA(regist)) = value & shortIntegerMask;         //JM bug fixed regist
 }
 
 

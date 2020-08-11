@@ -890,7 +890,7 @@ void XEQMENU_loadAllfromdisk(void) {
       char tmp[10];
       uint8_t ix = 1;
       while(ix<=18) {
-        sprintf(tmp,"%2d ",ix);
+        sprintf(tmp,"%2d",ix);
         print_inlinestr(tmp,false);
         XEQMENU_Selection( ix, line, false);
         ix++;

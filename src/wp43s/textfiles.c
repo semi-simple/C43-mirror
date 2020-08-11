@@ -788,7 +788,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   aa[1]=0;
   bb[1]=0;
   bb[0]=0;
-  if(verbose_jm >=1) {print_linestr("Code:",true);}
+  if(verbose_jm >=2) {print_linestr("Code:",true);}
   //printf("4:%s\n",line1);
 
   if(line1[stringByteLength(line1)-1] != 32) {
@@ -846,7 +846,7 @@ void displaywords(char *line1) {  //Preprocessor and display
       #ifdef DISPLOADING
       strcat(ll,aa);
       if(strlen(ll)>30 && aa[0] == 32) {
-        if(verbose_jm>=1) {print_linestr(ll,false);}
+        if(verbose_jm>=2) {print_linestr(ll,false);}
         ll[0]=0;
       }
       #endif
@@ -856,7 +856,7 @@ void displaywords(char *line1) {  //Preprocessor and display
         #ifdef DISPLOADING
         strcat(ll,aa);          
         if(strlen(ll)>36) {
-         if(verbose_jm>=1){print_linestr(ll,false);}
+         if(verbose_jm>=2){print_linestr(ll,false);}
           ll[0]=0;
         }
         #endif
@@ -866,7 +866,7 @@ void displaywords(char *line1) {  //Preprocessor and display
   }
   #ifdef DISPLOADING
   if(ll[0]!=0) {
-    if(verbose_jm>=1) {print_linestr(ll,false);}
+    if(verbose_jm>=2) {print_linestr(ll,false);}
   }
   #endif
 //printf("6:%s\n",line1);

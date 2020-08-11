@@ -90,27 +90,22 @@ void convertLongIntegerToReal(longInteger_t source, real_t *destination, realCon
 
 void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base, calcRegister_t destination) {
   reallocateRegister(destination, dtShortInteger, SHORT_INTEGER_SIZE, base);
-
   if(longIntegerIsZero(lgInt)) {
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = 0;
   }
   else {
-/*
-    *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
-
+    #ifdef DMCP_BUILD // 32 bits
+      uint64_t i64 = *(uint32_t *)(lgInt->_mp_d);
+      if(abs(lgInt->_mp_size > 1)) {
+        i64 = (i64 << 32) + *(((uint32_t *)(lgInt->_mp_d)) + 1);
+      }
+      *(REGISTER_SHORT_INTEGER_DATA(destination)) = i64 & shortIntegerMask;
+    #else // 64 bits
+      *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
+    #endif
     if(longIntegerIsNegative(lgInt)) {
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
-
     }
-*/
-    uint64_t tt;                                                      //JMvv bugfix
-    longIntegerToUInt(lgInt, tt);
-    if(longIntegerIsNegative(lgInt)) {
-      convertUInt64ToShortIntegerRegister(1, tt, base, destination);  //JM Changing to this method via UInt, as the above default code does not wotk on the DM42.
-    } 
-    else {
-      convertUInt64ToShortIntegerRegister(0, tt, base, destination);  //JM Changing to this method via UInt, as the above default code does not wotk on the DM42.      
-    }                                                                 //JM^^
   }
 }
 
@@ -244,8 +239,8 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
     }
   }
 
-  reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);      //JM bug fixed regist
-  *(REGISTER_SHORT_INTEGER_DATA(regist)) = value & shortIntegerMask;         //JM bug fixed regist
+  reallocateRegister(regist, dtShortInteger, SHORT_INTEGER_SIZE, base);
+  *(REGISTER_SHORT_INTEGER_DATA(regist)) = value & shortIntegerMask;
 }
 
 

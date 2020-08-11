@@ -133,7 +133,7 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
   if(longIntegerCompareUInt(lgInt, 0x8000) >= 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" FMT32U, (uint32_t)lgInt->_mp_d[0]);
+      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" FMT32U, (uint32_t)lgInt->_mp_d[0]); // OK for 32 and 64 bit limbs
       showInfoDialog("In function fnXToAlpha:", errorMessage, NULL, NULL);
     #endif
     return;
@@ -146,13 +146,13 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
     char1 = 0;
     char2 = 0;
   }
-  else if(lgInt->_mp_d[0] < 0x0080) {
-    char1 = lgInt->_mp_d[0];
+  else if(lgInt->_mp_d[0] < 0x0080) {      // OK for 32 and 64 bit limbs
+    char1 = lgInt->_mp_d[0];               // OK for 32 and 64 bit limbs
     char2 = 0;
   }
   else {
-    char1 = (lgInt->_mp_d[0] >> 8) | 0x80;
-    char2 = lgInt->_mp_d[0] & 0x00ff;
+    char1 = (lgInt->_mp_d[0] >> 8) | 0x80; // OK for 32 and 64 bit limbs
+    char2 = lgInt->_mp_d[0] & 0x00ff;      // OK for 32 and 64 bit limbs
   }
 
   longIntegerFree(lgInt);

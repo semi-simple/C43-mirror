@@ -462,7 +462,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     exponentLimit = 99;
   }
   else {
-    exponentLimit = (int16_t)(longInt->_mp_d[0]);
+    exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
   }
 
   longIntegerFree(longInt);
@@ -620,12 +620,14 @@ void fnReset(uint16_t confirmation) {
       while(softmenuStackPointer > 0) {
         popSoftmenu();
       }
+      calcModeNormal();
       if(SH_BASE_HOME && softmenuStackPointer == 0) pushSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;   
     #endif // TESTSUITE_BUILD
 
     exponentLimit = 6145;                                      //JMMAX
 
     temporaryInformation = TI_RESET;
+    aimBuffer[0] = 0;
 
     //JM Default USER
     fnUserJM(USER_RESET);                                      //JM USER

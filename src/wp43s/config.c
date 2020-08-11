@@ -453,7 +453,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     exponentLimit = 99;
   }
   else {
-    exponentLimit = (int16_t)(longInt->_mp_d[0]);
+    exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
   }
 
   longIntegerFree(longInt);
@@ -602,11 +602,12 @@ void fnReset(uint16_t confirmation) {
       while(softmenuStackPointer > 0) {
         popSoftmenu();
       }
+      calcModeNormal();
     #endif // TESTSUITE_BUILD
 
     exponentLimit = 6145;
-
     temporaryInformation = TI_RESET;
+    aimBuffer[0] = 0;
 
     // The following lines are test data
     //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;

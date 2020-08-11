@@ -34,7 +34,7 @@ Modes available in the mode menu:
 */
 
 
-#define verbose_default 1               //0 = no text; 1 = essential text; 2 = extra debugging
+#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging
 uint8_t verbose_jm;
 
 // Radix Mark 1 bit

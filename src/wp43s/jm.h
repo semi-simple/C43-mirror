@@ -37,6 +37,22 @@ Modes available in the mode menu:
 #define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging
 uint8_t verbose_jm;
 
+
+//This is to allow the cursors to change the case. Normal on 43S. Off on C43
+#define arrowCasechange    false
+
+//This is to allow the creation of a logfile
+#undef  RECORDLOG
+//#define RECORDLOG
+
+//This is to really see what the LCD in the SIM does while programs are running. UGLY.
+#undef  FULLUPDAT
+#define FULLUPDATE
+
+
+
+
+
 // Radix Mark 1 bit
 #define RX_PERIOD               103
 #define RX_COMMA                104
@@ -58,18 +74,6 @@ uint8_t verbose_jm;
 // Display override 1 bit
 #define DO_SCI                  115
 #define DO_ENG                  116
-
-
-
-
-//This is to allow the cursors to change the case. Normal on 43S. Off on C43
-#define arrowCasechange    false
-
-//This is to allow the creation of a logfile
-//#define RECORDLOG
-
-//This is to really see what the LCD in the SIM does while programs are running. UGLY.
-#define FULLUPDATE
 
 
 //This section must be part of both Layout1 and Layout2 and can be taken out of the main code here

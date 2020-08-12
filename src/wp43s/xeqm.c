@@ -99,6 +99,7 @@ void sendkeys(const char aa[]) {
       case 45:  runkey( 780); break; //-
       case 43:  runkey( 778); break; //+
       case 32:  runkey(1295); break; //space
+      case 35:  runkey(793); break; //#
       default:;
     }
   ix++;
@@ -257,9 +258,13 @@ void execute_string(const char *inputstring, bool_t exec1) {
 //                    if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
 
 // FROM SPREADSHEET vvv ****************************************************************************************************
+
+
                       if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
+                      if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "4");} else
                       if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
                       if (strcompare(commandnumber,"1/X" )) {strcpy(commandnumber, "6");} else
+                      if (strcompare(commandnumber,"2COMPL" )) {strcpy(commandnumber, "7");} else
                       if (strcompare(commandnumber,"2^X" )) {strcpy(commandnumber, "8");} else
                       if (strcompare(commandnumber,"CUBERT" )) {strcpy(commandnumber, "9");} else
                       if (strcompare(commandnumber,"AGM" )) {strcpy(commandnumber, "18");} else
@@ -321,6 +326,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"IDIV" )) {strcpy(commandnumber, "247");} else
                       if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "250");} else
                       if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "252");} else
+                      if (strcompare(commandnumber,"INTS" )) {strcpy(commandnumber, "-256");} else
                       if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "259");} else
                       if (strcompare(commandnumber,"KEY?" )) {strcpy(commandnumber, "284");} else
                       if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "296");} else
@@ -383,6 +389,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"SDR" )) {strcpy(commandnumber, "550");} else
                       if (strcompare(commandnumber,"SEED" )) {strcpy(commandnumber, "552");} else
                       if (strcompare(commandnumber,"SIGN" )) {strcpy(commandnumber, "566");} else
+                      if (strcompare(commandnumber,"SIGNMT" )) {strcpy(commandnumber, "567");} else
                       if (strcompare(commandnumber,"SIN" )) {strcpy(commandnumber, "569");} else
                       if (strcompare(commandnumber,"SINC" )) {strcpy(commandnumber, "570");} else
                       if (strcompare(commandnumber,"SINH" )) {strcpy(commandnumber, "571");} else
@@ -410,6 +417,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"T<>" )) {strcpy(commandnumber, "641");} else
                       if (strcompare(commandnumber,"ULP?" )) {strcpy(commandnumber, "642");} else
                       if (strcompare(commandnumber,"UNITV" )) {strcpy(commandnumber, "644");} else
+                      if (strcompare(commandnumber,"UNSIGN" )) {strcpy(commandnumber, "645");} else
                       if (strcompare(commandnumber,"WSIZE" )) {strcpy(commandnumber, "664");} else
                       if (strcompare(commandnumber,"WSIZE?" )) {strcpy(commandnumber, "665");} else
                       if (strcompare(commandnumber,"X^2" )) {strcpy(commandnumber, "669");} else

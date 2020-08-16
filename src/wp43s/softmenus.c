@@ -111,7 +111,7 @@ const int16_t menu_INTS[]        = { CHR_A,                         CHR_B,      
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLSLASH,                  ITM_DBLR,                   ITM_DBLCROSS,             ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
                                      ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE,
-                                     KEY_TYPCON_DN,                 ITM_DOTDEMU,                KEY_TYPCON_UP,            ITM_toSI,              ITM_NULL,                    ITM_NULL                      };    //JM
+                                     KEY_TYPCON_DN,                 KEY_dotD,                   KEY_TYPCON_UP,            ITM_RI,                ITM_NULL,                    ITM_NULL                      };    //JM
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
@@ -390,17 +390,13 @@ const int16_t menu_TamShuffle[]  = { ITM_ST_X,                      ITM_ST_Y,   
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 const int16_t menu_BASE[]        = { 
-                                     ITM_toSI,                      ITM_toINT /*KEY_HASH*/,     ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,             	      ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,             	      ITM_WS8,
-                                     CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
-
+                                     ITM_RI,                        ITM_HASH_JM,                  ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_2COMPL,                    ITM_UNSIGN,                 ITM_NULL,                 KEY_dotD,              -MNU_INTS,                   -MNU_BITS,
                                      ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
-                                     CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
-                                     ITM_toSI,                      ITM_toINT /*KEY_HASH*/,     ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
 
                                      CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
-                                     ITM_toSI,                      ITM_toINT /*KEY_HASH*/,     ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8
+                                     ITM_RI,                        ITM_HASH_JM,                  ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
                                                                                                                                                                                                             };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
@@ -503,7 +499,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
                                      ITM_DEG,             ITM_RAD,         ITM_DMS,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
 /*HOME-1*/                                                                                                                                                             //JM HOME
 /*1*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
-                                     ITM_RI,              KEY_TYPCON_DN,   KEY_TYPCON_UP,     ITM_toSI,         -MNU_BASE,        -MNU_INTS,                          //JM HOME
+                                     ITM_RI,              KEY_TYPCON_DN,   KEY_TYPCON_UP,     ITM_RI,           -MNU_BASE,        -MNU_INTS,                          //JM HOME
                                      ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
 /*HOME-2*/                                                                                                                                                             //JM HOME
 /*2*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
@@ -545,7 +541,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
  /*ROW 1    */
                                     ITM_SIGMAPLUS,        ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,           ITM_XEQ,
  /* f       */                      ITM_SIGMAMINUS,       ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
-/* g       */                       ITM_TGLFRT,           ITM_toINT /*KEY_HASH*/,ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
+/* g       */                       ITM_TGLFRT,           ITM_HASH_JM,        KEY_dotD,         ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 
 
 
@@ -554,7 +550,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
 /* g       */                       ITM_VIEW,             ITM_STATUS,       -MNU_CLK,         -MNU_UNITCONV,    -MNU_BITS,        -MNU_INTS,    
 /* g       */                       -MNU_STK,             -MNU_PARTS,       -MNU_ASN,         -MNU_LOOP,        -MNU_TEST,        -MNU_ALPHAFN,  
 
-/* g       */                       ITM_TGLFRT,           ITM_toINT /*KEY_HASH*/,ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
+/* g       */                       ITM_TGLFRT,           ITM_HASH_JM,        KEY_dotD,         ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 /* g       */                       ITM_MAGNITUDE,        ITM_DELTAPC,      ITM_ANGLE,        ITM_XTHROOT,      ITM_LBL,          ITM_RTN,      
 /* g       */                       -MNU_PRINT,           -MNU_CPX,         -MNU_EXP,         KEY_CC,           -MNU_FIN,         KEY_UNDO,     
 
@@ -589,7 +585,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
  /*ROW 1    */                      ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_XFACT,                        //JM HOME
  /* f       */                  //  ITM_SIGMAMINUS,        ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
                                     ITM_NULL,              ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_NULL,         ITM_GTO,    
-/* g       */                       ITM_TGLFRT,            ITM_toINT /*KEY_HASH*/,ITM_DOTDEMU,      ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
+/* g       */                       ITM_TGLFRT,            ITM_HASH_JM,        KEY_dotD,         ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
 
 
 #ifdef XXXX
@@ -618,7 +614,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
                                                                                                                                                                                                                                                 //JM HOME
                                                                    ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EX,                      ITM_XFACT,                          //JM HOME
                                                                    ITM_MAGNITUDE,                 ITM_DELTAPC,                ITM_ANGLE,                ITM_GTO,               ITM_LBL,                     ITM_RTN,                            //JM HOME
-                                                                   ITM_PROFRC,                    ITM_toINT /*KEY_HASH*/,     ITM_DOTDEMU,              ITM_ms,                ITM_toREC2,                  ITM_toPOL2,                          //JM HOME
+                                                                   ITM_PROFRC,                    ITM_HASH_JM,                  KEY_dotD,                 ITM_ms,                ITM_toREC2,                  ITM_toPOL2,                          //JM HOME
 //#endif //JM END OF LAYOUT 2 DM42 STRICT.
 #endif //XXXX
 

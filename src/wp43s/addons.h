@@ -38,6 +38,7 @@ void fnRoundi2      (uint16_t unusedParamButMandatory);
 void fnRound2       (uint16_t unusedParamButMandatory);
 void fnAngularModeJM(uint16_t unusedParamButMandatory);
 void fnChangeBaseJM (uint16_t unusedParamButMandatory);
+void fnChangeBaseMNU(uint16_t unusedParamButMandatory);
 void fnInDefault    (uint16_t inputDefault);
 
 

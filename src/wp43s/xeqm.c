@@ -89,17 +89,17 @@ void runkey(uint16_t item){
 void sendkeys(const char aa[]) {
   int16_t ix = 0;
   while (aa[ix]!=0) {
-    if(aa[ix]>=65 && aa[ix]<= 90){runkey(900+aa[ix]-65);} else //A..Z
-    if(aa[ix]>=97 && aa[ix]<=122){runkey(900+aa[ix]-65-32);} else //a..z converted to A..Z
-    if(aa[ix]>=48 && aa[ix]<= 57){runkey(890+aa[ix]-48);} else //0..9
+    if(aa[ix]>=65 && aa[ix]<= 90){runkey(CHR_A+aa[ix]-65);} else //A..Z
+    if(aa[ix]>=97 && aa[ix]<=122){runkey(CHR_A+aa[ix]-65-32);} else //a..z converted to A..Z
+    if(aa[ix]>=48 && aa[ix]<= 57){runkey(CHR_0+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-      case 46:  runkey(1310); break; //.
-      case 69:  runkey(1487); break; //E
-      case 101: runkey(1487); break; //e
-      case 45:  runkey( 780); break; //-
-      case 43:  runkey( 778); break; //+
-      case 32:  runkey(1295); break; //space
-      case 35:  runkey(793); break; //#
+      case 46:  runkey(CHR_PERIOD); break; //.
+      case 69:  runkey(ITM_EXPONENT); break; //E
+      case 101: runkey(ITM_EXPONENT); break; //e
+      case 45:  runkey(ITM_SUB); break; //-
+      case 43:  runkey(ITM_ADD); break; //+
+      case 32:  runkey(CHR_SPACE); break; //space
+      case 35:  runkey(ITM_toINT); break; //#
       default:;
     }
   ix++;
@@ -260,6 +260,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
+
                       if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
                       if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "4");} else
                       if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
@@ -326,7 +327,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"IDIV" )) {strcpy(commandnumber, "247");} else
                       if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "250");} else
                       if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "252");} else
-                      if (strcompare(commandnumber,"INTS" )) {strcpy(commandnumber, "-256");} else
+                      if (strcompare(commandnumber,"INTS" )) {strcpy(commandnumber, "256");} else
                       if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "259");} else
                       if (strcompare(commandnumber,"KEY?" )) {strcpy(commandnumber, "284");} else
                       if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "296");} else
@@ -542,7 +543,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"COMPLEX" )) {strcpy(commandnumber, "1766");} else
                       if (strcompare(commandnumber,"CONVUP" )) {strcpy(commandnumber, "1768");} else
                       if (strcompare(commandnumber,"CONVDN" )) {strcpy(commandnumber, "1769");} else
-                      if (strcompare(commandnumber,">LI<>SI" )) {strcpy(commandnumber, "1925");} else
+                      if (strcompare(commandnumber,">I" )) {strcpy(commandnumber, "1898");} else
                       if (strcompare(commandnumber,".MS" )) {strcpy(commandnumber, "1926");} else
                       if (strcompare(commandnumber,">POLAR" )) {strcpy(commandnumber, "1955");} else
                       if (strcompare(commandnumber,">RECT" )) {strcpy(commandnumber, "1956");} else
@@ -581,6 +582,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2019");} else
                       if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2020");} else
                       if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2021");} else
+
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 

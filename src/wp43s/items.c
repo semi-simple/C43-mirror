@@ -502,6 +502,7 @@ void fnXEQMXXEQ                 (uint16_t unusedParamButMandatory) {}
 void fnCase                     (uint16_t unusedParamButMandatory) {}
 void fnAngularModeJM            (uint16_t unusedParamButMandatory) {}
 void fnChangeBaseJM             (uint16_t unusedParamButMandatory) {}
+void fnChangeBaseMNU            (uint16_t unusedParamButMandatory) {}
                                                                                 //JM ^^
 
 
@@ -2290,8 +2291,8 @@ const item_t indexOfItems[] = {
 /* 1765 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",   0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM EE
 /* 1766 */  { fnKeyCC,                     KEY_COMPLEX,                 "COMPLEX",                                     "COMPLEX",                                     0,       0,       CAT_FNCT, SLS_UNCHANGED},   //JM Change CC to COMPLEX
 /* 1767 */  { fnRange,                     NOPARAM,                     "RNG",                                         "RNG",                                         0,       0,       CAT_NONE, SLS_ENABLED  },
-/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW STD_RIGHT_ARROW "LI",          0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
-/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW STD_LEFT_ARROW,            0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW "R" STD_RIGHT_ARROW "LI",      0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
+/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW "R" STD_LEFT_ARROW,        0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM TYPE CONVERT
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1771 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        0,       0,       CAT_FNCT, SLS_ENABLED  },
 
@@ -2450,7 +2451,7 @@ const item_t indexOfItems[] = {
 /* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED},   //JM GRAPH
-/* 1925 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI", STD_RIGHT_ARROW "LI" STD_LEFT_RIGHT_ARROWS "SI",   0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM SHORTINT
+/* 1925 */  { itemToBeCoded,               NOPARAM,                     "1925",                                        "1925",                                        0,       0,       CAT_FREE, SLS_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1926 */  { fnTo_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         0,       0,       CAT_FNCT, SLS_ENABLED  },   //JM DMS HMS
 /* 1927 */  { fnMultiplySI,                88,                          STD_DOT "p",                                   STD_DOT "p",                                   0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1928 */  { fnMultiplySI,                91,                          STD_DOT "n",                                   STD_DOT "n",                                   0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
@@ -2460,7 +2461,7 @@ const item_t indexOfItems[] = {
 /* 1932 */  { fnMultiplySI,                106,                         STD_DOT "M",                                   STD_DOT "M",                                   0,       0,       CAT_NONE, SLS_ENABLED  },   //JM PRE UNIT
 /* 1933 */  { fnUserJM,                    USER_ALPHA,                  "U" STD_SIGMA STD_DOT STD_alpha,               "U" STD_SIGMA STD_DOT STD_alpha,               0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1934 */  { fnUserJM,                    USER_GSHFT,                  "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        "U" STD_SIGMA STD_DOT "G" STD_DOT "SH",        0,       0,       CAT_NONE, SLS_UNCHANGED},
-/* 1935 */  { fnKeyDotD/*jm*/,             NOPARAM,                     "Dot.d",                                       "Dot.d",                                       0,       0,       CAT_NONE, SLS_ENABLED  },   //JM. Replaced by .d, superceded by Martin. KEEP FOR REFERENCE ONLY. NOTE jm
+/* 1935 */  { fnChangeBaseMNU,             NOPARAM,                     "MODE#",                                       "MODE#",                                       0,       0,       CAT_NONE, SLS_UNCHANGED},
 /* 1936 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1937 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },
 /* 1938 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       0,       0,       CAT_FNCT, SLS_ENABLED  },

@@ -1965,7 +1965,7 @@
 #define ITM_GRF_DX                    1922   //JM GRAPH
 #define ITM_GRF_DY                    1923   //JM GRAPH
 #define ITM_GRF_HLP                   1924   //JM GRAPH
-#define ITM_toSI                      1925   //JM SHORTINT
+#define Not_used1925                  1925
 #define ITM_ms                        1926   //JM DMS HMS
 #define ITM_SI_p                      1927   //JM PRE UNIT
 #define ITM_SI_n                      1928   //JM PRE UNIT
@@ -1975,7 +1975,7 @@
 #define ITM_SI_M                      1932   //JM PRE UNIT
 #define ITM_USER_ALPHA                1933   //JM USER
 #define ITM_USER_GSHFT                1934   //JM USER
-#define ITM_DOTDEMU                   1935   //JM USER
+#define ITM_HASH_JM                   1935
 #define ITM_DEMO1                     1936   //JM USER
 #define ITM_DEMO2                     1937   //JM USER
 #define ITM_DEMO3                     1938   //JM USER

@@ -237,7 +237,7 @@ printf(">>>   refreshScreen2 from keyboard.c executeFunction\n");
           }
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != KEY_CC) {
-              closeNim();
+              if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
               if(calcMode != CM_NIM) {
                 if(indexOfItems[item].func == fnConstant) {
                   setSystemFlag(FLAG_ASLIFT);
@@ -267,13 +267,16 @@ int16_t determineItem(const char *data) {
   int16_t result;
   const calcKey_t *key;
 
+
+  int8_t key_no = stringToKeyNumber(data);
+
 //  //key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 //  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   if (kbd_usr[36].primaryTam == KEY_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
-    key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
+    key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
-    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   allowScreenUpdate = true;
 
@@ -349,6 +352,14 @@ int16_t determineItem(const char *data) {
   }                                                                                                                           //JM shifts
 
 
+  if((calcMode == CM_NIM || calcMode == CM_NORMAL) && lastIntegerBase >= 11 && (key_no >= 0 && key_no <= 5 )) {               //JMNIM vv Added direct A-F for hex entry
+    result = shiftF ? key->fShifted :
+             shiftG ? key->gShifted :
+                      key->primaryAim;
+         //printf(">>> ±±±§§§ keys key:%d result:%d Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",key_no, result, calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+         return result;  
+  } else                                                                                                                      //JM^^
+ 
   if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
     result = shiftF ? key->fShifted :
              shiftG ? key->gShifted :
@@ -368,7 +379,7 @@ int16_t determineItem(const char *data) {
     result = 0;
   }
 
-  Check_Assign_in_progress(&result, stringToKeyNumber(data));  //JM
+  Check_Assign_in_progress(&result, key_no);  //JM
 
   Check_MultiPresses(&result);                                 //JM
 
@@ -577,7 +588,7 @@ void processKeyAction(int16_t item) {
     default:
       switch(calcMode) {
         case CM_NORMAL:
-          if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+          if(item == ITM_EXPONENT || item==CHR_PERIOD || ((CHR_0<=item && item<=CHR_9) || ((CHR_A <= item && item <= CHR_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
             addItemToNimBuffer(item);
             keyActionProcessed = true;
             refreshRegisterLine(REGISTER_X);           //JM to force direct display
@@ -645,7 +656,7 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           addItemToNimBuffer(item);
 
-          if((CHR_0 <= item && item <= CHR_9) || item == ITM_CHS || item == ITM_EXPONENT || item == CHR_PERIOD) {   //JMvv Direct keypresses
+          if( ((CHR_0 <= item && item <= CHR_9) || ((CHR_A <= item && item <= CHR_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == CHR_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
             refreshRegisterLine(REGISTER_X);
           }                                                                                   //JM^^
           break;

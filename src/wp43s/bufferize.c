@@ -2111,6 +2111,7 @@ void closeNim(void) {
 
           *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           lastIntegerBase = base;
+          nimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
 
           longIntegerFree(maxVal);
           longIntegerFree(minVal);

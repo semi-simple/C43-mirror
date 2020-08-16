@@ -2274,6 +2274,8 @@ void fnToReal(uint16_t unusedParamButMandatory) {
 
     case dtShortInteger :
       convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      lastIntegerBase = 0;                                                       //JM
+      fnRefreshRadioState(0, 0);                                                 //JM
       break;
 
     case dtReal34:

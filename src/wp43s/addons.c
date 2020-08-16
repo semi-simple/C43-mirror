@@ -463,6 +463,8 @@ void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longin
       break;
     case dtShortInteger:
       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
+      lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
+      fnRefreshRadioState(0, 0);                                                //JMNIM
       break;
     default:
       break;
@@ -557,15 +559,95 @@ void fnAngularModeJM(uint16_t AMODE) {
 
 }
 
+
+
+void shrinkNimBuffer (void) {                              //JMNIM vv
+  int16_t lastChar;                                        //if digits in NIMBUFFER, ensure switch to NIM,
+  int16_t hexD = 0;
+  bool_t  reached_end = false;
+  lastChar = strlen(nimBuffer) - 1;
+  if(lastChar >= 1) {
+    int16_t ix = 0;
+    while(nimBuffer[ix]!=0) {                              //if # found in nimbuffer, return and do nothing
+      if(nimBuffer[ix] >= 'A') {
+        hexD++;
+      }
+      if(nimBuffer[ix]==35 || reached_end) {
+        nimBuffer[ix]=0; 
+        reached_end = true;
+        //printf(">>> ***A # found. hexD=%d\n",hexD);
+      }
+      else {
+        //printf(">>> ***B # not found in %s:%d=%d hexD=%d\n",nimBuffer,ix,nimBuffer[ix],hexD);
+      }
+      ix++;
+    }
+    if (hexD > 0) nimNumberPart = NP_INT_16;
+    else nimNumberPart = NP_INT_10;
+//    calcMode = CM_NIM;
+  }
+}                                                          //JMNIM ^^
+
+
 void fnChangeBaseJM (uint16_t BASE) {
+  //printf(">>> §§§ fnChangeBaseJMa Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+  shrinkNimBuffer();
+  //printf(">>> §§§ fnChangeBaseJMb Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+
   if(BASE == lastIntegerBase) {
     lastIntegerBase = 0;
+    fnRefreshRadioState(0, 0);
   }
   else {
     fnChangeBase(BASE);
-    lastIntegerBase = BASE;
   }
-  fnRefreshRadioState(0, 0);
+  nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+}
+
+
+
+
+
+void fnChangeBaseMNU(uint16_t BASE) {
+#ifndef TESTSUITE_BUILD
+    //printf(">>> §§§ fnChangeBaseMNUa Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+    shrinkNimBuffer();
+    //printf(">>> §§§ fnChangeBaseMNUb Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+
+    if(lastIntegerBase == 0 && calcMode == CM_NORMAL && BASE > 1 && BASE <=16) {
+      //printf(">>> §§§fnChangeBaseMNc CM_NORMAL: convert non-shortint-mode to %d & return\n",BASE);
+      fnChangeBaseJM(BASE);
+      return;
+    }
+
+    if(lastIntegerBase == 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
+      //printf(">>> §§§fnChangeBaseMNd CM_NORMAL: convert non-shortint-mode to TAM\n");
+      runFunction(ITM_toINT);
+      return;
+    }
+
+    if(BASE > 1 && BASE <=16 ) {                                                //BASIC CONVERSION IN X REGISTER, OR DIGITS IN NIMBUFFER IF IN CM_NORMAL
+      //printf(">>> §§§1 convert base to %d & return\n",BASE);
+      fnChangeBaseJM(BASE);
+      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      return;
+    }
+
+    if(nimBuffer[0]==0 && calcMode == CM_NORMAL && BASE == NOPARAM) {           //IF # FROM MENU & TAM.
+      //printf(">>> §§§2 # FROM MENU: nimBuffer[0]=0; use runfunction\n");
+      runFunction(ITM_toINT);
+      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      return;
+    }
+
+    if(nimBuffer[0]!=0 && calcMode == CM_NIM) {                                 //IF # FROM MENU, while in NIM, just add to NimBuffer
+      //printf(">>> §§§3 # nimBuffer in use, addItemToNimBuffer\n");
+      addItemToNimBuffer (ITM_toINT);
+      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      return;
+    }
+
+#endif
 }
 
 

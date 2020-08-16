@@ -57,8 +57,8 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
 
   if(calcMode != CM_FLAG_BROWSER) {
     if(calcMode == CM_AIM) {
-      cursorEnabled = false;
       hideCursor();
+      cursorEnabled = false;
     }
 
     previousCalcMode = calcMode;
@@ -296,8 +296,8 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
 
   if(calcMode != CM_FLAG_BROWSER_OLD) {
     if(calcMode == CM_AIM) {
-      cursorEnabled = false;
       hideCursor();
+      cursorEnabled = false;
     }
     previousCalcMode = calcMode;
     calcMode = CM_FLAG_BROWSER_OLD;

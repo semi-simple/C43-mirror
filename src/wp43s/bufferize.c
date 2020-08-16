@@ -25,6 +25,7 @@
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
   resetShiftState();
+  aimBuffer[0] = 0;
   calcModeAim(NOPARAM); // Alpha Input Mode
 }
 
@@ -393,10 +394,10 @@ void addItemToNimBuffer(int16_t item) {
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);
         }                            //JM NEWERPN
-        nimBuffer[0] = '+';
-        nimBuffer[1] = '1';
-        nimBuffer[2] = '.';
-        nimBuffer[3] = 0;
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '1';
+        aimBuffer[2] = '.';
+        aimBuffer[3] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
         lastIntegerBase = 0;
         break;
@@ -409,9 +410,9 @@ void addItemToNimBuffer(int16_t item) {
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);
         }                            //JM NEWERPN
-        nimBuffer[0] = '+';
-        nimBuffer[1] = '0';
-        nimBuffer[2] = 0;
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '0';
+        aimBuffer[2] = 0;
         nimNumberPart = NP_INT_10;
         break;
 
@@ -438,8 +439,8 @@ void addItemToNimBuffer(int16_t item) {
         else {                       //JM NEWERPN ^^
         calcModeNim(NOPARAM);
         }                            //JM NEWERPN
-        nimBuffer[0] = '+';
-        nimBuffer[1] = 0;
+        aimBuffer[0] = '+';
+        aimBuffer[1] = 0;
         nimNumberPart = NP_EMPTY;
         break;
 
@@ -470,105 +471,105 @@ void addItemToNimBuffer(int16_t item) {
       switch(nimNumberPart) {
         case NP_INT_10 :
           if(item == CHR_0) {
-            if(nimBuffer[1] != '0') {
-              strcat(nimBuffer, "0");
+            if(aimBuffer[1] != '0') {
+              strcat(aimBuffer, "0");
             }
           }
           else {
-            if(nimBuffer[1] == '0') {
-              nimBuffer[1] = 0;
+            if(aimBuffer[1] == '0') {
+              aimBuffer[1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
           }
           break;
 
         case NP_REAL_EXPONENT :
           if(item == CHR_0) {
-            if(nimBuffer[exponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(aimBuffer[exponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
 
-            if(nimBuffer[exponentSignLocation + 1] != 0 || nimBuffer[exponentSignLocation] == '+') {
-              strcat(nimBuffer, "0");
+            if(aimBuffer[exponentSignLocation + 1] != 0 || aimBuffer[exponentSignLocation] == '+') {
+              strcat(aimBuffer, "0");
             }
 
-            if(stringToInt16(nimBuffer + exponentSignLocation) > exponentLimit || stringToInt16(nimBuffer + exponentSignLocation) < -exponentLimit) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt16(aimBuffer + exponentSignLocation) > exponentLimit || stringToInt16(aimBuffer + exponentSignLocation) < -exponentLimit) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           else {
-            if(nimBuffer[exponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(aimBuffer[exponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
 
-            if(stringToInt16(nimBuffer + exponentSignLocation) > exponentLimit || stringToInt16(nimBuffer + exponentSignLocation) < -exponentLimit) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt16(aimBuffer + exponentSignLocation) > exponentLimit || stringToInt16(aimBuffer + exponentSignLocation) < -exponentLimit) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           break;
 
         case NP_FRACTION_DENOMINATOR :
           if(item == CHR_0) {
-            strcat(nimBuffer, "0");
+            strcat(aimBuffer, "0");
 
-            if(nimBuffer[denominatorLocation] == '0') {
-              nimBuffer[denominatorLocation] = 0;
+            if(aimBuffer[denominatorLocation] == '0') {
+              aimBuffer[denominatorLocation] = 0;
             }
 
-            if(stringToInt32(nimBuffer + denominatorLocation) > 9999) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt32(aimBuffer + denominatorLocation) > 9999) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           else {
-            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
 
-            if(stringToInt32(nimBuffer + denominatorLocation) > 9999) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt32(aimBuffer + denominatorLocation) > 9999) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           break;
 
         case NP_COMPLEX_INT_PART :
           if(item == CHR_0) {
-            if(nimBuffer[imaginaryMantissaSignLocation + 2] != '0') {
-              strcat(nimBuffer, "0");
+            if(aimBuffer[imaginaryMantissaSignLocation + 2] != '0') {
+              strcat(aimBuffer, "0");
             }
           }
           else {
-            if(nimBuffer[imaginaryMantissaSignLocation + 2] == '0') {
-              nimBuffer[imaginaryMantissaSignLocation + 2] = 0;
+            if(aimBuffer[imaginaryMantissaSignLocation + 2] == '0') {
+              aimBuffer[imaginaryMantissaSignLocation + 2] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
           }
           break;
 
         case NP_COMPLEX_EXPONENT :
           if(item == CHR_0) {
-            if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(aimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
 
-            if(nimBuffer[imaginaryExponentSignLocation + 1] != 0 || nimBuffer[imaginaryExponentSignLocation] == '+') {
-              strcat(nimBuffer, "0");
+            if(aimBuffer[imaginaryExponentSignLocation + 1] != 0 || aimBuffer[imaginaryExponentSignLocation] == '+') {
+              strcat(aimBuffer, "0");
             }
 
-            if(stringToInt16(nimBuffer + imaginaryExponentSignLocation) > exponentLimit || stringToInt16(nimBuffer + imaginaryExponentSignLocation) < -exponentLimit) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt16(aimBuffer + imaginaryExponentSignLocation) > exponentLimit || stringToInt16(aimBuffer + imaginaryExponentSignLocation) < -exponentLimit) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           else {
-            if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(aimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
 
-            strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
 
-            if(stringToInt16(nimBuffer + imaginaryExponentSignLocation) > exponentLimit || stringToInt16(nimBuffer + imaginaryExponentSignLocation) < -exponentLimit) {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+            if(stringToInt16(aimBuffer + imaginaryExponentSignLocation) > exponentLimit || stringToInt16(aimBuffer + imaginaryExponentSignLocation) < -exponentLimit) {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           break;
@@ -579,7 +580,7 @@ void addItemToNimBuffer(int16_t item) {
             //debugNIM();
           }
 
-          strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+          strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
       }
       break;
 
@@ -592,11 +593,11 @@ void addItemToNimBuffer(int16_t item) {
       done = true;
 
       if(nimNumberPart == NP_EMPTY || nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
-        if(nimBuffer[1] == '0') {
-          nimBuffer[1] = 0;
+        if(aimBuffer[1] == '0') {
+          aimBuffer[1] = 0;
         }
 
-        strcat(nimBuffer, indexOfItems[item].itemSoftmenuName);
+        strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
         hexDigits++;
 
         nimNumberPart = NP_INT_16;
@@ -607,40 +608,40 @@ void addItemToNimBuffer(int16_t item) {
     case CHR_PERIOD :
       done = true;
 
-      if(nimBuffer[strlen(nimBuffer)-1] == 'i') {
-        strcat(nimBuffer, "0");
+      if(aimBuffer[strlen(aimBuffer)-1] == 'i') {
+        strcat(aimBuffer, "0");
       }
 
       lastIntegerBase = 0;
 
       switch(nimNumberPart) {
         case NP_INT_10 :
-          strcat(nimBuffer, ".");
+          strcat(aimBuffer, ".");
 
           nimNumberPart = NP_REAL_FLOAT_PART;
           //debugNIM();
           break;
 
         case NP_REAL_FLOAT_PART :
-          if(nimBuffer[strlen(nimBuffer) - 1] == '.') {
-            strcat(nimBuffer, "0");
+          if(aimBuffer[strlen(aimBuffer) - 1] == '.') {
+            strcat(aimBuffer, "0");
           }
 
-          for(uint16_t i=0; i<strlen(nimBuffer); i++) {
-            if(nimBuffer[i] == '.') {
-              nimBuffer[i] = ' ';
+          for(uint16_t i=0; i<strlen(aimBuffer); i++) {
+            if(aimBuffer[i] == '.') {
+              aimBuffer[i] = ' ';
               break;
             }
           }
-          strcat(nimBuffer, "/");
+          strcat(aimBuffer, "/");
 
-          denominatorLocation = strlen(nimBuffer);
+          denominatorLocation = strlen(aimBuffer);
           nimNumberPart = NP_FRACTION_DENOMINATOR;
           //debugNIM();
           break;
 
         case NP_COMPLEX_INT_PART :
-          strcat(nimBuffer, ".");
+          strcat(aimBuffer, ".");
 
           nimNumberPart = NP_COMPLEX_FLOAT_PART;
           //debugNIM();
@@ -653,34 +654,34 @@ void addItemToNimBuffer(int16_t item) {
     case ITM_EXPONENT :
       done = true;
 
-      if(nimBuffer[strlen(nimBuffer)-1] == 'i') {
-        strcat(nimBuffer, "1");
+      if(aimBuffer[strlen(aimBuffer)-1] == 'i') {
+        strcat(aimBuffer, "1");
       }
 
       lastIntegerBase = 0;
 
       switch(nimNumberPart) {
         case NP_INT_10 :
-          strcat(nimBuffer, "."); // no break here
+          strcat(aimBuffer, "."); // no break here
           #ifndef __APPLE__
             __attribute__ ((fallthrough));
           #endif
         case NP_REAL_FLOAT_PART :
-          strcat(nimBuffer, "e+");
-          exponentSignLocation = strlen(nimBuffer) - 1;
+          strcat(aimBuffer, "e+");
+          exponentSignLocation = strlen(aimBuffer) - 1;
 
           nimNumberPart = NP_REAL_EXPONENT;
           //debugNIM();
           break;
 
         case NP_COMPLEX_INT_PART :
-          strcat(nimBuffer, "."); // no break here
+          strcat(aimBuffer, "."); // no break here
           #ifndef __APPLE__
             __attribute__ ((fallthrough));
           #endif
         case NP_COMPLEX_FLOAT_PART :
-          strcat(nimBuffer, "e+");
-          imaginaryExponentSignLocation = strlen(nimBuffer) - 1;
+          strcat(aimBuffer, "e+");
+          imaginaryExponentSignLocation = strlen(aimBuffer) - 1;
 
           nimNumberPart = NP_COMPLEX_EXPONENT;
           //debugNIM();
@@ -696,7 +697,7 @@ void addItemToNimBuffer(int16_t item) {
       lastIntegerBase = 0;
 
       if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
-        strcat(nimBuffer, "#");
+        strcat(aimBuffer, "#");
 
         nimNumberPart = NP_INT_BASE;
         //debugNIM();
@@ -712,45 +713,45 @@ void addItemToNimBuffer(int16_t item) {
         case NP_INT_BASE :
         case NP_REAL_FLOAT_PART :
         case NP_FRACTION_DENOMINATOR :
-          if(nimBuffer[0] == '+') {
-            nimBuffer[0] = '-';
+          if(aimBuffer[0] == '+') {
+            aimBuffer[0] = '-';
           }
           else {
-            nimBuffer[0] = '+';
+            aimBuffer[0] = '+';
           }
           break;
 
         case NP_REAL_EXPONENT :
-          if(nimBuffer[exponentSignLocation] == '+') {
-            nimBuffer[exponentSignLocation] = '-';
-            if(nimBuffer[exponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+          if(aimBuffer[exponentSignLocation] == '+') {
+            aimBuffer[exponentSignLocation] = '-';
+            if(aimBuffer[exponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           else {
-            nimBuffer[exponentSignLocation] = '+';
+            aimBuffer[exponentSignLocation] = '+';
           }
           break;
 
         case NP_COMPLEX_INT_PART :
         case NP_COMPLEX_FLOAT_PART :
-          if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
-            nimBuffer[imaginaryMantissaSignLocation] = '-';
+          if(aimBuffer[imaginaryMantissaSignLocation] == '+') {
+            aimBuffer[imaginaryMantissaSignLocation] = '-';
           }
           else {
-            nimBuffer[imaginaryMantissaSignLocation] = '+';
+            aimBuffer[imaginaryMantissaSignLocation] = '+';
           }
           break;
 
         case NP_COMPLEX_EXPONENT :
-          if(nimBuffer[imaginaryExponentSignLocation] == '+') {
-            nimBuffer[imaginaryExponentSignLocation] = '-';
-            if(nimBuffer[imaginaryExponentSignLocation + 1] == '0') {
-              nimBuffer[strlen(nimBuffer) - 1] = 0;
+          if(aimBuffer[imaginaryExponentSignLocation] == '+') {
+            aimBuffer[imaginaryExponentSignLocation] = '-';
+            if(aimBuffer[imaginaryExponentSignLocation + 1] == '0') {
+              aimBuffer[strlen(aimBuffer) - 1] = 0;
             }
           }
           else {
-            nimBuffer[imaginaryExponentSignLocation] = '+';
+            aimBuffer[imaginaryExponentSignLocation] = '+';
           }
           break;
 
@@ -759,7 +760,7 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case KEY_CC :
-      lastChar = strlen(nimBuffer) - 1;
+      lastChar = strlen(aimBuffer) - 1;
 
       done = true;
 
@@ -767,15 +768,15 @@ void addItemToNimBuffer(int16_t item) {
 
       switch(nimNumberPart) {
        case NP_REAL_EXPONENT :
-          if((nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') && nimBuffer[lastChar - 1] == 'e') {
-            nimBuffer[lastChar - 1] = 0;
+          if((aimBuffer[lastChar] == '+' || aimBuffer[lastChar] == '-') && aimBuffer[lastChar - 1] == 'e') {
+            aimBuffer[lastChar - 1] = 0;
           }
-          else if(nimBuffer[lastChar] == 'e') {
-            nimBuffer[lastChar] = 0;
+          else if(aimBuffer[lastChar] == 'e') {
+            aimBuffer[lastChar] = 0;
           }
           else {
-            imaginaryMantissaSignLocation = strlen(nimBuffer);
-            strcat(nimBuffer, "+i");
+            imaginaryMantissaSignLocation = strlen(aimBuffer);
+            strcat(aimBuffer, "+i");
 
             nimNumberPart = NP_COMPLEX_INT_PART;
             //debugNIM();
@@ -783,14 +784,14 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_INT_10 :
-          strcat(nimBuffer, "."); // no break here
+          strcat(aimBuffer, "."); // no break here
           #ifndef __APPLE__
             __attribute__ ((fallthrough));
           #endif
 
         case NP_REAL_FLOAT_PART :
-          imaginaryMantissaSignLocation = strlen(nimBuffer);
-          strcat(nimBuffer, "+i");
+          imaginaryMantissaSignLocation = strlen(aimBuffer);
+          strcat(aimBuffer, "+i");
 
           nimNumberPart = NP_COMPLEX_INT_PART;
           //debugNIM();
@@ -801,14 +802,14 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case ITM_pi :
-      if(nimNumberPart == NP_COMPLEX_INT_PART && nimBuffer[strlen(nimBuffer) - 1] == 'i') {
+      if(nimNumberPart == NP_COMPLEX_INT_PART && aimBuffer[strlen(aimBuffer) - 1] == 'i') {
         done = true;
-        strcat(nimBuffer, "3.141592653589793238462643383279503");
+        strcat(aimBuffer, "3.141592653589793238462643383279503");
       }
       break;
 
     case KEY_BACKSPACE :
-      lastChar = strlen(nimBuffer) - 1;
+      lastChar = strlen(aimBuffer) - 1;
 
       done = true;
 
@@ -817,7 +818,7 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_INT_16 :
-          if(nimBuffer[lastChar] >= 'A') {
+          if(aimBuffer[lastChar] >= 'A') {
             hexDigits--;
           }
 
@@ -828,7 +829,7 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_INT_BASE :
-          if(nimBuffer[lastChar] == '#') {
+          if(aimBuffer[lastChar] == '#') {
             if(hexDigits > 0) {
               nimNumberPart = NP_INT_16;
             }
@@ -840,21 +841,21 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_REAL_FLOAT_PART :
-          if(nimBuffer[lastChar] == '.') {
+          if(aimBuffer[lastChar] == '.') {
             nimNumberPart = NP_INT_10;
             //debugNIM();
           }
           break;
 
         case NP_REAL_EXPONENT :
-          if(nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') {
-            nimBuffer[lastChar--] = 0;
+          if(aimBuffer[lastChar] == '+' || aimBuffer[lastChar] == '-') {
+            aimBuffer[lastChar--] = 0;
           }
 
-          if(nimBuffer[lastChar] == 'e') {
+          if(aimBuffer[lastChar] == 'e') {
             nimNumberPart = NP_INT_10;
             for(int16_t i=0; i<lastChar; i++) {
-              if(nimBuffer[i] == '.') {
+              if(aimBuffer[i] == '.') {
                 nimNumberPart = NP_REAL_FLOAT_PART;
                 break;
               }
@@ -864,11 +865,11 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_FRACTION_DENOMINATOR :
-          if(nimBuffer[lastChar] == '/') {
+          if(aimBuffer[lastChar] == '/') {
             nimNumberPart = NP_REAL_FLOAT_PART;
             for(int16_t i=0; i<lastChar; i++) {
-              if(nimBuffer[i] == ' ') {
-                nimBuffer[i] = '.';
+              if(aimBuffer[i] == ' ') {
+                aimBuffer[i] = '.';
                 break;
               }
             }
@@ -877,14 +878,14 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_COMPLEX_INT_PART :
-          if(nimBuffer[lastChar] == 'i') {
+          if(aimBuffer[lastChar] == 'i') {
             nimNumberPart = NP_INT_10;
             for(int16_t i=0; i<lastChar; i++) {
-              if(nimBuffer[i] == 'e') {
+              if(aimBuffer[i] == 'e') {
                 nimNumberPart = NP_REAL_EXPONENT;
                 break;
               }
-              if(nimBuffer[i] == '.') {
+              if(aimBuffer[i] == '.') {
                 nimNumberPart = NP_REAL_FLOAT_PART;
               }
             }
@@ -894,21 +895,21 @@ void addItemToNimBuffer(int16_t item) {
           break;
 
         case NP_COMPLEX_FLOAT_PART :
-          if(nimBuffer[lastChar] == '.') {
+          if(aimBuffer[lastChar] == '.') {
             nimNumberPart = NP_COMPLEX_INT_PART;
             //debugNIM();
           }
           break;
 
         case NP_COMPLEX_EXPONENT :
-          if(nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') {
-            nimBuffer[lastChar--] = 0;
+          if(aimBuffer[lastChar] == '+' || aimBuffer[lastChar] == '-') {
+            aimBuffer[lastChar--] = 0;
           }
 
-          if(nimBuffer[lastChar] == 'e') {
+          if(aimBuffer[lastChar] == 'e') {
             nimNumberPart = NP_COMPLEX_INT_PART;
             for(int16_t i=imaginaryMantissaSignLocation+2; i<lastChar; i++) {
-              if(nimBuffer[i] == '.') {
+              if(aimBuffer[i] == '.') {
                 nimNumberPart = NP_COMPLEX_FLOAT_PART;
                 break;
               }
@@ -920,11 +921,11 @@ void addItemToNimBuffer(int16_t item) {
         default : {}
       }
 
-      nimBuffer[lastChar--] = 0;
+      aimBuffer[lastChar--] = 0;
 
-      if(lastChar == -1 || (lastChar == 0 && nimBuffer[0] == '+')) {
+      if(lastChar == -1 || (lastChar == 0 && aimBuffer[0] == '+')) {
         calcModeNormal();
-        restoreStack();
+        undo();
       }
       break;
 
@@ -938,26 +939,26 @@ void addItemToNimBuffer(int16_t item) {
       break;
 
     case ITM_LOG10 :                                                                //JM layout different
-      if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // D for decimal base
+      if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // D for decimal base
         done = true;
 
-        strcat(nimBuffer, "10");
+        strcat(aimBuffer, "10");
       }
       break;
 
     case ITM_RCL :
-      if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // H for hexadecimal base
+      if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // H for hexadecimal base
         done = true;
 
-        strcat(nimBuffer, "16");
+        strcat(aimBuffer, "16");
       }
       break;
 
     case ITM_1ONX :                                                                 //JM layout different Added B for binary
-      if(nimNumberPart == NP_INT_BASE && nimBuffer[strlen(nimBuffer) - 1] == '#') { // Binary. Only works in direct NIM
+      if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // Binary. Only works in direct NIM
         done = true;
 
-        strcat(nimBuffer, "2");
+        strcat(aimBuffer, "2");
       }
       break;
 
@@ -992,37 +993,37 @@ void addItemToNimBuffer(int16_t item) {
       case NP_INT_10 :          // +12345
       case NP_INT_16 :          // +123AB
       case NP_INT_BASE :        // +123AB#16
-        nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+        nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
         break;
 
       case NP_REAL_FLOAT_PART : // +12345.6789
-        nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+        nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
         break;
 
       case NP_REAL_EXPONENT : // +12345.678e+3
-        nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+        nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
 
-        exponentToDisplayString(stringToInt32(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
-        if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
+        exponentToDisplayString(stringToInt32(aimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
+        if(aimBuffer[exponentSignLocation + 1] == 0 && aimBuffer[exponentSignLocation] == '-') {
           strcat(nimBufferDisplay, STD_SUP_MINUS);
         }
-        else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
+        else if(aimBuffer[exponentSignLocation + 1] == '0' && aimBuffer[exponentSignLocation] == '+') {
           strcat(nimBufferDisplay, STD_SUP_0);
         }
         break;
 
       case NP_FRACTION_DENOMINATOR : // +123 12/7
-        nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+        nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
         strcat(nimBufferDisplay, STD_SPACE_4_PER_EM);
 
-        for(index=2; nimBuffer[index]!=' '; index++); // The ending semi colon is OK here
-        supNumberToDisplayString(stringToInt32(nimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
+        for(index=2; aimBuffer[index]!=' '; index++); // The ending semi colon is OK here
+        supNumberToDisplayString(stringToInt32(aimBuffer + index + 1), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
 
         strcat(nimBufferDisplay, "/");
 
-        for(; nimBuffer[index]!='/'; index++); // The ending semi colon is OK here
-        if(nimBuffer[++index] != 0) {
-          subNumberToDisplayString(stringToInt32(nimBuffer + index), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL);
+        for(; aimBuffer[index]!='/'; index++); // The ending semi colon is OK here
+        if(aimBuffer[++index] != 0) {
+          subNumberToDisplayString(stringToInt32(aimBuffer + index), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL);
         }
         break;
 
@@ -1032,24 +1033,24 @@ void addItemToNimBuffer(int16_t item) {
         // Real part
         savedNimNumberPart = nimNumberPart;
 
-        for(index=2; index<imaginaryMantissaSignLocation && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
+        for(index=2; index<imaginaryMantissaSignLocation && aimBuffer[index] != '.'; index++); // The ending semi colon is OK here
         if(index < imaginaryMantissaSignLocation) { // There is a decimal part in the real part
           nimNumberPart = NP_REAL_FLOAT_PART;
         }
 
-        for(index=2; index<imaginaryMantissaSignLocation && nimBuffer[index] != 'e'; index++); // The ending semi colon is OK here
+        for(index=2; index<imaginaryMantissaSignLocation && aimBuffer[index] != 'e'; index++); // The ending semi colon is OK here
         if(index < imaginaryMantissaSignLocation) { // There is an exposant in the real part
           nimNumberPart = NP_REAL_EXPONENT;
         }
 
-        nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+        nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
 
         if(nimNumberPart == NP_REAL_EXPONENT) {
-          exponentToDisplayString(stringToInt32(nimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
-          if(nimBuffer[exponentSignLocation + 1] == 0 && nimBuffer[exponentSignLocation] == '-') {
+          exponentToDisplayString(stringToInt32(aimBuffer + exponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
+          if(aimBuffer[exponentSignLocation + 1] == 0 && aimBuffer[exponentSignLocation] == '-') {
             strcat(nimBufferDisplay, STD_SUP_MINUS);
           }
-          else if(nimBuffer[exponentSignLocation + 1] == '0' && nimBuffer[exponentSignLocation] == '+') {
+          else if(aimBuffer[exponentSignLocation + 1] == '0' && aimBuffer[exponentSignLocation] == '+') {
             strcat(nimBufferDisplay, STD_SUP_0);
           }
         }
@@ -1059,7 +1060,7 @@ void addItemToNimBuffer(int16_t item) {
         // Complex "separator"
         if(getSystemFlag(FLAG_POLAR)) { // polar mode
           strcat(nimBufferDisplay, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-          if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
+          if(aimBuffer[imaginaryMantissaSignLocation] == '-') {
             strcat(nimBufferDisplay, "-");
           }
         }
@@ -1068,7 +1069,7 @@ void addItemToNimBuffer(int16_t item) {
             strcat(nimBufferDisplay, STD_SPACE_HAIR);
           }
 
-          if(nimBuffer[imaginaryMantissaSignLocation] == '-') {
+          if(aimBuffer[imaginaryMantissaSignLocation] == '-') {
             strcat(nimBufferDisplay, "-");
           }
           else {
@@ -1079,27 +1080,27 @@ void addItemToNimBuffer(int16_t item) {
         }
 
         // Imaginary part
-        if(nimBuffer[imaginaryMantissaSignLocation+2] != 0) {
+        if(aimBuffer[imaginaryMantissaSignLocation+2] != 0) {
           savedNimNumberPart = nimNumberPart;
 
-          for(index=imaginaryMantissaSignLocation+1; index<(int16_t)strlen(nimBuffer) && nimBuffer[index] != '.'; index++); // The ending semi colon is OK here
-          if(index < (int16_t)strlen(nimBuffer)) { // There is a decimal part in the real part
+          for(index=imaginaryMantissaSignLocation+1; index<(int16_t)strlen(aimBuffer) && aimBuffer[index] != '.'; index++); // The ending semi colon is OK here
+          if(index < (int16_t)strlen(aimBuffer)) { // There is a decimal part in the real part
             nimNumberPart = NP_REAL_FLOAT_PART;
           }
 
-          for(index=imaginaryMantissaSignLocation+1; index<(int16_t)strlen(nimBuffer) && nimBuffer[index] != 'e'; index++); // The ending semi colon is OK here
-          if(index < (int16_t)strlen(nimBuffer)) { // There is an exposant in the real part
+          for(index=imaginaryMantissaSignLocation+1; index<(int16_t)strlen(aimBuffer) && aimBuffer[index] != 'e'; index++); // The ending semi colon is OK here
+          if(index < (int16_t)strlen(aimBuffer)) { // There is an exposant in the real part
             nimNumberPart = NP_REAL_EXPONENT;
           }
 
-          nimBufferToDisplayBuffer(nimBuffer + imaginaryMantissaSignLocation + 1, nimBufferDisplay + stringByteLength(nimBufferDisplay));
+          nimBufferToDisplayBuffer(aimBuffer + imaginaryMantissaSignLocation + 1, nimBufferDisplay + stringByteLength(nimBufferDisplay));
 
           if(nimNumberPart == NP_REAL_EXPONENT) {
-            exponentToDisplayString(stringToInt32(nimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
-            if(nimBuffer[imaginaryExponentSignLocation + 1] == 0 && nimBuffer[imaginaryExponentSignLocation] == '-') {
+            exponentToDisplayString(stringToInt32(aimBuffer + imaginaryExponentSignLocation), nimBufferDisplay + stringByteLength(nimBufferDisplay), NULL, true, STD_SPACE_PUNCTUATION);
+            if(aimBuffer[imaginaryExponentSignLocation + 1] == 0 && aimBuffer[imaginaryExponentSignLocation] == '-') {
               strcat(nimBufferDisplay, STD_SUP_MINUS);
             }
-            else if(nimBuffer[imaginaryExponentSignLocation + 1] == '0' && nimBuffer[imaginaryExponentSignLocation] == '+') {
+            else if(aimBuffer[imaginaryExponentSignLocation + 1] == '0' && aimBuffer[imaginaryExponentSignLocation] == '+') {
               strcat(nimBufferDisplay, STD_SUP_0);
             }
           }
@@ -1130,7 +1131,7 @@ void addItemToNimBuffer(int16_t item) {
       }
 
       if(lastErrorCode == 0) {
-        showFunctionName(item, 10);
+        showFunctionName(item, 1000); // 1000ms = 1s
       }
     }
   }
@@ -1166,13 +1167,13 @@ static int16_t insertGapFP(char *displayBuffer, int16_t numDigits, int16_t nth) 
 
 
 
-void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
+void nimBufferToDisplayBuffer(const char *buffer, char *displayBuffer) {
   int16_t numDigits, source, dest;
 
-  if(*nimBuffer == '-') {
+  if(*buffer == '-') {
     *(displayBuffer++) = '-';
   }
-  nimBuffer++;
+  buffer++;
 
   int16_t groupingGapM = groupingGap;                       //JMGAP vv
   switch(nimNumberPart) {
@@ -1205,10 +1206,10 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
       break;
   }                                                         //JMGAP ^^
 
-  for(numDigits=0; nimBuffer[numDigits]!=0 && nimBuffer[numDigits]!='e' && nimBuffer[numDigits]!='.' && nimBuffer[numDigits]!=' ' && nimBuffer[numDigits]!='#' && nimBuffer[numDigits]!='+' && nimBuffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
+  for(numDigits=0; buffer[numDigits]!=0 && buffer[numDigits]!='e' && buffer[numDigits]!='.' && buffer[numDigits]!=' ' && buffer[numDigits]!='#' && buffer[numDigits]!='+' && buffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
 
   for(source=0, dest=0; source<numDigits; source++) {
-    displayBuffer[dest++] = nimBuffer[source];
+    displayBuffer[dest++] = buffer[source];
     dest += insertGapIP(displayBuffer + dest, numDigits, source);
   }
 
@@ -1218,12 +1219,12 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
   if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
     displayBuffer[dest++] = '.';
 
-    nimBuffer += source + 1;
+    buffer += source + 1;
 
-    for(numDigits=0; nimBuffer[numDigits]!=0 && nimBuffer[numDigits]!='e' && nimBuffer[numDigits]!='+' && nimBuffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
+    for(numDigits=0; buffer[numDigits]!=0 && buffer[numDigits]!='e' && buffer[numDigits]!='+' && buffer[numDigits]!='-'; numDigits++); // The semicolon here is OK
 
     for(source=0; source<numDigits; source++) {
-      displayBuffer[dest++] = nimBuffer[source];
+      displayBuffer[dest++] = buffer[source];
       dest += insertGapFP(displayBuffer + dest, numDigits, source);
     }
 
@@ -1231,7 +1232,7 @@ void nimBufferToDisplayBuffer(const char *nimBuffer, char *displayBuffer) {
   }
 
   else if(nimNumberPart == NP_INT_BASE) {
-    strcpy(displayBuffer + dest, nimBuffer + numDigits);
+    strcpy(displayBuffer + dest, buffer + numDigits);
   }
 }
 
@@ -1293,7 +1294,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
             if(tamOperation == ITM_dddEL || tamOperation == ITM_dddIJ) {
               tamCurrentOperation = tamOperation;
-              indexOfItems[getOperation()].func(NOPARAM);
+              reallyRunFunction(getOperation(), NOPARAM);
               calcModeNormal();
               return;
             }
@@ -1313,7 +1314,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_LETTER :
           if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-            indexOfItems[getOperation()].func(tamLetteredRegister);
+            reallyRunFunction(getOperation(), tamLetteredRegister);
             calcModeNormal();
             return;
           }
@@ -1333,7 +1334,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           else if(tamNumber > tamNumberMax) {
           }
           else if(tamNumber*10 > tamNumberMax) {
-            indexOfItems[getOperation()].func(tamNumber);
+            reallyRunFunction(getOperation(), tamNumber);
             calcModeNormal();
             return;
           }
@@ -1363,13 +1364,13 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_BASE10 :
-          indexOfItems[getOperation()].func(10);
+          reallyRunFunction(getOperation(), 10);
           calcModeNormal();
           return;
           break;
 
         case TT_BASE16 :
-          indexOfItems[getOperation()].func(16);
+          reallyRunFunction(getOperation(), 16);
           calcModeNormal();
           return;
           break;
@@ -1402,7 +1403,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_LETTER :
-          indexOfItems[getOperation()].func(tamLetteredRegister);
+          reallyRunFunction(getOperation(), tamLetteredRegister);
           calcModeNormal();
           return;
 
@@ -1437,7 +1438,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           if(tamNumberMin <= (tamNumber*10 + tamDigit) && (tamNumber*10 + tamDigit) <= tamNumberMax) {
-            indexOfItems[getOperation()].func(tamNumber*10 + tamDigit);
+            reallyRunFunction(getOperation(), tamNumber*10 + tamDigit);
             calcModeNormal();
             return;
           }
@@ -1445,7 +1446,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_ENTER :
           if(tamNumberMin <= tamNumber && tamNumber <= tamNumberMax) {
-            indexOfItems[getOperation()].func(tamNumber);
+            reallyRunFunction(getOperation(), tamNumber);
             calcModeNormal();
             return;
           }
@@ -1471,7 +1472,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           tamNumber = tamDigit;
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber < allLocalRegisterPointer->numberOfLocalRegisters)) {
             if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 >= numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 >= allLocalRegisterPointer->numberOfLocalRegisters)) {
-              indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
+              reallyRunFunction(getOperation(), tamNumber + FIRST_LOCAL_REGISTER);
               calcModeNormal();
               return;
             }
@@ -1500,14 +1501,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 + tamDigit < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters)) {
-            indexOfItems[getOperation()].func(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
+            reallyRunFunction(getOperation(), tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
           }
           break;
 
         case TT_ENTER :
-          indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
+          reallyRunFunction(getOperation(), tamNumber + FIRST_LOCAL_REGISTER);
           calcModeNormal();
           return;
 
@@ -1528,7 +1529,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           value = indirectAddressing(tamLetteredRegister, tamNumberMin, tamNumberMax);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(value);
+            reallyRunFunction(getOperation(), value);
           }
           calcModeNormal();
           return;
@@ -1567,7 +1568,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           value = indirectAddressing(tamNumber*10 + tamDigit, tamNumberMin, tamNumberMax);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(value);
+            reallyRunFunction(getOperation(), value);
           }
           calcModeNormal();
           return;
@@ -1576,7 +1577,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           value = indirectAddressing(tamNumber, tamNumberMin, tamNumberMax);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(value);
+            reallyRunFunction(getOperation(), value);
           }
           calcModeNormal();
           return;
@@ -1603,7 +1604,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
               value = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
 
               if(lastErrorCode == 0) {
-                indexOfItems[getOperation()].func(value);
+                reallyRunFunction(getOperation(), value);
               }
               calcModeNormal();
               return;
@@ -1635,7 +1636,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
             value = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
 
             if(lastErrorCode == 0) {
-              indexOfItems[getOperation()].func(value);
+              reallyRunFunction(getOperation(), value);
             }
             calcModeNormal();
             return;
@@ -1646,7 +1647,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           value = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(value);
+            reallyRunFunction(getOperation(), value);
           }
           calcModeNormal();
           return;
@@ -1665,12 +1666,12 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 9 :
       switch(tamTransition) {
         case TT_DIGIT :
-          indexOfItems[getOperation()].func(tamNumber*10 + tamDigit);
+          reallyRunFunction(getOperation(), tamNumber*10 + tamDigit);
           calcModeNormal();
           return;
 
         case TT_ENTER :
-          indexOfItems[getOperation()].func(tamNumber);
+          reallyRunFunction(getOperation(), tamNumber);
           calcModeNormal();
           return;
 
@@ -1695,7 +1696,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
             if(tamNumber > tamNumberMax) {
             }
             else if(tamNumber*10 >= allLocalRegisterPointer->numberOfLocalRegisters) {
-              indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
+              reallyRunFunction(getOperation(), tamNumber + FIRST_LOCAL_REGISTER);
               calcModeNormal();
               return;
             }
@@ -1721,7 +1722,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       switch(tamTransition) {
         case TT_DIGIT :
           if(tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
-            indexOfItems[getOperation()].func(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
+            reallyRunFunction(getOperation(), tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
           }
@@ -1729,7 +1730,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_ENTER :
           if(tamNumber < allLocalRegisterPointer->numberOfLocalRegisters) {
-            indexOfItems[getOperation()].func(tamNumber + FIRST_LOCAL_REGISTER);
+            reallyRunFunction(getOperation(), tamNumber + FIRST_LOCAL_REGISTER);
             calcModeNormal();
             return;
           }
@@ -1752,7 +1753,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           regist = indirectAddressing(tamLetteredRegister, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(regist);
+            reallyRunFunction(getOperation(), regist);
           }
           calcModeNormal();
           return;
@@ -1790,7 +1791,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           regist = indirectAddressing(tamNumber*10 + tamDigit, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(regist);
+            reallyRunFunction(getOperation(), regist);
           }
           calcModeNormal();
           return;
@@ -1799,7 +1800,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           regist = indirectAddressing(tamNumber, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(regist);
+            reallyRunFunction(getOperation(), regist);
           }
           calcModeNormal();
           return;
@@ -1845,7 +1846,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
             regist = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
             if(lastErrorCode == 0) {
-              indexOfItems[getOperation()].func(regist);
+              reallyRunFunction(getOperation(), regist);
             }
             calcModeNormal();
             return;
@@ -1856,7 +1857,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           regist = indirectAddressing(tamNumber + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
           if(lastErrorCode == 0) {
-            indexOfItems[getOperation()].func(regist);
+            reallyRunFunction(getOperation(), regist);
           }
           calcModeNormal();
           return;
@@ -1880,7 +1881,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
               if(tamBuffer[strlen(tamBuffer)-i] == '_') {
                 tamBuffer[strlen(tamBuffer)-i] = "xyzt"[tamLetteredRegister-REGISTER_X];
                 if(i == 1) {
-                  indexOfItems[getOperation()].func(NOPARAM);
+                  reallyRunFunction(getOperation(), NOPARAM);
                   calcModeNormal();
                   return;
                 }
@@ -1916,6 +1917,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 }
 
 void closeNim(void) {
+printf("closeNim\n");
   if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
     switch (Input_Default) {
     case ID_43S:                                  //   Do nothing, this is default LI/DP
@@ -1930,16 +1932,16 @@ void closeNim(void) {
     }
   }                                               //JM ^^
   if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
-    strcat(nimBuffer, "#0");
-    int16_t basePos = strlen(nimBuffer) - 1;
+    strcat(aimBuffer, "#0");
+    int16_t basePos = strlen(aimBuffer) - 1;
     if(lastIntegerBase <= 9) {
-      nimBuffer[basePos] += lastIntegerBase;
+      aimBuffer[basePos] += lastIntegerBase;
     }
     else {
-      nimBuffer[basePos++] = '1';
-      nimBuffer[basePos] = '0';
-      nimBuffer[basePos + 1] = 0;
-      nimBuffer[basePos] += lastIntegerBase - 10;
+      aimBuffer[basePos++] = '1';
+      aimBuffer[basePos] = '0';
+      aimBuffer[basePos + 1] = 0;
+      aimBuffer[basePos] += lastIntegerBase - 10;
     }
 
     nimNumberPart = NP_INT_BASE;
@@ -1948,31 +1950,31 @@ void closeNim(void) {
     lastIntegerBase = 0;
   }
 
-  int16_t lastChar = strlen(nimBuffer) - 1;
+  int16_t lastChar = strlen(aimBuffer) - 1;
 
   if(nimNumberPart != NP_INT_16) { // We need a # and a base
-    if(nimNumberPart != NP_INT_BASE || nimBuffer[lastChar] != '#') { // We need a base
-      if((nimNumberPart == NP_COMPLEX_EXPONENT || nimNumberPart == NP_REAL_EXPONENT) && (nimBuffer[lastChar] == '+' || nimBuffer[lastChar] == '-') && nimBuffer[lastChar - 1] == 'e') {
-        nimBuffer[--lastChar] = 0;
+    if(nimNumberPart != NP_INT_BASE || aimBuffer[lastChar] != '#') { // We need a base
+      if((nimNumberPart == NP_COMPLEX_EXPONENT || nimNumberPart == NP_REAL_EXPONENT) && (aimBuffer[lastChar] == '+' || aimBuffer[lastChar] == '-') && aimBuffer[lastChar - 1] == 'e') {
+        aimBuffer[--lastChar] = 0;
         lastChar--;
       }
-      else if(nimNumberPart == NP_REAL_EXPONENT && nimBuffer[lastChar] == 'e') {
-        nimBuffer[lastChar--] = 0;
+      else if(nimNumberPart == NP_REAL_EXPONENT && aimBuffer[lastChar] == 'e') {
+        aimBuffer[lastChar--] = 0;
       }
 
-      if(nimNumberPart == NP_COMPLEX_INT_PART && (nimBuffer[lastChar] == 'i' || nimBuffer[lastChar-1]*256 + nimBuffer[lastChar]*256 == 0xa221)) { // complex i or measured angle
-        nimBuffer[++lastChar] = '0';                    //JM CHANGED FROM "1" to '0'. DEFAULTING TO 0+0xi WHEN ABORTING CC ENTRY.
-        nimBuffer[lastChar + 1] = 0;
+      if(nimNumberPart == NP_COMPLEX_INT_PART && (aimBuffer[lastChar] == 'i' || aimBuffer[lastChar-1]*256 + aimBuffer[lastChar]*256 == 0xa221)) { // complex i or measured angle
+        aimBuffer[++lastChar] = '0';                    //JM CHANGED FROM "1" to '0'. DEFAULTING TO 0+0xi WHEN ABORTING CC ENTRY.
+        aimBuffer[lastChar + 1] = 0;
       }
 
-      if((nimBuffer[0] != '-' || nimBuffer[1] != 0) && (nimBuffer[lastChar] != '-')) { // The buffer is not just the minus sign AND The last char of the buffer is not the minus sign
+      if((aimBuffer[0] != '-' || aimBuffer[1] != 0) && (aimBuffer[lastChar] != '-')) { // The buffer is not just the minus sign AND The last char of the buffer is not the minus sign
         calcModeNormal();
 
         if(nimNumberPart == NP_INT_10) {
           longInteger_t lgInt;
 
           longIntegerInit(lgInt);
-          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), 10, lgInt);
+          stringToLongInteger(aimBuffer + (aimBuffer[0] == '+' ? 1 : 0), 10, lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
           longIntegerFree(lgInt);
         }
@@ -1984,17 +1986,17 @@ void closeNim(void) {
           int16_t posHash, i, lg;
           int32_t base;
 
-          lg = strlen(nimBuffer);
+          lg = strlen(aimBuffer);
           posHash = 0;
           for(i=1; i<lg; i++) {
-            if(nimBuffer[i] == '#') {
+            if(aimBuffer[i] == '#') {
               posHash = i;
               break;
             }
           }
 
           for(i=posHash+1; i<lg; i++) {
-            if(nimBuffer[i]<'0' || nimBuffer[i]>'9') {
+            if(aimBuffer[i]<'0' || aimBuffer[i]>'9') {
               // This should never happen
               displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -2004,7 +2006,7 @@ void closeNim(void) {
             }
           }
 
-          base = stringToInt32(nimBuffer + posHash + 1);
+          base = stringToInt32(aimBuffer + posHash + 1);
           if(base < 2 || base > 16) {
             displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -2013,22 +2015,22 @@ void closeNim(void) {
             return;
           }
 
-          for(i=nimBuffer[0] == '-' ? 1 : 0; i<posHash; i++) {
-            if((nimBuffer[i] > '9' ? nimBuffer[i] - 'A' + 10 : nimBuffer[i] - '0') >= base) {
+          for(i=aimBuffer[0] == '-' ? 1 : 0; i<posHash; i++) {
+            if((aimBuffer[i] > '9' ? aimBuffer[i] - 'A' + 10 : aimBuffer[i] - '0') >= base) {
               displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                sprintf(errorMessage, "digit %c is not allowed in base %d!", nimBuffer[i], base);
+                sprintf(errorMessage, "digit %c is not allowed in base %d!", aimBuffer[i], base);
                 showInfoDialog("In function closeNIM:", errorMessage, NULL, NULL);
               #endif
 
-              restoreStack();
+              undo();
               return;
             }
           }
 
           longIntegerInit(value);
-          nimBuffer[posHash] = 0;
-          stringToLongInteger(nimBuffer + (nimBuffer[0] == '+' ? 1 : 0), base, value);
+          aimBuffer[posHash] = 0;
+          stringToLongInteger(aimBuffer + (aimBuffer[0] == '+' ? 1 : 0), base, value);
 
           // maxVal = 2^shortIntegerWordSize
           longIntegerInit(maxVal);
@@ -2111,7 +2113,7 @@ void closeNim(void) {
 
           *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           lastIntegerBase = base;
-          nimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
+          aimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
 
           longIntegerFree(maxVal);
           longIntegerFree(minVal);
@@ -2121,12 +2123,12 @@ void closeNim(void) {
           
             if(Input_Default == ID_CPXDP) {                                         //JM Input default type
               reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE); //JM Input default type
-              stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));          //JM Input default type
+              stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));          //JM Input default type
               stringToReal34("0", REGISTER_IMAG34_DATA(REGISTER_X));                //JM Input default type
             }                                                                       //JM Input default type
             else {                                                                  //JM Input default type
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-            stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+            stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
             }                                                                       //JM Input default type
 
         }
@@ -2135,18 +2137,23 @@ void closeNim(void) {
           int32_t integer, numer, denom;
           real34_t temp;
 
-          lg = strlen(nimBuffer);
+          // Set Fraction mode
+          if(!getSystemFlag(FLAG_FRACT)) {
+            setSystemFlag(FLAG_FRACT);
+          }
+
+          lg = strlen(aimBuffer);
 
           posSpace = 0;
           for(i=2; i<lg; i++) {
-            if(nimBuffer[i] == ' ') {
+            if(aimBuffer[i] == ' ') {
               posSpace = i;
               break;
             }
           }
 
           for(i=1; i<posSpace; i++) {
-            if(nimBuffer[i]<'0' || nimBuffer[i]>'9') { // This should never happen
+            if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
               displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
@@ -2157,14 +2164,14 @@ void closeNim(void) {
 
           posSlash = 0;
           for(i=posSpace+2; i<lg; i++) {
-            if(nimBuffer[i] == '/') {
+            if(aimBuffer[i] == '/') {
               posSlash = i;
               break;
             }
           }
 
           for(i=posSpace+1; i<posSlash; i++) {
-            if(nimBuffer[i]<'0' || nimBuffer[i]>'9') { // This should never happen
+            if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
              displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                showInfoDialog("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
@@ -2174,7 +2181,7 @@ void closeNim(void) {
           }
 
           for(i=posSlash+1; i<lg; i++) {
-            if(nimBuffer[i]<'0' || nimBuffer[i]>'9') {
+            if(aimBuffer[i]<'0' || aimBuffer[i]>'9') {
               displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 showInfoDialog("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
@@ -2183,11 +2190,11 @@ void closeNim(void) {
             }
           }
 
-          nimBuffer[posSpace] = 0;
-          nimBuffer[posSlash] = 0;
-          integer = stringToInt32(nimBuffer + 1);
-          numer   = stringToInt32(nimBuffer + posSpace + 1);
-          denom   = stringToInt32(nimBuffer + posSlash + 1);
+          aimBuffer[posSpace] = 0;
+          aimBuffer[posSlash] = 0;
+          integer = stringToInt32(aimBuffer + 1);
+          numer   = stringToInt32(aimBuffer + posSpace + 1);
+          denom   = stringToInt32(aimBuffer + posSlash + 1);
 
           if(denom == 0 && !getSystemFlag(FLAG_SPCRES)) {
             displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2203,34 +2210,25 @@ void closeNim(void) {
           real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
           int32ToReal34(integer, &temp);
           real34Add(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
-          if(nimBuffer[0] == '-') {
+          if(aimBuffer[0] == '-') {
             real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
-          }
-
-          if(!getSystemFlag(FLAG_FRACT)) {
-            if(integer == 0) {
-              clearSystemFlag(FLAG_PROPFR); // d/c
-            }
-            else {
-              setSystemFlag(FLAG_PROPFR); // a b/c
-            }
           }
         }
         else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
           int16_t imaginarySign;
 
-          if(nimBuffer[imaginaryMantissaSignLocation] == '+') {
+          if(aimBuffer[imaginaryMantissaSignLocation] == '+') {
             imaginarySign = 1;
           }
           else {
             imaginarySign = -1;
           }
-          nimBuffer[imaginaryMantissaSignLocation] = 0;
+          aimBuffer[imaginaryMantissaSignLocation] = 0;
 
           reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-          stringToReal34(nimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+          stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
 
-          stringToReal34(nimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
+          stringToReal34(aimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
           if(imaginarySign == -1) {
             real34SetNegativeSign(REGISTER_IMAG34_DATA(REGISTER_X));
           }

@@ -260,7 +260,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
-
                       if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
                       if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "4");} else
                       if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
@@ -582,7 +581,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2019");} else
                       if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2020");} else
                       if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2021");} else
-
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 

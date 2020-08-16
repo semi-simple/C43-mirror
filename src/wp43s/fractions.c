@@ -25,7 +25,6 @@
 void fnDenMax(uint16_t unusedParamButMandatory) {
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -42,7 +41,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -51,7 +50,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 

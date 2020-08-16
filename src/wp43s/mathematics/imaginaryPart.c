@@ -54,13 +54,12 @@ void imagPartError(void) {
  * \return void
  ***********************************************/
 void fnImaginaryPart(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   imagPart[getRegisterDataType(REGISTER_X)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
 }
 

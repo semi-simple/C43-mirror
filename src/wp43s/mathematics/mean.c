@@ -37,8 +37,6 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
   real_t *mean, tempReal1, tempReal2;
 
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -142,8 +140,6 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
     #endif
   }
   else {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
 

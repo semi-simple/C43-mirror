@@ -64,7 +64,6 @@ void subError(void) {
  * \return void
  ***********************************************/
 void fnSubtract(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

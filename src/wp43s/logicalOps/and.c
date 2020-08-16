@@ -76,13 +76,12 @@ void andError31(void) {
  * \return void
  ***********************************************/
 void fnLogicalAnd(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalAnd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
   else {
     fnDropY(NOPARAM);

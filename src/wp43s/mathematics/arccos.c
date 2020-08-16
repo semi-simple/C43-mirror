@@ -54,7 +54,6 @@ void arccosError(void) {
  * \return void
  ***********************************************/
 void fnArccos(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arccos[getRegisterDataType(REGISTER_X)]();

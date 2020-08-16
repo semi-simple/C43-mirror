@@ -50,6 +50,7 @@ bool_t                allowScreenUpdate;
 bool_t                funcOK;
 bool_t                keyActionProcessed;
 const font_t         *fontForShortInteger;
+const font_t         *cursorFont;
 
 // Variables stored in RAM
 realContext_t         ctxtReal34;   //   34 digits
@@ -61,8 +62,7 @@ realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reducti
 uint16_t              globalFlags[7];
 char                  tmpStr3000[TMP_STR_LENGTH];
 char                  errorMessage[ERROR_MESSAGE_LENGTH];
-char                  aimBuffer[AIM_BUFFER_LENGTH]; /// TODO may be aimBuffer and nimBuffer can be merged
-char                  nimBuffer[NIM_BUFFER_LENGTH];
+char                  aimBuffer[AIM_BUFFER_LENGTH]; // aimBuffer is also used for NIM
 char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
 char                  tamBuffer[TAM_BUFFER_LENGTH];
 char                  asmBuffer[5];
@@ -93,12 +93,13 @@ int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
 int16_t               mm_MNU_HOME;                 //JM
 int16_t               mm_MNU_ALPHA;                //JM
-int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
+int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
 uint16_t              numberOfLocalFlags;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 dataBlock_t          *allLocalRegisterPointer;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
+dataBlock_t          *savedStatisticalSumsPointer;
 uint16_t              programCounter;
 uint16_t              xCursor;
 uint16_t              yCursor;
@@ -110,7 +111,6 @@ uint32_t              alphaSelectionTimer;
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
 uint8_t               transitionSystemState;
-uint8_t               cursorBlinkCounter;
 uint8_t               numScreensStandardFont;
 uint8_t               currentFntScr;
 uint8_t               currentFlgScr;
@@ -121,7 +121,6 @@ uint8_t               significantDigits;
 uint8_t               shortIntegerMode;
 uint8_t               previousCalcMode;
 uint8_t               groupingGap;
-uint8_t               curveFitting;
 uint8_t               roundingMode;
 uint8_t               calcMode;
 uint8_t               nextChar;
@@ -130,7 +129,6 @@ uint8_t               alphaCase;
 uint8_t               numLinesNumericFont;
 uint8_t               numLinesStandardFont;
 uint8_t               cursorEnabled;
-uint8_t               cursorFont;
 uint8_t               nimNumberPart;
 uint8_t               hexDigits;
 uint8_t               lastErrorCode;
@@ -178,15 +176,16 @@ bool_t                printerIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
 bool_t                showContent;
-bool_t                savedStackLiftEnabled;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
+bool_t                thereIsSomethingToUndo;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 calcKey_t             kbd_usr[37];
 calcRegister_t        errorMessageRegisterLine;
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;
+uint64_t              savedSystemFlags;
 glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
 char                  transitionSystemOperation[4];
 char                  displayValueX[DISPLAY_VALUE_LEN];
@@ -195,6 +194,7 @@ int16_t               denominatorLocation;
 int16_t               imaginaryExponentSignLocation;
 int16_t               imaginaryMantissaSignLocation;
 int16_t               exponentLimit;
+int16_t               showFunctionNameCounter;
 size_t                gmpMemInBytes;
 size_t                wp43sMemInBytes;
 freeBlock_t           freeBlocks[MAX_FREE_BLOCKS];
@@ -308,6 +308,7 @@ void setupDefaults(void) {
   //ctxtReal2139.traps  = 0;
 
   statisticalSumsPointer = NULL;
+  savedStatisticalSumsPointer = NULL;
 
   fnSetWordSize(64); // word size from 1 to 64
   fnIntegerMode(SIM_2COMPL);
@@ -322,7 +323,6 @@ void setupDefaults(void) {
   fnAngularMode(AM_DEGREE);
   setSystemFlag(FLAG_DENANY);
   denMax = MAX_DENMAX;
-  fnCurveFitting(CF_LINEAR_FITTING);
   clearSystemFlag(FLAG_LEAD0);
   setSystemFlag(FLAG_MULTx);
   clearSystemFlag(FLAG_FRACT);
@@ -347,6 +347,7 @@ void setupDefaults(void) {
   watchIconEnabled = false;
   serialIOIconEnabled = false;
   printerIconEnabled = false;
+  thereIsSomethingToUndo = false;
 
   significantDigits = 0;
   fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
@@ -395,8 +396,6 @@ void setupDefaults(void) {
   softmenuStackPointer = 0;
 
   aimBuffer[0] = 0;
-
-  cursorBlinkCounter = 0;
 
   setSystemFlag(FLAG_ASLIFT);
 
@@ -507,7 +506,7 @@ int main(int argc, char* argv[]) {
 
   refreshScreen();
 
-  gdk_threads_add_timeout(LCD_REFRESH_TIMEOUT, refreshLcd, NULL); //dr refreshLcd is called every 100 ms //vv
+  gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms
   fnTimerReset();                                                    //dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
@@ -587,7 +586,7 @@ longIntegerFree(li);*/
   backToDMCP = false;
 
   lcd_forced_refresh();                                        //JM 
-  nextScreenRefresh = sys_current_ms()+LCD_REFRESH_TIMEOUT;    //dr
+  nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
   fnTimerReset();                                              //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
@@ -720,7 +719,7 @@ longIntegerFree(li);*/
 
     if(38 <= key && key <=43) {
       sprintf(charKey, "%c", key+11);
-      btnFnPressed(charKey);                                  //JM Changed from Clicked to Pressed
+      btnFnPressed(charKey);
     //lcd_refresh_dma();
     }
     else if(1 <= key && key <= 37) {

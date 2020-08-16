@@ -130,7 +130,6 @@ longInteger_t li;
 
 
 void fnToPolar2(uint16_t unusedParamButMandatory) {
-  //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
 //    fnComplexMode(CM_POLAR);
       fnSetFlag(FLAG_POLAR);
@@ -143,7 +142,6 @@ void fnToPolar2(uint16_t unusedParamButMandatory) {
 
 
 void fnToRect2(uint16_t unusedParamButMandatory) {
-  //saveStack();       //Not savestack because fnToRect already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
  //     fnComplexMode(CM_RECTANGULAR);
       fnClearFlag(FLAG_POLAR);
@@ -155,7 +153,6 @@ void fnToRect2(uint16_t unusedParamButMandatory) {
 
 
 void fnRoundi2(uint16_t unusedParamButMandatory) {
-  //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
     //nothing
   }
@@ -177,7 +174,6 @@ void fnRound2(uint16_t unusedParamButMandatory) {
 
 
 void fnTo_ms(uint16_t unusedParamButMandatory) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
 
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
@@ -218,7 +214,6 @@ void fnTo_ms(uint16_t unusedParamButMandatory) {
 
 
 void fnMultiplySI(uint16_t multiplier) {
-    //saveStack();  not needed as this is included in mult and div
     copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
 	char mult[20];
 	char divi[20];
@@ -268,7 +263,6 @@ void fnMultiplySI(uint16_t multiplier) {
 
 
 void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
-  saveStack();
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -278,7 +272,6 @@ void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
-  saveStack();
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -289,7 +282,6 @@ void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
-  saveStack();
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -300,7 +292,6 @@ void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
-  saveStack();
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -310,7 +301,6 @@ void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
 }
 
 void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
-  saveStack();
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -355,7 +345,6 @@ void fnJMup(uint16_t unusedParamButMandatory) {
   If SHORTINT: change to Real
   if Real change to LONGINT
   */
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
@@ -419,7 +408,6 @@ void fnJMdown(uint16_t unusedParamButMandatory) {
   If LONGINT: change to Real
   if Real change to ShortInt
   */
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);

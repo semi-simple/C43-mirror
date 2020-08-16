@@ -54,7 +54,6 @@ void unitVectorError(void) {
  * \return void
  ***********************************************/
 void fnUnitVector(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   unitVector[getRegisterDataType(REGISTER_X)]();

@@ -34,7 +34,6 @@ void fnAsr(uint16_t numberOfShifts) {
   uint64_t sign;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     sign = *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & shortIntegerSignBit;
@@ -73,7 +72,6 @@ void fnSl(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -111,7 +109,6 @@ void fnSr(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -150,7 +147,6 @@ void fnRl(uint16_t numberOfShifts) {
   uint64_t sign;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -189,7 +185,6 @@ void fnRr(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -228,7 +223,6 @@ void fnRlc(uint16_t numberOfShifts) {
   uint64_t sign, carry;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     carry = getSystemFlag(FLAG_CARRY);
@@ -268,7 +262,6 @@ void fnRrc(uint16_t numberOfShifts) {
   uint64_t lsb, carry;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     carry = getSystemFlag(FLAG_CARRY);
@@ -308,7 +301,6 @@ void fnLj(uint16_t numberOfShifts) {
   longInteger_t regX;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     count = 0;
@@ -348,7 +340,6 @@ void fnRj(uint16_t numberOfShifts) {
   longInteger_t regX;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     count = 0;

@@ -22,10 +22,15 @@
 #define CONFIRMED     9877
 #define NOT_CONFIRMED 9878
 
+// Stack Lift Status
 #define SLS_ENABLED   0
 #define SLS_DISABLED  1
 #define SLS_UNCHANGED 2
 
+// Undo Status
+#define US_ENABLED    0 // The command saves the stack, the statistical sums, and the system flags for later UNDO
+#define US_CANCEL     1 // The command cancels the last UNDO data
+#define US_UNCHANGED  2 // The command leaves the existing UNDO data as is
 
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
@@ -2082,6 +2087,7 @@
 #define CAT_SYFL  8 // System flags
 #define CAT_AINT  9 // Upper case alpha_INTL
 #define CAT_aint 10 // Lower case alpha_intl
+
 typedef struct {
   void     (*func)(uint16_t); ///< Function called to execute the item
   uint16_t param;             ///< 1st parameter to the above function
@@ -2091,9 +2097,11 @@ typedef struct {
   uint16_t tamMax;            ///< Maximal value for TAM argument
   char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
+  uint8_t  undoStatus;        ///< Undo status after item execution.
 } item_t;
 
-void runFunction  (int16_t func);
-void fnToBeCoded  (void);
-void itemToBeCoded(uint16_t unusedParamButMandatory);
-void fnNop        (uint16_t unusedParamButMandatory);
+void reallyRunFunction(int16_t func, uint16_t param);
+void runFunction      (int16_t func);
+void fnToBeCoded      (void);
+void itemToBeCoded    (uint16_t unusedParamButMandatory);
+void fnNop            (uint16_t unusedParamButMandatory);

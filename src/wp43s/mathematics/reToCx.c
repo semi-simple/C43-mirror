@@ -70,7 +70,8 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
 
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
       if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
-        real34Zero(VARIABLE_IMAG34_DATA(&temp));
+        real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+        real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       }
       else {
         real_t magnitude, theta;

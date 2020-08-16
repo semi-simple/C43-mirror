@@ -294,23 +294,6 @@ void debugNIM(void) {
 
 
   /********************************************//**
-   * \brief Returns the name of a curve fitting mode
-   *
-   * \param[in] cf uint16_t Curve fitting mode
-   * \return char*          Name of the curve fitting mode
-   ***********************************************/
-  char * getCurveFittingName(uint16_t cf) {
-    if(cf == CF_BEST_FITTING)        return "best fit ";
-    if(cf == CF_EXPONENTIAL_FITTING) return "exp fit  ";
-    if(cf == CF_LINEAR_FITTING)      return "lin fit  ";
-    if(cf == CF_LOGARITHMIC_FITTING) return "log fit  ";
-    if(cf == CF_POWER_FITTING)       return "power fit";
-
-    return "???      ";
-  }
-
-
-  /********************************************//**
    * \brief Returns the name of a rounding mode
    *
    * \param[in] rm uint16_t Rounding mode
@@ -551,20 +534,6 @@ void debugNIM(void) {
     if(ac == AC_UPPER) return "upper";
 
     return "???  ";
-  }
-
-
-  /********************************************//**
-   * \brief returns the name of a cursor font
-   *
-   * \param[in] cf uint16_t Cursor font
-   * \return char*          Name of the cursor font
-   ***********************************************/
-  char * getCursorFontName(uint16_t cf) {
-    if(cf == CF_NUMERIC)  return "numeric ";
-    if(cf == CF_STANDARD) return "standard";
-
-    return "???     ";
   }
 
 
@@ -902,12 +871,6 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "curveFitting                              = %6u = %s\n",  curveFitting,         getCurveFittingName(curveFitting));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
         sprintf(string, "calcMode                                  = %6u = %s",    calcMode,             getCalcModeName(calcMode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
@@ -962,19 +925,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "cursorFont                                = %6u = %s",    cursorFont,           getCursorFontName(cursorFont));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
         sprintf(string, "currentFntScr                             = %6u",         currentFntScr);
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
-        sprintf(string, "cursorBlinkCounter                        = %6u\n",       cursorBlinkCounter);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

@@ -144,7 +144,7 @@ void btnFnPressed(void *data) {
       }
 
 //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
-//    showFunctionName(item, 10);
+//      showFunctionName(item, 1000); // 1000ms = 1s
 //    #else
 //    showFunctionNameItem = item;
         btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
@@ -203,7 +203,7 @@ void executeFunction(const char *data) {
             calcModeNormal();
           }
           else if(calcMode == CM_ASM_OVER_TAM) {
-            indexOfItems[getOperation()].func(indexOfItems[item].param);
+            reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
             calcModeNormal();
 #ifdef PC_BUILD
 printf(">>>   refreshScreen1 from keyboard.c executeFunction\n");
@@ -472,7 +472,7 @@ void btnPressed(void *data) {
 
     processKeyAction(item);
     if(!keyActionProcessed) {
-      showFunctionName(item, 10);
+      showFunctionName(item, 1000); // 1000ms = 1s
     }
   }
 }
@@ -800,7 +800,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       }
 
       if(aimBuffer[0] == 0) {
-        restoreStack();
+        undo();
       }
       else {
         int16_t len = stringByteLength(aimBuffer) + 1;
@@ -913,7 +913,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
         popSoftmenu();
 
         if(aimBuffer[0] == 0) {
-          restoreStack();
+          undo();
         }
         else {
           int16_t len = stringByteLength(aimBuffer) + 1;
@@ -1072,6 +1072,12 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
+      if(stringByteLength(aimBuffer) > 0) {
+        lg = stringLastGlyph(aimBuffer);
+        aimBuffer[lg] = 0;
+      }
+      break;
+
     case CM_ASM_OVER_AIM:
 
       if(stringByteLength(aimBuffer) > 0) {

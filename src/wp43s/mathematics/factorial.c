@@ -54,7 +54,6 @@ void factError(void) {
  * \return void
  ***********************************************/
 void fnFactorial(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   fact[getRegisterDataType(REGISTER_X)]();

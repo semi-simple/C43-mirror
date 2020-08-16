@@ -54,13 +54,12 @@ void fpError(void) {
  * \return void
  ***********************************************/
 void fnFp(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   fp[getRegisterDataType(REGISTER_X)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
 }
 

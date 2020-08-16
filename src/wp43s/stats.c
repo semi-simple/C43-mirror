@@ -82,7 +82,6 @@ void fnSigma(uint16_t plusMinus) {
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {
-
     if(statisticalSumsPointer == NULL) {
       initStatisticalSums();
     }
@@ -325,8 +324,6 @@ void fnSigma(uint16_t plusMinus) {
 
 void fnStatSum(uint16_t sum) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -343,8 +340,6 @@ void fnStatSum(uint16_t sum) {
  ***********************************************/
 void fnSumXY(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -367,8 +362,6 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnXmin(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -391,8 +384,6 @@ void fnXmin(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnXmax(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();

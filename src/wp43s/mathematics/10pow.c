@@ -54,7 +54,6 @@ void tenPowError(void) {
  * \return void
  ***********************************************/
 void fn10Pow(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   tenPow[getRegisterDataType(REGISTER_X)]();

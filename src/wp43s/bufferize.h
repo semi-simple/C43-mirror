@@ -19,7 +19,7 @@
  ***********************************************/
 
                                        //JMMAX ORG: AIM:200, TAM:30, NIM:200
-#define AIM_BUFFER_LENGTH  220 //200 // 99 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
+#define AIM_BUFFER_LENGTH  220 //400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH   32
 #define NIM_BUFFER_LENGTH  100 //200
 
@@ -47,6 +47,6 @@
   void    addItemToNimBuffer       (int16_t item);
   void    tamTransitionSystem      (uint16_t tamEvent);
   void    closeNim                 (void);
-  void    nimBufferToDisplayBuffer (const char *nimBuffer, char *displayBuffer);
+  void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);
   int16_t getOperation             (void);
 #endif

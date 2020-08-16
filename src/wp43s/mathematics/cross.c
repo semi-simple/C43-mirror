@@ -79,7 +79,6 @@ static void crossDataTypeError(void) {
  * \return void
  ***********************************************/
 void fnCross(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

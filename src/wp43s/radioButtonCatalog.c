@@ -35,11 +35,18 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1969 */  { ITM_RECT,             CM_RECTANGULAR,         RB_CM },  //fnSetSetJM          /*  507 */ //fnComplexMode
 /* 1960 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnSetSetJM          /*   96 */ //fnComplexUnit
 /* 1961 */  { ITM_CPXJ,             CU_J,                   RB_CU },  //fnSetSetJM          /*   97 */ //fnComplexUnit
-/*   44 */  { ITM_BESTF,            CF_BEST_FITTING,        RB_CF },  //fnCurveFitting
-/*  161 */  { ITM_EXPF,             CF_EXPONENTIAL_FITTING, RB_CF },  //fnCurveFitting
-/*  308 */  { ITM_LINF,             CF_LINEAR_FITTING,      RB_CF },  //fnCurveFitting
-/*  325 */  { ITM_LOGF,             CF_LOGARITHMIC_FITTING, RB_CF },  //fnCurveFitting
-/*  466 */  { ITM_POWERF,           CF_POWER_FITTING,       RB_CF },  //fnCurveFitting
+
+/*  308 */  { ITM_LINF,             CF_LINEAR_FITTING       RB_CF },  //fnCurveFitting
+/*  161 */  { ITM_EXPF,             CF_EXPONENTIAL_FITTING  RB_CF },  //fnCurveFitting
+/*  325 */  { ITM_LOGF,             CF_LOGARITHMIC_FITTING  RB_CF },  //fnCurveFitting
+/*  466 */  { ITM_POWERF,           CF_POWER_FITTING        RB_CF },  //fnCurveFitting
+/* 1566 */  { ITM_ROOTF,            CF_ROOT_FITTING         RB_CF },  //fnCurveFitting
+/* 1565 */  { ITM_HYPF,             CF_HYPERBOLIC_FITTING   RB_CF },  //fnCurveFitting
+/* 1564 */  { ITM_PARABF,           CF_PARABOLIC_FITTING    RB_CF },  //fnCurveFitting
+/* 1563 */  { ITM_CAUCHF,           CF_CAUCHY_FITTING       RB_CF },  //fnCurveFitting
+/* 1562 */  { ITM_GAUSSF,           CF_GAUSS_FITTING        RB_CF },  //fnCurveFitting
+/*  438 */  { ITM_ORTHOF,           CF_ORTHOGONAL_FITTING   RB_CF },  //fnCurveFitting
+
 /*  136 */  { ITM_DMY,              DF_DMY,                 RB_DF },  //fnSetDateFormat
 /*  383 */  { ITM_MDY,              DF_MDY,                 RB_DF },  //fnSetDateFormat
 /*  700 */  { ITM_YMD,              DF_YMD,                 RB_DF },  //fnSetDateFormat

@@ -601,7 +601,9 @@ void fnChangeBaseJM (uint16_t BASE) {
   else {
     fnChangeBase(BASE);
   }
+  #ifndef TESTSUITE_BUILD
   nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+  #endif
 }
 
 

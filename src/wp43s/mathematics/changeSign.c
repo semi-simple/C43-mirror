@@ -54,13 +54,12 @@ void chsError(void) {
  * \return void
  ***********************************************/
 void fnChangeSign(uint16_t unusedParamButMandatory) {
-  saveStack();
   //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   chs[getRegisterDataType(REGISTER_X)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
 }
 

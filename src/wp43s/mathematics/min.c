@@ -20,13 +20,10 @@
 
 #include "wp43s.h"
 
-void fnMin(uint16_t unusedParamButMandatory)
-{
-    saveStack();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+void fnMin(uint16_t unusedParamButMandatory) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    registerMin(REGISTER_X, REGISTER_Y, REGISTER_X);
+  registerMin(REGISTER_X, REGISTER_Y, REGISTER_X);
 
-    adjustResult(REGISTER_X, true, false, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, true, false, REGISTER_X, -1, -1);
 }
-

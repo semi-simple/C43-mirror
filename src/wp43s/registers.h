@@ -38,7 +38,7 @@
 // If one of the 4 next defines is changed: change also xxxLINE in screen.h
 #define AIM_REGISTER_LINE        REGISTER_X
 #define TAM_REGISTER_LINE        REGISTER_T
-#define NIM_REGISTER_LINE        REGISTER_X
+#define NIM_REGISTER_LINE        REGISTER_X // MUST be REGISTER_X
 #define ERR_REGISTER_LINE        REGISTER_Z
 #define TRUE_FALSE_REGISTER_LINE REGISTER_Z
 
@@ -62,7 +62,6 @@
 #define recallFromDtConfigDescriptor(config)  (config = configToRecall->config)
 
 #define getRecalledSystemFlag(sf)             ((configToRecall->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
-#define setSystemFlagToRecalled(sf)           (getRecalledSystemFlag(sf)) ? (setSystemFlag(sf)) : (clearSystemFlag(sf))
 
 ///////////////////////////////////////////////////////
 // Register numbering:
@@ -102,7 +101,6 @@ typedef struct {
   uint8_t   groupingGap;
   uint8_t   currentAngularMode;
   uint8_t   displayStack;
-  uint8_t   curveFitting;
   uint8_t   roundingMode;
   uint32_t  denMax;
   uint32_t  firstGregorianDay;

@@ -79,7 +79,6 @@ void tanError(void) {
  * \return void
  ***********************************************/
 void fnTan(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Tan[getRegisterDataType(REGISTER_X)]();

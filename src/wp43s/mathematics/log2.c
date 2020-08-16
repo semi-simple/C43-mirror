@@ -54,7 +54,6 @@ void log2Error(void) {
  * \return void
  ***********************************************/
 void fnLog2(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logBase2[getRegisterDataType(REGISTER_X)]();

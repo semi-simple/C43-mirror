@@ -76,13 +76,12 @@ void xorError31(void) {
  * \return void
  ***********************************************/
 void fnLogicalXor(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalXor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
   else {
     fnDropY(NOPARAM);

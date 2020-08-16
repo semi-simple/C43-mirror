@@ -70,7 +70,6 @@ static void dataTtypeError(void) {
  * \return void
  ***********************************************/
 void fnPercent(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

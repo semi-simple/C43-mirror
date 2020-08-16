@@ -39,8 +39,6 @@ void fnMaskl(uint16_t numberOfBits) {
   }
   else {
     uint64_t mask;
-
-    saveStack();
     liftStack();
 
     if(numberOfBits == 0) {
@@ -74,8 +72,6 @@ void fnMaskr(uint16_t numberOfBits) {
   }
   else {
     uint64_t mask;
-
-    saveStack();
     liftStack();
 
     if(numberOfBits == 0) {

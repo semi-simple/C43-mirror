@@ -54,7 +54,6 @@ void coshError(void) {
  * \return void
  ***********************************************/
 void fnCosh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Cosh[getRegisterDataType(REGISTER_X)]();

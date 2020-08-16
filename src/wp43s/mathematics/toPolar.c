@@ -30,7 +30,6 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
   if((dataTypeX == dtReal34 || dataTypeX == dtLongInteger) && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {

@@ -36,7 +36,6 @@
   char * getDateFormatName                  (uint16_t df);
   char * getBooleanName                     (bool_t b);
   char * getRbrModeName                     (uint16_t mode);
-  char * getCurveFittingName                (uint16_t cf);
   char * getRoundingModeName                (uint16_t rm);
   char * getCalcModeName                    (uint16_t cm);
   char * getNextCharName                    (uint16_t nc);

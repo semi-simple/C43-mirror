@@ -54,7 +54,6 @@ void invertError(void) {
  * \return void
  ***********************************************/
 void fnInvert(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   invert[getRegisterDataType(REGISTER_X)]();

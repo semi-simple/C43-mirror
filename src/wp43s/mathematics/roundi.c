@@ -54,7 +54,6 @@ void roundiError(void) {
  * \return void
  ***********************************************/
 void fnRoundi(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Roundi[getRegisterDataType(REGISTER_X)]();

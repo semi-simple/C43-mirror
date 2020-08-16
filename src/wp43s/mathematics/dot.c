@@ -81,7 +81,6 @@ static void dotDataTypeError(void) {
  * \return void
  ***********************************************/
 void fnDot(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

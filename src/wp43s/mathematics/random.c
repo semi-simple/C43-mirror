@@ -47,8 +47,6 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
   uint32_t maxRand;
   int32_t cmp;
 
-  saveStack();
-
   if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -120,8 +118,6 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
 
 void fnRandom(uint16_t unusedParamButMandatory) {
   real_t x1, x2;
-
-  saveStack();
 
   uInt32ToReal(boundedRand(100000000),  &x1);
   uInt32ToReal(boundedRand(100000000),  &x2);

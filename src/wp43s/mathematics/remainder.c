@@ -64,7 +64,6 @@ void rmdError(void) {
  * \return void
  ***********************************************/
 void fnRmd(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   rmd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

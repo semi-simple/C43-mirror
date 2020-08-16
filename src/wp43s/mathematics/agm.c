@@ -78,7 +78,6 @@ void fnAgm(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(realInput) {

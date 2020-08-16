@@ -54,7 +54,6 @@ void tanhError(void) {
  * \return void
  ***********************************************/
 void fnTanh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Tanh[getRegisterDataType(REGISTER_X)]();

@@ -64,7 +64,6 @@ void mulError(void) {
  * \return void
  ***********************************************/
 void fnMultiply(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

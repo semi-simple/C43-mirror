@@ -76,13 +76,12 @@ void nandError31(void) {
  * \return void
  ***********************************************/
 void fnLogicalNand(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalNand[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
   else {
     fnDropY(NOPARAM);

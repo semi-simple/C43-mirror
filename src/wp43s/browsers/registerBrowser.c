@@ -34,8 +34,8 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
   if(calcMode != CM_REGISTER_BROWSER) {
     if(calcMode == CM_AIM) {
-      cursorEnabled = false;
       hideCursor();
+      cursorEnabled = false;
     }
 
     previousCalcMode = calcMode;

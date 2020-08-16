@@ -54,7 +54,6 @@ void lnError(void) {
  * \return void
  ***********************************************/
 void fnLn(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   ln[getRegisterDataType(REGISTER_X)]();

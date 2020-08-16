@@ -54,7 +54,6 @@ void arccoshError(void) {
  * \return void
  ***********************************************/
 void fnArccosh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arccosh[getRegisterDataType(REGISTER_X)]();

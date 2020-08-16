@@ -64,7 +64,6 @@ void divError(void) {
  * \return void
  ***********************************************/
 void fnDivide(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

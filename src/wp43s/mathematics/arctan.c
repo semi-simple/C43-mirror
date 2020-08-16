@@ -54,7 +54,6 @@ void arctanError(void) {
  * \return void
  ***********************************************/
 void fnArctan(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arctan[getRegisterDataType(REGISTER_X)]();
@@ -75,7 +74,6 @@ void fnArg(uint16_t unusedParamButMandatory) {
   real_t real, imag;
 
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);

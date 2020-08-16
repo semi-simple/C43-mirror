@@ -25,7 +25,6 @@ void fnUlp(uint16_t unusedParamButMandatory) {
   real34_t x34;
   longInteger_t lgInt;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {

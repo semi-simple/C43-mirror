@@ -63,7 +63,6 @@ void gcdError(void) {
  * \return void
  ***********************************************/
 void fnGcd(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -72,7 +71,7 @@ void fnGcd(uint16_t unusedParamButMandatory) {
     fnDropY(NOPARAM);
   }
   else {
-    restoreStack();
+    undo();
   }
 }
 

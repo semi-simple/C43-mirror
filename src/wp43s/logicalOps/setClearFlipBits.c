@@ -31,7 +31,6 @@
  ***********************************************/
 void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= ~((uint64_t)1 << (bit - 1));
@@ -56,7 +55,6 @@ void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  ***********************************************/
 void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) |= (uint64_t)1 << (bit - 1);
@@ -81,7 +79,6 @@ void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  ***********************************************/
 void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) ^= (uint64_t)1 << (bit - 1);
@@ -105,6 +102,7 @@ void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  ***********************************************/
 void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    thereIsSomethingToUndo = false;
     temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_FALSE : TI_TRUE);
   }
   else {
@@ -126,6 +124,7 @@ void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  ***********************************************/
 void fnBs(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+    thereIsSomethingToUndo = false;
     temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_TRUE : TI_FALSE);
   }
   else {

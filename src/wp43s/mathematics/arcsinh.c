@@ -54,7 +54,6 @@ void arcsinhError(void) {
  * \return void
  ***********************************************/
 void fnArcsinh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arcsinh[getRegisterDataType(REGISTER_X)]();

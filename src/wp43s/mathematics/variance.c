@@ -67,8 +67,6 @@ static void calculateStandardDeviation(const real_t *sumX2, const real_t *sumX,
                                        int sample, int rootn, int exp,
                                        int displayInfo) {
   if(checkMinimumDataPoints(const_2)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -109,7 +107,6 @@ void fnGeometricStandardError(uint16_t unusedParamButMandatory) {
 // Weighted standard deviation, standard error
 static void calculateWeightedStandardDeviation(int sample, int rootn, int exp, int display) {
   if(checkMinimumDataPoints(const_2)) {
-    saveStack();
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     do_stddev(SIGMA_X2Y, SIGMA_XY, SIGMA_Y, sample, rootn, exp, REGISTER_X);

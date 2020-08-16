@@ -54,7 +54,6 @@ void squareError(void) {
  * \return void
  ***********************************************/
 void fnSquare(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   square[getRegisterDataType(REGISTER_X)]();

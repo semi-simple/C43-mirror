@@ -54,7 +54,6 @@ void cubeError(void) {
  * \return void
  ***********************************************/
 void fnCube(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cube[getRegisterDataType(REGISTER_X)]();

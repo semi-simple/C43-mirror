@@ -168,8 +168,8 @@ void displayBugScreen(const char *msg) {
     previousCalcMode = calcMode;
     calcMode = CM_BUG_ON_SCREEN;
     clearSystemFlag(FLAG_ALPHA);
-    cursorEnabled = false;
     hideCursor();
+    cursorEnabled = false;
 
     #ifdef PC_BUILD
       int16_t x;

@@ -108,7 +108,6 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(realCoefs == false) {

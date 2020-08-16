@@ -54,7 +54,6 @@ void mantError(void) {
  * \return void
  ***********************************************/
 void fnMant(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   mant[getRegisterDataType(REGISTER_X)]();

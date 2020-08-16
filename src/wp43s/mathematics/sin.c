@@ -54,7 +54,6 @@ void sinError(void) {
  * \return void
  ***********************************************/
 void fnSin(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sin[getRegisterDataType(REGISTER_X)]();

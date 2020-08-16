@@ -54,7 +54,6 @@ void exptError(void) {
  * \return void
  ***********************************************/
 void fnExpt(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   expt[getRegisterDataType(REGISTER_X)]();

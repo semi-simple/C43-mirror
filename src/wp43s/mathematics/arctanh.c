@@ -54,7 +54,6 @@ void arctanhError(void) {
  * \return void
  ***********************************************/
 void fnArctanh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arctanh[getRegisterDataType(REGISTER_X)]();

@@ -63,7 +63,6 @@ void lcmError(void) {
  * \return void
  ***********************************************/
 void fnLcm(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   lcm[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -72,7 +71,7 @@ void fnLcm(uint16_t unusedParamButMandatory) {
     fnDropY(NOPARAM);
   }
   else {
-    restoreStack();
+    undo();
   }
 }
 

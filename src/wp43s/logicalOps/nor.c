@@ -76,13 +76,12 @@ void norError31(void) {
  * \return void
  ***********************************************/
 void fnLogicalNor(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalNor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
   else {
     fnDropY(NOPARAM);

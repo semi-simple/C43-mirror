@@ -68,7 +68,6 @@ void fnPercentSigma(uint16_t unusedParamButMandatory) {
     #endif
   }
   else {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     functionMatrix[getRegisterDataType(REGISTER_X)]();

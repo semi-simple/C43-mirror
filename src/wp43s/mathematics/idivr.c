@@ -64,7 +64,6 @@ void idivrError(void) {
  * \return void
  ***********************************************/
 void fnIDivR(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   idivr[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

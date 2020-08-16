@@ -64,7 +64,6 @@ void idivError(void) {
  * \return void
  ***********************************************/
 void fnIDiv(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   idiv[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

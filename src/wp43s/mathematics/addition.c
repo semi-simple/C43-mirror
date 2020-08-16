@@ -64,7 +64,6 @@ void addError(void) {
  * \return void
  ***********************************************/
 void fnAdd(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

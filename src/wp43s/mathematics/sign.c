@@ -54,7 +54,6 @@ void signError(void) {
  * \return void
  ***********************************************/
 void fnSign(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   sign[getRegisterDataType(REGISTER_X)]();

@@ -55,13 +55,12 @@ void notError(void) {
  ***********************************************/
 void fnLogicalNot(uint16_t unusedParamButMandatory) {
   if(not[getRegisterDataType(REGISTER_X)] != notError) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     not[getRegisterDataType(REGISTER_X)]();
 
     if(lastErrorCode != 0) {
-      restoreStack();
+      undo();
     }
   }
   else {

@@ -53,7 +53,6 @@ void magnitudeError(void) {
  * \return void
  ***********************************************/
 void fnMagnitude(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   magnitude[getRegisterDataType(REGISTER_X)]();

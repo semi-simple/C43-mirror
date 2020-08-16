@@ -25,7 +25,6 @@
 static void unitConversion(const real_t * const coefficient, uint16_t multiplyDivide) {
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -40,7 +39,7 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -68,7 +67,6 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
 void fnCvtCToF(uint16_t unusedParamButMandatory) {
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -83,7 +81,7 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtCToF:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -106,7 +104,6 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
 void fnCvtFToC(uint16_t unusedParamButMandatory) {
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -121,7 +118,7 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtFToC:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -365,7 +362,6 @@ void fnCvtLbfftNm(uint16_t multiplyDivide) {
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -380,7 +376,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -404,7 +400,6 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -419,7 +414,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       showInfoDialog("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 

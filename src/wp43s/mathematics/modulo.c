@@ -64,7 +64,6 @@ void modError(void) {
  * \return void
  ***********************************************/
 void fnMod(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   mod[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

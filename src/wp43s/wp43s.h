@@ -44,6 +44,7 @@
 #define TO_PCMEMPTR(p)              ((void *)((p) == WP43S_NULL ? NULL : ram + (p)))
 #define TO_WP43SMEMPTR(p)           ((p) == NULL ? WP43S_NULL : (uint16_t)((dataBlock_t *)(p) - ram))
 #define FN_KEY_TIMEOUT_TO_NOP       0
+#define SCREEN_REFRESH_PERIOD     500 // in milliseconds
 
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
@@ -242,12 +243,17 @@ typedef int16_t calcRegister_t;
 #define DF_YMD                  1
 #define DF_MDY                  2
 
-// Curve fitting 3 bits
-#define CF_LINEAR_FITTING       0
-#define CF_EXPONENTIAL_FITTING  1
-#define CF_LOGARITHMIC_FITTING  2
-#define CF_POWER_FITTING        3
-#define CF_BEST_FITTING         4
+// Curve fitting 10 bits
+#define CF_LINEAR_FITTING         1
+#define CF_EXPONENTIAL_FITTING    2
+#define CF_LOGARITHMIC_FITTING    4
+#define CF_POWER_FITTING          8
+#define CF_ROOT_FITTING          16
+#define CF_HYPERBOLIC_FITTING    32
+#define CF_PARABOLIC_FITTING     64
+#define CF_CAUCHY_FITTING       128
+#define CF_GAUSS_FITTING        256
+#define CF_ORTHOGONAL_FITTING   512
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN            0
@@ -282,10 +288,6 @@ typedef int16_t calcRegister_t;
 // Alpha case 1 bit
 #define AC_UPPER                0
 #define AC_LOWER                1
-
-// Cursor font 1 bit
-#define CF_NUMERIC              0
-#define CF_STANDARD             1
 
 // TAM mode
 #define TM_VALUE            10001 // TM_VALUE must be the 1st in this list
@@ -498,6 +500,7 @@ extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
 extern const calcKey_t       kbd_std[37];
 extern const font_t          standardFont, numericFont;
 extern const font_t         *fontForShortInteger;
+extern const font_t         *cursorFont;
 extern void                  (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern void                  (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern void                  (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
@@ -519,8 +522,7 @@ extern uint16_t              globalFlags[7];
 #define NUMBER_OF_GLYPH_ROWS           100
 extern char                  tmpStr3000[TMP_STR_LENGTH];
 extern char                  errorMessage[ERROR_MESSAGE_LENGTH];
-extern char                  aimBuffer[AIM_BUFFER_LENGTH];
-extern char                  nimBuffer[NIM_BUFFER_LENGTH];
+extern char                  aimBuffer[AIM_BUFFER_LENGTH]; // aimBuffer is also used for NIM
 extern char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
 extern char                  tamBuffer[TAM_BUFFER_LENGTH];
 extern char                  asmBuffer[5];
@@ -552,6 +554,7 @@ extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
+extern dataBlock_t          *savedStatisticalSumsPointer;
 extern uint16_t              programCounter;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
@@ -563,7 +566,6 @@ extern uint32_t              alphaSelectionTimer;
 extern uint8_t               softmenuStackPointer;
 extern uint8_t               softmenuStackPointerBeforeAIM;
 extern uint8_t               transitionSystemState;
-extern uint8_t               cursorBlinkCounter;
 extern uint8_t               numScreensStandardFont;
 extern uint8_t               currentFntScr;
 extern uint8_t               currentFlgScr;
@@ -574,7 +576,6 @@ extern uint8_t               significantDigits;
 extern uint8_t               shortIntegerMode;
 extern uint8_t               previousCalcMode;
 extern uint8_t               groupingGap;
-extern uint8_t               curveFitting;
 extern uint8_t               roundingMode;
 extern uint8_t               calcMode;
 extern uint8_t               nextChar;
@@ -583,7 +584,6 @@ extern uint8_t               alphaCase;
 extern uint8_t               numLinesNumericFont;
 extern uint8_t               numLinesStandardFont;
 extern uint8_t               cursorEnabled;
-extern uint8_t               cursorFont;
 extern uint8_t               nimNumberPart;
 extern uint8_t               hexDigits;
 extern uint8_t               lastErrorCode;
@@ -592,21 +592,21 @@ extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;
 extern uint8_t               currentAngularMode;
-extern int8_t                showFunctionNameCounter;
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;
 extern bool_t                shiftF;
 extern bool_t                shiftG;
 extern bool_t                showContent;
-extern bool_t                savedStackLiftEnabled;
 extern bool_t                rbr1stDigit;
 extern bool_t                updateDisplayValueX;
+extern bool_t                thereIsSomethingToUndo;
 extern calcKey_t             kbd_usr[37];
 extern calcRegister_t        errorMessageRegisterLine;
 extern uint64_t              shortIntegerMask;
 extern uint64_t              shortIntegerSignBit;
 extern uint64_t              systemFlags;
+extern uint64_t              savedSystemFlags;
 extern glyph_t               glyphNotFound;
 extern char                  transitionSystemOperation[4];
 extern char                  displayValueX[DISPLAY_VALUE_LEN];
@@ -615,6 +615,7 @@ extern int16_t               denominatorLocation;
 extern int16_t               imaginaryExponentSignLocation;
 extern int16_t               imaginaryMantissaSignLocation;
 extern int16_t               exponentLimit;
+extern int16_t               showFunctionNameCounter;
 extern size_t                gmpMemInBytes;
 extern size_t                wp43sMemInBytes;
 extern freeBlock_t           freeBlocks[MAX_FREE_BLOCKS];

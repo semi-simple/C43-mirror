@@ -32,7 +32,6 @@ void fnSdl(uint16_t numberOfShifts) {
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real_t real;
 
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
@@ -61,7 +60,6 @@ void fnSdr(uint16_t numberOfShifts) {
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real_t real;
 
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);

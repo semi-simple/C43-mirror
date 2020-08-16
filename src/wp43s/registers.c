@@ -950,13 +950,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     oneArgumentIsComplex = oneArgumentIsComplex || getRegisterDataType(op3) == dtComplex34;
   }
 
-  if(lastErrorCode != 0) {
-    restoreStack();
-    return;
-  }
-
   resultDataType = getRegisterDataType(res);
-  if(getSystemFlag(FLAG_SPCRES) == false) {
+  if(getSystemFlag(FLAG_SPCRES) == false && lastErrorCode == 0) {
     // D is clear: test infinite values and -0 values
     switch(resultDataType) {
       case dtReal34:
@@ -989,7 +984,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   }
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
     return;
   }
 
@@ -1104,7 +1099,6 @@ void fnStore(uint16_t r) {
  ***********************************************/
 void fnStoreAdd(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
@@ -1134,7 +1128,6 @@ void fnStoreAdd(uint16_t regist) {
  ***********************************************/
 void fnStoreSub(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
@@ -1164,7 +1157,6 @@ void fnStoreSub(uint16_t regist) {
  ***********************************************/
 void fnStoreMult(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
@@ -1194,7 +1186,6 @@ void fnStoreMult(uint16_t regist) {
  ***********************************************/
 void fnStoreDiv(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
 
@@ -1275,7 +1266,6 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(denMax);
   storeToDtConfigDescriptor(displayStack);
   storeToDtConfigDescriptor(firstGregorianDay);
-  storeToDtConfigDescriptor(curveFitting);
   storeToDtConfigDescriptor(roundingMode);
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
@@ -1387,7 +1377,6 @@ void fnLastX(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnRecallAdd(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -1416,7 +1405,6 @@ void fnRecallAdd(uint16_t regist) {
  ***********************************************/
 void fnRecallSub(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -1445,7 +1433,6 @@ void fnRecallSub(uint16_t regist) {
  ***********************************************/
 void fnRecallMult(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -1474,7 +1461,6 @@ void fnRecallMult(uint16_t regist) {
  ***********************************************/
 void fnRecallDiv(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -1544,7 +1530,7 @@ void fnRecallMax(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallConfig(uint16_t r) {
-  if (getRegisterDataType(r) == dtConfig) {
+  if(getRegisterDataType(r) == dtConfig) {
     dtConfigDescriptor_t *configToRecall = REGISTER_CONFIG_DATA(r);
 
     xcopy(kbd_usr, configToRecall->kbd_usr, sizeof(kbd_usr));
@@ -1557,32 +1543,9 @@ void fnRecallConfig(uint16_t r) {
     recallFromDtConfigDescriptor(denMax);
     recallFromDtConfigDescriptor(displayStack);
     recallFromDtConfigDescriptor(firstGregorianDay);
-    recallFromDtConfigDescriptor(curveFitting);
     recallFromDtConfigDescriptor(roundingMode);
-
-    setSystemFlagToRecalled(FLAG_TDM24);
-    setSystemFlagToRecalled(FLAG_DMY);
-    setSystemFlagToRecalled(FLAG_MDY);
-    setSystemFlagToRecalled(FLAG_YMD);
-    setSystemFlagToRecalled(FLAG_CPXRES);
-    setSystemFlagToRecalled(FLAG_POLAR);
-    setSystemFlagToRecalled(FLAG_FRACT);
-    setSystemFlagToRecalled(FLAG_PROPFR);
-    setSystemFlagToRecalled(FLAG_DENANY);
-    setSystemFlagToRecalled(FLAG_DENFIX);
-    setSystemFlagToRecalled(FLAG_LEAD0);
-    setSystemFlagToRecalled(FLAG_TRACE);
-    setSystemFlagToRecalled(FLAG_USER);
-    setSystemFlagToRecalled(FLAG_SLOW);
-    setSystemFlagToRecalled(FLAG_SPCRES);
-    setSystemFlagToRecalled(FLAG_SSIZE8);
-    setSystemFlagToRecalled(FLAG_QUIET);
-    setSystemFlagToRecalled(FLAG_DECIMP);
-    setSystemFlagToRecalled(FLAG_ALLENG);
-    setSystemFlagToRecalled(FLAG_GROW);
-    setSystemFlagToRecalled(FLAG_AUTOFF);
-    setSystemFlagToRecalled(FLAG_AUTXEQ);
-    setSystemFlagToRecalled(FLAG_IGN1ER);
+    recallFromDtConfigDescriptor(systemFlags);
+    synchronizeLetteredFlags();
   }
 
   else {
@@ -1615,7 +1578,6 @@ void fnRecallStack(uint16_t r) {
   else {
     int i;
 
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=0; i<size; i++) {
@@ -1655,7 +1617,6 @@ printf("fnRecallElement\n");
  * \return void
  ***********************************************/
 void fnRecallIJ(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   copySourceRegisterToDestRegister(REGISTER_I, REGISTER_X);

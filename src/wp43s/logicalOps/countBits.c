@@ -40,7 +40,6 @@ void fnCountBits(uint16_t unusedParamButMandatory) {
   else {
     uint64_t w;
 
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     // https://en.wikipedia.org/wiki/Hamming_weight

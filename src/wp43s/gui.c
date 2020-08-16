@@ -1418,13 +1418,12 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     calcMode = CM_AIM;
     nextChar = NC_NORMAL;
 
-    saveStack();
     liftStack();
 
     clearRegisterLine(AIM_REGISTER_LINE, true, true);
     xCursor = 1;
     yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = CF_STANDARD;
+    cursorFont = &standardFont;
     cursorEnabled = true;
   }
 
@@ -1471,7 +1470,7 @@ void calcModeAsm(void) {
  * \return void
  ***********************************************/
 void calcModeNim(uint16_t unusedParamButMandatory) {
-  saveStack();
+  saveForUndo();
 
   calcMode = CM_NIM;
   clearSystemFlag(FLAG_ALPHA);
@@ -1479,13 +1478,11 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   liftStack();
   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
 
-  nimBuffer[0] = 0;
+  aimBuffer[0] = 0;
   hexDigits = 0;
 
   clearRegisterLine(NIM_REGISTER_LINE, true, true);
   xCursor = 1;
-  yCursor = Y_POSITION_OF_NIM_LINE;
-  cursorFont = CF_NUMERIC;
   cursorEnabled = true;
 }
 

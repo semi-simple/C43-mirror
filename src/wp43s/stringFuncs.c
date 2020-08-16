@@ -37,7 +37,6 @@ void fnAlphaLeng(uint16_t regist) {
   longIntegerInit(stringSize);
   uIntToLongInteger(stringGlyphLength(REGISTER_STRING_DATA(regist)), stringSize);
 
-  saveStack();
   liftStack();
 
   convertLongIntegerToLongIntegerRegister(stringSize, REGISTER_X);
@@ -73,7 +72,6 @@ void fnAlphaToX(uint16_t regist) {
     char2 = *(REGISTER_STRING_DATA(regist) + 1);
   }
 
-  saveStack();
   liftStack();
 
   longIntegerInit(lgInt);
@@ -139,7 +137,6 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  saveStack();
   liftStack();
 
   if(longIntegerIsZero(lgInt)) {
@@ -198,7 +195,6 @@ void fnAlphaPos(uint16_t regist) {
     return;
   }
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   longIntegerInit(lgInt);
@@ -290,7 +286,6 @@ void fnAlphaRR(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -370,7 +365,6 @@ void fnAlphaRL(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -448,7 +442,6 @@ void fnAlphaSR(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -523,7 +516,6 @@ void fnAlphaSL(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {

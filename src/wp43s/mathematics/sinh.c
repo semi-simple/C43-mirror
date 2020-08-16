@@ -54,7 +54,6 @@ void sinhError(void) {
  * \return void
  ***********************************************/
 void fnSinh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sinh[getRegisterDataType(REGISTER_X)]();

@@ -54,7 +54,6 @@ void twoPowError(void) {
  * \return void
  ***********************************************/
 void fn2Pow(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   twoPow[getRegisterDataType(REGISTER_X)]();

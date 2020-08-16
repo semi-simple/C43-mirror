@@ -109,9 +109,9 @@ void btnFnPressed(void *data) {
       }
 
       #if(FN_KEY_TIMEOUT_TO_NOP == 1)
-      showFunctionName(item, 10);
+        showFunctionName(item, 1000); // 1000ms = 1s
       #else
-      showFunctionNameItem = item;
+        showFunctionNameItem = item;
       #endif
     }
     else {
@@ -139,7 +139,7 @@ void btnFnReleased(void *data) {
     if(showFunctionNameItem != 0) {
       int16_t item = showFunctionNameItem;
       #if(FN_KEY_TIMEOUT_TO_NOP == 1)
-      hideFunctionName();
+        hideFunctionName();
       #endif
 
       if(calcMode != CM_CONFIRMATION) {
@@ -154,7 +154,7 @@ void btnFnReleased(void *data) {
             calcModeNormal();
           }
           else if(calcMode == CM_ASM_OVER_TAM) {
-            indexOfItems[getOperation()].func(indexOfItems[item].param);
+            reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
             calcModeNormal();
             refreshScreen();
             return;
@@ -322,7 +322,7 @@ void btnPressed(void *data) {
   if(item != ITM_NOP && item != ITM_NULL) {
     processKeyAction(item);
     if(!keyActionProcessed) {
-      showFunctionName(item, 10);
+      showFunctionName(item, 1000); // 1000ms = 1s
     }
   }
 }
@@ -590,7 +590,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       }
 
       if(aimBuffer[0] == 0) {
-        restoreStack();
+        undo();
       }
       else {
         int16_t len = stringByteLength(aimBuffer) + 1;
@@ -668,7 +668,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
         popSoftmenu();
 
         if(aimBuffer[0] == 0) {
-          restoreStack();
+          undo();
         }
         else {
           int16_t len = stringByteLength(aimBuffer) + 1;
@@ -811,6 +811,12 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
+      if(stringByteLength(aimBuffer) > 0) {
+        lg = stringLastGlyph(aimBuffer);
+        aimBuffer[lg] = 0;
+      }
+      break;
+
     case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
         lg = stringLastGlyph(aimBuffer);

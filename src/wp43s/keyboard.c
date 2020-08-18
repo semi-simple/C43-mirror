@@ -143,8 +143,6 @@ void btnFnReleased(void *data) {
       #endif
 
       if(calcMode != CM_CONFIRMATION) {
-        allowScreenUpdate = true;
-
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
         }
@@ -208,9 +206,6 @@ int16_t determineItem(const char *data) {
   const calcKey_t *key;
 
   key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
-
-  allowScreenUpdate = true;
-
 
   // Shift f pressed and shift g not active
   if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
@@ -762,7 +757,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-          showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
+          moreInfoOnError("In function btnPressed:", errorMessage, NULL, NULL);
         #endif
       }
       break;
@@ -1068,7 +1063,7 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
 
     case CM_NIM:
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
+        moreInfoOnError("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
       #endif
       break;
 

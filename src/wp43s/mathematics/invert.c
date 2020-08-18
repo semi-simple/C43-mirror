@@ -40,7 +40,7 @@ void invertError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot invert %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnInvert:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnInvert:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -77,7 +77,7 @@ void invertLonI(void) {
   if(longIntegerIsZero(a)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertLonI:", "cannot divide a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function invertLonI:", "cannot divide a long integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -141,7 +141,7 @@ void invertReal(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function invertReal:", "cannot divide a real34 by 0", NULL, NULL);
+        moreInfoOnError("In function invertReal:", "cannot divide a real34 by 0", NULL, NULL);
       #endif
     }
   }
@@ -149,7 +149,7 @@ void invertReal(void) {
   else if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getSystemFlag(FLAG_SPCRES)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function invertReal:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
+      moreInfoOnError("In function invertReal:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
     #endif
   }
 

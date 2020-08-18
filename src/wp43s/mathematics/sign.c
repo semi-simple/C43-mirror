@@ -40,7 +40,7 @@ void signError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnSign:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnSign:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -130,7 +130,7 @@ void signReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
+      moreInfoOnError("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
     #endif
     return;
   }

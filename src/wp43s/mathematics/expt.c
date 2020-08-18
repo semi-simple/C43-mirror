@@ -40,7 +40,7 @@ void exptError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate EXPT for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function exptError:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function exptError:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -80,7 +80,7 @@ void exptReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptReal:", "cannot use NaN as X input of EXPT", NULL, NULL);
+      moreInfoOnError("In function exptReal:", "cannot use NaN as X input of EXPT", NULL, NULL);
     #endif
     return;
   }
@@ -91,7 +91,7 @@ void exptReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function exptReal:", "cannot use ±∞ as an input of EXPT", NULL, NULL);
+      moreInfoOnError("In function exptReal:", "cannot use ±∞ as an input of EXPT", NULL, NULL);
     #endif
     return;
   }

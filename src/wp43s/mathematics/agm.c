@@ -43,7 +43,7 @@ void fnAgm(uint16_t unusedParamButMandatory) {
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot calculate AGM with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
-                          showInfoDialog("In function fnAgm:", errorMessage, NULL, NULL);
+                          moreInfoOnError("In function fnAgm:", errorMessage, NULL, NULL);
                         #endif
                         return;
   }
@@ -65,7 +65,7 @@ void fnAgm(uint16_t unusedParamButMandatory) {
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot calculate AGM with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
-                          showInfoDialog("In function fnAgm:", errorMessage, NULL, NULL);
+                          moreInfoOnError("In function fnAgm:", errorMessage, NULL, NULL);
                         #endif
                         return;
   }
@@ -73,7 +73,7 @@ void fnAgm(uint16_t unusedParamButMandatory) {
   if(realInput && (realIsNegative(&aReal) || realIsNegative(&bReal))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnAgm:", "cannot use negative X and Y as input of AGM", NULL, NULL);
+      moreInfoOnError("In function fnAgm:", "cannot use negative X and Y as input of AGM", NULL, NULL);
     #endif
     return;
   }

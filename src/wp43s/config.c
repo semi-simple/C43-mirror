@@ -433,7 +433,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s for setting RANGE", getRegisterDataTypeName(REGISTER_X, true, true));
-      showInfoDialog("In function fnRange:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRange:", errorMessage, NULL, NULL);
     #endif
     return;
   }

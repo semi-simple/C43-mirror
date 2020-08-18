@@ -42,7 +42,7 @@ void fnSdl(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SDL %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnSdl:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSdl:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -71,7 +71,7 @@ void fnSdr(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SDR %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnSdr:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSdr:", errorMessage, NULL, NULL);
     #endif
   }
 }

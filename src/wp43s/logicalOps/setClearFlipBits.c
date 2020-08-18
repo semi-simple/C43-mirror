@@ -39,7 +39,7 @@ void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot CB %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnCb:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnCb:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -63,7 +63,7 @@ void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SB %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnSb:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSb:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -87,7 +87,7 @@ void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot FB %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnFb:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnFb:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -109,7 +109,7 @@ void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot BC %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnBc:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnBc:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -131,7 +131,7 @@ void fnBs(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot BS %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnBs:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnBs:", errorMessage, NULL, NULL);
     #endif
   }
 }

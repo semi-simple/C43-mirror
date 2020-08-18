@@ -40,7 +40,7 @@ void factError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate x! for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnFactorial:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnFactorial:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -73,7 +73,7 @@ void factLonI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      showInfoDialog("In function factLonI:", tmpStr3000, NULL, NULL);
+      moreInfoOnError("In function factLonI:", tmpStr3000, NULL, NULL);
     #endif
     longIntegerFree(x);
     return;
@@ -84,7 +84,7 @@ void factLonI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpStr3000, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
-      showInfoDialog("In function factLonI:", tmpStr3000, NULL, NULL);
+      moreInfoOnError("In function factLonI:", tmpStr3000, NULL, NULL);
     #endif
     longIntegerFree(x);
     return;
@@ -137,7 +137,7 @@ void factShoI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      showInfoDialog("In function factShoI:", tmpStr3000, NULL, NULL);
+      moreInfoOnError("In function factShoI:", tmpStr3000, NULL, NULL);
     #endif
     return;
   }
@@ -147,7 +147,7 @@ void factShoI(void) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      showInfoDialog("In function factShoI:", tmpStr3000, NULL, NULL);
+      moreInfoOnError("In function factShoI:", tmpStr3000, NULL, NULL);
     #endif
     return;
   }

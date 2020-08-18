@@ -143,7 +143,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnIsPrime:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnIsPrime:", errorMessage, NULL, NULL);
     #endif
   }
 
@@ -185,7 +185,7 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnIsPrime:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnIsPrime:", errorMessage, NULL, NULL);
     #endif
   }
 

@@ -40,7 +40,7 @@ void sinError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Sin for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnSin:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnSin:", errorMessage, NULL, NULL);
   #endif
 }
 

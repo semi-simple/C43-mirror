@@ -50,7 +50,7 @@ void addError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(REGISTER_X, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-    showInfoDialog("In function fnAdd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnAdd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -398,7 +398,7 @@ void addStriLonI(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriLonI:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriLonI:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -432,7 +432,7 @@ void addStriTime(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriTime:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriTime:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -466,7 +466,7 @@ void addStriDate(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriDate:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriDate:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -499,7 +499,7 @@ void addStriStri(void) {
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(REGISTER_STRING_DATA(REGISTER_X)),
                                                                                                         MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriStri:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriStri:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -558,7 +558,7 @@ void addStriShoI(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriShoI:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriShoI:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -592,7 +592,7 @@ void addStriReal(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriReal:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriReal:", errorMessage, NULL, NULL);
     #endif
   }
   else {
@@ -626,7 +626,7 @@ void addStriCplx(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      showInfoDialog("In function addStriCplx:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriCplx:", errorMessage, NULL, NULL);
     #endif
   }
   else {

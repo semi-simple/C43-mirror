@@ -390,7 +390,6 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
       refreshDebugPanel();
     #endif
 
-printf("refreshLcd (screenChange == true)\n");
     gtk_widget_queue_draw(screen);
     while(gtk_events_pending()) {
       gtk_main_iteration();

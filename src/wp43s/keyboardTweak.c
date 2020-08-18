@@ -401,8 +401,8 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
     fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
     if(JM_auto_doublepress_enabled != 0) {
        hideFunctionName();    
-       restoreStack();
-       showFunctionName(JM_auto_doublepress_enabled, 10);  //JM CLRDROP
+       undo();
+       showFunctionName(JM_auto_doublepress_enabled, 1000);  //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
        setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE

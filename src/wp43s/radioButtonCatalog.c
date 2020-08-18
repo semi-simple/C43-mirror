@@ -36,6 +36,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1960 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnSetSetJM          /*   96 */ //fnComplexUnit
 /* 1961 */  { ITM_CPXJ,             CU_J,                   RB_CU },  //fnSetSetJM          /*   97 */ //fnComplexUnit
 
+#ifdef XXXXX
 /*  308 */  { ITM_LINF,             CF_LINEAR_FITTING       RB_CF },  //fnCurveFitting
 /*  161 */  { ITM_EXPF,             CF_EXPONENTIAL_FITTING  RB_CF },  //fnCurveFitting
 /*  325 */  { ITM_LOGF,             CF_LOGARITHMIC_FITTING  RB_CF },  //fnCurveFitting
@@ -46,6 +47,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1563 */  { ITM_CAUCHF,           CF_CAUCHY_FITTING       RB_CF },  //fnCurveFitting
 /* 1562 */  { ITM_GAUSSF,           CF_GAUSS_FITTING        RB_CF },  //fnCurveFitting
 /*  438 */  { ITM_ORTHOF,           CF_ORTHOGONAL_FITTING   RB_CF },  //fnCurveFitting
+#endif
+
 
 /*  136 */  { ITM_DMY,              DF_DMY,                 RB_DF },  //fnSetDateFormat
 /*  383 */  { ITM_MDY,              DF_MDY,                 RB_DF },  //fnSetDateFormat
@@ -169,12 +172,13 @@ int8_t fnCbIsSet(int16_t item) {
           else { rb_param = CU_I; }
         }
         break;
-
+#ifdef XXXXX
       case RB_CF:
         {
           rb_param = curveFitting;
         }
         break;
+#endif
 
       case RB_DF:
         {

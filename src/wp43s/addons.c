@@ -162,7 +162,6 @@ void fnRoundi2(uint16_t unusedParamButMandatory) {
 
 
 void fnRound2(uint16_t unusedParamButMandatory) {
-  //saveStack();       //Not savestack because fnToPolar already has savestack and fnComplexMode does not need.
   if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
     //nothing
   }
@@ -553,15 +552,15 @@ void shrinkNimBuffer (void) {                              //JMNIM vv
   int16_t lastChar;                                        //if digits in NIMBUFFER, ensure switch to NIM,
   int16_t hexD = 0;
   bool_t  reached_end = false;
-  lastChar = strlen(nimBuffer) - 1;
+  lastChar = strlen(aimBuffer) - 1;
   if(lastChar >= 1) {
     int16_t ix = 0;
-    while(nimBuffer[ix]!=0) {                              //if # found in nimbuffer, return and do nothing
-      if(nimBuffer[ix] >= 'A') {
+    while(aimBuffer[ix]!=0) {                              //if # found in nimbuffer, return and do nothing
+      if(aimBuffer[ix] >= 'A') {
         hexD++;
       }
-      if(nimBuffer[ix]==35 || reached_end) {
-        nimBuffer[ix]=0; 
+      if(aimBuffer[ix]==35 || reached_end) {
+        aimBuffer[ix]=0; 
         reached_end = true;
         //printf(">>> ***A # found. hexD=%d\n",hexD);
       }
@@ -590,7 +589,7 @@ void fnChangeBaseJM (uint16_t BASE) {
     fnChangeBase(BASE);
   }
   #ifndef TESTSUITE_BUILD
-  nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+  nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
   #endif
 }
 
@@ -619,21 +618,21 @@ void fnChangeBaseMNU(uint16_t BASE) {
     if(BASE > 1 && BASE <=16 ) {                                                //BASIC CONVERSION IN X REGISTER, OR DIGITS IN NIMBUFFER IF IN CM_NORMAL
       //printf(">>> §§§1 convert base to %d & return\n",BASE);
       fnChangeBaseJM(BASE);
-      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
       return;
     }
 
-    if(nimBuffer[0]==0 && calcMode == CM_NORMAL && BASE == NOPARAM) {           //IF # FROM MENU & TAM.
+    if(aimBuffer[0]==0 && calcMode == CM_NORMAL && BASE == NOPARAM) {           //IF # FROM MENU & TAM.
       //printf(">>> §§§2 # FROM MENU: nimBuffer[0]=0; use runfunction\n");
       runFunction(ITM_toINT);
-      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
       return;
     }
 
-    if(nimBuffer[0]!=0 && calcMode == CM_NIM) {                                 //IF # FROM MENU, while in NIM, just add to NimBuffer
+    if(aimBuffer[0]!=0 && calcMode == CM_NIM) {                                 //IF # FROM MENU, while in NIM, just add to NimBuffer
       //printf(">>> §§§3 # nimBuffer in use, addItemToNimBuffer\n");
       addItemToNimBuffer (ITM_toINT);
-      nimBufferToDisplayBuffer(nimBuffer, nimBufferDisplay + 2);
+      nimBufferToDisplayBuffer(aimBuffer, nimBufferDisplay + 2);
       return;
     }
 

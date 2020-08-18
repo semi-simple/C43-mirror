@@ -137,7 +137,6 @@ uint8_t               temporaryInformation;
 uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
 uint8_t               currentAngularMode;
-int8_t                showFunctionNameCounter;
 bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup

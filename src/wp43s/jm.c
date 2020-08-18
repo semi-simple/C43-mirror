@@ -345,7 +345,7 @@ void fnSigmaAssign(uint16_t sigmaAssign) {             //DONE
 void fnShowJM(uint16_t jmConfig) {                               //DONE
   longInteger_t mem;
   longIntegerInit(mem);
-  saveStack();
+  saveForUndo();
   liftStack();
 
   switch(jmConfig) {
@@ -595,7 +595,7 @@ void fnJM(uint16_t JM_OPCODE) {
 #define JMTEMP TEMP_REGISTER
 
   if(JM_OPCODE == 6) {                                          //Delta to Star   ZYX to ZYX; destroys IJKL & JMTEMP
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J
@@ -636,7 +636,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 7) {                                          //Star to Delta ZYX to ZYX; destroys IJKL & JMTEMP
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J
@@ -674,7 +674,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 8) {                                          //SYMMETRICAL COMP to ABC   ZYX to ZYX; destroys IJKL
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);   // STO I  //A2
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);   // STO J  //A1
@@ -717,7 +717,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 9) {                                          //ABC to SYMMETRICAL COMP   ZYX to ZYX; destroys IJKL & JMTEMP
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);  // STO I  //c
     copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);  // STO J  //b
@@ -773,7 +773,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 10) {                                         //e^theta.j j
-    saveStack();
+    saveForUndo();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
     fn_cnst_op_j(0);
     fnMultiply(0);                                              // * aa
@@ -782,7 +782,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 11) {                                         //STO Z
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 90);
     copySourceRegisterToDestRegister(REGISTER_Y, 91);
@@ -791,7 +791,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 13) {                                         //STO V
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 93);
     copySourceRegisterToDestRegister(REGISTER_Y, 94);
@@ -800,7 +800,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 15) {                                         //STO I
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);                                          //  Registers: Z:90-92  V:93-95  I:96-98  XYZ
     copySourceRegisterToDestRegister(REGISTER_X, 96);
     copySourceRegisterToDestRegister(REGISTER_Y, 97);
@@ -809,7 +809,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 12) {                                         //RCL Z
-    saveStack();
+    saveForUndo();
     fnRCL(92);
     fnRCL(91);
     fnRCL(90);
@@ -817,7 +817,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 14) {                                         //RCL V
-    saveStack();
+    saveForUndo();
     fnRCL(95);
     fnRCL(94);
     fnRCL(93);
@@ -825,7 +825,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 16) {                                         //RCL I
-    saveStack();
+    saveForUndo();
     fnRCL(98);
     fnRCL(97);
     fnRCL(96);
@@ -833,7 +833,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 17) {                                         // V/I
-    saveStack();
+    saveForUndo();
     fnRCL(95);
     fnRCL(98);
     fnDivide(0);
@@ -847,7 +847,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 18) {                                         // IZ
-    saveStack();
+    saveForUndo();
     fnRCL(98);
     fnRCL(92);
     fnMultiply(0);
@@ -861,7 +861,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 19) {                                         // V/Z
-    saveStack();
+    saveForUndo();
     fnRCL(95);
     fnRCL(92);
     fnDivide(0);
@@ -875,7 +875,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 20) {                                         //Copy Create X>ABC
-    saveStack();
+    saveForUndo();
     setSystemFlag(FLAG_ASLIFT);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
 
@@ -896,7 +896,7 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 21) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -908,7 +908,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 22) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -920,7 +920,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 23) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -932,7 +932,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 24) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -944,7 +944,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 25) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -956,7 +956,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 26) {                                         //Graph
-    saveStack();
+    saveForUndo();
     //Convert from X register to float
     real_t tmpy;
     fnToReal(0);
@@ -968,7 +968,7 @@ void fnJM(uint16_t JM_OPCODE) {
   }
   else
   if(JM_OPCODE == 27) {                                         //Graph
-    saveStack();
+    saveForUndo();
     fnStrtoX("Type limits into X Register and press");
     fnStrtoX("[Xmin], [Xmax], [Ymin], [Ymax], [dX], [dY]");
     tmpStr3000[0]=0;

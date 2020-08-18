@@ -45,7 +45,11 @@
 #define TO_PCMEMPTR(p)              ((void *)((p) == WP43S_NULL ? NULL : ram + (p)))
 #define TO_WP43SMEMPTR(p)           ((p) == NULL ? WP43S_NULL : (uint16_t)((dataBlock_t *)(p) - ram))
 #define FN_KEY_TIMEOUT_TO_NOP       0
-#define SCREEN_REFRESH_PERIOD     500 // in milliseconds
+#ifdef DMCP_BUILD
+#define SCREEN_REFRESH_PERIOD     500 //JM timeout for lcd refresh in ms 125
+#else
+#define SCREEN_REFRESH_PERIOD     500 //JM timeout for lcd refresh in ms 100
+#endif 
 
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
@@ -578,7 +582,7 @@ extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle 
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t              globalFlags[7];
 //#define TMP_STR_LENGTH              3000 //Move to beginning of file due to errors
-#define ERROR_MESSAGE_LENGTH           250 //512          //JMMAX Temporarily reduced - ORG:512.
+#define ERROR_MESSAGE_LENGTH           320 //512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN               80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING 196
 #define NUMBER_OF_GLYPH_ROWS           100+6  //JM 100-->106

@@ -258,7 +258,7 @@ void addItemToBuffer(uint16_t item) {
         displayBugScreen(errorMessage);
       }
       else {
-        //JMCURSOR vv ADD THE CHARACTER MID-STRING
+        //JMCURSOR vv ADD THE CHARACTER MID-STRING =======================================================
         uint16_t ix = 0; 
         uint16_t in = 0;
         while (ix<T_cursorPos && in<T_cursorPos) {              //search the ix position in aimBuffer before the cursor

@@ -148,7 +148,7 @@ void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
 void fnSysFreeMem(uint16_t unusedParamButMandatory) {
   real_t value;
 
-  saveStack();
+  saveForUndo();
   liftStack();
 
   #ifdef PC_BUILD

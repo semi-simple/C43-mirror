@@ -61,6 +61,6 @@ void fnCurveFitting(uint16_t curveFitting) {
       printf("\nfitting models.\n");
     }
   #endif // PC_BUILD
-  fnRefreshRadioState(RB_CF, cf);                                               //dr
+//  fnRefreshRadioState(RB_CF, cf);                                               //dr
 }
 

@@ -905,20 +905,20 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     #ifdef PC_BUILD                                                                 // Dani Rau
       for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
         if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
+          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          setPixel(x+col, y);
+          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     #endif                                                                          // vv Dani Rau
 
     #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
+        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
+        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
     #endif                                                                          // ^^ Dani Rau
   }
@@ -929,10 +929,10 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     if(showLeadingCols) {
       for(col=0; col<glyph->colsBeforeGlyph; col++) {
         if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
+          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          setPixel(x+col, y);
+          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     }
@@ -946,18 +946,18 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
       if(byte & 0x80) {// MSB set
         if(videoMode == vmNormal) {
-          setPixel(x+xGlyph+col, y);
+          if(y>=0) setPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          clearPixel(x+xGlyph+col, y);
+          if(y>=0) clearPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
       else {
         if(videoMode == vmNormal) {
-          clearPixel(x+xGlyph+col, y);
+          if(y>=0) clearPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          setPixel(x+xGlyph+col, y);
+          if(y>=0) setPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
 
@@ -971,10 +971,10 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     // clearing the columns after the glyph
     for(col=0; col<endingCols; col++) {
       if(videoMode == vmNormal) {
-        clearPixel(xEndingCols+col, y);
+        if(y>=0) clearPixel(xEndingCols+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        setPixel(xEndingCols+col, y);
+        if(y>=0) setPixel(xEndingCols+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
     }
   }
@@ -984,20 +984,20 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     #ifdef PC_BUILD                                                                 // Dani Rau
       for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
         if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
+          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          setPixel(x+col, y);
+          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     #endif                                                                          // vv Dani Rau
 
     #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
+        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
+        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       #endif                                                                        // ^^ Dani Rau
   }

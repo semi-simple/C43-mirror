@@ -331,6 +331,31 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 
 
 
+
+void fnLongInt (uint16_t unusedParamButMandatory) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
+
+  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
+    fnToReal(0);  
+    JM_convertReal34ToLongInteger(CONFIRMED);
+  }
+  else
+
+  if(dataTypeX == dtShortInteger) {
+    convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
+  }
+  else
+
+  if(dataTypeX == dtReal34) {
+    JM_convertReal34ToLongInteger(CONFIRMED);
+  }  
+}
+
+
+
+
 /********************************************//**
  * \brief CONVERT DATA TYPES UP
  *

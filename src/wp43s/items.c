@@ -516,6 +516,7 @@ void fnCase                     (uint16_t unusedParamButMandatory) {}
 void fnAngularModeJM            (uint16_t unusedParamButMandatory) {}
 void fnChangeBaseJM             (uint16_t unusedParamButMandatory) {}
 void fnChangeBaseMNU            (uint16_t unusedParamButMandatory) {}
+void fnLongInt                  (uint16_t unusedParamButMandatory) {}
                                                                                 //JM ^^
 
 
@@ -2227,7 +2228,7 @@ const item_t indexOfItems[] = {
 /* 1691 */  { fnSetWordSize,               32,                          "32-BIT",                                      "32-BIT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM HEX
 /* 1692 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM HEX
 /* 1693 */  { fnDisplayFormatUnit,         TM_VALUE,                    "UNIT",                                        "UNIT",                                        0,      15,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM UNIT
-/* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},   //JM SHOW
+/* 1694 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },   //JM SHOW
 /* 1695 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //dr
 /* 1696 */  { fnSetSetJM,                  JC_BLZ,                      "LEAD0",                                       "LEAD0",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //dr
 /* 1697 */  { addItemToBuffer,             CHR_QOPPA,                   "",                                            STD_QOPPA,                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //JM GREEK
@@ -2446,7 +2447,7 @@ const item_t indexOfItems[] = {
 /* 1905 */  { fnInDefault,                 ID_43S,                      "i" STD_SPACE_3_PER_EM "LI/RL",                "i" STD_SPACE_3_PER_EM "LI/RL",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM INPUT DEFAULT
 /* 1906 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM UNDERLINING
 /* 1907 */  { fnInDefault,                 ID_DP,                       "i" STD_SPACE_3_PER_EM "REAL",                 "i" STD_SPACE_3_PER_EM "REAL",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM INPUT DEFAULT
-/* 1908 */  { fnShowJM,                    JM_INP_DFLT,                 "i" STD_SPACE_3_PER_EM "Dflt?",                "i" STD_SPACE_3_PER_EM "Dflt?",                0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //JM INPUT DEFAULT
+/* 1908 */  { fnShowJM,                    JM_INP_DFLT,                 "i" STD_SPACE_3_PER_EM "Dflt?",                "i" STD_SPACE_3_PER_EM "Dflt?",                0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },   //JM INPUT DEFAULT
 /* 1909 */  { fnSetSetJM,                  JC_FG_DOTS,                  "fg" STD_SPACE_3_PER_EM "DOTS",                "fg" STD_SPACE_3_PER_EM "DOTS",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM UNDERLINING
 /* 1910 */  { fnInDefault,                 ID_CPXDP,                    "i" STD_SPACE_3_PER_EM "CPX",                  "i" STD_SPACE_3_PER_EM "CPX",                  0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM INPUT DEFAULT
 /* 1911 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},   //JM KEY TAP DOUBLE SETTING
@@ -2463,7 +2464,7 @@ const item_t indexOfItems[] = {
 /* 1922 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //JM GRAPH
 /* 1923 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //JM GRAPH
 /* 1924 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //JM GRAPH
-/* 1925 */  { itemToBeCoded,               NOPARAM,                     "1925",                                        "1925",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1925 */  { fnLongInt,                   NOPARAM,                     "LNGINT",                                      "LNGINT",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1926 */  { fnTo_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },   //JM DMS HMS
 /* 1927 */  { fnMultiplySI,                88,                          STD_DOT "p",                                   STD_DOT "p",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },   //JM PRE UNIT
 /* 1928 */  { fnMultiplySI,                91,                          STD_DOT "n",                                   STD_DOT "n",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },   //JM PRE UNIT

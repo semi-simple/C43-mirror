@@ -32,6 +32,8 @@
 #define US_CANCEL     1 // The command cancels the last UNDO data
 #define US_UNCHANGED  2 // The command leaves the existing UNDO data as is
 
+
+
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1970,7 +1972,7 @@
 #define ITM_GRF_DX                    1922   //JM GRAPH
 #define ITM_GRF_DY                    1923   //JM GRAPH
 #define ITM_GRF_HLP                   1924   //JM GRAPH
-#define Not_used1925                  1925
+#define ITM_LI                        1925
 #define ITM_ms                        1926   //JM DMS HMS
 #define ITM_SI_p                      1927   //JM PRE UNIT
 #define ITM_SI_n                      1928   //JM PRE UNIT

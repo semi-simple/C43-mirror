@@ -196,7 +196,7 @@ void showFracMode(void) {
         str40[y++] = str20[x++];
       }
     }
-    showString(str40, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);        //-4 looks good
+    showString(str40, &standardFont, X_FRAC_MODE, -4, vmNormal, true, true);        //-4 looks good
     return;
   }                                                                                //JM^^
 

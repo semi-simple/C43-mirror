@@ -390,13 +390,13 @@ const int16_t menu_TamShuffle[]  = { ITM_ST_X,                      ITM_ST_Y,   
 const int16_t menu_MyMenu[]      = { ITM_cos                                                                                                                                                                };
 
 const int16_t menu_BASE[]        = { 
-                                     ITM_IP,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 KEY_dotD,              -MNU_BITS,                   -MNU_INTS,
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
+                                     -MNU_INTS,                     ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     -MNU_BITS,                     ITM_CB_LEADING_ZERO,        ITM_AND,                  ITM_OR,                ITM_XOR,                     ITM_NOT,    
+                                     ITM_LI,                        ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
 
                                      CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F, 
-                                     ITM_RI,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
+                                     ITM_LI,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_RI,                        ITM_NULL,                   ITM_NULL,                 KEY_dotD,              ITM_2COMPL,                  ITM_UNSIGN
                                                                                                                                                                                                             };    //JM BASE MENU ADDED
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE

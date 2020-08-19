@@ -1081,6 +1081,93 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
 
 
+void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
+  #ifdef PC_BUILD                                         // Dani Rau
+    uint16_t x, y;
+        for(x=x0; x<x0+dx; x++) {
+          for(y=y0; y<y0+dy; y++) {
+            clearPixel(x, y);
+          }
+        }
+  #endif                                                  // vv Dani Rau
+
+  #if DMCP_BUILD
+    if(cursorEnabled) {
+      if(cursorFont == &standardFont) {
+        lcd_fill_rect(x0, y0, dx, dy, 0);
+      }
+      else {
+        lcd_fill_rect(x0, y0, dx, dy, 0);
+      }
+    }
+  #endif                                                  // ^^ Dani Rau
+}
+
+
+
+int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+  uint16_t ch, charCode, lg, tmpxy;
+  bool_t   slc, sec;
+
+  if(lastline > 2) {
+    clearScreen_old(false, true,false);
+    x = 1; 
+    y = 20;
+  }
+
+  lg = stringByteLength(string + offset);
+
+  ch = offset;
+  while(string[ch] != 0) {
+    if(lg == 1 || (lg == 2 && (string[offset] & 0x80))) {// The string is 1 glyph long
+      slc = showLeadingCols;
+      sec = showEndingCols;
+    }
+    else if(ch == 0) {// First glyph
+      slc = showLeadingCols;
+      sec = true;
+    }
+    else if(ch == lg-1 || (ch == lg-2 && (string[ch] & 0x80))) {// Last glyph
+      slc = true;
+      sec = showEndingCols;
+    }
+    else {// Glyph between first and last glyph
+      slc = true;
+      sec = true;
+    }
+
+    charCode = (uint8_t)string[ch++];
+    if(charCode & 0x80) {// MSB set?
+      charCode = (charCode<<8) | (uint8_t)string[ch++];
+    }
+    
+    if(x>SCREEN_WIDTH-20 && lastline > 0) { x = 1; y += 21; lastline--;}
+    if(x>SCREEN_WIDTH-20 && lastline == -1) {   
+      xCursor = x;
+      yCursor = y;
+      return x;
+    }
+    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+
+    if(ch == edcursor && string[ch] != 0) {
+         tmpxy = y; 
+         while (tmpxy < y + 20) {
+         setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
+         tmpxy++;
+       }
+       x+=2;
+    }
+
+
+  }
+  xCursor = x;
+  yCursor = y;
+  x = showGlyphCode(32, font, x, y, videoMode, showLeadingCols, showEndingCols) - compressString;
+  return xCursor;
+}
+
+
+
 void refresh_gui(void) {                                        //JM vv
 #ifdef PC_BUILD
   while(gtk_events_pending()) {
@@ -1514,84 +1601,24 @@ void refreshRegisterLine(calcRegister_t regist) {
       }
 
       else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
-/*JMC*/ int16_t T_cursorPos_tmp, tmpxy, tmp;
-        if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-/*JMC*/   //JMCURSORvv SPLIT STRING AT CURSOR POSITION AND CHANGE CURSOR TYPE TO STATIC LINE INDICATING MID STRING POSITION
-/*JMC*/   tmp = 0;                                                                                       //Determine offset to be able to display the latter part of the string
-/*JMC*/   while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > SCREEN_WIDTH-6)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
+
+
+
+
+
+/*JMC*/ int16_t tmp;
+/*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
+/*JMC*/   while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > (SCREEN_WIDTH-6)*4)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
 /*JMC*/     tmp = stringNextGlyph(aimBuffer, tmp);
 /*JMC*/   }
 /*JMC*/   if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
 /*JMC*/   if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-
-/*JMC*/   T_cursorPos_tmp = aimBuffer[T_cursorPos];
-/*JMC*/   aimBuffer[T_cursorPos] = 0;                                                                    //Block aimbuffer at the cursor
-
-/*JMC*/   xCursor = showString(aimBuffer + tmp, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);  //display up to the cursor
-//org     xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-/*JMC*/   aimBuffer[T_cursorPos] = T_cursorPos_tmp;                                                      //Restore aimbuffer
-/*JMC*/   if(xCursor !=0) xCursor--;                                                                     //Adjust cursor position marginally closer to the letter on the left
-/*JMC*/   if(T_cursorPos <  stringByteLength(aimBuffer)) {
-/*JMC*/     tmpxy = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 3, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-/*JMC*/   }
-
-/*JMC*/   if(T_cursorPos == stringByteLength(aimBuffer)) {
-/*JMC*/     cursorEnabled = true;
-/*JMC*/   } else {
-/*JMC*/     cursorEnabled = false;
-/*JMC*/     tmpxy = Y_POSITION_OF_NIM_LINE + 6; while (tmpxy < Y_POSITION_OF_NIM_LINE + 26) {
-/*JMC*/       setPixel(xCursor,tmpxy); setPixel(xCursor+1,tmpxy); 
-/*JMC*/       tmpxy++;}
-/*JMC*/   }
-          yCursor = Y_POSITION_OF_NIM_LINE + 6;
+          showStringEd(4,tmp, T_cursorPos, aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
+/*JMC*/   if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
           cursorFont = &standardFont;
         }
-        else {
-/*JMC*/   //JMCURSORvv SPLIT STRING AT CURSOR POSITION AND CHANGE CURSOR TYPE TO STATIC LINE INDICATING MID STRING POSITION
-/*JMC*/   tmp = 0;                                                                                       //Determine offset to be able to display the latter part of the string
-/*JMC*/   while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > SCREEN_WIDTH-6)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
-/*JMC*/     tmp = stringNextGlyph(aimBuffer, tmp);
-/*JMC*/   }
-/*JMC*/   if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-/*JMC*/   if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
 
-/*JMC*/   T_cursorPos_tmp = aimBuffer[T_cursorPos];
-/*JMC*/   aimBuffer[T_cursorPos] = 0;                                                                    //Block aimbuffer at the cursor
-          w = stringByteLength(aimBuffer) + 1;
-          xcopy(tmpStr3000,        aimBuffer, w);
-          xcopy(tmpStr3000 + 1500, aimBuffer, w);
-          while(stringWidth(tmpStr3000, &standardFont, true, true) >= SCREEN_WIDTH - 1) {
-            w = stringLastGlyph(tmpStr3000);
-            tmpStr3000[w] = 0;
-          }
 
-          if(stringWidth(tmpStr3000 + 1500 + w, &standardFont, true, true) >= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-            btnClicked(NULL, "16"); // back space
-          }
-          else {
-            showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
-
-            xCursor = showString(tmpStr3000 + 1500 + tmp, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);  //display up to the cursor
-//            xCursor = showString(tmpStr3000 + 1500 + w, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-            aimBuffer[T_cursorPos] = T_cursorPos_tmp;                                                      //Restore aimbuffer
-            if(xCursor !=0) xCursor--;                                                                     //Adjust cursor position marginally closer to the letter on the left
-            if(T_cursorPos <  stringByteLength(aimBuffer)) {
-              tmpxy = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 3, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-            }
-
-            if(T_cursorPos == stringByteLength(aimBuffer)) {
-              cursorEnabled = true;
-            } else {
-              cursorEnabled = false;
-              tmpxy = Y_POSITION_OF_NIM_LINE + 18; while (tmpxy < Y_POSITION_OF_NIM_LINE + 38) {
-                setPixel(xCursor,tmpxy); setPixel(xCursor+1,tmpxy); 
-                tmpxy++;}
-            }
-            yCursor = Y_POSITION_OF_NIM_LINE + 18;
-            cursorFont = &standardFont;
-          }
-        }
-      }
 
       else if(   getSystemFlag(FLAG_FRACT)
               && (    getRegisterDataType(regist) == dtReal34

@@ -50,7 +50,7 @@ void idivError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot IDIV %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnIDiv:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnIDiv:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -91,7 +91,7 @@ void idivLonILonI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivLonILonI:", "cannot IDIV a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivLonILonI:", "cannot IDIV a long integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -123,7 +123,7 @@ void idivLonIShoI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivLonIShoI:", "cannot IDIV a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivLonIShoI:", "cannot IDIV a long integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -155,7 +155,7 @@ void idivShoILonI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivShoILonI:", "cannot IDIV a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivShoILonI:", "cannot IDIV a short integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -183,7 +183,7 @@ void idivLonIReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivLonIReal:", "cannot IDIV a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivLonIReal:", "cannot IDIV a long integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -211,7 +211,7 @@ void idivRealLonI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivRealLonI:", "cannot IDIV a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function idivRealLonI:", "cannot IDIV a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -243,7 +243,7 @@ void idivShoIShoI(void) {
   if(value == 0) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivShoIShoI:", "cannot IDIV a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivShoIShoI:", "cannot IDIV a short integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -264,7 +264,7 @@ void idivShoIReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivShoIReal:", "cannot IDIV a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function idivShoIReal:", "cannot IDIV a short integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -292,7 +292,7 @@ void idivRealShoI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivRealShoI:", "cannot IDIV a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function idivRealShoI:", "cannot IDIV a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -320,7 +320,7 @@ void idivRealReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function idivRealReal:", "cannot IDIV a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function idivRealReal:", "cannot IDIV a real34 by 0", NULL, NULL);
     #endif
     return;
   }

@@ -243,7 +243,7 @@ void addItemToBuffer(uint16_t item) {
       }
       else if(item == CHR_alpha) {
         #ifdef PC_BUILD
-          showInfoDialog("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
+          moreInfoOnError("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
         #endif
         tamTransitionSystem(TT_NOTHING);
       }
@@ -1162,10 +1162,8 @@ void tamTransitionSystem(uint16_t tamTransition) {
               return;
             }
 
-            strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : (tamOperation==ITM_Config ? "CFG" : (tamOperation==ITM_Stack ? "S" : "???"))))))));
-            sprintf(tamBuffer, "%s%s __", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
-
             tamCurrentOperation = tamOperation;
+            sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
 
             if(tamCurrentOperation == ITM_Config || tamCurrentOperation == ITM_Stack) {
               break;
@@ -1245,23 +1243,22 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo __
     case 1 : // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
-      strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : "???"))))));
-
       switch(tamTransition) {
         case TT_BACKSPACE :
+          tamCurrentOperation = tamFunction;
           sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 0;
           break;
 
         case TT_OPERATION :
           if(tamOperation==tamCurrentOperation) {
+            tamCurrentOperation = tamFunction;
             sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
             transitionSystemState = 0;
           }
           else {
             tamCurrentOperation = tamOperation;
-            strcpy(transitionSystemOperation, tamOperation==ITM_Max ? STD_UP_ARROW : (tamOperation==ITM_Min ? STD_DOWN_ARROW : (tamOperation==ITM_ADD ? "+" : (tamOperation==ITM_SUB ? "-" : (tamOperation==ITM_MULT ? STD_CROSS : (tamOperation==ITM_DIV ? "/" : "???"))))));
-            sprintf(tamBuffer, "%s%s __", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+            sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
           }
           break;
 
@@ -1275,19 +1272,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DIGIT :
           tamNumber = tamDigit;
-          sprintf(tamBuffer, "%s%s %d_", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation, tamNumber);
+          sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
           transitionSystemState = 9;
           break;
 
         case TT_DOT :
           if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
-            sprintf(tamBuffer, "%s%s .__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+            sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
             transitionSystemState = 10;
           }
           break;
 
         case TT_INDIRECT :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 12;
           break;
 
@@ -1539,7 +1536,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 1;
           break;
 
@@ -1564,14 +1561,14 @@ void tamTransitionSystem(uint16_t tamTransition) {
               return;
             }
             else {
-              sprintf(tamBuffer, "%s%s .%d_", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation, tamNumber);
+              sprintf(tamBuffer, "%s .%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
               transitionSystemState = 11;
             }
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __ ", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 1;
           break;
 
@@ -1600,7 +1597,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s .__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 10;
           break;
 
@@ -1626,19 +1623,19 @@ void tamTransitionSystem(uint16_t tamTransition) {
 
         case TT_DIGIT :
           tamNumber = tamDigit;
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation, tamNumber);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
           transitionSystemState = 13;
           break;
 
         case TT_DOT :
           if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
-            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
             transitionSystemState = 14;
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s __ ", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 1;
           break;
 
@@ -1669,7 +1666,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 12;
           break;
 
@@ -1686,13 +1683,13 @@ void tamTransitionSystem(uint16_t tamTransition) {
         case TT_DIGIT :
           if(tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation, tamNumber);
+            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
             transitionSystemState = 15;
           }
           break;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW "__ ", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 12;
           break;
 
@@ -1726,7 +1723,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
           return;
 
         case TT_BACKSPACE :
-          sprintf(tamBuffer, "%s%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName, transitionSystemOperation);
+          sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
           transitionSystemState = 14;
           break;
 
@@ -1780,7 +1777,6 @@ void tamTransitionSystem(uint16_t tamTransition) {
 }
 
 void closeNim(void) {
-printf("closeNim\n");
   if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
     strcat(aimBuffer, "#0");
     int16_t basePos = strlen(aimBuffer) - 1;
@@ -1850,7 +1846,7 @@ printf("closeNim\n");
               // This should never happen
               displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                showInfoDialog("In function closeNIM:", "there is a non numeric character in the base of the integer!", NULL, NULL);
+                moreInfoOnError("In function closeNIM:", "there is a non numeric character in the base of the integer!", NULL, NULL);
               #endif
               return;
             }
@@ -1860,7 +1856,7 @@ printf("closeNim\n");
           if(base < 2 || base > 16) {
             displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-             showInfoDialog("In function closeNIM:", "the base of the integer must be from 2 to 16!", NULL, NULL);
+             moreInfoOnError("In function closeNIM:", "the base of the integer must be from 2 to 16!", NULL, NULL);
             #endif
             return;
           }
@@ -1870,7 +1866,7 @@ printf("closeNim\n");
               displayCalcErrorMessage(ERROR_INVALID_INTEGER_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                 sprintf(errorMessage, "digit %c is not allowed in base %d!", aimBuffer[i], base);
-                showInfoDialog("In function closeNIM:", errorMessage, NULL, NULL);
+                moreInfoOnError("In function closeNIM:", errorMessage, NULL, NULL);
               #endif
 
               undo();
@@ -1923,7 +1919,7 @@ printf("closeNim\n");
               longIntegerToAllocatedString(maxVal, strMax, sizeof(strMax));
               sprintf(errorMessage, "For word size of %d bit%s and integer mode %s,", shortIntegerWordSize, shortIntegerWordSize>1 ? "s" : "", getShortIntegerModeName(shortIntegerMode));
               sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "the entered number must be from %s to %s!", strMin, strMax);
-              showInfoDialog("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+              moreInfoOnError("In function closeNIM:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
             #endif
             longIntegerFree(maxVal);
             longIntegerFree(minVal);
@@ -1996,7 +1992,7 @@ printf("closeNim\n");
             if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
               displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                showInfoDialog("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
+                moreInfoOnError("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
               #endif
               return;
             }
@@ -2014,7 +2010,7 @@ printf("closeNim\n");
             if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
              displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-               showInfoDialog("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
+               moreInfoOnError("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
              #endif
              return;
             }
@@ -2024,7 +2020,7 @@ printf("closeNim\n");
             if(aimBuffer[i]<'0' || aimBuffer[i]>'9') {
               displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                showInfoDialog("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
+                moreInfoOnError("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
               #endif
               return;
             }
@@ -2039,7 +2035,7 @@ printf("closeNim\n");
           if(denom == 0 && !getSystemFlag(FLAG_SPCRES)) {
             displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
+              moreInfoOnError("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
             #endif
             return;
           }

@@ -25,7 +25,7 @@
 #define EXTRA_INFO_MESSAGE(msg)                                         \
  do {                                                                   \
   sprintf(errorMessage, msg);                                           \
-  showInfoDialog("In function LogXY:", errorMessage, NULL, NULL); \
+  moreInfoOnError("In function LogXY:", errorMessage, NULL, NULL); \
  } while(0)
 
 #else // EXTRA_INFO_ON_CALC_ERROR != 1
@@ -60,7 +60,7 @@ void logxyError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Log of %s with base %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLogXY:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLogXY:", errorMessage, NULL, NULL);
   #endif
 }
 

@@ -3255,8 +3255,8 @@ const font_t standardFont = {
      .data="\x80\xc0\xe0\xe0\xf0\xfc\xfc"},
 
     // uni2434 
-    {.charCode=0xa434, .colsBeforeGlyph= 0, .colsGlyph=10, .colsAfterGlyph= 2, .rowsAboveGlyph= 1, .rowsGlyph=19, .rowsBelowGlyph= 0, .rank1=548, .rank2=556,
-     .data="\x90\x00\x90\x00\x90\x00\x90\x00\x60\x00\x0c\x00\x12\x00\x10\x00\x0c\x00\x02\x00\x12\x00\x0c\x00\x00\x00\x03\x80\x02\x40\x03\x80\x02\x40\x02\x40\x03\x80"},
+    {.charCode=0xa434, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 1, .rowsGlyph=19, .rowsBelowGlyph= 0, .rank1=548, .rank2=554,
+     .data="\x90\x00\x90\x00\x90\x00\x90\x00\x60\x00\x0c\x00\x12\x00\x10\x00\x0c\x00\x02\x00\x12\x00\x0c\x00\x00\x00\x07\x00\x04\x80\x07\x00\x04\x80\x04\x80\x07\x00"},
 
     // uni2460 
     {.charCode=0xa460, .colsBeforeGlyph= 1, .colsGlyph= 4, .colsAfterGlyph= 3, .rowsAboveGlyph=11, .rowsGlyph= 9, .rowsBelowGlyph= 0, .rank1= 15, .rank2= 21,

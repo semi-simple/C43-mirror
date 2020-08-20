@@ -490,7 +490,6 @@ typedef int16_t calcRegister_t;
 #endif
 
 extern dataBlock_t          *ram;
-extern bool_t                allowScreenUpdate;
 extern bool_t                funcOK;
 extern bool_t                keyActionProcessed;
 
@@ -608,7 +607,6 @@ extern uint64_t              shortIntegerSignBit;
 extern uint64_t              systemFlags;
 extern uint64_t              savedSystemFlags;
 extern glyph_t               glyphNotFound;
-extern char                  transitionSystemOperation[4];
 extern char                  displayValueX[DISPLAY_VALUE_LEN];
 extern int16_t               exponentSignLocation;
 extern int16_t               denominatorLocation;

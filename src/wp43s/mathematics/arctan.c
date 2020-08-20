@@ -40,7 +40,7 @@ void arctanError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arctan for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnArctan:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnArctan:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -90,7 +90,7 @@ void fnArg(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot calculate arg for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnArg:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnArg:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -136,7 +136,7 @@ void arctanReal(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arctanReal:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
+        moreInfoOnError("In function arctanReal:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
       #endif
       return;
     }

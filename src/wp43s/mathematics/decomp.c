@@ -53,7 +53,7 @@ void decompError(void) {
 
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
   sprintf(errorMessage, "cannot calculate Decomp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-  showInfoDialog("In function fnDecomp:", errorMessage, NULL, NULL);
+  moreInfoOnError("In function fnDecomp:", errorMessage, NULL, NULL);
   #endif
 }
 

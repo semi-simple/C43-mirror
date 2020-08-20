@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         45  // removed nimBuffer
+#define BACKUP_VERSION         47  // removed allowScreenUpdate
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -85,7 +85,6 @@ void saveCalc(void) {
   save(reg,                                 sizeof(reg),                                backup);
   save(savedStackRegister,                  sizeof(savedStackRegister),                 backup);
   save(kbd_usr,                             sizeof(kbd_usr),                            backup);
-  save(transitionSystemOperation,           sizeof(transitionSystemOperation),          backup);
   save(&tamFunction,                        sizeof(tamFunction),                        backup);
   save(&tamNumber,                          sizeof(tamNumber),                          backup);
   save(&tamNumberMin,                       sizeof(tamNumberMin),                       backup);
@@ -152,7 +151,6 @@ void saveCalc(void) {
   save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                backup);
   save(&temporaryInformation,               sizeof(temporaryInformation),               backup);
   save(&glyphNotFound,                      sizeof(glyphNotFound),                      backup);
-  save(&allowScreenUpdate,                  sizeof(allowScreenUpdate),                  backup);
   save(&funcOK,                             sizeof(funcOK),                             backup);
   save(&screenChange,                       sizeof(screenChange),                       backup);
   save(&exponentSignLocation,               sizeof(exponentSignLocation),               backup);
@@ -228,7 +226,6 @@ void restoreCalc(void) {
     restore(reg,                                 sizeof(reg),                                backup);
     restore(savedStackRegister,                  sizeof(savedStackRegister),                 backup);
     restore(kbd_usr,                             sizeof(kbd_usr),                            backup);
-    restore(transitionSystemOperation,           sizeof(transitionSystemOperation),          backup);
     restore(&tamFunction,                        sizeof(tamFunction),                        backup);
     restore(&tamNumber,                          sizeof(tamNumber),                          backup);
     restore(&tamNumberMin,                       sizeof(tamNumberMin),                       backup);
@@ -299,7 +296,6 @@ void restoreCalc(void) {
     glyphNotFound.data   = malloc(38);
     xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
-    restore(&allowScreenUpdate,                  sizeof(allowScreenUpdate),                  backup);
     restore(&funcOK,                             sizeof(funcOK),                             backup);
     restore(&screenChange,                       sizeof(screenChange),                       backup);
     restore(&exponentSignLocation,               sizeof(exponentSignLocation),               backup);
@@ -1004,7 +1000,7 @@ void fnLoad(uint16_t loadMode) {
   #endif
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
+        moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
         return;
       #endif
     }

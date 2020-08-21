@@ -471,8 +471,6 @@ void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatUnit        (uint16_t unusedParamButMandatory) {}
 void fnShowJM                   (uint16_t unusedParamButMandatory) {}
-void fnJMup                     (uint16_t unusedParamButMandatory) {}
-void fnJMdown                   (uint16_t unusedParamButMandatory) {}
 void fnUserJM                   (uint16_t unusedParamButMandatory) {}
 void fnSigmaAssign              (uint16_t unusedParamButMandatory) {}
 void fnGetSigmaAssignToX        (uint16_t unusedParamButMandatory) {}
@@ -526,6 +524,7 @@ void fnLongInt                  (uint16_t unusedParamButMandatory) {}
 const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /*    1 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*    2 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2304,8 +2303,8 @@ const item_t indexOfItems[] = {
 /* 1765 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },   //JM EE
 /* 1766 */  { fnKeyCC,                     KEY_COMPLEX,                 "COMPLEX",                                     "COMPLEX",                                     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },   //JM Change CC to COMPLEX
 /* 1767 */  { fnRange,                     NOPARAM,                     "RNG",                                         "RNG",                                         0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },
-/* 1768 */  { fnJMup,                      NOPARAM,                     "CONV UP",                                     STD_RIGHT_ARROW "R" STD_RIGHT_ARROW "LI",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},   //JM TYPE CONVERT
-/* 1769 */  { fnJMdown,                    NOPARAM,                     "CONV DN",                                     "SI" STD_LEFT_ARROW "R" STD_LEFT_ARROW,        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },   //JM TYPE CONVERT
+/* 1768 */  { itemToBeCoded,               NOPARAM,                     "1768",                                        "1768",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},   //Spare numbers allowed for Martin
+/* 1769 */  { itemToBeCoded,               NOPARAM,                     "1769",                                        "1769",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},   //Spare numbers allowed for Martin
 /* 1770 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
 /* 1771 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 
@@ -2545,7 +2544,7 @@ const item_t indexOfItems[] = {
 /* 2003 */  { fnT_ARROW,                   2,                           STD_RIGHT_ARROW,                               STD_RIGHT_ARROW,                               0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2004 */  { fnT_ARROW,                   3,                           STD_LEFT_ARROW STD_LEFT_ARROW,                 STD_LEFT_ARROW STD_LEFT_ARROW,                 0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2005 */  { fnT_ARROW,                   4,                           STD_RIGHT_ARROW STD_RIGHT_ARROW,               STD_RIGHT_ARROW STD_RIGHT_ARROW,               0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 2006 */  { fnJM,                        50,                          "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},   //Spare numbers
+/* 2006 */  { fnJM,                        50,                          "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2007 */  { fnXEQNEW,                    NOPARAM,                     "X.NEW",                                       "X.NEW",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2008 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 2009 */  { fnXEQMSAVE,                  TM_VALUE,                    "X.SAVE",                                      "X.SAVE",                                      1,      18,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

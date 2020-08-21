@@ -1106,13 +1106,14 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 
 
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint16_t ch, charCode, lg, tmpxy;
+  uint16_t ch, charCode, lg;
+  int16_t tmpxy;
   bool_t   slc, sec;
 
   if(lastline > 2) {
     clearScreen_old(false, true,false);
     x = 1; 
-    y = 20;
+    y = 40;
   }
 
   lg = stringByteLength(string + offset);
@@ -1136,6 +1137,16 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
       sec = true;
     }
 
+    if((ch == edcursor && string[ch] != 0) ) {
+         tmpxy = y; 
+         while (tmpxy < y + 20) {
+         setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
+         tmpxy++;
+       }
+       x+=2;
+    }
+
+
     charCode = (uint8_t)string[ch++];
     if(charCode & 0x80) {// MSB set?
       charCode = (charCode<<8) | (uint8_t)string[ch++];
@@ -1147,16 +1158,8 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
       yCursor = y;
       return x;
     }
-    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
 
-    if(ch == edcursor && string[ch] != 0) {
-         tmpxy = y; 
-         while (tmpxy < y + 20) {
-         setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
-         tmpxy++;
-       }
-       x+=2;
-    }
+    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
 
 
   }

@@ -1167,8 +1167,8 @@ void fnUserJM(uint16_t jmUser) {
   switch(jmUser) {
   case USER_DEFAULTS:                                           //USER_DEFAULTS FOR USER: E+ CC
     kbd_usr[0].primary     = KEY_CC;
-    kbd_usr[0].gShifted    = KEY_TYPCON_UP;
-    kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+    kbd_usr[0].fShifted    = ITM_RI;
+    kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = KEY_CC;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     fnSetFlag(FLAG_USER);
@@ -1179,8 +1179,8 @@ void fnUserJM(uint16_t jmUser) {
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].fShifted   = KEY_CC;                            //JM Changed CPX menu therefore USER MODE changes
     kbd_usr[0].primary     = -MNU_MyMenu;
-    kbd_usr[0].gShifted    = KEY_TYPCON_UP;
-    kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+    kbd_usr[0].fShifted    = ITM_RI;
+    kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     fnSetFlag(FLAG_USER);
@@ -1198,8 +1198,8 @@ void fnUserJM(uint16_t jmUser) {
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     //kbd_usr[12].gShifted   = KEY_CC;
     kbd_usr[0].primary     = -MNU_MyMenu;
-    kbd_usr[0].gShifted    = KEY_TYPCON_UP;
-    kbd_usr[0].fShifted    = KEY_TYPCON_DN;
+    kbd_usr[0].fShifted    = ITM_RI;
+    kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
     fnSetFlag(FLAG_USER);

@@ -746,9 +746,9 @@ longIntegerFree(li);*/
     }                                                          //^^
     now = sys_current_ms();
     if(nextScreenRefresh <= now) {
-      nextScreenRefresh += LCD_REFRESH_TIMEOUT;
+      nextScreenRefresh += SCREEN_REFRESH_PERIOD;
       if(nextScreenRefresh < now) {
-        nextScreenRefresh = now + LCD_REFRESH_TIMEOUT;                // we were out longer than expected; just skip ahead.
+        nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;                // we were out longer than expected; just skip ahead.
       }
       refreshLcd();
       if(key >= 0) {

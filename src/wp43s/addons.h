@@ -32,8 +32,6 @@ void fn_cnst_op_a   (uint16_t unusedParamButMandatory);
 void fn_cnst_0_cpx  (uint16_t unusedParamButMandatory);
 void fn_cnst_1_cpx  (uint16_t unusedParamButMandatory);
 void fnLongInt      (uint16_t unusedParamButMandatory);
-void fnJMup         (uint16_t unusedParamButMandatory);
-void fnJMdown       (uint16_t unusedParamButMandatory);
 void fnJM_2SI       (uint16_t unusedParamButMandatory);
 void fnRoundi2      (uint16_t unusedParamButMandatory);
 void fnRound2       (uint16_t unusedParamButMandatory);

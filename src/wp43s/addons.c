@@ -356,39 +356,6 @@ void fnLongInt (uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief CONVERT DATA TYPES UP
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnJMup(uint16_t unusedParamButMandatory) {
-  // >>
-  /*
-  if Angle mode: change to Real as applicable using .d.
-  If SHORTINT: change to Real
-  if Real change to LONGINT
-  */
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    fnToReal(0);  
-  }
-  else
-
-  if(dataTypeX == dtShortInteger) {
-    convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal34) {
-    JM_convertReal34ToLongInteger(CONFIRMED);
-  }
-
-}
-
 
 
 
@@ -419,37 +386,6 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
 }
 
 
-/********************************************//**
- * \brief CONVERT DATA TYPES DOWN
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnJMdown(uint16_t unusedParamButMandatory) {
-  // <<
-  /*
-  if Angle mode: change Real, as applicable using .d
-  If LONGINT: change to Real
-  if Real change to ShortInt
-  */
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    fnToReal(0);  
-  }
-  else
-
-  if(dataTypeX == dtLongInteger) {
-    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal34) {
-    JM_convertReal34ToShortInteger(CONFIRMED);
-  }
-}
 
 
 //Rounding

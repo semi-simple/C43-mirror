@@ -69,3 +69,5 @@ WP43S font:
 WP43S font:
 2020-07-31 added USB symbol U+2434
            New WP43S_StandardFont.ttf generated.
+
+2020-08-20 Changed USB icon U+2434

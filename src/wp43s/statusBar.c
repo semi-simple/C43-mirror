@@ -159,47 +159,71 @@ void showFracMode(void) {
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
   
-  if(lastIntegerBase > 0 && lastIntegerBase <= 16) {
+  if(lastIntegerBase > 0 && lastIntegerBase <= 16) {                       //JMvv HEXKEYS
     char str20[20];
     char str40[40];
     str20[0]=0;
-    switch(lastIntegerBase) {                                                        //JMvv
-      case  2: strcpy(str20,"BINBASE");break;
-      case  3: strcpy(str20,"BASE 3" );break;
-      case  4: strcpy(str20,"BASE 4" );break;
-      case  5: strcpy(str20,"BASE 5" );break;
-      case  6: strcpy(str20,"BASE 6" );break;
-      case  7: strcpy(str20,"BASE 7" );break;
-      case  8: strcpy(str20,"OCTBASE");break;
-      case  9: strcpy(str20,"BASE 9" );break;
-      case 10: strcpy(str20,"DECBASE");break;
-      case 11: strcpy(str20,"B11KEYS");break;
-      case 12: strcpy(str20,"B12KEYS");break;
-      case 13: strcpy(str20,"B13KEYS");break;
-      case 14: strcpy(str20,"B14KEYS");break;
-      case 15: strcpy(str20,"B15KEYS");break;
-      case 16: strcpy(str20,"HEXKEYS");break;
-      default:break;
-      }
     str40[0]=0;
-    int16_t y =0;
+    int16_t y = 0;
+    
+    if(lastIntegerBase>10 && lastIntegerBase<=16){
+      strcpy(str20,"HEXKEYS");
+    } else
+    if(lastIntegerBase>=2 && lastIntegerBase<=10){
+      strcpy(str20,"BASE");
+    }
     while(str20[x]!=0) {
       if(str20[x]>='A' && str20[x]<='Z') {
         str40[y++] = 0xa4;
         str40[y++] = str20[x++] + 0x75;
+        str40[y] = 0;
       } 
       else if(str20[x]>='0' && str20[x]<='9') {
         str40[y++] = 0xa0;
         str40[y++] = str20[x++] + 0x50;
+        str40[y] = 0;
       } 
       else {
         str40[y++] = str20[x++];
+        str40[y] = 0;
       }
     }
     showString(str40, &standardFont, X_FRAC_MODE, -4, vmNormal, true, true);        //-4 looks good
     return;
   }                                                                                //JM^^
 
+
+/*
+    if(lastIntegerBase>10 && lastIntegerBase<=16){
+//      strcpy(str20,"HEXKEYS");
+      strcpy(str20,"A-A");
+      str20[2]=65+lastIntegerBase-11;
+    } else
+    if(lastIntegerBase>=2 && lastIntegerBase<=10){
+//      strcpy(str20,"BASE");
+      strcpy(str20,"#");
+    }
+
+    while(str20[x]!=0) {
+//      if(str20[x]>='A' && str20[x]<='Z') {
+//        str40[y++] = 0xa4;
+//        str40[y++] = str20[x++] + 0x75;
+//        str40[y] = 0;
+//      } 
+//      else if(str20[x]>='0' && str20[x]<='9') {
+//        str40[y++] = 0xa0;
+//        str40[y++] = str20[x++] + 0x50;
+//        str40[y] = 0;
+//      } 
+//      else 
+      {
+        str40[y++] = str20[x++];
+        str40[y] = 0;
+      }
+    }
+    showString(str40, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);        //-4 looks good
+
+*/
 
 
   if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {

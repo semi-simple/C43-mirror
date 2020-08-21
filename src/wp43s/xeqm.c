@@ -260,6 +260,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
+
                       if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
                       if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "4");} else
                       if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
@@ -518,6 +519,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"INVRT" )) {strcpy(commandnumber, "1582");} else
                       if (strcompare(commandnumber,"TRANS" )) {strcpy(commandnumber, "1583");} else
                       if (strcompare(commandnumber,"SIG" )) {strcpy(commandnumber, "1682");} else
+                      if (strcompare(commandnumber,"BIN" )) {strcpy(commandnumber, "1685");} else
+                      if (strcompare(commandnumber,"OCT" )) {strcpy(commandnumber, "1686");} else
+                      if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "1687");} else
+                      if (strcompare(commandnumber,"HEX" )) {strcpy(commandnumber, "1688");} else
                       if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1693");} else
                       if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1694");} else
                       if (strcompare(commandnumber,"CASE" )) {strcpy(commandnumber, "1736");} else
@@ -540,9 +545,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"3V/3Z" )) {strcpy(commandnumber, "1764");} else
                       if (strcompare(commandnumber,"X>BAL" )) {strcpy(commandnumber, "1765");} else
                       if (strcompare(commandnumber,"COMPLEX" )) {strcpy(commandnumber, "1766");} else
-                      if (strcompare(commandnumber,"CONVUP" )) {strcpy(commandnumber, "1768");} else
-                      if (strcompare(commandnumber,"CONVDN" )) {strcpy(commandnumber, "1769");} else
                       if (strcompare(commandnumber,">I" )) {strcpy(commandnumber, "1898");} else
+                      if (strcompare(commandnumber,"LNGINT" )) {strcpy(commandnumber, "1925");} else
                       if (strcompare(commandnumber,".MS" )) {strcpy(commandnumber, "1926");} else
                       if (strcompare(commandnumber,">POLAR" )) {strcpy(commandnumber, "1955");} else
                       if (strcompare(commandnumber,">RECT" )) {strcpy(commandnumber, "1956");} else
@@ -581,6 +585,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2019");} else
                       if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2020");} else
                       if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2021");} else
+
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 
@@ -1015,6 +1020,7 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 
 void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
+    //printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
       if(eRPN) {      //JM NEWERPN 
         setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
@@ -1022,10 +1028,11 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
       strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_Y)); 
       T_cursorPos = stringByteLength(aimBuffer);
       fnDrop(0);
-      refreshRegisterLine(REGISTER_T);
+/*      refreshRegisterLine(REGISTER_T);
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);
       refreshRegisterLine(REGISTER_X);
+*/
     }
   }
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
@@ -1036,11 +1043,15 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
       strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X));
       T_cursorPos = stringByteLength(aimBuffer);
       fnDrop(0);
-      fnAim(0);
       #ifndef TESTSUITE_BUILD
+        resetShiftState();
+        calcModeAim(NOPARAM); // Alpha Input Mode
         showSoftmenu(NULL, -MNU_T_EDIT, true);
       #endif
-    }
+    } 
+//    else {
+//    	printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
+//    }
   }
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) != dtString) {
     char line1[TMP_STR_LENGTH];

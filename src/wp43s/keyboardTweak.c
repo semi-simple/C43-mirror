@@ -910,7 +910,7 @@ void fnT_ARROW(uint16_t command) {
        ix = 0; 
        in = 0;
        in_old = 0;
-       while (ix<T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
+       while (ix<=T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
          in_old = in;
          in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
          ix++;

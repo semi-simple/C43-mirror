@@ -33,7 +33,6 @@
 #define US_UNCHANGED  2 // The command leaves the existing UNDO data as is
 
 
-
 #define ITM_NULL                         0
 #define ITM_CtoF                         1
 #define ITM_FtoC                         2
@@ -1812,8 +1811,8 @@
 #define ITM_EE_X2BAL                  1765   //JM EE
 #define KEY_COMPLEX                   1766   //JM CPX
 #define ITM_RNG                       1767   //JM RANGE
-#define KEY_TYPCON_UP                 1768   //JM CPX
-#define KEY_TYPCON_DN                 1769   //JM CPX
+#define Not_used1768                  1768
+#define Not_used1769                  1769
 #define ITM_HOMEx3T                   1770   //JM HOME.3T
 #define STAT_DEMO                     1771   //LOAD STATS GRAPH
 

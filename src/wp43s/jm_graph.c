@@ -212,7 +212,7 @@ void graph_setupmemory(void) {
   }
   if ((telltale != MEM_INITIALIZED) || (gr_x == NULL || gr_y == NULL)) { 
   #ifdef PC_BUILD
-     showInfoDialog("In function graph_setupmemory:", "error allocating memory for graph!", NULL, NULL);
+     moreInfoOnError("In function graph_setupmemory:", "error allocating memory for graph!", NULL, NULL);
      exit(1);
   #endif
   } 
@@ -836,7 +836,7 @@ void graph_plotmem(void) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function graph_plotmem:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function graph_plotmem:", errorMessage, NULL, NULL);
     #endif
   }
 #endif

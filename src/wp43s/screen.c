@@ -1102,7 +1102,7 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 }
 
 
-
+                                                          //JMCURSOR vv
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
   int16_t tmpxy;
@@ -1167,6 +1167,7 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
   return xCursor;
 }
 
+                                                          //JMCURSOR ^^
 
 
 void refresh_gui(void) {                                        //JM vv
@@ -1606,7 +1607,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 
 
-
+//JMCURSOR vv
 /*JMC*/ int16_t tmp;
 /*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
 /*JMC*/   while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > (SCREEN_WIDTH-6)*4)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
@@ -1618,7 +1619,7 @@ void refreshRegisterLine(calcRegister_t regist) {
 /*JMC*/   if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
           cursorFont = &standardFont;
         }
-
+//JMCURSOR  ^^
 
 
       else if(   getSystemFlag(FLAG_FRACT)

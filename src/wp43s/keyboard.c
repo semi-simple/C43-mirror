@@ -549,6 +549,30 @@ void processKeyAction(int16_t item) {
       }                            //JM^^
       break;
 
+
+    case KEY_BST:                    //JMvv used for arrows in AIM
+      if(calcMode == CM_AIM) {
+        keyActionProcessed = true;
+        fnT_ARROW(ITM_T_LEFT_ARROW);
+      }
+      if(!keyActionProcessed){
+         keyActionProcessed = true;
+         addItemToBuffer(KEY_BST);
+      }
+      break;
+
+    case KEY_SST:
+      if(calcMode == CM_AIM) {
+        keyActionProcessed = true;
+        fnT_ARROW(ITM_T_RIGHT_ARROW);
+      }
+      if(!keyActionProcessed){
+         keyActionProcessed = true;
+         addItemToBuffer(KEY_SST);
+      }     
+      break;                       //JM^^
+
+
     case KEY_EXIT1:
       fnKeyExit(NOPARAM);
       keyActionProcessed = true;
@@ -1014,7 +1038,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-          showInfoDialog("In function btnPressed:", errorMessage, NULL, NULL);
+          moreInfoOnError("In function btnPressed:", errorMessage, NULL, NULL);
         #endif
       }
       return;
@@ -1093,7 +1117,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
           }
           aimBuffer[ix+lg]=0;                          //end new buffer
           T_cursorPos_tmp = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 6 /*Normally 8, reduced either side by 1*/, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-          fnT_ARROW(1);                               //move cursor one left
+          fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left
 //JMCURSOR^^ REPLACE STATEMENT BELOW
 //        lg = stringLastGlyph(aimBuffer);
 //        aimBuffer[lg] = 0;
@@ -1169,7 +1193,20 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_AIM:
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && (softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
+
+        //JM Arrow up and down if no menu other than AHOME of MyA       //JMvv
+        if(!arrowCasechange && (softmenuStackPointer > 0) && (
+          softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
+          softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(KEY_UP1);}
+              //ignoring the base menu, MY_ALPHA_MENU below
+              // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
+              // make arrowCasechnage true
+                                                                       //JM^^
+        else
+
+
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
@@ -1213,15 +1250,9 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
         }
       }
       else {
-        //JM Arrow up and down if no menu other than AHOME of MyA
-        if(!arrowCasechange && (softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_ALPHA)) {
-           keyActionProcessed = false;
-        }
-        else {
-          if(alphaCase != AC_UPPER) {
-            alphaCase = AC_UPPER;
-            showAlphaModeonGui(); //dr JM, see keyboardtweaks
-          }
+        if(alphaCase != AC_UPPER) {
+          alphaCase = AC_UPPER;
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
       }
       break;
@@ -1292,7 +1323,20 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_ASM_OVER_AIM:
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && (softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
+
+        //JM Arrow up and down if no menu other than AHOME of MyA       //JMvv
+        if(!arrowCasechange && (softmenuStackPointer > 0) && (
+          softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
+          softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(KEY_DOWN1);}
+              //ignoring the base menu, MY_ALPHA_MENU below
+              // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
+              // make arrowCasechnage true
+                                                                       //JM^^
+        else
+
+
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { //&& softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_T_EDIT)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1330,15 +1374,9 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         }
       }
       else {
-        //JM Arrow up and down if no menu other than AHOME of MyA //JMvv
-        if(!arrowCasechange && (softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_ALPHA)) {
-          keyActionProcessed = false;
-        }                                                         //JM^^
-        else {
-          if(alphaCase != AC_LOWER && arrowCasechange) { //JM
-            alphaCase = AC_LOWER;
-            showAlphaModeonGui(); //dr JM, see keyboardtweaks
-          }
+        if(alphaCase != AC_LOWER && arrowCasechange) { //JM
+          alphaCase = AC_LOWER;
+          showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
       }
       break;

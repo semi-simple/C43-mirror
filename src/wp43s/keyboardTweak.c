@@ -899,14 +899,20 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 
 
 
+  
+ 
+ 
 
 //########################################
 
 void fnT_ARROW(uint16_t command) {
 
-  uint16_t ix, in, ixx, in_old;
+  uint16_t ix, in, ixx, in_old; 
+  int16_t xc, yc;
+  char ss[4];
+
   switch (command) {
-     case 1 /*STD_LEFT_ARROW */ : 
+     case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
        ix = 0; 
        in = 0;
        in_old = 0;
@@ -918,7 +924,7 @@ void fnT_ARROW(uint16_t command) {
        T_cursorPos = in_old;
        break;
 
-     case 2 /*STD_RIGHT_ARROW*/ : 
+     case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
         ix = 0; 
         in = 0;
         while (ix < T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
@@ -928,21 +934,64 @@ void fnT_ARROW(uint16_t command) {
         T_cursorPos = stringNextGlyph(aimBuffer, in);
         break;
 
-     case 3 /*STD_FARLEFT_ARROW */ :
+     case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
         ixx = 0;
         while(ixx<10) {
-          fnT_ARROW(1);
+          fnT_ARROW(ITM_T_LEFT_ARROW);
           ixx++;
         }
         break;
 
-     case 4 /*STD_FARRIGHT_ARROW*/ :
+     case ITM_T_RRIGHT_ARROW /*STD_FARRIGHT_ARROW*/ :
         ixx = 0;
         while(ixx<10) {
-          fnT_ARROW(2);
+          fnT_ARROW(ITM_T_RIGHT_ARROW);
           ixx++;
         }
         break;
+
+
+     case KEY_UP1 /*UP */ :
+        ixx = 0;
+        yc = 0;
+        fnT_ARROW(ITM_T_RIGHT_ARROW);
+        fnT_ARROW(ITM_T_RIGHT_ARROW);
+        while(yc <= SCREEN_WIDTH && ixx < 50) {
+          fnT_ARROW(ITM_T_LEFT_ARROW);
+          stringNextGlyph(aimBuffer, T_cursorPos);
+          ss[0] = aimBuffer[T_cursorPos];
+          if(ss[0] & 0x80) {
+            ss[1]=aimBuffer[T_cursorPos+1];
+            ss[2]=0;
+          } else {
+            ss[1]=0;           
+          }
+          yc += stringWidth(ss,&standardFont,true,true);
+          ixx++;
+        }
+        break;
+
+
+     case KEY_DOWN1 /*DN*/ :
+        ixx = 0;
+        yc = 0;
+        fnT_ARROW(ITM_T_LEFT_ARROW);
+        fnT_ARROW(ITM_T_LEFT_ARROW);
+        while(yc <= SCREEN_WIDTH && ixx < 50) {
+          fnT_ARROW(ITM_T_RIGHT_ARROW);
+          stringNextGlyph(aimBuffer, T_cursorPos);
+          ss[0] = aimBuffer[T_cursorPos];
+          if(ss[0] & 0x80) {
+            ss[1]=aimBuffer[T_cursorPos+1];
+            ss[2]=0;
+          } else {
+            ss[1]=0;           
+          }
+          yc += stringWidth(ss,&standardFont,true,true);
+          ixx++;
+        }
+        break;
+
 
      default: break;
   }

@@ -299,10 +299,12 @@ switch (event_keyval) {
     case 65288: // Backspace
       btnClicked(w, "16");
       break;
-
 //ROW 5
     case 65362:                                               //JM     // CursorUp //JM
       btnClicked(w, "17");
+      break;
+    case 65361:                                               //JM     // CursorLt BST //JM
+      btnClicked_NU(w, "17");
       break;
     case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_UC(w, "18");
@@ -319,6 +321,9 @@ switch (event_keyval) {
 //ROW 6
     case 65364:                                               //JM     // CursorDown //JM
       btnClicked(w, "22");
+      break;
+    case 65363:                                               //JM     // CursorRt SST //JM
+      btnClicked_NU(w, "22");
       break;
     case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_UC(w, "23");

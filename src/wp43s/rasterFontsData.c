@@ -3311,7 +3311,7 @@ const font_t standardFont = {
      .data="\x80\xc0\xe0\xe0\xf0\xfc\xfc"},
 
     // uni2434 
-    {.charCode=0xa434, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 1, .rowsGlyph=19, .rowsBelowGlyph= 0, .rank1=548, .rank2=556,
+    {.charCode=0xa434, .colsBeforeGlyph= 0, .colsGlyph= 9, .colsAfterGlyph= 2, .rowsAboveGlyph= 1, .rowsGlyph=19, .rowsBelowGlyph= 0, .rank1=548, .rank2=554,
      .data="\x3e\x00\x22\x00\x22\x00\x7f\x00\xc1\x80\x80\x80\x80\x80\x80\x80\x80\x80\x80\x80\xff\x80\x7f\x00\x7f\x00\x7f\x00\x7f\x00\x08\x00\x08\x00\x08\x00\x08\x00"},
 
     // uni2460 

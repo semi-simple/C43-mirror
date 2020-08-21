@@ -2375,7 +2375,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s%s", tmpStr3000 + 2100, getRegisterDataTypeName(SHOWregis, true, false));
-        showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
   }

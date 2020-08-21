@@ -192,8 +192,6 @@ void executeFunction(const char *data) {
       //printf("%d--\n",calcMode);
     {
       if(calcMode != CM_CONFIRMATION) {
-        allowScreenUpdate = true;
-
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
         }
@@ -277,8 +275,6 @@ int16_t determineItem(const char *data) {
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
-
-  allowScreenUpdate = true;
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
@@ -1412,7 +1408,7 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
 
     case CM_NIM:
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
+        moreInfoOnError("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
       #endif
       break;
 

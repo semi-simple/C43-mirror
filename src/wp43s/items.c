@@ -42,7 +42,7 @@ void itemToBeCoded(uint16_t unusedParamButMandatory) {
 void fnToBeCoded(void) {
   displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
-    showInfoDialog("Function to be coded", "for that data type(s)!", NULL, NULL);
+    moreInfoOnError("Function to be coded", "for that data type(s)!", NULL, NULL);
   #endif
 }
 #endif
@@ -90,6 +90,9 @@ void reallyRunFunction(int16_t func, uint16_t param) {
     //printf("Forced ERPN items.c\n");
   }                                        //JM NEWERPN
 
+  #ifdef PC_BUILD
+    refreshLcd(NULL);
+  #endif
 }
 
 
@@ -109,7 +112,7 @@ void runFunction(int16_t func) {
   if(func >= LAST_ITEM) {
     #ifdef PC_BUILD
       sprintf(errorMessage, "item (%" FMT16S ") must be below LAST_ITEM", func);
-      showInfoDialog("In function runFunction:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
     #endif
   }
 
@@ -137,7 +140,7 @@ void runFunction(int16_t func) {
     displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "%" FMT16S " = %s", func, indexOfItems[func].itemCatalogName);
-      showInfoDialog("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
+      moreInfoOnError("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
     #endif
   }
 }

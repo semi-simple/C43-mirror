@@ -110,7 +110,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   }
   #ifdef PC_BUILD
     else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      showInfoDialog("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
+      moreInfoOnError("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
   #endif
 }*/
@@ -1497,7 +1497,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     }
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
+      moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
     #endif
 
     strcpy(displayString, "Integer data representation to wide!");
@@ -1553,7 +1553,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     }
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
+      moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
     #endif
 
     strcpy(displayString, "Integer data representation to wide!");
@@ -1896,7 +1896,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnShow:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;
   }

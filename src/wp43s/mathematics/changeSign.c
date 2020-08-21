@@ -40,7 +40,7 @@ void chsError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot change the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnChangeSign:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnChangeSign:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -97,7 +97,7 @@ void chsReal(void) {
   if(!getSystemFlag(FLAG_SPCRES) && real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function chsReal:", "cannot change infinity sign while D flag is clear", NULL, NULL);
+      moreInfoOnError("In function chsReal:", "cannot change infinity sign while D flag is clear", NULL, NULL);
     #endif
     return;
   }
@@ -116,7 +116,7 @@ void chsCplx(void) {
     if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCplx:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
+        moreInfoOnError("In function chsCplx:", "cannot change infinity sign of real part while D flag is clear", NULL, NULL);
       #endif
       return;
     }
@@ -124,7 +124,7 @@ void chsCplx(void) {
     if(real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_X))) {
       displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(REGISTER_X)) ? ERROR_OVERFLOW_MINUS_INF : ERROR_OVERFLOW_PLUS_INF , ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function chsCplx:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
+        moreInfoOnError("In function chsCplx:", "cannot change infinity sign of imaginary part while D flag is clear", NULL, NULL);
       #endif
       return;
     }

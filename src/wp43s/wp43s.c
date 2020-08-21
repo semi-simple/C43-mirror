@@ -46,7 +46,6 @@
 #endif
 
 dataBlock_t          *ram;
-bool_t                allowScreenUpdate;
 bool_t                funcOK;
 bool_t                keyActionProcessed;
 const font_t         *fontForShortInteger;
@@ -186,7 +185,6 @@ uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;
 uint64_t              savedSystemFlags;
 glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
-char                  transitionSystemOperation[4];
 char                  displayValueX[DISPLAY_VALUE_LEN];
 int16_t               exponentSignLocation;
 int16_t               denominatorLocation;
@@ -280,7 +278,6 @@ void setupDefaults(void) {
   #ifdef PC_BUILD
     debugWindow = DBG_REGISTERS;
   #endif
-  allowScreenUpdate   = false;
 
   temporaryInformation = TI_NO_INFO;
 
@@ -399,8 +396,6 @@ void setupDefaults(void) {
   setSystemFlag(FLAG_ASLIFT);
 
   lastErrorCode = 0;
-
-  allowScreenUpdate = true;
 
   gammaLanczosCoefficients = (real51_t *)const_gammaC01;
 

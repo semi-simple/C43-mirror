@@ -50,7 +50,7 @@ void rmdError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot RMD %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnRmd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnRmd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -91,7 +91,7 @@ void rmdLonILonI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonILonI:", "cannot IDIVR a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdLonILonI:", "cannot IDIVR a long integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -127,7 +127,7 @@ void rmdLonIShoI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIShoI:", "cannot IDIVR a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdLonIShoI:", "cannot IDIVR a long integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -163,7 +163,7 @@ void rmdShoILonI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoILonI:", "cannot IDIVR a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdShoILonI:", "cannot IDIVR a short integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -197,7 +197,7 @@ void rmdLonIReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonIReal:", "cannot IDIVR a long integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdLonIReal:", "cannot IDIVR a long integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -227,7 +227,7 @@ void rmdRealLonI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRealLonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function rmdRealLonI:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -260,7 +260,7 @@ void rmdShoIShoI(void) {
   if(longIntegerIsZero(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdLonILonI:", "cannot IDIVR a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdLonILonI:", "cannot IDIVR a short integer by 0", NULL, NULL);
     #endif
   }
   else {
@@ -295,7 +295,7 @@ void rmdShoIReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdShoIReal:", "cannot IDIVR a short integer by 0", NULL, NULL);
+      moreInfoOnError("In function rmdShoIReal:", "cannot IDIVR a short integer by 0", NULL, NULL);
     #endif
     return;
   }
@@ -325,7 +325,7 @@ void rmdRealShoI(void) {
   if(realIsZero(&x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRealShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function rmdRealShoI:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }
@@ -355,7 +355,7 @@ void rmdRealReal(void) {
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function rmdRealReal:", "cannot IDIVR a real34 by 0", NULL, NULL);
+      moreInfoOnError("In function rmdRealReal:", "cannot IDIVR a real34 by 0", NULL, NULL);
     #endif
     return;
   }

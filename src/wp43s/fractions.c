@@ -39,7 +39,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
+      moreInfoOnError("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
     undo();
     return;
@@ -48,7 +48,7 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
   if(realIsNaN(&reX)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
+      moreInfoOnError("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
     #endif
     undo();
     return;
@@ -113,7 +113,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   else {
     #ifdef PC_BUILD
       sprintf(errorMessage, "%s cannot be shown as a fraction!", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fraction:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fraction:", errorMessage, NULL, NULL);
     #endif
     *sign             = 0;
     *intPart          = 0;

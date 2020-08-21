@@ -102,7 +102,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "You cannot use Re->Cx with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-      showInfoDialog("In function fnReToCx:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnReToCx:", errorMessage, NULL, NULL);
     #endif
   }
 }

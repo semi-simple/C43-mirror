@@ -40,7 +40,7 @@ void log2Error(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLog2:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLog2:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -82,7 +82,7 @@ void log2LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2LonI:", "cannot calculate log2(0)", NULL, NULL);
+        moreInfoOnError("In function log2LonI:", "cannot calculate log2(0)", NULL, NULL);
       #endif
     }
   }
@@ -113,7 +113,7 @@ void log2LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2LonI:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function log2LonI:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -151,7 +151,7 @@ void log2Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Real:", "cannot calculate log2(0)", NULL, NULL);
+        moreInfoOnError("In function log2Real:", "cannot calculate log2(0)", NULL, NULL);
       #endif
     }
   }
@@ -160,7 +160,7 @@ void log2Real(void) {
     if(!getSystemFlag(FLAG_SPCRES)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
+        moreInfoOnError("In function log2Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
       #endif
       return;
     }
@@ -202,7 +202,7 @@ void log2Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Real:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function log2Real:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -220,7 +220,7 @@ void log2Cplx(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log2Cplx:", "cannot calculate log2(0)", NULL, NULL);
+        moreInfoOnError("In function log2Cplx:", "cannot calculate log2(0)", NULL, NULL);
       #endif
     }
   }

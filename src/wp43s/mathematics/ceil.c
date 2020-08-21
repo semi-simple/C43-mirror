@@ -40,7 +40,7 @@ void ceilError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate ceil for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnCeil:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnCeil:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -78,7 +78,7 @@ void ceilReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilReal:", "cannot use NaN as X input of ceil", NULL, NULL);
+      moreInfoOnError("In function ceilReal:", "cannot use NaN as X input of ceil", NULL, NULL);
     #endif
     return;
   }
@@ -86,7 +86,7 @@ void ceilReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function ceilReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ceil", NULL, NULL);
+      moreInfoOnError("In function ceilReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ceil", NULL, NULL);
     #endif
     return;
   }

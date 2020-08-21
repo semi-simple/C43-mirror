@@ -371,7 +371,7 @@ void copyAllRegistersToClipboard(void) {
  *                          * true  = timer will call this function again
  *                          * false = timer stops calling this function
  ***********************************************/
-gboolean refreshLcd(gpointer data) { // This function is called every SCREEN_REFRESH_PERIOD ms by a GTK timer
+gboolean refreshLcd(gpointer unusedData) { // This function is called every SCREEN_REFRESH_PERIOD ms by a GTK timer
   // Cursor blinking
   static bool_t cursorBlink=true;
 
@@ -397,13 +397,12 @@ gboolean refreshLcd(gpointer data) { // This function is called every SCREEN_REF
   // Update date and time
   getTimeString(dateTimeString);
   if(strcmp(dateTimeString, oldTime)) {
-    allowScreenUpdate = true;
     strcpy(oldTime, dateTimeString);
     showDateTime();
   }
 
   // If LCD has changed: update the GTK screen
-  if(screenChange && allowScreenUpdate) {
+  if(screenChange) {
     #if (__linux__ == 1) && (DEBUG_PANEL == 1)
       refreshDebugPanel();
     #endif
@@ -450,7 +449,6 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
   // Update date and time
   getTimeString(dateTimeString);
   if(strcmp(dateTimeString, oldTime)) {
-    allowScreenUpdate = true;
     strcpy(oldTime, dateTimeString);
     showDateTime();
   }
@@ -1531,7 +1529,7 @@ void refreshRegisterLine(calcRegister_t regist) {
         else {
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "Error message %" FMT8U " is too wide!", lastErrorCode);
-            showInfoDialog("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
+            moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
           #endif
           sprintf(tmpStr3000, "Error message %" FMT8U " is too wide!", lastErrorCode);
           w = stringWidth(tmpStr3000, &standardFont, true, true);
@@ -1648,7 +1646,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           lineWidth = w;
           if(w + prefixWidth > SCREEN_WIDTH) {
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function refreshRegisterLine:", "Fraction representation too wide!", tmpStr3000, NULL);
+              moreInfoOnError("In function refreshRegisterLine:", "Fraction representation too wide!", tmpStr3000, NULL);
             #endif
             strcpy(tmpStr3000, "Fraction representation too wide!");
             w = stringWidth(tmpStr3000, &standardFont, false, true);
@@ -2098,7 +2096,7 @@ void refreshRegisterLine(calcRegister_t regist) {
           w = stringWidth(tmpStr3000, &standardFont, false, true);
           if(w > SCREEN_WIDTH) {
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              showInfoDialog("In function refreshRegisterLine:", "Long integer representation too wide!", tmpStr3000, NULL);
+              moreInfoOnError("In function refreshRegisterLine:", "Long integer representation too wide!", tmpStr3000, NULL);
             #endif
             strcpy(tmpStr3000, "Long integer representation too wide!");
           }

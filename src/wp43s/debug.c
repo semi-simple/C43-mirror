@@ -1378,13 +1378,11 @@ void debugNIM(void) {
   }
 
   void btnBitFieldsClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_BIT_FIELDS;
     refreshDebugPanel();
   }
 
   void btnFlagsClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_FLAGS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Flags:");
     //gtk_widget_show(frmCalc);
@@ -1392,42 +1390,36 @@ void debugNIM(void) {
   }
 
   void btnRegistersClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
 
   void btnLocalRegistersClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_LOCAL_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
 
   void btnStatisticalSumsClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_STATISTICAL_SUMS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
 
   void btnNamedVariablesClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_NAMED_VARIABLES;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
 
   void btnSavedStackRegistersClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     debugWindow = DBG_TMP_SAVED_STACK_REGISTERS;
     //gtk_label_set_label(GTK_LABEL(lbl1[0]), "Regis Addres   Type  Size Content");
     refreshDebugPanel();
   }
 
   void chkHexaStringClicked(GtkWidget* w, gpointer data) {
-    allowScreenUpdate = true;
     refreshDebugPanel();
   }
 #endif

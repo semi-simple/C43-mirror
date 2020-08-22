@@ -908,7 +908,7 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 void fnT_ARROW(uint16_t command) {
 
   uint16_t ix, in, ixx, in_old; 
-  int16_t xc, yc;
+  int16_t yc;
   char ss[4];
 
   switch (command) {

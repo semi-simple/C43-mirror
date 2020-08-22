@@ -1078,7 +1078,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   uint16_t lg, newXCursor;
-//  uint16_t x, y;   //JMCURSOR removed these variables
+  uint16_t x, y;
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -1093,14 +1093,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_AIM:
       if(stringByteLength(aimBuffer) > 0) {
-        lg = stringLastGlyph(aimBuffer);
-        aimBuffer[lg] = 0;
-      }
-      break;
 
-    case CM_ASM_OVER_AIM:
-
-      if(stringByteLength(aimBuffer) > 0) {
 //JMCURSORvv SPLIT STRING AT CURSOR POSITION
           uint8_t T_cursorPos_tmp;
           T_cursorPos_tmp = aimBuffer[T_cursorPos];
@@ -1118,15 +1111,20 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
           aimBuffer[ix+lg]=0;                          //end new buffer
           T_cursorPos_tmp = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 6 /*Normally 8, reduced either side by 1*/, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
           fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left
-//JMCURSOR^^ REPLACE STATEMENT BELOW
-//        lg = stringLastGlyph(aimBuffer);
-//        aimBuffer[lg] = 0;
-//        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-//        for(x=newXCursor; x<xCursor+6; x++) {
-//          for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
-//            clearPixel(x, y);
-//          }
-//        }
+//JMCURSOR^^
+      }
+      break;
+
+    case CM_ASM_OVER_AIM:
+      if(stringByteLength(aimBuffer) > 0) {
+        lg = stringLastGlyph(aimBuffer);
+        aimBuffer[lg] = 0;
+        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+        for(x=newXCursor; x<xCursor+6; x++) {
+          for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
+            clearPixel(x, y);
+          }
+        }
         xCursor = newXCursor;
       }
       break;

@@ -154,76 +154,57 @@ void showAngularMode(void) {
  * \return void
  ***********************************************/
 void showFracMode(void) {
-  int16_t x = 0;
+    char str20[20];
+    char str21[20];
+    char str40[40];
+    void conv() {
+      str40[0]=0;
+      int16_t x = 0;
+      int16_t y = 0;
+      while(str20[x]!=0) {
+        if(str20[x]>='A' && str20[x]<='Z') {
+          str40[y++] = 0xa4;
+          str40[y++] = str20[x++] + 0x75;
+          str40[y] = 0;
+        } 
+        else if(str20[x]>='0' && str20[x]<='9') {
+          str40[y++] = 0xa0;
+          str40[y++] = str20[x++] + 0x50;
+          str40[y] = 0;
+        } 
+        else {
+          str40[y++] = str20[x++];
+          str40[y] = 0;
+        }
+      }
+    }
+
+
 
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
-  
+  int16_t x = 0;
+
   if(lastIntegerBase > 0 && lastIntegerBase <= 16) {                       //JMvv HEXKEYS
-    char str20[20];
-    char str40[40];
     str20[0]=0;
-    str40[0]=0;
-    int16_t y = 0;
     
     if(lastIntegerBase>10 && lastIntegerBase<=16){
-      strcpy(str20,"HEXKEYS");
+      strcpy(str21,"KEYS");
+      x = showString("KEYS", &standardFont, X_FRAC_MODE, 0 , vmNormal, true, true);//-4 looks good
+      strcpy(str20,"A"); conv();
+      x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
+      x = showString("-",    &standardFont, x,  2 , vmNormal, true, true);         //-4 looks good
+      strcpy(str20,"F"); conv();
+      x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
+
     } else
     if(lastIntegerBase>=2 && lastIntegerBase<=10){
-      strcpy(str20,"BASE");
+      x = showString("BASE", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true); //-4 looks good
     }
-    while(str20[x]!=0) {
-      if(str20[x]>='A' && str20[x]<='Z') {
-        str40[y++] = 0xa4;
-        str40[y++] = str20[x++] + 0x75;
-        str40[y] = 0;
-      } 
-      else if(str20[x]>='0' && str20[x]<='9') {
-        str40[y++] = 0xa0;
-        str40[y++] = str20[x++] + 0x50;
-        str40[y] = 0;
-      } 
-      else {
-        str40[y++] = str20[x++];
-        str40[y] = 0;
-      }
-    }
-    showString(str40, &standardFont, X_FRAC_MODE, -4, vmNormal, true, true);        //-4 looks good
     return;
   }                                                                                //JM^^
 
 
-/*
-    if(lastIntegerBase>10 && lastIntegerBase<=16){
-//      strcpy(str20,"HEXKEYS");
-      strcpy(str20,"A-A");
-      str20[2]=65+lastIntegerBase-11;
-    } else
-    if(lastIntegerBase>=2 && lastIntegerBase<=10){
-//      strcpy(str20,"BASE");
-      strcpy(str20,"#");
-    }
-
-    while(str20[x]!=0) {
-//      if(str20[x]>='A' && str20[x]<='Z') {
-//        str40[y++] = 0xa4;
-//        str40[y++] = str20[x++] + 0x75;
-//        str40[y] = 0;
-//      } 
-//      else if(str20[x]>='0' && str20[x]<='9') {
-//        str40[y++] = 0xa0;
-//        str40[y++] = str20[x++] + 0x50;
-//        str40[y] = 0;
-//      } 
-//      else 
-      {
-        str40[y++] = str20[x++];
-        str40[y] = 0;
-      }
-    }
-    showString(str40, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);        //-4 looks good
-
-*/
 
 
   if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {

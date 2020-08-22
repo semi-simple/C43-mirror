@@ -1105,8 +1105,10 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
                                                           //JMCURSOR vv
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
-  int16_t tmpxy;
+  int16_t tmpxy, glyphId;
   bool_t   slc, sec;
+  int16_t numPixels;
+  const glyph_t *glyph;
 
   if(lastline > 2) {
     clearScreen_old(false, true,false);
@@ -1135,23 +1137,33 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
       sec = true;
     }
 
-    if((ch == edcursor && string[ch] != 0) ) {
-         tmpxy = y; 
-         while (tmpxy < y + 20) {
+    if((ch == edcursor && string[ch] != 0) ) {                 //draw cursor
+         tmpxy = y-1; 
+         while (tmpxy < y + 22) {
          setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
          tmpxy++;
        }
        x+=2;
     }
 
-
-    charCode = (uint8_t)string[ch++];
+    charCode = (uint8_t)string[ch++];                         //get glyph code
     if(charCode & 0x80) {// MSB set?
       charCode = (charCode<<8) | (uint8_t)string[ch++];
     }
+    glyph = NULL;
+    glyphId = findGlyph(font, charCode);
+    if(glyphId >= 0) {
+      glyph = (font->glyphs) + glyphId;
+    }
+
+    numPixels = 0;
+    numPixels += glyph->colsGlyph + glyph->colsAfterGlyph;
+    numPixels += glyph->colsBeforeGlyph;
+    if(string[ch]== 0) numPixels += 8;
     
-    if(x>SCREEN_WIDTH-20 && lastline > 0) { x = 1; y += 21; lastline--;}
-    if(x>SCREEN_WIDTH-20 && lastline == -1) {   
+    
+    if(x+numPixels>SCREEN_WIDTH && lastline >  1) { x = 1; y += 21; lastline--;}
+    if(x+numPixels>SCREEN_WIDTH && lastline <= 1) {   
       xCursor = x;
       yCursor = y;
       return x;

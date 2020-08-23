@@ -520,7 +520,7 @@ void shrinkNimBuffer (void) {                              //JMNIM vv
       if(aimBuffer[ix] >= 'A') {
         hexD++;
       }
-      if(aimBuffer[ix]==35 || reached_end) {
+      if(aimBuffer[ix]=='#' || aimBuffer[ix]=='.' || reached_end) {               //chr(35) = "#"
         aimBuffer[ix]=0; 
         reached_end = true;
         //printf(">>> ***A # found. hexD=%d\n",hexD);

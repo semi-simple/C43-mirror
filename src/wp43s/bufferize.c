@@ -400,6 +400,7 @@ void addItemToNimBuffer(int16_t item) {
         aimBuffer[3] = 0;
         nimNumberPart = NP_REAL_FLOAT_PART;
         lastIntegerBase = 0;
+        fnRefreshRadioState(0, 0);                                                //JMNIM
         break;
 
       case CHR_PERIOD :
@@ -613,6 +614,7 @@ void addItemToNimBuffer(int16_t item) {
       }
 
       lastIntegerBase = 0;
+      fnRefreshRadioState(0, 0);                                                //JMNIM
 
       switch(nimNumberPart) {
         case NP_INT_10 :
@@ -659,6 +661,7 @@ void addItemToNimBuffer(int16_t item) {
       }
 
       lastIntegerBase = 0;
+      fnRefreshRadioState(0, 0);                                                //JMNIM
 
       switch(nimNumberPart) {
         case NP_INT_10 :
@@ -695,6 +698,7 @@ void addItemToNimBuffer(int16_t item) {
       done = true;
 
       lastIntegerBase = 0;
+      fnRefreshRadioState(0, 0);                                                //JMNIM
 
       if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
         strcat(aimBuffer, "#");
@@ -765,6 +769,7 @@ void addItemToNimBuffer(int16_t item) {
       done = true;
 
       lastIntegerBase = 0;
+      fnRefreshRadioState(0, 0);                                                //JMNIM
 
       switch(nimNumberPart) {
        case NP_REAL_EXPONENT :
@@ -1945,6 +1950,7 @@ printf("closeNim\n");
   }
   else {
     lastIntegerBase = 0;
+    fnRefreshRadioState(0, 0);                                                //JMNIM
   }
 
   int16_t lastChar = strlen(aimBuffer) - 1;
@@ -2110,6 +2116,7 @@ printf("closeNim\n");
 
           *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
           lastIntegerBase = base;
+          fnRefreshRadioState(0, 0);                                                //JMNIM
           aimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
 
           longIntegerFree(maxVal);

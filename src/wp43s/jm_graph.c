@@ -384,6 +384,14 @@ void placePixel(uint16_t x, uint8_t y) {
 #endif
 }
 
+void removePixel(uint16_t x, uint8_t y) {
+#ifndef TESTSUITE_BUILD
+  if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+SCREEN_MIN_GRAPH) {
+    clearPixel(x,y);
+  }
+#endif
+}
+
 
 //###################################################################################
 float auto_tick(float tick_int_f) {
@@ -556,6 +564,44 @@ void graph_axis (void){
 }
 
 
+void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+   pixelline(xo,yo,xn,yn,1);
+ }
+
+
+void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+    uint16_t x1;  //range 0-399
+    uint8_t  y1;  //range 0-239
+    #ifdef STATDEBUG
+    printf("%d %d   %d %d \n",xo,yo,xn,yn);
+    #endif
+    if(xo > xn) {
+      for(x1=xo; x1!=xn; x1-=1) {
+        y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
+      }
+    } 
+    else if(xo < xn) {
+      for(x1=xo; x1!=xn; x1+=1) {
+        y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
+        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
+      }
+    }
+    if(yo > yn) {
+      for(y1=yo; y1!=yn; y1-=1) {
+        x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
+      }
+    } 
+    else if(yo < yn) {
+      for(y1=yo; y1!=yn; y1+=1) {
+        x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
+        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
+      }
+    } else {
+        if(vmNormal) placePixel(xn,yn); else removePixel(xn,yn);
+    }
+  }
 
 
 //####################################################
@@ -564,42 +610,6 @@ void graph_axis (void){
 
 void graph_plotmem(void) {
   #ifndef TESTSUITE_BUILD
-
-      void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        uint16_t x1;  //range 0-399
-        uint8_t  y1;  //range 0-239
-        #ifdef STATDEBUG
-        printf("%d %d   %d %d \n",xo,yo,xn,yn);
-        #endif
-        if(xo > xn) {
-          for(x1=xo; x1!=xn; x1-=1) {
-            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-            placePixel(x1,y1);
-          }
-        } 
-        else if(xo < xn) {
-          for(x1=xo; x1!=xn; x1+=1) {
-            y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-            placePixel(x1,y1);
-          }
-        }
-
-        if(yo > yn) {
-          for(y1=yo; y1!=yn; y1-=1) {
-            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-            placePixel(x1,y1);
-          }
-        } 
-        else if(yo < yn) {
-          for(y1=yo; y1!=yn; y1+=1) {
-            x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-            placePixel(x1,y1);
-          }
-        } else {
-          placePixel(xn,yn);
-        }
-      }
-
 
       void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
         float dx, dy, ddx, ddy, zz, zzz;

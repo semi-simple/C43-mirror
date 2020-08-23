@@ -1074,6 +1074,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
   }
+  compressString = 0;        //JM compressString
   return x;
 }
 
@@ -1103,17 +1104,20 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 
 
                                                           //JMCURSOR vv
+#define x_offset 40
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
   int16_t tmpxy, glyphId;
   bool_t   slc, sec;
-  int16_t numPixels;
+  int16_t numPixels, orglastlines;
   const glyph_t *glyph;
+
+  orglastlines = lastline;
 
   if(lastline > 2) {
     clearScreen_old(false, true,false);
-    x = 1; 
-    y = 40;
+    x = x_offset; 
+    y = 20;
   }
 
   lg = stringByteLength(string + offset);
@@ -1138,8 +1142,8 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     }
 
     if((ch == edcursor && string[ch] != 0) ) {                 //draw cursor
-         tmpxy = y-1; 
-         while (tmpxy < y + 22) {
+       tmpxy = y-1;
+       while (tmpxy < y + 22) {
          setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
          tmpxy++;
        }
@@ -1157,13 +1161,23 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     }
 
     numPixels = 0;
-    numPixels += glyph->colsGlyph + glyph->colsAfterGlyph;
-    numPixels += glyph->colsBeforeGlyph;
+
+    numPixels += glyph->colsGlyph + glyph->colsAfterGlyph + glyph->colsBeforeGlyph;    // get width of glyph
+     printf(">>> lastline=%d string[ch]=%d x=%d numPixels=%d", lastline, string[ch], x, numPixels);
     if(string[ch]== 0) numPixels += 8;
-    
-    
-    if(x+numPixels>SCREEN_WIDTH && lastline >  1) { x = 1; y += 21; lastline--;}
-    if(x+numPixels>SCREEN_WIDTH && lastline <= 1) {   
+     printf("±±± lastline=%d string[ch]=%d x=%d numPixels=%d\n", lastline, string[ch], x, numPixels);
+
+    if(x + numPixels > SCREEN_WIDTH-1 && lastline == orglastlines) { 
+      x = x_offset; 
+      y += 21; 
+      lastline--;
+    } else    
+    if(x + numPixels > SCREEN_WIDTH-1 && lastline > 1) { 
+      x = 1; 
+      y += 21; 
+      lastline--;
+    } else
+    if(x + numPixels > SCREEN_WIDTH-1 && lastline <= 1) {   
       xCursor = x;
       yCursor = y;
       return x;
@@ -1175,7 +1189,8 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
   }
   xCursor = x;
   yCursor = y;
-  x = showGlyphCode(32, font, x, y, videoMode, showLeadingCols, showEndingCols) - compressString;
+//  x = showGlyphCode(32, font, x, y, videoMode, showLeadingCols, showEndingCols) - compressString;
+  compressString = 0;        //JM compressString
   return xCursor;
 }
 
@@ -1620,14 +1635,22 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 
 //JMCURSOR vv
-/*JMC*/ int16_t tmp;
-/*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
-/*JMC*/   while((stringWidth(aimBuffer + tmp, &standardFont, true, true) > (SCREEN_WIDTH-6)*4)  &&  (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   ) {
-/*JMC*/     tmp = stringNextGlyph(aimBuffer, tmp);
-/*JMC*/   }
+        #define lines 5
 /*JMC*/   if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
 /*JMC*/   if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-          showStringEd(4,tmp, T_cursorPos, aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
+/*JMC*/   int16_t tmp;
+/*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
+/*JMC*/   int16_t sw;
+          if(lines==1) {sw = SCREEN_WIDTH-1 - x_offset;} 
+          else if(lines==2) {sw = (SCREEN_WIDTH-1 - x_offset)*2;}
+          else {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}
+printf(">>>%d\n",sw);
+//MAKE SURE THAT T_cursorpos does never go off screen, on the right hand side of the last editing line. If off screen tmp must be increased to pull the cursor back on screen.
+
+        while((stringWidth(aimBuffer + tmp, &standardFont, true, true) - stringWidth(aimBuffer + (max(0,T_cursorPos - 10)), &standardFont, true, true) > sw && (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   )) {
+/*JMC*/     tmp = stringNextGlyph(aimBuffer, tmp);
+/*JMC*/   }
+          showStringEd(lines ,tmp, T_cursorPos, aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
 /*JMC*/   if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
           cursorFont = &standardFont;
         }

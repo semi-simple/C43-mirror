@@ -42,6 +42,8 @@ uint16_t ix_count;
 int8_t plotmode;                            //      _SCAT
 #define Aspect_Square false
 
+void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+
 void fnGraph          (uint16_t func);
 void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 

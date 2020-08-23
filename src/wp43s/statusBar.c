@@ -155,8 +155,8 @@ void showAngularMode(void) {
  ***********************************************/
 void showFracMode(void) {
     char str20[20];
-    char str21[20];
     char str40[40];
+
     void conv() {
       str40[0]=0;
       int16_t x = 0;
@@ -189,8 +189,7 @@ void showFracMode(void) {
     str20[0]=0;
     
     if(lastIntegerBase>10 && lastIntegerBase<=16){
-      strcpy(str21,"KEYS");
-      x = showString("KEYS", &standardFont, X_FRAC_MODE, 0 , vmNormal, true, true);//-4 looks good
+      x = showString("#KEY", &standardFont, X_FRAC_MODE, 0 , vmNormal, true, true);//-4 looks good
       strcpy(str20,"A"); conv();
       x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
       x = showString("-",    &standardFont, x,  2 , vmNormal, true, true);         //-4 looks good
@@ -199,7 +198,7 @@ void showFracMode(void) {
 
     } else
     if(lastIntegerBase>=2 && lastIntegerBase<=10){
-      x = showString("BASE", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true); //-4 looks good
+      x = showString("#BASE", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true); //-4 looks good
     }
     return;
   }                                                                                //JM^^

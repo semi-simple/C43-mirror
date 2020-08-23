@@ -1640,7 +1640,8 @@ void refreshRegisterLine(calcRegister_t regist) {
 /*JMC*/   if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
 /*JMC*/   int16_t tmp;
 /*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
-/*JMC*/   int16_t sw;
+
+/*JMC*/   int16_t sw;           //Calculate the total available pixels in the number of lines available.
           if(lines==1) {sw = SCREEN_WIDTH-1 - x_offset;} 
           else if(lines==2) {sw = (SCREEN_WIDTH-1 - x_offset)*2;}
           else {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}

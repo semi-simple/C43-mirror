@@ -501,7 +501,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CC" )) {strcpy(commandnumber, "1516");} else
                       if (strcompare(commandnumber,"EXIT" )) {strcpy(commandnumber, "1523");} else
                       if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
-                      if (strcompare(commandnumber,".D" )) {strcpy(commandnumber, "1527");} else
+                      if (strcompare(commandnumber,"DOTD" )) {strcpy(commandnumber, "1527");} else
                       if (strcompare(commandnumber,"D.MS>D" )) {strcpy(commandnumber, "1533");} else
                       if (strcompare(commandnumber,"X_HARM" )) {strcpy(commandnumber, "1559");} else
                       if (strcompare(commandnumber,"X_RMS" )) {strcpy(commandnumber, "1560");} else

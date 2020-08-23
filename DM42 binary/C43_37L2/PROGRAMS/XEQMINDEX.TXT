@@ -1,0 +1,11 @@
+XEQM01:XEQM01 HELP;
+XEQM02:Battery usage plot;
+XEQM06:CUBEs;
+
+
+
+// C43 XEQM softkey index file 
+// This file to allocate XEQM softkeys to text files in the PROGRAMS directory
+// nnnnn:mmmmmmmm; nnnnn=button; mmmmmmmm=file name; Colon and semicolon important.
+// .TXT is automatically appended.
+

@@ -1,0 +1,3 @@
+8ddeb659:
+---------
+>R>SI & >R>LI removed; USB Power icon changed in font;

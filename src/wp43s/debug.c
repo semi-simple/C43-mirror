@@ -603,7 +603,7 @@ void debugNIM(void) {
     
     else if(getRegisterDataType(regist) == dtReal34Matrix) {
       dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
-      sprintf(string + n, "Real Matrix of Size [%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixLines, dblock->matrixColumns);
+      sprintf(string + n, "Real Matrix of Size [%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixRows, dblock->matrixColumns);
     }
 
     else {

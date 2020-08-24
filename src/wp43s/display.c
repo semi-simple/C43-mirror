@@ -1689,7 +1689,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
   dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
-  sprintf(displayString, "[%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixLines, dblock->matrixColumns);
+  sprintf(displayString, "[%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixRows, dblock->matrixColumns);
 }
 
 void fnShow(uint16_t unusedParamButMandatory) {

@@ -849,7 +849,7 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
     //case dtTime:
     //case dtDate:
     case dtString:       return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    case dtReal34Matrix: return (getRegisterDataPointer(regist)->matrixColumns * getRegisterDataPointer(regist)->matrixLines * REAL34_SIZE + TO_BLOCKS(sizeof(registerDescriptor_t)));
+    case dtReal34Matrix: return (getRegisterDataPointer(regist)->matrixColumns * getRegisterDataPointer(regist)->matrixRows * REAL34_SIZE + TO_BLOCKS(sizeof(registerDescriptor_t)));
     //case dtComplex16Matrix:
     case dtShortInteger: return SHORT_INTEGER_SIZE;
     case dtReal34:       return REAL34_SIZE;
@@ -1048,7 +1048,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
         //case dtTime:
         //case dtDate:
         case dtString:       sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-        case dtReal34Matrix: sizeInBlocks = (getRegisterDataPointer(sourceRegister)->matrixColumns * getRegisterDataPointer(sourceRegister)->matrixLines * REAL34_SIZE + TO_BLOCKS(sizeof(registerDescriptor_t))); break;
+        case dtReal34Matrix: sizeInBlocks = (getRegisterDataPointer(sourceRegister)->matrixColumns * getRegisterDataPointer(sourceRegister)->matrixRows * REAL34_SIZE + TO_BLOCKS(sizeof(registerDescriptor_t))); break;
         //case dtComplex34Matrix:
         case dtShortInteger: sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
         case dtReal34:       sizeInBlocks = REAL34_SIZE;                                           break;

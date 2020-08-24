@@ -134,15 +134,15 @@ typedef union {
     uint16_t numberOfLocalRegisters;
   };
   struct {
-    uint16_t matrixLines;            // Number of lines in the matrix
+    uint16_t matrixRows;            // Number of lines in the matrix
     uint16_t matrixColumns;          // Number of columns in the matrix
   };
 } dataBlock_t;
 
 // Datatype for real34Matrix_t -> registers.h could be wrong place fot the typedef
 typedef struct {
-   dataBlock_t matrix_block;
-   real34_t*   matrix_content[];
+   dataBlock_t header;
+   real34_t*   vals[];
 } real34Matrix_t;
 
 

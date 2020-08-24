@@ -30,15 +30,15 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   
   uint32_t rows, cols;
   
-  longInteger_t lgInt;
+  longInteger_t tmp_lgInt;
   
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-  longIntegerToUInt(lgInt, cols);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
+  longIntegerToUInt(tmp_lgInt, cols);
   
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, lgInt);
-  longIntegerToUInt(lgInt, rows);
+  convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
+  longIntegerToUInt(tmp_lgInt, rows);
   
-  longIntegerFree(lgInt);
+  longIntegerFree(tmp_lgInt);
   
   fnDrop(unusedParamButMandatory);
   fnDrop(unusedParamButMandatory);
@@ -47,23 +47,25 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   liftStack();
   clearSystemFlag(FLAG_ASLIFT);
   
-  int32_t a_i = 0;
+  int32_t zero_int = 0;
   
-  uint32_t m_size;
+  uint32_t reg_size;
   
-  m_size = (rows * cols) * sizeof(real34_t) + sizeof(registerDescriptor_t);
+  reg_size = (rows * cols) * sizeof(real34_t) + sizeof(registerDescriptor_t);
   
-  real34Matrix_t* matrix = malloc(m_size);
+  real34Matrix_t* matrix = malloc(reg_size);
   
-  matrix->matrix_block.matrixColumns = cols;
-  matrix->matrix_block.matrixLines = rows;
+  matrix->header.matrixColumns = cols;
+  matrix->header.matrixRows = rows;
   
   for(uint32_t i = 0; i < rows * cols; i++) {
-    real34_t a;
-    int32ToReal34(a_i, &a);
-    matrix->matrix_content[i] = &a;
+    real34_t zero;
+    int32ToReal34(zero_int, &zero);
+    matrix->vals[i] = &zero;
   }
   
-  reallocateRegister(REGISTER_X, dtReal34Matrix, m_size, AM_NONE);
-  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, m_size);
+  reallocateRegister(REGISTER_X, dtReal34Matrix, reg_size, AM_NONE);
+  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, reg_size);
 }
+
+

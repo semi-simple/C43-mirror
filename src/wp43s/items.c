@@ -453,6 +453,7 @@ void fnLoad                     (uint16_t unusedParamButMandatory) {}
 void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
+void fnNewMatrix                (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -850,7 +851,7 @@ const item_t indexOfItems[] = {
 /*  389 */  { itemToBeCoded,               NOPARAM,                     "M.GROW",                                      "GROW",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  390 */  { itemToBeCoded,               NOPARAM,                     "M.INSR",                                      "INSR",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  391 */  { itemToBeCoded,               NOPARAM,                     "M.LU",                                        "M.LU",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*  392 */  { itemToBeCoded,               NOPARAM,                     "M.NEW",                                       "NEW",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*  392 */  { fnNewMatrix,                 NOPARAM,                     "M.NEW",                                       "NEW",                                         0,       0,       CAT_FNCT, SLS_ENABLED,   US_ENABLED  },
 /*  393 */  { itemToBeCoded,               NOPARAM,                     "M.OLD",                                       "OLD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  394 */  { itemToBeCoded,               NOPARAM,                     "M.PUT",                                       "PUTM",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  395 */  { itemToBeCoded,               NOPARAM,                     "M.R" STD_LEFT_RIGHT_ARROWS "R",               "R" STD_LEFT_RIGHT_ARROWS "R",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

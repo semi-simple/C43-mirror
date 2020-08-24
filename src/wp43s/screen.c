@@ -1487,6 +1487,15 @@ void refreshRegisterLine(calcRegister_t regist) {
         lineWidth = w;
         showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
       }
+      
+      else if(getRegisterDataType(regist) == dtReal34Matrix) {
+        
+        real34MatrixToDisplayString(regist, tmpStr3000);
+        
+        w = stringWidth(tmpStr3000, &numericFont, false, true);
+        lineWidth = w;
+        showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+      }
 
       else {
         sprintf(tmpStr3000, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));

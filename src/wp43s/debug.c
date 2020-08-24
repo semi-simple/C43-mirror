@@ -600,6 +600,11 @@ void debugNIM(void) {
     else if(getRegisterDataType(regist) == dtConfig) {
       sprintf(string + n, "Configuration data");
     }
+    
+    else if(getRegisterDataType(regist) == dtReal34Matrix) {
+      dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+      sprintf(string + n, "Real Matrix of Size [%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixLines, dblock->matrixColumns);
+    }
 
     else {
       sprintf(string + n, "data type %s not supported for now!", getRegisterDataTypeName(regist, false, false));

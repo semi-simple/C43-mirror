@@ -182,6 +182,7 @@ typedef int16_t calcRegister_t;
 #include "integers.h"
 #include "items.h"
 #include "keyboard.h"
+#include "matrix.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"

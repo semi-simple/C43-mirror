@@ -139,6 +139,12 @@ typedef union {
   };
 } dataBlock_t;
 
+// Datatype for real34Matrix_t -> registers.h could be wrong place fot the typedef
+typedef struct {
+   dataBlock_t matrix_block;
+   real34_t*   matrix_content[];
+} real34Matrix_t;
+
 
 uint32_t     getRegisterDataType             (calcRegister_t regist);
 dataBlock_t *getRegisterDataPointer          (calcRegister_t regist);

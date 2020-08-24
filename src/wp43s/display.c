@@ -1687,7 +1687,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
   sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
 }
 
-
+void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
+  dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+  sprintf(displayString, "[%" FMT16U" x %" FMT16U" Matrix]", dblock->matrixLines, dblock->matrixColumns);
+}
 
 void fnShow(uint16_t unusedParamButMandatory) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;

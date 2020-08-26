@@ -1448,9 +1448,14 @@ void showSoftmenuCurrentPart(void) {
             clearPixel(x, yDotted);
           }
         }
-        #define t 5                                                         //JMvv    //triangle centre point  // Triangles indicating more menus
+
+
+        for(x=0; x<20; x++) {                                                //JMvv    //triangle centre point  // Triangles indicating more menus
+          clearPixel(x, yDotted);
+        }
+        #define t 5
         #define t_o 1.6*t                                                             //offset
-        #define tt_o -t-2                                                             //total offset
+        #define tt_o -t-2  +4                                                             //total offset
         //pixelline(x,yDotted+1,x+2*t,yDotted+1,false);
         for(x=0; x<=t; x++) {
           pixelline(x,       tt_o + yDotted-x+t,   t*2-x,       tt_o + yDotted-x+t  ,true );
@@ -1504,10 +1509,11 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
 
 
 
-void fnMenuDump(uint16_t menu) {                              //JMvv procedure to dump all menus. First page only. To mod todump all pages
+void fnMenuDump(uint16_t menu, uint16_t item) {                              //JMvv procedure to dump all menus. First page only. To mod todump all pages
 
   doRefreshSoftMenu = true;
   showSoftmenu(NULL, softmenu[menu].menuId, true);
+  softmenuStack[softmenuStackPointer - 1].firstItem += item;
   showSoftmenuCurrentPart();
 
 #ifdef PC_BUILD
@@ -1525,7 +1531,7 @@ void fnMenuDump(uint16_t menu) {                              //JMvv procedure t
  
   printf(">>> %s\n",indexOfItems[-softmenu[menu].menuId].itemSoftmenuName);
 
-  sprintf(bmpFileName,"Menu_%3d.bmp",menu);
+  sprintf(bmpFileName,"Menu_%4d%4d.bmp",menu,item);
   bmp = fopen(bmpFileName, "wb");
 
   fwrite("BM", 1, 2, bmp);        // Offset 0x00  0  BMP header
@@ -1628,12 +1634,19 @@ void fnMenuDump(uint16_t menu) {                              //JMvv procedure t
 }
 
 
+
+
  
 void fnDumpMenus(void) {                      //JM
-  int16_t m;
+  int16_t m,n;
   m = 0;
     while(softmenu[m].menuId != 0) {
-      fnMenuDump(m);
+      n=0;
+      while(n <= softmenu[m].numItems) {
+printf("m=%d n=%d\n",m,n );
+        fnMenuDump(m, n);
+        n += 18;
+      }
       m++;
     }
 }                                                         //JM^^

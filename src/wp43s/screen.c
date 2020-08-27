@@ -1103,8 +1103,9 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 }
 
 
-                                                          //JMCURSOR vv
-#define x_offset 40
+#define lines 5                                                          //JMCURSOR vv
+#define x_offset 0    //pixels 40
+#define y_offset 2    //lines   0
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
   int16_t tmpxy, glyphId;
@@ -1114,10 +1115,10 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
 
   orglastlines = lastline;
 
-  if(lastline > 2) {
+  if(lastline > y_offset) {
     clearScreen_old(false, true,false);
     x = x_offset; 
-    y = 20;
+    y = 20 + y_offset * 20;
   }
 
   lg = stringByteLength(string + offset);
@@ -1163,9 +1164,9 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     numPixels = 0;
 
     numPixels += glyph->colsGlyph + glyph->colsAfterGlyph + glyph->colsBeforeGlyph;    // get width of glyph
-     printf(">>> lastline=%d string[ch]=%d x=%d numPixels=%d", lastline, string[ch], x, numPixels);
+    //printf(">>> lastline=%d string[ch]=%d x=%d numPixels=%d", lastline, string[ch], x, numPixels);
     if(string[ch]== 0) numPixels += 8;
-     printf("±±± lastline=%d string[ch]=%d x=%d numPixels=%d\n", lastline, string[ch], x, numPixels);
+    //printf("±±± lastline=%d string[ch]=%d x=%d numPixels=%d\n", lastline, string[ch], x, numPixels);
 
     if(x + numPixels > SCREEN_WIDTH-1 && lastline == orglastlines) { 
       x = x_offset; 
@@ -1308,7 +1309,7 @@ void hideFunctionName(void) {
   showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
   if(running_program_jm) return;                             //JM
-  refreshRegisterLine(REGISTER_T);                           //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
+  if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);                           //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
   //  showString("           ", &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
 
@@ -1634,28 +1635,40 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 
 
-//JMCURSOR vv
-        #define lines 5
-/*JMC*/   if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-/*JMC*/   if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-/*JMC*/   int16_t tmp;
-/*JMC*/   tmp = 0;              //Determine offset to be able to display the latter part of the string
+  //JMCURSOR vv
+        if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
+        if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
+        int16_t tmp,cnt;
+        tmp = 0;              //Determine offset to be able to display the latter part of the string
 
-/*JMC*/   int16_t sw;           //Calculate the total available pixels in the number of lines available.
-          if(lines==1) {sw = SCREEN_WIDTH-1 - x_offset;} 
-          else if(lines==2) {sw = (SCREEN_WIDTH-1 - x_offset)*2;}
-          else {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}
-printf(">>>%d\n",sw);
-//MAKE SURE THAT T_cursorpos does never go off screen, on the right hand side of the last editing line. If off screen tmp must be increased to pull the cursor back on screen.
+        int16_t sw=SCREEN_WIDTH-1-x_offset;           //Calculate the total available pixels in the number of lines available.
+        if(lines==1 && y_offset<1) {sw = SCREEN_WIDTH-1 - x_offset;} 
+        else if(lines==2 && y_offset<=1) {sw = (SCREEN_WIDTH-1 - x_offset)*(2-y_offset);}
+        else if(lines>2) {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}
+        cnt = 0;
+        do {
+          //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + tmp, &standardFont, true, true), - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true), sw);
+          while(cnt++ < 100 &&
+               (stringWidth(aimBuffer + tmp, &standardFont, true, true) - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
+          	   (tmp <= stringByteLength(aimBuffer)) && 
+          	   (tmp + 10 < T_cursorPos)
+          	   ) 
+            {
+              //printf(">>>b %d %d >? %d\n", stringWidth(aimBuffer + tmp, &standardFont, true, true), - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true), sw);
+              tmp = stringNextGlyph(aimBuffer, tmp);
+            }
 
-        while((stringWidth(aimBuffer + tmp, &standardFont, true, true) - stringWidth(aimBuffer + (max(0,T_cursorPos - 10)), &standardFont, true, true) > sw && (tmp <= stringByteLength(aimBuffer)) && (tmp + 10 < T_cursorPos)   )) {
-/*JMC*/     tmp = stringNextGlyph(aimBuffer, tmp);
-/*JMC*/   }
           showStringEd(lines ,tmp, T_cursorPos, aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
-/*JMC*/   if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
-          cursorFont = &standardFont;
-        }
-//JMCURSOR  ^^
+
+          if(xCursor > SCREEN_WIDTH-1) tmp = stringNextGlyph(aimBuffer, tmp);
+          //printf(">>>c length:%d T_cursorPos:%d tmp:%d x:%d y:%d\n",stringByteLength(aimBuffer), T_cursorPos, tmp, xCursor, yCursor);
+        } while(cnt++ < 150 && xCursor > SCREEN_WIDTH-1);
+
+
+        if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
+        cursorFont = &standardFont;
+      }
+  //JMCURSOR  ^^
 
 
       else if(   getSystemFlag(FLAG_FRACT)

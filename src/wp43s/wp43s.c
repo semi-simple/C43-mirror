@@ -93,6 +93,7 @@ int16_t               SHOWregis;                   //JMSHOW
 int16_t               mm_MNU_HOME;                 //JM
 int16_t               mm_MNU_ALPHA;                //JM
 int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
+int16_t               fnXEQMENUpos;                //JMXEQ
 uint16_t              numberOfLocalFlags;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 dataBlock_t          *allLocalRegisterPointer;
@@ -352,7 +353,20 @@ void setupDefaults(void) {
   shiftF = false;
   shiftG = false;
 
-  reset_jm_defaults();                                         //JM
+  //reset_jm_defaults();                                       //JM
+
+  fnXEQMENUpos = 0;                                            //JM Find fnXEQMENU in the indexOfItems array
+  while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {
+     fnXEQMENUpos++;
+  }
+  uint16_t ix;                                                 //JM Reset XEQM
+  ix = 0;
+  while(ix<18) {
+    indexOfItemsXEQM[+8*ix]=0;
+    strcpy(indexOfItemsXEQM +8*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
+    ix++;    
+  }
+
   mm_MNU_HOME       = mm(-MNU_HOME);                           //JM
   mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM
   if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 

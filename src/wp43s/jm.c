@@ -106,11 +106,13 @@ void reset_jm_defaults(void) {
      //JM defaults ^^
 
 
+                                                               //Find fnXEQMENU in the indexOfItems array
     fnXEQMENUpos = 0;
     while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {
        fnXEQMENUpos++;
     }
 
+                                                               //Reset XEQM
     uint16_t ix;
     ix = 0;
     while(ix<18) {
@@ -125,7 +127,6 @@ void reset_jm_defaults(void) {
 
 }
 
-    int16_t fnXEQMENUpos = 0;
 
 
 

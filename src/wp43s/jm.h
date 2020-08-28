@@ -147,9 +147,8 @@ extern bool_t jm_LARGELI;                                           //JM flag to
 extern bool_t running_program_jm;                                   //JM program is running flag
 extern uint16_t indic_x;                                            //JM program progress indicators
 extern uint16_t indic_y;                                            //JM program progress indicators
-
-extern int16_t fnXEQMENUpos;   //to save still if needed//JMXEQ
-char  indexOfItemsXEQM[18*8];  //tosave still if needed//JMXEQ
+extern int16_t fnXEQMENUpos;                                        //JMXEQ
+char  indexOfItemsXEQM[18*8];                                       //JMXEQ
 
 
 // Additional routines needed in jm.c

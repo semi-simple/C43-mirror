@@ -205,6 +205,8 @@ void saveCalc(void) {
   save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
   save(&indic_x,                            sizeof(indic_x),                            backup);
   save(&indic_y,                            sizeof(indic_y),                            backup);
+  save(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       backup);
+  save(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   backup);
   save(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
   save(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
   save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
@@ -386,6 +388,8 @@ void restoreCalc(void) {
     restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
     restore(&indic_x,                            sizeof(indic_x),                            backup);
     restore(&indic_y,                            sizeof(indic_y),                            backup);
+    restore(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       backup);
+    restore(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   backup);
     restore(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
     restore(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
     restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^

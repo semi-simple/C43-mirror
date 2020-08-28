@@ -353,7 +353,7 @@ void setupDefaults(void) {
   shiftF = false;
   shiftG = false;
 
-  //reset_jm_defaults();                                       //JM
+  reset_jm_defaults(false);                                       //JM
 
   fnXEQMENUpos = 0;                                            //JM Find fnXEQMENU in the indexOfItems array
   while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {

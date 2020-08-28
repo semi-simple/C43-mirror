@@ -59,7 +59,7 @@ calcMode = CM_BUG_ON_SCREEN;
 
 
 
-void reset_jm_defaults(void) {
+void reset_jm_defaults(int16_t toload) {
     verbose_jm = verbose_default;
 
     SHOWregis = 9999;                                          //JMSHOW
@@ -122,7 +122,7 @@ void reset_jm_defaults(void) {
     }
 
     verbose_jm = 0;
-    XEQMENU_loadAllfromdisk();
+    if(toload) XEQMENU_loadAllfromdisk();
     verbose_jm = verbose_default;
 
 }
@@ -1625,10 +1625,15 @@ void fnUserJM(uint16_t jmUser) {
 
   case JM_SEEK_FN:      //32766 in KEYBOARD.C will wait for a key. SEEK FUNCTION,         //USER_RESET 27
     JM_ASN_MODE = 32766;
-#ifndef TESTSUITE_BUILD
-//    clearScreen(false,true,false);
-    showString("Select function from keys: EXIT Aborts", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
-#endif
+    #ifndef TESTSUITE_BUILD
+      clearScreen_old(false,true,false);
+      showString("Select (EXIT Aborts)",                   &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+      showString("  Key1: function from keys",             &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      showString("  Key2: Assigned key (E+ to E and ",     &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+      showString("  [/] [*] [-] [+] [R/S]) (EXIT aborts)", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+    #endif
+    previousCalcMode = calcMode;
+    calcMode = CM_BUG_ON_SCREEN;
     break;
 
   default:
@@ -1642,19 +1647,21 @@ void fnUserJM(uint16_t jmUser) {
 void fnKEYSELECT(void) {                                        //JM ASSIGN - REMEMBER NEXT KEYBOARD FUNCTION
   if(JM_ASN_MODE == KEY_EXIT1 || JM_ASN_MODE == KEY_BACKSPACE) {
     JM_ASN_MODE = 0;
-#ifndef TESTSUITE_BUILD
-    showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
-#endif
+    #ifndef TESTSUITE_BUILD
+        clearScreen_old(false,true,false);
+        showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+    #endif
   }
   else {
-#ifndef TESTSUITE_BUILD
-    showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
-    showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
-#endif
+    #ifndef TESTSUITE_BUILD
+        //clearScreen_old(false,true,false);
+        //showString("Select key: top 4 lines excl. FN1-6 & [<-],", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        //showString("incl. [/] [*] [-] [+] [R/S].   EXIT aborts.", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_X - REGISTER_X), vmNormal, true, true);
+    #endif
+    calcMode = CM_NORMAL;
 
-      fnFlipFlag(FLAG_USER);
-      fnFlipFlag(FLAG_USER);
-
+    fnFlipFlag(FLAG_USER);
+    fnFlipFlag(FLAG_USER);
 //    userModeEnabled = true;                                     //JM Get out ouf USER MODE to select key in next step
   //  toggleUserMode();
   }

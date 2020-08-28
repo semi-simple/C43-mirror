@@ -595,7 +595,7 @@ void fnReset(uint16_t confirmation) {
     thereIsSomethingToUndo = false;
 
 //    showRealComplexResult();                                   //JM, from wp43s.c
-    reset_jm_defaults(); 
+    reset_jm_defaults(true); 
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));

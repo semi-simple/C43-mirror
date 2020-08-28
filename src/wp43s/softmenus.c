@@ -536,7 +536,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
  /*ROW 1    */
                                     ITM_SIGMAPLUS,        ITM_1ONX,         ITM_SQUAREROOTX,  ITM_LOG10,        ITM_LN,           ITM_XEQ,
  /* f       */                      ITM_SIGMAMINUS,       ITM_YX,           ITM_SQUARE,       ITM_10x,          ITM_EX,           ITM_GTO,
-/* g       */                       ITM_TGLFRT,           ITM_HASH_JM,      KEY_dotD,         ITM_ms,           ITM_toREC2,       ITM_toPOL2,    
+/* g       */                       ITM_TGLFRT,           ITM_HASH_JM,      ITM_ms,           KEY_dotD,         ITM_toREC2,       ITM_toPOL2,    
 
 
 

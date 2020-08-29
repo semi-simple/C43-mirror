@@ -1,8 +1,5 @@
 XEQM01:XEQM01 HELP;
 XEQM02:Battery usage plot;
-XEQM03:Mersenne Prime 2203;
-XEQM04:Mersenne Prime 2281;
-XEQM05:Mersenne Prime 3217;
 XEQM06:CUBEs;
 
 

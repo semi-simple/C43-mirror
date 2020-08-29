@@ -2,6 +2,7 @@ XEQLBL FF BATPLT
 
   //Battery voltage plot Rev2
 
+DOTD
 "400" STO "00" 
 TICKS STO "01" 
 CLSUM 

@@ -1133,6 +1133,8 @@ void addItemToNimBuffer(int16_t item) {
     if(calcMode != CM_NIM) {
       if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
         setSystemFlag(FLAG_ASLIFT);
+        lastIntegerBase = 0;                                                      //JMNIM
+        fnRefreshRadioState(0, 0);                                                //JMNIM
       }
 
       if(lastErrorCode == 0) {
@@ -1919,7 +1921,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
 }
 
 void closeNim(void) {
-printf("closeNim\n");
+//printf("closeNim\n");
   if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
     switch (Input_Default) {
     case ID_43S:                                  //   Do nothing, this is default LI/DP

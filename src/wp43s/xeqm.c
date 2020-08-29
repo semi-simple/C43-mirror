@@ -610,7 +610,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           if(go) {
                             force_refresh();
                             #ifdef PC_BUILD
-                            printf(">>> Loop:go\n");
+                            //printf(">>> Loop:go\n");
                             #endif
                           }
                         }

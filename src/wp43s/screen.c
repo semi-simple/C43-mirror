@@ -371,17 +371,18 @@ void copyAllRegistersToClipboard(void) {
  *                          * true  = timer will call this function again
  *                          * false = timer stops calling this function
  ***********************************************/
-int8_t cursorBlinkCounter;                 //JM cursor
+#define cursorCycle 3                      //JM cursor vv
+int8_t cursorBlinkCounter;                 //JM cursor ^^
 gboolean refreshLcd(gpointer unusedData) { // This function is called every SCREEN_REFRESH_PERIOD ms by a GTK timer
   // Cursor blinking
   static bool_t cursorBlink=true;
 
   if(cursorEnabled) {
-    if(++cursorBlinkCounter > 2) {         //JM cursor vv
+    if(++cursorBlinkCounter > cursorCycle) {         //JM cursor vv
       cursorBlinkCounter = 0;
 	    if(cursorBlink) {
 	      showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
-	    }                                  //JM cursor ^^
+	    }                                              //JM cursor ^^
 	    else {
 	      hideCursor();
 	    }
@@ -427,18 +428,23 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
   return TRUE;
 }
 #elif defined DMCP_BUILD
+#define cursorCycle 3                      //JM cursor vv
+int8_t cursorBlinkCounter;                 //JM cursor ^^
 void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
   // Cursor blinking
   static bool_t cursorBlink=true;
 
   if(cursorEnabled) {
-    if(cursorBlink) {
-      showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
+    if(++cursorBlinkCounter > cursorCycle) {         //JM cursor vv
+      cursorBlinkCounter = 0;
+      if(cursorBlink) {
+        showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
+      }                                              //JM cursor ^^
+      else {
+        hideCursor();
+      }
+      cursorBlink = !cursorBlink;
     }
-    else {
-      hideCursor();
-    }
-    cursorBlink = !cursorBlink;
   }
 
   // Function name display

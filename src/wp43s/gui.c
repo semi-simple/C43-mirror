@@ -28,9 +28,9 @@ GtkWidget *backgroundImage;
 #endif
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
-GtkWidget *lblEKey;
+//GtkWidget *lblEKey;
 //GtkWidget *lblEEKey;
-GtkWidget *lblSKey;
+//GtkWidget *lblSKey;
 GtkWidget *lblBehindScreen;
 
 GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
@@ -1019,9 +1019,9 @@ void hideAllWidgets(void) {
 #if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_hide(lblFKey2);  //JMLINES
   gtk_widget_hide(lblGKey2);  //JMLINES
-  gtk_widget_hide(lblEKey);   //JMLINES
+//  gtk_widget_hide(lblEKey);   //JMLINES
 //  gtk_widget_hide(lblEEKey);   //JMLINES
-  gtk_widget_hide(lblSKey);   //JMLINES
+//  gtk_widget_hide(lblSKey);   //JMLINES
 #endif  
   gtk_widget_hide(btn11);
   gtk_widget_hide(btn12);
@@ -1805,12 +1805,12 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   if(lbl[0] == 'Y') {                                       //JM Brighten up Y and N
     //lbl[0] = '#';                                         //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "YN");                        //JM Brighten up Y and N
   }
   else if(lbl[0] == 'N') {                                  //JM Brighten up Y and N
     //lbl[0] = '#';                                         //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "YN");                        //JM Brighten up Y and N
   }
   else {                                                    //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
@@ -1990,12 +1990,12 @@ if(key->primaryAim == CHR_SPACE) {
   if(lbl[0] == 'Y') {                                       //JM Brighten up Y and N
     //lbl[0] = '#';                                         //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "YN");                        //JM Brighten up Y and N
   }
   else if(lbl[0] == 'N') {                                  //JM Brighten up Y and N
     //lbl[0] = '#';                                         //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);     //JM Brighten up Y and N
-    gtk_widget_set_name(lblL, "On");                        //JM Brighten up Y and N
+    gtk_widget_set_name(lblL, "YN");                        //JM Brighten up Y and N
   }
   else {                                                    //JM Brighten up Y and N
     gtk_label_set_label(GTK_LABEL(lblL), (gchar *)lbl);
@@ -2061,9 +2061,9 @@ void calcModeNormalGui(void) {
 #if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
   gtk_widget_show( lblFKey2);  //JMLINES
   gtk_widget_show( lblGKey2);  //JMLINES
-  gtk_widget_show( lblEKey);   //JMLINES
+//  gtk_widget_show( lblEKey);   //JMLINES
 //  gtk_widget_show( lblEEKey);   //JMLINES
-  gtk_widget_show( lblSKey);   //JMLINES
+//  gtk_widget_show( lblSKey);   //JMLINES
 #endif
 
   labelCaptionNormal(keys++, btn21, lbl21F, lbl21G, lbl21L);
@@ -2817,10 +2817,10 @@ void setupUI(void) {
 
 
   // Frame around the Sigma+ key
-  lblEKey = gtk_label_new("");
-  gtk_widget_set_name(lblEKey,"eSoftkeyArea");
-  gtk_widget_set_size_request(lblEKey, 61-8-2-2,  5-2);
-  gtk_fixed_put(GTK_FIXED(grid), lblEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - DELTA_KEYS_Y);
+//  lblEKey = gtk_label_new("");
+//  gtk_widget_set_name(lblEKey,"eSoftkeyArea");
+//  gtk_widget_set_size_request(lblEKey, 61-8-2-2,  5-2);
+//  gtk_fixed_put(GTK_FIXED(grid), lblEKey, 350+4+2 - 4 * DELTA_KEYS_X, 563-1 - DELTA_KEYS_Y);
 
   // Frame around the Sigma- key
 //  lblEEKey = gtk_label_new("");
@@ -2830,10 +2830,10 @@ void setupUI(void) {
 
 
   // Frame around the SIN key
-  lblSKey = gtk_label_new("");
-  gtk_widget_set_name(lblSKey,"eSoftkeyArea");
-  gtk_widget_set_size_request(lblSKey, 61-8-2-2,  5-2);
-  gtk_fixed_put(GTK_FIXED(grid), lblSKey, 350+4+2 - 1 * DELTA_KEYS_X, 563-1 -0* DELTA_KEYS_Y);
+//  lblSKey = gtk_label_new("");
+//  gtk_widget_set_name(lblSKey,"eSoftkeyArea");
+//  gtk_widget_set_size_request(lblSKey, 61-8-2-2,  5-2);
+//  gtk_fixed_put(GTK_FIXED(grid), lblSKey, 350+4+2 - 1 * DELTA_KEYS_X, 563-1 -0* DELTA_KEYS_Y);
 
 #endif //JM
 

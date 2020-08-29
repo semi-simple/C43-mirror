@@ -221,10 +221,23 @@ gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("Pressed %d\n", event->keyval);                                  //JM
   event_keyval = event->keyval + CTRL_State;
+  //printf("#######%d\n",event_keyval);
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
 if (calcMode == CM_AIM) {
 switch (event_keyval) {
+
+    case 65507: // left Ctrl
+    case 65508: // right Ctrl
+      //printf("key pressed: CTRL Activated\n");
+      CTRL_State = 65536;
+      break;
+    case 72+65536: // Ctrl H
+    case 104+65536: // Ctrl h
+      printf("key pressed: CTRL+h Hardcopy\n");
+      copyScreenToClipboard();
+      break;
+
 //ROW 1
     case 65470: // F1                                                    //**************-- FUNCTION KEYS --***************//
       btnFnClicked(w, "1");

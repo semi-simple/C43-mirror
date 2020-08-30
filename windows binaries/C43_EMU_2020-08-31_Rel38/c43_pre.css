@@ -265,6 +265,18 @@
 
 #On {
   background:  $bezelBackground;
+  color:       $letterGrey;
+  font-family: WP43S_StandardFont;
+  font-style:  normal;
+  font-weight: normal;
+  font-size:   18px;
+  padding:     0px;
+  text-shadow: 0px 0px $keyLabelColor;
+  /* JM changed colour from lettergrey to keyLabelColor; Added emphasis (shadow) */
+}
+
+#YN {
+  background:  $bezelBackground;
   color:       $keyLabelColor;
   font-family: WP43S_StandardFont;
   font-style:  normal;

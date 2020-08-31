@@ -2054,6 +2054,8 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
 void calcModeNormalGui(void) {
   const calcKey_t *keys;
 
+  if(running_program_jm) return;                        //JM faster during program excution
+
   keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();
@@ -2306,6 +2308,8 @@ void calcModeNormalGui(void) {
 
 void calcModeAimGui(void) {
   const calcKey_t *keys;
+
+  if(running_program_jm) return;                        //JM faster during program excution
 
   keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
@@ -2585,6 +2589,8 @@ void calcModeAimGui(void) {
 void calcModeTamGui(void) {
   const calcKey_t *keys;
 
+  if(running_program_jm) return;                        //JM faster during program excution
+  
   keys = getSystemFlag(FLAG_USER) ? kbd_usr : kbd_std;
 
   hideAllWidgets();

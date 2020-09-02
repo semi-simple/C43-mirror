@@ -1,0 +1,14 @@
+XEQLBL FF BATPLT
+
+  //Battery voltage plot Rev2
+
+DOTD
+"400" STO "00" 
+TICKS STO "01" 
+CLSUM 
+
+LBL M1 
+BATT? TICKS RCL "01" - "10" / SUM+ 
+DSZ "00" GTO M1 
+
+PLOT 

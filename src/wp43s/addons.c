@@ -351,6 +351,8 @@ void fnLongInt (uint16_t unusedParamButMandatory) {
   if(dataTypeX == dtReal34) {
     JM_convertReal34ToLongInteger(CONFIRMED);
   }  
+  lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
+  fnRefreshRadioState(0, 0);                                                //JMNIM
 }
 
 

@@ -1,3 +1,0 @@
-00773ffd:
----------
-Fixed cursor blinking. Added simulator screen copy for AIM mode.

@@ -144,7 +144,7 @@
 #define ITM_NEXTP                      107
 #define ITM_XFACT                      108
 #define ITM_pi                         109
-#define ITM_CF                         100
+#define ITM_CF                         110
 #define ITM_SF                         111
 #define ITM_FF                         112
 #define ITM_0113                       113

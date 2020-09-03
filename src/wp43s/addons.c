@@ -578,6 +578,12 @@ void fnChangeBaseMNU(uint16_t BASE) {
       return;
     }
 
+    if(lastIntegerBase != 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
+      //printf(">>> §§§fnChangeBaseMNc CM_NORMAL: convert non-shortint-mode to %d & return\n",BASE);
+      runFunction(ITM_toINT);
+      return;
+    }
+
     if(BASE > 1 && BASE <=16 ) {                                                //BASIC CONVERSION IN X REGISTER, OR DIGITS IN NIMBUFFER IF IN CM_NORMAL
       //printf(">>> §§§1 convert base to %d & return\n",BASE);
       fnChangeBaseJM(BASE);

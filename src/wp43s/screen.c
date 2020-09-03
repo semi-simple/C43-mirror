@@ -1452,11 +1452,6 @@ void refreshRegisterLine(calcRegister_t regist) {
       #endif
     #endif
 
-    if(regist == REGISTER_X && getRegisterDataType(REGISTER_X) != dtShortInteger) {
-      lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-      fnRefreshRadioState(0, 0);                                                //JMNIM
-    }
-
     if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
       showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
     }

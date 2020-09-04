@@ -1777,8 +1777,8 @@ void labelCaptionNormal(const calcKey_t *key, GtkWidget *button, GtkWidget *lblF
   if(key->gShifted == 0) {
     lbl[0] = 0;
   }
-  else if(strcmp((char *)lbl, "CAT") == 0 && key->keyId != 85) {  //JM was 85 //JM Changed CATALOG to CAT
-    lbl[3] = 0;
+  else if(strcmp((char *)lbl, "MODE#") == 0 && key->keyId == 22) {          //JM MODE#
+    strcpy((char *)lbl,"#");                                                //JM MODE#
   }
 
   gtk_label_set_label(GTK_LABEL(lblG), (gchar *)lbl);

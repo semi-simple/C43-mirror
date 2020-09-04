@@ -133,7 +133,7 @@
 #define ITM_CHS                         97
 #define ITM_MULT                        98
 #define ITM_DIV                         99
-#define ITM_CF                         100
+#define ITM_IDIV                       100
 #define ITM_IDIVR                      101
 #define ITM_MOD                        102
 #define ITM_MAX                        103
@@ -143,24 +143,24 @@
 #define ITM_NEXTP                      107
 #define ITM_XFACT                      108
 #define ITM_pi                         109
-
+#define ITM_CF                         110
 #define ITM_SF                         111
 #define ITM_FF                         112
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define ITM_0113                       113
+#define ITM_0114                       114
+#define ITM_0115                       115
+#define ITM_0116                       116
+#define ITM_0117                       117
+#define ITM_0118                       118
+#define ITM_0119                       119
+#define ITM_0120                       120
+#define ITM_0121                       121
+#define ITM_0122                       122
+#define ITM_0123                       123
+#define ITM_0124                       124
+#define ITM_0125                       125
+#define ITM_0126                       126
+#define ITM_0127                       127
 #define CST_01                         128
 #define CST_02                         129
 #define CST_03                         130
@@ -241,18 +241,18 @@
 #define CST_78                         205
 #define CST_79                         206
 #define ITM_CNST                       207
-
-
-
-
-
-
-
-
-
-
-
-
+#define ITM_0208                       208
+#define ITM_0209                       209
+#define ITM_0210                       210
+#define ITM_0211                       211
+#define ITM_0212                       212
+#define ITM_0213                       213
+#define ITM_0214                       214
+#define ITM_0215                       215
+#define ITM_0216                       216
+#define ITM_0217                       217
+#define ITM_0218                       218
+#define ITM_0219                       219
 #define ITM_CtoF                       220
 #define ITM_FtoC                       221
 #define ITM_DBtoPR                     222
@@ -272,9 +272,9 @@
 #define ITM_M2toAC                     236
 #define ITM_M2toACb                    237
 #define ITM_ACUStoM2                   238
-
+#define ITM_ACUStoM2b                  239
 #define ITM_M2toACUS                   240
-
+#define ITM_M2toACUSb                  241
 #define ITM_ATMtoPA                    242
 #define ITM_PAtoATM                    243
 #define ITM_AUtoM                      244
@@ -286,9 +286,9 @@
 #define ITM_CALtoJ                     250
 #define ITM_JtoCAL                     251
 #define ITM_LBFFTtoNM                  252
-
+#define ITM_LBFFTtoNMb                 253
 #define ITM_NMtoLBFFT                  254
-
+#define ITM_NMtoLBFFTb                 255
 #define ITM_CWTtoKG                    256
 #define ITM_KGtoCWT                    257
 #define ITM_FTtoM                      258
@@ -300,13 +300,13 @@
 #define ITM_MtoFTUSb                   264
 #define ITM_MtoFTUSc                   265
 #define ITM_FZUKtoM3                   266
-
+#define ITM_FZUKtoM3b                  267
 #define ITM_M3toFZUK                   268
-
+#define ITM_M3toFZUKb                  269
 #define ITM_FZUStoM3                   270
-
+#define ITM_FZUStoM3b                  271
 #define ITM_M3toFZUS                   272
-
+#define ITM_M3toFZUSb                  273
 #define ITM_GLUKtoM3                   274
 #define ITM_M3toGLUK                   275
 #define ITM_GLUStoM3                   276
@@ -358,9 +358,9 @@
 #define ITM_LYtoM                      322
 #define ITM_MtoLY                      323
 #define ITM_MMHGtoPA                   324
-
+#define ITM_MMHGtoPAb                  325
 #define ITM_PAtoMMHG                   326
-
+#define ITM_PAtoMMHGb                  327
 #define ITM_MItoM                      328
 #define ITM_MtoMI                      329
 #define ITM_MtoNMI                     330
@@ -368,11 +368,11 @@
 #define ITM_MtoPC                      332
 #define ITM_PCtoM                      333
 #define ITM_MtoPOINTb                  334
-
-
+#define ITM_MtoPOINT                   335
+#define ITM_MtoPOINTc                  336
 #define ITM_POINTtoM                   337
-
-
+#define ITM_POINTtoMb                  338
+#define ITM_POINTtoMc                  339
 #define ITM_MtoYD                      340
 #define ITM_YDtoM                      341
 #define ITM_PSItoPA                    342
@@ -384,41 +384,41 @@
 #define ITM_StoYEAR                    348
 #define ITM_YEARtoS                    349
 #define ITM_CARATtoKG                  350
-
-
+#define ITM_CARATtoKGb                 351
+#define ITM_CARATtoKGc                 352
 #define ITM_KGtoCARAT                  353
-
-
+#define ITM_KGtoCARATb                 354
+#define ITM_KGtoCARATc                 355
 #define ITM_QTtoM3                     356
 #define ITM_M3toQT                     357
 #define ITM_FATHOMtoM                  358
-
-
+#define ITM_FATHOMtoMb                 359
+#define ITM_FATHOMtoMc                 360
 #define ITM_MtoFATHOM                  361
-
-
+#define ITM_MtoFATHOMb                 362
+#define ITM_MtoFATHOMc                 363
 #define ITM_BARRELtoM3                 364
-
+#define ITM_BARRELtoM3b                365
 #define ITM_M3toBARREL                 366
-
+#define ITM_M3toBARRELb                367
 #define ITM_ATMtoPAb                   368
 #define ITM_PAtoATMb                   369
 #define ITM_HECTAREtoM2                370
 #define ITM_M2toHECTARE                371
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define ITM_0372                       372
+#define ITM_0373                       373
+#define ITM_0374                       374
+#define ITM_0375                       375
+#define ITM_0376                       376
+#define ITM_0377                       377
+#define ITM_0378                       378
+#define ITM_0379                       379
+#define ITM_0380                       380
+#define ITM_0381                       381
+#define ITM_0382                       382
+#define ITM_0383                       383
+#define ITM_0384                       384
+#define ITM_0385                       385
 #define ITM_FCC                        386
 #define ITM_FCS                        387
 #define ITM_FCF                        388
@@ -466,19 +466,19 @@
 #define ITM_SIGMAy2                    430
 #define ITM_SIGMAxy                    431
 #define ITM_SIGMAlnxy                  432
-
+#define ITM_SIGMAlnx                   433
 #define ITM_SIGMAln2x                  434
 #define ITM_SIGMAylnx                  435
 #define ITM_SIGMAlny                   436
-
+#define ITM_SIGMAln2y                  437
 #define ITM_SIGMAxlny                  438
-
+#define ITM_SIGMAlnyonx                439
 #define ITM_SIGMAx2ony                 440
 #define ITM_SIGMA1onx                  441
-
+#define ITM_SIGMA1onx2                 442
 #define ITM_SIGMAxony                  443
-
-
+#define ITM_SIGMA1ony                  444
+#define ITM_SIGMA1ony2                 445
 #define ITM_SIGMAx3                    446
 #define ITM_SIGMAx4                    447
 
@@ -682,8 +682,8 @@
 #define CHR_theta                      646
 #define CHR_iota                       647
 #define CHR_iotaTON                    648
-#define CHR_iota_DIALYTIKA             649
-
+#define CHR_iota_DIALYTIKA_TONOS       649
+#define CHR_iota_DIALYTIKA             650
 #define CHR_kappa                      651
 #define CHR_lambda                     652
 #define CHR_mu                         653
@@ -697,9 +697,9 @@
 #define CHR_sigma_end                  661
 #define CHR_tau                        662
 #define CHR_upsilon                    663
-#define CHR_upsilon_DIALYTIKA          664
-
-
+#define CHR_upsilon_TONOS              664
+#define CHR_upsilon_DIALYTIKA          665
+#define CHR_upsilon_DIALYTIKA_TONOS    666
 #define CHR_phi                        667
 #define CHR_chi                        668
 #define CHR_psi                        669
@@ -878,7 +878,7 @@
 #define CHR_SUB_SUN                    841
 #define CHR_SUB_SUN_b                  842
 #define CHR_SUB_EARTH                  843
-
+#define CHR_SUB_EARTH_b                844
 #define CHR_SUB_PLUS                   845
 #define CHR_SUB_MINUS                  846
 #define CHR_SUB_INFINITY               847
@@ -958,7 +958,7 @@
 #define CHR_SUB_x_b                    919
 #define CHR_SUP_PLUS                   920
 #define CHR_SUP_MINUS                  921
-
+#define CHR_SUP_MINUS_1                922
 #define CHR_SUP_INFINITY               923
 #define CHR_SUP_ASTERISK               924
 #define CHR_SUP_0                      925
@@ -1028,7 +1028,7 @@
 #define CHR_RIGHT_DOUBLE_ANGLE         989
 #define CHR_ONE_HALF                   990
 #define CHR_ONE_QUARTER                991
-
+#define CHR_INVERTED_QUESTION_MARK     992
 #define CHR_ETH                        993
 #define CHR_CROSS                      994
 #define CHR_eth                        995
@@ -1054,8 +1054,8 @@
 #define CHR_RIGHT_SINGLE_QUOTE        1015
 #define CHR_SINGLE_LOW_QUOTE          1016
 #define CHR_SINGLE_HIGH_QUOTE         1017
-
-
+#define CHR_LEFT_DOUBLE_QUOTE         1018
+#define CHR_RIGHT_DOUBLE_QUOTE        1019
 #define CHR_DOUBLE_LOW_QUOTE          1020
 #define CHR_DOUBLE_HIGH_QUOTE         1021
 #define CHR_ELLIPSIS                  1022
@@ -1110,7 +1110,7 @@
 #define CHR_ANGLE                     1071
 #define CHR_MEASURED_ANGLE            1072
 #define CHR_DIVIDES                   1073
-
+#define CHR_DOES_NOT_DIVIDE           1074
 #define CHR_PARALLEL                  1075
 #define CHR_NOT_PARALLEL              1076
 #define CHR_AND                       1077
@@ -1131,7 +1131,7 @@
 #define CHR_NOT_EQUAL                 1092
 #define CHR_IDENTICAL_TO              1093
 #define CHR_LESS_EQUAL                1094
-
+#define CHR_GREATER_EQUAL             1095
 #define CHR_MUCH_LESS                 1096
 #define CHR_MUCH_GREATER              1097
 #define CHR_SUN                       1098
@@ -1748,12 +1748,12 @@
 #define ITM_PRINTERMODE               1702
 #define ITM_PRINTERPROG               1703
 #define ITM_PRINTERR                  1704
-
+#define ITM_PRINTERREGS               1705
 #define ITM_PRINTERSTK                1706
 #define ITM_PRINTERTAB                1707
 #define ITM_PRINTERUSER               1708
 #define ITM_PRINTERWIDTH              1709
-
+#define ITM_PRINTERSIGMA              1710
 #define ITM_PRINTERHASH               1711
 #define ITM_FBR                       1712
 #define KEY_UNDO                      1713
@@ -1766,11 +1766,11 @@
 #define KEY_CC                        1720
 #define KEY_f                         1721
 #define KEY_g                         1722
-#define KEY_UP                        1723
+#define KEY_UP1                        1723
 #define KEY_BST                       1724
-#define KEY_DOWN                      1725
+#define KEY_DOWN1                      1725
 #define KEY_SST                       1726
-#define KEY_EXIT                      1727
+#define KEY_EXIT1                      1727
 #define KEY_BACKSPACE                 1728
 #define KEY_PRTX                      1729
 #define ITM_AIM                       1730
@@ -2516,6 +2516,7 @@
 #define ITM_MULPI2                    2342
 #define ITM_RAD2                      2343
 #define ITM_HMS2                      2344
+
 
 
 

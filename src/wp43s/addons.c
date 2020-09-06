@@ -351,6 +351,8 @@ void fnLongInt (uint16_t unusedParamButMandatory) {
   if(dataTypeX == dtReal34) {
     JM_convertReal34ToLongInteger(CONFIRMED);
   }  
+  lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
+  fnRefreshRadioState(0, 0);                                                //JMNIM
 }
 
 
@@ -572,6 +574,12 @@ void fnChangeBaseMNU(uint16_t BASE) {
 
     if(lastIntegerBase == 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
       //printf(">>> §§§fnChangeBaseMNd CM_NORMAL: convert non-shortint-mode to TAM\n");
+      runFunction(ITM_toINT);
+      return;
+    }
+
+    if(lastIntegerBase != 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
+      //printf(">>> §§§fnChangeBaseMNc CM_NORMAL: convert non-shortint-mode to %d & return\n",BASE);
       runFunction(ITM_toINT);
       return;
     }

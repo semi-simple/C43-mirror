@@ -452,10 +452,10 @@
 #define ITM_NUMB                       416
 #define ITM_SDL                        417
 #define ITM_SDR                        418
-
-
-
-
+#define ITM_0419                       419
+#define ITM_0420                       420
+#define ITM_0421                       421
+#define ITM_0422                       422
 #define ITM_SIGMAPLUS                  423
 #define ITM_SIGMAMINUS                 424
 #define ITM_NSIGMA                     425
@@ -481,11 +481,11 @@
 #define ITM_SIGMA1ony2                 445
 #define ITM_SIGMAx3                    446
 #define ITM_SIGMAx4                    447
-
-
-
-
-
+#define ITM_0448                       448
+#define ITM_0449                       449
+#define ITM_0450                       450
+#define ITM_0451                       451
+#define ITM_0452                       452
 #define SFL_USB                        453
 #define SFL_TDM24                      454
 #define SFL_YMD                        455
@@ -527,29 +527,29 @@
 #define SFL_INTING                     491
 #define SFL_SOLVING                    492
 #define SFL_VMDISP                     493
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define ITM_0494                       494
+#define ITM_0495                       495
+#define ITM_0496                       496
+#define ITM_0497                       497
+#define ITM_0498                       498
+#define ITM_0499                       499
+#define ITM_0500                       500
+#define ITM_0501                       501
+#define ITM_0502                       502
+#define ITM_0503                       503
+#define ITM_0504                       504
+#define ITM_0505                       505
+#define ITM_0506                       506
+#define ITM_0507                       507
+#define ITM_0508                       508
+#define ITM_0509                       509
+#define ITM_0510                       510
+#define ITM_0511                       511
+#define ITM_0512                       512
+#define ITM_0513                       513
+#define ITM_0514                       514
+#define ITM_0515                       515
+#define ITM_0516                       516
 #define ITM_ST_A                       517
 #define ITM_ST_B                       518
 #define ITM_ST_C                       519
@@ -634,19 +634,19 @@
 #define CHR_y                          598
 #define CHR_z                          599
 #define CHR_ALPHA                      600   //NOTE the RANGE STARTS HERE, with +36 for lower case
-
+#define ITM_0601                       601
 #define CHR_BETA                       602
 #define CHR_GAMMA                      603
 #define CHR_DELTA                      604
 #define CHR_EPSILON                    605
-
+#define ITM_0606                       606
 #define CHR_ZETA                       607
 #define CHR_ETA                        608
-
+#define CHR_0609                       609
 #define CHR_THETA                      610
 #define CHR_IOTA                       611
-
-
+#define CHR_0612                       612
+#define CHR_0613                       613
 #define CHR_IOTA_DIALYTIKA             614
 #define CHR_KAPPA                      615
 #define CHR_LAMBDA                     616
@@ -654,21 +654,21 @@
 #define CHR_NU                         618
 #define CHR_XI                         619
 #define CHR_OMICRON                    620
-
+#define CHR_0621                       621
 #define CHR_PI                         622
 #define CHR_RHO                        623
 #define CHR_SIGMA                      624
-
+#define CHR_0625                       625
 #define CHR_TAU                        626
 #define CHR_UPSILON                    627
-
+#define CHR_0628                       628
 #define CHR_UPSILON_DIALYTIKA          629
-
+#define CHR_0630                       630
 #define CHR_PHI                        631
 #define CHR_CHI                        632
 #define CHR_PSI                        633
 #define CHR_OMEGA                      634   //NOTE the RANGE STOPS HERE, with +36 for lower case
-
+#define CHR_0635                       635
 #define CHR_alpha                      636
 #define CHR_alpha_TONOS                637
 #define CHR_beta                       638
@@ -705,12 +705,12 @@
 #define CHR_psi                        669
 #define CHR_omega                      670
 #define CHR_omega_TONOS                671
-
-
-
-
-
-
+#define CHR_0672                       672
+#define CHR_0673                       673
+#define CHR_0674                       674
+#define CHR_0675                       675
+#define CHR_0676                       676
+#define CHR_0677                       677
 #define CHR_A_MACRON                   678
 #define CHR_A_ACUTE                    679
 #define CHR_A_BREVE                    680
@@ -734,7 +734,7 @@
 #define CHR_E_CIRC                     698
 #define CHR_E_OGONEK                   699
 #define CHR_G_BREVE                    700
-
+#define CHR_0701                       701
 #define CHR_I_MACRON                   702
 #define CHR_I_ACUTE                    703
 #define CHR_I_BREVE                    704
@@ -759,8 +759,8 @@
 #define CHR_O_CIRC                     723
 #define CHR_O_STROKE                   724
 #define CHR_OE                         725
-
-
+#define CHR_0726                       726
+#define CHR_0727                       727
 #define CHR_S_SHARP                    728
 #define CHR_S_ACUTE                    729
 #define CHR_S_CARON                    730
@@ -776,21 +776,21 @@
 #define CHR_U_CIRC                     740
 #define CHR_U_RING                     741
 #define CHR_W_CIRC                     742
-
-
-
+#define CHR_0743                       743
+#define CHR_0744                       744
+#define CHR_0745                       745
 #define CHR_Y_CIRC                     746
 #define CHR_Y_ACUTE                    747
 #define CHR_Y_DIARESIS                 748
 #define CHR_Z_ACUTE                    749
 #define CHR_Z_CARON                    750
 #define CHR_Z_DOT                      751
-
-
-
-
-
-
+#define CHR_0752                       752
+#define CHR_0753                       753
+#define CHR_0754                       754
+#define CHR_0755                       755
+#define CHR_0756                       756
+#define CHR_0757                       757
 #define CHR_a_MACRON                   758
 #define CHR_a_ACUTE                    759
 #define CHR_a_BREVE                    760
@@ -865,13 +865,12 @@
 #define CHR_z_ACUTE                    829
 #define CHR_z_CARON                    830
 #define CHR_z_DOT                      831
-
-
-
-
-
-
-
+#define CHR_0832                       832
+#define CHR_0833                       833
+#define CHR_0834                       834
+#define CHR_0835                       835
+#define CHR_0836                       836
+#define CHR_0837                       837
 #define CHR_SUB_alpha                  838
 #define CHR_SUB_delta                  839
 #define CHR_SUB_mu                     840
@@ -908,7 +907,6 @@
 #define CHR_SUB_M                      871
 #define CHR_SUB_N                      872
 #define CHR_SUB_O                      873
-
 #define CHR_SUB_P                      874
 #define CHR_SUB_Q                      875
 #define CHR_SUB_R                      876
@@ -925,7 +923,6 @@
 #define CHR_SUB_b                      887
 #define CHR_SUB_c                      888
 #define CHR_SUB_d                      889
-
 #define CHR_SUB_e                      890
 #define CHR_SUB_h                      891
 #define CHR_SUB_i                      892
@@ -971,7 +968,7 @@
 #define CHR_SUP_7                      932
 #define CHR_SUP_8                      933
 #define CHR_SUP_9                      934
-
+#define CHR_0935                       935
 #define CHR_SUP_T                      936
 #define CHR_SUP_a                      937
 #define CHR_SUP_f                      938
@@ -990,7 +987,7 @@
 #define CHR_LEFT_PARENTHESIS           951
 #define CHR_RIGHT_PARENTHESIS          952
 #define CHR_ASTERISK                   953
-
+#define ITM_0954                       954
 #define CHR_PLUS                       955
 #define CHR_COMMA                      956
 #define CHR_MINUS                      957
@@ -1069,10 +1066,10 @@
 #define CHR_REAL_R                    1030
 #define CHR_LEFT_ARROW                1031
 #define CHR_UP_ARROW                  1032
-
+#define CHR_1033                      1033
 #define CHR_RIGHT_ARROW               1034
 #define CHR_DOWN_ARROW                1035
-
+#define CHR_1036                      1036
 #define CHR_SERIAL_IO                 1037
 #define CHR_RIGHT_SHORT_ARROW         1038
 #define CHR_LEFT_RIGHT_ARROWS         1039
@@ -1094,11 +1091,11 @@
 #define CHR_DOES_NOT_CONTAIN          1055
 #define CHR_ZERO                      1056
 #define CHR_PRODUCT                   1057
-
-
+#define ITM_1058                      1058
+#define ITM_1059                      1059
 #define CHR_MINUS_PLUS                1060
-
-
+#define ITM_1061                      1061
+#define ITM_1062                      1062
 #define CHR_RING                      1063
 #define CHR_BULLET                    1064
 #define CHR_SQUARE_ROOT               1065
@@ -1191,16 +1188,16 @@
 #define ITM_MA35                      1152
 #define ITM_MA36                      1153
 #define ITM_HEX                       1154
-
-
-
-
-
-
-
-
-
-
+#define ITM_1155                      1155
+#define ITM_1156                      1156
+#define ITM_1157                      1157
+#define ITM_1158                      1158
+#define ITM_1159                      1159
+#define ITM_1160                      1160
+#define ITM_1161                      1161
+#define ITM_1162                      1162
+#define ITM_1163                      1163
+#define ITM_1164                      1164
 #define ITM_REGI                      1165
 #define ITM_REGJ                      1166
 #define ITM_REGK                      1167
@@ -1226,14 +1223,13 @@
 #define CHR_1187                      1187
 #define CHR_1188                      1188
 #define CHR_1189                      1189
-
-
-
-
-
-
-
-
+#define CHR_1190                      1190
+#define CHR_1191                      1191
+#define CHR_1192                      1192
+#define CHR_1193                      1193
+#define CHR_1194                      1194
+#define CHR_1195                      1195
+#define CHR_1196                      1196
 #define MNU_BINOM                     1197
 #define ITM_BINOMP                    1198
 #define ITM_BINOM                     1199
@@ -1304,27 +1300,26 @@
 #define ITM_chi2x                     1264
 #define ITM_chi2ux                    1265
 #define ITM_chi2M1                    1266
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define CHR_1267                      1267
+#define CHR_1268                      1268
+#define CHR_1269                      1269
+#define CHR_1270                      1270
+#define CHR_1271                      1271
+#define CHR_1272                      1272
+#define CHR_1273                      1273
+#define CHR_1274                      1274
+#define CHR_1275                      1275
+#define CHR_1276                      1276
+#define CHR_1277                      1277
+#define CHR_1278                      1278
+#define CHR_1279                      1279
+#define CHR_1280                      1280
+#define CHR_1281                      1281
+#define CHR_1282                      1282
+#define CHR_1283                      1283
+#define CHR_1284                      1284
+#define CHR_1285                      1285
+#define CHR_1286                      1286
 #define ITM_BESTF                     1287
 #define ITM_EXPF                      1288
 #define ITM_LINF                      1289
@@ -1333,15 +1328,14 @@
 #define ITM_POWERF                    1292
 #define ITM_GAUSSF                    1293
 #define ITM_CAUCHF                    1294
-
 #define ITM_PARABF                    1295
 #define ITM_HYPF                      1296
 #define ITM_ROOTF                     1297
-
-
-
-
-
+#define CHR_1298                      1298
+#define CHR_1299                      1299
+#define CHR_1300                      1300
+#define CHR_1301                      1301
+#define CHR_1302                      1302
 #define MNU_ADV                       1303
 #define MNU_ANGLES                    1304
 #define MNU_PRINT                     1305
@@ -1423,16 +1417,16 @@
 #define MNU_VAR                       1381
 #define MNU_TAMFLAG                   1382
 #define MNU_TAMSHUFFLE                1383
-
-
-
-
-
-
-
-
-
-
+#define CHR_1384                      1384
+#define CHR_1385                      1385
+#define CHR_1386                      1386
+#define CHR_1387                      1387
+#define CHR_1388                      1388
+#define CHR_1389                      1389
+#define CHR_1390                      1390
+#define CHR_1391                      1391
+#define CHR_1392                      1392
+#define CHR_1393                      1393
 #define ITM_1COMPL                    1394
 #define ITM_SCRDMP                    1395
 #define ITM_2COMPL                    1396
@@ -1490,17 +1484,17 @@
 #define ITM_END                       1448
 #define ITM_ENDP                      1449
 #define ITM_ENG                       1450
-
-#define ITM_ENORM                     1452
-#define ITM_ENTRY                     1453
-#define ITM_EQ_DEL                    1454
-#define ITM_EQ_EDI                    1455
-#define ITM_EQ_NEW                    1456
-#define ITM_ERF                       1457
-#define ITM_ERFC                      1458
-#define ITM_ERR                       1459
-#define ITM_EXITALL                   1460
-#define ITM_EXPT                      1461
+#define ITM_ENORM                     1451
+#define ITM_ENTRY                     1452
+#define ITM_EQ_DEL                    1453
+#define ITM_EQ_EDI                    1454
+#define ITM_EQ_NEW                    1455
+#define ITM_ERF                       1456
+#define ITM_ERFC                      1457
+#define ITM_ERR                       1458
+#define ITM_EXITALL                   1459
+#define ITM_EXPT                      1460
+#define CST_10000                     1461
 #define ITM_FIB                       1462
 #define ITM_FIX                       1463
 #define ITM_FLASH                     1464
@@ -1518,7 +1512,6 @@
 #define ITM_INDEX                     1476
 #define ITM_IXYZ                      1477
 #define ITM_IGAMMAP                   1478
-
 #define ITM_IGAMMAQ                   1479
 #define ITM_IPLUS                     1480
 #define ITM_IMINUS                    1481
@@ -1714,13 +1707,10 @@
 #define ITM_toDATE                    1671
 #define ITM_toDEG                     1672
 #define ITM_toDMS                     1673
-
-
 #define ITM_toGRAD                    1674
 #define ITM_toHR                      1675
 #define ITM_toHMS                     1676
 #define ITM_toINT                     1677   // JM #
-
 #define ITM_toMULpi                   1678
 #define ITM_toPOL                     1679
 #define ITM_toRAD                     1680
@@ -1766,11 +1756,11 @@
 #define KEY_CC                        1720
 #define KEY_f                         1721
 #define KEY_g                         1722
-#define KEY_UP1                        1723
+#define KEY_UP1                       1723
 #define KEY_BST                       1724
-#define KEY_DOWN1                      1725
+#define KEY_DOWN1                     1725
 #define KEY_SST                       1726
-#define KEY_EXIT1                      1727
+#define KEY_EXIT1                     1727
 #define KEY_BACKSPACE                 1728
 #define KEY_PRTX                      1729
 #define ITM_AIM                       1730
@@ -1789,769 +1779,353 @@
 #define ITM_TRANS                     1743
 #define ITM_XIN                       1744
 #define ITM_XOUT                      1745
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define ITM_SYS_FREE_RAM              2000   //dr
-#define ITM_ERPN                      2001   //JM eRPN
-#define ITM_HOMEx3                    2002   //JM HOME.3
-#define ITM_SHTIM                     2003   //JM SHIFT CANCEL
-#define MNU_HOME                      2004   //JM HOME
-#define ITM_SIGFIG                    2005   //JM SIGFIG
-#define MNU_ALPHA                     2006   //JM ALPHA
-#define MNU_BASE                      2007   //JM BASE
-#define ITM_2BIN                      2008   //JM BASE
-#define ITM_2OCT                      2009   //JM BASE
-#define ITM_2DEC                      2010   //JM BASE
-#define ITM_2HEX                      2011   //JM BASE
-#define ITM_WS8                       2012   //JM BASE
-#define ITM_WS16                      2013   //JM BASE
-#define ITM_WS32                      2014   //JM BASE
-#define ITM_WS64                      2015   //JM BASE
-#define ITM_UNIT                      2016   //JM UNIT
-#define ITM_SH_ERPN                   2017   //JM SHOW
-#define ITM_CB_CPXRES                 2018   //JM cb ComplexResult
-#define ITM_CB_LEADING_ZERO           2019   //JM cb LeadingZeros
-#define CHR_QOPPA                     2020   //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
-#define CHR_DIGAMMA                   2021   //JM GREEK
-#define CHR_SAMPI                     2022   //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
-#define CHR_1599                      2023   //JM SPARE
-#define CHR_1600                      2024   //JM SPARE
-#define CHR_1601                      2025   //JM SPARE
-#define CHR_1602                      2026   //JM SPARE
-#define CHR_1603                      2027   //JM SPARE
-#define CHR_1604                      2028   //JM SPARE
-#define CHR_1605                      2029   //JM SPARE
-#define CHR_1606                      2030   //JM SPARE
-#define CHR_1607                      2031   //JM SPARE
-#define CHR_1608                      2032   //JM SPARE
-#define CHR_1609                      2033   //JM SPARE
-#define CHR_1610                      2034   //JM SPARE
-#define CHR_1611                      2035   //JM SPARE
-#define CHR_1612                      2036   //JM SPARE
-#define CHR_1613                      2037   //JM SPARE
-#define CHR_1614                      2038   //JM SPARE
-#define CHR_1615                      2039   //JM SPARE
-#define CHR_1616                      2040   //JM SPARE
-#define CHR_1617                      2041   //JM SPARE
-#define CHR_1618                      2042   //JM SPARE
-#define CHR_1619                      2043   //JM SPARE
-#define CHR_1620                      2044   //JM SPARE
-#define CHR_1621                      2045   //JM SPARE
-#define CHR_1622                      2046   //JM SPARE
-#define CHR_1623                      2047   //JM SPARE
-#define CHR_1624                      2048   //JM SPARE
-#define CHR_1625                      2049   //JM SPARE
-#define CHR_1626                      2050   //JM SPARE
-#define CHR_1627                      2051   //JM SPARE
-#define CHR_1628                      2052   //JM SPARE
-#define CHR_1629                      2053   //JM SPARE
-#define CHR_1630                      2054   //JM SPARE
-#define CHR_1631                      2055   //JM SPARE
-#define CHR_qoppa                     2056   //JM GREEK
-#define CHR_digamma                   2057   //JM GREEK
-#define CHR_sampi                     2058   //JM GREEK
-#define CHR_case                      2059   //JM CAPS
-#define Not_used1737                  2060
-#define MNU_XEQ                       2061   //JM EXEC
-#define ITM_op_a                      2062   //JM OPERATORS
-#define ITM_op_a2                     2063   //JM OPERATORS
-#define ITM_op_j                      2064   //JM OPERATORS
-#define ITM_BASE_HOME                 2065   //JM BASEMENU
-#define ITM_PGMTST                    2066   //JM Generic program test
-#define ITM_BASE_AHOME                2067   //JM BASEMENU
-#define ITM_H_SUMRY                   2068   //JMHOME
-#define ITM_H_REPLCA                  2069   //JMHOME
-#define ITM_H_FIXED                   2070   //JMHOME
-#define ITM_CB_SPCRES                 2071
-#define ITM_USER_V43                  2072   //V43
-#define ITM_EE_D2Y                    2073   //JM EE
-#define ITM_EE_Y2D                    2074   //JM EE
-#define ITM_EE_A2S                    2075   //JM EE
-#define ITM_EE_S2A                    2076   //JM EE
-#define MNU_EE                        2077   //JM EE
-#define ITM_EE_EXP_TH                 2078   //JM EE
-#define ITM_EE_STO_Z                  2079   //JM EE
-#define ITM_EE_RCL_Z                  2080   //JM EE
-#define ITM_EE_STO_V                  2081   //JM EE
-#define ITM_EE_RCL_V                  2082   //JM EE
-#define ITM_EE_STO_I                  2083   //JM EE
-#define ITM_EE_RCL_I                  2084   //JM EE
-#define ITM_EE_STO_V_I                2085   //JM EE
-#define ITM_EE_STO_IR                 2086   //JM EE
-#define ITM_EE_STO_V_Z                2087   //JM EE
-#define ITM_EE_X2BAL                  2088   //JM EE
-#define KEY_COMPLEX                   2089   //JM CPX
-#define ITM_RNG                       2090   //JM RANGE
-#define Not_used1768                  2091
-#define Not_used1769                  2092
-#define ITM_HOMEx3T                   2093   //JM HOME.3T
-#define STAT_DEMO                     2094   //LOAD STATS GRAPH
-#define MNU_ASN                       2095   //JM USER
-#define K_00U                         2096   //JM USER MODE TEST
-#define Kf00U                         2097   //JM USER MODE TEST
-#define Kg00U                         2098   //JM USER MODE TEST
-#define K_01U                         2099   //JM USER MODE TEST
-#define Kf01U                         2100   //JM USER MODE TEST
-#define Kg01U                         2101   //JM USER MODE TEST
-#define K_02U                         2102   //JM USER MODE TEST
-#define Kf02U                         2103   //JM USER MODE TEST
-#define Kg02U                         2104   //JM USER MODE TEST
-#define K_03U                         2105   //JM USER MODE TEST
-#define Kf03U                         2106   //JM USER MODE TEST
-#define Kg03U                         2107   //JM USER MODE TEST
-#define K_04U                         2108   //JM USER MODE TEST
-#define Kf04U                         2109   //JM USER MODE TEST
-#define Kg04U                         2110   //JM USER MODE TEST
-#define K_05U                         2111   //JM USER MODE TEST
-#define Kf05U                         2112   //JM USER MODE TEST
-#define Kg05U                         2113   //JM USER MODE TEST
-#define K_06U                         2114   //JM USER MODE TEST
-#define Kf06U                         2115   //JM USER MODE TEST
-#define Kg06U                         2116   //JM USER MODE TEST
-#define K_07U                         2117   //JM USER MODE TEST
-#define Kf07U                         2118   //JM USER MODE TEST
-#define Kg07U                         2119   //JM USER MODE TEST
-#define K_08U                         2120   //JM USER MODE TEST
-#define Kf08U                         2121   //JM USER MODE TEST
-#define Kg08U                         2122   //JM USER MODE TEST
-#define K_09U                         2123   //JM USER MODE TEST
-#define Kf09U                         2124   //JM USER MODE TEST
-#define Kg09U                         2125   //JM USER MODE TEST
-#define K_10U                         2126   //JM USER MODE TEST
-#define Kf10U                         2127   //JM USER MODE TEST
-#define Kg10U                         2128   //JM USER MODE TEST
-#define K_11U                         2129   //JM USER MODE TEST
-#define Kf11U                         2130   //JM USER MODE TEST
-#define Kg11U                         2131   //JM USER MODE TEST
-#define K_12U                         2132   //JM USER MODE TEST
-#define Kf12U                         2133   //JM USER MODE TEST
-#define Kg12U                         2134   //JM USER MODE TEST
-#define K_13U                         2135   //JM USER MODE TEST
-#define Kf13U                         2136   //JM USER MODE TEST
-#define Kg13U                         2137   //JM USER MODE TEST
-#define K_14U                         2138   //JM USER MODE TEST
-#define Kf14U                         2139   //JM USER MODE TEST
-#define Kg14U                         2140   //JM USER MODE TEST
-#define K_15U                         2141   //JM USER MODE TEST
-#define Kf15U                         2142   //JM USER MODE TEST
-#define Kg15U                         2143   //JM USER MODE TEST
-#define K_16U                         2144   //JM USER MODE TEST
-#define Kf16U                         2145   //JM USER MODE TEST
-#define Kg16U                         2146   //JM USER MODE TEST
-#define K_17U                         2147   //JM USER MODE TEST
-#define Kf17U                         2148   //JM USER MODE TEST
-#define Kg17U                         2149   //JM USER MODE TEST
-#define K_18U                         2150   //JM USER MODE TEST
-#define Kf18U                         2151   //JM USER MODE TEST
-#define Kg18U                         2152   //JM USER MODE TEST
-#define K_19U                         2153   //JM USER MODE TEST
-#define Kf19U                         2154   //JM USER MODE TEST
-#define Kg19U                         2155   //JM USER MODE TEST
-#define K_20U                         2156   //JM USER MODE TEST
-#define Kf20U                         2157   //JM USER MODE TEST
-#define Kg20U                         2158   //JM USER MODE TEST
-#define K_21U                         2159   //JM USER MODE TEST
-#define Kf21U                         2160   //JM USER MODE TEST
-#define Kg21U                         2161   //JM USER MODE TEST
-#define K_22U                         2162   //JM USER MODE TEST
-#define Kf22U                         2163   //JM USER MODE TEST
-#define Kg22U                         2164   //JM USER MODE TEST
-#define K_23U                         2165   //JM USER MODE TEST
-#define Kf23U                         2166   //JM USER MODE TEST
-#define Kg23U                         2167   //JM USER MODE TEST
-#define K_24U                         2168   //JM USER MODE TEST
-#define Kf24U                         2169   //JM USER MODE TEST
-#define Kg24U                         2170   //JM USER MODE TEST
-#define K_25U                         2171   //JM USER MODE TEST
-#define Kf25U                         2172   //JM USER MODE TEST
-#define Kg25U                         2173   //JM USER MODE TEST
-#define K_26U                         2174   //JM USER MODE TEST
-#define Kf26U                         2175   //JM USER MODE TEST
-#define Kg26U                         2176   //JM USER MODE TEST
-#define K_27U                         2177   //JM USER MODE TEST
-#define Kf27U                         2178   //JM USER MODE TEST
-#define Kg27U                         2179   //JM USER MODE TEST
-#define K_28U                         2180   //JM USER MODE TEST
-#define Kf28U                         2181   //JM USER MODE TEST
-#define Kg28U                         2182   //JM USER MODE TEST
-#define K_29U                         2183   //JM USER MODE TEST
-#define Kf29U                         2184   //JM USER MODE TEST
-#define Kg29U                         2185   //JM USER MODE TEST
-#define K_30U                         2186   //JM USER MODE TEST
-#define Kf30U                         2187   //JM USER MODE TEST
-#define Kg30U                         2188   //JM USER MODE TEST
-#define K_31U                         2189   //JM USER MODE TEST
-#define Kf31U                         2190   //JM USER MODE TEST
-#define Kg31U                         2191   //JM USER MODE TEST
-#define K_32U                         2192   //JM USER MODE TEST
-#define Kf32U                         2193   //JM USER MODE TEST
-#define Kg32U                         2194   //JM USER MODE TEST
-#define K_33U                         2195   //JM USER MODE TEST
-#define Kf33U                         2196   //JM USER MODE TEST
-#define Kg33U                         2197   //JM USER MODE TEST
-#define K_34U                         2198   //JM USER MODE TEST
-#define Kf34U                         2199   //JM USER MODE TEST
-#define Kg34U                         2200   //JM USER MODE TEST
-#define K_35U                         2201   //JM USER MODE TEST
-#define Kf35U                         2202   //JM USER MODE TEST
-#define Kg35U                         2203   //JM USER MODE TEST
-#define K_36U                         2204   //JM USER MODE TEST
-#define Kf36U                         2205   //JM USER MODE TEST
-#define Kg36U                         2206   //JM USER MODE TEST
-#define KEY_fg                        2207
-#define ITM_USER_DEFAULTS             2208   //JM USER
-#define ITM_USER_COMPLEX              2209   //JM USER
-#define ITM_USER_SHIFTS               2210   //JM USER
-#define ITM_USER_RESET                2211   //JM USER
-#define ITM_U_KEY_USER                2212   //JM USER
-#define MNU_INL_TST                   2213   //INLINE_TEST
-#define ITM_U_KEY_CC                  2214   //JM USER
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define ITM_TEST                      2215   //INLINE_TEST
-#define ITM_U_KEY_MM                  2216   //JM USER
-#define ITM_GET_TEST_BS               2217   //INLINE_TEST
-#define ITM_U_KEY_SIGMA               2218   //JM USER
-#define ITM_SET_TEST_BS               2219   //INLINE_TEST
-#define ITM_U_KEY_PRGM                2220   //JM USER
-#define ITM_RI                        2221   //JM ROUND
-#define ITM_U_KEY_ALPHA               2222   //JM USER
-#define ITM_SH_NORM_E                 2223   //JM USER NORMAL
-#define ITM_JM_ASN                    2224   //JM ASSIGN
-#define ITM_JM_SEEK                   2225   //JM ASSIGN
-#define MNU_ASN_N                     2226   //JM USER NORMAL
-#define ITM_GET_NORM_E                2227   //JM USER NORMAL
-#define ITM_INP_DEF_43S               2228   //JM INPUT DEFAULT
-#define ITM_FG_LINE                   2229   //JM FG              **
-#define ITM_INP_DEF_DP                2230   //JM INPUT DEFAULT
-#define ITM_SH_INP_DEF                2231   //JM INPUT DEFAULT
-#define ITM_FG_DOTS                   2232   //JM FG              **
-#define ITM_INP_DEF_CPXDP             2233   //JM INPUT DEFAULT
-#define ITM_G_DOUBLETAP               2234   //JM FG              **
-#define ITM_INP_DEF_SI                2235   //JM INPUT DEFAULT
-#define ITM_INP_DEF_LI                2236   //JM INPUT DEFAULT
-#define ITM_GRAPH                     2237   //JM GRAPHING
-#define MNU_A_Z                       2238   //  34
-#define MNU_a_z                       2239   //  875
-#define MNU_GRAPH                     2240   //JM GRAPH
-#define ITM_GRF_X0                    2241   //JM GRAPH
-#define ITM_GRF_X1                    2242   //JM GRAPH
-#define ITM_GRF_Y0                    2243   //JM GRAPH
-#define ITM_GRF_Y1                    2244   //JM GRAPH
-#define ITM_GRF_DX                    2245   //JM GRAPH
-#define ITM_GRF_DY                    2246   //JM GRAPH
-#define ITM_GRF_HLP                   2247   //JM GRAPH
-#define ITM_LI                        2248
-#define ITM_ms                        2249   //JM DMS HMS
-#define ITM_SI_p                      2250   //JM PRE UNIT
-#define ITM_SI_n                      2251   //JM PRE UNIT
-#define ITM_SI_u                      2252   //JM PRE UNIT
-#define ITM_SI_m                      2253   //JM PRE UNIT
-#define ITM_SI_k                      2254   //JM PRE UNIT
-#define ITM_SI_M                      2255   //JM PRE UNIT
-#define ITM_USER_ALPHA                2256   //JM USER
-#define ITM_USER_GSHFT                2257   //JM USER
-#define ITM_HASH_JM                   2258
-#define ITM_DEMO1                     2259   //JM USER
-#define ITM_DEMO2                     2260   //JM USER
-#define ITM_DEMO3                     2261   //JM USER
-#define ITM_DEMO4                     2262   //JM USER
-#define ITM_DEMO5                     2263   //JM USER
-#define ITM_DEMO6                     2264   //JM USER
-#define MNU_ST_GRAPH                  2265   //JM USER
-#define ITM_VECT                      2266   //JMVECT
-#define ITM_LARGELI                   2267
-#define ITM_P_ALLREGS                 2268   //JM Print all regs
-#define ITM_SI_f                      2269   //JM PRE UNIT
-#define ITM_SI_G                      2270   //JM PRE UNIT
-#define ITM_SI_T                      2271   //JM PRE UNIT
-#define ITM_USER_CC                   2272   //JM USER
-#define ITM_USER_MYM                  2273   //JM USER
-#define ITM_USER_PRGM                 2274   //JM USER
-#define ITM_USER_USER                 2275   //JM USER
-#define ITM_USER_SIGMAPLUS            2276   //JM USER
-#define ITM_LISTXY                    2277   //JMSTAT
-#define ITM_toPOL2                    2278   //JM
-#define ITM_toREC2                    2279   //JM
-#define ITM_CFG                       2280   //JM Replacements
-#define ITM_CLK12                     2281   //JM Replacements
-#define ITM_CLK24                     2282   //JM Replacements
-#define ITM_CPXI                      2283
-#define ITM_CPXJ                      2284
-#define ITM_MULTCR                    2285
-#define ITM_MULTDOT                   2286
-#define ITM_SSIZE4                    2287
-#define ITM_POLAR                     2288   //JM Replacements
-#define ITM_RDXCOM                    2289   //JM Replacements
-#define ITM_RDXPER                    2290   //JM Replacements
-#define ITM_SSIZE8                    2291
-#define ITM_RECT                      2292   //JM Replacements
-#define ITM_FLGSV                     2293
-#define ITM_SCIOVR                    2294   //JM Replacements
-#define ITM_ENGOVR                    2295   //JM Replacements
-#define ITM_USER_V43MIN               2296   //V43
-#define ITM_USER_SHIFTS2              2297   //V43
-#define ITM_USER_HOME                 2298   //JM USER
-#define ITM_USER_WP43S                2299   //V43
-#define ITM_USER_DM42                 2300   //V43
-#define MNU_ASN_U                     2301   //V43
-#define ITM_X_P1                      2302   //JM EXEC
-#define ITM_X_P2                      2303   //JM EXEC
-#define ITM_X_P3                      2304   //JM EXEC
-#define ITM_X_P4                      2305   //JM EXEC
-#define ITM_X_P5                      2306   //JM EXEC
-#define ITM_X_P6                      2307   //JM EXEC
-#define ITM_X_f1                      2308   //JM EXEC
-#define ITM_X_f2                      2309   //JM EXEC
-#define ITM_X_f3                      2310   //JM EXEC
-#define ITM_X_f4                      2311   //JM EXEC
-#define ITM_X_f5                      2312   //JM EXEC
-#define ITM_X_f6                      2313   //JM EXEC
-#define ITM_X_g1                      2314   //JM EXEC
-#define ITM_X_g2                      2315   //JM EXEC
-#define ITM_X_g3                      2316   //JM EXEC
-#define ITM_X_g4                      2317   //JM EXEC
-#define ITM_X_g5                      2318   //JM EXEC
-#define ITM_X_g6                      2319   //JM EXEC
-#define ITM_ROUND2                    2320
-#define ITM_ROUNDI2                   2321
-#define ITM_USER_C43                  2322
-#define ITM_eRPN_ON                   2323
-#define ITM_eRPN_OFF                  2324
-#define ITM_T_LEFT_ARROW              2325
-#define ITM_T_RIGHT_ARROW             2326
-#define ITM_T_LLEFT_ARROW             2327
-#define ITM_T_RRIGHT_ARROW            2328
-#define ITM_DMPMNU                    2329
-#define ITM_XNEW                      2330
-#define MNU_T_EDIT                    2331
-#define ITM_XSAVE                     2332
-#define ITM_XLOAD                     2333
-#define ITM_XEDIT                     2334
-#define ITM_XXEQ                      2335
-#define MNU_XXEQ                      2336
-#define ITM_EXTX                      2337
-#define ITM_EXTY                      2338
-#define ITM_DEG2                      2339
-#define ITM_DMS2                      2340
-#define ITM_GRAD2                     2341
-#define ITM_MULPI2                    2342
-#define ITM_RAD2                      2343
-#define ITM_HMS2                      2344
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define LAST_ITEM                     2345   //JM
+#define ITM_SYS_FREE_RAM              1746   //dr
+#define ITM_ERPN                      1747   //JM eRPN
+#define ITM_HOMEx3                    1748   //JM HOME.3
+#define ITM_SHTIM                     1749   //JM SHIFT CANCEL
+#define MNU_HOME                      1750   //JM HOME
+#define ITM_SIGFIG                    1751   //JM SIGFIG
+#define MNU_ALPHA                     1752   //JM ALPHA
+#define MNU_BASE                      1753   //JM BASE
+#define ITM_2BIN                      1754   //JM BASE
+#define ITM_2OCT                      1755   //JM BASE
+#define ITM_2DEC                      1756   //JM BASE
+#define ITM_2HEX                      1757   //JM BASE
+#define ITM_WS8                       1758   //JM BASE
+#define ITM_WS16                      1759   //JM BASE
+#define ITM_WS32                      1760   //JM BASE
+#define ITM_WS64                      1761   //JM BASE
+#define ITM_UNIT                      1762   //JM UNIT
+#define ITM_SH_ERPN                   1763   //JM SHOW
+#define ITM_CB_CPXRES                 1764   //JM cb ComplexResult
+#define ITM_CB_LEADING_ZERO           1765   //JM cb LeadingZeros
+#define CHR_QOPPA                     1766   //JM GREEK   //NOTE the RANGE STARTS HERE, with +36 for lower case
+#define CHR_DIGAMMA                   1767   //JM GREEK
+#define CHR_SAMPI                     1768   //JM GREEK   //NOTE the RANGE STOPS HERE, with +36 for lower case
+#define CHR_1599                      1769   //JM SPARE
+#define CHR_1600                      1770   //JM SPARE
+#define CHR_1601                      1771   //JM SPARE
+#define CHR_1602                      1772   //JM SPARE
+#define CHR_1603                      1773   //JM SPARE
+#define CHR_1604                      1774   //JM SPARE
+#define CHR_1605                      1775   //JM SPARE
+#define CHR_1606                      1776   //JM SPARE
+#define CHR_1607                      1777   //JM SPARE
+#define CHR_1608                      1778   //JM SPARE
+#define CHR_1609                      1779   //JM SPARE
+#define CHR_1610                      1780   //JM SPARE
+#define CHR_1611                      1781   //JM SPARE
+#define CHR_1612                      1782   //JM SPARE
+#define CHR_1613                      1783   //JM SPARE
+#define CHR_1614                      1784   //JM SPARE
+#define CHR_1615                      1785   //JM SPARE
+#define CHR_1616                      1786   //JM SPARE
+#define CHR_1617                      1787   //JM SPARE
+#define CHR_1618                      1788   //JM SPARE
+#define CHR_1619                      1789   //JM SPARE
+#define CHR_1620                      1790   //JM SPARE
+#define CHR_1621                      1791   //JM SPARE
+#define CHR_1622                      1792   //JM SPARE
+#define CHR_1623                      1793   //JM SPARE
+#define CHR_1624                      1794   //JM SPARE
+#define CHR_1625                      1795   //JM SPARE
+#define CHR_1626                      1796   //JM SPARE
+#define CHR_1627                      1797   //JM SPARE
+#define CHR_1628                      1798   //JM SPARE
+#define CHR_1629                      1799   //JM SPARE
+#define CHR_1630                      1800   //JM SPARE
+#define CHR_1631                      1801   //JM SPARE
+#define CHR_qoppa                     1802   //JM GREEK
+#define CHR_digamma                   1803   //JM GREEK
+#define CHR_sampi                     1804   //JM GREEK
+#define CHR_case                      1805   //JM CAPS
+#define Not_used1737                  1806
+#define MNU_XEQ                       1807   //JM EXEC
+#define ITM_op_a                      1808   //JM OPERATORS
+#define ITM_op_a2                     1809   //JM OPERATORS
+#define ITM_op_j                      1810   //JM OPERATORS
+#define ITM_BASE_HOME                 1811   //JM BASEMENU
+#define ITM_PGMTST                    1812   //JM Generic program test
+#define ITM_BASE_AHOME                1813   //JM BASEMENU
+#define ITM_H_SUMRY                   1814   //JMHOME
+#define ITM_H_REPLCA                  1815   //JMHOME
+#define ITM_H_FIXED                   1816   //JMHOME
+#define ITM_CB_SPCRES                 1817
+#define ITM_USER_V43                  1818   //V43
+#define ITM_EE_D2Y                    1819   //JM EE
+#define ITM_EE_Y2D                    1820   //JM EE
+#define ITM_EE_A2S                    1821   //JM EE
+#define ITM_EE_S2A                    1822   //JM EE
+#define MNU_EE                        1823   //JM EE
+#define ITM_EE_EXP_TH                 1824   //JM EE
+#define ITM_EE_STO_Z                  1825   //JM EE
+#define ITM_EE_RCL_Z                  1826   //JM EE
+#define ITM_EE_STO_V                  1827   //JM EE
+#define ITM_EE_RCL_V                  1828   //JM EE
+#define ITM_EE_STO_I                  1829   //JM EE
+#define ITM_EE_RCL_I                  1830   //JM EE
+#define ITM_EE_STO_V_I                1831   //JM EE
+#define ITM_EE_STO_IR                 1832   //JM EE
+#define ITM_EE_STO_V_Z                1833   //JM EE
+#define ITM_EE_X2BAL                  1834   //JM EE
+#define KEY_COMPLEX                   1835   //JM CPX
+#define ITM_RNG                       1836   //JM RANGE
+#define Not_used1768                  1837
+#define Not_used1769                  1838
+#define ITM_HOMEx3T                   1839   //JM HOME.3T
+#define STAT_DEMO                     1840   //LOAD STATS GRAPH
+#define MNU_ASN                       1841   //JM USER
+#define K_00U                         1842   //JM USER MODE TEST
+#define Kf00U                         1843   //JM USER MODE TEST
+#define Kg00U                         1844   //JM USER MODE TEST
+#define K_01U                         1845   //JM USER MODE TEST
+#define Kf01U                         1846   //JM USER MODE TEST
+#define Kg01U                         1847   //JM USER MODE TEST
+#define K_02U                         1848   //JM USER MODE TEST
+#define Kf02U                         1849   //JM USER MODE TEST
+#define Kg02U                         1850   //JM USER MODE TEST
+#define K_03U                         1851   //JM USER MODE TEST
+#define Kf03U                         1852   //JM USER MODE TEST
+#define Kg03U                         1853   //JM USER MODE TEST
+#define K_04U                         1854   //JM USER MODE TEST
+#define Kf04U                         1855   //JM USER MODE TEST
+#define Kg04U                         1856   //JM USER MODE TEST
+#define K_05U                         1857   //JM USER MODE TEST
+#define Kf05U                         1858   //JM USER MODE TEST
+#define Kg05U                         1859   //JM USER MODE TEST
+#define K_06U                         1860   //JM USER MODE TEST
+#define Kf06U                         1861   //JM USER MODE TEST
+#define Kg06U                         1862   //JM USER MODE TEST
+#define K_07U                         1863   //JM USER MODE TEST
+#define Kf07U                         1864   //JM USER MODE TEST
+#define Kg07U                         1865   //JM USER MODE TEST
+#define K_08U                         1866   //JM USER MODE TEST
+#define Kf08U                         1867   //JM USER MODE TEST
+#define Kg08U                         1868   //JM USER MODE TEST
+#define K_09U                         1869   //JM USER MODE TEST
+#define Kf09U                         1870   //JM USER MODE TEST
+#define Kg09U                         1871   //JM USER MODE TEST
+#define K_10U                         1872   //JM USER MODE TEST
+#define Kf10U                         1873   //JM USER MODE TEST
+#define Kg10U                         1874   //JM USER MODE TEST
+#define K_11U                         1875   //JM USER MODE TEST
+#define Kf11U                         1876   //JM USER MODE TEST
+#define Kg11U                         1877   //JM USER MODE TEST
+#define K_12U                         1878   //JM USER MODE TEST
+#define Kf12U                         1879   //JM USER MODE TEST
+#define Kg12U                         1880   //JM USER MODE TEST
+#define K_13U                         1881   //JM USER MODE TEST
+#define Kf13U                         1882   //JM USER MODE TEST
+#define Kg13U                         1883   //JM USER MODE TEST
+#define K_14U                         1884   //JM USER MODE TEST
+#define Kf14U                         1885   //JM USER MODE TEST
+#define Kg14U                         1886   //JM USER MODE TEST
+#define K_15U                         1887   //JM USER MODE TEST
+#define Kf15U                         1888   //JM USER MODE TEST
+#define Kg15U                         1889   //JM USER MODE TEST
+#define K_16U                         1890   //JM USER MODE TEST
+#define Kf16U                         1891   //JM USER MODE TEST
+#define Kg16U                         1892   //JM USER MODE TEST
+#define K_17U                         1893   //JM USER MODE TEST
+#define Kf17U                         1894   //JM USER MODE TEST
+#define Kg17U                         1895   //JM USER MODE TEST
+#define K_18U                         1896   //JM USER MODE TEST
+#define Kf18U                         1897   //JM USER MODE TEST
+#define Kg18U                         1898   //JM USER MODE TEST
+#define K_19U                         1899   //JM USER MODE TEST
+#define Kf19U                         1900   //JM USER MODE TEST
+#define Kg19U                         1901   //JM USER MODE TEST
+#define K_20U                         1902   //JM USER MODE TEST
+#define Kf20U                         1903   //JM USER MODE TEST
+#define Kg20U                         1904   //JM USER MODE TEST
+#define K_21U                         1905   //JM USER MODE TEST
+#define Kf21U                         1906   //JM USER MODE TEST
+#define Kg21U                         1907   //JM USER MODE TEST
+#define K_22U                         1908   //JM USER MODE TEST
+#define Kf22U                         1909   //JM USER MODE TEST
+#define Kg22U                         1910   //JM USER MODE TEST
+#define K_23U                         1911   //JM USER MODE TEST
+#define Kf23U                         1912   //JM USER MODE TEST
+#define Kg23U                         1913   //JM USER MODE TEST
+#define K_24U                         1914   //JM USER MODE TEST
+#define Kf24U                         1915   //JM USER MODE TEST
+#define Kg24U                         1916   //JM USER MODE TEST
+#define K_25U                         1917   //JM USER MODE TEST
+#define Kf25U                         1918   //JM USER MODE TEST
+#define Kg25U                         1919   //JM USER MODE TEST
+#define K_26U                         1920   //JM USER MODE TEST
+#define Kf26U                         1921   //JM USER MODE TEST
+#define Kg26U                         1922   //JM USER MODE TEST
+#define K_27U                         1923   //JM USER MODE TEST
+#define Kf27U                         1924   //JM USER MODE TEST
+#define Kg27U                         1925   //JM USER MODE TEST
+#define K_28U                         1926   //JM USER MODE TEST
+#define Kf28U                         1927   //JM USER MODE TEST
+#define Kg28U                         1928   //JM USER MODE TEST
+#define K_29U                         1929   //JM USER MODE TEST
+#define Kf29U                         1930   //JM USER MODE TEST
+#define Kg29U                         1931   //JM USER MODE TEST
+#define K_30U                         1932   //JM USER MODE TEST
+#define Kf30U                         1933   //JM USER MODE TEST
+#define Kg30U                         1934   //JM USER MODE TEST
+#define K_31U                         1935   //JM USER MODE TEST
+#define Kf31U                         1936   //JM USER MODE TEST
+#define Kg31U                         1937   //JM USER MODE TEST
+#define K_32U                         1938   //JM USER MODE TEST
+#define Kf32U                         1939   //JM USER MODE TEST
+#define Kg32U                         1940   //JM USER MODE TEST
+#define K_33U                         1941   //JM USER MODE TEST
+#define Kf33U                         1942   //JM USER MODE TEST
+#define Kg33U                         1943   //JM USER MODE TEST
+#define K_34U                         1944   //JM USER MODE TEST
+#define Kf34U                         1945   //JM USER MODE TEST
+#define Kg34U                         1946   //JM USER MODE TEST
+#define K_35U                         1947   //JM USER MODE TEST
+#define Kf35U                         1948   //JM USER MODE TEST
+#define Kg35U                         1949   //JM USER MODE TEST
+#define K_36U                         1950   //JM USER MODE TEST
+#define Kf36U                         1951   //JM USER MODE TEST
+#define Kg36U                         1952   //JM USER MODE TEST
+#define KEY_fg                        1953
+#define ITM_USER_DEFAULTS             1954   //JM USER
+#define ITM_USER_COMPLEX              1955   //JM USER
+#define ITM_USER_SHIFTS               1956   //JM USER
+#define ITM_USER_RESET                1957   //JM USER
+#define ITM_U_KEY_USER                1958   //JM USER
+#define MNU_INL_TST                   1959   //INLINE_TEST
+#define ITM_U_KEY_CC                  1960   //JM USER
+#define ITM_TEST                      1961   //INLINE_TEST
+#define ITM_U_KEY_MM                  1962   //JM USER
+#define ITM_GET_TEST_BS               1963   //INLINE_TEST
+#define ITM_U_KEY_SIGMA               1964   //JM USER
+#define ITM_SET_TEST_BS               1965   //INLINE_TEST
+#define ITM_U_KEY_PRGM                1966   //JM USER
+#define ITM_RI                        1967   //JM ROUND
+#define ITM_U_KEY_ALPHA               1968   //JM USER
+#define ITM_SH_NORM_E                 1969   //JM USER NORMAL
+#define ITM_JM_ASN                    1970   //JM ASSIGN
+#define ITM_JM_SEEK                   1971   //JM ASSIGN
+#define MNU_ASN_N                     1972   //JM USER NORMAL
+#define ITM_GET_NORM_E                1973   //JM USER NORMAL
+#define ITM_INP_DEF_43S               1974   //JM INPUT DEFAULT
+#define ITM_FG_LINE                   1975   //JM FG              **
+#define ITM_INP_DEF_DP                1976   //JM INPUT DEFAULT
+#define ITM_SH_INP_DEF                1977   //JM INPUT DEFAULT
+#define ITM_FG_DOTS                   1978   //JM FG              **
+#define ITM_INP_DEF_CPXDP             1979   //JM INPUT DEFAULT
+#define ITM_G_DOUBLETAP               1980   //JM FG              **
+#define ITM_INP_DEF_SI                1981   //JM INPUT DEFAULT
+#define ITM_INP_DEF_LI                1982   //JM INPUT DEFAULT
+#define ITM_GRAPH                     1983   //JM GRAPHING
+#define MNU_A_Z                       1984   //  34
+#define MNU_a_z                       1985   //  875
+#define MNU_GRAPH                     1986   //JM GRAPH
+#define ITM_GRF_X0                    1987   //JM GRAPH
+#define ITM_GRF_X1                    1988   //JM GRAPH
+#define ITM_GRF_Y0                    1989   //JM GRAPH
+#define ITM_GRF_Y1                    1990   //JM GRAPH
+#define ITM_GRF_DX                    1991   //JM GRAPH
+#define ITM_GRF_DY                    1992   //JM GRAPH
+#define ITM_GRF_HLP                   1993   //JM GRAPH
+#define ITM_LI                        1994
+#define ITM_ms                        1995   //JM DMS HMS
+#define ITM_SI_p                      1996   //JM PRE UNIT
+#define ITM_SI_n                      1997   //JM PRE UNIT
+#define ITM_SI_u                      1998   //JM PRE UNIT
+#define ITM_SI_m                      1999   //JM PRE UNIT
+#define ITM_SI_k                      2000   //JM PRE UNIT
+#define ITM_SI_M                      2001   //JM PRE UNIT
+#define ITM_USER_ALPHA                2002   //JM USER
+#define ITM_USER_GSHFT                2003   //JM USER
+#define ITM_HASH_JM                   2004
+#define ITM_DEMO1                     2005   //JM USER
+#define ITM_DEMO2                     2006   //JM USER
+#define ITM_DEMO3                     2007   //JM USER
+#define ITM_DEMO4                     2008   //JM USER
+#define ITM_DEMO5                     2009   //JM USER
+#define ITM_DEMO6                     2010   //JM USER
+#define MNU_ST_GRAPH                  2011   //JM USER
+#define ITM_VECT                      2012   //JMVECT
+#define ITM_LARGELI                   2013
+#define ITM_P_ALLREGS                 2014   //JM Print all regs
+#define ITM_SI_f                      2015   //JM PRE UNIT
+#define ITM_SI_G                      2016   //JM PRE UNIT
+#define ITM_SI_T                      2017   //JM PRE UNIT
+#define ITM_USER_CC                   2018   //JM USER
+#define ITM_USER_MYM                  2019   //JM USER
+#define ITM_USER_PRGM                 2020   //JM USER
+#define ITM_USER_USER                 2021   //JM USER
+#define ITM_USER_SIGMAPLUS            2022   //JM USER
+#define ITM_LISTXY                    2023   //JMSTAT
+#define ITM_toPOL2                    2024   //JM
+#define ITM_toREC2                    2025   //JM
+#define ITM_CFG                       2026   //JM Replacements
+#define ITM_CLK12                     2027   //JM Replacements
+#define ITM_CLK24                     2028   //JM Replacements
+#define ITM_CPXI                      2029
+#define ITM_CPXJ                      2030
+#define ITM_MULTCR                    2031
+#define ITM_MULTDOT                   2032
+#define ITM_SSIZE4                    2033
+#define ITM_POLAR                     2034   //JM Replacements
+#define ITM_RDXCOM                    2035   //JM Replacements
+#define ITM_RDXPER                    2036   //JM Replacements
+#define ITM_SSIZE8                    2037
+#define ITM_RECT                      2038   //JM Replacements
+#define ITM_FLGSV                     2039
+#define ITM_SCIOVR                    2040   //JM Replacements
+#define ITM_ENGOVR                    2041   //JM Replacements
+#define ITM_USER_V43MIN               2042   //V43
+#define ITM_USER_SHIFTS2              2043   //V43
+#define ITM_USER_HOME                 2044   //JM USER
+#define ITM_USER_WP43S                2045   //V43
+#define ITM_USER_DM42                 2046   //V43
+#define MNU_ASN_U                     2047   //V43
+#define ITM_X_P1                      2048   //JM EXEC
+#define ITM_X_P2                      2049   //JM EXEC
+#define ITM_X_P3                      2050   //JM EXEC
+#define ITM_X_P4                      2051   //JM EXEC
+#define ITM_X_P5                      2052   //JM EXEC
+#define ITM_X_P6                      2053   //JM EXEC
+#define ITM_X_f1                      2054   //JM EXEC
+#define ITM_X_f2                      2055   //JM EXEC
+#define ITM_X_f3                      2056   //JM EXEC
+#define ITM_X_f4                      2057   //JM EXEC
+#define ITM_X_f5                      2058   //JM EXEC
+#define ITM_X_f6                      2059   //JM EXEC
+#define ITM_X_g1                      2060   //JM EXEC
+#define ITM_X_g2                      2061   //JM EXEC
+#define ITM_X_g3                      2062   //JM EXEC
+#define ITM_X_g4                      2063   //JM EXEC
+#define ITM_X_g5                      2064   //JM EXEC
+#define ITM_X_g6                      2065   //JM EXEC
+#define ITM_ROUND2                    2066
+#define ITM_ROUNDI2                   2067
+#define ITM_USER_C43                  2068
+#define ITM_eRPN_ON                   2069
+#define ITM_eRPN_OFF                  2070
+#define ITM_T_LEFT_ARROW              2071
+#define ITM_T_RIGHT_ARROW             2072
+#define ITM_T_LLEFT_ARROW             2073
+#define ITM_T_RRIGHT_ARROW            2074
+#define ITM_DMPMNU                    2075
+#define ITM_XNEW                      2076
+#define MNU_T_EDIT                    2077
+#define ITM_XSAVE                     2078
+#define ITM_XLOAD                     2079
+#define ITM_XEDIT                     2080
+#define ITM_XXEQ                      2081
+#define MNU_XXEQ                      2082
+#define ITM_EXTX                      2083
+#define ITM_EXTY                      2084
+#define ITM_DEG2                      2085
+#define ITM_DMS2                      2086
+#define ITM_GRAD2                     2087
+#define ITM_MULPI2                    2088
+#define ITM_RAD2                      2089
+#define ITM_HMS2                      2090
+
+#define LAST_ITEM                     2091   //JM
 
 #define CHR_PROD_SIGN                 9999
 

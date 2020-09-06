@@ -1091,11 +1091,11 @@
 #define CHR_DOES_NOT_CONTAIN          1055
 #define CHR_ZERO                      1056
 #define CHR_PRODUCT                   1057
-#define ITM_1058                      1058
-#define ITM_1059                      1059
+#define CHR_1058                      1058
+#define CHR_1059                      1059
 #define CHR_MINUS_PLUS                1060
-#define ITM_1061                      1061
-#define ITM_1062                      1062
+#define CHR_1061                      1061
+#define CHR_1062                      1062
 #define CHR_RING                      1063
 #define CHR_BULLET                    1064
 #define CHR_SQUARE_ROOT               1065
@@ -1494,7 +1494,7 @@
 #define ITM_ERR                       1458
 #define ITM_EXITALL                   1459
 #define ITM_EXPT                      1460
-#define CST_10000                     1461
+#define ITM_1461                      1461
 #define ITM_FIB                       1462
 #define ITM_FIX                       1463
 #define ITM_FLASH                     1464

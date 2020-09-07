@@ -46,7 +46,7 @@
 #define TO_WP43SMEMPTR(p)           ((p) == NULL ? WP43S_NULL : (uint16_t)((dataBlock_t *)(p) - ram))
 #define FN_KEY_TIMEOUT_TO_NOP       0
 #ifdef DMCP_BUILD
-#define SCREEN_REFRESH_PERIOD     125 // 500 //JM timeout for lcd refresh in ms 125
+#define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 125
 #else
 #define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 100
 #endif 

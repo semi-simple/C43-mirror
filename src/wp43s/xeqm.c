@@ -34,21 +34,21 @@ void capture_sequence(char *origin, uint16_t item) {
     line1[0]=0;
     ll[0]=0; ll[1]=0;
     switch (item) {
-      case  684: strcpy(ll,"X<>Y"); break;
-      case  698: strcpy(ll,"Y^X" ); break;
-      case  784: strcpy(ll,"/"   ); break;
-      case  890: ll[0]=48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  891: ll[0]=49; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  892: ll[0]=50; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  893: ll[0]=51; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  894: ll[0]=52; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  895: ll[0]=53; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  896: ll[0]=54; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  897: ll[0]=55; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  898: ll[0]=56; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case  899: ll[0]=57; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
-      case 1310: ll[0]=46; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
-      case 1487: ll[0]=69; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
+      case  36: strcpy(ll,"X<>Y"); break;
+      case  60: strcpy(ll,"Y^X" ); break;
+      case  99: strcpy(ll,"/"   ); break;
+      case  CHR_0:        ll[0]=48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_1:        ll[0]=49; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_2:        ll[0]=50; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_3:        ll[0]=51; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_4:        ll[0]=52; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_5:        ll[0]=53; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_6:        ll[0]=54; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_7:        ll[0]=55; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_8:        ll[0]=56; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_9:        ll[0]=57; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+      case  CHR_PERIOD:   ll[0]=46; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
+      case  ITM_EXPONENT: ll[0]=69; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
       default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);
                }  
     }
@@ -227,372 +227,372 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       } else // (gotoinprogress <> 11)  AND NOT (==11 AND reg>0)
 
 // FAST TRACKED FOR QUICKER RESPONSE DUPLICATED ************************************************************************
-                      
-                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
-                      if (strcompare(commandnumber,"X<>Y"  )) {strcpy(commandnumber, "684");} else
-                      if (strcompare(commandnumber,"EXIT"  )) {strcpy(commandnumber,"1523");} else
-                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
-                      if (strcompare(commandnumber,"DROP"  )) {strcpy(commandnumber, "127");} else
-                      if (strcompare(commandnumber,"Y^X"   )) {strcpy(commandnumber, "698");} else
-                      if (strcompare(commandnumber,"10^X"  )) {strcpy(commandnumber,   "3");} else
-                      if (strcompare(commandnumber,"SQRT"  )) {strcpy(commandnumber, "808");} else
-                      if (strcompare(commandnumber,"-"     )) {strcpy(commandnumber, "780");} else
-                      if (strcompare(commandnumber,"+"     )) {strcpy(commandnumber, "778");} else
-                      if (strcompare(commandnumber,"/"     )) {strcpy(commandnumber, "784");} else
-                      if (strcompare(commandnumber,"*"     )) {strcpy(commandnumber, "782");} else
-                      if (strcompare(commandnumber,"CHS"   )) {strcpy(commandnumber, "779");} else
-                      if (strcompare(commandnumber,"SUM+"  )) {strcpy(commandnumber, "762");} else
-                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber,  "85");} else
-                      if (strcompare(commandnumber,"PRIME?")) {strcpy(commandnumber, "469");} else
-                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
-                      if (strcompare(commandnumber,"RAN#"  )) {strcpy(commandnumber, "486");} else
-                      if (strcompare(commandnumber,"PHI"   )) {strcpy(commandnumber, "764");} else
-                      if (strcompare(commandnumber,"e"     )) {strcpy(commandnumber, "139");} else
-                      if (strcompare(commandnumber,"ABS"   )) {strcpy(commandnumber, "815");} else
-                      if (strcompare(commandnumber,"ARG"   )) {strcpy(commandnumber, "819");} else
-                      if (strcompare(commandnumber,"RE"    )) {strcpy(commandnumber, "503");} else
-                      if (strcompare(commandnumber,"IM"    )) {strcpy(commandnumber, "250");} else
-                      if (strcompare(commandnumber,"STO"   )) {strcpy(commandnumber, "589");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
-                      if (strcompare(commandnumber,"RCL"   )) {strcpy(commandnumber, "488");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
-//                    if (strcompare(commandnumber,"DEC"   )) {strcpy(commandnumber, "115");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
-//                    if (strcompare(commandnumber,"INC"   )) {strcpy(commandnumber, "252");} else    //EXPECTING FOLLOWING OPERAND "nn". NOT CHECKING "nn", just sending it if in ""
+                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "1610");} else
+                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "35");} else
+                      if (strcompare(commandnumber,"X<>Y" )) {strcpy(commandnumber, "36");} else
+                      if (strcompare(commandnumber,"DROP" )) {strcpy(commandnumber, "37");} else
+                      if (strcompare(commandnumber,"STO" )) {strcpy(commandnumber, "44");} else
+                      if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "51");} else
+                      if (strcompare(commandnumber,"X^2" )) {strcpy(commandnumber, "58");} else
+                      if (strcompare(commandnumber,"Y^X" )) {strcpy(commandnumber, "60");} else
+                      if (strcompare(commandnumber,"SQRT" )) {strcpy(commandnumber, "61");} else
+                      if (strcompare(commandnumber,"2^X" )) {strcpy(commandnumber, "64");} else
+                      if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "67");} else
+                      if (strcompare(commandnumber,"+" )) {strcpy(commandnumber, "95");} else
+                      if (strcompare(commandnumber,"-" )) {strcpy(commandnumber, "96");} else
+                      if (strcompare(commandnumber,"CHS" )) {strcpy(commandnumber, "97");} else
+                      if (strcompare(commandnumber,"*" )) {strcpy(commandnumber, "98");} else
+                      if (strcompare(commandnumber,"/" )) {strcpy(commandnumber, "99");} else
+                      if (strcompare(commandnumber,"EXIT" )) {strcpy(commandnumber, "1727");} else
+                      if (strcompare(commandnumber,"SUM+" )) {strcpy(commandnumber, "423");} else
+                      if (strcompare(commandnumber,"PRIME?" )) {strcpy(commandnumber, "33");} else
+                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "107");} else
+                      if (strcompare(commandnumber,"PI" )) {strcpy(commandnumber, "109");} else
+                      if (strcompare(commandnumber,"RAN#" )) {strcpy(commandnumber, "1549");} else
+                      if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "135");} else
+                      if (strcompare(commandnumber,"PHI" )) {strcpy(commandnumber, "201");} else
+                      if (strcompare(commandnumber,"ABS" )) {strcpy(commandnumber, "105");} else
+                      if (strcompare(commandnumber,"ARG" )) {strcpy(commandnumber, "1696");} else
+                      if (strcompare(commandnumber,"RE" )) {strcpy(commandnumber, "1556");} else
+                      if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "1475");} else
+                      if (strcompare(commandnumber,"STO" )) {strcpy(commandnumber, "44");} else
+                      if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "51");} else
 
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
-
-                      if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "3");} else
-                      if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "4");} else
-                      if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "5");} else
-                      if (strcompare(commandnumber,"1/X" )) {strcpy(commandnumber, "6");} else
-                      if (strcompare(commandnumber,"2COMPL" )) {strcpy(commandnumber, "7");} else
-                      if (strcompare(commandnumber,"2^X" )) {strcpy(commandnumber, "8");} else
-                      if (strcompare(commandnumber,"CUBERT" )) {strcpy(commandnumber, "9");} else
-                      if (strcompare(commandnumber,"AGM" )) {strcpy(commandnumber, "18");} else
-                      if (strcompare(commandnumber,"AND" )) {strcpy(commandnumber, "22");} else
-                      if (strcompare(commandnumber,"ARCCOS" )) {strcpy(commandnumber, "24");} else
-                      if (strcompare(commandnumber,"ARCOSH" )) {strcpy(commandnumber, "25");} else
-                      if (strcompare(commandnumber,"ARCSIN" )) {strcpy(commandnumber, "26");} else
-                      if (strcompare(commandnumber,"ARCTAN" )) {strcpy(commandnumber, "27");} else
-                      if (strcompare(commandnumber,"ARSINH" )) {strcpy(commandnumber, "28");} else
-                      if (strcompare(commandnumber,"ARTANH" )) {strcpy(commandnumber, "29");} else
-                      if (strcompare(commandnumber,"ASR" )) {strcpy(commandnumber, "30");} else
-                      if (strcompare(commandnumber,"BATT?" )) {strcpy(commandnumber, "40");} else
-                      if (strcompare(commandnumber,"BC?" )) {strcpy(commandnumber, "41");} else
-                      if (strcompare(commandnumber,"BS?" )) {strcpy(commandnumber, "53");} else
-                      if (strcompare(commandnumber,"c" )) {strcpy(commandnumber, "56");} else
-                      if (strcompare(commandnumber,"CB" )) {strcpy(commandnumber, "67");} else
-                      if (strcompare(commandnumber,"CEIL" )) {strcpy(commandnumber, "68");} else
-                      if (strcompare(commandnumber,"CLFALL" )) {strcpy(commandnumber, "73");} else
-                      if (strcompare(commandnumber,"CLLCD" )) {strcpy(commandnumber, "77");} else
-                      if (strcompare(commandnumber,"CLMENU" )) {strcpy(commandnumber, "78");} else
-                      if (strcompare(commandnumber,"CLREGS" )) {strcpy(commandnumber, "82");} else
-                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber, "83");} else
-                      if (strcompare(commandnumber,"CLX" )) {strcpy(commandnumber, "84");} else
-                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber, "85");} else
-                      if (strcompare(commandnumber,"COMB" )) {strcpy(commandnumber, "87");} else
-                      if (strcompare(commandnumber,"CONJ" )) {strcpy(commandnumber, "88");} else
-                      if (strcompare(commandnumber,"CNST" )) {strcpy(commandnumber, "89");} else
-                      if (strcompare(commandnumber,"COS" )) {strcpy(commandnumber, "92");} else
-                      if (strcompare(commandnumber,"COSH" )) {strcpy(commandnumber, "93");} else
-                      if (strcompare(commandnumber,"CPX?" )) {strcpy(commandnumber, "100");} else
-                      if (strcompare(commandnumber,"CROSS" )) {strcpy(commandnumber, "101");} else
-                      if (strcompare(commandnumber,"CX>RE" )) {strcpy(commandnumber, "103");} else
-                      if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "115");} else
-                      if (strcompare(commandnumber,"DECOMP" )) {strcpy(commandnumber, "116");} else
-                      if (strcompare(commandnumber,"DEG>" )) {strcpy(commandnumber, "118");} else
-                      if (strcompare(commandnumber,"DOT" )) {strcpy(commandnumber, "125");} else
-                      if (strcompare(commandnumber,"DROP" )) {strcpy(commandnumber, "127");} else
-                      if (strcompare(commandnumber,"DROPY" )) {strcpy(commandnumber, "128");} else
-                      if (strcompare(commandnumber,"D.MS>" )) {strcpy(commandnumber, "135");} else
-                      if (strcompare(commandnumber,"D>R" )) {strcpy(commandnumber, "138");} else
-                      if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "139");} else
-                      if (strcompare(commandnumber,"ENG" )) {strcpy(commandnumber, "145");} else
-                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "148");} else
-                      if (strcompare(commandnumber,"ENTRY?" )) {strcpy(commandnumber, "149");} else
-                      if (strcompare(commandnumber,"E^X" )) {strcpy(commandnumber, "158");} else
-                      if (strcompare(commandnumber,"EXPT" )) {strcpy(commandnumber, "167");} else
-                      if (strcompare(commandnumber,"E^X-1" )) {strcpy(commandnumber, "168");} else
-                      if (strcompare(commandnumber,"FB" )) {strcpy(commandnumber, "173");} else
-                      if (strcompare(commandnumber,"FF" )) {strcpy(commandnumber, "180");} else
-                      if (strcompare(commandnumber,"FILL" )) {strcpy(commandnumber, "182");} else
-                      if (strcompare(commandnumber,"FIX" )) {strcpy(commandnumber, "185");} else
-                      if (strcompare(commandnumber,"FLASH?" )) {strcpy(commandnumber, "188");} else
-                      if (strcompare(commandnumber,"FLOOR" )) {strcpy(commandnumber, "189");} else
-                      if (strcompare(commandnumber,"FP" )) {strcpy(commandnumber, "190");} else
-                      if (strcompare(commandnumber,"GCD" )) {strcpy(commandnumber, "217");} else
-                      if (strcompare(commandnumber,"ge" )) {strcpy(commandnumber, "220");} else
-                      if (strcompare(commandnumber,"GRAD>" )) {strcpy(commandnumber, "230");} else
-                      if (strcompare(commandnumber,"gEARTH" )) {strcpy(commandnumber, "233");} else
-                      if (strcompare(commandnumber,"IDIV" )) {strcpy(commandnumber, "247");} else
-                      if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "250");} else
-                      if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "252");} else
-                      if (strcompare(commandnumber,"INTS" )) {strcpy(commandnumber, "256");} else
-                      if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "259");} else
-                      if (strcompare(commandnumber,"KEY?" )) {strcpy(commandnumber, "284");} else
-                      if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "296");} else
-                      if (strcompare(commandnumber,"LCM" )) {strcpy(commandnumber, "301");} else
-                      if (strcompare(commandnumber,"LJ" )) {strcpy(commandnumber, "309");} else
-                      if (strcompare(commandnumber,"LN" )) {strcpy(commandnumber, "310");} else
-                      if (strcompare(commandnumber,"LN(1+X)" )) {strcpy(commandnumber, "312");} else
-                      if (strcompare(commandnumber,"LNBETA" )) {strcpy(commandnumber, "314");} else
-                      if (strcompare(commandnumber,"LNGAMMA" )) {strcpy(commandnumber, "315");} else
-                      if (strcompare(commandnumber,"LOCR?" )) {strcpy(commandnumber, "322");} else
-                      if (strcompare(commandnumber,"LOG10" )) {strcpy(commandnumber, "323");} else
-                      if (strcompare(commandnumber,"LOG2" )) {strcpy(commandnumber, "324");} else
-                      if (strcompare(commandnumber,"LOGXY" )) {strcpy(commandnumber, "331");} else
-                      if (strcompare(commandnumber,"MANT" )) {strcpy(commandnumber, "344");} else
-                      if (strcompare(commandnumber,"MASKL" )) {strcpy(commandnumber, "345");} else
-                      if (strcompare(commandnumber,"MASKR" )) {strcpy(commandnumber, "346");} else
-                      if (strcompare(commandnumber,"MAX" )) {strcpy(commandnumber, "353");} else
-                      if (strcompare(commandnumber,"MEM?" )) {strcpy(commandnumber, "355");} else
-                      if (strcompare(commandnumber,"MIN" )) {strcpy(commandnumber, "358");} else
-                      if (strcompare(commandnumber,"MIRROR" )) {strcpy(commandnumber, "359");} else
-                      if (strcompare(commandnumber,"MOD" )) {strcpy(commandnumber, "364");} else
-                      if (strcompare(commandnumber,"NAND" )) {strcpy(commandnumber, "414");} else
-                      if (strcompare(commandnumber,"NEIGHB" )) {strcpy(commandnumber, "421");} else
-                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "422");} else
-                      if (strcompare(commandnumber,"NOR" )) {strcpy(commandnumber, "425");} else
-                      if (strcompare(commandnumber,"NOT" )) {strcpy(commandnumber, "431");} else
-                      if (strcompare(commandnumber,"NSUM" )) {strcpy(commandnumber, "433");} else
-                      if (strcompare(commandnumber,"OR" )) {strcpy(commandnumber, "437");} else
-                      if (strcompare(commandnumber,"PERM" )) {strcpy(commandnumber, "450");} else
-                      if (strcompare(commandnumber,"PLOT" )) {strcpy(commandnumber, "455");} else
-                      if (strcompare(commandnumber,"PRIME?" )) {strcpy(commandnumber, "469");} else
-                      if (strcompare(commandnumber,"RAD>" )) {strcpy(commandnumber, "484");} else
-                      if (strcompare(commandnumber,"RAN#" )) {strcpy(commandnumber, "486");} else
-                      if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "488");} else
-                      if (strcompare(commandnumber,"RCLEL" )) {strcpy(commandnumber, "490");} else
-                      if (strcompare(commandnumber,"RCLIJ" )) {strcpy(commandnumber, "491");} else
-                      if (strcompare(commandnumber,"RCLS" )) {strcpy(commandnumber, "492");} else
-                      if (strcompare(commandnumber,"RCL+" )) {strcpy(commandnumber, "493");} else
-                      if (strcompare(commandnumber,"RCL-" )) {strcpy(commandnumber, "494");} else
-                      if (strcompare(commandnumber,"RCLx" )) {strcpy(commandnumber, "495");} else
-                      if (strcompare(commandnumber,"RCL/" )) {strcpy(commandnumber, "496");} else
-                      if (strcompare(commandnumber,"RCLMAX" )) {strcpy(commandnumber, "497");} else
-                      if (strcompare(commandnumber,"RCLMIN" )) {strcpy(commandnumber, "498");} else
-                      if (strcompare(commandnumber,"RE" )) {strcpy(commandnumber, "503");} else
-                      if (strcompare(commandnumber,"REAL?" )) {strcpy(commandnumber, "506");} else
-                      if (strcompare(commandnumber,"RE>CX" )) {strcpy(commandnumber, "511");} else
-                      if (strcompare(commandnumber,"RE<>IM" )) {strcpy(commandnumber, "512");} else
-                      if (strcompare(commandnumber,"RJ" )) {strcpy(commandnumber, "513");} else
-                      if (strcompare(commandnumber,"RL" )) {strcpy(commandnumber, "515");} else
-                      if (strcompare(commandnumber,"RLC" )) {strcpy(commandnumber, "516");} else
-                      if (strcompare(commandnumber,"RMODE?" )) {strcpy(commandnumber, "519");} else
-                      if (strcompare(commandnumber,"RMD" )) {strcpy(commandnumber, "520");} else
-                      if (strcompare(commandnumber,"RR" )) {strcpy(commandnumber, "524");} else
-                      if (strcompare(commandnumber,"RRC" )) {strcpy(commandnumber, "525");} else
-                      if (strcompare(commandnumber,"R>D" )) {strcpy(commandnumber, "534");} else
-                      if (strcompare(commandnumber,"SB" )) {strcpy(commandnumber, "543");} else
-                      if (strcompare(commandnumber,"SCI" )) {strcpy(commandnumber, "545");} else
-                      if (strcompare(commandnumber,"SDIGS?" )) {strcpy(commandnumber, "548");} else
-                      if (strcompare(commandnumber,"SDL" )) {strcpy(commandnumber, "549");} else
-                      if (strcompare(commandnumber,"SDR" )) {strcpy(commandnumber, "550");} else
-                      if (strcompare(commandnumber,"SEED" )) {strcpy(commandnumber, "552");} else
-                      if (strcompare(commandnumber,"SIGN" )) {strcpy(commandnumber, "566");} else
-                      if (strcompare(commandnumber,"SIGNMT" )) {strcpy(commandnumber, "567");} else
-                      if (strcompare(commandnumber,"SIN" )) {strcpy(commandnumber, "569");} else
-                      if (strcompare(commandnumber,"SINC" )) {strcpy(commandnumber, "570");} else
-                      if (strcompare(commandnumber,"SINH" )) {strcpy(commandnumber, "571");} else
-                      if (strcompare(commandnumber,"SL" )) {strcpy(commandnumber, "573");} else
-                      if (strcompare(commandnumber,"SLVQ" )) {strcpy(commandnumber, "575");} else
-                      if (strcompare(commandnumber,"SMODE?" )) {strcpy(commandnumber, "577");} else
-                      if (strcompare(commandnumber,"SR" )) {strcpy(commandnumber, "582");} else
-                      if (strcompare(commandnumber,"SSIZE?" )) {strcpy(commandnumber, "585");} else
-                      if (strcompare(commandnumber,"STO" )) {strcpy(commandnumber, "589");} else
-                      if (strcompare(commandnumber,"STOEL" )) {strcpy(commandnumber, "591");} else
-                      if (strcompare(commandnumber,"STOIJ" )) {strcpy(commandnumber, "592");} else
-                      if (strcompare(commandnumber,"STOS" )) {strcpy(commandnumber, "594");} else
-                      if (strcompare(commandnumber,"ST.A" )) {strcpy(commandnumber, "604");} else
-                      if (strcompare(commandnumber,"ST.B" )) {strcpy(commandnumber, "605");} else
-                      if (strcompare(commandnumber,"ST.C" )) {strcpy(commandnumber, "606");} else
-                      if (strcompare(commandnumber,"ST.D" )) {strcpy(commandnumber, "607");} else
-                      if (strcompare(commandnumber,"ST.T" )) {strcpy(commandnumber, "608");} else
-                      if (strcompare(commandnumber,"ST.X" )) {strcpy(commandnumber, "609");} else
-                      if (strcompare(commandnumber,"ST.Y" )) {strcpy(commandnumber, "610");} else
-                      if (strcompare(commandnumber,"ST.Z" )) {strcpy(commandnumber, "611");} else
-                      if (strcompare(commandnumber,"SUM" )) {strcpy(commandnumber, "612");} else
-                      if (strcompare(commandnumber,"TAN" )) {strcpy(commandnumber, "618");} else
-                      if (strcompare(commandnumber,"TANH" )) {strcpy(commandnumber, "619");} else
-                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "622");} else
-                      if (strcompare(commandnumber,"T<>" )) {strcpy(commandnumber, "641");} else
-                      if (strcompare(commandnumber,"ULP?" )) {strcpy(commandnumber, "642");} else
-                      if (strcompare(commandnumber,"UNITV" )) {strcpy(commandnumber, "644");} else
-                      if (strcompare(commandnumber,"UNSIGN" )) {strcpy(commandnumber, "645");} else
-                      if (strcompare(commandnumber,"WSIZE" )) {strcpy(commandnumber, "664");} else
-                      if (strcompare(commandnumber,"WSIZE?" )) {strcpy(commandnumber, "665");} else
-                      if (strcompare(commandnumber,"X^2" )) {strcpy(commandnumber, "669");} else
-                      if (strcompare(commandnumber,"X^3" )) {strcpy(commandnumber, "670");} else
-                      if (strcompare(commandnumber,"XNOR" )) {strcpy(commandnumber, "672");} else
-                      if (strcompare(commandnumber,"XOR" )) {strcpy(commandnumber, "673");} else
-                      if (strcompare(commandnumber,"X_MEAN" )) {strcpy(commandnumber, "674");} else
-                      if (strcompare(commandnumber,"X_GEO" )) {strcpy(commandnumber, "675");} else
-                      if (strcompare(commandnumber,"X_WEIGHTD" )) {strcpy(commandnumber, "676");} else
-                      if (strcompare(commandnumber,"X!" )) {strcpy(commandnumber, "679");} else
-                      if (strcompare(commandnumber,"X>ALPHA" )) {strcpy(commandnumber, "682");} else
-                      if (strcompare(commandnumber,"X<>" )) {strcpy(commandnumber, "683");} else
-                      if (strcompare(commandnumber,"X<>Y" )) {strcpy(commandnumber, "684");} else
-                      if (strcompare(commandnumber,"XRTY" )) {strcpy(commandnumber, "694");} else
-                      if (strcompare(commandnumber,"Y^X" )) {strcpy(commandnumber, "698");} else
-                      if (strcompare(commandnumber,"Y<>" )) {strcpy(commandnumber, "701");} else
-                      if (strcompare(commandnumber,"Z<>" )) {strcpy(commandnumber, "703");} else
-                      if (strcompare(commandnumber,"XMAX" )) {strcpy(commandnumber, "708");} else
-                      if (strcompare(commandnumber,"XMIN" )) {strcpy(commandnumber, "709");} else
-                      if (strcompare(commandnumber,"GAMMA(X)" )) {strcpy(commandnumber, "724");} else
-                      if (strcompare(commandnumber,"DELTA%" )) {strcpy(commandnumber, "726");} else
-                      if (strcompare(commandnumber,"mu0" )) {strcpy(commandnumber, "735");} else
-                      if (strcompare(commandnumber,"PI" )) {strcpy(commandnumber, "744");} else
-                      if (strcompare(commandnumber,"SUMLN^2X" )) {strcpy(commandnumber, "748");} else
-                      if (strcompare(commandnumber,"SUMLN^2Y" )) {strcpy(commandnumber, "749");} else
-                      if (strcompare(commandnumber,"SUMLNX" )) {strcpy(commandnumber, "750");} else
-                      if (strcompare(commandnumber,"SUMLNXY" )) {strcpy(commandnumber, "751");} else
-                      if (strcompare(commandnumber,"SUMLNY" )) {strcpy(commandnumber, "752");} else
-                      if (strcompare(commandnumber,"SUMX" )) {strcpy(commandnumber, "754");} else
-                      if (strcompare(commandnumber,"SUMX^2" )) {strcpy(commandnumber, "755");} else
-                      if (strcompare(commandnumber,"SUMX^2Y" )) {strcpy(commandnumber, "756");} else
-                      if (strcompare(commandnumber,"SUMXLNY" )) {strcpy(commandnumber, "757");} else
-                      if (strcompare(commandnumber,"SUMXY" )) {strcpy(commandnumber, "758");} else
-                      if (strcompare(commandnumber,"SUMY" )) {strcpy(commandnumber, "759");} else
-                      if (strcompare(commandnumber,"SUMY^2" )) {strcpy(commandnumber, "760");} else
-                      if (strcompare(commandnumber,"SUMYLNX" )) {strcpy(commandnumber, "761");} else
-                      if (strcompare(commandnumber,"SUM+" )) {strcpy(commandnumber, "762");} else
-                      if (strcompare(commandnumber,"PHI" )) {strcpy(commandnumber, "764");} else
-                      if (strcompare(commandnumber,"RANI#" )) {strcpy(commandnumber, "766");} else
-                      if (strcompare(commandnumber,"RANGE" )) {strcpy(commandnumber, "769");} else
-                      if (strcompare(commandnumber,"RANGE?" )) {strcpy(commandnumber, "770");} else
-                      if (strcompare(commandnumber,"(-1)^X" )) {strcpy(commandnumber, "777");} else
-                      if (strcompare(commandnumber,"+" )) {strcpy(commandnumber, "778");} else
-                      if (strcompare(commandnumber,"CHS" )) {strcpy(commandnumber, "779");} else
-                      if (strcompare(commandnumber,"-" )) {strcpy(commandnumber, "780");} else
-                      if (strcompare(commandnumber,"-INFINITY" )) {strcpy(commandnumber, "781");} else
-                      if (strcompare(commandnumber,"*" )) {strcpy(commandnumber, "782");} else
-                      if (strcompare(commandnumber,"/" )) {strcpy(commandnumber, "784");} else
-                      if (strcompare(commandnumber,">DEG" )) {strcpy(commandnumber, "788");} else
-                      if (strcompare(commandnumber,">D.MS" )) {strcpy(commandnumber, "789");} else
-                      if (strcompare(commandnumber,">GRAD" )) {strcpy(commandnumber, "790");} else
-                      if (strcompare(commandnumber,">HR" )) {strcpy(commandnumber, "791");} else
-                      if (strcompare(commandnumber,">H.MS" )) {strcpy(commandnumber, "792");} else
-                      if (strcompare(commandnumber,">INT" )) {strcpy(commandnumber, "793");} else
-                      if (strcompare(commandnumber,">MULPI" )) {strcpy(commandnumber, "794");} else
-                      if (strcompare(commandnumber,">RAD" )) {strcpy(commandnumber, "796");} else
-                      if (strcompare(commandnumber,">REAL" )) {strcpy(commandnumber, "797");} else
-                      if (strcompare(commandnumber,"D>D.MS" )) {strcpy(commandnumber, "799");} else
-                      if (strcompare(commandnumber,"<>" )) {strcpy(commandnumber, "802");} else
-                      if (strcompare(commandnumber,"%" )) {strcpy(commandnumber, "803");} else
-                      if (strcompare(commandnumber,"%MRR" )) {strcpy(commandnumber, "804");} else
-                      if (strcompare(commandnumber,"%T" )) {strcpy(commandnumber, "805");} else
-                      if (strcompare(commandnumber,"%SUM" )) {strcpy(commandnumber, "806");} else
-                      if (strcompare(commandnumber,"%+MG" )) {strcpy(commandnumber, "807");} else
-                      if (strcompare(commandnumber,"SQRT" )) {strcpy(commandnumber, "808");} else
-                      if (strcompare(commandnumber,"INFINITY" )) {strcpy(commandnumber, "812");} else
-                      if (strcompare(commandnumber,"ABS" )) {strcpy(commandnumber, "815");} else
-                      if (strcompare(commandnumber,"PARL" )) {strcpy(commandnumber, "816");} else
-                      if (strcompare(commandnumber,"ARG" )) {strcpy(commandnumber, "819");} else
-                      if (strcompare(commandnumber,"MULPI>" )) {strcpy(commandnumber, "820");} else
-                      if (strcompare(commandnumber,"#B" )) {strcpy(commandnumber, "837");} else
-                      if (strcompare(commandnumber,"REG_A" )) {strcpy(commandnumber, "882");} else
-                      if (strcompare(commandnumber,"REG_B" )) {strcpy(commandnumber, "883");} else
-                      if (strcompare(commandnumber,"REG_C" )) {strcpy(commandnumber, "884");} else
-                      if (strcompare(commandnumber,"REG_D" )) {strcpy(commandnumber, "885");} else
-                      if (strcompare(commandnumber,"REG_L" )) {strcpy(commandnumber, "886");} else
-                      if (strcompare(commandnumber,"REG_I" )) {strcpy(commandnumber, "887");} else
-                      if (strcompare(commandnumber,"REG_J" )) {strcpy(commandnumber, "888");} else
-                      if (strcompare(commandnumber,"REG_K" )) {strcpy(commandnumber, "889");} else
-                      if (strcompare(commandnumber,"CC" )) {strcpy(commandnumber, "1516");} else
-                      if (strcompare(commandnumber,"EXIT" )) {strcpy(commandnumber, "1523");} else
-                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1526");} else
-                      if (strcompare(commandnumber,"DOTD" )) {strcpy(commandnumber, "1527");} else
-                      if (strcompare(commandnumber,"D.MS>D" )) {strcpy(commandnumber, "1533");} else
-                      if (strcompare(commandnumber,"X_HARM" )) {strcpy(commandnumber, "1559");} else
-                      if (strcompare(commandnumber,"X_RMS" )) {strcpy(commandnumber, "1560");} else
-                      if (strcompare(commandnumber,"SUMLNY/X" )) {strcpy(commandnumber, "1567");} else
-                      if (strcompare(commandnumber,"SUMX^2/Y" )) {strcpy(commandnumber, "1568");} else
-                      if (strcompare(commandnumber,"SUM^1/X" )) {strcpy(commandnumber, "1569");} else
-                      if (strcompare(commandnumber,"SUM^1/X^2" )) {strcpy(commandnumber, "1570");} else
-                      if (strcompare(commandnumber,"SUMX/Y" )) {strcpy(commandnumber, "1571");} else
-                      if (strcompare(commandnumber,"SUM^1/Y" )) {strcpy(commandnumber, "1572");} else
-                      if (strcompare(commandnumber,"SUM^1/Y^2" )) {strcpy(commandnumber, "1573");} else
-                      if (strcompare(commandnumber,"SUMX^3" )) {strcpy(commandnumber, "1574");} else
-                      if (strcompare(commandnumber,"SUMX^4" )) {strcpy(commandnumber, "1575");} else
-                      if (strcompare(commandnumber,"IDIVR" )) {strcpy(commandnumber, "1577");} else
-                      if (strcompare(commandnumber,"DET" )) {strcpy(commandnumber, "1581");} else
-                      if (strcompare(commandnumber,"INVRT" )) {strcpy(commandnumber, "1582");} else
-                      if (strcompare(commandnumber,"TRANS" )) {strcpy(commandnumber, "1583");} else
-                      if (strcompare(commandnumber,"SIG" )) {strcpy(commandnumber, "1682");} else
-                      if (strcompare(commandnumber,"BIN" )) {strcpy(commandnumber, "1685");} else
-                      if (strcompare(commandnumber,"OCT" )) {strcpy(commandnumber, "1686");} else
-                      if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "1687");} else
-                      if (strcompare(commandnumber,"HEX" )) {strcpy(commandnumber, "1688");} else
-                      if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1693");} else
-                      if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1694");} else
-                      if (strcompare(commandnumber,"CASE" )) {strcpy(commandnumber, "1736");} else
-                      if (strcompare(commandnumber,"OP_A" )) {strcpy(commandnumber, "1739");} else
-                      if (strcompare(commandnumber,"OP_A^2" )) {strcpy(commandnumber, "1740");} else
-                      if (strcompare(commandnumber,"OP_J" )) {strcpy(commandnumber, "1741");} else
-                      if (strcompare(commandnumber,"D>Y" )) {strcpy(commandnumber, "1750");} else
-                      if (strcompare(commandnumber,"Y>D" )) {strcpy(commandnumber, "1751");} else
-                      if (strcompare(commandnumber,"ATOSYM" )) {strcpy(commandnumber, "1752");} else
-                      if (strcompare(commandnumber,"SYMTOA" )) {strcpy(commandnumber, "1753");} else
-                      if (strcompare(commandnumber,"E^THETAJ" )) {strcpy(commandnumber, "1755");} else
-                      if (strcompare(commandnumber,"STO3Z" )) {strcpy(commandnumber, "1756");} else
-                      if (strcompare(commandnumber,"RCL3Z" )) {strcpy(commandnumber, "1757");} else
-                      if (strcompare(commandnumber,"STO3V" )) {strcpy(commandnumber, "1758");} else
-                      if (strcompare(commandnumber,"RCL3V" )) {strcpy(commandnumber, "1759");} else
-                      if (strcompare(commandnumber,"STO3I" )) {strcpy(commandnumber, "1760");} else
-                      if (strcompare(commandnumber,"RCL3I" )) {strcpy(commandnumber, "1761");} else
-                      if (strcompare(commandnumber,"3V/3I" )) {strcpy(commandnumber, "1762");} else
-                      if (strcompare(commandnumber,"3Ix3Z" )) {strcpy(commandnumber, "1763");} else
-                      if (strcompare(commandnumber,"3V/3Z" )) {strcpy(commandnumber, "1764");} else
-                      if (strcompare(commandnumber,"X>BAL" )) {strcpy(commandnumber, "1765");} else
-                      if (strcompare(commandnumber,"COMPLEX" )) {strcpy(commandnumber, "1766");} else
-                      if (strcompare(commandnumber,">I" )) {strcpy(commandnumber, "1898");} else
-                      if (strcompare(commandnumber,"LNGINT" )) {strcpy(commandnumber, "1925");} else
-                      if (strcompare(commandnumber,".MS" )) {strcpy(commandnumber, "1926");} else
-                      if (strcompare(commandnumber,">POLAR" )) {strcpy(commandnumber, "1955");} else
-                      if (strcompare(commandnumber,">RECT" )) {strcpy(commandnumber, "1956");} else
-                      if (strcompare(commandnumber,"CPXI" )) {strcpy(commandnumber, "1960");} else
-                      if (strcompare(commandnumber,"CPXJ" )) {strcpy(commandnumber, "1961");} else
-                      if (strcompare(commandnumber,"SSIZE4" )) {strcpy(commandnumber, "1964");} else
-                      if (strcompare(commandnumber,"SSIZE8" )) {strcpy(commandnumber, "1968");} else
-                      if (strcompare(commandnumber,"XEQM01" ) && exec) {strcpy(commandnumber, "1979");} else
-                      if (strcompare(commandnumber,"XEQM02" ) && exec) {strcpy(commandnumber, "1980");} else
-                      if (strcompare(commandnumber,"XEQM03" ) && exec) {strcpy(commandnumber, "1981");} else
-                      if (strcompare(commandnumber,"XEQM04" ) && exec) {strcpy(commandnumber, "1982");} else
-                      if (strcompare(commandnumber,"XEQM05" ) && exec) {strcpy(commandnumber, "1983");} else
-                      if (strcompare(commandnumber,"XEQM06" ) && exec) {strcpy(commandnumber, "1984");} else
-                      if (strcompare(commandnumber,"XEQM07" ) && exec) {strcpy(commandnumber, "1985");} else
-                      if (strcompare(commandnumber,"XEQM08" ) && exec) {strcpy(commandnumber, "1986");} else
-                      if (strcompare(commandnumber,"XEQM09" ) && exec) {strcpy(commandnumber, "1987");} else
-                      if (strcompare(commandnumber,"XEQM10" ) && exec) {strcpy(commandnumber, "1988");} else
-                      if (strcompare(commandnumber,"XEQM11" ) && exec) {strcpy(commandnumber, "1989");} else
-                      if (strcompare(commandnumber,"XEQM12" ) && exec) {strcpy(commandnumber, "1990");} else
-                      if (strcompare(commandnumber,"XEQM13" ) && exec) {strcpy(commandnumber, "1991");} else
-                      if (strcompare(commandnumber,"XEQM14" ) && exec) {strcpy(commandnumber, "1992");} else
-                      if (strcompare(commandnumber,"XEQM15" ) && exec) {strcpy(commandnumber, "1993");} else
-                      if (strcompare(commandnumber,"XEQM16" ) && exec) {strcpy(commandnumber, "1994");} else
-                      if (strcompare(commandnumber,"XEQM17" ) && exec) {strcpy(commandnumber, "1995");} else
-                      if (strcompare(commandnumber,"XEQM18" ) && exec) {strcpy(commandnumber, "1996");} else
-                      if (strcompare(commandnumber,"ROUND" )) {strcpy(commandnumber, "1997");} else
-                      if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "1998");} else
-                      if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "2000");} else
-                      if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2001");} else
-                      if (strcompare(commandnumber,"X.SAVE" )) {strcpy(commandnumber, "2009");} else
-                      if (strcompare(commandnumber,"X.LOAD" )) {strcpy(commandnumber, "2010");} else
-                      if (strcompare(commandnumber,"X.XEQ" )) {strcpy(commandnumber, "2012");} else
-                      if (strcompare(commandnumber,">>DEG" )) {strcpy(commandnumber, "2016");} else
-                      if (strcompare(commandnumber,">>D.MS" )) {strcpy(commandnumber, "2017");} else
-                      if (strcompare(commandnumber,">>GRAD" )) {strcpy(commandnumber, "2018");} else
-                      if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2019");} else
-                      if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2020");} else
-                      if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2021");} else
+                      if (strcompare(commandnumber,"CPX?" )) {strcpy(commandnumber, "26");} else
+                      if (strcompare(commandnumber,"REAL?" )) {strcpy(commandnumber, "29");} else
+                      if (strcompare(commandnumber,"PRIME?" )) {strcpy(commandnumber, "33");} else
+                      if (strcompare(commandnumber,"ENTER" )) {strcpy(commandnumber, "35");} else
+                      if (strcompare(commandnumber,"X<>Y" )) {strcpy(commandnumber, "36");} else
+                      if (strcompare(commandnumber,"DROP" )) {strcpy(commandnumber, "37");} else
+                      if (strcompare(commandnumber,"DROPY" )) {strcpy(commandnumber, "38");} else
+                      if (strcompare(commandnumber,"CLX" )) {strcpy(commandnumber, "41");} else
+                      if (strcompare(commandnumber,"FILL" )) {strcpy(commandnumber, "42");} else
+                      if (strcompare(commandnumber,"STO" )) {strcpy(commandnumber, "44");} else
+                      if (strcompare(commandnumber,"RCL" )) {strcpy(commandnumber, "51");} else
+                      if (strcompare(commandnumber,"RCL+" )) {strcpy(commandnumber, "52");} else
+                      if (strcompare(commandnumber,"RCL-" )) {strcpy(commandnumber, "53");} else
+                      if (strcompare(commandnumber,"RCLx" )) {strcpy(commandnumber, "54");} else
+                      if (strcompare(commandnumber,"RCL/" )) {strcpy(commandnumber, "55");} else
+                      if (strcompare(commandnumber,"RCLMAX" )) {strcpy(commandnumber, "56");} else
+                      if (strcompare(commandnumber,"RCLMIN" )) {strcpy(commandnumber, "57");} else
+                      if (strcompare(commandnumber,"X^2" )) {strcpy(commandnumber, "58");} else
+                      if (strcompare(commandnumber,"X^3" )) {strcpy(commandnumber, "59");} else
+                      if (strcompare(commandnumber,"Y^X" )) {strcpy(commandnumber, "60");} else
+                      if (strcompare(commandnumber,"SQRT" )) {strcpy(commandnumber, "61");} else
+                      if (strcompare(commandnumber,"CUBERT" )) {strcpy(commandnumber, "62");} else
+                      if (strcompare(commandnumber,"XRTY" )) {strcpy(commandnumber, "63");} else
+                      if (strcompare(commandnumber,"2^X" )) {strcpy(commandnumber, "64");} else
+                      if (strcompare(commandnumber,"E^X" )) {strcpy(commandnumber, "65");} else
+                      if (strcompare(commandnumber,"E^X-1" )) {strcpy(commandnumber, "66");} else
+                      if (strcompare(commandnumber,"10^X" )) {strcpy(commandnumber, "67");} else
+                      if (strcompare(commandnumber,"LOG2" )) {strcpy(commandnumber, "68");} else
+                      if (strcompare(commandnumber,"LN" )) {strcpy(commandnumber, "69");} else
+                      if (strcompare(commandnumber,"LN(1+X)" )) {strcpy(commandnumber, "70");} else
+                      if (strcompare(commandnumber,"LOG10" )) {strcpy(commandnumber, "71");} else
+                      if (strcompare(commandnumber,"LOGXY" )) {strcpy(commandnumber, "72");} else
+                      if (strcompare(commandnumber,"1/X" )) {strcpy(commandnumber, "73");} else
+                      if (strcompare(commandnumber,"COS" )) {strcpy(commandnumber, "74");} else
+                      if (strcompare(commandnumber,"COSH" )) {strcpy(commandnumber, "75");} else
+                      if (strcompare(commandnumber,"SIN" )) {strcpy(commandnumber, "76");} else
+                      if (strcompare(commandnumber,"SINC" )) {strcpy(commandnumber, "77");} else
+                      if (strcompare(commandnumber,"SINH" )) {strcpy(commandnumber, "78");} else
+                      if (strcompare(commandnumber,"TAN" )) {strcpy(commandnumber, "79");} else
+                      if (strcompare(commandnumber,"TANH" )) {strcpy(commandnumber, "80");} else
+                      if (strcompare(commandnumber,"ARCCOS" )) {strcpy(commandnumber, "81");} else
+                      if (strcompare(commandnumber,"ARCOSH" )) {strcpy(commandnumber, "82");} else
+                      if (strcompare(commandnumber,"ARCSIN" )) {strcpy(commandnumber, "83");} else
+                      if (strcompare(commandnumber,"ARSINH" )) {strcpy(commandnumber, "84");} else
+                      if (strcompare(commandnumber,"ARCTAN" )) {strcpy(commandnumber, "85");} else
+                      if (strcompare(commandnumber,"ARTANH" )) {strcpy(commandnumber, "86");} else
+                      if (strcompare(commandnumber,"CEIL" )) {strcpy(commandnumber, "87");} else
+                      if (strcompare(commandnumber,"FLOOR" )) {strcpy(commandnumber, "88");} else
+                      if (strcompare(commandnumber,"GCD" )) {strcpy(commandnumber, "89");} else
+                      if (strcompare(commandnumber,"LCM" )) {strcpy(commandnumber, "90");} else
+                      if (strcompare(commandnumber,"DEC" )) {strcpy(commandnumber, "91");} else
+                      if (strcompare(commandnumber,"INC" )) {strcpy(commandnumber, "92");} else
+                      if (strcompare(commandnumber,"IP" )) {strcpy(commandnumber, "93");} else
+                      if (strcompare(commandnumber,"FP" )) {strcpy(commandnumber, "94");} else
+                      if (strcompare(commandnumber,"+" )) {strcpy(commandnumber, "95");} else
+                      if (strcompare(commandnumber,"-" )) {strcpy(commandnumber, "96");} else
+                      if (strcompare(commandnumber,"CHS" )) {strcpy(commandnumber, "97");} else
+                      if (strcompare(commandnumber,"*" )) {strcpy(commandnumber, "98");} else
+                      if (strcompare(commandnumber,"/" )) {strcpy(commandnumber, "99");} else
+                      if (strcompare(commandnumber,"IDIV" )) {strcpy(commandnumber, "100");} else
+                      if (strcompare(commandnumber,"IDIVR" )) {strcpy(commandnumber, "101");} else
+                      if (strcompare(commandnumber,"MOD" )) {strcpy(commandnumber, "102");} else
+                      if (strcompare(commandnumber,"MAX" )) {strcpy(commandnumber, "103");} else
+                      if (strcompare(commandnumber,"MIN" )) {strcpy(commandnumber, "104");} else
+                      if (strcompare(commandnumber,"ABS" )) {strcpy(commandnumber, "105");} else
+                      if (strcompare(commandnumber,"NEIGHB" )) {strcpy(commandnumber, "106");} else
+                      if (strcompare(commandnumber,"NEXTP" )) {strcpy(commandnumber, "107");} else
+                      if (strcompare(commandnumber,"X!" )) {strcpy(commandnumber, "108");} else
+                      if (strcompare(commandnumber,"PI" )) {strcpy(commandnumber, "109");} else
+                      if (strcompare(commandnumber,"FF" )) {strcpy(commandnumber, "112");} else
+                      if (strcompare(commandnumber,"c" )) {strcpy(commandnumber, "132");} else
+                      if (strcompare(commandnumber,"e" )) {strcpy(commandnumber, "135");} else
+                      if (strcompare(commandnumber,"ge" )) {strcpy(commandnumber, "143");} else
+                      if (strcompare(commandnumber,"gEARTH" )) {strcpy(commandnumber, "145");} else
+                      if (strcompare(commandnumber,"mu0" )) {strcpy(commandnumber, "192");} else
+                      if (strcompare(commandnumber,"PHI" )) {strcpy(commandnumber, "201");} else
+                      if (strcompare(commandnumber,"-INFINITY" )) {strcpy(commandnumber, "204");} else
+                      if (strcompare(commandnumber,"INFINITY" )) {strcpy(commandnumber, "205");} else
+                      if (strcompare(commandnumber,"CNST" )) {strcpy(commandnumber, "207");} else
+                      if (strcompare(commandnumber,"NOT" )) {strcpy(commandnumber, "392");} else
+                      if (strcompare(commandnumber,"AND" )) {strcpy(commandnumber, "393");} else
+                      if (strcompare(commandnumber,"OR" )) {strcpy(commandnumber, "394");} else
+                      if (strcompare(commandnumber,"XOR" )) {strcpy(commandnumber, "395");} else
+                      if (strcompare(commandnumber,"NAND" )) {strcpy(commandnumber, "396");} else
+                      if (strcompare(commandnumber,"NOR" )) {strcpy(commandnumber, "397");} else
+                      if (strcompare(commandnumber,"XNOR" )) {strcpy(commandnumber, "398");} else
+                      if (strcompare(commandnumber,"BS?" )) {strcpy(commandnumber, "399");} else
+                      if (strcompare(commandnumber,"BC?" )) {strcpy(commandnumber, "400");} else
+                      if (strcompare(commandnumber,"CB" )) {strcpy(commandnumber, "401");} else
+                      if (strcompare(commandnumber,"SB" )) {strcpy(commandnumber, "402");} else
+                      if (strcompare(commandnumber,"FB" )) {strcpy(commandnumber, "403");} else
+                      if (strcompare(commandnumber,"RL" )) {strcpy(commandnumber, "404");} else
+                      if (strcompare(commandnumber,"RLC" )) {strcpy(commandnumber, "405");} else
+                      if (strcompare(commandnumber,"RR" )) {strcpy(commandnumber, "406");} else
+                      if (strcompare(commandnumber,"RRC" )) {strcpy(commandnumber, "407");} else
+                      if (strcompare(commandnumber,"SL" )) {strcpy(commandnumber, "408");} else
+                      if (strcompare(commandnumber,"SR" )) {strcpy(commandnumber, "409");} else
+                      if (strcompare(commandnumber,"ASR" )) {strcpy(commandnumber, "410");} else
+                      if (strcompare(commandnumber,"LJ" )) {strcpy(commandnumber, "411");} else
+                      if (strcompare(commandnumber,"RJ" )) {strcpy(commandnumber, "412");} else
+                      if (strcompare(commandnumber,"MASKL" )) {strcpy(commandnumber, "413");} else
+                      if (strcompare(commandnumber,"MASKR" )) {strcpy(commandnumber, "414");} else
+                      if (strcompare(commandnumber,"MIRROR" )) {strcpy(commandnumber, "415");} else
+                      if (strcompare(commandnumber,"#B" )) {strcpy(commandnumber, "416");} else
+                      if (strcompare(commandnumber,"SDL" )) {strcpy(commandnumber, "417");} else
+                      if (strcompare(commandnumber,"SDR" )) {strcpy(commandnumber, "418");} else
+                      if (strcompare(commandnumber,"SUM+" )) {strcpy(commandnumber, "423");} else
+                      if (strcompare(commandnumber,"NSUM" )) {strcpy(commandnumber, "425");} else
+                      if (strcompare(commandnumber,"SUMX" )) {strcpy(commandnumber, "426");} else
+                      if (strcompare(commandnumber,"SUMY" )) {strcpy(commandnumber, "427");} else
+                      if (strcompare(commandnumber,"SUMX^2" )) {strcpy(commandnumber, "428");} else
+                      if (strcompare(commandnumber,"SUMX^2Y" )) {strcpy(commandnumber, "429");} else
+                      if (strcompare(commandnumber,"SUMY^2" )) {strcpy(commandnumber, "430");} else
+                      if (strcompare(commandnumber,"SUMXY" )) {strcpy(commandnumber, "431");} else
+                      if (strcompare(commandnumber,"SUMLNXY" )) {strcpy(commandnumber, "432");} else
+                      if (strcompare(commandnumber,"SUMLNX" )) {strcpy(commandnumber, "433");} else
+                      if (strcompare(commandnumber,"SUMLN^2X" )) {strcpy(commandnumber, "434");} else
+                      if (strcompare(commandnumber,"SUMYLNX" )) {strcpy(commandnumber, "435");} else
+                      if (strcompare(commandnumber,"SUMLNY" )) {strcpy(commandnumber, "436");} else
+                      if (strcompare(commandnumber,"SUMLN^2Y" )) {strcpy(commandnumber, "437");} else
+                      if (strcompare(commandnumber,"SUMXLNY" )) {strcpy(commandnumber, "438");} else
+                      if (strcompare(commandnumber,"SUMLNY/X" )) {strcpy(commandnumber, "439");} else
+                      if (strcompare(commandnumber,"SUMX^2/Y" )) {strcpy(commandnumber, "440");} else
+                      if (strcompare(commandnumber,"SUM^1/X" )) {strcpy(commandnumber, "441");} else
+                      if (strcompare(commandnumber,"SUM^1/X^2" )) {strcpy(commandnumber, "442");} else
+                      if (strcompare(commandnumber,"SUMX/Y" )) {strcpy(commandnumber, "443");} else
+                      if (strcompare(commandnumber,"SUM^1/Y" )) {strcpy(commandnumber, "444");} else
+                      if (strcompare(commandnumber,"SUM^1/Y^2" )) {strcpy(commandnumber, "445");} else
+                      if (strcompare(commandnumber,"SUMX^3" )) {strcpy(commandnumber, "446");} else
+                      if (strcompare(commandnumber,"SUMX^4" )) {strcpy(commandnumber, "447");} else
+                      if (strcompare(commandnumber,"ST.A" )) {strcpy(commandnumber, "517");} else
+                      if (strcompare(commandnumber,"ST.B" )) {strcpy(commandnumber, "518");} else
+                      if (strcompare(commandnumber,"ST.C" )) {strcpy(commandnumber, "519");} else
+                      if (strcompare(commandnumber,"ST.D" )) {strcpy(commandnumber, "520");} else
+                      if (strcompare(commandnumber,"ST.T" )) {strcpy(commandnumber, "521");} else
+                      if (strcompare(commandnumber,"ST.X" )) {strcpy(commandnumber, "522");} else
+                      if (strcompare(commandnumber,"ST.Y" )) {strcpy(commandnumber, "523");} else
+                      if (strcompare(commandnumber,"ST.Z" )) {strcpy(commandnumber, "524");} else
+                      if (strcompare(commandnumber,"REG_A" )) {strcpy(commandnumber, "530");} else
+                      if (strcompare(commandnumber,"REG_B" )) {strcpy(commandnumber, "531");} else
+                      if (strcompare(commandnumber,"REG_C" )) {strcpy(commandnumber, "532");} else
+                      if (strcompare(commandnumber,"REG_D" )) {strcpy(commandnumber, "533");} else
+                      if (strcompare(commandnumber,"REG_L" )) {strcpy(commandnumber, "534");} else
+                      if (strcompare(commandnumber,"REG_I" )) {strcpy(commandnumber, "535");} else
+                      if (strcompare(commandnumber,"REG_J" )) {strcpy(commandnumber, "536");} else
+                      if (strcompare(commandnumber,"REG_K" )) {strcpy(commandnumber, "537");} else
+                      if (strcompare(commandnumber,"INTS" )) {strcpy(commandnumber, "1332");} else
+                      if (strcompare(commandnumber,"1COMPL" )) {strcpy(commandnumber, "1394");} else
+                      if (strcompare(commandnumber,"SNAP" )) {strcpy(commandnumber, "1395");} else
+                      if (strcompare(commandnumber,"2COMPL" )) {strcpy(commandnumber, "1396");} else
+                      if (strcompare(commandnumber,"AGM" )) {strcpy(commandnumber, "1398");} else
+                      if (strcompare(commandnumber,"BATT?" )) {strcpy(commandnumber, "1403");} else
+                      if (strcompare(commandnumber,"CLFALL" )) {strcpy(commandnumber, "1411");} else
+                      if (strcompare(commandnumber,"CLLCD" )) {strcpy(commandnumber, "1413");} else
+                      if (strcompare(commandnumber,"CLMENU" )) {strcpy(commandnumber, "1414");} else
+                      if (strcompare(commandnumber,"CLREGS" )) {strcpy(commandnumber, "1417");} else
+                      if (strcompare(commandnumber,"CLSTK" )) {strcpy(commandnumber, "1418");} else
+                      if (strcompare(commandnumber,"CLSUM" )) {strcpy(commandnumber, "1419");} else
+                      if (strcompare(commandnumber,"COMB" )) {strcpy(commandnumber, "1420");} else
+                      if (strcompare(commandnumber,"CONJ" )) {strcpy(commandnumber, "1421");} else
+                      if (strcompare(commandnumber,"CROSS" )) {strcpy(commandnumber, "1426");} else
+                      if (strcompare(commandnumber,"CX>RE" )) {strcpy(commandnumber, "1427");} else
+                      if (strcompare(commandnumber,"DECOMP" )) {strcpy(commandnumber, "1434");} else
+                      if (strcompare(commandnumber,"DEG>" )) {strcpy(commandnumber, "1436");} else
+                      if (strcompare(commandnumber,"DOT" )) {strcpy(commandnumber, "1439");} else
+                      if (strcompare(commandnumber,"D.MS>" )) {strcpy(commandnumber, "1442");} else
+                      if (strcompare(commandnumber,"D>R" )) {strcpy(commandnumber, "1445");} else
+                      if (strcompare(commandnumber,"ENG" )) {strcpy(commandnumber, "1450");} else
+                      if (strcompare(commandnumber,"ENTRY?" )) {strcpy(commandnumber, "1452");} else
+                      if (strcompare(commandnumber,"EXPT" )) {strcpy(commandnumber, "1460");} else
+                      if (strcompare(commandnumber,"FIX" )) {strcpy(commandnumber, "1463");} else
+                      if (strcompare(commandnumber,"FLASH?" )) {strcpy(commandnumber, "1464");} else
+                      if (strcompare(commandnumber,"GRAD>" )) {strcpy(commandnumber, "1471");} else
+                      if (strcompare(commandnumber,"IM" )) {strcpy(commandnumber, "1475");} else
+                      if (strcompare(commandnumber,"KEY?" )) {strcpy(commandnumber, "1490");} else
+                      if (strcompare(commandnumber,"LASTX" )) {strcpy(commandnumber, "1492");} else
+                      if (strcompare(commandnumber,"LNBETA" )) {strcpy(commandnumber, "1497");} else
+                      if (strcompare(commandnumber,"LNGAMMA" )) {strcpy(commandnumber, "1498");} else
+                      if (strcompare(commandnumber,"LOCR?" )) {strcpy(commandnumber, "1505");} else
+                      if (strcompare(commandnumber,"MANT" )) {strcpy(commandnumber, "1507");} else
+                      if (strcompare(commandnumber,"MEM?" )) {strcpy(commandnumber, "1509");} else
+                      if (strcompare(commandnumber,"PERM" )) {strcpy(commandnumber, "1535");} else
+                      if (strcompare(commandnumber,"PLOT" )) {strcpy(commandnumber, "1539");} else
+                      if (strcompare(commandnumber,"RAD>" )) {strcpy(commandnumber, "1548");} else
+                      if (strcompare(commandnumber,"RAN#" )) {strcpy(commandnumber, "1549");} else
+                      if (strcompare(commandnumber,"RCLEL" )) {strcpy(commandnumber, "1552");} else
+                      if (strcompare(commandnumber,"RCLIJ" )) {strcpy(commandnumber, "1553");} else
+                      if (strcompare(commandnumber,"RCLS" )) {strcpy(commandnumber, "1554");} else
+                      if (strcompare(commandnumber,"RE" )) {strcpy(commandnumber, "1556");} else
+                      if (strcompare(commandnumber,"RE>CX" )) {strcpy(commandnumber, "1559");} else
+                      if (strcompare(commandnumber,"RE<>IM" )) {strcpy(commandnumber, "1560");} else
+                      if (strcompare(commandnumber,"RMODE?" )) {strcpy(commandnumber, "1562");} else
+                      if (strcompare(commandnumber,"RMD" )) {strcpy(commandnumber, "1563");} else
+                      if (strcompare(commandnumber,"R>D" )) {strcpy(commandnumber, "1574");} else
+                      if (strcompare(commandnumber,"SCI" )) {strcpy(commandnumber, "1577");} else
+                      if (strcompare(commandnumber,"SDIGS?" )) {strcpy(commandnumber, "1578");} else
+                      if (strcompare(commandnumber,"SEED" )) {strcpy(commandnumber, "1579");} else
+                      if (strcompare(commandnumber,"SIGN" )) {strcpy(commandnumber, "1590");} else
+                      if (strcompare(commandnumber,"SIGNMT" )) {strcpy(commandnumber, "1591");} else
+                      if (strcompare(commandnumber,"SLVQ" )) {strcpy(commandnumber, "1594");} else
+                      if (strcompare(commandnumber,"SMODE?" )) {strcpy(commandnumber, "1596");} else
+                      if (strcompare(commandnumber,"SSIZE?" )) {strcpy(commandnumber, "1599");} else
+                      if (strcompare(commandnumber,"STOEL" )) {strcpy(commandnumber, "1602");} else
+                      if (strcompare(commandnumber,"STOIJ" )) {strcpy(commandnumber, "1603");} else
+                      if (strcompare(commandnumber,"STOS" )) {strcpy(commandnumber, "1605");} else
+                      if (strcompare(commandnumber,"SUM" )) {strcpy(commandnumber, "1606");} else
+                      if (strcompare(commandnumber,"TICKS" )) {strcpy(commandnumber, "1610");} else
+                      if (strcompare(commandnumber,"T<>" )) {strcpy(commandnumber, "1615");} else
+                      if (strcompare(commandnumber,"ULP?" )) {strcpy(commandnumber, "1616");} else
+                      if (strcompare(commandnumber,"UNITV" )) {strcpy(commandnumber, "1618");} else
+                      if (strcompare(commandnumber,"UNSIGN" )) {strcpy(commandnumber, "1619");} else
+                      if (strcompare(commandnumber,"WSIZE" )) {strcpy(commandnumber, "1628");} else
+                      if (strcompare(commandnumber,"WSIZE?" )) {strcpy(commandnumber, "1629");} else
+                      if (strcompare(commandnumber,"X_MEAN" )) {strcpy(commandnumber, "1630");} else
+                      if (strcompare(commandnumber,"X_GEO" )) {strcpy(commandnumber, "1631");} else
+                      if (strcompare(commandnumber,"X_WEIGHTD" )) {strcpy(commandnumber, "1632");} else
+                      if (strcompare(commandnumber,"X>ALPHA" )) {strcpy(commandnumber, "1635");} else
+                      if (strcompare(commandnumber,"X<>" )) {strcpy(commandnumber, "1636");} else
+                      if (strcompare(commandnumber,"Y<>" )) {strcpy(commandnumber, "1640");} else
+                      if (strcompare(commandnumber,"Z<>" )) {strcpy(commandnumber, "1641");} else
+                      if (strcompare(commandnumber,"XMAX" )) {strcpy(commandnumber, "1643");} else
+                      if (strcompare(commandnumber,"XMIN" )) {strcpy(commandnumber, "1644");} else
+                      if (strcompare(commandnumber,"GAMMA(X)" )) {strcpy(commandnumber, "1654");} else
+                      if (strcompare(commandnumber,"DELTA%" )) {strcpy(commandnumber, "1656");} else
+                      if (strcompare(commandnumber,"RANI#" )) {strcpy(commandnumber, "1665");} else
+                      if (strcompare(commandnumber,"RANGE" )) {strcpy(commandnumber, "1667");} else
+                      if (strcompare(commandnumber,"RANGE?" )) {strcpy(commandnumber, "1668");} else
+                      if (strcompare(commandnumber,"(-1)^X" )) {strcpy(commandnumber, "1669");} else
+                      if (strcompare(commandnumber,">DEG" )) {strcpy(commandnumber, "1672");} else
+                      if (strcompare(commandnumber,">D.MS" )) {strcpy(commandnumber, "1673");} else
+                      if (strcompare(commandnumber,">GRAD" )) {strcpy(commandnumber, "1674");} else
+                      if (strcompare(commandnumber,">HR" )) {strcpy(commandnumber, "1675");} else
+                      if (strcompare(commandnumber,">H.MS" )) {strcpy(commandnumber, "1676");} else
+                      if (strcompare(commandnumber,">INT" )) {strcpy(commandnumber, "1677");} else
+                      if (strcompare(commandnumber,">MULPI" )) {strcpy(commandnumber, "1678");} else
+                      if (strcompare(commandnumber,">RAD" )) {strcpy(commandnumber, "1680");} else
+                      if (strcompare(commandnumber,">REAL" )) {strcpy(commandnumber, "1681");} else
+                      if (strcompare(commandnumber,"D>D.MS" )) {strcpy(commandnumber, "1683");} else
+                      if (strcompare(commandnumber,"<>" )) {strcpy(commandnumber, "1684");} else
+                      if (strcompare(commandnumber,"%" )) {strcpy(commandnumber, "1685");} else
+                      if (strcompare(commandnumber,"%MRR" )) {strcpy(commandnumber, "1686");} else
+                      if (strcompare(commandnumber,"%T" )) {strcpy(commandnumber, "1687");} else
+                      if (strcompare(commandnumber,"%SUM" )) {strcpy(commandnumber, "1688");} else
+                      if (strcompare(commandnumber,"%+MG" )) {strcpy(commandnumber, "1689");} else
+                      if (strcompare(commandnumber,"PARL" )) {strcpy(commandnumber, "1693");} else
+                      if (strcompare(commandnumber,"ARG" )) {strcpy(commandnumber, "1696");} else
+                      if (strcompare(commandnumber,"MULPI>" )) {strcpy(commandnumber, "1697");} else
+                      if (strcompare(commandnumber,"CC" )) {strcpy(commandnumber, "1720");} else
+                      if (strcompare(commandnumber,"EXIT" )) {strcpy(commandnumber, "1727");} else
+                      if (strcompare(commandnumber,"ALPHA" )) {strcpy(commandnumber, "1730");} else
+                      if (strcompare(commandnumber,"DOTD" )) {strcpy(commandnumber, "1731");} else
+                      if (strcompare(commandnumber,"D.MS>D" )) {strcpy(commandnumber, "1734");} else
+                      if (strcompare(commandnumber,"X_HARM" )) {strcpy(commandnumber, "1736");} else
+                      if (strcompare(commandnumber,"X_RMS" )) {strcpy(commandnumber, "1737");} else
+                      if (strcompare(commandnumber,"DET" )) {strcpy(commandnumber, "1741");} else
+                      if (strcompare(commandnumber,"INVRT" )) {strcpy(commandnumber, "1742");} else
+                      if (strcompare(commandnumber,"TRANS" )) {strcpy(commandnumber, "1743");} else
+                      if (strcompare(commandnumber,"SIG" )) {strcpy(commandnumber, "1751");} else
+                      if (strcompare(commandnumber,"2BIN" )) {strcpy(commandnumber, "1754");} else
+                      if (strcompare(commandnumber,"2OCT" )) {strcpy(commandnumber, "1755");} else
+                      if (strcompare(commandnumber,"2DEC" )) {strcpy(commandnumber, "1756");} else
+                      if (strcompare(commandnumber,"2HEX" )) {strcpy(commandnumber, "1757");} else
+                      if (strcompare(commandnumber,"UNIT" )) {strcpy(commandnumber, "1762");} else
+                      if (strcompare(commandnumber,"ERPN?" )) {strcpy(commandnumber, "1763");} else
+                      if (strcompare(commandnumber,"CASE" )) {strcpy(commandnumber, "1805");} else
+                      if (strcompare(commandnumber,"OP_A" )) {strcpy(commandnumber, "1808");} else
+                      if (strcompare(commandnumber,"OP_A^2" )) {strcpy(commandnumber, "1809");} else
+                      if (strcompare(commandnumber,"OP_J" )) {strcpy(commandnumber, "1810");} else
+                      if (strcompare(commandnumber,"D>Y" )) {strcpy(commandnumber, "1819");} else
+                      if (strcompare(commandnumber,"Y>D" )) {strcpy(commandnumber, "1820");} else
+                      if (strcompare(commandnumber,"ATOSYM" )) {strcpy(commandnumber, "1821");} else
+                      if (strcompare(commandnumber,"SYMTOA" )) {strcpy(commandnumber, "1822");} else
+                      if (strcompare(commandnumber,"E^THETAJ" )) {strcpy(commandnumber, "1824");} else
+                      if (strcompare(commandnumber,"STO3Z" )) {strcpy(commandnumber, "1825");} else
+                      if (strcompare(commandnumber,"RCL3Z" )) {strcpy(commandnumber, "1826");} else
+                      if (strcompare(commandnumber,"STO3V" )) {strcpy(commandnumber, "1827");} else
+                      if (strcompare(commandnumber,"RCL3V" )) {strcpy(commandnumber, "1828");} else
+                      if (strcompare(commandnumber,"STO3I" )) {strcpy(commandnumber, "1829");} else
+                      if (strcompare(commandnumber,"RCL3I" )) {strcpy(commandnumber, "1830");} else
+                      if (strcompare(commandnumber,"3V/3I" )) {strcpy(commandnumber, "1831");} else
+                      if (strcompare(commandnumber,"3Ix3Z" )) {strcpy(commandnumber, "1832");} else
+                      if (strcompare(commandnumber,"3V/3Z" )) {strcpy(commandnumber, "1833");} else
+                      if (strcompare(commandnumber,"X>BAL" )) {strcpy(commandnumber, "1834");} else
+                      if (strcompare(commandnumber,"COMPLEX" )) {strcpy(commandnumber, "1835");} else
+                      if (strcompare(commandnumber,">I" )) {strcpy(commandnumber, "1967");} else
+                      if (strcompare(commandnumber,"LNGINT" )) {strcpy(commandnumber, "1994");} else
+                      if (strcompare(commandnumber,".MS" )) {strcpy(commandnumber, "1995");} else
+                      if (strcompare(commandnumber,">POLAR" )) {strcpy(commandnumber, "2024");} else
+                      if (strcompare(commandnumber,">RECT" )) {strcpy(commandnumber, "2025");} else
+                      if (strcompare(commandnumber,"CPXI" )) {strcpy(commandnumber, "2029");} else
+                      if (strcompare(commandnumber,"CPXJ" )) {strcpy(commandnumber, "2030");} else
+                      if (strcompare(commandnumber,"SSIZE4" )) {strcpy(commandnumber, "2033");} else
+                      if (strcompare(commandnumber,"SSIZE8" )) {strcpy(commandnumber, "2037");} else
+                      if (strcompare(commandnumber,"XEQM01" ) && exec) {strcpy(commandnumber, "2048");} else
+                      if (strcompare(commandnumber,"XEQM02" ) && exec) {strcpy(commandnumber, "2049");} else
+                      if (strcompare(commandnumber,"XEQM03" ) && exec) {strcpy(commandnumber, "2050");} else
+                      if (strcompare(commandnumber,"XEQM04" ) && exec) {strcpy(commandnumber, "2051");} else
+                      if (strcompare(commandnumber,"XEQM05" ) && exec) {strcpy(commandnumber, "2052");} else
+                      if (strcompare(commandnumber,"XEQM06" ) && exec) {strcpy(commandnumber, "2053");} else
+                      if (strcompare(commandnumber,"XEQM07" ) && exec) {strcpy(commandnumber, "2054");} else
+                      if (strcompare(commandnumber,"XEQM08" ) && exec) {strcpy(commandnumber, "2055");} else
+                      if (strcompare(commandnumber,"XEQM09" ) && exec) {strcpy(commandnumber, "2056");} else
+                      if (strcompare(commandnumber,"XEQM10" ) && exec) {strcpy(commandnumber, "2057");} else
+                      if (strcompare(commandnumber,"XEQM11" ) && exec) {strcpy(commandnumber, "2058");} else
+                      if (strcompare(commandnumber,"XEQM12" ) && exec) {strcpy(commandnumber, "2059");} else
+                      if (strcompare(commandnumber,"XEQM13" ) && exec) {strcpy(commandnumber, "2060");} else
+                      if (strcompare(commandnumber,"XEQM14" ) && exec) {strcpy(commandnumber, "2061");} else
+                      if (strcompare(commandnumber,"XEQM15" ) && exec) {strcpy(commandnumber, "2062");} else
+                      if (strcompare(commandnumber,"XEQM16" ) && exec) {strcpy(commandnumber, "2063");} else
+                      if (strcompare(commandnumber,"XEQM17" ) && exec) {strcpy(commandnumber, "2064");} else
+                      if (strcompare(commandnumber,"XEQM18" ) && exec) {strcpy(commandnumber, "2065");} else
+                      if (strcompare(commandnumber,"ROUND" )) {strcpy(commandnumber, "2066");} else
+                      if (strcompare(commandnumber,"ROUNDI" )) {strcpy(commandnumber, "2067");} else
+                      if (strcompare(commandnumber,"ERPN" )) {strcpy(commandnumber, "2069");} else
+                      if (strcompare(commandnumber,"RPN" )) {strcpy(commandnumber, "2070");} else
+                      if (strcompare(commandnumber,"X.SAVE" )) {strcpy(commandnumber, "2078");} else
+                      if (strcompare(commandnumber,"X.LOAD" )) {strcpy(commandnumber, "2079");} else
+                      if (strcompare(commandnumber,"X.XEQ" )) {strcpy(commandnumber, "2081");} else
+                      if (strcompare(commandnumber,">>DEG" )) {strcpy(commandnumber, "2085");} else
+                      if (strcompare(commandnumber,">>D.MS" )) {strcpy(commandnumber, "2086");} else
+                      if (strcompare(commandnumber,">>GRAD" )) {strcpy(commandnumber, "2087");} else
+                      if (strcompare(commandnumber,">>MULPI" )) {strcpy(commandnumber, "2088");} else
+                      if (strcompare(commandnumber,">>RAD" )) {strcpy(commandnumber, "2089");} else
+                      if (strcompare(commandnumber,">>H.MS" )) {strcpy(commandnumber, "2090");} else
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 
 
 
-                      if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "115"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
-                       if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "252"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "91"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                       if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "92"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
                         if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
                           if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                     else //EXPECTING FOLLOWING OPERAND Mn
                            if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}           //EXPECTING 2 OPERANDS nn XXXXXX

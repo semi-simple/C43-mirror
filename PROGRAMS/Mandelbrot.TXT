@@ -1,0 +1,44 @@
+XEQLBL FF MANDEL
+
+//WORK IN PROGRESS
+
+  //Mandelbrot set v0
+
+DOTD
+"0" EXIT "0" EXIT COMPLEX STO "04"    //complex number c in r04
+"20" STO "00"                         //real location range 20-->0 in r00
+TICKS STO "02"
+CLSUM 
+
+LBL M1
+"20" STO "01"                         //imag location range 20-->0 in r01
+
+LBL M2
+
+RCL "00" //real
+"10" / "1" -                         //scale real location to -1 to 1
+RCL "01" //imag
+"10" / "1" -                         //scale imag location to -1 to 1 in r03
+COMPLEX STO "03"
+
+"0" EXIT "0" COMPLEX                 //start wiuth z=0i0
+ENTER
+ABS
+
+//iterate:
+//check if ABS(Z) > 2. If larger, then colour pixel white (leave as is) and break
+//if ABS(Z)<=2 then repeat z = z + c for N times max
+//if iterations > N the break and colour pixel black
+
+  RCL "01"
+  RCL "00"
+  SUM+      //include in plot if pixel is dark
+
+
+DSZ "01" GTO M2
+
+DSZ "00" GTO M1
+
+
+TICKS RCL "02" - "10" /
+PLOT 

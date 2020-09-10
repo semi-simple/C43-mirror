@@ -535,6 +535,7 @@ int main(int argc, char* argv[]) {
 #ifdef DMCP_BUILD
 void program_main(void) {
   int key = 0;
+  uint32_t timeStampKey = (uint32_t)sys_current_ms();
   char charKey[3];
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
@@ -675,7 +676,24 @@ longIntegerFree(li);*/
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-    key = key_pop();
+//  key = key_pop();          // replaced with following code
+    
+    int oldTimeStampKey = timeStampKey;
+    uint8_t outKey;
+    int tmpKey = key_pop();
+    if(tmpKey >= 0) {
+      inKeyBuffer(tmpKey);
+    }
+    if(outKeyBuffer(&outKey, &timeStampKey) == BUFFER_SUCCESS) {
+      key = outKey;
+      int timeSpan = timeStampKey - oldTimeStampKey;
+      if(timeSpan >= 0) {
+        // do someting
+      }
+    }
+    else {
+      key = tmpKey;
+    }
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
     //char sysLastKeyCh[5];

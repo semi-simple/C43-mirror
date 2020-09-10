@@ -431,6 +431,7 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
 #define cursorCycle 3                      //JM cursor vv
 int8_t cursorBlinkCounter;                 //JM cursor ^^
 void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
+  int tmpKey;
   // Cursor blinking
   static bool_t cursorBlink=true;
 
@@ -444,6 +445,10 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
     }
   }
 
@@ -452,7 +457,15 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
     if(showFunctionNameCounter <= 0 || abort_accellerate()) {      //JM EXPERIMENT
       hideFunctionName();
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
       showFunctionName(ITM_NOP, 0);
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
     }
   }
 

@@ -945,7 +945,7 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime)
   return BUFFER_SUCCESS;
 }
 
-bool_t epmtyKeyBuffer()
+bool_t emptyKeyBuffer()
 {
   return buffer.read == buffer.write;
 }

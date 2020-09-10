@@ -79,7 +79,7 @@ typedef struct {
 
 uint8_t  inKeyBuffer          (uint8_t byte);
 uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime);
-bool_t   epmtyKeyBuffer       ();
+bool_t   emptyKeyBuffer       ();
 
 void     btnFnPressed_StateMachine (void *w, void *data);
 void     btnFnReleased_StateMachine(void *w, void *data);

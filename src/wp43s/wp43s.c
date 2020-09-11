@@ -210,7 +210,8 @@ const char            digits[17] = "0123456789ABCDEF";
     int8_t            telltale_pos;                            //JM Test
     int8_t            telltale_lastkey;                        //JM Test
   #endif                                                       //JM Test 
-  uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()                    //dr
+  uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
+  uint32_t            timeStampKey;                            //dr
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
@@ -535,8 +536,8 @@ int main(int argc, char* argv[]) {
 #ifdef DMCP_BUILD
 void program_main(void) {
   int key = 0;
-  uint32_t timeStampKey = (uint32_t)sys_current_ms();
   char charKey[3];
+  timeStampKey = (uint32_t)sys_current_ms();                   //dr
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
@@ -616,7 +617,7 @@ longIntegerFree(li);*/
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {         // Just wait if no keys available.
+    } else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {        // Just wait if no keys available.      //dr
       uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
       if(nextTimerRefresh != 0) {
         uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
@@ -629,7 +630,7 @@ longIntegerFree(li);*/
         sleepTime = min(sleepTime, 15);
       }                                                                         //^^
       CLR_ST(STAT_RUNNING);
-      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));             //dr wake up for screen refresh
+      sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));             // wake up for screen refresh           //dr
       sys_sleep();
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
@@ -676,7 +677,7 @@ longIntegerFree(li);*/
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//  key = key_pop();          // replaced with following code
+//  key = key_pop();          //vv dr replaced with following code
     
     int oldTimeStampKey = timeStampKey;
     uint8_t outKey;
@@ -693,7 +694,7 @@ longIntegerFree(li);*/
     }
     else {
       key = tmpKey;
-    }
+    }                         //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
     //char sysLastKeyCh[5];
@@ -762,29 +763,29 @@ longIntegerFree(li);*/
     //lcd_refresh_dma();
     }
 
-    if(key >= 0) {                                             //JM dr
+    if(key >= 0) {                                          //dr
       lcd_refresh_dma();
-      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);     //JM dr
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
     }
 
     uint32_t now = sys_current_ms();
-    if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {     //vv dr Timer
+    if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {  //vv dr Timer
       refreshTimer();
-    }                                                          //^^
-    now = sys_current_ms();
+    }                                                       //^^
+    now = sys_current_ms();                                 //vv dr
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += SCREEN_REFRESH_PERIOD;
       if(nextScreenRefresh < now) {
-        nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;
+        nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;    // we were out longer than expected; just skip ahead.
       }
       refreshLcd();
       if(key >= 0) {
         lcd_refresh();
       }
       else {
-        lcd_refresh_wait();                                   //dr
+        lcd_refresh_wait();
       }
-    }
+    }                                                       //^^
   }
 }
 #endif

@@ -909,14 +909,14 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  uint32_t now = (uint32_t)sys_current_ms();
-  uint8_t next = ((buffer.write + 1) & BUFFER_MASK);
+  uint32_t now  = (uint32_t)sys_current_ms();
+  uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
 
   if(buffer.read == next)
     return BUFFER_FAIL; // voll
 
-  buffer.data[buffer.write] = byte;
-  // buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
+//buffer.data[buffer.write] = byte;
+  buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
   buffer.time[buffer.write] = now;
   buffer.write = next;
 
@@ -945,6 +945,10 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime)
   return BUFFER_SUCCESS;
 }
 
+
+
+// Returns:
+//     true              der Ringbuffer ist leer
 bool_t emptyKeyBuffer()
 {
   return buffer.read == buffer.write;

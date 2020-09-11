@@ -83,7 +83,11 @@ uint8_t verbose_jm;
 #define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
 #define JM_TO_FN_LONG 	   400   //ms TO_FN_LONG  //  450 on 2020-03-13
 
-#define JM_CLRDROP_TIMER   500  //ms TO_CL_DROP    //DROP
+#ifdef DMCP_BUILD
+#define JM_CLRDROP_TIMER   900   //ms TO_CL_DROP   //DROP
+#else
+#define JM_CLRDROP_TIMER   500   //ms TO_CL_DROP   //DROP
+#endif
 #define JM_TO_CL_LONG      800   //ms TO_CL_LONG   //CLSTK
 
 #define JM_TO_3S_CTFF 	   600   //ms TO_3S_CTFF

@@ -431,7 +431,7 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
 #define cursorCycle 3                      //JM cursor vv
 int8_t cursorBlinkCounter;                 //JM cursor ^^
 void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
-  int tmpKey;
+  int tmpKey;                           //dr
   // Cursor blinking
   static bool_t cursorBlink=true;
 
@@ -445,27 +445,23 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
-      tmpKey = key_pop();
+      tmpKey = key_pop();               //vv dr
       if(tmpKey >= 0) {
         inKeyBuffer(tmpKey);
-      }
+      }                                 //^^
     }
   }
 
   // Function name display
   if(showFunctionNameCounter>0) {
     showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
-    if(showFunctionNameCounter <= 0 || abort_accellerate()) {      //JM EXPERIMENT
+    if(showFunctionNameCounter <= 0) {
       hideFunctionName();
-      tmpKey = key_pop();
-      if(tmpKey >= 0) {
-        inKeyBuffer(tmpKey);
-      }
       showFunctionName(ITM_NOP, 0);
-      tmpKey = key_pop();
+      tmpKey = key_pop();               //vv dr
       if(tmpKey >= 0) {
         inKeyBuffer(tmpKey);
-      }
+      }                                 //^^
     }
   }
 
@@ -541,6 +537,13 @@ void clear_ul(void) {
 void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
+
+#if DMCP_BUILD                          //vv dr
+  int tmpKey = key_pop();
+  if(tmpKey >= 0) {
+    inKeyBuffer(tmpKey);
+  }
+#endif                                  //^^
 
   if(jm_FG_LINE) {
 
@@ -2199,19 +2202,6 @@ void refreshRegisterLine(calcRegister_t regist) {
 }
 
 
-uint8_t last_CM = 255;
-
-bool_t abort_accellerate() {     //JM vv EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
-    #ifdef DMCP_BUILD
-    if (key_empty() == 0 || running_program_jm) {
-      last_CM = 254;      //force refresh
-      doRefreshSoftMenu = false;
-      hideFunctionName();
-      return true;
-    } else 
-    #endif
-      return false;
-}                                //JM ^^
 
 /********************************************//**   //JM vv
  * \brief Clears parts of the screen
@@ -2257,12 +2247,10 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
     }
 
     if(clearRegisterLines) {
-      if (abort_accellerate()) return;   //JM EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
       lcd_fill_rect(0, 20, SCREEN_WIDTH, 151, 0);
     }
 
     if(clearSoftkeys) {
-      if (abort_accellerate()) return;   //JM EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
       clear_ul(); //JMUL
       lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
     }
@@ -2285,15 +2273,8 @@ void clearScreen(void) {
   #endif
 
   #if DMCP_BUILD
-    lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
-
-    if (abort_accellerate()) return;   //JM EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
-    lcd_fill_rect(0, 20, SCREEN_WIDTH, 151, 0);
-
-    if (abort_accellerate()) return;   //JM EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
     clear_ul(); //JMUL
-    lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
-
+    lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
   #endif
 
 }
@@ -2301,6 +2282,7 @@ void clearScreen(void) {
 
 
 int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
+uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
@@ -2310,7 +2292,13 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(3); }     //dr
 #endif
-
+#if DMCP_BUILD                          //vv dr
+  int tmpKey = key_pop();
+  if(tmpKey >= 0) {
+    inKeyBuffer(tmpKey);
+  }
+#endif                                  //^^
+  
   if(calcMode!=CM_AIM && calcMode!=CM_NIM) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 
   switch(calcMode) {

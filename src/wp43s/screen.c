@@ -1396,13 +1396,16 @@ void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
-if(lastIntegerBase != 0 && displayStack != 1) {   //JMSHOI                   
-  displayStack_m = displayStack;                  //JMSHOI
+if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
+  if(displayStack != 1) {displayStack_m = displayStack;} //JMSHOI
   fnDisplayStack(1);                              //JMSHOI             
 } else {                                          //JMSHOI 
-  if(lastIntegerBase == 0 && displayStack_m != 255) { //JMSHOI
+  if(displayStack_m != 255) {                     //JMSHOI
     fnDisplayStack(displayStack_m);               //JMSHOI
     displayStack_m = 255;                         //JMSHOI
+  } else {
+    fnDisplayStack(4);
+    //displayStack_m = 255;//is already 255
   }                                               //JMSHOI
 }                                                 //JMSHOI
 

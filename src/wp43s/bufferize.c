@@ -1021,7 +1021,7 @@ void addItemToNimBuffer(int16_t item) {
   else {
     closeNim();
     if(calcMode != CM_NIM) {
-      if(item == ITM_pi || indexOfItems[item].func == fnConstant) {
+      if(item == ITM_pi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
         setSystemFlag(FLAG_ASLIFT);
       }
 

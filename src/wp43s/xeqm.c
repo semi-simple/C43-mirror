@@ -456,7 +456,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"SIGN" )) {sprintf(commandnumber,"%d", ITM_SIGN);} else
                       if (strcompare(commandnumber,"SIGNMT" )) {sprintf(commandnumber,"%d", ITM_SIGNMT);} else
                       if (strcompare(commandnumber,"SLVQ" )) {sprintf(commandnumber,"%d", ITM_SLVQ);} else
-                      if (strcompare(commandnumber,"SMODE?" )) {sprintf(commandnumber,"%d", ITM_SMODE);} else
+                      if (strcompare(commandnumber,"ISM?" )) {sprintf(commandnumber,"%d", ITM_ISM);} else
                       if (strcompare(commandnumber,"SSIZE?" )) {sprintf(commandnumber,"%d", ITM_SSIZE);} else
                       if (strcompare(commandnumber,"STOEL" )) {sprintf(commandnumber,"%d", ITM_STOEL);} else
                       if (strcompare(commandnumber,"STOIJ" )) {sprintf(commandnumber,"%d", ITM_STOIJ);} else

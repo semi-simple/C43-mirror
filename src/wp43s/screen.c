@@ -1387,7 +1387,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             #endif
 
             #if DMCP_BUILD
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0);
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
             #endif
           }
         }

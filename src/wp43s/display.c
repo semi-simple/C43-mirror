@@ -149,7 +149,7 @@ void exponentToDisplayString(int32_t exponent, char *displayString, char *displa
 
 void supNumberToDisplayString(int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, const char *separator) {
   if(displayValueString != NULL) {
-    sprintf(displayValueString, "%" FMT32S, supNumber);
+    sprintf(displayValueString, "%" PRId32, supNumber);
   }
 
   if(supNumber == 0) {
@@ -203,7 +203,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
 void subNumberToDisplayString(int32_t subNumber, char *displayString, char *displayValueString) {
   if(displayValueString != NULL) {
-    sprintf(displayValueString, "%" FMT32S, subNumber);
+    sprintf(displayValueString, "%" PRId32, subNumber);
   }
 
   if(subNumber < 0) {
@@ -1000,11 +1000,11 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
   //printf("regist = "); printRegisterToConsole(regist); printf("\n");
   fraction(regist, &sign, &intPart, &numer, &denom, &lessEqualGreater);
-  //printf("result of fraction(...) = %c%" FMT64U " %" FMT64U "/%" FMT64U "\n", sign==-1 ? '-' : ' ', intPart, numer, denom);
+  //printf("result of fraction(...) = %c%" PRIu64 " %" PRIu64 "/%" PRIu64 "\n", sign==-1 ? '-' : ' ', intPart, numer, denom);
 
   if(getSystemFlag(FLAG_PROPFR)) { // a b/c
     if(updateDisplayValueX) {
-      sprintf(displayValueX, "%s%" FMT64U " %" FMT64U "/%" FMT64U, (sign == -1 ? "-" : ""), intPart, numer, denom);
+      sprintf(displayValueX, "%s%" PRIu64 " %" PRIu64 "/%" PRIu64, (sign == -1 ? "-" : ""), intPart, numer, denom);
     }
 
     if(sign == -1) {
@@ -1046,7 +1046,7 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
   else { // FT_IMPROPER d/c
     if(updateDisplayValueX) {
-      sprintf(displayValueX, "%s%" FMT64U "/%" FMT64U, (sign == -1 ? "-" : ""), numer, denom);
+      sprintf(displayValueX, "%s%" PRIu64 "/%" PRIu64, (sign == -1 ? "-" : ""), numer, denom);
     }
 
     if(sign == -1) {
@@ -1194,7 +1194,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
       }
     }
 
-    sprintf(displayString, "%s%s" STD_DEGREE "%s%" FMT32U STD_QUOTE "%s%" FMT32U "%s%02" FMT32U STD_DOUBLE_QUOTE,
+    sprintf(displayString, "%s%s" STD_DEGREE "%s%" PRIu32 STD_QUOTE "%s%" PRIu32 "%s%02" PRIu32 STD_DOUBLE_QUOTE,
                             sign==-1 ? "-" : "",
                               degStr,         m < 10 ? STD_SPACE_FIGURE : "",
                                                 m,                   s < 10 ? STD_SPACE_FIGURE : "",
@@ -1210,7 +1210,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
     else {
       strcat(displayString, "?");
-      sprintf(errorMessage, "In function angle34ToDisplayString2: %" FMT8U " is an unexpected value for mode!", mode);
+      sprintf(errorMessage, "In function angle34ToDisplayString2: %" PRIu8 " is an unexpected value for mode!", mode);
       displayBugScreen(errorMessage);
     }
   }
@@ -1639,7 +1639,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   }
 
   if(strLen < stringLen) {
-    printf("In function longIntegerToAllocatedString: the string str (%" FMT32S " bytes) is too small to hold the base 10 representation of lgInt, %" FMT32S " are needed!\n", strLen, stringLen);
+    printf("In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!\n", strLen, stringLen);
     return;
   }
 
@@ -1678,13 +1678,13 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
+  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
 }
 
 
 
 void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" FMT64S, *(int64_t *)(REGISTER_DATA(regist)));
+  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
 }
 
 

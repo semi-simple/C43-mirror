@@ -550,7 +550,7 @@ void processKeyAction(int16_t item) {
           break;
 
         default:
-          sprintf(errorMessage, "In function btnPressed: %" FMT8U " is an unexpected value while processing calcMode!", calcMode);
+          sprintf(errorMessage, "In function btnPressed: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
           displayBugScreen(errorMessage);
       }
   }
@@ -631,7 +631,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" FMT8U ") while processing key ENTER!", calcMode);
+      sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -722,7 +722,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" FMT8U ") while processing key EXIT!", calcMode);
+      sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -777,7 +777,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyCC: unexpected calcMode value (%" FMT8U ") while processing key CC!", calcMode);
+      sprintf(errorMessage, "In function fnKeyCC: unexpected calcMode value (%" PRIu8 ") while processing key CC!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -857,7 +857,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" FMT8U ") while processing key BACKSPACE!", calcMode);
+      sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -928,7 +928,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -944,7 +944,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" FMT8U ") while processing key UP!", calcMode);
+      sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -1019,7 +1019,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" FMT8U " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -1035,7 +1035,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" FMT8U ") while processing key DOWN!", calcMode);
+      sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif
@@ -1073,7 +1073,7 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
       break;
 
     default:
-      sprintf(errorMessage, "In function fnKeyDotD: unexpected calcMode value (%" FMT8U ") while processing key .d!", calcMode);
+      sprintf(errorMessage, "In function fnKeyDotD: unexpected calcMode value (%" PRIu8 ") while processing key .d!", calcMode);
       displayBugScreen(errorMessage);
   }
   #endif

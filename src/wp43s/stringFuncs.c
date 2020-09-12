@@ -131,7 +131,7 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
   if(longIntegerCompareUInt(lgInt, 0x8000) >= 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" FMT32U, (uint32_t)lgInt->_mp_d[0]); // OK for 32 and 64 bit limbs
+      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" PRIu32, (uint32_t)lgInt->_mp_d[0]); // OK for 32 and 64 bit limbs
       moreInfoOnError("In function fnXToAlpha:", errorMessage, NULL, NULL);
     #endif
     return;
@@ -171,7 +171,7 @@ void fnAlphaPos(uint16_t regist) {
   if(getRegisterDataType(regist) != dtString) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot use " STD_alpha "POS? on %s (reg %" FMT16U ")", getRegisterDataTypeName(regist, true, false), regist);
+      sprintf(errorMessage, "cannot use " STD_alpha "POS? on %s (reg %" PRIu16 ")", getRegisterDataTypeName(regist, true, false), regist);
       moreInfoOnError("In function fnAlphaPos:", errorMessage, NULL, NULL);
     #endif
     return;

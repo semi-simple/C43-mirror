@@ -159,7 +159,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       break;
 
     default:
-      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
   }
 
   strcpy(clipboardString, tmpStr3000);
@@ -943,7 +943,7 @@ void refreshRegisterLine(calcRegister_t regist) {
       #if (SHOW_MEMORY_STATUS == 1)
         char string[1000];
 
-        sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), 43S %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes);
+        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " block%s), 43S %" PRIu32 " bytes, GMP %" PRIu32 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes);
         stringToUtf8(string, (uint8_t *)tmpStr);
         gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
         gtk_widget_show(lblMemoryStatus);
@@ -1030,10 +1030,10 @@ void refreshRegisterLine(calcRegister_t regist) {
         }
         else {
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "Error message %" FMT8U " is too wide!", lastErrorCode);
+            sprintf(errorMessage, "Error message %" PRIu8 " is too wide!", lastErrorCode);
             moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
           #endif
-          sprintf(tmpStr3000, "Error message %" FMT8U " is too wide!", lastErrorCode);
+          sprintf(tmpStr3000, "Error message %" PRIu8 " is too wide!", lastErrorCode);
           w = stringWidth(tmpStr3000, &standardFont, true, true);
           showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         }
@@ -1377,7 +1377,7 @@ void refreshRegisterLine(calcRegister_t regist) {
         else if(temporaryInformation == TI_STATISTIC_SUMS) {
           if(regist == REGISTER_Y) {
             realToInt32(SIGMA_N, w);
-            sprintf(prefix, "Data point %03" FMT16S, w);
+            sprintf(prefix, "Data point %03" PRId16, w);
             prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
 
             #ifdef PC_BUILD

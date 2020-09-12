@@ -148,9 +148,9 @@ int32_t findFirstItem(const char *twoLetters) {
 
   middle = first + (last - first) / 2;
   //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
-  //printf("\n----------------------------------\nfirst  = %3" FMT64S "   %3d\n", (int64_t)(first - f), *first);
-  //printf("middle = %3" FMT64S "   %3d\n", (int64_t)(middle - f), *middle);
-  //printf("last   = %3" FMT64S "   %3d\n", (int64_t)(last - f), *last);
+  //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+  //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+  //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
   while(first + 1 < last) {
     if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
       last = middle;
@@ -160,9 +160,9 @@ int32_t findFirstItem(const char *twoLetters) {
     }
 
     middle = first + (last - first) / 2;
-  //printf("\nfirst  = %3" FMT64S "   %3d\n", (int64_t)(first - f), *first);
-  //printf("middle = %3" FMT64S "   %3d\n", (int64_t)(middle - f), *middle);
-  //printf("last   = %3" FMT64S "   %3d\n", (int64_t)(last - f), *last);
+  //printf("\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+  //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+  //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
   }
 
   if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
@@ -1770,7 +1770,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // This should never happen
     default :
-      sprintf(errorMessage, "In function tamTransitionSystem: unknown state %" FMT16U " of the TAM transition system! This should never happen!", transitionSystemState);
+      sprintf(errorMessage, "In function tamTransitionSystem: unknown state %" PRIu16 " of the TAM transition system! This should never happen!", transitionSystemState);
       displayBugScreen(errorMessage);
       return;
   }

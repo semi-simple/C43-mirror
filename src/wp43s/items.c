@@ -95,7 +95,7 @@ void runFunction(int16_t func) {
 
   if(func >= LAST_ITEM) {
     #ifdef PC_BUILD
-      sprintf(errorMessage, "item (%" FMT16S ") must be below LAST_ITEM", func);
+      sprintf(errorMessage, "item (%" PRId16 ") must be below LAST_ITEM", func);
       moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
     #endif
   }
@@ -123,7 +123,7 @@ void runFunction(int16_t func) {
   if(!funcOK) {
     displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
-      sprintf(errorMessage, "%" FMT16S " = %s", func, indexOfItems[func].itemCatalogName);
+      sprintf(errorMessage, "%" PRId16 " = %s", func, indexOfItems[func].itemCatalogName);
       moreInfoOnError("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
     #endif
   }

@@ -1530,7 +1530,7 @@ void calcModeTam(void) {
       break;
 
     default:
-      sprintf(errorMessage, "In function calcModeTam: %" FMT8U " is an unexpected value for tamMode!", tamMode);
+      sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
       displayBugScreen(errorMessage);
       return;
   }

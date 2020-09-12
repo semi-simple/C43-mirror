@@ -2145,7 +2145,40 @@ void refreshRegisterLine(calcRegister_t regist) {
       else if(getRegisterDataType(regist) == dtShortInteger) {
         shortIntegerToDisplayString(regist, tmpStr3000, true);
         showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-      }
+
+        //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
+        if(displayStack == 2 || lastIntegerBase != 0) {
+          copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
+          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
+          setRegisterTag(REGISTER_Z, 2);
+          shortIntegerToDisplayString(REGISTER_Z, tmpStr3000, true);
+          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          }
+          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
+
+          copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
+          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
+          setRegisterTag(REGISTER_T, 16);
+          shortIntegerToDisplayString(REGISTER_T, tmpStr3000, true);
+          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          }
+          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
+          #ifdef PC_BUILD
+            for(w=0; w<SCREEN_WIDTH; w++) {
+              setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
+            }
+          #endif
+          #if DMCP_BUILD
+            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0);
+          #endif
+
+        }                                                                 //JM ^^
+
+              }
 
       else if(getRegisterDataType(regist) == dtLongInteger) {
 

@@ -1395,6 +1395,8 @@ void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
+if(lastIntegerBase != 0) {displayStack = 1;} else {displayStack = 4;} //JMSHOI
+
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
   #endif
@@ -1942,23 +1944,23 @@ void refreshRegisterLine(calcRegister_t regist) {
           }
         }
 
-        else if(temporaryInformation == TI_STATISTIC_SUMS) {
-          if(regist == REGISTER_Y) {
-            realToInt32(SIGMA_N, w);
-            sprintf(prefix, "Data point %03" FMT16S, w);
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+          else if(temporaryInformation == TI_STATISTIC_SUMS) {
+            if(regist == REGISTER_Y) {
+              realToInt32(SIGMA_N, w);
+              sprintf(prefix, "Data point %03" FMT16S, w);
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
 
-            #ifdef PC_BUILD
-              for(w=0; w<SCREEN_WIDTH; w++) {
-                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-              }
-            #endif
+              #ifdef PC_BUILD
+                for(w=0; w<SCREEN_WIDTH; w++) {
+                  setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
+                }
+              #endif
 
-            #if DMCP_BUILD
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0);
-            #endif
+              #if DMCP_BUILD
+                lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 1);
+              #endif
+            }
           }
-        }
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");
@@ -2147,10 +2149,20 @@ void refreshRegisterLine(calcRegister_t regist) {
         showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
 
         //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
-        if(displayStack == 2 || lastIntegerBase != 0) {
+        if(displayStack == 1 && lastIntegerBase != 0) {
+          copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
+          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
+          setRegisterTag(REGISTER_Y, 2);
+          shortIntegerToDisplayString(REGISTER_Y, tmpStr3000, true);
+          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          }
+          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
+
           copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
           copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
-          setRegisterTag(REGISTER_Z, 2);
+          setRegisterTag(REGISTER_Z, 8);
           shortIntegerToDisplayString(REGISTER_Z, tmpStr3000, true);
           if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
             showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
@@ -2169,11 +2181,11 @@ void refreshRegisterLine(calcRegister_t regist) {
           copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
           #ifdef PC_BUILD
             for(w=0; w<SCREEN_WIDTH; w++) {
-              setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
+              setPixel(w, Y_POSITION_OF_REGISTER_X_LINE - 2);
             }
           #endif
           #if DMCP_BUILD
-            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0);
+            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 1);
           #endif
 
         }                                                                 //JM ^^

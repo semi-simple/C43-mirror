@@ -392,7 +392,28 @@ const int16_t menu_MyMenu[]      = { ITM_cos                                    
 const int16_t menu_BASE[]        = { 
                                      ITM_LI,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_AND,                  ITM_OR,                ITM_XOR,                     ITM_NOT,    
-                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8                       };    //JM BASE MENU ADDED
+                                     ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
+
+ITM_NULL,ITM_NULL,ITM_FB01+3,ITM_FB01+2,ITM_FB01+1,ITM_FB01+0,
+ITM_NULL,ITM_NULL,ITM_FB01+7,ITM_FB01+6,ITM_FB01+5,ITM_FB01+4,
+ITM_NULL,ITM_NULL,ITM_FB01+11,ITM_FB01+10,ITM_FB01+9,ITM_FB01+8,
+ITM_NULL,ITM_NULL,ITM_FB01+15,ITM_FB01+14,ITM_FB01+13,ITM_FB01+12,
+ITM_NULL,ITM_NULL,ITM_FB01+19,ITM_FB01+18,ITM_FB01+17,ITM_FB01+16,
+ITM_NULL,ITM_NULL,ITM_FB01+23,ITM_FB01+22,ITM_FB01+21,ITM_FB01+20,
+ITM_NULL,ITM_NULL,ITM_FB01+27,ITM_FB01+26,ITM_FB01+25,ITM_FB01+24,
+ITM_NULL,ITM_NULL,ITM_FB01+31,ITM_FB01+30,ITM_FB01+29,ITM_FB01+28,
+ITM_NULL,ITM_NULL,ITM_FB01+35,ITM_FB01+34,ITM_FB01+33,ITM_FB01+32,
+ITM_NULL,ITM_NULL,ITM_FB01+39,ITM_FB01+38,ITM_FB01+37,ITM_FB01+36,
+ITM_NULL,ITM_NULL,ITM_FB01+43,ITM_FB01+42,ITM_FB01+41,ITM_FB01+40,
+ITM_NULL,ITM_NULL,ITM_FB01+47,ITM_FB01+46,ITM_FB01+45,ITM_FB01+44,
+ITM_NULL,ITM_NULL,ITM_FB01+51,ITM_FB01+50,ITM_FB01+49,ITM_FB01+48,
+ITM_NULL,ITM_NULL,ITM_FB01+55,ITM_FB01+54,ITM_FB01+53,ITM_FB01+52,
+ITM_NULL,ITM_NULL,ITM_FB01+59,ITM_FB01+58,ITM_FB01+57,ITM_FB01+56,
+ITM_NULL,ITM_NULL,ITM_FB01+63,ITM_FB01+62,ITM_FB01+61,ITM_FB01+60
+
+                                                            };    //JM BASE MENU ADDED
+
+
 
 const int16_t menu_EE[]          = { ITM_pi,                        ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
                                      ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
@@ -1114,12 +1135,6 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
-
-
-    if (abort_accellerate()) {   //JM vv EXPERIMENT TO TRY SPEED UP. Return promptly if key awaits and set refresh
-      return;
-    }                     //JM ^^
-
 
   if(0 <= xSoftkey && xSoftkey <= 5) {
     x1 = 67 * xSoftkey - 1;

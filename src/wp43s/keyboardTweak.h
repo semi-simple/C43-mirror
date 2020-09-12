@@ -56,13 +56,33 @@ int16_t  nameFunction        (int16_t  fn, int16_t itemShift  );   //JM LONGPRES
 #endif
 
 #ifdef PC_BUILD
-gboolean refreshTimer              (gpointer data);
+gboolean refreshTimer         (gpointer data);
 void     btnFnPressed_StateMachine (GtkWidget *w, gpointer data);
 void     btnFnReleased_StateMachine(GtkWidget *w, gpointer data);
 
 #endif
 #ifdef DMCP_BUILD
-void     refreshTimer              (void);
+void     refreshTimer         (void);
+
+/*
+#define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC - removed
+#define BUFFER_SUCCESS  1
+ 
+#define BUFFER_SIZE 4   // muss 2^n betragen (8, 16, 32, 64 ...)
+#define BUFFER_MASK (BUFFER_SIZE-1) // Klammern auf keinen Fall vergessen
+
+typedef struct {
+  uint8_t   data[BUFFER_SIZE];
+  uint32_t  time[BUFFER_SIZE];
+  uint8_t   read;   // zeigt auf das Feld mit dem ältesten Inhalt
+  uint8_t   write;  // zeigt immer auf leeres Feld
+} kb_buffer_t;
+
+uint8_t  inKeyBuffer          (uint8_t byte);
+uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime);
+bool_t   emptyKeyBuffer       ();                           //^^
+*/
+
 void     btnFnPressed_StateMachine (void *w, void *data);
 void     btnFnReleased_StateMachine(void *w, void *data);
 #endif

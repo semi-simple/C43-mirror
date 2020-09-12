@@ -96,8 +96,10 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
   else {
     #ifdef DMCP_BUILD // 32 bits
       uint64_t i64 = *(uint32_t *)(lgInt->_mp_d);
+      uint64_t i64h;                                 //JMfix
       if(abs(lgInt->_mp_size > 1)) {
-        i64 = (i64 << 32) + *(((uint32_t *)(lgInt->_mp_d)) + 1);
+        i64h = *(((uint32_t *)(lgInt->_mp_d)) + 1);  //JMfix
+        i64 = i64 + (i64h << 32);                    //JMfix
       }
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = i64 & shortIntegerMask;
     #else // 64 bits

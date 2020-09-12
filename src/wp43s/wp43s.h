@@ -46,7 +46,7 @@
 #define TO_WP43SMEMPTR(p)           ((p) == NULL ? WP43S_NULL : (uint16_t)((dataBlock_t *)(p) - ram))
 #define FN_KEY_TIMEOUT_TO_NOP       0
 #ifdef DMCP_BUILD
-#define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 125
+#define SCREEN_REFRESH_PERIOD     125 // 500 //JM timeout for lcd refresh in ms 125
 #else
 #define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 100
 #endif 
@@ -700,7 +700,8 @@ extern pcg32_random_t        pcg32_global;
 extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
-  extern uint32_t             nextTimerRefresh;   //dr
+  extern uint32_t            nextTimerRefresh;    //dr
+//extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC - removed
 #endif // DMCP_BUILD
 
 #define MAX_DENMAX           9999

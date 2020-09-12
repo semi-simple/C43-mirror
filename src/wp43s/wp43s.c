@@ -211,7 +211,7 @@ const char            digits[17] = "0123456789ABCDEF";
     int8_t            telltale_lastkey;                        //JM Test
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
-  uint32_t            timeStampKey;                            //dr
+//uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC - removed
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
@@ -537,7 +537,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  timeStampKey = (uint32_t)sys_current_ms();                   //dr
+//timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC - removed
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
@@ -617,7 +617,7 @@ longIntegerFree(li);*/
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {        // Just wait if no keys available.      //dr
+    } else if ((!ST(STAT_PGM_END) && key_empty() /*&& emptyKeyBuffer()*/)) {    // Just wait if no keys available.      //dr - internal keyBuffer POC - removed
       uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
       if(nextTimerRefresh != 0) {
         uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
@@ -677,9 +677,9 @@ longIntegerFree(li);*/
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//  key = key_pop();          //vv dr replaced with following code
+    key = key_pop();
     
-    int oldTimeStampKey = timeStampKey;
+/*  int oldTimeStampKey = timeStampKey;                     //vv dr - internal keyBuffer POC - removed
     uint8_t outKey;
     int tmpKey = key_pop();
     if(tmpKey >= 0) {
@@ -694,7 +694,7 @@ longIntegerFree(li);*/
     }
     else {
       key = tmpKey;
-    }                         //^^
+    }*/                                                     //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
     //char sysLastKeyCh[5];

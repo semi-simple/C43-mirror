@@ -897,8 +897,8 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 }
 
 
-
-#ifdef DMCP_BUILD
+/*
+#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC - removed
 kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 // Stellt 1 Byte in den Ringbuffer
@@ -953,8 +953,8 @@ bool_t emptyKeyBuffer()
 {
   return buffer.read == buffer.write;
 }
-#endif
-
+#endif                                                      //^^
+*/
 
 
 //########################################

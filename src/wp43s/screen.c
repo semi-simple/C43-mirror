@@ -1385,6 +1385,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
 
 
 
+uint8_t   displayStack_m = 255;                   //JMSHOI
 /********************************************//**
  * \brief Displays one register line
  *
@@ -1395,7 +1396,15 @@ void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
-if(lastIntegerBase != 0) {displayStack = 1;} else {displayStack = 4;} //JMSHOI
+if(lastIntegerBase != 0 && displayStack != 1) {   //JMSHOI                   
+  displayStack_m = displayStack;                  //JMSHOI
+  fnDisplayStack(1);                              //JMSHOI             
+} else {                                          //JMSHOI 
+  if(lastIntegerBase == 0 && displayStack_m != 255) { //JMSHOI
+    fnDisplayStack(displayStack_m);               //JMSHOI
+    displayStack_m = 255;                         //JMSHOI
+  }                                               //JMSHOI
+}                                                 //JMSHOI
 
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
@@ -1957,7 +1966,7 @@ if(lastIntegerBase != 0) {displayStack = 1;} else {displayStack = 4;} //JMSHOI
               #endif
 
               #if DMCP_BUILD
-                lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 1);
+                lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
               #endif
             }
           }
@@ -2185,7 +2194,7 @@ if(lastIntegerBase != 0) {displayStack = 1;} else {displayStack = 4;} //JMSHOI
             }
           #endif
           #if DMCP_BUILD
-            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 1);
+            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
           #endif
 
         }                                                                 //JM ^^

@@ -1663,7 +1663,7 @@
 #define ITM_SKIP                      1593
 #define ITM_SLVQ                      1594
 #define ITM_SM                        1595
-#define ITM_SMODE                     1596
+#define ITM_ISM                       1596
 #define ITM_SMW                       1597
 #define ITM_SOLVE                     1598
 #define ITM_SSIZE                     1599

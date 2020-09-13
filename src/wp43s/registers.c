@@ -1768,7 +1768,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
 
   else if(getRegisterDataType(regist) == dtString) {
     stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)str);
-    printf("string (%" PRIu64 " + %" PRIu32 " bytes) |%s|", sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
+    printf("string (%" PRIu64 " + %" PRIu32 " bytes) |%s|", (uint64_t)sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
   }
 
   else if(getRegisterDataType(regist) == dtShortInteger) {
@@ -1787,7 +1787,7 @@ void printRegisterToConsole(calcRegister_t regist, const char *before, const cha
     convertLongIntegerRegisterToLongInteger(regist, lgInt);
     longIntegerToAllocatedString(lgInt, str, sizeof(str));
     longIntegerFree(lgInt);
-    printf("long integer (%" PRIu64 " + %" PRIu32 " bytes) %s", sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
+    printf("long integer (%" PRIu64 " + %" PRIu32 " bytes) %s", (uint64_t)sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
   }
 
   else {

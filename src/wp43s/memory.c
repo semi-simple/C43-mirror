@@ -33,7 +33,7 @@ int32_t getFreeRamMemory(void) {
 
 #ifndef DMCP_BUILD
 void debugMemory(void) {
-  printf("WP43S owns %6" PRIu64 " bytes and GMP owns %6" PRIu64 " bytes (%" PRId32 " bytes free)\n", wp43sMemInBytes, gmpMemInBytes, getFreeRamMemory());
+  printf("WP43S owns %6" PRIu64 " bytes and GMP owns %6" PRIu64 " bytes (%" PRId32 " bytes free)\n", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes, getFreeRamMemory());
   printf("    Addr   Size\n");
   for(int i=0; i<numberOfFreeBlocks; i++) {
     printf("%2d%6u%7u\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks);
@@ -64,7 +64,7 @@ void *reallocWp43s(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes)
 
   wp43sMemInBytes += newSizeInBytes - oldSizeInBytes;
 
-  //if(debugMemAllocation) printf("WP43S claimed %6" PRIu64 " bytes, freed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", newSizeInBytes, oldSizeInBytes, wp43sMemInBytes);
+  //if(debugMemAllocation) printf("WP43S claimed %6" PRIu64 " bytes, freed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", (uint64_t)newSizeInBytes, (uint64_t)oldSizeInBytes, (uint64_t)wp43sMemInBytes);
   return wp43sReallocate(pcMemPtr, oldSizeInBytes, newSizeInBytes);
 }
 
@@ -88,7 +88,7 @@ void *allocGmp(size_t sizeInBytes) {
   sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   gmpMemInBytes += sizeInBytes;
 
-  //if(debugMemAllocation) printf("GMP claimed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", sizeInBytes, gmpMemInBytes);
+  //if(debugMemAllocation) printf("GMP claimed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", (uint64_t)sizeInBytes, (uint64_t)gmpMemInBytes);
   //return wp43sAllocate(sizeInBytes);
   return malloc(sizeInBytes);
 }
@@ -101,7 +101,7 @@ void *reallocGmp(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
 
   gmpMemInBytes += newSizeInBytes - oldSizeInBytes;
 
-  //if(debugMemAllocation) printf("GMP claimed %6" PRIu64 " bytes, freed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", newSizeInBytes, oldSizeInBytes, gmpMemInBytes);
+  //if(debugMemAllocation) printf("GMP claimed %6" PRIu64 " bytes, freed %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", (uint64_t)newSizeInBytes, (uint64_t)oldSizeInBytes, (uint64_t)gmpMemInBytes);
   //return wp43sReallocate(pcMemPtr, oldSizeInBytes, newSizeInBytes);
   return realloc(pcMemPtr, newSizeInBytes);
 }
@@ -112,7 +112,7 @@ void freeGmp(void *pcMemPtr, size_t sizeInBytes) {
   sizeInBytes = TO_BYTES(TO_BLOCKS(sizeInBytes));
   gmpMemInBytes -= sizeInBytes;
 
-  //if(debugMemAllocation) printf("GMP freed   %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", sizeInBytes, gmpMemInBytes);
+  //if(debugMemAllocation) printf("GMP freed   %6" PRIu64 " bytes and holds now %6" PRIu64 " bytes\n", (uint64_t)sizeInBytes, (uint64_t)gmpMemInBytes);
   //wp43sFree(pcMemPtr, sizeInBytes);
   free(pcMemPtr);
 }
@@ -159,7 +159,7 @@ void *wp43sAllocate(size_t sizeInBytes) {
       minSizeInBlocks += freeBlocks[i].sizeInBlocks;
     }
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", sizeInBytes, TO_BYTES(minSizeInBlocks));
+      printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)sizeInBytes, TO_BYTES(minSizeInBlocks));
       exit(-3);
     #endif
 

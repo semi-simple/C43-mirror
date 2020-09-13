@@ -90,7 +90,12 @@ uint8_t verbose_jm;
 #endif
 #define JM_TO_CL_LONG      800   //ms TO_CL_LONG   //CLSTK
 
+#ifdef DMCP_BUILD
+#define JM_TO_3S_CTFF 	   900   //ms TO_3S_CTFF
+#else
 #define JM_TO_3S_CTFF 	   600   //ms TO_3S_CTFF
+#endif
+
 #define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
 void jm_show_calc_state(char comment[]);

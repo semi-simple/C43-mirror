@@ -943,7 +943,7 @@ void refreshRegisterLine(calcRegister_t regist) {
       #if (SHOW_MEMORY_STATUS == 1)
         char string[1000];
 
-        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " block%s), 43S %" PRIu32 " bytes, GMP %" PRIu32 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes);
+        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " block%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
         stringToUtf8(string, (uint8_t *)tmpStr);
         gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
         gtk_widget_show(lblMemoryStatus);

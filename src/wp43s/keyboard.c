@@ -273,6 +273,7 @@ int16_t determineItem(const char *data) {
 void btnClicked(GtkWidget *w, gpointer data) {
   GdkEvent mouseButton;
   mouseButton.button.button = 1;
+  mouseButton.type = 0;
 
   btnPressed(w, &mouseButton, data);
   btnReleased(w, &mouseButton, data);

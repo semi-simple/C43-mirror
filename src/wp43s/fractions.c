@@ -187,13 +187,13 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
 
       *numer = 1;
       *denom = iPart[i];
-      //printf("  7 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  7 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    8 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        //printf("    8 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       }
-      //printf("  9 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  9 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
@@ -221,20 +221,20 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  G bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          //printf("  G bestNumer=%" PRIu64 " BestDenom=%" PRIu64 "\n", bestNumer, bestDenom);
           //printf("  H delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }
 
       *numer = 1;
       *denom = iPart[i] + 1;
-      //printf("  I numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  I numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    J numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        //printf("    J numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       }
-      //printf("  K numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  K numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
@@ -247,7 +247,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  L bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          //printf("  L bestNumer=%" PRIu64 " BestDenom=%" PRIu64 "\n", bestNumer, bestDenom);
           //printf("  M delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }

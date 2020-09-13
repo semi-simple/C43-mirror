@@ -97,7 +97,7 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
     #ifdef DMCP_BUILD // 32 bits
       uint64_t i64 = *(uint32_t *)(lgInt->_mp_d);
       if(abs(lgInt->_mp_size > 1)) {
-        i64 = (i64 << 32) + *(((uint32_t *)(lgInt->_mp_d)) + 1);
+        i64 |= (int64_t)(*(((uint32_t *)(lgInt->_mp_d)) + 1)) << 32;
       }
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = i64 & shortIntegerMask;
     #else // 64 bits
@@ -178,7 +178,7 @@ void convertShortIntegerRegisterToUInt64(calcRegister_t regist, int16_t *sign, u
        *value -= shortIntegerSignBit;
       }
       else {
-        sprintf(errorMessage, "In function convertShortIntegerRegisterToUInt64: %" FMT8U " is an unexpected value for shortIntegerMode!", shortIntegerMode);
+        sprintf(errorMessage, "In function convertShortIntegerRegisterToUInt64: %" PRIu8 " is an unexpected value for shortIntegerMode!", shortIntegerMode);
         displayBugScreen(errorMessage);
         *sign = 0;
         *value = 0;
@@ -233,7 +233,7 @@ void convertUInt64ToShortIntegerRegister(int16_t sign, uint64_t value, uint32_t 
       value += shortIntegerSignBit;
     }
     else {
-      sprintf(errorMessage, "In function convertUInt64ToShortIntegerRegister: %" FMT8U " is an unexpected value for shortIntegerMode!", shortIntegerMode);
+      sprintf(errorMessage, "In function convertUInt64ToShortIntegerRegister: %" PRIu8 " is an unexpected value for shortIntegerMode!", shortIntegerMode);
       displayBugScreen(errorMessage);
       value = 0;
     }

@@ -1,27 +1,27 @@
-31 Aug 2020 release pre-alpha REL38
+14 Sep 2020 release pre-alpha REL39
 
 
 
-This is the pre-alpha version of the WP43C modifications made on top of the WP43S prelim alpha emulator. Do not expect it to work. It probably does not.
+This is the pre-alpha version of the C43 modifications made on top of the WP43S prelim alpha emulator. Do not expect it to work. It probably does not.
 
-The basic WP43C write-up is on the first page of https://forum.swissmicros.com/viewtopic.php?f=2&t=2216. The source code is on https://gitlab.com/Jaymos/wp43c.
+The basic C43 write-up is on the first page of https://forum.swissmicros.com/viewtopic.php?f=2&t=2216. The source code is on https://gitlab.com/Jaymos/wp43c.
 
 If you do test, please submit well structured comments to the above group. With well structured, I mean documented repeatable errant behaviour, preferably listed in a group of errors, and/or comments, all in one (or few) post(s), numbered for reference in follow up posts.
 
 Questions welcomed on the above group.
 
-Praise and compliments to Martin, Pauli and Walter for the work on the base project WP43S. The WP43C work done thus far is way less than the effort made by these guys, and the WP43C cannot exist without the base code of the WP43S.
+Praise and compliments to Martin, Pauli and Walter for the work on the base project WP43S. The C43 work done thus far is way less than the effort made by these guys, and the C43 cannot exist without the base code of the WP43S.
 
 ---
 Notes:
 
 1. Note the dots above the shift key. One tap is for yellow shifted labels, a.k.a. f-shift. Two taps for blue shifted labels, a.k.a. g-shift. Three taps clears the shift and pops up the HOME menu.
 
-2. Triple shift mode (HOME.3) can be disabled using the switch in [MODE], [Dn]. Triple shift is also influenced by the triple shift timing switch SH.3T. Shift time out is controlled by SH_4s. None of these settings are really end user settings, and they are in progress.
+2. Triple shift mode (HOME.3) can be disabled using the switch in [MODE], [Dn]. Triple shift is also influenced by the triple shift timing switch SH.3T. Shift time out is controlled by SH_4s. None of these settings are really end user settings, and they are work in progress.
 
 3. The setting for triple shift HOME (HOME.3) is enabled by default. Triple shift accesses HOME. Or [g][7] does. Triple shift or EXIT to restores to previous menu.
 
-4. HOME (triple shift) comprises 4 home screens and a number of keyboard mirroring menus. Arrow [Dn] to access the next screen in a circular fashion.
+4. HOME (triple shift) comprises a number of home screens and a number of keyboard mirroring menus. Arrow [Dn] to access the next screen in a circular fashion.
 
 5. The latest CSS and PNG file are supplied. These are different from the main project, WP43S.
 
@@ -37,9 +37,9 @@ Notes:
 
 11. Try XEQM on long press XEQ. These are softmenu buttons reflecting 18 RPN program files. 
 
-12. Try the new BASE menu.
+12. Try the new BASE menu. And Up and Dn to further screens.
 
-13. Try the new Alpha mode editor.
+13. Try the new Alpha mode multi line text editor.
 
 ---
 

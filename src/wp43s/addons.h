@@ -41,6 +41,11 @@ void fnChangeBaseMNU(uint16_t unusedParamButMandatory);
 void fnInDefault    (uint16_t inputDefault);
 
 
+void fnByteShortcutsS(uint16_t size);     //JM POC BASE2 vv
+void fnByteShortcutsU(uint16_t size);
+void fnByte          (uint16_t command);  //JM POC BASE2 ^^
+
+
 //for display.c
 void fnDisplayFormatSigFig      (uint16_t displayFormatN);
 void fnDisplayFormatUnit        (uint16_t displayFormatN);

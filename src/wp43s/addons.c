@@ -630,3 +630,30 @@ void fnInDefault(uint16_t inputDefault) {              //DONE
 
 
 
+void fnByteShortcutsS(uint16_t size) {                //JM POC BASE2 vv
+  fnSetWordSize(size);
+  fnIntegerMode(SIM_2COMPL);
+}
+
+
+void fnByteShortcutsU(uint16_t size) {
+  fnSetWordSize(size);
+  fnIntegerMode(SIM_UNSIGN);  
+}
+
+void fnByte(uint16_t command) {
+  switch(command) {
+    case 1: fnSl(1); break;
+    case 2: fnSr(1); break;
+    case 3: fnRl(1); break;
+    case 4: fnRr(1); break;
+    case 5: break;            //FWORD
+    case 6: break;            //FBYTE
+    default: break;
+  }
+}                                                      //JM POC BASE2 ^^
+
+
+
+
+

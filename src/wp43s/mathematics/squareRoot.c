@@ -40,7 +40,7 @@ void sqrtError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate sqrt for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnSquareRoot:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnSquareRoot:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void sqrtError(void) {
  * \return void
  ***********************************************/
 void fnSquareRoot(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sqrt[getRegisterDataType(REGISTER_X)]();
@@ -97,7 +96,7 @@ void sqrtLonI(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative long integer when flag I is not set!");
-      showInfoDialog("In function sqrtLonI:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function sqrtLonI:", errorMessage, NULL, NULL);
     #endif
   }
 
@@ -128,7 +127,7 @@ void sqrtReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getSystemFlag(FLAG_SPCRES)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function sqrtReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sqrt when flag D is not set", NULL, NULL);
+      moreInfoOnError("In function sqrtReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of sqrt when flag D is not set", NULL, NULL);
     #endif
     return;
   }
@@ -153,7 +152,7 @@ void sqrtReal(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, STD_SQUARE_ROOT STD_x_UNDER_ROOT " doesn't work on a negative real when flag I is not set!");
-      showInfoDialog("In function sqrtReal:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function sqrtReal:", errorMessage, NULL, NULL);
     #endif
   }
 }

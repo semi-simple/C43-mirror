@@ -40,7 +40,7 @@ void roundError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate ROUND for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function roundError:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function roundError:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void roundError(void) {
  * \return void
  ***********************************************/
 void fnRound(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Round[getRegisterDataType(REGISTER_X)]();

@@ -53,7 +53,7 @@ static void dataTypeError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnDeltaPercent:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnDeltaPercent:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -70,7 +70,6 @@ static void dataTypeError(void) {
  * \return void
  ***********************************************/
 void fnDeltaPercent(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -94,7 +93,7 @@ static bool_t deltaPercentReal(real_t *xReal, real_t *yReal, real_t *rReal, real
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnDeltaPercent:", "cannot divide 0 by 0", NULL, NULL);
+          moreInfoOnError("In function fnDeltaPercent:", "cannot divide 0 by 0", NULL, NULL);
         #endif
         return false;
       }
@@ -107,7 +106,7 @@ static bool_t deltaPercentReal(real_t *xReal, real_t *yReal, real_t *rReal, real
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnDeltaPercent:", "cannot divide a real by y=0", NULL, NULL);
+        moreInfoOnError("In function fnDeltaPercent:", "cannot divide a real by y=0", NULL, NULL);
       #endif
       return false;
     }

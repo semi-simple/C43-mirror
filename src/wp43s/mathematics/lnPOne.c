@@ -41,7 +41,7 @@ void lnP1Error(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Ln(1 + x) for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLnP1:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLnP1:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -55,7 +55,6 @@ void lnP1Error(void) {
  * \return void
  ***********************************************/
 void fnLnP1(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   lnP1[getRegisterDataType(REGISTER_X)]();
@@ -102,7 +101,7 @@ void lnP1LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1LonI:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
+        moreInfoOnError("In function lnP1LonI:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
       #endif
     }
   }
@@ -131,7 +130,7 @@ void lnP1LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1LonI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function lnP1LonI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -167,7 +166,7 @@ void lnP1ShoI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1ShoI:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
+        moreInfoOnError("In function lnP1ShoI:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
       #endif
     }
   }
@@ -189,7 +188,7 @@ void lnP1ShoI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1ShoI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function lnP1ShoI:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -208,7 +207,7 @@ void lnP1Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1Real:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
+        moreInfoOnError("In function lnP1Real:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
       #endif
     }
   }
@@ -217,7 +216,7 @@ void lnP1Real(void) {
     if(!getSystemFlag(FLAG_SPCRES)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ln(x+1) when flag D is not set", NULL, NULL);
+        moreInfoOnError("In function lnP1Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of ln(x+1) when flag D is not set", NULL, NULL);
       #endif
       return;
     }
@@ -257,7 +256,7 @@ void lnP1Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1Real:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function lnP1Real:", "cannot calculate Ln of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -278,7 +277,7 @@ void lnP1Cplx(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function lnP1Cplx:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
+        moreInfoOnError("In function lnP1Cplx:", "cannot calculate Ln(0) in Ln(1 + x)", NULL, NULL);
       #endif
     }
   }

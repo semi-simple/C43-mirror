@@ -40,7 +40,7 @@ void coshError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnCosh:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnCosh:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void coshError(void) {
  * \return void
  ***********************************************/
 void fnCosh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Cosh[getRegisterDataType(REGISTER_X)]();
@@ -92,7 +91,7 @@ void coshReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getSystemFlag(FLAG_SPCRES)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function coshReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
+      moreInfoOnError("In function coshReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
     #endif
     return;
   }

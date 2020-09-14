@@ -30,14 +30,13 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
   if((dataTypeX == dtReal34 || dataTypeX == dtLongInteger) && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {
       case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39); break;
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);            break;
       default: {
-        sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
+        sprintf(errorMessage, "In function fnToPolar: %" PRIu32 " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
       }
     }
@@ -46,7 +45,7 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
       case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39); break;
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);            break;
       default: {
-        sprintf(errorMessage, "In function fnToPolar: %" FMT32U " is an unexpected dataTypeY value!", dataTypeY);
+        sprintf(errorMessage, "In function fnToPolar: %" PRIu32 " is an unexpected dataTypeY value!", dataTypeY);
         displayBugScreen(errorMessage);
       }
     }
@@ -65,7 +64,7 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert (%s, %s) to polar coordinates!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false), getDataTypeName(getRegisterDataType(REGISTER_Y), false, false));
-      showInfoDialog("In function fnToPolar:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnToPolar:", errorMessage, NULL, NULL);
     #endif
   }
 }

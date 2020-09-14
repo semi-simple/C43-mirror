@@ -47,7 +47,7 @@ void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_F
 #define EXTRA_INFO_MESSAGE(msg)                                         \
  do {                                                                   \
   sprintf(errorMessage, msg);                                           \
-  showInfoDialog("In function fnCyx/fnPyx:", errorMessage, NULL, NULL); \
+  moreInfoOnError("In function fnCyx/fnPyx:", errorMessage, NULL, NULL); \
  } while(0)
 
 #else // EXTRA_INFO_ON_CALC_ERROR != 1
@@ -69,7 +69,7 @@ static void cpyxDataTypeError(uint16_t unused) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnCyx/fnPyx:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnCyx/fnPyx:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -244,7 +244,6 @@ static void pyxCplx(real_t *yReal, real_t *yImag, real_t *xReal, real_t *xImag, 
  * \return void
  ***********************************************/
 void fnCyx(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_COMBINATION);
@@ -262,7 +261,6 @@ void fnCyx(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnPyx(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_PERMUTATION);

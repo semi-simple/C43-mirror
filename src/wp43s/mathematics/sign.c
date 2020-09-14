@@ -40,7 +40,7 @@ void signError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnSign:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnSign:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void signError(void) {
  * \return void
  ***********************************************/
 void fnSign(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   sign[getRegisterDataType(REGISTER_X)]();
@@ -114,7 +113,7 @@ void signShoI(void) {
 
     default :
       uIntToLongInteger(0, lgInt);
-      sprintf(errorMessage, "In function signShoI: %" FMT64U " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))));
+      sprintf(errorMessage, "In function signShoI: %" PRIu64 " is an unexpected value returned by WP34S_intSign!", WP34S_intSign(*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X))));
       displayBugScreen(errorMessage);
   }
 
@@ -131,7 +130,7 @@ void signReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
+      moreInfoOnError("In function signReal:", "cannot use NaN as X input of SIGN", NULL, NULL);
     #endif
     return;
   }

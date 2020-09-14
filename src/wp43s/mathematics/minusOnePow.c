@@ -40,7 +40,7 @@ void m1PowError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate (-1)" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnM1Pow:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnM1Pow:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void m1PowError(void) {
  * \return void
  ***********************************************/
 void fnM1Pow(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   m1Pow[getRegisterDataType(REGISTER_X)]();

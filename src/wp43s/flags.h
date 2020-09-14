@@ -72,7 +72,8 @@
 #define FLAG_INTING   0xc025
 #define FLAG_SOLVING  0xc026
 #define FLAG_VMDISP   0xc027
-#define NUMBER_OF_SYSTEM_FLAGS 40
+#define FLAG_USB      0xc028
+#define NUMBER_OF_SYSTEM_FLAGS 41
 
 #define isSystemFlagWriteProtected(sf)  ((sf & 0x4000) != 0)
 #define getSystemFlag(sf)               ((systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
@@ -80,19 +81,20 @@
 #define clearSystemFlag(sf)             { systemFlags &= ~((uint64_t)1 << (sf & 0x3fff)); systemFlagAction(sf, 0); }
 #define flipSystemFlag(sf)              { systemFlags ^=  ((uint64_t)1 << (sf & 0x3fff)); systemFlagAction(sf, 2); }
 
-void   systemFlagAction  (uint16_t systemFlag, uint16_t action);
-bool_t getFlag           (uint16_t flag);
-void   fnGetSystemFlag   (uint16_t systemFlag);
-void   fnSetFlag         (uint16_t flag);
-void   fnClearFlag       (uint16_t flag);
-void   fnFlipFlag        (uint16_t flag);
-void   fnClFAll          (uint16_t unusedParamButMandatory);
-void   fnIsFlagClear     (uint16_t flag);
-void   fnIsFlagSet       (uint16_t flag);
-void   fnIsFlagClearClear(uint16_t flag);
-void   fnIsFlagSetClear  (uint16_t flag);
-void   fnIsFlagClearSet  (uint16_t flag);
-void   fnIsFlagSetSet    (uint16_t flag);
-void   fnIsFlagClearFlip (uint16_t flag);
-void   fnIsFlagSetFlip   (uint16_t flag);
-void   fnIsFlagSetFlip   (uint16_t flag);
+void   systemFlagAction        (uint16_t systemFlag, uint16_t action);
+void   synchronizeLetteredFlags(void);
+bool_t getFlag                 (uint16_t flag);
+void   fnGetSystemFlag         (uint16_t systemFlag);
+void   fnSetFlag               (uint16_t flag);
+void   fnClearFlag             (uint16_t flag);
+void   fnFlipFlag              (uint16_t flag);
+void   fnClFAll                (uint16_t unusedParamButMandatory);
+void   fnIsFlagClear           (uint16_t flag);
+void   fnIsFlagSet             (uint16_t flag);
+void   fnIsFlagClearClear      (uint16_t flag);
+void   fnIsFlagSetClear        (uint16_t flag);
+void   fnIsFlagClearSet        (uint16_t flag);
+void   fnIsFlagSetSet          (uint16_t flag);
+void   fnIsFlagClearFlip       (uint16_t flag);
+void   fnIsFlagSetFlip         (uint16_t flag);
+void   fnIsFlagSetFlip         (uint16_t flag);

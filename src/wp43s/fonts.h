@@ -561,6 +561,7 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 #define STD_GAUSS_WHITE_R             "\xa4\x31"
 #define STD_GAUSS_WHITE_L             "\xa4\x32"
 #define STD_GAUSS_BLACK_R             "\xa4\x33"
+#define STD_USB                       "\xa4\x34"
 #define STD_BATTERY                   "\xa4\x2a"
 #define STD_PGM_BEGIN                 "\xa4\x2b"
 #define STD_USER_MODE                 "\xa4\x2c"

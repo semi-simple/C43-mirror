@@ -176,7 +176,7 @@ void fnSwapX(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnSwapX:", errorMessage, "is not defined!", NULL);
+    moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -199,7 +199,7 @@ void fnSwapY(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnSwapY:", errorMessage, "is not defined!", NULL);
+    moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -221,7 +221,7 @@ void fnSwapZ(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
+    moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -243,7 +243,7 @@ void fnSwapT(uint16_t regist) {
   #ifdef PC_BUILD
   else {
     sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    showInfoDialog("In function fnSwapT:", errorMessage, "is not defined!", NULL);
+    moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
   }
   #endif
 }
@@ -270,8 +270,6 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnShuffle(uint16_t unusedParamButMandatory) {
-  saveStack();
-
   for(int i=0; i<4; i++) {
     if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
       copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X + i);
@@ -332,32 +330,68 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
 
 
 
-void saveStack(void) {
-  savedStackLiftEnabled = getSystemFlag(FLAG_ASLIFT);
+void saveForUndo(void) {
+  savedSystemFlags = systemFlags;
+
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
   }
+
   copySourceRegisterToDestRegister(REGISTER_L, SAVED_REGISTER_L);
+
+  if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
+    if(savedStatisticalSumsPointer != NULL) {
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      savedStatisticalSumsPointer = NULL;
+    }
+  }
+  else { // There are statistical sums to save for undo
+    if(savedStatisticalSumsPointer == NULL) {
+      savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+    }
+    xcopy(savedStatisticalSumsPointer, statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+  }
+
+  thereIsSomethingToUndo = true;
 }
 
 
 
 void fnUndo(uint16_t unusedParamButMandatory) {
-  restoreStack();
+  if(thereIsSomethingToUndo) {
+    undo();
+  }
 }
 
 
 
-void restoreStack(void) {
-  if(savedStackLiftEnabled) {
-    setSystemFlag(FLAG_ASLIFT);
-  }
-  else {
-    clearSystemFlag(FLAG_ASLIFT);
-  }
+void clearUndoBuffer(void) {
+}
+
+
+
+void undo(void) {
+  systemFlags = savedSystemFlags;
+  synchronizeLetteredFlags();
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X - REGISTER_X + regist, regist);
   }
+
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
+
+  if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
+    if(statisticalSumsPointer != NULL) {
+      freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      statisticalSumsPointer = NULL;
+    }
+  }
+  else { // There are statistical sums to restore
+    if(statisticalSumsPointer == NULL) {
+      statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+    }
+    xcopy(statisticalSumsPointer, savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+  }
+
+  thereIsSomethingToUndo = false;
 }

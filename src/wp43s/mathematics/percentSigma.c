@@ -43,7 +43,7 @@ static void dataTypeError(void) {
 
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot use %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnPercentSigma:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnPercentSigma:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -64,11 +64,10 @@ void fnPercentSigma(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
-      showInfoDialog("In function fnPercentSigma:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnPercentSigma:", errorMessage, NULL, NULL);
     #endif
   }
   else {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     functionMatrix[getRegisterDataType(REGISTER_X)]();
@@ -91,7 +90,7 @@ static bool_t percentSigma(real_t *xReal, real_t *rReal, realContext_t *realCont
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnPercentSigma:", "cannot divide a real by 0", NULL, NULL);
+        moreInfoOnError("In function fnPercentSigma:", "cannot divide a real by 0", NULL, NULL);
       #endif
       return false;
     }

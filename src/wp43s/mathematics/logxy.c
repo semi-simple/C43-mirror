@@ -25,7 +25,7 @@
 #define EXTRA_INFO_MESSAGE(msg)                                         \
  do {                                                                   \
   sprintf(errorMessage, msg);                                           \
-  showInfoDialog("In function LogXY:", errorMessage, NULL, NULL); \
+  moreInfoOnError("In function LogXY:", errorMessage, NULL, NULL); \
  } while(0)
 
 #else // EXTRA_INFO_ON_CALC_ERROR != 1
@@ -35,7 +35,7 @@
 #endif // EXTRA_INFO_ON_CALC_ERROR
 
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
+static void (* const logBaseX[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
 // regX |    regY ==>    1              2              3              4           5           6           7              8              9              10
 //      V                Long integer   Real34         Complex34      Time        Date        String      Real34 mat     Complex34 mat  Short integer  Config data
 /*  1 Long integer  */ { logxyLonILonI, logxyRealLonI, logxyCplxLonI, logxyError, logxyError, logxyError, logxyRemaLonI, logxyCxmaLonI, logxyShoILonI, logxyError },
@@ -60,7 +60,7 @@ void logxyError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Log of %s with base %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLogXY:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLogXY:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -72,10 +72,9 @@ void logxyError(void) {
  * \return void
  ***********************************************/
 void fnLogXY(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  logBaseX[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

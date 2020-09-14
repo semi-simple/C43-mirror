@@ -40,7 +40,7 @@ void notError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate not(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
-    showInfoDialog("In function notError:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function notError:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -55,13 +55,12 @@ void notError(void) {
  ***********************************************/
 void fnLogicalNot(uint16_t unusedParamButMandatory) {
   if(not[getRegisterDataType(REGISTER_X)] != notError) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     not[getRegisterDataType(REGISTER_X)]();
 
     if(lastErrorCode != 0) {
-      restoreStack();
+      undo();
     }
   }
   else {

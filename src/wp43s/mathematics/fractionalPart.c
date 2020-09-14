@@ -40,7 +40,7 @@ void fpError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate FP for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnFp:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnFp:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,13 +54,12 @@ void fpError(void) {
  * \return void
  ***********************************************/
 void fnFp(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   fp[getRegisterDataType(REGISTER_X)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
 }
 

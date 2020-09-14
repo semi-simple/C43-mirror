@@ -1701,6 +1701,13 @@ void callFunction(void) {
 
   switch(funcType) {
     case FUNC_NOPARAM:
+      if(indexOfItems[functionIndex].undoStatus == US_ENABLED) {
+        saveForUndo();
+      }
+      else if(indexOfItems[functionIndex].undoStatus == US_CANCEL) {
+        thereIsSomethingToUndo = false;
+      }
+
       funcNoParam(NOPARAM);
       break;
 

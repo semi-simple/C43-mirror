@@ -25,7 +25,6 @@ void fnUlp(uint16_t unusedParamButMandatory) {
   real34_t x34;
   longInteger_t lgInt;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {
@@ -47,7 +46,7 @@ void fnUlp(uint16_t unusedParamButMandatory) {
       if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          showInfoDialog("In function fnUlp:", "cannot use ±∞ input of ULP?", NULL, NULL);
+          moreInfoOnError("In function fnUlp:", "cannot use ±∞ input of ULP?", NULL, NULL);
         #endif
       }
 
@@ -67,7 +66,7 @@ void fnUlp(uint16_t unusedParamButMandatory) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot calculate ULP? with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnUlp:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnUlp:", errorMessage, NULL, NULL);
       #endif
       return;
   }

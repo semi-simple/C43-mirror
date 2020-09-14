@@ -72,41 +72,35 @@ const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
  * \param[in] m4 const char* 4th part of the message
  * \return void
  ***********************************************/
-void showInfoDialog(const char *m1, const char *m2, const char *m3, const char *m4) {
-  GtkWidget *dialog;
+void moreInfoOnError(const char *m1, const char *m2, const char *m3, const char *m4) {
   uint8_t utf8m1[2000], utf8m2[2000], utf8m3[2000], utf8m4[2000];
 
   if(m1 == NULL) {
     stringToUtf8("No error message available!", utf8m1);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(frmCalc), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s", utf8m1);
+    printf("\n%s\n", utf8m1);
   }
   else if(m2 == NULL) {
     stringToUtf8(m1, utf8m1);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(frmCalc), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s", utf8m1);
+    printf("\n%s\n\n", utf8m1);
   }
   else if(m3 == NULL) {
     stringToUtf8(m1, utf8m1);
     stringToUtf8(m2, utf8m2);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(frmCalc), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s\n%s", utf8m1, utf8m2);
+    printf("\n%s\n%s\n\n", utf8m1, utf8m2);
   }
   else if(m4 == NULL) {
     stringToUtf8(m1, utf8m1);
     stringToUtf8(m2, utf8m2);
     stringToUtf8(m3, utf8m3);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(frmCalc), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s\n%s\n%s", utf8m1, utf8m2, utf8m3);
+    printf("\n%s\n%s\n%s\n\n", utf8m1, utf8m2, utf8m3);
   }
   else {
     stringToUtf8(m1, utf8m1);
     stringToUtf8(m2, utf8m2);
     stringToUtf8(m3, utf8m3);
     stringToUtf8(m4, utf8m4);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(frmCalc), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s\n%s\n%s\n%s", utf8m1, utf8m2, utf8m3, utf8m4);
+    printf("\n%s\n%s\n%s\n%s\n\n", utf8m1, utf8m2, utf8m3, utf8m4);
   }
-
-  gtk_widget_set_name(dialog, "errorBox");
-  gtk_window_set_title(GTK_WINDOW(dialog), "WP 43S error message");
-  gtk_dialog_run(GTK_DIALOG(dialog));
-  gtk_widget_destroy(dialog);
 }
 #endif
 
@@ -168,8 +162,8 @@ void displayBugScreen(const char *msg) {
     previousCalcMode = calcMode;
     calcMode = CM_BUG_ON_SCREEN;
     clearSystemFlag(FLAG_ALPHA);
-    cursorEnabled = false;
     hideCursor();
+    cursorEnabled = false;
 
     #ifdef PC_BUILD
       int16_t x;

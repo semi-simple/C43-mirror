@@ -40,7 +40,7 @@ void log10Error(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log10 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLog10:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLog10:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void log10Error(void) {
  * \return void
  ***********************************************/
 void fnLog10(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logBase10[getRegisterDataType(REGISTER_X)]();
@@ -83,7 +82,7 @@ void log10LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10LonI:", "cannot calculate log10(0)", NULL, NULL);
+        moreInfoOnError("In function log10LonI:", "cannot calculate log10(0)", NULL, NULL);
       #endif
     }
   }
@@ -114,7 +113,7 @@ void log10LonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10LonI:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function log10LonI:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -152,7 +151,7 @@ void log10Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Real:", "cannot calculate log10(0)", NULL, NULL);
+        moreInfoOnError("In function log10Real:", "cannot calculate log10(0)", NULL, NULL);
       #endif
     }
   }
@@ -161,7 +160,7 @@ void log10Real(void) {
     if(!getSystemFlag(FLAG_SPCRES)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log when flag D is not set", NULL, NULL);
+        moreInfoOnError("In function log10Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log when flag D is not set", NULL, NULL);
       #endif
       return;
     }
@@ -203,7 +202,7 @@ void log10Real(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Real:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
+        moreInfoOnError("In function log10Real:", "cannot calculate log10 of a negative number when CPXRES is not set!", NULL, NULL);
       #endif
     }
   }
@@ -221,7 +220,7 @@ void log10Cplx(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function log10Cplx:", "cannot calculate log10(0)", NULL, NULL);
+        moreInfoOnError("In function log10Cplx:", "cannot calculate log10(0)", NULL, NULL);
       #endif
     }
   }

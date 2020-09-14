@@ -65,5 +65,5 @@ void displayBugScreen       (const char *message);
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine);
 
 #ifdef PC_BUILD
-void showInfoDialog         (const char *m1, const char *m2, const char *m3, const char *m4);
+void moreInfoOnError        (const char *m1, const char *m2, const char *m3, const char *m4);
 #endif

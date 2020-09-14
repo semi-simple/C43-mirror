@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         41  // 41 = removed errorRegisterLine
+#define BACKUP_VERSION         47  // removed allowScreenUpdate
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -70,23 +70,21 @@ void saveCalc(void) {
   save(&backupVersion,                      sizeof(backupVersion),                      backup);
   save(&ramSize,                            sizeof(ramSize),                            backup);
   save(ram,                                 TO_BYTES(RAM_SIZE),                         backup);
-  save(freeBlocks,                          MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup);
+  save(freeBlocks,                          sizeof(freeBlocks),                         backup);
   save(&numberOfFreeBlocks,                 sizeof(numberOfFreeBlocks),                 backup);
   save(globalFlags,                         sizeof(globalFlags),                        backup);
-  save(tmpStr3000,                          TMP_STR_LENGTH,                             backup);
-  save(errorMessage,                        ERROR_MESSAGE_LENGTH,                       backup);
-  save(aimBuffer,                           AIM_BUFFER_LENGTH,                          backup);
-  save(nimBuffer,                           NIM_BUFFER_LENGTH,                          backup);
-  save(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          backup);
-  save(tamBuffer,                           TAM_BUFFER_LENGTH,                          backup);
+  save(tmpStr3000,                          sizeof(tmpStr3000),                         backup);
+  save(errorMessage,                        sizeof(errorMessage),                       backup);
+  save(aimBuffer,                           sizeof(aimBuffer),                          backup);
+  save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   backup);
+  save(tamBuffer,                           sizeof(tamBuffer),                          backup);
   save(asmBuffer,                           sizeof(asmBuffer),                          backup);
-  save(oldTime,                             8,                                          backup);
-  save(dateTimeString,                      12,                                         backup);
+  save(oldTime,                             sizeof(oldTime),                            backup);
+  save(dateTimeString,                      sizeof(dateTimeString),                     backup);
   save(softmenuStack,                       sizeof(softmenuStack),                      backup);
   save(reg,                                 sizeof(reg),                                backup);
   save(savedStackRegister,                  sizeof(savedStackRegister),                 backup);
   save(kbd_usr,                             sizeof(kbd_usr),                            backup);
-  save(transitionSystemOperation,           sizeof(transitionSystemOperation),          backup);
   save(&tamFunction,                        sizeof(tamFunction),                        backup);
   save(&tamNumber,                          sizeof(tamNumber),                          backup);
   save(&tamNumberMin,                       sizeof(tamNumberMin),                       backup);
@@ -103,6 +101,8 @@ void saveCalc(void) {
   save(&ramPtr,                             sizeof(ramPtr),                             backup);
   ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
   save(&ramPtr,                             sizeof(ramPtr),                             backup);
+  ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
+  save(&ramPtr,                             sizeof(ramPtr),                             backup);
   save(&programCounter,                     sizeof(programCounter),                     backup);
   save(&xCursor,                            sizeof(xCursor),                            backup);
   save(&yCursor,                            sizeof(yCursor),                            backup);
@@ -111,7 +111,6 @@ void saveCalc(void) {
   save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
   save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
   save(&transitionSystemState,              sizeof(transitionSystemState),              backup);
-  save(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
   save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);
   save(&currentFntScr,                      sizeof(currentFntScr),                      backup);
   save(&currentFlgScr,                      sizeof(currentFlgScr),                      backup);
@@ -122,7 +121,6 @@ void saveCalc(void) {
   save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   backup);
   save(&currentAngularMode,                 sizeof(currentAngularMode),                 backup);
   save(&groupingGap,                        sizeof(groupingGap),                        backup);
-  save(&curveFitting,                       sizeof(curveFitting),                       backup);
   save(&roundingMode,                       sizeof(roundingMode),                       backup);
   save(&calcMode,                           sizeof(calcMode),                           backup);
   save(&nextChar,                           sizeof(nextChar),                           backup);
@@ -133,7 +131,6 @@ void saveCalc(void) {
   save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 backup);
   save(&cursorEnabled,                      sizeof(cursorEnabled),                      backup);
   save(&cursorFont,                         sizeof(cursorFont),                         backup);
-  save(&savedStackLiftEnabled,              sizeof(savedStackLiftEnabled),              backup);
   save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        backup);
   save(&shiftF,                             sizeof(shiftF),                             backup);
   save(&shiftG,                             sizeof(shiftG),                             backup);
@@ -154,7 +151,6 @@ void saveCalc(void) {
   save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                backup);
   save(&temporaryInformation,               sizeof(temporaryInformation),               backup);
   save(&glyphNotFound,                      sizeof(glyphNotFound),                      backup);
-  save(&allowScreenUpdate,                  sizeof(allowScreenUpdate),                  backup);
   save(&funcOK,                             sizeof(funcOK),                             backup);
   save(&screenChange,                       sizeof(screenChange),                       backup);
   save(&exponentSignLocation,               sizeof(exponentSignLocation),               backup);
@@ -177,6 +173,8 @@ void saveCalc(void) {
   save(&exponentLimit,                      sizeof(exponentLimit),                      backup);
   save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 backup);
   save(&systemFlags,                        sizeof(systemFlags),                        backup);
+  save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
+  save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -213,23 +211,21 @@ void restoreCalc(void) {
     printf("Begin of calc's restoration\n");
 
     restore(ram,                                 TO_BYTES(RAM_SIZE),                         backup);
-    restore(freeBlocks,                          MAX_FREE_BLOCKS * sizeof(freeBlock_t),      backup);
+    restore(freeBlocks,                          sizeof(freeBlocks),                         backup);
     restore(&numberOfFreeBlocks,                 sizeof(numberOfFreeBlocks),                 backup);
     restore(globalFlags,                         sizeof(globalFlags),                        backup);
-    restore(tmpStr3000,                          TMP_STR_LENGTH,                             backup);
-    restore(errorMessage,                        ERROR_MESSAGE_LENGTH,                       backup);
-    restore(aimBuffer,                           AIM_BUFFER_LENGTH,                          backup);
-    restore(nimBuffer,                           NIM_BUFFER_LENGTH,                          backup);
-    restore(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          backup);
-    restore(tamBuffer,                           TAM_BUFFER_LENGTH,                          backup);
+    restore(tmpStr3000,                          sizeof(tmpStr3000),                         backup);
+    restore(errorMessage,                        sizeof(errorMessage),                       backup);
+    restore(aimBuffer,                           sizeof(aimBuffer),                          backup);
+    restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   backup);
+    restore(tamBuffer,                           sizeof(tamBuffer),                          backup);
     restore(asmBuffer,                           sizeof(asmBuffer),                          backup);
-    restore(oldTime,                             8,                                          backup);
-    restore(dateTimeString,                      12,                                         backup);
+    restore(oldTime,                             sizeof(oldTime),                            backup);
+    restore(dateTimeString,                      sizeof(dateTimeString),                     backup);
     restore(softmenuStack,                       sizeof(softmenuStack),                      backup);
     restore(reg,                                 sizeof(reg),                                backup);
     restore(savedStackRegister,                  sizeof(savedStackRegister),                 backup);
     restore(kbd_usr,                             sizeof(kbd_usr),                            backup);
-    restore(transitionSystemOperation,           sizeof(transitionSystemOperation),          backup);
     restore(&tamFunction,                        sizeof(tamFunction),                        backup);
     restore(&tamNumber,                          sizeof(tamNumber),                          backup);
     restore(&tamNumberMin,                       sizeof(tamNumberMin),                       backup);
@@ -246,6 +242,8 @@ void restoreCalc(void) {
     allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
     restore(&ramPtr,                             sizeof(ramPtr),                             backup);
     statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup);
+    savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
     restore(&programCounter,                     sizeof(programCounter),                     backup);
     restore(&xCursor,                            sizeof(xCursor),                            backup);
     restore(&yCursor,                            sizeof(yCursor),                            backup);
@@ -254,7 +252,6 @@ void restoreCalc(void) {
     restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               backup);
     restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      backup);
     restore(&transitionSystemState,              sizeof(transitionSystemState),              backup);
-    restore(&cursorBlinkCounter,                 sizeof(cursorBlinkCounter),                 backup);
     restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       backup);
     restore(&currentFntScr,                      sizeof(currentFntScr),                      backup);
     restore(&currentFlgScr,                      sizeof(currentFlgScr),                      backup);
@@ -265,7 +262,6 @@ void restoreCalc(void) {
     restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   backup);
     restore(&currentAngularMode,                 sizeof(currentAngularMode),                 backup);
     restore(&groupingGap,                        sizeof(groupingGap),                        backup);
-    restore(&curveFitting,                       sizeof(curveFitting),                       backup);
     restore(&roundingMode,                       sizeof(roundingMode),                       backup);
     restore(&calcMode,                           sizeof(calcMode),                           backup);
     restore(&nextChar,                           sizeof(nextChar),                           backup);
@@ -276,7 +272,6 @@ void restoreCalc(void) {
     restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 backup);
     restore(&cursorEnabled,                      sizeof(cursorEnabled),                      backup);
     restore(&cursorFont,                         sizeof(cursorFont),                         backup);
-    restore(&savedStackLiftEnabled,              sizeof(savedStackLiftEnabled),              backup);
     restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        backup);
     restore(&shiftF,                             sizeof(shiftF),                             backup);
     restore(&shiftG,                             sizeof(shiftG),                             backup);
@@ -301,7 +296,6 @@ void restoreCalc(void) {
     glyphNotFound.data   = malloc(38);
     xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
-    restore(&allowScreenUpdate,                  sizeof(allowScreenUpdate),                  backup);
     restore(&funcOK,                             sizeof(funcOK),                             backup);
     restore(&screenChange,                       sizeof(screenChange),                       backup);
     restore(&exponentSignLocation,               sizeof(exponentSignLocation),               backup);
@@ -324,6 +318,8 @@ void restoreCalc(void) {
     restore(&exponentLimit,                      sizeof(exponentLimit),                      backup);
     restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 backup);
     restore(&systemFlags,                        sizeof(systemFlags),                        backup);
+    restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
+    restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
 
     fclose(backup);
     printf("End of calc's restoration\n");
@@ -333,9 +329,9 @@ void restoreCalc(void) {
     #endif
 
     if(calcMode == CM_NORMAL)                calcModeNormalGui();
-    else if(calcMode == CM_AIM)              calcModeAimGui();
+    else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
     else if(calcMode == CM_TAM)              calcModeTamGui();
-    else if(calcMode == CM_NIM)              calcModeNormalGui();
+    else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
     else if(calcMode == CM_ASM)              calcModeAsm();
     else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
     else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
@@ -343,18 +339,11 @@ void restoreCalc(void) {
     else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
     else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
     else {
-      sprintf(errorMessage, "In function restoreCalc: %" FMT8U " is an unexpected value for calcMode", calcMode);
+      sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
       displayBugScreen(errorMessage);
     }
 
     refreshScreen();
-
-    if(getSystemFlag(FLAG_ASLIFT)) {
-      setSystemFlag(FLAG_ASLIFT);
-    }
-    else {
-      clearSystemFlag(FLAG_ASLIFT);
-    }
   }
 }
 #endif
@@ -371,49 +360,49 @@ static void registerToSaveString(calcRegister_t regist) {
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
       longIntegerToAllocatedString(lgInt, tmpStr3000 + START_REGISTER_VALUE, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
       longIntegerFree(lgInt);
-      strcpy(nimBuffer, "LonI");
+      strcpy(aimBuffer, "LonI");
       break;
 
     case dtString:
       stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpStr3000 + START_REGISTER_VALUE));
-      strcpy(nimBuffer, "Stri");
+      strcpy(aimBuffer, "Stri");
       break;
 
     case dtShortInteger:
       convertShortIntegerRegisterToUInt64(regist, &sign, &value);
-      sprintf(tmpStr3000 + START_REGISTER_VALUE, "%c%" FMT64U " %" FMT32U, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
-      strcpy(nimBuffer, "ShoI");
+      sprintf(tmpStr3000 + START_REGISTER_VALUE, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
+      strcpy(aimBuffer, "ShoI");
       break;
 
     case dtReal34:
       real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE);
       switch(getRegisterAngularMode(regist)) {
         case AM_DEGREE:
-          strcpy(nimBuffer, "Real:DEG");
+          strcpy(aimBuffer, "Real:DEG");
           break;
 
         case AM_GRAD:
-          strcpy(nimBuffer, "Real:GRAD");
+          strcpy(aimBuffer, "Real:GRAD");
           break;
 
         case AM_RADIAN:
-          strcpy(nimBuffer, "Real:RAD");
+          strcpy(aimBuffer, "Real:RAD");
           break;
 
         case AM_MULTPI:
-          strcpy(nimBuffer, "Real:MULTPI");
+          strcpy(aimBuffer, "Real:MULTPI");
           break;
 
         case AM_DMS:
-          strcpy(nimBuffer, "Real:DMS");
+          strcpy(aimBuffer, "Real:DMS");
           break;
 
         case AM_NONE:
-          strcpy(nimBuffer, "Real");
+          strcpy(aimBuffer, "Real");
           break;
 
         default:
-          strcpy(nimBuffer, "Real:???");
+          strcpy(aimBuffer, "Real:???");
           break;
       }
       break;
@@ -422,19 +411,19 @@ static void registerToSaveString(calcRegister_t regist) {
       real34ToString(REGISTER_REAL34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE);
       strcat(tmpStr3000 + START_REGISTER_VALUE, " ");
       real34ToString(REGISTER_IMAG34_DATA(regist), tmpStr3000 + START_REGISTER_VALUE + strlen(tmpStr3000 + START_REGISTER_VALUE));
-      strcpy(nimBuffer, "Cplx");
+      strcpy(aimBuffer, "Cplx");
       break;
 
     case dtConfig:
       for(str=tmpStr3000 + START_REGISTER_VALUE, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
       }
-      strcpy(nimBuffer, "Conf");
+      strcpy(aimBuffer, "Conf");
       break;
 
     default:
       strcpy(tmpStr3000 + START_REGISTER_VALUE, "???");
-      strcpy(nimBuffer, "????");
+      strcpy(aimBuffer, "????");
   }
 }
 
@@ -468,18 +457,18 @@ void fnSave(uint16_t unusedParamButMandatory) {
   #pragma GCC diagnostic ignored "-Wrestrict"
 
   // Global registers
-  sprintf(tmpStr3000, "GLOBAL_REGISTERS\n%" FMT16U "\n", FIRST_LOCAL_REGISTER);
+  sprintf(tmpStr3000, "GLOBAL_REGISTERS\n%" PRIu16 "\n", FIRST_LOCAL_REGISTER);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
-    sprintf(tmpStr3000, "R%03" FMT16S "\n%s\n%s\n", regist, nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Global flags
   strcpy(tmpStr3000, "GLOBAL_FLAGS\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "%" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U "\n",
+  sprintf(tmpStr3000, "%" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 "\n",
                        globalFlags[0],
                                    globalFlags[1],
                                                globalFlags[2],
@@ -490,48 +479,48 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   // Local registers
-  sprintf(tmpStr3000, "LOCAL_REGISTERS\n%" FMT16U "\n", allLocalRegisterPointer->numberOfLocalRegisters);
+  sprintf(tmpStr3000, "LOCAL_REGISTERS\n%" PRIu16 "\n", allLocalRegisterPointer->numberOfLocalRegisters);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allLocalRegisterPointer->numberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
-    sprintf(tmpStr3000, "R.%02" FMT32U "\n%s\n%s\n", i, nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Local flags
   if(allLocalRegisterPointer->numberOfLocalRegisters) {
-    sprintf(tmpStr3000, "LOCAL_FLAGS\n%" FMT16U "\n", allLocalRegisterPointer->localFlags);
+    sprintf(tmpStr3000, "LOCAL_FLAGS\n%" PRIu16 "\n", allLocalRegisterPointer->localFlags);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Named variables
-  sprintf(tmpStr3000, "NAMED_VARIABLES\n%" FMT16U "\n", allNamedVariablePointer->numberOfNamedVariables);
+  sprintf(tmpStr3000, "NAMED_VARIABLES\n%" PRIu16 "\n", allNamedVariablePointer->numberOfNamedVariables);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allNamedVariablePointer->numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
-    sprintf(tmpStr3000, "%s\n%s\n%s\n", "name", nimBuffer, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "%s\n%s\n%s\n", "name", aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Statistical sums
-  sprintf(tmpStr3000, "STATISTICAL_SUMS\n%" FMT16U "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
+  sprintf(tmpStr3000, "STATISTICAL_SUMS\n%" PRIu16 "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
-    realToString(statisticalSumsPointer + i, tmpStr3000 + START_REGISTER_VALUE);
+    realToString(statisticalSumsPointer + REAL_SIZE * i , tmpStr3000 + START_REGISTER_VALUE);
     sprintf(tmpStr3000, "%s\n", tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
   #pragma GCC diagnostic pop
 
   // System flags
-  sprintf(tmpStr3000, "SYSTEM_FLAGS\n%" FMT64U "\n", systemFlags);
+  sprintf(tmpStr3000, "SYSTEM_FLAGS\n%" PRIu64 "\n", systemFlags);
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   // Keyboard assignments
   sprintf(tmpStr3000, "KEYBOARD_ASSIGNMENTS\n37\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<37; i++) {
-    sprintf(tmpStr3000, "%" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S "\n",
+    sprintf(tmpStr3000, "%" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 "\n",
                          kbd_usr[i].keyId,
                                      kbd_usr[i].primary,
                                                  kbd_usr[i].fShifted,
@@ -549,31 +538,29 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
   sprintf(tmpStr3000, "firstGregorianDay\n1582 10 15\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "denMax\n%" FMT32U "\n", denMax);
+  sprintf(tmpStr3000, "denMax\n%" PRIu32 "\n", denMax);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayFormat\n%" FMT8U "\n", displayFormat);
+  sprintf(tmpStr3000, "displayFormat\n%" PRIu8 "\n", displayFormat);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayFormatDigits\n%" FMT8U "\n", displayFormatDigits);
+  sprintf(tmpStr3000, "displayFormatDigits\n%" PRIu8 "\n", displayFormatDigits);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "shortIntegerWordSize\n%" FMT8U "\n", shortIntegerWordSize);
+  sprintf(tmpStr3000, "shortIntegerWordSize\n%" PRIu8 "\n", shortIntegerWordSize);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "shortIntegerMode\n%" FMT8U "\n", shortIntegerMode);
+  sprintf(tmpStr3000, "shortIntegerMode\n%" PRIu8 "\n", shortIntegerMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "significantDigits\n%" FMT8U "\n", significantDigits);
+  sprintf(tmpStr3000, "significantDigits\n%" PRIu8 "\n", significantDigits);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "currentAngularMode\n%" FMT8U "\n", currentAngularMode);
+  sprintf(tmpStr3000, "currentAngularMode\n%" PRIu8 "\n", currentAngularMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "groupingGap\n%" FMT8U "\n", groupingGap);
+  sprintf(tmpStr3000, "groupingGap\n%" PRIu8 "\n", groupingGap);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "curveFitting\n%" FMT8U "\n", curveFitting);
+  sprintf(tmpStr3000, "roundingMode\n%" PRIu8 "\n", roundingMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "roundingMode\n%" FMT8U "\n", roundingMode);
+  sprintf(tmpStr3000, "displayStack\n%" PRIu8 "\n", displayStack);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayStack\n%" FMT8U "\n", displayStack);
+  sprintf(tmpStr3000, "rngState\n%" PRIu64 " %" PRIu64 "\n", pcg32_global.state, pcg32_global.inc);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "rngState\n%" FMT64U " %" FMT64U "\n", pcg32_global.state, pcg32_global.inc);
-  save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "exponentLimit\n%" FMT16S "\n", exponentLimit);
+  sprintf(tmpStr3000, "exponentLimit\n%" PRId16 "\n", exponentLimit);
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   #ifdef DMCP_BUILD
@@ -791,11 +778,11 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpStr3000); // Register number
       regist = stringToInt16(tmpStr3000 + 1);
-      readLine(stream, nimBuffer); // Register data type
+      readLine(stream, aimBuffer); // Register data type
       readLine(stream, tmpStr3000); // Register value
 
       if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X)) {
-        restoreRegister(regist, nimBuffer, tmpStr3000);
+        restoreRegister(regist, aimBuffer, tmpStr3000);
       }
     }
   }
@@ -842,11 +829,11 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpStr3000); // Register number
       regist = stringToInt16(tmpStr3000 + 2) + FIRST_LOCAL_REGISTER;
-      readLine(stream, nimBuffer); // Register data type
+      readLine(stream, aimBuffer); // Register data type
       readLine(stream, tmpStr3000); // Register value
 
       if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        restoreRegister(regist, nimBuffer, tmpStr3000);
+        restoreRegister(regist, aimBuffer, tmpStr3000);
       }
     }
 
@@ -864,12 +851,12 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     numberOfRegs = stringToInt16(tmpStr3000);
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpStr3000 + 2900); // Variable name
-      readLine(stream, nimBuffer); // Variable data type
+      readLine(stream, aimBuffer); // Variable data type
       readLine(stream, tmpStr3000); // Variable value
 
       if(loadMode == LM_ALL || loadMode == LM_NAMED_VARIABLES) {
         printf("Variable %s ", tmpStr3000 + 2900);
-        printf("%s = ", nimBuffer);
+        printf("%s = ", aimBuffer);
         printf("%s\n", tmpStr3000);
       }
     }
@@ -945,55 +932,52 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     readLine(stream, tmpStr3000); // Number params
     numberOfRegs = stringToInt16(tmpStr3000);
     for(i=0; i<numberOfRegs; i++) {
-      readLine(stream, nimBuffer); // param
+      readLine(stream, aimBuffer); // param
       readLine(stream, tmpStr3000); // value
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
-        if(strcmp(nimBuffer, "firstGregorianDay") == 0) {
+        if(strcmp(aimBuffer, "firstGregorianDay") == 0) {
         }
-        else if(strcmp(nimBuffer, "denMax") == 0) {
+        else if(strcmp(aimBuffer, "denMax") == 0) {
           denMax = stringToUint32(tmpStr3000);
           if(denMax < 1 || denMax > MAX_DENMAX) {
             denMax = MAX_DENMAX;
           }
         }
-        else if(strcmp(nimBuffer, "displayFormat") == 0) {
+        else if(strcmp(aimBuffer, "displayFormat") == 0) {
           displayFormat = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "displayFormatDigits") == 0) {
+        else if(strcmp(aimBuffer, "displayFormatDigits") == 0) {
           displayFormatDigits = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "shortIntegerWordSize") == 0) {
+        else if(strcmp(aimBuffer, "shortIntegerWordSize") == 0) {
           shortIntegerWordSize = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "shortIntegerMode") == 0) {
+        else if(strcmp(aimBuffer, "shortIntegerMode") == 0) {
           shortIntegerMode = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "significantDigits") == 0) {
+        else if(strcmp(aimBuffer, "significantDigits") == 0) {
           significantDigits = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "currentAngularMode") == 0) {
+        else if(strcmp(aimBuffer, "currentAngularMode") == 0) {
           currentAngularMode = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "groupingGap") == 0) {
+        else if(strcmp(aimBuffer, "groupingGap") == 0) {
           groupingGap = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "curveFitting") == 0) {
-          curveFitting = stringToUint8(tmpStr3000);
-        }
-        else if(strcmp(nimBuffer, "roundingMode") == 0) {
+        else if(strcmp(aimBuffer, "roundingMode") == 0) {
           roundingMode = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "displayStack") == 0) {
+        else if(strcmp(aimBuffer, "displayStack") == 0) {
           displayStack = stringToUint8(tmpStr3000);
         }
-        else if(strcmp(nimBuffer, "rngState") == 0) {
+        else if(strcmp(aimBuffer, "rngState") == 0) {
           pcg32_global.state = stringToUint64(tmpStr3000);
           str = tmpStr3000;
           while(*str != ' ') str++;
           while(*str == ' ') str++;
           pcg32_global.inc = stringToUint64(str);
         }
-        else if(strcmp(nimBuffer, "exponentLimit") == 0) {
+        else if(strcmp(aimBuffer, "exponentLimit") == 0) {
           exponentLimit = stringToInt16(tmpStr3000);
         }
       }
@@ -1016,7 +1000,7 @@ void fnLoad(uint16_t loadMode) {
   #endif
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
+        moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
         return;
       #endif
     }

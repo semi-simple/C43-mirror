@@ -39,12 +39,11 @@ void fnNeighb(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot get the NEIGHB from %s", getRegisterDataTypeName(REGISTER_X, true, false));
       sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "towards %s", getRegisterDataTypeName(REGISTER_Y, true, false));
-      showInfoDialog("In function fnNeighb:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+      moreInfoOnError("In function fnNeighb:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
     #endif
     return;
   }
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(dataTypeX) {

@@ -40,7 +40,7 @@ void floorError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate floor for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnFloor:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnFloor:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void floorError(void) {
  * \return void
  ***********************************************/
 void fnFloor(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Floor[getRegisterDataType(REGISTER_X)]();
@@ -79,7 +78,7 @@ void floorReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function floorReal:", "cannot use NaN as X input of floor", NULL, NULL);
+      moreInfoOnError("In function floorReal:", "cannot use NaN as X input of floor", NULL, NULL);
     #endif
     return;
   }
@@ -87,7 +86,7 @@ void floorReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function floorReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of floor", NULL, NULL);
+      moreInfoOnError("In function floorReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of floor", NULL, NULL);
     #endif
     return;
   }

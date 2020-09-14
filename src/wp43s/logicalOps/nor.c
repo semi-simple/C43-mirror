@@ -53,7 +53,7 @@ void norError24(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "%s NOR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "data type of one of the NOR parameters is not allowed");
-    showInfoDialog("In function norError24:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function norError24:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -62,7 +62,7 @@ void norError31(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "%s NOR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "NOR doesn't allow mixing data types real/long integer and short integer");
-    showInfoDialog("In function norError31:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function norError31:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -76,13 +76,12 @@ void norError31(void) {
  * \return void
  ***********************************************/
 void fnLogicalNor(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalNor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   if(lastErrorCode != 0) {
-    restoreStack();
+    undo();
   }
   else {
     fnDropY(NOPARAM);

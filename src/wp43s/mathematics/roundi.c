@@ -40,7 +40,7 @@ void roundiError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate ROUNDI for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function roundiError:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function roundiError:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void roundiError(void) {
  * \return void
  ***********************************************/
 void fnRoundi(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Roundi[getRegisterDataType(REGISTER_X)]();
@@ -74,7 +73,7 @@ void roundiReal(void) {
   if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function roundiReal:", "cannot use NaN as X input of ROUNDI", NULL, NULL);
+      moreInfoOnError("In function roundiReal:", "cannot use NaN as X input of ROUNDI", NULL, NULL);
     #endif
     return;
   }
@@ -82,7 +81,7 @@ void roundiReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function roundiReal:", "cannot use ±∞ as an input of ROUNDI", NULL, NULL);
+      moreInfoOnError("In function roundiReal:", "cannot use ±∞ as an input of ROUNDI", NULL, NULL);
     #endif
     return;
   }

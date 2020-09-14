@@ -49,7 +49,7 @@ static void percentMRR() {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnPercentMRR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnPercentMRR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -60,7 +60,7 @@ static void percentMRR() {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
-      showInfoDialog("In function fnPercentMRR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnPercentMRR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -71,7 +71,7 @@ static void percentMRR() {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Z);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot %%MRR with %s in Z", getRegisterDataTypeName(REGISTER_Z, true, false));
-      showInfoDialog("In function fnPercentMRR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnPercentMRR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -86,7 +86,7 @@ static void percentMRR() {
     } else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnPercentMRTR:", "cannot divide x=0 by y=0", NULL, NULL);
+        moreInfoOnError("In function fnPercentMRTR:", "cannot divide x=0 by y=0", NULL, NULL);
       #endif
       return;
     }
@@ -96,7 +96,7 @@ static void percentMRR() {
     } else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function fnPercentMRTR:", "cannot divide a real by 0", NULL, NULL);
+        moreInfoOnError("In function fnPercentMRTR:", "cannot divide a real by 0", NULL, NULL);
       #endif
       return;
     }
@@ -122,7 +122,6 @@ static void percentMRR() {
  * \return void
  ***********************************************/
 void fnPercentMRR(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   percentMRR();

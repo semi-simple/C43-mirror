@@ -49,7 +49,7 @@ void lcmError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate lcm (%s, %s)", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnLcm:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnLcm:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -63,7 +63,6 @@ void lcmError(void) {
  * \return void
  ***********************************************/
 void fnLcm(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   lcm[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -72,7 +71,7 @@ void fnLcm(uint16_t unusedParamButMandatory) {
     fnDropY(NOPARAM);
   }
   else {
-    restoreStack();
+    undo();
   }
 }
 

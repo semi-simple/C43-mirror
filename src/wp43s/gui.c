@@ -344,7 +344,7 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
     tmpString = malloc(strlen(needleLocation + needleLg) + 1);
     #ifdef PC_BUILD
       if(tmpString == NULL) {
-        showInfoDialog("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
+        moreInfoOnError("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
         exit(1);
       }
     #endif
@@ -376,7 +376,7 @@ void prepareCssData(void) {
   // Convert the pre-CSS data to CSS data
   cssFile = fopen(CSSFILE, "rb");
   if(cssFile == NULL) {
-    showInfoDialog("In function prepareCssData:", "error opening file " CSSFILE "!", NULL, NULL);
+    moreInfoOnError("In function prepareCssData:", "error opening file " CSSFILE "!", NULL, NULL);
     exit(1);
   }
 
@@ -387,7 +387,7 @@ void prepareCssData(void) {
 
   cssData = malloc(2*fileLg); // To be sure there is enough space
   if(cssData == NULL) {
-    showInfoDialog("In function prepareCssData:", "error allocating 10000 bytes for CSS data", NULL, NULL);
+    moreInfoOnError("In function prepareCssData:", "error allocating 10000 bytes for CSS data", NULL, NULL);
     exit(1);
   }
 
@@ -408,7 +408,7 @@ void prepareCssData(void) {
 
     replaceWith = strstr(toReplace, " with ");
     if(replaceWith == NULL) {
-      showInfoDialog("In function prepareCssData:", "Can't find \" with \" after \"/* Replace $\" in CSS file " CSSFILE, NULL, NULL);
+      moreInfoOnError("In function prepareCssData:", "Can't find \" with \" after \"/* Replace $\" in CSS file " CSSFILE, NULL, NULL);
       exit(1);
     }
 
@@ -426,7 +426,7 @@ void prepareCssData(void) {
   }
 
   if(strstr(cssData, "$") != NULL) {
-    showInfoDialog("In function prepareCssData:", "There is still an unreplaced $ in the CSS file!\nPlease check file " CSSFILE, NULL, NULL);
+    moreInfoOnError("In function prepareCssData:", "There is still an unreplaced $ in the CSS file!\nPlease check file " CSSFILE, NULL, NULL);
     printf("%s\n", cssData);
     exit(1);
   }
@@ -713,13 +713,6 @@ void calcModeTamGui(void) {
 
 
 
-void configureCallback(GtkWindow *window, GdkEvent *event, gpointer data) {
-  allowScreenUpdate = false;
-  //printf("x=%d y=%d\n", event->configure.x, event->configure.y);
- }
-
-
-
 /********************************************//**
  * \brief Creates the calc's GUI window with all the widgets
  *
@@ -743,7 +736,7 @@ void setupUI(void) {
   error = NULL;
   gtk_css_provider_load_from_data(cssProvider, cssData, -1, &error);
   if(error != NULL) {
-    showInfoDialog("In function setupUI:", "error while loading CSS style sheet " CSSFILE, NULL, NULL);
+    moreInfoOnError("In function setupUI:", "error while loading CSS style sheet " CSSFILE, NULL, NULL);
     exit(1);
   }
   g_object_unref(cssProvider);
@@ -787,7 +780,6 @@ void setupUI(void) {
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
 
   gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
-  g_signal_connect(G_OBJECT(frmCalc), "configure-event", G_CALLBACK(configureCallback), NULL);
 
   // Fixed grid to freely put widgets on it
   grid = gtk_fixed_new();
@@ -842,7 +834,7 @@ void setupUI(void) {
   screenData = malloc(numBytes);
   if(screenData == NULL) {
     sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
-    showInfoDialog("In function setupUI:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
     exit(1);
   }
 
@@ -1418,13 +1410,12 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
     calcMode = CM_AIM;
     nextChar = NC_NORMAL;
 
-    saveStack();
     liftStack();
 
     clearRegisterLine(AIM_REGISTER_LINE, true, true);
     xCursor = 1;
     yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = CF_STANDARD;
+    cursorFont = &standardFont;
     cursorEnabled = true;
   }
 
@@ -1471,7 +1462,7 @@ void calcModeAsm(void) {
  * \return void
  ***********************************************/
 void calcModeNim(uint16_t unusedParamButMandatory) {
-  saveStack();
+  saveForUndo();
 
   calcMode = CM_NIM;
   clearSystemFlag(FLAG_ALPHA);
@@ -1479,13 +1470,11 @@ void calcModeNim(uint16_t unusedParamButMandatory) {
   liftStack();
   real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
 
-  nimBuffer[0] = 0;
+  aimBuffer[0] = 0;
   hexDigits = 0;
 
   clearRegisterLine(NIM_REGISTER_LINE, true, true);
   xCursor = 1;
-  yCursor = Y_POSITION_OF_NIM_LINE;
-  cursorFont = CF_NUMERIC;
   cursorEnabled = true;
 }
 
@@ -1541,7 +1530,7 @@ void calcModeTam(void) {
       break;
 
     default:
-      sprintf(errorMessage, "In function calcModeTam: %" FMT8U " is an unexpected value for tamMode!", tamMode);
+      sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
       displayBugScreen(errorMessage);
       return;
   }

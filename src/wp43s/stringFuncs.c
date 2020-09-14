@@ -29,7 +29,7 @@ void fnAlphaLeng(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot get the " STD_alpha "LENG? from %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaLeng:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaLeng:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -37,7 +37,6 @@ void fnAlphaLeng(uint16_t regist) {
   longIntegerInit(stringSize);
   uIntToLongInteger(stringGlyphLength(REGISTER_STRING_DATA(regist)), stringSize);
 
-  saveStack();
   liftStack();
 
   convertLongIntegerToLongIntegerRegister(stringSize, REGISTER_X);
@@ -54,7 +53,7 @@ void fnAlphaToX(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha STD_RIGHT_ARROW "x on %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaToX:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaToX:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -63,7 +62,7 @@ void fnAlphaToX(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha STD_RIGHT_ARROW "x on an empty string");
-      showInfoDialog("In function fnAlphaToX:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaToX:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -73,7 +72,6 @@ void fnAlphaToX(uint16_t regist) {
     char2 = *(REGISTER_STRING_DATA(regist) + 1);
   }
 
-  saveStack();
   liftStack();
 
   longIntegerInit(lgInt);
@@ -123,7 +121,7 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot x" STD_RIGHT_ARROW STD_alpha " when X is %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnXToAlpha:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnXToAlpha:", errorMessage, NULL, NULL);
       #endif
       return;
   }
@@ -133,26 +131,25 @@ void fnXToAlpha(uint16_t unusedParamButMandatory) {
   if(longIntegerCompareUInt(lgInt, 0x8000) >= 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" FMT32U, (uint32_t)lgInt->_mp_d[0]);
-      showInfoDialog("In function fnXToAlpha:", errorMessage, NULL, NULL);
+      sprintf(errorMessage, "for x" STD_RIGHT_ARROW STD_alpha ", X must be < 32768. Here X = %" PRIu32, (uint32_t)lgInt->_mp_d[0]); // OK for 32 and 64 bit limbs
+      moreInfoOnError("In function fnXToAlpha:", errorMessage, NULL, NULL);
     #endif
     return;
   }
 
-  saveStack();
   liftStack();
 
   if(longIntegerIsZero(lgInt)) {
     char1 = 0;
     char2 = 0;
   }
-  else if(lgInt->_mp_d[0] < 0x0080) {
-    char1 = lgInt->_mp_d[0];
+  else if(lgInt->_mp_d[0] < 0x0080) {      // OK for 32 and 64 bit limbs
+    char1 = lgInt->_mp_d[0];               // OK for 32 and 64 bit limbs
     char2 = 0;
   }
   else {
-    char1 = (lgInt->_mp_d[0] >> 8) | 0x80;
-    char2 = lgInt->_mp_d[0] & 0x00ff;
+    char1 = (lgInt->_mp_d[0] >> 8) | 0x80; // OK for 32 and 64 bit limbs
+    char2 = lgInt->_mp_d[0] & 0x00ff;      // OK for 32 and 64 bit limbs
   }
 
   longIntegerFree(lgInt);
@@ -174,8 +171,8 @@ void fnAlphaPos(uint16_t regist) {
   if(getRegisterDataType(regist) != dtString) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot use " STD_alpha "POS? on %s (reg %" FMT16U ")", getRegisterDataTypeName(regist, true, false), regist);
-      showInfoDialog("In function fnAlphaPos:", errorMessage, NULL, NULL);
+      sprintf(errorMessage, "cannot use " STD_alpha "POS? on %s (reg %" PRIu16 ")", getRegisterDataTypeName(regist, true, false), regist);
+      moreInfoOnError("In function fnAlphaPos:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -184,7 +181,7 @@ void fnAlphaPos(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "POS? on %s (reg X)", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaPos:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaPos:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -193,12 +190,11 @@ void fnAlphaPos(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "POS? on or with an empty string");
-      showInfoDialog("In function fnAlphaPos:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaPos:", errorMessage, NULL, NULL);
     #endif
     return;
   }
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   longIntegerInit(lgInt);
@@ -239,7 +235,7 @@ void fnAlphaRR(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "RR on %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaRR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaRR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -249,7 +245,7 @@ void fnAlphaRR(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "RR on an empty string");
-      showInfoDialog("In function fnAlphaRR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaRR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -281,7 +277,7 @@ void fnAlphaRR(uint16_t regist) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot " STD_alpha "RR when X is %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnAlphaRR:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnAlphaRR:", errorMessage, NULL, NULL);
       #endif
       return;
   }
@@ -290,7 +286,6 @@ void fnAlphaRR(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -319,7 +314,7 @@ void fnAlphaRL(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "RL on %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaRL:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaRL:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -329,7 +324,7 @@ void fnAlphaRL(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "RL on an empty string");
-      showInfoDialog("In function fnAlphaRL:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaRL:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -361,7 +356,7 @@ void fnAlphaRL(uint16_t regist) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot " STD_alpha "RL when X is %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnAlphaRL:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnAlphaRL:", errorMessage, NULL, NULL);
       #endif
       return;
   }
@@ -370,7 +365,6 @@ void fnAlphaRL(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -397,7 +391,7 @@ void fnAlphaSR(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "SR on %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaSR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaSR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -407,7 +401,7 @@ void fnAlphaSR(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "SR on an empty string");
-      showInfoDialog("In function fnAlphaSR:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaSR:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -435,7 +429,7 @@ void fnAlphaSR(uint16_t regist) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot " STD_alpha "SR when X is %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnAlphaSR:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnAlphaSR:", errorMessage, NULL, NULL);
       #endif
       return;
   }
@@ -448,7 +442,6 @@ void fnAlphaSR(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {
@@ -471,7 +464,7 @@ void fnAlphaSL(uint16_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "SL on %s", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fnAlphaSL:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaSL:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -482,7 +475,7 @@ void fnAlphaSL(uint16_t regist) {
     displayCalcErrorMessage(ERROR_EMPTY_STRING, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use " STD_alpha "SL on an empty string");
-      showInfoDialog("In function fnAlphaSL:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAlphaSL:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -510,7 +503,7 @@ void fnAlphaSL(uint16_t regist) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot " STD_alpha "SL when X is %s", getRegisterDataTypeName(REGISTER_X, true, false));
-        showInfoDialog("In function fnAlphaSL:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnAlphaSL:", errorMessage, NULL, NULL);
       #endif
       return;
   }
@@ -523,7 +516,6 @@ void fnAlphaSL(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(steps > 0) {

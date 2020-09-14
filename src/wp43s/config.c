@@ -176,7 +176,6 @@ void fnVersion(uint16_t unusedParamButMandatory) {
 void fnFreeMemory(uint16_t unusedParamButMandatory) {
   longInteger_t mem;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(mem);
@@ -196,7 +195,6 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
   longInteger_t rounding;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(rounding);
@@ -215,7 +213,6 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
 void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
   longInteger_t ism;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(ism);
@@ -235,7 +232,6 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 void fnGetWordSize(uint16_t unusedParamButMandatory) {
   longInteger_t wordSize;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(wordSize);
@@ -299,7 +295,6 @@ void fnSetWordSize(uint16_t WS) {
 void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
   longInteger_t flashMem;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(flashMem);
@@ -319,7 +314,6 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
 void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
   real_t value;
 
-  saveStack();
   liftStack();
 
   #ifdef PC_BUILD
@@ -358,7 +352,6 @@ uint32_t getFreeFlash(void) {
 void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
   longInteger_t sigDigits;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(sigDigits);
@@ -418,6 +411,7 @@ void fnFractionType(uint16_t unusedParamButMandatory) {
 
 void setConfirmationMode(void (*func)(uint16_t)) {
   previousCalcMode = calcMode;
+  cursorEnabled = false;
   calcMode = CM_CONFIRMATION;
   clearSystemFlag(FLAG_ALPHA);
   confirmedFunction = func;
@@ -439,7 +433,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s for setting RANGE", getRegisterDataTypeName(REGISTER_X, true, true));
-      showInfoDialog("In function fnRange:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRange:", errorMessage, NULL, NULL);
     #endif
     return;
   }
@@ -453,7 +447,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     exponentLimit = 99;
   }
   else {
-    exponentLimit = (int16_t)(longInt->_mp_d[0]);
+    exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
   }
 
   longIntegerFree(longInt);
@@ -464,7 +458,6 @@ void fnRange(uint16_t unusedParamButMandatory) {
 void fnGetRange(uint16_t unusedParamButMandatory) {
   longInteger_t range;
 
-  saveStack();
   liftStack();
 
   longIntegerInit(range);
@@ -484,17 +477,25 @@ void fnClAll(uint16_t confirmation) {
 
     fnClPAll(CONFIRMED);  // Clears all the programs
     fnClSigma(CONFIRMED); // Clears and releases the memory of all statistical sums
+    if(savedStatisticalSumsPointer != NULL) {
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+    }
 
     // Clear local registers
     allocateLocalRegisters(0);
-    //for(regist=FIRST_LOCAL_REGISTER; regist<FIRST_LOCAL_REGISTER + numberOfLocalRegisters; regist++) {
-    //  clearRegister(regist);
-    //}
 
     // Clear registers including stack, I, J, K and L
     for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
       clearRegister(regist);
     }
+
+    // Clear saved stack registers
+    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=TEMP_REGISTER; regist++) {
+      clearRegister(regist);
+    }
+    thereIsSomethingToUndo = false;
+
+    // TODO: clear (or delete) named variables
 
     // Clear flags
     for(int32_t sixteenFlags=0; sixteenFlags<7; sixteenFlags++) { // 7 times uint16_t = 112 flags
@@ -548,7 +549,6 @@ void fnReset(uint16_t confirmation) {
     fnDenMax(0);
     fnDisplayStack(4);
     firstGregorianDay = 1752;
-    fnCurveFitting(CF_LINEAR_FITTING);
     clearSystemFlag(FLAG_LEAD0);
     setSystemFlag(FLAG_MULTx);
     setSystemFlag(FLAG_DECIMP);
@@ -572,12 +572,14 @@ void fnReset(uint16_t confirmation) {
     clearSystemFlag(FLAG_ASLIFT);
     clearSystemFlag(FLAG_USER);
     clearSystemFlag(FLAG_LOWBAT);
+    clearSystemFlag(FLAG_USB);
 
     hourGlassIconEnabled = false;
     programCounter = 0;
     watchIconEnabled = false;
     serialIOIconEnabled = false;
     printerIconEnabled = false;
+    thereIsSomethingToUndo = false;
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
@@ -601,11 +603,12 @@ void fnReset(uint16_t confirmation) {
       while(softmenuStackPointer > 0) {
         popSoftmenu();
       }
+      calcModeNormal();
     #endif // TESTSUITE_BUILD
 
     exponentLimit = 6145;
-
     temporaryInformation = TI_RESET;
+    aimBuffer[0] = 0;
 
     // The following lines are test data
     //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;

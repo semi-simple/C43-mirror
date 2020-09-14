@@ -40,7 +40,7 @@ void twoPowError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate 2" STD_SUP_x " for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fn2Pow:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fn2Pow:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void twoPowError(void) {
  * \return void
  ***********************************************/
 void fn2Pow(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   twoPow[getRegisterDataType(REGISTER_X)]();
@@ -140,7 +139,7 @@ void twoPowReal(void) {
   if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_X)) && !getSystemFlag(FLAG_SPCRES)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function twoPowReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of 2" STD_SUP_x " when flag D is not set", NULL, NULL);
+      moreInfoOnError("In function twoPowReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of 2" STD_SUP_x " when flag D is not set", NULL, NULL);
     #endif
     return;
   }

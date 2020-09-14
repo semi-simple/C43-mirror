@@ -38,7 +38,6 @@ static void (*const Decomp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \return void
  ***********************************************/
 void fnDecomp(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Decomp[getRegisterDataType(REGISTER_X)]();
@@ -54,7 +53,7 @@ void decompError(void) {
 
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
   sprintf(errorMessage, "cannot calculate Decomp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-  showInfoDialog("In function fnDecomp:", errorMessage, NULL, NULL);
+  moreInfoOnError("In function fnDecomp:", errorMessage, NULL, NULL);
   #endif
 }
 

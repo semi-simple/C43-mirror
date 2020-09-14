@@ -45,6 +45,7 @@ void refreshStatusBar(void) {
   showHidePrinter();
   showHideUserMode();
   showHideLowBattery();
+  showHideUSB();
 }
 
 
@@ -138,7 +139,7 @@ void showAngularMode(void) {
     showGlyph(STD_SPACE_HAIR,             &standardFont, x, 0, vmNormal, true, true); //    is 0+0+1 pixel wide
   }
   else {
-    sprintf(errorMessage, "In function showAngularMode: %" FMT8U " is an unexpected value for currentAngularMode!", currentAngularMode);
+    sprintf(errorMessage, "In function showAngularMode: %" PRIu8 " is an unexpected value for currentAngularMode!", currentAngularMode);
     displayBugScreen(errorMessage);
   }
 }
@@ -161,7 +162,7 @@ void showFracMode(void) {
   }
   else {
     if((getSystemFlag(FLAG_DENANY) && denMax!=MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
-      sprintf(errorMessage, "/%" FMT32U, denMax);
+      sprintf(errorMessage, "/%" PRIu32, denMax);
       x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
     }
 
@@ -186,10 +187,10 @@ void showFracMode(void) {
  ***********************************************/
 void showIntegerMode(void) {
   if(shortIntegerWordSize <= 9) {
-    sprintf(errorMessage, STD_SPACE_FIGURE "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
+    sprintf(errorMessage, STD_SPACE_FIGURE "%" PRIu8 ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
   else {
-    sprintf(errorMessage, "%" FMT8U ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
+    sprintf(errorMessage, "%" PRIu8 ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
   }
 
   showString(errorMessage, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
@@ -434,5 +435,27 @@ void showHideLowBattery(void) {
       clearPixel(395, 16);
     }
   #endif
+}
+
+
+
+/********************************************//**
+ * \brief Shows or hides the USB icon in the status bar
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void showHideUSB(void) {
+  if(getSystemFlag(FLAG_USB)) {
+    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+  }
+
+  #ifdef PC_BUILD
+  else if(!getSystemFlag(FLAG_ASLIFT)) {
+  #elif DMCP_BUILD
+  else if(!getSystemFlag(FLAG_LOWBAT)) {
+  #endif
+    showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+  }
 }
 #endif

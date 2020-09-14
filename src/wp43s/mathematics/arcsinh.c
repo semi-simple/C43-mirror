@@ -40,7 +40,7 @@ void arcsinhError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arcsinh for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnArcsinh:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnArcsinh:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void arcsinhError(void) {
  * \return void
  ***********************************************/
 void fnArcsinh(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arcsinh[getRegisterDataType(REGISTER_X)]();

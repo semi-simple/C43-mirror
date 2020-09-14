@@ -25,7 +25,6 @@
 void fnDenMax(uint16_t unusedParamButMandatory) {
   real_t reX;
 
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
@@ -40,18 +39,18 @@ void fnDenMax(uint16_t unusedParamButMandatory) {
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
+      moreInfoOnError("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
   if(realIsNaN(&reX)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
+      moreInfoOnError("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
     #endif
-    restoreStack();
+    undo();
     return;
   }
 
@@ -110,7 +109,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
   else {
     #ifdef PC_BUILD
       sprintf(errorMessage, "%s cannot be shown as a fraction!", getRegisterDataTypeName(regist, true, false));
-      showInfoDialog("In function fraction:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fraction:", errorMessage, NULL, NULL);
     #endif
     *sign             = 0;
     *intPart          = 0;
@@ -188,13 +187,13 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
 
       *numer = 1;
       *denom = iPart[i];
-      //printf("  7 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  7 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    8 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        //printf("    8 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       }
-      //printf("  9 numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  9 numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
@@ -222,20 +221,20 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  G bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          //printf("  G bestNumer=%" PRIu64 " BestDenom=%" PRIu64 "\n", bestNumer, bestDenom);
           //printf("  H delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }
 
       *numer = 1;
       *denom = iPart[i] + 1;
-      //printf("  I numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  I numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       for(j=i; j>1; j--) {
         *numer += *denom * iPart[j-1];
         ex = *numer; *numer = *denom; *denom = ex;
-        //printf("    J numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+        //printf("    J numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
       }
-      //printf("  K numer=%" FMT64U " denom=%" FMT64U "\n", *numer, *denom);
+      //printf("  K numer=%" PRIu64 " denom=%" PRIu64 "\n", *numer, *denom);
 
       if(*denom <= denMax) {
         uInt32ToReal34(*numer, &temp3);
@@ -248,7 +247,7 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
           real34Add(&temp3, &delta, &delta);
           bestNumer = *numer;
           bestDenom = *denom;
-          //printf("  L bestNumer=%" FMT64U " BestDenom=%" FMT64U "\n", bestNumer, bestDenom);
+          //printf("  L bestNumer=%" PRIu64 " BestDenom=%" PRIu64 "\n", bestNumer, bestDenom);
           //printf("  M delta = "); printReal34ToConsole(&delta); printf("\n");
         }
       }

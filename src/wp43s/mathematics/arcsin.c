@@ -40,7 +40,7 @@ void arcsinError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arcsin for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnArcsin:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnArcsin:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void arcsinError(void) {
  * \return void
  ***********************************************/
 void fnArcsin(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arcsin[getRegisterDataType(REGISTER_X)]();
@@ -82,7 +81,7 @@ void arcsinLonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arcsinLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
+        moreInfoOnError("In function arcsinLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
     }
     return;
@@ -136,7 +135,7 @@ void arcsinReal(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arcsinReal:", "|X| > 1", "and CPXRES is not set!", NULL);
+        moreInfoOnError("In function arcsinReal:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
       return;
     }

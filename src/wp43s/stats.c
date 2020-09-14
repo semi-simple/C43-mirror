@@ -32,7 +32,7 @@ bool_t checkMinimumDataPoints(const real_t *n) {
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function checkMinimumDataPoints:", "There is no statistical data available!", NULL, NULL);
+      moreInfoOnError("In function checkMinimumDataPoints:", "There is no statistical data available!", NULL, NULL);
     #endif
     return false;
   }
@@ -40,7 +40,7 @@ bool_t checkMinimumDataPoints(const real_t *n) {
   if (realCompareLessThan(SIGMA_N, n)) {
     displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      showInfoDialog("In function checkMinimumDataPoints:", "There is insufficient statistical data available!", NULL, NULL);
+      moreInfoOnError("In function checkMinimumDataPoints:", "There is insufficient statistical data available!", NULL, NULL);
     #endif
     return false;
   }
@@ -79,7 +79,6 @@ void fnSigma(uint16_t plusMinus) {
 
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {
-
     if(statisticalSumsPointer == NULL) {
       initStatisticalSums();
     }
@@ -309,7 +308,7 @@ void fnSigma(uint16_t plusMinus) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use (%s, %s) as statistical data!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false), getDataTypeName(getRegisterDataType(REGISTER_Y), false, false));
-      showInfoDialog("In function fnSigma:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSigma:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -318,8 +317,6 @@ void fnSigma(uint16_t plusMinus) {
 
 void fnStatSum(uint16_t sum) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     realToReal34((real_t *)(statisticalSumsPointer + REAL_SIZE * sum), REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -336,8 +333,6 @@ void fnStatSum(uint16_t sum) {
  ***********************************************/
 void fnSumXY(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -360,8 +355,6 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnXmin(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -384,8 +377,6 @@ void fnXmin(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnXmax(uint16_t unusedParamButMandatory) {
   if(checkMinimumDataPoints(const_1)) {
-    saveStack();
-
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();

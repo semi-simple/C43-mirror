@@ -55,7 +55,7 @@ static void dotDataTypeError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+    moreInfoOnError("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
   #endif
 }
 
@@ -64,7 +64,7 @@ static void dotDataTypeError(void) {
 
 //#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 //    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
-//    showInfoDialog("In function fnDot:", errorMessage, NULL, NULL);
+//    moreInfoOnError("In function fnDot:", errorMessage, NULL, NULL);
 //#endif
 //}
 
@@ -81,7 +81,6 @@ static void dotDataTypeError(void) {
  * \return void
  ***********************************************/
 void fnDot(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

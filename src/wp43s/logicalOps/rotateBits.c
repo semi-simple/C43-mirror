@@ -34,7 +34,6 @@ void fnAsr(uint16_t numberOfShifts) {
   uint64_t sign;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     sign = *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & shortIntegerSignBit;
@@ -55,7 +54,7 @@ void fnAsr(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot ASR %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnAsr:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnAsr:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -73,7 +72,6 @@ void fnSl(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -93,7 +91,7 @@ void fnSl(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SL %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnSl:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSl:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -111,7 +109,6 @@ void fnSr(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -131,7 +128,7 @@ void fnSr(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SR %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnSr:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnSr:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -150,7 +147,6 @@ void fnRl(uint16_t numberOfShifts) {
   uint64_t sign;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -171,7 +167,7 @@ void fnRl(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RL %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRl:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRl:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -189,7 +185,6 @@ void fnRr(uint16_t numberOfShifts) {
   int32_t i;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     for(i=1; i<=numberOfShifts; i++) {
@@ -209,7 +204,7 @@ void fnRr(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RR %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRr:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRr:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -228,7 +223,6 @@ void fnRlc(uint16_t numberOfShifts) {
   uint64_t sign, carry;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     carry = getSystemFlag(FLAG_CARRY);
@@ -249,7 +243,7 @@ void fnRlc(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RLC %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRlc:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRlc:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -268,7 +262,6 @@ void fnRrc(uint16_t numberOfShifts) {
   uint64_t lsb, carry;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     carry = getSystemFlag(FLAG_CARRY);
@@ -289,7 +282,7 @@ void fnRrc(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RRC %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRrc:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRrc:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -308,7 +301,6 @@ void fnLj(uint16_t numberOfShifts) {
   longInteger_t regX;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     count = 0;
@@ -329,7 +321,7 @@ void fnLj(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot LJ %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnLj:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnLj:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -348,7 +340,6 @@ void fnRj(uint16_t numberOfShifts) {
   longInteger_t regX;
 
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    saveStack();
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     count = 0;
@@ -369,7 +360,7 @@ void fnRj(uint16_t numberOfShifts) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot RJ %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      showInfoDialog("In function fnRj:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnRj:", errorMessage, NULL, NULL);
     #endif
   }
 }
@@ -399,7 +390,7 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for MIRROR!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      showInfoDialog("In function fnMirror:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function fnMirror:", errorMessage, NULL, NULL);
     #endif
   }
 }

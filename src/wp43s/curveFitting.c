@@ -27,7 +27,39 @@
  * \return void
  *
  ***********************************************/
-void fnCurveFitting(uint16_t cf) {
-  curveFitting = cf;
+void fnCurveFitting(uint16_t curveFitting) {
+  #ifdef PC_BUILD
+    uint16_t numberOfOnes;
+
+    numberOfOnes = curveFitting - ((curveFitting >> 1) & 0x5555);
+    numberOfOnes = (numberOfOnes & 0x3333) + ((numberOfOnes >> 2) & 0x3333);
+    numberOfOnes = (numberOfOnes + (numberOfOnes >> 4)) & 0x0f0f;
+    numberOfOnes = (uint16_t)(numberOfOnes * 0x0101) >> 8;
+
+    if(numberOfOnes == 1) {
+      printf("Use the ");
+    }
+    else {
+      printf("Use the best fitting model out of\n");
+    }
+
+    if(curveFitting & CF_LINEAR_FITTING)      printf("linear ");
+    if(curveFitting & CF_EXPONENTIAL_FITTING) printf("exponential ");
+    if(curveFitting & CF_LOGARITHMIC_FITTING) printf("logarithmic ");
+    if(curveFitting & CF_POWER_FITTING)       printf("power ");
+    if(curveFitting & CF_ROOT_FITTING)        printf("root ");
+    if(curveFitting & CF_HYPERBOLIC_FITTING)  printf("hyperbolic ");
+    if(curveFitting & CF_PARABOLIC_FITTING)   printf("parabolic ");
+    if(curveFitting & CF_CAUCHY_FITTING)      printf("Cauchy peak ");
+    if(curveFitting & CF_GAUSS_FITTING)       printf("Gauss peak ");
+    if(curveFitting & CF_ORTHOGONAL_FITTING)  printf("Orthogonal ");
+
+    if(numberOfOnes == 1) {
+      printf("fitting model.\n");
+    }
+    else {
+      printf("\nfitting models.\n");
+    }
+  #endif // PC_BUILD
 }
 

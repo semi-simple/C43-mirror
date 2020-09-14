@@ -40,7 +40,7 @@ void arccosError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arccos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-    showInfoDialog("In function fnArccos:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function fnArccos:", errorMessage, NULL, NULL);
   #endif
 }
 
@@ -54,7 +54,6 @@ void arccosError(void) {
  * \return void
  ***********************************************/
 void fnArccos(uint16_t unusedParamButMandatory) {
-  saveStack();
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arccos[getRegisterDataType(REGISTER_X)]();
@@ -82,7 +81,7 @@ void arccosLonI(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccosLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
+        moreInfoOnError("In function arccosLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
     }
     return;
@@ -138,7 +137,7 @@ void arccosReal(void) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        showInfoDialog("In function arccosReal:", "|X| > 1", "and CPXRES is not set!", NULL);
+        moreInfoOnError("In function arccosReal:", "|X| > 1", "and CPXRES is not set!", NULL);
       #endif
     }
     return;

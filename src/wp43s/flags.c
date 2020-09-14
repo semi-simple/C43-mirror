@@ -178,7 +178,7 @@ bool_t getFlag(uint16_t flag) {
         return (allLocalRegisterPointer->localFlags & (1u << flag)) != 0;
       }
       else {
-        sprintf(errorMessage, "In function getFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
+        sprintf(errorMessage, "In function getFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -222,7 +222,7 @@ void fnSetFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" FMT16U ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnSetFlag:", "Tying to set a write", errorMessage, NULL);
       #endif
       return;
@@ -251,7 +251,7 @@ void fnSetFlag(uint16_t flag) {
         allLocalRegisterPointer->localFlags |=  (1u << flag);
       }
       else {
-        sprintf(errorMessage, "In function fnSetFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
+        sprintf(errorMessage, "In function fnSetFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -277,7 +277,7 @@ void fnClearFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" FMT16U ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnClearFlag:", "Tying to clear a write", errorMessage, NULL);
       #endif
       return;
@@ -306,7 +306,7 @@ void fnClearFlag(uint16_t flag) {
         allLocalRegisterPointer->localFlags &= ~(1u << flag);
       }
       else {
-        sprintf(errorMessage, "In function fnClearFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
+        sprintf(errorMessage, "In function fnClearFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -332,7 +332,7 @@ void fnFlipFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" FMT16U ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnFlipFlag:", "Tying to flip a write", errorMessage, NULL);
       #endif
       return;
@@ -361,7 +361,7 @@ void fnFlipFlag(uint16_t flag) {
         allLocalRegisterPointer->localFlags ^=  (1u << flag);
       }
       else {
-        sprintf(errorMessage, "In function fnFlipFlag: local flag %" FMT16U " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
+        sprintf(errorMessage, "In function fnFlipFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
         displayBugScreen(errorMessage);
       }
     }

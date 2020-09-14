@@ -84,7 +84,7 @@ void     clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_
 
 #ifdef DMCP_BUILD
   void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);                   //JMCSV Added for textfiles 
-  void     refreshLcd        (void);
+  void     refreshLcd                         (void);
 #endif
 
 #ifndef TESTSUITE_BUILD

@@ -156,7 +156,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
       }
 
     case dtShortInteger:
-      sprintf(base, "base %2" FMT32U " ", getRegisterTag(regist));
+      sprintf(base, "base %2" PRIu32 " ", getRegisterTag(regist));
                                     return base;
 
     default:                        return "???     ";
@@ -1082,7 +1082,7 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" FMT16U " local registers", allLocalRegisterPointer->numberOfLocalRegisters);
+      sprintf(string, "Content of the %" PRIu16 " local registers", allLocalRegisterPointer->numberOfLocalRegisters);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
@@ -1340,7 +1340,7 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" FMT16U " named variables", allNamedVariablePointer->numberOfNamedVariables);
+      sprintf(string, "Content of the %" PRIu16 " named variables", allNamedVariablePointer->numberOfNamedVariables);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
@@ -1589,10 +1589,10 @@ void memoryDump2(const char *text) {
 //  if(debug) {
 //    debugCounter++;
     printf("\n\n%s\nTotal memory = %d bytes = %d blocks\n", text, TO_BYTES(RAM_SIZE), RAM_SIZE);
-    printf("Free blocks (%" FMT32S "):\n", numberOfFreeBlocks);
+    printf("Free blocks (%" PRId32 "):\n", numberOfFreeBlocks);
 
     for(i=0; i<numberOfFreeBlocks; i++) {
-      printf("  %2" FMT32S " starting at %5" FMT16U ": %5" FMT16U " blocks = %6" FMT32U " bytes\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks, TO_BYTES((uint32_t)freeBlocks[i].sizeInBlocks));
+      printf("  %2" PRId32 " starting at %5" PRIu16 ": %5" PRIu16 " blocks = %6" PRIu32 " bytes\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks, TO_BYTES((uint32_t)freeBlocks[i].sizeInBlocks));
     }
 
     printf("Reg  Num DescrAddr DataType                    DataInfo    DataPtr FullDataLen Content\n");

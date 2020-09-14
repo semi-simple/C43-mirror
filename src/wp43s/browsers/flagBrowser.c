@@ -74,7 +74,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     line = 0;
 
     // Free memory
-    sprintf(tmpStr3000 + CHARS_PER_LINE * line++, "%" FMT32U " bytes free in RAM, %" FMT32U " in flash.", getFreeRamMemory(), getFreeFlash());
+    sprintf(tmpStr3000 + CHARS_PER_LINE * line++, "%" PRIu32 " bytes free in RAM, %" PRIu32 " in flash.", getFreeRamMemory(), getFreeFlash());
 
     // Global flags
     sprintf(tmpStr3000 + CHARS_PER_LINE * line++, "Global user flags set:");
@@ -120,7 +120,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
         strcpy(tmpStr3000 + CHARS_PER_LINE * ++line, "1 local register is allocated.");
       }
       else {
-        sprintf(tmpStr3000 + CHARS_PER_LINE * ++line, "%" FMT16U " local registers are allocated.", allLocalRegisterPointer->numberOfLocalRegisters);
+        sprintf(tmpStr3000 + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", allLocalRegisterPointer->numberOfLocalRegisters);
       }
 
       // Local flags
@@ -369,7 +369,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
     }
 
     if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
-      sprintf(tmpStr3000, "%" FMT16U " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
+      sprintf(tmpStr3000, "%" PRIu16 " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
       showString(tmpStr3000, &standardFont, 1, 132-1, vmNormal, true, true);
       showString("Local flag status:", &standardFont, 1, 154-1, vmNormal, true, true);
 

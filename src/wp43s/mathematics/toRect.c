@@ -36,7 +36,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39); break;
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);            break;
       default: {
-        sprintf(errorMessage, "In function fnToRect: %" FMT32U " is an unexpected dataTypeX value!", dataTypeX);
+        sprintf(errorMessage, "In function fnToRect: %" PRIu32 " is an unexpected dataTypeX value!", dataTypeX);
         displayBugScreen(errorMessage);
       }
     }
@@ -56,7 +56,7 @@ void fnToRect(uint16_t unusedParamButMandatory) {
                           break;
 
       default: {
-        sprintf(errorMessage, "In function fnToRect: %" FMT32U " is an unexpected dataTypeY value!", dataTypeY);
+        sprintf(errorMessage, "In function fnToRect: %" PRIu32 " is an unexpected dataTypeY value!", dataTypeY);
         displayBugScreen(errorMessage);
       }
     }

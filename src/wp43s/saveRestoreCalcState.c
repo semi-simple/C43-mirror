@@ -420,7 +420,7 @@ void restoreCalc(void) {
     else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
     else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
     else {
-      sprintf(errorMessage, "In function restoreCalc: %" FMT8U " is an unexpected value for calcMode", calcMode);
+      sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
       displayBugScreen(errorMessage);
     }
 
@@ -451,7 +451,7 @@ static void registerToSaveString(calcRegister_t regist) {
 
     case dtShortInteger:
       convertShortIntegerRegisterToUInt64(regist, &sign, &value);
-      sprintf(tmpStr3000 + START_REGISTER_VALUE, "%c%" FMT64U " %" FMT32U, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
+      sprintf(tmpStr3000 + START_REGISTER_VALUE, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
       strcpy(aimBuffer, "ShoI");
       break;
 
@@ -538,18 +538,18 @@ void fnSave(uint16_t unusedParamButMandatory) {
   #pragma GCC diagnostic ignored "-Wrestrict"
 
   // Global registers
-  sprintf(tmpStr3000, "GLOBAL_REGISTERS\n%" FMT16U "\n", FIRST_LOCAL_REGISTER);
+  sprintf(tmpStr3000, "GLOBAL_REGISTERS\n%" PRIu16 "\n", FIRST_LOCAL_REGISTER);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
-    sprintf(tmpStr3000, "R%03" FMT16S "\n%s\n%s\n", regist, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Global flags
   strcpy(tmpStr3000, "GLOBAL_FLAGS\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "%" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U " %" FMT16U "\n",
+  sprintf(tmpStr3000, "%" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 " %" PRIu16 "\n",
                        globalFlags[0],
                                    globalFlags[1],
                                                globalFlags[2],
@@ -560,22 +560,22 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   // Local registers
-  sprintf(tmpStr3000, "LOCAL_REGISTERS\n%" FMT16U "\n", allLocalRegisterPointer->numberOfLocalRegisters);
+  sprintf(tmpStr3000, "LOCAL_REGISTERS\n%" PRIu16 "\n", allLocalRegisterPointer->numberOfLocalRegisters);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allLocalRegisterPointer->numberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
-    sprintf(tmpStr3000, "R.%02" FMT32U "\n%s\n%s\n", i, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
+    sprintf(tmpStr3000, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpStr3000 + START_REGISTER_VALUE);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Local flags
   if(allLocalRegisterPointer->numberOfLocalRegisters) {
-    sprintf(tmpStr3000, "LOCAL_FLAGS\n%" FMT16U "\n", allLocalRegisterPointer->localFlags);
+    sprintf(tmpStr3000, "LOCAL_FLAGS\n%" PRIu16 "\n", allLocalRegisterPointer->localFlags);
     save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Named variables
-  sprintf(tmpStr3000, "NAMED_VARIABLES\n%" FMT16U "\n", allNamedVariablePointer->numberOfNamedVariables);
+  sprintf(tmpStr3000, "NAMED_VARIABLES\n%" PRIu16 "\n", allNamedVariablePointer->numberOfNamedVariables);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<allNamedVariablePointer->numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
@@ -584,7 +584,7 @@ void fnSave(uint16_t unusedParamButMandatory) {
   }
 
   // Statistical sums
-  sprintf(tmpStr3000, "STATISTICAL_SUMS\n%" FMT16U "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
+  sprintf(tmpStr3000, "STATISTICAL_SUMS\n%" PRIu16 "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
     realToString(statisticalSumsPointer + REAL_SIZE * i , tmpStr3000 + START_REGISTER_VALUE);
@@ -594,14 +594,14 @@ void fnSave(uint16_t unusedParamButMandatory) {
   #pragma GCC diagnostic pop
 
   // System flags
-  sprintf(tmpStr3000, "SYSTEM_FLAGS\n%" FMT64U "\n", systemFlags);
+  sprintf(tmpStr3000, "SYSTEM_FLAGS\n%" PRIu64 "\n", systemFlags);
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   // Keyboard assignments
   sprintf(tmpStr3000, "KEYBOARD_ASSIGNMENTS\n37\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
   for(i=0; i<37; i++) {
-    sprintf(tmpStr3000, "%" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S " %" FMT16S "\n",
+    sprintf(tmpStr3000, "%" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 " %" PRId16 "\n",
                          kbd_usr[i].keyId,
                                      kbd_usr[i].primary,
                                                  kbd_usr[i].fShifted,
@@ -619,29 +619,29 @@ void fnSave(uint16_t unusedParamButMandatory) {
   save(tmpStr3000, strlen(tmpStr3000), backup);
   sprintf(tmpStr3000, "firstGregorianDay\n1582 10 15\n");
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "denMax\n%" FMT32U "\n", denMax);
+  sprintf(tmpStr3000, "denMax\n%" PRIu32 "\n", denMax);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayFormat\n%" FMT8U "\n", displayFormat);
+  sprintf(tmpStr3000, "displayFormat\n%" PRIu8 "\n", displayFormat);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayFormatDigits\n%" FMT8U "\n", displayFormatDigits);
+  sprintf(tmpStr3000, "displayFormatDigits\n%" PRIu8 "\n", displayFormatDigits);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "shortIntegerWordSize\n%" FMT8U "\n", shortIntegerWordSize);
+  sprintf(tmpStr3000, "shortIntegerWordSize\n%" PRIu8 "\n", shortIntegerWordSize);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "shortIntegerMode\n%" FMT8U "\n", shortIntegerMode);
+  sprintf(tmpStr3000, "shortIntegerMode\n%" PRIu8 "\n", shortIntegerMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "significantDigits\n%" FMT8U "\n", significantDigits);
+  sprintf(tmpStr3000, "significantDigits\n%" PRIu8 "\n", significantDigits);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "currentAngularMode\n%" FMT8U "\n", currentAngularMode);
+  sprintf(tmpStr3000, "currentAngularMode\n%" PRIu8 "\n", currentAngularMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "groupingGap\n%" FMT8U "\n", groupingGap);
+  sprintf(tmpStr3000, "groupingGap\n%" PRIu8 "\n", groupingGap);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "roundingMode\n%" FMT8U "\n", roundingMode);
+  sprintf(tmpStr3000, "roundingMode\n%" PRIu8 "\n", roundingMode);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "displayStack\n%" FMT8U "\n", displayStack);
+  sprintf(tmpStr3000, "displayStack\n%" PRIu8 "\n", displayStack);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "rngState\n%" FMT64U " %" FMT64U "\n", pcg32_global.state, pcg32_global.inc);
+  sprintf(tmpStr3000, "rngState\n%" PRIu64 " %" PRIu64 "\n", pcg32_global.state, pcg32_global.inc);
   save(tmpStr3000, strlen(tmpStr3000), backup);
-  sprintf(tmpStr3000, "exponentLimit\n%" FMT16S "\n", exponentLimit);
+  sprintf(tmpStr3000, "exponentLimit\n%" PRId16 "\n", exponentLimit);
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   #ifdef DMCP_BUILD

@@ -481,54 +481,6 @@ typedef int16_t calcRegister_t;
 #define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
 
-#if defined(__arm__)
-  #define FMT64U  "llu"
-  #define FMT64S  "lld"
-  #define FMT32U  "lu"
-  #define FMT32S  "ld"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "d"
-  #define FMTSIZE "d"
-#elif (__linux__ == 1)
-  #define FMT64U  "lu"
-  #define FMT64S  "ld"
-  #define FMT32U  "u"
-  #define FMT32S  "d"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "lu"
-  #define FMTSIZE "zd"
-#elif defined(__MINGW64__)
-  #define FMT64U  "I64u"
-  #define FMT64S  "I64d"
-  #define FMT32U  "u"
-  #define FMT32S  "d"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "lu"
-  #define FMTSIZE "I64u"
-#elif defined(__APPLE__)
-  #define FMT64U  "llu"
-  #define FMT64S  "lld"
-  #define FMT32U  "u"
-  #define FMT32S  "d"
-  #define FMT16U  "u"
-  #define FMT16S  "d"
-  #define FMT8U   "u"
-  #define FMT8S   "d"
-  #define FMTPTR  "lu"
-  #define FMTSIZE "zd"
-#else
-  #error Only Linux, MacOS, ARM, and Windows MINGW64 are supported for now
-#endif
-
 //#define tamMode                    ((*bits5 >> OFFSET_TAMMODE        ) & ((1 << LENGTH_TAMMODE        ) - 1)) // TAM mode
 //#define setTamMode(x)              *bits5 = (*bits5 & ~(((1 << LENGTH_TAMMODE        ) - 1) << OFFSET_TAMMODE        )) | ((x) << OFFSET_TAMMODE        )
 

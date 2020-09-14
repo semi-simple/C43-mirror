@@ -174,7 +174,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       break;
 
     default:
-      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" FMT32U " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+      sprintf(tmpStr3000, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
   }
 
   strcpy(clipboardString, tmpStr3000);
@@ -1477,7 +1477,7 @@ if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { 
       #if (SHOW_MEMORY_STATUS == 1)
         char string[1000];
 
-        sprintf(string, "%" FMT32S " bytes free (%" FMT32S " block%s), C43 %" FMT32U " bytes, GMP %" FMT32U " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint32_t)wp43sMemInBytes, (uint32_t)gmpMemInBytes); //JM C43
+        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " block%s), C43 %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes); //JM C43
         stringToUtf8(string, (uint8_t *)tmpStr);
         gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
         gtk_widget_show(lblMemoryStatus);
@@ -1599,10 +1599,10 @@ if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { 
         }
         else {
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "Error message %" FMT8U " is too wide!", lastErrorCode);
+            sprintf(errorMessage, "Error message %" PRIu8 " is too wide!", lastErrorCode);
             moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
           #endif
-          sprintf(tmpStr3000, "Error message %" FMT8U " is too wide!", lastErrorCode);
+          sprintf(tmpStr3000, "Error message %" PRIu8 " is too wide!", lastErrorCode);
           w = stringWidth(tmpStr3000, &standardFont, true, true);
           showString(tmpStr3000, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         }
@@ -1956,23 +1956,23 @@ if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { 
           }
         }
 
-          else if(temporaryInformation == TI_STATISTIC_SUMS) {
-            if(regist == REGISTER_Y) {
-              realToInt32(SIGMA_N, w);
-              sprintf(prefix, "Data point %03" FMT16S, w);
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+        else if(temporaryInformation == TI_STATISTIC_SUMS) {
+          if(regist == REGISTER_Y) {
+            realToInt32(SIGMA_N, w);
+            sprintf(prefix, "Data point %03" PRId16, w);
+            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
 
-              #ifdef PC_BUILD
-                for(w=0; w<SCREEN_WIDTH; w++) {
-                  setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-                }
-              #endif
+            #ifdef PC_BUILD
+              for(w=0; w<SCREEN_WIDTH; w++) {
+                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
+              }
+            #endif
 
-              #if DMCP_BUILD
-                lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
-              #endif
-            }
+            #if DMCP_BUILD
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
+            #endif
           }
+        }
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");
@@ -2409,8 +2409,9 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        clearScreen();      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
+        clearScreen();      
 
+        // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
         refreshRegisterLine(REGISTER_T);
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);

@@ -191,16 +191,18 @@ void         fnRecallElement                 (uint16_t unusedParamButMandatory);
 void         fnRecallIJ                      (uint16_t unusedParamButMandatory);
 void         fnXLessThan                     (uint16_t unusedParamButMandatory);
 int16_t      indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
-void         printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
-void         printRealToConsole              (const real_t *value, const char *before, const char *after);
-void         printComplex34ToConsole         (const complex34_t *value, const char *before, const char *after);
-void         printLongIntegerToConsole       (const longInteger_t value, const char *before, const char *after);
 void         reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t dataSizeWithoutDataLenBlocks, uint32_t tag);
-void         printRegisterToConsole          (calcRegister_t regist, const char *before, const char *after);
-void         printRegisterDescriptorToConsole(calcRegister_t regist);
 void         fnToReal                        (uint16_t unusedParamButMandatory);
 void         fnDec                           (uint16_t r);
 void         fnInc                           (uint16_t r);
+#ifndef DMCP_BUILD
+  void       printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
+  void       printRealToConsole              (const real_t *value, const char *before, const char *after);
+  void       printComplex34ToConsole         (const complex34_t *value, const char *before, const char *after);
+  void       printLongIntegerToConsole       (const longInteger_t value, const char *before, const char *after);
+  void       printRegisterToConsole          (calcRegister_t regist, const char *before, const char *after);
+  void       printRegisterDescriptorToConsole(calcRegister_t regist);
+#endif // DMCP_BUILD
 
 
 #define getRegisterAngularMode(reg)            getRegisterTag(reg)

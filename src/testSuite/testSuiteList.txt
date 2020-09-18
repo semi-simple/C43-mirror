@@ -219,3 +219,6 @@ percentPlusMG
 deltaPercent
 
 logxy
+lnbeta
+
+

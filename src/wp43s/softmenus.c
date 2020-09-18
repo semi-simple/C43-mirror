@@ -91,7 +91,7 @@ const int16_t menu_FLAGS[]       = { ITM_SF,                        ITM_FS,     
                                      ITM_FSS,                       ITM_FSC,                    ITM_FSF,                  ITM_FCF,               ITM_FCS,                     ITM_FCC,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_CLFALL                    };
 
-const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_SMODE,             ITM_WSIZEQ,                  ITM_KTYP,
+const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_ISM,               ITM_WSIZEQ,                  ITM_KTYP,
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,
                                      ITM_GETRANGE,                  ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_BESTFQ                    };
@@ -467,7 +467,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     x2 = x1 + 67;
   }
   else {
-    sprintf(errorMessage, "In function showSoftkey: xSoftkey=%" FMT16S " must be from 0 to 5" , xSoftkey);
+    sprintf(errorMessage, "In function showSoftkey: xSoftkey=%" PRId16 " must be from 0 to 5" , xSoftkey);
     displayBugScreen(errorMessage);
     return;
   }
@@ -477,7 +477,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     y2 = y1 + SOFTMENU_HEIGHT;
   }
   else {
-    sprintf(errorMessage, "In function showSoftkey: ySoftKey=%" FMT16S " but must be from 0 to 2!" , ySoftKey);
+    sprintf(errorMessage, "In function showSoftkey: ySoftKey=%" PRId16 " but must be from 0 to 2!" , ySoftKey);
     displayBugScreen(errorMessage);
     return;
   }
@@ -610,12 +610,12 @@ void showSoftmenuCurrentPart(void) {
           }
 
           if(softmenu[menu].menuId == 0) {
-            sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" FMT16S " not found!", item);
+            sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
             displayBugScreen(errorMessage);
           }
           else {
             if(softmenu[menu].softkeyItem == NULL) {
-              sprintf(errorMessage, "In function showSoftmenuCurrentPart: Softmenu ID %" FMT16S " must be generated!", item);
+              sprintf(errorMessage, "In function showSoftmenuCurrentPart: Softmenu ID %" PRId16 " must be generated!", item);
               displayBugScreen(errorMessage);
             }
             else {
@@ -840,7 +840,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   }
   if(softmenu[m].menuId == 0) {
     if(menu == NULL) {
-      sprintf(errorMessage, "In function showSoftmenu: softmenu %" FMT16S " not found!", id);
+      sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
       displayBugScreen(errorMessage);
     }
     else {
@@ -871,7 +871,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     else if(calcMode == CM_TAM) {
     }
     else {
-      sprintf(errorMessage, "In fuction showSoftMenu: %" FMT8U " is an unexpected value for calcMode!", calcMode);
+      sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
       displayBugScreen(errorMessage);
     }
   }

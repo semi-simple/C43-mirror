@@ -31,21 +31,24 @@
 #define X_BATTERY        389
 
 #ifndef TESTSUITE_BUILD
-void refreshStatusBar     (void);
-void showDateTime         (void);
-void showRealComplexResult(void);
-void showComplexMode      (void);
-void showAngularMode      (void);
-void showFracMode         (void);
-void showIntegerMode      (void);
-void showOverflowCarry    (void);
-void showHideAlphaMode    (void);
-void showHideHourGlass    (void);
-void showHidePgmBegin     (void);
-void showHideWatch        (void);
-void showHideSerialIO     (void);
-void showHidePrinter      (void);
-void showHideUserMode     (void);
-void showHideLowBattery   (void);
-void showHideUSB          (void);
-#endif
+  void refreshStatusBar       (void);
+  void showDateTime           (void);
+  void showRealComplexResult  (void);
+  void showComplexMode        (void);
+  void showAngularMode        (void);
+  void showFracMode           (void);
+  void showIntegerMode        (void);
+  void showOverflowCarry      (void);
+  void showHideAlphaMode      (void);
+  void showHideHourGlass      (void);
+  void showHidePgmBegin       (void);
+  void showHideWatch          (void);
+  void showHideSerialIO       (void);
+  void showHidePrinter        (void);
+  void showHideUserMode       (void);
+  #ifdef DMCP_BUILD
+    void showHideUsbLowBattery(void);
+  #else
+    void showHideStackLift    (void);
+  #endif // DMCP_BUILD
+#endif // not TESTSUITE_BUILD

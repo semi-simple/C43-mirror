@@ -442,7 +442,7 @@ void fnRj                       (uint16_t unusedParamButMandatory) {}
 void fnCountBits                (uint16_t unusedParamButMandatory) {}
 void fnNextPrime                (uint16_t unusedParamButMandatory) {}
 void fnScreenDump               (uint16_t unusedParamButMandatory) {}
-void fnArg                      (uint16_t unusedParamButMandatory) {}
+//void fnArg                      (uint16_t unusedParamButMandatory) {}
 void fnRange                    (uint16_t unusedParamButMandatory) {}
 void fnGetRange                 (uint16_t unusedParamButMandatory) {}
 void fnDot                      (uint16_t unusedParamButMandatory) {}

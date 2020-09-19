@@ -196,9 +196,9 @@ pyx
 
 fractionalPart
 integerPart
-;realPart           jmhold
-;imaginaryPart      jmhold
-;swapRealImaginary  jmhold
+realPart
+imaginaryPart
+swapRealImaginary
 
 gcd
 lcm
@@ -210,7 +210,8 @@ unitVector
 slvq
 agm
 
-;decomp             jmhold
+decomp
+;             jmhold
 
 matrix
 dot

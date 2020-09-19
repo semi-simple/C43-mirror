@@ -44,8 +44,11 @@ void refreshStatusBar(void) {
   showHideSerialIO();
   showHidePrinter();
   showHideUserMode();
-  showHideLowBattery();
-  showHideUSB();
+  #ifdef DMCP_BUILD
+    showHideUsbLowBattery();
+  #else
+    showHideStackLift();
+  #endif // DMCP_BUILD
   showHideASB();                //JM
 }
 
@@ -154,7 +157,7 @@ void showAngularMode(void) {
  * \return void
  ***********************************************/
 void showFracMode(void) {
-    char str20[20];
+    char str20[20];                                   //JM vv KEYS
     char str40[40];
 
     void conv() {
@@ -177,15 +180,13 @@ void showFracMode(void) {
           str40[y] = 0;
         }
       }
-    }
-
-
+    }                                                  //JM ^^ KEYS
 
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
   int16_t x = 0;
 
-  if(lastIntegerBase > 0 && lastIntegerBase <= 16) {                       //JMvv HEXKEYS
+  if(lastIntegerBase > 0 && lastIntegerBase <= 16) {                               //JMvv HEXKEYS
     str20[0]=0;
     
     if(lastIntegerBase>10 && lastIntegerBase<=16){
@@ -202,8 +203,6 @@ void showFracMode(void) {
     }
     return;
   }                                                                                //JM^^
-
-
 
 
   if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
@@ -425,113 +424,100 @@ void showHideUserMode(void) {
 
 
 
+#ifdef DMCP_BUILD
 /********************************************//**
- * \brief Shows or hides the battery icon in the status bar
+ * \brief Shows or hides the USB or low battery icon in the status bar
  *
  * \param void
  * \return void
  ***********************************************/
-void showHideLowBattery(void) {
-  #ifdef DMCP_BUILD
+void showHideUsbLowBattery(void) {
+  if(getSystemFlag(FLAG_USB)) {
+    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, true); // is 0+9+2 pixel wide
+  }
+  else {
     if(getSystemFlag(FLAG_LOWBAT)) {
-      showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+      showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+1 pixel wide
     }
     else {
       showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
     }
-  #endif
-
-  #ifdef PC_BUILD
-    if(getSystemFlag(FLAG_ASLIFT)) {
-      // Draw S
-      setPixel(392,  1);
-      setPixel(393,  1);
-      setPixel(394,  1);
-      setPixel(391,  2);
-      setPixel(395,  2);
-      setPixel(391,  3);
-      setPixel(392,  4);
-      setPixel(393,  4);
-      setPixel(394,  4);
-      setPixel(395,  5);
-      setPixel(391,  6);
-      setPixel(395,  6);
-      setPixel(392,  7);
-      setPixel(393,  7);
-      setPixel(394,  7);
-
-      // Draw L
-      setPixel(391, 10);
-      setPixel(391, 11);
-      setPixel(391, 12);
-      setPixel(391, 13);
-      setPixel(391, 14);
-      setPixel(391, 15);
-      setPixel(391, 16);
-      setPixel(392, 16);
-      setPixel(393, 16);
-      setPixel(394, 16);
-      setPixel(395, 16);
-    }
-    else {
-      // Erase S
-      clearPixel(392,  1);
-      clearPixel(393,  1);
-      clearPixel(394,  1);
-      clearPixel(391,  2);
-      clearPixel(395,  2);
-      clearPixel(391,  3);
-      clearPixel(392,  4);
-      clearPixel(393,  4);
-      clearPixel(394,  4);
-      clearPixel(395,  5);
-      clearPixel(391,  6);
-      clearPixel(395,  6);
-      clearPixel(392,  7);
-      clearPixel(393,  7);
-      clearPixel(394,  7);
-
-      // Erase L
-      clearPixel(391, 10);
-      clearPixel(391, 11);
-      clearPixel(391, 12);
-      clearPixel(391, 13);
-      clearPixel(391, 14);
-      clearPixel(391, 15);
-      clearPixel(391, 16);
-      clearPixel(392, 16);
-      clearPixel(393, 16);
-      clearPixel(394, 16);
-      clearPixel(395, 16);
-    }
-  #endif
+  }
 }
+#endif // DMCP_BUILD
 
 
 
+#ifndef DMCP_BUILD
 /********************************************//**
  * \brief Shows or hides the USB icon in the status bar
  *
  * \param void
  * \return void
  ***********************************************/
-void showHideUSB(void) {
-  if(getSystemFlag(FLAG_USB)) {
-    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
-  }
+void showHideStackLift(void) {
+  if(getSystemFlag(FLAG_ASLIFT)) {
+    // Draw S
+    setPixel(392,  1);
+    setPixel(393,  1);
+    setPixel(394,  1);
+    setPixel(391,  2);
+    setPixel(395,  2);
+    setPixel(391,  3);
+    setPixel(392,  4);
+    setPixel(393,  4);
+    setPixel(394,  4);
+    setPixel(395,  5);
+    setPixel(391,  6);
+    setPixel(395,  6);
+    setPixel(392,  7);
+    setPixel(393,  7);
+    setPixel(394,  7);
 
-  #ifdef PC_BUILD
-  else if(!getSystemFlag(FLAG_ASLIFT)) {
-  #elif DMCP_BUILD
-  else if(!getSystemFlag(FLAG_LOWBAT)) {
-  #endif
-    showGlyphCode(' ', &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide
+    // Draw L
+    setPixel(391, 10);
+    setPixel(391, 11);
+    setPixel(391, 12);
+    setPixel(391, 13);
+    setPixel(391, 14);
+    setPixel(391, 15);
+    setPixel(391, 16);
+    setPixel(392, 16);
+    setPixel(393, 16);
+    setPixel(394, 16);
+    setPixel(395, 16);
+  }
+  else {
+    // Erase S
+    clearPixel(392,  1);
+    clearPixel(393,  1);
+    clearPixel(394,  1);
+    clearPixel(391,  2);
+    clearPixel(395,  2);
+    clearPixel(391,  3);
+    clearPixel(392,  4);
+    clearPixel(393,  4);
+    clearPixel(394,  4);
+    clearPixel(395,  5);
+    clearPixel(391,  6);
+    clearPixel(395,  6);
+    clearPixel(392,  7);
+    clearPixel(393,  7);
+    clearPixel(394,  7);
+
+    // Erase L
+    clearPixel(391, 10);
+    clearPixel(391, 11);
+    clearPixel(391, 12);
+    clearPixel(391, 13);
+    clearPixel(391, 14);
+    clearPixel(391, 15);
+    clearPixel(391, 16);
+    clearPixel(392, 16);
+    clearPixel(393, 16);
+    clearPixel(394, 16);
+    clearPixel(395, 16);
   }
 }
-#endif
-
-
-
-
-
-
+#endif // DMCP_BUILD
+#endif // TESTSUITE_BUILD

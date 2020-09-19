@@ -1,0 +1,108 @@
+/* This file is part of 43S.
+ *
+ * 43S is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 43S is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/********************************************//**
+ * \file arg.c
+ ***********************************************/
+// Coded by JM, based on arctan.c
+
+#include "wp43s.h"
+
+
+
+void (* const arg[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+// regX ==> 1            2           3           4            5            6            7            8            9             10
+//          Long integer Real34      Complex34   Time         Date         String       Real34 mat   Complex34 m  Short integer Config data
+            argError,    argReal,    argCplx,    argError,    argError,    argError,    argError,    argError,    argError,     argError
+};
+
+
+
+/********************************************//**
+ * \brief Data type error in arctan
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void argError(void) {
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "cannot calculate arg for %s", getRegisterDataTypeName(REGISTER_X, true, false));
+    moreInfoOnError("In function fnArg:", errorMessage, NULL, NULL);
+  #endif
+}
+
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and arctan(regX) ==> regX
+ * enables stack lift and refreshes the stack
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnArg(uint16_t unusedParamButMandatory) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  arg[getRegisterDataType(REGISTER_X)]();
+
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+}
+
+
+
+/********************************************//**
+ * \brief regX ==> regL and arg(regX) = arctan(Im(regX) / Re(regX)) ==> regX
+ * enables stack lift and refreshes the stack
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void argReal(void) {
+
+  if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
+    //let it stay NAN
+  }
+  else {
+    if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))){
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+      setRegisterAngularMode(REGISTER_X, currentAngularMode);
+    }
+    else
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        realToReal34(const_180, REGISTER_REAL34_DATA(REGISTER_X));
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+        setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      }
+  }
+}
+
+
+void argCplx(void) {
+  real_t real, imag;
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
+  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
+  convertAngleFromTo(&imag, AM_RADIAN, currentAngularMode, &ctxtReal39);
+
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
+  realToReal34(&imag, REGISTER_REAL34_DATA(REGISTER_X));
+}

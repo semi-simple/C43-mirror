@@ -57,7 +57,7 @@ static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
 
 gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("%d\n", event->keyval);
-  switch (event->keyval) {
+  switch(event->keyval) {
     case 65470: // F1
       //printf("key pressed: F1\n");
       btnFnClicked(w, "1");
@@ -1536,7 +1536,7 @@ void calcModeTam(void) {
   }
 
   if(calcMode != CM_ASM_OVER_TAM) {
-    if (tamMode != TM_SHUFFLE) {
+    if(tamMode != TM_SHUFFLE) {
       strcat(tamBuffer, " __");
     }
     else {

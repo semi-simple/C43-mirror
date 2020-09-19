@@ -77,11 +77,11 @@ SRC_WP43S                = \
 		stats.c statusBar.c stringFuncs.c timer.c \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
-		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c \
+		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c arg.c \
 		ceil.c changeSign.c comparisonReals.c conjugate.c cos.c cosh.c cross.c cube.c cubeRoot.c \
 		cxToRe.c cpyx.c deltaPercent.c idiv.c idivr.c decomp.c dot.c \
 		division.c exp.c expMOne.c expt.c factorial.c floor.c fractionalPart.c gamma.c gcd.c \
-		imaginaryPart.c integerPart.c invert.c lcm.c ln.c lnPOne.c log10.c logxy.c \
+		imaginaryPart.c integerPart.c invert.c lcm.c ln.c lnPOne.c log10.c logxy.c lnbeta.c \
 		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c parallel.c pcg_basic.c \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
 		random.c realPart.c remainder.c reToCx.c round.c roundi.c shiftDigits.c sign.c sin.c sinc.c sinh.c slvq.c square.c squareRoot.c \

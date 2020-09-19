@@ -120,6 +120,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLog10",                fnLog10               },
   {"fnLog2",                 fnLog2                },
   {"fnLogXY",                fnLogXY               },
+  {"fnLnBeta",               fnLnBeta              },
   {"fnLogicalAnd",           fnLogicalAnd          },
   {"fnLogicalNand",          fnLogicalNand         },
   {"fnLogicalNor",           fnLogicalNor          },
@@ -520,7 +521,7 @@ void setParameter(char *p) {
         if(r[0] == '0') {clearSystemFlag(FLAG_OVERFLOW);} else {setSystemFlag(FLAG_OVERFLOW);}
       }
       else if(!strcmp(l+3, "ASLIFT")) {
-        if(r[0] == '0') {clearSystemFlag(FLAG_ASLIFT);} else {setSystemFlag(FLAG_ASLIFT);}
+        if(r[0] == '0') {clearSystemFlag(FLAG_ASLIFT);}   else {setSystemFlag(FLAG_ASLIFT);}
       }
       else {
         printf("\nMissformed numbered flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");

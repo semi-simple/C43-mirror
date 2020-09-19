@@ -200,6 +200,7 @@ gcd
 lcm
 
 magnitude
+argument
 unitVector
 
 slvq
@@ -219,3 +220,6 @@ percentPlusMG
 deltaPercent
 
 logxy
+lnbeta
+
+

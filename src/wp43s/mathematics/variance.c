@@ -26,9 +26,7 @@
  * are close to each other.  Because of this, the start of the computation is
  * performed using a FMA for the difference.
  */
-static void do_stddev(const real_t *sumXX, const real_t *sumX,
-		     const real_t *numberX, int sample,
-		     int rootn, int exp, int regIndex) {
+static void do_stddev(const real_t *sumXX, const real_t *sumX, const real_t *numberX, int sample, int rootn, int exp, int regIndex) {
   real_t tempReal1, tempReal2, tempReal3;
   const real_t *p = numberX;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits

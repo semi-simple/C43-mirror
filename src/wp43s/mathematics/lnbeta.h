@@ -15,11 +15,21 @@
  */
 
 /********************************************//**
- * \file imaginaryPart.h
+ * \file lnbeta.h
  ***********************************************/
 
-void fnImaginaryPart(uint16_t unusedParamButMandatory);
-void imagPartError  (void);
-void imagPartCxma   (void);
-void imagPartCplx   (void);
-void imagPartReal   (void);
+void fnLnBeta      (uint16_t unusedParamButMandatory);
+
+void lnbetaError   (void);
+
+void lnbetaLonILonI(void);
+void lnbetaRealLonI(void);
+void lnbetaCplxLonI(void);
+
+void lnbetaLonIReal(void);
+void lnbetaRealReal(void);
+void lnbetaCplxReal(void);
+
+void lnbetaLonICplx(void);
+void lnbetaRealCplx(void);
+void lnbetaCplxCplx(void);

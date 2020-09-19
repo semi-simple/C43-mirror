@@ -442,6 +442,10 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     }
   }
   else {
+    if(getSystemFlag(FLAG_USB)) {
+      clearSystemFlag(FLAG_USB);
+    }
+
     if(get_lowbat_state() == 1 || get_vbat() < 2500) {
       if(!getSystemFlag(FLAG_LOWBAT)) {
         setSystemFlag(FLAG_LOWBAT);

@@ -18,9 +18,9 @@
  * \file lnbeta.h
  ***********************************************/
 
-void fnLnBeta   (uint16_t unusedParamButMandatory);
+void fnLnBeta      (uint16_t unusedParamButMandatory);
 
-void lnbetaError(void);
+void lnbetaError   (void);
 
 void lnbetaLonILonI(void);
 void lnbetaRealLonI(void);

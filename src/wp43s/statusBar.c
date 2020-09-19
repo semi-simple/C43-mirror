@@ -367,11 +367,11 @@ void showHideUserMode(void) {
  ***********************************************/
 void showHideUsbLowBattery(void) {
   if(getSystemFlag(FLAG_USB)) {
-    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+    showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, true); // is 0+9+2 pixel wide
   }
   else {
     if(getSystemFlag(FLAG_LOWBAT)) {
-      showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+2 pixel wide
+      showGlyph(STD_BATTERY, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+10+1 pixel wide
     }
     else {
       showGlyphCode(' ',     &standardFont, X_BATTERY, 0, vmNormal, true, true);  // is 10 pixel wide

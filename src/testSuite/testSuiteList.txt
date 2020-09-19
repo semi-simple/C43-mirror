@@ -200,6 +200,7 @@ gcd
 lcm
 
 magnitude
+argument
 unitVector
 
 slvq

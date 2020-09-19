@@ -29,11 +29,11 @@
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
+void fnCb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= ~((uint64_t)1 << (bit - 1));
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= ~((uint64_t)1 << bit);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -53,11 +53,11 @@ void fnCb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
+void fnSb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) |= (uint64_t)1 << (bit - 1);
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) |= (uint64_t)1 << bit;
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -77,11 +77,11 @@ void fnSb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
+void fnFb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) ^= (uint64_t)1 << (bit - 1);
+    *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) ^= (uint64_t)1 << bit;
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -100,10 +100,10 @@ void fnFb(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
+void fnBc(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     thereIsSomethingToUndo = false;
-    temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_FALSE : TI_TRUE);
+    temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << bit) ? TI_FALSE : TI_TRUE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -122,10 +122,10 @@ void fnBc(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
  * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
-void fnBs(uint16_t bit) { // bit from 1=LSB to shortIntegerWordSize=MSB
+void fnBs(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
   if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
     thereIsSomethingToUndo = false;
-    temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << (bit - 1)) ? TI_TRUE : TI_FALSE);
+    temporaryInformation = (*(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) & ((uint64_t)1 << bit) ? TI_TRUE : TI_FALSE);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);

@@ -434,29 +434,29 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     showDateTime();
   }
 
-  if(get_lowbat_state() == 1 || get_vbat() < 2500) {
-    if(!getSystemFlag(FLAG_LOWBAT)) {
-      setSystemFlag(FLAG_LOWBAT);
-      showHideLowBattery();
-    }
-  }
-  else {
-    if(getSystemFlag(FLAG_LOWBAT)) {
-      clearSystemFlag(FLAG_LOWBAT);
-      showHideLowBattery();
-    }
-  }
-
   if(usb_powered() == 1) {
     if(!getSystemFlag(FLAG_USB)) {
       setSystemFlag(FLAG_USB);
-      showHideUSB();
+      clearSystemFlag(FLAG_LOWBAT);
+      showHideUsbLowBattery();
     }
   }
   else {
     if(getSystemFlag(FLAG_USB)) {
       clearSystemFlag(FLAG_USB);
-      showHideUSB();
+    }
+
+    if(get_lowbat_state() == 1 || get_vbat() < 2500) {
+      if(!getSystemFlag(FLAG_LOWBAT)) {
+        setSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
+    }
+    else {
+      if(getSystemFlag(FLAG_LOWBAT)) {
+        clearSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
     }
   }
 

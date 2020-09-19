@@ -262,6 +262,7 @@ void fnLn                       (uint16_t unusedParamButMandatory) {}
 void fnLogXY                    (uint16_t unusedParamButMandatory) {}
 void fnLnP1                     (uint16_t unusedParamButMandatory) {}
 void fnLnGamma                  (uint16_t unusedParamButMandatory) {}
+void fnLnBeta                   (uint16_t unusedParamButMandatory) {}
 void fnGamma                    (uint16_t unusedParamButMandatory) {}
 void fnIDiv                     (uint16_t unusedParamButMandatory) {}
 void fnIDivR                    (uint16_t unusedParamButMandatory) {}
@@ -1995,7 +1996,7 @@ const item_t indexOfItems[] = {
 /* 1494 */  { itemToBeCoded,               NOPARAM,                     "LEAP?",                                       "LEAP?",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1495 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1496 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1497 */  { itemToBeCoded,               NOPARAM,                     "LN" STD_beta,                                 "ln" STD_beta,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1497 */  { fnLnBeta,                    NOPARAM,                     "LN" STD_beta,                                 "ln" STD_beta,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1498 */  { fnLnGamma,                   NOPARAM,                     "LN" STD_GAMMA,                                "ln" STD_GAMMA,                                0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1499 */  { fnLoad,                      LM_ALL,                      "LOAD",                                        "LOAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_CANCEL   },
 /* 1500 */  { fnLoad,                      LM_PROGRAMS,                 "LOADP",                                       "LOADP",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

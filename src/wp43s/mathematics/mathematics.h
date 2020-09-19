@@ -64,6 +64,7 @@
 #include "log10.h"
 #include "log2.h"
 #include "logxy.h"
+#include "lnbeta.h"
 #include "magnitude.h"
 #include "mant.h"
 #include "max.h"

@@ -37,7 +37,7 @@ bool_t checkMinimumDataPoints(const real_t *n) {
     return false;
   }
 
-  if (realCompareLessThan(SIGMA_N, n)) {
+  if(realCompareLessThan(SIGMA_N, n)) {
     displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkMinimumDataPoints:", "There is insufficient statistical data available!", NULL, NULL);

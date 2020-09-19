@@ -25,7 +25,7 @@
 void (* const imagPart[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1              2              3             4              5              6              7              8             9              10
 //          Long integer   Real34         complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer  Config data
-            imagPartError, imagPartError, imagPartCplx, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCxma, imagPartError, imagPartError
+            imagPartError, imagPartReal,  imagPartCplx, imagPartError, imagPartError, imagPartError, imagPartError, imagPartCxma, imagPartError, imagPartError
 };
 
 
@@ -76,4 +76,11 @@ void imagPartCplx(void) {
   real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   real34Copy(&imagPart, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+void imagPartReal(void) {
+
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
 }

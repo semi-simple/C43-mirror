@@ -30,6 +30,7 @@
 #include "arcsinh.h"
 #include "arctan.h"
 #include "arctanh.h"
+#include "arg.h"
 #include "ceil.h"
 #include "changeSign.h"
 #include "comparisonReals.h"

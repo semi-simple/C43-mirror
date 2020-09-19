@@ -63,40 +63,6 @@ void fnArctan(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief regX ==> regL and arg(regX) = arctan(Im(regX) / Re(regX)) ==> regX
- * enables stack lift and refreshes the stack
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
-void fnArg(uint16_t unusedParamButMandatory) {
-  real_t real, imag;
-
-  if(getRegisterDataType(REGISTER_X) == dtComplex34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
-    realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
-    convertAngleFromTo(&imag, AM_RADIAN, currentAngularMode, &ctxtReal39);
-
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
-    realToReal34(&imag, REGISTER_REAL34_DATA(REGISTER_X));
-
-    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  }
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot calculate arg for %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      moreInfoOnError("In function fnArg:", errorMessage, NULL, NULL);
-    #endif
-  }
-}
-
-
-
 void arctanLonI(void) {
   real_t x;
 

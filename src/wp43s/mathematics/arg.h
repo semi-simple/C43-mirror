@@ -15,11 +15,10 @@
  */
 
 /********************************************//**
- * \file imaginaryPart.h
+ * \file arctan.h
  ***********************************************/
 
-void fnImaginaryPart(uint16_t unusedParamButMandatory);
-void imagPartError  (void);
-void imagPartCxma   (void);
-void imagPartCplx   (void);
-void imagPartReal   (void);
+void fnArg      (uint16_t unusedParamButMandatory);
+void argError   (void);
+void argReal    (void);
+void argCplx    (void);

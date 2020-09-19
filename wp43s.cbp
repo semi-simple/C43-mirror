@@ -389,6 +389,9 @@
 		<Unit filename="src/testSuite/lnGamma.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/lnbeta.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/log10.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1481,6 +1484,17 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/lnPOne.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lnbeta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lnbeta.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

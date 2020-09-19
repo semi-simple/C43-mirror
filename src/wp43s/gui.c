@@ -165,7 +165,7 @@ uint32_t CTRL_State, event_keyval;
 gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
   //printf("Released %d\n", event->keyval);
 
-  switch (event->keyval) {
+  switch(event->keyval) {
 
     case 65507: // left Ctrl
     case 65508: // right Ctrl
@@ -4178,7 +4178,7 @@ void calcModeTam(void) {
   }
 
   if(calcMode != CM_ASM_OVER_TAM) {
-    if (tamMode != TM_SHUFFLE) {
+    if(tamMode != TM_SHUFFLE) {
       strcat(tamBuffer, " __");
     }
     else {

@@ -25,7 +25,7 @@
 void (* const realPart[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1              2              3             4              5              6              7              8             9              10
 //          Long integer   Real34         Complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer  Config data
-            realPartError, realPartReal,  realPartCplx, realPartError, realPartError, realPartError, realPartError, realPartCxma, realPartError, realPartError   //JM
+            realPartError, realPartReal,  realPartCplx, realPartError, realPartError, realPartError, realPartError, realPartCxma, realPartError, realPartError
 };
 
 
@@ -79,11 +79,7 @@ void realPartCplx(void) {
 }
 
 
-void realPartReal(void) {                                         //JM vv
-  real34_t realPart;
-
-  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &realPart);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));
-}                                                                 //JM ^^
+void realPartReal(void) {
+  setRegisterAngularMode(REGISTER_X, AM_NONE);
+}
 

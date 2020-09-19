@@ -72,7 +72,7 @@ Out: EC=5  FL_CPXRES=1 FL_ASLIFT=1 RY=LonI:"0" RX=Real:"10.0"
 ;=======================================
 ; LogXY(Long Integer, Complex) --> Complex
 ;=======================================
-In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1  RY=LonI:"123" RX=Cplx:"10.1234 i +1.0"
+In:  WS=64 FL_CPXRES=1 FL_ASLIFT=1 RY=LonI:"123" RX=Cplx:"10.1234 i +1.0"
 Out: EC=0  FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"10.1234 i +1.0" RX=Cplx:"2.070750626745408061380412049168649 i -0.08789457175783785708709692458835297"
 
 

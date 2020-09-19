@@ -79,8 +79,8 @@ void imagPartCplx(void) {
 }
 
 
-void imagPartReal(void) {                                         //JM vv
+void imagPartReal(void) {
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-}                                                                 //JM ^^
+}

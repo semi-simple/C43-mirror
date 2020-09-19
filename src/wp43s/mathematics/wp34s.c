@@ -985,7 +985,7 @@ void WP34S_CalcComplexLnGamma_Lanczos(const real_t *zReal, const real_t *zImag, 
   realZero(&uImag);
   realAdd(zReal, const_29, &tReal, realContext);
   realCopy(zImag, &tImag);
-  for (k=28; k>=0; k--) {
+  for(k=28; k>=0; k--) {
     divRealComplex((real_t *)(gammaLanczosCoefficients + k), &tReal, &tImag, &sReal, &sImag, realContext);
     realSubtract(&tReal, const_1, &tReal, realContext);
     realAdd(&uReal, &sReal, &uReal, realContext);
@@ -1134,7 +1134,7 @@ void *xcopy(void *dest, const void *source, int n) {
       *pDest++ = *pSource++;
     }
   }
-  else if (pSource < pDest) {
+  else if(pSource < pDest) {
     while(n--) {
       pDest[n] = pSource[n];
     }

@@ -451,11 +451,11 @@ int main(int argc, char* argv[]) {
   #if defined __APPLE__
     // we take the directory where the application is as the root for this application.
     // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if (argc>=1) {
+    if(argc>=1) {
       char *curdir = malloc(1000);
       // find last /:
       char *s = strrchr(argv[0], '/');
-      if (s != 0) {
+      if(s != 0) {
         // take the directory before the appname:
         strncpy(curdir, argv[0], s-argv[0]);
         chdir(curdir);
@@ -797,11 +797,11 @@ int main(int argc, char* argv[]) {
   #if defined __APPLE__
     // we take the directory where the application is as the root for this application.
     // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if (argc>=1) {
+    if(argc>=1) {
       char *curdir = malloc(1000);
       // find last /:
       char *s = strrchr(argv[0], '/');
-      if (s != 0) {
+      if(s != 0) {
         // take the directory before the appname:
         strncpy(curdir, argv[0], s-argv[0]);
         chdir(curdir);

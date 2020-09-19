@@ -218,7 +218,7 @@ void xthRootReal(real_t *yy, real_t *xx, realContext_t *realContext) {
     return;
   }  //fall through, but returned
   else {
-    if (realIsNegative(&y)) {
+    if(realIsNegative(&y)) {
       realDivideRemainder(&x, const_2, &r, realContext);
       if(realIsZero(&r)) {                                          // negative base and even exp     (zero means no remainder means even)
         if(!getFlag(FLAG_CPXRES)) {

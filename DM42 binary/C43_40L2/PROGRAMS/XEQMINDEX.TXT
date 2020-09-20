@@ -1,7 +1,9 @@
-XEQM01:XEQM01 HELP;
+XEQM01:HELP;
 XEQM02:Battery usage plot;
-XEQM06:CUBEs;
-
+XEQM06:CUBEs3;
+XEQM08:Pythagoras Hypotenuse;
+XEQM12:Binet Fibonacci Plot;
+XEQM17:Plot random deviations from linear;
 
 
 // C43 XEQM softkey index file 

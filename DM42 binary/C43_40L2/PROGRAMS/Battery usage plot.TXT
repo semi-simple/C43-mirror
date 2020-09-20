@@ -1,11 +1,7 @@
-XEQLBL FF BATPLT
-
-  //Battery voltage plot Rev2
+XEQLBL FF BATPLT  //Battery voltage plot Rev3
 
 DOTD
 400 STO 00 
-DEC 00
-DEC 00
 TICKS STO 01 
 CLSUM 
 

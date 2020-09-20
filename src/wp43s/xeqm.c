@@ -226,7 +226,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformationJM,gotoinprogress,commandnumber);
                       
                       //DSZ:
-                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
+                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformationJM == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
                           //......IS NOT DSZ.... OR               DSZ    with REG NOT ZERO
                           go = (temporaryInformationJM == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
                           //printf("   DSZ/ISZ temporaryInformation = %5d\n",temporaryInformation);
@@ -607,14 +607,11 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             if (strcompare(commandnumber,"GTO"   ))    {
                               if(exec) {
                                 gotoinprogress = 1;
-                                /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
-                                else                   */  {go = true;}
-                                if(go) {
+                                go = true;
                                   force_refresh();
                                   #ifdef PC_BUILD
-                                  printf("   >>> Loop %d:go\n",loopnumber++);
+                                    printf("   >>> Loop %d:go\n",loopnumber++);
                                   #endif
-                                }
                               }
                             } else
                              if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else

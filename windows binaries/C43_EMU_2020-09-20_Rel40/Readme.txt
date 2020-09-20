@@ -1,4 +1,4 @@
-14 Sep 2020 release pre-alpha REL39
+20 Sep 2020 release pre-alpha REL40
 
 
 
@@ -31,15 +31,17 @@ Notes:
 
 8. To make a screen shot from the DM42 hardware screen, keep in shift f/g and press DISP. The screen shot will appear in the DM42 flash disk, under /SCREENS/
 
-9. Try SHOW. Up and Dn. With and without menus visible. VIEW has the original WP43S SHOW function for comparison.
+9. Try SHOW. Up and Dn. With and without menus visible. VIEW temporarily (until 43S develops the VIEW command) has the original WP43S SHOW function for comparison.
 
-10. Try KEYS on the simulator. This menu has various key layouts.
+10. Try KEYS on the simulator. This menu has various key layouts, including a WP43S layout if you have re-painted your DM42 keys that way.
 
-11. Try XEQM on long press XEQ. These are softmenu buttons reflecting 18 RPN program files. 
+11. Try XEQM on long press XEQ, then XEQM. These are softmenu buttons reflecting 18 user RPN program files on the flash disk under /PROGRAMS/. 
 
 12. Try the new BASE menu. And Up and Dn to further screens.
 
 13. Try the new Alpha mode multi line text editor.
+
+14. Try the new longpress EXIT clear input buffer.
 
 ---
 

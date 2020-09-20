@@ -34,8 +34,14 @@ gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
+  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+    cairo_scale(cr, 2.0, 2.0);
+  #endif
   cairo_set_source_surface(cr, imageSurface, 0, 0);
   cairo_surface_mark_dirty(imageSurface);
+  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+    cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_FAST);
+  #endif
   cairo_paint(cr);
   cairo_surface_destroy(imageSurface);
 

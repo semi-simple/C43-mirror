@@ -22,27 +22,29 @@
 
 #ifdef PC_BUILD
 GtkWidget *grid;
-GtkWidget *backgroundImage, *bezelImage;
-GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
-GtkWidget *lblBehindScreen;
+#ifndef SCREEN_800X480
+  GtkWidget *backgroundImage, *bezelImage;
+  GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
+  GtkWidget *lblBehindScreen;
 
-GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
-GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
-GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
-GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
-GtkWidget *btn51,   *btn52,   *btn53,   *btn54,   *btn55;
-GtkWidget *btn61,   *btn62,   *btn63,   *btn64,   *btn65;
-GtkWidget *btn71,   *btn72,   *btn73,   *btn74,   *btn75;
-GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
+  GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
+  GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
+  GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
+  GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
+  GtkWidget *btn51,   *btn52,   *btn53,   *btn54,   *btn55;
+  GtkWidget *btn61,   *btn62,   *btn63,   *btn64,   *btn65;
+  GtkWidget *btn71,   *btn72,   *btn73,   *btn74,   *btn75;
+  GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
 
-#if (DEBUG_PANEL == 1)
-  GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
-  GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedVariables, *btnSavedStackRegisters;
-  GtkWidget *chkHexaString;
-  int16_t debugWidgetDx, debugWidgetDy;
-#endif
+  #if (DEBUG_PANEL == 1)
+    GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
+    GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedVariables, *btnSavedStackRegisters;
+    GtkWidget *chkHexaString;
+    int16_t debugWidgetDx, debugWidgetDy;
+  #endif
 
-char *cssData;
+  char *cssData;
+#endif // SCREEN_800X480
 
 
 
@@ -360,6 +362,7 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
 
 
 #ifdef PC_BUILD
+#ifndef SCREEN_800X480
 /********************************************//**
  * \brief Reads the CSS file to configure the calc's GUI style
  *
@@ -710,7 +713,7 @@ void calcModeTamGui(void) {
 
   gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("artwork/key_empty.png"));
 }
-
+#endif // SCREEN_800X480
 
 
 /********************************************//**
@@ -720,627 +723,658 @@ void calcModeTamGui(void) {
  * \return void
  ***********************************************/
 void setupUI(void) {
-  int            numBytes, xPos, yPos;
-  GError         *error;
-  GtkCssProvider *cssProvider;
-  GdkDisplay     *cssDisplay;
-  GdkScreen      *cssScreen;
-
-  prepareCssData();
-
-  cssProvider = gtk_css_provider_new();
-  cssDisplay  = gdk_display_get_default();
-  cssScreen   = gdk_display_get_default_screen(cssDisplay);
-  gtk_style_context_add_provider_for_screen(cssScreen, GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  error = NULL;
-  gtk_css_provider_load_from_data(cssProvider, cssData, -1, &error);
-  if(error != NULL) {
-    moreInfoOnError("In function setupUI:", "error while loading CSS style sheet " CSSFILE, NULL, NULL);
-    exit(1);
-  }
-  g_object_unref(cssProvider);
-  free(cssData);
-
-  // Get the monitor geometry to determine whether the calc is portrait or landscape
-  GdkRectangle monitor;
-  gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
-  //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
-
-  if(calcAutoLandscapePortrait) {
-    calcLandscape = (monitor.height < 1025);
-  }
-
-  // The main window
-  frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
-  if(calcLandscape) {
-    #if (DEBUG_PANEL == 1)
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 1530);
-      debugWidgetDx = 0;
-      debugWidgetDy = 545;
-    #else
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
-    #endif
-  }
-  else {
-    #if (DEBUG_PANEL == 1)
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc),  1530, 980);
-      debugWidgetDx = 531;
-      debugWidgetDy = 0;
-    #else
-      gtk_window_set_default_size(GTK_WINDOW(frmCalc),  526, 980);
-    #endif
-  }
-
-  gtk_widget_set_name(frmCalc, "mainWindow");
-  gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
-  gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43S");
-  g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
-  g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
-
-  gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
-
-  // Fixed grid to freely put widgets on it
-  grid = gtk_fixed_new();
-  gtk_container_add(GTK_CONTAINER(frmCalc), grid);
-
-
-
-  // Backround image
-  if(calcLandscape) {
-    backgroundImage = gtk_image_new_from_file("artwork/dm42lshort.png");
-  }
-  else {
-    backgroundImage = gtk_image_new_from_file("artwork/dm42l.png");
-  }
-
-  gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
-
-  bezelImage = gtk_image_new_from_file("artwork/normal.png");
-  gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 15, calcLandscape ? 4 : 424);
-
-  // Areas for the g shifted softkeys
-  lblGSoftkeyArea = gtk_label_new("");
-  gtk_widget_set_name(lblGSoftkeyArea, "gSoftkeyArea");
-  gtk_widget_set_size_request(lblGSoftkeyArea, 438, 24);
-  gtk_fixed_put(GTK_FIXED(grid), lblGSoftkeyArea, 44, 72+170);
-
-
-
-  // Area for the f shifted softkeys
-  lblFSoftkeyArea = gtk_label_new("");
-  gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
-  gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
-  gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
-
-
-
-  // Behind screen
-  lblBehindScreen = gtk_label_new("");
-  gtk_widget_set_name(lblBehindScreen, "behindScreen");
-  gtk_widget_set_size_request(lblBehindScreen, 412, 252);
-  gtk_fixed_put(GTK_FIXED(grid), lblBehindScreen, 57, 66);
-
-
-
-  // LCD screen 400x240
-  screen = gtk_drawing_area_new();
-  gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-  gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\nh -> screen image\nx -> register X\nz -> lettered registers\nZ -> all registers");
-  gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
-  screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
-  numBytes = screenStride * SCREEN_HEIGHT * 4;
-  screenData = malloc(numBytes);
-  if(screenData == NULL) {
-    sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
-    moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
-    exit(1);
-  }
-
-  g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
-
-
-  #if (DEBUG_REGISTER_L == 1)
-    lblRegisterL1 = gtk_label_new("");
-    lblRegisterL2 = gtk_label_new("");
-    gtk_widget_set_name(lblRegisterL1, "registerL");
-    gtk_widget_set_name(lblRegisterL2, "registerL");
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 5, 28);
-    gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 5, 46);
-  #endif
-
-  #if (SHOW_MEMORY_STATUS == 1)
-    lblMemoryStatus = gtk_label_new("");
-    gtk_widget_set_name(lblMemoryStatus, "memoryStatus");
-    gtk_fixed_put(GTK_FIXED(grid), lblMemoryStatus, 5, 5);
-  #endif
-
-  // 1st row: F1 to F6 buttons
-  btn11 = gtk_button_new_with_label("");
-  btn12 = gtk_button_new_with_label("");
-  btn13 = gtk_button_new_with_label("");
-  btn14 = gtk_button_new_with_label("");
-  btn15 = gtk_button_new_with_label("");
-  btn16 = gtk_button_new_with_label("");
-
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn13), "F3");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn14), "F4");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn15), "F5");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn16), "F6");
-
-  gtk_widget_set_size_request(btn11, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn12, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn13, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn14, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn15, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn16, KEY_WIDTH_1, 0);
-
-  gtk_widget_set_name(btn11, "calcKey");
-  gtk_widget_set_name(btn12, "calcKey");
-  gtk_widget_set_name(btn13, "calcKey");
-  gtk_widget_set_name(btn14, "calcKey");
-  gtk_widget_set_name(btn15, "calcKey");
-  gtk_widget_set_name(btn16, "calcKey");
-
-  g_signal_connect(btn11, "button-press-event", G_CALLBACK(btnFnPressed), "1");
-  g_signal_connect(btn12, "button-press-event", G_CALLBACK(btnFnPressed), "2");
-  g_signal_connect(btn13, "button-press-event", G_CALLBACK(btnFnPressed), "3");
-  g_signal_connect(btn14, "button-press-event", G_CALLBACK(btnFnPressed), "4");
-  g_signal_connect(btn15, "button-press-event", G_CALLBACK(btnFnPressed), "5");
-  g_signal_connect(btn16, "button-press-event", G_CALLBACK(btnFnPressed), "6");
-  g_signal_connect(btn11, "button-release-event", G_CALLBACK(btnFnReleased), "1");
-  g_signal_connect(btn12, "button-release-event", G_CALLBACK(btnFnReleased), "2");
-  g_signal_connect(btn13, "button-release-event", G_CALLBACK(btnFnReleased), "3");
-  g_signal_connect(btn14, "button-release-event", G_CALLBACK(btnFnReleased), "4");
-  g_signal_connect(btn15, "button-release-event", G_CALLBACK(btnFnReleased), "5");
-  g_signal_connect(btn16, "button-release-event", G_CALLBACK(btnFnReleased), "6");
-
-  gtk_widget_set_focus_on_click(btn11, FALSE);
-  gtk_widget_set_focus_on_click(btn12, FALSE);
-  gtk_widget_set_focus_on_click(btn13, FALSE);
-  gtk_widget_set_focus_on_click(btn14, FALSE);
-  gtk_widget_set_focus_on_click(btn15, FALSE);
-  gtk_widget_set_focus_on_click(btn16, FALSE);
-
-  xPos = X_LEFT_PORTRAIT;
-  yPos = Y_TOP_PORTRAIT;
-  gtk_fixed_put(GTK_FIXED(grid), btn11, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn12, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn13, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn14, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn15, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn16, xPos, yPos);
-
-
-  // 2nd row
-  btn21   = gtk_button_new();
-  btn22   = gtk_button_new();
-  btn23   = gtk_button_new();
-  btn24   = gtk_button_new();
-  btn25   = gtk_button_new();
-  btn26   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn21), "i");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn22), "y");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn23), "t");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn24), "l");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn25), "e");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn26), "q");
-
-  gtk_widget_set_size_request(btn21, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn22, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn23, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn24, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn25, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn26, KEY_WIDTH_1, 0);
-
-  g_signal_connect(btn21, "button-press-event", G_CALLBACK(btnPressed), "00");
-  g_signal_connect(btn22, "button-press-event", G_CALLBACK(btnPressed), "01");
-  g_signal_connect(btn23, "button-press-event", G_CALLBACK(btnPressed), "02");
-  g_signal_connect(btn24, "button-press-event", G_CALLBACK(btnPressed), "03");
-  g_signal_connect(btn25, "button-press-event", G_CALLBACK(btnPressed), "04");
-  g_signal_connect(btn26, "button-press-event", G_CALLBACK(btnPressed), "05");
-  g_signal_connect(btn21, "button-release-event", G_CALLBACK(btnReleased), "00");
-  g_signal_connect(btn22, "button-release-event", G_CALLBACK(btnReleased), "01");
-  g_signal_connect(btn23, "button-release-event", G_CALLBACK(btnReleased), "02");
-  g_signal_connect(btn24, "button-release-event", G_CALLBACK(btnReleased), "03");
-  g_signal_connect(btn25, "button-release-event", G_CALLBACK(btnReleased), "04");
-  g_signal_connect(btn26, "button-release-event", G_CALLBACK(btnReleased), "05");
-
-  if(calcLandscape) {
-    xPos = X_LEFT_LANDSCAPE;
-    yPos = Y_TOP_LANDSCAPE;
-  }
-  else {
-    xPos = X_LEFT_PORTRAIT;
-    yPos += DELTA_KEYS_Y;
-  }
-
-  gtk_fixed_put(GTK_FIXED(grid), btn21, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn22, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn23, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn24, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn25, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn26, xPos, yPos);
-
-
-
-  // 3rd row
-  btn31   = gtk_button_new();
-  btn32   = gtk_button_new();
-  btn33   = gtk_button_new();
-  btn34   = gtk_button_new();
-  btn35   = gtk_button_new();
-  btn36   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn31), "s");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn32), "r");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn33), "Page Down");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn34), "upper C");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn35), "f");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn36), "g");
-
-  gtk_widget_set_size_request(btn31, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn32, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn33, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn34, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn35, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn36, KEY_WIDTH_1, 0);
-
-  g_signal_connect(btn31, "button-press-event", G_CALLBACK(btnPressed), "06");
-  g_signal_connect(btn32, "button-press-event", G_CALLBACK(btnPressed), "07");
-  g_signal_connect(btn33, "button-press-event", G_CALLBACK(btnPressed), "08");
-  g_signal_connect(btn34, "button-press-event", G_CALLBACK(btnPressed), "09");
-  g_signal_connect(btn35, "button-press-event", G_CALLBACK(btnPressed), "10");
-  g_signal_connect(btn36, "button-press-event", G_CALLBACK(btnPressed), "11");
-  g_signal_connect(btn31, "button-release-event", G_CALLBACK(btnReleased), "06");
-  g_signal_connect(btn32, "button-release-event", G_CALLBACK(btnReleased), "07");
-  g_signal_connect(btn33, "button-release-event", G_CALLBACK(btnReleased), "08");
-  g_signal_connect(btn34, "button-release-event", G_CALLBACK(btnReleased), "09");
-  g_signal_connect(btn35, "button-release-event", G_CALLBACK(btnReleased), "10");
-  g_signal_connect(btn36, "button-release-event", G_CALLBACK(btnReleased), "11");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y;
-  gtk_fixed_put(GTK_FIXED(grid), btn31, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn32, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn33, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn34, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn35, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn36, xPos, yPos);
-
-
-
-  // 4th row
-  btn41   = gtk_button_new();
-  btn42   = gtk_button_new();
-  btn43   = gtk_button_new();
-  btn44   = gtk_button_new();
-  btn45   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn41), "Enter");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn42), "Tab");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn43), "c");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn44), "E");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn45), "Backspace");
-
-  gtk_widget_set_size_request(btn41, KEY_WIDTH_1 + DELTA_KEYS_X, 0);
-  gtk_widget_set_size_request(btn42, KEY_WIDTH_1,              0);
-  gtk_widget_set_size_request(btn43, KEY_WIDTH_1,              0);
-  gtk_widget_set_size_request(btn44, KEY_WIDTH_1,              0);
-  gtk_widget_set_size_request(btn45, KEY_WIDTH_1,              0);
-
-  g_signal_connect(btn41, "button-press-event", G_CALLBACK(btnPressed), "12");
-  g_signal_connect(btn42, "button-press-event", G_CALLBACK(btnPressed), "13");
-  g_signal_connect(btn43, "button-press-event", G_CALLBACK(btnPressed), "14");
-  g_signal_connect(btn44, "button-press-event", G_CALLBACK(btnPressed), "15");
-  g_signal_connect(btn45, "button-press-event", G_CALLBACK(btnPressed), "16");
-  g_signal_connect(btn41, "button-release-event", G_CALLBACK(btnReleased), "12");
-  g_signal_connect(btn42, "button-release-event", G_CALLBACK(btnReleased), "13");
-  g_signal_connect(btn43, "button-release-event", G_CALLBACK(btnReleased), "14");
-  g_signal_connect(btn44, "button-release-event", G_CALLBACK(btnReleased), "15");
-  g_signal_connect(btn45, "button-release-event", G_CALLBACK(btnReleased), "16");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y;
-  gtk_fixed_put(GTK_FIXED(grid), btn41, xPos, yPos);
-
-  xPos += DELTA_KEYS_X*2;
-  gtk_fixed_put(GTK_FIXED(grid), btn42, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn43, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn44, xPos, yPos);
-
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn45, xPos, yPos);
-
-
-
-  // 5th row
-  btn51   = gtk_button_new();
-  btn52   = gtk_button_new();
-  btn53   = gtk_button_new();
-  btn54   = gtk_button_new();
-  btn55   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn51), "/");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn52), "7");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn53), "8");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn54), "9");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn55), "upper X");
-
-  gtk_widget_set_size_request(btn51, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn52, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn53, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn54, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn55, KEY_WIDTH_2, 0);
-
-  g_signal_connect(btn51, "button-press-event", G_CALLBACK(btnPressed), "17");
-  g_signal_connect(btn52, "button-press-event", G_CALLBACK(btnPressed), "18");
-  g_signal_connect(btn53, "button-press-event", G_CALLBACK(btnPressed), "19");
-  g_signal_connect(btn54, "button-press-event", G_CALLBACK(btnPressed), "20");
-  g_signal_connect(btn55, "button-press-event", G_CALLBACK(btnPressed), "21");
-  g_signal_connect(btn51, "button-release-event", G_CALLBACK(btnReleased), "17");
-  g_signal_connect(btn52, "button-release-event", G_CALLBACK(btnReleased), "18");
-  g_signal_connect(btn53, "button-release-event", G_CALLBACK(btnReleased), "19");
-  g_signal_connect(btn54, "button-release-event", G_CALLBACK(btnReleased), "20");
-  g_signal_connect(btn55, "button-release-event", G_CALLBACK(btnReleased), "21");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y + 1;
-  gtk_fixed_put(GTK_FIXED(grid), btn51, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 18;
-  gtk_fixed_put(GTK_FIXED(grid), btn52, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn53, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn54, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn55, xPos, yPos);
-
-
-
-  // 6th row
-  btn61   = gtk_button_new();
-  btn62   = gtk_button_new();
-  btn63   = gtk_button_new();
-  btn64   = gtk_button_new();
-  btn65   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn61), "*");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn62), "4");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn63), "5");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn64), "6");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn65), "Up");
-
-  gtk_widget_set_size_request(btn61, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn62, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn63, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn64, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn65, KEY_WIDTH_2, 0);
-
-  g_signal_connect(btn61, "button-press-event", G_CALLBACK(btnPressed), "22");
-  g_signal_connect(btn62, "button-press-event", G_CALLBACK(btnPressed), "23");
-  g_signal_connect(btn63, "button-press-event", G_CALLBACK(btnPressed), "24");
-  g_signal_connect(btn64, "button-press-event", G_CALLBACK(btnPressed), "25");
-  g_signal_connect(btn65, "button-press-event", G_CALLBACK(btnPressed), "26");
-  g_signal_connect(btn61, "button-release-event", G_CALLBACK(btnReleased), "22");
-  g_signal_connect(btn62, "button-release-event", G_CALLBACK(btnReleased), "23");
-  g_signal_connect(btn63, "button-release-event", G_CALLBACK(btnReleased), "24");
-  g_signal_connect(btn64, "button-release-event", G_CALLBACK(btnReleased), "25");
-  g_signal_connect(btn65, "button-release-event", G_CALLBACK(btnReleased), "26");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y + 1;
-  gtk_fixed_put(GTK_FIXED(grid), btn61, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 18;
-  gtk_fixed_put(GTK_FIXED(grid), btn62, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn63, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn64, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn65, xPos, yPos);
-
-
-
-  // 7th row
-  btn71   = gtk_button_new();
-  btn72   = gtk_button_new();
-  btn73   = gtk_button_new();
-  btn74   = gtk_button_new();
-  btn75   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn71), "-");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn72), "1");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn73), "2");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn74), "3");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn75), "Down");
-
-  gtk_widget_set_size_request(btn71, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn72, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn73, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn74, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn75, KEY_WIDTH_2, 0);
-
-  g_signal_connect(btn71, "button-press-event", G_CALLBACK(btnPressed), "27");
-  g_signal_connect(btn72, "button-press-event", G_CALLBACK(btnPressed), "28");
-  g_signal_connect(btn73, "button-press-event", G_CALLBACK(btnPressed), "29");
-  g_signal_connect(btn74, "button-press-event", G_CALLBACK(btnPressed), "30");
-  g_signal_connect(btn75, "button-press-event", G_CALLBACK(btnPressed), "31");
-  g_signal_connect(btn71, "button-release-event", G_CALLBACK(btnReleased), "27");
-  g_signal_connect(btn72, "button-release-event", G_CALLBACK(btnReleased), "28");
-  g_signal_connect(btn73, "button-release-event", G_CALLBACK(btnReleased), "29");
-  g_signal_connect(btn74, "button-release-event", G_CALLBACK(btnReleased), "30");
-  g_signal_connect(btn75, "button-release-event", G_CALLBACK(btnReleased), "31");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y + 1;
-  gtk_fixed_put(GTK_FIXED(grid), btn71, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 18;
-  gtk_fixed_put(GTK_FIXED(grid), btn72, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn73, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn74, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn75, xPos, yPos);
-
-
-
-  // 8th row
-  btn81   = gtk_button_new();
-  btn82   = gtk_button_new();
-  btn83   = gtk_button_new();
-  btn84   = gtk_button_new();
-  btn85   = gtk_button_new();
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn81), "+");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn82), "0");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn83), ". ,");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn84), "Ctrl");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn85), "Esc");
-
-  gtk_widget_set_size_request(btn81, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn82, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn83, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn84, KEY_WIDTH_2, 0);
-  gtk_widget_set_size_request(btn85, KEY_WIDTH_2, 0);
-
-  g_signal_connect(btn81, "button-press-event", G_CALLBACK(btnPressed), "32");
-  g_signal_connect(btn82, "button-press-event", G_CALLBACK(btnPressed), "33");
-  g_signal_connect(btn83, "button-press-event", G_CALLBACK(btnPressed), "34");
-  g_signal_connect(btn84, "button-press-event", G_CALLBACK(btnPressed), "35");
-  g_signal_connect(btn85, "button-press-event", G_CALLBACK(btnPressed), "36");
-  g_signal_connect(btn81, "button-release-event", G_CALLBACK(btnReleased), "32");
-  g_signal_connect(btn82, "button-release-event", G_CALLBACK(btnReleased), "33");
-  g_signal_connect(btn83, "button-release-event", G_CALLBACK(btnReleased), "34");
-  g_signal_connect(btn84, "button-release-event", G_CALLBACK(btnReleased), "35");
-  g_signal_connect(btn85, "button-release-event", G_CALLBACK(btnReleased), "36");
-
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
-
-  yPos += DELTA_KEYS_Y + 1;
-  gtk_fixed_put(GTK_FIXED(grid), btn81, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 18;
-  gtk_fixed_put(GTK_FIXED(grid), btn82, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn83, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn84, xPos, yPos);
-
-  xPos += DELTA_KEYS_X + 17;
-  gtk_fixed_put(GTK_FIXED(grid), btn85, xPos, yPos);
-
-  // The debug window
-  #if (DEBUG_PANEL == 1)
-    for(int i=0; i<DEBUG_LINES; i++) {
-      lbl1[i] = gtk_label_new("");
-      gtk_widget_set_name(lbl1[i], "debugDejaVu");
-      gtk_fixed_put(GTK_FIXED(grid), lbl1[i], 1 + debugWidgetDx, 26 + i*14 + debugWidgetDy);
-      lbl2[i] = gtk_label_new("");
-      gtk_widget_set_name(lbl2[i], "debugWP43S");
-      gtk_fixed_put(GTK_FIXED(grid), lbl2[i], 270 + debugWidgetDx, 25 + i*14 + debugWidgetDy);
+  #ifndef SCREEN_800X480
+    int             xPos, yPos;
+    GError         *error;
+    GtkCssProvider *cssProvider;
+    GdkDisplay     *cssDisplay;
+    GdkScreen      *cssScreen;
+
+    prepareCssData();
+
+    cssProvider = gtk_css_provider_new();
+    cssDisplay  = gdk_display_get_default();
+    cssScreen   = gdk_display_get_default_screen(cssDisplay);
+    gtk_style_context_add_provider_for_screen(cssScreen, GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+    error = NULL;
+    gtk_css_provider_load_from_data(cssProvider, cssData, -1, &error);
+    if(error != NULL) {
+      moreInfoOnError("In function setupUI:", "error while loading CSS style sheet " CSSFILE, NULL, NULL);
+      exit(1);
+    }
+    g_object_unref(cssProvider);
+    free(cssData);
+
+    // Get the monitor geometry to determine whether the calc is portrait or landscape
+    GdkRectangle monitor;
+    gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
+    //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
+
+    if(calcAutoLandscapePortrait) {
+      calcLandscape = (monitor.height < 1025);
     }
 
-    btnBitFields           = gtk_button_new_with_label("Bitfields");
-    btnFlags               = gtk_button_new_with_label("Flags");
-    btnRegisters           = gtk_button_new_with_label("Registers");
-    btnLocalRegisters      = gtk_button_new_with_label("Local registers");
-    btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
-    btnNamedVariables      = gtk_button_new_with_label("Named variables");
-    btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
-    chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
+    // The main window
+    frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    if(calcLandscape) {
+      #if (DEBUG_PANEL == 1)
+        gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 1530);
+        debugWidgetDx = 0;
+        debugWidgetDy = 545;
+      #else
+        gtk_window_set_default_size(GTK_WINDOW(frmCalc), 1000, 540);
+      #endif
+    }
+    else {
+      #if (DEBUG_PANEL == 1)
+        gtk_window_set_default_size(GTK_WINDOW(frmCalc),  1530, 980);
+        debugWidgetDx = 531;
+        debugWidgetDy = 0;
+      #else
+        gtk_window_set_default_size(GTK_WINDOW(frmCalc),  526, 980);
+      #endif
+    }
 
-    gtk_widget_set_name(btnBitFields,           "debugButton");
-    gtk_widget_set_name(btnFlags,               "debugButton");
-    gtk_widget_set_name(btnRegisters,           "debugButton");
-    gtk_widget_set_name(btnLocalRegisters,      "debugButton");
-    gtk_widget_set_name(btnStatisticalSums,     "debugButton");
-    gtk_widget_set_name(btnNamedVariables,      "debugButton");
-    gtk_widget_set_name(btnSavedStackRegisters, "debugButton");
-    gtk_widget_set_name(chkHexaString,          "debugCheckbox");
+    gtk_widget_set_name(frmCalc, "mainWindow");
+    gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
+    gtk_window_set_title(GTK_WINDOW(frmCalc), "WP 43S");
+    g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
+    g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
 
-    g_signal_connect(btnBitFields,           "clicked", G_CALLBACK(btnBitFieldsClicked),           NULL);
-    g_signal_connect(btnFlags,               "clicked", G_CALLBACK(btnFlagsClicked),               NULL);
-    g_signal_connect(btnRegisters,           "clicked", G_CALLBACK(btnRegistersClicked),           NULL);
-    g_signal_connect(btnLocalRegisters,      "clicked", G_CALLBACK(btnLocalRegistersClicked),      NULL);
-    g_signal_connect(btnStatisticalSums,     "clicked", G_CALLBACK(btnStatisticalSumsClicked),     NULL);
-    g_signal_connect(btnNamedVariables,      "clicked", G_CALLBACK(btnNamedVariablesClicked),      NULL);
-    g_signal_connect(btnSavedStackRegisters, "clicked", G_CALLBACK(btnSavedStackRegistersClicked), NULL);
-    g_signal_connect(chkHexaString,          "clicked", G_CALLBACK(chkHexaStringClicked),          NULL);
+    gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
 
-    gtk_fixed_put(GTK_FIXED(grid), btnBitFields,             1 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnFlags,                60 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnRegisters,           101 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnLocalRegisters,      166 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnStatisticalSums,     260 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnNamedVariables,      360 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnSavedStackRegisters, 465 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), chkHexaString,          630 + debugWidgetDx, 1 + debugWidgetDy);
+    // Fixed grid to freely put widgets on it
+    grid = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(frmCalc), grid);
 
-    gtk_widget_show(btnBitFields);
-    gtk_widget_show(btnFlags);
-    gtk_widget_show(btnRegisters);
-    gtk_widget_show(btnLocalRegisters);
-    gtk_widget_show(btnStatisticalSums);
-    gtk_widget_show(btnNamedVariables);
-    gtk_widget_show(btnSavedStackRegisters);
-    gtk_widget_show(chkHexaString);
+    // Backround image
+    if(calcLandscape) {
+      backgroundImage = gtk_image_new_from_file("artwork/dm42lshort.png");
+    }
+    else {
+      backgroundImage = gtk_image_new_from_file("artwork/dm42l.png");
+    }
 
-    debugWindow = DBG_REGISTERS;
-  #endif
+    gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
-  gtk_widget_show_all(frmCalc);
+    bezelImage = gtk_image_new_from_file("artwork/normal.png");
+    gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 15, calcLandscape ? 4 : 424);
+
+    // Areas for the g shifted softkeys
+    lblGSoftkeyArea = gtk_label_new("");
+    gtk_widget_set_name(lblGSoftkeyArea, "gSoftkeyArea");
+    gtk_widget_set_size_request(lblGSoftkeyArea, 438, 24);
+    gtk_fixed_put(GTK_FIXED(grid), lblGSoftkeyArea, 44, 72+170);
+
+
+
+    // Area for the f shifted softkeys
+    lblFSoftkeyArea = gtk_label_new("");
+    gtk_widget_set_name(lblFSoftkeyArea, "fSoftkeyArea");
+    gtk_widget_set_size_request(lblFSoftkeyArea, 438, 24);
+    gtk_fixed_put(GTK_FIXED(grid), lblFSoftkeyArea, 44, 72+170+24);
+
+
+
+    // Behind screen
+    lblBehindScreen = gtk_label_new("");
+    gtk_widget_set_name(lblBehindScreen, "behindScreen");
+    gtk_widget_set_size_request(lblBehindScreen, 412, 252);
+    gtk_fixed_put(GTK_FIXED(grid), lblBehindScreen, 57, 66);
+
+    // LCD screen 400x240
+    screen = gtk_drawing_area_new();
+    gtk_widget_set_size_request(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+    gtk_widget_set_tooltip_text(GTK_WIDGET(screen), "Copy to clipboard:\nh -> screen image\nx -> register X\nz -> lettered registers\nZ -> all registers");
+    gtk_fixed_put(GTK_FIXED(grid), screen, 63, 72);
+    screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
+    int numBytes = screenStride * SCREEN_HEIGHT * 4;
+    screenData = malloc(numBytes);
+    if(screenData == NULL) {
+      sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
+      moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
+      exit(1);
+    }
+
+    g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
+
+    #if (DEBUG_REGISTER_L == 1)
+      lblRegisterL1 = gtk_label_new("");
+      lblRegisterL2 = gtk_label_new("");
+      gtk_widget_set_name(lblRegisterL1, "registerL");
+      gtk_widget_set_name(lblRegisterL2, "registerL");
+      gtk_fixed_put(GTK_FIXED(grid), lblRegisterL1, 5, 28);
+      gtk_fixed_put(GTK_FIXED(grid), lblRegisterL2, 5, 46);
+    #endif
+
+    #if (SHOW_MEMORY_STATUS == 1)
+      lblMemoryStatus = gtk_label_new("");
+      gtk_widget_set_name(lblMemoryStatus, "memoryStatus");
+      gtk_fixed_put(GTK_FIXED(grid), lblMemoryStatus, 5, 5);
+    #endif
+
+    // 1st row: F1 to F6 buttons
+    btn11 = gtk_button_new_with_label("");
+    btn12 = gtk_button_new_with_label("");
+    btn13 = gtk_button_new_with_label("");
+    btn14 = gtk_button_new_with_label("");
+    btn15 = gtk_button_new_with_label("");
+    btn16 = gtk_button_new_with_label("");
+
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn13), "F3");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn14), "F4");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn15), "F5");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn16), "F6");
+
+    gtk_widget_set_size_request(btn11, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn12, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn13, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn14, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn15, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn16, KEY_WIDTH_1, 0);
+
+    gtk_widget_set_name(btn11, "calcKey");
+    gtk_widget_set_name(btn12, "calcKey");
+    gtk_widget_set_name(btn13, "calcKey");
+    gtk_widget_set_name(btn14, "calcKey");
+    gtk_widget_set_name(btn15, "calcKey");
+    gtk_widget_set_name(btn16, "calcKey");
+
+    g_signal_connect(btn11, "button-press-event", G_CALLBACK(btnFnPressed), "1");
+    g_signal_connect(btn12, "button-press-event", G_CALLBACK(btnFnPressed), "2");
+    g_signal_connect(btn13, "button-press-event", G_CALLBACK(btnFnPressed), "3");
+    g_signal_connect(btn14, "button-press-event", G_CALLBACK(btnFnPressed), "4");
+    g_signal_connect(btn15, "button-press-event", G_CALLBACK(btnFnPressed), "5");
+    g_signal_connect(btn16, "button-press-event", G_CALLBACK(btnFnPressed), "6");
+    g_signal_connect(btn11, "button-release-event", G_CALLBACK(btnFnReleased), "1");
+    g_signal_connect(btn12, "button-release-event", G_CALLBACK(btnFnReleased), "2");
+    g_signal_connect(btn13, "button-release-event", G_CALLBACK(btnFnReleased), "3");
+    g_signal_connect(btn14, "button-release-event", G_CALLBACK(btnFnReleased), "4");
+    g_signal_connect(btn15, "button-release-event", G_CALLBACK(btnFnReleased), "5");
+    g_signal_connect(btn16, "button-release-event", G_CALLBACK(btnFnReleased), "6");
+
+    gtk_widget_set_focus_on_click(btn11, FALSE);
+    gtk_widget_set_focus_on_click(btn12, FALSE);
+    gtk_widget_set_focus_on_click(btn13, FALSE);
+    gtk_widget_set_focus_on_click(btn14, FALSE);
+    gtk_widget_set_focus_on_click(btn15, FALSE);
+    gtk_widget_set_focus_on_click(btn16, FALSE);
+
+    xPos = X_LEFT_PORTRAIT;
+    yPos = Y_TOP_PORTRAIT;
+    gtk_fixed_put(GTK_FIXED(grid), btn11, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn12, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn13, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn14, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn15, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn16, xPos, yPos);
+
+
+    // 2nd row
+    btn21   = gtk_button_new();
+    btn22   = gtk_button_new();
+    btn23   = gtk_button_new();
+    btn24   = gtk_button_new();
+    btn25   = gtk_button_new();
+    btn26   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn21), "i");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn22), "y");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn23), "t");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn24), "l");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn25), "e");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn26), "q");
+
+    gtk_widget_set_size_request(btn21, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn22, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn23, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn24, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn25, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn26, KEY_WIDTH_1, 0);
+
+    g_signal_connect(btn21, "button-press-event", G_CALLBACK(btnPressed), "00");
+    g_signal_connect(btn22, "button-press-event", G_CALLBACK(btnPressed), "01");
+    g_signal_connect(btn23, "button-press-event", G_CALLBACK(btnPressed), "02");
+    g_signal_connect(btn24, "button-press-event", G_CALLBACK(btnPressed), "03");
+    g_signal_connect(btn25, "button-press-event", G_CALLBACK(btnPressed), "04");
+    g_signal_connect(btn26, "button-press-event", G_CALLBACK(btnPressed), "05");
+    g_signal_connect(btn21, "button-release-event", G_CALLBACK(btnReleased), "00");
+    g_signal_connect(btn22, "button-release-event", G_CALLBACK(btnReleased), "01");
+    g_signal_connect(btn23, "button-release-event", G_CALLBACK(btnReleased), "02");
+    g_signal_connect(btn24, "button-release-event", G_CALLBACK(btnReleased), "03");
+    g_signal_connect(btn25, "button-release-event", G_CALLBACK(btnReleased), "04");
+    g_signal_connect(btn26, "button-release-event", G_CALLBACK(btnReleased), "05");
+
+    if(calcLandscape) {
+      xPos = X_LEFT_LANDSCAPE;
+      yPos = Y_TOP_LANDSCAPE;
+    }
+    else {
+      xPos = X_LEFT_PORTRAIT;
+      yPos += DELTA_KEYS_Y;
+    }
+
+    gtk_fixed_put(GTK_FIXED(grid), btn21, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn22, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn23, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn24, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn25, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn26, xPos, yPos);
+
+
+
+    // 3rd row
+    btn31   = gtk_button_new();
+    btn32   = gtk_button_new();
+    btn33   = gtk_button_new();
+    btn34   = gtk_button_new();
+    btn35   = gtk_button_new();
+    btn36   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn31), "s");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn32), "r");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn33), "Page Down");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn34), "upper C");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn35), "f");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn36), "g");
+
+    gtk_widget_set_size_request(btn31, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn32, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn33, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn34, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn35, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn36, KEY_WIDTH_1, 0);
+
+    g_signal_connect(btn31, "button-press-event", G_CALLBACK(btnPressed), "06");
+    g_signal_connect(btn32, "button-press-event", G_CALLBACK(btnPressed), "07");
+    g_signal_connect(btn33, "button-press-event", G_CALLBACK(btnPressed), "08");
+    g_signal_connect(btn34, "button-press-event", G_CALLBACK(btnPressed), "09");
+    g_signal_connect(btn35, "button-press-event", G_CALLBACK(btnPressed), "10");
+    g_signal_connect(btn36, "button-press-event", G_CALLBACK(btnPressed), "11");
+    g_signal_connect(btn31, "button-release-event", G_CALLBACK(btnReleased), "06");
+    g_signal_connect(btn32, "button-release-event", G_CALLBACK(btnReleased), "07");
+    g_signal_connect(btn33, "button-release-event", G_CALLBACK(btnReleased), "08");
+    g_signal_connect(btn34, "button-release-event", G_CALLBACK(btnReleased), "09");
+    g_signal_connect(btn35, "button-release-event", G_CALLBACK(btnReleased), "10");
+    g_signal_connect(btn36, "button-release-event", G_CALLBACK(btnReleased), "11");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y;
+    gtk_fixed_put(GTK_FIXED(grid), btn31, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn32, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn33, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn34, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn35, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn36, xPos, yPos);
+
+
+
+    // 4th row
+    btn41   = gtk_button_new();
+    btn42   = gtk_button_new();
+    btn43   = gtk_button_new();
+    btn44   = gtk_button_new();
+    btn45   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn41), "Enter");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn42), "Tab");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn43), "c");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn44), "E");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn45), "Backspace");
+
+    gtk_widget_set_size_request(btn41, KEY_WIDTH_1 + DELTA_KEYS_X, 0);
+    gtk_widget_set_size_request(btn42, KEY_WIDTH_1,              0);
+    gtk_widget_set_size_request(btn43, KEY_WIDTH_1,              0);
+    gtk_widget_set_size_request(btn44, KEY_WIDTH_1,              0);
+    gtk_widget_set_size_request(btn45, KEY_WIDTH_1,              0);
+
+    g_signal_connect(btn41, "button-press-event", G_CALLBACK(btnPressed), "12");
+    g_signal_connect(btn42, "button-press-event", G_CALLBACK(btnPressed), "13");
+    g_signal_connect(btn43, "button-press-event", G_CALLBACK(btnPressed), "14");
+    g_signal_connect(btn44, "button-press-event", G_CALLBACK(btnPressed), "15");
+    g_signal_connect(btn45, "button-press-event", G_CALLBACK(btnPressed), "16");
+    g_signal_connect(btn41, "button-release-event", G_CALLBACK(btnReleased), "12");
+    g_signal_connect(btn42, "button-release-event", G_CALLBACK(btnReleased), "13");
+    g_signal_connect(btn43, "button-release-event", G_CALLBACK(btnReleased), "14");
+    g_signal_connect(btn44, "button-release-event", G_CALLBACK(btnReleased), "15");
+    g_signal_connect(btn45, "button-release-event", G_CALLBACK(btnReleased), "16");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y;
+    gtk_fixed_put(GTK_FIXED(grid), btn41, xPos, yPos);
+
+    xPos += DELTA_KEYS_X*2;
+    gtk_fixed_put(GTK_FIXED(grid), btn42, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn43, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn44, xPos, yPos);
+
+    xPos += DELTA_KEYS_X;
+    gtk_fixed_put(GTK_FIXED(grid), btn45, xPos, yPos);
+
+
+
+    // 5th row
+    btn51   = gtk_button_new();
+    btn52   = gtk_button_new();
+    btn53   = gtk_button_new();
+    btn54   = gtk_button_new();
+    btn55   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn51), "/");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn52), "7");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn53), "8");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn54), "9");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn55), "upper X");
+
+    gtk_widget_set_size_request(btn51, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn52, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn53, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn54, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn55, KEY_WIDTH_2, 0);
+
+    g_signal_connect(btn51, "button-press-event", G_CALLBACK(btnPressed), "17");
+    g_signal_connect(btn52, "button-press-event", G_CALLBACK(btnPressed), "18");
+    g_signal_connect(btn53, "button-press-event", G_CALLBACK(btnPressed), "19");
+    g_signal_connect(btn54, "button-press-event", G_CALLBACK(btnPressed), "20");
+    g_signal_connect(btn55, "button-press-event", G_CALLBACK(btnPressed), "21");
+    g_signal_connect(btn51, "button-release-event", G_CALLBACK(btnReleased), "17");
+    g_signal_connect(btn52, "button-release-event", G_CALLBACK(btnReleased), "18");
+    g_signal_connect(btn53, "button-release-event", G_CALLBACK(btnReleased), "19");
+    g_signal_connect(btn54, "button-release-event", G_CALLBACK(btnReleased), "20");
+    g_signal_connect(btn55, "button-release-event", G_CALLBACK(btnReleased), "21");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y + 1;
+    gtk_fixed_put(GTK_FIXED(grid), btn51, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 18;
+    gtk_fixed_put(GTK_FIXED(grid), btn52, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn53, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn54, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn55, xPos, yPos);
+
+
+
+    // 6th row
+    btn61   = gtk_button_new();
+    btn62   = gtk_button_new();
+    btn63   = gtk_button_new();
+    btn64   = gtk_button_new();
+    btn65   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn61), "*");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn62), "4");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn63), "5");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn64), "6");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn65), "Up");
+
+    gtk_widget_set_size_request(btn61, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn62, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn63, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn64, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn65, KEY_WIDTH_2, 0);
+
+    g_signal_connect(btn61, "button-press-event", G_CALLBACK(btnPressed), "22");
+    g_signal_connect(btn62, "button-press-event", G_CALLBACK(btnPressed), "23");
+    g_signal_connect(btn63, "button-press-event", G_CALLBACK(btnPressed), "24");
+    g_signal_connect(btn64, "button-press-event", G_CALLBACK(btnPressed), "25");
+    g_signal_connect(btn65, "button-press-event", G_CALLBACK(btnPressed), "26");
+    g_signal_connect(btn61, "button-release-event", G_CALLBACK(btnReleased), "22");
+    g_signal_connect(btn62, "button-release-event", G_CALLBACK(btnReleased), "23");
+    g_signal_connect(btn63, "button-release-event", G_CALLBACK(btnReleased), "24");
+    g_signal_connect(btn64, "button-release-event", G_CALLBACK(btnReleased), "25");
+    g_signal_connect(btn65, "button-release-event", G_CALLBACK(btnReleased), "26");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y + 1;
+    gtk_fixed_put(GTK_FIXED(grid), btn61, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 18;
+    gtk_fixed_put(GTK_FIXED(grid), btn62, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn63, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn64, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn65, xPos, yPos);
+
+
+
+    // 7th row
+    btn71   = gtk_button_new();
+    btn72   = gtk_button_new();
+    btn73   = gtk_button_new();
+    btn74   = gtk_button_new();
+    btn75   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn71), "-");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn72), "1");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn73), "2");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn74), "3");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn75), "Down");
+
+    gtk_widget_set_size_request(btn71, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn72, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn73, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn74, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn75, KEY_WIDTH_2, 0);
+
+    g_signal_connect(btn71, "button-press-event", G_CALLBACK(btnPressed), "27");
+    g_signal_connect(btn72, "button-press-event", G_CALLBACK(btnPressed), "28");
+    g_signal_connect(btn73, "button-press-event", G_CALLBACK(btnPressed), "29");
+    g_signal_connect(btn74, "button-press-event", G_CALLBACK(btnPressed), "30");
+    g_signal_connect(btn75, "button-press-event", G_CALLBACK(btnPressed), "31");
+    g_signal_connect(btn71, "button-release-event", G_CALLBACK(btnReleased), "27");
+    g_signal_connect(btn72, "button-release-event", G_CALLBACK(btnReleased), "28");
+    g_signal_connect(btn73, "button-release-event", G_CALLBACK(btnReleased), "29");
+    g_signal_connect(btn74, "button-release-event", G_CALLBACK(btnReleased), "30");
+    g_signal_connect(btn75, "button-release-event", G_CALLBACK(btnReleased), "31");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y + 1;
+    gtk_fixed_put(GTK_FIXED(grid), btn71, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 18;
+    gtk_fixed_put(GTK_FIXED(grid), btn72, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn73, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn74, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn75, xPos, yPos);
+
+
+
+    // 8th row
+    btn81   = gtk_button_new();
+    btn82   = gtk_button_new();
+    btn83   = gtk_button_new();
+    btn84   = gtk_button_new();
+    btn85   = gtk_button_new();
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn81), "+");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn82), "0");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn83), ". ,");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn84), "Ctrl");
+    gtk_widget_set_tooltip_text(GTK_WIDGET(btn85), "Esc");
+
+    gtk_widget_set_size_request(btn81, KEY_WIDTH_1, 0);
+    gtk_widget_set_size_request(btn82, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn83, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn84, KEY_WIDTH_2, 0);
+    gtk_widget_set_size_request(btn85, KEY_WIDTH_2, 0);
+
+    g_signal_connect(btn81, "button-press-event", G_CALLBACK(btnPressed), "32");
+    g_signal_connect(btn82, "button-press-event", G_CALLBACK(btnPressed), "33");
+    g_signal_connect(btn83, "button-press-event", G_CALLBACK(btnPressed), "34");
+    g_signal_connect(btn84, "button-press-event", G_CALLBACK(btnPressed), "35");
+    g_signal_connect(btn85, "button-press-event", G_CALLBACK(btnPressed), "36");
+    g_signal_connect(btn81, "button-release-event", G_CALLBACK(btnReleased), "32");
+    g_signal_connect(btn82, "button-release-event", G_CALLBACK(btnReleased), "33");
+    g_signal_connect(btn83, "button-release-event", G_CALLBACK(btnReleased), "34");
+    g_signal_connect(btn84, "button-release-event", G_CALLBACK(btnReleased), "35");
+    g_signal_connect(btn85, "button-release-event", G_CALLBACK(btnReleased), "36");
+
+    xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+
+    yPos += DELTA_KEYS_Y + 1;
+    gtk_fixed_put(GTK_FIXED(grid), btn81, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 18;
+    gtk_fixed_put(GTK_FIXED(grid), btn82, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn83, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn84, xPos, yPos);
+
+    xPos += DELTA_KEYS_X + 17;
+    gtk_fixed_put(GTK_FIXED(grid), btn85, xPos, yPos);
+
+    // The debug window
+    #if (DEBUG_PANEL == 1)
+      for(int i=0; i<DEBUG_LINES; i++) {
+        lbl1[i] = gtk_label_new("");
+        gtk_widget_set_name(lbl1[i], "debugDejaVu");
+        gtk_fixed_put(GTK_FIXED(grid), lbl1[i], 1 + debugWidgetDx, 26 + i*14 + debugWidgetDy);
+        lbl2[i] = gtk_label_new("");
+        gtk_widget_set_name(lbl2[i], "debugWP43S");
+        gtk_fixed_put(GTK_FIXED(grid), lbl2[i], 270 + debugWidgetDx, 25 + i*14 + debugWidgetDy);
+      }
+
+      btnBitFields           = gtk_button_new_with_label("Bitfields");
+      btnFlags               = gtk_button_new_with_label("Flags");
+      btnRegisters           = gtk_button_new_with_label("Registers");
+      btnLocalRegisters      = gtk_button_new_with_label("Local registers");
+      btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
+      btnNamedVariables      = gtk_button_new_with_label("Named variables");
+      btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
+      chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
+
+      gtk_widget_set_name(btnBitFields,           "debugButton");
+      gtk_widget_set_name(btnFlags,               "debugButton");
+      gtk_widget_set_name(btnRegisters,           "debugButton");
+      gtk_widget_set_name(btnLocalRegisters,      "debugButton");
+      gtk_widget_set_name(btnStatisticalSums,     "debugButton");
+      gtk_widget_set_name(btnNamedVariables,      "debugButton");
+      gtk_widget_set_name(btnSavedStackRegisters, "debugButton");
+      gtk_widget_set_name(chkHexaString,          "debugCheckbox");
+
+      g_signal_connect(btnBitFields,           "clicked", G_CALLBACK(btnBitFieldsClicked),           NULL);
+      g_signal_connect(btnFlags,               "clicked", G_CALLBACK(btnFlagsClicked),               NULL);
+      g_signal_connect(btnRegisters,           "clicked", G_CALLBACK(btnRegistersClicked),           NULL);
+      g_signal_connect(btnLocalRegisters,      "clicked", G_CALLBACK(btnLocalRegistersClicked),      NULL);
+      g_signal_connect(btnStatisticalSums,     "clicked", G_CALLBACK(btnStatisticalSumsClicked),     NULL);
+      g_signal_connect(btnNamedVariables,      "clicked", G_CALLBACK(btnNamedVariablesClicked),      NULL);
+      g_signal_connect(btnSavedStackRegisters, "clicked", G_CALLBACK(btnSavedStackRegistersClicked), NULL);
+      g_signal_connect(chkHexaString,          "clicked", G_CALLBACK(chkHexaStringClicked),          NULL);
+
+      gtk_fixed_put(GTK_FIXED(grid), btnBitFields,             1 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnFlags,                60 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnRegisters,           101 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnLocalRegisters,      166 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnStatisticalSums,     260 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnNamedVariables,      360 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), btnSavedStackRegisters, 465 + debugWidgetDx, 1 + debugWidgetDy);
+      gtk_fixed_put(GTK_FIXED(grid), chkHexaString,          630 + debugWidgetDx, 1 + debugWidgetDy);
+
+      gtk_widget_show(btnBitFields);
+      gtk_widget_show(btnFlags);
+      gtk_widget_show(btnRegisters);
+      gtk_widget_show(btnLocalRegisters);
+      gtk_widget_show(btnStatisticalSums);
+      gtk_widget_show(btnNamedVariables);
+      gtk_widget_show(btnSavedStackRegisters);
+      gtk_widget_show(chkHexaString);
+
+      debugWindow = DBG_REGISTERS;
+    #endif
+
+    gtk_widget_show_all(frmCalc);
+
+  #else // SCREEN_800X480
+    // The main window
+    frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
+    gtk_window_fullscreen(GTK_WINDOW(frmCalc));
+    gtk_window_set_decorated (GTK_WINDOW (frmCalc), FALSE);
+
+    gtk_widget_set_name(frmCalc, "mainWindow");
+    gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
+    g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
+    g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
+
+    gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
+
+    // Fixed grid to freely put widgets on it
+    grid = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(frmCalc), grid);
+
+    // LCD screen 800x480
+    screen = gtk_drawing_area_new();
+    gtk_widget_set_size_request(screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
+    gtk_fixed_put(GTK_FIXED(grid), screen, 0, 0);
+    screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
+    int numBytes = screenStride * SCREEN_HEIGHT * 4;
+    screenData = malloc(numBytes);
+    if(screenData == NULL) {
+      sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
+      moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
+      exit(1);
+    }
+
+    g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
+
+    gtk_widget_show_all(frmCalc);
+  #endif // SCREEN_800X480
 }
 #endif
 
@@ -1383,7 +1417,7 @@ void calcModeNormal(void) {
   hideCursor();
   cursorEnabled = false;
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeNormalGui();
   #endif
 }
@@ -1421,7 +1455,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
 
   setSystemFlag(FLAG_ALPHA);
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeAimGui();
   #endif
 }
@@ -1448,7 +1482,7 @@ void calcModeAsm(void) {
   clearSystemFlag(FLAG_ALPHA);
   resetAlphaSelectionBuffer();
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeAimGui();
   #endif
 }
@@ -1550,7 +1584,7 @@ void calcModeTam(void) {
 
   tamCurrentOperation = 0;
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeTamGui();
   #endif
 }

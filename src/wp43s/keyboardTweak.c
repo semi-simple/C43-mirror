@@ -376,10 +376,19 @@ void Check_MultiPresses(int16_t * result){          //Set up longpress
     switch(*result) {
       case KEY_BACKSPACE: tmp = ITM_CLSTK; break;   //backspace longpress to CLSTK
       case ITM_XEQ      : tmp = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
+      case KEY_EXIT1    : tmp = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
       //case ITM_CHS      : tmp = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
   }
+
+  if(calcMode == CM_NIM) {
+    switch(*result) {
+      case KEY_EXIT1    : tmp = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      default:;
+    }
+  }
+
 
   if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
     bool_t flag_user = getSystemFlag(FLAG_USER);

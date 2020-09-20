@@ -26,6 +26,22 @@
 #include "wp43s.h"
 
 
+
+void fnClAIM(uint16_t unusedParamButMandatory) {
+  //printf("Trying to clear input buffer\n");
+  if(calcMode == CM_NIM) {
+    strcpy(aimBuffer,"+");
+    fnKeyBackspace(0);
+    //printf("|%s|\n",aimBuffer);
+  }
+  lastIntegerBase = 0;
+//  clearRegister(REGISTER_X);
+//  fnClX(0);
+//  refreshScreen();
+}
+
+
+
 void jm_show_calc_state(char comment[]) {
 #ifdef PC_BUILD_TELLTALE
   printf("\n%s\n",comment);

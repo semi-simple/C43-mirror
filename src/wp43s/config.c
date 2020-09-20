@@ -628,6 +628,8 @@ void fnReset(uint16_t confirmation) {
     exponentLimit = 6145;                                      //JMMAX
 
     temporaryInformation = TI_RESET;
+    temporaryInformationJM = false;    //JM
+
     aimBuffer[0] = 0;
 
     //JM Default USER

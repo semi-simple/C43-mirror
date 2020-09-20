@@ -98,6 +98,9 @@ uint8_t verbose_jm;
 
 #define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
 
+
+void fnClAIM(uint16_t unusedParamButMandatory);
+
 void jm_show_calc_state(char comment[]);
 void reset_jm_defaults(int16_t toload);
 

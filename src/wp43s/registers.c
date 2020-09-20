@@ -2260,7 +2260,6 @@ void fnToReal(uint16_t unusedParamButMandatory) {
 //=============================================================================
 // Inc and Dec functions
 //-----------------------------------------------------------------------------
-
 #define INC_FLAG    0
 #define DEC_FLAG    1
 
@@ -2280,8 +2279,12 @@ static void incLonI(uint16_t regist, uint8_t flag) {
 
   (flag==INC_FLAG) ? longIntegerAddUInt(r, 1, r) : longIntegerSubtractUInt(r, 1, r);
 
-  temporaryInformation = longIntegerIsZero(r) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
-
+  temporaryInformationJM = longIntegerIsZero(r) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+  
+  //uint32_t n;                                               //JM
+  //longIntegerToUInt(r, n);                                  //JM
+  //printf("### %d, tempi=%d\n",n, temporaryInformationJM );  //JM
+  
   convertLongIntegerToLongIntegerRegister(r, regist);
 
   longIntegerFree(r);

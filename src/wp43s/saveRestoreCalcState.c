@@ -212,6 +212,7 @@ void saveCalc(void) {
   save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
   save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
   save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
+  save(&temporaryInformationJM,             sizeof(temporaryInformationJM),             backup);   //JM ^^
 
 
   fclose(backup);
@@ -395,6 +396,7 @@ void restoreCalc(void) {
     restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
     restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
     restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
+    restore(&temporaryInformationJM,             sizeof(temporaryInformationJM),             backup);   //JM ^^
 
 
     fclose(backup);

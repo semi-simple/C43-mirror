@@ -2201,8 +2201,9 @@
 #define ITM_RR1                       2165   //JM SHOI
 #define ITM_FWORD                     2166   //JM SHOI
 #define ITM_FBYTE                     2167   //JM SHOI
+#define ITM_CLAIM                     2168
 
-#define LAST_ITEM                     2168   //JM
+#define LAST_ITEM                     2169   //JM
 
 #define CHR_PROD_SIGN                 9999
 

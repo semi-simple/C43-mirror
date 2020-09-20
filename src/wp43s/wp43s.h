@@ -614,6 +614,7 @@ extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;
 extern uint8_t               currentAngularMode;
+extern bool_t                temporaryInformationJM;    //JM
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;

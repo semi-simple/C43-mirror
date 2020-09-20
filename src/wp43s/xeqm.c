@@ -20,13 +20,13 @@
  * \file xeqm.c
  ***********************************************/
 
+#define commandnumberl NIM_BUFFER_LENGTH
 
 #include "wp43s.h"
 
-
 void capture_sequence(char *origin, uint16_t item) {
    char line1[TMP_STR_LENGTH];
-   char ll[20];
+   char ll[commandnumberl];
 #ifdef PC_BUILD
    //printf("Captured: %4d   //%10s//  (%s)\n",item,indexOfItems[item].itemSoftmenuName, origin);
 #endif
@@ -34,9 +34,9 @@ void capture_sequence(char *origin, uint16_t item) {
     line1[0]=0;
     ll[0]=0; ll[1]=0;
     switch (item) {
-      case  36: strcpy(ll,"X<>Y"); break;
-      case  60: strcpy(ll,"Y^X" ); break;
-      case  99: strcpy(ll,"/"   ); break;
+      case  ITM_XexY: strcpy(ll,"X<>Y"); break;
+      case  ITM_YX:   strcpy(ll,"Y^X" ); break;
+      case  ITM_DIV:  strcpy(ll,"/"   ); break;
       case  CHR_0:        ll[0]=48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  CHR_1:        ll[0]=49; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  CHR_2:        ll[0]=50; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
@@ -141,8 +141,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
       uint16_t ix_m2 = 0;
       uint16_t ix_m3 = 0;
       uint16_t ix_m4 = 0;
-      uint16_t no;
-      char     commandnumber[20];
+      uint16_t no, ii;
+      char     commandnumber[commandnumberl];
       char     aa[2], bb[2];
       bool_t   state_comments, state_commands, state_quotes;
       uint16_t xeqlblinprogress;
@@ -154,9 +154,13 @@ void execute_string(const char *inputstring, bool_t exec1) {
       indic_x = 0;
       indic_y = SCREEN_HEIGHT-1;
       uint8_t starttoken = 0;
-
+      uint16_t loopnumber = 0;
+                                                 //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
-      //printf("Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+      #ifdef PC_BUILD
+        printf("------Starting parse ------- Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+        printf("|%s|\n",inputstring);
+      #endif
       xeqlblinprogress = 0;
       gotoinprogress   = 0;
       go = false;
@@ -205,7 +209,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       commandnumber[0]=0;
                     }
                      break;
-          case 34: if(!state_comments && !state_commands) {   // Toggle quote state
+          case 34: if(!state_comments && !state_commands) {   // " Toggle quote state
                        state_quotes   = !state_quotes;
                      }
                      break;
@@ -214,17 +218,19 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 10: //lf
           case 8 : //tab
           case 44: //,
-          case 32: if(state_commands){
+          case 32: 
+                   if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                      //printf("&%s&",commandnumber);
+                      //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformationJM,gotoinprogress,commandnumber);
                       
                       //DSZ:
                       if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
                           //......IS NOT DSZ.... OR               DSZ    with REG NOT ZERO
-                          go = (temporaryInformation == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
+                          go = (temporaryInformationJM == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
+                          //printf("   DSZ/ISZ temporaryInformation = %5d\n",temporaryInformation);
                           gotoinprogress = 1;                      //As per GTO_SZ
                           commandnumber[0]=0;                      //As per GTO_SZ
-                      } else // (gotoinprogress <> 11)  AND NOT (==11 AND reg>0)
+                      } else
 
 // FAST TRACKED FOR QUICKER RESPONSE DUPLICATED ************************************************************************
                       if (strcompare(commandnumber,"TICKS" )) {sprintf(commandnumber,"%d",ITM_TICKS);} else
@@ -309,8 +315,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"FLOOR" )) {sprintf(commandnumber,"%d", ITM_FLOOR);} else
                       if (strcompare(commandnumber,"GCD" )) {sprintf(commandnumber,"%d", ITM_GCD);} else
                       if (strcompare(commandnumber,"LCM" )) {sprintf(commandnumber,"%d", ITM_LCM);} else
-                      if (strcompare(commandnumber,"DEC" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
-                      if (strcompare(commandnumber,"INC" )) {sprintf(commandnumber,"%d", ITM_INC);} else
+                      if (strcompare(commandnumber,"DECX" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
+                      if (strcompare(commandnumber,"INCX" )) {sprintf(commandnumber,"%d", ITM_INC);} else
                       if (strcompare(commandnumber,"IP" )) {sprintf(commandnumber,"%d", ITM_IP);} else
                       if (strcompare(commandnumber,"FP" )) {sprintf(commandnumber,"%d", ITM_FP);} else
                       if (strcompare(commandnumber,"+" )) {sprintf(commandnumber,"%d", ITM_ADD);} else
@@ -388,6 +394,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"SUM^1/Y^2" )) {sprintf(commandnumber,"%d", ITM_SIGMA1ony2);} else
                       if (strcompare(commandnumber,"SUMX^3" )) {sprintf(commandnumber,"%d", ITM_SIGMAx3);} else
                       if (strcompare(commandnumber,"SUMX^4" )) {sprintf(commandnumber,"%d", ITM_SIGMAx4);} else
+                      if (strcompare(commandnumber,"FRACT" )) {sprintf(commandnumber,"%d", SFL_FRACT);} else
+                      if (strcompare(commandnumber,"PROPFR" )) {sprintf(commandnumber,"%d", SFL_PROPFR);} else
+                      if (strcompare(commandnumber,"DENANY" )) {sprintf(commandnumber,"%d", SFL_DENANY);} else
+                      if (strcompare(commandnumber,"DENFIX" )) {sprintf(commandnumber,"%d", SFL_DENFIX);} else
                       if (strcompare(commandnumber,"ST.A" )) {sprintf(commandnumber,"%d", ITM_ST_A);} else
                       if (strcompare(commandnumber,"ST.B" )) {sprintf(commandnumber,"%d", ITM_ST_B);} else
                       if (strcompare(commandnumber,"ST.C" )) {sprintf(commandnumber,"%d", ITM_ST_C);} else
@@ -420,6 +430,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CX>RE" )) {sprintf(commandnumber,"%d", ITM_CXtoRE);} else
                       if (strcompare(commandnumber,"DECOMP" )) {sprintf(commandnumber,"%d", ITM_DECOMP);} else
                       if (strcompare(commandnumber,"DEG>" )) {sprintf(commandnumber,"%d", ITM_DEGto);} else
+                      if (strcompare(commandnumber,"DENMAX" )) {sprintf(commandnumber,"%d", ITM_DENMAX);} else
                       if (strcompare(commandnumber,"DOT" )) {sprintf(commandnumber,"%d", ITM_DOT);} else
                       if (strcompare(commandnumber,"D.MS>" )) {sprintf(commandnumber,"%d", ITM_DMSto);} else
                       if (strcompare(commandnumber,"D>R" )) {sprintf(commandnumber,"%d", ITM_DtoR);} else
@@ -581,43 +592,62 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"X.SAVE" )) {sprintf(commandnumber,"%d", ITM_XSAVE);} else
                       if (strcompare(commandnumber,"X.LOAD" )) {sprintf(commandnumber,"%d", ITM_XLOAD);} else
 
-
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
 
 
 
-                      if (strcompare(commandnumber,"DSZ"   )) {strcpy(commandnumber, "91"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
-                       if (strcompare(commandnumber,"ISZ"   )) {strcpy(commandnumber, "92"); gotoinprogress = 10;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                      if (strcompare(commandnumber,"DSZ"    )) {sprintf(commandnumber,"%d", ITM_DEC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                       if (strcompare(commandnumber,"ISZ"   )) {sprintf(commandnumber,"%d", ITM_INC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
                         if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
                           if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                     else //EXPECTING FOLLOWING OPERAND Mn
-                           if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}           //EXPECTING 2 OPERANDS nn XXXXXX
+                           if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}              else//EXPECTING 2 OPERANDS nn XXXXXX
+                            if (strcompare(commandnumber,"GTO"   ))    {
+                              if(exec) {
+                                gotoinprogress = 1;
+                                /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
+                                else                   */  {go = true;}
+                                if(go) {
+                                  force_refresh();
+                                  #ifdef PC_BUILD
+                                  printf("   >>> Loop %d:go\n",loopnumber++);
+                                  #endif
+                                }
+                              }
+                            } else
+                             if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else
+                              if (strcompare(commandnumber,"RTN"   ))    {if(exec) {ix = ix_m; ix_m = 0;}}                      else
+                               if (strcompare(commandnumber,"GTO_SZ"))    {if(exec) {go = (temporaryInformation == TI_FALSE); gotoinprogress = 1; }} else
+                                if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;} else
+                                 if (strcompare(commandnumber,"RETURN"))    {if(exec) {ix = stringByteLength(inputstring)-2;}} 
+                                 else
 //         END ELSE
-                      if(starttoken == 0) {                        //if not started with XEQLBL or XEQC43
+                                   { 
+                                     ii = 0;
+                                     while(commandnumber[ii]!=0 && commandnumber[ii]<='9' && commandnumber[ii]>='0') {
+                                       ii++;
+                                     }
+                                     if(commandnumber[ii]==0 && (gotoinprogress == 0 || gotoinprogress == 10) && xeqlblinprogress == 0 ) {
+                                       //printf("   Fell thru, i.e. number %s, gotoinprogress %d\n",commandnumber,gotoinprogress);   // at this stage there SHOULD be a number (not checked) coming out at this point, from the ELSE, it is a number from the text file, therefore literal mnumbers
+                                                                 // prepare to break out of this state
+                                                                 // and set flags as if in direct character (quotes) state
+                                       if (exec) {
+                                         sendkeys(commandnumber);
+                                         //printf("   sent-->a|%s|\n",commandnumber);
+                                       }
+                                       commandnumber[0]=0;
+                                       if(gotoinprogress == 10) {gotoinprogress = 11;} //if the digits of STO or DSZ
+                                       break;
+                                     }
+                                   }
+        //v
+
+                      if(starttoken == 0) {                  //if not started with XEQLBL or XEQC43, immediately abandon program mode
                         running_program_jm = false;
                         return;
                       }
-
-                      if (strcompare(commandnumber,"GTO"   ))    {
-                        if(exec) {
-                          gotoinprogress = 1;
-                          /*if(gotoinprogress == 11) {go = (temporaryInformation == TI_FALSE);}
-                          else                   */  {go = true;}
-                          if(go) {
-                            force_refresh();
-                            #ifdef PC_BUILD
-                            //printf(">>> Loop:go\n");
-                            #endif
-                          }
-                        }
-                      } else
-                      if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else
-                       if (strcompare(commandnumber,"RTN"   ))    {if(exec) {ix = ix_m; ix_m = 0;}}                      else
-                        if (strcompare(commandnumber,"GTO_SZ"))    {if(exec) {go = (temporaryInformation == TI_FALSE); gotoinprogress = 1; }}
-//         END ELSE
-                      if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;}
-                      if (strcompare(commandnumber,"RETURN"))    if(exec) {ix = stringByteLength(inputstring)-2;} 
                       
+                      //printf("   gotoinprogress = %5d; xeqlblinprogress = %5d; commandnumber = %10s\n",gotoinprogress,xeqlblinprogress,commandnumber);
 
 
                       temporaryInformation = TI_NO_INFO;   //Cancel after go was determined.
@@ -626,6 +656,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           gotoinprogress = 2;
                           commandnumber[0]=0;
                         break;
+
                         case 2:                  //GOTO IN PROGRESS: if arriving from DSZ / 1, witho9ut M1-M4, waste the commandd, zero, and pass around
                           if(strcompare(commandnumber,"M1") && exec && go && (ix_m1 !=0)) ix = ix_m1; else
                           if(strcompare(commandnumber,"M2") && exec && go && (ix_m2 !=0)) ix = ix_m2; else 
@@ -652,6 +683,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           xeqlblinprogress = 2;
                           commandnumber[0]=0;
                         break;
+
                         case 2:                  //XEQMLABEL IN PROGRESS: get softkeynumber 01 - 18
                           no = atoi(commandnumber);
                           if(no>=1 && no <=18) {
@@ -663,9 +695,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                             commandnumber[0]=0;   //Processed
                           }
                         break;
+
                         case 3:                  //XEQMLABEL IN PROGRESS: get label
                           if (no>=1 && no<=18) {
-                            char tmpp[20];
+                            char tmpp[commandnumberl];
                             strcpy(tmpp,commandnumber);
                             tmpp[8-1]=0;         //Limit to length of indexOfItemsXEQM
                             //printf(">>> Exec:%d no:%d ComndNo:%s tmpp:%s>>XEQM:%s\n",exec, no,commandnumber, tmpp,indexOfItemsXEQM + (no-1)*8);
@@ -678,13 +711,11 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           }
                         break;
 
-
-
-
                         case 10:                  //LABEL IN PROGRESS: got command XEQLBL
                           xeqlblinprogress = 11;
                           commandnumber[0]=0;
                         break;
+
                         case 11:                  //LABEL IN PROGRESS: get label M1-M4
                           //printf("LABEL %s\n",commandnumber);
                           if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
@@ -696,9 +727,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           invertPixel(indic_x, indic_y-1);
                         break;
 //HERE DEFAULT !!
+//NOT IN PROGRESS                        
                         default:                 //NOT IN PROGRESS
                           no = atoi(commandnumber);       //Will force all unknown commands to have no number, and invalid command and RETURN MARK etc. to 0
-                          //printf("$$$ case default %s EXEC=%d no=%d\n",commandnumber,exec,no);
+                          //printf("   Command send %s EXEC=%d no=%d ",commandnumber,exec,no);
                           if(no > LAST_ITEM-1) {no = 0;}
                           if(no!=0 && exec) {
                             invertPixel(indic_x++, indic_y);
@@ -706,13 +738,17 @@ void execute_string(const char *inputstring, bool_t exec1) {
 
                             if(exec) {
                               runkey(no); 
+                              //printf("   -->%d sent ",no);
+                            } else {
+                              //printf("   -->%d not sent ",no);
                             }
                             //printf(">>> %d\n",temporaryInformation);
-                            if(gotoinprogress==10) {gotoinprogress = 11;}
+                            if(gotoinprogress == 9 ) {gotoinprogress = 10;}
                           }
                           else {
                             //printf("Skip execution |%s|",commandnumber);
                           }
+                          //printf("#\n");
                           commandnumber[0]=0;   //Processed
                         break;
                       }
@@ -722,11 +758,11 @@ void execute_string(const char *inputstring, bool_t exec1) {
         }
         if(state_quotes) {
           if (exec) {
-            sendkeys(aa); //else printf("Skip sending |%s|",aa);
-          }
-        } 
-        else { 
-          if(state_commands && stringByteLength(commandnumber) < 20-1) {
+            //printf("   sent-->b|%s|\n",aa);
+            sendkeys(aa);} //else printf("Skip sending |%s|",aa);
+        }
+        else {
+          if(state_commands && stringByteLength(commandnumber) < commandnumberl-1) {
             strcat(commandnumber,aa);
           }   // accumulate string
         }
@@ -998,11 +1034,18 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
 
 
 void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to X-REGISTER
-  printf("LOAD %d\n",XEQM_no);
+  #ifdef PC_BUILD
+    printf("LOAD %d\n",XEQM_no);
+  #endif
   char line1[TMP_STR_LENGTH];
   line1[0]=0;
   XEQMENU_Selection(XEQM_no, line1, false);
-  uint16_t ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}
+  uint16_t ix = 0;while (ix!=20) {
+    #ifdef PC_BUILD
+      printf("%d ",line1[ix]);
+    #endif
+    ix++;
+  }
   //printf(">>> loaded: utf:%s\n",line1);  
   utf8ToString((uint8_t *)line1,line1 + TMP_STR_LENGTH/2);
   //ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}  printf(">>> loaded: str:%s\n",line1 + TMP_STR_LENGTH/2);  

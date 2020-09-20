@@ -45,10 +45,12 @@
 
 #ifdef PC_BUILD
   void setupUI          (void);
-  void calcModeNormalGui(void);
-  void calcModeAimGui   (void);
-  void calcModeTamGui   (void);
-#endif
+  #ifndef SCREEN_800X480
+    void calcModeNormalGui(void);
+    void calcModeAimGui   (void);
+    void calcModeTamGui   (void);
+  #endif // SCREEN_800X480
+#endif // PC_BUILD
 
 #ifndef DMCP_BUILD
   void strReplace       (char *haystack, const char *needle, const char *newNeedle);

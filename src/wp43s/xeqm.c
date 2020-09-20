@@ -154,7 +154,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
       indic_x = 0;
       indic_y = SCREEN_HEIGHT-1;
       uint8_t starttoken = 0;
-      uint16_t loopnumber = 0;
+      #ifdef PC_BUILD
+        uint16_t loopnumber = 0;
+      #endif
                                                  //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
       #ifdef PC_BUILD

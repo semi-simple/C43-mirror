@@ -1,4 +1,0 @@
-   41 //       CLX
- 1418 //     CLSTK
- 1727 //      EXIT
- 2168 //     CLAIM

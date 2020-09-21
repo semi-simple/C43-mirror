@@ -438,6 +438,12 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
   if(strcmp(dateTimeString, oldTime)) {
     strcpy(oldTime, dateTimeString);
     showDateTime();
+
+    if(!getSystemFlag(FLAG_AUTOFF)) {
+      reset_auto_off();
+    }
+
+
   }
 
   if(usb_powered() == 1) {
@@ -452,7 +458,14 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
       clearSystemFlag(FLAG_USB);
     }
 
-    if(get_lowbat_state() == 1 || get_vbat() < 2500) {
+    if(get_vbat() < 2000) {
+      if(!getSystemFlag(FLAG_LOWBAT)) {
+        setSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
+      SET_ST(STAT_PGM_END);
+    }
+    else if(get_vbat() < 2500) {
       if(!getSystemFlag(FLAG_LOWBAT)) {
         setSystemFlag(FLAG_LOWBAT);
         showHideUsbLowBattery();

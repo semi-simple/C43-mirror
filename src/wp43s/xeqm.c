@@ -287,12 +287,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"FILL" )) {sprintf(commandnumber,"%d", ITM_FILL);} else
                       if (strcompare(commandnumber,"STO" )) {sprintf(commandnumber,"%d", ITM_STO);} else
                       if (strcompare(commandnumber,"RCL" )) {sprintf(commandnumber,"%d", ITM_RCL);} else
-                      if (strcompare(commandnumber,"RCL+" )) {sprintf(commandnumber,"%d", ITM_RCLPLUS);} else
-                      if (strcompare(commandnumber,"RCL-" )) {sprintf(commandnumber,"%d", ITM_RCLMINUS);} else
-                      if (strcompare(commandnumber,"RCLx" )) {sprintf(commandnumber,"%d", ITM_RCLMULT);} else
-                      if (strcompare(commandnumber,"RCL/" )) {sprintf(commandnumber,"%d", ITM_RCLDIV);} else
-                      if (strcompare(commandnumber,"RCLMAX" )) {sprintf(commandnumber,"%d", ITM_RCLMAX);} else
-                      if (strcompare(commandnumber,"RCLMIN" )) {sprintf(commandnumber,"%d", ITM_RCLMIN);} else
                       if (strcompare(commandnumber,"X^2" )) {sprintf(commandnumber,"%d", ITM_SQUARE);} else
                       if (strcompare(commandnumber,"X^3" )) {sprintf(commandnumber,"%d", ITM_CUBE);} else
                       if (strcompare(commandnumber,"Y^X" )) {sprintf(commandnumber,"%d", ITM_YX);} else
@@ -417,6 +411,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ST.X" )) {sprintf(commandnumber,"%d", ITM_ST_X);} else
                       if (strcompare(commandnumber,"ST.Y" )) {sprintf(commandnumber,"%d", ITM_ST_Y);} else
                       if (strcompare(commandnumber,"ST.Z" )) {sprintf(commandnumber,"%d", ITM_ST_Z);} else
+                      if (strcompare(commandnumber,"IND>" )) {sprintf(commandnumber,"%d", ITM_INDIRECTION);} else
                       if (strcompare(commandnumber,"REG_A" )) {sprintf(commandnumber,"%d", ITM_REG_A);} else
                       if (strcompare(commandnumber,"REG_B" )) {sprintf(commandnumber,"%d", ITM_REG_B);} else
                       if (strcompare(commandnumber,"REG_C" )) {sprintf(commandnumber,"%d", ITM_REG_C);} else
@@ -575,6 +570,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">DEC" )) {sprintf(commandnumber,"%d", ITM_2DEC);} else
                       if (strcompare(commandnumber,">HEX" )) {sprintf(commandnumber,"%d", ITM_2HEX);} else
                       if (strcompare(commandnumber,">I" )) {sprintf(commandnumber,"%d", ITM_RI);} else
+                      if (strcompare(commandnumber,"LISTXY" )) {sprintf(commandnumber,"%d", ITM_LISTXY);} else
                       if (strcompare(commandnumber,"ERPN?" )) {sprintf(commandnumber,"%d", ITM_SH_ERPN);} else
                       if (strcompare(commandnumber,"X.XEQ" )) {sprintf(commandnumber,"%d", ITM_XXEQ);} else
                       if (strcompare(commandnumber,"STATGRF" )) {sprintf(commandnumber,"%d", -MNU_ST_GRAPH);} else

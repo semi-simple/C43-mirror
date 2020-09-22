@@ -5,9 +5,10 @@ XEQM04:Mersenne Prime 2281;
 XEQM05:Mersenne Prime 3217;
 XEQM06:CUBEs3;
 XEQM08:Pythagoras Hypotenuse;
+XEQM09:Plot prime times;
 XEQM12:Binet Fibonacci Plot;
-// XEQM16:XEQM16;
 XEQM17:Plot random deviations from linear;
+XEQM18:CalculatorTest;
 
 
 

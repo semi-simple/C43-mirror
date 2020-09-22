@@ -137,7 +137,6 @@ uint8_t               temporaryInformation;
 uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
 uint8_t               currentAngularMode;
-bool_t                temporaryInformationJM;    //JM
 bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup
@@ -283,7 +282,6 @@ void setupDefaults(void) {
   #endif
 
   temporaryInformation = TI_NO_INFO;
-  temporaryInformationJM = false;    //JM
 
 
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);

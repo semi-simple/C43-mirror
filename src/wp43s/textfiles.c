@@ -802,8 +802,8 @@ void displaywords(char *line1) {  //Preprocessor and display
     aa[0]=line1[ix];
     bb[0]=line1[ix+1];
 
-    if ((aa[0]==47 && bb[0]==47)) {         //start and stop comment mode on double slash
-      state_comments=!state_comments;
+    if ((aa[0]==47 && bb[0]==47) && state_comments == false) {         //start comment on double slash
+      state_comments=true;
       ix++; //skip the second slash
     } 
     else 

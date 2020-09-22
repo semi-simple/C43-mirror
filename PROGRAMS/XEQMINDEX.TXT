@@ -6,7 +6,9 @@ XEQM05:Mersenne Prime 3217;
 XEQM06:CUBEs3;
 XEQM08:Pythagoras Hypotenuse;
 XEQM12:Binet Fibonacci Plot;
+// XEQM16:XEQM16;
 XEQM17:Plot random deviations from linear;
+
 
 
 // C43 XEQM softkey index file 

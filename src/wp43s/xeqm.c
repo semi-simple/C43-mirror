@@ -70,8 +70,13 @@ void capture_sequence(char *origin, uint16_t item) {
 
 
 //############################ SEND KEY TO 43S ENGINE ####################
-void runkey(uint16_t item){
+void runkey(int16_t item){
   #ifndef TESTSUITE_BUILD
+
+  if(item < 0) {
+    showSoftmenu(NULL, item, true);
+  } else {
+
     //printf("§%d§ ",item);
     hideFunctionName();           //Clear in case active
     processKeyAction(item);
@@ -82,6 +87,8 @@ void runkey(uint16_t item){
 //        lcd_forced_refresh(); // Just redraw from LCD buffer    
 //      #endif
     } 
+  }
+
   #endif
 }
 
@@ -141,7 +148,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
       uint16_t ix_m2 = 0;
       uint16_t ix_m3 = 0;
       uint16_t ix_m4 = 0;
-      uint16_t no, ii;
+      int16_t no, ii;
       char     commandnumber[commandnumberl];
       char     aa[2], bb[2];
       bool_t   state_comments, state_commands, state_quotes;
@@ -202,10 +209,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
           default:;
         }
         
-        if(state_comments && (aa[0] == 13 || aa[0] == 10)) {state_comments=!state_comments;} else
+        if(state_comments && (aa[0] == 13 || aa[0] == 10)) {
+          state_comments=false;
+        } else
         switch(aa[0]) {
           case 47: if(bb[0] == 47 && state_comments == false) {//ADDED  STATE, SO //always switches on the comment, but not off. CR/LF cancels it
-                      state_comments = !state_comments;        // Toggle comment state
+                      state_comments = true;           // Switch comment state on
                       state_commands = false;
                       state_quotes   = false;
                       commandnumber[0]=0;
@@ -223,12 +232,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 32: 
                    if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                      //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformationJM,gotoinprogress,commandnumber);
+                      //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);
                       
                       //DSZ:
-                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformationJM == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
+                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
                           //......IS NOT DSZ.... OR               DSZ    with REG NOT ZERO
-                          go = (temporaryInformationJM == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
+                          go = (temporaryInformation == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
                           //printf("   DSZ/ISZ temporaryInformation = %5d\n",temporaryInformation);
                           gotoinprogress = 1;                      //As per GTO_SZ
                           commandnumber[0]=0;                      //As per GTO_SZ
@@ -308,17 +317,17 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"TAN" )) {sprintf(commandnumber,"%d", ITM_tan);} else
                       if (strcompare(commandnumber,"TANH" )) {sprintf(commandnumber,"%d", ITM_tanh);} else
                       if (strcompare(commandnumber,"ARCCOS" )) {sprintf(commandnumber,"%d", ITM_arccos);} else
-                      if (strcompare(commandnumber,"ARCOSH" )) {sprintf(commandnumber,"%d", ITM_arcosh);} else
+                      if (strcompare(commandnumber,"ARCCOSH" )) {sprintf(commandnumber,"%d", ITM_arcosh);} else
                       if (strcompare(commandnumber,"ARCSIN" )) {sprintf(commandnumber,"%d", ITM_arcsin);} else
-                      if (strcompare(commandnumber,"ARSINH" )) {sprintf(commandnumber,"%d", ITM_arsinh);} else
+                      if (strcompare(commandnumber,"ARCSINH" )) {sprintf(commandnumber,"%d", ITM_arsinh);} else
                       if (strcompare(commandnumber,"ARCTAN" )) {sprintf(commandnumber,"%d", ITM_arctan);} else
-                      if (strcompare(commandnumber,"ARTANH" )) {sprintf(commandnumber,"%d", ITM_artanh);} else
+                      if (strcompare(commandnumber,"ARCTANH" )) {sprintf(commandnumber,"%d", ITM_artanh);} else
                       if (strcompare(commandnumber,"CEIL" )) {sprintf(commandnumber,"%d", ITM_CEIL);} else
                       if (strcompare(commandnumber,"FLOOR" )) {sprintf(commandnumber,"%d", ITM_FLOOR);} else
                       if (strcompare(commandnumber,"GCD" )) {sprintf(commandnumber,"%d", ITM_GCD);} else
                       if (strcompare(commandnumber,"LCM" )) {sprintf(commandnumber,"%d", ITM_LCM);} else
-                      if (strcompare(commandnumber,"DECX" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
-                      if (strcompare(commandnumber,"INCX" )) {sprintf(commandnumber,"%d", ITM_INC);} else
+                      if (strcompare(commandnumber,"DECR" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
+                      if (strcompare(commandnumber,"INCR" )) {sprintf(commandnumber,"%d", ITM_INC);} else
                       if (strcompare(commandnumber,"IP" )) {sprintf(commandnumber,"%d", ITM_IP);} else
                       if (strcompare(commandnumber,"FP" )) {sprintf(commandnumber,"%d", ITM_FP);} else
                       if (strcompare(commandnumber,"+" )) {sprintf(commandnumber,"%d", ITM_ADD);} else
@@ -416,6 +425,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"REG_I" )) {sprintf(commandnumber,"%d", ITM_REG_I);} else
                       if (strcompare(commandnumber,"REG_J" )) {sprintf(commandnumber,"%d", ITM_REG_J);} else
                       if (strcompare(commandnumber,"REG_K" )) {sprintf(commandnumber,"%d", ITM_REG_K);} else
+                      if (strcompare(commandnumber,"E" )) {sprintf(commandnumber,"%d", ITM_EXPONENT);} else
                       if (strcompare(commandnumber,"1COMPL" )) {sprintf(commandnumber,"%d", ITM_1COMPL);} else
                       if (strcompare(commandnumber,"SNAP" )) {sprintf(commandnumber,"%d", ITM_SCRDMP);} else
                       if (strcompare(commandnumber,"2COMPL" )) {sprintf(commandnumber,"%d", ITM_2COMPL);} else
@@ -431,9 +441,11 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CROSS" )) {sprintf(commandnumber,"%d", ITM_CROSS);} else
                       if (strcompare(commandnumber,"CX>RE" )) {sprintf(commandnumber,"%d", ITM_CXtoRE);} else
                       if (strcompare(commandnumber,"DECOMP" )) {sprintf(commandnumber,"%d", ITM_DECOMP);} else
+                      if (strcompare(commandnumber,"DEG" )) {sprintf(commandnumber,"%d", ITM_DEG);} else
                       if (strcompare(commandnumber,"DEG>" )) {sprintf(commandnumber,"%d", ITM_DEGto);} else
                       if (strcompare(commandnumber,"DENMAX" )) {sprintf(commandnumber,"%d", ITM_DENMAX);} else
                       if (strcompare(commandnumber,"DOT" )) {sprintf(commandnumber,"%d", ITM_DOT);} else
+                      if (strcompare(commandnumber,"D.MS" )) {sprintf(commandnumber,"%d", ITM_DMS);} else
                       if (strcompare(commandnumber,"D.MS>" )) {sprintf(commandnumber,"%d", ITM_DMSto);} else
                       if (strcompare(commandnumber,"D>R" )) {sprintf(commandnumber,"%d", ITM_DtoR);} else
                       if (strcompare(commandnumber,"ENG" )) {sprintf(commandnumber,"%d", ITM_ENG);} else
@@ -441,6 +453,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"EXPT" )) {sprintf(commandnumber,"%d", ITM_EXPT);} else
                       if (strcompare(commandnumber,"FIX" )) {sprintf(commandnumber,"%d", ITM_FIX);} else
                       if (strcompare(commandnumber,"FLASH?" )) {sprintf(commandnumber,"%d", ITM_FLASH);} else
+                      if (strcompare(commandnumber,"GRAD" )) {sprintf(commandnumber,"%d", ITM_GRAD);} else
                       if (strcompare(commandnumber,"GRAD>" )) {sprintf(commandnumber,"%d", ITM_GRADto);} else
                       if (strcompare(commandnumber,"IM" )) {sprintf(commandnumber,"%d", ITM_IM);} else
                       if (strcompare(commandnumber,"KEY?" )) {sprintf(commandnumber,"%d", ITM_KEYQ);} else
@@ -450,8 +463,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"LOCR?" )) {sprintf(commandnumber,"%d", ITM_LocRQ);} else
                       if (strcompare(commandnumber,"MANT" )) {sprintf(commandnumber,"%d", ITM_MANT);} else
                       if (strcompare(commandnumber,"MEM?" )) {sprintf(commandnumber,"%d", ITM_MEM);} else
+                      if (strcompare(commandnumber,"MULPI" )) {sprintf(commandnumber,"%d", ITM_MULPI);} else
                       if (strcompare(commandnumber,"PERM" )) {sprintf(commandnumber,"%d", ITM_PERM);} else
                       if (strcompare(commandnumber,"PLOT" )) {sprintf(commandnumber,"%d", ITM_PLOT);} else
+                      if (strcompare(commandnumber,"RAD" )) {sprintf(commandnumber,"%d", ITM_RAD);} else
                       if (strcompare(commandnumber,"RAD>" )) {sprintf(commandnumber,"%d", ITM_RADto);} else
                       if (strcompare(commandnumber,"RAN#" )) {sprintf(commandnumber,"%d", ITM_RAN);} else
                       if (strcompare(commandnumber,"RCLEL" )) {sprintf(commandnumber,"%d", ITM_RCLEL);} else
@@ -562,6 +577,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">I" )) {sprintf(commandnumber,"%d", ITM_RI);} else
                       if (strcompare(commandnumber,"ERPN?" )) {sprintf(commandnumber,"%d", ITM_SH_ERPN);} else
                       if (strcompare(commandnumber,"X.XEQ" )) {sprintf(commandnumber,"%d", ITM_XXEQ);} else
+                      if (strcompare(commandnumber,"STATGRF" )) {sprintf(commandnumber,"%d", -MNU_ST_GRAPH);} else
                       if (strcompare(commandnumber,"CPXI" )) {sprintf(commandnumber,"%d", ITM_CPXI);} else
                       if (strcompare(commandnumber,"CPXJ" )) {sprintf(commandnumber,"%d", ITM_CPXJ);} else
                       if (strcompare(commandnumber,"SSIZE4" )) {sprintf(commandnumber,"%d", ITM_SSIZE4);} else
@@ -596,34 +612,51 @@ void execute_string(const char *inputstring, bool_t exec1) {
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 
-
+// Unlimited GTO                                      GTO M1
+// 4 Labels M1, M2, M3 & M4                           XEQLBL M1
+// Unlimited DSZ and ISZ                              DSZ 00
+// Non-nested subroutine GSB M1..M4; RTN              GSB M01     RTN
+// END reacts to labelling parse and execution parse  END
+// RETURN reacts to execution parse only              RETURN
 
 
                       if (strcompare(commandnumber,"DSZ"    )) {sprintf(commandnumber,"%d", ITM_DEC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
-                       if (strcompare(commandnumber,"ISZ"   )) {sprintf(commandnumber,"%d", ITM_INC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
-                        if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                              else //EXPECTING FOLLOWING OPERAND Mn
-                          if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                     else //EXPECTING FOLLOWING OPERAND Mn
-                           if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}              else//EXPECTING 2 OPERANDS nn XXXXXX
+                       if (strcompare(commandnumber,"ISZ"   )) {sprintf(commandnumber,"%d", ITM_INC); gotoinprogress = 9;}       else //EXPECTING FOLLOWING OPERAND "nn"
+                        if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                                      else //EXPECTING FOLLOWING OPERAND Mn
+                          if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                             else //EXPECTING FOLLOWING OPERAND Mn
+                           if (strcompare(commandnumber,"XEQLBL"))    {xeqlblinprogress =  1; starttoken = 1;}                      else //EXPECTING 2 OPERANDS nn XXXXXX
                             if (strcompare(commandnumber,"GTO"   ))    {
-                              if(exec) {
-                                gotoinprogress = 1;
-                                go = true;
+                                  if(exec) {go = true; gotoinprogress = 1;
                                   force_refresh();
                                   #ifdef PC_BUILD
-                                    printf("   >>> Loop %d:go\n",loopnumber++);
+                                    printf("   >>> Loop GTO Jump %d:go\n",loopnumber++);
                                   #endif
                               }
                             } else
-                             if (strcompare(commandnumber,"XEQ"   ))    {if(exec) {go = true; gotoinprogress = 1; ix_m = ix;}} else
-                              if (strcompare(commandnumber,"RTN"   ))    {if(exec) {ix = ix_m; ix_m = 0;}}                      else
+                             if (strcompare(commandnumber,"GSB"   ))    {
+                                  if(exec) {go = true; gotoinprogress = 1; 
+                                  ix_m = ix;
+                                  force_refresh();
+                                  #ifdef PC_BUILD
+                                    printf("   >>> Sub  GSB Jump %d:go storing return address %d\n",loopnumber++, ix_m);
+                                  #endif
+                               }
+                             } else
+                              if (strcompare(commandnumber,"RTN"))       {
+                                  if(exec) {ix = ix_m+2; ix_m = 0;
+                                  force_refresh();
+                                  #ifdef PC_BUILD
+                                    printf("   >>> Sub  RTN to return address %d\n", ix);
+                                  #endif
+                               }
+                             } else
                                if (strcompare(commandnumber,"GTO_SZ"))    {if(exec) {go = (temporaryInformation == TI_FALSE); gotoinprogress = 1; }} else
-                                if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;} else
-                                 if (strcompare(commandnumber,"RETURN"))    {if(exec) {ix = stringByteLength(inputstring)-2;}} 
-                                 else
+                                if (strcompare(commandnumber,"END"))       {ix = stringByteLength(inputstring)-2;}                      else
+                                 if (strcompare(commandnumber,"RETURN"))    {if(exec) {ix = stringByteLength(inputstring)-2;}}           else
 //         END ELSE
                                    { 
                                      ii = 0;
-                                     while(commandnumber[ii]!=0 && commandnumber[ii]<='9' && commandnumber[ii]>='0') {
+                                     while(commandnumber[ii]!=0 && ((commandnumber[ii]<='9' && commandnumber[ii]>='0') || commandnumber[ii]>='.' || commandnumber[ii]>='E' ) ) {
                                        ii++;
                                      }
                                      if(commandnumber[ii]==0 && (gotoinprogress == 0 || gotoinprogress == 10) && xeqlblinprogress == 0 ) {
@@ -649,7 +682,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       //printf("   gotoinprogress = %5d; xeqlblinprogress = %5d; commandnumber = %10s\n",gotoinprogress,xeqlblinprogress,commandnumber);
 
 
-                      temporaryInformation = TI_NO_INFO;   //Cancel after go was determined.
+                      temporaryInformation   = TI_NO_INFO;   //Cancel after go was determined.
                       switch(gotoinprogress) {
                         case 1:                  //GOTO IN PROGRESS: got command GOTO. If arriving from DSZ with no label, just pass around and skip to 2
                           gotoinprogress = 2;
@@ -805,7 +838,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   #define pgmpath "PROGRAMS"
   strcpy(fn_short,"XEQMINDEX.TXT");
   strcpy(fn_long, "");
-  strcpy(fallback,"XEQM01:XEQM01 HELP;");
+  strcpy(fallback,"XEQM01:HELP;");
 
   if(verbose_jm>=1) {
     strcpy(tmp,fn_short); strcat(tmp," A: Loading XEQMENU mapping"); print_linestr(tmp,false);
@@ -859,7 +892,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
     sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT ");
   } 
   else {
-    sprintf(fallback,"XEQLBL %s XEQM-%s ",nn,nn);
+    sprintf(fallback,"XEQLBL %s X%s ",nn,nn);
   }
 
   if(verbose_jm>=2) {

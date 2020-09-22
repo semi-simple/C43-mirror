@@ -2279,11 +2279,11 @@ static void incLonI(uint16_t regist, uint8_t flag) {
 
   (flag==INC_FLAG) ? longIntegerAddUInt(r, 1, r) : longIntegerSubtractUInt(r, 1, r);
 
-  temporaryInformationJM = longIntegerIsZero(r) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+  temporaryInformation = longIntegerIsZero(r) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
   
   //uint32_t n;                                               //JM
   //longIntegerToUInt(r, n);                                  //JM
-  //printf("### %d, tempi=%d\n",n, temporaryInformationJM );  //JM
+  //printf("### %d, tempi=%d\n",n, temporaryInformation );    //JM
   
   convertLongIntegerToLongIntegerRegister(r, regist);
 

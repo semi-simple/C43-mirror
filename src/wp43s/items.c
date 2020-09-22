@@ -483,7 +483,6 @@ void fnInDefault                (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode               (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_f             (uint16_t unusedParamButMandatory) {}
 void fnJMUSERmode_g             (uint16_t unusedParamButMandatory) {}
-//void fnBASE_Hash                (uint16_t unusedParamButMandatory) {}
 void fnGraph                    (uint16_t unusedParamButMandatory) {}
 void fnJM_2SI                   (uint16_t unusedParamButMandatory) {}
 void fnTo_ms                    (uint16_t unusedParamButMandatory) {}
@@ -627,8 +626,8 @@ const item_t indexOfItems[] = {
 /*   88 */  { fnFloor,                     NOPARAM,                     "FLOOR",                                       "FLOOR",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*   89 */  { fnGcd,                       NOPARAM,                     "GCD",                                         "GCD",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*   90 */  { fnLcm,                       NOPARAM,                     "LCM",                                         "LCM",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*   91 */  { fnDec,                       TM_REGISTER,                 "DECX",                                        "DECX",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*   92 */  { fnInc,                       TM_REGISTER,                 "INCX",                                        "INCX",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*   91 */  { fnDec,                       TM_REGISTER,                 "DECR",                                        "DECR",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*   92 */  { fnInc,                       TM_REGISTER,                 "INCR",                                        "INCR",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*   93 */  { fnIp,                        NOPARAM,                     "IP",                                          "IP",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*   94 */  { fnFp,                        NOPARAM,                     "FP",                                          "FP",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*   95 */  { fnAdd,                       ITM_ADD,                     "+",                                           "+",                                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2500,7 +2499,7 @@ const item_t indexOfItems[] = {
 /* 1919 */  { itemToBeCoded,               NOPARAM,                     "KEYS",                                        "KEYS",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1920 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 34
 /* 1921 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 875 Small latin letters
-/* 1922 */  { itemToBeCoded,               NOPARAM,                     "ST_GRF",                                      "ST_GRF",                                      0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
+/* 1922 */  { itemToBeCoded,               NOPARAM,                     "STATGRF",                                     "STATGRF",                                      0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
 /* 1923 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+U&N",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},//J=V43
 /* 1924 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1925 */  { itemToBeCoded,               NOPARAM,                     "XXEQ",                                        "XXEQ",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},

@@ -328,20 +328,37 @@ void restoreCalc(void) {
       refreshRegisterLine(REGISTER_X); // to show L register
     #endif
 
-    if(calcMode == CM_NORMAL)                calcModeNormalGui();
-    else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
-    else if(calcMode == CM_TAM)              calcModeTamGui();
-    else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
-    else if(calcMode == CM_ASM)              calcModeAsm();
-    else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
-    else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
-    else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
-    else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
-    else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
-    else {
-      sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
-      displayBugScreen(errorMessage);
-    }
+    #ifdef SCREEN_800X480
+      if(calcMode == CM_NORMAL)                {}
+      else if(calcMode == CM_AIM)              {cursorEnabled = true;}
+      else if(calcMode == CM_TAM)              {}
+      else if(calcMode == CM_NIM)              {cursorEnabled = true;}
+      else if(calcMode == CM_ASM)              {}
+      else if(calcMode == CM_ASM_OVER_TAM)     {calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_ASM_OVER_AIM)     {calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_REGISTER_BROWSER) {}
+      else if(calcMode == CM_FLAG_BROWSER)     {}
+      else if(calcMode == CM_FONT_BROWSER)     {}
+      else {
+        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+        displayBugScreen(errorMessage);
+      }
+    #else
+      if(calcMode == CM_NORMAL)                calcModeNormalGui();
+      else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
+      else if(calcMode == CM_TAM)              calcModeTamGui();
+      else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
+      else if(calcMode == CM_ASM)              calcModeAsm();
+      else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
+      else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
+      else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+      else {
+        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+        displayBugScreen(errorMessage);
+      }
+    #endif // SCREEN_800X480
 
     refreshScreen();
   }

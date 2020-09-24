@@ -51,6 +51,12 @@
 #define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 100
 #endif 
 
+#define SCREEN_800X480 // Comment this define if you want a keyboard in addition to the screen on Raspberry pi
+
+#ifndef RASPBERRY
+  #undef SCREEN_800X480
+#endif
+
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
 #endif
@@ -82,7 +88,7 @@
 
 #endif
 
-#ifdef DMCP_BUILD
+#if defined(DMCP_BUILD) || defined(SCREEN_800X480)
   #undef  DEBUG_PANEL
   #define DEBUG_PANEL 0
   #undef  DEBUG_REGISTER_L

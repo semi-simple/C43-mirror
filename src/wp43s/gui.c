@@ -22,6 +22,7 @@
 
 #ifdef PC_BUILD
 GtkWidget *grid;
+#ifndef SCREEN_800X480
 GtkWidget *backgroundImage;
 #ifdef S43
   GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
@@ -108,6 +109,7 @@ GtkWidget *lblOn; //JM
 #endif
 
 char *cssData;
+#endif // SCREEN_800X480
 
 
 
@@ -929,6 +931,7 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
 
 
 #ifdef PC_BUILD
+#ifndef SCREEN_800X480
 /********************************************//**
  * \brief Reads the CSS file to configure the calc's GUI style
  *
@@ -2694,7 +2697,7 @@ void calcModeTamGui(void) {
 
   moveLabels();
 }
-
+#endif // SCREEN_800X480
 
 
 /********************************************//**
@@ -2704,6 +2707,7 @@ void calcModeTamGui(void) {
  * \return void
  ***********************************************/
 void setupUI(void) {
+#ifndef SCREEN_800X480
   int            numBytes, xPos, yPos;
   GError         *error;
   GtkCssProvider *cssProvider;
@@ -3976,6 +3980,41 @@ void setupUI(void) {
   #endif
 
   gtk_widget_show_all(frmCalc);
+#else // SCREEN_800X480
+    // The main window
+    frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
+    gtk_window_fullscreen(GTK_WINDOW(frmCalc));
+    gtk_window_set_decorated (GTK_WINDOW (frmCalc), FALSE);
+    
+    gtk_widget_set_name(frmCalc, "mainWindow");
+    gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
+    g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
+    g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
+    
+    gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
+    
+    // Fixed grid to freely put widgets on it
+    grid = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(frmCalc), grid);
+    
+    // LCD screen 800x480
+    screen = gtk_drawing_area_new();
+    gtk_widget_set_size_request(screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
+    gtk_fixed_put(GTK_FIXED(grid), screen, 0, 0);
+    screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
+    int numBytes = screenStride * SCREEN_HEIGHT * 4;
+    screenData = malloc(numBytes);
+    if(screenData == NULL) {
+        sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
+        moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
+        exit(1);
+    }
+    
+    g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
+    
+    gtk_widget_show_all(frmCalc);
+#endif // SCREEN_800X480
 }
 #endif
 
@@ -4018,7 +4057,7 @@ void calcModeNormal(void) {
   hideCursor();
   cursorEnabled = false;
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeNormalGui();
   #endif
 }
@@ -4063,7 +4102,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
 
   setSystemFlag(FLAG_ALPHA);
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeAimGui();
   #endif
 }
@@ -4090,7 +4129,7 @@ void calcModeAsm(void) {
   clearSystemFlag(FLAG_ALPHA);
   resetAlphaSelectionBuffer();
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeAimGui();
   #endif
 }
@@ -4192,7 +4231,7 @@ void calcModeTam(void) {
 
   tamCurrentOperation = 0;
 
-  #ifdef PC_BUILD
+  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
     calcModeTamGui();
   #endif
 }

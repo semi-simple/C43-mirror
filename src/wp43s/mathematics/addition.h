@@ -48,6 +48,7 @@ void addStriDate(void);
 void addStriShoI(void);
 void addStriReal(void);
 void addStriCplx(void);
+void addRegYStri(void);   //JM
 
 //      RegYRegX
 void addRemaRema(void);

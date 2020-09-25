@@ -30,7 +30,7 @@ void (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYP
 /*  3 Complex34     */ {addLonICplx, addRealCplx, addCplxCplx, addError,    addError,    addStriCplx, addError,    addError,    addShoICplx,  addError},
 /*  4 Time          */ {addLonITime, addRealTime, addError,    addTimeTime, addError,    addStriTime, addError,    addError,    addError,     addError},
 /*  5 Date          */ {addLonIDate, addRealDate, addError,    addError,    addError,    addStriDate, addError,    addError,    addError,     addError},
-/*  6 String        */ {addError,    addError,    addError,    addError,    addError,    addStriStri, addError,    addError,    addError,     addError},
+/*  6 String        */ {addRegYStri, addRegYStri, addRegYStri, addRegYStri, addRegYStri, addStriStri, addError,    addError,    addRegYStri,  addError},   //JM added addRegYStri
 /*  7 Real34 mat    */ {addError,    addError,    addError,    addError,    addError,    addStriRema, addRemaRema, addCxmaRema, addError,     addError},
 /*  8 Complex34 mat */ {addError,    addError,    addError,    addError,    addError,    addStriCxma, addRemaCxma, addCxmaCxma, addError,     addError},
 /*  9 Short integer */ {addLonIShoI, addRealShoI, addCplxShoI, addError,    addError,    addStriShoI, addError,    addError,    addShoIShoI,  addError},
@@ -70,6 +70,30 @@ void fnAdd(uint16_t unusedParamButMandatory) {
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
 }
+
+
+
+
+
+void addRegYStri(void) {                                                       //JM vv Add number + string
+  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+  
+  char tmp[2];
+  tmp[0]=0;
+  int16_t len = stringByteLength(tmp) + 1;
+  reallocateRegister(REGISTER_Y, dtString, TO_BLOCKS(len), AM_NONE);
+  xcopy(REGISTER_STRING_DATA(REGISTER_Y), tmp, len);
+  
+  addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
+  copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_X);
+
+  addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+
+}                                                                             //JM ^^
+
 
 
 

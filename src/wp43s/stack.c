@@ -158,6 +158,9 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
   displayStack = numberOfStackLines;
 }
 
+void fnShoiXRepeats(uint16_t numberOfRepeats) {           //JM SHOIDISP
+  displayStackSHOIDISP = numberOfRepeats;                 //   0-3
+}
 
 
 /********************************************//**

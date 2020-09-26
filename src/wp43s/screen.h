@@ -22,9 +22,14 @@
 #define SCREEN_HEIGHT         240
 #define ON_PIXEL              0x303030 // blue red green
 #define OFF_PIXEL             0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE   14 // 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR //JM increased from 7 to 14. Why not. It is not a Babbage machine.
+#define SOFTMENU_STACK_SIZE   14 //JM 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR //JM increased from 7 to 14. Why not. It is not a Babbage machine.
 #define TEMPORARY_INFO_OFFSET 10 // I find 4 looks better
 #define REGISTER_LINE_HEIGHT  36 // was 37
+
+//#define displayStackSHOIDISP 2                  //JMSHOIDISP  displayStackSHOIDISP=1: 3 lines of X-repeats
+                                                  //JMSHOIDISP  displayStackSHOIDISP=2: 2 lines of X-repeats
+                                                  //JMSHOIDISP  displayStackSHOIDISP=3: 1 lines of X-repeats
+                                                  //JMSHOIDISP  displayStackSHOIDISP=4: 0 lines of X-repeats
 
 #define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
 #define Y_POSITION_OF_REGISTER_Z_LINE  60 // was  61

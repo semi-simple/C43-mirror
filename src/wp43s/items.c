@@ -522,6 +522,7 @@ void fnByteShortcutsS           (uint16_t unusedParamButMandatory) {}  //JM POC 
 void fnByteShortcutsU           (uint16_t unusedParamButMandatory) {}  //JM POC BASE2
 void fnByte                     (uint16_t unusedParamButMandatory) {}  //JM POC BASE2
 void fnClAIM                    (uint16_t unusedParamButMandatory) {}  //JM POC BASE2
+void fnShoiXRepeats             (uint16_t numberOfRepeats)         {}  //JM SHOIDISP
 
                                                                                 //JM ^^
 
@@ -2499,7 +2500,7 @@ const item_t indexOfItems[] = {
 /* 1919 */  { itemToBeCoded,               NOPARAM,                     "KEYS",                                        "KEYS",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1920 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 34
 /* 1921 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 875 Small latin letters
-/* 1922 */  { itemToBeCoded,               NOPARAM,                     "STATGRF",                                     "STATGRF",                                      0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
+/* 1922 */  { itemToBeCoded,               NOPARAM,                     "STATGRF",                                     "STATGRF",                                     0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
 /* 1923 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+U&N",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},//J=V43
 /* 1924 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1925 */  { itemToBeCoded,               NOPARAM,                     "XXEQ",                                        "XXEQ",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
@@ -2743,9 +2744,10 @@ const item_t indexOfItems[] = {
 /* 2163 */  { fnByte,                      2,                           "SR1",                                         "SR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2164 */  { fnByte,                      3,                           "RL1",                                         "RL1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2165 */  { fnByte,                      4,                           "RR1",                                         "RR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2166 */  { fnByte,                      5,                           "SWAP.W",                                       "SWAP.W",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2167 */  { fnByte,                      6,                           "SWAP.B",                                       "SWAP.B",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
+/* 2166 */  { fnByte,                      5,                           "SWAP.W",                                      "SWAP.W",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
+/* 2167 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
+/* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                      "DISP_SI",                                      0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
 
-/* 2169 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2170 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

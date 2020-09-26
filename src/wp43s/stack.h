@@ -21,6 +21,7 @@ void fnDropY       (uint16_t unusedParamButMandatory);
 void fnRollUp      (uint16_t unusedParamButMandatory);
 void fnRollDown    (uint16_t unusedParamButMandatory);
 void fnDisplayStack(uint16_t numberOfStackLines);
+void fnShoiXRepeats(uint16_t numberOfRepeats);           //JM SHOIDISP
 void fnSwapX       (uint16_t regist);
 void fnSwapY       (uint16_t regist);
 void fnSwapZ       (uint16_t regist);

@@ -119,6 +119,10 @@ void reset_jm_defaults(int16_t toload) {
     setSystemFlag(FLAG_SPCRES);                                //JM default infinity etc.
     clearSystemFlag(FLAG_DENFIX);                              //JM default
     denMax = 64;                                               //JM default
+
+    fnShoiXRepeats(2);                                         //JM SHOIDISP
+
+
      //JM defaults ^^
 
     lastIntegerBase = 0;                                       //JM

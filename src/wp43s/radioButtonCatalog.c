@@ -492,6 +492,10 @@ int16_t fnItemShowValue(int16_t item) {
     result = displayStack;
     break;
 
+  case ITM_SHOIREP:
+    result = displayStackSHOIDISP;
+    break;
+
   case ITM_GAP:     //  215
     result = groupingGap;
     break;

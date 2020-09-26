@@ -1423,6 +1423,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(jm_HOME_MIR);
   storeToDtConfigDescriptor(jm_HOME_FIX);
   storeToDtConfigDescriptor(jm_LARGELI);                                   //JMCFG^^
+  storeToDtConfigDescriptor(displayStackSHOIDISP);                                   //JMCFG^^
 }
 
 
@@ -1727,6 +1728,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(jm_HOME_MIR);      
     recallFromDtConfigDescriptor(jm_HOME_FIX);
     recallFromDtConfigDescriptor(jm_LARGELI);                                  //JMCFG^^         
+    recallFromDtConfigDescriptor(displayStackSHOIDISP);                                  //JMCFG^^         
   }
 
   else {

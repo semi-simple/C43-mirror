@@ -412,7 +412,6 @@ uint64_t x;
     x = *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X));
 
     //printf("### %d %d",(shortIntegerWordSize & (bitWidth-1)), (shortIntegerWordSize |  (bitWidth-1) ) + 1 );
-    if( (shortIntegerWordSize & (bitWidth-1)) != 0 ) fnSetWordSize((shortIntegerWordSize |  (bitWidth-1) ) + 1);
 
     b7 = (x & 0xFF00000000000000) >> (64- 8);
     b6 = (x & 0x00FF000000000000) >> (64-16);
@@ -424,6 +423,9 @@ uint64_t x;
     b0 = (x & 0x00000000000000FF) >> (64-64);
   
     if(bitWidth == 8) {
+      if(shortIntegerWordSize<16) {fnSetWordSize(16);}
+      else
+        if( (shortIntegerWordSize & (bitWidth-1)) != 0 ) {fnSetWordSize((shortIntegerWordSize |  (bitWidth-1) ) + 1);}
       switch(shortIntegerWordSize) {
         case 16: x =                                                                               (b0 << 8 ) | b1; break;
         case 24: x =                                                                  (b0 << 16) | (b1 << 8 ) | b2; break;
@@ -436,6 +438,9 @@ uint64_t x;
       }
     } else
     if(bitWidth == 16) {
+      if(shortIntegerWordSize<32) {fnSetWordSize(32);}
+      else
+        if( (shortIntegerWordSize & (bitWidth-1)) != 0 ) {fnSetWordSize((shortIntegerWordSize |  (bitWidth-1) ) + 1);}
       switch(shortIntegerWordSize) {
         case 32: x =                                                     (b1 << 24) | (b0 << 16) | (b3 << 8 ) | b2; break;
         case 48: x =                           (b1 << 40) | (b0 << 32) | (b3 << 24) | (b2 << 16) | (b5 << 8 ) | b4; break;
@@ -445,7 +450,6 @@ uint64_t x;
 
     }
   *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = x;
-
 
   }
   else {

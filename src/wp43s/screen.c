@@ -1403,8 +1403,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
 }
 
 
-
-uint8_t   displayStack_m = 255;                   //JMSHOI
+uint8_t   displayStack_m = 255;                   //JMSHOIDISP
 /********************************************//**
  * \brief Displays one register line
  *
@@ -1415,18 +1414,18 @@ void refreshRegisterLine(calcRegister_t regist) {
   int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
-if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
-  if(displayStack != 1) {displayStack_m = displayStack;} //JMSHOI
-  fnDisplayStack(1);                              //JMSHOI             
-} else {                                          //JMSHOI 
-  if(displayStack_m != 255) {                     //JMSHOI
-    fnDisplayStack(displayStack_m);               //JMSHOI
-    displayStack_m = 255;                         //JMSHOI
+if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
+  if(displayStack != 4-displayStackSHOIDISP) {displayStack_m = displayStack;}   //JMSHOI
+  fnDisplayStack(4-displayStackSHOIDISP);                                       //JMSHOI             
+} else {                                                                        //JMSHOI 
+  if(displayStack_m != 255) {                                                   //JMSHOI
+    fnDisplayStack(displayStack_m);                                             //JMSHOI
+    displayStack_m = 255;                                                       //JMSHOI
   } else {
-    fnDisplayStack(4);
-    //displayStack_m = 255;//is already 255
-  }                                               //JMSHOI
-}                                                 //JMSHOI
+    //fnDisplayStack(4);  //removed because it clamps DSTACK to 4
+                                                                                //displayStack_m = 255;//is already 255
+  }                                                                             //JMSHOI
+}                                                                               //JMSHOI
 
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
@@ -2178,47 +2177,60 @@ if(lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { 
       else if(getRegisterDataType(regist) == dtShortInteger) {
         shortIntegerToDisplayString(regist, tmpStr3000, true);
         showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-
         //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
-        if(displayStack == 1 && lastIntegerBase != 0) {
-          copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
-          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
-          setRegisterTag(REGISTER_Y, 2);
-          shortIntegerToDisplayString(REGISTER_Y, tmpStr3000, true);
-          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
-            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+        if(displayStack == 4-displayStackSHOIDISP && lastIntegerBase != 0) {
+          if(displayStack == 1){
+            copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
+            setRegisterTag(REGISTER_Y, 2);
+            shortIntegerToDisplayString(REGISTER_Y, tmpStr3000, true);
+            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+              showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            }
+            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
           }
-          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
-
-          copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
-          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
-          setRegisterTag(REGISTER_Z, 8);
-          shortIntegerToDisplayString(REGISTER_Z, tmpStr3000, true);
-          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
-            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          if(displayStack == 1 || displayStack == 2){
+            copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
+            if(displayStack == 2) setRegisterTag(REGISTER_Z, 2); else 
+              if(displayStack == 1) setRegisterTag(REGISTER_Z, 8);
+            shortIntegerToDisplayString(REGISTER_Z, tmpStr3000, true);
+            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+              showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            }
+            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
           }
-          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
-
-          copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
-          copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
-          setRegisterTag(REGISTER_T, 16);
-          shortIntegerToDisplayString(REGISTER_T, tmpStr3000, true);
-          if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
-            showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          if(displayStack == 1 || displayStack == 2 || displayStack ==3){
+            copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
+            setRegisterTag(REGISTER_T, 16);
+            shortIntegerToDisplayString(REGISTER_T, tmpStr3000, true);
+            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+              showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            }
+            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
           }
-          showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-          copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
           #ifdef PC_BUILD
             for(w=0; w<SCREEN_WIDTH; w++) {
-              setPixel(w, Y_POSITION_OF_REGISTER_X_LINE - 2);
+              if(displayStack == 3)
+                setPixel(w, Y_POSITION_OF_REGISTER_Z_LINE - 2); else
+              if(displayStack == 2)
+                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2); else
+              if(displayStack == 1)
+                setPixel(w, Y_POSITION_OF_REGISTER_X_LINE - 2);
             }
           #endif
           #if DMCP_BUILD
-            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
+            if(displayStack == 3)
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Z_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else
+            if(displayStack == 2)
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else
+            if(displayStack == 1)
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 0xFF);            
           #endif
-
         }                                                                 //JM ^^
 
               }

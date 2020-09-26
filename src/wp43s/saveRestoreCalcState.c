@@ -212,6 +212,7 @@ void saveCalc(void) {
   save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
   save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
   save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
+  save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               backup);   //JM ^^
 
 
   fclose(backup);
@@ -395,6 +396,7 @@ void restoreCalc(void) {
     restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
     restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
     restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
+    restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               backup);   //JM ^^
 
 
     fclose(backup);
@@ -660,6 +662,8 @@ void fnSave(uint16_t unusedParamButMandatory) {
   sprintf(tmpStr3000, "rngState\n%" PRIu64 " %" PRIu64 "\n", pcg32_global.state, pcg32_global.inc);
   save(tmpStr3000, strlen(tmpStr3000), backup);
   sprintf(tmpStr3000, "exponentLimit\n%" PRId16 "\n", exponentLimit);
+  save(tmpStr3000, strlen(tmpStr3000), backup);
+  sprintf(tmpStr3000, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);
   save(tmpStr3000, strlen(tmpStr3000), backup);
 
   #ifdef DMCP_BUILD
@@ -1078,6 +1082,9 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         }
         else if(strcmp(aimBuffer, "exponentLimit") == 0) {
           exponentLimit = stringToInt16(tmpStr3000);
+        }
+        else if(strcmp(aimBuffer, "displayStackSHOIDISP") == 0) {         //JM SHOIDISP
+          displayStackSHOIDISP = stringToUint8(tmpStr3000);
         }
       }
     }

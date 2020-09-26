@@ -133,7 +133,8 @@ typedef struct {
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;
   bool_t jm_HOME_FIX;     
-  bool_t jm_LARGELI;                                                   //JMCFG^^
+  bool_t jm_LARGELI;     
+  uint8_t displayStackSHOIDISP;                                             //JMCFG^^
 
 } dtConfigDescriptor_t;
 

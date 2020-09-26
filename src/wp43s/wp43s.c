@@ -530,7 +530,7 @@ longIntegerFree(li);*/
     if(wp43sKbdLayout) {
       /////////////////////////////////////////////////
       // For key reassignment see:
-      // https://www.swissmicros.com/dm42/devel/dmcp_devel_manual/#_system_key_table
+      // https://technical.swissmicros.com/dm42/devel/dmcp_devel_manual/#_system_key_table
       //
       // Output of keymap2layout keymap.txt
       //

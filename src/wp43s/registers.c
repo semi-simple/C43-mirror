@@ -1227,6 +1227,9 @@ void fnStoreAdd(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)) &= shortIntegerMask;
+    }
 
     addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1256,6 +1259,9 @@ void fnStoreSub(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)) &= shortIntegerMask;
+    }
 
     subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1285,6 +1291,9 @@ void fnStoreMult(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)) &= shortIntegerMask;
+    }
 
     multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1314,6 +1323,9 @@ void fnStoreDiv(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
+    if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_Y)) &= shortIntegerMask;
+    }
 
     division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1500,6 +1512,9 @@ void fnRecall(uint16_t regist) {
     else {
       liftStack();
       copySourceRegisterToDestRegister(regist, REGISTER_X);
+      if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+        *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= shortIntegerMask;
+      }
     }
   }
   #ifdef PC_BUILD
@@ -1535,6 +1550,9 @@ void fnRecallAdd(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= shortIntegerMask;
+    }
 
     addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1563,6 +1581,9 @@ void fnRecallSub(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= shortIntegerMask;
+    }
 
     subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1591,6 +1612,9 @@ void fnRecallMult(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= shortIntegerMask;
+    }
 
     multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -1619,6 +1643,9 @@ void fnRecallDiv(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) &= shortIntegerMask;
+    }
 
     division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -2565,8 +2592,12 @@ void registerMax(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest) 
 
   if(!registerCmp(reg1, reg2, &result))
     registerCmpError(reg1, reg2);
-  else if(result != 0)
+  else if(result != 0) {
     copySourceRegisterToDestRegister(result>0 ? reg1 : reg2, dest);
+    if(getRegisterDataType(dest) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(dest)) &= shortIntegerMask;
+    }
+  }
 }
 
 void registerMin(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest) {
@@ -2574,6 +2605,10 @@ void registerMin(calcRegister_t reg1, calcRegister_t reg2, calcRegister_t dest) 
 
   if(!registerCmp(reg1, reg2, &result))
     registerCmpError(reg1, reg2);
-  else if(result != 0)
+  else if(result != 0) {
     copySourceRegisterToDestRegister(result>0 ? reg2 : reg1, dest);
+    if(getRegisterDataType(dest) == dtShortInteger) {
+      *(REGISTER_SHORT_INTEGER_DATA(dest)) &= shortIntegerMask;
+    }
+  }
 }

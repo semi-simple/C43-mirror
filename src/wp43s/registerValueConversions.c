@@ -159,7 +159,7 @@ void convertShortIntegerRegisterToReal(calcRegister_t source, real_t *destinatio
 
 
 void convertShortIntegerRegisterToUInt64(calcRegister_t regist, int16_t *sign, uint64_t *value) {
-  *value = *(REGISTER_SHORT_INTEGER_DATA(regist));
+  *value = *(REGISTER_SHORT_INTEGER_DATA(regist)) & shortIntegerMask;
 
   if(shortIntegerMode == SIM_UNSIGN) {
     *sign = 0;

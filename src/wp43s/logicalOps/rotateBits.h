@@ -28,3 +28,4 @@ void fnRrc   (uint16_t numberOfShifts);
 void fnLj    (uint16_t numberOfShifts);
 void fnRj    (uint16_t numberOfShifts);
 void fnMirror(uint16_t unusedButMandatoryParameter);
+void fnSwapEndian(uint8_t bitWidth);                  //JM

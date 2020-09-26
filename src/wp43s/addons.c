@@ -628,8 +628,8 @@ void fnByte(uint16_t command) {
     case 2: fnSr(1); break;
     case 3: fnRl(1); break;
     case 4: fnRr(1); break;
-    case 5: break;            //FWORD
-    case 6: break;            //FBYTE
+    case 5: fnSwapEndian(16);break;            //FWORD
+    case 6: fnSwapEndian(8); break;           //FBYTE
     default: break;
   }
 }                                                      //JM POC BASE2 ^^

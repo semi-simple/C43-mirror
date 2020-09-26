@@ -2743,8 +2743,8 @@ const item_t indexOfItems[] = {
 /* 2163 */  { fnByte,                      2,                           "SR1",                                         "SR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2164 */  { fnByte,                      3,                           "RL1",                                         "RL1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2165 */  { fnByte,                      4,                           "RR1",                                         "RR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2166 */  { fnByte,                      5,                           "FWORD",                                       "FWORD",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2167 */  { fnByte,                      6,                           "FBYTE",                                       "FBYTE",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
+/* 2166 */  { fnByte,                      5,                           "SWAP.W",                                       "SWAP.W",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
+/* 2167 */  { fnByte,                      6,                           "SWAP.B",                                       "SWAP.B",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
 
 /* 2169 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

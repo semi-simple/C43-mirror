@@ -2025,6 +2025,10 @@ void processTests(void) {
     exit(-1);
   }
 
+  setSystemFlag(FLAG_DENANY);                              //JM Default
+  setSystemFlag(FLAG_DENFIX);                              //JM default
+  denMax = 9999;                                               //JM default
+ 
   fgets(line, 9999, fileList);
   while(!feof(fileList)) {
     standardizeLine();

@@ -21,7 +21,7 @@
 /* ADDITIONAL C43 functions and routines */
 
 #define PC_BUILD_TELLTALE
-#undef PC_BUILD_TELLTALE
+#undef PC_BUILD_TELLTALE           //verbose
 
 #include "wp43s.h"
 

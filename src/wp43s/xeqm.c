@@ -181,7 +181,11 @@ void execute_string(const char *inputstring, bool_t exec1) {
       state_quotes = false;
       commandnumber[0]=0;
       aa[0]=0;
+#ifdef DMCP_BUILD
+      while (inputstring[ix]!=0 && key_empty()) {
+#else
       while (inputstring[ix]!=0) {
+#endif
         strcpy(bb,aa);
         aa[0] = inputstring[ix];
         aa[1] = 0;

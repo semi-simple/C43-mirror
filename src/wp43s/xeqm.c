@@ -960,7 +960,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 void XEQMENU_loadAllfromdisk(void) {
 #ifndef TESTSUITE_BUILD
       clearScreen_old(false, true, true);
-      print_inlinestr("Loading XEQM program files:",true);
+      print_inlinestr("Loading all XEQM program files:",true);
 
       char line[TMP_STR_LENGTH];
       

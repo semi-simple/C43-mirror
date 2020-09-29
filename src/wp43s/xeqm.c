@@ -618,7 +618,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"XEQM18" ) && exec) {sprintf(commandnumber,"%d", ITM_X_g6);} else
                       if (strcompare(commandnumber,"X.SAVE" )) {sprintf(commandnumber,"%d", ITM_XSAVE);} else
                       if (strcompare(commandnumber,"X.LOAD" )) {sprintf(commandnumber,"%d", ITM_XLOAD);} else
-
+                      if (strcompare(commandnumber,"SINCPI" )) {sprintf(commandnumber,"%d", ITM_sincpi);} else
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 

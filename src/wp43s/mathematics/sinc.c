@@ -64,6 +64,34 @@ void fnSinc(uint16_t unusedParamButMandatory) {
 
 
 
+void fnSincpi(uint16_t unusedParamButMandatory) {            //JM vv
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      //convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, AM_MULTPI);
+      setRegisterAngularMode(REGISTER_X, AM_MULTPI);
+      break;
+
+    case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+        //convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
+        setRegisterAngularMode(REGISTER_X, AM_MULTPI);
+      }
+      break;
+    default: break;
+  }
+  
+  Sinc[getRegisterDataType(REGISTER_X)]();
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+
+}                                                            //JM ^^
+
+
+
+
 void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
   // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // sinc (a + ib) = sin(a + ib) / (a + ib), for the allowable conditions

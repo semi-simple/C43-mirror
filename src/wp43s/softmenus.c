@@ -86,7 +86,7 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };
 
 const int16_t menu_TRI[]         = { ITM_sin,                       ITM_cos,                    ITM_tan,                  ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
-                                     ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_DMS,               ITM_toREC,                   ITM_toPOL,                          //JM re-arranged menu TRIG menu
+                                     ITM_DEG,                       ITM_RAD,                    ITM_MULPI,                ITM_DMS,               ITM_sinc,                    ITM_sincpi,                          //  ITM_toREC,                   ITM_toPOL,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
 const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM,                     

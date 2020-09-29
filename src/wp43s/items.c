@@ -525,6 +525,8 @@ void fnClAIM                    (uint16_t unusedParamButMandatory) {}  //JM POC 
 void fnShoiXRepeats             (uint16_t numberOfRepeats)         {}  //JM SHOIDISP
 void fnDumpMenus                (uint16_t unusedParamButMandatory) {}  //JM
 void fnCFGsettings              (uint16_t unusedParamButMandatory) {}
+void fnSincpi                   (uint16_t unusedParamButMandatory) {}
+
 
                                                                                 //JM ^^
 
@@ -2750,6 +2752,7 @@ const item_t indexOfItems[] = {
 /* 2167 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
 /* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
+/* 2170 */  { fnSincpi,                    NOPARAM,                     "sinc" STD_pi,                                 "sinc" STD_pi,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 
-/* 2170 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2171 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

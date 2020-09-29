@@ -27,20 +27,6 @@
 
 
 
-void fnClAIM(uint16_t unusedParamButMandatory) {
-  //printf("Trying to clear input buffer\n");
-  if(calcMode == CM_NIM) {
-    strcpy(aimBuffer,"+");
-    fnKeyBackspace(0);
-    //printf("|%s|\n",aimBuffer);
-  }
-  lastIntegerBase = 0;
-//  clearRegister(REGISTER_X);
-//  fnClX(0);
-//  refreshScreen();
-}
-
-
 
 void jm_show_calc_state(char comment[]) {
 #ifdef PC_BUILD_TELLTALE
@@ -51,27 +37,6 @@ void jm_show_calc_state(char comment[]) {
   printf(".  mmMNU_HOME=%d, mmMNU_ALPHA=%d\n",mm_MNU_HOME, mm_MNU_ALPHA);
 #endif  
 }
-
-/*
-char ss[100];
-copyRegisterToClipboardString(REGISTER_X, ss);
-strcat(ss,":1");
-print_linestr(ss,true);
-
-copyRegisterToClipboardString(REGISTER_X, ss);
-strcat(ss,"2"); 
-print_linestr(ss,false);
-
-copyRegisterToClipboardString(REGISTER_X, ss);
-strcat(ss,":3");
-print_linestr(ss,false);
-
-copyRegisterToClipboardString(REGISTER_X, ss);
-strcat(ss,":4");
-print_linestr(ss,false);
-calcMode = CM_BUG_ON_SCREEN;
-
-*/
 
 
 
@@ -146,9 +111,6 @@ void reset_jm_defaults(int16_t toload) {
     verbose_jm = verbose_default;
 
 }
-
-
-
 
 
 
@@ -248,7 +210,6 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
     break;
 
-
    case RX_COMMA:               //DONR
      fnClearFlag(FLAG_DECIMP);
      break;
@@ -328,8 +289,6 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
 
 
 
-
-
 /********************************************//** XXX
  * \brief Set Norm_Key_00_VAR
  *
@@ -341,20 +300,6 @@ void fnSigmaAssign(uint16_t sigmaAssign) {             //DONE
   fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
   fnClearFlag(FLAG_USER);
 }
-
-
-
-/********************************************//**
- * \brief Displays TRUE/FALSE information
- *
- * \param[in] f bool_t
- * \return void
- ***********************************************/
-//void fnInfo(bool_t f) {
-//  temporaryInformation = f ? TI_TRUE : TI_FALSE;
-//  refreshRegisterLine(TAM_REGISTER_LINE);
-//  refreshRegisterLine(REGISTER_X);
-//}
 
 
 
@@ -1009,6 +954,8 @@ void fnJM(uint16_t JM_OPCODE) {
     fnStrtoX(tmpStr3000);
     fnStrtoX("[PLOT] graphs, [SNAP] saves screen");
   }
+
+
   else
 
 
@@ -1016,157 +963,9 @@ void fnJM(uint16_t JM_OPCODE) {
   if(JM_OPCODE == 45) {                                         //PRIME stats
     #ifndef TESTSUITE_BUILD
 
-    longInteger_t xx3;
-    longIntegerInit(xx3);
-    runFunction(ITM_CLSIGMA);
-
-    //Get 'from' loop value from Z: 1 to 399 (default 0), for starting number exponents 10^(4*1) through 10^(4*399)
-    uint16_t ix1, ixx1;
-    if(getRegisterDataType(REGISTER_Z) != dtLongInteger) {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Z), REGISTER_Z, DEC_ROUND_DOWN);
-    }
-    if(getRegisterDataType(REGISTER_Z) == dtLongInteger) {
-      convertLongIntegerRegisterToLongInteger(REGISTER_Z, xx3);
-      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
-      longIntegerToInt(xx3,ix1);
-    } else {ix1 = 0;}
-    if(ix1 > 399) {ix1 = 0;}
-    ixx1 = ix1;
-
-    //Get 'to' (maximum) loops from Y: ix1 to 399  (default 0 or ix1), for starting number exponents 10^ix1 through 10^(4*399)
-    uint16_t ix2;
-    if(getRegisterDataType(REGISTER_Y) != dtLongInteger) {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_Y, DEC_ROUND_DOWN);
-    }
-    if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
-      convertLongIntegerRegisterToLongInteger(REGISTER_Y, xx3);
-      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
-      longIntegerToInt(xx3,ix2);
-    } else {ix2 = 0;}
-    if(ix2 < ix1) {ix2 = ix1;}
-    if(ix2 > 399) {ix2 = ix1;}
-
-    //Get number of repeated nextprimes from X from 1 to 100, default 10
-    uint16_t ix3 = 0;
-    if(getRegisterDataType(REGISTER_X) != dtLongInteger) {
-      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-    }
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      convertLongIntegerRegisterToLongInteger(REGISTER_X, xx3);
-      longIntegerToAllocatedString(xx3, tmpStr3000, TMP_STR_LENGTH);
-      longIntegerToInt(xx3,ix3);
-    } else {ix3 = 10;}
-    if(ix3 < 1 || ix3 > 100) {ix3 = 10;}
-    nprimes = ix3;
-
-
-
-    //Outer loop start
-    while (ix1 <= ix2 ) {
-      //printf("--%lld--%lld--\n",ix1,ix1*4);
-      uIntToLongInteger(ix1*4, xx3);
-      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
-      adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-      tenPowLonI();
-
-//      clearScreen(false,true,true);
-      sprintf(tmpStr3000,"i=10^4Z to i=10^4Y, n primes>i:ZYX %d %d %d|",ix1, ix2,ix3);
-      #ifdef PC_BUILD
-        printf(tmpStr3000);
-      #endif
-      print_linestr(tmpStr3000,true);
-
-      fnJM(46);
-
-      setSystemFlag(FLAG_ASLIFT);
-      liftStack();
-      uIntToLongInteger(ix1*4, xx3);
-      convertLongIntegerToLongIntegerRegister(xx3, REGISTER_X);
-      adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-
-      runFunction(ITM_SIGMAPLUS);
-      setSystemFlag(FLAG_ASLIFT);
-
-      ix1++;
-    }
-    longIntegerFree(xx3);
-    runFunction(ITM_DROP);
-
-    if(ixx1!=ix2) {runFunction(ITM_PLOT);}
     #endif
   }
-  else
-
-
-
-
-
- if(JM_OPCODE == 46) {                                         // NEXT |PRIME ROUTINE
-    #ifndef TESTSUITE_BUILD
-    uint32_t getUptimeMs0 = getUptimeMs();
-    int16_t ix;
-
-    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
-
-    longInteger_t lgInt;
-    longIntegerInit(lgInt);
-
-    ix = 0;
-    while (ix < nprimes ) {
-      runFunction(ITM_NEXTP);
-      fnStore(ix);
-
-      char tmpstr[200];
-      char tmpstr2[300];
-      sprintf(tmpstr2,"[%d]:",ix);
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpstr, 200, 399-32, 50, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
-      strcat(tmpstr2,tmpstr);
-
-      print_linestr(tmpstr2,false);
-
-      ix++;
-
-    }
-    getUptimeMs0 = getUptimeMs() - getUptimeMs0;
-
-    setSystemFlag(FLAG_ASLIFT);
-    liftStack();
-    uIntToLongInteger(getUptimeMs0, lgInt);
-    convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-    adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-    longIntegerFree(lgInt);
-    #endif
-
- } else
-
- if(JM_OPCODE == 47) {                                         // CALL SETTINGS
-    #ifndef TESTSUITE_BUILD
-    runFunction(ITM_FF);
-
-/*    int16_t m;
-    m = 0;
-    while(softmenu[m].menuId != 0) {
-      if(softmenu[m].menuId == ITM_CFG) {
-       break;
-      }
-      m++;
-    }
-    pushSoftmenu(m);
-*/
-    showSoftmenu(NULL, -MNU_SYSFL, true);
-    #endif
-  }
-
-
-
- else
-
- if(JM_OPCODE == 50) {                                         // 
-    #ifndef TESTSUITE_BUILD
-      fnDumpMenus();
-    #endif
-  }
-
+  
 
 
 // Item 255 is NOP

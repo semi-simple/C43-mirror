@@ -523,6 +523,8 @@ void fnByteShortcutsU           (uint16_t unusedParamButMandatory) {}  //JM POC 
 void fnByte                     (uint16_t unusedParamButMandatory) {}  //JM POC BASE2
 void fnClAIM                    (uint16_t unusedParamButMandatory) {}  //JM POC BASE2
 void fnShoiXRepeats             (uint16_t numberOfRepeats)         {}  //JM SHOIDISP
+void fnDumpMenus                (uint16_t unusedParamButMandatory) {}  //JM
+void fnCFGsettings              (uint16_t unusedParamButMandatory) {}
 
                                                                                 //JM ^^
 
@@ -2396,7 +2398,7 @@ const item_t indexOfItems[] = {
 /* 1815 */  { fnSetSetJM,                  JC_SH_3T,                    "SH.3T",                                       "SH.3T",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
 /* 1816 */  { fnSetSetJM,                  JC_VECT,                     "VECTOR",                                      "VECTOR",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
 /* 1817 */  { fnSetSetJM,                  JC_LARGELI,                  "LARGELI",                                     "LRG_LI",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
-/* 1818 */  { fnJM,                        45,                          "PRMTEST",                                     "PRMTEST",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },// JM SCREEN SHOT
+/* 1818 */  { fnJM,                        45,                          "TEST_45",                                     "TEST_45",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1819 */  { fnDisplayFormatSigFig,       TM_VALUE,                    "SIG",                                         "SIG",                                         0,      15,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM SIGFIG
 /* 1820 */  { fnDisplayFormatUnit,         TM_VALUE,                    "UNIT",                                        "UNIT",                                        0,      15,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNIT
 /* 1821 */  { fnRound2,                    NOPARAM,                     "ROUND",                                       "ROUND",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2419,7 +2421,7 @@ const item_t indexOfItems[] = {
 /* 1838 */  { fnJM,                        18,                          "3I" STD_CROSS "3Z",                           "I" STD_CROSS "Z",                             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1839 */  { fnJM,                        19,                          "3V" STD_DIVIDE "3Z",                          "V" STD_DIVIDE "Z",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1840 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
-/* 1841 */  { fnJM,                        50,                          "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1841 */  { fnDumpMenus,                 NOPARAM,                     "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1842 */  { fnLongInt,                   NOPARAM,                     "LNGINT",                                      "LNGINT",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1843 */  { fnChangeBaseJM,              2,                           "BIN",                                         "BIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM HEX
 /* 1844 */  { fnChangeBaseJM,              8,                           "OCT",                                         "OCT",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM HEX
@@ -2511,7 +2513,7 @@ const item_t indexOfItems[] = {
 /* 1930 */  { fnSetSetJM,                  SS_4,                        "SSIZE4",                                      "SSIZE4",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1931 */  { fnSetSetJM,                  SS_8,                        "SSIZE8",                                      "SSIZE8",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1932 */  { fnSetSetJM,                  JC_BSR,                      "SPCRES",                                      "SPCRES",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1933 */  { fnJM,                        47,                          "CFG",                                         "CFG",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM Replacements
+/* 1933 */  { fnCFGsettings,               NOPARAM,                     "CFG",                                         "CFG",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM Replacements
 /* 1934 */  { fnSetSetJM,                  TF_H12,                      "CLK12",                                       "CLK12",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM Replacements
 /* 1935 */  { fnSetSetJM,                  TF_H24,                      "CLK24",                                       "CLK24",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM Replacements
 /* 1936 */  { fnSetSetJM,                  PS_CROSS,                    "MULT" STD_CROSS,                              "MULT" STD_CROSS,                              0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2746,8 +2748,8 @@ const item_t indexOfItems[] = {
 /* 2165 */  { fnByte,                      4,                           "RR1",                                         "RR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2166 */  { fnByte,                      5,                           "SWAP.W",                                      "SWAP.W",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2167 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
-/* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                      "DISP_SI",                                      0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
+/* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
+/* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
 
 /* 2170 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

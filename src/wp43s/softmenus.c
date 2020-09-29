@@ -226,7 +226,7 @@ const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,     
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,                 
-                                     ITM_NULL,                      ITM_DMPMNU,                 -MNU_XXEQ,                ITM_PGMTST,            -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
+                                     ITM_NULL,                      ITM_DMPMNU,                 ITM_PGMTST,               -MNU_XXEQ,             -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
 
 const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Ln,                     ITM_LNALPHA,              ITM_PN,                ITM_TN,                      ITM_UN,
                                      ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -1633,24 +1633,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
 
 
- 
-void fnDumpMenus(void) {                      //JM
-  int16_t m,n;
-  m = 0;
-    while(softmenu[m].menuId != 0) {
-      n=0;
-      while(n <= softmenu[m].numItems) {
-printf("m=%d n=%d\n",m,n );
-        fnMenuDump(m, n);
-        n += 18;
-      }
-      m++;
-    }
-}                                                         //JM^^
-
-
-
-
                                                               //JM ^^
 
 
@@ -1901,3 +1883,21 @@ void setCatalogLastPos(void) {
   else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
 }
 #endif
+
+
+void fnDumpMenus(uint16_t unusedParamButMandatory) {                      //JM
+  int16_t m,n;
+  m = 0;
+    while(softmenu[m].menuId != 0) {
+      n=0;
+      while(n <= softmenu[m].numItems) {
+        printf("m=%d n=%d\n",m,n );
+#ifndef TESTSUITE_BUILD
+        fnMenuDump(m, n);
+#endif
+        n += 18;
+      }
+      m++;
+    }
+}                                                         //JM^^
+

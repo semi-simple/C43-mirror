@@ -72,13 +72,37 @@ All the below: because both Last x and savestack does not work due to multiple s
 
 
 void fneRPN(uint16_t state) {
-   if(state == 1) eRPN = true;
-   else if (state == 0) eRPN = false;
+  if(state == 1) eRPN = true;
+  else if (state == 0) eRPN = false;
 }
 
 
 
+void fnCFGsettings(uint16_t unusedParamButMandatory) {
+  #ifndef TESTSUITE_BUILD
+  runFunction(ITM_FF);
+  showSoftmenu(NULL, -MNU_SYSFL, true);
+  #endif
+}
 
+
+
+void fnClAIM(uint16_t unusedParamButMandatory) {  //clear input buffe
+  if(calcMode == CM_NIM) {
+    strcpy(aimBuffer,"+");
+    fnKeyBackspace(0);
+    //printf("|%s|\n",aimBuffer);
+  }
+  lastIntegerBase = 0;
+  while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
+#ifndef TESTSUITE_BUILD
+    popSoftmenu();
+#endif
+  }
+#ifndef TESTSUITE_BUILD
+  calcModeNormal();
+#endif
+}
 
 
 //fnArg for real and longints in addition to the standard complex. Simply returns 0 angle
@@ -633,6 +657,7 @@ void fnByte(uint16_t command) {
     default: break;
   }
 }                                                      //JM POC BASE2 ^^
+
 
 
 

@@ -12,6 +12,6 @@ The keyboard layout is also that of WP43S when navigating in the system part of 
   
 To leave the WP43S program: in the menu [g][MODE][up] select [g][SYSTEM] ([g][F1]) to return to the DMCP system.
   
-To retrieve the original DM42 keyboard layout: copy the file **original_DM42_keymap.bin** to the DM42 flash disk, rename it **keymap.bin** and reset the DM42. More informations here: http://www.swissmicros.com/dm42/devel/dmcp_devel_manual/  
+To retrieve the original DM42 keyboard layout: copy the file **original_DM42_keymap.bin** to the DM42 flash disk, rename it **keymap.bin** and reset the DM42. More informations here: https://technical.swissmicros.com/dm42/devel/dmcp_devel_manual/  
   
 ![Alt text](https://gitlab.com/Over_score/wp43s/uploads/f85d179daf51975d0dcbfa3b4130c670/image.png "DM42")

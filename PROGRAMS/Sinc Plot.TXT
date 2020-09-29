@@ -2,7 +2,8 @@
 
 XEQLBL FF SINCPLT        // BINDS THE PROGRAM NAME TO THE SOFTMENU BUTTON ON SCREEN
 
-  RAD                    // SET ADM
+//  RAD                    // SET ADM
+  MULPI                  // SET ADM
   ERPN                   // ENSURE IN ERPN
   DOTD                   // ENSURE IN REAL MODE
   CLSUM                  // CLEAR STATS DATA. CLΣ.
@@ -33,7 +34,8 @@ RETURN                   // STOPS PROCESSING
 LBL M4                      // CALC SUBROUTINE: START RANGE N IS 0 TO (STARTNO-1)
   RCL 02 DECR ST.X 2 IDIV / // SCALE THE RANGE TO: ([0:100]/ ((101-1)/2)); i.e. 0-2
   1 - 5 *                   // SCALE [-5:5]
-  PI *                      // SCALE [-5PI:5PI]
+//  PI *                      // SCALE [-5PI:5PI]
+  >MULPI
   ENTER                     // ENSURE TWO COPIES OF X
   SINC                      // CALCULATE FUNCTION
   X<>Y                      // SHIFT Y TO Y AND X TO X

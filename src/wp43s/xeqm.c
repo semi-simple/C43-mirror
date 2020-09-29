@@ -196,14 +196,20 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 13:
           case 10:
           case 44:
-          case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z 
-                    (      (aa[0]==42 // *
-                        ||  aa[0]==43 // +
-                        ||  aa[0]==45 // -
-                        ||  aa[0]==47 // /
-                        ||  aa[0]==126) //~
+          case 0 :  if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z; %; >; (; a-z; . 
+                    (       aa[0]=='*' //42 // *
+                        ||  aa[0]=='+' //43 // +
+                        ||  aa[0]=='-' //45 // -
+                        ||  aa[0]=='/' //47 // /
+                        ||  aa[0]=='~' //126) //~
                         || (aa[0]>=48 && aa[0]<=57) //0-9
-                        || (aa[0]>=65 && aa[0]<=90)  ) //A-Z
+                        || (aa[0]>=65 && aa[0]<=90) //A-Z
+                        || (aa[0]>=65+32 && aa[0]<=90+32) //a-z
+                        || aa[0]=='%'
+                        || aa[0]=='>'
+                        || aa[0]=='('
+                        || aa[0]=='.'
+                        )
                     && !state_comments                 //If not inside comments
                     && !state_quotes                   //if not inside quotes
                     && !state_commands                 //Don't re-check until done
@@ -234,6 +240,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 8 : //tab
           case 44: //,
           case 32: 
+printf("@@@ %s\n",commandnumber);
                    if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
                       //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);

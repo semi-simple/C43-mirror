@@ -97,17 +97,17 @@ void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t
 
 
 void sincLonI(void) {
-  real_t x, rr;
+  real_t x, sine;
 
-  convertLongIntegerRegisterToReal(REGISTER_X, &rr, &ctxtReal39);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
-  if(realIsZero(&rr)) {
+  if(realIsZero(&x)) {
     realCopy(const_1, &x);
   }
   else {
-    longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
-    WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, &x, NULL, NULL, &ctxtReal39);
-    realDivide(&x, &rr, &x, &ctxtReal39);
+    longIntegerAngleReduction(REGISTER_X, AM_RADIAN, &x);
+    WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, &sine, NULL, NULL, &ctxtReal39);
+    realDivide(&sine, &x, &x, &ctxtReal39);
   }
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -138,26 +138,30 @@ void sincReal(void) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function sincReal:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag D is not set", NULL, NULL);
       #endif
+      return;
     }
   }
 
-
   else {
-    real_t x, rr;
-    uint32_t xAngularMode;
+    real_t x, sine;
+    uint32_t registerAngularMode;
+
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
     if(realIsZero(&x)) {
       realCopy(const_1, &x);
     }
     else {
-      realCopy(&x, &rr);
-      xAngularMode = getRegisterAngularMode(REGISTER_X);
-      WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &x, NULL, NULL, &ctxtReal39);
-      realDivide(&x, &rr, &x, &ctxtReal39);
+      registerAngularMode = getRegisterAngularMode(REGISTER_X);
+      if(registerAngularMode != AM_NONE) {
+        convertAngleFromTo(&x, registerAngularMode, AM_RADIAN, &ctxtReal39);
+      }
+      WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, &sine, NULL, NULL, &ctxtReal39);
+      realDivide(&sine, &x, &x, &ctxtReal39);
     }
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
+
   setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 

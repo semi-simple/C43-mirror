@@ -145,14 +145,14 @@
 #endif
 
 #ifdef __APPLE__
-    // needed by chdir
-    #include<unistd.h>
+  // needed by chdir
+  #include<unistd.h>
 #endif
 
 #ifdef PC_BUILD
-    #include <glib.h>
-    #include <gtk/gtk.h>
-    #include <gdk/gdk.h>
+  #include <glib.h>
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
 #endif
 
 #ifdef DMCP_BUILD

@@ -42,14 +42,14 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
     liftStack();
 
     realDivide(sumX, numberX, &tempReal1, &ctxtReal39);
-    if (transform != NULL) {
+    if(transform != NULL) {
       (*transform)(&tempReal1, &tempReal2);
     }
     mean = transform == NULL ? &tempReal1 : &tempReal2;
     realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_X));
 
     realDivide(sumY, numberY, &tempReal1, &ctxtReal39);
-    if (transform != NULL) {
+    if(transform != NULL) {
       (*transform)(&tempReal1, &tempReal2);
     }
     realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_Y));
@@ -132,7 +132,7 @@ void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
       moreInfoOnError("In function fnWeightedMeanX:", errorMessage, NULL, NULL);
     #endif
   }
-  else if (realCompareLessThan(SIGMA_Y, const_1)) {
+  else if(realCompareLessThan(SIGMA_Y, const_1)) {
     displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is insufficient statistical data available!");

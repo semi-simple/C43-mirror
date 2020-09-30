@@ -46,6 +46,12 @@
 #define FN_KEY_TIMEOUT_TO_NOP       0
 #define SCREEN_REFRESH_PERIOD     500 // in milliseconds
 
+#define SCREEN_800X480 // Comment this define if you want a keyboard in addition to the screen on Raspberry pi
+
+#ifndef RASPBERRY
+  #undef SCREEN_800X480
+#endif
+
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
 #endif
@@ -65,7 +71,7 @@
   #endif
 #endif
 
-#ifdef DMCP_BUILD
+#if defined(DMCP_BUILD) || defined(SCREEN_800X480)
   #undef  DEBUG_PANEL
   #define DEBUG_PANEL 0
   #undef  DEBUG_REGISTER_L
@@ -111,14 +117,14 @@
 #endif
 
 #ifdef __APPLE__
-    // needed by chdir
-    #include<unistd.h>
+  // needed by chdir
+  #include<unistd.h>
 #endif
 
 #ifdef PC_BUILD
-    #include <glib.h>
-    #include <gtk/gtk.h>
-    #include <gdk/gdk.h>
+  #include <glib.h>
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
 #endif
 
 #ifdef DMCP_BUILD
@@ -280,6 +286,7 @@ typedef int16_t calcRegister_t;
 #define CM_ERROR_MESSAGE       11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN       12 // Bug message on screen
 #define CM_CONFIRMATION        13 // Waiting for confirmation or canceling
+#define CM_MIM                 14 // Matrix imput mode tbd reorder
 
 // Next character 2 bits
 #define NC_NORMAL               0
@@ -579,6 +586,7 @@ extern real39_t       const *angle90;
 extern real39_t       const *angle45;
 extern pcg32_random_t        pcg32_global;
 extern const char            digits[17];
+extern real34Matrix_t       *openMatrixMIMPointer;
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD

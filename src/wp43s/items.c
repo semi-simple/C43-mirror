@@ -455,6 +455,7 @@ void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
 void fnNewMatrix                (uint16_t unusedParamButMandatory) {}
+void fnEditMatrix               (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -872,11 +873,11 @@ const item_t indexOfItems[] = {
 /*  396 */  { fnLogicalNand,               NOPARAM,                     "NAND",                                        "NAND",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  397 */  { fnLogicalNor,                NOPARAM,                     "NOR",                                         "NOR",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  398 */  { fnLogicalXnor,               NOPARAM,                     "XNOR",                                        "XNOR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  399 */  { fnBs,                        TM_VALUE,                    "BS?",                                         "BS?",                                         1,      64,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  400 */  { fnBc,                        TM_VALUE,                    "BC?",                                         "BC?",                                         1,      64,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  401 */  { fnCb,                        TM_VALUE,                    "CB",                                          "CB",                                          1,      64,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  402 */  { fnSb,                        TM_VALUE,                    "SB",                                          "SB",                                          1,      64,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  403 */  { fnFb,                        TM_VALUE,                    "FB",                                          "FB",                                          1,      64,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  399 */  { fnBs,                        TM_VALUE,                    "BS?",                                         "BS?",                                         0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  400 */  { fnBc,                        TM_VALUE,                    "BC?",                                         "BC?",                                         0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  401 */  { fnCb,                        TM_VALUE,                    "CB",                                          "CB",                                          0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  402 */  { fnSb,                        TM_VALUE,                    "SB",                                          "SB",                                          0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  403 */  { fnFb,                        TM_VALUE,                    "FB",                                          "FB",                                          0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  404 */  { fnRl,                        TM_VALUE,                    "RL",                                          "RL",                                          0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  405 */  { fnRlc,                       TM_VALUE,                    "RLC",                                         "RLC",                                         0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  406 */  { fnRr,                        TM_VALUE,                    "RR",                                          "RR",                                          0,      63,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2019,7 +2020,7 @@ const item_t indexOfItems[] = {
 /* 1516 */  { itemToBeCoded,               NOPARAM,                     "M.DIM",                                       "DIM",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1517 */  { itemToBeCoded,               NOPARAM,                     "M.DIM?",                                      "DIM?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1518 */  { fnSetDateFormat,             ITM_MDY,                     "M.DY",                                        "M.DY",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1519 */  { itemToBeCoded,               NOPARAM,                     "M.EDI",                                       "EDIT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1519 */  { fnEditMatrix,                NOPARAM,                     "M.EDI",                                       "EDIT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "M.EDIN",                                      "EDITN",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1521 */  { itemToBeCoded,               NOPARAM,                     "M.GET",                                       "GETM",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1522 */  { itemToBeCoded,               NOPARAM,                     "M.GOTO",                                      "GOTO",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

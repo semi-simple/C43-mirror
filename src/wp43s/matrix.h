@@ -17,7 +17,9 @@
 /********************************************//**
  * \file matrix.h
  ***********************************************/
- 
- //#include "registers.h"
- 
- void     fnNewMatrix         (uint16_t unusedParamButMandatory);
+
+#define MATRIX_LINE_WIDTH_LARGE      40
+//#define MATRIX_CHAR_LEN              30
+
+void     fnNewMatrix         (uint16_t unusedParamButMandatory);
+void     fnEditMatrix        (uint16_t unusedParamButMandatory);

@@ -208,7 +208,7 @@ int16_t determineItem(const char *data) {
   key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
   // Shift f pressed and shift g not active
-  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_MIM)) {
     temporaryInformation = TI_NO_INFO;
 
     if(lastErrorCode != 0) {
@@ -220,7 +220,7 @@ int16_t determineItem(const char *data) {
   }
 
   // Shift g pressed and shift f not active
-  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_MIM)) {
     temporaryInformation = TI_NO_INFO;
 
     if(lastErrorCode != 0) {
@@ -231,7 +231,7 @@ int16_t determineItem(const char *data) {
     return ITM_NOP;
   }
 
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_MIM) {
     result = shiftF ? key->fShifted :
              shiftG ? key->gShifted :
                       key->primary;
@@ -619,6 +619,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
 
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_MIM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
@@ -691,6 +692,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_TAM:
+    case CM_MIM:
     case CM_ASM:
       calcModeNormal();
       break;

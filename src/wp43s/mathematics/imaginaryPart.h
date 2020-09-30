@@ -22,3 +22,4 @@ void fnImaginaryPart(uint16_t unusedParamButMandatory);
 void imagPartError  (void);
 void imagPartCxma   (void);
 void imagPartCplx   (void);
+void imagPartReal   (void);

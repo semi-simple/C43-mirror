@@ -29,7 +29,7 @@
 #define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
 #define Y_POSITION_OF_REGISTER_Z_LINE  60 // was  61
 #define Y_POSITION_OF_REGISTER_Y_LINE  96 // was  98
-#define Y_POSITION_OF_REGISTER_X_LINE 132 // was 135
+#define Y_POSITION_OF_REGISTER_X_LINE  132 // was 135
 
 // If one of the 4 next defines is changed: change also xxxREG in registers.h
 #define Y_POSITION_OF_AIM_LINE        Y_POSITION_OF_REGISTER_X_LINE

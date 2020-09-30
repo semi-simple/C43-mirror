@@ -34,8 +34,14 @@ gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
+  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+    cairo_scale(cr, 2.0, 2.0);
+  #endif
   cairo_set_source_surface(cr, imageSurface, 0, 0);
   cairo_surface_mark_dirty(imageSurface);
+  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+    cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_FAST);
+  #endif
   cairo_paint(cr);
   cairo_surface_destroy(imageSurface);
 
@@ -432,31 +438,44 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
   if(strcmp(dateTimeString, oldTime)) {
     strcpy(oldTime, dateTimeString);
     showDateTime();
-  }
 
-  if(get_lowbat_state() == 1 || get_vbat() < 2500) {
-    if(!getSystemFlag(FLAG_LOWBAT)) {
-      setSystemFlag(FLAG_LOWBAT);
-      showHideLowBattery();
+    if(!getSystemFlag(FLAG_AUTOFF)) {
+      reset_auto_off();
     }
-  }
-  else {
-    if(getSystemFlag(FLAG_LOWBAT)) {
-      clearSystemFlag(FLAG_LOWBAT);
-      showHideLowBattery();
-    }
+
+
   }
 
   if(usb_powered() == 1) {
     if(!getSystemFlag(FLAG_USB)) {
       setSystemFlag(FLAG_USB);
-      showHideUSB();
+      clearSystemFlag(FLAG_LOWBAT);
+      showHideUsbLowBattery();
     }
   }
   else {
     if(getSystemFlag(FLAG_USB)) {
       clearSystemFlag(FLAG_USB);
-      showHideUSB();
+    }
+
+    if(get_vbat() < 2000) {
+      if(!getSystemFlag(FLAG_LOWBAT)) {
+        setSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
+      SET_ST(STAT_PGM_END);
+    }
+    else if(get_vbat() < 2500) {
+      if(!getSystemFlag(FLAG_LOWBAT)) {
+        setSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
+    }
+    else {
+      if(getSystemFlag(FLAG_LOWBAT)) {
+        clearSystemFlag(FLAG_LOWBAT);
+        showHideUsbLowBattery();
+      }
     }
   }
 
@@ -1594,6 +1613,10 @@ void refreshScreen(void) {
 
           showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
+      }
+      
+      if(calcMode == CM_MIM) {
+       showMatrix(0,0); 
       }
 
       showSoftmenuCurrentPart();

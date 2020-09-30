@@ -1231,7 +1231,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     base = 10;
   }
 
-  number &= shortIntegerMask;
+  //number &= shortIntegerMask;
 
   if(shortIntegerMode == SIM_UNSIGN || base == 2 || base == 4 || base == 8 || base == 16) {
     sign = 0;

@@ -587,6 +587,9 @@ extern real39_t       const *angle45;
 extern pcg32_random_t        pcg32_global;
 extern const char            digits[17];
 extern real34Matrix_t       *openMatrixMIMPointer;
+extern uint16_t              mat_sel_row;
+extern uint16_t              mat_sel_col;
+extern bool_t                mat_edit_mode;
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD

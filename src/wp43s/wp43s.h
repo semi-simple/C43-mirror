@@ -660,7 +660,7 @@ extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
   extern uint32_t            nextTimerRefresh;    //dr
-//extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC - removed
+  extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC
 #endif // DMCP_BUILD
 
 #define MAX_DENMAX           9999

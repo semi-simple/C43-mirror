@@ -906,8 +906,8 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 }
 
 
-/*
-#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC - removed
+
+#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
 kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 // Stellt 1 Byte in den Ringbuffer
@@ -918,16 +918,16 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  uint32_t now  = (uint32_t)sys_current_ms();
-  uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
+  if(byte == buffer.data[(buffer.write - 1) & BUFFER_MASK] || byte == -1) return BUFFER_FAIL;  //Do not allow the same key to be stores multiple times. Only key changes stored
 
-  if(buffer.read == next)
+  uint32_t now  = (uint32_t)sys_current_ms();
+
+  if( ((buffer.read + 1) & BUFFER_MASK) == buffer.write)
     return BUFFER_FAIL; // voll
 
-//buffer.data[buffer.write] = byte;
-  buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
+  buffer.data[buffer.write] = byte;
   buffer.time[buffer.write] = now;
-  buffer.write = next;
+  buffer.write = ((buffer.write + 1) & BUFFER_MASK);
 
   return BUFFER_SUCCESS;
 }
@@ -941,19 +941,51 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_FAIL       der Ringbuffer ist leer. Es kann kein Byte geliefert werden.
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
-uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime)
+uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
 {
   if(buffer.read == buffer.write)
     return BUFFER_FAIL;
 
   *pByte = buffer.data[buffer.read];
   *pTime = buffer.time[buffer.read];
-
+  *dTime = (uint16_t)(*pTime - buffer.time[(buffer.read-1) & BUFFER_MASK]);
   buffer.read = (buffer.read+1) & BUFFER_MASK;
 
   return BUFFER_SUCCESS;
 }
 
+
+
+// Returns: true if double click
+bool_t outKeyBufferDoubleClick(char *line1)
+{
+  int16_t dTime_1, dTime_2, dTime_3;
+
+  dTime_1 = (uint16_t) buffer.time[(buffer.read-1) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK];
+  dTime_2 = (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK];
+  dTime_3 = (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-4) & BUFFER_MASK];
+
+sprintf(line1,"R%d W%d 0:%d %d %d %d 0:%d %d %d %d D: %d %d %d", (uint16_t)buffer.read,(uint16_t)buffer.write,
+    (uint16_t)buffer.time[0]/100, (uint16_t)buffer.time[1]/100,(uint16_t)buffer.time[2]/100,(uint16_t)buffer.time[3]/100, 
+    (uint16_t)buffer.data[0], (uint16_t)buffer.data[1],(uint16_t)buffer.data[2],(uint16_t)buffer.data[3],  dTime_1/10, dTime_2/10, dTime_3/10);
+
+
+//  sprintf(line1,"%5d %5d %5d", dTime_1, dTime_2, dTime_3);
+
+  return      (dTime_1 > 5)   && (dTime_3 > 5  )    //on pulses chatter proofing
+           && (dTime_1 < 300) && (dTime_3 < 300)    //on pulses not longer than 0.3 s
+           && (dTime_2 > 10)  && (dTime_2 < 500);   //off width not longer than 0.5 s
+}
+
+
+
+
+// Returns:
+//     true              der Ringbuffer has space for at least 1
+bool_t isMoreBufferSpace()
+{
+  return buffer.read != ((buffer.write + 1) & BUFFER_MASK);
+}
 
 
 // Returns:
@@ -963,7 +995,7 @@ bool_t emptyKeyBuffer()
   return buffer.read == buffer.write;
 }
 #endif                                                      //^^
-*/
+
 
 
 //########################################

@@ -437,7 +437,7 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
 #define cursorCycle 3                      //JM cursor vv
 int8_t cursorBlinkCounter;                 //JM cursor ^^
 void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
-//int tmpKey;                           //dr - internal keyBuffer POC - removed
+  int tmpKey;                              //dr - internal keyBuffer POC
   // Cursor blinking
   static bool_t cursorBlink=true;
 
@@ -451,10 +451,10 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
-/*    tmpKey = key_pop();               //vv dr - internal keyBuffer POC - removed
+      tmpKey = key_pop();               //vv dr - internal keyBuffer POC
       if(tmpKey >= 0) {
         inKeyBuffer(tmpKey);
-      }*/                               //^^
+      }                                 //^^
     }
   }
 
@@ -464,10 +464,10 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     if(showFunctionNameCounter <= 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
-/*    tmpKey = key_pop();               //vv dr - internal keyBuffer POC - removed
+      tmpKey = key_pop();               //vv dr - internal keyBuffer POC
       if(tmpKey >= 0) {
         inKeyBuffer(tmpKey);
-      }*/                               //^^
+      }                                 //^^
     }
   }
 
@@ -557,14 +557,14 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
 
-/*
-#if DMCP_BUILD                          //vv dr - internal keyBuffer POC - removed
+
+#if DMCP_BUILD                          //vv dr - internal keyBuffer POC
   int tmpKey = key_pop();
   if(tmpKey >= 0) {
     inKeyBuffer(tmpKey);
   }
 #endif                                  //^^
-*/
+
 
   if(jm_FG_LINE) {
 
@@ -2382,14 +2382,14 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(3); }     //dr
 #endif
-/*
-#if DMCP_BUILD                          //vv dr - internal keyBuffer POC - removed
+
+#if DMCP_BUILD                          //vv dr - internal keyBuffer POC
   int tmpKey = key_pop();
   if(tmpKey >= 0) {
     inKeyBuffer(tmpKey);
   }
 #endif                                  //^^
-*/
+
 
   if(calcMode!=CM_AIM && calcMode!=CM_NIM) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 

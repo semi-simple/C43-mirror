@@ -64,8 +64,8 @@ void     btnFnReleased_StateMachine(GtkWidget *w, gpointer data);
 #ifdef DMCP_BUILD
 void     refreshTimer         (void);
 
-/*
-#define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC - removed
+
+#define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC
 #define BUFFER_SUCCESS  1
  
 #define BUFFER_SIZE 4   // muss 2^n betragen (8, 16, 32, 64 ...)
@@ -79,9 +79,11 @@ typedef struct {
 } kb_buffer_t;
 
 uint8_t  inKeyBuffer          (uint8_t byte);
-uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime);
+uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime, uint16_t *dTime);
+bool_t   outKeyBufferDoubleClick(char *line1);
+bool_t   isMoreBufferSpace    ();
 bool_t   emptyKeyBuffer       ();                           //^^
-*/
+
 
 void     btnFnPressed_StateMachine (void *w, void *data);
 void     btnFnReleased_StateMachine(void *w, void *data);

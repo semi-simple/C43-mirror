@@ -19,7 +19,6 @@
  ***********************************************/
 
 //#define JMSHOWCODES
-#define JMSHOWCODES_KB
 
 
 #include "wp43s.h"
@@ -691,32 +690,6 @@ longIntegerFree(li);*/
     uint8_t outKey;
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
-
-      #ifdef JMSHOWCODES_KB 
-      uint8_t DC_val;
-      fnDisplayStack(1);
-      char bbb[200];
-      bbb[0]=0;
-      char aaa[100];
-      sprintf   (aaa,"key=%2d timeSpan=%5d ",key, timeSpan);
-      DC_val = outKeyBufferDoubleClick(bbb);
-      if( DC_val == 1) 
-        strcat(aaa," SINGLE      ");
-      else 
-      if( DC_val == 2) 
-        strcat(aaa,"    DOUBLE   ");
-      else 
-      if( DC_val == 3)
-        strcat(aaa,"       TRIPLE");
-      else
-        strcat(aaa,"             ");
-      showString(aaa,       &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
-      strcpy(aaa,bbb);
-      aaa[40]=0;
-      showString(aaa,       &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
-      showString(bbb + 40 , &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
-      #endif
-
       //  if(timeSpan >= 0) {
       //    do someting
       //  }

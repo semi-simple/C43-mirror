@@ -928,7 +928,7 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  if(byte == buffer.data[(buffer.write - 1) & BUFFER_MASK] || byte == -1) return BUFFER_FAIL;  //Do not allow the same key to be stores multiple times. Only key changes stored
+  if(byte == buffer.data[(buffer.write - 1) & BUFFER_MASK] || byte == -1) return BUFFER_FAIL;  //Do not allow the same key to be stored multiple times. Only key changes stored. -1 ignored.
 
   uint32_t now  = (uint32_t)sys_current_ms();
 
@@ -961,15 +961,16 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
   *dTime = (uint16_t)(*pTime - buffer.time[(buffer.read-1) & BUFFER_MASK]);
   buffer.read = (buffer.read+1) & BUFFER_MASK;
 
+  #define JMSHOWCODES_KB2
+  #define JMSHOWCODES_KB1
 
-  #define JMSHOWCODES_KB
-
-    #ifdef JMSHOWCODES_KB 
+    #ifdef JMSHOWCODES_KB1 
       uint8_t DC_val;
       fnDisplayStack(2);
       char aaa[100];
       DC_val = outKeyBufferDoubleClick();
       sprintf   (aaa,"key=%2d deltaT=%5d DC:%d",*pByte, *dTime, DC_val);
+      //sprintf   (aaa,"DC:%d",DC_val);
       showString(aaa,       &standardFont, 1, 1, vmNormal, true, true);
     #endif
 
@@ -978,11 +979,69 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
 }
 
 
+
+/* Switching profile, single press, double press and triple press:
+
+
+SINGLEPRESS: 
+unknown  waiting   pres    rel      
+---D3--x_____D2____x---D1--x_
+      t-3         t-2     t-1
+
+
+DOUBLEPRESS: 
+unknown  waiting   pres    rel    pres  
+-------x___________x-------x______x-
+      t-4    D3   t-3  D2 t-2 D1 t-1
+
+
+TRIPLEPRESS: 
+unknown  waiting   pres    rel    pres   rel    pres
+-------x___________x-------x______x------x______x-
+                          t-4 D3 t-3 D2 t-2 D1 t-1
+
+
+
+Circular key buffer:
+
+ Pointers are ready to read and ready to write.
+ Pointers are incremented after action.
+ Allow writing of 3 keys ahead, into: R+0, R+1, R+2. R+3 is blocked.
+ Allow reading of 3 keys up to R=W, which is not read.
+
+ +------------------------------------+
+ |   1                                | emptyKeyBuffer, not used
+ | R 2 W   R=W: Empty buffer, cannot  | outKeyBuffer
+ |   3          read.                 |
+ |   4                                |    (Will not pop a key which is not pushed. Can look at 4 places back directly at the stack. )
+ +------------------------------------+
+ |   1 W   W+1 NOT= R: Space for 1+   | isMoreBufferSpace, used by keyBuffer_pop writing to the buffer only when there is space
+ | R 2                                |
+ |   3                                | 
+ |   4                                |
+ +------------------------------------+
+ |   1                                | inKeyBuffer
+ | R 2                                |
+ |   3 W   R+1=W: Write buffer full.  |    (must avoid this one, because the key is lost then. Must rather test first and keep the key in the DM42 buffer)
+ |   4            Failed. Return      |
+ +------------------------------------+
+
+ +-------------------------------------------------------------------------------+
+ |   1 W    X     iv.block access to inKeyBuffer, i.e. keep key in DM42 buffer.  | 
+ | R 2 ov      i.write o and move down v                                         |
+ |   3 o v      ii.write o and move down v                                       |  
+ |   4 o  v      iii.write o and move down v                                     |      
+ +-------------------------------------------------------------------------------+
+
+*/
+
+
+
+
 // Returns: true if double click
 uint8_t outKeyBufferDoubleClick()
 {
   int16_t dTime_1, dTime_2, dTime_3;
-  char line[50], line1[100];
   bool_t doubleclicked, tripleclicked;
   uint8_t outDC;
 
@@ -991,8 +1050,8 @@ uint8_t outKeyBufferDoubleClick()
   dTime_2 = (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK];
   dTime_3 = (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-4) & BUFFER_MASK];
 
-  #define D1 100 //400 //space before last press, released time
-  #define D2 120 //length of first press, pressed down time
+  #define D1 150 //400 //space before last press, released time
+  #define D2 200 //length of first press, pressed down time
 
   doubleclicked = 
          buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
@@ -1003,9 +1062,9 @@ uint8_t outKeyBufferDoubleClick()
   if(dTime_1+dTime_2 > D1+D2) doubleclicked = false;
 
 
-  #define TD1 100 //space before last press, released time
-  #define TD2 150 //length of middle press, pressed down time
-  #define TD3 100 //space before middle press, i.e. released time after first press
+  #define TD1 150 //space before last press, released time
+  #define TD2 200 //length of middle press, pressed down time
+  #define TD3 150 //space before middle press, i.e. released time after first press
 
   tripleclicked = 
          buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
@@ -1013,7 +1072,7 @@ uint8_t outKeyBufferDoubleClick()
       && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-5) & BUFFER_MASK]   //check that the previous key is the same. If buffer is 4 long only, it will wrap and not check the first triple press
       && (dTime_1 > 10 ) && (dTime_1 < TD1)                //check no chatter > 10 ms & released width is not longer than limit
       && (dTime_2 > 10 ) && (dTime_2 < TD2)                //check no chatter > 10 ms & pressed width is not longer than limit
-      && (dTime_3 > 10 ) && (dTime_2 < TD3);               //check no chatter > 10 ms & pressed width is not longer than limit
+      && (dTime_3 > 10 ) && (dTime_3 < TD3);               //check no chatter > 10 ms & pressed width is not longer than limit
 
   if(dTime_1+dTime_2+dTime_3 > TD1+TD2+TD3) tripleclicked = false;
 
@@ -1023,7 +1082,8 @@ uint8_t outKeyBufferDoubleClick()
   else outDC = 0;
 
 
-  #ifdef JMSHOWCODES_KB 
+  #ifdef JMSHOWCODES_KB2 
+    char line[50], line1[100];
     fnDisplayStack(2);
     sprintf(line1,"R%-1dW%-1d -1:%-5d -2:%-5d -3:%-5d -4:%-5d  ",
       (uint16_t)buffer.read,(uint16_t)buffer.write,

@@ -21,5 +21,10 @@
 #define MATRIX_LINE_WIDTH_LARGE      40
 //#define MATRIX_CHAR_LEN              30
 
-void     fnNewMatrix         (uint16_t unusedParamButMandatory);
-void     fnEditMatrix        (uint16_t unusedParamButMandatory);
+void              fnNewMatrix           (uint16_t unusedParamButMandatory);
+void              fnEditMatrix          (uint16_t unusedParamButMandatory);
+int16_t getIRegisterAsInt(bool_t asArrayPointer);
+int16_t getJRegisterAsInt(bool_t asArrayPointer);
+void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
+void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
+//real34Matrix_t * getMatrixFromRegister(calcRegister_t regist);

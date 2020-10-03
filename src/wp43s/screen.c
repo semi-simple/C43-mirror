@@ -1617,7 +1617,7 @@ void refreshScreen(void) {
       }
 
       if(calcMode == CM_MIM) {
-       showMatrix(false, 0, 0);
+       showMatrixEditor();
       }
 
       showSoftmenuCurrentPart();

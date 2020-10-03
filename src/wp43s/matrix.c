@@ -20,7 +20,11 @@
 
  #include "wp43s.h"
 
- real34Matrix_t* openMatrixMIMPointer;
+real34Matrix_t       *getMatrixFromRegister(calcRegister_t);
+real34Matrix_t       *openMatrixMIMPointer;
+//int16_t               matSelRow;
+//int16_t               matSelCol;
+bool_t                matEditMode;
 
 /********************************************//**
  * \brief creates new Matrix of size y->m x x ->n
@@ -30,6 +34,7 @@
  ***********************************************/
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
+  //Get Size from REGISTER_X and REGISTER_Y
   uint32_t rows, cols;
 
   longInteger_t tmp_lgInt;
@@ -42,15 +47,15 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   longIntegerFree(tmp_lgInt);
 
+  //Allocate Memory for Matrix
   uint32_t reg_size;
-
   reg_size = (rows * cols) * sizeof(real34_t) + sizeof(registerDescriptor_t);
-
   real34Matrix_t* matrix = malloc(reg_size);
 
   matrix->header.matrixColumns = cols;
   matrix->header.matrixRows = rows;
 
+  //Initialize with 0.
   for(uint32_t i = 0; i < rows * cols; i++) {
     int32_t zero_int = 0;
     real34_t* zero = malloc(REAL34_SIZE);
@@ -58,20 +63,11 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
     matrix->vals[i] = zero;
   }
 
-  calcMode = CM_MIM;
-  openMatrixMIMPointer = matrix;
-
-  showMatrix(false, 0, 0);
-
+  //Drop X_Register and Y_Register
   fnDrop(0);
   fnDrop(0);
 
-  //showSoftmenu(NULL, -MNU_M_EDIT, true);
-  //showSoftmenuCurrentPart();
-  //for each;
-  //showString(content, font, x, y, inversNormal, leadingCols, endingCols);
-  //displayCalcErrorMessage();
-
+  storeMatrixToXRegister(matrix);
 }
 
 /********************************************//**
@@ -81,28 +77,29 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEditMatrix(uint16_t unusedParamButMandatory) {
+  calcMode = CM_MIM;
+
+  //getMatrixFromXReg
+  openMatrixMIMPointer = getMatrixFromRegister(REGISTER_X);
+
   showSoftmenu(NULL, -MNU_M_EDIT, true);
-  showMatrix(true, 0, 0);
+  setIRegisterAsInt(true, 0);
+  setJRegisterAsInt(true, 0);
+  showMatrixEditor();
 }
 
 
 /********************************************//**
  * \brief Displays a Matrix
  *
- * \param[in] matrixEditMode bool_t
- * \param[in] cursor_row     int16_t
- * \param[in] cursor_col     int16_t
  * \return void
  ***********************************************/
-void showMatrix(bool_t matrixEditMode, int16_t cursor_row, int16_t cursor_col) {
+void showMatrixEditor() {
   int cols = openMatrixMIMPointer->header.matrixColumns;
   int rows = openMatrixMIMPointer->header.matrixRows;
   int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
 
-
-  if (matrixEditMode) {
-    int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
-  }
+  Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
 
   bool_t colVector = false;
   if (cols == 1) {
@@ -111,12 +108,33 @@ void showMatrix(bool_t matrixEditMode, int16_t cursor_row, int16_t cursor_col) {
     rows = 1;
   }
 
+  int16_t matSelRow = getIRegisterAsInt(true);
+  int16_t matSelCol = getJRegisterAsInt(true);
+
+  //tbd: Implement right behavior (add row, add col on change)
+  if (!getSystemFlag(FLAG_GROW)) {
+    if (matSelRow < 0) {
+      matSelRow = rows;
+    } else if (matSelRow == rows) {
+      matSelRow = 0;
+    }
+
+    if (matSelCol < 0) {
+      matSelCol = cols;
+    } else if (matSelCol == cols) {
+      matSelCol = 0;
+    }
+  }
+  else {
+    //GROW tbd
+  }
+
   videoMode_t vm = vmNormal;
   for(int i = 0; i < rows; i++) {
     showString("[", &numericFont, 1, Y_POS - (rows -1 - i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     for(int j = 0; j< cols; j++) {
       real34ToDisplayString(openMatrixMIMPointer->vals[i*cols+j], AM_NONE, tmpStr3000, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
-      if (matrixEditMode && cursor_row == i && cursor_col == j) {
+      if (matEditMode && matSelRow == i && matSelCol == j) {
         vm = vmReverse;
       } else {
         vm = vmNormal;
@@ -128,21 +146,94 @@ void showMatrix(bool_t matrixEditMode, int16_t cursor_row, int16_t cursor_col) {
         showString("T", &numericFont, 20 + cols * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     }
   }
+
+  sprintf(tmpStr3000, "%" PRIi16";%" PRIi16"= ", matSelRow+1, matSelCol+1);
+  showString(tmpStr3000, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false);
 }
 
-void storeMatrixToRegister(int16_t regist) {
-
-  uint32_t reg_size = (openMatrixMIMPointer->header.matrixColumns * openMatrixMIMPointer->header.matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t);
-  real34Matrix_t* matrix = malloc(reg_size);
-
+void storeMatrixToXRegister(real34Matrix_t *matrix) {
+  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t);
+  //real34Matrix_t* matrix = malloc(reg_size);
 
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   clearSystemFlag(FLAG_ASLIFT);
 
-  reallocateRegister(regist, dtReal34Matrix, reg_size, AM_NONE);
-  xcopy(REGISTER_REAL34_MATRIX(regist), matrix, reg_size);
+  reallocateRegister(REGISTER_X, dtReal34Matrix, sizeof(matrix), AM_NONE);
+  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, sizeof(matrix));
 }
 
+real34Matrix_t * getMatrixFromRegister(calcRegister_t regist) {
+  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t);
+  //real34Matrix_t* matrix = malloc(reg_size);
+
+  if (getRegisterDataType(regist) != dtReal34Matrix) {
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType % " PRIu32, getRegisterDataType(regist));
+    moreInfoOnError("In function getMatrixFromRegister:", errorMessage, "is not dataType dtRealMatrix.", "");
+    #endif
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    return;
+  }
+  real34Matrix_t* matrix = malloc(getRegisterFullSize(regist));
+  xcopy(matrix, REGISTER_REAL34_MATRIX(regist), getRegisterFullSize(regist));
+  //real34Matrix_t* matrix = getRegisterDataPointer(regist);
+  return matrix;
+}
+
+//Row of Matric
+int16_t getIRegisterAsInt(bool_t asArrayPointer) {
+  int16_t ret;
+  longInteger_t tmp_lgInt;
+
+  convertLongIntegerRegisterToLongInteger(REGISTER_I, tmp_lgInt);
+  longIntegerToInt(tmp_lgInt, ret);
+
+  longIntegerFree(tmp_lgInt);
+
+  if (asArrayPointer) ret--;
+
+  return ret;
+}
+
+//Col of Matrix
+int16_t getJRegisterAsInt(bool_t asArrayPointer) {
+  int16_t ret;
+  longInteger_t tmp_lgInt;
+
+  convertLongIntegerRegisterToLongInteger(REGISTER_J, tmp_lgInt);
+  longIntegerToInt(tmp_lgInt, ret);
+
+  longIntegerFree(tmp_lgInt);
+
+  if (asArrayPointer) ret--;
+
+  return ret;
+}
+
+//Row of Matrix
+void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
+  if (asArrayPointer) toStore++;
+  longInteger_t tmp_lgInt;
+  longIntegerInit(tmp_lgInt);
+
+  intToLongInteger(toStore, tmp_lgInt);
+  convertLongIntegerToLongIntegerRegister(tmp_lgInt, REGISTER_I);
+
+  longIntegerFree(tmp_lgInt);
+}
+
+//ColOfMatrix
+void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
+  if (asArrayPointer) toStore++;
+  longInteger_t tmp_lgInt;
+  longIntegerInit(tmp_lgInt);
+
+  intToLongInteger(toStore, tmp_lgInt);
+  convertLongIntegerToLongIntegerRegister(tmp_lgInt, REGISTER_J);
+
+  longIntegerFree(tmp_lgInt);
+
+}
 
 

@@ -20,8 +20,6 @@
 
 #include "wp43s.h"
 
-
-
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedParamButMandatory) {
   shiftF = false;
@@ -285,8 +283,25 @@ void addItemToBuffer(uint16_t item) {
       alphaSelectionTimer = getUptimeMs();
     }
 
-    else if(calcMode == CM_NIM) {
+     else if(calcMode == CM_NIM) {
       addItemToNimBuffer(item);
+    }
+
+    //Probably wrong place for this function?! Should Arrow be processed in buffercize.c in this case?
+    else if(calcMode == CM_MIM) {
+      if (item == CHR_RIGHT_ARROW) {
+        setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
+      }
+      else if (item == CHR_LEFT_ARROW) {
+        setIRegisterAsInt(true, getIRegisterAsInt(true) - 1);
+      }
+      else if (item == CHR_UP_ARROW) {
+        setJRegisterAsInt(true, getJRegisterAsInt(true) - 1);
+      }
+      else if (item == CHR_DOWN_ARROW) {
+        setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
+      }
+      refreshScreen();
     }
 
     else {

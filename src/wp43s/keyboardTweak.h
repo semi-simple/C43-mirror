@@ -81,7 +81,7 @@ typedef struct {
 void     keyBuffer_pop        ();
 uint8_t  inKeyBuffer          (uint8_t byte);
 uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime, uint16_t *dTime);
-uint8_t  outKeyBufferDoubleClick(char *line1);
+uint8_t  outKeyBufferDoubleClick();
 bool_t   isMoreBufferSpace    ();
 bool_t   emptyKeyBuffer       ();                           //^^
 

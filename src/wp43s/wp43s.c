@@ -690,6 +690,9 @@ longIntegerFree(li);*/
     uint8_t outKey;
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
+
+      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click
+
       //  if(timeSpan >= 0) {
       //    do someting
       //  }

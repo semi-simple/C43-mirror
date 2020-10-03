@@ -961,76 +961,97 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
   *dTime = (uint16_t)(*pTime - buffer.time[(buffer.read-1) & BUFFER_MASK]);
   buffer.read = (buffer.read+1) & BUFFER_MASK;
 
+
   #define JMSHOWCODES_KB
 
-      #ifdef JMSHOWCODES_KB 
+    #ifdef JMSHOWCODES_KB 
       uint8_t DC_val;
       fnDisplayStack(2);
-      char bbb[200];
-      bbb[0]=0;
       char aaa[100];
-      sprintf   (aaa,"key=%2d deltaTime=%5d ",*pByte, *dTime);
-      DC_val = outKeyBufferDoubleClick(bbb);
-      if( DC_val == 1) 
-        strcat(aaa," SINGLE      ");
-      else 
-      if( DC_val == 2) 
-        strcat(aaa,"    DOUBLE   ");
-      else 
-      if( DC_val == 3)
-        strcat(aaa,"       TRIPLE");
-      else
-        strcat(aaa,"             ");
+      DC_val = outKeyBufferDoubleClick();
+      sprintf   (aaa,"key=%2d deltaT=%5d DC:%d",*pByte, *dTime, DC_val);
       showString(aaa,       &standardFont, 1, 1, vmNormal, true, true);
-      strcpy(aaa,bbb);
-      aaa[40]=0;
-      showString(aaa,       &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
-      showString(bbb + 40 , &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
-      #endif
-
+    #endif
 
 
   return BUFFER_SUCCESS;
 }
 
 
-bool_t doubleclicked;
-int8_t  doubleclicks;
 // Returns: true if double click
-uint8_t outKeyBufferDoubleClick(char *line1)
+uint8_t outKeyBufferDoubleClick()
 {
   int16_t dTime_1, dTime_2, dTime_3;
-  char line[50];
+  char line[50], line1[100];
+  bool_t doubleclicked, tripleclicked;
+  uint8_t outDC;
 
-  //note Delta Time 1 is the most recent on pulse edge
+  //note Delta Time 1 is the most recent, Delta time 3 is the oldest
   dTime_1 = (uint16_t) buffer.time[(buffer.read-1) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK];
-  //note Delta Time 2 is the preceding off pulse edge
   dTime_2 = (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK];
-  //note Delta Time 1 is the previous on pulse edge
   dTime_3 = (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-4) & BUFFER_MASK];
 
-  sprintf(line,"B-1:%d %d %d %d",(uint16_t)buffer.data[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.data[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-4) & BUFFER_MASK] );
-  sprintf(line1,"R%-1dW%-1d -1:%-5d -2:%-5d -3:%-5d -4:%-5d %-16s   D1:%d D2:%d D3:%d    ", 
-      (uint16_t)buffer.read,(uint16_t)buffer.write,
-      (uint16_t)buffer.time[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.time[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-4) & BUFFER_MASK],
-      line,dTime_1, dTime_2, dTime_3);
+  #define D1 100 //400 //space before last press, released time
+  #define D2 120 //length of first press, pressed down time
 
   doubleclicked = 
          buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
       && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-3) & BUFFER_MASK]   //check that the two last keys are the same, otherwise itis a glisando 
-      && (dTime_1 > 10 ) && (dTime_1 < 450)                //check no chatter > 10 ms & released width is not longer than limit
-      && (dTime_2 > 10 ) && (dTime_2 < 150);               //check no chatter > 10 ms & pressed width is not longer than limit
+      && (dTime_1 > 10 ) && (dTime_1 < D1)                //check no chatter > 10 ms & released width is not longer than limit
+      && (dTime_2 > 10 ) && (dTime_2 < D2);               //check no chatter > 10 ms & pressed width is not longer than limit
 
-  if(doubleclicked) {
-    doubleclicks++;
-    doubleclicks = doubleclicks & 3;
-    doubleclicks = doubleclicks | (doubleclicks >> 1);     //convert 00>00, 01>01, 10>11, 11>11: Force 0, 1 or 3.
-  }
-  if(dTime_1+dTime_2 > 750) doubleclicks = 0;
+  if(dTime_1+dTime_2 > D1+D2) doubleclicked = false;
 
-     //WARNING! this triggers conseq double click but does not check it is the SAME key
- 
-   return doubleclicks;
+
+  #define TD1 100 //space before last press, released time
+  #define TD2 150 //length of middle press, pressed down time
+  #define TD3 100 //space before middle press, i.e. released time after first press
+
+  tripleclicked = 
+         buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-3) & BUFFER_MASK]   //check that the two last keys are the same, otherwise itis a glisando 
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-5) & BUFFER_MASK]   //check that the previous key is the same. If buffer is 4 long only, it will wrap and not check the first triple press
+      && (dTime_1 > 10 ) && (dTime_1 < TD1)                //check no chatter > 10 ms & released width is not longer than limit
+      && (dTime_2 > 10 ) && (dTime_2 < TD2)                //check no chatter > 10 ms & pressed width is not longer than limit
+      && (dTime_3 > 10 ) && (dTime_2 < TD3);               //check no chatter > 10 ms & pressed width is not longer than limit
+
+  if(dTime_1+dTime_2+dTime_3 > TD1+TD2+TD3) tripleclicked = false;
+
+  if(tripleclicked) outDC = 3; else
+  if(doubleclicked) outDC = 2; else
+  if(buffer.data[(buffer.read-1) & BUFFER_MASK] != 0) outDC = 1; 
+  else outDC = 0;
+
+
+  #ifdef JMSHOWCODES_KB 
+    fnDisplayStack(2);
+    sprintf(line1,"R%-1dW%-1d -1:%-5d -2:%-5d -3:%-5d -4:%-5d  ",
+      (uint16_t)buffer.read,(uint16_t)buffer.write,
+      (uint16_t)buffer.time[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.time[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-4) & BUFFER_MASK] );
+    showString(line1, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+    sprintf(line,"B-1:%d %d %d %d",(uint16_t)buffer.data[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.data[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-4) & BUFFER_MASK] );
+    sprintf(line1,"%-16s   D1:%d D2:%d D3:%d    ",       
+      line,dTime_1, dTime_2, dTime_3);
+    showString(line1, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+
+    line1[0]=0;
+    if( outDC == 1) 
+      strcat(line1," SINGLE      ");
+    else 
+    if( outDC == 2) 
+      strcat(line1,"    DOUBLE   ");
+    else 
+    if( outDC == 3)
+      strcat(line1,"       TRIPLE");
+    else
+      strcat(line1,"             ");
+    showString(line1, &standardFont, 266, 1, vmNormal, true, true);
+  #endif
+
+     //WARNING! this triggers conseq double click to be 'triple' click but does not check it is the SAME key. Buffer to short for that.
+     //Can be fixed by having a single byte added to the rolling stack catching the key which was rolled out
+
+   return outDC;
 }
 
 

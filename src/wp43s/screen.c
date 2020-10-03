@@ -437,7 +437,6 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
 #define cursorCycle 3                      //JM cursor vv
 int8_t cursorBlinkCounter;                 //JM cursor ^^
 void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
-  int tmpKey;                              //dr - internal keyBuffer POC
   // Cursor blinking
   static bool_t cursorBlink=true;
 
@@ -451,10 +450,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
-      tmpKey = key_pop();               //vv dr - internal keyBuffer POC
-      if(tmpKey >= 0) {
-        inKeyBuffer(tmpKey);
-      }                                 //^^
+      keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -464,10 +460,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     if(showFunctionNameCounter <= 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
-      tmpKey = key_pop();               //vv dr - internal keyBuffer POC
-      if(tmpKey >= 0) {
-        inKeyBuffer(tmpKey);
-      }                                 //^^
+      keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -559,10 +552,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 #if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-  int tmpKey = key_pop();
-  if(tmpKey >= 0) {
-    inKeyBuffer(tmpKey);
-  }
+      keyBuffer_pop();                     //drjm - internal keyBuffer POC
 #endif                                  //^^
 
 
@@ -2384,10 +2374,7 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #endif
 
 #if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-  int tmpKey = key_pop();
-  if(tmpKey >= 0) {
-    inKeyBuffer(tmpKey);
-  }
+  keyBuffer_pop();
 #endif                                  //^^
 
 

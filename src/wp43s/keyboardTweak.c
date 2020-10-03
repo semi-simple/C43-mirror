@@ -906,8 +906,18 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 }
 
 
+//######################################## KEYBUFFER internal keyBuffer POC ################################################################################
+#ifdef DMCP_BUILD
+void keyBuffer_pop()
+{
+  while( key_tail() != tmpKey &&  key_tail() != -1 && isMoreBufferSpace()) {
+    tmpKey = key_pop();
+    inKeyBuffer(tmpKey);
+  }
+}
 
-#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
+
+
 kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 // Stellt 1 Byte in den Ringbuffer
@@ -955,29 +965,43 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
 }
 
 
-
+bool_t doubleclicked;
+int8_t  doubleclicks;
 // Returns: true if double click
-bool_t outKeyBufferDoubleClick(char *line1)
+uint8_t outKeyBufferDoubleClick(char *line1)
 {
   int16_t dTime_1, dTime_2, dTime_3;
 
+  //note Delta Time 1 is the most recent on pulse edge
   dTime_1 = (uint16_t) buffer.time[(buffer.read-1) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK];
+  //note Delta Time 2 is the preceding off pulse edge
   dTime_2 = (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK];
+  //note Delta Time 1 is the previous on pulse edge
   dTime_3 = (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-4) & BUFFER_MASK];
 
-sprintf(line1,"R%d W%d 0:%d %d %d %d 0:%d %d %d %d D: %d %d %d", (uint16_t)buffer.read,(uint16_t)buffer.write,
-    (uint16_t)buffer.time[0]/100, (uint16_t)buffer.time[1]/100,(uint16_t)buffer.time[2]/100,(uint16_t)buffer.time[3]/100, 
-    (uint16_t)buffer.data[0], (uint16_t)buffer.data[1],(uint16_t)buffer.data[2],(uint16_t)buffer.data[3],  dTime_1/10, dTime_2/10, dTime_3/10);
+  sprintf(line1,"R%1d W%1d T0:%5d %5d %5d %5d Buffer: B0:%2d %2d %2d %2d D1:%5d D2:%5d D3:%5d    ", 
+      (uint16_t)buffer.read,(uint16_t)buffer.write,
+      (uint16_t)buffer.time[0], (uint16_t)buffer.time[1],(uint16_t)buffer.time[2],(uint16_t)buffer.time[3],
+      (uint16_t)buffer.data[0], (uint16_t)buffer.data[1],(uint16_t)buffer.data[2],(uint16_t)buffer.data[3],  
+      dTime_1, dTime_2, dTime_3);
 
+  doubleclicked = 
+         buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-3) & BUFFER_MASK]   //check that the two last keys are the same, otherwise itis a glisando 
+      && (dTime_1 > 10 ) && (dTime_1 < 450)                //check no chatter > 10 ms & released width is not longer than limit
+      && (dTime_2 > 10 ) && (dTime_2 < 150);               //check no chatter > 10 ms & pressed width is not longer than limit
 
-//  sprintf(line1,"%5d %5d %5d", dTime_1, dTime_2, dTime_3);
+  if(doubleclicked) {
+    doubleclicks++;
+    doubleclicks = doubleclicks & 3;
+    doubleclicks = doubleclicks | (doubleclicks >> 1);     //convert 00>00, 01>01, 10>11, 11>11: Force 0, 1 or 3.
+  }
+  if(dTime_1+dTime_2+dTime_3 > 1000) doubleclicks = 0;
 
-  return      (dTime_1 > 5)   && (dTime_3 > 5  )    //on pulses chatter proofing
-           && (dTime_1 < 300) && (dTime_3 < 300)    //on pulses not longer than 0.3 s
-           && (dTime_2 > 10)  && (dTime_2 < 500);   //off width not longer than 0.5 s
+     //WARNING! this triggers conseq double click but does not check it is the SAME key
+ 
+   return doubleclicks;
 }
-
-
 
 
 // Returns:
@@ -994,11 +1018,11 @@ bool_t emptyKeyBuffer()
 {
   return buffer.read == buffer.write;
 }
-#endif                                                      //^^
+#endif
+
+//########################################################################################################################
 
 
-
-//########################################
 
 void fnT_ARROW(uint16_t command) {
 

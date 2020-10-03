@@ -18,7 +18,8 @@
  * \file wp43s.c
  ***********************************************/
 
-#define JMSHOWCODES
+//#define JMSHOWCODES
+#define JMSHOWCODES_KB
 
 
 #include "wp43s.h"
@@ -213,6 +214,7 @@ const char            digits[17] = "0123456789ABCDEF";
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
   uint32_t            timeStampKey;                            //dr - internal keyBuffer POC
+  int                 tmpKey;                                 //drjm internal keyBuffer POC
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
@@ -541,7 +543,7 @@ void program_main(void) {
   int key = 0;
   char charKey[3];
   timeStampKey = (uint32_t)sys_current_ms();                   //dr   vv- internal keyBuffer POC
-  int tmpKey = -1;                                             //drjm ^^
+  tmpKey = -1;                                                 //drjm ^^
 
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
@@ -684,30 +686,43 @@ longIntegerFree(li);*/
     // == 0 -> Key released
 //    key = key_pop();                       dr - internal keyBuffer POC
     
-                                                            //vv dr - internal keyBuffer POC
+                                                            //vv dr - internal keyBuffer POC    
+    keyBuffer_pop();
     uint8_t outKey;
-    while( key_tail() != tmpKey &&  key_tail() != -1 && isMoreBufferSpace()) {
-      tmpKey = key_pop();
-      inKeyBuffer(tmpKey);
-    }
-    
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
 
+      #ifdef JMSHOWCODES_KB 
+      uint8_t DC_val;
+      fnDisplayStack(1);
       char bbb[200];
-      if(outKeyBufferDoubleClick(bbb)) {
-       char aaa[100];
-       sprintf   (aaa,"k=%d d=%d DBL  ",key, timeSpan);
-       showString(aaa, &standardFont, 300, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
-      }
-      showString(bbb, &standardFont, 1, 30+Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+      bbb[0]=0;
+      char aaa[100];
+      sprintf   (aaa,"key=%2d timeSpan=%5d ",key, timeSpan);
+      DC_val = outKeyBufferDoubleClick(bbb);
+      if( DC_val == 1) 
+        strcat(aaa," SINGLE      ");
+      else 
+      if( DC_val == 2) 
+        strcat(aaa,"    DOUBLE   ");
+      else 
+      if( DC_val == 3)
+        strcat(aaa,"       TRIPLE");
+      else
+        strcat(aaa,"             ");
+      showString(aaa,       &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+      strcpy(aaa,bbb);
+      aaa[40]=0;
+      showString(aaa,       &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+      showString(bbb + 40 , &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+      #endif
 
       //  if(timeSpan >= 0) {
       //    do someting
       //  }
     }
     else {
-      key = -1;
+      key = -1; tmpKey = -1;
     }                                                       //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
@@ -749,8 +764,8 @@ longIntegerFree(li);*/
        telltale_pos++;
        telltale_pos = telltale_pos & 0x03;
        char aaa[100];
-//       sprintf   (aaa,"k=%d d=%d      ",key, timeSpan);
-  //     showString(aaa, &standardFont, 300, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+       sprintf   (aaa,"k=%d d=%d      ",key, timeSpan);
+       showString(aaa, &standardFont, 300, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
        sprintf   (aaa,"Rel=%d, nop=%d, St=%d, Key=%d, FN_kp=%d   ",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_state, sys_last_key(), FN_key_pressed);
        showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
        sprintf   (aaa,"%4d(%4d)<<",sys_last_key(),timeSpan);

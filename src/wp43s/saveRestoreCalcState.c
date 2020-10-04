@@ -70,8 +70,8 @@ void saveCalc(void) {
   save(&backupVersion,                      sizeof(backupVersion),                      backup);
   save(&ramSize,                            sizeof(ramSize),                            backup);
   save(ram,                                 TO_BYTES(RAM_SIZE),                         backup);
-  save(freeBlocks,                          sizeof(freeBlocks),                         backup);
-  save(&numberOfFreeBlocks,                 sizeof(numberOfFreeBlocks),                 backup);
+  save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  backup);
+  save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          backup);
   save(globalFlags,                         sizeof(globalFlags),                        backup);
   save(tmpStr3000,                          sizeof(tmpStr3000),                         backup);
   save(errorMessage,                        sizeof(errorMessage),                       backup);
@@ -211,8 +211,8 @@ void restoreCalc(void) {
     printf("Begin of calc's restoration\n");
 
     restore(ram,                                 TO_BYTES(RAM_SIZE),                         backup);
-    restore(freeBlocks,                          sizeof(freeBlocks),                         backup);
-    restore(&numberOfFreeBlocks,                 sizeof(numberOfFreeBlocks),                 backup);
+    restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  backup);
+    restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          backup);
     restore(globalFlags,                         sizeof(globalFlags),                        backup);
     restore(tmpStr3000,                          sizeof(tmpStr3000),                         backup);
     restore(errorMessage,                        sizeof(errorMessage),                       backup);
@@ -328,7 +328,7 @@ void restoreCalc(void) {
       refreshRegisterLine(REGISTER_X); // to show L register
     #endif
 
-    #ifdef SCREEN_800X480
+    #if (SCREEN_800X480 == 1)
       if(calcMode == CM_NORMAL)                {}
       else if(calcMode == CM_AIM)              {cursorEnabled = true;}
       else if(calcMode == CM_TAM)              {}
@@ -343,7 +343,7 @@ void restoreCalc(void) {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);
       }
-    #else
+    #else // SCREEN_800X480 == 0
       if(calcMode == CM_NORMAL)                calcModeNormalGui();
       else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
       else if(calcMode == CM_TAM)              calcModeTamGui();

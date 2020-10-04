@@ -707,7 +707,7 @@ void pushSoftmenu(int16_t softmenu) {
     softmenuStackPointer++;
   }
   else {
-    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in wp43s.h");
+    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
   }
 }
 

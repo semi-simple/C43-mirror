@@ -34,12 +34,12 @@ gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
-  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+  #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
     cairo_scale(cr, 2.0, 2.0);
   #endif
   cairo_set_source_surface(cr, imageSurface, 0, 0);
   cairo_surface_mark_dirty(imageSurface);
-  #if defined(RASPBERRY) && defined(SCREEN_800X480)
+  #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_FAST);
   #endif
   cairo_paint(cr);
@@ -962,7 +962,7 @@ void refreshRegisterLine(calcRegister_t regist) {
       #if (SHOW_MEMORY_STATUS == 1)
         char string[1000];
 
-        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " block%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeBlocks, numberOfFreeBlocks==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
+        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
         stringToUtf8(string, (uint8_t *)tmpStr);
         gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
         gtk_widget_show(lblMemoryStatus);

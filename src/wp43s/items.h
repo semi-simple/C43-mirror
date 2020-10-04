@@ -18,20 +18,6 @@
  * \file items.h
  ***********************************************/
 
-#define NOPARAM       9876
-#define CONFIRMED     9877
-#define NOT_CONFIRMED 9878
-
-// Stack Lift Status
-#define SLS_ENABLED   0
-#define SLS_DISABLED  1
-#define SLS_UNCHANGED 2
-
-// Undo Status
-#define US_ENABLED    0 // The command saves the stack, the statistical sums, and the system flags for later UNDO
-#define US_CANCEL     1 // The command cancels the last UNDO data
-#define US_UNCHANGED  2 // The command leaves the existing UNDO data as is
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1818,35 +1804,10 @@
 
 #define LAST_ITEM                     1746
 
-#define CHR_PROD_SIGN                 9999
-
-/********************************************//**
- * \typedef item_t
- * \brief Structure keeping the information for one item
- ***********************************************/
-#define CAT_NONE  0
-#define CAT_FNCT  1 // Function
-#define CAT_MENU  2 // Menu
-#define CAT_CNST  3 // Constant
-#define CAT_FREE  4 // To identify and find the free items
-#define CAT_REGS  5 // Registers
-#define CAT_RVAR  6 // Reserved variable
-#define CAT_DUPL  7 // Duplicate of another item e.g. acus->m^2
-#define CAT_SYFL  8 // System flags
-#define CAT_AINT  9 // Upper case alpha_INTL
-#define CAT_aint 10 // Lower case alpha_intl
-
-typedef struct {
-  void     (*func)(uint16_t); ///< Function called to execute the item
-  uint16_t param;             ///< 1st parameter to the above function
-  char     *itemCatalogName;  ///< Name of the item in the catalogs
-  char     *itemSoftmenuName; ///< Representation of the item in the menus or on the keyboard
-  uint16_t tamMin;            ///< Minimul value for TAM argument
-  uint16_t tamMax;            ///< Maximal value for TAM argument
-  char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
-  uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
-  uint8_t  undoStatus;        ///< Undo status after item execution.
-} item_t;
+#define NOPARAM                       9876 // Item for function who don't need an item
+#define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL
+#define NOT_CONFIRMED                 9878 // Confirmation for RESET, CLPALL, CLALL
+#define CHR_PROD_SIGN                 9999 // Multiplication sign × or ·
 
 void reallyRunFunction(int16_t func, uint16_t param);
 void runFunction      (int16_t func);

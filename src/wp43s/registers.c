@@ -2104,9 +2104,6 @@ void fnToReal(uint16_t unusedParamButMandatory) {
 // Inc and Dec functions
 //-----------------------------------------------------------------------------
 
-#define INC_FLAG    0
-#define DEC_FLAG    1
-
 static void incError(uint16_t regist, uint8_t flag) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, regist);
 

@@ -18,22 +18,6 @@
  * \file bufferize.h
  ***********************************************/
 
-#define AIM_BUFFER_LENGTH  400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
-#define TAM_BUFFER_LENGTH   32
-#define NIM_BUFFER_LENGTH  200
-
-#define TT_OPERATION       0
-#define TT_LETTER          1
-#define TT_VARIABLE        2
-#define TT_DIGIT           3
-#define TT_ENTER           4
-#define TT_DOT             5
-#define TT_INDIRECT        6
-#define TT_BACKSPACE       7
-#define TT_BASE10          8
-#define TT_BASE16          9
-#define TT_NOTHING        10
-
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedParamButMandatory);
   void    resetAlphaSelectionBuffer(void);

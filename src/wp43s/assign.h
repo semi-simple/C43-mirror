@@ -18,18 +18,3 @@
  * \file assign.h
  ***********************************************/
 
-/********************************************//**
- * \struct calcKey_t
- * \brief Structure keeping the informations for one key
- ***********************************************/
-typedef struct {
-  int16_t keyId;       ///< ID of the key
-  int16_t primary;     ///< ID of the primary function of the key
-  int16_t fShifted;    ///< ID of the f shifted function of the key
-  int16_t gShifted;    ///< ID of the g shifted function of the key
-  int16_t keyLblAim;   ///< ID of the main label of the key
-  int16_t primaryAim;  ///< ID of the primary AIM function: latin letters
-  int16_t fShiftedAim; ///< ID of the f shifted AIM function:
-  int16_t gShiftedAim; ///< ID of the g shifted AIM function: greek letters
-  int16_t primaryTam;  ///< ID of the primary TAM function of the key
-} calcKey_t;

@@ -15,16 +15,15 @@
  */
 
 /********************************************//**
- * \file bufferize.h
+ * \file sinc.h
  ***********************************************/
+// Coded by JM, based on sinc.h
 
-#ifndef TESTSUITE_BUILD
-  void    fnAim                    (uint16_t unusedParamButMandatory);
-  void    resetAlphaSelectionBuffer(void);
-  void    addItemToBuffer          (uint16_t item);
-  void    addItemToNimBuffer       (int16_t item);
-  void    tamTransitionSystem      (uint16_t tamEvent);
-  void    closeNim                 (void);
-  void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);
-  int16_t getOperation             (void);
-#endif
+void fnSincpi(uint16_t unusedParamButMandatory);
+void sincpiError(void);
+void sincpiLonI (void);
+void sincpiRema (void);
+void sincpiCxma (void);
+void sincpiReal (void);
+void sincpiCplx (void);
+void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);

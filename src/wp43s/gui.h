@@ -18,22 +18,6 @@
  * \file gui.h
  ***********************************************/
 
-#define GAP                     6
-#define Y_OFFSET_LETTER        18
-#define X_OFFSET_LETTER         3
-#define Y_OFFSET_SHIFTED_LABEL 25
-#define Y_OFFSET_GREEK         27
-
-#define DELTA_KEYS_X           78
-#define DELTA_KEYS_Y           74
-#define KEY_WIDTH_1            47
-#define KEY_WIDTH_2            56
-
-#define X_LEFT_PORTRAIT        45
-#define X_LEFT_LANDSCAPE      544
-#define Y_TOP_PORTRAIT        376
-#define Y_TOP_LANDSCAPE        30
-
 #ifndef TESTSUITE_BUILD
   void fnOff            (uint16_t unsuedParamButMandatory);
   void calcModeNormal   (void);
@@ -45,7 +29,7 @@
 
 #ifdef PC_BUILD
   void setupUI          (void);
-  #ifndef SCREEN_800X480
+  #if (SCREEN_800X480 == 0)
     void calcModeNormalGui(void);
     void calcModeAimGui   (void);
     void calcModeTamGui   (void);

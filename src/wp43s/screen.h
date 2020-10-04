@@ -18,39 +18,10 @@
  * \file screen.h
  ***********************************************/
 
-#define SCREEN_WIDTH          400
-#define SCREEN_HEIGHT         240
-#define ON_PIXEL              0x303030 // blue red green
-#define OFF_PIXEL             0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE   14 //JM 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR //JM increased from 7 to 14. Why not. It is not a Babbage machine.
-#define TEMPORARY_INFO_OFFSET 10 // I find 4 looks better
-#define REGISTER_LINE_HEIGHT  36 // was 37
-
 //#define displayStackSHOIDISP 2                  //JMSHOIDISP  displayStackSHOIDISP=1: 3 lines of X-repeats
                                                   //JMSHOIDISP  displayStackSHOIDISP=2: 2 lines of X-repeats
                                                   //JMSHOIDISP  displayStackSHOIDISP=3: 1 lines of X-repeats
                                                   //JMSHOIDISP  displayStackSHOIDISP=4: 0 lines of X-repeats
-
-#define Y_POSITION_OF_REGISTER_T_LINE  24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
-#define Y_POSITION_OF_REGISTER_Z_LINE  60 // was  61
-#define Y_POSITION_OF_REGISTER_Y_LINE  96 // was  98
-#define Y_POSITION_OF_REGISTER_X_LINE 132 // was 135
-
-// If one of the 4 next defines is changed: change also xxxREG in registers.h
-#define Y_POSITION_OF_AIM_LINE        Y_POSITION_OF_REGISTER_X_LINE
-#define Y_POSITION_OF_TAM_LINE        Y_POSITION_OF_REGISTER_T_LINE
-#define Y_POSITION_OF_NIM_LINE        Y_POSITION_OF_REGISTER_X_LINE
-#define Y_POSITION_OF_ERR_LINE        Y_POSITION_OF_REGISTER_Z_LINE
-#define Y_POSITION_OF_TRUE_FALSE_LINE Y_POSITION_OF_REGISTER_Z_LINE
-
-/********************************************//**
- * \typedef videoMode_t
- * \brief Video mode: normal video or reverse video
- ***********************************************/
-typedef enum {
-  vmNormal,  ///< Normal mode: black on white background
-  vmReverse  ///< Reverse mode: white on black background
-} videoMode_t; // 1 bit
 
 extern bool_t   doRefreshSoftMenu;                             //dr
 
@@ -67,16 +38,6 @@ void     clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_
 
 
 #ifdef PC_BUILD
-  #if (__linux__ == 1)
-    #define LINEBREAK "\n"
-  #elif defined(__MINGW64__)
-    #define LINEBREAK "\n\r"
-  #elif defined(__APPLE__)
-    #define LINEBREAK "\r\n"
-  #else
-    #error Only Linux, MacOS, and Windows MINGW64 are supported for now
-  #endif
-
   gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard              (void);
   void     copyRegisterXToClipboard           (void);

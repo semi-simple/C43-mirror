@@ -175,6 +175,7 @@ void fnCos                      (uint16_t unusedParamButMandatory) {}
 void fnCosh                     (uint16_t unusedParamButMandatory) {}
 void fnSin                      (uint16_t unusedParamButMandatory) {}
 void fnSinc                     (uint16_t unusedParamButMandatory) {}
+void fnSincpi                   (uint16_t unusedParamButMandatory) {}
 void fnSinh                     (uint16_t unusedParamButMandatory) {}
 void fnTan                      (uint16_t unusedParamButMandatory) {}
 void fnTanh                     (uint16_t unusedParamButMandatory) {}
@@ -525,7 +526,6 @@ void fnClAIM                    (uint16_t unusedParamButMandatory) {}  //JM POC 
 void fnShoiXRepeats             (uint16_t numberOfRepeats)         {}  //JM SHOIDISP
 void fnDumpMenus                (uint16_t unusedParamButMandatory) {}  //JM
 void fnCFGsettings              (uint16_t unusedParamButMandatory) {}
-void fnSincpi                   (uint16_t unusedParamButMandatory) {}
 
 
                                                                                 //JM ^^
@@ -653,7 +653,7 @@ const item_t indexOfItems[] = {
 /*  110 */  { fnClearFlag,                 TM_FLAGW,                    "CF",                                          "CF",                                          0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  111 */  { fnSetFlag,                   TM_FLAGW,                    "SF",                                          "SF",                                          0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*  112 */  { fnFlipFlag,                  TM_FLAGW,                    "FF",                                          "FF",                                          0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  113 */  { itemToBeCoded,               NOPARAM,                     "LITT",                                        "LITT",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // Litteral in a PGM
+/*  113 */  { fnSincpi,                    NOPARAM,                     "sinc" STD_pi,                                 "sinc" STD_pi,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  114 */  { itemToBeCoded,               NOPARAM,                     "0114",                                        "0114",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  115 */  { itemToBeCoded,               NOPARAM,                     "0115",                                        "0115",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  116 */  { itemToBeCoded,               NOPARAM,                     "0116",                                        "0116",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2752,7 +2752,6 @@ const item_t indexOfItems[] = {
 /* 2167 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
 /* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
-/* 2170 */  { fnSincpi,                    NOPARAM,                     "sinc" STD_pi,                                 "sinc" STD_pi,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 
-/* 2171 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2170 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

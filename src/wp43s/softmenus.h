@@ -18,28 +18,6 @@
  * \file softmenu.h
  ***********************************************/
 
-#define MY_ALPHA_MENU_CNST    0  // This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
-#define SOFTMENU_HEIGHT 23
-
-/********************************************//**
- * \struct softmenu_t
- * \brief Structure keeping the informations for one softmenu
- ***********************************************/
-typedef struct {
-  int16_t menuId;             ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
-  int16_t numItems;           ///< Number of items in the softmenu (must be a multiple of 6 for now)
-  const int16_t *softkeyItem; ///< Pointer to the first item of the menu
-} softmenu_t;
-
-/********************************************//**
- * \struct softmenuStack_t
- * \brief Stack of softmenus
- ***********************************************/
-typedef struct {
-  int16_t softmenu;  ///< Softmenu ID
-  int16_t firstItem; ///< Current first item on the screen (unshifted F1 = bottom left)
-} softmenuStack_t;
-
 void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue); //dr
 void showSoftmenuCurrentPart(void);
 void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);

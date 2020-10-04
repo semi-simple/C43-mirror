@@ -18,21 +18,6 @@
  * \file items.h
  ***********************************************/
 
-#define NOPARAM       9876
-#define CONFIRMED     9877
-#define NOT_CONFIRMED 9878
-
-// Stack Lift Status
-#define SLS_ENABLED   0
-#define SLS_DISABLED  1
-#define SLS_UNCHANGED 2
-
-// Undo Status
-#define US_ENABLED    0 // The command saves the stack, the statistical sums, and the system flags for later UNDO
-#define US_CANCEL     1 // The command cancels the last UNDO data
-#define US_UNCHANGED  2 // The command leaves the existing UNDO data as is
-
-
 #define ITM_NULL                         0
 #define ITM_LBL                          1
 #define ITM_GTO                          2
@@ -146,7 +131,7 @@
 #define ITM_CF                         110
 #define ITM_SF                         111
 #define ITM_FF                         112
-#define ITM_0113                       113
+#define ITM_sincpi                     113
 #define ITM_0114                       114
 #define ITM_0115                       115
 #define ITM_0116                       116
@@ -161,6 +146,10 @@
 #define ITM_0125                       125
 #define ITM_0126                       126
 #define ITM_0127                       127
+
+
+// Items from 128 to ... are 2 byte OP codes
+// Constants
 #define CST_01                         128
 #define CST_02                         129
 #define CST_03                         130
@@ -2203,39 +2192,13 @@
 #define ITM_FBYTE                     2167   //JM SHOI
 #define ITM_CLAIM                     2168
 #define ITM_SHOIREP                   2169   //JM SHOI
-#define ITM_sincpi                    2170
 
-#define LAST_ITEM                     2171   //JM
+#define LAST_ITEM                     2170   //JM
 
-#define CHR_PROD_SIGN                 9999
-
-/********************************************//**
- * \typedef item_t
- * \brief Structure keeping the information for one item
- ***********************************************/
-#define CAT_NONE  0
-#define CAT_FNCT  1 // Function
-#define CAT_MENU  2 // Menu
-#define CAT_CNST  3 // Constant
-#define CAT_FREE  4 // To identify and find the free items
-#define CAT_REGS  5 // Registers
-#define CAT_RVAR  6 // Reserved variable
-#define CAT_DUPL  7 // Duplicate of another item e.g. acus->m^2
-#define CAT_SYFL  8 // System flags
-#define CAT_AINT  9 // Upper case alpha_INTL
-#define CAT_aint 10 // Lower case alpha_intl
-
-typedef struct {
-  void     (*func)(uint16_t); ///< Function called to execute the item
-  uint16_t param;             ///< 1st parameter to the above function
-  char     *itemCatalogName;  ///< Name of the item in the catalogs
-  char     *itemSoftmenuName; ///< Representation of the item in the menus or on the keyboard
-  uint16_t tamMin;            ///< Minimul value for TAM argument
-  uint16_t tamMax;            ///< Maximal value for TAM argument
-  char     catalog;           ///< Menu of CATALOG in which the item is located: see #define CAT_*
-  uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
-  uint8_t  undoStatus;        ///< Undo status after item execution.
-} item_t;
+#define NOPARAM                       9876 // Item for function who don't need an item
+#define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL
+#define NOT_CONFIRMED                 9878 // Confirmation for RESET, CLPALL, CLALL
+#define CHR_PROD_SIGN                 9999 // Multiplication sign × or ·
 
 void reallyRunFunction(int16_t func, uint16_t param);
 void runFunction      (int16_t func);

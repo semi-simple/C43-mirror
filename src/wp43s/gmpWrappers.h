@@ -21,9 +21,6 @@
 #define longInteger_t                                                     mpz_t
 #define REGISTER_LONG_INTEGER_DATA(a)                                     ((void *)(getRegisterDataPointer(a) + 1)) // Memory pointer to the long integer of a register
 #define LIMB_SIZE                                                         sizeof(mp_limb_t)
-#define LI_ZERO                                                           0 // 0
-#define LI_NEGATIVE                                                       1 // -
-#define LI_POSITIVE                                                       2 // +
 #define longIntegerSizeInBytes(li)                                        (abs((li)->_mp_size) * LIMB_SIZE)
 
 

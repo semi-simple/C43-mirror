@@ -626,9 +626,7 @@ void fnReset(uint16_t confirmation) {
     #endif // TESTSUITE_BUILD
 
     exponentLimit = 6145;                                      //JMMAX
-
     temporaryInformation = TI_RESET;
-
     aimBuffer[0] = 0;
 
     //JM Default USER

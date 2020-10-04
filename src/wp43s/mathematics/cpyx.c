@@ -42,21 +42,6 @@ void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_F
 //-----------------------------------------------------------------------------
 
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-
-#define EXTRA_INFO_MESSAGE(msg)                                         \
- do {                                                                   \
-  sprintf(errorMessage, msg);                                           \
-  moreInfoOnError("In function fnCyx/fnPyx:", errorMessage, NULL, NULL); \
- } while(0)
-
-#else // EXTRA_INFO_ON_CALC_ERROR != 1
-
-#define EXTRA_INFO_MESSAGE(msg)
-
-#endif // EXTRA_INFO_ON_CALC_ERROR
-
-
 /********************************************//**
  * \brief Data type error in Cyx
  *
@@ -201,15 +186,15 @@ static void pyxLong(longInteger_t y, longInteger_t x, longInteger_t result) {
 
     realSubtract(&yReal, &xReal, &resultReal, &ctxtReal75);
     realAdd(&resultReal, const_1, &resultReal, &ctxtReal75);
-    WP34S_LnGamma(&resultReal, &resultReal, &ctxtReal75);       // r = ln((y-x)!)
+    WP34S_LnGamma(&resultReal, &resultReal, &ctxtReal75);        // r = ln((y-x)!)
 
     realAdd(&yReal, const_1, &yReal, &ctxtReal75);
-    WP34S_LnGamma(&yReal, &yReal, &ctxtReal75);                 // y = ln(y!)
+    WP34S_LnGamma(&yReal, &yReal, &ctxtReal75);                  // y = ln(y!)
 
     realSubtract(&yReal, &resultReal, &resultReal, &ctxtReal75);
     realSubtract(&resultReal, &xReal, &resultReal, &ctxtReal75); // r = ln(y!) - ln((y-x)!)
 
-    realExp(&resultReal, &resultReal, &ctxtReal75);             // r = y! / (y-x)!
+    realExp(&resultReal, &resultReal, &ctxtReal75);              // r = y! / (y-x)!
 
     convertRealToLongInteger(&resultReal, result, DEC_ROUND_HALF_UP);
   }
@@ -287,7 +272,7 @@ void cpyxLonILonI(uint16_t combOrPerm) {
 
   if(longIntegerIsNegative(x) || longIntegerIsNegative(y) || longIntegerCompare(y, x) < 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxLonILonI:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     longInteger_t t;
@@ -318,7 +303,7 @@ void cpyxLonIReal(uint16_t combOrPerm) {
 
   if(realIsNegative(&x) || realIsNegative(&y)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxLonIReal:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     real_t t;
@@ -367,7 +352,7 @@ void cpyxLonIShoI(uint16_t combOrPerm) {
 
   if(longIntegerIsNegative(x) || longIntegerIsNegative(y) || longIntegerCompare(y, x) < 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxLonIShoI:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     longInteger_t t;
@@ -402,7 +387,7 @@ void cpyxRealLonI(uint16_t combOrPerm) {
 
   if(realIsNegative(&x) || realIsNegative(&y) || realCompareGreaterThan(&x, &y)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxRealLonI:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     real_t t;
@@ -430,7 +415,7 @@ void cpyxRealReal(uint16_t combOrPerm) {
 
   if(realIsNegative(&x) || realIsNegative(&y) || realCompareGreaterThan(&x, &y)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxRealReal:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     real_t t;
@@ -480,7 +465,7 @@ void cpyxRealShoI(uint16_t combOrPerm) {
 
   if(realIsNegative(&x) || realIsNegative(&y) || realCompareGreaterThan(&x, &y)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxRealShoI:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     real_t t;
@@ -611,7 +596,7 @@ void cpyxShoILonI(uint16_t combOrPerm) {
 
   if(longIntegerIsNegative(x) || longIntegerIsNegative(y) || longIntegerCompare(y, x) < 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
+    EXTRA_INFO_MESSAGE("cpyxShoILonI:", "cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
   }
   else {
     longInteger_t t;
@@ -642,7 +627,7 @@ void cpyxShoIReal(uint16_t combOrPerm) {
 
   if(realIsNegative(&x) || realIsNegative(&y) || realCompareGreaterThan(&x, &y)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
+    EXTRA_INFO_MESSAGE("cpyxShoIReal:", "cannot calculate Cyx/Pyx, conditions: x>=0, y>=0, and x<=y.");
   }
   else {
     real_t t;
@@ -693,7 +678,7 @@ void cpyxShoIShoI(uint16_t combOrPerm) {
 
   if(longIntegerIsNegative(x) || longIntegerIsNegative(y) || longIntegerCompare(y, x) < 0) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
+    EXTRA_INFO_MESSAGE("cpyxShoIShoI:", "cannot calculate Cyx/Pyx, y and x must be greater or equal than zero.");
   }
   else {
     longInteger_t t;

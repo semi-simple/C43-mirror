@@ -14,11 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define NUMERIC_FONT_HEIGHT                      36
-#define STANDARD_FONT_HEIGHT                     22
-#define NUMBER_OF_NUMERIC_FONT_LINES_PER_SCREEN   5
-#define NUMBER_OF_STANDARD_FONT_LINES_PER_SCREEN  8
-
 #ifndef TESTSUITE_BUILD
   void initFontBrowser(void);
   void fontBrowser    (uint16_t unusedParamButMandatory);

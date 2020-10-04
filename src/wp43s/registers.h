@@ -139,10 +139,10 @@ typedef union {
   };
 } dataBlock_t;
 
-// Datatype for real34Matrix_t -> registers.h could be wrong place fot the typedef
+// Datatype for real34Matrix_t -> registers.h could be wrong place for the typedef
 typedef struct {
    dataBlock_t header;
-   real34_t*   vals[];
+   real34_t    matrixElements[];
 } real34Matrix_t;
 
 

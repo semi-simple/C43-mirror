@@ -93,6 +93,7 @@ typedef struct {real34_t real, imag;}                     complex34_t;
 #define REGISTER_CONFIG_DATA(a)                           ((dtConfigDescriptor_t *)(getRegisterDataPointer(a)))
 
 #define REGISTER_REAL34_MATRIX_DBLOCK(a)                  ((dataBlock_t *)(getRegisterDataPointer(a)))
+#define REGISTER_REAL34_MATRIX_M_ELEMENTS(a)              ((real34_t *)(getRegisterDataPointer(a) + sizeof(dataBlock_t)))
 #define REGISTER_REAL34_MATRIX(a)                         ((real34Matrix_t *)(getRegisterDataPointer(a)))
 
 #define REGISTER_SHORT_INTEGER_DATA(a)                    ((uint64_t    *)(getRegisterDataPointer(a)))

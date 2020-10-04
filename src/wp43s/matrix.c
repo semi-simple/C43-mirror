@@ -20,10 +20,7 @@
 
  #include "wp43s.h"
 
-//real34Matrix_t       *getMatrixFromRegister(calcRegister_t);
 real34Matrix_t       *openMatrixMIMPointer;
-//int16_t               matSelRow;
-//int16_t               matSelCol;
 bool_t                matEditMode;
 
 /********************************************//**
@@ -49,7 +46,7 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   //Allocate Memory for Matrix
   uint32_t reg_size;
-  reg_size = (rows * cols) * sizeof(real34_t) + sizeof(registerDescriptor_t);
+  reg_size = (rows * cols) * sizeof(real34_t) + sizeof(dataBlock_t);
   real34Matrix_t* matrix = malloc(reg_size);
 
   matrix->header.matrixColumns = cols;
@@ -58,9 +55,10 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   //Initialize with 0.
   for(uint32_t i = 0; i < rows * cols; i++) {
     int32_t zero_int = 0;
-    real34_t* zero = malloc(REAL34_SIZE);
-    int32ToReal34(zero_int, zero);
-    matrix->vals[i] = zero;
+    real34_t zero;
+    //real34_t* zero = malloc(REAL34_SIZE);
+    int32ToReal34(zero_int, &zero);
+    matrix->matrixElements[i] = zero;
   }
 
   //Drop X_Register and Y_Register
@@ -79,8 +77,6 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 void fnEditMatrix(uint16_t unusedParamButMandatory) {
   calcMode = CM_MIM;
 
-  //getMatrixFromXReg
-  //openMatrixMIMPointer =
   getMatrixFromRegister(REGISTER_X);
 
   showSoftmenu(NULL, -MNU_M_EDIT, true);
@@ -131,13 +127,11 @@ void showMatrixEditor() {
   int16_t matSelRow = getIRegisterAsInt(true);
   int16_t matSelCol = getJRegisterAsInt(true);
 
-  //real34_t myReal34 = openMatrixMIMPointer->vals[0];
-
   videoMode_t vm = vmNormal;
   for(int i = 0; i < rows; i++) {
     showString("[", &numericFont, 1, Y_POS - (rows -1 - i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     for(int j = 0; j< cols; j++) {
-      real34ToDisplayString(openMatrixMIMPointer->vals[i*cols+j], AM_NONE, tmpStr3000, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
+      real34ToDisplayString(&openMatrixMIMPointer->matrixElements[i*cols+j], AM_NONE, tmpStr3000, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
       if (matSelRow == i && matSelCol == j) {
         vm = vmReverse;
       } else {
@@ -156,8 +150,6 @@ void showMatrixEditor() {
 }
 
 void storeMatrixToXRegister(real34Matrix_t *matrix) {
-  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t);
-  //real34Matrix_t* matrix = malloc(reg_size);
 
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
@@ -167,8 +159,8 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
   //openMatrixMIMPointer = matrix;
   // END WORKING//
 
-  reallocateRegister(REGISTER_X, dtReal34Matrix, sizeof(matrix), AM_NONE);
-  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, sizeof(matrix));
+  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)), AM_NONE);
+  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)));
 }
 
 //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist) {
@@ -184,8 +176,42 @@ void getMatrixFromRegister(calcRegister_t regist) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     return;
   }
-  real34Matrix_t* matrix = malloc(getRegisterFullSize(regist));
-  xcopy(matrix, REGISTER_REAL34_MATRIX(regist), getRegisterFullSize(regist));
+
+  dataBlock_t *dblock           = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+  real34_t    *matrixElem     = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
+  /*
+  dataBlock_t header;
+  xcopy(&header, REGISTER_REAL34_MATRIX_DBLOCK(regist), TO_BLOCKS(sizeof(dataBlock_t)));
+
+  real34_t* matixElements[dblock->matrixColumns * dblock->matrixRows];
+  xcopy(matixElements, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), TO_BLOCKS((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t)));
+  //xcopy(&matixElements, REGISTER_REAL34_MATRIX_DBLOCK(regist) + sizeof(dataBlock_t), (header.matrixColumns * header.matrixRows) * sizeof(real34_t));
+
+  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t));
+  matrix->header.matrixColumns = header.matrixColumns;
+  matrix->header.matrixRows = header.matrixRows;
+  int r = dblock->matrixRows;
+  int c = dblock->matrixColumns;
+  int hr = matrix->header.matrixRows;
+  int hc = matrix->header.matrixColumns;
+  for(int i = 0; i < dblock->matrixColumns * dblock->matrixRows; i++) {
+    matrix->matrixElements[i] = *matixElements[i];
+  }
+  */
+
+  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t));
+
+  matrix->header.matrixColumns = dblock->matrixColumns;
+  matrix->header.matrixRows = dblock->matrixRows;
+
+  int hr = matrix->header.matrixRows;
+  int hc = matrix->header.matrixColumns;
+
+  for(int i = 0; i < dblock->matrixColumns * dblock->matrixRows; i++) {
+    matrix->matrixElements[i] = *matrixElem;
+    matrixElem++;
+  }
+
 
   //NOT WORKING//
   openMatrixMIMPointer = matrix;

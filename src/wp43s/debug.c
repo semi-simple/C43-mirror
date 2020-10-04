@@ -600,7 +600,7 @@ void debugNIM(void) {
     else if(getRegisterDataType(regist) == dtConfig) {
       sprintf(string + n, "Configuration data");
     }
-    
+
     else if(getRegisterDataType(regist) == dtReal34Matrix) {
       dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
       sprintf(string + n, "Real Matrix of Size [%" PRIu16" x %" PRIu16" Matrix]", dblock->matrixRows, dblock->matrixColumns);

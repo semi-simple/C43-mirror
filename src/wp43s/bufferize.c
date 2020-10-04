@@ -290,16 +290,16 @@ void addItemToBuffer(uint16_t item) {
     //Probably wrong place for this function?! Should Arrow be processed in buffercize.c in this case?
     else if(calcMode == CM_MIM) {
       if (item == CHR_RIGHT_ARROW) {
-        setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
+        setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
       }
       else if (item == CHR_LEFT_ARROW) {
-        setIRegisterAsInt(true, getIRegisterAsInt(true) - 1);
-      }
-      else if (item == CHR_UP_ARROW) {
         setJRegisterAsInt(true, getJRegisterAsInt(true) - 1);
       }
+      else if (item == CHR_UP_ARROW) {
+        setIRegisterAsInt(true, getIRegisterAsInt(true) - 1);
+      }
       else if (item == CHR_DOWN_ARROW) {
-        setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
+        setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
       }
       refreshScreen();
     }

@@ -18,12 +18,6 @@
  * \file conversionUnits.h
  ***********************************************/
 
-
-typedef enum {
-  multiply,
-  divide
-} multiplyDivide_t;
-
 // Temperature
 void fnCvtCToF      (uint16_t unusedParamButMandatory);
 void fnCvtFToC      (uint16_t unusedParamButMandatory);

@@ -18,11 +18,6 @@
  * \file memory.h
  ***********************************************/
 
-typedef struct {
-  uint16_t address;
-  uint16_t sizeInBlocks;
-} freeBlock_t;
-
 void    *wp43sAllocate  (size_t sizeInBytes);
 void    *wp43sReallocate(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes);
 void    wp43sFree       (void *pcMemPtr, size_t sizeInBytes);

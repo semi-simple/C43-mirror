@@ -22,7 +22,7 @@
 
 #ifdef PC_BUILD
 GtkWidget *grid;
-#ifndef SCREEN_800X480
+#if (SCREEN_800X480 == 0)
   GtkWidget *backgroundImage, *bezelImage;
   GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
   GtkWidget *lblBehindScreen;
@@ -362,7 +362,7 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
 
 
 #ifdef PC_BUILD
-#ifndef SCREEN_800X480
+#if (SCREEN_800X480 == 0)
 /********************************************//**
  * \brief Reads the CSS file to configure the calc's GUI style
  *
@@ -373,8 +373,6 @@ void prepareCssData(void) {
   FILE *cssFile;
   char *toReplace, *replaceWith, needle[100], newNeedle[100];
   int  i, fileLg;
-
-  #define CSSFILE "wp43s_pre.css"
 
   // Convert the pre-CSS data to CSS data
   cssFile = fopen(CSSFILE, "rb");
@@ -723,7 +721,7 @@ void calcModeTamGui(void) {
  * \return void
  ***********************************************/
 void setupUI(void) {
-  #ifndef SCREEN_800X480
+  #if (SCREEN_800X480 == 0)
     int             xPos, yPos;
     GError         *error;
     GtkCssProvider *cssProvider;
@@ -1340,7 +1338,7 @@ void setupUI(void) {
 
     gtk_widget_show_all(frmCalc);
 
-  #else // SCREEN_800X480
+  #else // SCREEN_800X480 == 1
     // The main window
     frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
@@ -1417,7 +1415,7 @@ void calcModeNormal(void) {
   hideCursor();
   cursorEnabled = false;
 
-  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeNormalGui();
   #endif
 }
@@ -1455,7 +1453,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
 
   setSystemFlag(FLAG_ALPHA);
 
-  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeAimGui();
   #endif
 }
@@ -1482,7 +1480,7 @@ void calcModeAsm(void) {
   clearSystemFlag(FLAG_ALPHA);
   resetAlphaSelectionBuffer();
 
-  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeAimGui();
   #endif
 }
@@ -1584,7 +1582,7 @@ void calcModeTam(void) {
 
   tamCurrentOperation = 0;
 
-  #if defined(PC_BUILD) && !defined(SCREEN_800X480)
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeTamGui();
   #endif
 }

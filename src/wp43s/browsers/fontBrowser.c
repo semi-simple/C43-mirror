@@ -64,7 +64,7 @@ void initFontBrowser(void) {
 
   #ifdef PC_BUILD
     if(numLinesNumericFont + numLinesStandardFont > NUMBER_OF_GLYPH_ROWS) {
-      printf("In file wp43s.h NUMBER_OF_GLYPH_ROWS must be increased from %d to %d\n", NUMBER_OF_GLYPH_ROWS, numLinesNumericFont + numLinesStandardFont);
+      printf("In file defines.h NUMBER_OF_GLYPH_ROWS must be increased from %d to %d\n", NUMBER_OF_GLYPH_ROWS, numLinesNumericFont + numLinesStandardFont);
       exit(-1);
     }
   #endif // PC_BUILD

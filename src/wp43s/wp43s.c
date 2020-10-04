@@ -153,8 +153,8 @@ int16_t               exponentLimit;
 int16_t               showFunctionNameCounter;
 size_t                gmpMemInBytes;
 size_t                wp43sMemInBytes;
-freeBlock_t           freeBlocks[MAX_FREE_BLOCKS];
-int32_t               numberOfFreeBlocks;
+freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
 void                  (*confirmedFunction)(uint16_t);
 real51_t              const *gammaLanczosCoefficients;
@@ -166,7 +166,6 @@ const char            digits[17] = "0123456789ABCDEF";
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
-  #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 
@@ -181,9 +180,9 @@ void setupDefaults(void) {
 
   ram = (dataBlock_t *)malloc(TO_BYTES(RAM_SIZE));
   memset(ram, 0, TO_BYTES(RAM_SIZE));
-  numberOfFreeBlocks = 1;
-  freeBlocks[0].address = 0;
-  freeBlocks[0].sizeInBlocks = RAM_SIZE;
+  numberOfFreeMemoryRegions = 1;
+  freeMemoryRegions[0].address = 0;
+  freeMemoryRegions[0].sizeInBlocks = RAM_SIZE;
 
   glyphNotFound.data   = malloc(38);
   xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);

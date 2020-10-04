@@ -811,6 +811,13 @@
 			<Option target="generateConstants" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/defines.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/display.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -2168,6 +2175,13 @@
 		<Unit filename="src/wp43s/timer.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/typeDefinitions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/wp43s.c">

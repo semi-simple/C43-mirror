@@ -212,8 +212,7 @@ const char            digits[17] = "0123456789ABCDEF";
     int8_t            telltale_lastkey;                        //JM Test
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
-  uint32_t            timeStampKey;                            //dr - internal keyBuffer POC
-  int                 tmpKey;                                 //drjm internal keyBuffer POC
+  uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
   #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
@@ -537,13 +536,10 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef DMCP_BUILD
-uint16_t timeSpan;
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  timeStampKey = (uint32_t)sys_current_ms();                   //dr   vv- internal keyBuffer POC
-  tmpKey = -1;                                                 //drjm ^^
-
+  timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
@@ -680,25 +676,28 @@ longIntegerFree(li);*/
     }
 
     // Fetch the key
-    //  -1  -> No key event
+    //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//    key = key_pop();                       dr - internal keyBuffer POC
+//  key = key_pop();                                        //dr - removed because of internal keyBuffer
     
-                                                            //vv dr - internal keyBuffer POC    
-    keyBuffer_pop();
+                                                            //vv dr - internal keyBuffer POC
     uint8_t outKey;
+    uint32_t timeSpan;
+    int tmpKey = key_pop();
+    if(tmpKey >= 0) {
+      inKeyBuffer(tmpKey);
+    }
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
-
-      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click
-
-      //  if(timeSpan >= 0) {
-      //    do someting
-      //  }
+      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!
+      // dr - KeyBuffer is a FIFO, therefore the state of the captured element has to be taken with this element, no global state is allowed
+//    if(timeSpan >= 0) {
+//      do someting
+//    }
     }
     else {
-      key = -1; tmpKey = -1;
+      key = tmpKey;
     }                                                       //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
@@ -731,7 +730,7 @@ longIntegerFree(li);*/
         currentVolumeSetting = get_beep_volume();
       }
     }
-
+   
    #ifdef JMSHOWCODES 
     fnDisplayStack(1);
     //Show key codes

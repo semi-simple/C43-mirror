@@ -906,14 +906,18 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 }
 
 
-//######################################## KEYBUFFER internal keyBuffer POC ################################################################################
-#ifdef DMCP_BUILD
+
+#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
 void keyBuffer_pop()
 {
-  while( key_tail() != tmpKey &&  key_tail() != -1 && isMoreBufferSpace()) {
+  int tmpKey;
+
+  do {
     tmpKey = key_pop();
-    inKeyBuffer(tmpKey);
-  }
+    if(tmpKey >= 0) {
+      inKeyBuffer(tmpKey);
+    } 
+  } while (tmpKey >= 0);
 }
 
 
@@ -928,16 +932,27 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  if(byte == buffer.data[(buffer.write - 1) & BUFFER_MASK] || byte == -1) return BUFFER_FAIL;  //Do not allow the same key to be stored multiple times. Only key changes stored. -1 ignored.
-
   uint32_t now  = (uint32_t)sys_current_ms();
+  uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
 
-  if( ((buffer.read + 1) & BUFFER_MASK) == buffer.write)
+  if(buffer.read == next)
     return BUFFER_FAIL; // voll
 
-  buffer.data[buffer.write] = byte;
+
+// EXPERIMENT insert missing Key released
+  if(buffer.data[(buffer.write - 1) & BUFFER_MASK] == byte) {
+    buffer.data[buffer.write & BUFFER_MASK] = 0;
+    buffer.time[buffer.write] = now;
+    buffer.write = next;
+    next = ((buffer.write + 1) & BUFFER_MASK);
+  }
+// END EXPERIMENT insert missing Key released
+
+
+//buffer.data[buffer.write] = byte;
+  buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
   buffer.time[buffer.write] = now;
-  buffer.write = ((buffer.write + 1) & BUFFER_MASK);
+  buffer.write = next;
 
   return BUFFER_SUCCESS;
 }
@@ -951,28 +966,39 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_FAIL       der Ringbuffer ist leer. Es kann kein Byte geliefert werden.
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
-uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint16_t *dTime)
+uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 {
+  uint32_t tmpTime;
+
   if(buffer.read == buffer.write)
     return BUFFER_FAIL;
 
   *pByte = buffer.data[buffer.read];
   *pTime = buffer.time[buffer.read];
-  *dTime = (uint16_t)(*pTime - buffer.time[(buffer.read-1) & BUFFER_MASK]);
-  buffer.read = (buffer.read+1) & BUFFER_MASK;
+  tmpTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
+  if(buffer.time[buffer.read] >= tmpTime) {
+    tmpTime = buffer.time[buffer.read] - tmpTime;
+  }
+  else {
+    tmpTime = buffer.time[buffer.read];
+  }
+  *pTimeSpan = tmpTime;
+
+  buffer.read = (buffer.read + 1) & BUFFER_MASK;
+
 
   #define JMSHOWCODES_KB2
   #define JMSHOWCODES_KB1
 
-    #ifdef JMSHOWCODES_KB1 
-      uint8_t DC_val;
-      fnDisplayStack(2);
-      char aaa[100];
-      DC_val = outKeyBufferDoubleClick();
-      sprintf   (aaa,"key=%2d deltaT=%5d DC:%d",*pByte, *dTime, DC_val);
-      //sprintf   (aaa,"DC:%d",DC_val);
-      showString(aaa,       &standardFont, 1, 1, vmNormal, true, true);
-    #endif
+  #ifdef JMSHOWCODES_KB1 
+    uint8_t DC_val;
+    fnDisplayStack(2);
+    char aaa[100];
+    DC_val = outKeyBufferDoubleClick();
+    sprintf   (aaa,"key=%2d deltaT=%5lu DC:%d",*pByte, *pTimeSpan, DC_val);
+  //sprintf   (aaa,"DC:%d",DC_val);
+    showString(aaa,       &standardFont, 1, 1, vmNormal, true, true);
+  #endif
 
 
   return BUFFER_SUCCESS;
@@ -1017,7 +1043,7 @@ Circular key buffer:
  +------------------------------------+
  |   1 W   W+1 NOT= R: Space for 1+   | isMoreBufferSpace, used by keyBuffer_pop writing to the buffer only when there is space
  | R 2                                |
- |   3                                | 
+ |   3                                |
  |   4                                |
  +------------------------------------+
  |   1                                | inKeyBuffer
@@ -1027,14 +1053,13 @@ Circular key buffer:
  +------------------------------------+
 
  +-------------------------------------------------------------------------------+
- |   1 W    X     iv.block access to inKeyBuffer, i.e. keep key in DM42 buffer.  | 
+ |   1 W    X     iv.block access to inKeyBuffer, i.e. keep key in DM42 buffer.  |
  | R 2 ov      i.write o and move down v                                         |
- |   3 o v      ii.write o and move down v                                       |  
- |   4 o  v      iii.write o and move down v                                     |      
+ |   3 o v      ii.write o and move down v                                       |
+ |   4 o  v      iii.write o and move down v                                     |
  +-------------------------------------------------------------------------------+
 
 */
-
 
 
 
@@ -1115,13 +1140,6 @@ uint8_t outKeyBufferDoubleClick()
 }
 
 
-// Returns:
-//     true              der Ringbuffer has space for at least 1
-bool_t isMoreBufferSpace()
-{
-  return buffer.read != ((buffer.write + 1) & BUFFER_MASK);
-}
-
 
 // Returns:
 //     true              der Ringbuffer ist leer
@@ -1129,11 +1147,11 @@ bool_t emptyKeyBuffer()
 {
   return buffer.read == buffer.write;
 }
-#endif
-
-//########################################################################################################################
+#endif                                                      //^^
 
 
+
+//########################################
 
 void fnT_ARROW(uint16_t command) {
 

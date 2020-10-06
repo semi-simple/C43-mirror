@@ -679,14 +679,17 @@ longIntegerFree(li);*/
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//  key = key_pop();                                        //dr - removed because of internal keyBuffer
+//  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
     
                                                             //vv dr - internal keyBuffer POC
     uint8_t outKey;
     uint32_t timeSpan;
-    int tmpKey = key_pop();
-    if(tmpKey >= 0) {
-      inKeyBuffer(tmpKey);
+    int tmpKey = -1;
+    if(!fullyKeyBuffer()) {
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
     }
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;

@@ -910,13 +910,15 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 #ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
 void keyBuffer_pop()
 {
-  int tmpKey;
+  int tmpKey = -1;
 
   do {
-    tmpKey = key_pop();
-    if(tmpKey >= 0) {
-      inKeyBuffer(tmpKey);
-    } 
+    if(!fullyKeyBuffer()) {
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
+    }
   } while (tmpKey >= 0);
 }
 
@@ -935,23 +937,22 @@ uint8_t inKeyBuffer(uint8_t byte)
   uint32_t now  = (uint32_t)sys_current_ms();
   uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
 
-  if(buffer.read == next)
-    return BUFFER_FAIL; // voll
+  if(buffer.read == next) {
 
-
-// EXPERIMENT insert missing Key released
-  if(buffer.data[(buffer.write - 1) & BUFFER_MASK] == byte) {
-    buffer.data[buffer.write & BUFFER_MASK] = 0;
-    buffer.time[buffer.write] = now;
-    buffer.write = next;
-    next = ((buffer.write + 1) & BUFFER_MASK);
+    return BUFFER_FAIL;  // voll
   }
-// END EXPERIMENT insert missing Key released
 
 
-//buffer.data[buffer.write] = byte;
-  buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
-  buffer.time[buffer.write] = now;
+// EXPERIMENT Do not allow the same key to be stored multiple times. Only key changes stored.
+  if(buffer.data[(buffer.write - 1) & BUFFER_MASK] == byte) {
+
+    return BUFFER_FAIL;  // doppelt
+  }
+// END EXPERIMENT
+
+
+  buffer.data[buffer.write & BUFFER_MASK] = byte;
+  buffer.time[buffer.write & BUFFER_MASK] = now;
   buffer.write = next;
 
   return BUFFER_SUCCESS;
@@ -970,8 +971,10 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 {
   uint32_t tmpTime;
 
-  if(buffer.read == buffer.write)
-    return BUFFER_FAIL;
+  if(buffer.read == buffer.write) {
+
+    return BUFFER_FAIL;  //leer
+  }
 
   *pByte = buffer.data[buffer.read];
   *pTime = buffer.time[buffer.read];
@@ -1009,19 +1012,19 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 /* Switching profile, single press, double press and triple press:
 
 
-SINGLEPRESS: 
-unknown  waiting   pres    rel      
+SINGLEPRESS:
+unknown  waiting   pres    rel
 ---D3--x_____D2____x---D1--x_
       t-3         t-2     t-1
 
 
-DOUBLEPRESS: 
-unknown  waiting   pres    rel    pres  
+DOUBLEPRESS:
+unknown  waiting   pres    rel    pres
 -------x___________x-------x______x-
       t-4    D3   t-3  D2 t-2 D1 t-1
 
 
-TRIPLEPRESS: 
+TRIPLEPRESS:
 unknown  waiting   pres    rel    pres   rel    pres
 -------x___________x-------x______x------x______x-
                           t-4 D3 t-3 D2 t-2 D1 t-1
@@ -1139,6 +1142,14 @@ uint8_t outKeyBufferDoubleClick()
    return outDC;
 }
 
+
+
+// Returns:
+//     true              der Ringbuffer ist voll
+bool_t fullyKeyBuffer()
+{
+  return buffer.read == (buffer.write + 1) & BUFFER_MASK;
+}
 
 
 // Returns:

@@ -910,9 +910,10 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 #ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
 void keyBuffer_pop()
 {
-  int tmpKey = -1;
+  int tmpKey;
 
   do {
+    tmpKey = -1;
     if(!fullyKeyBuffer()) {
       tmpKey = key_pop();
       if(tmpKey >= 0) {
@@ -973,7 +974,7 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 
   if(buffer.read == buffer.write) {
 
-    return BUFFER_FAIL;  //leer
+    return BUFFER_FAIL;  // leer
   }
 
   *pByte = buffer.data[buffer.read];

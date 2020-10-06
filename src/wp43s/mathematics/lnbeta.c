@@ -20,20 +20,6 @@
 
 #include "wp43s.h"
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-
-#define EXTRA_INFO_MESSAGE(msg)                                         \
- do {                                                                   \
-  sprintf(errorMessage, msg);                                           \
-  moreInfoOnError("In function LnBeta:", errorMessage, NULL, NULL); \
- } while(0)
-
-#else // EXTRA_INFO_ON_CALC_ERROR != 1
-
-#define EXTRA_INFO_MESSAGE(msg)
-
-#endif // EXTRA_INFO_ON_CALC_ERROR
-
 static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
 // regX |    regY ==>    1               2               3               4            5            6            7            8             9             10
 //      V                Long integer    Real34          Complex34       Time         Date         String       Real34 mat   Complex34 mat Short integer Config data
@@ -98,7 +84,7 @@ static bool_t _checkLnGammaArgs(int8_t *resultType, real_t *xReal, realContext_t
   if(realIsInfinite(xReal)) {
     if(!getSystemFlag(FLAG_SPCRES)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-      EXTRA_INFO_MESSAGE("cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of lnbeta when flag D is not set");
+      EXTRA_INFO_MESSAGE("_checkLnGammaArgs", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of lnbeta when flag D is not set");
     }
     else {
       realToReal34((real34IsPositive(xReal) ? const_plusInfinity : const_NaN), REGISTER_REAL34_DATA(REGISTER_X));
@@ -110,7 +96,7 @@ static bool_t _checkLnGammaArgs(int8_t *resultType, real_t *xReal, realContext_t
     if(realIsAnInteger(xReal)) {
       if(!getSystemFlag(FLAG_SPCRES)) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        EXTRA_INFO_MESSAGE("cannot use a negative integer as X input of lnbeta when flag D is not set");
+        EXTRA_INFO_MESSAGE("_checkLnGammaArgs", "cannot use a negative integer as X input of lnbeta when flag D is not set");
       }
       else {
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -134,7 +120,7 @@ static bool_t _checkLnGammaArgs(int8_t *resultType, real_t *xReal, realContext_t
         }
         else { // Domain error
           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-          EXTRA_INFO_MESSAGE( "cannot use a as X input of lnbeta if gamma(X)<0 when flag I is not set");
+          EXTRA_INFO_MESSAGE("_checkLnGammaArgs", "cannot use a as X input of lnbeta if gamma(X)<0 when flag I is not set");
           result = false;
         }
       }

@@ -25,7 +25,7 @@
 
 #define      filenamelen 40
 char         filename_csv[filenamelen]; //JMMAX                //JM_CSV
-uint32_t     mem__32;                                 //JM_CSV
+uint32_t     mem__32;                                          //JM_CSV
 
 #define      CSV_NEWLINE "\n"
 #define      CSV_TAB     "\t"

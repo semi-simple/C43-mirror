@@ -23,7 +23,6 @@
 
 
 #ifndef TESTSUITE_BUILD
-#define CHARS_PER_LINE 80
 static void oneSystemFlag(uint16_t systemFlag, const char *systemFlagNamename, int16_t *line, bool_t *firstSystemFlag) {
   if(getSystemFlag(systemFlag)) {
     if(stringWidth(tmpStr3000 + CHARS_PER_LINE * *line, &standardFont, true, true) + stringWidth(systemFlagNamename, &standardFont, true, false) <= SCREEN_WIDTH - 1 - 8) { // STD_SPACE_FIGURE is 8 pixel wide

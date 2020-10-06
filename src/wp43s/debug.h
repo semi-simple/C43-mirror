@@ -15,7 +15,6 @@
  */
 
 #if (DEBUG_PANEL == 1)
-  #define DEBUG_LINES 68
   extern GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
   extern GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnTmpAndSavedStackRegisters;
   extern GtkWidget *chkHexaString;

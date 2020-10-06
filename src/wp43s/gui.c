@@ -943,14 +943,6 @@ void prepareCssData(void) {
   char *toReplace, *replaceWith, needle[100], newNeedle[100];
   int  i, fileLg;
 
-
-#if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
-  #define CSSFILE "c43_pre_L2.css"              //JM L
-#endif //JM L
-#if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
-  #define CSSFILE "c43_pre.css"
-#endif //JM L
-
   // Convert the pre-CSS data to CSS data
   cssFile = fopen(CSSFILE, "rb");
   if(cssFile == NULL) {

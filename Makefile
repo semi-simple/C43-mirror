@@ -29,7 +29,6 @@ ifeq ($(detected_OS),Windows)
 else ifeq ($(detected_OS),Darwin)        # Mac OS X
 	CFLAGS += -D OSX
 	CFLAGS += -I/usr/local/include/
-#	CFLAGS += -g -O0 -v
 	LDFLAGS += -L/usr/local/lib
 else ifeq ($(detected_OS),Linux)
 	CFLAGS += -D LINUX
@@ -69,14 +68,13 @@ DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
 SRC_WP43S                = \
 	$(addprefix src/wp43s/, \
-		addons.c jm.c jm_graph.c \
 		assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c inlineTest.c integers.c items.c keyboard.c keyboardTweak.c \
-		rasterFontsData.c radioButtonCatalog.c registerValueConversions.c registers.c \
+		fonts.c fractions.c gui.c  integers.c items.c keyboard.c \
+		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
-		stats.c statusBar.c stringFuncs.c textfiles.c timer.c xeqm.c \
+		stats.c statusBar.c stringFuncs.c timer.c \
 		wp43s.c memory.c) \
 	$(addprefix src/wp43s/mathematics/, \
 		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c arg.c \
@@ -86,13 +84,15 @@ SRC_WP43S                = \
 		imaginaryPart.c integerPart.c invert.c lcm.c ln.c lnPOne.c log10.c logxy.c lnbeta.c \
 		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c parallel.c pcg_basic.c \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
-		random.c realPart.c remainder.c reToCx.c round.c roundi.c shiftDigits.c sign.c sin.c sinc.c sinh.c slvq.c square.c squareRoot.c \
+		random.c realPart.c remainder.c reToCx.c round.c roundi.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
 		variance.c wp34s.c) \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/browsers/, \
-		flagBrowser.c fontBrowser.c registerBrowser.c)
+		flagBrowser.c fontBrowser.c registerBrowser.c) \
+	$(addprefix src/wp43s/, \
+		addons.c jm.c jm_graph.c inlineTest.c keyboardTweak.c radioButtonCatalog.c textfiles.c xeqm.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 DEPS_WP43S               = $(SRC_WP43S:.c=.d)
 

@@ -18,6 +18,9 @@
  * \file defines.h
  ***********************************************/
 
+#define SWAP_LAYOUTS    //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+#undef  SWAP_LAYOUTS
+
 
 //*********************************
 //* General configuration defines *
@@ -27,9 +30,21 @@
 #define DEBUG_REGISTER_L                 1 // Showing register L content on the PC GUI
 #define SHOW_MEMORY_STATUS               1 // Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers
-#define MMHG_PA_133_3224                 1 // mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
+#define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 // 1001 decimal digits: 3328 ≃ log2(10^1001)
+#define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
+#define MAX_FACTORIAL                    449 //JMMAX  1142   // 43S: 450 //JMMAX
+
+                               // bits  digits  43S     x digits   x! digits
+                               //                         69!            98
+                               //                        210!           398
+                               // 3328  1001    450!     449!           998
+                               //                        807!          1997
+                               //                        977!          2499
+                               // 9965  3000            1142!          2998
+                               //15000  4515            1388!
+                               //                       2122!          6140
+
 #define SHORT_INTEGER_SIZE               2 // 2 blocks = 8 bytes = 64 bits
 
 #define IBM_DECIMAL                      1 // Use the IBM decNumber library for the floating point data type
@@ -56,9 +71,9 @@
 #define NUMBER_OF_NUMERIC_FONT_LINES_PER_SCREEN    5 // Used in the font browser application
 #define NUMBER_OF_STANDARD_FONT_LINES_PER_SCREEN   8 // Used in the font browser application
 
-#define AIM_BUFFER_LENGTH                        400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
-#define TAM_BUFFER_LENGTH                         32 // TODO: find the exact maximum needed
-#define NIM_BUFFER_LENGTH                        200 // TODO: find the exact maximum needed
+#define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
+#define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
+#define NIM_BUFFER_LENGTH                        100 //JMMAX changed from 200 // TODO: find the exact maximum needed
 
 // TAM transition system
 #define TT_OPERATION                               0 // +, -, *, /, min, max
@@ -184,8 +199,33 @@
 #define LI_POSITIVE                                2 // Long integer sign +
 
 
+#ifdef PC_BUILD
+  #ifndef SWAP_LAYOUTS
+      #define JM_LAYOUT_1A               //Preferred layout
+      #undef  JM_LAYOUT_2_DM42_STRICT
+  #endif
+
+  #ifdef SWAP_LAYOUTS
+      #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
+      #undef  JM_LAYOUT_1A
+      #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
+  #endif
+#endif
+
+
 // PC GUI
-#define CSSFILE                      "wp43s_pre.css"
+#if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
+  #define CSSFILE "c43_pre_L2.css"              //JM L
+#endif //JM L
+#if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
+  #define CSSFILE "c43_pre.css"
+#endif //JM L
+
+#define GAP                                        6 //JM original GUI legacy
+#define Y_OFFSET_LETTER                           18 //JM original GUI legacy
+#define X_OFFSET_LETTER                            3 //JM original GUI legacy
+#define Y_OFFSET_SHIFTED_LABEL                    25 //JM original GUI legacy
+#define Y_OFFSET_GREEK                            27 //JM original GUI legacy
 
 #define DELTA_KEYS_X                              78 // Horizontal key step in pixel (row of 6 keys)
 #define DELTA_KEYS_Y                              74 // Vertical key step in pixel
@@ -277,7 +317,7 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE                        7 // Maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define SOFTMENU_STACK_SIZE                       14 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 
@@ -286,7 +326,8 @@
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define MY_ALPHA_MENU                              0  // This is the index of the MyAlpha   softmenu in the softmenu[] array
+#define MY_ALPHA_MENU_CNST    0  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
+
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -308,6 +349,18 @@
 
 #define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
 
+// timer nr for FG and FN use                                       //dr vv
+#define TO_FG_LONG                                 0
+#define TO_CL_LONG                                 1
+#define TO_FG_TIMR                                 2
+#define TO_FN_LONG                                 3
+#define TO_FN_EXEC                                 4
+#define TO_3S_CTFF                                 5
+#define TO_CL_DROP                                 6
+#define TO_KB_ACTV                                 7                //dr ^^
+
+
+
 #ifdef PC_BUILD
   #if (__linux__ == 1)
     #define LINEBREAK                           "\n"
@@ -324,7 +377,7 @@
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
 
 // Number of constants
-#define NUMBER_OF_CONSTANTS_39                   177
+#define NUMBER_OF_CONSTANTS_39                   177+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
 #define NUMBER_OF_CONSTANTS_34                     7
@@ -346,6 +399,8 @@
 #define DF_FIX                                     1
 #define DF_SCI                                     2
 #define DF_ENG                                     3
+#define DF_SF                                      4   //JM
+#define DF_UN                                      5   //JM
 
 // Angular mode 3 bits
 #define AM_DEGREE                                  0 // degree must be 0
@@ -354,6 +409,7 @@
 #define AM_MULTPI                                  3 // multpi must be 3
 #define AM_DMS                                     4 // dms    must be 4
 #define AM_NONE                                    5
+#define AM_HMS                                     6   //JM
 
 // Date format 2 bits
 #define DF_DMY                                     0
@@ -396,6 +452,7 @@
 #define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          12 // Bug message on screen
 #define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
+#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old                                      //JM
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -532,15 +589,20 @@
 #define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
 
-#define TMP_STR_LENGTH                          3000
-#define ERROR_MESSAGE_LENGTH                     512
+#define TMP_STR_LENGTH                          3000 //JMMAX ORG:3000
+#define ERROR_MESSAGE_LENGTH                     325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN                         80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
-#define NUMBER_OF_GLYPH_ROWS                     100 // Used in the font browser application
+#define NUMBER_OF_GLYPH_ROWS                     100+6  //JM 100-->106 // Used in the font browser application
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
-#define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
+#ifdef DMCP_BUILD
+#define SCREEN_REFRESH_PERIOD                    125 // 500 //JM timeout for lcd refresh in ms 125
+#else
+#define SCREEN_REFRESH_PERIOD                    100 // 500 //JM timeout for lcd refresh in ms 100
+#endif
+
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 #define WP43S_NULL                             65535 // NULL pointer
 

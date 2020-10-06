@@ -109,6 +109,17 @@ typedef enum {
 } dataType_t; // 4 bits (NOT 5 BITS)
 
 
+
+/********************************************//**
+ * \typedef bool_t
+ * \brief Boolean type
+ ***********************************************/
+typedef enum {
+  false = 0,     ///< Value for false
+  true  = !false ///< Value for true
+} bool_t; // 1 bit
+
+
 /********************************************//**
  * \typedef dtConfigDescriptor_t
  * \brief Configuration for STOCFG and RCLCFG
@@ -126,6 +137,36 @@ typedef struct {
   uint32_t  firstGregorianDay;
   uint64_t  systemFlags;
   calcKey_t kbd_usr[37];
+
+  //    int16_t   Norm_Key_00_VAR;                                           //JMCFGvv
+  uint8_t SigFigMode;
+  bool_t eRPN;
+  bool_t HOME3;
+  bool_t ShiftTimoutMode;
+  bool_t Home3TimerMode;
+  bool_t UNITDisplay;
+  bool_t SH_BASE_HOME;
+  bool_t SH_BASE_AHOME;
+  int16_t Norm_Key_00_VAR;
+  uint8_t Input_Default;
+  bool_t jm_FG_LINE;
+  bool_t jm_FG_DOTS;
+  bool_t jm_G_DOUBLETAP;
+  double graph_xmin;
+  double graph_xmax;
+  double graph_ymin;
+  double graph_ymax;
+  double graph_dx;
+  double graph_dy;
+  bool_t extentx;
+  bool_t extenty;
+  bool_t jm_VECT;
+  bool_t jm_HOME_SUM;
+  bool_t jm_HOME_MIR;
+  bool_t jm_HOME_FIX;     
+  bool_t jm_LARGELI;
+  uint8_t displayStackSHOIDISP;                                             //JMCFG^^
+
 } dtConfigDescriptor_t;
 
 
@@ -199,16 +240,6 @@ typedef struct {
   int16_t softmenu;  ///< Softmenu ID
   int16_t firstItem; ///< Current first item on the screen (unshifted F1 = bottom left)
 } softmenuStack_t;
-
-
-/********************************************//**
- * \typedef bool_t
- * \brief Boolean type
- ***********************************************/
-typedef enum {
-  false = 0,     ///< Value for false
-  true  = !false ///< Value for true
-} bool_t; // 1 bit
 
 
 /********************************************//**

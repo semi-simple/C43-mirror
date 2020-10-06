@@ -560,6 +560,9 @@
 		<Unit filename="src/testSuite/sinc.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/sincpi.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/sinh.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -809,6 +812,13 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="generateConstants" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/defines.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/display.c">
@@ -1924,6 +1934,12 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/sincpi.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/sinc.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
@@ -2239,6 +2255,13 @@
 		<Unit filename="src/wp43s/timer.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/typeDefinitions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/wp43s.c">

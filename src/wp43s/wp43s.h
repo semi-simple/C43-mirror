@@ -18,9 +18,6 @@
  * \file wp43s.h
  ***********************************************/
 
-//#define SWAP_LAYOUTS    //SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
-#define TMP_STR_LENGTH      3000 //3000         //JMMAX ORG:3000
-
 #ifndef wp43s_H_INCLUDED
 #define wp43s_H_INCLUDED
 
@@ -57,9 +54,6 @@
 #ifdef DMCP_BUILD
   #include <main.h>
   #include <dmcp.h>
-#define SCREEN_REFRESH_PERIOD     125 // 500 //JM timeout for lcd refresh in ms 125
-#else
-#define SCREEN_REFRESH_PERIOD     100 // 500 //JM timeout for lcd refresh in ms 100
 #endif
 
 #include "typeDefinitions.h"
@@ -100,21 +94,9 @@
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif
-
-  #ifndef SWAP_LAYOUTS
-      #define JM_LAYOUT_1A               //Preferred layout
-      #undef  JM_LAYOUT_2_DM42_STRICT
-  #endif
-
-  #ifdef SWAP_LAYOUTS
-      #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout. Temporary SWAP. Change here for screen picture.
-      #undef  JM_LAYOUT_1A
-      #define JM_LAYOUT_SHOW_BLUES       //ONLY DEFINE IF BLUE MUST BE DISPLAYED. TEMPORARY FOR CREATING AN EMU FOR THE LAYOUT42
-  #endif
-
 #endif
 
-#if defined(DMCP_BUILD) || defined(SCREEN_800X480)
+#if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #undef  DEBUG_PANEL
   #define DEBUG_PANEL 0
   #undef  DEBUG_REGISTER_L
@@ -161,9 +143,6 @@
 #define INLINE_TEST                     //vv dr
 //#undef INLINE_TEST                    //^^
 
-#endif
-
-
 #include "assign.h"
 #include "bufferize.h"
 #include "browsers/browsers.h"
@@ -207,11 +186,11 @@
 #include "keyboardTweak.h"              //dr
 #include "radioButtonCatalog.h"         //dr
 #ifdef INLINE_TEST                      //vv dr
-#include "inlineTest.h"
+  #include "inlineTest.h"
 #endif                                  //^^
 
 
-#define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))        //dr?? vv
+#define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))        //dr vv
 
 // Variables for the simulator
 #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

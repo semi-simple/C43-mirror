@@ -283,7 +283,6 @@ void setupDefaults(void) {
 
   temporaryInformation = TI_NO_INFO;
 
-
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
   decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);

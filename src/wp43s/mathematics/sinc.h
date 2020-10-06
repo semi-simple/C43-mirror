@@ -20,7 +20,6 @@
 // Coded by JM, based on sin.h
 
 void fnSinc  (uint16_t unusedParamButMandatory);
-void fnSincpi(uint16_t unusedParamButMandatory);            //JM
 void sincError(void);
 void sincLonI (void);
 void sincRema (void);

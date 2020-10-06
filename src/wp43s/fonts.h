@@ -18,38 +18,6 @@
  * \file fonts.h
  ***********************************************/
 
-/********************************************//**
- * \typedef glyph_t
- * \brief Structure keeping the informations for one glyph
- ***********************************************/
-typedef struct {
-  uint16_t charCode;        ///< Unicode code point
-  int8_t   colsBeforeGlyph; ///< Number of empty columns before the glyph
-  int8_t   colsGlyph;       ///< Number of columns of the glyph
-  int8_t   colsAfterGlyph;  ///< Number of empty columns afer the glyph
-  int8_t   rowsAboveGlyph;  ///< Number of empty rows above the glyph
-  int8_t   rowsGlyph;       ///< Number of rows of the glyph
-  int8_t   rowsBelowGlyph;  ///< Number of empty rows below the glypg
-  int16_t  rank1;           ///< Rank of the replacement glyph
-  int16_t  rank2;           ///< Rank of the glyph
-  char     *data;           ///< Hexadecimal data representing the glyph.
-                            ///< There are rowsGlyph x (colsGlyph rounded up to 8 bit boundary) bytes
-} glyph_t;
-
-/********************************************//**
- * \typedef font_t
- * \brief Font description
- ***********************************************/
-typedef struct {
-  int8_t  id;             ///< 0=numeric 1=standard
-  //char    name[19];       ///< ASCII name of the font
-  //int16_t ascender;       ///< Ascender of the font. Not used
-  //int16_t descender;      ///< Descender of the font. Not used
-  int16_t numberOfGlyphs; ///< Number of glyphs in the font
-  glyph_t glyphs[];       ///< Pointer to the glyph description structure
-} font_t;
-
-
 int16_t findGlyph            (const font_t *font, uint16_t charCode);
 void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 

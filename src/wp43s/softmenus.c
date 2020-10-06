@@ -86,7 +86,7 @@ const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_YX,     
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };
 
 const int16_t menu_TRI[]         = { ITM_sin,                       ITM_cos,                    ITM_tan,                  ITM_arcsin,            ITM_arccos,                  ITM_arctan,                         //JM re-arranged menu TRIG menu
-                                     ITM_DEG,                       ITM_RAD,                    ITM_MULPI,                ITM_DMS,               ITM_sinc,                    ITM_sincpi,                          //  ITM_toREC,                   ITM_toPOL,                          //JM re-arranged menu TRIG menu
+                                     ITM_sinc,                      ITM_sincpi,                 ITM_DEG,                  ITM_RAD,               ITM_MULPI,                   ITM_DMS,                                         //  ITM_toREC,                   ITM_toPOL,                          //JM re-arranged menu TRIG menu
                                      ITM_sinh,                      ITM_cosh,                   ITM_tanh,                 ITM_arsinh,            ITM_arcosh,                  ITM_artanh                    };    //JM re-arranged menu TRIG menu
 
 const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM,                     
@@ -224,7 +224,7 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
 const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
-                                     ITM_sinc,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
+                                     ITM_NULL,                      ITM_WM,                     ITM_WP,                   ITM_WM1,               ITM_BETAXY,                  ITM_gammaXY,
                                      ITM_GAMMAXY,                   ITM_zetaX,                  ITM_M1X,                  ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,                 
                                      ITM_NULL,                      ITM_DMPMNU,                 ITM_PGMTST,               -MNU_XXEQ,             -MNU_GRAPH,                  -MNU_EE                       };    //JM Added 
 
@@ -1694,7 +1694,7 @@ void pushSoftmenu(int16_t softmenu) {
     doRefreshSoftMenu = true;     //dr
   }
   else {
-    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in wp43s.h");
+    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
   }
 }
 

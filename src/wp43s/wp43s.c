@@ -196,8 +196,8 @@ int16_t               exponentLimit;
 int16_t               showFunctionNameCounter;
 size_t                gmpMemInBytes;
 size_t                wp43sMemInBytes;
-freeBlock_t           freeBlocks[MAX_FREE_BLOCKS];
-int32_t               numberOfFreeBlocks;
+freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
 void                  (*confirmedFunction)(uint16_t);
 real51_t              const *gammaLanczosCoefficients;
@@ -212,11 +212,9 @@ const char            digits[17] = "0123456789ABCDEF";
     int8_t            telltale_lastkey;                        //JM Test
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
-  uint32_t            timeStampKey;                            //dr - internal keyBuffer POC
-  int                 tmpKey;                                 //drjm internal keyBuffer POC
+  uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
-  #define TIMER_IDX_SCREEN_REFRESH 0     // use timer 0 to wake up for screen refresh
 #endif // DMCP_BUILD
 
 
@@ -231,9 +229,9 @@ void setupDefaults(void) {
 
   ram = (dataBlock_t *)malloc(TO_BYTES(RAM_SIZE));
   memset(ram, 0, TO_BYTES(RAM_SIZE));
-  numberOfFreeBlocks = 1;
-  freeBlocks[0].address = 0;
-  freeBlocks[0].sizeInBlocks = RAM_SIZE;
+  numberOfFreeMemoryRegions = 1;
+  freeMemoryRegions[0].address = 0;
+  freeMemoryRegions[0].sizeInBlocks = RAM_SIZE;
 
   glyphNotFound.data   = malloc(38);
   xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
@@ -284,7 +282,6 @@ void setupDefaults(void) {
   #endif
 
   temporaryInformation = TI_NO_INFO;
-
 
   decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
@@ -537,13 +534,10 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef DMCP_BUILD
-uint16_t timeSpan;
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  timeStampKey = (uint32_t)sys_current_ms();                   //dr   vv- internal keyBuffer POC
-  tmpKey = -1;                                                 //drjm ^^
-
+  timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
 uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
@@ -680,25 +674,31 @@ longIntegerFree(li);*/
     }
 
     // Fetch the key
-    //  -1  -> No key event
+    //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//    key = key_pop();                       dr - internal keyBuffer POC
+//  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
     
-                                                            //vv dr - internal keyBuffer POC    
-    keyBuffer_pop();
+                                                            //vv dr - internal keyBuffer POC
     uint8_t outKey;
+    uint32_t timeSpan;
+    int tmpKey = -1;
+    if(!fullyKeyBuffer()) {
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
+    }
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
-
-      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click
-
-      //  if(timeSpan >= 0) {
-      //    do someting
-      //  }
+      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!
+      // dr - KeyBuffer is a FIFO, therefore the state of the captured element has to be taken with this element, no global state is allowed
+//    if(timeSpan >= 0) {
+//      do someting
+//    }
     }
     else {
-      key = -1; tmpKey = -1;
+      key = tmpKey;
     }                                                       //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
@@ -731,7 +731,7 @@ longIntegerFree(li);*/
         currentVolumeSetting = get_beep_volume();
       }
     }
-
+   
    #ifdef JMSHOWCODES 
     fnDisplayStack(1);
     //Show key codes

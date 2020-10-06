@@ -20,20 +20,6 @@
 
 #include "wp43s.h"
 
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-
-#define EXTRA_INFO_MESSAGE(msg)                                         \
- do {                                                                   \
-  sprintf(errorMessage, msg);                                           \
-  moreInfoOnError("In function LogXY:", errorMessage, NULL, NULL); \
- } while(0)
-
-#else // EXTRA_INFO_ON_CALC_ERROR != 1
-
-#define EXTRA_INFO_MESSAGE(msg)
-
-#endif // EXTRA_INFO_ON_CALC_ERROR
-
 
 static void (* const logBaseX[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
 // regX |    regY ==>    1              2              3              4           5           6           7              8              9              10
@@ -98,11 +84,11 @@ static bool_t checkArgs(const real_t *xReal, const real_t *xImag, const real_t *
    */
   if(COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
     displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y=0");
+    EXTRA_INFO_MESSAGE("checkArgs", "cannot calculate LogXY with x=0 and y=0");
   }
   else if(!COMPLEX_IS_ZERO(xReal, xImag) && COMPLEX_IS_ZERO(yReal, yImag)) {
     displayCalcErrorMessage(ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
-    EXTRA_INFO_MESSAGE("cannot calculate LogXY with x=0 and y!=0");
+    EXTRA_INFO_MESSAGE("checkArgs", "cannot calculate LogXY with x=0 and y!=0");
   }
   else if(COMPLEX_IS_ZERO(xReal, xImag) && !COMPLEX_IS_ZERO(yReal, yImag)) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -140,7 +126,7 @@ static void logxy(const real_t *xReal, const real_t *yReal, realContext_t *realC
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-        EXTRA_INFO_MESSAGE("cannot calculate LogXY with x<0 when flag I is not set");
+        EXTRA_INFO_MESSAGE("logxy", "cannot calculate LogXY with x<0 when flag I is not set");
       }
     }
     else {

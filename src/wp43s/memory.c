@@ -24,8 +24,8 @@ int32_t getFreeRamMemory(void) {
   int32_t freeMem, i;
 
   freeMem = 0;
-  for(i=0; i<numberOfFreeBlocks; i++) {
-    freeMem += freeBlocks[i].sizeInBlocks;
+  for(i=0; i<numberOfFreeMemoryRegions; i++) {
+    freeMem += freeMemoryRegions[i].sizeInBlocks;
   }
 
   return TO_BYTES(freeMem);
@@ -35,8 +35,8 @@ int32_t getFreeRamMemory(void) {
 void debugMemory(void) {
   printf("C43 owns %6" PRIu64 " bytes and GMP owns %6" PRIu64 " bytes (%" PRId32 " bytes free)\n", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes, getFreeRamMemory());  //JM C43
   printf("    Addr   Size\n");
-  for(int i=0; i<numberOfFreeBlocks; i++) {
-    printf("%2d%6u%7u\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks);
+  for(int i=0; i<numberOfFreeMemoryRegions; i++) {
+    printf("%2d%6u%7u\n", i, freeMemoryRegions[i].address, freeMemoryRegions[i].sizeInBlocks);
   }
   printf("\n");
 }
@@ -138,25 +138,25 @@ void *wp43sAllocate(size_t sizeInBytes) {
   //debugMemory();
   minSizeInBlocks = 65535u;
   minBlock = WP43S_NULL;
-  for(i=0; i<numberOfFreeBlocks; i++) {
-    if(freeBlocks[i].sizeInBlocks == sizeInBlocks) {
-      //if(debugMemAllocation) printf("The block found is the size of the one claimed at address %u\n", freeBlocks[i].address);
-      pcMemPtr = TO_PCMEMPTR(freeBlocks[i].address);
-      xcopy(freeBlocks + i, freeBlocks + i + 1, (numberOfFreeBlocks-i-1) * sizeof(freeBlock_t));
-      numberOfFreeBlocks--;
+  for(i=0; i<numberOfFreeMemoryRegions; i++) {
+    if(freeMemoryRegions[i].sizeInBlocks == sizeInBlocks) {
+      //if(debugMemAllocation) printf("The block found is the size of the one claimed at address %u\n", freeMemoryRegions[i].address);
+      pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[i].address);
+      xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions-i-1) * sizeof(freeMemoryRegion_t));
+      numberOfFreeMemoryRegions--;
       //debugMemory();
       return pcMemPtr;
     }
-    else if(freeBlocks[i].sizeInBlocks > sizeInBlocks && freeBlocks[i].sizeInBlocks < minSizeInBlocks) {
-      minSizeInBlocks = freeBlocks[i].sizeInBlocks;
+    else if(freeMemoryRegions[i].sizeInBlocks > sizeInBlocks && freeMemoryRegions[i].sizeInBlocks < minSizeInBlocks) {
+      minSizeInBlocks = freeMemoryRegions[i].sizeInBlocks;
       minBlock = i;
     }
   }
 
   if(minBlock == WP43S_NULL) {
     minSizeInBlocks = 0;
-    for(i=0; i<numberOfFreeBlocks; i++) {
-      minSizeInBlocks += freeBlocks[i].sizeInBlocks;
+    for(i=0; i<numberOfFreeMemoryRegions; i++) {
+      minSizeInBlocks += freeMemoryRegions[i].sizeInBlocks;
     }
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)sizeInBytes, TO_BYTES(minSizeInBlocks));
@@ -169,9 +169,9 @@ void *wp43sAllocate(size_t sizeInBytes) {
   }
 
   //if(debugMemAllocation) printf("The block found is larger than the one claimed\n");
-  pcMemPtr = TO_PCMEMPTR(freeBlocks[minBlock].address);
-  freeBlocks[minBlock].address += sizeInBlocks;
-  freeBlocks[minBlock].sizeInBlocks -= sizeInBlocks;
+  pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[minBlock].address);
+  freeMemoryRegions[minBlock].address += sizeInBlocks;
+  freeMemoryRegions[minBlock].sizeInBlocks -= sizeInBlocks;
 
   //debugMemory();
   return pcMemPtr;
@@ -221,11 +221,11 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
 
   // is the freed block just before an other free block?
   addr = ramPtr + sizeInBlocks;
-  for(i=0; i<numberOfFreeBlocks && freeBlocks[i].address<=addr; i++) {
-    if(freeBlocks[i].address == addr) {
-      freeBlocks[i].address = ramPtr;
-      freeBlocks[i].sizeInBlocks += sizeInBlocks;
-      sizeInBlocks = freeBlocks[i].sizeInBlocks;
+  for(i=0; i<numberOfFreeMemoryRegions && freeMemoryRegions[i].address<=addr; i++) {
+    if(freeMemoryRegions[i].address == addr) {
+      freeMemoryRegions[i].address = ramPtr;
+      freeMemoryRegions[i].sizeInBlocks += sizeInBlocks;
+      sizeInBlocks = freeMemoryRegions[i].sizeInBlocks;
       j = i;
       done = true;
       break;
@@ -233,12 +233,12 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
   }
 
   // is the freed block just after an other free block?
-  for(i=0; i<numberOfFreeBlocks && freeBlocks[i].address+freeBlocks[i].sizeInBlocks<=ramPtr; i++) {
-    if(freeBlocks[i].address + freeBlocks[i].sizeInBlocks == ramPtr) {
-      freeBlocks[i].sizeInBlocks += sizeInBlocks;
+  for(i=0; i<numberOfFreeMemoryRegions && freeMemoryRegions[i].address+freeMemoryRegions[i].sizeInBlocks<=ramPtr; i++) {
+    if(freeMemoryRegions[i].address + freeMemoryRegions[i].sizeInBlocks == ramPtr) {
+      freeMemoryRegions[i].sizeInBlocks += sizeInBlocks;
       if(done) {
-        xcopy(freeBlocks + j, freeBlocks + j + 1, (numberOfFreeBlocks-j-1) * sizeof(freeBlock_t));
-        numberOfFreeBlocks--;
+        xcopy(freeMemoryRegions + j, freeMemoryRegions + j + 1, (numberOfFreeMemoryRegions-j-1) * sizeof(freeMemoryRegion_t));
+        numberOfFreeMemoryRegions--;
       }
       else {
         done = true;
@@ -249,7 +249,7 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
 
   // new free block
   if(!done) {
-    if(numberOfFreeBlocks == MAX_FREE_BLOCKS) {
+    if(numberOfFreeMemoryRegions == MAX_FREE_REGION) {
       printf("\n**********************************************************************\n");
       printf("* The maximum number of free memory blocks has been exceeded!        *\n");
       printf("* This number must be increased or the compaction function improved. *\n");
@@ -264,17 +264,17 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
     }
 
     i = 0;
-    while(i<numberOfFreeBlocks && freeBlocks[i].address < ramPtr) {
+    while(i<numberOfFreeMemoryRegions && freeMemoryRegions[i].address < ramPtr) {
       i++;
     }
 
-    if(i < numberOfFreeBlocks) {
-      xcopy(freeBlocks + i + 1, freeBlocks + i, (numberOfFreeBlocks-i) * sizeof(freeBlock_t));
+    if(i < numberOfFreeMemoryRegions) {
+      xcopy(freeMemoryRegions + i + 1, freeMemoryRegions + i, (numberOfFreeMemoryRegions-i) * sizeof(freeMemoryRegion_t));
     }
 
-    freeBlocks[i].address = ramPtr;
-    freeBlocks[i].sizeInBlocks = sizeInBlocks;
-    numberOfFreeBlocks++;
+    freeMemoryRegions[i].address = ramPtr;
+    freeMemoryRegions[i].sizeInBlocks = sizeInBlocks;
+    numberOfFreeMemoryRegions++;
   }
 
   //debugMemory();

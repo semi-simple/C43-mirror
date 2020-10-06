@@ -1149,7 +1149,7 @@ uint8_t outKeyBufferDoubleClick()
 //     true              der Ringbuffer ist voll
 bool_t fullyKeyBuffer()
 {
-  return buffer.read == (buffer.write + 1) & BUFFER_MASK;
+  return buffer.read == ((buffer.write + 1) & BUFFER_MASK);
 }
 
 

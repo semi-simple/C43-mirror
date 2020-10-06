@@ -73,7 +73,7 @@
 
 #define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
-#define NIM_BUFFER_LENGTH                        100 //JMMAX changed from 200 // TODO: find the exact maximum needed
+#define NIM_BUFFER_LENGTH                        60 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 
 // TAM transition system
 #define TT_OPERATION                               0 // +, -, *, /, min, max

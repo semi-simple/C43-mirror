@@ -82,7 +82,7 @@ void     keyBuffer_pop        ();
 uint8_t  inKeyBuffer          (uint8_t byte);
 uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan);
 uint8_t  outKeyBufferDoubleClick();
-bool_t   fullyKeyBuffer       ();
+bool_t   fullKeyBuffer        ();
 bool_t   emptyKeyBuffer       ();                           //^^
 
 

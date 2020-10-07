@@ -678,27 +678,24 @@ longIntegerFree(li);*/
     //  > 0 -> Key pressed
     // == 0 -> Key released
 //  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
+    keyBuffer_pop();
     
                                                             //vv dr - internal keyBuffer POC
     uint8_t outKey;
     uint32_t timeSpan;
-    int tmpKey = -1;
-    if(!fullyKeyBuffer()) {
-      tmpKey = key_pop();
-      if(tmpKey >= 0) {
-        inKeyBuffer(tmpKey);
-      }
-    }
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
-      // Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!
-      // dr - KeyBuffer is a FIFO, therefore the state of the captured element has to be taken with this element, no global state is allowed
+      // jm Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!
+      // dr KeyBuffer is a FIFO, therefore the state of the captured element has to be taken with this element, no global state is allowed
+      // jm I suspect you misunderstand the intention: not to interfere with fifo, but outkeybuffer checks the timing of D1, D2, D3 and determines
+      //     if doublepress or triplepress is pressed, then setting a global flag say CLICK_STATE, which tells the other code the last key processed was a double press.
+      //     But possibly the whole Timeout thing will work better because we now have better key capturing.
 //    if(timeSpan >= 0) {
 //      do someting
 //    }
     }
     else {
-      key = tmpKey;
+      key = -1;
     }                                                       //^^
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
@@ -740,11 +737,11 @@ longIntegerFree(li);*/
        telltale_pos++;
        telltale_pos = telltale_pos & 0x03;
        char aaa[100];
-       sprintf   (aaa,"k=%d d=%d      ",key, timeSpan);
+       sprintf   (aaa,"k=%d d=%ld      ",key, timeSpan);
        showString(aaa, &standardFont, 300, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
        sprintf   (aaa,"Rel=%d, nop=%d, St=%d, Key=%d, FN_kp=%d   ",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_state, sys_last_key(), FN_key_pressed);
        showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
-       sprintf   (aaa,"%4d(%4d)<<",sys_last_key(),timeSpan);
+       sprintf   (aaa,"%4d(%4ld)<<",sys_last_key(),timeSpan);
        showString(aaa, &standardFont, telltale_pos*90+ 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
      }
     #endif

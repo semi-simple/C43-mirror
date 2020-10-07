@@ -908,18 +908,37 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 
 
 #ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
+
+//#define JMSHOWCODES_KB0   // top line left    Key value from DM42. Not necessarily pushed to buffer.
+#define JMSHOWCODES_KB1   // top line middle  Key and  dT value
+//#define JMSHOWCODES_KB2 // main screen      Telltales keys, times, etc.
+#define JMSHOWCODES_KB3   // top line right   Single Double Triple
+
 void keyBuffer_pop()
 {
   int tmpKey;
 
   do {
     tmpKey = -1;
-    if(!fullyKeyBuffer()) {
+    if(!fullKeyBuffer()) {
       tmpKey = key_pop();
       if(tmpKey >= 0) {
         inKeyBuffer(tmpKey);
       }
     }
+    #ifdef JMSHOWCODES_KB0
+      uint16_t tmpxx = 1;
+      char aaa[10];
+      sprintf   (aaa,"%2d ",tmpKey);
+      showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
+    #endif       
+    while(key_tail() == tmpKey && tmpKey > 0) {  //   vv eat all repeats in the DM42 buffer; it cannot be -1 at this point
+      tmpKey = key_pop();
+      #ifdef JMSHOWCODES_KB0
+        sprintf   (aaa,"%2d ",tmpKey);
+        showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
+      #endif       
+    }                              //   ^^
   } while (tmpKey >= 0);
 }
 
@@ -968,6 +987,7 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_FAIL       der Ringbuffer ist leer. Es kann kein Byte geliefert werden.
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
+uint16_t tmpx = 320;
 uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 {
   uint32_t tmpTime;
@@ -991,17 +1011,14 @@ uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
   buffer.read = (buffer.read + 1) & BUFFER_MASK;
 
 
-  #define JMSHOWCODES_KB2
-  #define JMSHOWCODES_KB1
-
   #ifdef JMSHOWCODES_KB1 
     uint8_t DC_val;
     fnDisplayStack(2);
     char aaa[100];
     DC_val = outKeyBufferDoubleClick();
-    sprintf   (aaa,"key=%2d deltaT=%5lu DC:%d",*pByte, *pTimeSpan, DC_val);
+    sprintf   (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, DC_val);
   //sprintf   (aaa,"DC:%d",DC_val);
-    showString(aaa,       &standardFont, 1, 1, vmNormal, true, true);
+    tmpx = showString(aaa,       &standardFont, 220, 1, vmNormal, true, true);
   #endif
 
 
@@ -1122,19 +1139,22 @@ uint8_t outKeyBufferDoubleClick()
     sprintf(line1,"%-16s   D1:%d D2:%d D3:%d    ",       
       line,dTime_1, dTime_2, dTime_3);
     showString(line1, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+  #endif
 
-    line1[0]=0;
+  #ifdef JMSHOWCODES_KB3
+    char line2[10];
+    line2[0]=0;
     if( outDC == 1) 
-      strcat(line1," SINGLE      ");
+      strcat(line2," S   ");
     else 
     if( outDC == 2) 
-      strcat(line1,"    DOUBLE   ");
+      strcat(line2,"  D  ");
     else 
     if( outDC == 3)
-      strcat(line1,"       TRIPLE");
+      strcat(line2,"   T ");
     else
-      strcat(line1,"             ");
-    showString(line1, &standardFont, 266, 1, vmNormal, true, true);
+      strcat(line2,"     ");
+    showString(line2, &standardFont, tmpx, 1, vmNormal, true, true);
   #endif
 
      //WARNING! this triggers conseq double click to be 'triple' click but does not check it is the SAME key. Buffer to short for that.
@@ -1147,7 +1167,7 @@ uint8_t outKeyBufferDoubleClick()
 
 // Returns:
 //     true              der Ringbuffer ist voll
-bool_t fullyKeyBuffer()
+bool_t fullKeyBuffer()
 {
   return buffer.read == ((buffer.write + 1) & BUFFER_MASK);
 }

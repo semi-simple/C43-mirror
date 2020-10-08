@@ -1863,13 +1863,13 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics/sincpi.c">
-			<Option compilerVar="CC" />
+		<Unit filename="src/wp43s/mathematics/sinc.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics/sinc.h">
+		<Unit filename="src/wp43s/mathematics/sincpi.c">
+			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -2046,6 +2046,22 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/memory.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/decode.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/decode.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/programming.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

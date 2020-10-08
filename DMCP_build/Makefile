@@ -42,7 +42,7 @@ C_SOURCES += decNumberICU/decimal128.c
 C_SOURCES += decNumberICU/decimal64.c
 C_SOURCES += decNumberICU/decNumber.c
 C_SOURCES += decNumberICU/decQuad.c
-C_SOURCES += $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c) $(wildcard src/wp43s/browsers/*.c) $(wildcard src/wp43s/logicalOps/*.c)
+C_SOURCES += $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c) $(wildcard src/wp43s/browsers/*.c) $(wildcard src/wp43s/logicalOps/*.c) $(wildcard src/wp43s/programming/*.c)
 
 # C++ sources
 #CXX_SOURCES += src/xxx.cc

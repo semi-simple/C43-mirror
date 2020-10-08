@@ -134,7 +134,7 @@
 #define ITM_SF                         111
 #define ITM_FF                         112
 #define ITM_sincpi                     113
-#define ITM_0114                       114
+#define ITM_LITT                       114
 #define ITM_0115                       115
 #define ITM_0116                       116
 #define ITM_0117                       117

@@ -14,6 +14,11 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/********************************************//**
+ * \file flags.h
+ ***********************************************/
+
+
 void   systemFlagAction        (uint16_t systemFlag, uint16_t action);
 void   synchronizeLetteredFlags(void);
 bool_t getFlag                 (uint16_t flag);

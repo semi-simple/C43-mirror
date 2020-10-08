@@ -156,6 +156,7 @@
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"
+#include "programming/programming.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
@@ -327,6 +328,7 @@ extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD
+extern uint8_t *pgm;
 
 #include "constantPointers.h"
 #endif // wp43s_H_INCLUDED

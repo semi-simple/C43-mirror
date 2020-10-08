@@ -678,11 +678,12 @@ longIntegerFree(li);*/
     //  > 0 -> Key pressed
     // == 0 -> Key released
 //  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
-    keyBuffer_pop();
     
                                                             //vv dr - internal keyBuffer POC
     uint8_t outKey;
     uint32_t timeSpan;
+
+    keyBuffer_pop();
     if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
       key = outKey;
       // jm Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!

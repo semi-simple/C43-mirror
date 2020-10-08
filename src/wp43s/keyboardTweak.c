@@ -910,9 +910,10 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 #ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
 
 //#define JMSHOWCODES_KB0   // top line left    Key value from DM42. Not necessarily pushed to buffer.
-#define JMSHOWCODES_KB1   // top line middle  Key and  dT value
-//#define JMSHOWCODES_KB2 // main screen      Telltales keys, times, etc.
-#define JMSHOWCODES_KB3   // top line right   Single Double Triple
+//#define JMSHOWCODES_KB1   // top line middle  Key and  dT value
+//#define JMSHOWCODES_KB2   // main screen      Telltales keys, times, etc.
+//#define JMSHOWCODES_KB3   // top line right   Single Double Triple
+#undef EVALUATE_SDT       //Evaluate the Single/Double/Triple presses
 
 void keyBuffer_pop()
 {
@@ -926,24 +927,13 @@ void keyBuffer_pop()
         inKeyBuffer(tmpKey);
       }
     }
-    #ifdef JMSHOWCODES_KB0
-      uint16_t tmpxx = 1;
-      char aaa[10];
-      sprintf   (aaa,"%2d ",tmpKey);
-      showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
-    #endif       
-    while(key_tail() == tmpKey && tmpKey > 0) {  //   vv eat all repeats in the DM42 buffer; it cannot be -1 at this point
-      tmpKey = key_pop();
-      #ifdef JMSHOWCODES_KB0
-        sprintf   (aaa,"%2d ",tmpKey);
-        showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
-      #endif       
-    }                              //   ^^
   } while (tmpKey >= 0);
 }
 
 
-
+#ifdef JMSHOWCODES_KB0
+  uint16_t tmpxx = 1;
+#endif
 kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 // Stellt 1 Byte in den Ringbuffer
@@ -965,12 +955,19 @@ uint8_t inKeyBuffer(uint8_t byte)
 
 // EXPERIMENT Do not allow the same key to be stored multiple times. Only key changes stored.
   if(buffer.data[(buffer.write - 1) & BUFFER_MASK] == byte) {
+  #ifdef JMSHOWCODES_KB0
+    char aaa[12];
+    sprintf   (aaa,"%2d ",byte);
+    showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
+  #endif       
 
     return BUFFER_FAIL;  // doppelt
   }
 // END EXPERIMENT
 
-
+  #ifdef JMSHOWCODES_KB0
+    tmpxx = 1;
+  #endif
   buffer.data[buffer.write & BUFFER_MASK] = byte;
   buffer.time[buffer.write & BUFFER_MASK] = now;
   buffer.write = next;
@@ -1087,6 +1084,10 @@ Circular key buffer:
 // Returns: true if double click
 uint8_t outKeyBufferDoubleClick()
 {
+  #ifndef EVALUATE_SDT
+    return 255;
+  #endif
+
   int16_t dTime_1, dTime_2, dTime_3;
   bool_t doubleclicked, tripleclicked;
   uint8_t outDC;

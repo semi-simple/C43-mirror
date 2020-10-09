@@ -369,49 +369,53 @@ void Setup_MultiPresses(int16_t result){
 
 
 
-void Check_MultiPresses(int16_t * result){          //Set up longpress
-  int16_t tmp = 0;
+void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up longpress
+  int16_t firstResult = 0;
+  firstdelayedResult = 0;
+  delayedResult = 0;
 
-  if(calcMode == CM_NORMAL) {
-    switch(*result) {
-      case KEY_BACKSPACE: tmp = ITM_CLSTK; break;   //backspace longpress to CLSTK
-      case ITM_XEQ      : tmp = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
-      case KEY_EXIT1    : tmp = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
-      //case ITM_CHS      : tmp = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
-      default:;
-    }
-  }
-
-  if(calcMode == CM_NIM) {
-    switch(*result) {
-      case KEY_EXIT1    : tmp = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
-      default:;
-    }
-  }
-
-
-  if(tmp == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
+  if(firstResult == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
     bool_t flag_user = getSystemFlag(FLAG_USER);
-    for(int i=0; i<14; i++) {
-      if(*result == kbd_usr[i].primary) {
+    for(int i=0; i<=16; i++) {
+      if(key_no == i && i!=15) {    //Do not allow EEX as EEX is a leading edge button
         if(flag_user) {
-          tmp = kbd_usr[i].fShifted;
+          firstResult = kbd_usr[i].fShifted;
+          delayedResult = kbd_usr[i].gShifted;
         }
         else {
-          tmp = kbd_std[i].fShifted;
+          firstResult = kbd_std[i].fShifted;
+          delayedResult = kbd_std[i].gShifted;
         }
         break;
       }
     }
   }
 
-  if(tmp !=0) {                                      //if activated key pressed 
-    JM_auto_longpress_enabled = tmp;
+  if(calcMode == CM_NORMAL) {
+    switch(*result) {
+      case KEY_BACKSPACE: firstdelayedResult=firstResult; firstResult = ITM_CLSTK; break;   //backspace longpress to CLSTK
+      case ITM_XEQ      : firstdelayedResult=firstResult; firstResult = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
+      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      //case ITM_CHS      : firstResult = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
+      default:;
+    }
+  }
+
+  if(calcMode == CM_NIM) {
+    switch(*result) {
+      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      default:;
+    }
+  }
+
+
+  if(firstResult !=0) {                                      //if activated key pressed 
+    JM_auto_longpress_enabled = firstResult;
     fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
     if(JM_auto_doublepress_enabled != 0) {
        hideFunctionName();    
        undo();
-       showFunctionName(JM_auto_doublepress_enabled, 1000);  //JM CLRDROP
+       showFunctionName(JM_auto_doublepress_enabled, FUNCTION_NOPTIME);  //JM CLRDROP
        *result = JM_auto_doublepress_enabled;
        fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
        setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE

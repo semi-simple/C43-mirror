@@ -49,7 +49,7 @@ void Check_Assign_in_progress(int16_t  * result, int16_t tempkey);
 bool_t   func_lookup         (int16_t  fn, int16_t itemShift, int16_t *funk);
 void     execFnTimeout       (uint16_t key                    );                         //dr - delayed call of the primary function key
 void     shiftCutoff         (uint16_t unusedParamButMandatory);     //dr - press shift three times within one second to call HOME timer
-void     Check_MultiPresses  (int16_t  * result               );
+void     Check_MultiPresses  (int16_t  * result, int8_t key_no);
 void     Setup_MultiPresses  (int16_t  result                 );
 int16_t  nameFunction        (int16_t  fn, int16_t itemShift  );   //JM LONGPRESS FN
 

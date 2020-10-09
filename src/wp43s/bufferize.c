@@ -474,7 +474,7 @@ void addItemToNimBuffer(int16_t item) {
           if(item == CHR_0) {
             //if(aimBuffer[1] != '0') {  //JM_TYPE0
               strcat(aimBuffer, "0");
-            }
+            //}
           }
           else {
             if(aimBuffer[1] == '0') {

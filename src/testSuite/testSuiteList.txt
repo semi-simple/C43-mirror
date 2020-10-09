@@ -222,5 +222,6 @@ deltaPercent
 
 logxy
 lnbeta
+beta
 
 

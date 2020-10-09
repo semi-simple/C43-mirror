@@ -472,13 +472,13 @@ void addItemToNimBuffer(int16_t item) {
       switch(nimNumberPart) {
         case NP_INT_10 :
           if(item == CHR_0) {
-            if(aimBuffer[1] != '0') {
+            //if(aimBuffer[1] != '0') {  //JM_TYPE0
               strcat(aimBuffer, "0");
             }
           }
           else {
             if(aimBuffer[1] == '0') {
-              aimBuffer[1] = 0;
+              //aimBuffer[1] = 0;  //JM_TYPE0
             }
 
             strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
@@ -595,7 +595,7 @@ void addItemToNimBuffer(int16_t item) {
 
       if(nimNumberPart == NP_EMPTY || nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
         if(aimBuffer[1] == '0') {
-          aimBuffer[1] = 0;
+          //aimBuffer[1] = 0;       //JM_TYPE0
         }
 
         strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);

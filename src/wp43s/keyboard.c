@@ -379,7 +379,7 @@ int16_t determineItem(const char *data) {
 
   Check_Assign_in_progress(&result, key_no);  //JM
 
-  Check_MultiPresses(&result);                                 //JM
+  Check_MultiPresses(&result, key_no);        //JM
 
   if(result == CHR_PROD_SIGN) {
     result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);

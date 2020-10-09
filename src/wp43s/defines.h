@@ -53,7 +53,7 @@
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
 
 
-
+#define FUNCTION_NOPTIME 1000.             //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
 
 
 //*************************

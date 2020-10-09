@@ -269,6 +269,8 @@ extern int16_t               lastCnstMenuPos;
 extern int16_t               lastSyFlMenuPos;
 extern int16_t               lastAIntMenuPos;
 extern int16_t               showFunctionNameItem;
+extern int16_t               firstdelayedResult;          //JM
+extern int16_t               delayedResult;               //JM
 extern int16_t               T_cursorPos;                 //JMCURSOR
 extern int16_t               SHOWregis;                   //JMSHOW
 extern int16_t               mm_MNU_HOME;                 //JM

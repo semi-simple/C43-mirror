@@ -88,6 +88,8 @@ int16_t               lastCnstMenuPos;
 int16_t               lastSyFlMenuPos;
 int16_t               lastAIntMenuPos;
 int16_t               showFunctionNameItem;
+int16_t               firstdelayedResult;          //JM
+int16_t               delayedResult;               //JM
 int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
 int16_t               mm_MNU_HOME;                 //JM
@@ -372,6 +374,7 @@ void setupDefaults(void) {
   mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM
   if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
   T_cursorPos = 0;                                             //JMCURSOR
+  delayedResult = 0;                                           //JM
   doRefreshSoftMenu = true;                                    //dr
   ULFL = false;                                                //JM Underline
   ULGL = false;                                                //JM Underline

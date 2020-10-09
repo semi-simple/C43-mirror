@@ -1319,7 +1319,6 @@ void hideCursor(void) {
 
 
 
-
 /********************************************//**
  * \brief Displays the function of the
  * currently pressed button in the
@@ -1331,6 +1330,18 @@ void hideCursor(void) {
  ***********************************************/
 void showFunctionName(int16_t item, int16_t delayInMs) {
   char padding[20];                                          //JM
+  if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
+    if(firstdelayedResult != 0) {
+      item = firstdelayedResult; 
+      delayInMs = FUNCTION_NOPTIME;
+      firstdelayedResult = 0;
+    } else
+    if(delayedResult != 0) {
+      item = delayedResult; 
+      delayInMs = FUNCTION_NOPTIME;
+      delayedResult = 0;
+    }
+  }                                                              //JM^^
   showFunctionNameItem = item;
   if(running_program_jm) return;                             //JM
   showFunctionNameCounter = delayInMs;

@@ -280,6 +280,7 @@ void fnLogXY                    (uint16_t unusedParamButMandatory) {}
 void fnLnP1                     (uint16_t unusedParamButMandatory) {}
 void fnLnGamma                  (uint16_t unusedParamButMandatory) {}
 void fnLnBeta                   (uint16_t unusedParamButMandatory) {}
+void fnBeta                     (uint16_t unusedParamButMandatory) {}
 void fnGamma                    (uint16_t unusedParamButMandatory) {}
 void fnIDiv                     (uint16_t unusedParamButMandatory) {}
 void fnIDivR                    (uint16_t unusedParamButMandatory) {}
@@ -2225,7 +2226,7 @@ const item_t indexOfItems[] = {
 /* 1648 */  { fnAlphaSL,                   TM_REGISTER,                 STD_alpha "SL",                                STD_alpha "SL",                                0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1649 */  { fnAlphaSR,                   TM_REGISTER,                 STD_alpha "SR",                                STD_alpha "SR",                                0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1650 */  { fnAlphaToX,                  TM_REGISTER,                 STD_alpha STD_RIGHT_ARROW "x",                 STD_alpha STD_RIGHT_ARROW "x",                 0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1651 */  { itemToBeCoded,               NOPARAM,                     STD_beta "(x,y)",                              STD_beta "(x,y)",                              0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1651 */  { fnBeta,                      NOPARAM,                     STD_beta "(x,y)",                              STD_beta "(x,y)",                              0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1652 */  { itemToBeCoded,               NOPARAM,                     STD_gamma STD_SUB_x STD_SUB_y,                 STD_gamma STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1653 */  { itemToBeCoded,               NOPARAM,                     STD_GAMMA STD_SUB_x STD_SUB_y,                 STD_GAMMA STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1654 */  { fnGamma,                     NOPARAM,                     STD_GAMMA "(x)",                               STD_GAMMA "(x)",                               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

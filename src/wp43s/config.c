@@ -679,7 +679,7 @@ void fnReset(uint16_t confirmation) {
     #endif
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("KeyBuffer POC2B");
+    fnStrtoX("C43 Release 2020-10-11   C43-27-import");
     fnStore(102);
     fnDrop(0);
 

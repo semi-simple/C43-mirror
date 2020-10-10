@@ -623,8 +623,8 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         #endif
       }
       else if(shiftF && !shiftG) {
-        shiftG = true;        //S_shG();
-        shiftF = false;       //R_shF();
+        shiftG = true;                  
+        shiftF = false;                 
         showShiftState();
         refreshRegisterLine(REGISTER_T); //clearRegisterLine(Y_POSITION_OF_REGISTER_T_LINE - 4, REGISTER_LINE_HEIGHT); //JM FN clear the previous shift function name
         showFunctionName(nameFunction(FN_key_pressed-37,12),0);

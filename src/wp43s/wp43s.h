@@ -328,7 +328,7 @@ extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD
-extern uint8_t *pgm;
+extern uint8_t *pgm, *stepAddress, param;
 
 #include "constantPointers.h"
 #endif // wp43s_H_INCLUDED

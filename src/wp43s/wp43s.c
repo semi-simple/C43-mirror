@@ -167,7 +167,7 @@ const char            digits[17] = "0123456789ABCDEF";
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
-uint8_t *pgm;
+uint8_t *pgm, *stepAddress, param;
 
 /********************************************//**
  * \brief Sets all the default values of the calc and refreshes the stack
@@ -477,78 +477,638 @@ void setupDefaults(void) {
   *(pgm +  73) = 9;
 
   // 28
-  *(pgm +  56) = ITM_LITT;
-  *(pgm +  57) = 5; // String to real34
-  *(pgm +  58) = 1; // String length
-  *(pgm +  59) = '6'; // THE string
-
-  // 29
-  *(pgm +  60) = ITM_XEQ;
-  *(pgm +  61) = 9;
-
-  // 30
-  *(pgm +  62) = ITM_LITT;
-  *(pgm +  63) = 5; // String to real34
-  *(pgm +  64) = 1; // String length
-  *(pgm +  65) = '2'; // THE string
-
-  // 31
-  *(pgm +  66) = ITM_XEQ;
-  *(pgm +  67) = 9;
-
-  // 32
-  *(pgm +  68) = ITM_LITT;
-  *(pgm +  69) = 5; // String to real34
-  *(pgm +  70) = 1; // String length
-  *(pgm +  71) = '6'; // THE string
-
-  // 33
-  *(pgm +  72) = ITM_XEQ;
-  *(pgm +  73) = 9;
-
-  // 34
   *(pgm +  74) = ITM_LITT;
   *(pgm +  75) = 5; // String to real34
   *(pgm +  76) = 1; // String length
-  *(pgm +  77) = '4'; // THE string
+  *(pgm +  77) = '6'; // THE string
 
-  // 35
+  // 29
   *(pgm +  78) = ITM_XEQ;
   *(pgm +  79) = 9;
 
-  // 36
+  // 30
   *(pgm +  80) = ITM_LITT;
   *(pgm +  81) = 5; // String to real34
   *(pgm +  82) = 1; // String length
   *(pgm +  83) = '2'; // THE string
 
-  // 37
+  // 31
   *(pgm +  84) = ITM_XEQ;
   *(pgm +  85) = 9;
 
-  // 38
+  // 32
   *(pgm +  86) = ITM_LITT;
   *(pgm +  87) = 5; // String to real34
   *(pgm +  88) = 1; // String length
-  *(pgm +  89) = '4'; // THE string
+  *(pgm +  89) = '6'; // THE string
 
-  // 39
+  // 33
   *(pgm +  90) = ITM_XEQ;
   *(pgm +  91) = 9;
 
+  // 34
+  *(pgm +  92) = ITM_LITT;
+  *(pgm +  93) = 5; // String to real34
+  *(pgm +  94) = 1; // String length
+  *(pgm +  95) = '4'; // THE string
 
+  // 35
+  *(pgm +  96) = ITM_XEQ;
+  *(pgm +  97) = 9;
 
+  // 36
+  *(pgm +  98) = ITM_LITT;
+  *(pgm +  99) = 5; // String to real34
+  *(pgm + 100) = 1; // String length
+  *(pgm + 101) = '2'; // THE string
 
+  // 37
+  *(pgm + 102) = ITM_XEQ;
+  *(pgm + 103) = 9;
+
+  // 38
+  *(pgm + 104) = ITM_LITT;
+  *(pgm + 105) = 5; // String to real34
+  *(pgm + 106) = 1; // String length
+  *(pgm + 107) = '4'; // THE string
+
+  // 39
+  *(pgm + 108) = ITM_XEQ;
+  *(pgm + 109) = 9;
+
+  // 40
+  *(pgm + 110) = ITM_LITT;
+  *(pgm + 111) = 5; // String to real34
+  *(pgm + 112) = 1; // String length
+  *(pgm + 113) = '6'; // THE string
+
+  // 41
+  *(pgm + 114) = ITM_XEQ;
+  *(pgm + 115) = 9;
+
+  // 42
+  *(pgm + 116) = ITM_LITT;
+  *(pgm + 117) = 5; // String to real34
+  *(pgm + 118) = 1; // String length
+  *(pgm + 119) = '6'; // THE string
+
+  // 43
+  *(pgm + 120) = ITM_XEQ;
+  *(pgm + 121) = 9;
+
+  // 44
+  *(pgm + 122) = ITM_LITT;
+  *(pgm + 123) = 5; // String to real34
+  *(pgm + 124) = 1; // String length
+  *(pgm + 125) = '2'; // THE string
+
+  // 45
+  *(pgm + 126) = ITM_XEQ;
+  *(pgm + 127) = 9;
+
+  // 46
+  *(pgm + 128) = ITM_LITT;
+  *(pgm + 129) = 5; // String to real34
+  *(pgm + 130) = 1; // String length
+  *(pgm + 131) = '6'; // THE string
+
+  // 47
+  *(pgm + 132) = ITM_XEQ;
+  *(pgm + 133) = 9;
+
+  // 48
+  *(pgm + 134) = ITM_LITT;
+  *(pgm + 135) = 5; // String to real34
+  *(pgm + 136) = 1; // String length
+  *(pgm + 137) = '4'; // THE string
+
+  // 49
+  *(pgm + 138) = ITM_XEQ;
+  *(pgm + 139) = 9;
+
+  // 50
+  *(pgm + 140) = ITM_LITT;
+  *(pgm + 141) = 5; // String to real34
+  *(pgm + 142) = 1; // String length
+  *(pgm + 143) = '2'; // THE string
+
+  // 51
+  *(pgm + 144) = ITM_XEQ;
+  *(pgm + 145) = 9;
+
+  // 52
+  *(pgm + 146) = ITM_LITT;
+  *(pgm + 147) = 5; // String to real34
+  *(pgm + 148) = 1; // String length
+  *(pgm + 149) = '6'; // THE string
+
+  // 53
+  *(pgm + 150) = ITM_XEQ;
+  *(pgm + 151) = 9;
+
+  // 54
+  *(pgm + 152) = ITM_LITT;
+  *(pgm + 153) = 5; // String to real34
+  *(pgm + 154) = 1; // String length
+  *(pgm + 155) = '4'; // THE string
+
+  // 55
+  *(pgm + 156) = ITM_XEQ;
+  *(pgm + 157) = 9;
+
+  // 56
+  *(pgm + 158) = ITM_LITT;
+  *(pgm + 159) = 5; // String to real34
+  *(pgm + 160) = 1; // String length
+  *(pgm + 161) = '6'; // THE string
+
+  // 57
+  *(pgm + 162) = ITM_XEQ;
+  *(pgm + 163) = 9;
+
+  // 58
+  *(pgm + 164) = ITM_LITT;
+  *(pgm + 165) = 5; // String to real34
+  *(pgm + 166) = 1; // String length
+  *(pgm + 167) = '8'; // THE string
+
+  // 59
+  *(pgm + 168) = ITM_XEQ;
+  *(pgm + 169) = 9;
+
+  // 60
+  *(pgm + 170) = ITM_LITT;
+  *(pgm + 171) = 5; // String to real34
+  *(pgm + 172) = 1; // String length
+  *(pgm + 173) = '4'; // THE string
+
+  // 61
+  *(pgm + 174) = ITM_XEQ;
+  *(pgm + 175) = 9;
+
+  // 62
+  *(pgm + 176) = ITM_LITT;
+  *(pgm + 177) = 5; // String to real34
+  *(pgm + 178) = 1; // String length
+  *(pgm + 179) = '2'; // THE string
+
+  // 63
+  *(pgm + 180) = ITM_XEQ;
+  *(pgm + 181) = 9;
+
+  // 64
+  *(pgm + 182) = ITM_LITT;
+  *(pgm + 183) = 5; // String to real34
+  *(pgm + 184) = 1; // String length
+  *(pgm + 185) = '4'; // THE string
+
+  // 65
+  *(pgm + 186) = ITM_XEQ;
+  *(pgm + 187) = 9;
+
+  // 66
+  *(pgm + 188) = ITM_LITT;
+  *(pgm + 189) = 5; // String to real34
+  *(pgm + 190) = 1; // String length
+  *(pgm + 191) = '2'; // THE string
+
+  // 67
+  *(pgm + 192) = ITM_XEQ;
+  *(pgm + 193) = 9;
+
+  // 68
+  *(pgm + 194) = ITM_LITT;
+  *(pgm + 195) = 5; // String to real34
+  *(pgm + 196) = 1; // String length
+  *(pgm + 197) = '4'; // THE string
+
+  // 69
+  *(pgm + 198) = ITM_XEQ;
+  *(pgm + 199) = 9;
+
+  // 70
+  *(pgm + 200) = ITM_LITT;
+  *(pgm + 201) = 5; // String to real34
+  *(pgm + 202) = 1; // String length
+  *(pgm + 203) = '8'; // THE string
+
+  // 71
+  *(pgm + 204) = ITM_XEQ;
+  *(pgm + 205) = 9;
+
+  // 72
+  *(pgm + 206) = ITM_LITT;
+  *(pgm + 207) = 5; // String to real34
+  *(pgm + 208) = 1; // String length
+  *(pgm + 209) = '6'; // THE string
+
+  // 73
+  *(pgm + 210) = ITM_XEQ;
+  *(pgm + 211) = 9;
+
+  // 74
+  *(pgm + 212) = ITM_LITT;
+  *(pgm + 213) = 5; // String to real34
+  *(pgm + 214) = 1; // String length
+  *(pgm + 215) = '4'; // THE string
+
+  // 75
+  *(pgm + 216) = ITM_XEQ;
+  *(pgm + 217) = 9;
+
+  // 76
+  *(pgm + 218) = ITM_LITT;
+  *(pgm + 219) = 5; // String to real34
+  *(pgm + 220) = 1; // String length
+  *(pgm + 221) = '6'; // THE string
+
+  // 77
+  *(pgm + 222) = ITM_XEQ;
+  *(pgm + 223) = 9;
+
+  // 78
+  *(pgm + 224) = ITM_LITT;
+  *(pgm + 225) = 5; // String to real34
+  *(pgm + 226) = 1; // String length
+  *(pgm + 227) = '2'; // THE string
+
+  // 79
+  *(pgm + 228) = ITM_XEQ;
+  *(pgm + 229) = 9;
+
+  // 80
+  *(pgm + 230) = ITM_LITT;
+  *(pgm + 231) = 5; // String to real34
+  *(pgm + 232) = 1; // String length
+  *(pgm + 233) = '4'; // THE string
+
+  // 81
+  *(pgm + 234) = ITM_XEQ;
+  *(pgm + 235) = 9;
+
+  // 82
+  *(pgm + 236) = ITM_LITT;
+  *(pgm + 237) = 5; // String to real34
+  *(pgm + 238) = 1; // String length
+  *(pgm + 239) = '6'; // THE string
+
+  // 83
+  *(pgm + 240) = ITM_XEQ;
+  *(pgm + 241) = 9;
+
+  // 84
+  *(pgm + 242) = ITM_LITT;
+  *(pgm + 243) = 5; // String to real34
+  *(pgm + 244) = 1; // String length
+  *(pgm + 245) = '2'; // THE string
+
+  // 85
+  *(pgm + 246) = ITM_XEQ;
+  *(pgm + 247) = 9;
+
+  // 86
+  *(pgm + 248) = ITM_LITT;
+  *(pgm + 249) = 5; // String to real34
+  *(pgm + 250) = 1; // String length
+  *(pgm + 251) = '6'; // THE string
+
+  // 87
+  *(pgm + 252) = ITM_XEQ;
+  *(pgm + 253) = 9;
+
+  // 88
+  *(pgm + 254) = ITM_LITT;
+  *(pgm + 255) = 5; // String to real34
+  *(pgm + 256) = 1; // String length
+  *(pgm + 257) = '6'; // THE string
+
+  // 89
+  *(pgm + 258) = ITM_XEQ;
+  *(pgm + 259) = 9;
+
+  // 90
+  *(pgm + 260) = ITM_LITT;
+  *(pgm + 261) = 5; // String to real34
+  *(pgm + 262) = 1; // String length
+  *(pgm + 263) = '4'; // THE string
+
+  // 91
+  *(pgm + 264) = ITM_XEQ;
+  *(pgm + 265) = 9;
+
+  // 92
+  *(pgm + 266) = ITM_LITT;
+  *(pgm + 267) = 5; // String to real34
+  *(pgm + 268) = 1; // String length
+  *(pgm + 269) = '2'; // THE string
+
+  // 93
+  *(pgm + 270) = ITM_XEQ;
+  *(pgm + 271) = 9;
+
+  // 94
+  *(pgm + 272) = ITM_LITT;
+  *(pgm + 273) = 5; // String to real34
+  *(pgm + 274) = 1; // String length
+  *(pgm + 275) = '4'; // THE string
+
+  // 94
+  *(pgm + 276) = ITM_XEQ;
+  *(pgm + 277) = 9;
+
+  // 96
+  *(pgm + 278) = ITM_LITT;
+  *(pgm + 279) = 5; // String to real34
+  *(pgm + 280) = 1; // String length
+  *(pgm + 281) = '6'; // THE string
+
+  // 97
+  *(pgm + 282) = ITM_XEQ;
+  *(pgm + 283) = 9;
+
+  // 98
+  *(pgm + 284) = ITM_LITT;
+  *(pgm + 285) = 5; // String to real34
+  *(pgm + 286) = 1; // String length
+  *(pgm + 287) = '2'; // THE string
+
+  // 99
+  *(pgm + 288) = ITM_XEQ;
+  *(pgm + 289) = 9;
+
+  // 100
+  *(pgm + 290) = ITM_LITT;
+  *(pgm + 291) = 5; // String to real34
+  *(pgm + 292) = 1; // String length
+  *(pgm + 293) = '6'; // THE string
+
+  // 101
+  *(pgm + 294) = ITM_XEQ;
+  *(pgm + 295) = 9;
+
+  // 102
+  *(pgm + 296) = ITM_LITT;
+  *(pgm + 297) = 5; // String to real34
+  *(pgm + 298) = 1; // String length
+  *(pgm + 299) = '4'; // THE string
+
+  // 103
+  *(pgm + 300) = ITM_XEQ;
+  *(pgm + 301) = 9;
+
+  // 104
+  *(pgm + 302) = ITM_LITT;
+  *(pgm + 303) = 5; // String to real34
+  *(pgm + 304) = 1; // String length
+  *(pgm + 305) = '2'; // THE string
+
+  // 105
+  *(pgm + 306) = ITM_XEQ;
+  *(pgm + 307) = 9;
+
+  // 106
+  *(pgm + 308) = ITM_LITT;
+  *(pgm + 309) = 5; // String to real34
+  *(pgm + 310) = 1; // String length
+  *(pgm + 311) = '4'; // THE string
+
+  // 107
+  *(pgm + 312) = ITM_XEQ;
+  *(pgm + 313) = 9;
+
+  // 108
+  *(pgm + 314) = ITM_LITT;
+  *(pgm + 315) = 5; // String to real34
+  *(pgm + 316) = 1; // String length
+  *(pgm + 317) = '2'; // THE string
+
+  // 109
+  *(pgm + 318) = ITM_XEQ;
+  *(pgm + 319) = 9;
+
+  // 110
+  *(pgm + 320) = ITM_LITT;
+  *(pgm + 321) = 5; // String to real34
+  *(pgm + 322) = 2; // String length
+  *(pgm + 323) = '1'; // THE string
+  *(pgm + 324) = '0'; // THE string
+
+  // 111
+  *(pgm + 325) = ITM_XEQ;
+  *(pgm + 326) = 9;
+
+  // 112
+  *(pgm + 327) = ITM_LITT;
+  *(pgm + 328) = 5; // String to real34
+  *(pgm + 329) = 1; // String length
+  *(pgm + 330) = '2'; // THE string
+
+  // 113
+  *(pgm + 331) = ITM_XEQ;
+  *(pgm + 332) = 9;
+
+  // 114
+  *(pgm + 333) = ITM_LITT;
+  *(pgm + 334) = 5; // String to real34
+  *(pgm + 335) = 2; // String length
+  *(pgm + 336) = '1'; // THE string
+  *(pgm + 337) = '0'; // THE string
+
+  // 115
+  *(pgm + 338) = ITM_XEQ;
+  *(pgm + 339) = 9;
+
+  // 116
+  *(pgm + 340) = ITM_RCL;
+  *(pgm + 341) = 2;
+
+  // 117
+  *(pgm + 342) = ITM_RCL;
+  *(pgm + 343) = 1;
+
+  // 118
+  *(pgm + 344) = ITM_XLT;
+  *(pgm + 345) = 101; // Y
+
+  // 119
+  *(pgm + 346) = ITM_GTO;
+  *(pgm + 347) = 2;
+
+  // 120
+  *(pgm + 348) = ITM_RCL;
+  *(pgm + 349) = 0;
+
+  // 121
+  *(pgm + 350) = ITM_RCL;
+  *(pgm + 351) = 0;
+
+  // 122
+  *(pgm + 352) = (ITM_STOP >> 8) | 0x80;
+  *(pgm + 353) =  ITM_STOP       & 0xff;
+
+  // 123
+  *(pgm + 354) = ITM_LBL;
+  *(pgm + 355) = 9;
+
+  // 124
+  *(pgm + 356) = ITM_STOPLUS;
+  *(pgm + 357) = 1;
+
+  // 125
+  *(pgm + 358) = ITM_RCL;
+  *(pgm + 359) = 0;
+
+  // 126
+  *(pgm + 360) = ITM_RCL;
+  *(pgm + 361) = 1;
+
+  // 127
+  *(pgm + 362) = ITM_MOD;
+
+  // 128
+  *(pgm + 363) = ITM_XNE;
+  *(pgm + 364) = 250; // 0.
+
+  // 129
+  *(pgm + 365) = ITM_RTN;
+
+  // 130
+  *(pgm + 366) = ITM_RCL;
+  *(pgm + 367) = 0;
+
+  // 131
+  *(pgm + 368) = ITM_RCL;
+  *(pgm + 369) = 1;
 
   // 132
-  *(pgm +  92) = (ITM_END >> 8) | 0x80;
-  *(pgm +  93) =  ITM_END       & 0xff;
+  *(pgm + 370) = (ITM_END >> 8) | 0x80;
+  *(pgm + 371) =  ITM_END       & 0xff;
 
-  *(pgm +  94) = 127 | 0x80; // .END.
-  *(pgm +  95) = 255;        // .END.
 
-  while(pgm) {
-    pgm = decodeOneStep(pgm);
+
+
+  // 1
+  *(pgm + 372) = ITM_LBL;
+  *(pgm + 373) = 255;
+  *(pgm + 374) = (7 << 4) | 7; // 7 glyphs and 7 bytes
+  *(pgm + 375) = 'B';
+  *(pgm + 376) = 'a';
+  *(pgm + 377) = 'i';
+  *(pgm + 378) = 'r';
+  *(pgm + 379) = 's';
+  *(pgm + 380) = 't';
+  *(pgm + 381) = 'o';
+
+  // 2
+  *(pgm + 382) = (ITM_ALL >> 8) | 0x80;
+  *(pgm + 383) =  ITM_ALL       & 0xff;
+  *(pgm + 384) = 0;
+
+  // 3
+  *(pgm + 385) = (ITM_CLREGS >> 8) | 0x80;
+  *(pgm + 386) =  ITM_CLREGS       & 0xff;
+
+  // 4
+  *(pgm + 387) = (ITM_CLSTK >> 8) | 0x80;
+  *(pgm + 388) =  ITM_CLSTK       & 0xff;
+
+  // 5
+  *(pgm + 389) = ITM_LITT;
+  *(pgm + 390) = 8; // String
+  *(pgm + 391) = 19; // String length
+  *(pgm + 392) = 'P'; // THE string
+  *(pgm + 393) = 'o';
+  *(pgm + 394) = 'l';
+  *(pgm + 395) = 'y';
+  *(pgm + 396) = 'n';
+  *(pgm + 397) = 'o';
+  *(pgm + 398) = 'm';
+  *(pgm + 399) = 'i';
+  *(pgm + 400) = 'a';
+  *(pgm + 401) = 'l';
+  *(pgm + 402) = ' ';
+  *(pgm + 403) = 'd';
+  *(pgm + 404) = 'e';
+  *(pgm + 405) = 'g';
+  *(pgm + 406) = 'r';
+  *(pgm + 407) = 'e';
+  *(pgm + 408) = 'e';
+  *(pgm + 409) = ' ';
+  *(pgm + 410) = '?';
+
+  // 6
+  *(pgm + 411) = (ITM_STOP >> 8) | 0x80;
+  *(pgm + 412) =  ITM_STOP       & 0xff;
+
+  // 7
+  *(pgm + 413) = ITM_MAGNITUDE;
+
+  // 8
+  *(pgm + 414) = ITM_IP;
+
+  // 9
+  *(pgm + 415) = ITM_STO;
+  *(pgm + 416) = 90;
+
+  // 10
+  *(pgm + 417) = ITM_STO;
+  *(pgm + 418) = 91;
+
+  // 11
+  *(pgm + 419) = (ITM_CLSTK >> 8) | 0x80;
+  *(pgm + 420) =  ITM_CLSTK       & 0xff;
+
+  // 12
+  *(pgm + 421) = ITM_RCL;
+  *(pgm + 422) = 91;
+
+  // 13
+  *(pgm + 423) = ITM_LITT;
+  *(pgm + 424) = 5; // String to real34
+  *(pgm + 425) = 3; // String length
+  *(pgm + 426) = '1'; // THE string
+  *(pgm + 427) = 'e';
+  *(pgm + 428) = '3';
+
+  // 14
+  *(pgm + 429) = ITM_DIV;
+
+  // 15
+  *(pgm + 430) = ITM_STO;
+  *(pgm + 431) = 92;
+
+  // 16
+  *(pgm + 432) = ITM_LBL;
+  *(pgm + 433) = 100; // A
+
+  // 17
+  *(pgm + 434) = ITM_LITT;
+  *(pgm + 435) = 8; // String
+  *(pgm + 436) = 2; // String length
+  *(pgm + 437) = 'x'; // THE string
+  *(pgm + 438) = '^';
+
+  // 18
+  *(pgm + 439) = ITM_RCL;
+  *(pgm + 440) = 91;
+
+  // 19
+  *(pgm + 441) = ITM_ADD;
+
+
+
+
+
+
+  *(pgm + 442) = 127 | 0x80; // .END.
+  *(pgm + 443) = 255;        // .END.
+
+
+  uint16_t step = 0;
+  stepAddress = pgm;
+  while(stepAddress) {
+    printf("%4u  ", ++step);
+    stepAddress = decodeOneStep();
   }
 
   exit(0);

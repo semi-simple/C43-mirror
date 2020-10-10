@@ -18,4 +18,4 @@
  * \file decode.c
  ***********************************************/
 
-void *decodeOneStep(void *stepAddress);
+void *decodeOneStep(void);

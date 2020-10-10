@@ -41,7 +41,7 @@ uint8_t verbose_jm;
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43
 #define arrowCasechange    false
 
-//This is to allow the creation of a logfile
+//This is to allow the creation of a logfile while you type
 #undef  RECORDLOG
 //#define RECORDLOG
 

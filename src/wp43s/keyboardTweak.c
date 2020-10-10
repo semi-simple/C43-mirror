@@ -910,9 +910,38 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 }
 
 
-/*
-#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC - removed
-kb_buffer_t buffer = {{}, {}, 0, 0};
+
+#ifdef DMCP_BUILD                                           //vv dr - internal keyBuffer POC
+
+//#define JMSHOWCODES_KB0   // top line left    Key value from DM42. Not necessarily pushed to buffer.
+//#define JMSHOWCODES_KB1   // top line middle  Key and  dT value
+//#define JMSHOWCODES_KB2   // main screen      Telltales keys, times, etc.
+//#define JMSHOWCODES_KB3   // top line right   Single Double Triple
+
+void keyBuffer_pop()
+{
+  int tmpKey;
+
+  do {
+    tmpKey = -1;
+    if(!fullKeyBuffer()) {
+      tmpKey = key_pop();
+      if(tmpKey >= 0) {
+        inKeyBuffer(tmpKey);
+      }
+    }
+  } while (tmpKey >= 0);
+}
+
+
+#ifdef JMSHOWCODES_KB0
+  uint16_t tmpxx = 1;
+#endif
+#ifdef BUFFER_CLICK_DETECTION
+  kb_buffer_t buffer = {{}, {}, 0, 0};
+#else
+  kb_buffer_t buffer = {{}, 0, 0};
+#endif
 //
 // Stellt 1 Byte in den Ringbuffer
 //
@@ -922,15 +951,36 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  uint32_t now  = (uint32_t)sys_current_ms();
+  #ifdef BUFFER_CLICK_DETECTION
+    uint32_t now  = (uint32_t)sys_current_ms();
+  #endif
   uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
 
-  if(buffer.read == next)
-    return BUFFER_FAIL; // voll
+  if(buffer.read == next) {
 
-//buffer.data[buffer.write] = byte;
-  buffer.data[buffer.write & BUFFER_MASK] = byte; // absolut Sicher
-  buffer.time[buffer.write] = now;
+    return BUFFER_FAIL;  // voll
+  }
+
+
+// EXPERIMENT Do not allow the same key to be stored multiple times. Only key changes stored.
+  if(buffer.data[(buffer.write - 1) & BUFFER_MASK] == byte) {
+  #ifdef JMSHOWCODES_KB0
+    char aaa[12];
+    sprintf   (aaa,"%2d ",byte);
+    showString(aaa,&standardFont, tmpxx++, 1, vmNormal, true, true);
+  #endif       
+
+    return BUFFER_FAIL;  // doppelt
+  }
+// END EXPERIMENT
+
+  #ifdef JMSHOWCODES_KB0
+    tmpxx = 1;
+  #endif
+  buffer.data[buffer.write & BUFFER_MASK] = byte;
+  #ifdef BUFFER_CLICK_DETECTION
+    buffer.time[buffer.write & BUFFER_MASK] = now;
+  #endif
   buffer.write = next;
 
   return BUFFER_SUCCESS;
@@ -945,19 +995,202 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_FAIL       der Ringbuffer ist leer. Es kann kein Byte geliefert werden.
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
-uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime)
+uint16_t tmpx = 320;
+uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 {
-  if(buffer.read == buffer.write)
-    return BUFFER_FAIL;
+  if(buffer.read == buffer.write) {
+
+    return BUFFER_FAIL;  // leer
+  }
 
   *pByte = buffer.data[buffer.read];
-  *pTime = buffer.time[buffer.read];
+  #ifdef BUFFER_CLICK_DETECTION
+    uint32_t tmpTime;
+    *pTime = buffer.time[buffer.read];
+    tmpTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
+    if(buffer.time[buffer.read] >= tmpTime) {
+      tmpTime = buffer.time[buffer.read] - tmpTime;
+    }
+    else {
+      tmpTime = buffer.time[buffer.read];
+    }
+    *pTimeSpan = tmpTime;
+  #endif
 
-  buffer.read = (buffer.read+1) & BUFFER_MASK;
+  buffer.read = (buffer.read + 1) & BUFFER_MASK;
+
+  #ifdef BUFFER_CLICK_DETECTION
+    tmpTime = outKeyBufferDoubleClick();
+    #ifdef JMSHOWCODES_KB1
+      fnDisplayStack(2);
+      char aaa[50];
+      sprintf (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, (uint8_t)tmpTime);
+      tmpx = showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
+    #endif
+  #endif
 
   return BUFFER_SUCCESS;
 }
 
+
+
+/* Switching profile, single press, double press and triple press:
+
+
+SINGLEPRESS:
+unknown  waiting   pres    rel
+---D3--x_____D2____x---D1--x_
+      t-3         t-2     t-1
+
+
+DOUBLEPRESS:
+unknown  waiting   pres    rel    pres
+-------x___________x-------x______x-
+      t-4    D3   t-3  D2 t-2 D1 t-1
+
+
+TRIPLEPRESS:
+unknown  waiting   pres    rel    pres   rel    pres
+-------x___________x-------x______x------x______x-
+                          t-4 D3 t-3 D2 t-2 D1 t-1
+
+
+
+Circular key buffer:
+
+ Pointers are ready to read and ready to write.
+ Pointers are incremented after action.
+ Allow writing of 3 keys ahead, into: R+0, R+1, R+2. R+3 is blocked.
+ Allow reading of 3 keys up to R=W, which is not read.
+
+ +------------------------------------+
+ |   1                                | emptyKeyBuffer, not used
+ | R 2 W   R=W: Empty buffer, cannot  | outKeyBuffer
+ |   3          read.                 |
+ |   4                                |    (Will not pop a key which is not pushed. Can look at 4 places back directly at the stack. )
+ +------------------------------------+
+ |   1 W   W+1 NOT= R: Space for 1+   | isMoreBufferSpace, used by keyBuffer_pop writing to the buffer only when there is space
+ | R 2                                |
+ |   3                                |
+ |   4                                |
+ +------------------------------------+
+ |   1                                | inKeyBuffer
+ | R 2                                |
+ |   3 W   R+1=W: Write buffer full.  |    (must avoid this one, because the key is lost then. Must rather test first and keep the key in the DM42 buffer)
+ |   4            Failed. Return      |
+ +------------------------------------+
+
+ +-------------------------------------------------------------------------------+
+ |   1 W    X     iv.block access to inKeyBuffer, i.e. keep key in DM42 buffer.  |
+ | R 2 ov      i.write o and move down v                                         |
+ |   3 o v      ii.write o and move down v                                       |
+ |   4 o  v      iii.write o and move down v                                     |
+ +-------------------------------------------------------------------------------+
+
+*/
+
+
+
+// Returns: true if double click
+uint8_t outKeyBufferDoubleClick()
+{
+#ifdef BUFFER_CLICK_DETECTION
+     //WARNING! this triggers conseq double click to be 'triple' click but does not check it is the SAME key. 
+     //Buffer of 4 to short for that. Buffer of 8 sufficient.
+     //Can be fixed by having a single byte added to the rolling stack catching the key which was rolled out
+
+  int16_t dTime_1, dTime_2, dTime_3;
+  bool_t  doubleclicked, tripleclicked;
+  uint8_t outDoubleclick;
+
+  //note Delta Time 1 is the most recent, Delta time 3 is the oldest
+  dTime_1 = (uint16_t) buffer.time[(buffer.read-1) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK];
+  dTime_2 = (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK];
+  dTime_3 = (uint16_t) buffer.time[(buffer.read-3) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-4) & BUFFER_MASK];
+
+  #define D1 150 //400 //space before last press, released time
+  #define D2 200 //length of first press, pressed down time
+
+  doubleclicked = 
+         buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-3) & BUFFER_MASK]   //check that the two last keys are the same, otherwise itis a glisando 
+      && (dTime_1 > 10 ) && (dTime_1 < D1)                //check no chatter > 10 ms & released width is not longer than limit
+      && (dTime_2 > 10 ) && (dTime_2 < D2);               //check no chatter > 10 ms & pressed width is not longer than limit
+
+  if(dTime_1+dTime_2 > D1+D2) doubleclicked = false;
+
+
+  #define TD1 150 //space before last press, released time
+  #define TD2 200 //length of middle press, pressed down time
+  #define TD3 150 //space before middle press, i.e. released time after first press
+
+  tripleclicked = 
+         buffer.data[(buffer.read-1) & BUFFER_MASK] != 0   //check that the last incoming keys was a press, not a release
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-3) & BUFFER_MASK]   //check that the two last keys are the same, otherwise itis a glisando 
+      && buffer.data[(buffer.read-1) & BUFFER_MASK] == buffer.data[(buffer.read-5) & BUFFER_MASK]   //check that the previous key is the same. If buffer is 4 long only, it will wrap and not check the first triple press
+      && (dTime_1 > 10 ) && (dTime_1 < TD1)                //check no chatter > 10 ms & released width is not longer than limit
+      && (dTime_2 > 10 ) && (dTime_2 < TD2)                //check no chatter > 10 ms & pressed width is not longer than limit
+      && (dTime_3 > 10 ) && (dTime_3 < TD3);               //check no chatter > 10 ms & pressed width is not longer than limit
+
+  if(dTime_1+dTime_2+dTime_3 > TD1+TD2+TD3) tripleclicked = false;
+
+  if(tripleclicked) outDoubleclick = 3; else
+  if(doubleclicked) outDoubleclick = 2; else
+  if(buffer.data[(buffer.read-1) & BUFFER_MASK] != 0) outDoubleclick = 1; 
+  else outDoubleclick = 0;
+
+
+  #ifdef JMSHOWCODES_KB2 
+    char line[50], line1[100];
+    fnDisplayStack(2);
+    sprintf(line1,"R%-1dW%-1d -1:%-5d -2:%-5d -3:%-5d -4:%-5d  ",
+      (uint16_t)buffer.read,(uint16_t)buffer.write,
+      (uint16_t)buffer.time[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.time[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.time[(buffer.read-4) & BUFFER_MASK] );
+    showString(line1, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+    sprintf(line,"B-1:%d %d %d %d",(uint16_t)buffer.data[(buffer.read-1) & BUFFER_MASK], (uint16_t)buffer.data[(buffer.read-2) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-3) & BUFFER_MASK],(uint16_t)buffer.data[(buffer.read-4) & BUFFER_MASK] );
+    sprintf(line1,"%-16s   D1:%d D2:%d D3:%d    ",       
+      line,dTime_1, dTime_2, dTime_3);
+    showString(line1, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+  #endif
+
+  #ifdef JMSHOWCODES_KB3
+    char line2[10];
+    line2[0]=0;
+    if( outDoubleclick == 1) {
+      strcat(line2,"S");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
+    else 
+    if( outDoubleclick == 2) {
+      strcat(line2,"D");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
+    else 
+    if( outDoubleclick == 3) {
+      strcat(line2,"T");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
+    else {
+      strcat(line2," ");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+      //refreshStatusBar();
+    }
+  #endif
+
+  return outDoubleclick;
+#else
+  return 255;
+#endif
+}
+
+
+
+// Returns:
+//     true              der Ringbuffer ist voll
+bool_t fullKeyBuffer()
+{
+  return buffer.read == ((buffer.write + 1) & BUFFER_MASK);
+}
 
 
 // Returns:
@@ -967,7 +1200,7 @@ bool_t emptyKeyBuffer()
   return buffer.read == buffer.write;
 }
 #endif                                                      //^^
-*/
+
 
 
 //########################################

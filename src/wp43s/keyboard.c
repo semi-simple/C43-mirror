@@ -440,6 +440,10 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           break;
 
+        case CM_MIM:
+          addItemToBuffer(item);
+          keyActionProcessed = true;
+
         case CM_ASM:
         case CM_ASM_OVER_TAM:
         case CM_ASM_OVER_AIM:
@@ -617,9 +621,11 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
       tamTransitionSystem(TT_ENTER);
       break;
 
+    case CM_MIM:
+      mimEnter();
+
     case CM_ASM:
     case CM_ASM_OVER_TAM:
-    case CM_MIM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:

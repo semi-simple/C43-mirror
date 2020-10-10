@@ -287,7 +287,7 @@ void addItemToBuffer(uint16_t item) {
       addItemToNimBuffer(item);
     }
 
-    //Probably wrong place for this function?! Should Arrow be processed in buffercize.c in this case?
+    //Probably wrong place for this function?! Should Arrow be processed in buffercize.c in this case? //Switch statement better.
     else if(calcMode == CM_MIM) {
       if (item == CHR_RIGHT_ARROW) {
         setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
@@ -302,6 +302,22 @@ void addItemToBuffer(uint16_t item) {
         setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
       }
       refreshScreen();
+
+    switch(item) {
+      case CHR_0 :
+      case CHR_1 :
+      case CHR_2 :
+      case CHR_3 :
+      case CHR_4 :
+      case CHR_5 :
+      case CHR_6 :
+      case CHR_7 :
+      case CHR_8 :
+      case CHR_9 :
+
+      mimAddNumber();
+      break;
+
     }
 
     else {

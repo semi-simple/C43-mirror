@@ -149,6 +149,13 @@ void showMatrixEditor() {
   showString(tmpStr3000, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false);
 }
 
+void mimEnter() {
+}
+
+void mimAddNumber() {
+
+}
+
 void storeMatrixToXRegister(real34Matrix_t *matrix) {
 
   setSystemFlag(FLAG_ASLIFT);

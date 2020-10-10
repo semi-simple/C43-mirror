@@ -67,13 +67,13 @@ void     refreshTimer         (void);
 
 #define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC
 #define BUFFER_SUCCESS  1
-
-#define BUFFER_SIZE 8   // muss 2^n betragen (8, 16, 32, 64 ...)
 #define BUFFER_MASK (BUFFER_SIZE-1) // Klammern auf keinen Fall vergessen
 
 typedef struct {
   uint8_t   data[BUFFER_SIZE];
+  #ifdef    BUFFER_CLICK_DETECTION
   uint32_t  time[BUFFER_SIZE];
+  #endif
   uint8_t   read;   // zeigt auf das Feld mit dem ältesten Inhalt
   uint8_t   write;  // zeigt immer auf leeres Feld
 } kb_buffer_t;

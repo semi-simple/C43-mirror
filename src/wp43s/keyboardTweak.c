@@ -917,7 +917,6 @@ uint8_t fnTimerGetStatus(uint8_t nr) {
 //#define JMSHOWCODES_KB1   // top line middle  Key and  dT value
 //#define JMSHOWCODES_KB2   // main screen      Telltales keys, times, etc.
 //#define JMSHOWCODES_KB3   // top line right   Single Double Triple
-#undef EVALUATE_SDT       //Evaluate the Single/Double/Triple presses
 
 void keyBuffer_pop()
 {
@@ -938,7 +937,11 @@ void keyBuffer_pop()
 #ifdef JMSHOWCODES_KB0
   uint16_t tmpxx = 1;
 #endif
-kb_buffer_t buffer = {{}, {}, 0, 0};
+#ifdef BUFFER_CLICK_DETECTION
+  kb_buffer_t buffer = {{}, {}, 0, 0};
+#else
+  kb_buffer_t buffer = {{}, 0, 0};
+#endif
 //
 // Stellt 1 Byte in den Ringbuffer
 //
@@ -948,7 +951,9 @@ kb_buffer_t buffer = {{}, {}, 0, 0};
 //
 uint8_t inKeyBuffer(uint8_t byte)
 {
-  uint32_t now  = (uint32_t)sys_current_ms();
+  #ifdef BUFFER_CLICK_DETECTION
+    uint32_t now  = (uint32_t)sys_current_ms();
+  #endif
   uint8_t  next = ((buffer.write + 1) & BUFFER_MASK);
 
   if(buffer.read == next) {
@@ -973,7 +978,9 @@ uint8_t inKeyBuffer(uint8_t byte)
     tmpxx = 1;
   #endif
   buffer.data[buffer.write & BUFFER_MASK] = byte;
-  buffer.time[buffer.write & BUFFER_MASK] = now;
+  #ifdef BUFFER_CLICK_DETECTION
+    buffer.time[buffer.write & BUFFER_MASK] = now;
+  #endif
   buffer.write = next;
 
   return BUFFER_SUCCESS;
@@ -991,37 +998,36 @@ uint8_t inKeyBuffer(uint8_t byte)
 uint16_t tmpx = 320;
 uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
 {
-  uint32_t tmpTime;
-
   if(buffer.read == buffer.write) {
 
     return BUFFER_FAIL;  // leer
   }
 
   *pByte = buffer.data[buffer.read];
-  *pTime = buffer.time[buffer.read];
-  tmpTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
-  if(buffer.time[buffer.read] >= tmpTime) {
-    tmpTime = buffer.time[buffer.read] - tmpTime;
-  }
-  else {
-    tmpTime = buffer.time[buffer.read];
-  }
-  *pTimeSpan = tmpTime;
+  #ifdef BUFFER_CLICK_DETECTION
+    uint32_t tmpTime;
+    *pTime = buffer.time[buffer.read];
+    tmpTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
+    if(buffer.time[buffer.read] >= tmpTime) {
+      tmpTime = buffer.time[buffer.read] - tmpTime;
+    }
+    else {
+      tmpTime = buffer.time[buffer.read];
+    }
+    *pTimeSpan = tmpTime;
+  #endif
 
   buffer.read = (buffer.read + 1) & BUFFER_MASK;
 
-
-  #ifdef JMSHOWCODES_KB1 
-    uint8_t DC_val;
-    fnDisplayStack(2);
-    char aaa[100];
-    DC_val = outKeyBufferDoubleClick();
-    sprintf   (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, DC_val);
-  //sprintf   (aaa,"DC:%d",DC_val);
-    tmpx = showString(aaa,       &standardFont, 220, 1, vmNormal, true, true);
+  #ifdef BUFFER_CLICK_DETECTION
+    tmpTime = outKeyBufferDoubleClick();
+    #ifdef JMSHOWCODES_KB1
+      fnDisplayStack(2);
+      char aaa[50];
+      sprintf (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, (uint8_t)tmpTime);
+      tmpx = showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
+    #endif
   #endif
-
 
   return BUFFER_SUCCESS;
 }
@@ -1088,13 +1094,14 @@ Circular key buffer:
 // Returns: true if double click
 uint8_t outKeyBufferDoubleClick()
 {
-  #ifndef EVALUATE_SDT
-    return 255;
-  #endif
+#ifdef BUFFER_CLICK_DETECTION
+     //WARNING! this triggers conseq double click to be 'triple' click but does not check it is the SAME key. 
+     //Buffer of 4 to short for that. Buffer of 8 sufficient.
+     //Can be fixed by having a single byte added to the rolling stack catching the key which was rolled out
 
   int16_t dTime_1, dTime_2, dTime_3;
-  bool_t doubleclicked, tripleclicked;
-  uint8_t outDC;
+  bool_t  doubleclicked, tripleclicked;
+  uint8_t outDoubleclick;
 
   //note Delta Time 1 is the most recent, Delta time 3 is the oldest
   dTime_1 = (uint16_t) buffer.time[(buffer.read-1) & BUFFER_MASK] - (uint16_t) buffer.time[(buffer.read-2) & BUFFER_MASK];
@@ -1127,10 +1134,10 @@ uint8_t outKeyBufferDoubleClick()
 
   if(dTime_1+dTime_2+dTime_3 > TD1+TD2+TD3) tripleclicked = false;
 
-  if(tripleclicked) outDC = 3; else
-  if(doubleclicked) outDC = 2; else
-  if(buffer.data[(buffer.read-1) & BUFFER_MASK] != 0) outDC = 1; 
-  else outDC = 0;
+  if(tripleclicked) outDoubleclick = 3; else
+  if(doubleclicked) outDoubleclick = 2; else
+  if(buffer.data[(buffer.read-1) & BUFFER_MASK] != 0) outDoubleclick = 1; 
+  else outDoubleclick = 0;
 
 
   #ifdef JMSHOWCODES_KB2 
@@ -1149,23 +1156,31 @@ uint8_t outKeyBufferDoubleClick()
   #ifdef JMSHOWCODES_KB3
     char line2[10];
     line2[0]=0;
-    if( outDC == 1) 
-      strcat(line2," S   ");
+    if( outDoubleclick == 1) {
+      strcat(line2,"S");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
     else 
-    if( outDC == 2) 
-      strcat(line2,"  D  ");
+    if( outDoubleclick == 2) {
+      strcat(line2,"D");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
     else 
-    if( outDC == 3)
-      strcat(line2,"   T ");
-    else
-      strcat(line2,"     ");
-    showString(line2, &standardFont, tmpx, 1, vmNormal, true, true);
+    if( outDoubleclick == 3) {
+      strcat(line2,"T");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+    }
+    else {
+      strcat(line2," ");
+      showString(line2, &standardFont, SCREEN_WIDTH-11, 0, vmNormal, true, true);
+      //refreshStatusBar();
+    }
   #endif
 
-     //WARNING! this triggers conseq double click to be 'triple' click but does not check it is the SAME key. Buffer to short for that.
-     //Can be fixed by having a single byte added to the rolling stack catching the key which was rolled out
-
-   return outDC;
+  return outDoubleclick;
+#else
+  return 255;
+#endif
 }
 
 

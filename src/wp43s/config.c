@@ -679,6 +679,11 @@ void fnReset(uint16_t confirmation) {
     #endif
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
+    fnStrtoX("C43 Release 2020-10-10 C43-27-import");
+    fnStore(102);
+    fnDrop(0);
+
+    //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
     fnDrop(0);

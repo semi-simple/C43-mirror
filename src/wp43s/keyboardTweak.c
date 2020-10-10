@@ -555,7 +555,7 @@ void btnFnPressed_StateMachine(void *w, void *data) {
     FN_state =  ST_1_PRESS1;
   }
 
-  if(FN_state == ST_3_PRESS2 && fnTimerGetStatus(TO_FN_EXEC) == TMR_COMPLETED) {
+  if(FN_state == ST_3_PRESS2 && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {  //JM BUGFIX (INVERTED) The first  usage did not work due to the timer which was in stopped mode, not in expired mode.
     //----------------Copied here
     char charKey[3];
     underline_softkey(FN_key_pressed-38, 3, false);   //Purposely in row 3 which does not exist, just to activate the clear previous line
@@ -596,8 +596,8 @@ void btnFnPressed_StateMachine(void *w, void *data) {
   if(jm_G_DOUBLETAP) {
     if(exexute_double_g) {
       if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
-        shiftF = false; //R_shF();                                          //JM
-        shiftG = true;  //S_shG();                                          //JM
+        shiftF = false;                                                     //JM
+        shiftG = true;                                                      //JM
         double_click_detected = true;                                       //JM --> FORCE INTO LONGPRESS
         FN_handle_timed_out_to_EXEC = false;                //dr
       }

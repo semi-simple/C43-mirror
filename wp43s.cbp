@@ -269,6 +269,9 @@
 		<Unit filename="src/testSuite/arctanh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/beta.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/ceil.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1172,6 +1175,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/arg.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -1,4 +1,4 @@
-27 Sep 2020 release pre-alpha REL41
+11 Oct 2020 release pre-alpha REL42
 
 
 
@@ -27,7 +27,11 @@ Notes:
 
 6. A lot of effort was put into the emulator keyboard control to make it a useful Windows Calc replacement. Welcome to test that. Clipboard control was added, via the usual CTRL-C, and also -H, -D, -A, -X.
 
+
+####################################################################################
 7. Be sure to delete the previous backup.bin file prior to using this version. Also, on the DM42 hardware, do a CLR RESET to re-initialize the calculator.
+####################################################################################
+
 
 8. To make a screen shot from the DM42 hardware screen, keep in shift f/g and press DISP. The screen shot will appear in the DM42 flash disk, under /SCREENS/
 

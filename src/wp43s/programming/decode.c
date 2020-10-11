@@ -20,307 +20,277 @@
 
 #include "wp43s.h"
 
-void getVariableName(void) {
-  param = (*(uint8_t *)(stepAddress++)) & 0x0f;
+void getStringLabelOrVariableName(void) {
+  param = *(uint8_t *)(stepAddress++);
+  xcopy(tmpStr3000 + 2000, stepAddress, param);
+  tmpStr3000[2000 + param] = 0;
+}
 
-  xcopy(tmpStr3000 + 1000, stepAddress, param);
-  tmpStr3000[param + 1000] = 0;
+
+void decodeOp(const char *op) {
+  stepAddress++;
+  if(param < REGISTER_X) { // Global register from 00 to 99
+    sprintf(tmpStr3000 + 1000, "%s %02u", op, param);
+  }
+
+  else if(param <= REGISTER_K) { // Lettered register from X to K
+    sprintf(tmpStr3000 + 1000, "%s %s", op, indexOfItems[ITM_ST_X + param - REGISTER_X].itemSoftmenuName);
+  }
+  else if(param <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
+    sprintf(tmpStr3000 + 1000, "%s .%02u", op, param - FIRST_LOCAL_REGISTER);
+  }
+
+  else if(param == VALUE_0) {
+    sprintf(tmpStr3000 + 1000, "%s 0.", op);
+  }
+
+  else if(param == VALUE_1) {
+    sprintf(tmpStr3000 + 1000, "%s 1.", op);
+  }
+
+  else if(param == STRING_LABEL_VARIABLE) {
+    getStringLabelOrVariableName();
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wrestrict"
+    sprintf(tmpStr3000 + 1000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+    #pragma GCC diagnostic pop
+    stepAddress += param;
+  }
+
+  else if(param == INDIRECT_REGISTER) {
+    param = *(uint8_t *)(stepAddress++);
+    if(param < REGISTER_X) { // Global register from 00 to 99
+      sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW "%02u", op, param);
+    }
+    else if(param <= REGISTER_K) { // Lettered register from X to K
+      sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_ST_X + param - REGISTER_X].itemSoftmenuName);
+    }
+    else if(param <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
+      sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW ".%02u", op, param - FIRST_LOCAL_REGISTER);
+    }
+    else {
+      sprintf(tmpStr3000, "%s " STD_RIGHT_ARROW "ERROR: %u is not an acceptable parameter!", op, param);
+      stepAddress = NULL;
+    }
+  }
+
+  else if(param == INDIRECT_VARIABLE) {
+    param = *(uint8_t *)(stepAddress++);
+    getStringLabelOrVariableName();
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wrestrict"
+    sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+    #pragma GCC diagnostic pop
+    stepAddress += param;
+  }
+
+  else {
+    sprintf(tmpStr3000, "%s ERROR: %u is not an acceptable parameter!", op, param);
+    stepAddress = NULL;
+  }
+
   stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
 }
 
-void *decodeLBL(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  LBL %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 109) {
-    printf(" 2  LBL %c\n", 'A' + (param - 100));
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  LBL '%s'\n", 3 + param, tmpStr3000);
 
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_LBL! It must be from 0 to 109 or 255.\n", param);
-    return NULL;
-  }
+void *decodeLBL(void) {
+  decodeOp("LBL");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
-void *decodeGTO(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  GTO %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 109) {
-    printf(" 2  GTO %c\n", 'A' + (param - 100));
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  GTO '%s'\n", 3 + param, tmpStr3000);
 
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_GTO! It must be from 0 to 109 or 255.\n", param);
-    return NULL;
-  }
+void *decodeGTO(void) {
+  decodeOp("GTO");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeXEQ(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  XEQ %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 109) {
-    printf(" 2  XEQ %c\n", 'A' + (param - 100));
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  XEQ '%s'\n", 3 + param, tmpStr3000);
-
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_XEQ! It must be from 0 to 109 or 255.\n", param);
-    return NULL;
-  }
+  decodeOp("XEQ");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeRTN(void) {
-  printf(" 1  RTN\n");
+  printf("RTN\n");
+  return stepAddress;
+}
+
+
+void *decodeISG(void) {
+  decodeOp("ISG");
+  printf("%s\n", tmpStr3000);
   return stepAddress;
 }
 
 
 void *decodeXNE(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  x ≠? %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 111) {
-    printf(" 2  x ≠?  %c\n", "XYZTABCDLIJK"[param - 100]);
-    return stepAddress;
-  }
-  else if(param <= 210) {
-    printf(" 2  x ≠? .%02u\n", param - 112);
-    return stepAddress;
-  }
-  else if(param == 250) {
-    printf(" 2  x ≠? 0.\n");
-    return stepAddress;
-  }
-  else if(param == 251) {
-    printf(" 2  x ≠? 1.\n");
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  x ≠? '%s'\n", 3 + param, tmpStr3000);
-
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_XNE! It must be from 0 to 210.\n", param);
-    return NULL;
-  }
+  decodeOp("x " STD_NOT_EQUAL "?");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeXLT(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  x <? %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 111) {
-    printf(" 2  x <?  %c\n", "XYZTABCDLIJK"[param - 100]);
-    return stepAddress;
-  }
-  else if(param <= 210) {
-    printf(" 2  x <? .%02u\n", param - 112);
-    return stepAddress;
-  }
-  else if(param == 250) {
-    printf(" 2  x <? 0.\n");
-    return stepAddress;
-  }
-  else if(param == 251) {
-    printf(" 2  x <? 1.\n");
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  x <? '%s'\n", 3 + param, tmpStr3000);
+  decodeOp("x <?");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
+}
 
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_XLT! It must be from 0 to 210.\n", param);
-    return NULL;
-  }
+
+void *decodeXGT(void) {
+  decodeOp("x >?");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeSTO(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  STO %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 111) {
-    printf(" 2  STO %c\n", "XYZTABCDLIJK"[param - 100]);
-    return stepAddress;
-  }
-  else if(param <= 210) {
-    printf(" 2  STO .%02u\n", param - 112);
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  STO '%s'\n", 3 + param, tmpStr3000);
-
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_STO! It must be from 0 to 210.\n", param);
-    return NULL;
-  }
+  decodeOp("STO");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeSTOPLUS(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  STO+ %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 111) {
-    printf(" 2  STO+ %c\n", "XYZTABCDLIJK"[param - 100]);
-    return stepAddress;
-  }
-  else if(param <= 210) {
-    printf(" 2  STO+ .%02u\n", param - 112);
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  STO+ '%s'\n", 3 + param, tmpStr3000);
-
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_STOPLUS! It must be from 0 to 210.\n", param);
-    return NULL;
-  }
+  decodeOp("STO+");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeRCL(void) {
-  stepAddress++;
-  if(param <= 99) {
-    printf(" 2  RCL %02u\n", param);
-    return stepAddress;
-  }
-  else if(param <= 111) {
-    printf(" 2  RCL %c\n", "XYZTABCDLIJK"[param - 100]);
-    return stepAddress;
-  }
-  else if(param <= 210) {
-    printf(" 2  RCL .%02u\n", param - 112);
-    return stepAddress;
-  }
-  else if(param == 255) {
-    getVariableName();
-    printf("%2u  RCL '%s'\n", 3 + param, tmpStr3000);
+  decodeOp("RCL");
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
+}
 
-    return stepAddress + param;
-  }
-  else {
-    printf("ERROR: %u is not an acceptable parameter for ITM_RCL! It must be from 0 to 210.\n", param);
-    return NULL;
-  }
+
+void *decodeSQUARE(void) {
+  sprintf(tmpStr3000 + 1000, "x" STD_SUP_2);
+  stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
 }
 
 
 void *decodeSQUAREROOTX(void) {
-  printf(" 1  √x\n");
+  sprintf(tmpStr3000 + 1000, STD_SQUARE_ROOT "x");
+  stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
+  printf("%s\n", tmpStr3000);
   return stepAddress;
 }
 
 
 void *decodeIP(void) {
-  printf(" 1  IP\n");
+  printf("IP\n");
+  return stepAddress;
+}
+
+
+void *decodeADD(void) {
+  printf("+\n");
+  return stepAddress;
+}
+
+
+void *decodeSUB(void) {
+  printf("-\n");
+  return stepAddress;
+}
+
+
+void *decodeMULT(void) {
+  xcopy(tmpStr3000 + 1000, STD_CROSS, 3);
+  stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
+  printf("%s\n", tmpStr3000);
+  return stepAddress;
+}
+
+
+void *decodeCHS(void) {
+  printf("+/-\n");
+  return stepAddress;
+}
+
+
+void *decodeDIV(void) {
+  printf("/\n");
   return stepAddress;
 }
 
 
 void *decodeMOD(void) {
-  printf(" 1  MOD\n");
+  printf("MOD\n");
   return stepAddress;
 }
 
 
 void *decodeMAGNITUDE(void) {
-  printf(" 1  |x|\n");
+  printf("|x|\n");
   return stepAddress;
 }
 
 
 void *decodeLITT(void) {
-  uint16_t numberOfBytes;
-
   stepAddress++;
   switch(param) {
-    //case 1: // Binary short integer
+    //case BINARY_SHORT_INTEGER:
     //  break;
 
-    //case 2: // String short integer
+    //case STRING_SHORT_INTEGER:
     //  break;
 
-    //case 3: // Long integer
+    //case BINARY_LONG_INTEGER:
     //  break;
 
-    //case 4: // Binary real34
+    //case STRING_LONG_INTEGER:
     //  break;
 
-    case 5: // String real34
-      numberOfBytes = *(uint8_t *)stepAddress++;
+    //case BINARY_REAL34:
+    //  break;
 
-      xcopy(tmpStr3000, stepAddress, numberOfBytes);
-      tmpStr3000[numberOfBytes] = 0;
-      printf("%2u  %s\n", 3 + numberOfBytes, tmpStr3000);
-
-      return stepAddress + numberOfBytes;
+    case STRING_REAL34:
+      getStringLabelOrVariableName();
+      stringToUtf8(tmpStr3000 + 2000, (uint8_t *)tmpStr3000);
+      printf("%s\n", tmpStr3000);
+      return stepAddress + param;
       break;
 
-    //case 6: // Binary complex34
+    //case BINARY_COMPLEX34:
     //  break;
 
-    //case 7: // String complex34
+    //case STRING_COMPLEX34:
     //  break;
 
-    //case 8: // String
+    case STRING_LABEL_VARIABLE:
+      getStringLabelOrVariableName();
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wrestrict"
+      sprintf(tmpStr3000 + 1000, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpStr3000 + 2000);
+      #pragma GCC diagnostic pop
+      stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
+      printf("%s\n", tmpStr3000);
+      return stepAddress + param;
+      break;
+
+    //case BINARY_DATE:
     //  break;
 
-    //case 9: // Date
+    //case STRING_DATE:
     //  break;
 
-    //case 10: // Time
+    //case BINARY_TIME:
+    //  break;
+
+    //case STRING_TIME:
     //  break;
 
     default:
-      printf("ERROR: %u is not an acceptable parameter for ITM_LITT! It must be from 1 to 10.\n", param);
+      printf("ERROR: %u is not an acceptable parameter for ITM_LITT!\n", param);
       return NULL;
   }
 }
@@ -328,64 +298,89 @@ void *decodeLITT(void) {
 
 void *decodeALL(void) {
   stepAddress++;
-  printf(" 3  ALL %02u\n", param);
+  printf("ALL %02u\n", param);
+  return stepAddress;
+}
+
+
+void *decodeCLREGS(void) {
+  printf("CLREGS\n");
+  return stepAddress;
+}
+
+
+void *decodeCLSTK(void) {
+  printf("CLSTK\n");
   return stepAddress;
 }
 
 
 void *decodeEND(void) {
-  printf(" 2  END\n");
+  printf("END\n");
   return stepAddress;
 }
 
 
 void *decodeSTOP(void) {
-  printf(" 2  STOP\n");
+  printf("STOP\n");
   return stepAddress;
 }
 
 
 void *decodeDENDD(void) {
-  printf(" 2  .END.\n");
+  printf(".END.\n");
   return NULL;
 }
 
 
 void *decodeOneStep(void) {
-  uint8_t step8 = *(uint8_t *)(stepAddress++);
+  uint8_t item8 = *(uint8_t *)(stepAddress++);
+  uint16_t item16;
+
   param = *(uint8_t *)stepAddress;
 
-  switch(step8) {
+  switch(item8) {
     case ITM_LBL:         return decodeLBL();         //   1
     case ITM_GTO:         return decodeGTO();         //   2
     case ITM_XEQ:         return decodeXEQ();         //   3
     case ITM_RTN:         return decodeRTN();         //   4
+    case ITM_ISG:         return decodeISG();         //   6
     case ITM_XNE:         return decodeXNE();         //  12
     case ITM_XLT:         return decodeXLT();         //  16
+    case ITM_XGT:         return decodeXGT();         //  19
     case ITM_STO:         return decodeSTO();         //  44
     case ITM_STOPLUS:     return decodeSTOPLUS();     //  45
     case ITM_RCL:         return decodeRCL();         //  51
+    case ITM_SQUARE:      return decodeSQUARE();      //  58
     case ITM_SQUAREROOTX: return decodeSQUAREROOTX(); //  61
     case ITM_IP:          return decodeIP();          //  93
+    case ITM_ADD:         return decodeADD();         //  95
+    case ITM_SUB:         return decodeSUB();         //  96
+    case ITM_CHS:         return decodeCHS();         //  97
+    case ITM_MULT:        return decodeMULT();        //  98
+    case ITM_DIV:         return decodeDIV();         //  99
     case ITM_MOD:         return decodeMOD();         // 102
     case ITM_MAGNITUDE:   return decodeMAGNITUDE();   // 105
     case ITM_LITT:        return decodeLITT();        // 114
 
     default:
-      if((step8 & 0x80) == 0) {
-        printf("ERROR: single byte instruction %u is unknown!\n", step8);
+      if((item8 & 0x80) == 0) {
+        printf("ERROR: single byte instruction %u is unknown!\n", item8);
         return NULL;
       }
 
-      stepAddress++;
-      switch(((uint16_t)(step8 & 0x7F) << 8) | param) {
+      item16 = ((uint16_t)(item8 & 0x7F) << 8) | param;
+      param = *(uint8_t *)(++stepAddress);
+      switch(item16) {
         case ITM_ALL:     return decodeALL();         //  1400
+        case ITM_CLREGS:  return decodeCLREGS();      //  1417
+        case ITM_CLSTK:   return decodeCLSTK();       //  1418
         case ITM_END:     return decodeEND();         //  1448
         case ITM_STOP:    return decodeSTOP();        //  1604
         case 0x7fff:      return decodeDENDD();       // 32767
 
         default:
-          printf("ERROR: double byte instruction %u is unknown!\n", ((uint16_t)(step8 & 0x7F) << 8) | param);
+          printf("ERROR: double byte instruction %u is unknown!\n", ((uint16_t)(item8 & 0x7F) << 8) | param);
           return NULL;
       }
   }

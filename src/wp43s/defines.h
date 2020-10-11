@@ -242,6 +242,7 @@
 #define REGISTER_J                               110
 #define REGISTER_K                               111
 #define FIRST_LOCAL_REGISTER                     112 // There are 112 global registers from 0 to 111
+#define LAST_LOCAL_REGISTER                      210 // There are maximum 99 local registers from 112 to 210 (.00 to .98)
 #define FIRST_NAMED_VARIABLE                    1000
 #define FIRST_SAVED_STACK_REGISTER              2000
 #define SAVED_REGISTER_X                        2000
@@ -546,6 +547,31 @@
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
+#define BINARY_SHORT_INTEGER                       1
+#define STRING_SHORT_INTEGER                       2
+#define BINARY_LONG_INTEGER                        3
+#define STRING_LONG_INTEGER                        4
+#define BINARY_REAL34                              5
+#define STRING_REAL34                              6
+#define BINARY_COMPLEX34                           7
+#define STRING_COMPLEX34                           8
+#define BINARY_DATE                                9
+#define STRING_DATE                               10
+#define BINARY_TIME                               11
+#define STRING_TIME                               12
+#define VALUE_0                                  251
+#define VALUE_1                                  252
+#define STRING_LABEL_VARIABLE                    253
+#define INDIRECT_REGISTER                        254
+#define INDIRECT_VARIABLE                        255
+
+#define PARAM_GLOBAL_REGISTERS                     1
+#define PARAM_LETTERED_REGISTER                    2
+#define PARAM_LABEL                                4
+#define PARAM_LOCAL_REGISTER                       8
+#define PARAM_COMPARE_0_1                         16
+#define PARAM_VARIABLE_GLOBAL_LABEL_STRING        32
+#define PARAM_INDIRECT                            64
 
 
 

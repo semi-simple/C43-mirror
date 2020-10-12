@@ -179,6 +179,7 @@
 #include "stringFuncs.h"
 #include "timer.h"
 #include "jm_graph.h"                   //JM include 
+#include "graphs.h"                     //JM include 
 #include "jm.h"                         //JM include
 #include "addons.h"                     //JM include
 #include "textfiles.h"                  //JM include

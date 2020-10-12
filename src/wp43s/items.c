@@ -527,6 +527,7 @@ void fnClAIM                    (uint16_t unusedParamButMandatory) {}  //JM POC 
 void fnShoiXRepeats             (uint16_t numberOfRepeats)         {}  //JM SHOIDISP
 void fnDumpMenus                (uint16_t unusedParamButMandatory) {}  //JM
 void fnCFGsettings              (uint16_t unusedParamButMandatory) {}
+void fnPlot                     (uint16_t unusedParamButMandatory) {}
 
 
                                                                                 //JM ^^
@@ -2114,7 +2115,7 @@ const item_t indexOfItems[] = {
 /* 1536 */  { itemToBeCoded,               NOPARAM,                     "PGMINT",                                      "PGMINT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1537 */  { itemToBeCoded,               NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1538 */  { itemToBeCoded,               NOPARAM,                     "PIXEL",                                       "PIXEL",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1539 */  { fnGraph,                     4              /*# JM #*/,   "PLOT",                                        "PLOT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1539 */  { fnPlot,                      NOPARAM        /*# JM #*/,   "PLOT",                                        "PLOT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1540 */  { itemToBeCoded,               NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1541 */  { itemToBeCoded,               NOPARAM,                     "POINT",                                       "POINT",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1542 */  { fnLoad,                      LM_NAMED_VARIABLES,          "LOADV",                                       "LOADV",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -2753,6 +2754,7 @@ const item_t indexOfItems[] = {
 /* 2167 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2168 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
 /* 2169 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
+/* 2170 */  { itemToBeCoded,               NOPARAM,                     "PLOTMNU",                                        "PLOTMNU",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 
-/* 2170 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2171 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

@@ -2192,8 +2192,9 @@
 #define ITM_FBYTE                     2167   //JM SHOI
 #define ITM_CLAIM                     2168
 #define ITM_SHOIREP                   2169   //JM SHOI
+#define MNU_PLOT                      2170
 
-#define LAST_ITEM                     2170   //JM
+#define LAST_ITEM                     2171   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

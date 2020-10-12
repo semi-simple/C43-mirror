@@ -632,6 +632,12 @@ const int16_t menu_ST_GRAPH[]        = {
                                      ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_NULL,              ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
+const int16_t menu_PLOT[]        = {
+          /*-1------*/                                                                                                                                                                                            //JM ALPHA
+                                     ITM_PLOT,                      ITM_VECT,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_LISTXY,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_EXTX,                      ITM_EXTY,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
+
 
 const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
@@ -753,6 +759,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
   {.menuId = -MNU_GRAPH,       .numItems = sizeof(menu_GRAPH      )/sizeof(int16_t), .softkeyItem = menu_GRAPH       },  //JM GRAPH
   {.menuId = -MNU_ST_GRAPH,    .numItems = sizeof(menu_ST_GRAPH   )/sizeof(int16_t), .softkeyItem = menu_ST_GRAPH    },  //JM GRAPH
+  {.menuId = -MNU_PLOT,        .numItems = sizeof(menu_PLOT       )/sizeof(int16_t), .softkeyItem = menu_PLOT        },  //JM GRAPH
   {.menuId = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
   {.menuId = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
   {.menuId = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE

@@ -117,7 +117,9 @@
 #define NUMBER_OF_ERROR_CODES                     37
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
-#define NUMBER_OF_LOCAL_FLAGS                     16 // Could be 32 because 32 bits are available
+#define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
+#define NUMBER_OF_LOCAL_FLAGS                     16 // Could be  32 because 32 bits are available
+#define LAST_LOCAL_FLAG                          128 // Could be 144 because 32 bits are available
 
 // Global flags
 #define FLAG_X                                   100
@@ -547,6 +549,7 @@
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
+// Type of constant stored in a program
 #define BINARY_SHORT_INTEGER                       1
 #define STRING_SHORT_INTEGER                       2
 #define BINARY_LONG_INTEGER                        3
@@ -559,19 +562,21 @@
 #define STRING_DATE                               10
 #define BINARY_TIME                               11
 #define STRING_TIME                               12
+
+// OP parameter special values
 #define VALUE_0                                  251
 #define VALUE_1                                  252
 #define STRING_LABEL_VARIABLE                    253
 #define INDIRECT_REGISTER                        254
 #define INDIRECT_VARIABLE                        255
 
-#define PARAM_GLOBAL_REGISTERS                     1
-#define PARAM_LETTERED_REGISTER                    2
-#define PARAM_LABEL                                4
-#define PARAM_LOCAL_REGISTER                       8
-#define PARAM_COMPARE_0_1                         16
-#define PARAM_VARIABLE_GLOBAL_LABEL_STRING        32
-#define PARAM_INDIRECT                            64
+// OP parameter type
+#define PARAM_DECLARE_LABEL                        1
+#define PARAM_LABEL                                2
+#define PARAM_REGISTER                             3
+#define PARAM_FLAG                                 4
+#define PARAM_NUMBER                               5
+#define PARAM_COMPARE                              6
 
 
 

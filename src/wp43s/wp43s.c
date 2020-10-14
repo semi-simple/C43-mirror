@@ -348,7 +348,7 @@ void setupDefaults(void) {
   // Defining a little program
 
   uint16_t step = 0;
-  pgm = allocWp43s(1200);
+  pgm = allocWp43s(2000);
   while(1) {
     // 1
     *(pgm + step++) = ITM_LBL;
@@ -953,7 +953,7 @@ void setupDefaults(void) {
     *(pgm + step++) = 9;
 
     // 124
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 1;
 
     // 125
@@ -1120,11 +1120,11 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 24
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 93;
 
     // 25
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 93;
 
     // 26
@@ -1372,7 +1372,7 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 78
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 93;
 
     // 79
@@ -1492,15 +1492,15 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 104
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 93;
 
     // 105
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 94;
 
     // 106
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 94;
 
     // 107
@@ -1527,7 +1527,7 @@ void setupDefaults(void) {
 
     // 111
     *(pgm + step++) = ITM_LBL;
-    *(pgm + step++) = 100 + 'L' - 'A'; // L
+    *(pgm + step++) = 100 + 'E' - 'A'; // E
 
     // 112
     *(pgm + step++) = ITM_RCL;
@@ -1555,7 +1555,7 @@ void setupDefaults(void) {
     *(pgm + step++) = ITM_CHS;
 
     // 118
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -1575,7 +1575,7 @@ void setupDefaults(void) {
     *(pgm + step++) = ITM_CHS;
 
     // 123
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -1586,22 +1586,22 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 125
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 91;
 
     // 126
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 92;
 
     // 127
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 93;
 
     // 128
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -1700,15 +1700,15 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 149
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 93;
 
     // 150
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 94;
 
     // 151
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 94;
 
     // 152
@@ -1763,7 +1763,7 @@ void setupDefaults(void) {
     *(pgm + step++) = ITM_CHS;
 
     // 163
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -1783,7 +1783,7 @@ void setupDefaults(void) {
     *(pgm + step++) = ITM_CHS;
 
     // 168
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -1794,22 +1794,22 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 170
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 91;
 
     // 171
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 92;
 
     // 172
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 93;
 
     // 173
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = INDIRECT_REGISTER;
     *(pgm + step++) = 94;
 
@@ -2059,7 +2059,7 @@ void setupDefaults(void) {
     *(pgm + step++) = 87;
 
     // 240
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 95;
 
     // 241
@@ -2067,7 +2067,7 @@ void setupDefaults(void) {
     *(pgm + step++) = 86;
 
     // 242
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 96;
 
     // 243
@@ -2077,7 +2077,7 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 244
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 98;
 
     // 245
@@ -2201,11 +2201,11 @@ void setupDefaults(void) {
     *(pgm + step++) = '1'; // THE string
 
     // 271
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 91;
 
     // 272
-    *(pgm + step++) = ITM_STOPLUS;
+    *(pgm + step++) = ITM_STOADD;
     *(pgm + step++) = 92;
 
     // 273
@@ -2486,14 +2486,145 @@ void setupDefaults(void) {
     *(pgm + step++) = ITM_RTN;
 
     // 337
-    *(pgm + step++) = 127 | 0x80; // .END.
-    *(pgm + step++) = 255;        // .END.
+    *(pgm + step++) = (ITM_END >> 8) | 0x80;
+    *(pgm + step++) =  ITM_END       & 0xff;
 
     printf("Prime + Bairstow : %u bytes\n", step);
     break;
   }
 
-  step = 0;
+
+  while(1) { // Speed test. see: https://forum.swissmicros.com/viewtopic.php?p=17308
+    // 1
+    *(pgm + step++) = ITM_LBL;
+    *(pgm + step++) = STRING_LABEL_VARIABLE;
+    *(pgm + step++) = 5; // String length
+    *(pgm + step++) = 'S';
+    *(pgm + step++) = 'p';
+    *(pgm + step++) = 'e';
+    *(pgm + step++) = 'e';
+    *(pgm + step++) = 'd';
+
+    // 2
+    *(pgm + step++) = ITM_STO;
+    *(pgm + step++) = 10;
+
+    // 3
+    *(pgm + step++) = (ITM_TICKS >> 8) | 0x80;
+    *(pgm + step++) =  ITM_TICKS       & 0xff;
+
+    // 4
+    *(pgm + step++) = ITM_STO;
+    *(pgm + step++) = 0;
+
+    // 5
+    *(pgm + step++) = ITM_LITT;
+    *(pgm + step++) = STRING_REAL34;
+    *(pgm + step++) = 1; // String length
+    *(pgm + step++) = '0'; // THE string
+
+    // 6
+    *(pgm + step++) = ITM_STO;
+    *(pgm + step++) = 11;
+
+    // 7
+    *(pgm + step++) = ITM_LITT;
+    *(pgm + step++) = STRING_REAL34;
+    *(pgm + step++) = 1; // String length
+    *(pgm + step++) = '1'; // THE string
+
+    // 8
+    *(pgm + step++) = ITM_STO;
+    *(pgm + step++) = 12;
+
+    // 9
+    *(pgm + step++) = ITM_LBL;
+    *(pgm + step++) = 1;
+
+    // 10
+    *(pgm + step++) = ITM_arctan;
+
+    // 11
+    *(pgm + step++) = ITM_sin;
+
+    // 12
+    *(pgm + step++) = ITM_EXP;
+
+    // 13
+    *(pgm + step++) = ITM_LITT;
+    *(pgm + step++) = STRING_REAL34;
+    *(pgm + step++) = 1; // String length
+    *(pgm + step++) = '3'; // THE string
+
+    // 14
+    *(pgm + step++) = ITM_1ONX;
+
+    // 15
+    *(pgm + step++) = ITM_YX;
+
+    // 16
+    *(pgm + step++) = ITM_STOADD;
+    *(pgm + step++) = 11;
+
+    // 17
+    *(pgm + step++) = ITM_RCL;
+    *(pgm + step++) = 12;
+
+    // 18
+    *(pgm + step++) = ITM_LITT;
+    *(pgm + step++) = STRING_REAL34;
+    *(pgm + step++) = 1; // String length
+    *(pgm + step++) = '1'; // THE string
+
+    // 19
+    *(pgm + step++) = ITM_ADD;
+
+    // 20
+    *(pgm + step++) = ITM_STO;
+    *(pgm + step++) = 12;
+
+    // 21
+    *(pgm + step++) = ITM_DSE;
+    *(pgm + step++) = 10;
+
+    // 22
+    *(pgm + step++) = ITM_GTO;
+    *(pgm + step++) = 1;
+
+    // 23
+    *(pgm + step++) = (ITM_TICKS >> 8) | 0x80;
+    *(pgm + step++) =  ITM_TICKS       & 0xff;
+
+    // 24
+    *(pgm + step++) = ITM_RCL;
+    *(pgm + step++) = 0;
+
+    // 25
+    *(pgm + step++) = ITM_SUB;
+
+    // 26
+    *(pgm + step++) = ITM_LITT;
+    *(pgm + step++) = STRING_REAL34;
+    *(pgm + step++) = 2; // String length
+    *(pgm + step++) = '1'; // THE string
+    *(pgm + step++) = '0';
+
+    // 27
+    *(pgm + step++) = ITM_DIV;
+
+    // 28
+    *(pgm + step++) = (ITM_END >> 8) | 0x80;
+    *(pgm + step++) =  ITM_END       & 0xff;
+
+    printf("Prime + Bairstow + Speed : %u bytes\n", step);
+    break;
+  }
+
+  *(pgm + step++) = 127 | 0x80; // .END.
+  *(pgm + step++) = 255;        // .END.
+
+
+  step = 1;
   stepAddress = pgm;
   while(stepAddress) {
     printf("%4u  ", step++);

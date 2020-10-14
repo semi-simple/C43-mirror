@@ -63,11 +63,9 @@ void reset_jm_defaults(int16_t toload) {
     graph_xmax = +3*3.14159265;                                //JM GRAPH
     graph_ymin = -2;                                           //JM GRAPH
     graph_ymax = +2;                                           //JM GRAPH
-    graph_dx   = 0;                                            //JM GRAPH
-    graph_dy   = 0;                                            //JM GRAPH
-    extentx   = false;                                        //JM GRAPH
-    extenty   = false;                                        //JM GRAPH
-    jm_VECT = false;                                           //JM Screen / keyboard operation setup
+
+    graph_reset();
+
     jm_HOME_SUM = false;                                       //JMHOME
     jm_HOME_MIR = true;                                        //JMHOME
     jm_HOME_FIX = false;                                       //JMHOME
@@ -175,11 +173,6 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
     break;
 
-  case JC_VECT:                                      //JM
-    jm_VECT = !jm_VECT;
-    fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
-    break;
-
   case JC_H_SUM:                                      //JM
     jm_HOME_SUM = !jm_HOME_SUM;
     fnRefreshComboxState(CB_JC, JC_H_SUM, jm_HOME_SUM);                //jm
@@ -198,16 +191,6 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_LARGELI:                                      //JM
     jm_LARGELI = !jm_LARGELI;
     fnRefreshComboxState(CB_JC, JC_LARGELI, jm_LARGELI);                //jm
-    break;
-
-  case JC_EXTENTX:                                      //JM
-    extentx = !extentx;
-    fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
-    break;
-
-  case JC_EXTENTY:                                      //JM
-    extenty = !extenty;
-    fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
     break;
 
    case RX_COMMA:               //DONR

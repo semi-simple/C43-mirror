@@ -628,15 +628,19 @@ const int16_t menu_GRAPH[]        = {
 
 const int16_t menu_ST_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_SIGMAMINUS,                ITM_SUM,                    ITM_LISTXY,               ITM_P_ALLREGS,         ITM_SCRDMP,                  ITM_PLOT,                         //JM GRAPH
-                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_NULL,              ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
+                                     ITM_SIGMAMINUS,                ITM_SUM,                    ITM_LISTXY,               ITM_P_ALLREGS,         ITM_PLOTLS,                  ITM_PLOT,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_SCRDMP,            ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_PLOT,                      ITM_VECT,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_LISTXY,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_EXTX,                      ITM_EXTY,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
+                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_LISTXY,                    ITM_VECT,                   ITM_PCROS,                ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+
+                                     ITM_PLINE,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PCROS,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PBOX,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
 
 
 const int16_t menu_ALPHA[]        = {
@@ -1148,6 +1152,10 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
 void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
+
+  if(calcMode == CM_GRAPH && xSoftkey >= 2) {
+      return;
+  }
 
   if(0 <= xSoftkey && xSoftkey <= 5) {
     x1 = 67 * xSoftkey - 1;
@@ -1851,7 +1859,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH) {
       if(push) {
         pushSoftmenu(m);
       }

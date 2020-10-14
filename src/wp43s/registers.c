@@ -1432,6 +1432,10 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(extentx);
   storeToDtConfigDescriptor(extenty);
   storeToDtConfigDescriptor(jm_VECT);
+  storeToDtConfigDescriptor(Aspect_Square);          
+  storeToDtConfigDescriptor(PLOT_LINE);          
+  storeToDtConfigDescriptor(PLOT_CROSS);          
+  storeToDtConfigDescriptor(PLOT_BOX);
   storeToDtConfigDescriptor(jm_HOME_SUM);
   storeToDtConfigDescriptor(jm_HOME_MIR);
   storeToDtConfigDescriptor(jm_HOME_FIX);
@@ -1752,6 +1756,10 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(extentx);
     recallFromDtConfigDescriptor(extenty);
     recallFromDtConfigDescriptor(jm_VECT);          
+    recallFromDtConfigDescriptor(Aspect_Square);          
+    recallFromDtConfigDescriptor(PLOT_LINE);          
+    recallFromDtConfigDescriptor(PLOT_CROSS);          
+    recallFromDtConfigDescriptor(PLOT_BOX);
     recallFromDtConfigDescriptor(jm_HOME_SUM);      
     recallFromDtConfigDescriptor(jm_HOME_MIR);      
     recallFromDtConfigDescriptor(jm_HOME_FIX);

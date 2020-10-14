@@ -363,6 +363,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
 
 void fnGraph (uint16_t func){
+  Aspect_Square = false;
   switch (func) 
   {
 	  case 1:   fnGraph_old(3);

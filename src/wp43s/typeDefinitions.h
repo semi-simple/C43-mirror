@@ -161,6 +161,10 @@ typedef struct {
   bool_t extentx;
   bool_t extenty;
   bool_t jm_VECT;
+  bool_t Aspect_Square;
+  bool_t PLOT_LINE;
+  bool_t PLOT_CROSS;
+  bool_t PLOT_BOX;
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;
   bool_t jm_HOME_FIX;     

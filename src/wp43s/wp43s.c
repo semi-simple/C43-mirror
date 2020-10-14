@@ -144,7 +144,6 @@ bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup
 bool_t                jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
-bool_t                jm_VECT;                                 //JM GRAPH
 bool_t                jm_HOME_SUM;                             //JMHOME
 bool_t                jm_HOME_MIR;                             //JMHOME
 bool_t                jm_HOME_FIX;                             //JMHOME
@@ -163,10 +162,15 @@ float                 graph_xmin;                              //JM Graph
 float                 graph_xmax;                              //JM Graph
 float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
-float                 graph_dx;                                //JM Graph
-float                 graph_dy;                                //JM Graph
-bool_t                extentx;                                //JM Graph
-bool_t                extenty;                                //JM Graph
+float                 graph_dx;                            //JM Graph
+float                 graph_dy;                            //JM Graph
+bool_t                extentx;                             //JM Graph
+bool_t                extenty;                             //JM Graph
+bool_t                jm_VECT;                             //JM GRAPH
+bool_t                Aspect_Square;                       //JM GRAPH
+bool_t                PLOT_LINE;                           //JM GRAPH
+bool_t                PLOT_CROSS;                          //JM GRAPH
+bool_t                PLOT_BOX;                            //JM GRAPH
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //

@@ -18,7 +18,7 @@
  * \file graphs.c Graphing module
  ***********************************************/
 
-/* C43 functions and routines, adapted for WP43S by JM */
+/* C43 functions and routines written by JM, adapted from C43 to WP43S by JM */
 
 
 #include "wp43s.h"
@@ -28,25 +28,125 @@
 
 
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
-
-  float    tick_int_x;
-  float    tick_int_y;
-  float    x_min; 
-  float    x_max;
-  float    y_min;
-  float    y_max;
-  uint16_t xzero;
-  uint8_t  yzero;
-#define Aspect_Square true      //TODO make a variable of this, save in setupsave
+float    tick_int_x;
+float    tick_int_y;
+float    x_min; 
+float    x_max;
+float    y_min;
+float    y_max;
+uint16_t xzero;
+uint8_t  yzero;
 
 
 
-
-void fnPlot         (uint16_t unusedParamButMandatory) {
-  showSoftmenu(NULL, -MNU_PLOT, true);
-
-  graph_plotmem();
+void graph_reset(){
+  graph_dx      = 0;
+  graph_dy      = 0;
+  extentx       = false;
+  extenty       = false;
+  jm_VECT       = false;
+  Aspect_Square = true;
+  PLOT_LINE     = false;
+  PLOT_CROSS    = false;
+  PLOT_BOX      = true;
 }
+
+
+void fnPline(uint16_t unusedParamButMandatory) {
+  PLOT_LINE = !PLOT_LINE;
+  fnRefreshComboxState(CB_JC, JC_PLINE, PLOT_LINE);                //jm
+  fnPlot(0);
+}
+
+
+void fnPcros(uint16_t unusedParamButMandatory) {
+  PLOT_CROSS = !PLOT_CROSS;
+  fnRefreshComboxState(CB_JC, JC_PCROS, PLOT_CROSS);                //jm
+  fnPlot(0);
+}
+
+
+void fnPbox (uint16_t unusedParamButMandatory) {
+  PLOT_BOX = !PLOT_BOX;
+  fnRefreshComboxState(CB_JC, JC_PBOX, PLOT_BOX);                //jm
+  fnPlot(0);
+}
+
+void fnPvect (uint16_t unusedParamButMandatory) {
+  jm_VECT = !jm_VECT;
+  fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
+  fnPlot(0);
+}    
+
+void fnPx (uint16_t unusedParamButMandatory) {
+  extentx = !extentx;
+  fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
+  fnPlot(0);
+}
+
+void fnPy (uint16_t unusedParamButMandatory) {
+  extenty = !extenty;
+  fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
+  fnPlot(0);
+}
+
+void fnPlot(uint16_t unusedParamButMandatory) {
+  Aspect_Square = true;
+  calcMode = CM_GRAPH;
+  #ifndef TESTSUITE_BUILD
+    showSoftmenu(NULL, -MNU_PLOT, true);
+  #endif
+  doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
+}
+
+void fnPlotLS(uint16_t unusedParamButMandatory) {
+  Aspect_Square = false;
+  calcMode = CM_GRAPH;
+  doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
+}
+
+void fnPdemo1(uint16_t unusedParamButMandatory) {
+
+PLOT_LINE = true;
+PLOT_CROSS= false;
+PLOT_BOX  = false;
+extentx   = false;
+extenty   = false;
+jm_VECT   = false;
+Aspect_Square = true;
+
+//GRAPH  // Build test data 
+float x_min = -1;
+float x_max = 1;
+  #ifndef TESTSUITE_BUILD
+  double x; 
+  fnClearStack(0);
+
+  if(telltale != MEM_INITIALIZED) {
+    graph_setupmemory();
+    runFunction(ITM_CLSIGMA);
+  }
+
+  fnAngularMode(AM_MULTPI);
+
+  //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
+  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
+
+    //convert double to X register
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
+    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+
+    //leaving y in Y and x in X
+    //execute_rpn_function(0);
+    fnSigma(1);
+  }
+  fnClearStack(0);
+  runFunction(ITM_SIGMAx);
+  #endif
+}
+
+
 
 
 
@@ -123,8 +223,11 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     cnt = ix_count;
   } else {
     //Convert from real to int
-    realToString(SIGMA_N, tmpStr3000);
-    cnt = stringToInt16 (tmpStr3000);
+    realToInt32(SIGMA_N, cnt);
+    ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
+                                             //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
+//    realToString(SIGMA_N, tmpStr3000);
+//    cnt = stringToInt16 (tmpStr3000);
     #ifdef STATDEBUG
     printf("Count: %s, %d\n",tmpStr3000,cnt);
     #endif
@@ -230,6 +333,11 @@ void clearScreenPixels() {
          clearPixel(x, y);
         }
       }
+      for(y=SCREEN_MIN_GRAPH; y<171; y++) {
+        for(x=0; x<SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x++) {
+         clearPixel(x, y);
+        }
+      }
     } else {
       for(y=SCREEN_MIN_GRAPH; y<SCREEN_HEIGHT_GRAPH; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
@@ -281,7 +389,7 @@ float auto_tick(float tick_int_f) {
 void graph_axis (void){
   #ifndef TESTSUITE_BUILD
   uint16_t cnt;
-  uint16_t ypos = Y_POSITION_OF_REGISTER_T_LINE + 12 * 2;
+  uint16_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5;
 
   //GRAPH RANGE
   //  graph_xmin= -3*3.14150;  graph_xmax= 2*3.14159;
@@ -340,7 +448,7 @@ void graph_axis (void){
   }
 
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "y %.3f/tick",tick_int_y);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "y %.3f/tick  ",tick_int_y);
   ii = 0;
   oo = 0;
   outstr[0]=0;
@@ -353,7 +461,7 @@ void graph_axis (void){
   ypos -= 12;
 
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "x %.3f/tick", tick_int_x);
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "x %.3f/tick  ", tick_int_x);
   ii = 0;
   oo = 0;
   outstr[0]=0;
@@ -367,7 +475,7 @@ void graph_axis (void){
 
 
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "axis 0,0");
+  snprintf(tmpStr3000, sizeof(tmpStr3000), "axis    0,0");
   ii = 0;
   oo = 0;
   outstr[0]=0;
@@ -402,7 +510,7 @@ void graph_axis (void){
 
 
   cnt = minn;  
-  while (cnt!=SCREEN_HEIGHT_GRAPH-1) { 
+  while (cnt!=SCREEN_HEIGHT_GRAPH) { 
       setPixel(xzero,cnt); 
 
       if (Aspect_Square) {
@@ -556,6 +664,20 @@ void graph_plotmem(void) {
         placePixel(xn+2,yn+2);
       }
 
+      void plotbox(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        placePixel(xn-2,yn-2);
+        placePixel(xn-2,yn-1);
+        placePixel(xn-1,yn-2);
+        placePixel(xn-2,yn+2);
+        placePixel(xn-2,yn+1);
+        placePixel(xn-1,yn+2);
+        placePixel(xn+2,yn-2);
+        placePixel(xn+1,yn-2);
+        placePixel(xn+2,yn-1);
+        placePixel(xn+2,yn+2);
+        placePixel(xn+2,yn+1);
+        placePixel(xn+1,yn+2);
+      }
 
 
   uint16_t cnt, ix, statnum;
@@ -574,8 +696,9 @@ void graph_plotmem(void) {
 
     if(plotmode != _VECT) {
       //Convert from real to int
-      realToString(SIGMA_N, tmpStr3000);
-      statnum = stringToInt16 (tmpStr3000);
+      realToInt32(SIGMA_N, statnum);
+      //realToString(SIGMA_N, tmpStr3000);
+      //statnum = stringToInt16 (tmpStr3000);
     } else {
       statnum = ix_count;
     }
@@ -591,9 +714,10 @@ void graph_plotmem(void) {
 
   if(telltale == MEM_INITIALIZED && statnum >= 2) {
     //GRAPH SETUP
-    calcMode = CM_BUG_ON_SCREEN;    //Hack to prevent calculator to restart operation. Used to view graph
-    clearScreen();
-    refreshStatusBar();
+//    if(!Aspect_Square) {
+//      clearScreen();
+  //    refreshStatusBar();
+//    }
 
     //AUTOSCALE
     x_min = 1e38;
@@ -690,18 +814,6 @@ void graph_plotmem(void) {
 
     graph_axis();
 
-      /* //Sample data
-      gr_x[0] = 0; gr_y[0] = 1;
-      gr_x[1] = 1; gr_y[1] = 0.7;
-      gr_x[2] = 2; gr_y[2] = 0.9;
-      gr_x[3] = 3; gr_y[3] = 0.2;
-      gr_x[4] = 4; gr_y[4] = 0.2;
-      gr_x[5] = 5; gr_y[5] = 0.3;
-      gr_x[6] = 6; gr_y[6] = 0.301;
-      statnum = 7;
-      */
-
-
     if(plotmode != _VECT) {
       yn = screen_window_y(y_min,gr_y[0],y_max);
       xn = screen_window_x(x_min,gr_x[0],x_max);
@@ -747,13 +859,18 @@ void graph_plotmem(void) {
 
 
         if(plotmode != _VECT) {
+
+          if(PLOT_CROSS)
             plotcross(xn,yn);
+          else if(PLOT_BOX)
+            plotbox(xn,yn);
+          else placePixel(xn,yn);
+
         } else {
-            plotarrow(xo, yo, xn, yn);
+          plotarrow(xo, yo, xn, yn);
         }
 
-        //placePixel(xn,yn);
-        plotline(xo, yo, xn, yn);
+        if(PLOT_LINE) plotline(xo, yo, xn, yn);
 
       }
     }
@@ -798,8 +915,9 @@ void fnStatList(uint16_t unusedParamButMandatory) {
 
     if(plotmode != _VECT) {
       //Convert from real to int
-      realToString(SIGMA_N, tmpStr3000);
-      statnum = stringToInt16 (tmpStr3000);
+      realToInt32(SIGMA_N, statnum);
+      //realToString(SIGMA_N, tmpStr3000);
+      //statnum = stringToInt16 (tmpStr3000);
     } else {
       statnum = ix_count;
     }

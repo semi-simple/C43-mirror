@@ -555,6 +555,9 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
       keyBuffer_pop();                     //drjm - internal keyBuffer POC
 #endif                                  //^^
 
+  if(calcMode == CM_GRAPH && xSoftkey >= 2) {
+      return;
+  }
 
   if(jm_FG_LINE) {
 
@@ -1432,7 +1435,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
     refreshDebugPanel();
   #endif
 
-  if(calcMode != CM_BUG_ON_SCREEN) {
+  if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_GRAPH)) {               //JM
     clearRegisterLine(regist, true, (regist != REGISTER_Y));
 
     #ifdef PC_BUILD
@@ -2378,7 +2381,7 @@ void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
 jm_show_calc_state("refreshScreen\n");
-printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
+printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
 #endif
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(3); }     //dr
@@ -2389,7 +2392,7 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #endif                                  //^^
 
 
-  if(calcMode!=CM_AIM && calcMode!=CM_NIM) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
+  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -2434,16 +2437,18 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
+    case CM_GRAPH:                      //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        clearScreen();      
-
+        if(calcMode != CM_GRAPH) {      //JM
+          clearScreen();      
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
-        refreshRegisterLine(REGISTER_T);
-        refreshRegisterLine(REGISTER_Z);
-        refreshRegisterLine(REGISTER_Y);
+          refreshRegisterLine(REGISTER_T);
+          refreshRegisterLine(REGISTER_Z);
+          refreshRegisterLine(REGISTER_Y);
+        }                               //JM
       }
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }      //dr
@@ -2451,7 +2456,9 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
+      if(calcMode != CM_GRAPH) {        //JM
         refreshRegisterLine(REGISTER_X);
+      }                                 //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
 #endif
@@ -2492,6 +2499,11 @@ printf(">>> refreshScreenCounter=%d\n",refreshScreenCounter++);    //JMYY
 
         hourGlassIconEnabled = false;
         refreshStatusBar();
+
+        if(calcMode == CM_GRAPH) {     //JM v
+            graph_plotmem();
+        }                              //JM ^
+
       }
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(2); }      //dr

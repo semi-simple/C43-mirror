@@ -145,11 +145,6 @@ extern float graph_xmin;                                             //JM Graph
 extern float graph_xmax;                                             //JM Graph
 extern float graph_ymin;                                             //JM Graph
 extern float graph_ymax;                                             //JM Graph
-extern float graph_dx;                                               //JM Graph
-extern float graph_dy;                                               //JM Graph
-extern bool_t extentx;                                              //JM Graph
-extern bool_t extenty;                                              //JM Graph
-extern bool_t jm_VECT;                                               //JM GRAPH setup
 extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
@@ -248,17 +243,21 @@ char* itoa(int value, char* result, int base);
 #define JC_FG_DOTS             21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
 
-#define JC_VECT                23    // screen setup
-
 #define JC_H_SUM               24    //JMHOME
 #define JC_H_MIR               25    //JMHOME
 #define JC_H_FIX               26    //JMHOME
 
 #define JC_LARGELI             27
-#define JC_EXTENTX             28
-#define JC_EXTENTY             29
 
 #define JC_ITM_TST             31    //dr
+
+#define JC_VECT                40    // graph setup
+#define JC_EXTENTX             41    // graph setup
+#define JC_EXTENTY             42    // graph setup
+#define JC_PLINE               43    // graph setup
+#define JC_PCROS               44    // graph setup
+#define JC_PBOX                45    // graph setup
+
 
 
 #ifdef PC_BUILD

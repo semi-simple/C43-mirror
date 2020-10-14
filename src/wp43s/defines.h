@@ -88,7 +88,7 @@
 
 #define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
-#define NIM_BUFFER_LENGTH                        100-24 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#define NIM_BUFFER_LENGTH                        100-24-10 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 
 // TAM transition system
 #define TT_OPERATION                               0 // +, -, *, /, min, max
@@ -467,6 +467,7 @@
 #define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          12 // Bug message on screen
 #define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
+#define CM_GRAPH                                  98 //JM Display graph
 #define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old                                      //JM
 
 // Next character in AIM 2 bits

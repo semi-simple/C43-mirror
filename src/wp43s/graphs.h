@@ -31,6 +31,17 @@ uint16_t ix_count;
 #define  MEM_INITIALIZED   199
 
 
+extern float graph_dx;                                               //JM Graph
+extern float graph_dy;                                               //JM Graph
+extern bool_t extentx;                                              //JM Graph
+extern bool_t extenty;                                              //JM Graph
+extern bool_t jm_VECT;                                               //JM GRAPH setup
+extern bool_t Aspect_Square;
+extern bool_t PLOT_LINE;
+extern bool_t PLOT_CROSS;
+extern bool_t PLOT_BOX;
+
+
 //Screen limits
 #define SCREEN_MIN_GRAPH 20
 #define SCREEN_HEIGHT_GRAPH SCREEN_HEIGHT
@@ -41,17 +52,21 @@ uint16_t ix_count;
 
 int8_t plotmode;                            //      _SCAT
 
+void graph_reset      ();
+void fnPline          (uint16_t unusedParamButMandatory);
+void fnPcros          (uint16_t unusedParamButMandatory);
+void fnPbox           (uint16_t unusedParamButMandatory);
+void fnPvect          (uint16_t unusedParamButMandatory);
+void fnPx             (uint16_t unusedParamButMandatory);
+void fnPy             (uint16_t unusedParamButMandatory);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-
-
-void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
-
 void graph_setupmemory(void);
+void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 void graph_end        (void);
-
 void fnStatList       (uint16_t unusedParamButMandatory);
 void graph_plotmem    (void);
 void fnPlot           (uint16_t unusedParamButMandatory);
+void fnPlotLS         (uint16_t unusedParamButMandatory);
 
 
 #ifndef TESTSUITE_BUILD

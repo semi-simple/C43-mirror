@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         47  // removed allowScreenUpdate
+#define BACKUP_VERSION          1  // removed allowScreenUpdate
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -189,7 +189,6 @@ void saveCalc(void) {
   save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         backup);
   save(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         backup);
   save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     backup);
-  save(&jm_VECT,                            sizeof(jm_VECT),                            backup);
   save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        backup);
   save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        backup);
   save(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        backup);
@@ -201,6 +200,11 @@ void saveCalc(void) {
   save(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
   save(&extentx   ,                         sizeof(extentx   ),                         backup);
   save(&extenty   ,                         sizeof(extenty   ),                         backup);
+  save(&jm_VECT,                            sizeof(jm_VECT),                            backup);
+  save(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
+  save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
+  save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);
+  save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      backup);
   save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
   save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
   save(&indic_x,                            sizeof(indic_x),                            backup);
@@ -373,7 +377,6 @@ void restoreCalc(void) {
     restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         backup);
     restore(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         backup);
     restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     backup);
-    restore(&jm_VECT,                            sizeof(jm_VECT),                            backup);
     restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        backup);
     restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        backup);
     restore(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        backup);
@@ -385,6 +388,11 @@ void restoreCalc(void) {
     restore(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
     restore(&extentx   ,                         sizeof(extentx   ),                         backup);
     restore(&extenty   ,                         sizeof(extenty   ),                         backup);
+    restore(&jm_VECT,                            sizeof(jm_VECT),                            backup);
+    restore(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
+    restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
+    restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);
+    restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      backup);
     restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
     restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
     restore(&indic_x,                            sizeof(indic_x),                            backup);
@@ -422,6 +430,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_FLAG_BROWSER)     {}
       else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM
       else if(calcMode == CM_FONT_BROWSER)     {}
+      else if(calcMode == CM_GRAPH)            {}
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);
@@ -438,6 +447,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
       else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
       else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+      else if(calcMode == CM_GRAPH)            {}
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);

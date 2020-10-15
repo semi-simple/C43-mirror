@@ -288,7 +288,6 @@ printf("@@@ %s\n",commandnumber);
 
 
 
-
                       if (strcompare(commandnumber,"CPX?" )) {sprintf(commandnumber,"%d", ITM_CPX);} else
                       if (strcompare(commandnumber,"REAL?" )) {sprintf(commandnumber,"%d", ITM_REAL);} else
                       if (strcompare(commandnumber,"PRIME?" )) {sprintf(commandnumber,"%d", ITM_PRIME);} else
@@ -460,6 +459,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"ENG" )) {sprintf(commandnumber,"%d", ITM_ENG);} else
                       if (strcompare(commandnumber,"ENTRY?" )) {sprintf(commandnumber,"%d", ITM_ENTRY);} else
                       if (strcompare(commandnumber,"EXPT" )) {sprintf(commandnumber,"%d", ITM_EXPT);} else
+                      if (strcompare(commandnumber,"FIB" )) {sprintf(commandnumber,"%d", ITM_FIB);} else
                       if (strcompare(commandnumber,"FIX" )) {sprintf(commandnumber,"%d", ITM_FIX);} else
                       if (strcompare(commandnumber,"FLASH?" )) {sprintf(commandnumber,"%d", ITM_FLASH);} else
                       if (strcompare(commandnumber,"GRAD" )) {sprintf(commandnumber,"%d", ITM_GRAD);} else

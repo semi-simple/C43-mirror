@@ -830,9 +830,6 @@ uint64_t WP34S_intLog10(uint64_t x) {
   return WP34S_build_value(r, signValue);
 }
 
-
-
-
 #ifdef DUMMY
 /* Calculate (a . b) mod c taking care to avoid overflow */
 static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {

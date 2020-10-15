@@ -88,7 +88,7 @@
 #define longIntegerFactorial(op, result)                                  mpz_fac_ui(result, op)
 #define longIntegerIsPrime(currentNumber)                                 mpz_probab_prime_p(currentNumber, 25)
 #define longIntegerNextPrime(currentNumber, nextPrime)                    mpz_nextprime(nextPrime, currentNumber)
-
+#define longIntegerFibonacci(op, result)                                  mpz_fib_ui(result, op)
 
 //#define longIntegerInit(op)                                               {mpz_init(op); PRINT_LI(op, "after longIntegerInit"); }
 //#define longIntegerInitSizeInBits(op, bits)                               {printf("bits=%d ", (int)bits); mpz_init2(op, bits); PRINT_LI(op, "after longIntegerInitSizeInBits"); }

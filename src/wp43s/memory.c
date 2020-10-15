@@ -144,7 +144,6 @@ void *wp43sAllocate(size_t sizeInBytes) {
       pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[i].address);
       xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions-i-1) * sizeof(freeMemoryRegion_t));
       numberOfFreeMemoryRegions--;
-printf("After allocate: last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
       //debugMemory();
       return pcMemPtr;
     }
@@ -173,7 +172,6 @@ printf("After allocate: last free memory region: %u blocks (%u bytes) at address
   pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[minBlock].address);
   freeMemoryRegions[minBlock].address += sizeInBlocks;
   freeMemoryRegions[minBlock].sizeInBlocks -= sizeInBlocks;
-printf("After allocate: last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
 
   //debugMemory();
   return pcMemPtr;
@@ -278,7 +276,47 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
     freeMemoryRegions[i].sizeInBlocks = sizeInBlocks;
     numberOfFreeMemoryRegions++;
   }
-printf("After free:     last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
 
   //debugMemory();
+}
+
+
+void resizeProgramMemory(uint16_t newSizeInBlocks) {
+  uint16_t currentSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
+
+  printf("currentSizeInBlocks = %u    newSizeInBlocks = %u\n",currentSizeInBlocks, newSizeInBlocks);
+  if(newSizeInBlocks == currentSizeInBlocks) { // Nothing to do
+    return;
+  }
+
+  if(newSizeInBlocks > currentSizeInBlocks) { // Increase program memory size
+    if(newSizeInBlocks - currentSizeInBlocks > freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks) {
+      #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+        int32_t freeMemory = 0;
+        for(int32_t i=0; i<numberOfFreeMemoryRegions; i++) {
+          freeMemory += freeMemoryRegions[i].sizeInBlocks;
+        }
+        printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)TO_BYTES(newSizeInBlocks - currentSizeInBlocks), TO_BYTES(freeMemory));
+        exit(-3);
+      #endif
+
+      #ifdef DMCP_BUILD
+        backToSystem(NOPARAM);
+      #endif
+    }
+    else {
+      freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks -= newSizeInBlocks - currentSizeInBlocks;
+      xcopy(programMemoryPointer + TO_BYTES(newSizeInBlocks - currentSizeInBlocks), programMemoryPointer, newSizeInBlocks);
+      programMemoryPointer += TO_BYTES(newSizeInBlocks - currentSizeInBlocks);
+      listPrograms();
+    }
+  }
+  else { // Decrease program memory size
+    freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks += currentSizeInBlocks - newSizeInBlocks;
+    xcopy(programMemoryPointer + TO_BYTES(currentSizeInBlocks - newSizeInBlocks), programMemoryPointer, newSizeInBlocks);
+    programMemoryPointer += TO_BYTES(currentSizeInBlocks - newSizeInBlocks);
+    listPrograms();
+  }
+
+  exit(0);
 }

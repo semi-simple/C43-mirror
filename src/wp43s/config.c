@@ -531,8 +531,25 @@ void fnClSigma(uint16_t unusedParamButMandatory) {
 
 
 
+void listPrograms(void) {
+  uint16_t step = 1;
+
+  stepAddress = programMemoryPointer;
+  while(stepAddress) {
+    printf("%4u  ", step++);
+    if(*stepAddress == ((ITM_END >> 8) | 0x80) && *(stepAddress + 1) == (ITM_END & 0xff)) {
+      step = 1;
+    }
+    stepAddress = decodeOneStep();
+  }
+}
+
+
+
 void addTestPrograms(void) {
-  programMemoryPointer = allocWp43s(TO_BYTES(TO_BLOCKS(1256)));
+  uint32_t numberOfBytesForTheTestPrograms = 1264;
+
+  resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   stepAddress = programMemoryPointer;
 
   while(1) { // Prime number checker
@@ -1173,7 +1190,7 @@ void addTestPrograms(void) {
     *(stepAddress++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("Prime : %u bytes\n", stepAddress - programMemoryPointer);
+      printf("Prime : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
     break;
   }
@@ -2677,7 +2694,7 @@ void addTestPrograms(void) {
     *(stepAddress++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("Prime + Bairstow : %u bytes\n", stepAddress - programMemoryPointer);
+      printf("Prime + Bairstow : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
     break;
   }
@@ -2805,7 +2822,7 @@ void addTestPrograms(void) {
     *(stepAddress++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("Prime + Bairstow + Speed : %u bytes\n", stepAddress - programMemoryPointer);
+      printf("Prime + Bairstow + Speed : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
     break;
   }
@@ -2814,19 +2831,12 @@ void addTestPrograms(void) {
   *(stepAddress++) = 255; // .END.
 
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    if((stepAddress - programMemoryPointer) > TO_BYTES(TO_BLOCKS(1256))) {
+    printf("Prime + Bairstow + Speed + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    if((uint32_t)TO_BLOCKS((stepAddress - programMemoryPointer) + 2) > (uint32_t)TO_BLOCKS(numberOfBytesForTheTestPrograms)) {
       printf("Increase allocated memory for programs!\n");
+      exit(0);
     }
-
-    uint16_t step = 1;
-    stepAddress = programMemoryPointer;
-    while(stepAddress) {
-      printf("%4u  ", step++);
-      if(*stepAddress == ((ITM_END >> 8) | 0x80) && *(stepAddress + 1) == (ITM_END & 0xff)) {
-        step = 1;
-      }
-      stepAddress = decodeOneStep();
-    }
+    listPrograms();
   #endif
 }
 

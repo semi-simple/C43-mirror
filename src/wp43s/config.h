@@ -47,3 +47,4 @@ void     fnClSigma             (uint16_t unusedParamButMandatory);
 void     backToSystem          (uint16_t unusedParamButMandatory);
 void     fnRange               (uint16_t unusedParamButMandatory);
 void     fnGetRange            (uint16_t unusedParamButMandatory);
+void     listPrograms          (void);

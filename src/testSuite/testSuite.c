@@ -94,6 +94,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnExpM1",                fnExpM1               },
   {"fnExpt",                 fnExpt                },
   {"fnFactorial",            fnFactorial           },
+  {"fnFib",                  fnFib                 },
   {"fnFillStack",            fnFillStack           },
   {"fnFloor",                fnFloor               },
   {"fnFp",                   fnFp                  },

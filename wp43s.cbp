@@ -353,6 +353,9 @@
 		<Unit filename="src/testSuite/factorial.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/fib.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/floor.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1392,6 +1395,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/factorial.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/fib.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/fib.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

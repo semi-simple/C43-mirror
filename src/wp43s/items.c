@@ -472,6 +472,7 @@ void fnLoad                     (uint16_t unusedParamButMandatory) {}
 void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
+void fnFib                      (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}

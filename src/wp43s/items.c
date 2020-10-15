@@ -456,6 +456,7 @@ void fnLoad                     (uint16_t unusedParamButMandatory) {}
 void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
+void fnFib                      (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -1963,7 +1964,7 @@ const item_t indexOfItems[] = {
 /* 1459 */  { itemToBeCoded,               NOPARAM,                     "EXITALL",                                     "EXITall",                                     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1460 */  { fnExpt,                      NOPARAM,                     "EXPT",                                        "EXPT",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1461 */  { itemToBeCoded,               NOPARAM,                     "1461",                                        "1461",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1462 */  { itemToBeCoded,               NOPARAM,                     "FIB",                                         "FIB",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1462 */  { fnFib,                       NOPARAM,                     "FIB",                                         "FIB",                                         0,       0,       CAT_FNCT, SLS_ENABLED,   US_ENABLED  },
 /* 1463 */  { fnDisplayFormatFix,          TM_VALUE,                    "FIX",                                         "FIX",                                         0,      15,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1464 */  { fnFreeFlashMemory,           NOPARAM,                     "FLASH?",                                      "FLASH?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1465 */  { itemToBeCoded,               NOPARAM,                     "f'(x)",                                       "f'(x)",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

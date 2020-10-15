@@ -99,6 +99,17 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
                         }
                         break;
 
+    case FLAG_ALLENG:   switch(action) {
+                          case 0: globalFlags[FLAG_A/16] &= ~(1u << (FLAG_A%16));
+                                  break;
+                          case 1: globalFlags[FLAG_A/16] |=   1u << (FLAG_A%16);
+                                  break;
+                          case 2: globalFlags[FLAG_A/16] ^=   1u << (FLAG_A%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
     default: {}
   }
 }
@@ -106,13 +117,14 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
 
 void synchronizeLetteredFlags(void) {
-  if(getSystemFlag(FLAG_LEAD0))    setSystemFlag(FLAG_LEAD0)    else clearSystemFlag(FLAG_LEAD0)
-  if(getSystemFlag(FLAG_POLAR))    setSystemFlag(FLAG_POLAR)    else clearSystemFlag(FLAG_POLAR)
-  if(getSystemFlag(FLAG_CPXRES))   setSystemFlag(FLAG_CPXRES)   else clearSystemFlag(FLAG_CPXRES)
-  if(getSystemFlag(FLAG_SPCRES))   setSystemFlag(FLAG_SPCRES)   else clearSystemFlag(FLAG_SPCRES)
-  if(getSystemFlag(FLAG_TRACE))    setSystemFlag(FLAG_TRACE)    else clearSystemFlag(FLAG_TRACE)
-  if(getSystemFlag(FLAG_CARRY))    setSystemFlag(FLAG_CARRY)    else clearSystemFlag(FLAG_CARRY)
+  if(getSystemFlag(FLAG_ALLENG))   setSystemFlag(FLAG_ALLENG)   else clearSystemFlag(FLAG_ALLENG)
   if(getSystemFlag(FLAG_OVERFLOW)) setSystemFlag(FLAG_OVERFLOW) else clearSystemFlag(FLAG_OVERFLOW)
+  if(getSystemFlag(FLAG_CARRY))    setSystemFlag(FLAG_CARRY)    else clearSystemFlag(FLAG_CARRY)
+  if(getSystemFlag(FLAG_SPCRES))   setSystemFlag(FLAG_SPCRES)   else clearSystemFlag(FLAG_SPCRES)
+  if(getSystemFlag(FLAG_CPXRES))   setSystemFlag(FLAG_CPXRES)   else clearSystemFlag(FLAG_CPXRES)
+  if(getSystemFlag(FLAG_LEAD0))    setSystemFlag(FLAG_LEAD0)    else clearSystemFlag(FLAG_LEAD0)
+  if(getSystemFlag(FLAG_TRACE))    setSystemFlag(FLAG_TRACE)    else clearSystemFlag(FLAG_TRACE)
+  if(getSystemFlag(FLAG_POLAR))    setSystemFlag(FLAG_POLAR)    else clearSystemFlag(FLAG_POLAR)
 }
 
 
@@ -192,6 +204,7 @@ void fnSetFlag(uint16_t flag) {
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
     switch(flag) {
+      case FLAG_A: setSystemFlag(FLAG_ALLENG);   break;
       case FLAG_B: setSystemFlag(FLAG_OVERFLOW); break;
       case FLAG_C: setSystemFlag(FLAG_CARRY);    break;
       case FLAG_D: setSystemFlag(FLAG_SPCRES);   break;
@@ -246,6 +259,7 @@ void fnClearFlag(uint16_t flag) {
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
     switch(flag) {
+      case FLAG_A: clearSystemFlag(FLAG_ALLENG);   break;
       case FLAG_B: clearSystemFlag(FLAG_OVERFLOW); break;
       case FLAG_C: clearSystemFlag(FLAG_CARRY);    break;
       case FLAG_D: clearSystemFlag(FLAG_SPCRES);   break;
@@ -300,6 +314,7 @@ void fnFlipFlag(uint16_t flag) {
   }
   else if(flag < NUMBER_OF_GLOBAL_FLAGS) { // Global flag
     switch(flag) {
+      case FLAG_A: flipSystemFlag(FLAG_ALLENG);   break;
       case FLAG_B: flipSystemFlag(FLAG_OVERFLOW); break;
       case FLAG_C: flipSystemFlag(FLAG_CARRY);    break;
       case FLAG_D: flipSystemFlag(FLAG_SPCRES);   break;
@@ -339,6 +354,7 @@ void fnFlipFlag(uint16_t flag) {
  ***********************************************/
 void fnClFAll(uint16_t unusedParamButMandatory) {
   memset(globalFlags, 0, sizeof(globalFlags));
+  clearSystemFlag(FLAG_ALLENG);
   clearSystemFlag(FLAG_OVERFLOW);
   clearSystemFlag(FLAG_CARRY);
   clearSystemFlag(FLAG_SPCRES);

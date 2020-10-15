@@ -138,13 +138,13 @@
 // System flags
 // Bit 15 (MSB) is always set for a system flag
 // If bit 14 is set the system flag is read only for the user
-#define FLAG_TDM24                            0x8000
-#define FLAG_YMD                              0xc001
-#define FLAG_DMY                              0xc002
-#define FLAG_MDY                              0xc003
+#define FLAG_TDM24                            0x8000 // The system flags
+#define FLAG_YMD                              0xc001 // MUST be in the same
+#define FLAG_DMY                              0xc002 // order as the items
+#define FLAG_MDY                              0xc003 // in items.c and items.h
 #define FLAG_CPXRES                           0x8004
-#define FLAG_CPXj                             0x8005
-#define FLAG_POLAR                            0x8006
+#define FLAG_CPXj                             0x8005 // And TDM24 MUST be
+#define FLAG_POLAR                            0x8006 // the first.
 #define FLAG_FRACT                            0x8007
 #define FLAG_PROPFR                           0x8008
 #define FLAG_DENANY                           0x8009

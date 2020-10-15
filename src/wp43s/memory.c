@@ -144,6 +144,7 @@ void *wp43sAllocate(size_t sizeInBytes) {
       pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[i].address);
       xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions-i-1) * sizeof(freeMemoryRegion_t));
       numberOfFreeMemoryRegions--;
+printf("After allocate: last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
       //debugMemory();
       return pcMemPtr;
     }
@@ -172,6 +173,7 @@ void *wp43sAllocate(size_t sizeInBytes) {
   pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[minBlock].address);
   freeMemoryRegions[minBlock].address += sizeInBlocks;
   freeMemoryRegions[minBlock].sizeInBlocks -= sizeInBlocks;
+printf("After allocate: last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
 
   //debugMemory();
   return pcMemPtr;
@@ -276,6 +278,7 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
     freeMemoryRegions[i].sizeInBlocks = sizeInBlocks;
     numberOfFreeMemoryRegions++;
   }
+printf("After free:     last free memory region: %u blocks (%u bytes) at address %u\n", freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks, TO_BYTES(freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks), freeMemoryRegions[numberOfFreeMemoryRegions - 1].address);
 
   //debugMemory();
 }

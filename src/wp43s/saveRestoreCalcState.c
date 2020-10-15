@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         47  // removed allowScreenUpdate
+#define BACKUP_VERSION         48  // added programMemoryPointer
 #define START_REGISTER_VALUE 1522
 
 static void save(const void *buffer, uint32_t size, void *stream) {
@@ -175,6 +175,7 @@ void saveCalc(void) {
   save(&systemFlags,                        sizeof(systemFlags),                        backup);
   save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
   save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
+  save(&programMemoryPointer,               sizeof(programMemoryPointer),               backup);
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -186,10 +187,10 @@ void restoreCalc(void) {
   uint32_t backupVersion, ramSize, ramPtr;
   FILE *backup;
 
+  fnReset(CONFIRMED);
   backup = fopen("backup.bin", "rb");
   if(backup == NULL) {
     printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
-    fnReset(CONFIRMED);
     return;
   }
 
@@ -320,6 +321,7 @@ void restoreCalc(void) {
     restore(&systemFlags,                        sizeof(systemFlags),                        backup);
     restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
     restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
+    restore(&programMemoryPointer,               sizeof(programMemoryPointer),               backup);
 
     fclose(backup);
     printf("End of calc's restoration\n");

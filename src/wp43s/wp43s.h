@@ -253,7 +253,6 @@ extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
 extern dataBlock_t          *savedStatisticalSumsPointer;
-extern uint16_t              programCounter;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
 extern uint16_t              tamMode;
@@ -290,6 +289,10 @@ extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;
 extern uint8_t               currentAngularMode;
+extern uint8_t              *programMemoryPointer;
+extern uint8_t              *programCounter;
+extern uint8_t              *stepAddress;
+extern uint8_t               opParam;
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;
@@ -328,7 +331,6 @@ extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
 #endif // DMCP_BUILD
-extern uint8_t *pgm, *stepAddress, param;
 
 #include "constantPointers.h"
 #endif // wp43s_H_INCLUDED

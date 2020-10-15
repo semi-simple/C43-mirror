@@ -352,6 +352,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"X!" )) {sprintf(commandnumber,"%d", ITM_XFACT);} else
                       if (strcompare(commandnumber,"PI" )) {sprintf(commandnumber,"%d", ITM_pi);} else
                       if (strcompare(commandnumber,"FF" )) {sprintf(commandnumber,"%d", ITM_FF);} else
+                      if (strcompare(commandnumber,"SINCPI" )) {sprintf(commandnumber,"%d", ITM_sincpi);} else
                       if (strcompare(commandnumber,"c" )) {sprintf(commandnumber,"%d", CST_05);} else
                       if (strcompare(commandnumber,"e" )) {sprintf(commandnumber,"%d", CST_08);} else
                       if (strcompare(commandnumber,"ge" )) {sprintf(commandnumber,"%d", CST_16);} else
@@ -458,6 +459,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"ENG" )) {sprintf(commandnumber,"%d", ITM_ENG);} else
                       if (strcompare(commandnumber,"ENTRY?" )) {sprintf(commandnumber,"%d", ITM_ENTRY);} else
                       if (strcompare(commandnumber,"EXPT" )) {sprintf(commandnumber,"%d", ITM_EXPT);} else
+                      if (strcompare(commandnumber,"FIB" )) {sprintf(commandnumber,"%d", ITM_FIB);} else
                       if (strcompare(commandnumber,"FIX" )) {sprintf(commandnumber,"%d", ITM_FIX);} else
                       if (strcompare(commandnumber,"FLASH?" )) {sprintf(commandnumber,"%d", ITM_FLASH);} else
                       if (strcompare(commandnumber,"GRAD" )) {sprintf(commandnumber,"%d", ITM_GRAD);} else
@@ -513,6 +515,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"Z<>" )) {sprintf(commandnumber,"%d", ITM_Zex);} else
                       if (strcompare(commandnumber,"XMAX" )) {sprintf(commandnumber,"%d", ITM_XMAX);} else
                       if (strcompare(commandnumber,"XMIN" )) {sprintf(commandnumber,"%d", ITM_XMIN);} else
+                      if (strcompare(commandnumber,"BETA(X,Y)" )) {sprintf(commandnumber,"%d", ITM_BETAXY);} else
                       if (strcompare(commandnumber,"GAMMA(X)" )) {sprintf(commandnumber,"%d", ITM_GAMMAX);} else
                       if (strcompare(commandnumber,"DELTA%" )) {sprintf(commandnumber,"%d", ITM_DELTAPC);} else
                       if (strcompare(commandnumber,"RANI#" )) {sprintf(commandnumber,"%d", ITM_RANI);} else
@@ -618,7 +621,6 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"XEQM18" ) && exec) {sprintf(commandnumber,"%d", ITM_X_g6);} else
                       if (strcompare(commandnumber,"X.SAVE" )) {sprintf(commandnumber,"%d", ITM_XSAVE);} else
                       if (strcompare(commandnumber,"X.LOAD" )) {sprintf(commandnumber,"%d", ITM_XLOAD);} else
-                      if (strcompare(commandnumber,"SINCPI" )) {sprintf(commandnumber,"%d", ITM_sincpi);} else
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 

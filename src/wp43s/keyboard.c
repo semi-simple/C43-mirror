@@ -36,6 +36,8 @@ int16_t determineFunctionKeyItem(const char *data) {
     itemShift = 0;
   }
 
+  if(fn >= 3){calcMode = CM_NORMAL;}
+
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
@@ -299,6 +301,8 @@ int16_t determineItem(const char *data) {
       lastErrorCode = 0;
     }
 
+    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
+
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
@@ -316,6 +320,8 @@ int16_t determineItem(const char *data) {
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
     }
+
+    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -341,6 +347,8 @@ int16_t determineItem(const char *data) {
     if(lastErrorCode != 0) {                                                                                                  //JM shifts
       lastErrorCode = 0;                                                                                                      //JM shifts
     }                                                                                                                         //JM shifts
+
+    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
 
     fg_processing_jm();
 

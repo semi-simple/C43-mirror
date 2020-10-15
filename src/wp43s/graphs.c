@@ -333,7 +333,7 @@ void clearScreenPixels() {
          clearPixel(x, y);
         }
       }
-      for(y=SCREEN_MIN_GRAPH; y<171; y++) {
+      for(y=Y_POSITION_OF_REGISTER_T_LINE + 20; y<171; y++) {
         for(x=0; x<SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x++) {
          clearPixel(x, y);
         }

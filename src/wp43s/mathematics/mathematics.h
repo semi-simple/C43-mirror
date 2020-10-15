@@ -50,6 +50,7 @@
 #include "expMOne.h"
 #include "expt.h"
 #include "factorial.h"
+#include "fib.h"
 #include "floor.h"
 #include "fractionalPart.h"
 #include "gamma.h"

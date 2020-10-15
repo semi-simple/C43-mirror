@@ -51,3 +51,4 @@ uint64_t WP34S_int10pow             (uint64_t x);
 uint64_t WP34S_intLog2              (uint64_t x);
 uint64_t WP34S_intLog10             (uint64_t x);
 uint64_t WP34S_extract_value        (const uint64_t val, int32_t *const sign);
+int64_t  WP34S_intFib               (int64_t x);

@@ -92,6 +92,8 @@ void fnPy (uint16_t unusedParamButMandatory) {
 
 void fnPlot(uint16_t unusedParamButMandatory) {
   Aspect_Square = true;
+  if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
+  if(previousCalcMode == CM_GRAPH){previousCalcMode = CM_NORMAL;}
   calcMode = CM_GRAPH;
   #ifndef TESTSUITE_BUILD
     showSoftmenu(NULL, -MNU_PLOT, true);
@@ -101,53 +103,11 @@ void fnPlot(uint16_t unusedParamButMandatory) {
 
 void fnPlotLS(uint16_t unusedParamButMandatory) {
   Aspect_Square = false;
+  if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
+  if(previousCalcMode == CM_GRAPH){previousCalcMode = CM_NORMAL;}
   calcMode = CM_GRAPH;
   doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
 }
-
-void fnPdemo1(uint16_t unusedParamButMandatory) {
-
-PLOT_LINE = true;
-PLOT_CROSS= false;
-PLOT_BOX  = false;
-extentx   = false;
-extenty   = false;
-jm_VECT   = false;
-Aspect_Square = true;
-
-//GRAPH  // Build test data 
-float x_min = -1;
-float x_max = 1;
-  #ifndef TESTSUITE_BUILD
-  double x; 
-  fnClearStack(0);
-
-  if(telltale != MEM_INITIALIZED) {
-    graph_setupmemory();
-    runFunction(ITM_CLSIGMA);
-  }
-
-  fnAngularMode(AM_MULTPI);
-
-  //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
-  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
-
-    //convert double to X register
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
-    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
-
-    //leaving y in Y and x in X
-    //execute_rpn_function(0);
-    fnSigma(1);
-  }
-  fnClearStack(0);
-  runFunction(ITM_SIGMAx);
-  #endif
-}
-
-
-
 
 
 
@@ -474,111 +434,151 @@ void graph_axis (void){
   ypos -= 12;
 
 
-
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "axis    0,0");
-  ii = 0;
-  oo = 0;
-  outstr[0]=0;
-  while (tmpStr3000[ii] != 0) {
-    convertDigits();
-    ii++;
-  }
-  outstr[oo]=0;
-  showString(outstr, &standardFont, 1, ypos, vmNormal, true, true);  //JM
-  ypos -= 12;
-
-
-
   //GRAPH ZERO AXIS
   yzero = screen_window_y(y_min,0,y_max);
   xzero = screen_window_x(x_min,0,x_max);
 
-  //DRAW AXIS
-  if (Aspect_Square) {
-    cnt = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
-  } else {
-    cnt = 0;
-  }  
-  while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
-      setPixel(cnt,yzero); 
-      cnt++; 
+  int16_t minnx, minny;
+  if (!Aspect_Square) {
+    minny = SCREEN_MIN_GRAPH;
+    minnx = 0;
+  }
+  else {
+    minny = 0;
+    minnx = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
+  }
+
+  tmpStr3000[0]=0;                                  //If the axis is on the edge supress it, and label accordingly
+  uint8_t axisdisp = 
+           (!( yzero == SCREEN_HEIGHT_GRAPH-1  || yzero == minny) ? 2:0) + 
+           (!(  xzero == SCREEN_WIDTH-1        || xzero == minnx) ? 1:0) ;
+  switch( axisdisp )  {
+    case 0: strcpy(tmpStr3000,"          "); break;
+    case 1: snprintf(tmpStr3000, sizeof(tmpStr3000), "y-axis x 0"); break;
+    case 2: snprintf(tmpStr3000, sizeof(tmpStr3000), "x-axis y 0"); break;
+    case 3: snprintf(tmpStr3000, sizeof(tmpStr3000), "axis 0,0 "); break;
+    default:break;
+  }
+
+
+  //Change to the small characters and fabricate a small = char
+    ii = 0;
+    oo = 0;
+    outstr[0]=0;
+    while (tmpStr3000[ii] != 0) {
+      convertDigits();
+      ii++;
     }
-
-  int16_t minn;
-  if (!Aspect_Square) minn = SCREEN_MIN_GRAPH;
-  else minn = 0;
-
-
-  cnt = minn;  
-  while (cnt!=SCREEN_HEIGHT_GRAPH) { 
-      setPixel(xzero,cnt); 
-
-      if (Aspect_Square) {
-        setPixel(SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH-1,cnt);   
-        setPixel(SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH-2,cnt);   
-      }
-      cnt++; 
-    }
-
-
-
+  outstr[oo]=0;
+  ii=showString(outstr, &standardFont, 1, ypos, vmNormal, true, true);  //JM
+  if(tmpStr3000[ stringByteLength(tmpStr3000)-1 ] == '0') {
+    #define sp 15
+    plotline((uint16_t)(ii-17),(uint8_t)(ypos+2+sp),(uint16_t)(ii-11),(uint8_t)(ypos+2+sp));
+    plotline((uint16_t)(ii-17),(uint8_t)(ypos+1+sp),(uint16_t)(ii-11),(uint8_t)(ypos+1+sp));
+    plotline((uint16_t)(ii-17),(uint8_t)(ypos-1+sp),(uint16_t)(ii-11),(uint8_t)(ypos-1+sp));
+    plotline((uint16_t)(ii-17),(uint8_t)(ypos-2+sp),(uint16_t)(ii-11),(uint8_t)(ypos-2+sp));
+  }
+  ypos -= 12;
+  
   force_refresh();
 
 
 
+  //SEPARATING LINE IF SQUARE
+  cnt = minny;
+  while (cnt!=SCREEN_HEIGHT_GRAPH) { 
+    if (Aspect_Square) {
+        setPixel(minnx-1,cnt);   
+        setPixel(minnx-2,cnt);   
+    }
+    cnt++; 
+  }
+
+  #ifdef STATDEBUG
+    printf("%d %d   \n",xzero,yzero);
+  #endif
+
+
   double x; 
   double y;
-  for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
-    cnt = screen_window_y(y_min,y,y_max);
-    setPixel(max(xzero-1,0),cnt); //tick
-    setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-  }  
-  for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
-    cnt = screen_window_y(y_min,y,y_max);
-    setPixel(max(xzero-1,0),cnt); //tick
-    setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-  }  
 
-  for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
-    cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-1,minn)); //tick
-   }
-  for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
-    cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-1,minn)); //tick
-   }
+  if( !(yzero == SCREEN_HEIGHT_GRAPH-1 || yzero == minny)) {
+    //DRAW XAXIS
+    if (Aspect_Square) {
+      cnt = minnx;
+    } else {
+      cnt = 0;
+    }  
+    while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
+      setPixel(cnt,yzero); 
+      cnt++; 
+    }
 
-  for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
-    cnt = screen_window_y(y_min,y,y_max);
-    setPixel(max(xzero-2,0),cnt); //tick
-    setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    setPixel(max(xzero-3,0),cnt); //tick
-    setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-  }  
-  for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
-    cnt = screen_window_y(y_min,y,y_max);
-    setPixel(max(xzero-2,0),cnt); //tick
-    setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    setPixel(max(xzero-3,0),cnt); //tick
-    setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-  }  
+   force_refresh();
 
-  for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
-    cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-2,minn)); //tick
-      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-3,minn)); //tick
-   }
-  for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
-    cnt = screen_window_x(x_min,x,x_max);
-      setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-2,minn)); //tick
-      setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-      setPixel(cnt,max(yzero-3,minn)); //tick
-   }
+   for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
+      cnt = screen_window_x(x_min,x,x_max);
+        setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-1,minny)); //tick
+     }
+    for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
+      cnt = screen_window_x(x_min,x,x_max);
+        setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-1,minny)); //tick
+     }
+    for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
+      cnt = screen_window_x(x_min,x,x_max);
+        setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-2,minny)); //tick
+        setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-3,minny)); //tick
+     }
+    for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
+      cnt = screen_window_x(x_min,x,x_max);
+        setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-2,minny)); //tick
+        setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setPixel(cnt,max(yzero-3,minny)); //tick
+     }
+  }
+
+
+
+  if( !(xzero == SCREEN_WIDTH-1 || xzero == minnx)) {
+    //DRAW YAXIS
+    cnt = minny;
+    while (cnt!=SCREEN_HEIGHT_GRAPH) { 
+      setPixel(xzero,cnt); 
+      cnt++; 
+    }
+
+    force_refresh();
+
+    for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
+      cnt = screen_window_y(y_min,y,y_max);
+      setPixel(max(xzero-1,0),cnt); //tick
+      setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    }  
+    for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
+      cnt = screen_window_y(y_min,y,y_max);
+      setPixel(max(xzero-1,0),cnt); //tick
+      setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    }  
+    for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
+      cnt = screen_window_y(y_min,y,y_max);
+      setPixel(max(xzero-2,0),cnt); //tick
+      setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setPixel(max(xzero-3,0),cnt); //tick
+      setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    }  
+    for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
+      cnt = screen_window_y(y_min,y,y_max);
+      setPixel(max(xzero-2,0),cnt); //tick
+      setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setPixel(max(xzero-3,0),cnt); //tick
+      setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+    }  
+  }
 
   force_refresh();
   #endif

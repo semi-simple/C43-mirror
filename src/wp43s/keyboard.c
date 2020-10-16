@@ -36,8 +36,6 @@ int16_t determineFunctionKeyItem(const char *data) {
     itemShift = 0;
   }
 
-  if(fn >= 3){calcMode = CM_NORMAL;}
-
   if(softmenuStackPointer > 0) {
     sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
@@ -301,7 +299,7 @@ int16_t determineItem(const char *data) {
       lastErrorCode = 0;
     }
 
-    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
+    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -321,7 +319,7 @@ int16_t determineItem(const char *data) {
       lastErrorCode = 0;
     }
 
-    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
+    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -348,7 +346,7 @@ int16_t determineItem(const char *data) {
       lastErrorCode = 0;                                                                                                      //JM shifts
     }                                                                                                                         //JM shifts
 
-    if(calcMode == CM_GRAPH) {calcMode = CM_NORMAL;}
+    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
 
     fg_processing_jm();
 
@@ -762,9 +760,15 @@ void processKeyAction(int16_t item) {
         case CM_FONT_BROWSER:
         case CM_ERROR_MESSAGE:
         case CM_BUG_ON_SCREEN:
-        case CM_GRAPH:                      //JM
           keyActionProcessed = true;
           break;
+
+
+        case CM_GRAPH:                      //JM
+          keyActionProcessed = true;
+          calcMode = previousCalcMode;
+          break;
+
 
         case CM_CONFIRMATION:
           if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ

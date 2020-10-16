@@ -629,18 +629,26 @@ const int16_t menu_GRAPH[]        = {
 const int16_t menu_ST_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
                                      ITM_SIGMAMINUS,                ITM_SUM,                    ITM_LISTXY,               ITM_P_ALLREGS,         ITM_PLOTLS,                  ITM_PLOT,                         //JM GRAPH
-                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 ITM_NULL,                 ITM_SCRDMP,            ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_NSIGMA,                 -MNU_PLOT,                ITM_SCRDMP,            ITM_EXTX,                    ITM_EXTY,                         //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_VECT,                   ITM_NULL,                 ITM_DEMO4,             ITM_DEMO5,                   ITM_DEMO6                      };    //JM GRAPH
 
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                -MNU_ST_GRAPH,         ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_LISTXY,                    ITM_VECT,                   ITM_PCROS,                -MNU_STAT,             ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 -MNU_SUMS,             ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                -MNU_ST_GRAPH,         ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
+                                     ITM_LISTXY,                    ITM_VECT,                   ITM_PCROS,                -MNU_STAT,             ITM_SIGMAMINUS,              ITM_NULL,                           //JM GRAPH
+                                     ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 -MNU_SUMS,             ITM_CLSIGMA,                 ITM_NULL,                           //JM GRAPH
 
                                      ITM_PLINE,                     -MNU_ST_GRAPH,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_PCROS,                     -MNU_STAT,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_PBOX,                      -MNU_SUMS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
+                                     ITM_PBOX,                      -MNU_SUMS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+
+                                     ITM_SIGMAPLUS,                 ITM_SCRDMP,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_SIGMAMINUS,                ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_CLSIGMA,                   ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
 
 
 const int16_t menu_ALPHA[]        = {

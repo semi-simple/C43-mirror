@@ -60,6 +60,7 @@ void fnPvect          (uint16_t unusedParamButMandatory);
 void fnPx             (uint16_t unusedParamButMandatory);
 void fnPy             (uint16_t unusedParamButMandatory);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+void plotline         (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void graph_setupmemory(void);
 void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 void graph_end        (void);

@@ -18,4 +18,5 @@
  * \file decode.c
  ***********************************************/
 
+void  listPrograms (void);
 void *decodeOneStep(void);

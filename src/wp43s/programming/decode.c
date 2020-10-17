@@ -20,6 +20,21 @@
 
 #include "wp43s.h"
 
+
+void listPrograms(void) {
+  uint16_t step = 1;
+
+  stepAddress = programMemoryPointer;
+  while(stepAddress) {
+    printf("%4u  ", step++);
+    if(*stepAddress == ((ITM_END >> 8) | 0x80) && *(stepAddress + 1) == (ITM_END & 0xff)) {
+      step = 1;
+    }
+    stepAddress = decodeOneStep();
+  }
+}
+
+
 void getStringLabelOrVariableName(void) {
   opParam = *(uint8_t *)(stepAddress++);
   xcopy(tmpStr3000 + 2000, stepAddress, opParam);
@@ -470,7 +485,7 @@ void *decodeOneStep(void) {
           return decodeNoParam(indexOfItems[item16].itemSoftmenuName);
 
         case 0x7fff:     // 32767
-          decodeNoParam(".END.");
+          decodeNoParam(".END.\n\n");
           return NULL;
 
         default:

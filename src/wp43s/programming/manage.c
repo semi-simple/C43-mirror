@@ -15,16 +15,30 @@
  */
 
 /********************************************//**
- * \file stats.h Statistical functions
+ * \file manage.c
  ***********************************************/
 
+#include "wp43s.h"
 
 
-void   fnSigma               (uint16_t plusMinus);
-void   fnStatSum             (uint16_t sum);
-void   fnSumXY               (uint16_t unusedParamButMandatory);
-void   fnXmin                (uint16_t unusedParamButMandatory);
-void   fnXmax                (uint16_t unusedParamButMandatory);
-void   fnClSigma             (uint16_t unusedParamButMandatory);
-bool_t checkMinimumDataPoints(const real_t *n);
-void   initStatisticalSums   (void);
+
+void fnClPAll(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnClPAll);
+  }
+  else {
+    *programMemoryPointer       = 255; // .END.
+    *(programMemoryPointer + 1) = 255; // .END.
+    resizeProgramMemory(1); // 1 block for an empty program
+    programCounter = programMemoryPointer;
+    currentProgramMemoryPointer = programMemoryPointer;
+    freeProgramBytes = 2;
+    temporaryInformation = TI_NO_INFO;
+  }
+}
+
+
+
+void fnClP(uint16_t unusedParamButMandatory) {
+  printf("CLP\n");
+}

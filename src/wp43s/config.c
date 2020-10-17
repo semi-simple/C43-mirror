@@ -508,51 +508,14 @@ void fnClAll(uint16_t confirmation) {
 
 
 
-void fnClPAll(uint16_t confirmation) {
-  if(confirmation == NOT_CONFIRMED) {
-    setConfirmationMode(fnClPAll);
-  }
-  else {
-    //printf("Running CLPALL\n");
-    // TODO: actually clear all programs
-    programCounter = programMemoryPointer;
-    temporaryInformation = TI_NO_INFO;
-  }
-}
-
-
-
-void fnClSigma(uint16_t unusedParamButMandatory) {
-  if(statisticalSumsPointer != NULL) {
-    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    statisticalSumsPointer = NULL;
-  }
-}
-
-
-
-void listPrograms(void) {
-  uint16_t step = 1;
-
-  stepAddress = programMemoryPointer;
-  while(stepAddress) {
-    printf("%4u  ", step++);
-    if(*stepAddress == ((ITM_END >> 8) | 0x80) && *(stepAddress + 1) == (ITM_END & 0xff)) {
-      step = 1;
-    }
-    stepAddress = decodeOneStep();
-  }
-}
-
-
-
 void addTestPrograms(void) {
   uint32_t numberOfBytesForTheTestPrograms = 1264;
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
+  currentProgramMemoryPointer = programMemoryPointer;
   stepAddress = programMemoryPointer;
 
-  while(1) { // Prime number checker
+  { // Prime number checker
     // 1
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
@@ -1192,10 +1155,9 @@ void addTestPrograms(void) {
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("Prime : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
-    break;
   }
 
-  while(1) { // Bairstow polynomial root finder
+  { // Bairstow polynomial root finder
     // 1
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
@@ -2696,10 +2658,9 @@ void addTestPrograms(void) {
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("Prime + Bairstow : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
-    break;
   }
 
-  while(1) { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
+  { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
     // 1
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
@@ -2824,11 +2785,16 @@ void addTestPrograms(void) {
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("Prime + Bairstow + Speed : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
-    break;
   }
 
   *(stepAddress++) = 255; // .END.
   *(stepAddress++) = 255; // .END.
+
+  #if defined(DMCP_BUILD)
+    freeProgramBytes = (4 - ((uint32_t)stepAddress)) % 4;
+  #else
+    freeProgramBytes = (4 - ((uint64_t)stepAddress)) % 4;
+  #endif
 
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
     printf("Prime + Bairstow + Speed + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
@@ -2859,12 +2825,16 @@ void fnReset(uint16_t confirmation) {
 
     // Empty program initialization
     programMemoryPointer = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
+    currentProgramMemoryPointer = programMemoryPointer;
     programCounter = programMemoryPointer;
     *programMemoryPointer       = 255; // .END.
     *(programMemoryPointer + 1) = 255; // .END.
+    freeProgramBytes = 2;
 
     // "Not found glyph" initialization
-    glyphNotFound.data   = malloc(38);
+    if(glyphNotFound.data == NULL) {
+      glyphNotFound.data = malloc(38);
+    }
     xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
     // Initialization of user key assignments

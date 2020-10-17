@@ -20,3 +20,4 @@
 
 
 #include "decode.h"
+#include "manage.h"

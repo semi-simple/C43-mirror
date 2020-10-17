@@ -182,6 +182,7 @@
 #include "graphs.h"                     //JM include 
 #include "jm.h"                         //JM include
 #include "addons.h"                     //JM include
+#include "graphText.h"                  //JM include
 #include "textfiles.h"                  //JM include
 #include "xeqm.h"                       //JM include
 #include "keyboardTweak.h"              //dr

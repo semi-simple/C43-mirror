@@ -2192,10 +2192,11 @@
 #define ITM_PCROS                     2170   //GRAPH
 #define ITM_PBOX                      2171   //GRAPH
 #define ITM_VECT                      2172   //JMVECT
-#define ITM_EXTX                      2173
-#define ITM_EXTY                      2174
+#define ITM_NVECT                     2173   //JMVECT
+#define ITM_EXTX                      2174
+#define ITM_EXTY                      2175
 
-#define LAST_ITEM                     2175   //JM
+#define LAST_ITEM                     2176   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

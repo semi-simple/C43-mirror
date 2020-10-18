@@ -201,6 +201,7 @@ void saveCalc(void) {
   save(&extentx   ,                         sizeof(extentx   ),                         backup);
   save(&extenty   ,                         sizeof(extenty   ),                         backup);
   save(&jm_VECT,                            sizeof(jm_VECT),                            backup);
+  save(&jm_NVECT,                           sizeof(jm_NVECT),                           backup);
   save(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
   save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
   save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);
@@ -389,6 +390,7 @@ void restoreCalc(void) {
     restore(&extentx   ,                         sizeof(extentx   ),                         backup);
     restore(&extenty   ,                         sizeof(extenty   ),                         backup);
     restore(&jm_VECT,                            sizeof(jm_VECT),                            backup);
+    restore(&jm_NVECT,                           sizeof(jm_NVECT),                           backup);
     restore(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
     restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
     restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);

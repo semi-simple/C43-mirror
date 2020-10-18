@@ -635,7 +635,7 @@ const int16_t menu_ST_GRAPH[]        = {
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
                                      ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                -MNU_ST_GRAPH,         ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
-                                     ITM_LISTXY,                    ITM_VECT,                   ITM_PCROS,                -MNU_STAT,             ITM_SIGMAMINUS,              ITM_NULL,                           //JM GRAPH
+                                     ITM_NVECT,                     ITM_VECT,                   ITM_PCROS,                -MNU_STAT,             ITM_SIGMAMINUS,              ITM_LISTXY,                         //JM GRAPH
                                      ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 -MNU_SUMS,             ITM_CLSIGMA,                 ITM_NULL,                           //JM GRAPH
 
                                      ITM_PLINE,                     -MNU_ST_GRAPH,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
@@ -643,7 +643,7 @@ const int16_t menu_PLOT[]        = {
                                      ITM_PBOX,                      -MNU_SUMS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_SIGMAPLUS,                 ITM_SCRDMP,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_SIGMAMINUS,                ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_SIGMAMINUS,                ITM_LISTXY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH

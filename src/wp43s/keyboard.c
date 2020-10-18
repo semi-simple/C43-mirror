@@ -276,7 +276,7 @@ int16_t determineItem(const char *data) {
   if (kbd_usr[36].primaryTam == KEY_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
-    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
@@ -299,8 +299,6 @@ int16_t determineItem(const char *data) {
       lastErrorCode = 0;
     }
 
-    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
-
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
 
@@ -318,8 +316,6 @@ int16_t determineItem(const char *data) {
     if(lastErrorCode != 0) {
       lastErrorCode = 0;
     }
-
-    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -345,8 +341,6 @@ int16_t determineItem(const char *data) {
     if(lastErrorCode != 0) {                                                                                                  //JM shifts
       lastErrorCode = 0;                                                                                                      //JM shifts
     }                                                                                                                         //JM shifts
-
-    if(calcMode == CM_GRAPH) {calcMode = previousCalcMode;}
 
     fg_processing_jm();
 
@@ -394,6 +388,22 @@ int16_t determineItem(const char *data) {
   resetShiftState();
 
   return result;
+}
+
+
+
+bool_t checkShifts(const char *data) {
+  const calcKey_t *key;
+
+  int8_t key_no = stringToKeyNumber(data);
+
+  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);
+
+  if(key->primary == KEY_f || key->primary == KEY_g || key->primary == KEY_fg) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
@@ -494,8 +504,7 @@ void btnPressed(void *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
-jm_show_calc_state("btnReleased");
+jm_show_calc_state("btnReleased begin");
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
@@ -513,7 +522,13 @@ void btnReleased(void *data) {
     }
   }
 
-  refreshScreen();
+  if(!checkShifts((char *)data)) {
+    #ifdef PC_BUILD
+    printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
+    jm_show_calc_state("btnReleased end");
+    #endif
+    refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
+  }
 }
 
 
@@ -564,6 +579,9 @@ void processKeyAction(int16_t item) {
       if(calcMode == CM_AIM) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_LEFT_ARROW);
+      } else
+      if(calcMode == CM_GRAPH) {
+        keyActionProcessed = true;
       }
       if(!keyActionProcessed){
          keyActionProcessed = true;
@@ -575,6 +593,9 @@ void processKeyAction(int16_t item) {
       if(calcMode == CM_AIM) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_RIGHT_ARROW);
+      } else
+      if(calcMode == CM_GRAPH) {
+        keyActionProcessed = true;
       }
       if(!keyActionProcessed){
          keyActionProcessed = true;
@@ -765,8 +786,10 @@ void processKeyAction(int16_t item) {
 
 
         case CM_GRAPH:                      //JM
+          if(item == KEY_EXIT1 || item == KEY_BACKSPACE) {
+            calcMode = previousCalcMode;
+          }
           keyActionProcessed = true;
-          calcMode = previousCalcMode;
           break;
 
 
@@ -1173,8 +1196,12 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_BUG_ON_SCREEN:
+      calcMode = previousCalcMode;
+      break;
+
     case CM_GRAPH:                      //JM
       calcMode = previousCalcMode;
+      keyActionProcessed = true;
       break;
 
     case CM_CONFIRMATION:

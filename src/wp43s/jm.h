@@ -251,7 +251,8 @@ char* itoa(int value, char* result, int base);
 
 #define JC_ITM_TST             31    //dr
 
-#define JC_VECT                40    // graph setup
+#define JC_VECT                39    // graph setup
+#define JC_NVECT               40    // graph setup
 #define JC_EXTENTX             41    // graph setup
 #define JC_EXTENTY             42    // graph setup
 #define JC_PLINE               43    // graph setup

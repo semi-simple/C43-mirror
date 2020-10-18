@@ -23,9 +23,9 @@
 //graphs.h
 
 //Memory structure
-double*   gr_x;
-double*   gr_y;
-double    telltale;
+float/*double*/*   gr_x;
+float/*double*/*   gr_y;
+float/*double*/    telltale;
 uint16_t ix_count;
 #define  LIM               400                 //Number of points
 #define  MEM_INITIALIZED   199
@@ -36,6 +36,7 @@ extern float graph_dy;                                               //JM Graph
 extern bool_t extentx;                                              //JM Graph
 extern bool_t extenty;                                              //JM Graph
 extern bool_t jm_VECT;                                               //JM GRAPH setup
+extern bool_t jm_NVECT;                                               //JM GRAPH setup
 extern bool_t Aspect_Square;
 extern bool_t PLOT_LINE;
 extern bool_t PLOT_CROSS;
@@ -57,6 +58,7 @@ void fnPline          (uint16_t unusedParamButMandatory);
 void fnPcros          (uint16_t unusedParamButMandatory);
 void fnPbox           (uint16_t unusedParamButMandatory);
 void fnPvect          (uint16_t unusedParamButMandatory);
+void fnPNvect         (uint16_t unusedParamButMandatory);
 void fnPx             (uint16_t unusedParamButMandatory);
 void fnPy             (uint16_t unusedParamButMandatory);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
@@ -71,7 +73,7 @@ void fnPlotLS         (uint16_t unusedParamButMandatory);
 
 
 #ifndef TESTSUITE_BUILD
-int16_t screen_window_x(double x_min, double x, double x_max);
-int16_t screen_window_y(double y_min, double y, double y_max);
+int16_t screen_window_x(float/*double*/ x_min, float/*double*/ x, float/*double*/ x_max);
+int16_t screen_window_y(float/*double*/ y_min, float/*double*/ y, float/*double*/ y_max);
 #endif
 float auto_tick(float tick_int_f);

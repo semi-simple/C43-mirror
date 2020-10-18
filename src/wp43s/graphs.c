@@ -45,6 +45,7 @@ void graph_reset(){
   extentx       = false;
   extenty       = false;
   jm_VECT       = false;
+  jm_NVECT      = false;
   Aspect_Square = true;
   PLOT_LINE     = false;
   PLOT_CROSS    = false;
@@ -74,7 +75,15 @@ void fnPbox (uint16_t unusedParamButMandatory) {
 
 void fnPvect (uint16_t unusedParamButMandatory) {
   jm_VECT = !jm_VECT;
+  if(jm_VECT) {jm_NVECT = false;}
   fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
+  fnPlot(0);
+}    
+
+void fnPNvect (uint16_t unusedParamButMandatory) {
+  jm_NVECT = !jm_NVECT;
+  if(jm_NVECT) {jm_VECT = false;}
+  fnRefreshComboxState(CB_JC, JC_NVECT, jm_NVECT);                //jm
   fnPlot(0);
 }    
 
@@ -115,8 +124,8 @@ void fnPlotLS(uint16_t unusedParamButMandatory) {
 void graph_setupmemory(void) {
   int i;
   if(telltale != MEM_INITIALIZED) {
-    gr_x = (double*)malloc(LIM * sizeof(double)); 
-    gr_y = (double*)malloc(LIM * sizeof(double)); 
+    gr_x = (float/*double*/*)malloc(LIM * sizeof(float/*double*/)); 
+    gr_y = (float/*double*/*)malloc(LIM * sizeof(float/*double*/)); 
     telltale = MEM_INITIALIZED;
     ix_count = 0;
   }
@@ -144,17 +153,24 @@ void graph_end(void) {
 }
 
 
+float/*double*/ grf_x(int i) {
+  if (jm_NVECT) {return gr_y[i];}
+  else {return gr_x[i];}
+}
 
-
+float/*double*/ grf_y(int i) {
+  if (jm_NVECT) {return gr_x[i];}
+  else {return gr_y[i];}
+}
 
 
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
-  double x; 
-  double y;
+  float/*double*/ x; 
+  float/*double*/ y;
 
-  if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale != MEM_INITIALIZED) {
     graph_setupmemory();
@@ -162,13 +178,13 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
   }
 
 
-  //Convert from X register to double
+  //Convert from X register to float/*double*/
   realToString(yy, tmpStr3000);
   y = strtof (tmpStr3000, NULL);
 
   //printf("y=%f ",y);
 
-  //Convert from X register to double
+  //Convert from X register to float/*double*/
   realToString(xx, tmpStr3000);
   x = strtof (tmpStr3000, NULL);
 
@@ -219,7 +235,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 //###################################################################################
 #ifndef TESTSUITE_BUILD
-  int16_t screen_window_x(double x_min, double x, double x_max) {
+  int16_t screen_window_x(float/*double*/ x_min, float/*double*/ x, float/*double*/ x_max) {
     int16_t temp;
     if (Aspect_Square) {
       temp = (x-x_min)/(x_max-x_min)*(SCREEN_HEIGHT_GRAPH-1);
@@ -234,13 +250,13 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
       else if (temp<0) {temp=0;}
       //printf("--> %d \n",temp);
       #ifdef PC_BUILD
-        if(temp<0 || temp>399) {printf("In function screen_window_x JM X EXCEEDED %d",temp);}
+        if(temp<0 || temp>399) {printf("In function screen_window_x X EXCEEDED %d",temp);}
       #endif
       return temp;
     }
   }
 
-  int16_t screen_window_y(double y_min, double y, double y_max) {
+  int16_t screen_window_y(float/*double*/ y_min, float/*double*/ y, float/*double*/ y_max) {
   int16_t temp, minn;
     if (!Aspect_Square) minn = SCREEN_MIN_GRAPH;
     else minn = 0;
@@ -250,7 +266,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     else if (temp<0) {temp=0;}
 
     #ifdef PC_BUILD
-      if(SCREEN_HEIGHT_GRAPH-1 - temp<0 || SCREEN_HEIGHT_GRAPH-1 - temp>239) {printf("In function screen_window_y JM Y EXCEEDED %d %d",temp,SCREEN_HEIGHT_GRAPH-1 - temp);}
+      if(SCREEN_HEIGHT_GRAPH-1 - temp<0 || SCREEN_HEIGHT_GRAPH-1 - temp>239) {printf("In function screen_window_y Y EXCEEDED %d %d",temp,SCREEN_HEIGHT_GRAPH-1 - temp);}
     #endif
     return (SCREEN_HEIGHT_GRAPH-1 - temp);
   }
@@ -293,7 +309,7 @@ void clearScreenPixels() {
          clearPixel(x, y);
         }
       }
-      for(y=Y_POSITION_OF_REGISTER_T_LINE + 20; y<171; y++) {
+      for(y=Y_POSITION_OF_REGISTER_T_LINE /*+ 20*/; y<171; y++) {
         for(x=0; x<SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x++) {
          clearPixel(x, y);
         }
@@ -322,7 +338,7 @@ void clearScreenPixels() {
 //###################################################################################
 float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
-  //double tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
+  //float/*double*/ tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
   char tx[4];
   tx[0] = tmpStr3000[0];
@@ -456,7 +472,7 @@ void graph_axis (void){
     case 0: strcpy(tmpStr3000,"          "); break;
     case 1: snprintf(tmpStr3000, sizeof(tmpStr3000), "y-axis x 0"); break;
     case 2: snprintf(tmpStr3000, sizeof(tmpStr3000), "x-axis y 0"); break;
-    case 3: snprintf(tmpStr3000, sizeof(tmpStr3000), "axis 0,0 "); break;
+    case 3: snprintf(tmpStr3000, sizeof(tmpStr3000), "axis 0.0 "); break;
     default:break;
   }
 
@@ -499,8 +515,8 @@ void graph_axis (void){
   #endif
 
 
-  double x; 
-  double y;
+  float/*double*/ x; 
+  float/*double*/ y;
 
   if( !(yzero == SCREEN_HEIGHT_GRAPH-1 || yzero == minny)) {
     //DRAW XAXIS
@@ -545,6 +561,16 @@ void graph_axis (void){
 
 
   if( !(xzero == SCREEN_WIDTH-1 || xzero == minnx)) {
+
+    //Write North arrow
+    if(jm_NVECT) {
+      showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
+      tmpStr3000[0]=0x80 | 0x22;
+      tmpStr3000[1]=0x06;
+      tmpStr3000[2]=0;
+      showString(tmpStr3000, &standardFont, xzero-4, minny+0, vmNormal, true, true);
+    }
+
     //DRAW YAXIS
     cnt = minny;
     while (cnt!=SCREEN_HEIGHT_GRAPH) { 
@@ -683,12 +709,12 @@ void graph_plotmem(void) {
   uint16_t cnt, ix, statnum;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
-  double x; 
-  double y;
-  double sx, sy;
+  float/*double*/ x; 
+  float/*double*/ y;
+  float/*double*/ sx, sy;
 
   statnum = 0;
-  if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
 
@@ -730,12 +756,12 @@ void graph_plotmem(void) {
     if(plotmode != _VECT) {
       for(cnt=0; (cnt < LIM && cnt < statnum); cnt++) {
         #ifdef STATDEBUG
-        printf("Axis0a: x: %f y: %f   \n",gr_x[cnt], gr_y[cnt]);   
+        printf("Axis0a: x: %f y: %f   \n",grf_x(cnt), grf_y(cnt));   
         #endif
-        if(gr_x[cnt] < x_min) {x_min = gr_x[cnt];}
-        if(gr_x[cnt] > x_max) {x_max = gr_x[cnt];}
-        if(gr_y[cnt] < y_min) {y_min = gr_y[cnt];}
-        if(gr_y[cnt] > y_max) {y_max = gr_y[cnt];}
+        if(grf_x(cnt) < x_min) {x_min = grf_x(cnt);}
+        if(grf_x(cnt) > x_max) {x_max = grf_x(cnt);}
+        if(grf_y(cnt) < y_min) {y_min = grf_y(cnt);}
+        if(grf_y(cnt) > y_max) {y_max = grf_y(cnt);}
         #ifdef STATDEBUG
         printf("Axis0b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
         #endif
@@ -744,8 +770,8 @@ void graph_plotmem(void) {
       sx =0;
       sy =0;
       for(cnt=0; (cnt < LIM && cnt < statnum); cnt++) {            //### Note XXX E- will stuff up statnum!
-        sx = sx + gr_x[cnt];
-        sy = sy + gr_y[cnt];
+        sx = sx + grf_x(cnt);
+        sy = sy + grf_y(cnt);
         if(sx < x_min) {x_min = sx;}
         if(sx > x_max) {x_max = sx;}
         if(sy < y_min) {y_min = sy;}
@@ -815,8 +841,8 @@ void graph_plotmem(void) {
     graph_axis();
 
     if(plotmode != _VECT) {
-      yn = screen_window_y(y_min,gr_y[0],y_max);
-      xn = screen_window_x(x_min,gr_x[0],x_max);
+      yn = screen_window_y(y_min,grf_y(0),y_max);
+      xn = screen_window_x(x_min,grf_x(0),x_max);
       xN = xn;
       yN = yn;
     } else {
@@ -832,11 +858,11 @@ void graph_plotmem(void) {
     ix = 0;
     for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
       if(plotmode != _VECT) {
-        x = gr_x[ix];
-        y = gr_y[ix];
+        x = grf_x(ix);
+        y = grf_y(ix);
       } else {
-        sx = sx + gr_x[ix];
-        sy = sy + gr_y[ix];
+        sx = sx + grf_x(ix);
+        sy = sy + grf_y(ix);
         x = sx;
         y = sy;
       }
@@ -899,13 +925,13 @@ void fnStatList(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
   if(telltale == MEM_INITIALIZED) {
     //GRAPH SETUP
-    calcMode = CM_BUG_ON_SCREEN;              //Hack to prevent calculator to restart operation. Used to view graph
+    calcMode = CM_GRAPH; //Used to view graph/listing
     clearScreen();
     refreshStatusBar();
   }
   #endif
 
-  if(jm_VECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
 
@@ -934,15 +960,15 @@ void fnStatList(uint16_t unusedParamButMandatory) {
     for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
       ixx = statnum - ix - 1;
 
-      if((fabs(gr_x[ixx]) > 0.0000001 && fabs(gr_x[ixx]) < 1000000)) 
-        sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, gr_x[ixx]);
+      if((fabs(grf_x(ixx)) > 0.0000001 && fabs(grf_x(ixx)) < 1000000)) 
+        sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, grf_x(ixx));
       else
-        sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, round(gr_x[ixx]*1e10)/1e10);
+        sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, round(grf_x(ixx)*1e10)/1e10);
 
-      if((fabs(gr_y[ixx]) > 0.0000001 && fabs(gr_y[ixx]) < 1000000))
-        sprintf(tmpstr2,"y%19.7f", gr_y[ixx]);
+      if((fabs(grf_y(ixx)) > 0.0000001 && fabs(grf_y(ixx)) < 1000000))
+        sprintf(tmpstr2,"y%19.7f", grf_y(ixx));
       else
-        sprintf(tmpstr2,"y%19.7e", round(gr_y[ixx]*1e10)/1e10);
+        sprintf(tmpstr2,"y%19.7e", round(grf_y(ixx)*1e10)/1e10);
 
       strcat(tmpstr1,tmpstr2);
 

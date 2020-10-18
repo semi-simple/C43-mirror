@@ -533,8 +533,9 @@ void refreshFn(uint16_t timerType) {                        //vv dr - general ti
 
 void underline(int16_t y) {                     //JM
   int16_t i;
-   for( i = 0; i < 6; i = i + 1 ){
-     underline_softkey(i, y, true);
+   for( i = 0; i < 6; i++ ){
+     if(calcMode != CM_GRAPH || ((calcMode == CM_GRAPH) && (i <= 1)))
+       underline_softkey(i, y, true);
    }
 }                                               //JM
 

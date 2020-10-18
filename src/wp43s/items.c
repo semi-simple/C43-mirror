@@ -534,6 +534,7 @@ void fnPline                    (uint16_t unusedParamButMandatory) {}
 void fnPcros                    (uint16_t unusedParamButMandatory) {}
 void fnPbox                     (uint16_t unusedParamButMandatory) {}
 void fnPvect                    (uint16_t unusedParamButMandatory) {}
+void fnPNvect                   (uint16_t unusedParamButMandatory) {}
 void fnPx                       (uint16_t unusedParamButMandatory) {}
 void fnPy                       (uint16_t unusedParamButMandatory) {}
 
@@ -2767,9 +2768,10 @@ const item_t indexOfItems[] = {
 /* 2169 */  { fnPline,                     NOPARAM,                     "LINE",                                        "LINE",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2170 */  { fnPcros,                     NOPARAM,                     "CROSS",                                       "CROSS",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2171 */  { fnPbox,                      NOPARAM,                     "BOX",                                         "BOX",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
-/* 2172 */  { fnPvect,                     NOPARAM,                     "VECTOR",                                      "VECTOR",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
-/* 2173 */  { fnPx,                        NOPARAM,                     "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 2174 */  { fnPy,                        NOPARAM,                     "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2172 */  { fnPvect,                     NOPARAM,                     "VECT",                                        "VECT",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
+/* 2173 */  { fnPNvect,                    NOPARAM,                     "N.VECT",                                      "N.VECT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
+/* 2174 */  { fnPx,                        NOPARAM,                     "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2175 */  { fnPy,                        NOPARAM,                     "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 
-/* 2175 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2176 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

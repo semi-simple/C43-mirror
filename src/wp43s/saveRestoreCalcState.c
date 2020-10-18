@@ -991,26 +991,42 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
   }
 
   else if(strcmp(tmpStr3000, "PROGRAMS") == 0) {
+    uint16_t numberOfBlocks;
+
     readLine(stream, tmpStr3000); // Number of blocks
-    uint16_t numberOfBlocks = stringToUint16(tmpStr3000);
-    resizeProgramMemory(numberOfBlocks);
+    numberOfBlocks = stringToUint16(tmpStr3000);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      resizeProgramMemory(numberOfBlocks);
+    }
 
     readLine(stream, tmpStr3000); // currentProgramMemoryPointer (pointer to block)
-    currentProgramMemoryPointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      currentProgramMemoryPointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    }
     readLine(stream, tmpStr3000); // currentProgramMemoryPointer (offset in bytes within block)
-    currentProgramMemoryPointer += stringToUint32(tmpStr3000);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      currentProgramMemoryPointer += stringToUint32(tmpStr3000);
+    }
 
     readLine(stream, tmpStr3000); // firstFreeProgramBytePointer (pointer to block)
-    firstFreeProgramBytePointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      firstFreeProgramBytePointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    }
     readLine(stream, tmpStr3000); // firstFreeProgramBytePointer (offset in bytes within block)
-    firstFreeProgramBytePointer += stringToUint32(tmpStr3000);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      firstFreeProgramBytePointer += stringToUint32(tmpStr3000);
+    }
 
     readLine(stream, tmpStr3000); // freeProgramBytes
-    freeProgramBytes = stringToUint16(tmpStr3000);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      freeProgramBytes = stringToUint16(tmpStr3000);
+    }
 
     for(i=0; i<numberOfBlocks; i++) {
       readLine(stream, tmpStr3000); // One block
-      *(((uint32_t *)(programMemoryPointer)) + i) = stringToUint32(tmpStr3000);
+      if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+        *(((uint32_t *)(programMemoryPointer)) + i) = stringToUint32(tmpStr3000);
+      }
     }
   }
 

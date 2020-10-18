@@ -312,6 +312,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
     else { // There is plenty of memory available
       blocksToMove = currentSizeInBlocks;
       newProgramMemoryPointer = programMemoryPointer - TO_BYTES(deltaBlocks);
+      firstFreeProgramBytePointer -= TO_BYTES(deltaBlocks);
       //printf("Increasing program memory by copying %u blocks from %u to %u\n", currentSizeInBlocks, TO_WP43SMEMPTR(programMemoryPointer), TO_WP43SMEMPTR(newProgramMemoryPointer));
       freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks -= deltaBlocks;
     }
@@ -320,6 +321,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
     deltaBlocks = currentSizeInBlocks - newSizeInBlocks;
     blocksToMove = newSizeInBlocks;
     newProgramMemoryPointer = programMemoryPointer + TO_BYTES(deltaBlocks);
+    firstFreeProgramBytePointer += TO_BYTES(deltaBlocks);
     //printf("Decreasing program memory by copying %u blocks from %u to %u\n", newSizeInBlocks, TO_WP43SMEMPTR(programMemoryPointer), TO_WP43SMEMPTR(newProgramMemoryPointer));
     freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks += deltaBlocks;
   }

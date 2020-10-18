@@ -2826,7 +2826,8 @@ void fnReset(uint16_t confirmation) {
     // Empty program initialization
     programMemoryPointer = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
     currentProgramMemoryPointer = programMemoryPointer;
-    programCounter = programMemoryPointer;
+    programCounter              = programMemoryPointer;
+    firstFreeProgramBytePointer = programMemoryPointer;
     *programMemoryPointer       = 255; // .END.
     *(programMemoryPointer + 1) = 255; // .END.
     freeProgramBytes = 2;

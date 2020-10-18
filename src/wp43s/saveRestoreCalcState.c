@@ -176,17 +176,17 @@ void saveCalc(void) {
   save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
   save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
   ramPtr = TO_WP43SMEMPTR(programMemoryPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
-  ramPtr = (uint32_t)((void *)programMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(programMemoryPointer))); // programMemoryPointer is not a dataBlock_t pointer
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // programMemoryPointer pointer to block
+  ramPtr = (uint32_t)((void *)programMemoryPointer -        TO_PCMEMPTR(TO_WP43SMEMPTR(programMemoryPointer)));
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // programMemoryPointer offset within block
   ramPtr = TO_WP43SMEMPTR(currentProgramMemoryPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
-  ramPtr = (uint32_t)((void *)currentProgramMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(currentProgramMemoryPointer))); // currentProgramMemoryPointer is not a dataBlock_t pointer
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // currentProgramMemoryPointer pointer to block
+  ramPtr = (uint32_t)((void *)currentProgramMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(currentProgramMemoryPointer)));
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // currentProgramMemoryPointer offset within block
   ramPtr = TO_WP43SMEMPTR(firstFreeProgramBytePointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
-  ramPtr = (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer))); // firstFreeProgramBytePointer is not a dataBlock_t pointer
-  save(&ramPtr,                             sizeof(ramPtr),                             backup);
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer pointer to block
+  ramPtr = (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer)));
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer offset within block
   save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   backup);
 
   fclose(backup);
@@ -333,17 +333,17 @@ void restoreCalc(void) {
     restore(&systemFlags,                        sizeof(systemFlags),                        backup);
     restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   backup);
     restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             backup);
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup);
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // programMemoryPointer pointer to block
     programMemoryPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // programMemoryPointer is not a dataBlock_t pointer
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // programMemoryPointer offset within block
     programMemoryPointer += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup);
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // currentProgramMemoryPointer pointer to block
     currentProgramMemoryPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // currentProgramMemoryPointer is not a dataBlock_t pointer
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // currentProgramMemoryPointer offset within block
     currentProgramMemoryPointer += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup);
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer pointer to block
     firstFreeProgramBytePointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer is not a dataBlock_t pointer
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer offset within block
     firstFreeProgramBytePointer += ramPtr;
     restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   backup);
 
@@ -574,6 +574,25 @@ void fnSave(uint16_t unusedParamButMandatory) {
                                                                                                              kbd_usr[i].gShiftedAim,
                                                                                                                          kbd_usr[i].primaryTam);
   save(tmpStr3000, strlen(tmpStr3000), backup);
+  }
+
+  // Programs
+  uint16_t currentSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
+  sprintf(tmpStr3000, "PROGRAMS\n%" PRIu16 "\n", currentSizeInBlocks);
+  save(tmpStr3000, strlen(tmpStr3000), backup);
+
+  sprintf(tmpStr3000, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(currentProgramMemoryPointer), (uint32_t)((void *)currentProgramMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(currentProgramMemoryPointer)))); // currentProgramMemoryPointer block pointer + offset within block
+  save(tmpStr3000, strlen(tmpStr3000), backup);
+
+  sprintf(tmpStr3000, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(firstFreeProgramBytePointer), (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer)))); // firstFreeProgramBytePointer block pointer + offset within block
+  save(tmpStr3000, strlen(tmpStr3000), backup);
+
+  sprintf(tmpStr3000, "%" PRIu16 "\n", freeProgramBytes);
+  save(tmpStr3000, strlen(tmpStr3000), backup);
+
+  for(i=0; i<currentSizeInBlocks; i++) {
+    sprintf(tmpStr3000, "%" PRIu32 "\n", *(((uint32_t *)(programMemoryPointer)) + i));
+    save(tmpStr3000, strlen(tmpStr3000), backup);
   }
 
   // Other configuration stuff
@@ -834,31 +853,31 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     readLine(stream, tmpStr3000); // Global flags
     if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
       str = tmpStr3000;
-      globalFlags[0] = stringToUint16(str);
+      globalFlags[0] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[1] = stringToUint16(str);
+      globalFlags[1] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[2] = stringToUint16(str);
+      globalFlags[2] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[3] = stringToUint16(str);
+      globalFlags[3] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[4] = stringToUint16(str);
+      globalFlags[4] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[5] = stringToUint16(str);
+      globalFlags[5] = stringToInt16(str);
 
       while(*str != ' ') str++;
       while(*str == ' ') str++;
-      globalFlags[6] = stringToUint16(str);
+      globalFlags[6] = stringToInt16(str);
     }
   }
 
@@ -971,6 +990,30 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     }
   }
 
+  else if(strcmp(tmpStr3000, "PROGRAMS") == 0) {
+    readLine(stream, tmpStr3000); // Number of blocks
+    uint16_t numberOfBlocks = stringToUint16(tmpStr3000);
+    resizeProgramMemory(numberOfBlocks);
+
+    readLine(stream, tmpStr3000); // currentProgramMemoryPointer (pointer to block)
+    currentProgramMemoryPointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    readLine(stream, tmpStr3000); // currentProgramMemoryPointer (offset in bytes within block)
+    currentProgramMemoryPointer += stringToUint32(tmpStr3000);
+
+    readLine(stream, tmpStr3000); // firstFreeProgramBytePointer (pointer to block)
+    firstFreeProgramBytePointer = TO_PCMEMPTR(stringToUint32(tmpStr3000));
+    readLine(stream, tmpStr3000); // firstFreeProgramBytePointer (offset in bytes within block)
+    firstFreeProgramBytePointer += stringToUint32(tmpStr3000);
+
+    readLine(stream, tmpStr3000); // freeProgramBytes
+    freeProgramBytes = stringToUint16(tmpStr3000);
+
+    for(i=0; i<numberOfBlocks; i++) {
+      readLine(stream, tmpStr3000); // One block
+      *(((uint32_t *)(programMemoryPointer)) + i) = stringToUint32(tmpStr3000);
+    }
+  }
+
   else if(strcmp(tmpStr3000, "OTHER_CONFIGURATION_STUFF") == 0) {
     readLine(stream, tmpStr3000); // Number params
     numberOfRegs = stringToInt16(tmpStr3000);
@@ -1055,6 +1098,7 @@ void fnLoad(uint16_t loadMode) {
   restoreOneSection(backup, loadMode); // STATISTICAL_SUMS
   restoreOneSection(backup, loadMode); // SYSTEM_FLAGS
   restoreOneSection(backup, loadMode); // KEYBOARD_ASSIGNMENTS
+  restoreOneSection(backup, loadMode); // PROGRAMS
   restoreOneSection(backup, loadMode); // OTHER_CONFIGURATION_STUFF
 
   #ifdef DMCP_BUILD

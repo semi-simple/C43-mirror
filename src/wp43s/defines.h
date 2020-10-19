@@ -568,6 +568,9 @@
 #define CP_PERMUTATION                             0
 #define CP_COMBINATION                             1
 
+#define GD_DIRECT_FUNCTION                         0
+#define GD_INVERSE_FUNCTION                        1
+
 // Load mode
 #define LM_ALL                                     0
 #define LM_PROGRAMS                                1

@@ -473,6 +473,7 @@ void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
 void fnFib                      (uint16_t unusedParamButMandatory) {}
+<<<<<<< HEAD
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -543,6 +544,10 @@ void fnPy                       (uint16_t unusedParamButMandatory) {}
 
 
 
+=======
+void fnGd                       (uint16_t unusedParamButMandatory) {}
+void fnInvGd                    (uint16_t unusedParamButMandatory) {}
+>>>>>>> 43S-Master-JM
 #endif
 
 const item_t indexOfItems[] = {
@@ -2053,8 +2058,8 @@ const item_t indexOfItems[] = {
 /* 1465 */  { itemToBeCoded,               NOPARAM,                     "f'(x)",                                       "f'(x)",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1466 */  { itemToBeCoded,               NOPARAM,                     "f\"(x)",                                      "f\"(x)",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1467 */  { fnDisplayFormatGap,          TM_VALUE,                    "GAP",                                         "GAP",                                         0,      15,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1468 */  { itemToBeCoded,               NOPARAM,                     "g" STD_SUB_d,                                 "g" STD_SUB_d,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1469 */  { itemToBeCoded,               NOPARAM,                     "g" STD_SUB_d STD_SUP_MINUS_1,                 "g" STD_SUB_d STD_SUP_MINUS_1,                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1468 */  { fnGd,                        NOPARAM,                     "g" STD_SUB_d,                                 "g" STD_SUB_d,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1469 */  { fnInvGd,                     NOPARAM,                     "g" STD_SUB_d STD_SUP_MINUS_1,                 "g" STD_SUB_d STD_SUP_MINUS_1,                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1470 */  { fnAngularMode,               AM_GRAD,                     "GRAD",                                        "GRAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1471 */  { fnCvtToCurrentAngularMode,   AM_GRAD,                     "GRAD" STD_RIGHT_ARROW,                        "GRAD" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1472 */  { itemToBeCoded,               NOPARAM,                     "GTO.",                                        "GTO.",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

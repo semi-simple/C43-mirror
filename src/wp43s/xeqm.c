@@ -287,7 +287,6 @@ printf("@@@ %s\n",commandnumber);
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
-
                       if (strcompare(commandnumber,"CPX?" )) {sprintf(commandnumber,"%d", ITM_CPX);} else
                       if (strcompare(commandnumber,"REAL?" )) {sprintf(commandnumber,"%d", ITM_REAL);} else
                       if (strcompare(commandnumber,"PRIME?" )) {sprintf(commandnumber,"%d", ITM_PRIME);} else
@@ -589,7 +588,6 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"LISTXY" )) {sprintf(commandnumber,"%d", ITM_LISTXY);} else
                       if (strcompare(commandnumber,"ERPN?" )) {sprintf(commandnumber,"%d", ITM_SH_ERPN);} else
                       if (strcompare(commandnumber,"X.XEQ" )) {sprintf(commandnumber,"%d", ITM_XXEQ);} else
-                      if (strcompare(commandnumber,"STATGRF" )) {sprintf(commandnumber,"%d", -MNU_ST_GRAPH);} else
                       if (strcompare(commandnumber,"CPXI" )) {sprintf(commandnumber,"%d", ITM_CPXI);} else
                       if (strcompare(commandnumber,"CPXJ" )) {sprintf(commandnumber,"%d", ITM_CPXJ);} else
                       if (strcompare(commandnumber,"SSIZE4" )) {sprintf(commandnumber,"%d", ITM_SSIZE4);} else
@@ -621,8 +619,9 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"XEQM18" ) && exec) {sprintf(commandnumber,"%d", ITM_X_g6);} else
                       if (strcompare(commandnumber,"X.SAVE" )) {sprintf(commandnumber,"%d", ITM_XSAVE);} else
                       if (strcompare(commandnumber,"X.LOAD" )) {sprintf(commandnumber,"%d", ITM_XLOAD);} else
-                      if (strcompare(commandnumber,"GRF" )) {sprintf(commandnumber,"%d", ITM_PLOTJM);} else
                       if (strcompare(commandnumber,"PLOTLS" )) {sprintf(commandnumber,"%d", ITM_PLOTLS);} else
+                      if (strcompare(commandnumber,"GRF" )) {sprintf(commandnumber,"%d", ITM_PLOTJM);} else
+
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************
 

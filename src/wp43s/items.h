@@ -1768,7 +1768,7 @@
 #define ITM_FG_LINE                   1746   //JM FG              **
 #define ITM_FG_DOTS                   1747   //JM FG              **
 #define ITM_G_DOUBLETAP               1748   //JM FG              **
-#define ITM_GRAPH                     1749   //JM GRAPHING
+#define ITM_1749                      1749
 #define ITM_P_ALLREGS                 1750   //JM Print all regs
 #define ITM_SI_f                      1751   //JM PRE UNIT
 #define ITM_SI_p                      1752   //JM PRE UNIT
@@ -1878,12 +1878,12 @@
 #define ITM_GRF_DX                    1856   //JM GRAPH
 #define ITM_GRF_DY                    1857   //JM GRAPH
 #define ITM_GRF_HLP                   1858   //JM GRAPH
-#define ITM_DEMO1                     1859   //JM USER
-#define ITM_DEMO2                     1860   //JM USER
-#define ITM_DEMO3                     1861   //JM USER
-#define ITM_DEMO4                     1862   //JM USER
-#define ITM_DEMO5                     1863   //JM USER
-#define ITM_DEMO6                     1864   //JM USER
+#define ITM_1859                      1859
+#define ITM_1860                      1860
+#define ITM_1861                      1861
+#define ITM_1862                      1862
+#define ITM_1863                      1863
+#define ITM_1864                      1864
 #define ITM_LISTXY                    1865   //JMSTAT
 #define ITM_SH_ERPN                   1866   //JM SHOW
 #define ITM_SYS_FREE_RAM              1867   //dr
@@ -1934,11 +1934,11 @@
 #define MNU_BASE                      1912   //JM BASE
 #define MNU_XEQ                       1913   //JM EXEC
 #define MNU_EE                        1914   //JM EE
-#define STAT_DEMO                     1915   //LOAD STATS GRAPH
+#define ITM_1915                      1915
 #define MNU_ASN                       1916   //JM USER
 #define MNU_A_Z                       1917   //  34
 #define MNU_a_z                       1918   //  875
-#define MNU_ST_GRAPH                  1919   //JM USER
+#define ITM_1919                      1919
 #define MNU_ASN_U                     1920   //V43
 #define MNU_T_EDIT                    1921
 #define MNU_XXEQ                      1922
@@ -2186,7 +2186,7 @@
 #define ITM_FBYTE                     2164   //JM SHOI
 #define ITM_CLAIM                     2165
 #define ITM_SHOIREP                   2166   //JM SHOI
-#define ITM_PLOTJM                    2167
+#define ITM_2167                      2167
 #define ITM_PLOTLS                    2168
 #define ITM_PLINE                     2169   //GRAPH
 #define ITM_PCROS                     2170   //GRAPH
@@ -2195,8 +2195,16 @@
 #define ITM_NVECT                     2173   //JMVECT
 #define ITM_EXTX                      2174
 #define ITM_EXTY                      2175
+#define ITM_PLOTJM                    2176
+#define ITM_GRAPH                     2177   //JM GRAPHING
+#define ITM_DEMO1                     2178   //JM USER
+#define ITM_DEMO2                     2179   //JM USER
+#define ITM_DEMO3                     2180   //JM USER
+#define ITM_DEMO4                     2181   //JM USER
+#define ITM_DEMO5                     2182   //JM USER
+#define ITM_DEMO6                     2183   //JM USER
 
-#define LAST_ITEM                     2176   //JM
+#define LAST_ITEM                     2184   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

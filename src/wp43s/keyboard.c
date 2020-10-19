@@ -276,7 +276,7 @@ int16_t determineItem(const char *data) {
   if (kbd_usr[36].primaryTam == KEY_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
-    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
@@ -358,7 +358,7 @@ int16_t determineItem(const char *data) {
          return result;  
   } else                                                                                                                      //JM^^
  
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_GRAPH) {  //JM added modes
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
     result = shiftF ? key->fShifted :
              shiftG ? key->gShifted :
                       key->primary;
@@ -580,7 +580,7 @@ void processKeyAction(int16_t item) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_LEFT_ARROW);
       } else
-      if(calcMode == CM_GRAPH) {
+      if(calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {
         keyActionProcessed = true;
       }
       if(!keyActionProcessed){
@@ -594,7 +594,7 @@ void processKeyAction(int16_t item) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_RIGHT_ARROW);
       } else
-      if(calcMode == CM_GRAPH) {
+      if(calcMode == CM_GRAPH || calcMode == CM_LISTXY) {
         keyActionProcessed = true;
       }
       if(!keyActionProcessed){
@@ -612,7 +612,7 @@ void processKeyAction(int16_t item) {
     case KEY_CC:
     case ITM_ENTER:
     case KEY_dotD:
-      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH) {  //JM added mode
+      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
         keyActionProcessed = true;
       }
       break;
@@ -784,7 +784,7 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           break;
 
-
+        case CM_LISTXY:
         case CM_GRAPH:                      //JM
           if(item == KEY_EXIT1 || item == KEY_BACKSPACE) {
             calcMode = previousCalcMode;
@@ -910,6 +910,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
     case CM_FONT_BROWSER:
     case CM_ERROR_MESSAGE:
     case CM_BUG_ON_SCREEN:
+    case CM_LISTXY:
     case CM_GRAPH:                      //JM
       break;
 
@@ -1034,6 +1035,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_BUG_ON_SCREEN:
+    case CM_LISTXY:
     case CM_GRAPH:                      //JM
       calcMode = previousCalcMode;
       break;
@@ -1100,6 +1102,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
     case CM_FLAG_BROWSER:
     case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
+    case CM_LISTXY:
     case CM_GRAPH:                      //JM
       break;
 
@@ -1199,6 +1202,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
       calcMode = previousCalcMode;
       break;
 
+    case CM_LISTXY:
     case CM_GRAPH:                      //JM
       calcMode = previousCalcMode;
       keyActionProcessed = true;
@@ -1238,6 +1242,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_ASM:
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
+    case CM_LISTXY:
     case CM_GRAPH:                  //JM
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
@@ -1369,6 +1374,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_ASM:
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
+    case CM_LISTXY:
     case CM_GRAPH:                  //JM
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
@@ -1503,6 +1509,7 @@ void fnKeyDotD(uint16_t unusedParamButMandatory) {
     case CM_FLAG_BROWSER:
     case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
+    case CM_LISTXY:
     case CM_GRAPH:                  //JM
       break;
 

@@ -500,7 +500,7 @@ void fn_cnst_op_aa              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_op_a               (uint16_t unusedParamButMandatory) {}
 void fn_cnst_0_cpx              (uint16_t unusedParamButMandatory) {}
 void fn_cnst_1_cpx              (uint16_t unusedParamButMandatory) {}
-void fnStatList                 (uint16_t unusedParamButMandatory) {}
+void fnListXY                   (uint16_t unusedParamButMandatory) {}
 void fnXEQMENU                  (uint16_t unusedParamButMandatory) {}
 void flagBrowser_old            (uint16_t unusedParamButMandatory) {}
 void fnRound2                   (uint16_t unusedParamButMandatory) {}
@@ -2342,7 +2342,7 @@ const item_t indexOfItems[] = {
 /* 1746 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNDERLINING
 /* 1747 */  { fnSetSetJM,                  JC_FG_DOTS,                  "fg" STD_SPACE_3_PER_EM "DOTS",                "fg" STD_SPACE_3_PER_EM "DOTS",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNDERLINING
 /* 1748 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM KEY TAP DOUBLE SETTING
-/* 1749 */  { fnGraph,                     1,                           "PLTGRF",                                      "PLTGRF",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPHING
+/* 1749 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1750 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 /* 1751 */  { fnMultiplySI,                85,                          STD_DOT "f",                                   STD_DOT "f",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM PRE UNIT
 /* 1752 */  { fnMultiplySI,                88,                          STD_DOT "p",                                   STD_DOT "p",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM PRE UNIT
@@ -2453,13 +2453,13 @@ const item_t indexOfItems[] = {
 /* 1856 */  { fnJM,                        25,                          "GRF.DX",                                      "TICK DX",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPH
 /* 1857 */  { fnJM,                        26,                          "GRF.DY",                                      "TICK DY",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPH
 /* 1858 */  { fnJM,                        27,                          "GRF.HLP",                                     "GRF.HLP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPH
-/* 1859 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1860 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1861 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1862 */  { fnGraph,                     14,                          "DEMO4",                                       "DEMO4",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1863 */  { fnGraph,                     15,                          "DEMO5",                                       "DEMO5",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1864 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 1865 */  { fnStatList,                  NOPARAM,                     "LISTXY",                                      "LISTXY",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 1859 */  { itemToBeCoded,               NOPARAM,                     "1859",                                        "1859",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1860 */  { itemToBeCoded,               NOPARAM,                     "1860",                                        "1860",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1861 */  { itemToBeCoded,               NOPARAM,                     "1861",                                        "1861",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1862 */  { itemToBeCoded,               NOPARAM,                     "1862",                                        "1862",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1863 */  { itemToBeCoded,               NOPARAM,                     "1863",                                        "1863",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1864 */  { itemToBeCoded,               NOPARAM,                     "1864",                                        "1864",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1865 */  { fnListXY,                    NOPARAM,                     "LISTXY",                                      "LISTXY",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 
 
 /* 1866 */  { fnShowJM,                    JC_ERPN,                     "eRPN?",                                       "eRPN?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOW
@@ -2511,11 +2511,11 @@ const item_t indexOfItems[] = {
 /* 1912 */  { itemToBeCoded,               NOPARAM,                     "BASE",                                        "BASE",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},//JM BASE
 /* 1913 */  { itemToBeCoded,               NOPARAM,                     "XEQM",                                        "XEQM",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1914 */  { itemToBeCoded,               NOPARAM,                     "ELEC.ENG",                                    "ELEC",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_ENABLED  },//JM EE
-/* 1915 */  { fnGraph,                     3,                           "DEMO",                                        "DEMO",                                        0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
+/* 1915 */  { itemToBeCoded,               NOPARAM,                     "1915",                                        "1915",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1916 */  { itemToBeCoded,               NOPARAM,                     "KEYS",                                        "KEYS",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1917 */  { itemToBeCoded,               NOPARAM,                     "A..Z",                                        "A..Z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 34
 /* 1918 */  { itemToBeCoded,               NOPARAM,                     "a..z",                                        "a..z",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},// Ex 875 Small latin letters
-/* 1919 */  { itemToBeCoded,               NOPARAM,                     "STATGRF",                                     "STATGRF",                                     0,       0,       CAT_MENU, SLS_ENABLED  , US_UNCHANGED},
+/* 1919 */  { itemToBeCoded,               NOPARAM,                     "1919",                                        "1919",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1920 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+U&N",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},//J=V43
 /* 1921 */  { itemToBeCoded,               NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1922 */  { itemToBeCoded,               NOPARAM,                     "XXEQ",                                        "XXEQ",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
@@ -2763,7 +2763,7 @@ const item_t indexOfItems[] = {
 /* 2164 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2165 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
 /* 2166 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
-/* 2167 */  { fnGraph,                     4,                           "GRF",                                         "GRF",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 2167 */  { itemToBeCoded,               NOPARAM,                     "2167",                                        "2167",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2168 */  { fnPlotLS,                    NOPARAM,                     "PLOTLS",                                      "PLOTLS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 /* 2169 */  { fnPline,                     NOPARAM,                     "LINE",                                        "LINE",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2170 */  { fnPcros,                     NOPARAM,                     "CROSS",                                       "CROSS",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
@@ -2772,6 +2772,14 @@ const item_t indexOfItems[] = {
 /* 2173 */  { fnPNvect,                    NOPARAM,                     "N.VECT",                                      "N.VECT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
 /* 2174 */  { fnPx,                        NOPARAM,                     "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2175 */  { fnPy,                        NOPARAM,                     "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2176 */  { fnGraph,                     4,                           "GRF",                                         "GRF",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 2177 */  { fnGraph,                     1,                           "PLTGRF",                                      "PLTGRF",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPHING
+/* 2178 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
+/* 2179 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
+/* 2180 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
+/* 2181 */  { fnGraph,                     14,                          "DEMO4",                                       "DEMO4",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
+/* 2182 */  { fnGraph,                     15,                          "DEMO5",                                       "DEMO5",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
+/* 2183 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 
-/* 2176 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2184 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

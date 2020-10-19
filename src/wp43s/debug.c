@@ -335,6 +335,7 @@ void debugNIM(void) {
     if(cm == CM_BUG_ON_SCREEN)    return "BUG.ON.SCR  ";
     if(cm == CM_CONFIRMATION)     return "CONFIRMATION";
     if(cm == CM_GRAPH)            return "GRAPH       ";
+    if(cm == CM_LISTXY)           return "LISTXY      ";
 
     return "???         ";
   }

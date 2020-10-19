@@ -1436,7 +1436,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
     refreshDebugPanel();
   #endif
 
-  if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_GRAPH)) {               //JM
+  if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
     clearRegisterLine(regist, true, (regist != REGISTER_Y));
 
     #ifdef PC_BUILD
@@ -2393,7 +2393,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #endif                                  //^^
 
 
-  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
+  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -2438,12 +2438,13 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
+    case CM_LISTXY:
     case CM_GRAPH:                      //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        if(calcMode != CM_GRAPH) {      //JM
+        if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
           clearScreen();      
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
@@ -2457,7 +2458,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
-      if(calcMode != CM_GRAPH) {        //JM
+      if(calcMode != CM_GRAPH && calcMode!=CM_LISTXY) {        //JM
         refreshRegisterLine(REGISTER_X);
       }                                 //JM
 #ifdef INLINE_TEST
@@ -2502,8 +2503,12 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
         refreshStatusBar();
 
         if(calcMode == CM_GRAPH) {     //JM v
-            graph_plotmem();
+          graph_plotmem();
         }                              //JM ^
+        if(calcMode == CM_LISTXY) {     //JM v
+          fnStatList();
+        }                              //JM ^
+
 
       }
 #ifdef INLINE_TEST

@@ -119,6 +119,13 @@ void fnPlotLS(uint16_t unusedParamButMandatory) {
 }
 
 
+void fnListXY(uint16_t unusedParamButMandatory) {
+  #ifndef TESTSUITE_BUILD
+    if(telltale == MEM_INITIALIZED) {
+      calcMode = CM_LISTXY; //Used to view graph/listing
+    }
+  #endif
+}
 
 
 void graph_setupmemory(void) {
@@ -918,27 +925,23 @@ void graph_plotmem(void) {
 //-----------------------------------------------------//-----------------------------------------------------
 
 
-void fnStatList(uint16_t unusedParamButMandatory) {
+void fnStatList() {
   char tmpstr1[100], tmpstr2[100];
   int16_t ix, ixx, statnum;
 
   #ifndef TESTSUITE_BUILD
-  if(telltale == MEM_INITIALIZED) {
-    //GRAPH SETUP
-    calcMode = CM_GRAPH; //Used to view graph/listing
-    clearScreen();
-    refreshStatusBar();
-  }
+    if(telltale == MEM_INITIALIZED) {
+      clearScreen();
+      refreshStatusBar();
+    }
   #endif
+
+  #ifndef TESTSUITE_BUILD
 
   if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
-
-    #ifndef TESTSUITE_BUILD
     runFunction(ITM_NSIGMA);
-    #endif
-
     if(plotmode != _VECT) {
       //Convert from real to int
       realToInt32(SIGMA_N, statnum);
@@ -948,13 +951,10 @@ void fnStatList(uint16_t unusedParamButMandatory) {
       statnum = ix_count;
     }
 
-    #ifndef TESTSUITE_BUILD
     runFunction(ITM_DROP);
-    #endif
-   
     print_linestr("Stat data",true);
     #ifdef STATDEBUG
-    printf("Stat data %d - %d\n",statnum-1, max(0, statnum-1-6) );
+      printf("Stat data %d - %d\n",statnum-1, max(0, statnum-1-6) );
     #endif
 
     for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
@@ -974,10 +974,11 @@ void fnStatList(uint16_t unusedParamButMandatory) {
 
       print_numberstr(tmpstr1,false);
       #ifdef STATDEBUG
-      printf("%d:%s\n",ixx,tmpstr1);
+        printf("%d:%s\n",ixx,tmpstr1);
       #endif
     }
   }
+  #endif
 }
 
 

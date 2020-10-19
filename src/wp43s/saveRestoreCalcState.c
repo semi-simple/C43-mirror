@@ -432,6 +432,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_FLAG_BROWSER)     {}
       else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM
       else if(calcMode == CM_FONT_BROWSER)     {}
+      else if(calcMode == CM_LISTXY)           {}
       else if(calcMode == CM_GRAPH)            {}
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
@@ -449,6 +450,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
       else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
       else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+      else if(calcMode == CM_LISTXY)           {}
       else if(calcMode == CM_GRAPH)            {}
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);

@@ -467,7 +467,8 @@
 #define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          12 // Bug message on screen
 #define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
-#define CM_GRAPH                                  98 //JM Display graph
+#define CM_GRAPH                                  97 //JM Display graph       //JM
+#define CM_LISTXY                                 98 //JM Display stat list   //JM
 #define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old                                      //JM
 
 // Next character in AIM 2 bits

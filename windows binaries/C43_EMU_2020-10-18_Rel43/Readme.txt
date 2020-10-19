@@ -1,4 +1,4 @@
-11 Oct 2020 release pre-alpha REL42
+18 Oct 2020 release pre-alpha REL43
 
 
 
@@ -46,6 +46,8 @@ Notes:
 13. Try the new Alpha mode multi line text editor.
 
 14. Try the new longpress EXIT clear input buffer.
+
+15. Try the new STAT / PLOT
 
 ---
 

@@ -26,3 +26,5 @@ void tanRema                  (void);
 void tanCxma                  (void);
 void tanReal                  (void);
 void tanCplx                  (void);
+
+uint8_t TanComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);

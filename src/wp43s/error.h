@@ -24,3 +24,4 @@
 
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine);
 void moreInfoOnError        (const char *m1, const char *m2, const char *m3, const char *m4);
+

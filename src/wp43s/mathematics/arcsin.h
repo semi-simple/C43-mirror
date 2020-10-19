@@ -25,3 +25,5 @@ void arcsinRema (void);
 void arcsinCxma (void);
 void arcsinReal (void);
 void arcsinCplx (void);
+
+uint8_t ArcsinComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);

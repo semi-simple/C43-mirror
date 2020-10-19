@@ -18,11 +18,16 @@
  * \file fib.h
  ***********************************************/
 
-void fnFib   (uint16_t unusedParamButMandatory);
-void fibError(void);
-void fibLonI (void);
-void fibReal (void);
-void fibCplx (void);
+void fnGd   (uint16_t unusedParamButMandatory);
+void fnInvGd(uint16_t unusedParamButMandatory);
 
-uint8_t FibonacciReal(const real_t *n, real_t *res, realContext_t *realContext);
-uint8_t FibonacciComplex(const real_t *nReal, const real_t *nImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+void gdTypeError(uint16_t gdOrInvGd);
+void gdLonI (uint16_t gdOrInvGd);
+void gdReal (uint16_t gdOrInvGd);
+void gdCplx (uint16_t gdOrInvGd);
+
+uint8_t GudermannianReal(const real_t *x, real_t *res, realContext_t *realContext);
+uint8_t GudermannianComplex(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+uint8_t InverseGudermannianReal(const real_t *x, real_t *res, realContext_t *realContext);
+uint8_t InverseGudermannianComplex(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext);

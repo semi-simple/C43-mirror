@@ -473,7 +473,8 @@ void fnUndo                     (uint16_t unusedParamButMandatory) {}
 void fnXmax                     (uint16_t unusedParamButMandatory) {}
 void fnXmin                     (uint16_t unusedParamButMandatory) {}
 void fnFib                      (uint16_t unusedParamButMandatory) {}
-<<<<<<< HEAD
+void fnGd                       (uint16_t unusedParamButMandatory) {}
+void fnInvGd                    (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -542,12 +543,6 @@ void fnPy                       (uint16_t unusedParamButMandatory) {}
   
                                                                                 //JM ^^
 
-
-
-=======
-void fnGd                       (uint16_t unusedParamButMandatory) {}
-void fnInvGd                    (uint16_t unusedParamButMandatory) {}
->>>>>>> 43S-Master-JM
 #endif
 
 const item_t indexOfItems[] = {

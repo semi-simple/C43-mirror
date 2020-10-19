@@ -25,3 +25,6 @@ void arcsinhRema (void);
 void arcsinhCxma (void);
 void arcsinhReal (void);
 void arcsinhCplx (void);
+
+uint8_t ArcsinhReal(const real_t *x, real_t *res, realContext_t *realContext);
+uint8_t ArcsinhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);

@@ -224,4 +224,6 @@ logxy
 lnbeta
 beta
 fib
+gd
+invGd
 

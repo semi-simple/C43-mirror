@@ -25,3 +25,5 @@ void arctanRema (void);
 void arctanCxma (void);
 void arctanReal (void);
 void arctanCplx (void);
+
+uint8_t ArctanComplex(real_t *xReal, real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);

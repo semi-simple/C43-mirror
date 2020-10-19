@@ -22,14 +22,11 @@
 
 
 void listPrograms(void) {
-  uint16_t step = 1;
+  uint16_t step = 0;
 
   stepAddress = programMemoryPointer;
   while(stepAddress) {
     printf("%4u  ", step++);
-    if(*stepAddress == ((ITM_END >> 8) | 0x80) && *(stepAddress + 1) == (ITM_END & 0xff)) {
-      step = 1;
-    }
     stepAddress = decodeOneStep();
   }
 }
@@ -462,6 +459,7 @@ void *decodeOneStep(void) {
         case ITM_ALL:      //  1400
         case ITM_ENG:      //  1450
         case ITM_FIX:      //  1463
+        case ITM_LocR:     //  1504
         case ITM_SCI:      //  1577
           return decodeParam(indexOfItems[item16].itemSoftmenuName, PARAM_NUMBER);
 

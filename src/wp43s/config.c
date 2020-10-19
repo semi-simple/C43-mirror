@@ -509,14 +509,14 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 1264;
+  uint32_t numberOfBytesForTheTestPrograms = 1304; // 326*4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   currentProgramMemoryPointer = programMemoryPointer;
   stepAddress = programMemoryPointer;
 
   { // Prime number checker
-    // 1
+    // 0
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
     *(stepAddress++) = 5; // String length
@@ -526,455 +526,455 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'm';
     *(stepAddress++) = 'e';
 
-    // 2
+    // 1
     *(stepAddress++) = ITM_MAGNITUDE;
 
-    // 3
+    // 2
     *(stepAddress++) = ITM_IP;
 
-    // 4
+    // 3
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 0;
 
-    // 5
+    // 4
     *(stepAddress++) = ITM_SQUAREROOTX;
 
-    // 6
+    // 5
     *(stepAddress++) = ITM_IP;
 
-    // 7
+    // 6
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 2;
 
-    // 8
+    // 7
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 9
+    // 8
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 1;
 
-    // 10
+    // 9
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 11
+    // 10
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 12
+    // 11
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 12
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 13
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 14
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 15
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 16
+    // 15
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 17
+    // 16
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '4'; // THE string
 
-    // 18
+    // 17
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 19
+    // 18
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 2;
 
-    // 20
+    // 19
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
+
+    // 20
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 21
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 22
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 23
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 24
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 25
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 26
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 27
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 28
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 29
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 30
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 31
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 32
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 33
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 34
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 35
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 36
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 37
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 38
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 39
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 40
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 41
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 42
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 43
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 44
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 45
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 46
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 47
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 48
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 49
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 50
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 51
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 52
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 53
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 54
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 55
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 56
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 57
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '8'; // THE string
 
     // 58
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '8'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 59
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 60
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 61
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 62
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 63
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 64
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '4'; // THE string
 
-    // 65
+    // 64
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 66
+    // 65
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 67
+    // 66
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 68
+    // 67
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '4'; // THE string
 
-    // 69
+    // 68
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 70
+    // 69
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '8'; // THE string
 
-    // 71
+    // 70
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 71
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 72
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 73
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 74
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 75
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 76
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 77
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 78
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 79
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 80
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 81
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 82
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 83
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 84
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 85
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 86
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 87
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 88
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 89
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 90
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 91
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 92
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 93
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 94
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
@@ -983,172 +983,172 @@ void addTestPrograms(void) {
     // 94
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 95
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '6'; // THE string
 
     // 96
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 97
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 98
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 99
+    // 98
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 100
+    // 99
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '6'; // THE string
 
-    // 101
+    // 100
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 101
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '4'; // THE string
 
     // 102
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '4'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 103
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 104
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 105
+    // 104
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 106
+    // 105
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '4'; // THE string
 
-    // 107
+    // 106
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 107
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '2'; // THE string
 
     // 108
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '2'; // THE string
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 9;
 
     // 109
-    *(stepAddress++) = ITM_XEQ;
-    *(stepAddress++) = 9;
-
-    // 110
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 2; // String length
     *(stepAddress++) = '1'; // THE string
     *(stepAddress++) = '0'; // THE string
 
-    // 111
+    // 110
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 112
+    // 111
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 113
+    // 112
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
 
-    // 114
+    // 113
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 2; // String length
     *(stepAddress++) = '1'; // THE string
     *(stepAddress++) = '0'; // THE string
 
-    // 115
+    // 114
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 9;
+
+    // 115
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 2;
 
     // 116
     *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 2;
-
-    // 117
-    *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 1;
 
-    // 118
+    // 117
     *(stepAddress++) = ITM_XLT;
     *(stepAddress++) = REGISTER_Y;
 
-    // 119
+    // 118
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 2;
+
+    // 119
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 0;
 
     // 120
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 0;
 
     // 121
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 0;
-
-    // 122
     *(stepAddress++) = (ITM_STOP >> 8) | 0x80;
     *(stepAddress++) =  ITM_STOP       & 0xff;
 
-    // 123
+    // 122
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 9;
 
-    // 124
+    // 123
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 1;
 
-    // 125
+    // 124
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 0;
 
-    // 126
+    // 125
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 1;
 
-    // 127
+    // 126
     *(stepAddress++) = ITM_MOD;
 
-    // 128
+    // 127
     *(stepAddress++) = ITM_XNE;
     *(stepAddress++) = VALUE_0;
 
-    // 129
+    // 128
     *(stepAddress++) = ITM_RTN;
 
-    // 130
+    // 129
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 0;
 
-    // 131
+    // 130
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 1;
 
-    // 132
+    // 131
     *(stepAddress++) = (ITM_END >> 8) | 0x80;
     *(stepAddress++) =  ITM_END       & 0xff;
 
@@ -1158,7 +1158,7 @@ void addTestPrograms(void) {
   }
 
   { // Bairstow polynomial root finder
-    // 1
+    // 132
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
     *(stepAddress++) = 7; // String length
@@ -1170,20 +1170,20 @@ void addTestPrograms(void) {
     *(stepAddress++) = 't';
     *(stepAddress++) = 'o';
 
-    // 2
+    // 133
     *(stepAddress++) = (ITM_ALL >> 8) | 0x80;
     *(stepAddress++) =  ITM_ALL       & 0xff;
     *(stepAddress++) = 0;
 
-    // 3
+    // 134
     *(stepAddress++) = (ITM_CLREGS >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLREGS       & 0xff;
 
-    // 4
+    // 135
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 5
+    // 136
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 19; // String length
@@ -1207,33 +1207,33 @@ void addTestPrograms(void) {
     *(stepAddress++) = ' ';
     *(stepAddress++) = '?';
 
-    // 6
+    // 137
     *(stepAddress++) = (ITM_STOP >> 8) | 0x80;
     *(stepAddress++) =  ITM_STOP       & 0xff;
 
-    // 7
+    // 138
     *(stepAddress++) = ITM_MAGNITUDE;
 
-    // 8
+    // 139
     *(stepAddress++) = ITM_IP;
 
-    // 9
+    // 140
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 90;
 
-    // 10
+    // 141
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 91;
 
-    // 11
+    // 142
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 12
+    // 143
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 13
+    // 144
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 3; // String length
@@ -1241,93 +1241,93 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = '3';
 
-    // 14
+    // 145
     *(stepAddress++) = ITM_DIV;
 
-    // 15
+    // 146
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 92;
 
-    // 16
+    // 147
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 100 + 'A' - 'A'; // A
 
-    // 17
+    // 148
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 2; // String length
     *(stepAddress++) = 'x'; // THE string
     *(stepAddress++) = '^';
 
-    // 18
+    // 149
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 19
+    // 150
     *(stepAddress++) = ITM_ADD;
 
-    // 20
+    // 151
     *(stepAddress++) = (ITM_STOP >> 8) | 0x80;
     *(stepAddress++) =  ITM_STOP       & 0xff;
 
-    // 21
+    // 152
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 93;
 
-    // 22
+    // 153
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 23
+    // 154
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 24
+    // 155
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 93;
 
-    // 25
+    // 156
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 93;
 
-    // 26
+    // 157
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
-    // 27
+    // 158
     *(stepAddress++) = ITM_ISG;
     *(stepAddress++) = 92;
 
-    // 28
+    // 159
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 100 + 'A' - 'A'; // A
 
-    // 29
+    // 160
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 30
+    // 161
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 31
+    // 162
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 0;
 
-    // 32
+    // 163
     *(stepAddress++) = ITM_XNE;
     *(stepAddress++) = REGISTER_Y;
 
-    // 33
+    // 164
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 100 + 'B' - 'A'; // B
 
-    // 34
+    // 165
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 10; // String length
@@ -1342,133 +1342,133 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = '?';
 
-    // 35
+    // 166
     *(stepAddress++) = (ITM_STOP >> 8) | 0x80;
     *(stepAddress++) =  ITM_STOP       & 0xff;
 
-    // 36
+    // 167
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 99;
 
-    // 37
+    // 168
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 38
+    // 169
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 10;
 
-    // 39
+    // 170
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '3'; // THE string
 
-    // 40
+    // 171
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 94;
 
-    // 41
+    // 172
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 94;
 
-    // 42
+    // 173
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 90;
 
-    // 43
+    // 174
     *(stepAddress++) = ITM_XLT;
     *(stepAddress++) = REGISTER_X;
 
-    // 44
+    // 175
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 2;
 
-    // 45
+    // 176
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '0'; // THE string
 
-    // 46
+    // 177
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 95;
 
-    // 47
+    // 178
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 96;
 
-    // 48
+    // 179
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 100 + 'D' - 'A'; // D
 
-    // 49
+    // 180
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 100 + 'J' - 'A'; // J
 
-    // 50
+    // 181
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 11;
 
-    // 51
+    // 182
     *(stepAddress++) = (ITM_STOP >> 8) | 0x80;
     *(stepAddress++) =  ITM_STOP       & 0xff;
 
-    // 52
+    // 183
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 10;
 
-    // 53
+    // 184
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 2;
 
-    // 54
+    // 185
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 55
+    // 186
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 94;
 
-    // 56
+    // 187
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 94;
 
-    // 57
+    // 188
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 90;
 
-    // 58
+    // 189
     *(stepAddress++) = ITM_XNE;
     *(stepAddress++) = REGISTER_Y;
 
-    // 59
+    // 190
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 1;
 
-    // 60
+    // 191
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 1;
 
-    // 61
+    // 192
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 90;
 
-    // 62
+    // 193
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 1;
 
-    // 63
+    // 194
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 13;
 
-    // 64
+    // 195
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 90;
 
-    // 65
+    // 196
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 9; // String length
@@ -1482,28 +1482,28 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'o';
     *(stepAddress++) = 't';
 
-    // 66
+    // 197
     *(stepAddress++) = ITM_RTN;
 
-    // 67
+    // 198
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 100 + 'B' - 'A'; // B
 
-    // 68
+    // 199
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 69
+    // 200
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 93;
 
-    // 70
+    // 201
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 90;
 
-    // 71
+    // 202
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 3; // String length
@@ -1511,742 +1511,742 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = '3';
 
-    // 72
+    // 203
     *(stepAddress++) = ITM_DIV;
 
-    // 73
+    // 204
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 92;
 
-    // 74
+    // 205
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 100 + 'C' - 'A'; // C
 
-    // 75
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 0;
-
-    // 76
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 77
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 78
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 93;
-
-    // 79
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 92;
-
-    // 80
-    *(stepAddress++) = ITM_ISG;
-    *(stepAddress++) = 92;
-
-    // 81
-    *(stepAddress++) = ITM_GTO;
-    *(stepAddress++) = 100 + 'C' - 'A'; // C
-
-    // 82
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 83
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 0;
-
-    // 84
-    *(stepAddress++) = ITM_RTN;
-
-    // 85
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'D' - 'A'; // D
-
-    // 86
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 87
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 97;
-
-    // 88
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '0'; // THE string
-
-    // 89
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 98;
-
-    // 90
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'I' - 'A'; // I
-
-    // 91
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 92
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 91;
-
-    // 93
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 90;
-
-    // 94
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 3; // String length
-    *(stepAddress++) = '1'; // THE string
-    *(stepAddress++) = 'e';
-    *(stepAddress++) = '3';
-
-    // 95
-    *(stepAddress++) = ITM_DIV;
-
-    // 96
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 97
-    *(stepAddress++) = ITM_ADD;
-
-    // 98
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 89;
-
-    // 98
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 2; // String length
-    *(stepAddress++) = '3'; // THE string
-    *(stepAddress++) = '0'; // THE string
-
-    // 100
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 92;
-
-    // 101
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 93;
-
-    // 102
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 94;
-
-    // 103
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 104
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 93;
-
-    // 105
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 94;
-
-    // 106
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 94;
-
-    // 107
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '0'; // THE string
-
-    // 108
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 109
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 110
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 111
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'E' - 'A'; // E
-
-    // 112
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 91;
-
-    // 113
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 114
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 115
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 95;
-
-    // 116
-    *(stepAddress++) = ITM_MULT;
-
-    // 117
-    *(stepAddress++) = ITM_CHS;
-
-    // 118
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 119
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 120
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 96;
-
-    // 121
-    *(stepAddress++) = ITM_MULT;
-
-    // 122
-    *(stepAddress++) = ITM_CHS;
-
-    // 123
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 124
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 125
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 91;
-
-    // 126
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 127
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 128
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 129
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 89;
-
-    // 130
-    *(stepAddress++) = ITM_ISG;
-    *(stepAddress++) = 89;
-
-    // 131
-    *(stepAddress++) = ITM_GTO;
-    *(stepAddress++) = 100 + 'E' - 'A'; // E
-
-    // 132
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 133
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 84;
-
-    // 134
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 135
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 85;
-
-    // 136
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 2; // String length
-    *(stepAddress++) = '3'; // THE string
-    *(stepAddress++) = '0'; // THE string
-
-    // 137
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 91;
-
-    // 138
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 90;
-
-    // 139
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++) = STRING_REAL34;
-    *(stepAddress++) = 3; // String length
-    *(stepAddress++) = '1'; // THE string
-    *(stepAddress++) = 'e';
-    *(stepAddress++) = '3';
-
-    // 140
-    *(stepAddress++) = ITM_DIV;
-
-    // 141
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 142
-    *(stepAddress++) = ITM_ADD;
-
-    // 143
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 89;
-
-    // 144
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 2; // String length
-    *(stepAddress++) = '6'; // THE string
-    *(stepAddress++) = '0'; // THE string
-
-    // 145
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 92;
-
-    // 146
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 93;
-
-    // 147
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 94;
-
-    // 148
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 149
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 93;
-
-    // 150
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 94;
-
-    // 151
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 94;
-
-    // 152
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '0'; // THE string
-
-    // 153
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 154
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '0'; // THE string
-
-    // 155
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 156
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'F' - 'A'; // F
-
-    // 157
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 91;
-
-    // 158
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 159
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 160
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 95;
-
-    // 161
-    *(stepAddress++) = ITM_MULT;
-
-    // 162
-    *(stepAddress++) = ITM_CHS;
-
-    // 163
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 164
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 165
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 96;
-
-    // 166
-    *(stepAddress++) = ITM_MULT;
-
-    // 167
-    *(stepAddress++) = ITM_CHS;
-
-    // 168
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 169
-    *(stepAddress++) = ITM_LITT;
-    *(stepAddress++)= STRING_REAL34;
-    *(stepAddress++) = 1; // String length
-    *(stepAddress++) = '1'; // THE string
-
-    // 170
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 91;
-
-    // 171
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 172
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 173
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 94;
-
-    // 174
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 89;
-
-    // 175
-    *(stepAddress++) = ITM_ISG;
-    *(stepAddress++) = 89;
-
-    // 176
-    *(stepAddress++) = ITM_GTO;
-    *(stepAddress++) = 100 + 'F' - 'A'; // F
-
-    // 177
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 92;
-
-    // 178
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 92;
-
-    // 179
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = 93;
-
-    // 180
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 93;
-
-    // 181
-    *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
-    *(stepAddress++) =  ITM_CLSTK       & 0xff;
-
-    // 182
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 95;
-
-    // 183
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 93;
-
-    // 184
-    *(stepAddress++) = ITM_MULT;
-
-    // 185
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 96;
-
-    // 186
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 92;
-
-    // 187
-    *(stepAddress++) = ITM_MULT;
-
-    // 188
-    *(stepAddress++) = ITM_ADD;
-
-    // 189
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 92;
-
-    // 190
-    *(stepAddress++) = ITM_MULT;
-
-    // 191
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 93;
-
-    // 192
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 93;
-
-    // 193
-    *(stepAddress++) = ITM_MULT;
-
-    // 194
-    *(stepAddress++) = ITM_ADD;
-
-    // 195
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 88;
-
-    // 196
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 84;
-
-    // 197
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 93;
-
-    // 198
-    *(stepAddress++) = ITM_MULT;
-
-    // 199
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 85;
-
-    // 200
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 92;
-
-    // 201
-    *(stepAddress++) = ITM_MULT;
-
-    // 202
-    *(stepAddress++) = ITM_SUB;
-
-    // 203
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 88;
-
-    // 204
-    *(stepAddress++) = ITM_DIV;
-
-    // 205
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 87;
-
     // 206
     *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 95;
+    *(stepAddress++) = 0;
 
     // 207
-    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 93;
 
     // 208
-    *(stepAddress++) = ITM_MULT;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
 
     // 209
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 96;
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 93;
 
     // 210
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
     // 211
-    *(stepAddress++) = ITM_MULT;
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = 92;
 
     // 212
-    *(stepAddress++) = ITM_ADD;
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 100 + 'C' - 'A'; // C
 
     // 213
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 84;
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
 
     // 214
-    *(stepAddress++) = ITM_MULT;
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 0;
 
     // 215
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 85;
+    *(stepAddress++) = ITM_RTN;
 
     // 216
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 93;
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'D' - 'A'; // D
 
     // 217
-    *(stepAddress++) = ITM_MULT;
-
-    // 218
-    *(stepAddress++) = ITM_ADD;
-
-    // 219
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 88;
-
-    // 220
-    *(stepAddress++) = ITM_DIV;
-
-    // 221
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 86;
-
-    // 222
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 87;
-
-    // 223
-    *(stepAddress++) = ITM_MAGNITUDE;
-
-    // 224
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = REGISTER_X;
-
-    // 225
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 86;
-
-    // 226
-    *(stepAddress++) = ITM_MAGNITUDE;
-
-    // 227
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = REGISTER_Y;
-
-    // 228
-    *(stepAddress++) = ITM_XGT;
-    *(stepAddress++) = REGISTER_Y;
-
-    // 229
-    *(stepAddress++) = ITM_GTO;
-    *(stepAddress++) = 100 + 'G' - 'A'; // G
-
-    // 230
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 87;
-
-    // 231
-    *(stepAddress++) = ITM_MAGNITUDE;
-
-    // 232
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 97;
-
-    // 233
-    *(stepAddress++) = ITM_GTO;
-    *(stepAddress++) = 100 + 'H' - 'A'; // H
-
-    // 234
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'G' - 'A'; // G
-
-    // 235
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 86;
-
-    // 236
-    *(stepAddress++) = ITM_MAGNITUDE;
-
-    // 237
-    *(stepAddress++) = ITM_STO;
-    *(stepAddress++) = 97;
-
-    // 238
-    *(stepAddress++) = ITM_LBL;
-    *(stepAddress++) = 100 + 'H' - 'A'; // H
-
-    // 239
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 87;
-
-    // 240
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 95;
-
-    // 241
-    *(stepAddress++) = ITM_RCL;
-    *(stepAddress++) = 86;
-
-    // 242
-    *(stepAddress++) = ITM_STOADD;
-    *(stepAddress++) = 96;
-
-    // 243
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
+    // 218
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 97;
+
+    // 219
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '0'; // THE string
+
+    // 220
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 98;
+
+    // 221
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'I' - 'A'; // I
+
+    // 222
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 223
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 91;
+
+    // 224
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 90;
+
+    // 225
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 3; // String length
+    *(stepAddress++) = '1'; // THE string
+    *(stepAddress++) = 'e';
+    *(stepAddress++) = '3';
+
+    // 226
+    *(stepAddress++) = ITM_DIV;
+
+    // 227
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 228
+    *(stepAddress++) = ITM_ADD;
+
+    // 229
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 89;
+
+    // 230
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 2; // String length
+    *(stepAddress++) = '3'; // THE string
+    *(stepAddress++) = '0'; // THE string
+
+    // 231
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 92;
+
+    // 232
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 93;
+
+    // 233
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 94;
+
+    // 234
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 235
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 93;
+
+    // 236
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 94;
+
+    // 237
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 94;
+
+    // 238
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '0'; // THE string
+
+    // 239
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 240
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 241
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 242
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'E' - 'A'; // E
+
+    // 243
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 91;
+
     // 244
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 245
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 246
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 95;
+
+    // 247
+    *(stepAddress++) = ITM_MULT;
+
+    // 248
+    *(stepAddress++) = ITM_CHS;
+
+    // 249
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 250
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 251
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 96;
+
+    // 252
+    *(stepAddress++) = ITM_MULT;
+
+    // 253
+    *(stepAddress++) = ITM_CHS;
+
+    // 254
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 255
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 256
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 91;
+
+    // 257
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 258
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 259
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 260
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 89;
+
+    // 261
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = 89;
+
+    // 262
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 100 + 'E' - 'A'; // E
+
+    // 263
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 264
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 84;
+
+    // 265
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 266
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 85;
+
+    // 267
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 2; // String length
+    *(stepAddress++) = '3'; // THE string
+    *(stepAddress++) = '0'; // THE string
+
+    // 268
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 91;
+
+    // 269
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 90;
+
+    // 270
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 3; // String length
+    *(stepAddress++) = '1'; // THE string
+    *(stepAddress++) = 'e';
+    *(stepAddress++) = '3';
+
+    // 271
+    *(stepAddress++) = ITM_DIV;
+
+    // 272
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 273
+    *(stepAddress++) = ITM_ADD;
+
+    // 274
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 89;
+
+    // 275
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 2; // String length
+    *(stepAddress++) = '6'; // THE string
+    *(stepAddress++) = '0'; // THE string
+
+    // 276
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 92;
+
+    // 277
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 93;
+
+    // 278
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 94;
+
+    // 279
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 280
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 93;
+
+    // 281
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 94;
+
+    // 282
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 94;
+
+    // 283
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '0'; // THE string
+
+    // 284
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 285
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '0'; // THE string
+
+    // 286
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 287
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'F' - 'A'; // F
+
+    // 288
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 91;
+
+    // 289
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 290
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 291
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 95;
+
+    // 292
+    *(stepAddress++) = ITM_MULT;
+
+    // 293
+    *(stepAddress++) = ITM_CHS;
+
+    // 294
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 295
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 296
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 96;
+
+    // 297
+    *(stepAddress++) = ITM_MULT;
+
+    // 298
+    *(stepAddress++) = ITM_CHS;
+
+    // 299
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 300
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 301
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 91;
+
+    // 302
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 303
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 304
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 94;
+
+    // 305
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 89;
+
+    // 306
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = 89;
+
+    // 307
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 100 + 'F' - 'A'; // F
+
+    // 308
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 92;
+
+    // 309
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 92;
+
+    // 310
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 93;
+
+    // 311
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 93;
+
+    // 312
+    *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CLSTK       & 0xff;
+
+    // 313
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 95;
+
+    // 314
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 315
+    *(stepAddress++) = ITM_MULT;
+
+    // 316
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 96;
+
+    // 317
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 92;
+
+    // 318
+    *(stepAddress++) = ITM_MULT;
+
+    // 319
+    *(stepAddress++) = ITM_ADD;
+
+    // 320
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 92;
+
+    // 321
+    *(stepAddress++) = ITM_MULT;
+
+    // 322
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 323
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 324
+    *(stepAddress++) = ITM_MULT;
+
+    // 325
+    *(stepAddress++) = ITM_ADD;
+
+    // 326
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 88;
+
+    // 327
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 84;
+
+    // 328
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 329
+    *(stepAddress++) = ITM_MULT;
+
+    // 330
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 85;
+
+    // 331
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 92;
+
+    // 332
+    *(stepAddress++) = ITM_MULT;
+
+    // 333
+    *(stepAddress++) = ITM_SUB;
+
+    // 334
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 88;
+
+    // 335
+    *(stepAddress++) = ITM_DIV;
+
+    // 336
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 87;
+
+    // 337
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 95;
+
+    // 338
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 339
+    *(stepAddress++) = ITM_MULT;
+
+    // 340
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 96;
+
+    // 341
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 92;
+
+    // 342
+    *(stepAddress++) = ITM_MULT;
+
+    // 343
+    *(stepAddress++) = ITM_ADD;
+
+    // 344
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 84;
+
+    // 345
+    *(stepAddress++) = ITM_MULT;
+
+    // 346
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 85;
+
+    // 347
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 93;
+
+    // 348
+    *(stepAddress++) = ITM_MULT;
+
+    // 349
+    *(stepAddress++) = ITM_ADD;
+
+    // 350
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 88;
+
+    // 351
+    *(stepAddress++) = ITM_DIV;
+
+    // 352
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 86;
+
+    // 353
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 87;
+
+    // 354
+    *(stepAddress++) = ITM_MAGNITUDE;
+
+    // 355
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = REGISTER_X;
+
+    // 356
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 86;
+
+    // 357
+    *(stepAddress++) = ITM_MAGNITUDE;
+
+    // 358
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = REGISTER_Y;
+
+    // 359
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = REGISTER_Y;
+
+    // 360
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 100 + 'G' - 'A'; // G
+
+    // 361
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 87;
+
+    // 362
+    *(stepAddress++) = ITM_MAGNITUDE;
+
+    // 363
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 97;
+
+    // 364
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 100 + 'H' - 'A'; // H
+
+    // 365
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'G' - 'A'; // G
+
+    // 366
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 86;
+
+    // 367
+    *(stepAddress++) = ITM_MAGNITUDE;
+
+    // 368
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 97;
+
+    // 369
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 100 + 'H' - 'A'; // H
+
+    // 370
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 87;
+
+    // 371
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 95;
+
+    // 372
+    *(stepAddress++) = ITM_RCL;
+    *(stepAddress++) = 86;
+
+    // 373
+    *(stepAddress++) = ITM_STOADD;
+    *(stepAddress++) = 96;
+
+    // 374
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++)= STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 375
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 98;
 
-    // 245
+    // 376
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 3; // String length
@@ -2254,84 +2254,84 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = '4';
 
-    // 246
+    // 377
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = REGISTER_X;
 
-    // 247
+    // 378
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 98;
 
-    // 248
+    // 379
     *(stepAddress++) = ITM_XGT;
     *(stepAddress++) = REGISTER_Y;
 
-    // 249
+    // 380
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 4;
 
-    // 250
+    // 381
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 99;
 
-    // 251
+    // 382
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 97;
 
-    // 252
+    // 383
     *(stepAddress++) = ITM_XGT;
     *(stepAddress++) = REGISTER_Y;
 
-    // 253
+    // 384
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 100 + 'I' - 'A';
 
-    // 254
+    // 385
     *(stepAddress++) = ITM_RTN;
 
-    // 255
+    // 386
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 100 + 'J' - 'A'; // J
 
-    // 256
+    // 387
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '0'; // THE string
 
-    // 257
+    // 388
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 91;
 
-    // 258
+    // 389
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 2; // String length
     *(stepAddress++) = '3'; // THE string
     *(stepAddress++) = '1'; // THE string
 
-    // 259
+    // 390
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 92;
 
-    // 260
+    // 391
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 90;
 
-    // 261
+    // 392
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 262
+    // 393
     *(stepAddress++) = ITM_SUB;
 
-    // 263
+    // 394
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 93;
 
-    // 264
+    // 395
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 3; // String length
@@ -2339,159 +2339,159 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = '3';
 
-    // 265
+    // 396
     *(stepAddress++) = ITM_DIV;
 
-    // 266
+    // 397
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 94;
 
-    // 267
+    // 398
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 88;
 
-    // 268
+    // 399
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 92;
 
-    // 269
+    // 400
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 91;
 
-    // 270
+    // 401
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 271
+    // 402
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 91;
 
-    // 272
+    // 403
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 92;
 
-    // 273
+    // 404
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 94;
 
-    // 274
+    // 405
     *(stepAddress++) = ITM_ISG;
     *(stepAddress++) = 94;
 
-    // 275
+    // 406
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 88;
 
-    // 276
+    // 407
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 90;
 
-    // 277
+    // 408
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 278
+    // 409
     *(stepAddress++) = ITM_SUB;
 
-    // 279
+    // 410
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 90;
 
-    // 280
+    // 411
     *(stepAddress++) = ITM_RTN;
 
-    // 281
+    // 412
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 11;
 
-    // 282
+    // 413
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 283
+    // 414
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 95;
 
-    // 284
+    // 415
     *(stepAddress++) = ITM_CHS;
 
-    // 285
+    // 416
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 286
+    // 417
     *(stepAddress++) = ITM_DIV;
 
-    // 287
+    // 418
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 91;
 
-    // 288
+    // 419
     *(stepAddress++) = ITM_SQUARE;
 
-    // 289
+    // 420
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 96;
 
-    // 290
+    // 421
     *(stepAddress++) = ITM_SUB;
 
-    // 291
+    // 422
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 92;
 
-    // 292
+    // 423
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 293
+    // 424
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 294
+    // 425
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
-    // 295
+    // 426
     *(stepAddress++) = ITM_SQUAREROOTX;
 
-    // 296
+    // 427
     *(stepAddress++) = ITM_ADD;
 
-    // 297
+    // 428
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 298
+    // 429
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
-    // 299
+    // 430
     *(stepAddress++) = ITM_SQUAREROOTX;
 
-    // 300
+    // 431
     *(stepAddress++) = ITM_SUB;
 
-    // 301
+    // 432
     *(stepAddress++) = ITM_RTN;
 
-    // 302
+    // 433
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 12;
 
-    // 303
+    // 434
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 304
+    // 435
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 12; // String length
@@ -2508,84 +2508,84 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'u';
     *(stepAddress++) = 'e';
 
-    // 305
+    // 436
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 1;
 
-    // 306
+    // 437
     *(stepAddress++) = ITM_CHS;
 
-    // 307
+    // 438
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '2'; // THE string
 
-    // 308
+    // 439
     *(stepAddress++) = ITM_DIV;
 
-    // 309
+    // 440
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 91;
 
-    // 310
+    // 441
     *(stepAddress++) = ITM_SQUARE;
 
-    // 311
+    // 442
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 2;
 
-    // 312
+    // 443
     *(stepAddress++) = ITM_SUB;
 
-    // 313
+    // 444
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 92;
 
-    // 314
+    // 445
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 315
+    // 446
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 316
+    // 447
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
-    // 317
+    // 448
     *(stepAddress++) = ITM_SQUAREROOTX;
 
-    // 318
+    // 449
     *(stepAddress++) = ITM_ADD;
 
-    // 319
+    // 450
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 320
+    // 451
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 92;
 
-    // 321
+    // 452
     *(stepAddress++) = ITM_SQUAREROOTX;
 
-    // 322
+    // 453
     *(stepAddress++) = ITM_SUB;
 
-    // 323
+    // 454
     *(stepAddress++) = ITM_RTN;
 
-    // 324
+    // 455
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 13;
 
-    // 325
+    // 456
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 326
+    // 457
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 12; // String length
@@ -2602,37 +2602,37 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'u';
     *(stepAddress++) = 'e';
 
-    // 327
+    // 458
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 1;
 
-    // 328
+    // 459
     *(stepAddress++) = ITM_CHS;
 
-    // 329
+    // 460
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 91;
 
-    // 330
+    // 461
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 331
+    // 462
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 91;
 
-    // 332
+    // 463
     *(stepAddress++) = ITM_RTN;
 
-    // 333
+    // 464
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 4;
 
-    // 334
+    // 465
     *(stepAddress++) = (ITM_CLSTK >> 8) | 0x80;
     *(stepAddress++) =  ITM_CLSTK       & 0xff;
 
-    // 335
+    // 466
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++)= STRING_LABEL_VARIABLE;
     *(stepAddress++) = 11; // String length
@@ -2648,10 +2648,10 @@ void addTestPrograms(void) {
     *(stepAddress++) = '0';
     *(stepAddress++) = '!';
 
-    // 336
+    // 467
     *(stepAddress++) = ITM_RTN;
 
-    // 337
+    // 468
     *(stepAddress++) = (ITM_END >> 8) | 0x80;
     *(stepAddress++) =  ITM_END       & 0xff;
 
@@ -2661,7 +2661,7 @@ void addTestPrograms(void) {
   }
 
   { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
-    // 1
+    // 469
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
     *(stepAddress++) = 5; // String length
@@ -2671,119 +2671,191 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'e';
     *(stepAddress++) = 'd';
 
-    // 2
+    // 470
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 10;
 
-    // 3
+    // 471
     *(stepAddress++) = (ITM_TICKS >> 8) | 0x80;
     *(stepAddress++) =  ITM_TICKS       & 0xff;
 
-    // 4
+    // 472
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 0;
 
-    // 5
+    // 473
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '0'; // THE string
 
-    // 6
+    // 474
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 11;
 
-    // 7
+    // 475
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 8
+    // 476
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 12;
 
-    // 9
+    // 477
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 1;
 
-    // 10
+    // 478
     *(stepAddress++) = ITM_arctan;
 
-    // 11
+    // 479
     *(stepAddress++) = ITM_sin;
 
-    // 12
+    // 480
     *(stepAddress++) = ITM_EXP;
 
-    // 13
+    // 481
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '3'; // THE string
 
-    // 14
+    // 482
     *(stepAddress++) = ITM_1ONX;
 
-    // 15
+    // 483
     *(stepAddress++) = ITM_YX;
 
-    // 16
+    // 484
     *(stepAddress++) = ITM_STOADD;
     *(stepAddress++) = 11;
 
-    // 17
+    // 485
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 12;
 
-    // 18
+    // 486
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 1; // String length
     *(stepAddress++) = '1'; // THE string
 
-    // 19
+    // 487
     *(stepAddress++) = ITM_ADD;
 
-    // 20
+    // 488
     *(stepAddress++) = ITM_STO;
     *(stepAddress++) = 12;
 
-    // 21
+    // 489
     *(stepAddress++) = ITM_DSE;
     *(stepAddress++) = 10;
 
-    // 22
+    // 490
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 1;
 
-    // 23
+    // 491
     *(stepAddress++) = (ITM_TICKS >> 8) | 0x80;
     *(stepAddress++) =  ITM_TICKS       & 0xff;
 
-    // 24
+    // 492
     *(stepAddress++) = ITM_RCL;
     *(stepAddress++) = 0;
 
-    // 25
+    // 493
     *(stepAddress++) = ITM_SUB;
 
-    // 26
+    // 494
     *(stepAddress++) = ITM_LITT;
     *(stepAddress++) = STRING_REAL34;
     *(stepAddress++) = 2; // String length
     *(stepAddress++) = '1'; // THE string
     *(stepAddress++) = '0';
 
-    // 27
+    // 495
     *(stepAddress++) = ITM_DIV;
 
-    // 28
+    // 496
     *(stepAddress++) = (ITM_END >> 8) | 0x80;
     *(stepAddress++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("Prime + Bairstow + Speed : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    #endif
+  }
+
+  { // Factorial: the recursive way
+    // 497
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 4; // String length
+    *(stepAddress++) = 'F';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'c';
+    *(stepAddress++) = 't';
+
+    // 498
+    *(stepAddress++) = ITM_IP;
+
+    // 499
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = VALUE_1;
+
+    // 500
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 0;
+
+    // 501
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_REAL34;
+    *(stepAddress++) = 1; // String length
+    *(stepAddress++) = '1'; // THE string
+
+    // 502
+    *(stepAddress++) = ITM_RTN;
+
+    // 503
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 0;
+
+    // 504
+    *(stepAddress++) = (ITM_LocR >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LocR       & 0xff;
+    *(stepAddress++) = 1;
+
+    // 505
+    *(stepAddress++) = ITM_STO;
+    *(stepAddress++) = 112; // .00
+
+    // 506
+    *(stepAddress++) = ITM_DEC;
+    *(stepAddress++) = REGISTER_X;
+
+    // 507
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 4; // String length
+    *(stepAddress++) = 'F';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'c';
+    *(stepAddress++) = 't';
+
+    // 508
+    *(stepAddress++) = ITM_RCLMULT;
+    *(stepAddress++) = 112; // .00
+
+    // 509
+    *(stepAddress++) = ITM_RTN;
+
+    // 510
+    *(stepAddress++) = (ITM_END >> 8) | 0x80;
+    *(stepAddress++) =  ITM_END       & 0xff;
+
+    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+      printf("Prime + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
 
@@ -2797,7 +2869,7 @@ void addTestPrograms(void) {
   #endif
 
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    printf("Prime + Bairstow + Speed + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    printf("Prime + Bairstow + Speed + Fact + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     if((uint32_t)TO_BLOCKS((stepAddress - programMemoryPointer) + 2) > (uint32_t)TO_BLOCKS(numberOfBytesForTheTestPrograms)) {
       printf("Increase allocated memory for programs!\n");
       exit(0);

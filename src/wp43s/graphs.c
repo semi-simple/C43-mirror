@@ -926,17 +926,14 @@ void graph_plotmem(void) {
 
 
 void fnStatList() {
+  #ifndef TESTSUITE_BUILD
   char tmpstr1[100], tmpstr2[100];
   int16_t ix, ixx, statnum;
 
-  #ifndef TESTSUITE_BUILD
     if(telltale == MEM_INITIALIZED) {
       clearScreen();
       refreshStatusBar();
     }
-  #endif
-
-  #ifndef TESTSUITE_BUILD
 
   if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 

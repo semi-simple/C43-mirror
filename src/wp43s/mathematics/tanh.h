@@ -25,3 +25,5 @@ void tanhRema (void);
 void tanhCxma (void);
 void tanhReal (void);
 void tanhCplx (void);
+
+uint8_t TanhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);

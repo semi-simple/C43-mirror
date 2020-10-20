@@ -163,26 +163,33 @@ void tanCplx(void) {
   // tan(a + ib) = -----------------------------------
   //                cos(a)*cosh(b) - i*sin(a)*sinh(b)
 
-  real_t real, imag;
-  real_t sina, cosa, sinhb, coshb;
-  real_t numerReal, denomReal;
-  real_t numerImag, denomImag;
+    real_t xReal, xImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  WP34S_Cvt2RadSinCosTan(&real, AM_RADIAN, &sina, &cosa, NULL, &ctxtReal51);
-  WP34S_SinhCosh(&imag, &sinhb, &coshb, &ctxtReal51);
+    TanComplex(&xReal, &xImag, &xReal, &xImag, &ctxtReal51);
 
-  realMultiply(&sina, &coshb, &numerReal, &ctxtReal51);
-  realMultiply(&cosa, &sinhb, &numerImag, &ctxtReal51);
+    realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
-  realMultiply(&cosa, &coshb, &denomReal, &ctxtReal51);
-  realMultiply(&sina, &sinhb, &denomImag, &ctxtReal51);
-  realChangeSign(&denomImag);
+uint8_t TanComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
+    real_t sina, cosa, sinhb, coshb;
+    real_t numerReal, denomReal;
+    real_t numerImag, denomImag;
 
-  divComplexComplex(&numerReal, &numerImag, &denomReal, &denomImag, &real, &imag, &ctxtReal51);
+    WP34S_Cvt2RadSinCosTan(xReal, AM_RADIAN, &sina, &cosa, NULL, realContext);
+    WP34S_SinhCosh(xImag, &sinhb, &coshb, realContext);
 
-  realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&imag, REGISTER_IMAG34_DATA(REGISTER_X));
+    realMultiply(&sina, &coshb, &numerReal, realContext);
+    realMultiply(&cosa, &sinhb, &numerImag, realContext);
+
+    realMultiply(&cosa, &coshb, &denomReal, realContext);
+    realMultiply(&sina, &sinhb, &denomImag, realContext);
+    realChangeSign(&denomImag);
+
+    divComplexComplex(&numerReal, &numerImag, &denomReal, &denomImag, rReal, rImag, realContext);
+
+    return ERROR_NONE;
 }

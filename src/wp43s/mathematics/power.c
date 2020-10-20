@@ -546,8 +546,11 @@ void powCplxReal(void) {
 /*
  * Calculate y^x for complex numbers.
  */
-void powerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext)
+uint8_t PowerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal, const real_t *xImag,
+                     real_t *rReal, real_t *rImag, realContext_t *realContext)
 {
+    uint8_t errorCode = ERROR_NONE;
+
     if(realIsInfinite(yReal) || realIsInfinite(yImag)) {
         if(realIsZero(xReal) && realIsZero(xImag)) {
             realCopy(const_NaN, rReal);
@@ -557,26 +560,28 @@ void powerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal,
             realCopy(const_plusInfinity, rReal);
             realCopy(const_plusInfinity, rImag);
         }
-        return;
+    }
+    else {
+        real_t theta;
+        real_t tmp;
+
+        realRectangularToPolar(yReal, yImag, rReal, &theta, realContext);
+        WP34S_Ln(rReal, rReal, realContext);
+
+        realMultiply(rReal, xImag, rImag, realContext);
+        realFMA(&theta, xReal, rImag, rImag, realContext);
+        realChangeSign(&theta);
+
+        realMultiply(rReal, xReal, rReal, realContext);
+        realFMA(&theta, xImag, rReal, rReal, realContext);
+
+        realExp(rReal, &tmp, realContext);
+        realPolarToRectangular(const_1, rImag, rReal, rImag, realContext);
+        realMultiply(&tmp, rImag, rImag, realContext);
+        realMultiply(&tmp, rReal, rReal, realContext);
     }
 
-    real_t theta;
-    real_t tmp;
-
-    realRectangularToPolar(yReal, yImag, rReal, &theta, realContext);
-    WP34S_Ln(rReal, rReal, realContext);
-
-    realMultiply(rReal, xImag, rImag, realContext);
-    realFMA(&theta, xReal, rImag, rImag, realContext);
-    realChangeSign(&theta);
-
-    realMultiply(rReal, xReal, rReal, realContext);
-    realFMA(&theta, xImag, rReal, rReal, realContext);
-
-    realExp(rReal, &tmp, realContext);
-    realPolarToRectangular(const_1, rImag, rReal, rImag, realContext);
-    realMultiply(&tmp, rImag, rImag, realContext);
-    realMultiply(&tmp, rReal, rReal, realContext);
+    return errorCode;
 }
 
 /********************************************//**
@@ -596,8 +601,18 @@ void powCplxCplx(void) {
 
     real_t rReal, rImag;
 
-    powerComplex(&yReal, &yImag, &xReal, &xImag, &rReal, &rImag, &ctxtReal39);
+    uint8_t errorCode = PowerComplex(&yReal, &yImag, &xReal, &xImag, &rReal, &rImag, &ctxtReal39);
 
-    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+    if(errorCode!=ERROR_NONE) {
+        displayCalcErrorMessage(errorCode, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnPower:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+#endif
+    }
+    else {
+        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
 }

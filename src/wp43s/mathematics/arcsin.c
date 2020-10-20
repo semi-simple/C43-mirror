@@ -150,46 +150,59 @@ void arcsinReal(void) {
   }
 }
 
-
-
 void arcsinCplx(void) {
-  real_t a, b, real, imag;
+    real_t xReal, xImag, rReal, rImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  // arcsin(z) = -i.ln(iz + sqrt(1 - z²))
-  // calculate z²   real part
-  realMultiply(&b, &b, &real, &ctxtReal39);
-  realChangeSign(&real);
-  realFMA(&a, &a, &real, &real, &ctxtReal39);
+    ArcsinComplex(&xReal, &xImag, &rReal, &rImag, &ctxtReal39);
 
-  // calculate z²   imaginary part
-  realMultiply(&a, &b, &imag, &ctxtReal39);
-  realMultiply(&imag, const_2, &imag, &ctxtReal39);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
-  // calculate 1 - z²
-  realSubtract(const_1, &real, &real, &ctxtReal39);
-  realChangeSign(&imag);
+uint8_t ArcsinComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
+  real_t a, b;
 
-  // calculate sqrt(1 - z²)
-  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
-  realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  realPolarToRectangular(&real, &imag, &real, &imag, &ctxtReal39);
+  realCopy(xReal, &a);
+  realCopy(xImag, &b);
 
-  // calculate iz + sqrt(1 - z²)
+  // arcsin(z) = -i.ln(iz + sqrt(1 - zï¿½))
+  // calculate zï¿½   real part
+  realMultiply(&b, &b, rReal, realContext);
+  realChangeSign(rReal);
+  realFMA(&a, &a, rReal, rReal, realContext);
+
+  // calculate zï¿½   imaginary part
+  realMultiply(&a, &b, rImag, realContext);
+  realMultiply(rImag, const_2, rImag, realContext);
+
+  // calculate 1 - zï¿½
+  realSubtract(const_1, rReal, rReal, realContext);
+  realChangeSign(rImag);
+
+  // calculate sqrt(1 - zï¿½)
+  realRectangularToPolar(rReal, rImag, rReal, rImag, realContext);
+  realSquareRoot(rReal, rReal, realContext);
+  realMultiply(rImag, const_1on2, rImag, realContext);
+  realPolarToRectangular(rReal, rImag, rReal, rImag, realContext);
+
+  // calculate iz + sqrt(1 - zï¿½)
   realChangeSign(&b);
-  realAdd(&real, &b, &real, &ctxtReal39);
-  realAdd(&imag, &a, &imag, &ctxtReal39);
+  realAdd(rReal, &b, rReal, realContext);
+  realAdd(rImag, &a, rImag, realContext);
 
-  // calculate ln(iz + sqrt(1 - z²))
-  realRectangularToPolar(&real, &imag, &a, &b, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
+  // calculate ln(iz + sqrt(1 - zï¿½))
+  realRectangularToPolar(rReal, rImag, &a, &b, realContext);
+  WP34S_Ln(&a, &a, realContext);
 
-  // calculate = -i.ln(iz + sqrt(1 - z²))
+  // calculate = -i.ln(iz + sqrt(1 - zï¿½))
   realChangeSign(&a);
 
-  realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+  realCopy(&b, rReal);
+  realCopy(&a, rImag);
+
+  return ERROR_NONE;
 }
+

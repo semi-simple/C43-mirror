@@ -55,6 +55,7 @@
 #include "fractionalPart.h"
 #include "gamma.h"
 #include "gcd.h"
+#include "gd.h"
 #include "idiv.h"
 #include "idivr.h"
 #include "imaginaryPart.h"

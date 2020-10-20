@@ -2220,7 +2220,7 @@ const item_t indexOfItems[] = {
 /* 1712 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED}, // Font browser
 
 /* 1713 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
-/* 1714 */  { itemToBeCoded,               NOPARAM,                     "P/R",                                         "P/R",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1714 */  { fnPEM,                       NOPARAM,                     "P/R",                                         "P/R",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_CANCEL   },
 /* 1715 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1716 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1717 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

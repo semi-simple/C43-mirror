@@ -42,3 +42,9 @@ void fnClPAll(uint16_t confirmation) {
 void fnClP(uint16_t unusedParamButMandatory) {
   printf("CLP\n");
 }
+
+
+
+void fnPEM(uint16_t unusedParamButMandatory) {
+  printf("PEM\n");
+}

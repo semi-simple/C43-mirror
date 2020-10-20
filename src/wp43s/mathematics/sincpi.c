@@ -72,7 +72,7 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
   real_t rmdr;
 
 
-//  fnCvtFromCurrentAngularMode(AM_RADIAN);
+  //fnCvtFromCurrentAngularMode(AM_RADIAN);
 
   realCopy(real, &rr);
   realCopy(imag, &ii);
@@ -82,8 +82,7 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
     realCopy(const_1, resReal);
     realCopy(const_0, resImag);
   }
-  else
-  if(realIsZero(&rmdr) && realIsZero(&ii)) {
+  else if(realIsZero(&rmdr) && realIsZero(&ii)) {
     realCopy(const_0, resReal);
     realCopy(const_0, resImag);
   }
@@ -110,7 +109,8 @@ void sincpiLonI(void) {
   if(longIntegerIsZeroRegister(REGISTER_X)) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));
-  } else {
+  }
+  else {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -158,8 +158,7 @@ void sincpiReal(void) {
     if(realIsZero(&x)) {
       realCopy(const_1, &x);
     }
-    else
-    if(realIsZero(&xx)) {
+    else if(realIsZero(&xx)) {
       realCopy(const_0, &x);
     }
     else {

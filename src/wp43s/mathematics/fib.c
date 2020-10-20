@@ -36,11 +36,11 @@ static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \return void
  ***********************************************/
 void fibError(void) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate fib(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     moreInfoOnError("In function fnFib:", errorMessage, NULL, NULL);
-#endif
+  #endif
 }
 
 
@@ -52,123 +52,125 @@ void fibError(void) {
  * \return void
  ***********************************************/
 void fnFib(uint16_t unusedParamButMandatory) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    matrix[getRegisterDataType(REGISTER_X)]();
+  matrix[getRegisterDataType(REGISTER_X)]();
 
-    adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
 
 void fibLonI(void) {
-    longInteger_t x, result;
+  longInteger_t x, result;
 
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
-    if (longIntegerIsNegative(x)) {
-        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-        sprintf(tmpStr3000, "cannot calculate fib(%s)", errorMessage);
-        moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-#endif
-        longIntegerFree(x);
-        return;
-    }
-
-    if (shortIntegerMode == SIM_UNSIGN && longIntegerCompareUInt(x, 93) > 0) {
-        displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-        sprintf(tmpStr3000, "cannot calculate fib(%s), the limit for UNSIGN is 93", errorMessage);
-        moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-#endif
-        longIntegerFree(x);
-        return;
-    } else if (longIntegerCompareUInt(x, 4791) > 0) {
-        displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-        sprintf(tmpStr3000, "cannot calculate fib(%s), the limit is 4791, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
-        moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-#endif
-        longIntegerFree(x);
-        return;
-    }
-
-    uint32_t n;
-    longIntegerToUInt(x, n);           // Convert x into unsigned int.
-
-    longIntegerInit(result);           // Initialize fib variable
-    longIntegerFibonacci(n, result);   // result = FIB(n)
-
-    convertLongIntegerToLongIntegerRegister(result, REGISTER_X);
-
-    longIntegerFree(result);
+  if(longIntegerIsNegative(x)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+      sprintf(tmpStr3000, "cannot calculate fib(%s)", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
+    #endif
     longIntegerFree(x);
+    return;
+  }
+
+  if(shortIntegerMode == SIM_UNSIGN && longIntegerCompareUInt(x, 93) > 0) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+      sprintf(tmpStr3000, "cannot calculate fib(%s), the limit for UNSIGN is 93", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
+    #endif
+    longIntegerFree(x);
+    return;
+  }
+  else if(longIntegerCompareUInt(x, 4791) > 0) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+      sprintf(tmpStr3000, "cannot calculate fib(%s), the limit is 4791, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
+    #endif
+    longIntegerFree(x);
+    return;
+  }
+
+  uint32_t n;
+  longIntegerToUInt(x, n);           // Convert x into unsigned int.
+
+  longIntegerInit(result);           // Initialize fib variable
+  longIntegerFibonacci(n, result);   // result = FIB(n)
+
+  convertLongIntegerToLongIntegerRegister(result, REGISTER_X);
+
+  longIntegerFree(result);
+  longIntegerFree(x);
 }
 
 
 uint8_t FibonacciReal(const real_t *n, real_t *res, realContext_t *realContext) {
-    // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
+  // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
 
-    real_t a, b;
+  real_t a, b;
 
-    realPower(const_PHI, n, &a, realContext);                                    // a = PHI^(n)
-    realDivide(const_1, &a, &b, realContext);                           // b = PHI^(-n) = = 1/PHI^(n)
-    realMultiply(const_pi, n, res, realContext);                                     // res = PI * n
-    WP34S_Cvt2RadSinCosTan(res, AM_RADIAN, NULL, res, NULL, realContext);   // res = COS(PI * n)
-    realMultiply(&b, res, &b, realContext);                             // b = PHI^(-n) * COS(PI * n)
-    realSquareRoot(const_5, res, realContext);                                       // res = SQRT(5)
-    realSubtract(&a, &b, &a, realContext);                     // a = PHI^(n) - PHI^(-n) * COS(PI * n)
-    realDivide(&a, res, res, realContext);                                   // res = [ PHI^n - PHI^(-n) * COS(PI * n) ] / SQRT(5)
+  realPower(const_PHI, n, &a, realContext);                             // a   = PHI^(n)
+  realDivide(const_1, &a, &b, realContext);                             // b   = PHI^(-n) = = 1/PHI^(n)
+  realMultiply(const_pi, n, res, realContext);                          // res = PI * n
+  WP34S_Cvt2RadSinCosTan(res, AM_RADIAN, NULL, res, NULL, realContext); // res = COS(PI * n)
+  realMultiply(&b, res, &b, realContext);                               // b   = PHI^(-n) * COS(PI * n)
+  realSquareRoot(const_5, res, realContext);                            // res = SQRT(5)
+  realSubtract(&a, &b, &a, realContext);                                // a   = PHI^(n) - PHI^(-n) * COS(PI * n)
+  realDivide(&a, res, res, realContext);                                // res = [ PHI^n - PHI^(-n) * COS(PI * n) ] / SQRT(5)
 
-    return ERROR_NONE;
+  return ERROR_NONE;
 }
 
 
 uint8_t FibonacciComplex(const real_t *nReal, const real_t *nImag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
-    // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
+  // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
 
-    real_t aReal, aImag;
-    real_t bReal, bImag;
+  real_t aReal, aImag;
+  real_t bReal, bImag;
 
-    PowerComplex(const_PHI, const_0, nReal, nImag, &aReal, &aImag, realContext);      // a = PHI^(n)
-    divRealComplex(const_1, &aReal, &aImag, &bReal, &bImag, realContext);             // b = PHI^(-n) = 1/PHI^(n)
-    mulComplexComplex(const_pi, const_0, nReal, nImag, resReal, resImag, realContext);// res = PI * n
-    cosComplex(resReal, resImag, resReal, resImag, realContext);                      // res = COS(PI * n)
-    mulComplexComplex(&bReal, &bImag, resReal, resImag, &bReal, &bImag, realContext); // b = PHI^(-n) * COS(PI * n)
-    realSquareRoot(const_5, resReal, realContext);                                    // res = SQRT(5)
-    realZero(resImag);
-    realSubtract(&aReal, &bReal, &aReal, realContext);          // a = PHI^(n) - PHI^(-n) * COS(PI * n)
-    realSubtract(&aImag, &bImag, &aImag, realContext);
-    divComplexComplex(&aReal, &aImag, resReal, resImag, resReal, resImag, realContext);// res = [ PHI^(n) - PHI^(-n) * COS(PI * n) ] / SQRT(5)
+  PowerComplex(const_PHI, const_0, nReal, nImag, &aReal, &aImag, realContext);       // a   = PHI^(n)
+  divRealComplex(const_1, &aReal, &aImag, &bReal, &bImag, realContext);              // b   = PHI^(-n) = 1/PHI^(n)
+  mulComplexComplex(const_pi, const_0, nReal, nImag, resReal, resImag, realContext); // res = PI * n
+  cosComplex(resReal, resImag, resReal, resImag, realContext);                       // res = COS(PI * n)
+  mulComplexComplex(&bReal, &bImag, resReal, resImag, &bReal, &bImag, realContext);  // b   = PHI^(-n) * COS(PI * n)
+  realSquareRoot(const_5, resReal, realContext);                                     // res = SQRT(5)
+  realZero(resImag);
+  realSubtract(&aReal, &bReal, &aReal, realContext);                                 // a   = PHI^(n) - PHI^(-n) * COS(PI * n)
+  realSubtract(&aImag, &bImag, &aImag, realContext);
+  divComplexComplex(&aReal, &aImag, resReal, resImag, resReal, resImag, realContext);// res = [ PHI^(n) - PHI^(-n) * COS(PI * n) ] / SQRT(5)
 
-    return ERROR_NONE;
+  return ERROR_NONE;
 }
 
 void fibReal(void) {
-    // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
+  // FIB(x) = [ PHI^(x) - PHI^(-x)*COS(PI * x) ] / SQRT(5)
 
-    real_t x;
+  real_t x;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-    FibonacciReal(&x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  FibonacciReal(&x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 void fibCplx(void) {
-    real_t xReal, xImag;
+  real_t xReal, xImag;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
-    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-    if(realIsZero(&xImag))
-        FibonacciReal(&xReal, &xReal, &ctxtReal39);
-    else
-        FibonacciComplex(&xReal, &xImag, &xReal, &xImag, &ctxtReal39);
+  if(realIsZero(&xImag)) {
+    FibonacciReal(&xReal, &xReal, &ctxtReal39);
+  }
+  else {
+    FibonacciComplex(&xReal, &xImag, &xReal, &xImag, &ctxtReal39);
+  }
 
-    realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  realToReal34(&xReal, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&xImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
-

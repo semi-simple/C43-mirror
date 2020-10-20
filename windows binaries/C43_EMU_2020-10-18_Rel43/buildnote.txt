@@ -1,3 +1,0 @@
-79379269:
----------
-Change to FLOAT instead of DOUBLE; Added Navigation Vector Display; Improved clear screens and NOP display during Graph; Improved 2 button menu underline;

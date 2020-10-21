@@ -231,7 +231,7 @@ int16_t determineItem(const char *data) {
     return ITM_NOP;
   }
 
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION) {
+  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM) {
     result = shiftF ? key->fShifted :
              shiftG ? key->gShifted :
                       key->primary;
@@ -692,6 +692,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_TAM:
     case CM_ASM:
+    case CM_PEM:
       calcModeNormal();
       break;
 

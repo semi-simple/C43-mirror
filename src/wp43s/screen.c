@@ -1559,6 +1559,13 @@ void refreshScreen(void) {
       refreshStatusBar();
       break;
 
+    case CM_PEM:
+      clearScreen();
+      showSoftmenuCurrentPart();
+      fnPEM(NOPARAM);
+      refreshStatusBar();
+      break;
+
     case CM_BUG_ON_SCREEN:
       break;
 

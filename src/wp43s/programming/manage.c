@@ -46,5 +46,16 @@ void fnClP(uint16_t unusedParamButMandatory) {
 
 
 void fnPEM(uint16_t unusedParamButMandatory) {
-  printf("PEM\n");
+  if(calcMode != CM_PEM) {
+    calcMode = CM_PEM;
+    return;
+  }
+
+  showString(" Ligne 0 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal,  true, true);
+  showString(" Ligne 1 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal,  true, true);
+  showString(" Ligne 2 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal,  true, true);
+  showString(" Ligne 3 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmReverse, true, true);
+  showString(" Ligne 4 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal,  true, true);
+  showString(" Ligne 5 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal,  true, true);
+  showString(" Ligne 6 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal,  true, true);
 }

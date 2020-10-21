@@ -399,6 +399,7 @@
 #define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          12 // Bug message on screen
 #define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
+#define CM_PEM                                    14 // Program entry mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0

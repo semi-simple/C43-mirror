@@ -537,6 +537,7 @@ void fnPcros                    (uint16_t unusedParamButMandatory) {}
 void fnPbox                     (uint16_t unusedParamButMandatory) {}
 void fnPvect                    (uint16_t unusedParamButMandatory) {}
 void fnPNvect                   (uint16_t unusedParamButMandatory) {}
+void fnScale                    (uint16_t unusedParamButMandatory) {}
 void fnPx                       (uint16_t unusedParamButMandatory) {}
 void fnPy                       (uint16_t unusedParamButMandatory) {}
 
@@ -2761,9 +2762,9 @@ const item_t indexOfItems[] = {
 /* 2162 */  { fnByte,                      4,                           "RR1",                                         "RR1",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2163 */  { fnByte,                      5,                           "SWAP.W",                                      "SWAP.W",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
 /* 2164 */  { fnByte,                      6,                           "SWAP.B",                                      "SWAP.B",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM SHOI
-/* 2165 */  { fnClAIM,                     NOPARAM,                     "CLAIM",                                       "CLAIM",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
+/* 2165 */  { fnClAIM,                     NOPARAM,                     "EXITCLR",                                     "EXITCLR",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//clear HEX mode
 /* 2166 */  { fnShoiXRepeats,              TM_VALUE,                    "DISP_SI",                                     "DISP_SI",                                     0,       3,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHOI
-/* 2167 */  { itemToBeCoded,               NOPARAM,                     "2167",                                        "2167",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2167 */  { fnScale,                     NOPARAM,                     "TICKS",                                       "TICKS",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM GRAPHING
 /* 2168 */  { fnPlotLS,                    NOPARAM,                     "PLOTLS",                                      "PLOTLS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 /* 2169 */  { fnPline,                     NOPARAM,                     "LINE",                                        "LINE",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2170 */  { fnPcros,                     NOPARAM,                     "CROSS",                                       "CROSS",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH

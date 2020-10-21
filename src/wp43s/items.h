@@ -2186,7 +2186,7 @@
 #define ITM_FBYTE                     2164   //JM SHOI
 #define ITM_CLAIM                     2165
 #define ITM_SHOIREP                   2166   //JM SHOI
-#define ITM_2167                      2167
+#define ITM_SCALE                     2167   //JM GRAPHING
 #define ITM_PLOTLS                    2168
 #define ITM_PLINE                     2169   //GRAPH
 #define ITM_PCROS                     2170   //GRAPH

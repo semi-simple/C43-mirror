@@ -107,6 +107,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1680 */  { ITM_SHTIM,            JC_SHFT_4s,             CB_JC },  //fnSetSetJM
 /* 1943 */  { ITM_VECT,             JC_VECT,                CB_JC },  //fnSetSetJM
 /* 1943 */  { ITM_NVECT,            JC_NVECT,               CB_JC },  //fnSetSetJM
+/*      */  { ITM_SCALE,            JC_SCALE,               CB_JC },  //fnSetSetJM
 /* 1744 */  { ITM_H_SUMRY,          JC_H_SUM,               CB_JC },  //fnSetSetJM
 /* 1745 */  { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
 /* 1746 */  { ITM_H_FIXED,          JC_H_FIX,               CB_JC },  //fnSetSetJM
@@ -352,6 +353,12 @@ int8_t fnCbIsSet(int16_t item) {
           case JC_NVECT:
             {
               cb_param = jm_NVECT;
+            }
+            break;
+
+          case JC_SCALE:
+            {
+              cb_param = jm_SCALE;
             }
             break;
 

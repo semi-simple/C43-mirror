@@ -162,6 +162,7 @@ typedef struct {
   bool_t extenty;
   bool_t jm_VECT;
   bool_t jm_NVECT;
+  bool_t jm_SCALE;
   bool_t Aspect_Square;
   bool_t PLOT_LINE;
   bool_t PLOT_CROSS;

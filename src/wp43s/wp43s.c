@@ -168,6 +168,7 @@ bool_t                extentx;                             //JM Graph
 bool_t                extenty;                             //JM Graph
 bool_t                jm_VECT;                             //JM GRAPH
 bool_t                jm_NVECT;                            //JM GRAPH
+bool_t                jm_SCALE;                            //JM GRAPH
 bool_t                Aspect_Square;                       //JM GRAPH
 bool_t                PLOT_LINE;                           //JM GRAPH
 bool_t                PLOT_CROSS;                          //JM GRAPH

@@ -37,6 +37,7 @@ extern bool_t extentx;                                              //JM Graph
 extern bool_t extenty;                                              //JM Graph
 extern bool_t jm_VECT;                                               //JM GRAPH setup
 extern bool_t jm_NVECT;                                               //JM GRAPH setup
+extern bool_t jm_SCALE;                                              //JM GRAPH setup
 extern bool_t Aspect_Square;
 extern bool_t PLOT_LINE;
 extern bool_t PLOT_CROSS;
@@ -59,6 +60,7 @@ void fnPcros          (uint16_t unusedParamButMandatory);
 void fnPbox           (uint16_t unusedParamButMandatory);
 void fnPvect          (uint16_t unusedParamButMandatory);
 void fnPNvect         (uint16_t unusedParamButMandatory);
+void fnScale          (uint16_t unusedParamButMandatory);
 void fnPx             (uint16_t unusedParamButMandatory);
 void fnPy             (uint16_t unusedParamButMandatory);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1

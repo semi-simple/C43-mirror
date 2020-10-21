@@ -628,11 +628,11 @@ const int16_t menu_GRAPH[]        = {
 
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                ITM_P_ALLREGS,         ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
+                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_PLINE,                ITM_SCALE,             ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
                                      ITM_NVECT,                     ITM_VECT,                   ITM_PCROS,                -MNU_STAT,             ITM_SIGMAMINUS,              ITM_LISTXY,                         //JM GRAPH
                                      ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 -MNU_SUMS,             ITM_CLSIGMA,                 ITM_SUM,                            //JM GRAPH
 
-                                     ITM_PLINE,                     ITM_P_ALLREGS,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PLINE,                     ITM_SCALE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_PCROS,                     -MNU_STAT,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_PBOX,                      -MNU_SUMS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
@@ -642,7 +642,7 @@ const int16_t menu_PLOT[]        = {
 
                                      ITM_PLOT,                      ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_DEMO4,                     ITM_DEMO5,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_DEMO6,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
+                                     ITM_DEMO6,                     ITM_P_ALLREGS,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
 
 
 const int16_t menu_ALPHA[]        = {
@@ -1483,7 +1483,7 @@ void showSoftmenuCurrentPart(void) {
 
 
 
-void rolloutSoftmenus(void) {                                       //JM vv
+void rollBackOneSoftmenu(void) {                                       //JM vv  Roll out one softmenu First in goes out
   int8_t ix;
   if(softmenuStackPointer == 0) return; 
   else {
@@ -1498,6 +1498,8 @@ void rolloutSoftmenus(void) {                                       //JM vv
   }
 }
 
+
+
 void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
   int8_t ix;
 //  printf(">>> softmenuStackPointer  PRE=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
@@ -1509,7 +1511,7 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
       ix--;
     }
     if(softmenuStack[ix-1].softmenu == target) {
-      rolloutSoftmenus();
+      rollBackOneSoftmenu();
       rolloutSoftmenusIncluding(target);
     }
   }
@@ -1695,7 +1697,12 @@ void initSoftmenuStack(int16_t softmenu) {
  ***********************************************/
 void pushSoftmenu(int16_t softmenu) {
 //printf(">>> ###### pushing %d\n",softmenu);
-  rolloutSoftmenusIncluding(softmenu);   //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
+  rolloutSoftmenusIncluding(softmenu);               //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
+
+  if(softmenuStackPointer == SOFTMENU_STACK_SIZE) {  //JM
+    rollBackOneSoftmenu();                             //Rather just make space for a new menu than complain there is not enough space.
+  }
+
  
   if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
     softmenuStack[softmenuStackPointer].softmenu = softmenu;
@@ -1710,7 +1717,7 @@ void pushSoftmenu(int16_t softmenu) {
     doRefreshSoftMenu = true;     //dr
   }
   else {
-    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
+    //displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
   }
 }
 
@@ -1756,6 +1763,7 @@ void popSoftmenu(void) {
 void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   int16_t m;
 //printf(">>> ###### showsoftmenu %d\n",id);
+  push = true;                                   //JM Experiment to force all menus to push onto stack
 
   if(id == -MNU_FCNS) {
     alphaSelectionMenu = ASM_FCNS;

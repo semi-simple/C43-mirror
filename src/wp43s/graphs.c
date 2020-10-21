@@ -46,6 +46,7 @@ void graph_reset(){
   extenty       = false;
   jm_VECT       = false;
   jm_NVECT      = false;
+  jm_SCALE      = false;
   Aspect_Square = true;
   PLOT_LINE     = false;
   PLOT_CROSS    = false;
@@ -87,6 +88,12 @@ void fnPNvect (uint16_t unusedParamButMandatory) {
   fnPlot(0);
 }    
 
+void fnScale (uint16_t unusedParamButMandatory) {
+  jm_SCALE = !jm_SCALE;
+  fnRefreshComboxState(CB_JC, JC_SCALE, jm_SCALE);                //jm
+  fnPlot(0);
+}    
+
 void fnPx (uint16_t unusedParamButMandatory) {
   extentx = !extentx;
   fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
@@ -102,7 +109,9 @@ void fnPy (uint16_t unusedParamButMandatory) {
 void fnPlot(uint16_t unusedParamButMandatory) {
   Aspect_Square = true;
   if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
-  if(previousCalcMode == CM_GRAPH){previousCalcMode = CM_NORMAL;}
+  if(previousCalcMode == CM_GRAPH) {
+    previousCalcMode = CM_NORMAL;
+  }
   calcMode = CM_GRAPH;
   #ifndef TESTSUITE_BUILD
     showSoftmenu(NULL, -MNU_PLOT, true);
@@ -113,7 +122,9 @@ void fnPlot(uint16_t unusedParamButMandatory) {
 void fnPlotLS(uint16_t unusedParamButMandatory) {
   Aspect_Square = false;
   if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
-  if(previousCalcMode == CM_GRAPH){previousCalcMode = CM_NORMAL;}
+  if(previousCalcMode == CM_GRAPH) {
+    previousCalcMode = CM_NORMAL;
+  }
   calcMode = CM_GRAPH;
   doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
 }
@@ -721,6 +732,9 @@ void graph_plotmem(void) {
   float/*double*/ sx, sy;
 
   statnum = 0;
+
+  graph_axis();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
+
   if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
@@ -728,10 +742,7 @@ void graph_plotmem(void) {
     runFunction(ITM_NSIGMA);
 
     if(plotmode != _VECT) {
-      //Convert from real to int
       realToInt32(SIGMA_N, statnum);
-      //realToString(SIGMA_N, tmpStr3000);
-      //statnum = stringToInt16 (tmpStr3000);
     } else {
       statnum = ix_count;
     }
@@ -741,7 +752,6 @@ void graph_plotmem(void) {
     #ifdef STATDEBUG
     printf("n=%d\n",statnum);
     #endif 
-
   }
 
 
@@ -811,6 +821,13 @@ void graph_plotmem(void) {
       if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*y_max;} else {y_max = 0;}}
     }
     
+    if(jm_SCALE) {
+      x_min = min(x_min,y_min);
+      x_max = max(x_max,y_max);
+      y_min = x_min;
+      y_max = x_max;
+    }
+
     #ifdef STATDEBUG
     printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif

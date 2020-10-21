@@ -192,6 +192,7 @@ void fnClAll                    (uint16_t unusedParamButMandatory) {}
 void fnClX                      (uint16_t unusedParamButMandatory) {}
 void fnClFAll                   (uint16_t unusedParamButMandatory) {}
 void fnClPAll                   (uint16_t unusedParamButMandatory) {}
+void fnClP(uint16_t unusedParamButMandatory) {}
 void fnClSigma                  (uint16_t unusedParamButMandatory) {}
 void fnClearStack               (uint16_t unusedParamButMandatory) {}
 void fnClearRegisters           (uint16_t unusedParamButMandatory) {}

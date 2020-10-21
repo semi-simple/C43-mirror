@@ -305,7 +305,7 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,"CUBRT" )) {sprintf(commandnumber,"%d", ITM_CUBEROOT);} else
                       if (strcompare(commandnumber,"XRTY" )) {sprintf(commandnumber,"%d", ITM_XTHROOT);} else
                       if (strcompare(commandnumber,"2^X" )) {sprintf(commandnumber,"%d", ITM_2X);} else
-                      if (strcompare(commandnumber,"E^X" )) {sprintf(commandnumber,"%d", ITM_EX);} else
+                      if (strcompare(commandnumber,"E^X" )) {sprintf(commandnumber,"%d", ITM_EXP);} else
                       if (strcompare(commandnumber,"E^X-1" )) {sprintf(commandnumber,"%d", ITM_EX1);} else
                       if (strcompare(commandnumber,"10^X" )) {sprintf(commandnumber,"%d", ITM_10x);} else
                       if (strcompare(commandnumber,"LOG2" )) {sprintf(commandnumber,"%d", ITM_LOG2);} else

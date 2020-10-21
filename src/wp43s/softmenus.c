@@ -1489,7 +1489,7 @@ void rollBackOneSoftmenu(void) {                                       //JM vv  
   else {
     doRefreshSoftMenu = true;     //dr
     ix = 1;
-    while(ix <= softmenuStackPointer) {
+    while(ix <= softmenuStackPointer - 1) {
       softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
       softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
       ix++;

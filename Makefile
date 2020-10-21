@@ -87,6 +87,8 @@ SRC_WP43S                = \
 		random.c realPart.c remainder.c reToCx.c round.c roundi.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
 		variance.c wp34s.c) \
+	$(addprefix src/wp43s/programming/, \
+		decode.c manage.c \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/browsers/, \

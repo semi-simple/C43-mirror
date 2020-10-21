@@ -1249,8 +1249,8 @@ int16_t getOperation(void) {
   switch(tamFunction) {
     case ITM_STO :
       switch(tamCurrentOperation) {
-        case ITM_ADD    : return ITM_STOPLUS;
-        case ITM_SUB    : return ITM_STOMINUS;
+        case ITM_ADD    : return ITM_STOADD;
+        case ITM_SUB    : return ITM_STOSUB;
         case ITM_MULT   : return ITM_STOMULT;
         case ITM_DIV    : return ITM_STODIV;
         case ITM_Max    : return ITM_STOMAX;
@@ -1265,8 +1265,8 @@ int16_t getOperation(void) {
 
     case ITM_RCL :
       switch(tamCurrentOperation) {
-        case ITM_ADD    : return ITM_RCLPLUS;
-        case ITM_SUB    : return ITM_RCLMINUS;
+        case ITM_ADD    : return ITM_RCLADD;
+        case ITM_SUB    : return ITM_RCLSUB;
         case ITM_MULT   : return ITM_RCLMULT;
         case ITM_DIV    : return ITM_RCLDIV;
         case ITM_Max    : return ITM_RCLMAX;

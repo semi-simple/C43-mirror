@@ -22,89 +22,89 @@
 
 void systemFlagAction(uint16_t systemFlag, uint16_t action) {
   switch(systemFlag) {
-    case FLAG_LEAD0:    switch(action) {
-                          case 0: globalFlags[108/16] &= ~(1u << (108%16));
-                                  break;
-                          case 1: globalFlags[108/16] |=   1u << (108%16);
-                                  break;
-                          case 2: globalFlags[108/16] ^=   1u << (108%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_POLAR:    switch(action) {
-                          case 0: globalFlags[100/16] &= ~(1u << (100%16));
-                                  break;
-                          case 1: globalFlags[100/16] |=   1u << (100%16);
-                                  break;
-                          case 2: globalFlags[100/16] ^=   1u << (100%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_CPXRES:   switch(action) {
-                          case 0: globalFlags[109/16] &= ~(1u << (109%16));
-                                  break;
-                          case 1: globalFlags[109/16] |=   1u << (109%16);
-                                  break;
-                          case 2: globalFlags[109/16] ^=   1u << (109%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_SPCRES:   switch(action) {
-                          case 0: globalFlags[107/16] &= ~(1u << (107%16));
-                                  break;
-                          case 1: globalFlags[107/16] |=   1u << (107%16);
-                                  break;
-                          case 2: globalFlags[107/16] ^=   1u << (107%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_TRACE:   switch(action) {
-                          case 0: globalFlags[103/16] &= ~(1u << (103%16));
-                                  break;
-                          case 1: globalFlags[103/16] |=   1u << (103%16);
-                                  break;
-                          case 2: globalFlags[103/16] ^=   1u << (103%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_CARRY:    switch(action) {
-                          case 0: globalFlags[106/16] &= ~(1u << (106%16));
-                                  break;
-                          case 1: globalFlags[106/16] |=   1u << (106%16);
-                                  break;
-                          case 2: globalFlags[106/16] ^=   1u << (106%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_OVERFLOW: switch(action) {
-                          case 0: globalFlags[105/16] &= ~(1u << (105%16));
-                                  break;
-                          case 1: globalFlags[105/16] |=   1u << (105%16);
-                                  break;
-                          case 2: globalFlags[105/16] ^=   1u << (105%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
     case FLAG_ALLENG:   switch(action) {
                           case 0: globalFlags[FLAG_A/16] &= ~(1u << (FLAG_A%16));
                                   break;
                           case 1: globalFlags[FLAG_A/16] |=   1u << (FLAG_A%16);
                                   break;
                           case 2: globalFlags[FLAG_A/16] ^=   1u << (FLAG_A%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_OVERFLOW: switch(action) {
+                          case 0: globalFlags[FLAG_B/16] &= ~(1u << (FLAG_B%16));
+                                  break;
+                          case 1: globalFlags[FLAG_B/16] |=   1u << (FLAG_B%16);
+                                  break;
+                          case 2: globalFlags[FLAG_B/16] ^=   1u << (FLAG_B%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_CARRY:    switch(action) {
+                          case 0: globalFlags[FLAG_C/16] &= ~(1u << (FLAG_C%16));
+                                  break;
+                          case 1: globalFlags[FLAG_C/16] |=   1u << (FLAG_C%16);
+                                  break;
+                          case 2: globalFlags[FLAG_C/16] ^=   1u << (FLAG_C%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_SPCRES:   switch(action) {
+                          case 0: globalFlags[FLAG_D/16] &= ~(1u << (FLAG_D%16));
+                                  break;
+                          case 1: globalFlags[FLAG_D/16] |=   1u << (FLAG_D%16);
+                                  break;
+                          case 2: globalFlags[FLAG_D/16] ^=   1u << (FLAG_D%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_CPXRES:   switch(action) {
+                          case 0: globalFlags[FLAG_I/16] &= ~(1u << (FLAG_I%16));
+                                  break;
+                          case 1: globalFlags[FLAG_I/16] |=   1u << (FLAG_I%16);
+                                  break;
+                          case 2: globalFlags[FLAG_I/16] ^=   1u << (FLAG_I%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_LEAD0:    switch(action) {
+                          case 0: globalFlags[FLAG_L/16] &= ~(1u << (FLAG_L%16));
+                                  break;
+                          case 1: globalFlags[FLAG_L/16] |=   1u << (FLAG_L%16);
+                                  break;
+                          case 2: globalFlags[FLAG_L/16] ^=   1u << (FLAG_L%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_TRACE:   switch(action) {
+                          case 0: globalFlags[FLAG_T/16] &= ~(1u << (FLAG_T%16));
+                                  break;
+                          case 1: globalFlags[FLAG_T/16] |=   1u << (FLAG_T%16);
+                                  break;
+                          case 2: globalFlags[FLAG_T/16] ^=   1u << (FLAG_T%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_POLAR:    switch(action) {
+                          case 0: globalFlags[FLAG_X/16] &= ~(1u << (FLAG_X%16));
+                                  break;
+                          case 1: globalFlags[FLAG_X/16] |=   1u << (FLAG_X%16);
+                                  break;
+                          case 2: globalFlags[FLAG_X/16] ^=   1u << (FLAG_X%16);
                                   break;
                           default: {}
                         }

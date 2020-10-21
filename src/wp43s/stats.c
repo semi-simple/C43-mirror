@@ -70,6 +70,15 @@ void initStatisticalSums(void) {
 
 
 
+void fnClSigma(uint16_t unusedParamButMandatory) {
+  if(statisticalSumsPointer != NULL) {
+    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+    statisticalSumsPointer = NULL;
+  }
+}
+
+
+
 /********************************************//**
  * \brief Adds a value to the statistic registers
  *

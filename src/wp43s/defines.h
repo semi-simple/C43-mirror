@@ -147,7 +147,9 @@
 #define NUMBER_OF_ERROR_CODES                     37
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
-#define NUMBER_OF_LOCAL_FLAGS                     16 // Could be 32 because 32 bits are available
+#define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
+#define NUMBER_OF_LOCAL_FLAGS                     16 // Could be  32 because 32 bits are available
+#define LAST_LOCAL_FLAG                          128 // Could be 144 because 32 bits are available
 
 // Global flags
 #define FLAG_X                                   100
@@ -166,13 +168,13 @@
 // System flags
 // Bit 15 (MSB) is always set for a system flag
 // If bit 14 is set the system flag is read only for the user
-#define FLAG_TDM24                            0x8000
-#define FLAG_YMD                              0xc001
-#define FLAG_DMY                              0xc002
-#define FLAG_MDY                              0xc003
+#define FLAG_TDM24                            0x8000 // The system flags
+#define FLAG_YMD                              0xc001 // MUST be in the same
+#define FLAG_DMY                              0xc002 // order as the items
+#define FLAG_MDY                              0xc003 // in items.c and items.h
 #define FLAG_CPXRES                           0x8004
-#define FLAG_CPXj                             0x8005
-#define FLAG_POLAR                            0x8006
+#define FLAG_CPXj                             0x8005 // And TDM24 MUST be
+#define FLAG_POLAR                            0x8006 // the first.
 #define FLAG_FRACT                            0x8007
 #define FLAG_PROPFR                           0x8008
 #define FLAG_DENANY                           0x8009
@@ -297,6 +299,7 @@
 #define REGISTER_J                               110
 #define REGISTER_K                               111
 #define FIRST_LOCAL_REGISTER                     112 // There are 112 global registers from 0 to 111
+#define LAST_LOCAL_REGISTER                      210 // There are maximum 99 local registers from 112 to 210 (.00 to .98)
 #define FIRST_NAMED_VARIABLE                    1000
 #define FIRST_SAVED_STACK_REGISTER              2000
 #define SAVED_REGISTER_X                        2000
@@ -332,7 +335,7 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE                        7 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define SOFTMENU_STACK_SIZE                        7 // Maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 
@@ -467,6 +470,7 @@
 #define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          12 // Bug message on screen
 #define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
+#define CM_PEM                                    14 // Program entry mode
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
 #define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old                                      //JM
@@ -628,6 +632,34 @@
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
+// Type of constant stored in a program
+#define BINARY_SHORT_INTEGER                       1
+#define STRING_SHORT_INTEGER                       2
+#define BINARY_LONG_INTEGER                        3
+#define STRING_LONG_INTEGER                        4
+#define BINARY_REAL34                              5
+#define STRING_REAL34                              6
+#define BINARY_COMPLEX34                           7
+#define STRING_COMPLEX34                           8
+#define BINARY_DATE                                9
+#define STRING_DATE                               10
+#define BINARY_TIME                               11
+#define STRING_TIME                               12
+
+// OP parameter special values
+#define VALUE_0                                  251
+#define VALUE_1                                  252
+#define STRING_LABEL_VARIABLE                    253
+#define INDIRECT_REGISTER                        254
+#define INDIRECT_VARIABLE                        255
+
+// OP parameter type
+#define PARAM_DECLARE_LABEL                        1
+#define PARAM_LABEL                                2
+#define PARAM_REGISTER                             3
+#define PARAM_FLAG                                 4
+#define PARAM_NUMBER                               5
+#define PARAM_COMPARE                              6
 
 
 

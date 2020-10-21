@@ -45,7 +45,7 @@
   #endif
 #endif
 
-dataBlock_t          *ram;
+dataBlock_t          *ram = NULL;
 bool_t                funcOK;
 bool_t                keyActionProcessed;
 const font_t         *fontForShortInteger;
@@ -97,12 +97,12 @@ int16_t               mm_MNU_ALPHA;                //JM
 int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
 int16_t               fnXEQMENUpos;                //JMXEQ
 uint16_t              numberOfLocalFlags;
+uint16_t              freeProgramBytes;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 dataBlock_t          *allLocalRegisterPointer;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
 dataBlock_t          *savedStatisticalSumsPointer;
-uint16_t              programCounter;
 uint16_t              xCursor;
 uint16_t              yCursor;
 uint16_t              tamMode;
@@ -194,7 +194,7 @@ uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;
 uint64_t              savedSystemFlags;
-glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19};
+glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
 char                  displayValueX[DISPLAY_VALUE_LEN];
 int16_t               exponentSignLocation;
 int16_t               denominatorLocation;
@@ -224,235 +224,6 @@ const char            digits[17] = "0123456789ABCDEF";
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
-
-
-/********************************************//**
- * \brief Sets all the default values of the calc and refreshes the stack
- *
- * \param void
- * \return void
- ***********************************************/
-void setupDefaults(void) {
-  void *memPtr;
-
-  ram = (dataBlock_t *)malloc(TO_BYTES(RAM_SIZE));
-  memset(ram, 0, TO_BYTES(RAM_SIZE));
-  numberOfFreeMemoryRegions = 1;
-  freeMemoryRegions[0].address = 0;
-  freeMemoryRegions[0].sizeInBlocks = RAM_SIZE;
-
-  glyphNotFound.data   = malloc(38);
-  xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
-
-//JM Where commented, fnReset is over-writing the content of setupdefaults. fnReset is in config.c
-         //JM vv note: Overwritten by fnReset
-  // Initialization of user key assignments
-  xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-  //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-  //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-  //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-  //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
-  //kbd_usr[18].fShifted    = -MNU_VARS;
-  //kbd_usr[18].gShifted    = CST_54;
-  //kbd_usr[19].fShifted    = ITM_SW;
-  //kbd_usr[19].gShifted    = ITM_SXY;
-  //kbd_usr[20].gShifted    = ITM_LYtoM;
-         //JM ^^ note: Overwritten by fnReset
-
-  // initialize the global registers
-  for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal34, AM_NONE);
-    memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
-    setRegisterDataPointer(regist, memPtr);
-    real34Zero(memPtr);
-  }
-
-  // initialize the 9+1 saved stack registers
-  for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
-    setRegisterDataType(regist, dtReal34, AM_NONE);
-    memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
-    setRegisterDataPointer(regist, memPtr);
-    real34Zero(memPtr);
-  }
-
-  // allocating space for the named variable list
-  allNamedVariablePointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of named variables
-  allNamedVariablePointer->numberOfNamedVariables = 0;
-
-  // allocate space for the local register list
-  allLocalRegisterPointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of local registers and the local flags
-  numberOfLocalFlags = 0;
-  allLocalRegisterPointer->numberOfLocalRegisters = 0;
-  allLocalRegisterPointer->localFlags = 0;
-
-  #ifdef PC_BUILD
-    debugWindow = DBG_REGISTERS;
-  #endif
-
-  temporaryInformation = TI_NO_INFO;
-
-  decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
-
-  decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
-  ctxtReal39.digits = 39;
-  ctxtReal39.traps  = 0;
-
-  decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
-  ctxtReal51.digits = 51;
-  ctxtReal51.traps  = 0;
-
-  decContextDefault(&ctxtReal75, DEC_INIT_DECQUAD);
-  ctxtReal75.digits = 75;
-  ctxtReal75.traps  = 0;
-
-  decContextDefault(&ctxtReal1071,  DEC_INIT_DECQUAD);
-  ctxtReal1071.digits = 1071;
-  ctxtReal1071.traps  = 0;
-
-  //decContextDefault(&ctxtReal2139,  DEC_INIT_DECQUAD);
-  //ctxtReal2139.digits = 2139;
-  //ctxtReal2139.traps  = 0;
-
-  statisticalSumsPointer = NULL;
-  savedStatisticalSumsPointer = NULL;
-
-  fnSetWordSize(64); // word size from 1 to 64
-  fnIntegerMode(SIM_2COMPL);
-
-  groupingGap = 3;
-
-  systemFlags = 0;
-  displayFormat = DF_ALL;
-  displayFormatDigits = 0;
-  setSystemFlag(FLAG_TDM24); // time format = 24H
-  clearSystemFlag(FLAG_CPXj);
-  fnAngularMode(AM_DEGREE);
-  setSystemFlag(FLAG_DENANY);
-  denMax = MAX_DENMAX;
-  clearSystemFlag(FLAG_LEAD0);
-  setSystemFlag(FLAG_MULTx);
-  clearSystemFlag(FLAG_FRACT);
-  clearSystemFlag(FLAG_PROPFR);
-  setSystemFlag(FLAG_DECIMP);
-  clearSystemFlag(FLAG_CPXRES);
-  clearSystemFlag(FLAG_POLAR);
-  clearSystemFlag(FLAG_ALLENG);
-  setSystemFlag(FLAG_AUTOFF);
-  clearSystemFlag(FLAG_SSIZE8);
-  clearSystemFlag(FLAG_MDY); // date format
-  clearSystemFlag(FLAG_DMY); // date format
-  setSystemFlag(FLAG_YMD);   // date format
-  clearSystemFlag(FLAG_OVERFLOW);
-  clearSystemFlag(FLAG_CARRY);
-  clearSystemFlag(FLAG_USER);
-  clearSystemFlag(FLAG_LOWBAT);
-  clearSystemFlag(FLAG_USB);
-
-  hourGlassIconEnabled = false;
-  programCounter = 0;
-  watchIconEnabled = false;
-  serialIOIconEnabled = false;
-  printerIconEnabled = false;
-  thereIsSomethingToUndo = false;
-
-  significantDigits = 0;
-  fnRoundingMode(RM_HALF_EVEN); // DEC_ROUND_HALF_EVEN
-  fnDisplayStack(4);
-
-  shiftF = false;
-  shiftG = false;
-
-  reset_jm_defaults(false);                                       //JM
-
-  fnXEQMENUpos = 0;                                            //JM Find fnXEQMENU in the indexOfItems array
-  while(indexOfItems[fnXEQMENUpos].func != fnXEQMENU) {
-     fnXEQMENUpos++;
-  }
-  uint16_t ix;                                                 //JM Reset XEQM
-  ix = 0;
-  while(ix<18) {
-    indexOfItemsXEQM[+8*ix]=0;
-    strcpy(indexOfItemsXEQM +8*ix, indexOfItems[fnXEQMENUpos+ix].itemSoftmenuName);
-    ix++;    
-  }
-
-  mm_MNU_HOME       = mm(-MNU_HOME);                           //JM
-  mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM
-  if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
-  T_cursorPos = 0;                                             //JMCURSOR
-  delayedResult = 0;                                           //JM
-  doRefreshSoftMenu = true;                                    //dr
-  ULFL = false;                                                //JM Underline
-  ULGL = false;                                                //JM Underline
-  FN_state = ST_0_INIT;                                        //JM FN-DOUBLE
-  FN_key_pressed = 0;                                          //JM LONGPRESS FN
-  FN_key_pressed_last = 0;                                     //JM LONGPRESS FN
-  FN_timeouts_in_progress = false;                             //JM LONGPRESS FN
-  Shft_timeouts = false;                                       //JM SHIFT NEW
-  FN_timed_out_to_RELEASE_EXEC = false;                        //JM LONGPRESS FN
-  FN_timed_out_to_NOP = false;                                 //JM LONGPRESS FN
-#ifdef INLINE_TEST                                             //vv dr
-  testEnabled = false;                                         //dr
-  testBitset = 0x0000;                                         //dr
-#endif                                                         //^^
-  strcpy(filename_csv,"DEFAULT.CSV");                          //JMCSV
-  mem__32=0;                                                   //JMCSV
-
-  JM_SHIFT_HOME_TIMER1 = 1;                                    //JM TIMER
-  JM_ASN_MODE = 0;                                             //JM ASSIGN
-  //Load_HOME();                                               //JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK
-  telltale = 0;                                                //JMGRAPH MEM
-  #ifndef TESTSUITE_BUILD                                      //JM
-    clear_ul();                                                //JMUL
-  #endif // TESTSUITE_BUILD                                    //JM
-
-  #ifndef TESTSUITE_BUILD
-//    showShiftState();
-  #endif // TESTSUITE_BUILD
-  initFontBrowser();
-  currentFlgScr = 0;
-  currentRegisterBrowserScreen = 9999;
-
-  softmenuStackPointer = 0;
-
-  aimBuffer[0] = 0;
-
-  setSystemFlag(FLAG_ASLIFT);
-
-  lastErrorCode = 0;
-
-  gammaLanczosCoefficients = (real51_t *)const_gammaC01;
-
-  angle180 = (real39_t *)const_180;
-  angle90  = (real39_t *)const_90;
-  angle45  = (real39_t *)const_45;
-
-  alphaSelectionMenu = ASM_NONE;
-
-  #ifndef TESTSUITE_BUILD
-    resetAlphaSelectionBuffer();
-  #endif
-
-  lastFcnsMenuPos = 0;
-  lastMenuMenuPos = 0;
-  lastCnstMenuPos = 0;
-  lastSyFlMenuPos = 0;
-  lastAIntMenuPos = 0;
-
-  exponentLimit = 6145;                                        //JMMAX
-
-  #ifdef TESTSUITE_BUILD
-    calcMode = CM_NORMAL;
-    clearSystemFlag(FLAG_ALPHA);
-  #else
-    calcModeNormal();
-  #endif // TESTSUITE_BUILD
-
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    debugMemAllocation = true;
-  #endif
-}
-
 
 
 #ifdef PC_BUILD
@@ -505,7 +276,7 @@ int main(int argc, char* argv[]) {
   gtk_init(&argc, &argv);
   setupUI();
 
-  setupDefaults();
+  setupDefaults();   //CHECKQQ
 
 // Without the following 8 lines of code
   // the f- and g-shifted labels are
@@ -520,8 +291,6 @@ int main(int argc, char* argv[]) {
   }
 
   restoreCalc();
-  //fnReset(CONFIRMED);
-
   refreshScreen();
 
   gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms
@@ -548,7 +317,7 @@ void program_main(void) {
   char charKey[3];
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
-uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
+  uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -569,7 +338,7 @@ uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep s
   key = 0;
 
   lcd_clear_buf();*/                                           //^^
-  setupDefaults();
+  setupDefaults();     //CHECKQQ
 
   fnReset(CONFIRMED);
   refreshScreen();
@@ -826,7 +595,7 @@ int main(int argc, char* argv[]) {
   gmpMemInBytes = 0;
   mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
-  setupDefaults();
+  //setupDefaults();   //CHECKQQ Removed by Martin
 
   fnReset(CONFIRMED);
 

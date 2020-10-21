@@ -166,6 +166,7 @@
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"
+#include "programming/programming.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
@@ -280,11 +281,11 @@ extern int16_t               mm_MNU_ALPHA;                //JM
 extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
 extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
+extern uint16_t              freeProgramBytes;
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
 extern dataBlock_t          *savedStatisticalSumsPointer;
-extern uint16_t              programCounter;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
 extern uint16_t              tamMode;
@@ -322,6 +323,12 @@ extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;
 extern uint8_t               currentAngularMode;
+extern uint8_t              *programMemoryPointer;
+extern uint8_t              *currentProgramMemoryPointer;
+extern uint8_t              *firstFreeProgramBytePointer;
+extern uint8_t              *programCounter;
+extern uint8_t              *stepAddress;
+extern uint8_t               opParam;
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;

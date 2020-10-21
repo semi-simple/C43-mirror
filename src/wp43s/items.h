@@ -18,8 +18,9 @@
  * \file items.h
  ***********************************************/
 
-
 #define ITM_NULL                         0
+
+// Items from 1 to 127 are 1 byte OP codes
 #define ITM_LBL                          1
 #define ITM_GTO                          2
 #define ITM_XEQ                          3
@@ -64,15 +65,15 @@
 #define ITM_FILL                        42
 #define ITM_INPUT                       43
 #define ITM_STO                         44
-#define ITM_STOPLUS                     45
-#define ITM_STOMINUS                    46
+#define ITM_STOADD                      45
+#define ITM_STOSUB                      46
 #define ITM_STOMULT                     47
 #define ITM_STODIV                      48
 #define ITM_STOMAX                      49
 #define ITM_STOMIN                      50
 #define ITM_RCL                         51
-#define ITM_RCLPLUS                     52
-#define ITM_RCLMINUS                    53
+#define ITM_RCLADD                      52
+#define ITM_RCLSUB                      53
 #define ITM_RCLMULT                     54
 #define ITM_RCLDIV                      55
 #define ITM_RCLMAX                      56
@@ -84,7 +85,7 @@
 #define ITM_CUBEROOT                    62
 #define ITM_XTHROOT                     63
 #define ITM_2X                          64
-#define ITM_EX                          65
+#define ITM_EXP                         65
 #define ITM_EX1                         66
 #define ITM_10x                         67
 #define ITM_LOG2                        68
@@ -133,7 +134,7 @@
 #define ITM_SF                         111
 #define ITM_FF                         112
 #define ITM_sincpi                     113
-#define ITM_0114                       114
+#define ITM_LITT                       114
 #define ITM_0115                       115
 #define ITM_0116                       116
 #define ITM_0117                       117
@@ -147,6 +148,10 @@
 #define ITM_0125                       125
 #define ITM_0126                       126
 #define ITM_0127                       127
+
+
+// Items from 128 to ... are 2 byte OP codes
+// Constants
 #define CST_01                         128
 #define CST_02                         129
 #define CST_03                         130
@@ -239,6 +244,9 @@
 #define ITM_0217                       217
 #define ITM_0218                       218
 #define ITM_0219                       219
+
+
+// Conversions
 #define ITM_CtoF                       220
 #define ITM_FtoC                       221
 #define ITM_DBtoPR                     222
@@ -261,8 +269,8 @@
 #define ITM_ACUStoM2b                  239
 #define ITM_M2toACUS                   240
 #define ITM_M2toACUSb                  241
-#define ITM_ATMtoPA                    242
-#define ITM_PAtoATM                    243
+#define ITM_PAtoATM                    242
+#define ITM_ATMtoPA                    243
 #define ITM_AUtoM                      244
 #define ITM_MtoAU                      245
 #define ITM_BARtoPA                    246
@@ -405,6 +413,9 @@
 #define ITM_0383                       383
 #define ITM_0384                       384
 #define ITM_0385                       385
+
+
+// Flag, bit, rotation, and logical OPs
 #define ITM_FCC                        386
 #define ITM_FCS                        387
 #define ITM_FCF                        388
@@ -442,6 +453,9 @@
 #define ITM_0420                       420
 #define ITM_0421                       421
 #define ITM_0422                       422
+
+
+// Statistical sums
 #define ITM_SIGMAPLUS                  423
 #define ITM_SIGMAMINUS                 424
 #define ITM_NSIGMA                     425
@@ -536,27 +550,30 @@
 #define ITM_0514                       514
 #define ITM_0515                       515
 #define ITM_0516                       516
-#define ITM_ST_A                       517
-#define ITM_ST_B                       518
-#define ITM_ST_C                       519
-#define ITM_ST_D                       520
-#define ITM_ST_T                       521
-#define ITM_ST_X                       522
-#define ITM_ST_Y                       523
-#define ITM_ST_Z                       524
-#define ITM_INDIRECTION                525
-#define ITM_REG_X                      526
-#define ITM_REG_Y                      527
-#define ITM_REG_Z                      528
-#define ITM_REG_T                      529
-#define ITM_REG_A                      530
-#define ITM_REG_B                      531
-#define ITM_REG_C                      532
-#define ITM_REG_D                      533
-#define ITM_REG_L                      534
-#define ITM_REG_I                      535
-#define ITM_REG_J                      536
-#define ITM_REG_K                      537
+
+
+// Bufferized items
+#define ITM_ST_X                       517
+#define ITM_ST_Y                       518
+#define ITM_ST_Z                       519
+#define ITM_ST_T                       520
+#define ITM_ST_A                       521
+#define ITM_ST_B                       522
+#define ITM_ST_C                       523
+#define ITM_ST_D                       524
+#define ITM_REG_L                      525
+#define ITM_REG_I                      526
+#define ITM_REG_J                      527
+#define ITM_REG_K                      528
+#define ITM_INDIRECTION                529
+#define ITM_REG_X                      530
+#define ITM_REG_Y                      531
+#define ITM_REG_Z                      532
+#define ITM_REG_T                      533
+#define ITM_REG_A                      534
+#define ITM_REG_B                      535
+#define ITM_REG_C                      536
+#define ITM_REG_D                      537
 #define CHR_0                          538
 #define CHR_1                          539
 #define CHR_2                          540
@@ -1184,6 +1201,9 @@
 #define ITM_1162                      1162
 #define ITM_1163                      1163
 #define ITM_1164                      1164
+
+
+// Reserved variables
 #define ITM_REGI                      1165
 #define ITM_REGJ                      1166
 #define ITM_REGK                      1167
@@ -1216,6 +1236,9 @@
 #define CHR_1194                      1194
 #define CHR_1195                      1195
 #define CHR_1196                      1196
+
+
+// Probability distributions
 #define MNU_BINOM                     1197
 #define ITM_BINOMP                    1198
 #define ITM_BINOM                     1199
@@ -1306,6 +1329,9 @@
 #define CHR_1284                      1284
 #define CHR_1285                      1285
 #define CHR_1286                      1286
+
+
+// Curve fitting
 #define ITM_BESTF                     1287
 #define ITM_EXPF                      1288
 #define ITM_LINF                      1289
@@ -1322,6 +1348,9 @@
 #define CHR_1300                      1300
 #define CHR_1301                      1301
 #define CHR_1302                      1302
+
+
+// Menus
 #define MNU_ADV                       1303
 #define MNU_ANGLES                    1304
 #define MNU_PRINT                     1305
@@ -1413,6 +1442,8 @@
 #define CHR_1391                      1391
 #define CHR_1392                      1392
 #define CHR_1393                      1393
+
+
 #define ITM_1COMPL                    1394
 #define ITM_SCRDMP                    1395
 #define ITM_2COMPL                    1396

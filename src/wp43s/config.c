@@ -518,7 +518,8 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 1304; // 326*4
+  uint8_t *stepAddress;
+  uint32_t numberOfBytesForTheTestPrograms = 4096; // 1024*4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   currentProgramMemoryPointer = programMemoryPointer;
@@ -2868,7 +2869,1079 @@ void addTestPrograms(void) {
     #endif
   }
 
-  // 511
+  { // All OP's
+    //currentProgramMemoryPointer = stepAddress;
+    // 511
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 7; // String length
+    *(stepAddress++) = 'A';
+    *(stepAddress++) = 'l';
+    *(stepAddress++) = 'l';
+    *(stepAddress++) = 'O';
+    *(stepAddress++) = 'p';
+    *(stepAddress++) = '\'';
+    *(stepAddress++) = 's';
+
+    // 512
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 0;
+
+    // 513
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 99;
+
+    // 514
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 'A' - 'A' + 100; // A
+
+    // 515
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = 'J' - 'A' + 100; // J
+
+    // 516
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 0;
+
+    // 517
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 99;
+
+    // 518
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 'A' - 'A' + 100; // A
+
+    // 519
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = 'J' - 'A' + 100; // J
+
+    // 520
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 5;
+    *(stepAddress++) = 'L';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'b';
+    *(stepAddress++) = 'e';
+    *(stepAddress++) = 'l';
+
+    // 521
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 522
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 523
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 524
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 525
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 526
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 527
+    *(stepAddress++) = ITM_GTO;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 528
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 0;
+
+    // 529
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 99;
+
+    // 530
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 'A' - 'A' + 100; // A
+
+    // 531
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = 'J' - 'A' + 100; // J
+
+    // 532
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 5;
+    *(stepAddress++) = 'L';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'b';
+    *(stepAddress++) = 'e';
+    *(stepAddress++) = 'l';
+
+    // 533
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 534
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 535
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 536
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 537
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 538
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 539
+    *(stepAddress++) = ITM_XEQ;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 540
+    *(stepAddress++) = ITM_RTN;
+
+    // 541
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = 0;
+
+    // 542
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = 99;
+
+    // 543
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = REGISTER_X;
+
+    // 544
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = REGISTER_K;
+
+    // 545
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 546
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 547
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 548
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 549
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 550
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 551
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 552
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 553
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 554
+    *(stepAddress++) = ITM_ISE;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 555
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = 0;
+
+    // 556
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = 99;
+
+    // 557
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = REGISTER_X;
+
+    // 558
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = REGISTER_K;
+
+    // 559
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 560
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 561
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 562
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 563
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 564
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 565
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 566
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 567
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 568
+    *(stepAddress++) = ITM_ISG;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 569
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = 0;
+
+    // 570
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = 99;
+
+    // 571
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = REGISTER_X;
+
+    // 572
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = REGISTER_K;
+
+    // 573
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 574
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 575
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 576
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 577
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 578
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 579
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 580
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 581
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 582
+    *(stepAddress++) = ITM_ISZ;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 583
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = 0;
+
+    // 584
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = 99;
+
+    // 585
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = REGISTER_X;
+
+    // 586
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = REGISTER_K;
+
+    // 587
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 588
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 589
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 590
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 591
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 592
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 593
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 594
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 595
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 596
+    *(stepAddress++) = ITM_DSE;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 597
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = 0;
+
+    // 598
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = 99;
+
+    // 599
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = REGISTER_X;
+
+    // 600
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = REGISTER_K;
+
+    // 601
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 602
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 603
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 604
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 605
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 606
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 607
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 608
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 609
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 610
+    *(stepAddress++) = ITM_DSL;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 611
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = 0;
+
+    // 612
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = 99;
+
+    // 613
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = REGISTER_X;
+
+    // 614
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = REGISTER_K;
+
+    // 615
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 616
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 617
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 618
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 619
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 620
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 621
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 622
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 623
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 624
+    *(stepAddress++) = ITM_DSZ;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 625
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = 0;
+
+    // 626
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = 99;
+
+    // 627
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = REGISTER_X;
+
+    // 628
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = REGISTER_K;
+
+    // 629
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 630
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 631
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 632
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 633
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 634
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 635
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 636
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 637
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 638
+    *(stepAddress++) = ITM_XEQU;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 639
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = 0;
+
+    // 640
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = 99;
+
+    // 641
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = REGISTER_X;
+
+    // 642
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = REGISTER_K;
+
+    // 643
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 644
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 645
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 646
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 647
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 648
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 649
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 650
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 651
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 652
+    *(stepAddress++) = ITM_XNE;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 653
+    *(stepAddress++) = ITM_XEQUP0;
+
+    // 654
+    *(stepAddress++) = ITM_XEQUM0;
+
+    // 655
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = 0;
+
+    // 656
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = 99;
+
+    // 657
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = REGISTER_X;
+
+    // 658
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = REGISTER_K;
+
+    // 659
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 660
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 661
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 662
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 663
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 664
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 665
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 666
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 667
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 668
+    *(stepAddress++) = ITM_XAEQU;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 669
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = 99;
+
+    // 670
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = REGISTER_X;
+
+    // 671
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = REGISTER_K;
+
+    // 672
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 673
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 674
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 675
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 676
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 677
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 678
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 679
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 680
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 681
+    *(stepAddress++) = ITM_XLT;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 682
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = 99;
+
+    // 683
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = REGISTER_X;
+
+    // 684
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = REGISTER_K;
+
+    // 685
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 686
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 687
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 688
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 689
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 690
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 691
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 692
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 693
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 694
+    *(stepAddress++) = ITM_XLE;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 695
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = 99;
+
+    // 696
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = REGISTER_X;
+
+    // 697
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = REGISTER_K;
+
+    // 698
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 699
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 700
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 701
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 702
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 703
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 704
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 705
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 706
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 707
+    *(stepAddress++) = ITM_XGE;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 708
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = 99;
+
+    // 709
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = REGISTER_X;
+
+    // 710
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = REGISTER_K;
+
+    // 711
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 712
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 713
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+    // 714
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 0;
+
+    // 715
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = 99;
+
+    // 716
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_X;
+
+    // 717
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = REGISTER_K;
+
+    // 718
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+
+    // 719
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_REGISTER;
+
+    // 720
+    *(stepAddress++) = ITM_XGT;
+    *(stepAddress++) = INDIRECT_VARIABLE;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 'V';
+    *(stepAddress++) = 'a';
+    *(stepAddress++) = 'r';
+
+
+
+    // 721
+    *(stepAddress++) = (ITM_END >> 8) | 0x80;
+    *(stepAddress++) =  ITM_END       & 0xff;
+
+    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+      printf("Prime + Bairstow + Speed + Fact + AllOp's : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    #endif
+  }
+
+  // 722
   *(stepAddress++) = 255; // .END.
   *(stepAddress++) = 255; // .END.
 
@@ -2879,12 +3952,50 @@ void addTestPrograms(void) {
   #endif
 
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-    printf("Prime + Bairstow + Speed + Fact + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     if((uint32_t)TO_BLOCKS((stepAddress - programMemoryPointer) + 2) > (uint32_t)TO_BLOCKS(numberOfBytesForTheTestPrograms)) {
       printf("Increase allocated memory for programs!\n");
       exit(0);
     }
-    listPrograms();
+
+
+   uint16_t i, numberOfBytesInStep, step = 0;
+   uint8_t *ns;
+   printf("\nProgram listing");
+   printf("\nStep   Bytes         OP");
+   stepAddress = currentProgramMemoryPointer;
+   while(stepAddress) {
+     ns = nextStep(stepAddress);
+     if(ns) {
+       numberOfBytesInStep = (uint16_t)(ns - stepAddress);
+       printf("\n%4u  ", step++); fflush(stdout);
+
+       for(i=0; i<numberOfBytesInStep; i++) {
+         printf(" %02x", *(stepAddress + i)); fflush(stdout);
+         if(i == 3 && numberOfBytesInStep > 4) {
+           decodeOneStep(stepAddress);
+           stringToUtf8(tmpStr3000, (uint8_t *)(tmpStr3000 + 2000));
+           printf("   %s", tmpStr3000 + 2000); fflush(stdout);
+         }
+
+         if(i%4 == 3 && i != numberOfBytesInStep - 1) {
+           printf("\n      "); fflush(stdout);
+         }
+       }
+
+       if(numberOfBytesInStep <= 4) {
+         for(i=1; i<=4 - ((numberOfBytesInStep - 1) % 4); i++) {
+           printf("   "); fflush(stdout);
+         }
+         decodeOneStep(stepAddress);
+         stringToUtf8(tmpStr3000, (uint8_t *)(tmpStr3000 + 2000));
+         printf("%s", tmpStr3000 + 2000); fflush(stdout);
+       }
+     }
+
+     stepAddress = ns;
+   }
+   exit(0);
   #endif
 }
 

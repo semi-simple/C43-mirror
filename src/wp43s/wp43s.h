@@ -327,8 +327,6 @@ extern uint8_t              *programMemoryPointer;
 extern uint8_t              *currentProgramMemoryPointer;
 extern uint8_t              *firstFreeProgramBytePointer;
 extern uint8_t              *programCounter;
-extern uint8_t              *stepAddress;
-extern uint8_t               opParam;
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
 extern bool_t                printerIconEnabled;

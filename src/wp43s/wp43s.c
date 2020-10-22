@@ -144,8 +144,6 @@ uint8_t              *programMemoryPointer;
 uint8_t              *currentProgramMemoryPointer;
 uint8_t              *firstFreeProgramBytePointer;
 uint8_t              *programCounter;
-uint8_t              *stepAddress;
-uint8_t               opParam;
 
 bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup

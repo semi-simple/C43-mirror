@@ -3065,53 +3065,45 @@ void fnReset(uint16_t confirmation) {
     addTestPrograms();
 
       
-//********** JM CHECKQQ
+//********** JM CHECKQQ Copy from the original wp43s.c configurations
 
-      setSystemFlag(FLAG_TDM24);
-      fnIntegerMode(SIM_2COMPL);
-      fnDisplayFormatAll(3);                                     //JM Default
-      fnDisplayFormatGap(3);
-      clearSystemFlag(FLAG_CPXj);
-      fnAngularMode(AM_DEGREE);
-      clearSystemFlag(FLAG_DENANY);                              //JM Default
-      fnDenMax(0);                                               //JM Default
-      fnDisplayStack(4);
-      firstGregorianDay = 1752;
-      clearSystemFlag(FLAG_LEAD0);
-      setSystemFlag(FLAG_MULTx);
-      setSystemFlag(FLAG_DECIMP);
-      fnRoundingMode(RM_HALF_EVEN);
-      clearSystemFlag(FLAG_ALLENG);
-      setSystemFlag(FLAG_AUTOFF);
-      setSystemFlag(FLAG_SSIZE8);                                //JM Default
-      //tDisp = -1;
-      fnSetWordSize(64);
-      clearSystemFlag(FLAG_MDY); // date format
-      clearSystemFlag(FLAG_DMY); // date format
-      setSystemFlag(FLAG_YMD);   // date format
-      clearSystemFlag(FLAG_POLAR);
-      setSystemFlag(FLAG_CPXRES);                                //JM Default
-      allocateLocalRegisters(0);
-      
-      clearSystemFlag(FLAG_FRACT);
-      clearSystemFlag(FLAG_PROPFR);
-      clearSystemFlag(FLAG_OVERFLOW);
-      clearSystemFlag(FLAG_CARRY);
-      clearSystemFlag(FLAG_ASLIFT);
-      clearSystemFlag(FLAG_USER);
-      clearSystemFlag(FLAG_LOWBAT);
-      clearSystemFlag(FLAG_USB);
-      
-      
+        //setSystemFlag(FLAG_TDM24);
+        //setSystemFlag(FLAG_MULTx);
+        //setSystemFlag(FLAG_DECIMP);
+        //setSystemFlag(FLAG_AUTOFF);
+        //setSystemFlag(FLAG_YMD);   // date format
+        clearSystemFlag(FLAG_DENANY);                              //JM Default
+        fnDenMax(0);                                               //JM Default
+        clearSystemFlag(FLAG_ASLIFT);  //JM??
+        fnDisplayFormatAll(3);                                     //JM Default
+        setSystemFlag(FLAG_SSIZE8);                                //JM Default
+        setSystemFlag(FLAG_CPXRES);                                //JM Default
+
+      //fnIntegerMode(SIM_2COMPL);
+      //fnDisplayFormatGap(3);
+ //    clearSystemFlag(FLAG_CPXj);
+ //    fnAngularMode(AM_DEGREE);
+ //    fnDisplayStack(4);
+ //    clearSystemFlag(FLAG_LEAD0);
+ //    fnRoundingMode(RM_HALF_EVEN);
+ //    clearSystemFlag(FLAG_ALLENG);
+ //  
+ //    fnSetWordSize(64);
+ //    clearSystemFlag(FLAG_MDY); // date format
+ //    clearSystemFlag(FLAG_DMY); // date format
+ //    clearSystemFlag(FLAG_POLAR);
+ //    allocateLocalRegisters(0);
+ //    
+ //    clearSystemFlag(FLAG_FRACT);
+ //    clearSystemFlag(FLAG_PROPFR);
+ //    clearSystemFlag(FLAG_OVERFLOW);
+ //    clearSystemFlag(FLAG_CARRY);
+ //    clearSystemFlag(FLAG_USER);
+ //    clearSystemFlag(FLAG_LOWBAT);
+ //    clearSystemFlag(FLAG_USB);
       
       
-      
-#ifndef TESTSUITE_BUILD
-      initFontBrowser();
-#endif
-      currentFlgScr = 0;
-      currentRegisterBrowserScreen = 9999;
-      
+            
 #ifndef TESTSUITE_BUILD
       while(softmenuStackPointer > 0) {
           popSoftmenu();
@@ -3120,21 +3112,9 @@ void fnReset(uint16_t confirmation) {
       if(SH_BASE_HOME && softmenuStackPointer == 0) pushSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;
 #endif // TESTSUITE_BUILD
       
-      exponentLimit = 6145;                                      //JMMAX
-      
-      lastIntegerBase = 0;
-      
-      
       //    showRealComplexResult();                                   //JM, from wp43s.c
       reset_jm_defaults(true); 
       
-      // Initialization of user key assignments
-      xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-      
-      
-      
-      
-
 //********** JM CHECKQQ
 
       

@@ -542,6 +542,9 @@ void fnScale                    (uint16_t unusedParamButMandatory) {}
 void fnPx                       (uint16_t unusedParamButMandatory) {}
 void fnPy                       (uint16_t unusedParamButMandatory) {}
 
+void fnPEM(uint16_t unusedParamButMandatory) {}
+
+
   
                                                                                 //JM ^^
 
@@ -2303,7 +2306,7 @@ const item_t indexOfItems[] = {
 /* 1712 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},// Font Browser
 
 /* 1713 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
-/* 1714 */  { itemToBeCoded,               NOPARAM     /*# JM #*/,      "PRGM",                                        "PRGM",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM Change P/R to PRGM
+/* 1714 */  { fnPEM,                       NOPARAM     /*# JM #*/,      "PRGM",                                        "PRGM",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_CANCEL   },//JM Change P/R to PRGM
 /* 1715 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1716 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1717 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

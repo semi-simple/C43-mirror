@@ -283,7 +283,7 @@ int main(int argc, char* argv[]) {
   gtk_init(&argc, &argv);
   setupUI();
 
-  setupDefaults();   //CHECKQQ
+//  setupDefaults();   //CHECKQQ
 
 // Without the following 8 lines of code
   // the f- and g-shifted labels are
@@ -345,7 +345,7 @@ void program_main(void) {
   key = 0;
 
   lcd_clear_buf();*/                                           //^^
-  setupDefaults();     //CHECKQQ
+//  setupDefaults();     //CHECKQQ
 
   fnReset(CONFIRMED);
   refreshScreen();

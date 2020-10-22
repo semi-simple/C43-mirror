@@ -342,18 +342,18 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
       }
 
       switch(f) {
-      	case 100: strcpy(tmpStr3000, "X:POLAR "); break;
-      	case 101: strcpy(tmpStr3000, "Y:101   "); break;
-      	case 102: strcpy(tmpStr3000, "Z:102   "); break;
-      	case 103: strcpy(tmpStr3000, "T:TRACE "); break;
-      	case 104: strcpy(tmpStr3000, "A:ALLENG"); break;
-      	case 105: strcpy(tmpStr3000, "B:OVRFL "); break;
-      	case 106: strcpy(tmpStr3000, "C:CARRY "); break;
-      	case 107: strcpy(tmpStr3000, "D:SPCRES"); break;
-      	case 108: strcpy(tmpStr3000, "L:LEAD0 "); break;
-      	case 109: strcpy(tmpStr3000, "I:CPXRES"); break;
-      	case 110: strcpy(tmpStr3000, "J:110   "); break;
-      	case 111: strcpy(tmpStr3000, "K:111   "); break;
+      	case FLAG_X: strcpy(tmpStr3000, "X:POLAR "); break;
+      	case FLAG_Y: strcpy(tmpStr3000, "Y:101   "); break;
+      	case FLAG_Z: strcpy(tmpStr3000, "Z:102   "); break;
+      	case FLAG_T: strcpy(tmpStr3000, "T:TRACE "); break;
+      	case FLAG_A: strcpy(tmpStr3000, "A:ALLENG"); break;
+      	case FLAG_B: strcpy(tmpStr3000, "B:OVRFL "); break;
+      	case FLAG_C: strcpy(tmpStr3000, "C:CARRY "); break;
+      	case FLAG_D: strcpy(tmpStr3000, "D:SPCRES"); break;
+      	case FLAG_L: strcpy(tmpStr3000, "L:LEAD0 "); break;
+      	case FLAG_I: strcpy(tmpStr3000, "I:CPXRES"); break;
+      	case FLAG_J: strcpy(tmpStr3000, "J:110   "); break;
+      	case FLAG_K: strcpy(tmpStr3000, "K:111   "); break;
       	default:  sprintf(tmpStr3000,"   %d ", f);break;
       }
 

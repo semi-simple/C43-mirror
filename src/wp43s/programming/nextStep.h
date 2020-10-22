@@ -15,8 +15,7 @@
  */
 
 /********************************************//**
- * \file decode.c
+ * \file nextStep.c
  ***********************************************/
 
-void listPrograms (void);
-void decodeOneStep(uint8_t *stepAddress);
+void *nextStep(void *step);

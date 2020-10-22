@@ -132,8 +132,6 @@ uint8_t              *programMemoryPointer;
 uint8_t              *currentProgramMemoryPointer;
 uint8_t              *firstFreeProgramBytePointer;
 uint8_t              *programCounter;
-uint8_t              *stepAddress;
-uint8_t               opParam;
 bool_t                hourGlassIconEnabled;
 bool_t                watchIconEnabled;
 bool_t                printerIconEnabled;

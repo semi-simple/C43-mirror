@@ -22,237 +22,199 @@
 
 
 void listPrograms(void) {
-  uint16_t step = 0;
-
-  stepAddress = programMemoryPointer;
-  while(stepAddress) {
-    printf("%4u  ", step++);
-    stepAddress = decodeOneStep();
-  }
 }
 
 
-void getStringLabelOrVariableName(void) {
-  opParam = *(uint8_t *)(stepAddress++);
-  xcopy(tmpStr3000 + 2000, stepAddress, opParam);
-  tmpStr3000[2000 + opParam] = 0;
+void getStringLabelOrVariableName(uint8_t *stringAddress) {
+  uint8_t stringLength = *(uint8_t *)(stringAddress++);
+  xcopy(tmpStr3000 + 1000, stringAddress, stringLength);
+  tmpStr3000[1000 + stringLength] = 0;
 }
 
 
-void getIndirectRegister(const char *op) {
-  opParam = *(uint8_t *)(stepAddress++);
+void getIndirectRegister(uint8_t *paramAddress, const char *op) {
+  uint8_t opParam = *(uint8_t *)paramAddress;
   if(opParam < REGISTER_X) { // Global register from 00 to 99
-    sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW "%02u", op, opParam);
+    sprintf(tmpStr3000, "%s " STD_RIGHT_ARROW "%02u", op, opParam);
   }
   else if(opParam <= REGISTER_K) { // Lettered register from X to K
-    sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
+    sprintf(tmpStr3000, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
   }
   else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-    sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW ".%02u", op, opParam - FIRST_LOCAL_REGISTER);
+    sprintf(tmpStr3000, "%s " STD_RIGHT_ARROW ".%02u", op, opParam - FIRST_LOCAL_REGISTER);
   }
   else {
-    sprintf(tmpStr3000 + 1000, "In function getIndirectRegister: %s " STD_RIGHT_ARROW " %u is not a valid parameter!", op, opParam);
-    stepAddress = NULL;
+    sprintf(tmpStr3000, "In function getIndirectRegister: %s " STD_RIGHT_ARROW " %u is not a valid parameter!", op, opParam);
   }
 }
 
 
-void getIndirectVariable(const char *op) {
-  opParam = *(uint8_t *)(stepAddress++);
-  getStringLabelOrVariableName();
+void getIndirectVariable(uint8_t *stringAddress, const char *op) {
+  getStringLabelOrVariableName(stringAddress);
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wrestrict"
-  sprintf(tmpStr3000 + 1000, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+  sprintf(tmpStr3000, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 1000);
   #pragma GCC diagnostic pop
-  stepAddress += opParam;
 }
 
 
-void decodeOp(const char *op, uint16_t paramMode) {
-  stepAddress++;
+void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
+  uint8_t opParam = *(uint8_t *)(paramAddress++);
 
   switch(paramMode) {
     case PARAM_DECLARE_LABEL:
          if(opParam <= 99) { // Local label from 00 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam <= 109) { // Local label from A to J
-           sprintf(tmpStr3000 + 1000, "%s %c", op, 'A' + (opParam - 100));
+           sprintf(tmpStr3000, "%s %c", op, 'A' + (opParam - 100));
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
-           getStringLabelOrVariableName();
+           getStringLabelOrVariableName(paramAddress);
            #pragma GCC diagnostic push
            #pragma GCC diagnostic ignored "-Wrestrict"
-           sprintf(tmpStr3000 + 1000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+           sprintf(tmpStr3000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 1000);
            #pragma GCC diagnostic pop
-           stepAddress += opParam;
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodeOp case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
          }
          break;
 
     case PARAM_LABEL:
          if(opParam <= 99) { // Local label from 00 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam <= 109) { // Local label from A to J
-           sprintf(tmpStr3000 + 1000, "%s %c", op, 'A' + (opParam - 100));
+           sprintf(tmpStr3000, "%s %c", op, 'A' + (opParam - 100));
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
-           getStringLabelOrVariableName();
+           getStringLabelOrVariableName(paramAddress);
            #pragma GCC diagnostic push
            #pragma GCC diagnostic ignored "-Wrestrict"
-           sprintf(tmpStr3000 + 1000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+           sprintf(tmpStr3000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 1000);
            #pragma GCC diagnostic pop
-           stepAddress += opParam;
          }
          else if(opParam == INDIRECT_REGISTER) {
-           getIndirectRegister(op);
+           getIndirectRegister(paramAddress, op);
          }
          else if(opParam == INDIRECT_VARIABLE) {
-           getIndirectVariable(op);
+           getIndirectVariable(paramAddress, op);
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodOp: case PARAM_LABEL, %s  %u is not a valid parameter!", op, opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp: case PARAM_LABEL, %s  %u is not a valid parameter!", op, opParam);
          }
          break;
 
     case PARAM_REGISTER:
          if(opParam < REGISTER_X) { // Global register from 00 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam <= REGISTER_K) { // Lettered register from X to K
-           sprintf(tmpStr3000 + 1000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
+           sprintf(tmpStr3000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-           sprintf(tmpStr3000 + 1000, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
+           sprintf(tmpStr3000, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
-           getStringLabelOrVariableName();
+           getStringLabelOrVariableName(paramAddress);
            #pragma GCC diagnostic push
            #pragma GCC diagnostic ignored "-Wrestrict"
-           sprintf(tmpStr3000 + 1000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+           sprintf(tmpStr3000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 1000);
            #pragma GCC diagnostic pop
-           stepAddress += opParam;
          }
          else if(opParam == INDIRECT_REGISTER) {
-           getIndirectRegister(op);
+           getIndirectRegister(paramAddress, op);
          }
          else if(opParam == INDIRECT_VARIABLE) {
-           getIndirectVariable(op);
+           getIndirectVariable(paramAddress, op);
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodOp: case PARAM_REGISTER, %s  %u is not a valid parameter!", op, opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp: case PARAM_REGISTER, %s  %u is not a valid parameter!", op, opParam);
          }
          break;
 
     case PARAM_FLAG:
          if(opParam < REGISTER_X) { // Global flag from 00 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam <= REGISTER_K) { // Lettered flag from X to K
-           sprintf(tmpStr3000 + 1000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
+           sprintf(tmpStr3000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_FLAG) { // Local flag from .00 to .15 (or .31)
-           sprintf(tmpStr3000 + 1000, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
+           sprintf(tmpStr3000, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
          }
          else if(FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS <= opParam && opParam < FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS + NUMBER_OF_SYSTEM_FLAGS) { // Local register from .00 to .15 (or .31)
-           sprintf(tmpStr3000 + 1000, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
+           sprintf(tmpStr3000, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
          }
          else if(opParam == INDIRECT_REGISTER) {
-           getIndirectRegister(op);
+           getIndirectRegister(paramAddress, op);
          }
          else if(opParam == INDIRECT_VARIABLE) {
-           getIndirectVariable(op);
+           getIndirectVariable(paramAddress, op);
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodOp: case PARAM_FLAG, %s  %u is not a valid parameter!", op, opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp: case PARAM_FLAG, %s  %u is not a valid parameter!", op, opParam);
          }
          break;
 
     case PARAM_NUMBER:
          if(opParam <= 99) { // Value from 0 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam == INDIRECT_REGISTER) {
-           getIndirectRegister(op);
+           getIndirectRegister(paramAddress, op);
          }
          else if(opParam == INDIRECT_VARIABLE) {
-           getIndirectVariable(op);
+           getIndirectVariable(paramAddress, op);
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodOp: case PARAM_NUMBER, %s  %u is not a valid parameter!", op, opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp: case PARAM_NUMBER, %s  %u is not a valid parameter!", op, opParam);
          }
          break;
 
     case PARAM_COMPARE:
          if(opParam < REGISTER_X) { // Global register from 00 to 99
-           sprintf(tmpStr3000 + 1000, "%s %02u", op, opParam);
+           sprintf(tmpStr3000, "%s %02u", op, opParam);
          }
          else if(opParam <= REGISTER_K) { // Lettered register from X to K
-           sprintf(tmpStr3000 + 1000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
+           sprintf(tmpStr3000, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-           sprintf(tmpStr3000 + 1000, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
+           sprintf(tmpStr3000, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
-           getStringLabelOrVariableName();
+           getStringLabelOrVariableName(paramAddress);
            #pragma GCC diagnostic push
            #pragma GCC diagnostic ignored "-Wrestrict"
-           sprintf(tmpStr3000 + 1000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 2000);
+           sprintf(tmpStr3000, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStr3000 + 1000);
            #pragma GCC diagnostic pop
-           stepAddress += opParam;
          }
          else if(opParam == VALUE_0) {
-           sprintf(tmpStr3000 + 1000, "%s 0.", op);
+           sprintf(tmpStr3000, "%s 0.", op);
          }
          else if(opParam == VALUE_1) {
-           sprintf(tmpStr3000 + 1000, "%s 1.", op);
+           sprintf(tmpStr3000, "%s 1.", op);
          }
          else if(opParam == INDIRECT_REGISTER) {
-           getIndirectRegister(op);
+           getIndirectRegister(paramAddress, op);
          }
          else if(opParam == INDIRECT_VARIABLE) {
-           getIndirectVariable(op);
+           getIndirectVariable(paramAddress, op);
          }
          else {
-           sprintf(tmpStr3000 + 1000, "In function decodOp: case PARAM_COMPARE, %s  %u is not a valid parameter!", op, opParam);
-           stepAddress = NULL;
+           sprintf(tmpStr3000, "In function decodeOp: case PARAM_COMPARE, %s  %u is not a valid parameter!", op, opParam);
          }
          break;
 
     default:
-         sprintf(tmpStr3000 + 1000, "In function decodeOp: paramMode %u is not valid!\n", paramMode);
-         stepAddress = NULL;
+         sprintf(tmpStr3000, "In function decodeOp: paramMode %u is not valid!\n", paramMode);
   }
-
-  stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
 }
 
 
-void *decodeNoParam(const char *op) {
-  stringToUtf8(op, (uint8_t *)tmpStr3000);
-  printf("%s\n", tmpStr3000);
-  return stepAddress;
-}
-
-
-void *decodeParam(const char *op, uint16_t paramMode) {
-  decodeOp(op, paramMode);
-  printf("%s\n", tmpStr3000);
-  return stepAddress;
-}
-
-
-void *decodeLITT(void) {
-  stepAddress++;
-  switch(opParam) {
+void decodeLITT(uint8_t *litteralAddress) {
+  switch(*(uint8_t *)(litteralAddress++)) {
     //case BINARY_SHORT_INTEGER:
     //  break;
 
@@ -269,10 +231,14 @@ void *decodeLITT(void) {
     //  break;
 
     case STRING_REAL34:
-      getStringLabelOrVariableName();
-      stringToUtf8(tmpStr3000 + 2000, (uint8_t *)tmpStr3000);
-      printf("%s\n", tmpStr3000);
-      return stepAddress + opParam;
+      getStringLabelOrVariableName(litteralAddress);
+      #pragma GCC diagnostic push
+      #pragma GCC diagnostic ignored "-Wrestrict"
+      sprintf(tmpStr3000, "%s", tmpStr3000 + 1000);
+      #pragma GCC diagnostic pop
+      if(strchr(tmpStr3000, 'e') == NULL && strchr(tmpStr3000, '.') == NULL) {
+        strcat(tmpStr3000, RADIX34_MARK_STRING);
+      }
       break;
 
     //case BINARY_COMPLEX34:
@@ -282,14 +248,11 @@ void *decodeLITT(void) {
     //  break;
 
     case STRING_LABEL_VARIABLE:
-      getStringLabelOrVariableName();
+      getStringLabelOrVariableName(litteralAddress);
       #pragma GCC diagnostic push
       #pragma GCC diagnostic ignored "-Wrestrict"
-      sprintf(tmpStr3000 + 1000, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpStr3000 + 2000);
+      sprintf(tmpStr3000, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpStr3000 + 1000);
       #pragma GCC diagnostic pop
-      stringToUtf8(tmpStr3000 + 1000, (uint8_t *)tmpStr3000);
-      printf("%s\n", tmpStr3000);
-      return stepAddress + opParam;
       break;
 
     //case BINARY_DATE:
@@ -305,25 +268,25 @@ void *decodeLITT(void) {
     //  break;
 
     default:
-      printf("ERROR: %u is not an acceptable parameter for ITM_LITT!\n", opParam);
-      return NULL;
+      printf("ERROR: %u is not an acceptable parameter for ITM_LITT!\n", *(uint8_t *)(litteralAddress - 1));
+      break;
   }
 }
 
 
-void *decodeOneStep(void) {
+void decodeOneStep(uint8_t *stepAddress) {
   uint8_t item8 = *(uint8_t *)(stepAddress++);
   uint16_t item16;
 
-  opParam = *(uint8_t *)stepAddress;
-
   switch(item8) {
     case ITM_LBL:         //   1
-      return decodeParam(indexOfItems[item8].itemSoftmenuName, PARAM_DECLARE_LABEL);
+      decodeOp(stepAddress, indexOfItems[item8].itemSoftmenuName, PARAM_DECLARE_LABEL);
+      break;
 
     case ITM_GTO:         //   2
     case ITM_XEQ:         //   3
-      return decodeParam(indexOfItems[item8].itemSoftmenuName, PARAM_LABEL);
+      decodeOp(stepAddress, indexOfItems[item8].itemSoftmenuName, PARAM_LABEL);
+      break;
 
     case ITM_ISE:         //   5
     case ITM_ISG:         //   6
@@ -347,7 +310,8 @@ void *decodeOneStep(void) {
     case ITM_RCLMIN:      //  57
     case ITM_DEC:         //  91
     case ITM_INC:         //  92
-      return decodeParam(indexOfItems[item8].itemSoftmenuName, PARAM_REGISTER);
+      decodeOp(stepAddress, indexOfItems[item8].itemSoftmenuName, PARAM_REGISTER);
+      break;
 
     case ITM_XEQU:        //  11
     case ITM_XNE:         //  12
@@ -356,14 +320,16 @@ void *decodeOneStep(void) {
     case ITM_XLE:         //  17
     case ITM_XGE:         //  18
     case ITM_XGT:         //  19
-      return decodeParam(indexOfItems[item8].itemSoftmenuName, PARAM_COMPARE);
+      decodeOp(stepAddress, indexOfItems[item8].itemSoftmenuName, PARAM_COMPARE);
+      break;
 
     case ITM_FC:          //  20
     case ITM_FS:          //  21
     case ITM_CF:          // 110
     case ITM_SF:          // 111
     case ITM_FF:          // 112
-      return decodeParam(indexOfItems[item8].itemSoftmenuName, PARAM_FLAG);
+      decodeOp(stepAddress, indexOfItems[item8].itemSoftmenuName, PARAM_FLAG);
+      break;
 
     case ITM_RTN:         //   4
     case ITM_XEQUP0:      //  13
@@ -441,19 +407,20 @@ void *decodeOneStep(void) {
     case ITM_XFACT:       // 108
     case ITM_pi:          // 109
     case ITM_sincpi:      // 113
-      return decodeNoParam(indexOfItems[item8].itemSoftmenuName);
+      sprintf(tmpStr3000, "%s", indexOfItems[item8].itemSoftmenuName);
+      break;
 
     case ITM_LITT:        // 114
-       return decodeLITT();
+       decodeLITT(stepAddress);
+       break;
 
     default:
       if((item8 & 0x80) == 0) {
         printf("ERROR: single byte instruction %u is unknown!\n", item8);
-        return NULL;
+        break;
       }
 
-      item16 = ((uint16_t)(item8 & 0x7F) << 8) | opParam;
-      opParam = *(uint8_t *)(++stepAddress);
+      item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(stepAddress++);
       switch(item16) {
         case ITM_CNST:     //   207
         case ITM_ALL:      //  1400
@@ -461,7 +428,8 @@ void *decodeOneStep(void) {
         case ITM_FIX:      //  1463
         case ITM_LocR:     //  1504
         case ITM_SCI:      //  1577
-          return decodeParam(indexOfItems[item16].itemSoftmenuName, PARAM_NUMBER);
+          decodeOp(stepAddress, indexOfItems[item16].itemSoftmenuName, PARAM_NUMBER);
+          break;
 
         case ITM_CtoF:     //   220
         case ITM_FtoC:     //   221
@@ -480,73 +448,15 @@ void *decodeOneStep(void) {
         case ITM_END:      //  1448
         case ITM_STOP:     //  1604
         case ITM_TICKS:    //  1610
-          return decodeNoParam(indexOfItems[item16].itemSoftmenuName);
+          sprintf(tmpStr3000, "%s", indexOfItems[item16].itemSoftmenuName);
+          break;
 
         case 0x7fff:     // 32767
-          decodeNoParam(".END.\n\n");
-          return NULL;
+          break;
 
         default:
-          printf("ERROR: double byte instruction %u is unknown!\n", ((uint16_t)(item8 & 0x7F) << 8) | opParam);
-          return NULL;
+          printf("ERROR: double byte instruction %u is unknown!\n", ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(stepAddress - 1));
+          break;
       }
   }
 }
-
-
-/*void *nextStep(void *step) {
-  uint8_t item8 = *(uint8_t *)(step++);
-  uint16_t item16;
-
-  opParam = *(uint8_t *)step;
-
-  switch(item8) {
-    case ITM_LBL:         return decodeLBL();         //   1
-    case ITM_GTO:         return decodeGTO();         //   2
-    case ITM_XEQ:         return decodeXEQ();         //   3
-
-    case ITM_RTN:         //   4
-    case ITM_SQUARE:      //  58
-    case ITM_SQUAREROOTX: //  61
-    case ITM_IP:          //  93
-    case ITM_ADD:         //  95
-    case ITM_SUB:         //  96
-    case ITM_CHS:         //  97
-    case ITM_MULT:        //  98
-    case ITM_DIV:         //  99
-    case ITM_MOD:         // 102
-    case ITM_MAGNITUDE:   // 105
-      return step;
-
-    case ITM_ISG:         return decodeISG();         //   6
-    case ITM_XNE:         return decodeXNE();         //  12
-    case ITM_XLT:         return decodeXLT();         //  16
-    case ITM_XGT:         return decodeXGT();         //  19
-    case ITM_STO:         return decodeSTO();         //  44
-    case ITM_STOADD:      return decodeSTOPLUS();     //  45
-    case ITM_RCL:         return decodeRCL();         //  51
-    case ITM_LITT:        return decodeLITT();        // 114
-
-    default:
-      if((item8 & 0x80) == 0) {
-        printf("ERROR: single byte instruction %u is unknown!\n", item8);
-        return NULL;
-      }
-
-      item16 = ((uint16_t)(item8 & 0x7F) << 8) | opParam;
-      opParam = *(uint8_t *)(++stepAddress);
-      switch(item16) {
-        case ITM_ALL:     return decodeALL();         //  1400
-        case ITM_CLREGS:  return decodeCLREGS();      //  1417
-        case ITM_CLSTK:   return decodeCLSTK();       //  1418
-        case ITM_END:     return decodeEND();         //  1448
-        case ITM_STOP:    return decodeSTOP();        //  1604
-        case 0x7fff:      return decodeDENDD();       // 32767
-
-        default:
-          printf("ERROR: double byte instruction %u is unknown!\n", ((uint16_t)(item8 & 0x7F) << 8) | opParam);
-          return NULL;
-      }
-  }
-}
-*/

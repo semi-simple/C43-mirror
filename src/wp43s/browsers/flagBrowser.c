@@ -230,27 +230,28 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     // System flags
     firstFlag = true;
     tmpStr3000[CHARS_PER_LINE * ++line] = 0;
-    oneSystemFlag(FLAG_ALLENG,  "ALLENG",         &line, &firstFlag);
-    oneSystemFlag(FLAG_ALPIN,   "ALP.IN",         &line, &firstFlag);
-    oneSystemFlag(FLAG_AUTOFF,  "AUTOFF",         &line, &firstFlag);
-    oneSystemFlag(FLAG_AUTXEQ,  "AUTXEQ",         &line, &firstFlag);
-    oneSystemFlag(FLAG_CPXj,    "CPXj",           &line, &firstFlag);
-    oneSystemFlag(FLAG_CPXRES,  "CPXRES",         &line, &firstFlag);  //JM
-    oneSystemFlag(FLAG_FRACT,   "FRACT",          &line, &firstFlag);
-    oneSystemFlag(FLAG_GROW,    "GROW",           &line, &firstFlag);
-    oneSystemFlag(FLAG_IGN1ER,  "IGN1ER",         &line, &firstFlag);
-    oneSystemFlag(FLAG_INTING,  "INTING",         &line, &firstFlag);
-    oneSystemFlag(FLAG_LEAD0,   "LEAD.0",         &line, &firstFlag);
-    oneSystemFlag(FLAG_NUMIN,   "NUM.IN",         &line, &firstFlag);
-    oneSystemFlag(FLAG_POLAR,   "POLAR",          &line, &firstFlag);   //JM
-    oneSystemFlag(FLAG_PRTACT,  "PRTACT",         &line, &firstFlag);
-    oneSystemFlag(FLAG_QUIET,   "QUIET",          &line, &firstFlag);
-    oneSystemFlag(FLAG_SLOW,    "SLOW",           &line, &firstFlag);
-    oneSystemFlag(FLAG_SOLVING, "SOLVING",        &line, &firstFlag);
-    oneSystemFlag(FLAG_SPCRES,  "SPCRES",         &line, &firstFlag);
-    oneSystemFlag(FLAG_SSIZE8,  "SSIZE8",         &line, &firstFlag);
-    oneSystemFlag(FLAG_TRACE,   "TRACE",          &line, &firstFlag);
-    oneSystemFlag(FLAG_VMDISP,  "VMDISP",         &line, &firstFlag);
+    oneSystemFlag(FLAG_ALLENG,  "ALLENG",  &line, &firstFlag);
+    oneSystemFlag(FLAG_ALPIN,   "ALP.IN",  &line, &firstFlag);
+    oneSystemFlag(FLAG_AUTOFF,  "AUTOFF",  &line, &firstFlag);
+    oneSystemFlag(FLAG_AUTXEQ,  "AUTXEQ",  &line, &firstFlag);
+    oneSystemFlag(FLAG_CPXj,    "CPXj",    &line, &firstFlag);
+    oneSystemFlag(FLAG_CPXRES,  "CPXRES",  &line, &firstFlag);  //JM
+    oneSystemFlag(FLAG_FRACT,   "FRACT",   &line, &firstFlag);
+    oneSystemFlag(FLAG_GROW,    "GROW",    &line, &firstFlag);
+    oneSystemFlag(FLAG_IGN1ER,  "IGN1ER",  &line, &firstFlag);
+    oneSystemFlag(FLAG_INTING,  "INTING",  &line, &firstFlag);
+    oneSystemFlag(FLAG_LEAD0,   "LEAD.0",  &line, &firstFlag);
+    oneSystemFlag(FLAG_NUMIN,   "NUM.IN",  &line, &firstFlag);
+    oneSystemFlag(FLAG_POLAR,   "POLAR",   &line, &firstFlag);   //JM
+    oneSystemFlag(FLAG_PRTACT,  "PRTACT",  &line, &firstFlag);
+    oneSystemFlag(FLAG_QUIET,   "QUIET",   &line, &firstFlag);
+    oneSystemFlag(FLAG_SLOW,    "SLOW",    &line, &firstFlag);
+    oneSystemFlag(FLAG_SOLVING, "SOLVING", &line, &firstFlag);
+    oneSystemFlag(FLAG_SPCRES,  "SPCRES",  &line, &firstFlag);
+    oneSystemFlag(FLAG_SSIZE8,  "SSIZE8",  &line, &firstFlag);
+    oneSystemFlag(FLAG_TRACE,   "TRACE",   &line, &firstFlag);
+    oneSystemFlag(FLAG_USB,     "USB",     &line, &firstFlag);
+    oneSystemFlag(FLAG_VMDISP,  "VMDISP",  &line, &firstFlag);
     line++;
   }
 

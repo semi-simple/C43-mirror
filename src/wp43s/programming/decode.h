@@ -18,5 +18,7 @@
  * \file decode.c
  ***********************************************/
 
-void listPrograms (void);
-void decodeOneStep(uint8_t *stepAddress);
+void decodeOneStep  (uint8_t *stepAddress);
+#ifndef DMCP_BUILD
+  void listPrograms (void);
+#endif // !DMCP_BUILD

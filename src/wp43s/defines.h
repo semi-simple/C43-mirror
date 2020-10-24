@@ -555,17 +555,19 @@
 
 // Type of constant stored in a program
 #define BINARY_SHORT_INTEGER                       1
-#define STRING_SHORT_INTEGER                       2
-#define BINARY_LONG_INTEGER                        3
-#define STRING_LONG_INTEGER                        4
-#define BINARY_REAL34                              5
-#define STRING_REAL34                              6
-#define BINARY_COMPLEX34                           7
-#define STRING_COMPLEX34                           8
-#define BINARY_DATE                                9
-#define STRING_DATE                               10
-#define BINARY_TIME                               11
-#define STRING_TIME                               12
+#define BINARY_LONG_INTEGER                        2
+#define BINARY_REAL34                              3
+#define BINARY_ANGLE34                             4
+#define BINARY_COMPLEX34                           5
+#define BINARY_DATE                                6
+#define BINARY_TIME                                7
+#define STRING_SHORT_INTEGER                       8
+#define STRING_LONG_INTEGER                        9
+#define STRING_REAL34                             10
+#define STRING_ANGLE34                            11
+#define STRING_COMPLEX34                          12
+#define STRING_TIME                               13
+#define STRING_DATE                               14
 
 // OP parameter special values
 #define VALUE_0                                  251

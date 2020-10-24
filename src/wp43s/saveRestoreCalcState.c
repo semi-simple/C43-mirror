@@ -187,7 +187,12 @@ void saveCalc(void) {
   save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer pointer to block
   ramPtr = (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer)));
   save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer offset within block
+  ramPtr = TO_WP43SMEMPTR(firstDisplayedStepPointer);
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstDisplayedStepPointer pointer to block
+  ramPtr = (uint32_t)((void *)firstDisplayedStepPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStepPointer)));
+  save(&ramPtr,                             sizeof(ramPtr),                             backup); // firstDisplayedStepPointer offset within block
   save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   backup);
+  save(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 backup);
 
   fclose(backup);
   printf("End of calc's backup\n");
@@ -211,13 +216,11 @@ void restoreCalc(void) {
   if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
     fclose(backup);
 
-    printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version. Performing RESET\n");
+    printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
     printf("               Backup file      Program\n");
     printf("backupVersion  %6u           %6u\n", backupVersion, BACKUP_VERSION);
     printf("ramSize blocks %6u           %6u\n", ramSize, RAM_SIZE);
     printf("ramSize bytes  %6u           %6u\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
-
-    fnReset(CONFIRMED);
     return;
   }
   else {
@@ -345,7 +348,12 @@ void restoreCalc(void) {
     firstFreeProgramBytePointer = TO_PCMEMPTR(ramPtr);
     restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstFreeProgramBytePointer offset within block
     firstFreeProgramBytePointer += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstDisplayedStepPointer pointer to block
+    firstDisplayedStepPointer = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             backup); // firstDisplayedStepPointer offset within block
+    firstDisplayedStepPointer += ramPtr;
     restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   backup);
+    restore(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 backup);
 
     fclose(backup);
     printf("End of calc's restoration\n");
@@ -365,6 +373,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_REGISTER_BROWSER) {}
       else if(calcMode == CM_FLAG_BROWSER)     {}
       else if(calcMode == CM_FONT_BROWSER)     {}
+      else if(calcMode == CM_PEM)              {}
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);
@@ -380,6 +389,7 @@ void restoreCalc(void) {
       else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
       else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
       else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+      else if(calcMode == CM_PEM)              calcModeNormalGui();
       else {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);

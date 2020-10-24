@@ -459,6 +459,8 @@ void fnXmin                     (uint16_t unusedParamButMandatory) {}
 void fnFib                      (uint16_t unusedParamButMandatory) {}
 void fnGd                       (uint16_t unusedParamButMandatory) {}
 void fnInvGd                    (uint16_t unusedParamButMandatory) {}
+void fnClP                      (uint16_t unusedParamButMandatory) {}
+void fnPem                      (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {
@@ -677,7 +679,7 @@ const item_t indexOfItems[] = {
 /*  203 */  { fnConstant,                  75,                          STD_omega,                                     STD_omega,                                     0,       0,       CAT_CNST, SLS_ENABLED  , US_ENABLED  },
 /*  204 */  { fnConstant,                  76,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                              0,       0,       CAT_CNST, SLS_ENABLED  , US_ENABLED  },
 /*  205 */  { fnConstant,                  77,                          STD_INFINITY,                                  STD_INFINITY,                                  0,       0,       CAT_CNST, SLS_ENABLED  , US_ENABLED  },
-/*  206 */  { itemToBeCoded,               NOPARAM,                     "#",                                           "#",                                           0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/*  206 */  { itemToBeCoded,               78,                          "#",                                           "#",                                           0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /*  207 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  208 */  { itemToBeCoded,               NOPARAM,                     "0208",                                        "0208",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  209 */  { itemToBeCoded,               NOPARAM,                     "0209",                                        "0209",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2220,7 +2222,7 @@ const item_t indexOfItems[] = {
 /* 1712 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED}, // Font browser
 
 /* 1713 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
-/* 1714 */  { fnPEM,                       NOPARAM,                     "P/R",                                         "P/R",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_CANCEL   },
+/* 1714 */  { fnPem,                       NOPARAM,                     "P/R",                                         "P/R",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_CANCEL   },
 /* 1715 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1716 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Not",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1717 */  { itemToBeCoded,               NOPARAM,                     "",                                            "yet",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

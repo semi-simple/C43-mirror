@@ -32,8 +32,8 @@ int32_t getFreeRamMemory(void) {
 }
 
 #ifndef DMCP_BUILD
-void debugMemory(void) {
-  printf("WP43S owns %6" PRIu64 " bytes and GMP owns %6" PRIu64 " bytes (%" PRId32 " bytes free)\n", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes, getFreeRamMemory());
+void debugMemory(const char *message) {
+  printf("\n%s\nWP43S owns %6" PRIu64 " bytes and GMP owns %6" PRIu64 " bytes (%" PRId32 " bytes free)\n", message, (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes, getFreeRamMemory());
   printf("    Addr   Size\n");
   for(int i=0; i<numberOfFreeMemoryRegions; i++) {
     printf("%2d%6u%7u\n", i, freeMemoryRegions[i].address, freeMemoryRegions[i].sizeInBlocks);
@@ -144,7 +144,7 @@ void *wp43sAllocate(size_t sizeInBytes) {
       pcMemPtr = TO_PCMEMPTR(freeMemoryRegions[i].address);
       xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions-i-1) * sizeof(freeMemoryRegion_t));
       numberOfFreeMemoryRegions--;
-      //debugMemory();
+      //debugMemory("wp43sAllocate: found a memory region with the exact requested size!");
       return pcMemPtr;
     }
     else if(freeMemoryRegions[i].sizeInBlocks > sizeInBlocks && freeMemoryRegions[i].sizeInBlocks < minSizeInBlocks) {
@@ -173,7 +173,7 @@ void *wp43sAllocate(size_t sizeInBytes) {
   freeMemoryRegions[minBlock].address += sizeInBlocks;
   freeMemoryRegions[minBlock].sizeInBlocks -= sizeInBlocks;
 
-  //debugMemory();
+  //debugMemory("wp43sAllocate: allocated within the smalest memory region found that is large enough.");
   return pcMemPtr;
 }
 
@@ -277,16 +277,15 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBytes) {
     numberOfFreeMemoryRegions++;
   }
 
-  //debugMemory();
+  //debugMemory("wp43sFree : end");
 }
 
 
 void resizeProgramMemory(uint16_t newSizeInBlocks) {
   uint16_t currentSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
-  uint16_t deltaBlocks, blocksToMove;
-  uint8_t *newProgramMemoryPointer;
+  uint16_t deltaBlocks, blocksToMove = 0;
+  uint8_t *newProgramMemoryPointer = NULL;
 
-  debugMemory();
   //printf("currentSizeInBlocks = %u    newSizeInBlocks = %u\n", currentSizeInBlocks, newSizeInBlocks);
   //printf("currentAddress      = %u\n", TO_WP43SMEMPTR(programMemoryPointer));
   if(newSizeInBlocks == currentSizeInBlocks) { // Nothing to do
@@ -328,5 +327,5 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
 
   xcopy(newProgramMemoryPointer, programMemoryPointer, TO_BYTES(blocksToMove));
   programMemoryPointer = newProgramMemoryPointer;
-  listPrograms();
+  //debugMemory("resizeProgramMemory : end");
 }

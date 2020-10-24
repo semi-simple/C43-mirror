@@ -1562,7 +1562,7 @@ void refreshScreen(void) {
     case CM_PEM:
       clearScreen();
       showSoftmenuCurrentPart();
-      fnPEM(NOPARAM);
+      fnPem(NOPARAM);
       refreshStatusBar();
       break;
 
@@ -1621,8 +1621,12 @@ void refreshScreen(void) {
 
     default: {}
   }
+
+  #ifndef DMCP_BUILD
+    refreshLcd(NULL);
+  #endif // !DMCP_BUILD
 }
-#endif
+#endif // !TESTSUITE_BUILD
 
 
 

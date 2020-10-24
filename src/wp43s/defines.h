@@ -29,7 +29,7 @@
 #define BUFFER_CLICK_DETECTION    //jm Evaluate the Single/Double/Triple presses
 //#undef BUFFER_CLICK_DETECTION
 
-#define BUFFER_SIZE 4             //dr muss 2^n betragen (8, 16, 32, 64 ...)
+#define BUFFER_SIZE 8             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
 #define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
 
@@ -88,7 +88,11 @@
 
 #define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
+#ifdef BUFFER_CLICK_DETECTION
 #define NIM_BUFFER_LENGTH                        100-24-10 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#else
+#define NIM_BUFFER_LENGTH                        100-24 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#endif
 
 // TAM transition system
 #define TT_OPERATION                               0 // +, -, *, /, min, max
@@ -332,7 +336,11 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
+#ifdef BUFFER_CLICK_DETECTION
 #define SOFTMENU_STACK_SIZE                        7 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#else
+#define SOFTMENU_STACK_SIZE                       14 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#endif
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 
@@ -618,7 +626,7 @@
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
 #ifdef DMCP_BUILD
-#define SCREEN_REFRESH_PERIOD                    125 // 500 //JM timeout for lcd refresh in ms 125
+#define SCREEN_REFRESH_PERIOD                    160 // 500 //JM timeout for lcd refresh in ms 125
 #else
 #define SCREEN_REFRESH_PERIOD                    100 // 500 //JM timeout for lcd refresh in ms 100
 #endif

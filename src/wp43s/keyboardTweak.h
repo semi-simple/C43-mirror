@@ -80,7 +80,11 @@ typedef struct {
 
 void     keyBuffer_pop        ();
 uint8_t  inKeyBuffer          (uint8_t byte);
-uint8_t  outKeyBuffer         (uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan);
+#ifdef BUFFER_CLICK_DETECTION
+uint8_t  outKeyBuffer         (uint8_t *pByte, uint8_t *pByteCount, uint32_t *pTime, uint32_t *pTimeSpan_1, uint32_t *pTimeSpan_B);
+#else
+uint8_t  outKeyBuffer         (uint8_t *pByte, uint8_t *pByteCount);
+#endif
 uint8_t  outKeyBufferDoubleClick();
 bool_t   fullKeyBuffer        ();
 bool_t   emptyKeyBuffer       ();                           //^^

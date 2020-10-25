@@ -18,6 +18,7 @@
  * \file manage.c
  ***********************************************/
 
-void fnClPAll(uint16_t confirmation);
-void fnClP   (uint16_t unusedParamButMandatory);
-void fnPEM   (uint16_t unusedParamButMandatory);
+void scanLabels(void);
+void fnClPAll  (uint16_t confirmation);
+void fnClP     (uint16_t unusedParamButMandatory);
+void fnPem     (uint16_t unusedParamButMandatory);

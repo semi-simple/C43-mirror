@@ -519,10 +519,12 @@ void fnClAll(uint16_t confirmation) {
 
 void addTestPrograms(void) {
   uint8_t *stepAddress;
-  uint32_t numberOfBytesForTheTestPrograms = 4096; // 1024*4
+  uint32_t numberOfBytesForTheTestPrograms = 8192; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   currentProgramMemoryPointer = programMemoryPointer;
+  firstDisplayedStepPointer   = programMemoryPointer;
+  firstDisplayedStep          = 0;
   stepAddress = programMemoryPointer;
 
   { // Prime number checker
@@ -1388,7 +1390,7 @@ void addTestPrograms(void) {
 
     // 174
     *(stepAddress++) = ITM_XLT;
-    *(stepAddress++) = REGISTER_X;
+    *(stepAddress++) = REGISTER_Y;
 
     // 175
     *(stepAddress++) = ITM_GTO;
@@ -3964,11 +3966,11 @@ void addTestPrograms(void) {
 
     // 729
     *(stepAddress++) = ITM_FC;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 730
     *(stepAddress++) = ITM_FC;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 731
     *(stepAddress++) = ITM_FC;
@@ -3993,12 +3995,12 @@ void addTestPrograms(void) {
     // 735
     *(stepAddress++) = ITM_FC;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 736
     *(stepAddress++) = ITM_FC;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 737
     *(stepAddress++) = ITM_FC;
@@ -4026,11 +4028,11 @@ void addTestPrograms(void) {
 
     // 742
     *(stepAddress++) = ITM_FS;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 743
     *(stepAddress++) = ITM_FS;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 744
     *(stepAddress++) = ITM_FS;
@@ -4055,12 +4057,12 @@ void addTestPrograms(void) {
     // 748
     *(stepAddress++) = ITM_FS;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 749
     *(stepAddress++) = ITM_FS;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 750
     *(stepAddress++) = ITM_FS;
@@ -5424,11 +5426,11 @@ void addTestPrograms(void) {
 
     // 1051
     *(stepAddress++) = ITM_CF;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1052
     *(stepAddress++) = ITM_CF;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1053
     *(stepAddress++) = ITM_CF;
@@ -5453,12 +5455,12 @@ void addTestPrograms(void) {
     // 1057
     *(stepAddress++) = ITM_CF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1058
     *(stepAddress++) = ITM_CF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1059
     *(stepAddress++) = ITM_CF;
@@ -5486,11 +5488,11 @@ void addTestPrograms(void) {
 
     // 1064
     *(stepAddress++) = ITM_SF;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1065
     *(stepAddress++) = ITM_SF;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1066
     *(stepAddress++) = ITM_SF;
@@ -5515,12 +5517,12 @@ void addTestPrograms(void) {
     // 1070
     *(stepAddress++) = ITM_SF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1071
     *(stepAddress++) = ITM_SF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1072
     *(stepAddress++) = ITM_SF;
@@ -5548,11 +5550,11 @@ void addTestPrograms(void) {
 
     // 1077
     *(stepAddress++) = ITM_FF;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1078
     *(stepAddress++) = ITM_FF;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1079
     *(stepAddress++) = ITM_FF;
@@ -5577,12 +5579,12 @@ void addTestPrograms(void) {
     // 1083
     *(stepAddress++) = ITM_FF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = FIRST_LOCAL_REGISTER;
+    *(stepAddress++) = FIRST_LOCAL_FLAG;
 
     // 1084
     *(stepAddress++) = ITM_FF;
     *(stepAddress++) = INDIRECT_REGISTER;
-    *(stepAddress++) = LAST_LOCAL_REGISTER;
+    *(stepAddress++) = LAST_LOCAL_FLAG;
 
     // 1085
     *(stepAddress++) = ITM_FF;
@@ -5596,368 +5598,504 @@ void addTestPrograms(void) {
     *(stepAddress++) = ITM_sincpi;
 
     // 1087
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = BINARY_SHORT_INTEGER;
+    *(stepAddress++) = 16; // Base
+    *(stepAddress++) = 1;
+    *(stepAddress++) = 2;
+    *(stepAddress++) = 3;
+    *(stepAddress++) = 4;
+    *(stepAddress++) = 5;
+    *(stepAddress++) = 6;
+    *(stepAddress++) = 7;
+    *(stepAddress++) = 8;
+
+    // 1088
+    *(stepAddress++) = (ITM_NOP >> 8) | 0x80; // TODO: implement ITM_LITT BINARY_LONG_INTEGER
+    *(stepAddress++) =  ITM_NOP       & 0xff;
+
+    // 1089
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = BINARY_REAL34;
+    *(stepAddress++) =  1;
+    *(stepAddress++) =  2;
+    *(stepAddress++) =  3;
+    *(stepAddress++) =  4;
+    *(stepAddress++) =  5;
+    *(stepAddress++) =  6;
+    *(stepAddress++) =  7;
+    *(stepAddress++) =  8;
+    *(stepAddress++) =  9;
+    *(stepAddress++) = 10;
+    *(stepAddress++) = 11;
+    *(stepAddress++) = 12;
+    *(stepAddress++) = 13;
+    *(stepAddress++) = 14;
+    *(stepAddress++) = 15;
+    *(stepAddress++) = 16;
+
+    // 1090
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = BINARY_ANGLE34;
+    *(stepAddress++) = AM_MULTPI;
+    *(stepAddress++) = 16;
+    *(stepAddress++) = 15;
+    *(stepAddress++) = 14;
+    *(stepAddress++) = 13;
+    *(stepAddress++) = 12;
+    *(stepAddress++) = 11;
+    *(stepAddress++) = 10;
+    *(stepAddress++) =  9;
+    *(stepAddress++) =  8;
+    *(stepAddress++) =  7;
+    *(stepAddress++) =  6;
+    *(stepAddress++) =  5;
+    *(stepAddress++) =  4;
+    *(stepAddress++) =  3;
+    *(stepAddress++) =  2;
+    *(stepAddress++) =  1;
+
+    // 1091
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = BINARY_COMPLEX34;
+    *(stepAddress++) =  1;
+    *(stepAddress++) =  2;
+    *(stepAddress++) =  3;
+    *(stepAddress++) =  4;
+    *(stepAddress++) =  5;
+    *(stepAddress++) =  6;
+    *(stepAddress++) =  7;
+    *(stepAddress++) =  8;
+    *(stepAddress++) =  9;
+    *(stepAddress++) = 10;
+    *(stepAddress++) = 11;
+    *(stepAddress++) = 12;
+    *(stepAddress++) = 13;
+    *(stepAddress++) = 14;
+    *(stepAddress++) = 15;
+    *(stepAddress++) = 16;
+    *(stepAddress++) = 17;
+    *(stepAddress++) = 18;
+    *(stepAddress++) = 19;
+    *(stepAddress++) = 20;
+    *(stepAddress++) = 21;
+    *(stepAddress++) = 22;
+    *(stepAddress++) = 23;
+    *(stepAddress++) = 24;
+    *(stepAddress++) = 25;
+    *(stepAddress++) = 26;
+    *(stepAddress++) = 27;
+    *(stepAddress++) = 28;
+    *(stepAddress++) = 29;
+    *(stepAddress++) = 30;
+    *(stepAddress++) = 31;
+    *(stepAddress++) = 32;
+
+    // 1092
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_SHORT_INTEGER;
+    *(stepAddress++) =  16; // Base
+    *(stepAddress++) =  7;  // String length
+    *(stepAddress++) =  '-';
+    *(stepAddress++) =  'A';
+    *(stepAddress++) =  'B';
+    *(stepAddress++) =  'C';
+    *(stepAddress++) =  'D';
+    *(stepAddress++) =  'E';
+    *(stepAddress++) =  'F';
+
+    // 1093
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_LONG_INTEGER;
+    *(stepAddress++) =  7;  // String length
+    *(stepAddress++) =  '-';
+    *(stepAddress++) =  '1';
+    *(stepAddress++) =  '2';
+    *(stepAddress++) =  '3';
+    *(stepAddress++) =  '4';
+    *(stepAddress++) =  '5';
+    *(stepAddress++) =  '6';
+
+    // 1094
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_ANGLE34;
+    *(stepAddress++) = AM_DEGREE;
+    *(stepAddress++) = 2; // String length
+    *(stepAddress++) = '4';
+    *(stepAddress++) = '5';
+
+    // 1095
+    *(stepAddress++) = ITM_LITT;
+    *(stepAddress++) = STRING_COMPLEX34;
+    *(stepAddress++) = 4; // String length
+    *(stepAddress++) = '1';
+    *(stepAddress++) = '-';
+    *(stepAddress++) = 'i';
+    *(stepAddress++) = '2';
+
+    // 1096
     *(stepAddress++) = (CST_01 >> 8) | 0x80;
     *(stepAddress++) =  CST_01       & 0xff;
 
-    // 1088
+    // 1097
     *(stepAddress++) = (CST_02 >> 8) | 0x80;
     *(stepAddress++) =  CST_02       & 0xff;
 
-    // 1089
+    // 1098
     *(stepAddress++) = (CST_03 >> 8) | 0x80;
     *(stepAddress++) =  CST_03       & 0xff;
 
-    // 1090
+    // 1099
     *(stepAddress++) = (CST_04 >> 8) | 0x80;
     *(stepAddress++) =  CST_04       & 0xff;
 
-    // 1091
+    // 1100
     *(stepAddress++) = (CST_05 >> 8) | 0x80;
     *(stepAddress++) =  CST_05       & 0xff;
 
-    // 1092
+    // 1101
     *(stepAddress++) = (CST_06 >> 8) | 0x80;
     *(stepAddress++) =  CST_06       & 0xff;
 
-    // 1093
+    // 1102
     *(stepAddress++) = (CST_07 >> 8) | 0x80;
     *(stepAddress++) =  CST_07       & 0xff;
 
-    // 1094
+    // 1103
     *(stepAddress++) = (CST_08 >> 8) | 0x80;
     *(stepAddress++) =  CST_08       & 0xff;
 
-    // 1095
+    // 1104
     *(stepAddress++) = (CST_09 >> 8) | 0x80;
     *(stepAddress++) =  CST_09       & 0xff;
 
-    // 1096
+    // 1105
     *(stepAddress++) = (CST_10 >> 8) | 0x80;
     *(stepAddress++) =  CST_10       & 0xff;
 
-    // 1097
+    // 1106
     *(stepAddress++) = (CST_11 >> 8) | 0x80;
     *(stepAddress++) =  CST_11       & 0xff;
 
-    // 1098
+    // 1107
     *(stepAddress++) = (CST_12 >> 8) | 0x80;
     *(stepAddress++) =  CST_12       & 0xff;
 
-    // 1099
+    // 1108
     *(stepAddress++) = (CST_13 >> 8) | 0x80;
     *(stepAddress++) =  CST_13       & 0xff;
 
-    // 1100
+    // 1109
     *(stepAddress++) = (CST_14 >> 8) | 0x80;
     *(stepAddress++) =  CST_14       & 0xff;
 
-    // 1101
+    // 1110
     *(stepAddress++) = (CST_15 >> 8) | 0x80;
     *(stepAddress++) =  CST_15       & 0xff;
 
-    // 1102
+    // 1111
     *(stepAddress++) = (CST_16 >> 8) | 0x80;
     *(stepAddress++) =  CST_16       & 0xff;
 
-    // 1103
+    // 1112
     *(stepAddress++) = (CST_17 >> 8) | 0x80;
     *(stepAddress++) =  CST_17       & 0xff;
 
-    // 1104
+    // 1113
     *(stepAddress++) = (CST_18 >> 8) | 0x80;
     *(stepAddress++) =  CST_18       & 0xff;
 
-    // 1105
+    // 1114
     *(stepAddress++) = (CST_19 >> 8) | 0x80;
     *(stepAddress++) =  CST_19       & 0xff;
 
-    // 1106
+    // 1115
     *(stepAddress++) = (CST_20 >> 8) | 0x80;
     *(stepAddress++) =  CST_20       & 0xff;
 
-    // 1107
+    // 1116
     *(stepAddress++) = (CST_21 >> 8) | 0x80;
     *(stepAddress++) =  CST_21       & 0xff;
 
-    // 1108
+    // 1117
     *(stepAddress++) = (CST_22 >> 8) | 0x80;
     *(stepAddress++) =  CST_22       & 0xff;
 
-    // 1109
+    // 1118
     *(stepAddress++) = (CST_23 >> 8) | 0x80;
     *(stepAddress++) =  CST_23       & 0xff;
 
-    // 1110
+    // 1119
     *(stepAddress++) = (CST_24 >> 8) | 0x80;
     *(stepAddress++) =  CST_24       & 0xff;
 
-    // 1111
+    // 1120
     *(stepAddress++) = (CST_25 >> 8) | 0x80;
     *(stepAddress++) =  CST_25       & 0xff;
 
-    // 1112
+    // 1121
     *(stepAddress++) = (CST_26 >> 8) | 0x80;
     *(stepAddress++) =  CST_26       & 0xff;
 
-    // 1113
+    // 1122
     *(stepAddress++) = (CST_27 >> 8) | 0x80;
     *(stepAddress++) =  CST_27       & 0xff;
 
-    // 1114
+    // 1123
     *(stepAddress++) = (CST_28 >> 8) | 0x80;
     *(stepAddress++) =  CST_28       & 0xff;
 
-    // 1115
+    // 1124
     *(stepAddress++) = (CST_29 >> 8) | 0x80;
     *(stepAddress++) =  CST_29       & 0xff;
 
-    // 1116
+    // 1125
     *(stepAddress++) = (CST_30 >> 8) | 0x80;
     *(stepAddress++) =  CST_30       & 0xff;
 
-    // 1117
+    // 1126
     *(stepAddress++) = (CST_31 >> 8) | 0x80;
     *(stepAddress++) =  CST_31       & 0xff;
 
-    // 1118
+    // 1127
     *(stepAddress++) = (CST_32 >> 8) | 0x80;
     *(stepAddress++) =  CST_32       & 0xff;
 
-    // 1119
+    // 1128
     *(stepAddress++) = (CST_33 >> 8) | 0x80;
     *(stepAddress++) =  CST_33       & 0xff;
 
-    // 1120
+    // 1129
     *(stepAddress++) = (CST_34 >> 8) | 0x80;
     *(stepAddress++) =  CST_34       & 0xff;
 
-    // 1121
+    // 1130
     *(stepAddress++) = (CST_35 >> 8) | 0x80;
     *(stepAddress++) =  CST_35       & 0xff;
 
-    // 1122
+    // 1131
     *(stepAddress++) = (CST_36 >> 8) | 0x80;
     *(stepAddress++) =  CST_36       & 0xff;
 
-    // 1123
+    // 1132
     *(stepAddress++) = (CST_37 >> 8) | 0x80;
     *(stepAddress++) =  CST_37       & 0xff;
 
-    // 1124
+    // 1133
     *(stepAddress++) = (CST_38 >> 8) | 0x80;
     *(stepAddress++) =  CST_38       & 0xff;
 
-    // 1125
+    // 1134
     *(stepAddress++) = (CST_39 >> 8) | 0x80;
     *(stepAddress++) =  CST_39       & 0xff;
 
-    // 1126
+    // 1135
     *(stepAddress++) = (CST_40 >> 8) | 0x80;
     *(stepAddress++) =  CST_40       & 0xff;
 
-    // 1127
+    // 1136
     *(stepAddress++) = (CST_41 >> 8) | 0x80;
     *(stepAddress++) =  CST_41       & 0xff;
 
-    // 1128
+    // 1137
     *(stepAddress++) = (CST_42 >> 8) | 0x80;
     *(stepAddress++) =  CST_42       & 0xff;
 
-    // 1129
+    // 1138
     *(stepAddress++) = (CST_43 >> 8) | 0x80;
     *(stepAddress++) =  CST_43       & 0xff;
 
-    // 1130
+    // 1139
     *(stepAddress++) = (CST_44 >> 8) | 0x80;
     *(stepAddress++) =  CST_44       & 0xff;
 
-    // 1131
+    // 1140
     *(stepAddress++) = (CST_45 >> 8) | 0x80;
     *(stepAddress++) =  CST_45       & 0xff;
 
-    // 1132
+    // 1141
     *(stepAddress++) = (CST_46 >> 8) | 0x80;
     *(stepAddress++) =  CST_46       & 0xff;
 
-    // 1133
+    // 1142
     *(stepAddress++) = (CST_47 >> 8) | 0x80;
     *(stepAddress++) =  CST_47       & 0xff;
 
-    // 1134
+    // 1143
     *(stepAddress++) = (CST_48 >> 8) | 0x80;
     *(stepAddress++) =  CST_48       & 0xff;
 
-    // 1135
+    // 1144
     *(stepAddress++) = (CST_49 >> 8) | 0x80;
     *(stepAddress++) =  CST_49       & 0xff;
 
-    // 1136
+    // 1145
     *(stepAddress++) = (CST_50 >> 8) | 0x80;
     *(stepAddress++) =  CST_50       & 0xff;
 
-    // 1137
+    // 1146
     *(stepAddress++) = (CST_51 >> 8) | 0x80;
     *(stepAddress++) =  CST_51       & 0xff;
 
-    // 1138
+    // 1147
     *(stepAddress++) = (CST_52 >> 8) | 0x80;
     *(stepAddress++) =  CST_52       & 0xff;
 
-    // 1139
+    // 1148
     *(stepAddress++) = (CST_53 >> 8) | 0x80;
     *(stepAddress++) =  CST_53       & 0xff;
 
-    // 1140
+    // 1149
     *(stepAddress++) = (CST_54 >> 8) | 0x80;
     *(stepAddress++) =  CST_54       & 0xff;
 
-    // 1141
+    // 1150
     *(stepAddress++) = (CST_55 >> 8) | 0x80;
     *(stepAddress++) =  CST_55       & 0xff;
 
-    // 1142
+    // 1151
     *(stepAddress++) = (CST_56 >> 8) | 0x80;
     *(stepAddress++) =  CST_56       & 0xff;
 
-    // 1143
+    // 1152
     *(stepAddress++) = (CST_57 >> 8) | 0x80;
     *(stepAddress++) =  CST_57       & 0xff;
 
-    // 1144
+    // 1153
     *(stepAddress++) = (CST_58 >> 8) | 0x80;
     *(stepAddress++) =  CST_58       & 0xff;
 
-    // 1145
+    // 1154
     *(stepAddress++) = (CST_59 >> 8) | 0x80;
     *(stepAddress++) =  CST_59       & 0xff;
 
-    // 1146
+    // 1155
     *(stepAddress++) = (CST_60 >> 8) | 0x80;
     *(stepAddress++) =  CST_60       & 0xff;
 
-    // 1147
+    // 1156
     *(stepAddress++) = (CST_61 >> 8) | 0x80;
     *(stepAddress++) =  CST_61       & 0xff;
 
-    // 1148
+    // 1157
     *(stepAddress++) = (CST_62 >> 8) | 0x80;
     *(stepAddress++) =  CST_62       & 0xff;
 
-    // 1149
+    // 1158
     *(stepAddress++) = (CST_63 >> 8) | 0x80;
     *(stepAddress++) =  CST_63       & 0xff;
 
-    // 1150
+    // 1159
     *(stepAddress++) = (CST_64 >> 8) | 0x80;
     *(stepAddress++) =  CST_64       & 0xff;
 
-    // 1151
+    // 1160
     *(stepAddress++) = (CST_65 >> 8) | 0x80;
     *(stepAddress++) =  CST_65       & 0xff;
 
-    // 1152
+    // 1161
     *(stepAddress++) = (CST_66 >> 8) | 0x80;
     *(stepAddress++) =  CST_66       & 0xff;
 
-    // 1153
+    // 1162
     *(stepAddress++) = (CST_67 >> 8) | 0x80;
     *(stepAddress++) =  CST_67       & 0xff;
 
-    // 1154
+    // 1163
     *(stepAddress++) = (CST_68 >> 8) | 0x80;
     *(stepAddress++) =  CST_68       & 0xff;
 
-    // 1155
+    // 1164
     *(stepAddress++) = (CST_69 >> 8) | 0x80;
     *(stepAddress++) =  CST_69       & 0xff;
 
-    // 1156
+    // 1165
     *(stepAddress++) = (CST_70 >> 8) | 0x80;
     *(stepAddress++) =  CST_70       & 0xff;
 
-    // 1157
+    // 1166
     *(stepAddress++) = (CST_71 >> 8) | 0x80;
     *(stepAddress++) =  CST_71       & 0xff;
 
-    // 1158
+    // 1167
     *(stepAddress++) = (CST_72 >> 8) | 0x80;
     *(stepAddress++) =  CST_72       & 0xff;
 
-    // 1159
+    // 1168
     *(stepAddress++) = (CST_73 >> 8) | 0x80;
     *(stepAddress++) =  CST_73       & 0xff;
 
-    // 1160
+    // 1169
     *(stepAddress++) = (CST_74 >> 8) | 0x80;
     *(stepAddress++) =  CST_74       & 0xff;
 
-    // 1161
+    // 1170
     *(stepAddress++) = (CST_75 >> 8) | 0x80;
     *(stepAddress++) =  CST_75       & 0xff;
 
-    // 1162
+    // 1171
     *(stepAddress++) = (CST_76 >> 8) | 0x80;
     *(stepAddress++) =  CST_76       & 0xff;
 
-    // 1163
+    // 1172
     *(stepAddress++) = (CST_77 >> 8) | 0x80;
     *(stepAddress++) =  CST_77       & 0xff;
 
-    // 1164
+    // 1173
     *(stepAddress++) = (CST_78 >> 8) | 0x80;
     *(stepAddress++) =  CST_78       & 0xff;
 
-    // 1165
+    // 1174
     *(stepAddress++) = (CST_79 >> 8) | 0x80;
     *(stepAddress++) =  CST_79       & 0xff;
 
-    // 1166
+    // 1175
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) =  1;
 
-    // 1167
+    // 1176
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) =  79;
 
-    // 1168
+    // 1177
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 0;
 
-    // 1169
+    // 1178
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 99;
 
-    // 1170
+    // 1179
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = REGISTER_X;
 
-    // 1171
+    // 1180
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = REGISTER_K;
 
-    // 1172
+    // 1181
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = FIRST_LOCAL_REGISTER;
 
-    // 1173
+    // 1182
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = LAST_LOCAL_REGISTER;
 
-    // 1174
+    // 1183
     *(stepAddress++) = (ITM_CNST >> 8) | 0x80;
     *(stepAddress++) =  ITM_CNST       & 0xff;
     *(stepAddress++) = INDIRECT_VARIABLE;
@@ -5966,129 +6104,617 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'a';
     *(stepAddress++) = 'r';
 
-    // 1175
+    // 1184
     *(stepAddress++) = (ITM_CtoF >> 8) | 0x80;
     *(stepAddress++) =  ITM_CtoF       & 0xff;
 
-    // 1176
+    // 1185
     *(stepAddress++) = (ITM_FtoC >> 8) | 0x80;
     *(stepAddress++) =  ITM_FtoC       & 0xff;
 
-    // 1177
+    // 1186
     *(stepAddress++) = (ITM_DBtoPR >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoPR       & 0xff;
 
-    // 1178
+    // 1187
     *(stepAddress++) = (ITM_DBtoPRb >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoPRb       & 0xff;
 
-    // 1179
+    // 1188
     *(stepAddress++) = (ITM_DBtoPRc >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoPRc       & 0xff;
 
-    // 1180
+    // 1189
     *(stepAddress++) = (ITM_DBtoFR >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoFR       & 0xff;
 
-    // 1181
+    // 1190
     *(stepAddress++) = (ITM_DBtoFRb >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoFRb       & 0xff;
 
-    // 1182
+    // 1191
     *(stepAddress++) = (ITM_DBtoFRc >> 8) | 0x80;
     *(stepAddress++) =  ITM_DBtoFRc       & 0xff;
 
-    // 1183
+    // 1192
     *(stepAddress++) = (ITM_PRtoDB >> 8) | 0x80;
     *(stepAddress++) =  ITM_PRtoDB       & 0xff;
 
-    // 1184
+    // 1193
     *(stepAddress++) = (ITM_PRtoDBb >> 8) | 0x80;
     *(stepAddress++) =  ITM_PRtoDBb       & 0xff;
 
-    // 1185
+    // 1194
     *(stepAddress++) = (ITM_PRtoDBc >> 8) | 0x80;
     *(stepAddress++) =  ITM_PRtoDBc       & 0xff;
 
-    // 1186
+    // 1195
     *(stepAddress++) = (ITM_FRtoDB >> 8) | 0x80;
     *(stepAddress++) =  ITM_FRtoDB       & 0xff;
 
-    // 1187
+    // 1196
     *(stepAddress++) = (ITM_FRtoDBb >> 8) | 0x80;
     *(stepAddress++) =  ITM_FRtoDBb       & 0xff;
 
-    // 1188
+    // 1197
     *(stepAddress++) = (ITM_FRtoDBc >> 8) | 0x80;
     *(stepAddress++) =  ITM_FRtoDBc       & 0xff;
 
-    // 1189
+    // 1198
     *(stepAddress++) = (ITM_ACtoM2 >> 8) | 0x80;
     *(stepAddress++) =  ITM_ACtoM2       & 0xff;
 
-    // 1190
+    // 1199
     *(stepAddress++) = (ITM_ACtoM2b >> 8) | 0x80;
     *(stepAddress++) =  ITM_ACtoM2b       & 0xff;
 
-    // 1191
+    // 1200
     *(stepAddress++) = (ITM_M2toAC >> 8) | 0x80;
     *(stepAddress++) =  ITM_M2toAC       & 0xff;
 
-    // 1192
+    // 1201
     *(stepAddress++) = (ITM_M2toACb >> 8) | 0x80;
     *(stepAddress++) =  ITM_M2toACb       & 0xff;
 
-    // 1193
+    // 1202
     *(stepAddress++) = (ITM_ACUStoM2 >> 8) | 0x80;
     *(stepAddress++) =  ITM_ACUStoM2       & 0xff;
 
-    // 1194
+    // 1203
     *(stepAddress++) = (ITM_ACUStoM2b >> 8) | 0x80;
     *(stepAddress++) =  ITM_ACUStoM2b       & 0xff;
 
-    // 1195
+    // 1204
     *(stepAddress++) = (ITM_M2toACUS >> 8) | 0x80;
     *(stepAddress++) =  ITM_M2toACUS       & 0xff;
 
-    // 1196
+    // 1205
     *(stepAddress++) = (ITM_M2toACUSb >> 8) | 0x80;
     *(stepAddress++) =  ITM_M2toACUSb       & 0xff;
 
-    // 1197
+    // 1206
     *(stepAddress++) = (ITM_PAtoATM >> 8) | 0x80;
     *(stepAddress++) =  ITM_PAtoATM       & 0xff;
 
-    // 1198
+    // 1207
     *(stepAddress++) = (ITM_ATMtoPA >> 8) | 0x80;
     *(stepAddress++) =  ITM_ATMtoPA       & 0xff;
 
-    // 1199
+    // 1208
     *(stepAddress++) = (ITM_AUtoM >> 8) | 0x80;
     *(stepAddress++) =  ITM_AUtoM       & 0xff;
 
-    // 1200
+    // 1209
     *(stepAddress++) = (ITM_MtoAU >> 8) | 0x80;
     *(stepAddress++) =  ITM_MtoAU       & 0xff;
 
-    // 1201
+    // 1210
     *(stepAddress++) = (ITM_BARtoPA >> 8) | 0x80;
     *(stepAddress++) =  ITM_BARtoPA       & 0xff;
 
-    // 1202
+    // 1211
     *(stepAddress++) = (ITM_PAtoBAR >> 8) | 0x80;
     *(stepAddress++) =  ITM_PAtoBAR       & 0xff;
 
-    // 1203
+    // 1212
     *(stepAddress++) = (ITM_BTUtoJ >> 8) | 0x80;
     *(stepAddress++) =  ITM_BTUtoJ       & 0xff;
 
-    // 1204
+    // 1213
     *(stepAddress++) = (ITM_JtoBTU >> 8) | 0x80;
     *(stepAddress++) =  ITM_JtoBTU       & 0xff;
 
+    // 1214
+    *(stepAddress++) = (ITM_CALtoJ >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CALtoJ       & 0xff;
+
+    // 1215
+    *(stepAddress++) = (ITM_JtoCAL >> 8) | 0x80;
+    *(stepAddress++) =  ITM_JtoCAL       & 0xff;
+
+    // 1216
+    *(stepAddress++) = (ITM_LBFFTtoNM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LBFFTtoNM       & 0xff;
+
+    // 1217
+    *(stepAddress++) = (ITM_LBFFTtoNMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LBFFTtoNMb       & 0xff;
+
+    // 1218
+    *(stepAddress++) = (ITM_NMtoLBFFT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_NMtoLBFFT       & 0xff;
+
+    // 1219
+    *(stepAddress++) = (ITM_NMtoLBFFTb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_NMtoLBFFTb       & 0xff;
+
+    // 1220
+    *(stepAddress++) = (ITM_CWTtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CWTtoKG       & 0xff;
+
+    // 1221
+    *(stepAddress++) = (ITM_KGtoCWT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoCWT       & 0xff;
+
+    // 1222
+    *(stepAddress++) = (ITM_FTtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FTtoM       & 0xff;
+
+    // 1223
+    *(stepAddress++) = (ITM_MtoFT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFT       & 0xff;
+
+    // 1224
+    *(stepAddress++) = (ITM_FTUStoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FTUStoM       & 0xff;
+
+    // 1225
+    *(stepAddress++) = (ITM_FTUStoMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FTUStoMb       & 0xff;
+
+    // 1226
+    *(stepAddress++) = (ITM_FTUStoMc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FTUStoMc       & 0xff;
+
+    // 1227
+    *(stepAddress++) = (ITM_MtoFTUS >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFTUS       & 0xff;
+
+    // 1228
+    *(stepAddress++) = (ITM_MtoFTUSb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFTUSb       & 0xff;
+
+    // 1229
+    *(stepAddress++) = (ITM_MtoFTUSc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFTUSc       & 0xff;
+
+    // 1230
+    *(stepAddress++) = (ITM_FZUKtoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FZUKtoM3       & 0xff;
+
+    // 1231
+    *(stepAddress++) = (ITM_FZUKtoM3b >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FZUKtoM3b       & 0xff;
+
+    // 1232
+    *(stepAddress++) = (ITM_M3toFZUK >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toFZUK       & 0xff;
+
+    // 1233
+    *(stepAddress++) = (ITM_M3toFZUKb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toFZUKb       & 0xff;
+
+    // 1234
+    *(stepAddress++) = (ITM_FZUStoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FZUStoM3       & 0xff;
+
+    // 1235
+    *(stepAddress++) = (ITM_FZUStoM3b >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FZUStoM3b       & 0xff;
+
+    // 1236
+    *(stepAddress++) = (ITM_M3toFZUS >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toFZUS       & 0xff;
+
+    // 1237
+    *(stepAddress++) = (ITM_M3toFZUSb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toFZUSb       & 0xff;
+
+    // 1238
+    *(stepAddress++) = (ITM_GLUKtoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_GLUKtoM3       & 0xff;
+
+    // 1239
+    *(stepAddress++) = (ITM_M3toGLUK >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toGLUK       & 0xff;
+
+    // 1240
+    *(stepAddress++) = (ITM_GLUStoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_GLUStoM3       & 0xff;
+
+    // 1241
+    *(stepAddress++) = (ITM_M3toGLUS >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toGLUS       & 0xff;
+
+    // 1242
+    *(stepAddress++) = (ITM_HPEtoW >> 8) | 0x80;
+    *(stepAddress++) =  ITM_HPEtoW       & 0xff;
+
+    // 1243
+    *(stepAddress++) = (ITM_WtoHPE >> 8) | 0x80;
+    *(stepAddress++) =  ITM_WtoHPE       & 0xff;
+
+    // 1244
+    *(stepAddress++) = (ITM_HPMtoW >> 8) | 0x80;
+    *(stepAddress++) =  ITM_HPMtoW       & 0xff;
+
+    // 1245
+    *(stepAddress++) = (ITM_WtoHPM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_WtoHPM       & 0xff;
+
+    // 1246
+    *(stepAddress++) = (ITM_HPUKtoW >> 8) | 0x80;
+    *(stepAddress++) =  ITM_HPUKtoW       & 0xff;
+
+    // 1247
+    *(stepAddress++) = (ITM_WtoHPUK >> 8) | 0x80;
+    *(stepAddress++) =  ITM_WtoHPUK       & 0xff;
+
+    // 1248
+    *(stepAddress++) = (ITM_IHGtoPA >> 8) | 0x80;
+    *(stepAddress++) =  ITM_IHGtoPA       & 0xff;
+
+    // 1249
+    *(stepAddress++) = (ITM_IHGtoPA >> 8) | 0x80;
+    *(stepAddress++) =  ITM_IHGtoPA       & 0xff;
+
+    // 1250
+    *(stepAddress++) = (ITM_IHGtoPAb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_IHGtoPAb       & 0xff;
+
+    // 1251
+    *(stepAddress++) = (ITM_PAtoIHG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoIHG       & 0xff;
+
+    // 1252
+    *(stepAddress++) = (ITM_PAtoIHGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoIHGb       & 0xff;
+
+    // 1253
+    *(stepAddress++) = (ITM_INtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_INtoM       & 0xff;
+
+    // 1254
+    *(stepAddress++) = (ITM_MtoINCH >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoINCH       & 0xff;
+
+    // 1255
+    *(stepAddress++) = (ITM_WHtoJ >> 8) | 0x80;
+    *(stepAddress++) =  ITM_WHtoJ       & 0xff;
+
+    // 1256
+    *(stepAddress++) = (ITM_JtoWH >> 8) | 0x80;
+    *(stepAddress++) =  ITM_JtoWH       & 0xff;
+
+    // 1257
+    *(stepAddress++) = (ITM_KGtoLBS >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoLBS       & 0xff;
+
+    // 1258
+    *(stepAddress++) = (ITM_LBStoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LBStoKG       & 0xff;
+
+    // 1259
+    *(stepAddress++) = (ITM_KGtoOZ >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoOZ       & 0xff;
+
+    // 1260
+    *(stepAddress++) = (ITM_OZtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_OZtoKG       & 0xff;
+
+    // 1261
+    *(stepAddress++) = (ITM_KGtoSCW >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSCW       & 0xff;
+
+    // 1262
+    *(stepAddress++) = (ITM_KGtoSCWb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSCWb       & 0xff;
+
+    // 1263
+    *(stepAddress++) = (ITM_SCWtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_SCWtoKG       & 0xff;
+
+    // 1264
+    *(stepAddress++) = (ITM_SCWtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_SCWtoKGb       & 0xff;
+
+    // 1265
+    *(stepAddress++) = (ITM_KGtoSTO >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSTO       & 0xff;
+
+    // 1266
+    *(stepAddress++) = (ITM_KGtoSTOb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSTOb       & 0xff;
+
+    // 1267
+    *(stepAddress++) = (ITM_STOtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_STOtoKG       & 0xff;
+
+    // 1268
+    *(stepAddress++) = (ITM_STOtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_STOtoKGb       & 0xff;
+
+    // 1269
+    *(stepAddress++) = (ITM_KGtoST >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoST       & 0xff;
+
+    // 1270
+    *(stepAddress++) = (ITM_KGtoSTb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSTb       & 0xff;
+
+    // 1271
+    *(stepAddress++) = (ITM_KGtoSTc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoSTc       & 0xff;
+
+    // 1272
+    *(stepAddress++) = (ITM_STtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_STtoKG       & 0xff;
+
+    // 1273
+    *(stepAddress++) = (ITM_STtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_STtoKGb       & 0xff;
+
+    // 1274
+    *(stepAddress++) = (ITM_STtoKGc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_STtoKGc       & 0xff;
+
+    // 1275
+    *(stepAddress++) = (ITM_KGtoTON >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoTON       & 0xff;
+
+    // 1276
+    *(stepAddress++) = (ITM_KGtoTONb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoTONb       & 0xff;
+
+    // 1277
+    *(stepAddress++) = (ITM_KGtoTONc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoTONc       & 0xff;
+
+    // 1278
+    *(stepAddress++) = (ITM_TONtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TONtoKG       & 0xff;
+
+    // 1279
+    *(stepAddress++) = (ITM_TONtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TONtoKGb       & 0xff;
+
+    // 1280
+    *(stepAddress++) = (ITM_TONtoKGc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TONtoKGc       & 0xff;
+
+    // 1281
+    *(stepAddress++) = (ITM_KGtoTRZ >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoTRZ       & 0xff;
+
+    // 1282
+    *(stepAddress++) = (ITM_KGtoTRZb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoTRZb       & 0xff;
+
+    // 1283
+    *(stepAddress++) = (ITM_TRZtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TRZtoKG       & 0xff;
+
+    // 1284
+    *(stepAddress++) = (ITM_TRZtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TRZtoKGb       & 0xff;
+
+    // 1285
+    *(stepAddress++) = (ITM_LBFtoN >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LBFtoN       & 0xff;
+
+    // 1286
+    *(stepAddress++) = (ITM_NtoLBF >> 8) | 0x80;
+    *(stepAddress++) =  ITM_NtoLBF       & 0xff;
+
+    // 1287
+    *(stepAddress++) = (ITM_LYtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_LYtoM       & 0xff;
+
+    // 1288
+    *(stepAddress++) = (ITM_MtoLY >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoLY       & 0xff;
+
+    // 1289
+    *(stepAddress++) = (ITM_MMHGtoPA >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MMHGtoPA       & 0xff;
+
+    // 1290
+    *(stepAddress++) = (ITM_MMHGtoPAb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MMHGtoPAb       & 0xff;
+
+    // 1291
+    *(stepAddress++) = (ITM_PAtoMMHG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoMMHG       & 0xff;
+
+    // 1292
+    *(stepAddress++) = (ITM_PAtoMMHGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoMMHGb       & 0xff;
+
+    // 1293
+    *(stepAddress++) = (ITM_MItoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MItoM       & 0xff;
+
+    // 1294
+    *(stepAddress++) = (ITM_MtoMI >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoMI       & 0xff;
+
+    // 1295
+    *(stepAddress++) = (ITM_MtoNMI >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoNMI       & 0xff;
+
+    // 1296
+    *(stepAddress++) = (ITM_NMItoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_NMItoM       & 0xff;
+
+    // 1297
+    *(stepAddress++) = (ITM_MtoPC >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoPC       & 0xff;
+
+    // 1298
+    *(stepAddress++) = (ITM_PCtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PCtoM       & 0xff;
+
+    // 1299
+    *(stepAddress++) = (ITM_MtoPOINTb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoPOINTb       & 0xff;
+
+    // 1300
+    *(stepAddress++) = (ITM_MtoPOINT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoPOINT       & 0xff;
+
+    // 1301
+    *(stepAddress++) = (ITM_POINTtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_POINTtoM       & 0xff;
+
+    // 1302
+    *(stepAddress++) = (ITM_POINTtoMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_POINTtoMb       & 0xff;
+
+    // 1303
+    *(stepAddress++) = (ITM_POINTtoMc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_POINTtoMc       & 0xff;
+
+    // 1304
+    *(stepAddress++) = (ITM_MtoYD >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoYD       & 0xff;
+
+    // 1305
+    *(stepAddress++) = (ITM_YDtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_YDtoM       & 0xff;
+
+    // 1306
+    *(stepAddress++) = (ITM_PSItoPA >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PSItoPA       & 0xff;
+
+    // 1307
+    *(stepAddress++) = (ITM_PAtoPSI >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoPSI       & 0xff;
+
+    // 1308
+    *(stepAddress++) = (ITM_PAtoTOR >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoTOR       & 0xff;
+
+    // 1309
+    *(stepAddress++) = (ITM_PAtoTORb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoTORb       & 0xff;
+
+    // 1310
+    *(stepAddress++) = (ITM_TORtoPA >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TORtoPA       & 0xff;
+
+    // 1311
+    *(stepAddress++) = (ITM_TORtoPAb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_TORtoPAb       & 0xff;
+
+    // 1312
+    *(stepAddress++) = (ITM_StoYEAR >> 8) | 0x80;
+    *(stepAddress++) =  ITM_StoYEAR       & 0xff;
+
+    // 1313
+    *(stepAddress++) = (ITM_YEARtoS >> 8) | 0x80;
+    *(stepAddress++) =  ITM_YEARtoS       & 0xff;
+
+    // 1314
+    *(stepAddress++) = (ITM_CARATtoKG >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CARATtoKG       & 0xff;
+
+    // 1315
+    *(stepAddress++) = (ITM_CARATtoKGb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CARATtoKGb       & 0xff;
+
+    // 1316
+    *(stepAddress++) = (ITM_CARATtoKGc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_CARATtoKGc       & 0xff;
+
+    // 1317
+    *(stepAddress++) = (ITM_KGtoCARAT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoCARAT       & 0xff;
+
+    // 1318
+    *(stepAddress++) = (ITM_KGtoCARATb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoCARATb       & 0xff;
+
+    // 1319
+    *(stepAddress++) = (ITM_KGtoCARATc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_KGtoCARATc       & 0xff;
+
+    // 1320
+    *(stepAddress++) = (ITM_QTtoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_QTtoM3       & 0xff;
+
+    // 1321
+    *(stepAddress++) = (ITM_M3toQT >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toQT       & 0xff;
+
+    // 1322
+    *(stepAddress++) = (ITM_FATHOMtoM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FATHOMtoM       & 0xff;
+
+    // 1323
+    *(stepAddress++) = (ITM_FATHOMtoMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FATHOMtoMb       & 0xff;
+
+    // 1324
+    *(stepAddress++) = (ITM_FATHOMtoMc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_FATHOMtoMc       & 0xff;
+
+    // 1325
+    *(stepAddress++) = (ITM_MtoFATHOM >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFATHOM       & 0xff;
+
+    // 1326
+    *(stepAddress++) = (ITM_MtoFATHOMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFATHOMb       & 0xff;
+
+    // 1327
+    *(stepAddress++) = (ITM_MtoFATHOMc >> 8) | 0x80;
+    *(stepAddress++) =  ITM_MtoFATHOMc       & 0xff;
+
+    // 1328
+    *(stepAddress++) = (ITM_BARRELtoM3 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_BARRELtoM3       & 0xff;
+
+    // 1329
+    *(stepAddress++) = (ITM_BARRELtoM3b >> 8) | 0x80;
+    *(stepAddress++) =  ITM_BARRELtoM3b       & 0xff;
+
+    // 1330
+    *(stepAddress++) = (ITM_M3toBARREL >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toBARREL       & 0xff;
+
+    // 1331
+    *(stepAddress++) = (ITM_M3toBARRELb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M3toBARRELb       & 0xff;
+
+    // 1332
+    *(stepAddress++) = (ITM_ATMtoPAb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_ATMtoPAb       & 0xff;
+
+    // 1333
+    *(stepAddress++) = (ITM_PAtoATMb >> 8) | 0x80;
+    *(stepAddress++) =  ITM_PAtoATMb       & 0xff;
+
+    // 1334
+    *(stepAddress++) = (ITM_HECTAREtoM2 >> 8) | 0x80;
+    *(stepAddress++) =  ITM_HECTAREtoM2       & 0xff;
+
+    // 1335
+    *(stepAddress++) = (ITM_M2toHECTARE >> 8) | 0x80;
+    *(stepAddress++) =  ITM_M2toHECTARE       & 0xff;
 
 
-    // 1205
+
+    // 1336
     *(stepAddress++) = (ITM_END >> 8) | 0x80;
     *(stepAddress++) =  ITM_END       & 0xff;
 
@@ -6097,62 +6723,25 @@ void addTestPrograms(void) {
     #endif
   }
 
-  // 1206
+  // 1337
   *(stepAddress++) = 255; // .END.
   *(stepAddress++) = 255; // .END.
 
-  #if defined(DMCP_BUILD)
-    freeProgramBytes = (4 - ((uint32_t)stepAddress)) % 4;
-  #else
-    freeProgramBytes = (4 - ((uint64_t)stepAddress)) % 4;
-  #endif
+  freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - stepAddress;
 
-  #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+  #ifndef DMCP_BUILD
     printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     if((uint32_t)TO_BLOCKS((stepAddress - programMemoryPointer) + 2) > (uint32_t)TO_BLOCKS(numberOfBytesForTheTestPrograms)) {
       printf("Increase allocated memory for programs!\n");
       exit(0);
     }
 
+    printf("freeProgramBytes = %u\n", freeProgramBytes);
 
-   uint16_t i, numberOfBytesInStep, step = 0;
-   uint8_t *ns;
-   printf("\nProgram listing");
-   printf("\nStep   Bytes         OP");
-   stepAddress = currentProgramMemoryPointer;
-   while(stepAddress) {
-     ns = nextStep(stepAddress);
-     if(ns) {
-       numberOfBytesInStep = (uint16_t)(ns - stepAddress);
-       printf("\n%4u  ", step++); fflush(stdout);
-
-       for(i=0; i<numberOfBytesInStep; i++) {
-         printf(" %02x", *(stepAddress + i)); fflush(stdout);
-         if(i == 3 && numberOfBytesInStep > 4) {
-           decodeOneStep(stepAddress);
-           stringToUtf8(tmpStr3000, (uint8_t *)(tmpStr3000 + 2000));
-           printf("   %s", tmpStr3000 + 2000); fflush(stdout);
-         }
-
-         if(i%4 == 3 && i != numberOfBytesInStep - 1) {
-           printf("\n      "); fflush(stdout);
-         }
-       }
-
-       if(numberOfBytesInStep <= 4) {
-         for(i=1; i<=4 - ((numberOfBytesInStep - 1) % 4); i++) {
-           printf("   "); fflush(stdout);
-         }
-         decodeOneStep(stepAddress);
-         stringToUtf8(tmpStr3000, (uint8_t *)(tmpStr3000 + 2000));
-         printf("%s", tmpStr3000 + 2000); fflush(stdout);
-       }
-     }
-
-     stepAddress = ns;
-   }
-   exit(0);
-  #endif
+    listPrograms();
+    scanLabels();
+    //exit(0);
+  #endif // !DMCP_BUILD
 }
 
 
@@ -6177,6 +6766,8 @@ void fnReset(uint16_t confirmation) {
     currentProgramMemoryPointer = programMemoryPointer;
     programCounter              = programMemoryPointer;
     firstFreeProgramBytePointer = programMemoryPointer;
+    firstDisplayedStepPointer   = programMemoryPointer;
+    firstDisplayedStep          = 0;
     *programMemoryPointer       = 255; // .END.
     *(programMemoryPointer + 1) = 255; // .END.
     freeProgramBytes = 2;
@@ -6257,9 +6848,8 @@ void fnReset(uint16_t confirmation) {
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
 
-//    shortIntegerWordSize = 64;
 //    shortIntegerMode = SIM_2COMPL;
-      fnSetWordSize(64); // word size from 1 to 64     //JM
+      fnSetWordSize(64);
       fnIntegerMode(SIM_2COMPL);                       //JM
 
     groupingGap = 3;
@@ -6329,7 +6919,6 @@ void fnReset(uint16_t confirmation) {
     exponentLimit = 6145;
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
-    addTestPrograms();
 
       
 //********** JM CHECKQQ Copy from the original wp43s.c configurations
@@ -6393,6 +6982,7 @@ void fnReset(uint16_t confirmation) {
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 
     // The following lines are test data
+    addTestPrograms();
     //fnSetFlag(  3);
     //fnSetFlag( 11);
     //fnSetFlag( 33);

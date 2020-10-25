@@ -270,3 +270,15 @@ typedef struct {
   uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
   uint8_t  undoStatus;        ///< Undo status after item execution.
 } item_t;
+
+
+/********************************************//**
+ * \typedef labelList_t
+ * \brief Structure keeping the information for a program label
+ ***********************************************/
+typedef struct {
+  int16_t  program;             ///< Program id: <0 for FLASH and >0 for RAM
+  int32_t  step;                ///< Step number: <0 for a local label and >0 for a global label
+  uint8_t  *labelPointer;       ///< Pointer to the byte after the 0x01 op code (LBL)
+  uint8_t  *instructionPointer; ///< Pointer to the instructiuon following the label
+} labelList_t;

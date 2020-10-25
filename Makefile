@@ -71,7 +71,7 @@ SRC_WP43S                = \
 		assign.c bufferize.c charString.c config.c constantPointers.c \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c  integers.c items.c keyboard.c \
+		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
 		rasterFontsData.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c stringFuncs.c timer.c \
@@ -88,7 +88,7 @@ SRC_WP43S                = \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
 		variance.c wp34s.c) \
 	$(addprefix src/wp43s/programming/, \
-		decode.c manage.c) \
+		decode.c manage.c nextStep.c) \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/browsers/, \

@@ -282,6 +282,8 @@ extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
 extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern uint16_t              freeProgramBytes;
+extern uint16_t              firstDisplayedStep;
+extern uint16_t              numberOfLabels;
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
@@ -326,6 +328,7 @@ extern uint8_t               currentAngularMode;
 extern uint8_t              *programMemoryPointer;
 extern uint8_t              *currentProgramMemoryPointer;
 extern uint8_t              *firstFreeProgramBytePointer;
+extern uint8_t              *firstDisplayedStepPointer;
 extern uint8_t              *programCounter;
 extern bool_t                hourGlassIconEnabled;
 extern bool_t                watchIconEnabled;
@@ -362,6 +365,7 @@ extern real39_t       const *angle180;
 extern real39_t       const *angle90;
 extern real39_t       const *angle45;
 extern pcg32_random_t        pcg32_global;
+extern labelList_t          *labelList;
 extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;

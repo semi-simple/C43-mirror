@@ -35,5 +35,5 @@ int32_t getFreeRamMemory   (void);
 void    resizeProgramMemory(uint16_t newSizeInBlocks);
 
 #ifndef DMCP_BUILD
-  void    debugMemory      (void);
+  void    debugMemory      (const char *message);
 #endif

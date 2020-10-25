@@ -1473,6 +1473,11 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case CM_PEM:
+      firstDisplayedStep++;
+      firstDisplayedStepPointer = nextStep(firstDisplayedStepPointer);
+      break;
+
     default:
       sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
       displayBugScreen(errorMessage);

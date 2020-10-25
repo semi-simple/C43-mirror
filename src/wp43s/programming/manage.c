@@ -22,6 +22,30 @@
 
 
 
+void scanLabels(void) {
+  //uint16_t step = 0;
+  uint8_t *currentStep = programMemoryPointer;
+
+  numberOfLabels = 0;
+  while(*currentStep != 255 || *(currentStep + 1) != 255) {
+    if(*currentStep == 1) {
+      numberOfLabels++;
+    }
+    currentStep = nextStep(currentStep);
+  }
+
+  free(labelList);
+  labelList = malloc(sizeof(labelList_t) * numberOfLabels);
+  if(labelList == NULL) {
+    //printf("\n")
+  }
+
+  numberOfLabels = 0;
+  currentStep = programMemoryPointer;
+}
+
+
+
 void fnClPAll(uint16_t confirmation) {
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnClPAll);
@@ -32,6 +56,8 @@ void fnClPAll(uint16_t confirmation) {
     resizeProgramMemory(1); // 1 block for an empty program
     programCounter = programMemoryPointer;
     currentProgramMemoryPointer = programMemoryPointer;
+    firstDisplayedStepPointer   = programMemoryPointer;
+    firstDisplayedStep          = 0;
     freeProgramBytes = 2;
     temporaryInformation = TI_NO_INFO;
   }
@@ -45,17 +71,26 @@ void fnClP(uint16_t unusedParamButMandatory) {
 
 
 
-void fnPEM(uint16_t unusedParamButMandatory) {
+void fnPem(uint16_t unusedParamButMandatory) {
+  uint16_t line, currentStep, stepSize;
+  uint8_t *stepPointer, *ns;
+  bool_t lblOrEnd;
+
   if(calcMode != CM_PEM) {
     calcMode = CM_PEM;
     return;
   }
 
-  showString(" Ligne 0 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal,  true, true);
-  showString(" Ligne 1 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal,  true, true);
-  showString(" Ligne 2 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal,  true, true);
-  showString(" Ligne 3 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmReverse, true, true);
-  showString(" Ligne 4 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal,  true, true);
-  showString(" Ligne 5 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal,  true, true);
-  showString(" Ligne 6 ", &standardFont, 5, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal,  true, true);
+  stepPointer = firstDisplayedStepPointer;
+  currentStep = firstDisplayedStep + 3;
+  for(line=0; line<7; line++) {
+    ns = nextStep(stepPointer);
+    stepSize = (uint16_t)(ns - stepPointer);
+    sprintf(tmpStr3000, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStep + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
+    showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, firstDisplayedStep + line == currentStep ? vmReverse : vmNormal,  false, true);
+    lblOrEnd = (*stepPointer == ITM_LBL) || ((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff)));
+    decodeOneStep(stepPointer);
+    showString(tmpStr3000, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+    stepPointer = ns;
+  }
 }

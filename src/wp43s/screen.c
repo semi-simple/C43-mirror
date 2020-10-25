@@ -2427,7 +2427,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
     case CM_PEM:
       clearScreen();
       showSoftmenuCurrentPart();
-      fnPEM(NOPARAM);
+      fnPem(NOPARAM);
       refreshStatusBar();
       break;
 
@@ -2525,12 +2525,15 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 
     default: {}
   }
+#ifndef DMCP_BUILD
+    refreshLcd(NULL);
+#endif // !DMCP_BUILD
 
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(3); }      //dr
 #endif
 }
-#endif
+#endif // !TESTSUITE_BUILD
 
 
 

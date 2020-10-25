@@ -6729,7 +6729,9 @@ void addTestPrograms(void) {
 
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
-    //listPrograms();
+    listPrograms();
+    scanLabels();
+    //exit(0);
   #endif // !DMCP_BUILD
 }
 
@@ -6837,8 +6839,8 @@ void fnReset(uint16_t confirmation) {
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
 
-    shortIntegerWordSize = 64;
     shortIntegerMode = SIM_2COMPL;
+    fnSetWordSize(64);
 
     groupingGap = 3;
 

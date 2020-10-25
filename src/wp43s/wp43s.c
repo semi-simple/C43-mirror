@@ -89,6 +89,7 @@ uint16_t              numberOfLocalFlags;
 uint16_t              freeProgramBytes;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 uint16_t              firstDisplayedStep;
+uint16_t              numberOfLabels;
 dataBlock_t          *allLocalRegisterPointer;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
@@ -168,6 +169,7 @@ real39_t              const *angle180;
 real39_t              const *angle90;
 real39_t              const *angle45;
 pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
+labelList_t          *labelList = NULL;
 const char            digits[17] = "0123456789ABCDEF";
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
@@ -265,28 +267,64 @@ void program_main(void) {
   fnReset(CONFIRMED);
   refreshScreen();
 
-/*longInteger_t li;
-longIntegerInit(li);
-uint32_t addr;
+  #if 1
+    longInteger_t li;
+    uint32_t addr, min, max, *ptr;
 
-addr = (uint32_t)ram;
-uIntToLongInteger(addr, li);
-convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_T);
+    min = 1;
+    max = 100000000;
+    while(min+1 < max) {
+      ptr = malloc((max + min) >> 1);
+      if(ptr) {
+        free(ptr);
+        min = (max + min) >> 1;
+      }
+      else {
+        max = (max + min) >> 1;
+      }
+    }
 
-addr = (uint32_t)row;
-uIntToLongInteger(addr, li);
-convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_Z);
+    ptr = malloc(min);
+    xcopy(&addr, &ptr, 4);
+    free(ptr);
+    longIntegerInit(li);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 50);
 
-addr = (uint32_t)(&angle180);
-uIntToLongInteger(addr, li);
-convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_Y);
+    uIntToLongInteger(min, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 51);
 
-addr = (uint32_t)indexOfItems;
-uIntToLongInteger(addr, li);
-convertLongIntegerToShortIntegerRegister(li, 16, REGISTER_X);
+    ptr = (uint32_t *)qspi_user_addr();
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 52);
 
-refreshScreen();
-longIntegerFree(li);*/
+    addr = (uint32_t)qspi_user_size();
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 53);
+
+    ptr = (uint32_t *)&ram;
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 54);
+
+    ptr = (uint32_t *)&reg;
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 55);
+
+    ptr = (uint32_t *)&angle180;
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 56);
+
+    ptr = (uint32_t *)&indexOfItems;
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 57);
+
+    longIntegerFree(li);
+  #endif
 
   backToDMCP = false;
 

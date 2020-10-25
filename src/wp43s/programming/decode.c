@@ -60,6 +60,7 @@ void listPrograms(void) {
 
     stepAddress = ns;
   }
+  printf("\n");
 }
 #endif // !DMCP_BUILD
 

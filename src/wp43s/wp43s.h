@@ -251,6 +251,7 @@ extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern uint16_t              freeProgramBytes;
 extern uint16_t              firstDisplayedStep;
+extern uint16_t              numberOfLabels;
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
@@ -330,6 +331,7 @@ extern real39_t       const *angle180;
 extern real39_t       const *angle90;
 extern real39_t       const *angle45;
 extern pcg32_random_t        pcg32_global;
+extern labelList_t          *labelList;
 extern const char            digits[17];
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;

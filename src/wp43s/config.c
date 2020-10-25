@@ -679,7 +679,7 @@ void fnReset(uint16_t confirmation) {
     #endif
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43 Release 43B++, 2020-10-20, C43-28-graph");
+    fnStrtoX("C43 Release 44 POC2B, 2020-10-25");
     fnStore(102);
     fnDrop(0);
 

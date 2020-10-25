@@ -1,3 +1,0 @@
-3c7ad5f1:
----------
-Bugfix and release 43B

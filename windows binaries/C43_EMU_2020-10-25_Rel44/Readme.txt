@@ -1,4 +1,4 @@
-18 Oct 2020 release pre-alpha REL43
+25 Oct 2020 release pre-alpha REL44
 
 
 
@@ -48,6 +48,8 @@ Notes:
 14. Try the new longpress EXIT clear input buffer.
 
 15. Try the new STAT / PLOT
+
+16. Try the new FIFO on all softmenu items
 
 ---
 

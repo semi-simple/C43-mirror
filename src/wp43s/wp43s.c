@@ -548,7 +548,7 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-  int keyCount = 0;                                                             //dr - internal keyBuffer POC
+//  int keyCount = 0;                                                             //dr - internal keyBuffer POC
 #ifdef BUFFER_CLICK_DETECTION
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 #endif
@@ -710,7 +710,7 @@ longIntegerFree(li);*/
     uint32_t timeSpan_B;
     if(outKeyBuffer(&outKey, &outKeyCount, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
       key = outKey;
-      keyCount = outKeyCount;
+//      keyCount = outKeyCount;
 //    if(outKeyCount > 0) {
 //      do someting
 //    }
@@ -718,7 +718,7 @@ longIntegerFree(li);*/
 #else
     if(outKeyBuffer(&outKey, &outKeyCount) == BUFFER_SUCCESS) {
       key = outKey;
-      keyCount = outKeyCount;
+//      keyCount = outKeyCount;
     }
 #endif
     else {

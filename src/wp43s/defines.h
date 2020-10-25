@@ -336,11 +336,7 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
-#ifdef BUFFER_CLICK_DETECTION
 #define SOFTMENU_STACK_SIZE                        7 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
-#else
-#define SOFTMENU_STACK_SIZE                       14 //JMMAX 7 // maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
-#endif
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 

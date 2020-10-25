@@ -1055,7 +1055,7 @@ uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
   fnDisplayStack(2);
   char aaa[50];
   sprintf (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, (uint8_t)tmpTime);
-  uint16_t tmpx = showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
+  showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
 #endif
 #endif
   

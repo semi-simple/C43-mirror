@@ -164,15 +164,15 @@ float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
 float                 graph_dx;                                //JM Graph
 float                 graph_dy;                                //JM Graph
-bool_t                extentx;                                //JM Graph
-bool_t                extenty;                                //JM Graph
-bool_t                jm_VECT;                             //JM GRAPH
-bool_t                jm_NVECT;                            //JM GRAPH
-bool_t                jm_SCALE;                            //JM GRAPH
-bool_t                Aspect_Square;                       //JM GRAPH
-bool_t                PLOT_LINE;                           //JM GRAPH
-bool_t                PLOT_CROSS;                          //JM GRAPH
-bool_t                PLOT_BOX;                            //JM GRAPH
+bool_t                extentx;                                 //JM Graph
+bool_t                extenty;                                 //JM Graph
+bool_t                jm_VECT;                                 //JM GRAPH
+bool_t                jm_NVECT;                                //JM GRAPH
+bool_t                jm_SCALE;                                //JM GRAPH
+bool_t                Aspect_Square;                           //JM GRAPH
+bool_t                PLOT_LINE;                               //JM GRAPH
+bool_t                PLOT_CROSS;                              //JM GRAPH
+bool_t                PLOT_BOX;                                //JM GRAPH
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //

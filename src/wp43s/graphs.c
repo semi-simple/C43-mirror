@@ -38,6 +38,10 @@ uint16_t xzero;
 uint8_t  yzero;
 
 
+  bool_t int_invalid = true;
+  bool_t ddy_invalid = true;
+  
+
 
 void graph_reset(){
   graph_dx      = 0;
@@ -353,6 +357,81 @@ void clearScreenPixels() {
 }                                                       //JM ^^
 
 
+#ifndef TESTSUITE_BUILD
+      void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        float dx, dy, ddx, ddy, zz, zzz;
+        ddy = yn-yo;
+        ddx = xn-xo;
+        zz  = sqrt(ddy*ddy+ddx*ddx);
+        zzz = 3;
+        dy  = ddy * (zzz/zz);
+        dx  = ddx * (zzz/zz);
+        #ifdef STATDEBUG
+        printf("%d %d  %d %d  ddx=%f, ddy=%f, zz=%f  zzz=%f, dx=%f, dy=%f \n",xo, yo, xn, yn, ddx,ddy,zz,zzz,dx,dy);
+        #endif
+        if (!(xo==xn && yo==yn)){
+          plotline(xn+(-3*dx +dy), yn+(-3*dy -dx), xn, yn);
+          plotline(xn+(-3*dx -dy), yn+(-3*dy +dx), xn, yn);
+        } else {
+          placePixel(xn,yn);
+        }
+      }
+
+      void plotdelta(uint16_t xn, uint8_t yn) {              // Plots ldifferential sign; uses temporary x1,y1
+        placePixel(xn+0,yn-2);                               //   PLOT a delta
+        placePixel(xn-1,yn-1);
+        placePixel(xn-1,yn+0);
+        placePixel(xn-2,yn+1);
+        placePixel(xn-2,yn+2);
+        placePixel(xn+1,yn-1);
+        placePixel(xn+1,yn-0);
+        placePixel(xn+2,yn+1);
+        placePixel(xn+2,yn+2);
+        placePixel(xn-1,yn+2);
+        placePixel(xn  ,yn+2);
+        placePixel(xn+1,yn+2);
+      }
+
+      void plotint(uint16_t xn, uint8_t yn) {                // Plots integral sign; uses temporary x1,y1
+        placePixel(xn,yn);                                   //   PLOT a I
+        placePixel(xn,yn-1);
+        placePixel(xn,yn-2);
+        placePixel(xn,yn+1);
+        placePixel(xn,yn+2);
+        placePixel(xn+1,yn-2);
+        placePixel(xn-1,yn+2);
+      }
+
+      void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        placePixel(xn,yn);                                   //   PLOT a cross
+        placePixel(xn-1,yn-1);
+        placePixel(xn-1,yn+1);
+        placePixel(xn+1,yn-1);
+        placePixel(xn+1,yn+1);
+        placePixel(xn-2,yn-2);
+        placePixel(xn-2,yn+2);
+        placePixel(xn+2,yn-2);
+        placePixel(xn+2,yn+2);
+      }
+
+      void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+        placePixel(xn-2,yn-2);                               //   PLOT a box
+        placePixel(xn-2,yn-1);
+        placePixel(xn-1,yn-2);
+        placePixel(xn-2,yn+2);
+        placePixel(xn-2,yn+1);
+        placePixel(xn-1,yn+2);
+        placePixel(xn+2,yn-2);
+        placePixel(xn+1,yn-2);
+        placePixel(xn+2,yn-1);
+        placePixel(xn+2,yn+2);
+        placePixel(xn+2,yn+1);
+        placePixel(xn+1,yn+2);
+      }
+#endif
+
+
+
 //###################################################################################
 float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
@@ -442,6 +521,7 @@ void graph_axis (void){
   }
 
 
+
   snprintf(tmpStr3000, sizeof(tmpStr3000), "y %.3f/tick  ",tick_int_y);
   ii = 0;
   oo = 0;
@@ -512,8 +592,26 @@ void graph_axis (void){
     plotline((uint16_t)(ii-17),(uint8_t)(ypos-1+sp),(uint16_t)(ii-11),(uint8_t)(ypos-1+sp));
     plotline((uint16_t)(ii-17),(uint8_t)(ypos-2+sp),(uint16_t)(ii-11),(uint8_t)(ypos-2+sp));
   }
-  ypos -= 12;
+  ypos += 48;
   
+
+
+  if(!int_invalid) {
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapz Intg");
+    showString(tmpStr3000, &standardFont, 1, ypos, vmNormal, true, true);  //JM
+    plotint( 5, ypos+4 );
+    ypos += 20;
+  }
+
+  if(!ddy_invalid) {
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Num diff");
+    showString(tmpStr3000, &standardFont, 1, ypos, vmNormal, true, true);  //JM
+    plotdelta( 5, ypos+4);
+    ypos += 20;
+  }
+
+
+
   force_refresh();
 
 
@@ -676,60 +774,16 @@ void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal
 void graph_plotmem(void) {
   #ifndef TESTSUITE_BUILD
 
-      void plotarrow(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        float dx, dy, ddx, ddy, zz, zzz;
-        ddy = yn-yo;
-        ddx = xn-xo;
-        zz  = sqrt(ddy*ddy+ddx*ddx);
-        zzz = 3;
-        dy  = ddy * (zzz/zz);
-        dx  = ddx * (zzz/zz);
-        #ifdef STATDEBUG
-        printf("%d %d  %d %d  ddx=%f, ddy=%f, zz=%f  zzz=%f, dx=%f, dy=%f \n",xo, yo, xn, yn, ddx,ddy,zz,zzz,dx,dy);
-        #endif
-        if (!(xo==xn && yo==yn)){
-          plotline(xn+(-3*dx +dy), yn+(-3*dy -dx), xn, yn);
-          plotline(xn+(-3*dx -dy), yn+(-3*dy +dx), xn, yn);
-        } else {
-          placePixel(xn,yn);
-        }
-      }
-
-
-      void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        placePixel(xn,yn);                     //PLOT a cross
-        placePixel(xn-1,yn-1);
-        placePixel(xn-1,yn+1);
-        placePixel(xn+1,yn-1);
-        placePixel(xn+1,yn+1);
-        placePixel(xn-2,yn-2);
-        placePixel(xn-2,yn+2);
-        placePixel(xn+2,yn-2);
-        placePixel(xn+2,yn+2);
-      }
-
-      void plotbox(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        placePixel(xn-2,yn-2);
-        placePixel(xn-2,yn-1);
-        placePixel(xn-1,yn-2);
-        placePixel(xn-2,yn+2);
-        placePixel(xn-2,yn+1);
-        placePixel(xn-1,yn+2);
-        placePixel(xn+2,yn-2);
-        placePixel(xn+1,yn-2);
-        placePixel(xn+2,yn-1);
-        placePixel(xn+2,yn+2);
-        placePixel(xn+2,yn+1);
-        placePixel(xn+1,yn+2);
-      }
-
-
   uint16_t cnt, ix, statnum;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
   float/*double*/ x; 
   float/*double*/ y;
   float/*double*/ sx, sy;
+  float/*double*/ ddx = 1E38;
+  float/*double*/ ddy = 1E38;
+  float/*double*/ inty = 0;
+
 
   statnum = 0;
 
@@ -771,6 +825,33 @@ void graph_plotmem(void) {
     printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
     if(plotmode != _VECT) {
+
+      int_invalid = false;                                                      //integral scale
+      ddy_invalid = false;                                                      //Differential ddy scale
+      inty = grf_y(0);                                                          //  integral starting constant co-incides with graph
+      for (ix = 0; (ix < LIM && ix < statnum); ++ix) { 
+        if(ix !=0){
+          ddx = grf_x(ix) - grf_x(ix-1);
+          if(ddx<=0) {
+    		    x_min = 1e38;
+    		    x_max = -1e38;
+    		    y_min = 1e38;
+    		    y_max = -1e38;
+    		    ddy_invalid = true;
+            int_invalid = true;
+    		    break;
+          } else {          	
+            if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = 1e38;  //Differential
+            if(ddy < y_min) {y_min = ddy;}
+            if(ddy > y_max) {y_max = ddy;}
+            inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                    //integral
+            if(inty < y_min) {y_min = inty;}
+            if(inty > y_max) {y_max = inty;}
+          }
+        } 
+      }
+
+
       for(cnt=0; (cnt < LIM && cnt < statnum); cnt++) {
         #ifdef STATDEBUG
         printf("Axis0a: x: %f y: %f   \n",grf_x(cnt), grf_y(cnt));   
@@ -880,10 +961,18 @@ void graph_plotmem(void) {
     sy = 0;
     //GRAPH
     ix = 0;
+    inty = grf_y(0);                                                         //  integral starting constant co-incides with graph
     for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
       if(plotmode != _VECT) {
         x = grf_x(ix);
         y = grf_y(ix);
+
+        if(ix !=0){                                                               //Differential ddy
+          ddx = grf_x(ix) - grf_x(ix-1);
+          if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = 1e38;
+          inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                      //integral
+        }
+
       } else {
         sx = sx + grf_x(ix);
         sy = sy + grf_y(ix);
@@ -915,6 +1004,13 @@ void graph_plotmem(void) {
           else if(PLOT_BOX)
             plotbox(xn,yn);
           else placePixel(xn,yn);
+
+          if(!ddy_invalid && ix != 0) {
+            plotdelta( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, ddy, y_max) );
+          }
+          if(!int_invalid && ix !=0) {
+            plotint( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, inty, y_max) );
+          }
 
         } else {
           plotarrow(xo, yo, xn, yn);

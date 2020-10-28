@@ -271,9 +271,9 @@ char dirfile[40];
     strcat(dirfile,"\\");
     strcat(dirfile,filename);
     
-    sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
+    sprintf(tmpString,"%s%s",line1,CSV_NEWLINE);
     check_create_dir(dirname);      
-    if(export_append_string_to_file(tmpStr3000, mode, dirfile) != 0) {
+    if(export_append_string_to_file(tmpString, mode, dirfile) != 0) {
       //ERROR ALREADY ANNOUNCED
       return 1;
     }
@@ -489,8 +489,8 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
     return 1;
   }
 
-  sprintf(tmpStr3000,"%s%s",line1,CSV_NEWLINE);
-  fr = fputs(tmpStr3000, outfile);
+  sprintf(tmpString,"%s%s",line1,CSV_NEWLINE);
+  fr = fputs(tmpString, outfile);
   //printf(">>> %d\n",fr);
   if (fr == 0) {
     sprintf(line,"export_string_to_file: Write error--> %d    \n",fr);            

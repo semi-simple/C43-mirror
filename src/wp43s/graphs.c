@@ -222,14 +222,14 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 
   //Convert from X register to float/*double*/
-  realToString(yy, tmpStr3000);
-  y = strtof (tmpStr3000, NULL);
+  realToString(yy, tmpString);
+  y = strtof (tmpString, NULL);
 
   //printf("y=%f ",y);
 
   //Convert from X register to float/*double*/
-  realToString(xx, tmpStr3000);
-  x = strtof (tmpStr3000, NULL);
+  realToString(xx, tmpString);
+  x = strtof (tmpString, NULL);
 
   //printf("x=%f ",x);
 
@@ -245,10 +245,10 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     realToInt32(SIGMA_N, cnt);
     ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
                                              //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
-//    realToString(SIGMA_N, tmpStr3000);
-//    cnt = stringToInt16 (tmpStr3000);
+//    realToString(SIGMA_N, tmpString);
+//    cnt = stringToInt16 (tmpString);
     #ifdef STATDEBUG
-    printf("Count: %s, %d\n",tmpStr3000,cnt);
+    printf("Count: %s, %d\n",tmpString,cnt);
     #endif
 
   }
@@ -475,24 +475,24 @@ void clearScreenPixels() {
 float auto_tick(float tick_int_f) {
     //Obtain scaling of ticks, to about 20 intervals left to right.
   //float/*double*/ tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "%.1e", tick_int_f);
+  snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
   char tx[4];
-  tx[0] = tmpStr3000[0];
-  tx[1] = tmpStr3000[1];
-  tx[2] = tmpStr3000[2];
+  tx[0] = tmpString[0];
+  tx[1] = tmpString[1];
+  tx[2] = tmpString[2];
   tx[3] = 0;
-  //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpStr3000, tx);
-  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
-  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpStr3000, tx);
-  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpStr3000[0] = '0'; tmpStr3000[2]='2'; } else
-  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpStr3000[0] = '0'; tmpStr3000[2]='5'; } else
-  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpStr3000[0] = '1'; tmpStr3000[2]='0'; } else
-  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpStr3000[0] = '1'; tmpStr3000[2]='5'; } else
-  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpStr3000[0] = '2'; tmpStr3000[2]='0'; } else
-  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpStr3000[0] = '5'; tmpStr3000[2]='0'; } else
-  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpStr3000[0] = '7'; tmpStr3000[2]='5'; }
-  tick_int_f = strtof (tmpStr3000, NULL);                                        //printf("string:%s converted:%f \n",tmpStr3000, tick_int_f);
-  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpStr3000, tx);
+  //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
+  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
+  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
+  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
+  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString[0] = '1'; tmpString[2]='0'; } else
+  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpString[0] = '1'; tmpString[2]='5'; } else
+  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString[0] = '2'; tmpString[2]='0'; } else
+  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
+  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
+  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
   return tick_int_f;
 }
 
@@ -530,7 +530,7 @@ void graph_axis (void){
   uint16_t oo;
   char outstr[300];
   void convertDigits(void) {
-    switch (tmpStr3000[ii]) {
+    switch (tmpString[ii]) {
       case  48: outstr[oo++] = 0xa0; outstr[oo++] = 0x80; break; //.
       case  49: outstr[oo++] = 0xa0; outstr[oo++] = 0x81; break; //.
       case  50: outstr[oo++] = 0xa0; outstr[oo++] = 0x82; break; //.
@@ -555,17 +555,17 @@ void graph_axis (void){
       case 105: outstr[oo++] = 0xa4; outstr[oo++] = 0xa4; break; //i
       case 99 : outstr[oo++] = 0xa4; outstr[oo++] = 0x9e; break; //c
       case 107: outstr[oo++] = 0xa4; outstr[oo++] = 0xa6; break; //k
-      default : outstr[oo++] = tmpStr3000[ii];
+      default : outstr[oo++] = tmpString[ii];
     }
   }
 
 
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "y %.3f/tick  ",tick_int_y);
+  snprintf(tmpString, TMP_STR_LENGTH, "y %.3f/tick  ",tick_int_y);
   ii = 0;
   oo = 0;
   outstr[0]=0;
-  while (tmpStr3000[ii] != 0) {
+  while (tmpString[ii] != 0) {
     convertDigits();
     ii++;
   }
@@ -574,11 +574,11 @@ void graph_axis (void){
   ypos -= 12;
 
 
-  snprintf(tmpStr3000, sizeof(tmpStr3000), "x %.3f/tick  ", tick_int_x);
+  snprintf(tmpString, TMP_STR_LENGTH, "x %.3f/tick  ", tick_int_x);
   ii = 0;
   oo = 0;
   outstr[0]=0;
-  while (tmpStr3000[ii] != 0) {
+  while (tmpString[ii] != 0) {
     convertDigits();
     ii++;
   }
@@ -601,15 +601,15 @@ void graph_axis (void){
     minnx = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
   }
 
-  tmpStr3000[0]=0;                                  //If the axis is on the edge supress it, and label accordingly
+  tmpString[0]=0;                                  //If the axis is on the edge supress it, and label accordingly
   uint8_t axisdisp = 
            (!( yzero == SCREEN_HEIGHT_GRAPH-1  || yzero == minny) ? 2:0) + 
            (!(  xzero == SCREEN_WIDTH-1        || xzero == minnx) ? 1:0) ;
   switch( axisdisp )  {
-    case 0: strcpy(tmpStr3000,"          "); break;
-    case 1: snprintf(tmpStr3000, sizeof(tmpStr3000), "y-axis x 0"); break;
-    case 2: snprintf(tmpStr3000, sizeof(tmpStr3000), "x-axis y 0"); break;
-    case 3: snprintf(tmpStr3000, sizeof(tmpStr3000), "axis 0.0 "); break;
+    case 0: strcpy(tmpString,"          "); break;
+    case 1: snprintf(tmpString, TMP_STR_LENGTH, "y-axis x 0"); break;
+    case 2: snprintf(tmpString, TMP_STR_LENGTH, "x-axis y 0"); break;
+    case 3: snprintf(tmpString, TMP_STR_LENGTH, "axis 0.0 "); break;
     default:break;
   }
 
@@ -618,13 +618,13 @@ void graph_axis (void){
     ii = 0;
     oo = 0;
     outstr[0]=0;
-    while (tmpStr3000[ii] != 0) {
+    while (tmpString[ii] != 0) {
       convertDigits();
       ii++;
     }
   outstr[oo]=0;
   ii=showString(outstr, &standardFont, 1, ypos, vmNormal, true, true);  //JM
-  if(tmpStr3000[ stringByteLength(tmpStr3000)-1 ] == '0') {
+  if(tmpString[ stringByteLength(tmpString)-1 ] == '0') {
     #define sp 15
     plotline((uint16_t)(ii-17),(uint8_t)(ypos+2+sp),(uint16_t)(ii-11),(uint8_t)(ypos+2+sp));
     plotline((uint16_t)(ii-17),(uint8_t)(ypos+1+sp),(uint16_t)(ii-11),(uint8_t)(ypos+1+sp));
@@ -636,18 +636,18 @@ void graph_axis (void){
 
 
   if(PLOT_INTG && !invalid_intg) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapezium integral");
+    snprintf(tmpString, TMP_STR_LENGTH, "  Trapezium integral");
     miniC = 1;
-    showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
+    showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
     plotintbig( 5, ypos+4+4 );
     ypos += 20;
   }
 
   if(PLOT_DIFF && !invalid_diff) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Num. differential");
+    snprintf(tmpString, TMP_STR_LENGTH, "  Num. differential");
     miniC = 1;
-    showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
+    showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
     plotdeltabig( 6, ypos+4+4);
     ypos += 20;
@@ -724,10 +724,10 @@ void graph_axis (void){
     //Write North arrow
     if(jm_NVECT) {
       showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
-      tmpStr3000[0]=0x80 | 0x22;
-      tmpStr3000[1]=0x06;
-      tmpStr3000[2]=0;
-      showString(tmpStr3000, &standardFont, xzero-4, minny+0, vmNormal, true, true);
+      tmpString[0]=0x80 | 0x22;
+      tmpString[1]=0x06;
+      tmpString[2]=0;
+      showString(tmpString, &standardFont, xzero-4, minny+0, vmNormal, true, true);
     }
 
     //DRAW YAXIS
@@ -1182,8 +1182,8 @@ void fnStatList() {
     if(plotmode != _VECT) {
       //Convert from real to int
       realToInt32(SIGMA_N, statnum);
-      //realToString(SIGMA_N, tmpStr3000);
-      //statnum = stringToInt16 (tmpStr3000);
+      //realToString(SIGMA_N, tmpString);
+      //statnum = stringToInt16 (tmpString);
     } else {
       statnum = ix_count;
     }

@@ -153,7 +153,7 @@ void Fn_Lbl_F(void) {                                   //Temporary RPN function
 
 void execute_rpn_function(int16_t nbr){
   #ifdef STATDEBUG
-  printf("nbr=%d   x=%s \n",nbr,tmpStr3000);
+  printf("nbr=%d   x=%s \n",nbr,tmpString);
   #endif
 
   if(nbr == 1) {
@@ -200,8 +200,8 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
     //convert double to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
-    stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+    snprintf(tmpString, sizeof(tmpString), "%.16e", x);
+    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 
     //leaving y in Y and x in X
     execute_rpn_function(nbr);
@@ -255,15 +255,15 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
                         //convert double to X register
                         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-                        snprintf(tmpStr3000, sizeof(tmpStr3000), "%.16e", x);
-                        stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+                        snprintf(tmpString, sizeof(tmpString), "%.16e", x);
+                        stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 
                         execute_rpn_function(nbr);
 
                         //Convert from X register to double
                         real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-                        realToString(&tmpy, tmpStr3000);
-                        y = strtof (tmpStr3000, NULL);
+                        realToString(&tmpy, tmpString);
+                        y = strtof (tmpString, NULL);
 
                         yo = yn;   //old , new
                         yn = screen_window_y(y_min,y,y_max);
@@ -346,8 +346,8 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
                         tick_int_y = graph_dy;
                       }
 
-                      snprintf(tmpStr3000, sizeof(tmpStr3000), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
-                      showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
+                      snprintf(tmpString, sizeof(tmpString), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
+                      showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
                       graph_draw(selection, graph_xmin, graph_xmax, graph_ymin, graph_ymax, tick_int_x, tick_int_y, xzero, yzero);
                       #endif
                     }

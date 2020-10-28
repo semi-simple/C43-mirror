@@ -130,7 +130,7 @@ void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+    longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
     longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
     testBitset = mod(X_REG, 0x10000);

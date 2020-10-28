@@ -194,55 +194,55 @@ void saveCalc(void) {
   save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
   save(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
 
-  save(&eRPN,                               sizeof(eRPN),                               backup);    //JM vv
-  save(&HOME3,                              sizeof(HOME3),                              backup);
-  save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    backup);
-  save(&UNITDisplay,                        sizeof(UNITDisplay),                        backup);
-  save(&SigFigMode,                         sizeof(SigFigMode),                         backup);
-  save(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     backup);
-  save(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     backup);
-  save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     backup);
-  save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    backup);
-  save(&Input_Default,                      sizeof(Input_Default),                      backup);
-  save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         backup);
-  save(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         backup);
-  save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     backup);
-  save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        backup);
-  save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        backup);
-  save(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        backup);
-  save(&graph_xmin,                         sizeof(graph_xmin),                         backup);
-  save(&graph_xmax,                         sizeof(graph_xmax),                         backup);
-  save(&graph_ymin,                         sizeof(graph_ymin),                         backup);
-  save(&graph_ymax,                         sizeof(graph_ymax),                         backup);
-  save(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
-  save(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
-  save(&extentx   ,                         sizeof(extentx   ),                         backup);
-  save(&extenty   ,                         sizeof(extenty   ),                         backup);
-  save(&jm_VECT,                            sizeof(jm_VECT),                            backup);
-  save(&jm_NVECT,                           sizeof(jm_NVECT),                           backup);
-  save(&jm_SCALE,                           sizeof(jm_SCALE),                           backup);
-  save(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
-  save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
-  save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);
-  save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      backup);
-  save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      backup);
-  save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      backup);
-  save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      backup);
-  save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
-  save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
-  save(&indic_x,                            sizeof(indic_x),                            backup);
-  save(&indic_y,                            sizeof(indic_y),                            backup);
-  save(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       backup);
-  save(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   backup);
-  save(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
-  save(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
-  save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
-  save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
-  save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
-  save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               backup);   //JM ^^
+  save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
+  save(&HOME3,                              sizeof(HOME3),                              BACKUP);
+  save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
+  save(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
+  save(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
+  save(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
+  save(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
+  save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
+  save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
+  save(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+  save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
+  save(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
+  save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
+  save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
+  save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
+  save(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
+  save(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
+  save(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
+  save(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
+  save(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
+  save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+  save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+  save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+  save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+  save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+  save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+  save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+  save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+  save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+  save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+  save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+  save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+  save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+  save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+  save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
+  save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
+  save(&indic_x,                            sizeof(indic_x),                            BACKUP);
+  save(&indic_y,                            sizeof(indic_y),                            BACKUP);
+  save(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
+  save(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
+  save(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
+  save(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
+  save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
+  save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
+  save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
+  save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
 
 
-  fclose(backup);
+  fclose(BACKUP);
   printf("End of calc's backup\n");
 }
 
@@ -402,55 +402,55 @@ void restoreCalc(void) {
     restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     restore(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
 
-    restore(&eRPN,                               sizeof(eRPN),                               backup);    //JM vv
-    restore(&HOME3,                              sizeof(HOME3),                              backup);
-    restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    backup);
-    restore(&UNITDisplay,                        sizeof(UNITDisplay),                        backup);
-    restore(&SigFigMode,                         sizeof(SigFigMode),                         backup);
-    restore(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     backup);
-    restore(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     backup);
-    restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     backup);
-    restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    backup);
-    restore(&Input_Default,                      sizeof(Input_Default),                      backup);
-    restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         backup);
-    restore(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         backup);
-    restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     backup);
-    restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        backup);
-    restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        backup);
-    restore(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        backup);
-    restore(&graph_xmin,                         sizeof(graph_xmin),                         backup);
-    restore(&graph_xmax,                         sizeof(graph_xmax),                         backup);
-    restore(&graph_ymin,                         sizeof(graph_ymin),                         backup);
-    restore(&graph_ymax,                         sizeof(graph_ymax),                         backup);
-    restore(&graph_dx  ,                         sizeof(graph_dx  ),                         backup);
-    restore(&graph_dy  ,                         sizeof(graph_dy  ),                         backup);
-    restore(&extentx   ,                         sizeof(extentx   ),                         backup);
-    restore(&extenty   ,                         sizeof(extenty   ),                         backup);
-    restore(&jm_VECT,                            sizeof(jm_VECT),                            backup);
-    restore(&jm_NVECT,                           sizeof(jm_NVECT),                           backup);
-    restore(&jm_SCALE,                           sizeof(jm_SCALE),                           backup);
-    restore(&Aspect_Square,                      sizeof(Aspect_Square),                      backup);
-    restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      backup);
-    restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      backup);
-    restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      backup);
-    restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      backup);
-    restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      backup);
-    restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      backup);
-    restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
-    restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
-    restore(&indic_x,                            sizeof(indic_x),                            backup);
-    restore(&indic_y,                            sizeof(indic_y),                            backup);
-    restore(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       backup);
-    restore(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   backup);
-    restore(&T_cursorPos,                        sizeof(T_cursorPos),                        backup);   //JM ^^
-    restore(&SHOWregis,                          sizeof(SHOWregis),                          backup);   //JM ^^
-    restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        backup);   //JM ^^
-    restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       backup);   //JM ^^
-    restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      backup);   //JM ^^
-    restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               backup);   //JM ^^
+    restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
+    restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
+    restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
+    restore(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
+    restore(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
+    restore(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
+    restore(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
+    restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
+    restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
+    restore(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+    restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
+    restore(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
+    restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
+    restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
+    restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
+    restore(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
+    restore(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
+    restore(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
+    restore(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
+    restore(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
+    restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+    restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+    restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+    restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+    restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+    restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+    restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+    restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+    restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+    restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+    restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+    restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+    restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+    restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
+    restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
+    restore(&indic_x,                            sizeof(indic_x),                            BACKUP);
+    restore(&indic_y,                            sizeof(indic_y),                            BACKUP);
+    restore(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
+    restore(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
+    restore(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
+    restore(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
+    restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
+    restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
+    restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
+    restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
 
 
-    fclose(backup);
+    fclose(BACKUP);
     printf("End of calc's restoration\n");
 
     if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
@@ -1198,7 +1198,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
           exponentLimit = stringToInt16(tmpString);
         }
         else if(strcmp(aimBuffer, "displayStackSHOIDISP") == 0) {         //JM SHOIDISP
-          displayStackSHOIDISP = stringToUint8(tmpStr3000);
+          displayStackSHOIDISP = stringToUint8(tmpString);
         }
       }
     }

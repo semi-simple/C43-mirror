@@ -1956,37 +1956,37 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
 
   void SHOW_reset(void){
-    tmpStr3000[   0] = 0; // L1
-    tmpStr3000[ 300] = 0; // L2
-    tmpStr3000[ 600] = 0; // L3
-    tmpStr3000[ 900] = 0; // L4
-    tmpStr3000[1200] = 0; // L5
-    tmpStr3000[1500] = 0; // L6
-    tmpStr3000[1800] = 0; // L7
+    tmpString[   0] = 0; // L1
+    tmpString[ 300] = 0; // L2
+    tmpString[ 600] = 0; // L3
+    tmpString[ 900] = 0; // L4
+    tmpString[1200] = 0; // L5
+    tmpString[1500] = 0; // L6
+    tmpString[1800] = 0; // L7
 
     temporaryInformation = TI_SHOW_REGISTER_SMALL;
 
-    tmpStr3000[   0] = 0; // JM Initialise
-    tmpStr3000[2100] = 0; // JM temp
-    tmpStr3000[2400] = 0; // JM temp
+    tmpString[   0] = 0; // JM Initialise
+    tmpString[2100] = 0; // JM temp
+    tmpString[2400] = 0; // JM temp
 
 
     if(SHOWregis >= 0 && SHOWregis < 100) {
-      snprintf(tmpStr3000 + 2100, 10, "%d:", SHOWregis);
+      snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
     } else
     switch (SHOWregis) {
-      case REGISTER_X: strcpy(tmpStr3000 + 2100, "X: "); break;
-      case REGISTER_Y: strcpy(tmpStr3000 + 2100, "Y: "); break;
-      case REGISTER_Z: strcpy(tmpStr3000 + 2100, "Z: "); break;
-      case REGISTER_T: strcpy(tmpStr3000 + 2100, "T: "); break;
-      case REGISTER_A: strcpy(tmpStr3000 + 2100, "A: "); break;
-      case REGISTER_B: strcpy(tmpStr3000 + 2100, "B: "); break;
-      case REGISTER_C: strcpy(tmpStr3000 + 2100, "C: "); break;
-      case REGISTER_D: strcpy(tmpStr3000 + 2100, "D: "); break;
-      case REGISTER_L: strcpy(tmpStr3000 + 2100, "L: "); break;
-      case REGISTER_I: strcpy(tmpStr3000 + 2100, "I: "); break;
-      case REGISTER_J: strcpy(tmpStr3000 + 2100, "J: "); break;
-      case REGISTER_K: strcpy(tmpStr3000 + 2100, "K: "); break;
+      case REGISTER_X: strcpy(tmpString + 2100, "X: "); break;
+      case REGISTER_Y: strcpy(tmpString + 2100, "Y: "); break;
+      case REGISTER_Z: strcpy(tmpString + 2100, "Z: "); break;
+      case REGISTER_T: strcpy(tmpString + 2100, "T: "); break;
+      case REGISTER_A: strcpy(tmpString + 2100, "A: "); break;
+      case REGISTER_B: strcpy(tmpString + 2100, "B: "); break;
+      case REGISTER_C: strcpy(tmpString + 2100, "C: "); break;
+      case REGISTER_D: strcpy(tmpString + 2100, "D: "); break;
+      case REGISTER_L: strcpy(tmpString + 2100, "L: "); break;
+      case REGISTER_I: strcpy(tmpString + 2100, "I: "); break;
+      case REGISTER_J: strcpy(tmpString + 2100, "J: "); break;
+      case REGISTER_K: strcpy(tmpString + 2100, "K: "); break;
       default: break;
     }
   }
@@ -2002,14 +2002,14 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+      longIntegerRegisterToDisplayString(SHOWregis, tmpString + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      last = 2100 + stringByteLength(tmpString + 2100);
       source = 2100;
       dest = 0;
 
  
-      { //printf("2: %d\n",stringGlyphLength(tmpStr3000 + 2100));
+      { //printf("2: %d\n",stringGlyphLength(tmpString + 2100));
         temporaryInformation = TI_SHOW_REGISTER_BIG;
         if(groupingGap == 0) {
           maxWidth = SCREEN_WIDTH - stringWidth("0", &numericFont, true, true);
@@ -2024,42 +2024,42 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
         for(d=0; d<=1200 ; d+=300) {                                                      //LARGE font, fill 7 lines at 0, 300, 600, 900, 1200
                                                                                           //   fill all lines, and check if the 5th line  contains any characters.
           dest = d;
-          while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <=  maxWidth) {
-            tmpStr3000[dest] = tmpStr3000[source];
-            if(tmpStr3000[dest] & 0x80) {
-              tmpStr3000[++dest] = tmpStr3000[++source];
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <=  maxWidth) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
             }
             source++;
-            tmpStr3000[++dest] = 0;
+            tmpString[++dest] = 0;
           }
 
-          while (source < last && groupingGap!=0 && !(tmpStr3000[dest-2] & 0x80)) //Not in the last line. Eat away characters at the end to line up the last space.
+          while (source < last && groupingGap!=0 && !(tmpString[dest-2] & 0x80)) //Not in the last line. Eat away characters at the end to line up the last space.
             {
               dest--; 
               source--;
             }
-          tmpStr3000[dest] = 0;
+          tmpString[dest] = 0;
 
-          if(!(source < last) && groupingGap!=0 && (tmpStr3000[dest+0] != 0) && !(tmpStr3000[dest+0] == *(separator + 0) && (tmpStr3000[dest+1] == *(separator + 1)))) {               //Last line
-            tmpStr3000[dest+0] = *(separator + 0); //0xa0;       //Add a space to the very end to space last line nicely.
-            tmpStr3000[dest+1] = *(separator + 1); //0x05;
-            tmpStr3000[dest+2] = 0;
+          if(!(source < last) && groupingGap!=0 && (tmpString[dest+0] != 0) && !(tmpString[dest+0] == *(separator + 0) && (tmpString[dest+1] == *(separator + 1)))) {               //Last line
+            tmpString[dest+0] = *(separator + 0); //0xa0;       //Add a space to the very end to space last line nicely.
+            tmpString[dest+1] = *(separator + 1); //0x05;
+            tmpString[dest+2] = 0;
             dest+=2;
           }
         }
       }      
 
-      //printf("### %d %d %d\n",(uint8_t) tmpStr3000[1200],(uint8_t)  tmpStr3000[1201],(uint8_t) tmpStr3000[1202]);
-      if(tmpStr3000[1200] != 0) {
+      //printf("### %d %d %d\n",(uint8_t) tmpString[1200],(uint8_t)  tmpString[1201],(uint8_t) tmpString[1202]);
+      if(tmpString[1200] != 0) {
 
         SHOW_reset();
-        longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+        longIntegerRegisterToDisplayString(SHOWregis, tmpString + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
-        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        last = 2100 + stringByteLength(tmpString + 2100);
         source = 2100;
         dest = 0;
 
-        //printf("1: %d\n",stringGlyphLength(tmpStr3000 + 2100));
+        //printf("1: %d\n",stringGlyphLength(tmpString + 2100));
 
         if(groupingGap == 0) {
           maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true);
@@ -2070,21 +2070,21 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
         for(d=0; d<=1800 ; d+=300) {                                                      //Small font, fill 7 lines at 0, 300, 600, 900, 1200, 1500, 1800
           dest = d;
-          while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
+          while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
             do {
-              tmpStr3000[dest] = tmpStr3000[source];
-              if(tmpStr3000[dest] & 0x80) {
-                tmpStr3000[++dest] = tmpStr3000[++source];
+              tmpString[dest] = tmpString[source];
+              if(tmpString[dest] & 0x80) {
+                tmpString[++dest] = tmpString[++source];
               }
               source++;
-              tmpStr3000[++dest] = 0;
-            } while(source < last && groupingGap > 0 && (tmpStr3000[source] != *separator || tmpStr3000[source + 1] != *(separator + 1)));
+              tmpString[++dest] = 0;
+            } while(source < last && groupingGap > 0 && (tmpString[source] != *separator || tmpString[source + 1] != *(separator + 1)));
           }
         }
         if(source < last) { // The long integer is too long
-          xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
-          xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
-          tmpStr3000[dest + 2] = 0;
+          xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
+          xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
+          tmpString[dest + 2] = 0;
         }
       } 
       break;
@@ -2093,18 +2093,18 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
     case dtReal34:
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpStr3000 + 2103, &numericFont, 2000, 34, false, separator);
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpString + 2103, &numericFont, 2000, 34, false, separator);
+      last = 2100 + stringByteLength(tmpString + 2100);
       source = 2100;
       for(d=0; d<=900 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpString[dest] = tmpString[source];
+          if(tmpString[dest] & 0x80) {
+            tmpString[++dest] = tmpString[++source];
           }
           source++;
-          tmpStr3000[++dest] = 0;
+          tmpString[++dest] = 0;
         }
       }
       break;
@@ -2115,111 +2115,111 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
       // Real part into +0
       separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), AM_NONE, tmpStr3000, &numericFont, 2000, 34, false, separator);
-      for(i=stringByteLength(tmpStr3000) - 1; i>0; i--) {
-        if(tmpStr3000[i] == 0x08) {
-          tmpStr3000[i] = 0x05;
+      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), AM_NONE, tmpString, &numericFont, 2000, 34, false, separator);
+      for(i=stringByteLength(tmpString) - 1; i>0; i--) {
+        if(tmpString[i] == 0x08) {
+          tmpString[i] = 0x05;
         }
       }
   
       // +/- i× into +300
       real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
       last = 300;
-      while(tmpStr3000[last]) last++;
-      xcopy(tmpStr3000 + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
-      xcopy(tmpStr3000 + last++, COMPLEX_UNIT, 1);
-      xcopy(tmpStr3000 + last,   PRODUCT_SIGN, 3);
+      while(tmpString[last]) last++;
+      xcopy(tmpString + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
+      xcopy(tmpString + last++, COMPLEX_UNIT, 1);
+      xcopy(tmpString + last,   PRODUCT_SIGN, 3);
 
       // Imaginary part into +600
       real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &numericFont, 2000, 34, false, separator);
-      for(i=stringByteLength(tmpStr3000 + 600) - 1; i>0; i--) {
-        if(tmpStr3000[600 + i] == 0x08) {
-          tmpStr3000[600 + i] = 0x05;
+      real34ToDisplayString(&real34, AM_NONE, tmpString + 600, &numericFont, 2000, 34, false, separator);
+      for(i=stringByteLength(tmpString + 600) - 1; i>0; i--) {
+        if(tmpString[600 + i] == 0x08) {
+          tmpString[600 + i] = 0x05;
         }
       }
   
-//vv      strncat(tmpStr3000 + 300, tmpStr3000 +  600, 299); //add +i. and imag
-//vv      tmpStr3000[600] = 0;
+//vv      strncat(tmpString + 300, tmpString +  600, 299); //add +i. and imag
+//vv      tmpString[600] = 0;
 
       //Concatenate +ix and IMAG into 300
       last = 300;
-      while(tmpStr3000[last]) last++;
-      xcopy(tmpStr3000 + last, tmpStr3000 + 600,  strlen(tmpStr3000 + 600) + 1);
-      tmpStr3000[600] = 0;
+      while(tmpString[last]) last++;
+      xcopy(tmpString + last, tmpString + 600,  strlen(tmpString + 600) + 1);
+      tmpString[600] = 0;
 //^^
       //Check if REAL + IMAG fits into two lines
-      if(stringWidth(tmpStr3000, &numericFont, true, true) + stringWidth(tmpStr3000 + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
+      if(stringWidth(tmpString, &numericFont, true, true) + stringWidth(tmpString + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
       //  if it fits, copy all into +0
-        strncat(tmpStr3000, tmpStr3000 +  300, 299);
-        tmpStr3000[300] = 0;
+        strncat(tmpString, tmpString +  300, 299);
+        tmpString[300] = 0;
       }
   
-//vv      strncat(tmpStr3000 + 2103, tmpStr3000 + 0, 299-3);  //COPY REAL
-//vv      tmpStr3000[0] = 0;
+//vv      strncat(tmpString + 2103, tmpString + 0, 299-3);  //COPY REAL
+//vv      tmpString[0] = 0;
 
 
       //copy +0 REAL or REAL+IMAG result into destination 2100 (label already in 2100-2102)
       last = 2100;
-      while(tmpStr3000[last]) last++; 
-      xcopy(tmpStr3000 + last, tmpStr3000 + 0,  strlen(tmpStr3000 + 0) + 1);
-      tmpStr3000[0] = 0;
+      while(tmpString[last]) last++; 
+      xcopy(tmpString + last, tmpString + 0,  strlen(tmpString + 0) + 1);
+      tmpString[0] = 0;
 //^^
   
-//vv      strcpy(tmpStr3000 + 2400, tmpStr3000 + 300);        //COPY IMAG
-//vv      tmpStr3000[300] = 0;
+//vv      strcpy(tmpString + 2400, tmpString + 300);        //COPY IMAG
+//vv      tmpString[300] = 0;
 //new
 
       //copy IMAG result into +2400
       last = 2400;
-//      while(tmpStr3000[last]) last++;
-      xcopy(tmpStr3000 + last, tmpStr3000 + 300,  strlen(tmpStr3000 + 300) + 1);
-      tmpStr3000[300] = 0;
+//      while(tmpString[last]) last++;
+      xcopy(tmpString + last, tmpString + 300,  strlen(tmpString + 300) + 1);
+      tmpString[300] = 0;
 //^^
   
 
       //write 2100+ into two lines, 0+ and 300+
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      last = 2100 + stringByteLength(tmpString + 2100);
       source = 2100;
       for(d=0; d<=300 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpString[dest] = tmpString[source];
+          if(tmpString[dest] & 0x80) {
+            tmpString[++dest] = tmpString[++source];
           }
           source++;
-          tmpStr3000[++dest] = 0;
+          tmpString[++dest] = 0;
         }
       }
       
       //write 2400+ into two lines, 300+ and 900+
-      last = 2400 + stringByteLength(tmpStr3000 + 2400);
+      last = 2400 + stringByteLength(tmpString + 2400);
       source = 2400;
       for(d=600; d<=900 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpString[dest] = tmpString[source];
+          if(tmpString[dest] & 0x80) {
+            tmpString[++dest] = tmpString[++source];
           }
           source++;
-          tmpStr3000[++dest] = 0;
+          tmpString[++dest] = 0;
         }
       }
   
-      if (tmpStr3000[300]==0) {                          //shift up if line is empty
-        //vv new       strcpy(tmpStr3000 + 300, tmpStr3000 + 600);
-        xcopy(tmpStr3000 + 300, tmpStr3000 + 600,  min(300,strlen(tmpStr3000 + 600) + 1));
-        //vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
-        xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
-        tmpStr3000[900] = 0;
+      if (tmpString[300]==0) {                          //shift up if line is empty
+        //vv new       strcpy(tmpString + 300, tmpString + 600);
+        xcopy(tmpString + 300, tmpString + 600,  min(300,strlen(tmpString + 600) + 1));
+        //vv new        strcpy(tmpString + 600, tmpString + 900);
+        xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
+        tmpString[900] = 0;
       }
   
-      if (tmpStr3000[600]==0) {                          //shift up if line is empty
-        //vv new        strcpy(tmpStr3000 + 600, tmpStr3000 + 900);
-        xcopy(tmpStr3000 + 600, tmpStr3000 + 900,  min(300,strlen(tmpStr3000 + 900) + 1));
-        tmpStr3000[900] = 0;
+      if (tmpString[600]==0) {                          //shift up if line is empty
+        //vv new        strcpy(tmpString + 600, tmpString + 900);
+        xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
+        tmpString[900] = 0;
       }
       break;
 
@@ -2227,50 +2227,50 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
     case dtShortInteger:
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-      shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, true);
+      shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
     
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
         dest = 2400;
-        while(tmpStr3000[source] !=0 ) {
-          if((uint8_t)(tmpStr3000[source]) == 160 && (uint8_t)(tmpStr3000[source+1]) == 39) {
+        while(tmpString[source] !=0 ) {
+          if((uint8_t)(tmpString[source]) == 160 && (uint8_t)(tmpString[source+1]) == 39) {
             source++;
-            tmpStr3000[dest++]=49;
+            tmpString[dest++]=49;
           } else
-            if((uint8_t)(tmpStr3000[source]) == 162 && (uint8_t)(tmpStr3000[source+1]) == 14) {
+            if((uint8_t)(tmpString[source]) == 162 && (uint8_t)(tmpString[source+1]) == 14) {
               source++;
-              tmpStr3000[dest++]=48;
+              tmpString[dest++]=48;
             } else {
-              tmpStr3000[dest++] = tmpStr3000[source];
+              tmpString[dest++] = tmpString[source];
             }
           source++;
         }
-        tmpStr3000[dest]=0;
+        tmpString[dest]=0;
       } else {
-        strcpy(tmpStr3000 + 2400,tmpStr3000 + 2100);
+        strcpy(tmpString + 2400,tmpString + 2100);
       }
  
 
-      last = 2400 + stringByteLength(tmpStr3000 + 2400);
+      last = 2400 + stringByteLength(tmpString + 2400);
       source = 2400;
       for(d=0; d<=900 ; d+=300) {
         dest = d;
-        if(dest != 0){strcat(tmpStr3000 + dest,"  ");dest+=2;}               //space below the T:
-        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpString[dest] = tmpString[source];
+          if(tmpString[dest] & 0x80) {
+            tmpString[++dest] = tmpString[++source];
           }
           source++;
-          tmpStr3000[++dest] = 0;
+          tmpString[++dest] = 0;
         }
 
         if(source < last && groupingGap!=0) {                  //Not in the last line
-          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
-          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
-          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
-          if(!(tmpStr3000[dest-2] & 0x80)) {dest--; source--;}
-          tmpStr3000[dest] = 0;
+          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
+          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+          tmpString[dest] = 0;
         }            
       }
       break;
@@ -2281,19 +2281,19 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       offset = 0;
       thereIsANextLine = true;
       bytesProcessed = 2100;
-      strcat(tmpStr3000 + 2100, "'");
-      strcat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
-      strcat(tmpStr3000 + 2100, "'");
+      strcat(tmpString + 2100, "'");
+      strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+      strcat(tmpString + 2100, "'");
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, tmpStr3000 + bytesProcessed, stringByteLength(tmpStr3000 + bytesProcessed) + 1);
+        xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
         thereIsANextLine = false;
-        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
-          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+        while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
         }
-        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        bytesProcessed += stringByteLength(tmpString + offset);
         offset += 300;
-        tmpStr3000[offset] = 0;
+        tmpString[offset] = 0;
       }
       break;
 
@@ -2302,46 +2302,46 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
     case dtString:
 
       temporaryInformation = TI_SHOW_REGISTER_BIG;
-      strcpy(tmpStr3000 + 2103, "'");
-      strncat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 1);
-      strcat(tmpStr3000 + 2100, "'");
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      strcpy(tmpString + 2103, "'");
+      strncat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 1);
+      strcat(tmpString + 2100, "'");
+      last = 2100 + stringByteLength(tmpString + 2100);
       source = 2100;
       for(d=0; d<=1200 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpStr3000[dest] = tmpStr3000[source];
-          if(tmpStr3000[dest] & 0x80) {
-            tmpStr3000[++dest] = tmpStr3000[++source];
+        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          tmpString[dest] = tmpString[source];
+          if(tmpString[dest] & 0x80) {
+            tmpString[++dest] = tmpString[++source];
           }
           source++;
-          tmpStr3000[++dest] = 0;
+          tmpString[++dest] = 0;
         }
       }
 
-      if(tmpStr3000[1200] != 0) {
+      if(tmpString[1200] != 0) {
         SHOW_reset();
-        strcpy(tmpStr3000 + 2103, "'");
-        strncat(tmpStr3000 + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 1);
-        strcat(tmpStr3000 + 2100, "'");
-        last = 2100 + stringByteLength(tmpStr3000 + 2100);
+        strcpy(tmpString + 2103, "'");
+        strncat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis), stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 1);
+        strcat(tmpString + 2100, "'");
+        last = 2100 + stringByteLength(tmpString + 2100);
         source = 2100;
         dest = 0;
         for(d=0; d<=1800 ; d+=300) {
           dest = d;
-          while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= SCREEN_WIDTH - 8*2) {
-            tmpStr3000[dest] = tmpStr3000[source];
-            if(tmpStr3000[dest] & 0x80) {
-              tmpStr3000[++dest] = tmpStr3000[++source];
+          while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
             }
             source++;
-            tmpStr3000[++dest] = 0;
+            tmpString[++dest] = 0;
           }
         }
         if(source < last) { // The string is too long
-        xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
-        xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
-        tmpStr3000[dest + 2] = 0;
+        xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
+        xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
+        tmpString[dest + 2] = 0;
         }
       }
       break;
@@ -2352,21 +2352,21 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       thereIsANextLine = true;
       bytesProcessed = 0;
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
+        xcopy(tmpString + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
         thereIsANextLine = false;
-        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
-          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+        while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
         }
-        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        bytesProcessed += stringByteLength(tmpString + offset);
         offset += 300;
-        tmpStr3000[offset] = 0;
+        tmpString[offset] = 0;
       }
       break;
 */
 
     case dtConfig:
-      xcopy(tmpStr3000, "Configuration data", 19);
+      xcopy(tmpString, "Configuration data", 19);
       break;
 
 
@@ -2374,7 +2374,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "cannot SHOW %s%s", tmpStr3000 + 2100, getRegisterDataTypeName(SHOWregis, true, false));
+        sprintf(errorMessage, "cannot SHOW %s%s", tmpString + 2100, getRegisterDataTypeName(SHOWregis, true, false));
         moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
       #endif
       return;

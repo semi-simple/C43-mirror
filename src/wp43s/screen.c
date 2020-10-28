@@ -95,11 +95,11 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
       longIntegerFree(lgInt);
       tmp2[0]=0;                                         //JMCSV add apostrophies
       strcat(tmp2,"\"");                                 //JMCSV
-      strcat(tmp2,tmpStr3000);                           //JMCSV
-      //strcpy(tmpStr3000,tmp2);                         //JMCSV
+      strcat(tmp2,tmpString);                           //JMCSV
+      //strcpy(tmpString,tmp2);                         //JMCSV
       tmp2[TMP_STR_LENGTH-1]=0;                          //JMCSV trying a better way, in case the terminating 0 is not copied
-      xcopy(tmpStr3000,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
-      strcat(tmpStr3000,"\"");                           //JMCSV
+      xcopy(tmpString,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
+      strcat(tmpString,"\"");                           //JMCSV
       break;
 
     case dtTime:
@@ -1555,8 +1555,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       w = stringWidth(tmpString + 300, &standardFont, true, true);
       showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
-      if(tmpStr3000[600]) {        w = stringWidth(tmpStr3000 + 600, &standardFont, true, true);
-        showString(tmpStr3000 + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+      if(tmpString[600]) {        w = stringWidth(tmpString + 600, &standardFont, true, true);
+        showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
       }
     }
 
@@ -1585,30 +1585,30 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           #define line_h 38
           switch(regist) {
             // L1
-            case REGISTER_T: w = stringWidth(tmpStr3000, &numericFont, true, true);
-                             showString(tmpStr3000, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+            case REGISTER_T: w = stringWidth(tmpString, &numericFont, true, true);
+                             showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
                              break;
 
             // L2 & L3
-            case REGISTER_Z: w = stringWidth(tmpStr3000 + 300, &numericFont, true, true);
-                             showString(tmpStr3000 + 300, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h, vmNormal, true, true);
+            case REGISTER_Z: w = stringWidth(tmpString + 300, &numericFont, true, true);
+                             showString(tmpString + 300, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h, vmNormal, true, true);
                              break;
 
             // L4 & L5
-            case REGISTER_Y: w = stringWidth(tmpStr3000 + 600, &numericFont, true, true);
-                             showString(tmpStr3000 + 600, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*2, vmNormal, true, true);
+            case REGISTER_Y: w = stringWidth(tmpString + 600, &numericFont, true, true);
+                             showString(tmpString + 600, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*2, vmNormal, true, true);
                              break;
 
             // L6 & L7
-            case REGISTER_X: w = stringWidth(tmpStr3000 + 900, &numericFont, true, true);
-                             showString(tmpStr3000 + 900, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*3, vmNormal, true, true);
+            case REGISTER_X: w = stringWidth(tmpString + 900, &numericFont, true, true);
+                             showString(tmpString + 900, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*3, vmNormal, true, true);
                              break;
 
             default: {}
           }
 
 //          if(getRegisterDataType(REGISTER_X) == dtReal34) {
-//            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
+//            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
 //          }
         }
                                                                          //JMSHOW ^^
@@ -2067,7 +2067,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       }
 
           //JM else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
-          //JM complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
+          //JM complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
 
           else if(getRegisterDataType(regist) == dtComplex34) {
             if(temporaryInformation == TI_ABC) {                             //JM EE \/
@@ -2130,7 +2130,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpStr3000, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS,true, STD_SPACE_PUNCTUATION);
+            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS,true, STD_SPACE_PUNCTUATION);
 
         w = stringWidth(tmpString, &numericFont, false, true);
         lineWidth = w;
@@ -2181,19 +2181,19 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       }
 
       else if(getRegisterDataType(regist) == dtShortInteger) {
-        shortIntegerToDisplayString(regist, tmpStr3000, true);
-        showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+        shortIntegerToDisplayString(regist, tmpString, true);
+        showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
         //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
         if(displayStack == 4-displayStackSHOIDISP && lastIntegerBase != 0) {
           if(displayStack == 1){
             copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
             setRegisterTag(REGISTER_Y, 2);
-            shortIntegerToDisplayString(REGISTER_Y, tmpStr3000, true);
-            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            shortIntegerToDisplayString(REGISTER_Y, tmpString, true);
+            if(stringWidth(tmpString, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
-            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
           }
           if(displayStack == 1 || displayStack == 2){
@@ -2201,22 +2201,22 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
             if(displayStack == 2) setRegisterTag(REGISTER_Z, 2); else 
               if(displayStack == 1) setRegisterTag(REGISTER_Z, 8);
-            shortIntegerToDisplayString(REGISTER_Z, tmpStr3000, true);
-            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            shortIntegerToDisplayString(REGISTER_Z, tmpString, true);
+            if(stringWidth(tmpString, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
-            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
           }
           if(displayStack == 1 || displayStack == 2 || displayStack ==3){
             copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
             setRegisterTag(REGISTER_T, 16);
-            shortIntegerToDisplayString(REGISTER_T, tmpStr3000, true);
-            if(stringWidth(tmpStr3000, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
+            shortIntegerToDisplayString(REGISTER_T, tmpString, true);
+            if(stringWidth(tmpString, fontForShortInteger, false, true) + stringWidth("  X: ", &standardFont, false, true) <= SCREEN_WIDTH) {
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
-            showString(tmpStr3000, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpStr3000, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+            showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
           }
           #ifdef PC_BUILD
@@ -2256,7 +2256,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               }
             }                                                               //JMms ^^
 
-          longIntegerRegisterToDisplayString(regist, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION, true);          //JMms added prefix   //JM added last parameter: Allow LARGELI
+          longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION, true);          //JMms added prefix   //JM added last parameter: Allow LARGELI
 
         w = stringWidth(tmpString, &numericFont, false, true);
         lineWidth = w;

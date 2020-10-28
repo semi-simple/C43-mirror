@@ -390,7 +390,7 @@ void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {      //DONE
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+    longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
     longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
     //printf("Xreg %d\n", X_REG);
@@ -413,7 +413,7 @@ void fnJMUSERmode(uint16_t JM_KEY) {      //DONE
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+    longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
     longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
@@ -439,7 +439,7 @@ void fnJMUSERmode_f(uint16_t JM_KEY) {      //DONE
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+    longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
     longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
@@ -465,7 +465,7 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {      //DONE
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, lgInt);
-    longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+    longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
     longIntegerToInt(lgInt,X_REG);
     longIntegerFree(lgInt);
   //printf("Xreg %d\n", X_REG);
@@ -493,25 +493,25 @@ void fnStrtoX(char aimBuffer[]) {      //DONE
 
 
 void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
-  tmpStr3000[0] = 0;
-  strcat(tmpStr3000, inp1);
+  tmpString[0] = 0;
+  strcat(tmpString, inp1);
   setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(REGISTER_X));
+  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
-  tmpStr3000[0]=0;
-  strcat(tmpStr3000, inp1);
+  tmpString[0]=0;
+  strcat(tmpString, inp1);
   setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
 
   longInteger_t lgInt;
   longIntegerInit(lgInt);
-  stringToLongInteger(tmpStr3000 + (tmpStr3000[0] == '+' ? 1 : 0), 10, lgInt);
+  stringToLongInteger(tmpString + (tmpString[0] == '+' ? 1 : 0), 10, lgInt);
   convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
   longIntegerFree(lgInt);
 }
@@ -850,9 +850,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_xmin = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_xmin);
+    realToString(&tmpy, tmpString);
+    graph_xmin = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_xmin);
     fnDrop(0);
   }
   else
@@ -862,9 +862,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_xmax = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_xmax);
+    realToString(&tmpy, tmpString);
+    graph_xmax = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_xmax);
     fnDrop(0);
   }
   else
@@ -874,9 +874,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_ymin = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_ymin);
+    realToString(&tmpy, tmpString);
+    graph_ymin = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_ymin);
     fnDrop(0);
   }
   else
@@ -886,9 +886,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_ymax = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_ymax);
+    realToString(&tmpy, tmpString);
+    graph_ymax = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_ymax);
     fnDrop(0);
   }
   else
@@ -898,9 +898,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_dx = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_dx);
+    realToString(&tmpy, tmpString);
+    graph_dx = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_dx);
     fnDrop(0);
   }
   else
@@ -910,9 +910,9 @@ void fnJM(uint16_t JM_OPCODE) {
     real_t tmpy;
     fnToReal(0);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpStr3000);
-    graph_dy = strtof(tmpStr3000, NULL);
-    //printf("%s %f\n",tmpStr3000,graph_dy);
+    realToString(&tmpy, tmpString);
+    graph_dy = strtof(tmpString, NULL);
+    //printf("%s %f\n",tmpString,graph_dy);
     fnDrop(0);
   }
   else
@@ -920,21 +920,21 @@ void fnJM(uint16_t JM_OPCODE) {
     saveForUndo();
     fnStrtoX("Type limits into X Register and press");
     fnStrtoX("[Xmin], [Xmax], [Ymin], [Ymax], [dX], [dY]");
-    tmpStr3000[0]=0;
+    tmpString[0]=0;
     char tmp[12];
     snprintf(tmp, 12, "%.5f, ", graph_xmin);
-    strcat(tmpStr3000,tmp);
+    strcat(tmpString,tmp);
     snprintf(tmp, 12, "%.5f, ", graph_xmax);
-    strcat(tmpStr3000,tmp);
+    strcat(tmpString,tmp);
     snprintf(tmp, 12, "%.5f, ", graph_ymin);
-    strcat(tmpStr3000,tmp);
+    strcat(tmpString,tmp);
     snprintf(tmp, 12, "%.5f, ", graph_ymax);
-    strcat(tmpStr3000,tmp);
+    strcat(tmpString,tmp);
     snprintf(tmp, 12, "%.3f, ", graph_dx);
-    strcat(tmpStr3000,tmp);
+    strcat(tmpString,tmp);
     snprintf(tmp, 12, "%.3f", graph_dy);
-    strcat(tmpStr3000,tmp);
-    fnStrtoX(tmpStr3000);
+    strcat(tmpString,tmp);
+    fnStrtoX(tmpString);
     fnStrtoX("[PLOT] graphs, [SNAP] saves screen");
   }
 

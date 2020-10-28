@@ -146,7 +146,7 @@ void displaywords(char *line1) {  //Preprocessor and display
     strcat(line1," ");
   }
 
-  tmpStr3000[0]=32;tmpStr3000[1]=0;
+  tmpString[0]=32;tmpString[1]=0;
 
   int16_t ix = 0;
   while (line1[ix] != 0) {
@@ -160,7 +160,7 @@ void displaywords(char *line1) {  //Preprocessor and display
     else 
     if (state_comments && (aa[0]==13 || aa[0]==10))  {    //stop comment mode at end of line
       state_comments=false;
-      strcat(tmpStr3000," ");
+      strcat(tmpString," ");
     } 
     else
       if(!state_comments) {                //proceed only if not comment mode
@@ -169,13 +169,13 @@ void displaywords(char *line1) {  //Preprocessor and display
           case 8:
           case 13:
           case 10:
-          case 44: if(strlen(tmpStr3000)!=0) {
-                     if(tmpStr3000[strlen(tmpStr3000)-1] != 32) {
-                       strcat(tmpStr3000," ");
+          case 44: if(strlen(tmpString)!=0) {
+                     if(tmpString[strlen(tmpString)-1] != 32) {
+                       strcat(tmpString," ");
                      }
                    }
                    break;
-          default: strcat(tmpStr3000,aa);
+          default: strcat(tmpString,aa);
         }    
       }
 
@@ -190,9 +190,9 @@ void displaywords(char *line1) {  //Preprocessor and display
   aa[0]=0; aa[1]=0;                  //remove consequtive spaces
   ix = 1;
   line1[0]=0;
-  while (tmpStr3000[ix] != 0) {
-    aa[0]=tmpStr3000[ix];    
-    if (tmpStr3000[ix-1] != 32) {
+  while (tmpString[ix] != 0) {
+    aa[0]=tmpString[ix];    
+    if (tmpString[ix-1] != 32) {
       strcat(line1,aa);
       #ifdef DISPLOADING
       strcat(ll,aa);

@@ -63,8 +63,8 @@ void capture_sequence(char *origin, uint16_t item) {
     if(line1[0]==0) sprintf(line1, " %4d //%10s",item,ll);
 
     #ifndef TESTSUITE_BUILD
-    stringToUtf8(line1, (uint8_t *)tmpStr3000);
-    export_string_to_file(tmpStr3000);
+    stringToUtf8(line1, (uint8_t *)tmpString);
+    export_string_to_file(tmpString);
     #endif
 }
 
@@ -1040,7 +1040,7 @@ char line1[TMP_STR_LENGTH];
 void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGISTER TO DISK
   char tt[40]; 
   if(getRegisterDataType(REGISTER_X) == dtString) {
-    xcopy(tmpStr3000 + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
+    xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
     tt[0]=0;
     switch(XEQM_no) {
       case  1:strcpy(tt, "XEQM01.TXT"); break;
@@ -1065,16 +1065,16 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
     }
 
     #ifdef PC_BUILD
-    printf(">>> string ready  ## %s:%s\n",tt,tmpStr3000 + TMP_STR_LENGTH/2);
-    //uint16_t ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,tmpStr3000[ix]);ix++;}
-    stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-    printf(">>> string in utf ## %s:%s\n",tt, tmpStr3000);
+    printf(">>> string ready  ## %s:%s\n",tt,tmpString + TMP_STR_LENGTH/2);
+    //uint16_t ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,tmpString[ix]);ix++;}
+    stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+    printf(">>> string in utf ## %s:%s\n",tt, tmpString);
     //ix = 0;while (ix!=20) {printf("%d:%d=\n",ix,ll[ix]);ix++;}
     #endif
 
     #ifndef TESTSUITE_BUILD
-      stringToUtf8(tmpStr3000 + TMP_STR_LENGTH/2, (uint8_t *)tmpStr3000);
-      if(tt[0]!=0) export_string_to_filename(tmpStr3000, overwrite, "PROGRAMS", tt);
+      stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+      if(tt[0]!=0) export_string_to_filename(tmpString, overwrite, "PROGRAMS", tt);
     #endif
   }
 }

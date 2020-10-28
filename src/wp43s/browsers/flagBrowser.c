@@ -270,7 +270,7 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
     }
   }
 
-  //printf("1: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpStr3000);  //JM
+  //printf("1: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpString);  //JM
   if(currentFlgScr == 3) {        //JMvv
     currentFlgScr = 0;
     //printf("leave new\n");
@@ -322,8 +322,8 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
         }
       }
 
-      sprintf(tmpStr3000, "%d", f);
-      showString(tmpStr3000, &standardFont, 40*(f%10) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2, 22*(f/10)+66-1-44, getFlag(f) ? vmReverse : vmNormal, true, true); //JM-44
+      sprintf(tmpString, "%d", f);
+      showString(tmpString, &standardFont, 40*(f%10) + 19 - stringWidth(tmpString, &standardFont, false, false)/2, 22*(f/10)+66-1-44, getFlag(f) ? vmReverse : vmNormal, true, true); //JM-44
     }
   }
 
@@ -342,35 +342,35 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
       }
 
       switch(f) {
-      	case FLAG_X: strcpy(tmpStr3000, "X:POLAR "); break;
-      	case FLAG_Y: strcpy(tmpStr3000, "Y:101   "); break;
-      	case FLAG_Z: strcpy(tmpStr3000, "Z:102   "); break;
-      	case FLAG_T: strcpy(tmpStr3000, "T:TRACE "); break;
-      	case FLAG_A: strcpy(tmpStr3000, "A:ALLENG"); break;
-      	case FLAG_B: strcpy(tmpStr3000, "B:OVRFL "); break;
-      	case FLAG_C: strcpy(tmpStr3000, "C:CARRY "); break;
-      	case FLAG_D: strcpy(tmpStr3000, "D:SPCRES"); break;
-      	case FLAG_L: strcpy(tmpStr3000, "L:LEAD0 "); break;
-      	case FLAG_I: strcpy(tmpStr3000, "I:CPXRES"); break;
-      	case FLAG_J: strcpy(tmpStr3000, "J:110   "); break;
-      	case FLAG_K: strcpy(tmpStr3000, "K:111   "); break;
-      	default:  sprintf(tmpStr3000,"   %d ", f);break;
+      	case FLAG_X: strcpy(tmpString, "X:POLAR "); break;
+      	case FLAG_Y: strcpy(tmpString, "Y:101   "); break;
+      	case FLAG_Z: strcpy(tmpString, "Z:102   "); break;
+      	case FLAG_T: strcpy(tmpString, "T:TRACE "); break;
+      	case FLAG_A: strcpy(tmpString, "A:ALLENG"); break;
+      	case FLAG_B: strcpy(tmpString, "B:OVRFL "); break;
+      	case FLAG_C: strcpy(tmpString, "C:CARRY "); break;
+      	case FLAG_D: strcpy(tmpString, "D:SPCRES"); break;
+      	case FLAG_L: strcpy(tmpString, "L:LEAD0 "); break;
+      	case FLAG_I: strcpy(tmpString, "I:CPXRES"); break;
+      	case FLAG_J: strcpy(tmpString, "J:110   "); break;
+      	case FLAG_K: strcpy(tmpString, "K:111   "); break;
+      	default:  sprintf(tmpString,"   %d ", f);break;
       }
 
       char ss[2];
       i=0;
       ss[1]=0;
-      while(tmpStr3000[i]!=0){
-        ss[0]=tmpStr3000[i];
+      while(tmpString[i]!=0){
+        ss[0]=tmpString[i];
         showString(ss, &standardFont, i*9-32+1+max(0,16-1+2*40*(f%5) + 19 - 16/8), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
         i++;
       }
-//      showString(tmpStr3000, &standardFont, max(0,16-1+2*40*(f%5) + 19 - stringWidth(tmpStr3000, &standardFont, false, false)/2), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
+//      showString(tmpString, &standardFont, max(0,16-1+2*40*(f%5) + 19 - stringWidth(tmpString, &standardFont, false, false)/2), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
     }
 
     if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
-      sprintf(tmpStr3000, "%" PRIu16 " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
-      showString(tmpStr3000, &standardFont, 1, 132-1, vmNormal, true, true);
+      sprintf(tmpString, "%" PRIu16 " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
+      showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
       showString("Local flag status:", &standardFont, 1, 154-1, vmNormal, true, true);
 
       for(f=0; f<16; f++) {
@@ -382,12 +382,12 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
           }
         }
 
-        sprintf(tmpStr3000, "%d", f);
-        showString(tmpStr3000, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1-44, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);     //JM-44
+        sprintf(tmpString, "%d", f);
+        showString(tmpString, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1-44, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);     //JM-44
       }
     }
   }
-  //printf("2: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpStr3000);
+  //printf("2: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpString);
 
   if(currentFlgScr == 5) { // Change over to STATUS
     currentFlgScr = 0;

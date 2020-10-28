@@ -633,8 +633,8 @@ const int16_t menu_PLOT[]        = {
                                      ITM_EXTX,                      ITM_EXTY,                   ITM_PBOX,                 ITM_INTG,              ITM_CLSIGMA,                 ITM_SUM,                            //JM GRAPH
 
                                      ITM_PLINE,                     ITM_SCALE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_PCROS,                     -MNU_STAT,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_PBOX,                      -MNU_SUMS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PCROS,                     ITM_DIFF,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PBOX,                      ITM_INTG,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_SIGMAPLUS,                 ITM_SCRDMP,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_SIGMAMINUS,                ITM_LISTXY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH

@@ -636,15 +636,19 @@ void graph_axis (void){
 
 
   if(PLOT_INTG && !invalid_intg) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapz. Integral");
-    showString(tmpStr3000, &standardFont, 1, ypos, vmNormal, true, true);  //JM
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapezium integral");
+    miniC = 1;
+    showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
+    miniC = 0;
     plotintbig( 5, ypos+4+4 );
     ypos += 20;
   }
 
   if(PLOT_DIFF && !invalid_diff) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Differential");
-    showString(tmpStr3000, &standardFont, 1, ypos, vmNormal, true, true);  //JM
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Num. differential");
+    miniC = 1;
+    showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
+    miniC = 0;
     plotdeltabig( 6, ypos+4+4);
     ypos += 20;
   }

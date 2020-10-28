@@ -893,6 +893,7 @@ void invertPixel(int16_t x, int16_t y) {           //JM
 }
 
 
+uint8_t  miniC = 0;                                                              //JM miniature letters
 
 /********************************************//**
  * \brief Displays a glyph using it's Unicode code point
@@ -907,10 +908,9 @@ void invertPixel(int16_t x, int16_t y) {           //JM
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
 int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  int16_t  col, row, xGlyph, xEndingCols, endingCols, bit, glyphId;
+  int16_t  col, row, xGlyph, /*xEndingCols, */endingCols, bit, glyphId;    //JMmini
   int8_t   byte, *data;
   const glyph_t  *glyph;
-
   glyphId = findGlyph(font, charCode);
   if(glyphId >= 0) {
     glyph = (font->glyphs) + glyphId;
@@ -934,9 +934,9 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   }
 
   data = (int8_t *)glyph->data;
-
+  int16_t y0 = y;                                                   //JMmin i
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
-  xEndingCols = x + xGlyph + glyph->colsGlyph;
+  //xEndingCols = x + xGlyph + glyph->colsGlyph;   //JMmini
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
   // Clearing the rows above the glyph
@@ -944,20 +944,20 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     #ifdef PC_BUILD                                                                 // Dani Rau
       for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
         if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                   //JMmini                         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     #endif                                                                          // vv Dani Rau
 
     #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0);              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0xFF);           //JMmini                                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
     #endif                                                                          // ^^ Dani Rau
   }
@@ -968,10 +968,10 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     if(showLeadingCols) {
       for(col=0; col<glyph->colsBeforeGlyph; col++) {
         if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                         //JMmini                      //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                           //JMmini                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     }
@@ -981,22 +981,23 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     for(col=0; col<glyph->colsGlyph; col++) {
       if(bit == 7) {
         byte = *(data++);
+        if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
       }
 
       if(byte & 0x80) {// MSB set
         if(videoMode == vmNormal) {
-          if(y>=0) setPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                   //JMmini                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) clearPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
       else {
         if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) setPixel(x+xGlyph+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
 
@@ -1010,10 +1011,10 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     // clearing the columns after the glyph
     for(col=0; col<endingCols; col++) {
       if(videoMode == vmNormal) {
-        if(y>=0) clearPixel(xEndingCols+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) clearPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        if(y>=0) setPixel(xEndingCols+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) setPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
     }
   }
@@ -1023,25 +1024,25 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     #ifdef PC_BUILD                                                                 // Dani Rau
       for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
         if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                                     //JMmini          //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) setPixel(x+col, y);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                                      //JMmini         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
     #endif                                                                          // vv Dani Rau
 
     #if DMCP_BUILD
       if(videoMode == vmNormal) {
-        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, 0);                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       else {
-        if(y>=0) lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);                                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, 0xFF);             //JMmini                                  //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
       }
       #endif                                                                        // ^^ Dani Rau
   }
 
-  return x + xGlyph + glyph->colsGlyph + endingCols;
+  return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);   //JMmini
 }
 
 

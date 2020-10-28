@@ -54,7 +54,13 @@
 #ifdef DMCP_BUILD
   #include <main.h>
   #include <dmcp.h>
+  #define TMP_STR_LENGTH       AUX_BUF_SIZE
+#else
+  #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560
 #endif
+#define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
+#define DISPLAY_VALUE_LEN        80
+
 
 #include "typeDefinitions.h"
 
@@ -243,11 +249,11 @@ extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 extern uint16_t              globalFlags[7];
-extern char                  tmpStr3000[TMP_STR_LENGTH];
-extern char                  errorMessage[ERROR_MESSAGE_LENGTH];
-extern char                  aimBuffer[AIM_BUFFER_LENGTH]; // aimBuffer is also used for NIM
-extern char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
-extern char                  tamBuffer[TAM_BUFFER_LENGTH];
+extern char                 *tmpString;
+extern char                 *errorMessage;
+extern char                 *aimBuffer; // aimBuffer is also used for NIM
+extern char                 *nimBufferDisplay;
+extern char                 *tamBuffer;
 extern char                  asmBuffer[5];
 extern char                  oldTime[8];
 extern char                  dateTimeString[12];

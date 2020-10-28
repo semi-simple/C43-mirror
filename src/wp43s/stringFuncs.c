@@ -295,10 +295,10 @@ void fnAlphaRR(uint16_t regist) {
 
     ptr = REGISTER_STRING_DATA(regist) + glyphPointer;
     steps = stringByteLength(ptr) + 1;
-    xcopy(tmpStr3000, ptr, steps);
+    xcopy(tmpString, ptr, steps);
     *(ptr) = 0;
-    xcopy(tmpStr3000 + stringByteLength(tmpStr3000), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-    xcopy(REGISTER_STRING_DATA(regist), tmpStr3000, stringByteLength(tmpStr3000) + 1);
+    xcopy(tmpString + stringByteLength(tmpString), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
+    xcopy(REGISTER_STRING_DATA(regist), tmpString, stringByteLength(tmpString) + 1);
   }
 }
 
@@ -374,10 +374,10 @@ void fnAlphaRL(uint16_t regist) {
 
     ptr = REGISTER_STRING_DATA(regist) + glyphPointer;
     steps = stringByteLength(ptr) + 1;
-    xcopy(tmpStr3000, ptr, steps);
+    xcopy(tmpString, ptr, steps);
     *(ptr) = 0;
-    xcopy(tmpStr3000 + stringByteLength(tmpStr3000), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-    xcopy(REGISTER_STRING_DATA(regist), tmpStr3000, stringByteLength(tmpStr3000) + 1);
+    xcopy(tmpString + stringByteLength(tmpString), REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
+    xcopy(REGISTER_STRING_DATA(regist), tmpString, stringByteLength(tmpString) + 1);
   }
 }
 

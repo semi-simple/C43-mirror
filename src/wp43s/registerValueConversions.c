@@ -52,10 +52,10 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
   reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
-  stringToReal34(tmpStr3000, REGISTER_REAL34_DATA(destination));
+  stringToReal34(tmpString, REGISTER_REAL34_DATA(destination));
 }
 
 
@@ -64,9 +64,9 @@ void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destina
   longInteger_t lgInt;
 
   convertLongIntegerRegisterToLongInteger(source, lgInt);
-  longIntegerToAllocatedString(lgInt, tmpStr3000, TMP_STR_LENGTH);
+  longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  stringToReal34(tmpStr3000, destination);
+  stringToReal34(tmpString, destination);
 }
 
 
@@ -82,8 +82,8 @@ void convertLongIntegerRegisterToReal(calcRegister_t source, real_t *destination
 
 
 void convertLongIntegerToReal(longInteger_t source, real_t *destination, realContext_t *ctxt) {
-  longIntegerToAllocatedString(source, tmpStr3000, TMP_STR_LENGTH);
-  stringToReal(tmpStr3000, destination, ctxt);
+  longIntegerToAllocatedString(source, tmpString, TMP_STR_LENGTH);
+  stringToReal(tmpString, destination, ctxt);
 }
 
 

@@ -6761,6 +6761,27 @@ void fnReset(uint16_t confirmation) {
     freeMemoryRegions[0].address = 0;
     freeMemoryRegions[0].sizeInBlocks = RAM_SIZE - 1; // - 1: one block for an empty program
 
+    if(tmpString == NULL) {
+      #ifdef DMCP_BUILD
+         tmpString        = aux_buf_ptr();   // 2560 byte buffer provided by DMCP
+         errorMessage     = write_buf_ptr(); // 4096 byte buffer provided by DMCP
+         aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
+         nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
+         tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+       #else
+         tmpString        = (char *)malloc(TMP_STR_LENGTH);
+         errorMessage     = (char *)malloc(ERROR_MESSAGE_LENGTH);
+         aimBuffer        = (char *)malloc(AIM_BUFFER_LENGTH);
+         nimBufferDisplay = (char *)malloc(NIM_BUFFER_LENGTH);
+         tamBuffer        = (char *)malloc(TAM_BUFFER_LENGTH);
+      #endif // DMCP_BUILD
+    }
+    memset(tmpString,        0, TMP_STR_LENGTH);
+    memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);
+    memset(aimBuffer,        0, AIM_BUFFER_LENGTH);
+    memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
+    memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
+
     // Empty program initialization
     programMemoryPointer = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
     currentProgramMemoryPointer = programMemoryPointer;
@@ -7000,9 +7021,9 @@ void fnReset(uint16_t confirmation) {
     //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
     //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
-    //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpStr3000) + 1), AM_NONE);
-    //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
+    //strcpy(tmpString, "Pure ASCII string requiring 38 bytes!");
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), AM_NONE);
+    //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpString);
 
 
     //allocateNamedVariable("Z" STD_a_DIARESIS "hler");

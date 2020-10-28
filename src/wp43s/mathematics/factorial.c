@@ -72,8 +72,8 @@ void factLonI(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
-      sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      moreInfoOnError("In function factLonI:", tmpStr3000, NULL, NULL);
+      sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
+      moreInfoOnError("In function factLonI:", tmpString, NULL, NULL);
     #endif
     longIntegerFree(x);
     return;
@@ -83,8 +83,8 @@ void factLonI(void) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
-      sprintf(tmpStr3000, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
-      moreInfoOnError("In function factLonI:", tmpStr3000, NULL, NULL);
+      sprintf(tmpString, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
+      moreInfoOnError("In function factLonI:", tmpString, NULL, NULL);
     #endif
     longIntegerFree(x);
     return;
@@ -136,8 +136,8 @@ void factShoI(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
-      sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      moreInfoOnError("In function factShoI:", tmpStr3000, NULL, NULL);
+      sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
+      moreInfoOnError("In function factShoI:", tmpString, NULL, NULL);
     #endif
     return;
   }
@@ -146,8 +146,8 @@ void factShoI(void) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
-      sprintf(tmpStr3000, "cannot calculate factorial(%s)", errorMessage);
-      moreInfoOnError("In function factShoI:", tmpStr3000, NULL, NULL);
+      sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
+      moreInfoOnError("In function factShoI:", tmpString, NULL, NULL);
     #endif
     return;
   }

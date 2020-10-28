@@ -1901,8 +1901,8 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         real34ToString(REGISTER_REAL34_DATA(regist), errorMessage);
-        sprintf(tmpStr3000, "register %" PRId16 " = %s:", regist, errorMessage);
-        moreInfoOnError("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
+        sprintf(tmpString, "register %" PRId16 " = %s:", regist, errorMessage);
+        moreInfoOnError("In function indirectAddressing:", tmpString, "this value is negative or too big!", NULL);
       #endif
       return 9999;
     }
@@ -1917,8 +1917,8 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         longIntegerToAllocatedString(lgInt, errorMessage, sizeof(errorMessage));
-        sprintf(tmpStr3000, "register %" PRId16 " = %s:", regist, errorMessage);
-        moreInfoOnError("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
+        sprintf(tmpString, "register %" PRId16 " = %s:", regist, errorMessage);
+        moreInfoOnError("In function indirectAddressing:", tmpString, "this value is negative or too big!", NULL);
       #endif
       longIntegerFree(lgInt);
       return 9999;
@@ -1936,8 +1936,8 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
         shortIntegerToDisplayString(regist, errorMessage, false);
-        sprintf(tmpStr3000, "register %" PRId16 " = %s:", regist, errorMessage);
-        moreInfoOnError("In function indirectAddressing:", tmpStr3000, "this value is negative or too big!", NULL);
+        sprintf(tmpString, "register %" PRId16 " = %s:", regist, errorMessage);
+        moreInfoOnError("In function indirectAddressing:", tmpString, "this value is negative or too big!", NULL);
       #endif
       return 9999;
     }
@@ -2269,8 +2269,8 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
   else {
     setRegisterTag(regist, tag);
   }
-//sprintf(tmpStr3000, "reallocateRegister %d to %s tag=%u (%u bytes including dataLen) done", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithDataLenBlocks);
-//memoryDump(tmpStr3000);
+//sprintf(tmpString, "reallocateRegister %d to %s tag=%u (%u bytes including dataLen) done", regist, getDataTypeName(dataType, false, false), tag, dataSizeWithDataLenBlocks);
+//memoryDump(tmpString);
 }
 
 

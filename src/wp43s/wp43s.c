@@ -56,11 +56,11 @@ realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 uint16_t              globalFlags[7];
-char                  tmpStr3000[TMP_STR_LENGTH];
-char                  errorMessage[ERROR_MESSAGE_LENGTH];
-char                  aimBuffer[AIM_BUFFER_LENGTH]; // aimBuffer is also used for NIM
-char                  nimBufferDisplay[NIM_BUFFER_LENGTH];
-char                  tamBuffer[TAM_BUFFER_LENGTH];
+char                 *tmpString = NULL;
+char                 *errorMessage;
+char                 *aimBuffer; // aimBuffer is also used for NIM
+char                 *nimBufferDisplay;
+char                 *tamBuffer;
 char                  asmBuffer[5];
 char                  oldTime[8];
 char                  dateTimeString[12];
@@ -299,7 +299,7 @@ void program_main(void) {
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 16, 52);
 
-    addr = (uint32_t)qspi_user_size();
+    addr = (uint32_t)qspi_user_size(); // QSPI user size in bytes
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 10, 53);
 
@@ -308,20 +308,46 @@ void program_main(void) {
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 16, 54);
 
-    ptr = (uint32_t *)&reg;
+    ptr = (uint32_t *)&indexOfItems;
     xcopy(&addr, &ptr, 4);
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 16, 55);
 
-    ptr = (uint32_t *)&angle180;
+    ptr = (uint32_t *)ppgm_fp;
     xcopy(&addr, &ptr, 4);
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 16, 56);
 
-    ptr = (uint32_t *)&indexOfItems;
+    ptr = (uint32_t *)get_reset_state_file();
     xcopy(&addr, &ptr, 4);
     uIntToLongInteger(addr, li);
     convertLongIntegerToShortIntegerRegister(li, 16, 57);
+
+    addr = 0x38; // RESET_STATE_FILE_SIZE;
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 58);
+
+    ptr = (uint32_t *)aux_buf_ptr();
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 59);
+
+    addr = AUX_BUF_SIZE;
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 60);
+
+    ptr = (uint32_t *)write_buf_ptr();
+    xcopy(&addr, &ptr, 4);
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 16, 61);
+
+    addr = (uint32_t)write_buf_size();
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 62);
+
+    addr = (uint32_t)get_hw_id();
+    uIntToLongInteger(addr, li);
+    convertLongIntegerToShortIntegerRegister(li, 10, 63);
 
     longIntegerFree(li);
   #endif

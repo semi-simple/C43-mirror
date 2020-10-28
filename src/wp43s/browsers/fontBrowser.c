@@ -98,8 +98,8 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
 
     first = (currentFntScr-1) * NUMBER_OF_NUMERIC_FONT_LINES_PER_SCREEN;
     for(y=first; y<min(currentFntScr * NUMBER_OF_NUMERIC_FONT_LINES_PER_SCREEN, numLinesNumericFont); y++) {
-      sprintf(tmpStr3000, "%04X", glyphRow[y]<0x8000 ? glyphRow[y] : glyphRow[y]-0x8000);
-      showString(tmpStr3000, &standardFont, 5, NUMERIC_FONT_HEIGHT*(y-first)+43, vmNormal, false, false);
+      sprintf(tmpString, "%04X", glyphRow[y]<0x8000 ? glyphRow[y] : glyphRow[y]-0x8000);
+      showString(tmpString, &standardFont, 5, NUMERIC_FONT_HEIGHT*(y-first)+43, vmNormal, false, false);
       for(x=0; x<=15; x++) {
         showGlyphCode(glyphRow[y]+x, &numericFont, 46+20*x, NUMERIC_FONT_HEIGHT*(y-first)+40, vmNormal, false, false);
       }
@@ -112,8 +112,8 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
       showString("Numeric font. Press " STD_UP_ARROW ", " STD_DOWN_ARROW " or EXIT", &standardFont, 5, 220, vmNormal, false, false);
     }
 
-    sprintf(tmpStr3000, "%d/%d", currentFntScr, numScreensNumericFont+numScreensStandardFont);
-    showString(tmpStr3000, &standardFont, SCREEN_WIDTH - stringWidth(tmpStr3000, &standardFont, false, true), 220, vmNormal, false, true);
+    sprintf(tmpString, "%d/%d", currentFntScr, numScreensNumericFont+numScreensStandardFont);
+    showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), 220, vmNormal, false, true);
   }
 
   else if(currentFntScr>numScreensNumericFont && currentFntScr<=numScreensNumericFont+numScreensStandardFont) { // Standard font
@@ -126,8 +126,8 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
 
     first = numLinesNumericFont + (currentFntScr-numScreensNumericFont-1) * NUMBER_OF_STANDARD_FONT_LINES_PER_SCREEN;
     for(y=first; y<min(numLinesNumericFont + (currentFntScr-numScreensNumericFont) * NUMBER_OF_STANDARD_FONT_LINES_PER_SCREEN, numLinesNumericFont+numLinesStandardFont); y++) {
-      sprintf(tmpStr3000, "%04X", glyphRow[y]<0x8000 ? glyphRow[y] : glyphRow[y]-0x8000);
-      showString(tmpStr3000, &standardFont, 5, STANDARD_FONT_HEIGHT*(y-first)+40, vmNormal, false, false);
+      sprintf(tmpString, "%04X", glyphRow[y]<0x8000 ? glyphRow[y] : glyphRow[y]-0x8000);
+      showString(tmpString, &standardFont, 5, STANDARD_FONT_HEIGHT*(y-first)+40, vmNormal, false, false);
       for(x=0; x<=15; x++) {
         showGlyphCode(glyphRow[y]+x, &standardFont, 50+20*x, STANDARD_FONT_HEIGHT*(y-first)+40, vmNormal, false, false);
       }
@@ -140,8 +140,8 @@ void fontBrowser(uint16_t unusedParamButMandatory) {
       showString("Standard font. Press " STD_UP_ARROW ", " STD_DOWN_ARROW " or EXIT", &standardFont, 5, 220, vmNormal, false, false);
     }
 
-    sprintf(tmpStr3000, "%d/%d", currentFntScr, numScreensNumericFont+numScreensStandardFont);
-    showString(tmpStr3000, &standardFont, SCREEN_WIDTH-stringWidth(tmpStr3000, &standardFont, false, true), 220, vmNormal, false, true);
+    sprintf(tmpString, "%d/%d", currentFntScr, numScreensNumericFont+numScreensStandardFont);
+    showString(tmpString, &standardFont, SCREEN_WIDTH-stringWidth(tmpString, &standardFont, false, true), 220, vmNormal, false, true);
   }
   else {
     displayBugScreen("In function showFonts: This should never happen!");

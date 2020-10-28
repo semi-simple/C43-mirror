@@ -110,9 +110,9 @@ void longIntegerMultiply(longInteger_t opY, longInteger_t opX, longInteger_t res
     displayCalcErrorMessage(longIntegerSign(opY) == longIntegerSign(opX) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Multiplying this 2 values (%" PRIu64 " bits " STD_CROSS " %" PRIu64 " bits) would result in a value exceeding %" PRId16 " bits!", (uint64_t)longIntegerBits(opY), (uint64_t)longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
-      moreInfoOnError("In function longIntegerMultiply:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpString, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpString + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
+      moreInfoOnError("In function longIntegerMultiply:", errorMessage, tmpString, tmpString + TMP_STR_LENGTH / 2);
     #endif
   }
 }
@@ -127,8 +127,8 @@ void longIntegerSquare(longInteger_t op, longInteger_t result) {
     displayCalcErrorMessage(ERROR_OVERFLOW_PLUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Squaring this value (%" PRIu64 " bits) would result in a value exceeding %" PRId16 " bits!", (uint64_t)longIntegerBits(op), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(op, tmpStr3000, TMP_STR_LENGTH);
-      moreInfoOnError("In function longIntegerSquare:", errorMessage, tmpStr3000, NULL);
+      longIntegerToAllocatedString(op, tmpString, TMP_STR_LENGTH);
+      moreInfoOnError("In function longIntegerSquare:", errorMessage, tmpString, NULL);
     #endif
   }
 }
@@ -143,9 +143,9 @@ void longIntegerAdd(longInteger_t opY, longInteger_t opX, longInteger_t result) 
     displayCalcErrorMessage(longIntegerSign(opY) == 0 ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Adding this 2 values (%" PRIu64 " bits " STD_CROSS " %" PRIu64 " bits) would result in a value exceeding %" PRId16 " bits!", (uint64_t)longIntegerBits(opY), (uint64_t)longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
-      moreInfoOnError("In function longIntegerAdd:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpString, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpString + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
+      moreInfoOnError("In function longIntegerAdd:", errorMessage, tmpString, tmpString + TMP_STR_LENGTH / 2);
     #endif
   }
 }
@@ -160,9 +160,9 @@ void longIntegerSubtract(longInteger_t opY, longInteger_t opX, longInteger_t res
     displayCalcErrorMessage(longIntegerSign(opY) == 0 ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF, ERR_REGISTER_LINE, REGISTER_X);
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "Subtracting this 2 values (%" PRIu64 " bits " STD_CROSS " %" PRIu64 " bits) would result in a value exceeding %" PRId16 " bits!", (uint64_t)longIntegerBits(opY), (uint64_t)longIntegerBits(opX), MAX_LONG_INTEGER_SIZE_IN_BITS);
-      longIntegerToAllocatedString(opY, tmpStr3000, TMP_STR_LENGTH / 2);
-      longIntegerToAllocatedString(opX, tmpStr3000 + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
-      moreInfoOnError("In function longIntegerSubtract:", errorMessage, tmpStr3000, tmpStr3000 + TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opY, tmpString, TMP_STR_LENGTH / 2);
+      longIntegerToAllocatedString(opX, tmpString + TMP_STR_LENGTH / 2, TMP_STR_LENGTH / 2);
+      moreInfoOnError("In function longIntegerSubtract:", errorMessage, tmpString, tmpString + TMP_STR_LENGTH / 2);
     #endif
   }
 }

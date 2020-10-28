@@ -96,8 +96,8 @@ void invertLonI(void) {
     else {
       real_t reX;
 
-      longIntegerToAllocatedString(a, tmpStr3000, TMP_STR_LENGTH);
-      stringToReal(tmpStr3000, &reX, &ctxtReal39);
+      longIntegerToAllocatedString(a, tmpString, TMP_STR_LENGTH);
+      stringToReal(tmpString, &reX, &ctxtReal39);
 
       realDivide(const_1, &reX, &reX, &ctxtReal39);
 

@@ -224,12 +224,12 @@ int16_t realIdenticalDigits(real_t *a, real_t *b) {
     return 0;
   }
 
-  realGetCoefficient(a, tmpStr3000);
-  realGetCoefficient(b, tmpStr3000 + TMP_STR_LENGTH/2);
+  realGetCoefficient(a, tmpString);
+  realGetCoefficient(b, tmpString + TMP_STR_LENGTH/2);
   smallest = min(a->digits, b->digits);
   counter = 0;
 
-  while(counter < smallest && tmpStr3000[counter] == tmpStr3000[TMP_STR_LENGTH/2 + counter]) {
+  while(counter < smallest && tmpString[counter] == tmpString[TMP_STR_LENGTH/2 + counter]) {
     counter++;
   }
 

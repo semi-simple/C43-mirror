@@ -539,9 +539,6 @@
 #define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
 
-#define TMP_STR_LENGTH                          3000
-#define ERROR_MESSAGE_LENGTH                     512
-#define DISPLAY_VALUE_LEN                         80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100 // Used in the font browser application
 

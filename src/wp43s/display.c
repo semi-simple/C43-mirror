@@ -305,7 +305,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     real34SetNegativeSign(&value34);
   }
 
-  bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
+  bcd = (uint8_t *)(tmpString + 256 - MAX_DIGITS);
   memset(bcd, 0, MAX_DIGITS);
 
   sign = real34GetCoefficient(&value34, bcd + 1);
@@ -353,7 +353,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     else if(exponent < -exponentLimit) {
       real34Zero(&value34);
 
-      bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
+      bcd = (uint8_t *)(tmpString + 256 - MAX_DIGITS);
       memset(bcd, 0, MAX_DIGITS);
 
       sign = 0;
@@ -1699,22 +1699,22 @@ void fnShow(uint16_t unusedParamButMandatory) {
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
 
-  tmpStr3000[   0] = 0; // L1
-  tmpStr3000[ 300] = 0; // L2
-  tmpStr3000[ 600] = 0; // L3
-  tmpStr3000[ 900] = 0; // L4
-  tmpStr3000[1200] = 0; // L5
-  tmpStr3000[1500] = 0; // L6
-  tmpStr3000[1800] = 0; // L7
+  tmpString[   0] = 0; // L1
+  tmpString[ 300] = 0; // L2
+  tmpString[ 600] = 0; // L3
+  tmpString[ 900] = 0; // L4
+  tmpString[1200] = 0; // L5
+  tmpString[1500] = 0; // L6
+  tmpString[1800] = 0; // L7
 
   temporaryInformation = TI_SHOW_REGISTER;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, tmpString + 2100, TMP_STR_LENGTH, 3200, 400, separator);
 
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
+      last = 2100 + stringByteLength(tmpString + 2100);
       source = 2100;
       dest = 0;
 
@@ -1727,59 +1727,59 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
+        while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
           do {
-            tmpStr3000[dest] = tmpStr3000[source];
-            if(tmpStr3000[dest] & 0x80) {
-              tmpStr3000[++dest] = tmpStr3000[++source];
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
             }
             source++;
-            tmpStr3000[++dest] = 0;
-          } while(source < last && groupingGap > 0 && (tmpStr3000[source] != *separator || tmpStr3000[source + 1] != *(separator + 1)));
+            tmpString[++dest] = 0;
+          } while(source < last && groupingGap > 0 && (tmpString[source] != *separator || tmpString[source + 1] != *(separator + 1)));
         }
       }
 
       if(source < last) { // The long integer is too long
-        xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
-        xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
-        tmpStr3000[dest + 2] = 0;
+        xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
+        xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
+        tmpString[dest + 2] = 0;
       }
       break;
 
     case dtReal34:
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
       break;
 
     case dtComplex34:
       // Real part
       separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34, false, separator);
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpString, &standardFont, 2000, 34, false, separator);
 
       // +/- i×
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
       last = 300;
-      while(tmpStr3000[last]) last++;
-      xcopy(tmpStr3000 + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
-      xcopy(tmpStr3000 + last++, COMPLEX_UNIT, 1);
-      xcopy(tmpStr3000 + last, PRODUCT_SIGN, 3);
+      while(tmpString[last]) last++;
+      xcopy(tmpString + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
+      xcopy(tmpString + last++, COMPLEX_UNIT, 1);
+      xcopy(tmpString + last, PRODUCT_SIGN, 3);
 
       // Imaginary part
       real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34, false, separator);
+      real34ToDisplayString(&real34, AM_NONE, tmpString + 600, &standardFont, 2000, 34, false, separator);
 
-      if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
+      if(stringWidth(tmpString + 300, &standardFont, true, true) + stringWidth(tmpString + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 300;
-        while(tmpStr3000[last]) last++;
-        xcopy(tmpStr3000 + last, tmpStr3000 + 600,  strlen(tmpStr3000 + 600) + 1);
-        tmpStr3000[600] = 0;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString + 600,  strlen(tmpString + 600) + 1);
+        tmpString[600] = 0;
       }
 
-      if(stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
+      if(stringWidth(tmpString, &standardFont, true, true) + stringWidth(tmpString + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 0;
-        while(tmpStr3000[last]) last++;
-        xcopy(tmpStr3000 + last, tmpStr3000 +  300, strlen(tmpStr3000 + 300) + 1);
-        xcopy(tmpStr3000 + 300, tmpStr3000 + 600, strlen(tmpStr3000 + 600) + 1);
-        tmpStr3000[600] = 0;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString +  300, strlen(tmpString + 300) + 1);
+        xcopy(tmpString + 300, tmpString + 600, strlen(tmpString + 600) + 1);
+        tmpString[600] = 0;
       }
       break;
 
@@ -1788,20 +1788,20 @@ void fnShow(uint16_t unusedParamButMandatory) {
       thereIsANextLine = true;
       bytesProcessed = 0;
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
+        xcopy(tmpString + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
         thereIsANextLine = false;
-        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
-          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+        while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
         }
-        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        bytesProcessed += stringByteLength(tmpString + offset);
         offset += 300;
-        tmpStr3000[offset] = 0;
+        tmpString[offset] = 0;
       }
       break;
 
     case dtConfig:
-      xcopy(tmpStr3000, "Configuration data", 19);
+      xcopy(tmpString, "Configuration data", 19);
       break;
 
     default:

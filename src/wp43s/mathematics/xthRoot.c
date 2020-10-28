@@ -349,10 +349,10 @@ void xthRootLonILonI(void) {
     }
   }
 
-  longIntegerToAllocatedString(exponent, tmpStr3000, TMP_STR_LENGTH);
-  stringToReal(tmpStr3000, &x, &ctxtReal39);
-  longIntegerToAllocatedString(base, tmpStr3000, TMP_STR_LENGTH);
-  stringToReal(tmpStr3000, &y, &ctxtReal39);
+  longIntegerToAllocatedString(exponent, tmpString, TMP_STR_LENGTH);
+  stringToReal(tmpString, &x, &ctxtReal39);
+  longIntegerToAllocatedString(base, tmpString, TMP_STR_LENGTH);
+  stringToReal(tmpString, &y, &ctxtReal39);
 
   longIntegerFree(base);
   longIntegerFree(exponent);

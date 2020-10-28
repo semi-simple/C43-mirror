@@ -86,11 +86,11 @@ void fnPem(uint16_t unusedParamButMandatory) {
   for(line=0; line<7; line++) {
     ns = nextStep(stepPointer);
     stepSize = (uint16_t)(ns - stepPointer);
-    sprintf(tmpStr3000, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStep + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
-    showString(tmpStr3000, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, firstDisplayedStep + line == currentStep ? vmReverse : vmNormal,  false, true);
+    sprintf(tmpString, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStep + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
+    showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, firstDisplayedStep + line == currentStep ? vmReverse : vmNormal,  false, true);
     lblOrEnd = (*stepPointer == ITM_LBL) || ((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff)));
     decodeOneStep(stepPointer);
-    showString(tmpStr3000, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+    showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
     stepPointer = ns;
   }
 }

@@ -259,6 +259,9 @@ char* itoa(int value, char* result, int base);
 #define JC_PLINE               44    // graph setup
 #define JC_PCROS               45    // graph setup
 #define JC_PBOX                46    // graph setup
+#define JC_INTG                47    // graph setup
+#define JC_DIFF                48    // graph setup
+#define JC_RMS                 49    // graph setup
 
 
 

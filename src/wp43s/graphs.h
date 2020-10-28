@@ -42,7 +42,9 @@ extern bool_t Aspect_Square;
 extern bool_t PLOT_LINE;
 extern bool_t PLOT_CROSS;
 extern bool_t PLOT_BOX;
-
+extern bool_t PLOT_INTG; 
+extern bool_t PLOT_DIFF; 
+extern bool_t PLOT_RMS; 
 
 //Screen limits
 #define SCREEN_MIN_GRAPH 20
@@ -58,6 +60,9 @@ void graph_reset      ();
 void fnPline          (uint16_t unusedParamButMandatory);
 void fnPcros          (uint16_t unusedParamButMandatory);
 void fnPbox           (uint16_t unusedParamButMandatory);
+void fnPintg          (uint16_t unusedParamButMandatory);
+void fnPdiff          (uint16_t unusedParamButMandatory);
+void fnPrms           (uint16_t unusedParamButMandatory);
 void fnPvect          (uint16_t unusedParamButMandatory);
 void fnPNvect         (uint16_t unusedParamButMandatory);
 void fnScale          (uint16_t unusedParamButMandatory);

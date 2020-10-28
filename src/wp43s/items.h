@@ -2234,8 +2234,11 @@
 #define ITM_DEMO4                     2181   //JM USER
 #define ITM_DEMO5                     2182   //JM USER
 #define ITM_DEMO6                     2183   //JM USER
+#define ITM_INTG                      2184   //GRAPH
+#define ITM_DIFF                      2185   //GRAPH
+#define ITM_RMS                       2186   //GRAPH
 
-#define LAST_ITEM                     2184   //JM
+#define LAST_ITEM                     2187   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

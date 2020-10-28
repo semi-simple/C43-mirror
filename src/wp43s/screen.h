@@ -56,6 +56,7 @@ void     clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
 uint8_t  compressString;                                                                                        //JM compressString
+uint8_t  miniC;                                                              //JM miniature letters
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
 void     refresh_gui                          (void);

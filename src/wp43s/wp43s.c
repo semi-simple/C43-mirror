@@ -173,6 +173,9 @@ bool_t                Aspect_Square;                           //JM GRAPH
 bool_t                PLOT_LINE;                               //JM GRAPH
 bool_t                PLOT_CROSS;                              //JM GRAPH
 bool_t                PLOT_BOX;                                //JM GRAPH
+bool_t                PLOT_INTG;                               //JM GRAPH
+bool_t                PLOT_DIFF;                               //JM GRAPH
+bool_t                PLOT_RMS;                                //JM GRAPH
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //

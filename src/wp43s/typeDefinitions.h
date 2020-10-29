@@ -167,6 +167,9 @@ typedef struct {
   bool_t PLOT_LINE;
   bool_t PLOT_CROSS;
   bool_t PLOT_BOX;
+  bool_t PLOT_INTG;
+  bool_t PLOT_DIFF;
+  bool_t PLOT_RMS;
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;
   bool_t jm_HOME_FIX;     

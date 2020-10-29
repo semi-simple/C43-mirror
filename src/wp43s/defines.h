@@ -27,14 +27,14 @@
 //*********************************
 //* Key buffer and double clicck detection
 #define BUFFER_CLICK_DETECTION    //jm Evaluate the Single/Double/Triple presses
-//#undef BUFFER_CLICK_DETECTION
+#undef BUFFER_CLICK_DETECTION
 
-#define BUFFER_SIZE 4             //dr muss 2^n betragen (8, 16, 32, 64 ...)
+#define BUFFER_SIZE 2             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
 #define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
 
 #define JMSHOWCODES_KB3   // top line right   Single Double Triple
-
+#undef JMSHOWCODES_KB3
 
 
 
@@ -88,7 +88,11 @@
 
 #define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
+#ifdef BUFFER_CLICK_DETECTION
 #define NIM_BUFFER_LENGTH                        100-24-10 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#else
+#define NIM_BUFFER_LENGTH                        100-24 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#endif
 
 // TAM transition system
 #define TT_OPERATION                               0 // +, -, *, /, min, max
@@ -619,7 +623,7 @@
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
 #ifdef DMCP_BUILD
-#define SCREEN_REFRESH_PERIOD                    125 // 500 //JM timeout for lcd refresh in ms 125
+#define SCREEN_REFRESH_PERIOD                    160 // 500 //JM timeout for lcd refresh in ms 125
 #else
 #define SCREEN_REFRESH_PERIOD                    100 // 500 //JM timeout for lcd refresh in ms 100
 #endif

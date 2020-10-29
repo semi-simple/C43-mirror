@@ -50,9 +50,9 @@ void graph_reset(){
   jm_NVECT      = false;
   jm_SCALE      = false;
   Aspect_Square = true;
-  PLOT_LINE     = false;
+  PLOT_LINE     = true;
   PLOT_CROSS    = false;
-  PLOT_BOX      = true;
+  PLOT_BOX      = false;
   PLOT_INTG     = false;
   PLOT_DIFF     = false;
   PLOT_RMS      = false;
@@ -640,7 +640,7 @@ void graph_axis (void){
     miniC = 1;
     showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
-    plotintbig( 5, ypos+4+4 );
+    plotintbig( 5, ypos+4+4-2 );
     ypos += 20;
   }
 
@@ -649,7 +649,7 @@ void graph_axis (void){
     miniC = 1;
     showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
-    plotdeltabig( 6, ypos+4+4);
+    plotdeltabig( 6, ypos+4+4-2);
     ypos += 20;
   }
 

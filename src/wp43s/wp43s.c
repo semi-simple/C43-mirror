@@ -170,20 +170,20 @@ float                 graph_xmin;                              //JM Graph
 float                 graph_xmax;                              //JM Graph
 float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
-float                 graph_dx;                            //JM Graph
-float                 graph_dy;                            //JM Graph
-bool_t                extentx;                             //JM Graph
-bool_t                extenty;                             //JM Graph
-bool_t                jm_VECT;                             //JM GRAPH
-bool_t                jm_NVECT;                            //JM GRAPH
-bool_t                jm_SCALE;                            //JM GRAPH
-bool_t                Aspect_Square;                       //JM GRAPH
-bool_t                PLOT_LINE;                           //JM GRAPH
-bool_t                PLOT_CROSS;                          //JM GRAPH
-bool_t                PLOT_BOX;                            //JM GRAPH
-bool_t                PLOT_INTG;                           //JM GRAPH
-bool_t                PLOT_DIFF;                           //JM GRAPH
-bool_t                PLOT_RMS ;                           //JM GRAPH
+float                 graph_dx;                                //JM Graph
+float                 graph_dy;                                //JM Graph
+bool_t                extentx;                                 //JM Graph
+bool_t                extenty;                                 //JM Graph
+bool_t                jm_VECT;                                 //JM GRAPH
+bool_t                jm_NVECT;                                //JM GRAPH
+bool_t                jm_SCALE;                                //JM GRAPH
+bool_t                Aspect_Square;                           //JM GRAPH
+bool_t                PLOT_LINE;                               //JM GRAPH
+bool_t                PLOT_CROSS;                              //JM GRAPH
+bool_t                PLOT_BOX;                                //JM GRAPH
+bool_t                PLOT_INTG;                               //JM GRAPH
+bool_t                PLOT_DIFF;                               //JM GRAPH
+bool_t                PLOT_RMS;                                //JM GRAPH
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
@@ -232,7 +232,9 @@ const char            digits[17] = "0123456789ABCDEF";
     int8_t            telltale_lastkey;                        //JM Test
   #endif                                                       //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
+#ifdef BUFFER_CLICK_DETECTION
   uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
+#endif
   bool_t              backToDMCP;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
@@ -325,7 +327,11 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
+//  int keyCount = 0;                                                             //dr - internal keyBuffer POC
+#ifdef BUFFER_CLICK_DETECTION
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
+#endif
+  int count_refreshes = 0;                                                      //dr clock down refresh after 1 minute of no keystroke
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
   uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
@@ -472,7 +478,7 @@ void program_main(void) {
         sleepTime = min(sleepTime, timeoutTime);
       }
       if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
-        sleepTime = min(sleepTime, 25);
+        sleepTime = min(sleepTime, 40);
       }
       if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {
         sleepTime = min(sleepTime, 15);
@@ -528,21 +534,32 @@ void program_main(void) {
 //  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
     
                                                             //vv dr - internal keyBuffer POC
+    uint8_t outKeyCount;
+    // == 0 -> Key released
+    // == 1 -> Key pressed
+    // == 2 -> The same key pressed twice.
+    // == 3 -> The same key pressed three times.
+    // not compatible to pc routine
+    
     uint8_t outKey;
-    uint32_t timeSpan;
-
     keyBuffer_pop();
-    if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan) == BUFFER_SUCCESS) {
+
+#ifdef BUFFER_CLICK_DETECTION
+    uint32_t timeSpan_1;
+    uint32_t timeSpan_B;
+    if(outKeyBuffer(&outKey, &outKeyCount, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
       key = outKey;
-      // jm Maybe set a global variable in outKeyBuffer, to indicate double and triple click - dr; NO!
-      // dr KeyBuffer is a FIFO, therefore the state of the captured element has to be taken with this element, no global state is allowed
-      // jm I suspect you misunderstand the intention: not to interfere with fifo, but outkeybuffer checks the timing of D1, D2, D3 and determines
-      //     if doublepress or triplepress is pressed, then setting a global flag say CLICK_STATE, which tells the other code the last key processed was a double press.
-      //     But possibly the whole Timeout thing will work better because we now have better key capturing.
-//    if(timeSpan >= 0) {
+//      keyCount = outKeyCount;
+//    if(outKeyCount > 0) {
 //      do someting
 //    }
     }
+#else
+    if(outKeyBuffer(&outKey, &outKeyCount) == BUFFER_SUCCESS) {
+      key = outKey;
+//      keyCount = outKeyCount;
+    }
+#endif
     else {
       key = -1;
     }                                                       //^^
@@ -617,6 +634,7 @@ void program_main(void) {
     if(key >= 0) {                                          //dr
       lcd_refresh_dma();
       fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
+      count_refreshes = 10;                                 //dr
     }
 
     uint32_t now = sys_current_ms();
@@ -626,6 +644,9 @@ void program_main(void) {
     now = sys_current_ms();                                 //vv dr
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += SCREEN_REFRESH_PERIOD;
+      count_refreshes++;
+      if(count_refreshes > 384)
+        nextScreenRefresh += SCREEN_REFRESH_PERIOD;
       if(nextScreenRefresh < now) {
         nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;    // we were out longer than expected; just skip ahead.
       }

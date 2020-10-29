@@ -450,7 +450,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
-      keyBuffer_pop();                     //drjm - internal keyBuffer POC
+//    keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -460,7 +460,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     if(showFunctionNameCounter <= 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
-      keyBuffer_pop();                     //drjm - internal keyBuffer POC
+//    keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -553,7 +553,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 
 #if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-      keyBuffer_pop();                     //drjm - internal keyBuffer POC
+//keyBuffer_pop();                      //drjm - internal keyBuffer POC
 #endif                                  //^^
 
   if(calcMode == CM_GRAPH && xSoftkey >= 2) {
@@ -2390,7 +2390,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #endif
 
 #if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-  keyBuffer_pop();
+//keyBuffer_pop();
 #endif                                  //^^
 
 
@@ -2453,7 +2453,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #endif
       if(last_CM != calcMode) {
         if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
-          clearScreen();      
+          clearScreen();
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
@@ -2511,7 +2511,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
         refreshStatusBar();
 
         if(calcMode == CM_GRAPH) {     //JM v
-          graph_plotmem();
+            graph_plotmem();
         }                              //JM ^
         if(calcMode == CM_LISTXY) {     //JM v
           fnStatList();

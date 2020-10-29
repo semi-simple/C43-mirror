@@ -995,40 +995,70 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_FAIL       der Ringbuffer ist leer. Es kann kein Byte geliefert werden.
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
-uint16_t tmpx = 320;
-uint8_t outKeyBuffer(uint8_t *pByte, uint32_t *pTime, uint32_t *pTimeSpan)
+#ifdef BUFFER_CLICK_DETECTION
+uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount, uint32_t *pTime, uint32_t *pTimeSpan_1, uint32_t *pTimeSpan_B)
+#else
+uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
+#endif
 {
   if(buffer.read == buffer.write) {
 
     return BUFFER_FAIL;  // leer
   }
 
-  *pByte = buffer.data[buffer.read];
-  #ifdef BUFFER_CLICK_DETECTION
-    uint32_t tmpTime;
-    *pTime = buffer.time[buffer.read];
-    tmpTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
-    if(buffer.time[buffer.read] >= tmpTime) {
-      tmpTime = buffer.time[buffer.read] - tmpTime;
+  uint8_t keyCount = 0;
+  uint8_t actKey = buffer.data[buffer.read];
+  *pKey = actKey;
+  if(actKey > 0) {
+    keyCount++;
+    if(buffer.data[(buffer.read - 2) & BUFFER_MASK] == actKey) {
+      keyCount++;
+      if(buffer.data[(buffer.read - 4) & BUFFER_MASK] == actKey) {
+        keyCount++;
+      }
     }
-    else {
-      tmpTime = buffer.time[buffer.read];
-    }
-    *pTimeSpan = tmpTime;
-  #endif
+  }
+  *pKeyCount = keyCount;
+  
+#ifdef BUFFER_CLICK_DETECTION
+  uint32_t actTime = buffer.time[buffer.read];
+  *pTime = actTime;
+  uint32_t oldTime;
+  
+  oldTime = buffer.time[(buffer.read - 1) & BUFFER_MASK];
+  if(actTime >= oldTime) {
+    *pTimeSpan_1 = actTime - oldTime;
+  }
+  else {            // protect uint overflow 
+    *pTimeSpan_1 = actTime;
+  }
 
+  if(keyCount > 2) {
+    oldTime = buffer.time[(buffer.read - 4) & BUFFER_MASK];
+  }
+  else {
+    oldTime = buffer.time[(buffer.read - 2) & BUFFER_MASK];
+  }
+  if(actTime >= oldTime) {
+    *pTimeSpan_B = actTime - oldTime;
+  }
+  else {            // protect uint overflow 
+    *pTimeSpan_B = actTime;
+  }
+#endif
+  
   buffer.read = (buffer.read + 1) & BUFFER_MASK;
 
-  #ifdef BUFFER_CLICK_DETECTION
-    tmpTime = outKeyBufferDoubleClick();
-    #ifdef JMSHOWCODES_KB1
-      fnDisplayStack(2);
-      char aaa[50];
-      sprintf (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, (uint8_t)tmpTime);
-      tmpx = showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
-    #endif
-  #endif
-
+#ifdef BUFFER_CLICK_DETECTION
+  keyCount = outKeyBufferDoubleClick();
+#ifdef JMSHOWCODES_KB1
+  fnDisplayStack(2);
+  char aaa[50];
+  sprintf (aaa,"k=%2d dT=%5lu:%d",*pByte, *pTimeSpan, (uint8_t)tmpTime);
+  showString(aaa, &standardFont, 220, 1, vmNormal, true, true);
+#endif
+#endif
+  
   return BUFFER_SUCCESS;
 }
 

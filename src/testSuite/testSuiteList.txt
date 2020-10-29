@@ -161,6 +161,7 @@ cos
 sin
 tan
 sinc
+sincpi
 
 arccosh
 arcsinh
@@ -221,5 +222,8 @@ deltaPercent
 
 logxy
 lnbeta
-
+beta
+fib
+gd
+invGd
 

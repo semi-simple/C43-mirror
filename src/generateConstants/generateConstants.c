@@ -18,8 +18,7 @@
  * \file generateConstants.c
  ***********************************************/
 
-#define IBM_DECIMAL                                     1
-#define NUMBER_OF_CONSTANTS_IN_CNST_CATALOG            78
+#define NUMBER_OF_CONSTANTS_IN_CNST_CATALOG 78
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,8 +29,9 @@
   #include<unistd.h>
 #endif // __APPLE__
 
+#include "defines.h"
+
 #if (IBM_DECIMAL == 1)
- #define DECNUMDIGITS 39
  #include "decimal128.h"
  #include "decimal64.h"
  #include "decDouble.h"
@@ -380,8 +380,7 @@ void generateAllConstants(void) {
   generateConstantArray("LbfToN",        "+4.448221615260500000000000000000000000000000000000000000e+00"); // cnst122      newton = lbf × 9.80665 × 0.45359237
 
   generateConstantArray("TorrToPa",      "+1.333223684210526315789473684210526315789473684210526316e+02"); // cnst123      pascal = torr × 101325 / 760
-  #define MMHG_PA_133_3224
-  #ifdef MMHG_PA_133_3224
+  #if (MMHG_PA_133_3224 == 1)
     generateConstantArray("MmhgToPa",    "+1.333224000000000000000000000000000000000000000000000000e+02"); // cnst124      pascal = mm.Hg × 133.3224
     generateConstantArray("InhgToPa",    "+3.386388960000000000000000000000000000000000000000000000e+03"); // cnst125      pascal = in.Hg × 133.3224 × 25.4
   #else

@@ -269,6 +269,9 @@
 		<Unit filename="src/testSuite/arctanh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/beta.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/ceil.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -350,6 +353,9 @@
 		<Unit filename="src/testSuite/factorial.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/fib.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/floor.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -360,6 +366,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/gcd.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gd.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/idiv.txt">
@@ -375,6 +384,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/integerPart.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/invGd.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/invert.txt">
@@ -558,6 +570,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sinc.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/sincpi.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/sinh.txt">
@@ -809,6 +824,13 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="generateConstants" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/defines.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/display.c">
@@ -1166,6 +1188,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/ceil.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1372,6 +1405,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/fib.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/fib.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/floor.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1412,6 +1456,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/gcd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gd.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gd.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1858,6 +1913,12 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/sincpi.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/sinh.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -2168,6 +2229,13 @@
 		<Unit filename="src/wp43s/timer.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/typeDefinitions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="generateConstants" />
+			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/wp43s.c">

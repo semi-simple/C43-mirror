@@ -970,7 +970,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         else if(real34IsZero(REGISTER_REAL34_DATA(res))) {
           real34SetPositiveSign(REGISTER_REAL34_DATA(res));
         }
-        else if(real34IsInfinite(REGISTER_IMAG34_DATA(res))) {
+
+        if(real34IsInfinite(REGISTER_IMAG34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_IMAG34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
         else if(real34IsZero(REGISTER_IMAG34_DATA(res))) {
@@ -2102,9 +2103,6 @@ void fnToReal(uint16_t unusedParamButMandatory) {
 //=============================================================================
 // Inc and Dec functions
 //-----------------------------------------------------------------------------
-
-#define INC_FLAG    0
-#define DEC_FLAG    1
 
 static void incError(uint16_t regist, uint8_t flag) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, regist);

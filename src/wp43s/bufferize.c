@@ -318,6 +318,7 @@ void addItemToBuffer(uint16_t item) {
       mimAddNumber();
       break;
 
+      }
     }
 
     else {

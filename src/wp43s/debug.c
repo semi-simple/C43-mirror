@@ -1593,10 +1593,10 @@ void memoryDump2(const char *text) {
 //  if(debug) {
 //    debugCounter++;
     printf("\n\n%s\nTotal memory = %d bytes = %d blocks\n", text, TO_BYTES(RAM_SIZE), RAM_SIZE);
-    printf("Free blocks (%" PRId32 "):\n", numberOfFreeBlocks);
+    printf("Free blocks (%" PRId32 "):\n", numberOfFreeMemoryRegions);
 
-    for(i=0; i<numberOfFreeBlocks; i++) {
-      printf("  %2" PRId32 " starting at %5" PRIu16 ": %5" PRIu16 " blocks = %6" PRIu32 " bytes\n", i, freeBlocks[i].address, freeBlocks[i].sizeInBlocks, TO_BYTES((uint32_t)freeBlocks[i].sizeInBlocks));
+    for(i=0; i<numberOfFreeMemoryRegions; i++) {
+      printf("  %2" PRId32 " starting at %5" PRIu16 ": %5" PRIu16 " blocks = %6" PRIu32 " bytes\n", i, freeMemoryRegions[i].address, freeMemoryRegions[i].sizeInBlocks, TO_BYTES((uint32_t)freeMemoryRegions[i].sizeInBlocks));
     }
 
     printf("Reg  Num DescrAddr DataType                    DataInfo    DataPtr FullDataLen Content\n");

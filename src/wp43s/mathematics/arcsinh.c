@@ -69,7 +69,7 @@ void arcsinhLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
 
-  // arcsinh(x) = ln(x + sqrt(x² + 1))
+  // arcsinh(x) = ln(x + sqrt(xï¿½ + 1))
   realMultiply(&x, &x, &xSquared, &ctxtReal39);
   realAdd(&xSquared, const_1, &xSquared, &ctxtReal39);
   realSquareRoot(&xSquared, &xSquared, &ctxtReal39);
@@ -94,61 +94,83 @@ void arcsinhCxma(void) {
 
 
 void arcsinhReal(void) {
-  real_t x, xSquared;
+    real_t x;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-  if(realIsInfinite(&x) && realIsNegative(&x)) {
-    realCopy(const_minusInfinity, &x);
-  }
-  else {
-    // arcsinh(x) = ln(x + sqrt(x² + 1))
-    realMultiply(&x, &x, &xSquared, &ctxtReal51);
-    realAdd(&xSquared, const_1, &xSquared, &ctxtReal51);
-    realSquareRoot(&xSquared, &xSquared, &ctxtReal51);
-    realAdd(&xSquared, &x, &x, &ctxtReal51);
-    WP34S_Ln(&x, &x, &ctxtReal51);
-  }
-
-  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    ArcsinhReal(&x, &x, &ctxtReal51);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
 }
 
 
 
 void arcsinhCplx(void) {
-  real_t a, b, real, imag;
+    real_t xReal, xImag, rReal, rImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  // arcsinh(z) = ln(z + sqrt(z² + 1))
-  // calculate z²   real part
-  realMultiply(&b, &b, &real, &ctxtReal39);
-  realChangeSign(&real);
-  realFMA(&a, &a, &real, &real, &ctxtReal39);
+    ArcsinhComplex(&xReal, &xImag, &rReal, &rImag, &ctxtReal39);
 
-  // calculate z²   imaginary part
-  realMultiply(&a, &b, &imag, &ctxtReal39);
-  realMultiply(&imag, const_2, &imag, &ctxtReal39);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
-  // calculate z² + 1
-  realAdd(&real, const_1, &real, &ctxtReal39);
 
-  // calculate sqrt(z² + 1)
-  realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
-  realSquareRoot(&real, &real, &ctxtReal39);
-  realMultiply(&imag, const_1on2, &imag, &ctxtReal39);
-  realPolarToRectangular(&real, &imag, &real, &imag, &ctxtReal39);
+uint8_t ArcsinhReal(const real_t *x, real_t *res, realContext_t *realContext) {
+    real_t xSquared;
 
-  // calculate z + sqrt(z² + 1)
-  realAdd(&a, &real, &real, &ctxtReal39);
-  realAdd(&b, &imag, &imag, &ctxtReal39);
+    if(realIsInfinite(x) && realIsNegative(x)) {
+        realCopy(const_minusInfinity, res);
+    }
+    else {
+        // arcsinh(x) = ln(x + sqrt(xï¿½ + 1))
+        realMultiply(x, x, &xSquared, realContext);
+        realAdd(&xSquared, const_1, &xSquared, realContext);
+        realSquareRoot(&xSquared, &xSquared, realContext);
+        realAdd(&xSquared, x, res, realContext);
+        WP34S_Ln(res, res, realContext);
+    }
 
-  // calculate ln(z + sqtr(z² + 1))
-  realRectangularToPolar(&real, &imag, &a, &b, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
+    return ERROR_NONE;
+}
 
-  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+
+uint8_t ArcsinhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
+    real_t a, b;
+
+    realCopy(xReal, &a);
+    realCopy(xImag, &b);
+
+    // arcsinh(z) = ln(z + sqrt(zï¿½ + 1))
+    // calculate zï¿½   real part
+    realMultiply(&b, &b, rReal, realContext);
+    realChangeSign(rReal);
+    realFMA(&a, &a, rReal, rReal, realContext);
+
+    // calculate zï¿½   imaginary part
+    realMultiply(&a, &b, rImag, realContext);
+    realMultiply(rImag, const_2, rImag, realContext);
+
+    // calculate zï¿½ + 1
+    realAdd(rReal, const_1, rReal, realContext);
+
+    // calculate sqrt(zï¿½ + 1)
+    realRectangularToPolar(rReal, rImag, rReal, rImag, realContext);
+    realSquareRoot(rReal, rReal, realContext);
+    realMultiply(rImag, const_1on2, rImag, realContext);
+    realPolarToRectangular(rReal, rImag, rReal, rImag, realContext);
+
+    // calculate z + sqrt(zï¿½ + 1)
+    realAdd(&a, rReal, rReal, realContext);
+    realAdd(&b, rImag, rImag, realContext);
+
+    // calculate ln(z + sqtr(zï¿½ + 1))
+    realRectangularToPolar(rReal, rImag, &a, &b, realContext);
+    WP34S_Ln(&a, &a, realContext);
+
+    realCopy(&a, rReal);
+    realCopy(&b, rImag);
+
+    return ERROR_NONE;
 }

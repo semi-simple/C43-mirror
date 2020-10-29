@@ -543,6 +543,47 @@ void powCplxReal(void) {
 /* complex34 + ...                                                                                                                                                                        */
 /******************************************************************************************************************************************************************************************/
 
+/*
+ * Calculate y^x for complex numbers.
+ */
+uint8_t PowerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal, const real_t *xImag,
+                     real_t *rReal, real_t *rImag, realContext_t *realContext)
+{
+    uint8_t errorCode = ERROR_NONE;
+
+    if(realIsInfinite(yReal) || realIsInfinite(yImag)) {
+        if(realIsZero(xReal) && realIsZero(xImag)) {
+            realCopy(const_NaN, rReal);
+            realCopy(const_NaN, rImag);
+        }
+        else {
+            realCopy(const_plusInfinity, rReal);
+            realCopy(const_plusInfinity, rImag);
+        }
+    }
+    else {
+        real_t theta;
+        real_t tmp;
+
+        realRectangularToPolar(yReal, yImag, rReal, &theta, realContext);
+        WP34S_Ln(rReal, rReal, realContext);
+
+        realMultiply(rReal, xImag, rImag, realContext);
+        realFMA(&theta, xReal, rImag, rImag, realContext);
+        realChangeSign(&theta);
+
+        realMultiply(rReal, xReal, rReal, realContext);
+        realFMA(&theta, xImag, rReal, rReal, realContext);
+
+        realExp(rReal, &tmp, realContext);
+        realPolarToRectangular(const_1, rImag, rReal, rImag, realContext);
+        realMultiply(&tmp, rImag, rImag, realContext);
+        realMultiply(&tmp, rReal, rReal, realContext);
+    }
+
+    return errorCode;
+}
+
 /********************************************//**
  * \brief Y(complex34) ^ X(complex34) ==> X(complex34)
  *
@@ -550,41 +591,28 @@ void powCplxReal(void) {
  * \return void
  ***********************************************/
 void powCplxCplx(void) {
-  if(real34IsInfinite(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsInfinite(REGISTER_IMAG34_DATA(REGISTER_Y))) {
-    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_NaN, REGISTER_IMAG34_DATA(REGISTER_X));
+
+    real_t yReal, yImag, xReal, xImag;
+
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
+
+    real_t rReal, rImag;
+
+    uint8_t errorCode = PowerComplex(&yReal, &yImag, &xReal, &xImag, &rReal, &rImag, &ctxtReal39);
+
+    if(errorCode!=ERROR_NONE) {
+        displayCalcErrorMessage(errorCode, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnPower:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+#endif
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(const_plusInfinity, REGISTER_IMAG34_DATA(REGISTER_X));
+        realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+        realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
     }
-    return;
-  }
-
-  real_t a, b, c, d, theta;
-
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &b);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &c);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &d);
-
-  realRectangularToPolar(&a, &b, &a, &theta, &ctxtReal39);
-  WP34S_Ln(&a, &a, &ctxtReal39);
-
-  realMultiply(&a, &d, &b, &ctxtReal39);
-  realFMA(&theta, &c, &b, &b, &ctxtReal39);
-  realChangeSign(&theta);
-  realMultiply(&a, &c, &a, &ctxtReal39);
-  realFMA(&theta, &d, &a, &a, &ctxtReal39);
-
-  realExp(&a, &c, &ctxtReal39);
-  realPolarToRectangular(const_1, &b, &a, &b, &ctxtReal39);
-  realMultiply(&c, &b, &d, &ctxtReal39);
-  realMultiply(&c, &a, &c, &ctxtReal39);
-
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&d, REGISTER_IMAG34_DATA(REGISTER_X));
 }

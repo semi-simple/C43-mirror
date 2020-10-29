@@ -94,6 +94,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnExpM1",                fnExpM1               },
   {"fnExpt",                 fnExpt                },
   {"fnFactorial",            fnFactorial           },
+  {"fnFib",                  fnFib                 },
   {"fnFillStack",            fnFillStack           },
   {"fnFloor",                fnFloor               },
   {"fnFp",                   fnFp                  },
@@ -101,6 +102,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnFreeMemory",           fnFreeMemory          },
   {"fnGamma",                fnGamma               },
   {"fnGcd",                  fnGcd                 },
+  {"fnGd",                   fnGd                  },
   {"fnGetIntegerSignMode",   fnGetIntegerSignMode  },
   {"fnGetLocR",              fnGetLocR             },
   {"fnGetRoundingMode",      fnGetRoundingMode     },
@@ -111,6 +113,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnIDivR",                fnIDivR               },
   {"fnImaginaryPart",        fnImaginaryPart       },
   {"fnInvert",               fnInvert              },
+  {"fnInvGd",                fnInvGd               },
   {"fnIp",                   fnIp                  },
   {"fnIsPrime",              fnIsPrime             },
   {"fnLcm",                  fnLcm                 },
@@ -121,6 +124,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnLog2",                 fnLog2                },
   {"fnLogXY",                fnLogXY               },
   {"fnLnBeta",               fnLnBeta              },
+  {"fnBeta",                 fnBeta                },
   {"fnLogicalAnd",           fnLogicalAnd          },
   {"fnLogicalNand",          fnLogicalNand         },
   {"fnLogicalNor",           fnLogicalNor          },
@@ -160,6 +164,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSign",                 fnSign                },
   {"fnSin",                  fnSin                 },
   {"fnSinc",                 fnSinc                },
+  {"fnSincpi",               fnSincpi              },
   {"fnSinh",                 fnSinh                },
   {"fnSlvq",                 fnSlvq                },
   {"fnSquare",               fnSquare              },
@@ -894,7 +899,7 @@ void setParameter(char *p) {
 
 
 void inParameters(char *token) {
-  char parameter[300];
+  char parameter[2000];
   int32_t index, lg;
 
   strReplace(token, "inf", "9e9999");
@@ -1075,7 +1080,7 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 
 
 void checkExpectedOutParameter(char *p) {
-  char l[200], r[200], real[200], imag[200], angMod[200], letter = 0;
+  char l[2000], r[2000], real[200], imag[200], angMod[200], letter = 0;
   int32_t i, am = AM_DEGREE;
   real34_t expectedReal34, expectedImag34;
 
@@ -1669,7 +1674,7 @@ void checkExpectedOutParameter(char *p) {
 
 
 void outParameters(char *token) {
-  char parameter[300];
+  char parameter[2000];
   int32_t index, lg;
 
   strReplace(token, "inf", "9e9999");

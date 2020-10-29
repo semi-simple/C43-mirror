@@ -21,6 +21,10 @@
 void fnPower    (uint16_t unusedParamButMandatory);
 void powError   (void);
 
+uint8_t PowerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal, const real_t *xImag,
+                     real_t *rReal, real_t *rImag, realContext_t *realContext);
+
+
 //      RegYRegX
 void powLonILonI(void);
 void powLonIShoI(void);

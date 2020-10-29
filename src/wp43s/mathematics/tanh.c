@@ -107,28 +107,38 @@ void tanhReal(void) {
 
 
 void tanhCplx(void) {
-  // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
-  real_t a, b, sina, cosa;
-  real_t numerReal, denomReal;
-  real_t numerImag, denomImag;
+    real_t xReal, xImag;
+    real_t rReal, rImag;
 
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
-  real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &xReal);
+    real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &xImag);
 
-  if(realIsZero(&b)) {
-    WP34S_Tanh(&a, &numerReal, &ctxtReal39);
-    realZero(&numerImag);
-  }
-  else {
-    WP34S_Tanh(&a, &numerReal, &ctxtReal39);
-    WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sina, &cosa, &numerImag, &ctxtReal39);
+    TanhComplex(&xReal, &xImag, &rReal, &rImag, &ctxtReal39);
 
-    realCopy(const_1, &denomReal);
-    realMultiply(&numerReal, &numerImag, &denomImag, &ctxtReal39);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
 
-    divComplexComplex(&numerReal, &numerImag, &denomReal, &denomImag, &numerReal, &numerImag, &ctxtReal39);
-  }
 
-  realToReal34(&numerReal, REGISTER_REAL34_DATA(REGISTER_X));
-  realToReal34(&numerImag, REGISTER_IMAG34_DATA(REGISTER_X));
+uint8_t TanhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext) {
+    // tanh(a + i b) = (tanh(a) + i tan(b)) / (1 + i tanh(a) tan(b))
+
+    real_t sina, cosa;
+    real_t denomReal, denomImag;
+
+    if(realIsZero(xImag)) {
+        WP34S_Tanh(xReal, rReal, &ctxtReal39);
+        realZero(rImag);
+    }
+    else {
+        WP34S_Tanh(xReal, rReal, &ctxtReal39);
+        WP34S_Cvt2RadSinCosTan(xImag, AM_RADIAN, &sina, &cosa, rImag, &ctxtReal39);
+
+        realCopy(const_1, &denomReal);
+        realMultiply(rReal, rImag, &denomImag, &ctxtReal39);
+
+        divComplexComplex(rReal, rImag, &denomReal, &denomImag, rReal, rImag, &ctxtReal39);
+    }
+
+    return ERROR_NONE;
 }

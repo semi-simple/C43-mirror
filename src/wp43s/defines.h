@@ -289,7 +289,9 @@
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define MY_ALPHA_MENU                              0  // This is the index of the MyAlpha   softmenu in the softmenu[] array
+#define MY_ALPHA_MENU                              0  // This is the index of the MyAlpha softmenu in the softmenu[] array
+#define RAM_MENU                                   1  // This is the index of the RAM     softmenu in the softmenu[] array
+#define FLASH_MENU                                 2  // This is the index of the FLASH   softmenu in the softmenu[] array
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar

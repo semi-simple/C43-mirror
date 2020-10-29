@@ -161,8 +161,8 @@ uint8_t *countLITTbytes(uint8_t *step) {
 }
 
 
-void *nextStep(void *step) {
-  uint8_t item8 = *(uint8_t *)(step++);
+uint8_t *nextStep(uint8_t *step) {
+  uint8_t item8 = *(step++);
   uint16_t item16;
 
   switch(item8) {
@@ -300,7 +300,7 @@ void *nextStep(void *step) {
         return NULL;
       }
 
-      item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(step++);
+      item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(step++);
       switch(item16) {
         case ITM_CNST:        //   207
         case ITM_ALL:         //  1400
@@ -558,4 +558,35 @@ void *nextStep(void *step) {
           return NULL;
       }
   }
+}
+
+
+
+uint8_t *previousStep(uint8_t *step) {
+  int16_t label;
+  uint8_t *searchFromStep, *ns;
+
+  if(step == programMemoryPointer) {
+    return step;
+  }
+
+  if(numberOfLabels <= 0 || step <= labelList[0].instructionPointer) {
+    searchFromStep = programMemoryPointer;
+  }
+  else {
+    for(label=numberOfLabels - 1; label >= 0; label--) {
+      if(labelList[label].instructionPointer < step) {
+        searchFromStep = labelList[label].instructionPointer;
+        break;
+      }
+    }
+  }
+
+  ns = nextStep(searchFromStep);
+  while(ns != step) {
+    searchFromStep = ns;
+    ns = nextStep(searchFromStep);
+  }
+
+  return searchFromStep;
 }

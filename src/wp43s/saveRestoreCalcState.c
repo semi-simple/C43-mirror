@@ -357,6 +357,8 @@ void restoreCalc(void) {
     fclose(BACKUP);
     printf("End of calc's restoration\n");
 
+    scanLabels();
+
     #if (DEBUG_REGISTER_L == 1)
       refreshRegisterLine(REGISTER_X); // to show L register
     #endif

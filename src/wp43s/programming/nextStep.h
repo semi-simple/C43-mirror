@@ -15,7 +15,8 @@
  */
 
 /********************************************//**
- * \file nextStep.c
+ * \file nextStep.h
  ***********************************************/
 
-void *nextStep(void *step);
+uint8_t *nextStep    (uint8_t *step);
+uint8_t *previousStep(uint8_t *step);

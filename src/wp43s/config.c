@@ -6719,6 +6719,7 @@ void addTestPrograms(void) {
   *(stepAddress++) = 255; // .END.
 
   freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - stepAddress;
+  scanLabels();
 
   #ifndef DMCP_BUILD
     printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
@@ -6730,8 +6731,7 @@ void addTestPrograms(void) {
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
     listPrograms();
-    scanLabels();
-    //exit(0);
+    listLabels();
   #endif // !DMCP_BUILD
 }
 

@@ -945,6 +945,13 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case CM_PEM:
+      if(firstDisplayedStep) {
+        firstDisplayedStep--;
+        firstDisplayedStepPointer = previousStep(firstDisplayedStepPointer);
+      }
+      break;
+
     default:
       sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
       displayBugScreen(errorMessage);

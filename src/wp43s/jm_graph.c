@@ -30,6 +30,7 @@
 
 
 void Fn_Lbl_A(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
 
     // (sin(x)/x + sin(10x)/5) / 2 + 2/x 
@@ -54,11 +55,13 @@ void Fn_Lbl_A(void) {                                   //Temporary RPN function
     fnDivide(0);             // /
     fnAdd(0);                // +    
     fnRCL(99);               //leaving y in Y and x in X
+#endif
 }
 
 
 
 void Fn_Lbl_B(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
     fnSin(0);                // SIN    
     fnRCL(99);
@@ -66,14 +69,16 @@ void Fn_Lbl_B(void) {                                   //Temporary RPN function
     fnSin(0);                // SIN
     fnAdd(0);                // +    
     fnRCL(99);               //leaving y in Y and x in X
+#endif
 }
 
 
 void Fn_Lbl_C(void) {                                   //Temporary RPN function
+#ifndef TESTSUITE_BUILD
     fnStore(99);             // STO 99
     runFunction(ITM_sinc);
     fnRCL(99);               //leaving y in Y and x in X
-
+#endif
 }
 
 

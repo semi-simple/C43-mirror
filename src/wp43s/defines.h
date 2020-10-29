@@ -27,14 +27,14 @@
 //*********************************
 //* Key buffer and double clicck detection
 #define BUFFER_CLICK_DETECTION    //jm Evaluate the Single/Double/Triple presses
-//#undef BUFFER_CLICK_DETECTION
+#undef BUFFER_CLICK_DETECTION
 
-#define BUFFER_SIZE 8             //dr muss 2^n betragen (8, 16, 32, 64 ...)
+#define BUFFER_SIZE 2             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
 #define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
 
 #define JMSHOWCODES_KB3   // top line right   Single Double Triple
-
+#undef JMSHOWCODES_KB3
 
 
 

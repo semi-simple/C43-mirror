@@ -30,7 +30,6 @@
 
 
 void Fn_Lbl_A(void) {                                   //Temporary RPN function
-	  fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
     fnStore(99);             // STO 99
 
     // (sin(x)/x + sin(10x)/5) / 2 + 2/x 
@@ -54,28 +53,26 @@ void Fn_Lbl_A(void) {                                   //Temporary RPN function
     fnRCL(99);               // RCL 99
     fnDivide(0);             // /
     fnAdd(0);                // +    
+    fnRCL(99);               //leaving y in Y and x in X
 }
 
 
 
 void Fn_Lbl_B(void) {                                   //Temporary RPN function
-	  fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
     fnStore(99);             // STO 99
     fnSin(0);                // SIN    
     fnRCL(99);
     fnSquare(0);             // square
     fnSin(0);                // SIN
     fnAdd(0);                // +    
+    fnRCL(99);               //leaving y in Y and x in X
 }
 
 
 void Fn_Lbl_C(void) {                                   //Temporary RPN function
-//    fnAngularMode(AM_RADIAN);                           //Does not belong here -- it is repeated. It is convenient.
-//    fnStore(99);             // STO 99
-//    fnSin(0);                // SIN    
-//    fnRCL(99);
-//    fnDivide(0);             // /
-    fnSinc(0);
+    fnStore(99);             // STO 99
+    runFunction(ITM_sinc);
+    fnRCL(99);               //leaving y in Y and x in X
 
 }
 
@@ -134,16 +131,16 @@ void Fn_Lbl_E(void) {                                   //Temporary RPN function
 
 void Fn_Lbl_F(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
-    fnStrInputReal34("-1"); // -0.5
+    fnStrInputReal34("-1"); // -1
     runFunction(ITM_ADD);    // +             // /
 
     fnStore(99);             // STO 99
-    fnStrInputReal34("12"); // 0.2
+    fnStrInputReal34("12"); // 12
     runFunction(ITM_MULT);   // *             // /
 
     runFunction(ITM_sin);    // fnRandom(0);                //    
     fnRCL(99);               //leaving y in Y and x in X
-    fnStrInputReal34("12"); // 0.2
+    fnStrInputReal34("12"); // 12
     runFunction(ITM_MULT);   // *             // /
     runFunction(ITM_cos);    // fnRandom(0);                //    
 #endif
@@ -196,7 +193,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   fnAngularMode(AM_RADIAN);
 
   //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
-  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduxced the amount of sample data from 400 points to 40 points
+  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduced the amount of sample data from 400 points to 40 points
 
     //convert double to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
@@ -209,6 +206,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   }
   fnClearStack(0);
   runFunction(ITM_SIGMAx);
+  runFunction(ITM_PLOT);
   #endif
 }
 
@@ -367,6 +365,7 @@ void fnGraph (uint16_t func){
   PLOT_INTG = false;
   PLOT_DIFF = false;
   PLOT_RMS  = false;
+  fnClSigma(0);
   switch (func) 
   {
 	  case 1:   fnGraph_old(3);

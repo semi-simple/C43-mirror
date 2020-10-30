@@ -946,9 +946,13 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_PEM:
-      if(firstDisplayedStep) {
+      if(firstDisplayedStep > 0 && currentStep <= firstDisplayedStep + 3) {
         firstDisplayedStep--;
         firstDisplayedStepPointer = previousStep(firstDisplayedStepPointer);
+      }
+
+      if(currentStep != 0) {
+        currentStep--;
       }
       break;
 
@@ -1038,14 +1042,22 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_FONT_BROWSER:
-      if(currentFntScr < numScreensNumericFont+numScreensStandardFont) {
+      if(currentFntScr < numScreensNumericFont + numScreensStandardFont) {
         currentFntScr++;
       }
       break;
 
     case CM_PEM:
-      firstDisplayedStep++;
-      firstDisplayedStepPointer = nextStep(firstDisplayedStepPointer);
+      if(currentStep++ >= 3) {
+        if(!programListEnd) {
+          firstDisplayedStep++;
+          firstDisplayedStepPointer = nextStep(firstDisplayedStepPointer);
+        }
+      }
+
+      if(currentStep > firstDisplayedStep + numberOfStepsOnScreen) {
+        currentStep = firstDisplayedStep + numberOfStepsOnScreen;
+      }
       break;
 
     default:

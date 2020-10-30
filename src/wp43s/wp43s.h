@@ -229,20 +229,25 @@ extern bool_t                showContent;
 extern bool_t                rbr1stDigit;
 extern bool_t                updateDisplayValueX;
 extern bool_t                thereIsSomethingToUndo;
+extern bool_t                programListEnd;
+
 extern realContext_t         ctxtReal34;   //   34 digits
 extern realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
 extern realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-extern softmenuStack_t       softmenuStack[7];
+
 extern registerDescriptor_t  reg[112];
 extern registerDescriptor_t  savedStackRegister[9+1];
+
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;
 extern dataBlock_t          *statisticalSumsPointer;
 extern dataBlock_t          *savedStatisticalSumsPointer;
 extern dataBlock_t          *ram;
+
+extern softmenuStack_t       softmenuStack[7];
 extern calcKey_t             kbd_usr[37];
 extern calcRegister_t        errorMessageRegisterLine;
 extern glyph_t               glyphNotFound;
@@ -330,6 +335,8 @@ extern uint16_t              numberOfLabels;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
 extern uint16_t              tamMode;
+extern uint16_t              currentStep;
+extern uint16_t              numberOfStepsOnScreen;
 
 extern int32_t               numberOfFreeMemoryRegions;
 extern int32_t               lgCatalogSelection;

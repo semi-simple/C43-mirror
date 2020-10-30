@@ -63,20 +63,25 @@ bool_t                showContent;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
 bool_t                thereIsSomethingToUndo;
+bool_t                programListEnd;
+
 realContext_t         ctxtReal34;   //   34 digits
 realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
 realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-softmenuStack_t       softmenuStack[7];
+
 registerDescriptor_t  reg[112];
 registerDescriptor_t  savedStackRegister[9+1];
+
 dataBlock_t          *allLocalRegisterPointer;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
 dataBlock_t          *savedStatisticalSumsPointer;
 dataBlock_t          *ram = NULL;
+
+softmenuStack_t       softmenuStack[7];
 calcKey_t             kbd_usr[37];
 calcRegister_t        errorMessageRegisterLine;
 glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
@@ -164,6 +169,8 @@ uint16_t              numberOfLabels;
 uint16_t              xCursor;
 uint16_t              yCursor;
 uint16_t              tamMode;
+uint16_t              currentStep;
+uint16_t              numberOfStepsOnScreen;
 
 int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;

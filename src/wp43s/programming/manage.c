@@ -23,11 +23,12 @@
 
 
 void scanLabels(void) {
-  //uint16_t step = 0;
-  uint8_t *currentStep = programMemoryPointer;
+  uint32_t step = 0;
+  uint16_t program;
+  uint8_t *ns, *currentStep = programMemoryPointer;
 
   numberOfLabels = 0;
-  while(*currentStep != 255 || *(currentStep + 1) != 255) {
+  while(*currentStep != 255 || *(currentStep + 1) != 255) { // .END.
     if(*currentStep == 1) {
       numberOfLabels++;
     }
@@ -37,11 +38,37 @@ void scanLabels(void) {
   free(labelList);
   labelList = malloc(sizeof(labelList_t) * numberOfLabels);
   if(labelList == NULL) {
-    //printf("\n")
+    //printf("\n");
   }
 
   numberOfLabels = 0;
   currentStep = programMemoryPointer;
+  program = 1;
+  step = 0;
+  while(*currentStep != 255 || *(currentStep + 1) != 255) { // .END.
+    ns = nextStep(currentStep);
+    if(*currentStep == 1) { // LBL
+      labelList[numberOfLabels].program = program;
+      if(*(currentStep + 1) <= 109) { // Local label
+        labelList[numberOfLabels].step = -step;
+        labelList[numberOfLabels].labelPointer = currentStep + 1;
+      }
+      else { // Global label
+        labelList[numberOfLabels].step = step;
+        labelList[numberOfLabels].labelPointer = currentStep + 2;
+      }
+
+      labelList[numberOfLabels].instructionPointer = ns;
+      numberOfLabels++;
+    }
+
+    if((*currentStep & 0x7f) == (ITM_END >> 8) && *(currentStep + 1) == (ITM_END & 0xff)) { // END
+      program++;
+    }
+
+    currentStep = ns;
+    step++;
+  }
 }
 
 

@@ -453,9 +453,8 @@ void restoreCalc(void) {
     fclose(BACKUP);
     printf("End of calc's restoration\n");
 
-    if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM 
-    
-
+    if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM
+    scanLabels();
 
     #if (DEBUG_REGISTER_L == 1)
       refreshRegisterLine(REGISTER_X); // to show L register

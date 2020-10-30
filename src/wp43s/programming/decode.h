@@ -21,4 +21,5 @@
 void decodeOneStep  (uint8_t *stepAddress);
 #ifndef DMCP_BUILD
   void listPrograms (void);
+  void listLabels   (void);
 #endif // !DMCP_BUILD

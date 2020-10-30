@@ -341,8 +341,6 @@ const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,
 const int16_t menu_MATRS[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_STRING[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_CPXS[]        = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_RAM[]         = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_FLASH[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_DATES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_TIMES[]       = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_ANGLES[]      = { ITM_Not,                       ITM_yet,                    ITM_defined,              ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -666,6 +664,8 @@ const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,  
 
 const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = sizeof(menu_MyAlpha    )/sizeof(int16_t), .softkeyItem = menu_MyAlpha     }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             }, // This menu MUST stay the 2nd in this list or change #define RAM_MENU 1
+  {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             }, // This menu MUST stay the 3rd in this list or change #define FLASH_MENU 2
   {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
   {.menuId = -MNU_SYSFL,       .numItems = sizeof(menu_SYSFL      )/sizeof(int16_t), .softkeyItem = menu_SYSFL       },
   {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
@@ -734,8 +734,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_MENUS,       .numItems = sizeof(menu_MENUS      )/sizeof(int16_t), .softkeyItem = menu_MENUS       },
   {.menuId = -MNU_MATRS,       .numItems = sizeof(menu_MATRS      )/sizeof(int16_t), .softkeyItem = menu_MATRS       },
   {.menuId = -MNU_STRING,      .numItems = sizeof(menu_STRING     )/sizeof(int16_t), .softkeyItem = menu_STRING      },
-  {.menuId = -MNU_RAM,         .numItems = sizeof(menu_RAM        )/sizeof(int16_t), .softkeyItem = menu_RAM         },
-  {.menuId = -MNU_FLASH,       .numItems = sizeof(menu_FLASH      )/sizeof(int16_t), .softkeyItem = menu_FLASH       },
   {.menuId = -MNU_DATES,       .numItems = sizeof(menu_DATES      )/sizeof(int16_t), .softkeyItem = menu_DATES       },
   {.menuId = -MNU_TIMES,       .numItems = sizeof(menu_TIMES      )/sizeof(int16_t), .softkeyItem = menu_TIMES       },
   {.menuId = -MNU_ANGLES,      .numItems = sizeof(menu_ANGLES     )/sizeof(int16_t), .softkeyItem = menu_ANGLES      },

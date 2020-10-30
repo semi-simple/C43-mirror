@@ -62,6 +62,28 @@ void listPrograms(void) {
   }
   printf("\n");
 }
+
+
+void listLabels(void) {
+  printf("\nnum program  step label\n");
+  for(int i=0; i<numberOfLabels; i++) {
+    printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].step));
+    if(labelList[i].step < 0) { // Local label
+      if(*(labelList[i].labelPointer) < 100) {
+        printf("%d\n", *(labelList[i].labelPointer));
+      }
+      else if(*(labelList[i].labelPointer) < 110) {
+        printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
+      }
+    }
+    else { // Global label
+      xcopy(tmpString + 100, labelList[i].labelPointer + 1, *(labelList[i].labelPointer));
+      tmpString[100 + *(labelList[i].labelPointer)] = 0;
+      stringToUtf8(tmpString + 100, (uint8_t *)tmpString);
+      printf("'%s'\n", tmpString);
+    }
+  }
+}
 #endif // !DMCP_BUILD
 
 

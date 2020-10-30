@@ -29,6 +29,9 @@
 #define BUFFER_CLICK_DETECTION    //jm Evaluate the Single/Double/Triple presses
 #undef BUFFER_CLICK_DETECTION
 
+#define BUFFER_KEY_COUNT          //dr BUFFER_SIZE has to be at least 8 to become accurate results
+#undef BUFFER_KEY_COUNT
+
 #define BUFFER_SIZE 2             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
 #define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS

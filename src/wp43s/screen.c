@@ -450,7 +450,6 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
         hideCursor();
       }
       cursorBlink = !cursorBlink;
-//    keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -460,7 +459,6 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
     if(showFunctionNameCounter <= 0) {
       hideFunctionName();
       showFunctionName(ITM_NOP, 0);
-//    keyBuffer_pop();                     //drjm - internal keyBuffer POC
     }
   }
 
@@ -551,10 +549,6 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
 
-
-#if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-//keyBuffer_pop();                      //drjm - internal keyBuffer POC
-#endif                                  //^^
 
   if(calcMode == CM_GRAPH && xSoftkey >= 2) {
       return;
@@ -911,6 +905,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   int16_t  col, row, xGlyph, /*xEndingCols, */endingCols, bit, glyphId;    //JMmini
   int8_t   byte, *data;
   const glyph_t  *glyph;
+
   glyphId = findGlyph(font, charCode);
   if(glyphId >= 0) {
     glyph = (font->glyphs) + glyphId;
@@ -2388,10 +2383,6 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(3); }     //dr
 #endif
-
-#if DMCP_BUILD                          //vv dr - internal keyBuffer POC
-//keyBuffer_pop();
-#endif                                  //^^
 
 
   if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 

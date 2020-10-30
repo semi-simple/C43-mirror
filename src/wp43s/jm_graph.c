@@ -202,7 +202,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
     //convert double to X register
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    snprintf(tmpString, sizeof(tmpString), "%.16e", x);
+    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
     stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 
     //leaving y in Y and x in X
@@ -258,7 +258,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
                         //convert double to X register
                         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-                        snprintf(tmpString, sizeof(tmpString), "%.16e", x);
+                        snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
                         stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 
                         execute_rpn_function(nbr);
@@ -349,7 +349,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
                         tick_int_y = graph_dy;
                       }
 
-                      snprintf(tmpString, sizeof(tmpString), "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
+                      snprintf(tmpString, TMP_STR_LENGTH, "x: %.3f/tick  y: %.3f/tick", tick_int_x,tick_int_y);
                       showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);  //JM
                       graph_draw(selection, graph_xmin, graph_xmax, graph_ymin, graph_ymax, tick_int_x, tick_int_y, xzero, yzero);
                       #endif

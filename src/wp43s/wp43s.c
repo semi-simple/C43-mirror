@@ -45,20 +45,48 @@
   #endif
 #endif
 
-dataBlock_t          *ram = NULL;
-bool_t                funcOK;
-bool_t                keyActionProcessed;
 const font_t         *fontForShortInteger;
 const font_t         *cursorFont;
+const char            digits[17] = "0123456789ABCDEF";
+real51_t              const *gammaLanczosCoefficients;
+real39_t              const *angle180;
+real39_t              const *angle90;
+real39_t              const *angle45;
+void                  (*confirmedFunction)(uint16_t);
 
 // Variables stored in RAM
+bool_t                funcOK;
+bool_t                keyActionProcessed;
+bool_t                hourGlassIconEnabled;
+bool_t                watchIconEnabled;
+bool_t                printerIconEnabled;
+bool_t                shiftF;
+bool_t                shiftG;
+bool_t                showContent;
+bool_t                rbr1stDigit;
+bool_t                updateDisplayValueX;
+bool_t                thereIsSomethingToUndo;
 realContext_t         ctxtReal34;   //   34 digits
 realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
 realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-uint16_t              globalFlags[7];
+softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];          //JM bugfix
+registerDescriptor_t  reg[112];
+registerDescriptor_t  savedStackRegister[9+1];
+dataBlock_t          *allLocalRegisterPointer;
+dataBlock_t          *allNamedVariablePointer;
+dataBlock_t          *statisticalSumsPointer;
+dataBlock_t          *savedStatisticalSumsPointer;
+dataBlock_t          *ram = NULL;
+calcKey_t             kbd_usr[37];
+calcRegister_t        errorMessageRegisterLine;
+glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
+freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
+labelList_t          *labelList = NULL;
+
 char                 *tmpString = NULL;
 char                 *errorMessage;
 char                 *aimBuffer; // aimBuffer is also used for NIM
@@ -67,51 +95,8 @@ char                 *tamBuffer;
 char                  asmBuffer[5];
 char                  oldTime[8];
 char                  dateTimeString[12];
-softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];          //JM bugfix
-registerDescriptor_t  reg[112];
-registerDescriptor_t  savedStackRegister[9+1];
-int16_t               tamFunction;
-int16_t               tamNumber;
-int16_t               tamNumberMin;
-int16_t               tamNumberMax;
-int16_t               tamDigit;
-int16_t               tamOperation;
-int16_t               tamLetteredRegister;
-int16_t               tamCurrentOperation;
-int16_t               currentRegisterBrowserScreen;
-int16_t               lineTWidth;
-int16_t               rbrRegister;
-int16_t               alphaSelectionMenu;
-int16_t               lastFcnsMenuPos;
-int16_t               lastMenuMenuPos;
-int16_t               lastCnstMenuPos;
-int16_t               lastSyFlMenuPos;
-int16_t               lastAIntMenuPos;
-int16_t               showFunctionNameItem;
-int16_t               firstdelayedResult;          //JM
-int16_t               delayedResult;               //JM
-int16_t               T_cursorPos;                 //JMCURSOR
-int16_t               SHOWregis;                   //JMSHOW
-int16_t               mm_MNU_HOME;                 //JM
-int16_t               mm_MNU_ALPHA;                //JM
-int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
-int16_t               fnXEQMENUpos;                //JMXEQ
-uint16_t              numberOfLocalFlags;
-uint16_t              freeProgramBytes;
-uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
-uint16_t              firstDisplayedStep;
-uint16_t              numberOfLabels;
-dataBlock_t          *allLocalRegisterPointer;
-dataBlock_t          *allNamedVariablePointer;
-dataBlock_t          *statisticalSumsPointer;
-dataBlock_t          *savedStatisticalSumsPointer;
-uint16_t              xCursor;
-uint16_t              yCursor;
-uint16_t              tamMode;
-uint32_t              firstGregorianDay;
-uint32_t              denMax;
-uint32_t              lastIntegerBase;
-uint32_t              alphaSelectionTimer;
+char                  displayValueX[DISPLAY_VALUE_LEN];
+
 uint8_t               softmenuStackPointer;
 uint8_t               softmenuStackPointerBeforeAIM;
 uint8_t               transitionSystemState;
@@ -129,7 +114,6 @@ uint8_t               roundingMode;
 uint8_t               calcMode;
 uint8_t               nextChar;
 uint8_t               displayStack;
-uint8_t               displayStackSHOIDISP;          //JM SHOIDISP
 uint8_t               alphaCase;
 uint8_t               numLinesNumericFont;
 uint8_t               numLinesStandardFont;
@@ -148,6 +132,26 @@ uint8_t              *firstFreeProgramBytePointer;
 uint8_t              *firstDisplayedStepPointer;
 uint8_t              *programCounter;
 
+int16_t               tamFunction;
+int16_t               tamNumber;
+int16_t               tamNumberMin;
+int16_t               tamNumberMax;
+int16_t               tamDigit;
+int16_t               tamOperation;
+int16_t               tamLetteredRegister;
+int16_t               tamCurrentOperation;
+int16_t               currentRegisterBrowserScreen;
+int16_t               lineTWidth;
+int16_t               rbrRegister;
+int16_t               alphaSelectionMenu;
+int16_t               lastFcnsMenuPos;
+int16_t               lastMenuMenuPos;
+int16_t               lastCnstMenuPos;
+int16_t               lastSyFlMenuPos;
+int16_t               lastAIntMenuPos;
+int16_t               showFunctionNameItem;
+
+uint8_t               displayStackSHOIDISP;          //JM SHOIDISP
 bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup
@@ -188,44 +192,48 @@ bool_t                PLOT_RMS;                                //JM GRAPH
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
 #endif                                                         //^^
-
-bool_t                hourGlassIconEnabled;
-bool_t                watchIconEnabled;
-bool_t                printerIconEnabled;
-bool_t                shiftF;
-bool_t                shiftG;
-bool_t                showContent;
-bool_t                rbr1stDigit;
-bool_t                updateDisplayValueX;
-bool_t                thereIsSomethingToUndo;
-bool_t                AlphaSelectionBufferTimerRunning;        //JM
-calcKey_t             kbd_usr[37];
-calcRegister_t        errorMessageRegisterLine;
-uint64_t              shortIntegerMask;
-uint64_t              shortIntegerSignBit;
-uint64_t              systemFlags;
-uint64_t              savedSystemFlags;
-glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
-char                  displayValueX[DISPLAY_VALUE_LEN];
+int16_t               firstdelayedResult;          //JM
+int16_t               delayedResult;               //JM
+int16_t               T_cursorPos;                 //JMCURSOR
+int16_t               SHOWregis;                   //JMSHOW
+int16_t               mm_MNU_HOME;                 //JM
+int16_t               mm_MNU_ALPHA;                //JM
+int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
+int16_t               fnXEQMENUpos;                //JMXEQ
 int16_t               exponentSignLocation;
 int16_t               denominatorLocation;
 int16_t               imaginaryExponentSignLocation;
 int16_t               imaginaryMantissaSignLocation;
 int16_t               exponentLimit;
 int16_t               showFunctionNameCounter;
-size_t                gmpMemInBytes;
-size_t                wp43sMemInBytes;
-freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+int16_t              *menu_RAM;
+
+uint16_t              globalFlags[7];
+uint16_t              numberOfLocalFlags;
+uint16_t              freeProgramBytes;
+uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
+uint16_t              firstDisplayedStep;
+uint16_t              numberOfLabels;
+uint16_t              xCursor;
+uint16_t              yCursor;
+uint16_t              tamMode;
+
 int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
-void                  (*confirmedFunction)(uint16_t);
-real51_t              const *gammaLanczosCoefficients;
-real39_t              const *angle180;
-real39_t              const *angle90;
-real39_t              const *angle45;
-pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
-labelList_t          *labelList = NULL;
-const char            digits[17] = "0123456789ABCDEF";
+
+uint32_t              firstGregorianDay;
+uint32_t              denMax;
+uint32_t              lastIntegerBase;
+uint32_t              alphaSelectionTimer;
+bool_t                AlphaSelectionBufferTimerRunning;        //JM
+uint64_t              shortIntegerMask;
+uint64_t              shortIntegerSignBit;
+uint64_t              systemFlags;
+uint64_t              savedSystemFlags;
+
+size_t                gmpMemInBytes;
+size_t                wp43sMemInBytes;
+
 #ifdef DMCP_BUILD
   #ifdef JMSHOWCODES                                           //JM Test
     int8_t            telltale_pos;                            //JM Test
@@ -362,21 +370,21 @@ void program_main(void) {
   telltale_pos = 0;                                            //JM test
   #endif                                                       //JM test
 
-#if 1
+  #if 1
     longInteger_t li;
     uint32_t addr, min, max, *ptr;
 
     min = 1;
     max = 100000000;
     while(min+1 < max) {
-        ptr = malloc((max + min) >> 1);
-        if(ptr) {
-            free(ptr);
-            min = (max + min) >> 1;
-        }
-        else {
-            max = (max + min) >> 1;
-        }
+      ptr = malloc((max + min) >> 1);
+      if(ptr) {
+        free(ptr);
+        min = (max + min) >> 1;
+      }
+      else {
+        max = (max + min) >> 1;
+      }
     }
 
     ptr = malloc(min);
@@ -445,7 +453,7 @@ void program_main(void) {
     convertLongIntegerToShortIntegerRegister(li, 10, 63);
 
     longIntegerFree(li);
-#endif
+  #endif
 
   backToDMCP = false;
 

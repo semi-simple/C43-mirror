@@ -224,10 +224,6 @@
   #endif
 #endif
 
-extern dataBlock_t          *ram;
-extern bool_t                funcOK;
-extern bool_t                keyActionProcessed;
-
 // Variables stored in FLASH
 extern const item_t          indexOfItems[];
 extern const char           *errorMessages[NUMBER_OF_ERROR_CODES];
@@ -235,20 +231,53 @@ extern const calcKey_t       kbd_std[37];
 extern const font_t          standardFont, numericFont;
 extern const font_t         *fontForShortInteger;
 extern const font_t         *cursorFont;
+extern const char            digits[17];
 extern void                  (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern void                  (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern void                  (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
 extern void                  (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+extern void                  (*confirmedFunction)(uint16_t);
 extern const softmenu_t      softmenu[];
+extern real51_t       const *gammaLanczosCoefficients;
+extern real39_t       const *angle180;
+extern real39_t       const *angle90;
+extern real39_t       const *angle45;
 
 // Variables stored in RAM
+extern bool_t                funcOK;
+extern bool_t                keyActionProcessed;
+extern bool_t                hourGlassIconEnabled;
+extern bool_t                watchIconEnabled;
+extern bool_t                printerIconEnabled;
+extern bool_t                shiftF;
+extern bool_t                shiftG;
+extern bool_t                showContent;
+extern bool_t                rbr1stDigit;
+extern bool_t                updateDisplayValueX;
+extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
+extern bool_t                thereIsSomethingToUndo;
+
 extern realContext_t         ctxtReal34;   //   34 digits
 extern realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
 extern realContext_t         ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
 extern realContext_t         ctxtReal75;   //   75 digits: used in SLVQ
 extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
 //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
-extern uint16_t              globalFlags[7];
+extern softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];         //JM Bugfix was 7. Needs to be the same as in screen.h
+extern registerDescriptor_t  reg[112];
+extern registerDescriptor_t  savedStackRegister[9+1];
+extern dataBlock_t          *allLocalRegisterPointer;
+extern dataBlock_t          *allNamedVariablePointer;
+extern dataBlock_t          *statisticalSumsPointer;
+extern dataBlock_t          *savedStatisticalSumsPointer;
+extern dataBlock_t          *ram;
+extern calcKey_t             kbd_usr[37];
+extern calcRegister_t        errorMessageRegisterLine;
+extern glyph_t               glyphNotFound;
+extern freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+extern pcg32_random_t        pcg32_global;
+extern labelList_t          *labelList;
+
 extern char                 *tmpString;
 extern char                 *errorMessage;
 extern char                 *aimBuffer; // aimBuffer is also used for NIM
@@ -257,50 +286,8 @@ extern char                 *tamBuffer;
 extern char                  asmBuffer[5];
 extern char                  oldTime[8];
 extern char                  dateTimeString[12];
-extern softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];         //JM Bugfix was 7. Needs to be the same as in screen.h
-extern registerDescriptor_t  reg[112];
-extern registerDescriptor_t  savedStackRegister[9+1];
-extern int16_t               tamFunction;
-extern int16_t               tamNumber;
-extern int16_t               tamNumberMin;
-extern int16_t               tamNumberMax;
-extern int16_t               tamDigit;
-extern int16_t               tamOperation;
-extern int16_t               tamLetteredRegister;
-extern int16_t               tamCurrentOperation;
-extern int16_t               currentRegisterBrowserScreen;
-extern int16_t               lineTWidth;
-extern int16_t               rbrRegister;
-extern int16_t               alphaSelectionMenu;
-extern int16_t               lastFcnsMenuPos;
-extern int16_t               lastMenuMenuPos;
-extern int16_t               lastCnstMenuPos;
-extern int16_t               lastSyFlMenuPos;
-extern int16_t               lastAIntMenuPos;
-extern int16_t               showFunctionNameItem;
-extern int16_t               firstdelayedResult;          //JM
-extern int16_t               delayedResult;               //JM
-extern int16_t               T_cursorPos;                 //JMCURSOR
-extern int16_t               SHOWregis;                   //JMSHOW
-extern int16_t               mm_MNU_HOME;                 //JM
-extern int16_t               mm_MNU_ALPHA;                //JM
-extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
-extern uint16_t              numberOfLocalFlags;
-extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
-extern uint16_t              freeProgramBytes;
-extern uint16_t              firstDisplayedStep;
-extern uint16_t              numberOfLabels;
-extern dataBlock_t          *allLocalRegisterPointer;
-extern dataBlock_t          *allNamedVariablePointer;
-extern dataBlock_t          *statisticalSumsPointer;
-extern dataBlock_t          *savedStatisticalSumsPointer;
-extern uint16_t              xCursor;
-extern uint16_t              yCursor;
-extern uint16_t              tamMode;
-extern uint32_t              firstGregorianDay;
-extern uint32_t              denMax;
-extern uint32_t              lastIntegerBase;
-extern uint32_t              alphaSelectionTimer;
+extern char                  displayValueX[DISPLAY_VALUE_LEN];
+
 extern uint8_t               softmenuStackPointer;
 extern uint8_t               softmenuStackPointerBeforeAIM;
 extern uint8_t               transitionSystemState;
@@ -336,43 +323,65 @@ extern uint8_t              *currentProgramMemoryPointer;
 extern uint8_t              *firstFreeProgramBytePointer;
 extern uint8_t              *firstDisplayedStepPointer;
 extern uint8_t              *programCounter;
-extern bool_t                hourGlassIconEnabled;
-extern bool_t                watchIconEnabled;
-extern bool_t                printerIconEnabled;
-extern bool_t                shiftF;
-extern bool_t                shiftG;
-extern bool_t                showContent;
-extern bool_t                rbr1stDigit;
-extern bool_t                updateDisplayValueX;
-extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
-extern bool_t                thereIsSomethingToUndo;
-extern calcKey_t             kbd_usr[37];
-extern calcRegister_t        errorMessageRegisterLine;
-extern uint64_t              shortIntegerMask;
-extern uint64_t              shortIntegerSignBit;
-extern uint64_t              systemFlags;
-extern uint64_t              savedSystemFlags;
-extern glyph_t               glyphNotFound;
-extern char                  displayValueX[DISPLAY_VALUE_LEN];
+
+extern int16_t               tamFunction;
+extern int16_t               tamNumber;
+extern int16_t               tamNumberMin;
+extern int16_t               tamNumberMax;
+extern int16_t               tamDigit;
+extern int16_t               tamOperation;
+extern int16_t               tamLetteredRegister;
+extern int16_t               tamCurrentOperation;
+extern int16_t               currentRegisterBrowserScreen;
+extern int16_t               lineTWidth;
+extern int16_t               rbrRegister;
+extern int16_t               alphaSelectionMenu;
+extern int16_t               lastFcnsMenuPos;
+extern int16_t               lastMenuMenuPos;
+extern int16_t               lastCnstMenuPos;
+extern int16_t               lastSyFlMenuPos;
+extern int16_t               lastAIntMenuPos;
+extern int16_t               showFunctionNameItem;
 extern int16_t               exponentSignLocation;
 extern int16_t               denominatorLocation;
 extern int16_t               imaginaryExponentSignLocation;
 extern int16_t               imaginaryMantissaSignLocation;
 extern int16_t               exponentLimit;
 extern int16_t               showFunctionNameCounter;
-extern size_t                gmpMemInBytes;
-extern size_t                wp43sMemInBytes;
-extern freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
+extern int16_t              *menu_RAM;
+
+extern uint16_t              globalFlags[7];
+extern int16_t               firstdelayedResult;          //JM
+extern int16_t               delayedResult;               //JM
+extern int16_t               T_cursorPos;                 //JMCURSOR
+extern int16_t               SHOWregis;                   //JMSHOW
+extern int16_t               mm_MNU_HOME;                 //JM
+extern int16_t               mm_MNU_ALPHA;                //JM
+extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
+extern uint16_t              numberOfLocalFlags;
+extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
+extern uint16_t              freeProgramBytes;
+extern uint16_t              firstDisplayedStep;
+extern uint16_t              numberOfLabels;
+extern uint16_t              xCursor;
+extern uint16_t              yCursor;
+extern uint16_t              tamMode;
+
 extern int32_t               numberOfFreeMemoryRegions;
 extern int32_t               lgCatalogSelection;
-extern void                  (*confirmedFunction)(uint16_t);
-extern real51_t       const *gammaLanczosCoefficients;
-extern real39_t       const *angle180;
-extern real39_t       const *angle90;
-extern real39_t       const *angle45;
-extern pcg32_random_t        pcg32_global;
-extern labelList_t          *labelList;
-extern const char            digits[17];
+
+extern uint32_t              firstGregorianDay;
+extern uint32_t              denMax;
+extern uint32_t              lastIntegerBase;
+extern uint32_t              alphaSelectionTimer;
+extern uint64_t              shortIntegerMask;
+extern uint64_t              shortIntegerSignBit;
+extern uint64_t              systemFlags;
+extern uint64_t              savedSystemFlags;
+
+extern size_t                gmpMemInBytes;
+extern size_t                wp43sMemInBytes;
+
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
   extern uint32_t            nextTimerRefresh;    //dr

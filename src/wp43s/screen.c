@@ -2489,13 +2489,13 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
           }
         }
 
-        showSoftmenuCurrentPart();
+        if (calcMode != CM_LISTXY) showSoftmenuCurrentPart();
 
         hourGlassIconEnabled = false;
         refreshStatusBar();
 
         if(calcMode == CM_GRAPH) {     //JM v
-            graph_plotmem();
+          graph_plotmem();
         }                              //JM ^
         if(calcMode == CM_LISTXY) {     //JM v
           fnStatList();

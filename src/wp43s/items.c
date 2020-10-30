@@ -2784,8 +2784,8 @@ const item_t indexOfItems[] = {
 /* 2181 */  { fnGraph,                     14,                          "DEMO4",                                       "DEMO4",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 /* 2182 */  { fnGraph,                     15,                          "DEMO5",                                       "DEMO5",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 /* 2183 */  { fnGraph,                     16,                          "DEMO6",                                       "DEMO6",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
-/* 2184 */  { fnPintg,                     NOPARAM,                     STD_INTEGRAL "ydx",                            STD_INTEGRAL "ydx",                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
-/* 2185 */  { fnPdiff,                     NOPARAM,                     "dy/dx",                                       "dy/dx",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
+/* 2184 */  { fnPintg,                     NOPARAM,                     STD_SIGMA STD_y_BAR STD_DELTA "x",             STD_SIGMA STD_y_BAR STD_DELTA "x",                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
+/* 2185 */  { fnPdiff,                     NOPARAM,                     STD_DELTA "y/" STD_DELTA "x",                  STD_DELTA "y/" STD_DELTA "x",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2186 */  { fnPrms,                      NOPARAM,                     "RMS",                                         "RMS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 
 /* 2187 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

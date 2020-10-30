@@ -159,6 +159,7 @@ void fnListXY(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
     if(telltale == MEM_INITIALIZED) {
       calcMode = CM_LISTXY; //Used to view graph/listing
+      ListXYposition = 0;
     }
   #endif
 }
@@ -352,12 +353,14 @@ void clearScreenPixels() {
          clearPixel(x, y);
         }
       }
-      for(y=Y_POSITION_OF_REGISTER_T_LINE /*+ 20*/; y<171; y++) {
+      for(y=Y_POSITION_OF_REGISTER_T_LINE /*+ 20*/; y<171; y++) {  //To just above the softmenu
         for(x=0; x<SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x++) {
-         clearPixel(x, y);
+         if(!(y>171-5 && x<20)) clearPixel(x, y);                     //To allow to scroll up/down not to be deleted
         }
       }
-    } else {
+    } 
+
+    else {
       for(y=SCREEN_MIN_GRAPH; y<SCREEN_HEIGHT_GRAPH; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
          clearPixel(x, y);
@@ -823,8 +826,8 @@ void graph_plotmem(void) {
   float/*double*/ x; 
   float/*double*/ y;
   float/*double*/ sx, sy;
-  float/*double*/ ddx = 1E38;
-  float/*double*/ ddy = 1E38;
+  float/*double*/ ddx = FLoatingMax;
+  float/*double*/ ddy = FLoatingMax;
   float/*double*/ inty = 0;
 
 
@@ -864,10 +867,10 @@ void graph_plotmem(void) {
 //    }
 
     //AUTOSCALE
-    x_min = 1e38;
-    x_max = -1e38;
-    y_min = 1e38;
-    y_max = -1e38;
+    x_min = FLoatingMax;
+    x_max = FLoatingMin;
+    y_min = FLoatingMax;
+    y_max = FLoatingMin;
     #ifdef STATDEBUG
     printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
@@ -882,16 +885,16 @@ void graph_plotmem(void) {
           if(ix !=0){
             ddx = grf_x(ix) - grf_x(ix-1);                                            //used in DIFF and INT
             if(ddx<=0) {                                                              //Cannot get slop or area if x is not growing in positive dierection
-      		    x_min = 1e38;
-      		    x_max = -1e38;
-      		    y_min = 1e38;
-      		    y_max = -1e38;
+      		    x_min = FLoatingMax;
+      		    x_max = FLoatingMin;
+      		    y_min = FLoatingMax;
+      		    y_max = FLoatingMin;
       		    invalid_diff = true;
               invalid_intg = true;
       		    break;
             } else {          	
               if(PLOT_DIFF) {
-                if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = 1e38;  //Differential
+                if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;  //Differential
                 if(ddy < y_min) {y_min = ddy;}
                 if(ddy > y_max) {y_max = ddy;}
                 if(grf_x(ix) < x_min) {x_min = grf_x(ix);}
@@ -1046,7 +1049,7 @@ void graph_plotmem(void) {
 
         if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg))){                                                               //Differential ddy
           ddx = grf_x(ix) - grf_x(ix-1);
-          if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = 1e38;
+          if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;
           inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                      //integral
           x = (grf_x(ix) + grf_x(ix-1))/2;
           if(PLOT_DIFF) y = ddy;
@@ -1180,22 +1183,24 @@ void fnStatList() {
   if(telltale == MEM_INITIALIZED) {
     runFunction(ITM_NSIGMA);
     if(plotmode != _VECT) {
-      //Convert from real to int
       realToInt32(SIGMA_N, statnum);
-      //realToString(SIGMA_N, tmpStr3000);
-      //statnum = stringToInt16 (tmpStr3000);
+      sprintf(tmpStr3000, "Stat data: N = %d",statnum);
     } else {
       statnum = ix_count;
+      sprintf(tmpStr3000, "Stat data: Vector IndexCount = %d",statnum);
     }
 
     runFunction(ITM_DROP);
-    print_linestr("Stat data",true);
+    print_linestr(tmpStr3000,true);
     #ifdef STATDEBUG
-      printf("Stat data %d - %d\n",statnum-1, max(0, statnum-1-6) );
+      printf("Stat data %d - %d (%s)\n",statnum-1, max(0, statnum-1-6), tmpStr3000 );
     #endif
 
+    if( statnum - 0 - 1 + ListXYposition > statnum-1) ListXYposition = 0; else
+    if( statnum - (min(10,min(LIM, statnum))-1) - 1 + ListXYposition < 0) ListXYposition = - (statnum - (min(10,min(LIM, statnum))-1) - 1);
+
     for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
-      ixx = statnum - ix - 1;
+      ixx = statnum - ix - 1 + ListXYposition;
 
       if((fabs(grf_x(ixx)) > 0.0000001 && fabs(grf_x(ixx)) < 1000000)) 
         sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, grf_x(ixx));

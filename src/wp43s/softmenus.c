@@ -1158,7 +1158,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
 
-  if(calcMode == CM_GRAPH && xSoftkey >= 2) {
+  if(calcMode == CM_GRAPH && xSoftkey >= 2) {           //JM prevent softkeys columns 3-6 from displaying
       return;
   }
 

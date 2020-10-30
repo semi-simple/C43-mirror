@@ -30,6 +30,9 @@ uint16_t ix_count;
 #define  LIM               400                 //Number of points
 #define  MEM_INITIALIZED   199
 
+#define FLoatingMax 1e38
+#define FLoatingMin -1e38
+
 
 extern float graph_dx;                                               //JM Graph
 extern float graph_dy;                                               //JM Graph

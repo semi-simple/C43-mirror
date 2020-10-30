@@ -92,6 +92,7 @@ int16_t               firstdelayedResult;          //JM
 int16_t               delayedResult;               //JM
 int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
+int16_t               ListXYposition;              //JMSHOW
 int16_t               mm_MNU_HOME;                 //JM
 int16_t               mm_MNU_ALPHA;                //JM
 int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
@@ -410,7 +411,7 @@ void setupDefaults(void) {
   #ifndef TESTSUITE_BUILD                                      //JM
     clear_ul();                                                //JMUL
   #endif // TESTSUITE_BUILD                                    //JM
-
+  ListXYposition = 0;                                          //JM
   #ifndef TESTSUITE_BUILD
 //    showShiftState();
   #endif // TESTSUITE_BUILD

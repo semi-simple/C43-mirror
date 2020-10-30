@@ -25,14 +25,14 @@
 void scanLabels(void) {
   uint32_t step = 0;
   uint16_t program;
-  uint8_t *ns, *currentStep = programMemoryPointer;
+  uint8_t *ns, *currentStepPointer = programMemoryPointer;
 
   numberOfLabels = 0;
-  while(*currentStep != 255 || *(currentStep + 1) != 255) { // .END.
-    if(*currentStep == 1) {
+  while(*currentStepPointer != 255 || *(currentStepPointer + 1) != 255) { // .END.
+    if(*currentStepPointer == 1) {
       numberOfLabels++;
     }
-    currentStep = nextStep(currentStep);
+    currentStepPointer = nextStep(currentStepPointer);
   }
 
   free(labelList);
@@ -42,31 +42,31 @@ void scanLabels(void) {
   }
 
   numberOfLabels = 0;
-  currentStep = programMemoryPointer;
+  currentStepPointer = programMemoryPointer;
   program = 1;
   step = 0;
-  while(*currentStep != 255 || *(currentStep + 1) != 255) { // .END.
-    ns = nextStep(currentStep);
-    if(*currentStep == 1) { // LBL
+  while(*currentStepPointer != 255 || *(currentStepPointer + 1) != 255) { // .END.
+    ns = nextStep(currentStepPointer);
+    if(*currentStepPointer == 1) { // LBL
       labelList[numberOfLabels].program = program;
-      if(*(currentStep + 1) <= 109) { // Local label
+      if(*(currentStepPointer + 1) <= 109) { // Local label
         labelList[numberOfLabels].step = -step;
-        labelList[numberOfLabels].labelPointer = currentStep + 1;
+        labelList[numberOfLabels].labelPointer = currentStepPointer + 1;
       }
       else { // Global label
         labelList[numberOfLabels].step = step;
-        labelList[numberOfLabels].labelPointer = currentStep + 2;
+        labelList[numberOfLabels].labelPointer = currentStepPointer + 2;
       }
 
       labelList[numberOfLabels].instructionPointer = ns;
       numberOfLabels++;
     }
 
-    if((*currentStep & 0x7f) == (ITM_END >> 8) && *(currentStep + 1) == (ITM_END & 0xff)) { // END
+    if((*currentStepPointer & 0x7f) == (ITM_END >> 8) && *(currentStepPointer + 1) == (ITM_END & 0xff)) { // END
       program++;
     }
 
-    currentStep = ns;
+    currentStepPointer = ns;
     step++;
   }
 }
@@ -99,7 +99,7 @@ void fnClP(uint16_t unusedParamButMandatory) {
 
 
 void fnPem(uint16_t unusedParamButMandatory) {
-  uint16_t line, currentStep, stepSize;
+  uint16_t line, stepSize;
   uint8_t *stepPointer, *ns;
   bool_t lblOrEnd;
 
@@ -109,7 +109,8 @@ void fnPem(uint16_t unusedParamButMandatory) {
   }
 
   stepPointer = firstDisplayedStepPointer;
-  currentStep = firstDisplayedStep + 3;
+  programListEnd = false;
+
   for(line=0; line<7; line++) {
     ns = nextStep(stepPointer);
     stepSize = (uint16_t)(ns - stepPointer);
@@ -118,6 +119,11 @@ void fnPem(uint16_t unusedParamButMandatory) {
     lblOrEnd = (*stepPointer == ITM_LBL) || ((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff)));
     decodeOneStep(stepPointer);
     showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+    numberOfStepsOnScreen = line;
+    if(((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff))) && ((*ns == 255 && *(ns + 1) == 255))) {
+      programListEnd = true;
+      break;
+    }
     stepPointer = ns;
   }
 }

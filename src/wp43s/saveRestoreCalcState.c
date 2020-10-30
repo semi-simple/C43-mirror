@@ -193,6 +193,8 @@ void saveCalc(void) {
   save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStepPointer offset within block
   save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
   save(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
+  save(&currentStep,                        sizeof(currentStep),                        BACKUP);
+  save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
   save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
   save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -401,6 +403,8 @@ void restoreCalc(void) {
     firstDisplayedStepPointer += ramPtr;
     restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     restore(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
+    restore(&currentStep,                        sizeof(currentStep),                        BACKUP);
+    restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
     restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     restore(&HOME3,                              sizeof(HOME3),                              BACKUP);

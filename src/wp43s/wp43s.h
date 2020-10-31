@@ -358,6 +358,7 @@ extern int16_t               firstdelayedResult;          //JM
 extern int16_t               delayedResult;               //JM
 extern int16_t               T_cursorPos;                 //JMCURSOR
 extern int16_t               SHOWregis;                   //JMSHOW
+extern int16_t               ListXYposition;              //JM
 extern int16_t               mm_MNU_HOME;                 //JM
 extern int16_t               mm_MNU_ALPHA;                //JM
 extern int16_t               MY_ALPHA_MENU;               //JM Replaced define

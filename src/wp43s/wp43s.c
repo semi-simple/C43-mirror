@@ -201,6 +201,7 @@ int16_t               firstdelayedResult;          //JM
 int16_t               delayedResult;               //JM
 int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
+int16_t               ListXYposition;              //JMSHOW
 int16_t               mm_MNU_HOME;                 //JM
 int16_t               mm_MNU_ALPHA;                //JM
 int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
@@ -342,7 +343,9 @@ int main(int argc, char* argv[]) {
 void program_main(void) {
   int key = 0;
   char charKey[3];
-//  int keyCount = 0;                                                             //dr - internal keyBuffer POC
+#ifdef BUFFER_KEY_COUNT
+  int keyCount = 0;                                                             //dr - internal keyBuffer POC
+#endif
 #ifdef BUFFER_CLICK_DETECTION
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 #endif
@@ -549,7 +552,7 @@ void program_main(void) {
 //  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
     
                                                             //vv dr - internal keyBuffer POC
-    uint8_t outKeyCount;
+    // uint8_t outKeyCount;
     // == 0 -> Key released
     // == 1 -> Key pressed
     // == 2 -> The same key pressed twice.
@@ -562,18 +565,32 @@ void program_main(void) {
 #ifdef BUFFER_CLICK_DETECTION
     uint32_t timeSpan_1;
     uint32_t timeSpan_B;
+#ifdef BUFFER_KEY_COUNT
+    uint8_t outKeyCount;
     if(outKeyBuffer(&outKey, &outKeyCount, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
       key = outKey;
-//      keyCount = outKeyCount;
+      keyCount = outKeyCount;
 //    if(outKeyCount > 0) {
 //      do someting
 //    }
     }
 #else
+    if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
+      key = outKey;
+    }
+#endif
+#else
+#ifdef BUFFER_KEY_COUNT
+    uint8_t outKeyCount;
     if(outKeyBuffer(&outKey, &outKeyCount) == BUFFER_SUCCESS) {
       key = outKey;
-//      keyCount = outKeyCount;
+      keyCount = outKeyCount;
     }
+#else
+    if(outKeyBuffer(&outKey) == BUFFER_SUCCESS) {
+      key = outKey;
+    }
+#endif
 #endif
     else {
       key = -1;

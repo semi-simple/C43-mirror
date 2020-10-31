@@ -1243,7 +1243,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
     case CM_ASM:
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
-    case CM_LISTXY:
     case CM_GRAPH:                  //JM
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
@@ -1357,6 +1356,10 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case CM_LISTXY:
+      ListXYposition += 10;
+      break;
+          
     default:
       sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
       displayBugScreen(errorMessage);
@@ -1386,7 +1389,6 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
     case CM_ASM:
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
-    case CM_LISTXY:
     case CM_GRAPH:                  //JM
       doRefreshSoftMenu = true;     //jm
       resetAlphaSelectionBuffer();
@@ -1497,6 +1499,10 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       }
       break;
 
+    case CM_LISTXY:
+      ListXYposition -= 10;
+      break;
+          
     default:
       sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
       displayBugScreen(errorMessage);

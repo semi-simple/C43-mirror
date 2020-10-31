@@ -84,6 +84,7 @@ void reset_jm_defaults(int16_t toload) {
     denMax = 64;                                               //JM default
 
     fnShoiXRepeats(2);                                         //JM SHOIDISP
+    ListXYposition = 0;
 
 
      //JM defaults ^^

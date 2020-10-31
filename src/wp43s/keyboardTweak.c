@@ -996,9 +996,17 @@ uint8_t inKeyBuffer(uint8_t byte)
 //     BUFFER_SUCCESS    1 Byte wurde geliefert
 //
 #ifdef BUFFER_CLICK_DETECTION
+#ifdef BUFFER_KEY_COUNT
 uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount, uint32_t *pTime, uint32_t *pTimeSpan_1, uint32_t *pTimeSpan_B)
 #else
+uint8_t outKeyBuffer(uint8_t *pKey, uint32_t *pTime, uint32_t *pTimeSpan_1, uint32_t *pTimeSpan_B)
+#endif
+#else
+#ifdef BUFFER_KEY_COUNT
 uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
+#else
+uint8_t outKeyBuffer(uint8_t *pKey)
+#endif
 #endif
 {
   if(buffer.read == buffer.write) {
@@ -1006,6 +1014,7 @@ uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
     return BUFFER_FAIL;  // leer
   }
 
+#ifdef BUFFER_KEY_COUNT
   uint8_t keyCount = 0;
   uint8_t actKey = buffer.data[buffer.read];
   *pKey = actKey;
@@ -1019,7 +1028,8 @@ uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
     }
   }
   *pKeyCount = keyCount;
-  
+#endif
+
 #ifdef BUFFER_CLICK_DETECTION
   uint32_t actTime = buffer.time[buffer.read];
   *pTime = actTime;
@@ -1033,10 +1043,14 @@ uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
     *pTimeSpan_1 = actTime;
   }
 
+#ifdef BUFFER_KEY_COUNT
   if(keyCount > 2) {
     oldTime = buffer.time[(buffer.read - 4) & BUFFER_MASK];
   }
   else {
+#else
+  {
+#endif
     oldTime = buffer.time[(buffer.read - 2) & BUFFER_MASK];
   }
   if(actTime >= oldTime) {
@@ -1050,7 +1064,7 @@ uint8_t outKeyBuffer(uint8_t *pKey, uint8_t *pKeyCount)
   buffer.read = (buffer.read + 1) & BUFFER_MASK;
 
 #ifdef BUFFER_CLICK_DETECTION
-  keyCount = outKeyBufferDoubleClick();
+  uint8_t detectionResult = outKeyBufferDoubleClick();
 #ifdef JMSHOWCODES_KB1
   fnDisplayStack(2);
   char aaa[50];

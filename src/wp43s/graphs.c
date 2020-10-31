@@ -1202,12 +1202,12 @@ void fnStatList() {
     for (ix = 0; (ix < min(10,min(LIM, statnum))); ++ix) {
       ixx = statnum - ix - 1 + ListXYposition;
 
-      if((fabs(grf_x(ixx)) > 0.0000001 && fabs(grf_x(ixx)) < 1000000)) 
+      if(((fabs(grf_x(ixx)) > 0.000999 || grf_x(ixx) == 0) && fabs(grf_x(ixx)) < 1000000)) 
         sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, grf_x(ixx));
       else
         sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, round(grf_x(ixx)*1e10)/1e10);
 
-      if((fabs(grf_y(ixx)) > 0.0000001 && fabs(grf_y(ixx)) < 1000000))
+      if(((fabs(grf_y(ixx)) > 0.000999 || grf_y(ixx) == 0) && fabs(grf_y(ixx)) < 1000000))
         sprintf(tmpstr2,"y%19.7f", grf_y(ixx));
       else
         sprintf(tmpstr2,"y%19.7e", round(grf_y(ixx)*1e10)/1e10);

@@ -1016,8 +1016,10 @@ uint8_t outKeyBuffer(uint8_t *pKey)
 
 #ifdef BUFFER_KEY_COUNT
   uint8_t keyCount = 0;
+#endif
   uint8_t actKey = buffer.data[buffer.read];
   *pKey = actKey;
+#ifdef BUFFER_KEY_COUNT
   if(actKey > 0) {
     keyCount++;
     if(buffer.data[(buffer.read - 2) & BUFFER_MASK] == actKey) {

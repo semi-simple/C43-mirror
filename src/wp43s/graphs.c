@@ -361,7 +361,7 @@ void clearScreenPixels() {
     } 
 
     else {
-      for(y=SCREEN_MIN_GRAPH; y<SCREEN_HEIGHT_GRAPH; y++) {
+      for(y=/*SCREEN_MIN_GRAPH*/0; y<SCREEN_HEIGHT_GRAPH; y++) {
         for(x=0; x<SCREEN_WIDTH; x++) {
          clearPixel(x, y);
         }
@@ -1122,7 +1122,13 @@ void graph_plotmem(void) {
             #ifdef STATDEBUG
               printf("Plotting Integral x=%f intg(x)=%f\n",x-ddx/2,inty);
             #endif
-            plotint( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, inty, y_max) );
+            uint16_t xN0=screen_window_x( x_min, grf_x(ix-1), x_max);
+            uint16_t yNi=screen_window_y( y_min, inty, y_max);
+            uint16_t xNN=((xN0+xN) >> 1);
+            plotint( xNN, yNi );
+            //printf("%d %d %d \n",xN0,xN,abs((int16_t)(xN-xN0)));
+            if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNi, xNN+2, yNi);plotline(xNN-2, yNi, xN0, yNi);} else
+            if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNi, xNN+2, yNi);plotline(xNN-2, yNi, xN0, yNi);}
           }
 
         } else {

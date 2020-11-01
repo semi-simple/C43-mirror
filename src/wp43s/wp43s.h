@@ -240,6 +240,7 @@ extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle 
 
 extern registerDescriptor_t  reg[112];
 extern registerDescriptor_t  savedStackRegister[9+1];
+extern variableSoftmenu_t    variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS];
 
 extern dataBlock_t          *allLocalRegisterPointer;
 extern dataBlock_t          *allNamedVariablePointer;

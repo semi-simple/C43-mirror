@@ -192,6 +192,17 @@ typedef struct {
 
 
 /********************************************//**
+ * \struct variableSoftmenu_t
+ * \brief Structure keeping the informations for one variable softmenu
+ ***********************************************/
+typedef struct {
+  int16_t menuId;             ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
+  int16_t numItems;           ///< Number of items in the softmenu (must be a multiple of 6 for now)
+  uint8_t *menuContent;       ///< Pointer to the menu content
+} variableSoftmenu_t;
+
+
+/********************************************//**
  * \struct softmenuStack_t
  * \brief Stack of softmenus
  ***********************************************/

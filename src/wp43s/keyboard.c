@@ -204,7 +204,9 @@ void executeFunction(const char *data) {
           }
           else if(calcMode == CM_ASM_OVER_TAM) {
             reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-            calcModeNormal();
+            if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
+              calcModeNormal();
+            }                                                                                     //JM ^
 #ifdef PC_BUILD
 printf(">>>   refreshScreen1 from keyboard.c executeFunction\n");
 #endif
@@ -1037,8 +1039,12 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_BUG_ON_SCREEN:
     case CM_LISTXY:
+      calcMode = previousCalcMode;
+      break;
+
     case CM_GRAPH:                      //JM
       calcMode = previousCalcMode;
+      softmenuStack[softmenuStackPointer-1].firstItem = 0;
       break;
 
     case CM_CONFIRMATION:

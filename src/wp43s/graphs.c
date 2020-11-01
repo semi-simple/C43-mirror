@@ -139,7 +139,9 @@ void fnPlot(uint16_t unusedParamButMandatory) {
   }
   calcMode = CM_GRAPH;
   #ifndef TESTSUITE_BUILD
-    showSoftmenu(NULL, -MNU_PLOT, true);
+    if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_PLOT) {
+      showSoftmenu(NULL, -MNU_PLOT, true);                         //JM MENU Prevent resetting the softmenu to the default no 1 page position
+    }
   #endif
   doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
 }

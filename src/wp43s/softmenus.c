@@ -444,6 +444,8 @@ variableSoftmenu_t variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS] = {
 
 
 void initVariableSoftmenu(int16_t menu) {
+  int16_t i, numberOfBytes, numberOfGlobalLabels;
+
   free(variableSoftmenu[menu].menuContent);
   switch(-variableSoftmenu[menu].menuId) {
     case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
@@ -451,7 +453,24 @@ void initVariableSoftmenu(int16_t menu) {
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_RAM:     variableSoftmenu[menu].menuContent = malloc(24);
+    case MNU_RAM:     numberOfBytes = 1;
+                      numberOfGlobalLabels = 0;
+                      for(i=0; i<numberOfLabels; i++) {
+                        if(labelList[i].program > 0 && labelList[i].step > 0) { // RAM and Global label
+                          numberOfGlobalLabels++;
+                          numberOfBytes += 1 + labelList[i].labelPointer[0];
+                          xcopy(tmpString, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
+                          tmpString[labelList[i].labelPointer[0]] = 0;
+                        }
+                      }
+
+                      if(numberOfGlobalLabels % 6 != 0) {
+                        numberOfBytes +=
+                      }
+
+                      printf("numberOfGlobalLabels=%d numberOfBytes=%d\n", numberOfGlobalLabels, numberOfBytes);
+
+                      variableSoftmenu[menu].menuContent = malloc(24);
                       xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000RAM", 23);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
@@ -538,7 +557,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
 /********************************************//**
  * \brief Displays one softkey
  *
- * \param[in] label const char*     Text to display
+ * \param[in] l const char*         Text to display
  * \param[in] xSoftkey int16_t      x location of softkey: from 0 (left) to 5 (right)
  * \param[in] ySoftKey int16_t      y location of softkey: from 0 (bottom) to 2 (top)
  * \param[in] videoMode videoMode_t Video mode normal or reverse
@@ -547,9 +566,10 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
+void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
+  char label[15];
 
   if(0 <= xSoftkey && xSoftkey <= 5) {
     x1 = 67 * xSoftkey - 1;
@@ -635,7 +655,13 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
+  xcopy(label, l, stringByteLength(l) + 1);
   w = stringWidth(label, &standardFont, false, false);
+  while(w > (xSoftkey == 5 ? 65 : 66)) {
+    label[stringLastGlyph(label)] = 0;
+    w = stringWidth(label, &standardFont, false, false);
+  }
+
   showString(label, &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
 }
 
@@ -653,6 +679,7 @@ void showSoftmenuCurrentPart(void) {
 
   if(softmenuStackPointer > 0) {
     m = softmenuStack[softmenuStackPointer-1].softmenu;
+printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemCatalogName);
     if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
       initVariableSoftmenu(m);
       numberOfItems = variableSoftmenu[m].numItems;
@@ -688,7 +715,6 @@ void showSoftmenuCurrentPart(void) {
     }
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-printf("m = %d\n", m);
     for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
         if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
@@ -717,14 +743,7 @@ printf("m = %d\n", m);
               displayBugScreen(errorMessage);
             }
             else {
-              if(softmenu[menu].softkeyItem == NULL) {
-printf("menu = %d\n", menu);
-                sprintf(errorMessage, "In function showSoftmenuCurrentPart: Softmenu ID %" PRId16 " must be generated!", item);
-                displayBugScreen(errorMessage);
-              }
-              else {
-                showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
-              }
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
             }
           }
           else if(item == 9999) {

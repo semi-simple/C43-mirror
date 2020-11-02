@@ -50,11 +50,11 @@ void scanLabels(void) {
     if(*currentStepPointer == 1) { // LBL
       labelList[numberOfLabels].program = program;
       if(*(currentStepPointer + 1) <= 109) { // Local label
-        labelList[numberOfLabels].step = -step;
+        labelList[numberOfLabels].step = -step - 1;
         labelList[numberOfLabels].labelPointer = currentStepPointer + 1;
       }
       else { // Global label
-        labelList[numberOfLabels].step = step;
+        labelList[numberOfLabels].step = step + 1;
         labelList[numberOfLabels].labelPointer = currentStepPointer + 2;
       }
 

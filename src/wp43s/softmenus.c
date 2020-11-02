@@ -1483,6 +1483,7 @@ void showSoftmenuCurrentPart(void) {
     }
     showShiftState(); //JM
   }
+  if(softmenuStackPointer == 0) clearScreen_old(false, false, true); //JM, added to ensure the HOME is deleted
 }
 
 
@@ -1493,6 +1494,22 @@ void rollBackOneSoftmenu(void) {                                       //JM vv  
   else {
     doRefreshSoftMenu = true;     //dr
     ix = 1;
+    while(ix <= softmenuStackPointer - 1) {
+      softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
+      softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
+      ix++;
+    }
+    softmenuStackPointer--;
+  }
+}
+
+
+void popOneSoftmenu(int16_t ix0) {                                       //JM vv  Roll out one softmenu First in goes out
+  int8_t ix;
+  if(softmenuStackPointer == 0) return; 
+  else {
+    doRefreshSoftMenu = true;     //dr
+    ix = ix0;
     while(ix <= softmenuStackPointer - 1) {
       softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
       softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
@@ -1515,7 +1532,8 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
       ix--;
     }
     if(softmenuStack[ix-1].softmenu == target) {
-      rollBackOneSoftmenu();
+      //rollBackOneSoftmenu();
+      popOneSoftmenu(ix);
       rolloutSoftmenusIncluding(target);
     }
   }

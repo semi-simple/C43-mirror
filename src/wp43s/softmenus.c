@@ -1409,7 +1409,7 @@ void showSoftmenuCurrentPart(void) {
           } else
             showSoftkey(indexOfItems    [item%10000].itemSoftmenuName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
         }                                                                      //JMXEQ^^
-        else                                                                   //JMvv
+        else                                                                   //JMvv add radiobuttons
         if(softmenu[m].menuId == -MNU_SYSFL) {
           if(indexOfItems[item%10000].itemCatalogName[0] != 0) {
             if(isSystemFlagWriteProtected(indexOfItems[item%10000].param)) {
@@ -1437,6 +1437,10 @@ void showSoftmenuCurrentPart(void) {
           else if(item == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }     //JM ^^
+
+          else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          }                                                        //JM^^
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }

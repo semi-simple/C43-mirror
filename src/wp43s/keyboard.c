@@ -937,6 +937,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnKeyExit(uint16_t unusedParamButMandatory) {
+  int16_t tmp1;            //JM
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
   
@@ -1018,10 +1019,15 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_ASM_OVER_TAM:
+      tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;      //JM
       transitionSystemState = 0;
       calcModeTam();
       sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       tamTransitionSystem(TT_NOTHING);
+
+      if(tmp1 == -MNU_SYSFL) {                                                              //JM auto recover out of SYSFL 
+        calcModeNormal();
+       }                                                                                    //JM auto recover out of SYSFL 
       break;
 
     case CM_ASM_OVER_AIM:

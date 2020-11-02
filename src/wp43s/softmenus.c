@@ -1447,7 +1447,7 @@ printf("m = %d\n", m);
       for(x=0; x<6; x++) {
         if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
           if(x + 6*y + currentFirstItem < numberOfItems) {
-            showSoftkey(getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem), x, y-currentFirstItem/6, vmNormal, true, true);
+            showSoftkey(getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem), x, y-currentFirstItem/6, vmNormal, true, true, -1, -1); //JMTOCHECK
           }
         }
         else { // Static softmenu

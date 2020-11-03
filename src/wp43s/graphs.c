@@ -660,7 +660,7 @@ void graph_axis (void){
 
 
   if(PLOT_INTG && !invalid_intg) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapezium integral");
+    snprintf(tmpStr3000, sizeof(tmpStr3000), "  Trapezoid integral");
     miniC = 1;
     showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
@@ -856,6 +856,13 @@ void graph_plotmem(void) {
 //printf("TEST %d %d\n",screen_window_x(-0.405573,0.45,0.689633), screen_window_y(-0.405573,0.45,0.689633));
 //printf("TEST %d %d\n",screen_window_x(0,1,1), screen_window_y(0,1,1));
 
+  void plotDiff(void) {
+    if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;  //Differential
+  }
+
+  void plotInt(void) {
+    inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;
+  }
 
   statnum = 0;
 
@@ -923,14 +930,14 @@ void graph_plotmem(void) {
       		    break;
             } else {          	
               if(PLOT_DIFF) {
-                if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;  //Differential
+                plotDiff(); //ddy                                            //Differential
                 if(ddy < y_min) {y_min = ddy;}
                 if(ddy > y_max) {y_max = ddy;}
                 if(grf_x(ix) < x_min) {x_min = grf_x(ix);}
                 if(grf_x(ix) > x_max) {x_max = grf_x(ix);}
               }
               if(PLOT_INTG) {
-                inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                    //integral
+                plotInt();   //inty                                          //integral
                 if(inty < y_min) {y_min = inty;}
                 if(inty > y_max) {y_max = inty;}
                 if(grf_x(ix) < x_min) {x_min = grf_x(ix);}
@@ -1078,9 +1085,9 @@ void graph_plotmem(void) {
 
         if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg))){                                                               //Differential ddy
           ddx = grf_x(ix) - grf_x(ix-1);
-          if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;
+          plotDiff();   //ddy                                          //Differential
           inty0 = inty;
-          inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                      //integral
+          plotInt();    //inty                                         //integral
           x = (grf_x(ix) + grf_x(ix-1))/2;
           if(PLOT_DIFF) y = ddy;
           if(PLOT_INTG) y = inty;
@@ -1157,22 +1164,23 @@ void graph_plotmem(void) {
             uint16_t yNoff =screen_window_y( y_min, inty_off, y_max);
             uint16_t yN0   =screen_window_y( y_min, inty0, y_max);
             uint16_t yNintg=screen_window_y( y_min, inty, y_max);
-
-            uint16_t xAvg=((xN0+xN) >> 1);
+            uint16_t xAvg  =((xN0+xN) >> 1);
             
-            if(abs((int16_t)(xN-xN0)>=4)) {plotint( xAvg, yNintg );} else
-                                          {placePixel( xAvg, yNintg );}
+            if(abs((int16_t)(xN-xN0)>=6)) {plotint( xAvg, yNintg );} else
+                                          {//placePixel( xAvg, yNintg );
+                                           plotrect(xAvg-1, yNintg-1, xAvg+1, yNintg+1);}
 
-              //printf("%d %d %d \n",xN0,xN,abs((int16_t)(xN-xN0)));
             if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);} else
             if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);}
-//            plotline(xN, yNintg, xN0, yNintg);
 
-//            plotline(xN, yNintg, xN0, yNintg);
-
-            plotrect(xN0,yNoff,xN,yN0);
-            plotrect(xN0,yN0,xN,yNintg);
-            plotline(xN0,yN0,xN,yNintg);
+            if(abs((int16_t)(xN-xN0)>=6)) {
+              plotrect(xN0,yNoff,xN,yN0);
+              plotrect(xN0,yN0,xN,yNintg);
+              plotline(xN0,yN0,xN,yNintg);
+            } else {
+              plotrect(xN0,yNoff,xN,yNintg);
+              plotrect(xN0,yN0,xN,yNintg);
+            }
 
 
           }

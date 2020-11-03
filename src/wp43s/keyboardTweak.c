@@ -20,6 +20,11 @@
  * \file keyboardTweak.c
  ***********************************************/
 
+
+#define TESTING        //Allow longpress CHS and EEX
+#undef TESTING
+
+
 #include "wp43s.h"
 
 
@@ -212,9 +217,11 @@ void fg_processing_jm(void) {
             shiftF = false;  // Set it up, for flags to be cleared below.
             shiftG = true;
             if(HOME3) {
+              //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer-1].softmenu, mm_MNU_HOME);
               jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
-              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {                          //JM shifts
-                popSoftmenu();                                                                                                //JM shifts
+              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {              //JM shifts
+                 //printf("popping\n");
+                 popSoftmenu();                                                                                                //JM shifts
               }
               else {
                 if(calcMode == CM_AIM) {                                                                                      //JM shifts
@@ -223,6 +230,7 @@ void fg_processing_jm(void) {
                   showSoftmenu(NULL, -MNU_HOME, true);                                                                        //JM shifts  //JM ALPHA-HOME
                 }                                                                                                             //JM shifts                                                                                                                              //JM shifts
               }
+            showSoftmenuCurrentPart();
             }                                                                                                                 //JM shifts
           }
         }
@@ -352,7 +360,7 @@ void Setup_MultiPresses(int16_t result){
   if(calcMode == CM_NORMAL) {
     switch(result) {
       case KEY_BACKSPACE: tmp = ITM_DROP; break;      //Set up backspace double click to DROP
-      case ITM_XEQ      : tmp = -MNU_XXEQ; break;      //XEQ XEQMENU
+      //case ITM_XEQ      : tmp = -MNU_XXEQ; break;      //XEQ XEQMENU, removed as it does not properly work on double clieck. It still accesses XEQ
       //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
@@ -376,15 +384,27 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
 
   if(firstResult == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
     bool_t flag_user = getSystemFlag(FLAG_USER);
-    for(int i=0; i<=16; i++) {
-      if(key_no == i && i!=15) {    //Do not allow EEX as EEX is a leading edge button
+    for(int i=0; i<=16; i++) {      //16 //0=E+  6=STO  12=ENTER 13=X<>Y 14=CHS 15=E 16=BKSPC
+      if(key_no == i 
+        #ifndef TESTING
+          && i!=14       //Do not allow longpress CHS
+          && i!=15       //Do not allow longpress EEX as EEX is a leading edge button
+        #endif
+        && i!=16) {    //Do not allow longpress BKSPC
         if(flag_user) {
           firstResult = kbd_usr[i].fShifted;
-          delayedResult = kbd_usr[i].gShifted;
+          if(i!=13 && i!=14 && i!=15) delayedResult = kbd_usr[i].gShifted;
         }
         else {
           firstResult = kbd_std[i].fShifted;
-          delayedResult = kbd_std[i].gShifted;
+          if(
+               i!=12     //Do not allow second longpress ENTER
+          	&& i!=13     //Do not allow second longpress x<>y
+          #ifndef TESTING
+          	&& i!=14     //Do not allow second longpress CHS
+          	&& i!=15     //Do not allow second longpress EEX
+          #endif
+          ) delayedResult = kbd_std[i].gShifted;
         }
         break;
       }

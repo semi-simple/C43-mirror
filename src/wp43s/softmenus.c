@@ -1533,7 +1533,7 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
           } else
             showSoftkey(indexOfItems    [item%10000].itemSoftmenuName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
         }                                                                      //JMXEQ^^
-        else                                                                   //JMvv
+        else                                                                   //JMvv add radiobuttons
         if(softmenu[m].menuId == -MNU_SYSFL) {
           if(indexOfItems[item%10000].itemCatalogName[0] != 0) {
             if(isSystemFlagWriteProtected(indexOfItems[item%10000].param)) {
@@ -1561,6 +1561,10 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
           else if(item == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }     //JM ^^
+
+          else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
+            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+          }                                                        //JM^^
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
@@ -1606,6 +1610,7 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
     }
     showShiftState(); //JM
   }
+  if(softmenuStackPointer == 0) clearScreen_old(false, false, true); //JM, added to ensure the HOME is deleted
 }
 
 
@@ -1616,6 +1621,22 @@ void rollBackOneSoftmenu(void) {                                       //JM vv  
   else {
     doRefreshSoftMenu = true;     //dr
     ix = 1;
+    while(ix <= softmenuStackPointer - 1) {
+      softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
+      softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
+      ix++;
+    }
+    softmenuStackPointer--;
+  }
+}
+
+
+void popOneSoftmenu(int16_t ix0) {                                       //JM vv  Roll out one softmenu First in goes out
+  int8_t ix;
+  if(softmenuStackPointer == 0) return; 
+  else {
+    doRefreshSoftMenu = true;     //dr
+    ix = ix0;
     while(ix <= softmenuStackPointer - 1) {
       softmenuStack[ix-1].softmenu = softmenuStack[ix].softmenu;
       softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
@@ -1638,7 +1659,8 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
       ix--;
     }
     if(softmenuStack[ix-1].softmenu == target) {
-      rollBackOneSoftmenu();
+      //rollBackOneSoftmenu();
+      popOneSoftmenu(ix);
       rolloutSoftmenusIncluding(target);
     }
   }

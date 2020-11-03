@@ -2329,6 +2329,11 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
           clearPixel(x, y);
         }
       }
+      for(y=171-5; y<171; y++) {
+        for(x=0; x<20; x++) {
+          clearPixel(x, y);
+        }
+      }
     }
   #endif
 
@@ -2344,6 +2349,7 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
     if(clearSoftkeys) {
       clear_ul(); //JMUL
       lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
+      lcd_fill_rect(0, 171-5, 20, 5, 0);
     }
   #endif
 }                                                       //JM ^^

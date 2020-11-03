@@ -785,99 +785,123 @@ variableSoftmenu_t variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS] = {
 };
 
 
+
+static int sortMenu(void const *a, void const *b)
+ {
+  return compareString(a, b, CMP_EXTENSIVE);
+ }
+
+
 void initVariableSoftmenu(int16_t menu) {
-  int16_t i, numberOfBytes, numberOfGlobalLabels;
+  int16_t i, numberOfBytes, numberOfGlobalLabels, numberOfRows, bytesToAdd, len;
+  uint8_t *ptr;
 
   free(variableSoftmenu[menu].menuContent);
+
   switch(-variableSoftmenu[menu].menuId) {
     case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000MyAlpha", 27);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000not\000yet\000defined\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_RAM:     numberOfBytes = 1;
+    case MNU_RAM:
+    case MNU_FLASH:   scanLabels();
+                      numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
+                      memset(tmpString, 0, TMP_STR_LENGTH);
                       for(i=0; i<numberOfLabels; i++) {
-                        if(labelList[i].program > 0 && labelList[i].step > 0) { // RAM and Global label
+                        if((variableSoftmenu[menu].menuId == -MNU_RAM ? 1 : -1) * labelList[i].program > 0 && labelList[i].followingStep > 0) { // (RAM or FLASH) and Global label
+                          xcopy(tmpString + 15 * numberOfGlobalLabels, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
                           numberOfGlobalLabels++;
                           numberOfBytes += 1 + labelList[i].labelPointer[0];
-                          xcopy(tmpString, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
-                          tmpString[labelList[i].labelPointer[0]] = 0;
                         }
                       }
 
-                      if(numberOfGlobalLabels % 6 != 0) {
-                        numberOfBytes +=
+                      if(numberOfGlobalLabels == 0) {
+                        numberOfRows = 1;
+                        bytesToAdd = 6;
+                      }
+                      else {
+                        numberOfRows = (numberOfGlobalLabels - 1) / 6 + 1;
+                        bytesToAdd = 6 * numberOfRows - numberOfGlobalLabels;
+
+                        qsort(tmpString, numberOfGlobalLabels, 15, sortMenu);
                       }
 
-                      printf("numberOfGlobalLabels=%d numberOfBytes=%d\n", numberOfGlobalLabels, numberOfBytes);
+                      ptr = malloc(numberOfBytes + bytesToAdd);
+                      variableSoftmenu[menu].menuContent = ptr;
+                      *(ptr++) = numberOfRows;
+                      for(i=0; i<numberOfGlobalLabels; i++) {
+                        len = stringByteLength(tmpString + 15*i) + 1;
+                        xcopy(ptr, tmpString + 15*i, len);
+                        ptr += len;
+                      }
 
-                      variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000RAM", 23);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
-                      break;
+                      for(i=0; i<bytesToAdd; i++) {
+                        *(ptr++) = 0;
+                      }
 
-    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000FLASH", 25);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+                      variableSoftmenu[menu].menuContent[0] = numberOfRows;
+                      variableSoftmenu[menu].numItems = 6 * numberOfRows;
                       break;
 
     case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000MyMenu", 26);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000not\000yet\000defined\000\000", 26);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000VAR", 23);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000not\000yet\000defined\000\000", 23);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000MATRS", 25);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000STRINGS", 27);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000not\000yet\000defined\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000DATES", 25);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000TIMES", 25);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000ANGLES", 26);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000not\000yet\000defined\000\000", 26);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000SINTS", 25);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000LINTS", 25);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000REALS", 24);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000not\000yet\000defined\000\000", 24);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(25);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001Not\000yet\000defined\000\000\000CPXS", 24);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000not\000yet\000defined\000\000", 24);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    default: {}
+    default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", -variableSoftmenu[menu].menuId);
+                      displayBugScreen(errorMessage);
   }
 }
 
@@ -1432,7 +1456,7 @@ void showSoftmenuCurrentPart(void) {
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
     m = softmenuStack[softmenuStackPointer-1].softmenu;
-printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemCatalogName);
+    //printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemCatalogName);
     if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
       initVariableSoftmenu(m);
       numberOfItems = variableSoftmenu[m].numItems;
@@ -1471,11 +1495,15 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
     ULGL = false;                                   //JM Underline
 
     const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
+    char *ptr;
     for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
         if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
+          ptr = getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
           if(x + 6*y + currentFirstItem < numberOfItems) {
-            showSoftkey(getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem), x, y-currentFirstItem/6, vmNormal, true, true, -1, -1); //JMTOCHECK
+            if(variableSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
+              showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true, -1, -1);   //JM
+            }
           }
         }
         else { // Static softmenu

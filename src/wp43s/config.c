@@ -2619,9 +2619,38 @@ void addTestPrograms(void) {
     #endif
   }
 
+  { // OM page 203
+    // 547
+    *(stepAddress++) = ITM_LBL;
+    *(stepAddress++) = STRING_LABEL_VARIABLE;
+    *(stepAddress++) = 6; // String length
+    *(stepAddress++) = 'O';
+    *(stepAddress++) = 'M';
+    *(stepAddress++) = 'p';
+    *(stepAddress++) = '2';
+    *(stepAddress++) = '0';
+    *(stepAddress++) = '3';
+
+    *(stepAddress++) = ITM_SQUARE;
+
+    *(stepAddress++) = ITM_pi;
+
+    // 550
+    *(stepAddress++) = ITM_MULT;
+
+    *(stepAddress++) = ITM_RTN;
+    // 552
+    *(stepAddress++) = (ITM_END >> 8) | 0x80;
+    *(stepAddress++) =  ITM_END       & 0xff;
+
+    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+      printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
+    #endif
+  }
+
   { // All OP's
     //currentProgramMemoryPointer = stepAddress;
-    // 547
+    // 553
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = STRING_LABEL_VARIABLE;
     *(stepAddress++) = 7; // String length
@@ -2639,7 +2668,6 @@ void addTestPrograms(void) {
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 99;
 
-    // 550
     *(stepAddress++) = ITM_LBL;
     *(stepAddress++) = 'A' - 'A' + 100; // A
 
@@ -2652,6 +2680,7 @@ void addTestPrograms(void) {
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 99;
 
+    // 560
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = 'A' - 'A' + 100; // A
 
@@ -2679,7 +2708,6 @@ void addTestPrograms(void) {
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = REGISTER_X;
 
-    // 560
     *(stepAddress++) = ITM_GTO;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = REGISTER_K;
@@ -2699,6 +2727,7 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'a';
     *(stepAddress++) = 'r';
 
+    // 570
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = 0;
 
@@ -2724,7 +2753,6 @@ void addTestPrograms(void) {
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 0;
 
-    // 570
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 99;
@@ -2741,6 +2769,7 @@ void addTestPrograms(void) {
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = FIRST_LOCAL_REGISTER;
 
+    // 580
     *(stepAddress++) = ITM_XEQ;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = LAST_LOCAL_REGISTER;
@@ -2763,7 +2792,6 @@ void addTestPrograms(void) {
     *(stepAddress++) = ITM_ISE;
     *(stepAddress++) = REGISTER_X;
 
-    // 580
     *(stepAddress++) = ITM_ISE;
     *(stepAddress++) = REGISTER_K;
 
@@ -2780,6 +2808,7 @@ void addTestPrograms(void) {
     *(stepAddress++) = 'a';
     *(stepAddress++) = 'r';
 
+    // 590
     *(stepAddress++) = ITM_ISE;
     *(stepAddress++) = INDIRECT_REGISTER;
     *(stepAddress++) = 0;

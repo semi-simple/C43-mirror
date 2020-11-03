@@ -472,6 +472,25 @@ void clearScreenPixels() {
         placePixel(xn+2,yn+1);
         placePixel(xn+1,yn+2);
       }
+
+
+      void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
+        plotline(a, b, c, b);
+        plotline(a, b, a, d);
+        plotline(c, d, c, b);
+        plotline(c, d, a, d);
+      }
+
+
+      void plottriangle(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
+        plotline(a, b, c, b);
+        plotline(a, b, c, d);
+        plotline(c, d, c, b);
+      }
+
+
+
+
 #endif
 
 
@@ -831,7 +850,8 @@ void graph_plotmem(void) {
   float/*double*/ ddx = FLoatingMax;
   float/*double*/ ddy = FLoatingMax;
   float/*double*/ inty = 0;
-
+  float/*double*/ inty0 = 0;
+  float/*double*/ inty_off = 0;
 
 //printf("TEST %d %d\n",screen_window_x(-0.405573,0.45,0.689633), screen_window_y(-0.405573,0.45,0.689633));
 //printf("TEST %d %d\n",screen_window_x(0,1,1), screen_window_y(0,1,1));
@@ -860,6 +880,13 @@ void graph_plotmem(void) {
     #endif 
   }
 
+    runFunction(ITM_XRMS);
+    runFunction(ITM_DROP);
+    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpStr3000);
+    inty_off = strtof (tmpStr3000, NULL);
+    runFunction(ITM_DROP);
+
+
 
   if(telltale == MEM_INITIALIZED && statnum >= 2) {
     //GRAPH SETUP
@@ -882,7 +909,7 @@ void graph_plotmem(void) {
       invalid_diff = false;                                                      //Differential ddy scale
 
       if(PLOT_DIFF || PLOT_INTG) {
-        inty = grf_y(0);                                                          //  integral starting constant co-incides with graph
+        inty = inty_off;                                                          //  integral starting constant co-incides with graph
         for (ix = 0; (ix < LIM && ix < statnum); ++ix) { 
           if(ix !=0){
             ddx = grf_x(ix) - grf_x(ix-1);                                            //used in DIFF and INT
@@ -1042,7 +1069,7 @@ void graph_plotmem(void) {
     sy = 0;
     //GRAPH
     ix = 0;
-    inty = grf_y(0);                                                         //  integral starting constant co-incides with graph
+    inty = inty_off;                                                         //  integral starting constant co-incides with graph
     for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
       if(plotmode != _VECT) {
 
@@ -1052,6 +1079,7 @@ void graph_plotmem(void) {
         if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg))){                                                               //Differential ddy
           ddx = grf_x(ix) - grf_x(ix-1);
           if(ddx != 0) ddy = (grf_y(ix) - grf_y(ix-1)) / ddx; else ddy = FLoatingMax;
+          inty0 = inty;
           inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;                      //integral
           x = (grf_x(ix) + grf_x(ix-1))/2;
           if(PLOT_DIFF) y = ddy;
@@ -1124,13 +1152,29 @@ void graph_plotmem(void) {
             #ifdef STATDEBUG
               printf("Plotting Integral x=%f intg(x)=%f\n",x-ddx/2,inty);
             #endif
-            uint16_t xN0=screen_window_x( x_min, grf_x(ix-1), x_max);
-            uint16_t yNi=screen_window_y( y_min, inty, y_max);
-            uint16_t xNN=((xN0+xN) >> 1);
-            plotint( xNN, yNi );
-            //printf("%d %d %d \n",xN0,xN,abs((int16_t)(xN-xN0)));
-            if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNi, xNN+2, yNi);plotline(xNN-2, yNi, xN0, yNi);} else
-            if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNi, xNN+2, yNi);plotline(xNN-2, yNi, xN0, yNi);}
+            uint16_t xN0   =screen_window_x( x_min, grf_x(ix-1), x_max);
+            uint16_t xN1   =screen_window_x( x_min, grf_x(ix), x_max);
+            uint16_t yNoff =screen_window_y( y_min, inty_off, y_max);
+            uint16_t yN0   =screen_window_y( y_min, inty0, y_max);
+            uint16_t yNintg=screen_window_y( y_min, inty, y_max);
+
+            uint16_t xAvg=((xN0+xN) >> 1);
+            
+            if(abs((int16_t)(xN-xN0)>=4)) {plotint( xAvg, yNintg );} else
+                                          {placePixel( xAvg, yNintg );}
+
+              //printf("%d %d %d \n",xN0,xN,abs((int16_t)(xN-xN0)));
+            if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);} else
+            if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);}
+//            plotline(xN, yNintg, xN0, yNintg);
+
+//            plotline(xN, yNintg, xN0, yNintg);
+
+            plotrect(xN0,yNoff,xN,yN0);
+            plotrect(xN0,yN0,xN,yNintg);
+            plotline(xN0,yN0,xN,yNintg);
+
+
           }
 
         } else {

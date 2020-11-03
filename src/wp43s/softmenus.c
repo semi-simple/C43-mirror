@@ -1454,8 +1454,7 @@ void showSoftmenuCurrentPart(void) {
 
     //JMTOCHECK
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
-    clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
-    
+    clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are delete
 
 
     m = softmenuStack[softmenuStackPointer-1].softmenu;
@@ -1499,11 +1498,6 @@ void showSoftmenuCurrentPart(void) {
 
 
 
-
-
-
-
-
     ULFL = false;                                   //JM Underline
     ULGL = false;                                   //JM Underline
 
@@ -1511,7 +1505,6 @@ void showSoftmenuCurrentPart(void) {
     char *ptr;
     for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
       for(x=0; x<6; x++) {
-        
 
 
         if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
@@ -1527,7 +1520,6 @@ void showSoftmenuCurrentPart(void) {
             item = ITM_NULL;
           }
           else {
-
 
 
 
@@ -1559,9 +1551,7 @@ void showSoftmenuCurrentPart(void) {
 
 
 
-
             if(item < 0) { // softmenu
-
             menu = 0;
             while(softmenu[menu].menuId != 0) {
               if(softmenu[menu].menuId == item) {
@@ -1588,7 +1578,7 @@ void showSoftmenuCurrentPart(void) {
 #endif                                                                          //^^
           }
         }
-        
+
 
 
 
@@ -1611,7 +1601,6 @@ void showSoftmenuCurrentPart(void) {
             }
           }
         }                                                                      //JM^^
-        
 
 
 
@@ -1625,6 +1614,8 @@ void showSoftmenuCurrentPart(void) {
           if(softmenu[m].menuId == -MNU_FCNS) {
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
+
+
           else   //JM vv display i or j properly on display
           if(item == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
@@ -1635,6 +1626,7 @@ void showSoftmenuCurrentPart(void) {
           else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }                                                        //JM^^
+
 
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);

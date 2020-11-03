@@ -67,7 +67,7 @@ void listPrograms(void) {
 void listLabels(void) {
   printf("\nnum program  step label\n");
   for(int i=0; i<numberOfLabels; i++) {
-    printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].step));
+    printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].step) - 1);
     if(labelList[i].step < 0) { // Local label
       if(*(labelList[i].labelPointer) < 100) {
         printf("%d\n", *(labelList[i].labelPointer));

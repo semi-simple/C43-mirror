@@ -1267,7 +1267,7 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
+void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
   int16_t x, y, x1, y1, x2, y2;
   int16_t w;
   char label[15];
@@ -1360,6 +1360,14 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
   }
 
+  xcopy(label, l, stringByteLength(l) + 1);
+  w = stringWidth(label, &standardFont, false, false);
+  while(w > (xSoftkey == 5 ? 65 : 66)) {
+    label[stringLastGlyph(label)] = 0;
+    w = stringWidth(label, &standardFont, false, false);
+  }
+
+//continue with trimmed labe
   w = stringWidth(figlabel(label, showValue), &standardFont, false, false);                      //JM & dr vv
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
@@ -1471,40 +1479,42 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
           }
         }
         else { // Static softmenu
-            if(softkeyItem + x >= softmenu[m].softkeyItem + softmenu[m].numItems) {
-                item = ITM_NULL;
-            }
-            else {
-                int16_t xx = x + y*6;
-                //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
-                if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME)
-                {                                          //JMHOME
-                    if(menu_A_HOME[xx] < 100) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]    ].primary ) : (kbd_usr[menu_A_HOME[xx]    ].primary );}             else
-                        if(menu_A_HOME[xx] < 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
-                            if(menu_A_HOME[xx]>= 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-200].gShifted) : (kbd_usr[menu_A_HOME[xx]-200].gShifted);}
-                    //printf("item (std/usr)=%d \n",item);                              //JMHOME
-                    
-                    if(!getSystemFlag(FLAG_USER) && menu_A_HOME[xx] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
-                        item = Norm_Key_00_VAR;
-                    }
-                    
-                }                                                                     //JMHOME vv
-                else {
-                    item = softkeyItem[x];
-                    //printf("item (-1)=%d \n",item);                                  //JMHOME
-                }                                                                    //JMHOME
+          if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
+            item = ITM_NULL;
+          }
+          else {
+//JMCHECK spacing below
+              int16_t xx = x + y*6;
+              //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
+              if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME)
+              {                                          //JMHOME
+                  if(menu_A_HOME[xx] < 100) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]    ].primary ) : (kbd_usr[menu_A_HOME[xx]    ].primary );}             else
+                      if(menu_A_HOME[xx] < 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
+                          if(menu_A_HOME[xx]>= 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-200].gShifted) : (kbd_usr[menu_A_HOME[xx]-200].gShifted);}
+                  //printf("item (std/usr)=%d \n",item);                              //JMHOME
+                  
+                  if(!getSystemFlag(FLAG_USER) && menu_A_HOME[xx] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+                      item = Norm_Key_00_VAR;
+                  }
+                 
+              }                                                                     //JMHOME vv
+              else {
+                item = softkeyItem[x];
+                //printf("item (-1)=%d \n",item);                                  //JMHOME
+              }                                                                    //JMHOME
                 
             }
             int8_t showCb = fnCbIsSet(item%10000);                                  //dr
             int16_t showValue = fnItemShowValue(item%10000);                        //dr
             if(item < 0) { // softmenu
-                menu = 0;
-                while(softmenu[menu].menuId != 0) {
-                    if(softmenu[menu].menuId == item) {
-                        break;
-                    }
-                    menu++;
-                }
+
+            menu = 0;
+            while(softmenu[menu].menuId != 0) {
+              if(softmenu[menu].menuId == item) {
+                break;
+              }
+              menu++;
+            }
 
             if(softmenu[menu].menuId == 0) {
               sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
@@ -1553,7 +1563,7 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
           //        +30000 -> neither top nor bottom line
           if(softmenu[m].menuId == -MNU_FCNS) {
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          }
+          
           else   //JM vv display i or j properly on display
           if(item == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
@@ -1565,20 +1575,21 @@ printf("\n\nm=%d  MNU=%d=%s\n", m, -softmenu[m].menuId, indexOfItems[-softmenu[m
           else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }                                                        //JM^^
+
           else {
-            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          }
-          if(showValue == ITEM_NOT_CODED) {
-            int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
-            for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out
-              if(xStroke%3 == 0) yStroke--;
-              invertPixel(xStroke, yStroke -3);                                       //JM mod
-//JMCHECK^^
+       showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+            }
+            if(indexOfItems[item%10000].func == itemToBeCoded) {
+              int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
+              for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out
+                if(xStroke%3 == 0) yStroke--;
+                invertPixel(xStroke, yStroke -3);                                       //JM mod
+              }
             }
           }
         }
       }
-    }
+//JMCHECK spacing above
 
     if(0 <= yDotted && yDotted <= 2) {
       yDotted = 217 - SOFTMENU_HEIGHT * yDotted;

@@ -56,7 +56,7 @@
   #include <dmcp.h>
   #define TMP_STR_LENGTH       AUX_BUF_SIZE
 #else
-  #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560
+  #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560  //JMTOCHECK
 #endif
 #define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
 #define DISPLAY_VALUE_LEN        80

@@ -31,7 +31,7 @@ void     resetShiftState      (void);
 void     showShiftState       (void);
 
 
-void     fnCase              (uint16_t unusedParamButMandatory);
+void     fnCase              (uint16_t Param);
 void     processKeyAction    (int16_t item); //JM
 
 #ifndef TESTSUITE_BUILD

@@ -1160,7 +1160,7 @@ void graph_plotmem(void) {
               printf("Plotting Integral x=%f intg(x)=%f\n",x-ddx/2,inty);
             #endif
             uint16_t xN0   =screen_window_x( x_min, grf_x(ix-1), x_max);
-            uint16_t xN1   =screen_window_x( x_min, grf_x(ix), x_max);
+//          uint16_t xN1   =screen_window_x( x_min, grf_x(ix), x_max);
             uint16_t yNoff =screen_window_y( y_min, inty_off, y_max);
             uint16_t yN0   =screen_window_y( y_min, inty0, y_max);
             uint16_t yNintg=screen_window_y( y_min, inty, y_max);

@@ -241,8 +241,8 @@ const int16_t menu_DIGITS[]      = { CHR_A,                         CHR_B,      
                                      CHR_5,                         CHR_6,                      CHR_7,                    CHR_8,                 CHR_9,                       CHR_i,
                                      CHR_0,                         CHR_1,                      CHR_2,                    CHR_3,                 CHR_4,                       ITM_NULL                      };
 
-const int16_t menu_CHARS[]       = { -MNU_A_Z,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT,
-                                     -MNU_a_z,                      -MNU_alpha_omega,           ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
+const int16_t menu_CHARS[]       = { ITM_NULL,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT,
+                                     ITM_NULL,                      -MNU_alpha_omega,           ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
 
 const int16_t menu_PROGS[]       = { -MNU_RAM,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    -MNU_FLASH                    };
 
@@ -254,19 +254,6 @@ const int16_t menu_VAR[]         = { ITM_Not,                       ITM_yet,    
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-// Following menu is UPPER CASE for lower case: +26
-const int16_t menu_A_Z[]         = { CHR_A,                         CHR_B,                      CHR_C,                    CHR_D,                 CHR_E,                       CHR_F,
-                                     CHR_G,                         CHR_H,                      CHR_I,                    CHR_J,                 CHR_K,                       CHR_L,
-                                     CHR_M,                         CHR_N,                      CHR_O,                    CHR_P,                 CHR_Q,                       CHR_R,
-                                     CHR_S,                         CHR_T,                      CHR_U,                    CHR_V,                 CHR_W,                       CHR_X,
-                                     CHR_Y,                         CHR_Z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
-const int16_t menu_a_z[]         = { CHR_a,                         CHR_b,                      CHR_c,                    CHR_d,                 CHR_e,                       CHR_f,
-                                     CHR_g,                         CHR_h,                      CHR_i,                    CHR_j,                 CHR_k,                       CHR_l,
-                                     CHR_m,                         CHR_n,                      CHR_o,                    CHR_p,                 CHR_q,                       CHR_r,
-                                     CHR_s,                         CHR_t,                      CHR_u,                    CHR_v,                 CHR_w,                       CHR_x,
-                                     CHR_y,                         CHR_z,                      ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-
 // Following menu is UPPER CASE for lower case: +36
 const int16_t menu_ALPHA_OMEGA[] = { CHR_ALPHA,                     CHR_BETA,                   CHR_GAMMA,                CHR_DELTA,             CHR_EPSILON,                 CHR_DIGAMMA,
                                      CHR_ZETA,                      CHR_ETA,                    CHR_THETA,                CHR_IOTA,              CHR_KAPPA,                   CHR_LAMBDA,
@@ -651,13 +638,14 @@ const int16_t menu_PLOT[]        = {
 
 const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                             -MNU_MyAlpha,                  -MNU_ALPHA_OMEGA,           -MNU_A_Z,                 ITM_XEDIT,             ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW, 
-                                     CHR_case,                      -MNU_alpha_omega,           -MNU_a_z,                 -MNU_ALPHADOT,         -MNU_ALPHAMATH,               -MNU_ALPHAINTL,                     //JM
-                                     ITM_ASSIGN,                     KEY_USERMODE,              -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                    -MNU_FLAGS                     };    //JM
+/* 03 */                             KEY_UP1,                       KEY_DOWN1,                  ITM_T_LLEFT_ARROW,        ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW, 
+                                     -MNU_MyAlpha,                  ITM_XEDIT,                  -MNU_ALPHA_OMEGA,         -MNU_ALPHADOT,         -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                     //JM
+                                     ITM_ASSIGN,                    KEY_USERMODE,               -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                   -MNU_FLAGS                     };    //JM
 
 
-const int16_t menu_T_EDIT[]      = { CHR_DOUBLE_QUOTE,              CHR_SLASH,                  ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,             ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
-                                     CHR_QUOTE,                     CHR_ASTERISK,               CHR_CIRCUMFLEX,          ITM_NULL,              CHR_LESS_THAN,                CHR_GREATER_THAN                }; 
+const int16_t menu_T_EDIT[]      = { KEY_UP1,                       KEY_DOWN1,                  ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,     ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+                                     CHR_DOUBLE_QUOTE,              ITM_XEDIT,                  -MNU_ALPHA_OMEGA,         -MNU_ALPHADOT,         -MNU_ALPHAMATH,              -MNU_ALPHAINTL,               
+                                     CHR_QUOTE,                     CHR_ASTERISK,               CHR_CIRCUMFLEX,          CHR_SLASH,              CHR_LESS_THAN,               CHR_GREATER_THAN       }; 
 
 const int16_t menu_XXEQ[]        = { ITM_XSAVE,                     ITM_XLOAD,                  ITM_XEDIT,               ITM_XNEW,              ITM_XXEQ,                     -MNU_XEQ                        };   //JM
 
@@ -726,8 +714,6 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_PROGS,       .numItems = sizeof(menu_PROGS      )/sizeof(int16_t), .softkeyItem = menu_PROGS       },
   {.menuId = -MNU_VARS,        .numItems = sizeof(menu_VARS       )/sizeof(int16_t), .softkeyItem = menu_VARS        },
   {.menuId = -MNU_VAR,         .numItems = sizeof(menu_VAR        )/sizeof(int16_t), .softkeyItem = menu_VAR         },
-  {.menuId = -MNU_A_Z,         .numItems = sizeof(menu_A_Z        )/sizeof(int16_t), .softkeyItem = menu_A_Z         },
-  {.menuId = -MNU_a_z,         .numItems = sizeof(menu_a_z        )/sizeof(int16_t), .softkeyItem = menu_a_z         },
   {.menuId = -MNU_ALPHA_OMEGA, .numItems = sizeof(menu_ALPHA_OMEGA)/sizeof(int16_t), .softkeyItem = menu_ALPHA_OMEGA },
   {.menuId = -MNU_alpha_omega, .numItems = sizeof(menu_alpha_omega)/sizeof(int16_t), .softkeyItem = menu_alpha_omega },
   {.menuId = -MNU_FCNS,        .numItems = sizeof(menu_FCNS       )/sizeof(int16_t), .softkeyItem = menu_FCNS        },
@@ -1848,9 +1834,6 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
   }
-  else if(id==-MNU_A_Z && alphaCase==AC_LOWER) { // A...Z                                      //JM vv retaining the old menu
-    id = -MNU_a_z;
-  } //JM^^
   else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;
   }
@@ -1858,9 +1841,6 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
   if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
     id = -MNU_ALPHAintl;
   }
-  else if((id==0 && !strcmp(menu, "A" STD_ELLIPSIS "Z")) && alphaCase==AC_LOWER) { // A...Z    //JM vv retaining the old menu
-    id = -MNU_a_z;
-  } //JM^^
   else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
     id = -MNU_alpha_omega;
   }

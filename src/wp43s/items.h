@@ -1882,8 +1882,8 @@
 #define ITM_1860                      1860
 #define ITM_1861                      1861
 #define ITM_1862                      1862
-#define ITM_1863                      1863
-#define ITM_1864                      1864
+#define CHR_caseUP                    1863   //JM CAPS
+#define CHR_caseDN                    1864   //JM CAPS
 #define ITM_LISTXY                    1865   //JMSTAT
 #define ITM_SH_ERPN                   1866   //JM SHOW
 #define ITM_SYS_FREE_RAM              1867   //dr
@@ -1936,8 +1936,8 @@
 #define MNU_EE                        1914   //JM EE
 #define ITM_1915                      1915
 #define MNU_ASN                       1916   //JM USER
-#define MNU_A_Z                       1917   //  34
-#define MNU_a_z                       1918   //  875
+#define ITM_1917                      1917
+#define ITM_1918                      1918
 #define ITM_1919                      1919
 #define MNU_ASN_U                     1920   //V43
 #define MNU_T_EDIT                    1921

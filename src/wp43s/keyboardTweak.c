@@ -38,9 +38,16 @@ uint32_t    timerLastCalled;
 
 
 
-void fnCase(uint16_t unusedParamButMandatory) {
+void fnCase(uint16_t Param) {
   #ifndef TESTSUITE_BUILD
-  processKeyAction(CHR_case);
+  switch (Param) {
+
+    case 0:  processKeyAction(CHR_case); break;
+    case 1:  if(alphaCase == AC_LOWER)  { processKeyAction(CHR_case); } break;
+    case 2:  if(alphaCase == AC_UPPER)  { processKeyAction(CHR_case); } break;
+    default: break;
+  }
+
   #endif
 }
 
@@ -589,6 +596,25 @@ void btnFnPressed_StateMachine(void *w, void *data) {
 
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
 
+
+
+  //BYPASS LONG/DOUBLE CLICK FOR IDENTIFIED QUICK KEYS, i.e. NAV KEYS, ARROWS ETC.
+  int16_t tmp1 = nameFunction(FN_key_pressed-37,0);
+  if( FN_state == ST_1_PRESS1 && 
+       (   tmp1 == ITM_T_RIGHT_ARROW 
+        || tmp1 == ITM_T_LEFT_ARROW 
+        || tmp1 == ITM_T_RRIGHT_ARROW 
+        || tmp1 == ITM_T_LLEFT_ARROW 
+        || tmp1 == KEY_DOWN1
+        || tmp1 == KEY_UP1
+        ) ) {
+     char charKey[3];
+     sprintf(charKey, "%c", FN_key_pressed + 11);
+     btnFnClicked(w, charKey);                                             //Execute    
+     return;
+  }
+
+
   if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try
     if(FN_key_pressed_last != FN_key_pressed) {       //first press
       fnTimerExec(TO_FN_EXEC);
@@ -645,7 +671,7 @@ void btnFnPressed_StateMachine(void *w, void *data) {
     else if(!shiftF && shiftG) {
       showFunctionName(nameFunction(FN_key_pressed-37,12),0);
       underline_softkey(FN_key_pressed-38, 2, !true /*dontclear at first call*/); //JMUL inverted clearflag
-    }                                                                      //further shifts are done within FN_handler
+    }                                                                       //further shifts are done within FN_handler
   }
 //#ifdef INLINE_TEST
 //  if(testEnabled) { fnSwStop(1); }      //dr

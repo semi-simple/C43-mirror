@@ -240,6 +240,21 @@ switch (event_keyval) {
       copyScreenToClipboard();
       break;
 
+//ROW 0
+    case 65362:                                               //JM     // CursorUp //JM
+      btnFnClickedP(w, "1");
+      break;
+    case 65361:                                               //JM     // CursorLt BST //JM
+      btnFnClickedP(w, "5");
+      break;
+    case 65364:                                               //JM     // CursorDown //JM
+      btnFnClickedP(w, "2");
+      break;
+    case 65363:                                               //JM     // CursorRt SST //JM
+      btnFnClickedP(w, "6");
+      break;
+
+
 //ROW 1
     case 65470: // F1                                                    //**************-- FUNCTION KEYS --***************//
       btnFnClicked(w, "1");
@@ -315,11 +330,8 @@ switch (event_keyval) {
       btnClicked(w, "16");
       break;
 //ROW 5
-    case 65362:                                               //JM     // CursorUp //JM
+    case 65360:                                               //JM     // HOME  //JM
       btnClicked(w, "17");
-      break;
-    case 65361:                                               //JM     // CursorLt BST //JM
-      btnClicked_NU(w, "17");
       break;
     case 80:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_UC(w, "18");
@@ -334,11 +346,8 @@ switch (event_keyval) {
       btnClicked_UC(w, "21");
       break;
 //ROW 6
-    case 65364:                                               //JM     // CursorDown //JM
+    case 65367:                                               //JM     // END  //JM
       btnClicked(w, "22");
-      break;
-    case 65363:                                               //JM     // CursorRt SST //JM
-      btnClicked_NU(w, "22");
       break;
     case 84:  //JM SHIFTED CAPITAL ALPHA AND SHIFTED NUMERAL  //JM
       btnClicked_UC(w, "23");

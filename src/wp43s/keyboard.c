@@ -623,12 +623,12 @@ void processKeyAction(int16_t item) {
       int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                      //JMvv
       if(alphaCase == AC_LOWER) {
         alphaCase = AC_UPPER;
-        if(sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) {
+        if(sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) {
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch case menu
         }
       } else {
         alphaCase = AC_LOWER;
-        if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) {
+        if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) {
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch case menu
         }
       }
@@ -973,7 +973,9 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_AIM:
-      if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) { //JM
+      tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;  //JM
+      if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU || tmp1 == -MNU_T_EDIT) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) { //JM
+        if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}    //JM
         calcModeNormal();
         popSoftmenu();
 
@@ -1273,7 +1275,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_alpha_omega || sm == -MNU_a_z || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
+        if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
@@ -1419,7 +1421,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { //&& softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_T_EDIT)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_A_Z || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
+        if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu

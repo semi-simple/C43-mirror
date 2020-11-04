@@ -1140,15 +1140,29 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 }
 
 
-#define lines 5                                                          //JMCURSOR vv
+uint8_t lines = 2;
+uint8_t y_offset = 3;
+
+//#define lines 5                                                          //JMCURSOR vv
 #define x_offset 0    //pixels 40
-#define y_offset 2    //lines   0
+//#define y_offset 2    //lines   0
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
   int16_t tmpxy, glyphId;
   bool_t   slc, sec;
   int16_t numPixels, orglastlines;
   const glyph_t *glyph;
+
+  lg = stringByteLength(string + offset);
+
+  if(lg>30) {
+    lines = 5;
+    y_offset = 2;
+  } else {
+    if(lines==5) last_CM = 253; //Force redraw
+    lines = 2;
+    y_offset = 3;
+  }
 
   orglastlines = lastline;
 
@@ -1157,9 +1171,7 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     x = x_offset; 
     y = 20 + y_offset * 20;
   }
-
-  lg = stringByteLength(string + offset);
-
+  
   ch = offset;
   while(string[ch] != 0) {
     if(lg == 1 || (lg == 2 && (string[offset] & 0x80))) {// The string is 1 glyph long

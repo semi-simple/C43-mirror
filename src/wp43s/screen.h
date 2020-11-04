@@ -34,6 +34,7 @@ void     Shft_stop();                        //JM reset shift after  4s
 void     underline(int16_t y);               //JM SHIFT LINE
 void     clear_ul(void);                     //JMUL
 void     clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);      //JMOLD
+uint8_t  last_CM;
 
 
 

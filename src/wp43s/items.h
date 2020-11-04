@@ -1934,11 +1934,11 @@
 #define MNU_BASE                      1912   //JM BASE
 #define MNU_XEQ                       1913   //JM EXEC
 #define MNU_EE                        1914   //JM EE
-#define ITM_1915                      1915
+#define ITM_T_UP_ARROW                1915
 #define MNU_ASN                       1916   //JM USER
-#define ITM_1917                      1917
-#define ITM_1918                      1918
-#define ITM_1919                      1919
+#define ITM_T_DOWN_ARROW              1917
+#define ITM_T_HOME                    1918
+#define ITM_T_END                     1919
 #define MNU_ASN_U                     1920   //V43
 #define MNU_T_EDIT                    1921
 #define MNU_XXEQ                      1922

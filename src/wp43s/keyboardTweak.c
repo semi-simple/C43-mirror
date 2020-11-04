@@ -597,6 +597,8 @@ void btnFnPressed_StateMachine(void *w, void *data) {
   FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
 
 
+/* REVISION 0 OF QUICKKEYS. WORKING ##################
+Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
 
   //BYPASS LONG/DOUBLE CLICK FOR IDENTIFIED QUICK KEYS, i.e. NAV KEYS, ARROWS ETC.
   int16_t tmp1 = nameFunction(FN_key_pressed-37,0);
@@ -605,14 +607,17 @@ void btnFnPressed_StateMachine(void *w, void *data) {
         || tmp1 == ITM_T_LEFT_ARROW 
         || tmp1 == ITM_T_RRIGHT_ARROW 
         || tmp1 == ITM_T_LLEFT_ARROW 
-        || tmp1 == KEY_DOWN1
-        || tmp1 == KEY_UP1
+        || tmp1 == ITM_T_DOWN_ARROW
+        || tmp1 == ITM_T_UP_ARROW
         ) ) {
      char charKey[3];
      sprintf(charKey, "%c", FN_key_pressed + 11);
      btnFnClicked(w, charKey);                                             //Execute    
+     fnTimerStop(TO_FN_EXEC);
+     FN_handle_timed_out_to_EXEC=false;
      return;
   }
+   ################################################## */
 
 
   if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try
@@ -639,7 +644,7 @@ void btnFnPressed_StateMachine(void *w, void *data) {
 
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   double_click_detected = false;                                            //JM FN-DOUBLE - Dip detection flag
-  if(jm_G_DOUBLETAP) {
+  if((jm_G_DOUBLETAP && calcMode != CM_AIM)) {
     if(exexute_double_g) {
       if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
         shiftF = false;                                                     //JM
@@ -701,7 +706,7 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     FN_state =  ST_2_REL1;
   }
 
-  if(jm_G_DOUBLETAP && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
+  if((jm_G_DOUBLETAP && calcMode != CM_AIM) && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
     uint8_t                      offset =  0;
     if(shiftF && !shiftG)      { offset =  6; }
     else if(!shiftF && shiftG) { offset = 12; }
@@ -1302,6 +1307,7 @@ void fnT_ARROW(uint16_t command) {
   char ss[4];
 
   switch (command) {
+
      case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
        ix = 0; 
        in = 0;
@@ -1341,7 +1347,7 @@ void fnT_ARROW(uint16_t command) {
         break;
 
 
-     case KEY_UP1 /*UP */ :
+     case ITM_T_UP_ARROW /*UP */ :
         ixx = 0;
         yc = 0;
         fnT_ARROW(ITM_T_RIGHT_ARROW);
@@ -1362,7 +1368,7 @@ void fnT_ARROW(uint16_t command) {
         break;
 
 
-     case KEY_DOWN1 /*DN*/ :
+     case ITM_T_DOWN_ARROW /*DN*/ :
         ixx = 0;
         yc = 0;
         fnT_ARROW(ITM_T_LEFT_ARROW);
@@ -1380,6 +1386,19 @@ void fnT_ARROW(uint16_t command) {
           yc += stringWidth(ss,&standardFont,true,true);
           ixx++;
         }
+        break;
+
+
+
+     case KEY_UP1 /*HOME */ :
+        T_cursorPos = 0;
+        break;
+
+
+     case KEY_DOWN1 /*END*/ :
+        T_cursorPos = stringByteLength(aimBuffer) - 1;
+        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
+        fnT_ARROW(ITM_T_RIGHT_ARROW);
         break;
 
 

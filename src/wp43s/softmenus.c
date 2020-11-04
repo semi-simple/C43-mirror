@@ -638,12 +638,12 @@ const int16_t menu_PLOT[]        = {
 
 const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-/* 03 */                             KEY_UP1,                       KEY_DOWN1,                  ITM_T_LLEFT_ARROW,        ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW, 
+/* 03 */                             ITM_T_UP_ARROW,                ITM_T_DOWN_ARROW,           ITM_T_LLEFT_ARROW,        ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW, 
                                      -MNU_MyAlpha,                  ITM_XEDIT,                  -MNU_ALPHA_OMEGA,         -MNU_ALPHADOT,         -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                     //JM
                                      ITM_ASSIGN,                    KEY_USERMODE,               -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                   -MNU_FLAGS                     };    //JM
 
 
-const int16_t menu_T_EDIT[]      = { KEY_UP1,                       KEY_DOWN1,                  ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,     ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
+const int16_t menu_T_EDIT[]      = { ITM_T_UP_ARROW,                ITM_T_DOWN_ARROW,           ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,     ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
                                      CHR_DOUBLE_QUOTE,              ITM_XEDIT,                  -MNU_ALPHA_OMEGA,         -MNU_ALPHADOT,         -MNU_ALPHAMATH,              -MNU_ALPHAINTL,               
                                      CHR_QUOTE,                     CHR_ASTERISK,               CHR_CIRCUMFLEX,          CHR_SLASH,              CHR_LESS_THAN,               CHR_GREATER_THAN       }; 
 

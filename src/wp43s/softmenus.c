@@ -1373,17 +1373,25 @@ void showSoftmenuCurrentPart(void) {
               sprintf(errorMessage, "In function showSoftmenuCurrentPart: Softmenu ID %" PRId16 " must be generated!", item);
               displayBugScreen(errorMessage);
             }
-            else {
-#ifdef INLINE_TEST                                                              //vv dr
-              if(softmenu[menu].menuId == -MNU_INL_TST) {
-                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1, -1);
-              }
+
+            else if(softmenu[menu].menuId == -MNU_ALPHA_OMEGA && alphaCase == AC_UPPER) { //JMvv
+              showSoftkey(indexOfItems[MNU_ALPHA_OMEGA].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+            }     //JM ^^
+            else if(softmenu[menu].menuId == -MNU_ALPHA_OMEGA && alphaCase == AC_LOWER) { //JMvv
+              showSoftkey(indexOfItems[MNU_alpha_omega].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+            }     //JM ^^
+  
               else {
-#endif                                                                          //^^
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
-#ifdef INLINE_TEST                                                              //vv dr
-              }
-#endif                                                                          //^^
+  #ifdef INLINE_TEST                                                              //vv dr
+                if(softmenu[menu].menuId == -MNU_INL_TST) {
+                  showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1, -1);
+                }
+                else {
+  #endif                                                                          //^^
+                showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+  #ifdef INLINE_TEST                                                              //vv dr
+                }
+  #endif                                                                          //^^
             }
           }
         }
@@ -1417,19 +1425,20 @@ void showSoftmenuCurrentPart(void) {
             showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
           else   //JM vv display i or j properly on display
-          if(item == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
+          if(item%10000 == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
-          else if(item == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
+          else if(item%10000 == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
             showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }     //JM ^^
-
           else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }                                                        //JM^^
           else {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
           }
+
+
           if(showValue == ITEM_NOT_CODED) {
             int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
             for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out

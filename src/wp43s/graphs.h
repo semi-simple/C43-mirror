@@ -48,6 +48,7 @@ extern bool_t PLOT_BOX;
 extern bool_t PLOT_INTG; 
 extern bool_t PLOT_DIFF; 
 extern bool_t PLOT_RMS; 
+extern bool_t PLOT_SHADE; 
 
 //Screen limits
 #define SCREEN_MIN_GRAPH 20
@@ -69,6 +70,7 @@ void fnPrms           (uint16_t unusedParamButMandatory);
 void fnPvect          (uint16_t unusedParamButMandatory);
 void fnPNvect         (uint16_t unusedParamButMandatory);
 void fnScale          (uint16_t unusedParamButMandatory);
+void fnPshade         (uint16_t unusedParamButMandatory);
 void fnPx             (uint16_t unusedParamButMandatory);
 void fnPy             (uint16_t unusedParamButMandatory);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1

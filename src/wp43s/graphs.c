@@ -56,6 +56,7 @@ void graph_reset(){
   PLOT_INTG     = false;
   PLOT_DIFF     = false;
   PLOT_RMS      = false;
+  PLOT_SHADE    = false;
 }
 
 
@@ -117,6 +118,14 @@ void fnScale (uint16_t unusedParamButMandatory) {
   jm_SCALE = !jm_SCALE;
   fnRefreshComboxState(CB_JC, JC_SCALE, jm_SCALE);                //jm
   fnPlot(0);
+}    
+
+void fnPshade (uint16_t unusedParamButMandatory) {
+  PLOT_SHADE = !PLOT_SHADE;
+  
+  if(PLOT_SHADE) PLOT_INTG = false;
+  fnRefreshComboxState(CB_JC, JC_SHADE, PLOT_SHADE);                //jm
+  fnPintg(0);
 }    
 
 void fnPx (uint16_t unusedParamButMandatory) {
@@ -1173,13 +1182,15 @@ void graph_plotmem(void) {
             if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);} else
             if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);}
 
-            if(abs((int16_t)(xN-xN0)>=6)) {
-              plotrect(xN0,yNoff,xN,yN0);
-              plotrect(xN0,yN0,xN,yNintg);
-              plotline(xN0,yN0,xN,yNintg);
-            } else {
-              plotrect(xN0,yNoff,xN,yNintg);
-              plotrect(xN0,yN0,xN,yNintg);
+            if(PLOT_SHADE) {
+              if(abs((int16_t)(xN-xN0)>=6)) {
+                plotrect(xN0,yNoff,xN,yN0);
+                plotrect(xN0,yN0,xN,yNintg);
+                plotline(xN0,yN0,xN,yNintg);
+              } else {
+                plotrect(xN0,yNoff,xN,yNintg);
+                plotrect(xN0,yN0,xN,yNintg);
+              }
             }
 
 

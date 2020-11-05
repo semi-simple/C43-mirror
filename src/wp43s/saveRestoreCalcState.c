@@ -210,6 +210,7 @@ void saveCalc(void) {
   save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      backup);
   save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      backup);
   save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      backup);
+  save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      backup);
   save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
   save(&running_program_jm,                 sizeof(running_program_jm),                 backup);
   save(&indic_x,                            sizeof(indic_x),                            backup);
@@ -404,6 +405,7 @@ void restoreCalc(void) {
     restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      backup);
     restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      backup);
     restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      backup);
+    restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      backup);
     restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         backup);
     restore(&running_program_jm,                 sizeof(running_program_jm),                 backup);
     restore(&indic_x,                            sizeof(indic_x),                            backup);

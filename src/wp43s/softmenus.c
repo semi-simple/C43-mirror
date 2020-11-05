@@ -616,16 +616,16 @@ const int16_t menu_GRAPH[]        = {
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
                                      ITM_PLOT,                      ITM_PLOTLS,                 ITM_SCALE,                ITM_PLINE,             ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
-                                     ITM_NVECT,                     ITM_VECT,                   ITM_EXTX,                 ITM_PCROS,             ITM_SIGMAMINUS,              ITM_LISTXY,                         //JM GRAPH
-                                     ITM_DIFF,                      ITM_INTG,                   ITM_EXTY,                 ITM_PBOX,              ITM_CLSIGMA,                 ITM_SUM,                            //JM GRAPH
+                                     ITM_NVECT,                     ITM_VECT,                   ITM_EXTX,                 ITM_PCROS,             ITM_LISTXY,                  ITM_RMS,                         //JM GRAPH
+                                     ITM_DIFF,                      ITM_INTG,                   ITM_EXTY,                 ITM_PBOX,              ITM_CLSIGMA,                 ITM_SHADE,                            //JM GRAPH
 
                                      ITM_SCALE,                     ITM_PLINE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_EXTX,                      ITM_PCROS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_EXTY,                      ITM_PBOX,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_SIGMAPLUS,                 ITM_SCRDMP,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_SIGMAMINUS,                ITM_LISTXY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_CLSIGMA,                   ITM_SUM,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_LISTXY,                    ITM_RMS,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_CLSIGMA,                   ITM_SHADE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_PLOT,                      ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_DEMO4,                     ITM_DEMO5,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH

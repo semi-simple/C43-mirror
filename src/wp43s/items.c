@@ -543,6 +543,7 @@ void fnPNvect                   (uint16_t unusedParamButMandatory) {}
 void fnScale                    (uint16_t unusedParamButMandatory) {}
 void fnPx                       (uint16_t unusedParamButMandatory) {}
 void fnPy                       (uint16_t unusedParamButMandatory) {}
+void fnPshade                   (uint16_t unusedParamButMandatory) {}
 
   
                                                                                 //JM ^^
@@ -2787,6 +2788,7 @@ const item_t indexOfItems[] = {
 /* 2184 */  { fnPintg,                     NOPARAM,                     STD_SIGMA STD_y_BAR STD_DELTA "x",             STD_SIGMA STD_y_BAR STD_DELTA "x",             0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2185 */  { fnPdiff,                     NOPARAM,                     STD_DELTA "y/" STD_DELTA "x",                  STD_DELTA "y/" STD_DELTA "x",                  0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2186 */  { fnPrms,                      NOPARAM,                     "RMS",                                         "RMS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
+/* 2187 */  { fnPshade,                    NOPARAM,                     "SHADE",                                       "SHADE",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 
-/* 2187 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2188 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

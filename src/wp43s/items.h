@@ -1768,7 +1768,7 @@
 #define ITM_FG_LINE                   1746   //JM FG              **
 #define ITM_FG_DOTS                   1747   //JM FG              **
 #define ITM_G_DOUBLETAP               1748   //JM FG              **
-#define ITM_1749                      1749
+#define ITM_CLA                       1749   //GRAPH
 #define ITM_P_ALLREGS                 1750   //JM Print all regs
 #define ITM_SI_f                      1751   //JM PRE UNIT
 #define ITM_SI_p                      1752   //JM PRE UNIT

@@ -1118,8 +1118,9 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
 /*      refreshRegisterLine(REGISTER_T);
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);
-      refreshRegisterLine(REGISTER_X);
-*/
+*/      refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+      last_CM=253;
+
     }
   }
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
@@ -1174,6 +1175,16 @@ void fnXEQNEW (uint16_t unusedParamButMandatory) {
   fnStrtoX("XEQC43 XEQLBL 01 XXXXXX ");
   fnXEQMEDIT(0);
 }
+
+
+
+void fnCla(uint16_t unusedParamButMandatory){
+  aimBuffer[0]=0;
+  T_cursorPos = 0;
+  refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+  last_CM=253;
+}
+
 
 
 

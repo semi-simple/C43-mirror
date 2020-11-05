@@ -544,6 +544,8 @@ void fnScale                    (uint16_t unusedParamButMandatory) {}
 void fnPx                       (uint16_t unusedParamButMandatory) {}
 void fnPy                       (uint16_t unusedParamButMandatory) {}
 void fnPshade                   (uint16_t unusedParamButMandatory) {}
+void fnCla                      (uint16_t unusedParamButMandatory) {}
+
 
   
                                                                                 //JM ^^
@@ -2347,7 +2349,7 @@ const item_t indexOfItems[] = {
 /* 1746 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNDERLINING
 /* 1747 */  { fnSetSetJM,                  JC_FG_DOTS,                  "fg" STD_SPACE_3_PER_EM "DOTS",                "fg" STD_SPACE_3_PER_EM "DOTS",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNDERLINING
 /* 1748 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM KEY TAP DOUBLE SETTING
-/* 1749 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1749 */  { fnCla,                       NOPARAM,                     "CLA",                                         "CLA",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 1750 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 /* 1751 */  { fnMultiplySI,                85,                          STD_DOT "f",                                   STD_DOT "f",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM PRE UNIT
 /* 1752 */  { fnMultiplySI,                88,                          STD_DOT "p",                                   STD_DOT "p",                                   0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM PRE UNIT

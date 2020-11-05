@@ -1159,10 +1159,11 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     lines = 5;
     y_offset = 2;
   } else {
-    if(lines==5) last_CM = 253; //Force redraw
     lines = 2;
     y_offset = 3;
   }
+  if(lines==5 || lg == 0) last_CM = 253; //Force redraw if 
+
 
   orglastlines = lastline;
 

@@ -371,7 +371,16 @@ void Setup_MultiPresses(int16_t result){
       //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
+  } else
+  if(calcMode == CM_AIM) {
+    switch(result) {
+      case KEY_BACKSPACE: tmp = ITM_CLA; break;      //Set up backspace double click to CLA
+      default:;
+    }
   }
+
+
+
   if(tmp != 0){
     if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
       JM_auto_doublepress_enabled = tmp;
@@ -435,6 +444,12 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
     }
   }
 
+  if(calcMode == CM_AIM) {
+    switch(*result) {
+      case KEY_BACKSPACE    : firstResult = ITM_CLA; break;       //TRYOUT LONGPRESS EXIT DOES CLA
+      default:;
+    }
+  }
 
   if(firstResult !=0) {                                      //if activated key pressed 
     JM_auto_longpress_enabled = firstResult;

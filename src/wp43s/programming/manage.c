@@ -73,28 +73,64 @@ void scanLabels(void) {
 
 
 
+void deleteStepsFromTo(uint8_t *from, uint8_t *to) {
+  uint16_t opSize = to - from;
+  xcopy(from, to, (firstFreeProgramBytePointer - to) + 2);
+  firstFreeProgramBytePointer -= opSize;
+  freeProgramBytes += opSize;
+printf("freeProgramBytes = %u\n", freeProgramBytes);
+  scanLabels();
+}
+
+
+
 void fnClPAll(uint16_t confirmation) {
   if(confirmation == NOT_CONFIRMED) {
     setConfirmationMode(fnClPAll);
   }
   else {
-    *programMemoryPointer       = 255; // .END.
-    *(programMemoryPointer + 1) = 255; // .END.
+    *(programMemoryPointer + 0) = (ITM_END >> 8) | 0x80;
+    *(programMemoryPointer + 1) =  ITM_END       & 0xff;
+    *(programMemoryPointer + 2) = 255; // .END.
+    *(programMemoryPointer + 3) = 255; // .END.
+    freeProgramBytes = 0;
+printf("freeProgramBytes = %u\n", freeProgramBytes);
     resizeProgramMemory(1); // 1 block for an empty program
     programCounter = programMemoryPointer;
     currentProgramMemoryPointer = programMemoryPointer;
     firstDisplayedStepPointer   = programMemoryPointer;
     firstDisplayedStep          = 0;
-    freeProgramBytes = 2;
-printf("freeProgramBytes = %u\n", freeProgramBytes);
     temporaryInformation = TI_NO_INFO;
+    scanLabels();
   }
 }
 
 
 
 void fnClP(uint16_t unusedParamButMandatory) {
-  printf("CLP\n");
+  uint8_t *endOfCurrentProgram;
+
+  endOfCurrentProgram = nextStep(currentProgramMemoryPointer);
+  if(currentProgramMemoryPointer == programMemoryPointer && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is no program to delete at all
+    return;
+  }
+
+  if(*currentProgramMemoryPointer == ((ITM_END >> 8) | 0x80) && *(currentProgramMemoryPointer + 1) == (ITM_END & 0xff)) { // There is only END in the current program
+    deleteStepsFromTo(currentProgramMemoryPointer, endOfCurrentProgram);
+    return;
+  }
+
+  while(*endOfCurrentProgram != ((ITM_END >> 8) | 0x80) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // Find the END of the current program
+    endOfCurrentProgram = nextStep(endOfCurrentProgram);
+  }
+  endOfCurrentProgram = nextStep(endOfCurrentProgram);
+
+  if(currentProgramMemoryPointer == programMemoryPointer && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is only one program in memory
+    fnClPAll(CONFIRMED);
+    return;
+  }
+
+  deleteStepsFromTo(currentProgramMemoryPointer, endOfCurrentProgram);
 }
 
 

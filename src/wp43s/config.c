@@ -518,7 +518,7 @@ void addTestPrograms(void) {
   stepAddress                 = programMemoryPointer;
   currentStep                 = 0;
   firstDisplayedStep          = 0;
-/*
+
   { // Prime number checker
     // 0
     *(stepAddress++) = ITM_LBL;
@@ -2557,7 +2557,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
-*/
+
   { // Factorial: the recursive way
     // 533
     *(stepAddress++) = ITM_LBL;
@@ -2618,7 +2618,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
-/*
+
   { // OM page 203
     // 547
     *(stepAddress++) = ITM_LBL;
@@ -5758,7 +5758,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + AllOp's : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
-*/
+
   firstFreeProgramBytePointer = stepAddress;
 
   // 1373
@@ -5827,10 +5827,13 @@ void fnReset(uint16_t confirmation) {
     firstFreeProgramBytePointer = programMemoryPointer;
     firstDisplayedStepPointer   = programMemoryPointer;
     firstDisplayedStep          = 0;
-    *programMemoryPointer       = 255; // .END.
-    *(programMemoryPointer + 1) = 255; // .END.
-    freeProgramBytes = 2;
+    *(programMemoryPointer + 0) = (ITM_END >> 8) | 0x80;
+    *(programMemoryPointer + 1) =  ITM_END       & 0xff;
+    *(programMemoryPointer + 2) = 255; // .END.
+    *(programMemoryPointer + 3) = 255; // .END.
+    freeProgramBytes = 0;
 printf("freeProgramBytes = %u\n", freeProgramBytes);
+    scanLabels();
 
     // "Not found glyph" initialization
     if(glyphNotFound.data == NULL) {

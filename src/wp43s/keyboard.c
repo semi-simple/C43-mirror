@@ -804,7 +804,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, x, y, newXCursor, opSize;
+  uint16_t lg, x, y, newXCursor;
   uint8_t *nextStepPointer;
 
   switch(calcMode) {
@@ -871,12 +871,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
     case CM_PEM:
       nextStepPointer = nextStep(programCounter);
       if(*nextStepPointer != 255 || *(nextStepPointer + 1) != 255) { // Not the last END
-        opSize = nextStepPointer - programCounter;
-        xcopy(programCounter, nextStepPointer, (firstFreeProgramBytePointer - nextStepPointer) + 2);
-        firstFreeProgramBytePointer -= opSize;
-        freeProgramBytes += opSize;
-printf("freeProgramBytes = %u\n", freeProgramBytes);
-        scanLabels();
+        deleteStepsFromTo(programCounter, nextStepPointer);
       }
       break;
 

@@ -1105,6 +1105,8 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 }
 
 
+
+
 void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
     //printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
@@ -1123,6 +1125,32 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
 
     }
   }
+  else
+  if(calcMode == CM_AIM && (getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtComplex34  || getRegisterDataType(REGISTER_Y) == dtLongInteger   || getRegisterDataType(REGISTER_Y) == dtShortInteger)) {
+    if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
+      if(eRPN) {      //JM NEWERPN 
+        setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+      }                                        //JM NEWERPN 
+
+      char tmp[2];
+      tmp[0]=0;
+      int16_t len = stringByteLength(tmp) + 1;
+
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);           //Make blank string in X
+      xcopy(REGISTER_STRING_DATA(REGISTER_X), tmp, len);
+      addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();//Convert Y number to string in X REGISTER
+      adjustResult(REGISTER_X, false, false, -1, -1, -1);                          //Copy X string to Aimbuffer
+      strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X)); 
+
+      T_cursorPos = stringByteLength(aimBuffer);
+      fnDrop(0);
+      refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+      last_CM=253;
+
+    }
+  }
+
+
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) < AIM_BUFFER_LENGTH) {
       if(eRPN) {      //JM NEWERPN 
@@ -1177,14 +1205,31 @@ void fnXEQNEW (uint16_t unusedParamButMandatory) {
 }
 
 
-
 void fnCla(uint16_t unusedParamButMandatory){
+  //Not using calcModeAim becose some modes are reset which should not be
   aimBuffer[0]=0;
   T_cursorPos = 0;
-  refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+  nextChar = NC_NORMAL;
+  xCursor = 1;
+  yCursor = Y_POSITION_OF_AIM_LINE + 6;
+  cursorFont = &standardFont;
+  cursorEnabled = true;
+  //fnKeyBackspace(0);
+  last_CM=252;
+  clearRegisterLine(AIM_REGISTER_LINE, true, true);
+  refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
   last_CM=253;
 }
 
+
+void fnCln(uint16_t unusedParamButMandatory){
+  calcModeNim(0);
+//  fnKeyBackspace(0);
+  last_CM=252;
+  refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+  last_CM=253;
+  addItemToNimBuffer(CHR_0);
+}
 
 
 

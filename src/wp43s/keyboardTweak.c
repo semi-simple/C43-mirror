@@ -371,15 +371,8 @@ void Setup_MultiPresses(int16_t result){
       //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
-  } else
-  if(calcMode == CM_AIM) {
-    switch(result) {
-      case KEY_BACKSPACE: tmp = ITM_CLA; break;      //Set up backspace double click to CLA
-      default:;
-    }
   }
-
-
+  
 
   if(tmp != 0){
     if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
@@ -439,7 +432,9 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
 
   if(calcMode == CM_NIM) {
     switch(*result) {
+      case ITM_XEQ      : firstdelayedResult=firstResult; firstResult = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
       case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      case KEY_BACKSPACE: firstResult = ITM_CLN; break;         //TRYOUT LONGPRESS EXIT DOES CLA
       default:;
     }
   }
@@ -447,6 +442,7 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
   if(calcMode == CM_AIM) {
     switch(*result) {
       case KEY_BACKSPACE    : firstResult = ITM_CLA; break;       //TRYOUT LONGPRESS EXIT DOES CLA
+      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
       default:;
     }
   }

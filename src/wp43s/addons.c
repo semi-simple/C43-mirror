@@ -94,8 +94,8 @@ void fnClAIM(uint16_t unusedParamButMandatory) {  //clear input buffe
     //printf("|%s|\n",aimBuffer);
   }
   lastIntegerBase = 0;
-  while(softmenuStackPointer > 0 /*softmenuStackPointerBeforeAIM*/ ) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
 #ifndef TESTSUITE_BUILD
+  while(softmenuStackPointer > 0 /*softmenuStackPointerBeforeAIM*/ ) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
     popSoftmenu();
 #endif
   }

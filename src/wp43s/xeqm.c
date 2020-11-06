@@ -1214,21 +1214,23 @@ void fnCla(uint16_t unusedParamButMandatory){
   yCursor = Y_POSITION_OF_AIM_LINE + 6;
   cursorFont = &standardFont;
   cursorEnabled = true;
-  //fnKeyBackspace(0);
   last_CM=252;
-  clearRegisterLine(AIM_REGISTER_LINE, true, true);
-  refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
+  #ifndef TESTSUITE_BUILD
+    clearRegisterLine(AIM_REGISTER_LINE, true, true);
+    refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
+  #endif
   last_CM=253;
 }
 
 
 void fnCln(uint16_t unusedParamButMandatory){
-  calcModeNim(0);
-//  fnKeyBackspace(0);
-  last_CM=252;
-  refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
-  last_CM=253;
-  addItemToNimBuffer(CHR_0);
+  #ifndef TESTSUITE_BUILD
+    calcModeNim(0);
+    last_CM=252;
+    refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+    last_CM=253;
+    addItemToNimBuffer(CHR_0);
+  #endif
 }
 
 

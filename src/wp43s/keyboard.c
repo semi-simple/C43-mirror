@@ -937,9 +937,9 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnKeyExit(uint16_t unusedParamButMandatory) {
-  int16_t tmp1;            //JM
-  doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
+    int16_t tmp1;            //JM
+    doRefreshSoftMenu = true;     //dr
   
   #ifdef PC_BUILD
     jm_show_calc_state("fnKeyExit");

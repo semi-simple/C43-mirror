@@ -564,7 +564,7 @@ uint8_t *nextStep(uint8_t *step) {
 
 uint8_t *previousStep(uint8_t *step) {
   int16_t label;
-  uint8_t *searchFromStep, *ns;
+  uint8_t *searchFromStep = NULL, *ns;
 
   if(step == programMemoryPointer) {
     return step;

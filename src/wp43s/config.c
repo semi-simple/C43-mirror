@@ -518,7 +518,7 @@ void addTestPrograms(void) {
   stepAddress                 = programMemoryPointer;
   currentStep                 = 0;
   firstDisplayedStep          = 0;
-
+/*
   { // Prime number checker
     // 0
     *(stepAddress++) = ITM_LBL;
@@ -2557,7 +2557,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
-
+*/
   { // Factorial: the recursive way
     // 533
     *(stepAddress++) = ITM_LBL;
@@ -2618,7 +2618,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
-
+/*
   { // OM page 203
     // 547
     *(stepAddress++) = ITM_LBL;
@@ -5758,8 +5758,10 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + AllOp's : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
     #endif
   }
+*/
+  firstFreeProgramBytePointer = stepAddress;
 
-    // 1373
+  // 1373
   *(stepAddress++) = 255; // .END.
   *(stepAddress++) = 255; // .END.
 
@@ -5768,7 +5770,7 @@ void addTestPrograms(void) {
 
   #ifndef DMCP_BUILD
     printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(stepAddress - programMemoryPointer));
-    if((uint32_t)TO_BLOCKS((stepAddress - programMemoryPointer) + 2) > (uint32_t)TO_BLOCKS(numberOfBytesForTheTestPrograms)) {
+    if((uint32_t)(stepAddress - programMemoryPointer) + 2 > numberOfBytesForTheTestPrograms) {
       printf("Increase allocated memory for programs!\n");
       exit(0);
     }
@@ -5828,6 +5830,7 @@ void fnReset(uint16_t confirmation) {
     *programMemoryPointer       = 255; // .END.
     *(programMemoryPointer + 1) = 255; // .END.
     freeProgramBytes = 2;
+printf("freeProgramBytes = %u\n", freeProgramBytes);
 
     // "Not found glyph" initialization
     if(glyphNotFound.data == NULL) {

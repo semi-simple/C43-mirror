@@ -356,6 +356,7 @@ extern size_t                wp43sMemInBytes;
 
 #ifdef DMCP_BUILD
   extern bool_t              backToDMCP;
+  extern int                 keyAutoRepeat; // Key repetition
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"

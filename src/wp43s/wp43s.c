@@ -189,6 +189,7 @@ size_t                wp43sMemInBytes;
 
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
+  int                 keyAutoRepeat;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
@@ -372,6 +373,7 @@ void program_main(void) {
 
   lcd_refresh();
   nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
+  //runner_key_tout_init(0); // Enables fast auto repeat
 
   // Status flags:
   //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -465,7 +467,9 @@ void program_main(void) {
       //  < 0 -> No key event
       //  > 0 -> Key pressed
       // == 0 -> Key released
-      key = key_pop();
+      //key = key_pop();
+      key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
+      //key = runner_get_key(&keyAutoRepeat);
 
       //The switch instruction below is implemented as follows e.g. for the up arrow key on the WP43S layout:
       //  the output of keymap2layout for this key is UP 27:18 so we need the line:
@@ -510,21 +514,41 @@ void program_main(void) {
         case 37: key = 33; break; // +
         default: {}
       }
+
+      //The 3 lines below to see in the top left screen corner the pressed keycode
+      //char sysLastKeyCh[5];
+      //sprintf(sysLastKeyCh, "c%02d", key);
+      //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
+
+      //The line below to emit a beep
+      //while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(220000); sys_delay(200); stop_buzzer();
     }
     else {
       // Fetch the key
       //  < 0 -> No key event
       //  > 0 -> Key pressed
       // == 0 -> Key released
-      key = key_pop();
+      //key = key_pop();
+      key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
+      //key = runner_get_key(&keyAutoRepeat);
+
+      //The 3 lines below to see in the top left screen corner the pressed keycode
+      //char sysLastKeyCh[5];
+      //sprintf(sysLastKeyCh, " %02d", key);
+      //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
     }
 
-    //The 3 lines below to see in the top left screen corner the pressed keycode
-    //char sysLastKeyCh[5];
-    //sprintf(sysLastKeyCh, "%2d", sys_last_key());
-    //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
+    if(keyAutoRepeat) {
+      if(key == 27 || key == 32) { // UP or DOWN keys
+        key = 0; // to trigger btnReleased
+      }
+      else {
+        keyAutoRepeat = 0;
+        key = -1;
+      }
+    }
 
-    if(sys_last_key() == 44 ) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
+    if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
       shiftF = false;
       shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
 
@@ -563,10 +587,10 @@ void program_main(void) {
     }
     else if(key == 0) {
       if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
-        btnFnReleased(NULL);
+        btnFnReleased(charKey);
       }
       else { // Last key pressed was not one of the 6 function keys
-        btnReleased(NULL);
+        btnReleased(charKey);
       }
       lcd_refresh();
     }

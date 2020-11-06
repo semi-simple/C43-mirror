@@ -86,6 +86,7 @@ void fnClPAll(uint16_t confirmation) {
     firstDisplayedStepPointer   = programMemoryPointer;
     firstDisplayedStep          = 0;
     freeProgramBytes = 2;
+printf("freeProgramBytes = %u\n", freeProgramBytes);
     temporaryInformation = TI_NO_INFO;
   }
 }
@@ -115,7 +116,13 @@ void fnPem(uint16_t unusedParamButMandatory) {
     ns = nextStep(stepPointer);
     stepSize = (uint16_t)(ns - stepPointer);
     sprintf(tmpString, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStep + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
-    showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, firstDisplayedStep + line == currentStep ? vmReverse : vmNormal,  false, true);
+    if(firstDisplayedStep + line == currentStep) {
+      showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
+      programCounter = stepPointer;
+    }
+    else {
+      showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, true);
+    }
     lblOrEnd = (*stepPointer == ITM_LBL) || ((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff)));
     decodeOneStep(stepPointer);
     showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);

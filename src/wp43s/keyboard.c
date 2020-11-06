@@ -337,9 +337,11 @@ void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
-#endif
+#endif // DMCP_BUILD
+  int16_t item;
+
   if(showFunctionNameItem != 0) {
-    int16_t item = showFunctionNameItem;
+    item = showFunctionNameItem;
     hideFunctionName();
     if(item < 0) {
       showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
@@ -348,6 +350,13 @@ void btnReleased(void *data) {
       runFunction(item);
     }
   }
+  #ifdef DMCP_BUILD
+  else if(keyAutoRepeat == 1) {
+    item = determineItem((char *)data);
+    hideFunctionName();
+    runFunction(item);
+  }
+  #endif // DMCP_BUILD
 
   refreshScreen();
 }
@@ -795,7 +804,8 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, x, y, newXCursor;
+  uint16_t lg, x, y, newXCursor, opSize;
+  uint8_t *nextStepPointer;
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -856,6 +866,18 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
       temporaryInformation = TI_NO_INFO;
+      break;
+
+    case CM_PEM:
+      nextStepPointer = nextStep(programCounter);
+      if(*nextStepPointer != 255 || *(nextStepPointer + 1) != 255) { // Not the last END
+        opSize = nextStepPointer - programCounter;
+        xcopy(programCounter, nextStepPointer, (firstFreeProgramBytePointer - nextStepPointer) + 2);
+        firstFreeProgramBytePointer -= opSize;
+        freeProgramBytes += opSize;
+printf("freeProgramBytes = %u\n", freeProgramBytes);
+        scanLabels();
+      }
       break;
 
     default:

@@ -23,22 +23,22 @@
 
 #ifndef DMCP_BUILD
 void listPrograms(void) {
-  uint16_t i, numberOfBytesInStep, step = 0;
-  uint8_t *ns, *stepAddress;
+  uint16_t i, numberOfBytesInStep, stepNumber = 0;
+  uint8_t *nextStep, *step;
 
   printf("\nProgram listing");
   printf("\nStep   Bytes         OP");
-  stepAddress = currentProgramMemoryPointer;
-  while(stepAddress) {
-    ns = nextStep(stepAddress);
-    if(ns) {
-      numberOfBytesInStep = (uint16_t)(ns - stepAddress);
-      printf("\n%4u  ", step++); fflush(stdout);
+  step = beginOfCurrentProgram;
+  while(step) {
+    nextStep = findNextStep(step);
+    if(nextStep) {
+      numberOfBytesInStep = (uint16_t)(nextStep - step);
+      printf("\n%4u  ", stepNumber++); fflush(stdout);
 
       for(i=0; i<numberOfBytesInStep; i++) {
-        printf(" %02x", *(stepAddress + i)); fflush(stdout);
+        printf(" %02x", *(step + i)); fflush(stdout);
         if(i == 3 && numberOfBytesInStep > 4) {
-          decodeOneStep(stepAddress);
+          decodeOneStep(step);
           stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
           printf("   %s", tmpString + 2000); fflush(stdout);
         }
@@ -52,13 +52,13 @@ void listPrograms(void) {
         for(i=1; i<=4 - ((numberOfBytesInStep - 1) % 4); i++) {
           printf("   "); fflush(stdout);
         }
-        decodeOneStep(stepAddress);
+        decodeOneStep(step);
         stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
         printf("%s", tmpString + 2000); fflush(stdout);
       }
     }
 
-    stepAddress = ns;
+    step = nextStep;
   }
   printf("\n");
 }
@@ -380,18 +380,18 @@ void decodeLITT(uint8_t *litteralAddress) {
 }
 
 
-void decodeOneStep(uint8_t *stepAddress) {
-  uint8_t item8 = *(uint8_t *)(stepAddress++);
+void decodeOneStep(uint8_t *step) {
+  uint8_t item8 = *(uint8_t *)(step++);
   uint16_t item16;
 
   switch(item8) {
     case ITM_LBL:         //   1
-      decodeOp(stepAddress, indexOfItems[item8].itemCatalogName, PARAM_DECLARE_LABEL);
+      decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_DECLARE_LABEL);
       break;
 
     case ITM_GTO:         //   2
     case ITM_XEQ:         //   3
-      decodeOp(stepAddress, indexOfItems[item8].itemCatalogName, PARAM_LABEL);
+      decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_LABEL);
       break;
 
     case ITM_ISE:         //   5
@@ -416,7 +416,7 @@ void decodeOneStep(uint8_t *stepAddress) {
     case ITM_RCLMIN:      //  57
     case ITM_DEC:         //  91
     case ITM_INC:         //  92
-      decodeOp(stepAddress, indexOfItems[item8].itemCatalogName, PARAM_REGISTER);
+      decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_REGISTER);
       break;
 
     case ITM_XEQU:        //  11
@@ -426,7 +426,7 @@ void decodeOneStep(uint8_t *stepAddress) {
     case ITM_XLE:         //  17
     case ITM_XGE:         //  18
     case ITM_XGT:         //  19
-      decodeOp(stepAddress, indexOfItems[item8].itemCatalogName, PARAM_COMPARE);
+      decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_COMPARE);
       break;
 
     case ITM_FC:          //  20
@@ -434,7 +434,7 @@ void decodeOneStep(uint8_t *stepAddress) {
     case ITM_CF:          // 110
     case ITM_SF:          // 111
     case ITM_FF:          // 112
-      decodeOp(stepAddress, indexOfItems[item8].itemCatalogName, PARAM_FLAG);
+      decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_FLAG);
       break;
 
     case ITM_RTN:         //   4
@@ -517,7 +517,7 @@ void decodeOneStep(uint8_t *stepAddress) {
       break;
 
     case ITM_LITT:        // 114
-       decodeLITT(stepAddress);
+       decodeLITT(step);
        break;
 
     default:
@@ -526,7 +526,7 @@ void decodeOneStep(uint8_t *stepAddress) {
         break;
       }
 
-      item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(stepAddress++);
+      item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(step++);
       switch(item16) {
         case ITM_CNST:        //   207
         case ITM_ALL:         //  1400
@@ -534,7 +534,7 @@ void decodeOneStep(uint8_t *stepAddress) {
         case ITM_FIX:         //  1463
         case ITM_LocR:        //  1504
         case ITM_SCI:         //  1577
-          decodeOp(stepAddress, indexOfItems[item16].itemCatalogName, PARAM_NUMBER);
+          decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_NUMBER);
           break;
 
         case CST_01:          //   128

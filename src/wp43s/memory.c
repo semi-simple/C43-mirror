@@ -287,7 +287,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
   uint8_t *newProgramMemoryPointer = NULL;
 
   //printf("currentSizeInBlocks = %u    newSizeInBlocks = %u\n", currentSizeInBlocks, newSizeInBlocks);
-  //printf("currentAddress      = %u\n", TO_WP43SMEMPTR(programMemoryPointer));
+  //printf("currentAddress      = %u\n", TO_WP43SMEMPTR(beginOfProgramMemory));
   if(newSizeInBlocks == currentSizeInBlocks) { // Nothing to do
     return;
   }
@@ -310,22 +310,22 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
     }
     else { // There is plenty of memory available
       blocksToMove = currentSizeInBlocks;
-      newProgramMemoryPointer = programMemoryPointer - TO_BYTES(deltaBlocks);
-      firstFreeProgramBytePointer -= TO_BYTES(deltaBlocks);
-      //printf("Increasing program memory by copying %u blocks from %u to %u\n", currentSizeInBlocks, TO_WP43SMEMPTR(programMemoryPointer), TO_WP43SMEMPTR(newProgramMemoryPointer));
+      newProgramMemoryPointer = beginOfProgramMemory - TO_BYTES(deltaBlocks);
+      firstFreeProgramByte -= TO_BYTES(deltaBlocks);
+      //printf("Increasing program memory by copying %u blocks from %u to %u\n", currentSizeInBlocks, TO_WP43SMEMPTR(beginOfProgramMemory), TO_WP43SMEMPTR(newProgramMemoryPointer));
       freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks -= deltaBlocks;
     }
   }
   else { // Decrease program memory size
     deltaBlocks = currentSizeInBlocks - newSizeInBlocks;
     blocksToMove = newSizeInBlocks;
-    newProgramMemoryPointer = programMemoryPointer + TO_BYTES(deltaBlocks);
-    firstFreeProgramBytePointer += TO_BYTES(deltaBlocks);
-    //printf("Decreasing program memory by copying %u blocks from %u to %u\n", newSizeInBlocks, TO_WP43SMEMPTR(programMemoryPointer), TO_WP43SMEMPTR(newProgramMemoryPointer));
+    newProgramMemoryPointer = beginOfProgramMemory + TO_BYTES(deltaBlocks);
+    firstFreeProgramByte += TO_BYTES(deltaBlocks);
+    //printf("Decreasing program memory by copying %u blocks from %u to %u\n", newSizeInBlocks, TO_WP43SMEMPTR(beginOfProgramMemory), TO_WP43SMEMPTR(newProgramMemoryPointer));
     freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks += deltaBlocks;
   }
 
-  xcopy(newProgramMemoryPointer, programMemoryPointer, TO_BYTES(blocksToMove));
-  programMemoryPointer = newProgramMemoryPointer;
+  xcopy(newProgramMemoryPointer, beginOfProgramMemory, TO_BYTES(blocksToMove));
+  beginOfProgramMemory = newProgramMemoryPointer;
   //debugMemory("resizeProgramMemory : end");
 }

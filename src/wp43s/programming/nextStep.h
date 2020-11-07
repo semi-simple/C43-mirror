@@ -18,5 +18,5 @@
  * \file nextStep.h
  ***********************************************/
 
-uint8_t *nextStep    (uint8_t *step);
-uint8_t *previousStep(uint8_t *step);
+uint8_t *findNextStep    (uint8_t *step);
+uint8_t *findPreviousStep(uint8_t *step);

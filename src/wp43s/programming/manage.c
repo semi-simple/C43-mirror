@@ -20,19 +20,70 @@
 
 #include "wp43s.h"
 
+// Structure of the program memory.
+// In this example the RAM is 16384 blocks (from 0 to 16383) of 4 bytes = 65536 bytes.
+// The program memory occupies the end of the RAM area.
+//
+//  +-----+----+----+----------+
+//  |Block|Step|Code|    OP    |
+//  +-----+----+----+----------+
+//  |16374|  0 |   1| LBL 'P1' | <-- beginOfProgramMemory
+//  |     |    | 253|          |
+//  |     |    |   2|          |
+//  |     |    | 'P'|          |
+//  |16375|    | '1'| 1.       |  ^
+//  |     |  1 | 114|          |  | 1 block = 4 bytes
+//  |     |    |   6|          |  |
+//  |     |    |   1|          |  v
+//  |16376|    | '1'|          |
+//  |     |  2 |  95| +        |
+//  |     |  3 | 133| END      |
+//  |     |    | 168|          |
+//  |16377|  4 |   1| LBL 'P2' | <-- beginOfCurrentProgram
+//  |     |    | 253|          |
+//  |     |    |   2|          |
+//  |     |    | 'P'|          |
+//  |16378|    | '2'|          |
+//  |     |  5 | 114| 22.      | <-- currentStep       this inequality is always true: beginOfCurrentProgram ≤ currentStep < endOfCurrentProgram
+//  |     |    |   6|          |
+//  |     |    |   2|          |
+//  |16379|    | '2'|          |
+//  |     |    | '2'|          |
+//  |     |  6 |  95| +        |
+//  |     |  7 | 133| END      |
+//  |16380|    | 168|          |
+//  |     |  8 |   2| LBL 'P3' | <-- endOfCurrentProgram
+//  |     |    | 253|          |
+//  |     |    |   2|          |
+//  |16381|    | 'P'|          |
+//  |     |    | '3'| 3.       |
+//  |     |  9 | 114|          |
+//  |     |    |   6|          |
+//  |16382|    |   1|          |
+//  |     |    | '3'|          |
+//  |     | 10 |  95| +        |
+//  |     | 11 | 133| END      |
+//  |16383|    | 168|          |
+//  |     |    | 255| .END.    | <-- firstFreeProgramByte
+//  |     |    | 255|          |
+//  |     |    |   ?|          | free byte     This byte is the end of the RAM area
+//  +-----+----+----+----------+
+//
+//  freeProgramBytes = 1
+
 
 
 void scanLabels(void) {
-  uint32_t step = 0;
+  uint32_t stepNumber = 0;
   uint16_t program;
-  uint8_t *ns, *currentStepPointer = programMemoryPointer;
+  uint8_t *nextStep, *step = beginOfProgramMemory;
 
   numberOfLabels = 0;
-  while(*currentStepPointer != 255 || *(currentStepPointer + 1) != 255) { // .END.
-    if(*currentStepPointer == 1) {
+  while(*step != 255 || *(step + 1) != 255) { // .END.
+    if(*step == 1) {
       numberOfLabels++;
     }
-    currentStepPointer = nextStep(currentStepPointer);
+    step = findNextStep(step);
   }
 
   free(labelList);
@@ -42,32 +93,32 @@ void scanLabels(void) {
   }
 
   numberOfLabels = 0;
-  currentStepPointer = programMemoryPointer;
+  step = beginOfProgramMemory;
   program = 1;
-  step = 0;
-  while(*currentStepPointer != 255 || *(currentStepPointer + 1) != 255) { // .END.
-    ns = nextStep(currentStepPointer);
-    if(*currentStepPointer == 1) { // LBL
+  stepNumber = 0;
+  while(*step != 255 || *(step + 1) != 255) { // .END.
+    nextStep = findNextStep(step);
+    if(*step == 1) { // LBL
       labelList[numberOfLabels].program = program;
-      if(*(currentStepPointer + 1) <= 109) { // Local label
-        labelList[numberOfLabels].followingStep = -(step + 1);
-        labelList[numberOfLabels].labelPointer = currentStepPointer + 1;
+      if(*(step + 1) <= 109) { // Local label
+        labelList[numberOfLabels].followingStep = -(stepNumber + 1);
+        labelList[numberOfLabels].labelPointer = step + 1;
       }
       else { // Global label
-        labelList[numberOfLabels].followingStep = step + 1;
-        labelList[numberOfLabels].labelPointer = currentStepPointer + 2;
+        labelList[numberOfLabels].followingStep = stepNumber + 1;
+        labelList[numberOfLabels].labelPointer = step + 2;
       }
 
-      labelList[numberOfLabels].instructionPointer = ns;
+      labelList[numberOfLabels].instructionPointer = nextStep;
       numberOfLabels++;
     }
 
-    if((*currentStepPointer & 0x7f) == (ITM_END >> 8) && *(currentStepPointer + 1) == (ITM_END & 0xff)) { // END
+    if((*step & 0x7f) == (ITM_END >> 8) && *(step + 1) == (ITM_END & 0xff)) { // END
       program++;
     }
 
-    currentStepPointer = ns;
-    step++;
+    step = nextStep;
+    stepNumber++;
   }
 }
 
@@ -75,8 +126,8 @@ void scanLabels(void) {
 
 void deleteStepsFromTo(uint8_t *from, uint8_t *to) {
   uint16_t opSize = to - from;
-  xcopy(from, to, (firstFreeProgramBytePointer - to) + 2);
-  firstFreeProgramBytePointer -= opSize;
+  xcopy(from, to, (firstFreeProgramByte - to) + 2);
+  firstFreeProgramByte -= opSize;
   freeProgramBytes += opSize;
 printf("freeProgramBytes = %u\n", freeProgramBytes);
   scanLabels();
@@ -89,55 +140,69 @@ void fnClPAll(uint16_t confirmation) {
     setConfirmationMode(fnClPAll);
   }
   else {
-    *(programMemoryPointer + 0) = (ITM_END >> 8) | 0x80;
-    *(programMemoryPointer + 1) =  ITM_END       & 0xff;
-    *(programMemoryPointer + 2) = 255; // .END.
-    *(programMemoryPointer + 3) = 255; // .END.
-    freeProgramBytes = 0;
-printf("freeProgramBytes = %u\n", freeProgramBytes);
     resizeProgramMemory(1); // 1 block for an empty program
-    programCounter = programMemoryPointer;
-    currentProgramMemoryPointer = programMemoryPointer;
-    firstDisplayedStepPointer   = programMemoryPointer;
-    firstDisplayedStep          = 0;
-    temporaryInformation = TI_NO_INFO;
+    *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
+    *(beginOfProgramMemory + 1) =  ITM_END       & 0xff;
+    *(beginOfProgramMemory + 2) = 255; // .END.
+    *(beginOfProgramMemory + 3) = 255; // .END.
+    firstFreeProgramByte        = beginOfProgramMemory + 2;
+    freeProgramBytes            = 0;
+    currentStep                 = beginOfProgramMemory;
+    beginOfCurrentProgram       = beginOfProgramMemory;
+    endOfCurrentProgram         = beginOfProgramMemory + 2;
+    firstDisplayedStep          = beginOfProgramMemory;
+    firstDisplayedStepNumber    = 0;
+    temporaryInformation        = TI_NO_INFO;
     scanLabels();
+printf("freeProgramBytes = %u\n", freeProgramBytes);
   }
 }
 
 
 
 void fnClP(uint16_t unusedParamButMandatory) {
-  uint8_t *endOfCurrentProgram;
-
-  endOfCurrentProgram = nextStep(currentProgramMemoryPointer);
-  if(currentProgramMemoryPointer == programMemoryPointer && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is no program to delete at all
-    return;
+  if(beginOfCurrentProgram != beginOfProgramMemory || *endOfCurrentProgram != 255 || *(endOfCurrentProgram + 1) != 255) {
+    deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram);
   }
+}
 
-  if(*currentProgramMemoryPointer == ((ITM_END >> 8) | 0x80) && *(currentProgramMemoryPointer + 1) == (ITM_END & 0xff)) { // There is only END in the current program
-    deleteStepsFromTo(currentProgramMemoryPointer, endOfCurrentProgram);
-    return;
+
+
+void defineCurrentProgram(void) {
+  if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentStep in not between begin and end of the current program
+    // Calculating endOfCurrentProgram
+    endOfCurrentProgram = currentStep;
+    while((*endOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // not END
+      endOfCurrentProgram = findNextStep(endOfCurrentProgram);
+    }
+    beginOfCurrentProgram = endOfCurrentProgram;
+    endOfCurrentProgram = findNextStep(endOfCurrentProgram);
+
+    // Calculating beginOfCurrentProgram
+    if(beginOfCurrentProgram > beginOfProgramMemory) { // not at the beginning of program memory
+      beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
+    }
+
+    if((*beginOfCurrentProgram & 0x7f) == (ITM_END >> 8) && *(beginOfCurrentProgram + 1) == (ITM_END & 0xff)) { // END
+      beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
+      return;
+    }
+
+    while(((*beginOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(beginOfCurrentProgram + 1) != (ITM_END & 0xff)) && beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
+      beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
+    }
+
+    if(beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
+      beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
+    }
   }
-
-  while(*endOfCurrentProgram != ((ITM_END >> 8) | 0x80) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // Find the END of the current program
-    endOfCurrentProgram = nextStep(endOfCurrentProgram);
-  }
-  endOfCurrentProgram = nextStep(endOfCurrentProgram);
-
-  if(currentProgramMemoryPointer == programMemoryPointer && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is only one program in memory
-    fnClPAll(CONFIRMED);
-    return;
-  }
-
-  deleteStepsFromTo(currentProgramMemoryPointer, endOfCurrentProgram);
 }
 
 
 
 void fnPem(uint16_t unusedParamButMandatory) {
   uint16_t line, stepSize;
-  uint8_t *stepPointer, *ns;
+  uint8_t *step, *nextStep;
   bool_t lblOrEnd;
 
   if(calcMode != CM_PEM) {
@@ -145,28 +210,29 @@ void fnPem(uint16_t unusedParamButMandatory) {
     return;
   }
 
-  stepPointer = firstDisplayedStepPointer;
+  step = firstDisplayedStep;
   programListEnd = false;
 
   for(line=0; line<7; line++) {
-    ns = nextStep(stepPointer);
-    stepSize = (uint16_t)(ns - stepPointer);
-    sprintf(tmpString, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStep + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
-    if(firstDisplayedStep + line == currentStep) {
+    nextStep = findNextStep(step);
+    stepSize = (uint16_t)(nextStep - step);
+    sprintf(tmpString, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStepNumber + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
+    if(firstDisplayedStepNumber + line == currentStepNumber) {
       showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
-      programCounter = stepPointer;
+      currentStep = step;
+      defineCurrentProgram();
     }
     else {
       showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, true);
     }
-    lblOrEnd = (*stepPointer == ITM_LBL) || ((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff)));
-    decodeOneStep(stepPointer);
+    lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
+    decodeOneStep(step);
     showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
     numberOfStepsOnScreen = line;
-    if(((*stepPointer == ((ITM_END >> 8) | 0x80)) && (*(stepPointer + 1) == (ITM_END & 0xff))) && ((*ns == 255 && *(ns + 1) == 255))) {
+    if(((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff))) && ((*nextStep == 255 && *(nextStep + 1) == 255))) {
       programListEnd = true;
       break;
     }
-    stepPointer = ns;
+    step = nextStep;
   }
 }

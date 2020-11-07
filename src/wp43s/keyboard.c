@@ -1081,6 +1081,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
   uint32_t dataTypeY;
 
   // The switch statement is broken up here, due to multiple conditions.                      //JM
+  if((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX)) addItemToNimBuffer(KEY_EXIT1);    //JM Allow COMPLEX to be used from NIM
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);

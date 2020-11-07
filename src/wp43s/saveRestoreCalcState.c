@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         48  // added programMemoryPointer
+#define BACKUP_VERSION         48  // added beginOfProgramMemory
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -103,7 +103,6 @@ void saveCalc(void) {
   save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
   ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
   save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  save(&programCounter,                     sizeof(programCounter),                     BACKUP);
   save(&xCursor,                            sizeof(xCursor),                            BACKUP);
   save(&yCursor,                            sizeof(yCursor),                            BACKUP);
   save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
@@ -175,25 +174,33 @@ void saveCalc(void) {
   save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
   save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
   save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(programMemoryPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // programMemoryPointer pointer to block
-  ramPtr = (uint32_t)((void *)programMemoryPointer -        TO_PCMEMPTR(TO_WP43SMEMPTR(programMemoryPointer)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // programMemoryPointer offset within block
-  ramPtr = TO_WP43SMEMPTR(currentProgramMemoryPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentProgramMemoryPointer pointer to block
-  ramPtr = (uint32_t)((void *)currentProgramMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(currentProgramMemoryPointer)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentProgramMemoryPointer offset within block
-  ramPtr = TO_WP43SMEMPTR(firstFreeProgramBytePointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramBytePointer pointer to block
-  ramPtr = (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramBytePointer offset within block
-  ramPtr = TO_WP43SMEMPTR(firstDisplayedStepPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStepPointer pointer to block
-  ramPtr = (uint32_t)((void *)firstDisplayedStepPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStepPointer)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStepPointer offset within block
+  ramPtr = TO_WP43SMEMPTR(beginOfProgramMemory);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+  ramPtr = (uint32_t)((void *)beginOfProgramMemory -        TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfProgramMemory)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+  ramPtr = TO_WP43SMEMPTR(beginOfCurrentProgram);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfCurrentProgram pointer to block
+  ramPtr = (uint32_t)((void *)beginOfCurrentProgram - TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfCurrentProgram)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfCurrentProgram offset within block
+  ramPtr = TO_WP43SMEMPTR(endOfCurrentProgram);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // endOfCurrentProgram pointer to block
+  ramPtr = (uint32_t)((void *)endOfCurrentProgram - TO_PCMEMPTR(TO_WP43SMEMPTR(endOfCurrentProgram)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // endOfCurrentProgram offset within block
+  ramPtr = TO_WP43SMEMPTR(firstFreeProgramByte);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+  ramPtr = (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+  ramPtr = TO_WP43SMEMPTR(firstDisplayedStep);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+  ramPtr = (uint32_t)((void *)firstDisplayedStep - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStep)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+  ramPtr = TO_WP43SMEMPTR(currentStep);
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+  ramPtr = (uint32_t)((void *)currentStep - TO_PCMEMPTR(TO_WP43SMEMPTR(currentStep)));
+  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
   save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-  save(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
-  save(&currentStep,                        sizeof(currentStep),                        BACKUP);
+  save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+  save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
   save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
   save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
@@ -310,7 +317,6 @@ void restoreCalc(void) {
     statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
     restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
-    restore(&programCounter,                     sizeof(programCounter),                     BACKUP);
     restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
     restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
     restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
@@ -386,25 +392,33 @@ void restoreCalc(void) {
     restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
     restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
     restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // programMemoryPointer pointer to block
-    programMemoryPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // programMemoryPointer offset within block
-    programMemoryPointer += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentProgramMemoryPointer pointer to block
-    currentProgramMemoryPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentProgramMemoryPointer offset within block
-    currentProgramMemoryPointer += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramBytePointer pointer to block
-    firstFreeProgramBytePointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramBytePointer offset within block
-    firstFreeProgramBytePointer += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStepPointer pointer to block
-    firstDisplayedStepPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStepPointer offset within block
-    firstDisplayedStepPointer += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+    beginOfProgramMemory = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+    beginOfProgramMemory += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfCurrentProgram pointer to block
+    beginOfCurrentProgram = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfCurrentProgram offset within block
+    beginOfCurrentProgram += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // endOfCurrentProgram pointer to block
+    endOfCurrentProgram = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // endOfCurrentProgram offset within block
+    endOfCurrentProgram += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+    firstFreeProgramByte = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+    firstFreeProgramByte += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+    firstDisplayedStep = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+    firstDisplayedStep += ramPtr;
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+    currentStep = TO_PCMEMPTR(ramPtr);
+    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
+    currentStep += ramPtr;
     restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-    restore(&firstDisplayedStep,                 sizeof(firstDisplayedStep),                 BACKUP);
-    restore(&currentStep,                        sizeof(currentStep),                        BACKUP);
+    restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+    restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
     restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
     restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
@@ -699,17 +713,20 @@ void fnSave(uint16_t unusedParamButMandatory) {
   sprintf(tmpString, "PROGRAMS\n%" PRIu16 "\n", currentSizeInBlocks);
   save(tmpString, strlen(tmpString), BACKUP);
 
-  sprintf(tmpString, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(currentProgramMemoryPointer), (uint32_t)((void *)currentProgramMemoryPointer - TO_PCMEMPTR(TO_WP43SMEMPTR(currentProgramMemoryPointer)))); // currentProgramMemoryPointer block pointer + offset within block
+  sprintf(tmpString, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(beginOfCurrentProgram), (uint32_t)((void *)beginOfCurrentProgram - TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfCurrentProgram)))); // beginOfCurrentProgram block pointer + offset within block
   save(tmpString, strlen(tmpString), BACKUP);
 
-  sprintf(tmpString, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(firstFreeProgramBytePointer), (uint32_t)((void *)firstFreeProgramBytePointer - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramBytePointer)))); // firstFreeProgramBytePointer block pointer + offset within block
+  sprintf(tmpString, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(endOfCurrentProgram), (uint32_t)((void *)endOfCurrentProgram - TO_PCMEMPTR(TO_WP43SMEMPTR(endOfCurrentProgram)))); // endOfCurrentProgram block pointer + offset within block
+  save(tmpString, strlen(tmpString), BACKUP);
+
+  sprintf(tmpString, "%" PRIu32 "\n%" PRIu32 "\n", (uint32_t)TO_WP43SMEMPTR(firstFreeProgramByte), (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)))); // firstFreeProgramByte block pointer + offset within block
   save(tmpString, strlen(tmpString), BACKUP);
 
   sprintf(tmpString, "%" PRIu16 "\n", freeProgramBytes);
   save(tmpString, strlen(tmpString), BACKUP);
 
   for(i=0; i<currentSizeInBlocks; i++) {
-    sprintf(tmpString, "%" PRIu32 "\n", *(((uint32_t *)(programMemoryPointer)) + i));
+    sprintf(tmpString, "%" PRIu32 "\n", *(((uint32_t *)(beginOfProgramMemory)) + i));
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -1119,22 +1136,31 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       resizeProgramMemory(numberOfBlocks);
     }
 
-    readLine(stream, tmpString); // currentProgramMemoryPointer (pointer to block)
+    readLine(stream, tmpString); // beginOfCurrentProgram (pointer to block)
     if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
-      currentProgramMemoryPointer = TO_PCMEMPTR(stringToUint32(tmpString));
+      beginOfCurrentProgram = TO_PCMEMPTR(stringToUint32(tmpString));
     }
-    readLine(stream, tmpString); // currentProgramMemoryPointer (offset in bytes within block)
+    readLine(stream, tmpString); // beginOfCurrentProgram (offset in bytes within block)
     if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
-      currentProgramMemoryPointer += stringToUint32(tmpString);
+      beginOfCurrentProgram += stringToUint32(tmpString);
     }
 
-    readLine(stream, tmpString); // firstFreeProgramBytePointer (pointer to block)
+    readLine(stream, tmpString); // endOfCurrentProgram (pointer to block)
     if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
-      firstFreeProgramBytePointer = TO_PCMEMPTR(stringToUint32(tmpString));
+      endOfCurrentProgram = TO_PCMEMPTR(stringToUint32(tmpString));
     }
-    readLine(stream, tmpString); // firstFreeProgramBytePointer (offset in bytes within block)
+    readLine(stream, tmpString); // endOfCurrentProgram (offset in bytes within block)
     if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
-      firstFreeProgramBytePointer += stringToUint32(tmpString);
+      endOfCurrentProgram += stringToUint32(tmpString);
+    }
+
+    readLine(stream, tmpString); // firstFreeProgramByte (pointer to block)
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      firstFreeProgramByte = TO_PCMEMPTR(stringToUint32(tmpString));
+    }
+    readLine(stream, tmpString); // firstFreeProgramByte (offset in bytes within block)
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      firstFreeProgramByte += stringToUint32(tmpString);
     }
 
     readLine(stream, tmpString); // freeProgramBytes
@@ -1145,7 +1171,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     for(i=0; i<numberOfBlocks; i++) {
       readLine(stream, tmpString); // One block
       if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
-        *(((uint32_t *)(programMemoryPointer)) + i) = stringToUint32(tmpString);
+        *(((uint32_t *)(beginOfProgramMemory)) + i) = stringToUint32(tmpString);
       }
     }
   }

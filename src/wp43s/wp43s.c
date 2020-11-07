@@ -131,11 +131,12 @@ uint8_t               temporaryInformation;
 uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
 uint8_t               currentAngularMode;
-uint8_t              *programMemoryPointer;
-uint8_t              *currentProgramMemoryPointer;
-uint8_t              *firstFreeProgramBytePointer;
-uint8_t              *firstDisplayedStepPointer;
-uint8_t              *programCounter;
+uint8_t              *beginOfProgramMemory;
+uint8_t              *beginOfCurrentProgram;
+uint8_t              *endOfCurrentProgram;
+uint8_t              *firstFreeProgramByte;
+uint8_t              *firstDisplayedStep;
+uint8_t              *currentStep;
 
 int16_t               tamFunction;
 int16_t               tamNumber;
@@ -218,12 +219,12 @@ uint16_t              globalFlags[7];
 uint16_t              numberOfLocalFlags;
 uint16_t              freeProgramBytes;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
-uint16_t              firstDisplayedStep;
+uint16_t              firstDisplayedStepNumber;
 uint16_t              numberOfLabels;
 uint16_t              xCursor;
 uint16_t              yCursor;
 uint16_t              tamMode;
-uint16_t              currentStep;
+uint16_t              currentStepNumber;
 uint16_t              numberOfStepsOnScreen;
 
 int32_t               numberOfFreeMemoryRegions;
@@ -252,6 +253,7 @@ size_t                wp43sMemInBytes;
   uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
 #endif
   bool_t              backToDMCP;
+//  int                 keyAutoRepeat;   //JMTOCHECK removed autorepeat stuff
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
@@ -469,6 +471,8 @@ void program_main(void) {
 
   lcd_forced_refresh();                                        //JM 
   nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
+  //runner_key_tout_init(0); // Enables fast auto repeat     //JMTOCHECK Remove all autorepeat stuff
+
   fnTimerReset();                                              //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
   fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
@@ -489,7 +493,8 @@ void program_main(void) {
     if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
       CLR_ST(STAT_RUNNING);
       sys_sleep();
-    } else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {        // Just wait if no keys available.      //dr - internal keyBuffer POC
+    }
+    else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {        // Just wait if no keys available.      //dr - internal keyBuffer POC
       uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
       if(nextTimerRefresh != 0) {
         uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
@@ -549,7 +554,9 @@ void program_main(void) {
     //  < 0 -> No key event
     //  > 0 -> Key pressed
     // == 0 -> Key released
-//  key = key_pop();                                        //dr - removed because of internal keyBuffer POC
+    //key = key_pop();                                        //dr - removed because of internal keyBuffer POC
+//    key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
+//    //key = runner_get_key(&keyAutoRepeat);
     
                                                             //vv dr - internal keyBuffer POC
     // uint8_t outKeyCount;
@@ -656,12 +663,11 @@ void program_main(void) {
     }
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
       btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
-    //lcd_refresh_dma();
     }
     else if(key == 0) {
       btnReleased(NULL);
-    //lcd_refresh_dma();
     }
+    //lcd_refresh_dma();
 
     if(key >= 0) {                                          //dr
       lcd_refresh_dma();
@@ -683,7 +689,7 @@ void program_main(void) {
         nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;    // we were out longer than expected; just skip ahead.
       }
       refreshLcd();
-      if(key >= 0) {
+      if(key >= 0) {    //JMTOCHECK if key>0 is needed. what about -1?
         lcd_refresh();
       }
       else {

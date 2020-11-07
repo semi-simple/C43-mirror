@@ -161,7 +161,7 @@ uint8_t *countLITTbytes(uint8_t *step) {
 }
 
 
-uint8_t *nextStep(uint8_t *step) {
+uint8_t *findNextStep(uint8_t *step) {
   uint8_t item8 = *(step++);
   uint16_t item16;
 
@@ -562,16 +562,16 @@ uint8_t *nextStep(uint8_t *step) {
 
 
 
-uint8_t *previousStep(uint8_t *step) {
+uint8_t *findPreviousStep(uint8_t *step) {
   int16_t label;
-  uint8_t *searchFromStep, *ns;
+  uint8_t *searchFromStep = NULL, *nextStep;
 
-  if(step == programMemoryPointer) {
+  if(step == beginOfProgramMemory) {
     return step;
   }
 
   if(numberOfLabels <= 0 || step <= labelList[0].instructionPointer) {
-    searchFromStep = programMemoryPointer;
+    searchFromStep = beginOfProgramMemory;
   }
   else {
     for(label=numberOfLabels - 1; label >= 0; label--) {
@@ -582,10 +582,10 @@ uint8_t *previousStep(uint8_t *step) {
     }
   }
 
-  ns = nextStep(searchFromStep);
-  while(ns != step) {
-    searchFromStep = ns;
-    ns = nextStep(searchFromStep);
+  nextStep = findNextStep(searchFromStep);
+  while(nextStep != step) {
+    searchFromStep = nextStep;
+    nextStep = findNextStep(searchFromStep);
   }
 
   return searchFromStep;

@@ -322,11 +322,12 @@ extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;
 extern uint8_t               currentAngularMode;
-extern uint8_t              *programMemoryPointer;
-extern uint8_t              *currentProgramMemoryPointer;
-extern uint8_t              *firstFreeProgramBytePointer;
-extern uint8_t              *firstDisplayedStepPointer;
-extern uint8_t              *programCounter;
+extern uint8_t              *beginOfProgramMemory;
+extern uint8_t              *beginOfCurrentProgram;
+extern uint8_t              *endOfCurrentProgram;
+extern uint8_t              *firstFreeProgramByte;
+extern uint8_t              *firstDisplayedStep;
+extern uint8_t              *currentStep;
 
 extern int16_t               tamFunction;
 extern int16_t               tamNumber;
@@ -366,12 +367,12 @@ extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
 extern uint16_t              numberOfLocalFlags;
 extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern uint16_t              freeProgramBytes;
-extern uint16_t              firstDisplayedStep;
+extern uint16_t              firstDisplayedStepNumber;
 extern uint16_t              numberOfLabels;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
 extern uint16_t              tamMode;
-extern uint16_t              currentStep;
+extern uint16_t              currentStepNumber;
 extern uint16_t              numberOfStepsOnScreen;
 
 extern int32_t               numberOfFreeMemoryRegions;
@@ -395,6 +396,7 @@ extern size_t                wp43sMemInBytes;
 #ifdef BUFFER_CLICK_DETECTION
   extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC
 #endif
+//extern int                 keyAutoRepeat; // Key repetition //JMTOCHECK Removed the autorepeat stuff
 #endif // DMCP_BUILD
 
 #include "constantPointers.h"

@@ -510,11 +510,12 @@ jm_show_calc_state("btnReleased begin");
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
-#endif
+#endif //DMCP_BUILD
+    int16_t item;
   Shft_timeouts = false;                         //JM SHIFT NEW
   JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
   if(showFunctionNameItem != 0) {
-    int16_t item = showFunctionNameItem;
+    item = showFunctionNameItem;
     hideFunctionName();
     if(item < 0) {
       showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
@@ -523,6 +524,13 @@ void btnReleased(void *data) {
       runFunction(item);
     }
   }
+//  #ifdef DMCP_BUILD                        //vv JMTOCHECK REMOVED autorepeat
+//  else if(keyAutoRepeat == 1) {
+//    item = determineItem((char *)data);
+//    hideFunctionName();
+//    runFunction(item);
+//  }
+//  #endif // DMCP_BUILD                     //^^
 
   if(!checkShifts((char *)data)) {
     #ifdef PC_BUILD
@@ -1138,8 +1146,8 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, newXCursor;
-  uint16_t x, y;
+  uint16_t lg, x, y, newXCursor;
+  uint8_t *nextStep;
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -1226,6 +1234,13 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
       temporaryInformation = TI_NO_INFO;
+      break;
+
+    case CM_PEM:
+      nextStep = findNextStep(currentStep);
+      if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
+        deleteStepsFromTo(currentStep, nextStep);
+      }
       break;
 
     default:
@@ -1360,13 +1375,13 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_PEM:
-      if(firstDisplayedStep > 0 && currentStep <= firstDisplayedStep + 3) {
-        firstDisplayedStep--;
-        firstDisplayedStepPointer = previousStep(firstDisplayedStepPointer);
+      if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
+        firstDisplayedStepNumber--;
+        firstDisplayedStep = findPreviousStep(firstDisplayedStep);
       }
 
-      if(currentStep != 0) {
-        currentStep--;
+      if(currentStepNumber != 0) {
+        currentStepNumber--;
       }
       break;
 
@@ -1501,15 +1516,15 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
       break;
 
     case CM_PEM:
-      if(currentStep++ >= 3) {
+      if(currentStepNumber++ >= 3) {
         if(!programListEnd) {
-          firstDisplayedStep++;
-          firstDisplayedStepPointer = nextStep(firstDisplayedStepPointer);
+          firstDisplayedStepNumber++;
+          firstDisplayedStep = findNextStep(firstDisplayedStep);
         }
       }
 
-      if(currentStep > firstDisplayedStep + numberOfStepsOnScreen) {
-        currentStep = firstDisplayedStep + numberOfStepsOnScreen;
+      if(currentStepNumber > firstDisplayedStepNumber + numberOfStepsOnScreen) {
+        currentStepNumber = firstDisplayedStepNumber + numberOfStepsOnScreen;
       }
       break;
 

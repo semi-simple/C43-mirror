@@ -325,7 +325,7 @@ void showHideHourGlass(void) {
  * \return void
  ***********************************************/
 void showHidePgmBegin(void) {
-  if(programCounter == programMemoryPointer) {
+  if(currentStep == beginOfCurrentProgram) {
     showGlyph(STD_PGM_BEGIN, &standardFont, X_PROGRAM_BEGIN, 0, vmNormal, true, false); // is 0+10+3 pixel wide
   }
   else {

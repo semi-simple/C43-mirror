@@ -91,6 +91,7 @@ glyph_t               glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0,
 freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
 pcg32_random_t        pcg32_global = PCG32_INITIALIZER;
 labelList_t          *labelList = NULL;
+programList_t        *programList = NULL;
 
 char                 *tmpString = NULL;
 char                 *errorMessage;
@@ -221,6 +222,7 @@ uint16_t              freeProgramBytes;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 uint16_t              firstDisplayedStepNumber;
 uint16_t              numberOfLabels;
+uint16_t              numberOfPrograms;
 uint16_t              xCursor;
 uint16_t              yCursor;
 uint16_t              tamMode;

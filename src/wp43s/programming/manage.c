@@ -73,33 +73,45 @@
 
 
 
-void scanLabels(void) {
+void scanLabelsAndPrograms(void) {
   uint32_t stepNumber = 0;
-  uint16_t program;
   uint8_t *nextStep, *step = beginOfProgramMemory;
 
   numberOfLabels = 0;
+  numberOfPrograms = 1;
   while(*step != 255 || *(step + 1) != 255) { // .END.
-    if(*step == 1) {
+    if(*step == ITM_LBL) { // LBL
       numberOfLabels++;
+    }
+    if((*step & 0x7f) == (ITM_END >> 8) && *(step + 1) == (ITM_END & 0xff)) { // END
+      numberOfPrograms++;
     }
     step = findNextStep(step);
   }
 
   free(labelList);
+  free(programList);
+
   labelList = malloc(sizeof(labelList_t) * numberOfLabels);
   if(labelList == NULL) {
     //printf("\n");
   }
 
+  programList = malloc(sizeof(programList_t) * numberOfPrograms);
+  if(programList == NULL) {
+    //printf("\n");
+  }
+
   numberOfLabels = 0;
   step = beginOfProgramMemory;
-  program = 1;
+  programList[0].instructionPointer = step;
+  programList[0].step = (0 + 1);
+  numberOfPrograms = 1;
   stepNumber = 0;
   while(*step != 255 || *(step + 1) != 255) { // .END.
     nextStep = findNextStep(step);
     if(*step == 1) { // LBL
-      labelList[numberOfLabels].program = program;
+      labelList[numberOfLabels].program = numberOfPrograms;
       if(*(step + 1) <= 109) { // Local label
         labelList[numberOfLabels].followingStep = -(stepNumber + 1);
         labelList[numberOfLabels].labelPointer = step + 1;
@@ -114,12 +126,16 @@ void scanLabels(void) {
     }
 
     if((*step & 0x7f) == (ITM_END >> 8) && *(step + 1) == (ITM_END & 0xff)) { // END
-      program++;
+      programList[numberOfPrograms].instructionPointer = step + 2;
+      programList[numberOfPrograms].step = stepNumber + 2;
+      numberOfPrograms++;
     }
 
     step = nextStep;
     stepNumber++;
   }
+
+  listLabelsAndPrograms();
 }
 
 
@@ -130,7 +146,8 @@ void deleteStepsFromTo(uint8_t *from, uint8_t *to) {
   firstFreeProgramByte -= opSize;
   freeProgramBytes += opSize;
 printf("freeProgramBytes = %u\n", freeProgramBytes);
-  scanLabels();
+  scanLabelsAndPrograms();
+  defineCurrentProgram();
 }
 
 
@@ -153,7 +170,7 @@ void fnClPAll(uint16_t confirmation) {
     firstDisplayedStep          = beginOfProgramMemory;
     firstDisplayedStepNumber    = 0;
     temporaryInformation        = TI_NO_INFO;
-    scanLabels();
+    scanLabelsAndPrograms();
 printf("freeProgramBytes = %u\n", freeProgramBytes);
   }
 }
@@ -164,38 +181,49 @@ void fnClP(uint16_t unusedParamButMandatory) {
   if(beginOfCurrentProgram != beginOfProgramMemory || *endOfCurrentProgram != 255 || *(endOfCurrentProgram + 1) != 255) {
     deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram);
   }
+  defineCurrentProgram();
 }
 
 
 
 void defineCurrentProgram(void) {
-  if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentStep in not between begin and end of the current program
-    // Calculating endOfCurrentProgram
-    endOfCurrentProgram = currentStep;
-    while((*endOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // not END
-      endOfCurrentProgram = findNextStep(endOfCurrentProgram);
-    }
-    beginOfCurrentProgram = endOfCurrentProgram;
+  // Calculating endOfCurrentProgram
+  endOfCurrentProgram = currentStep;
+  while((*endOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // not END
     endOfCurrentProgram = findNextStep(endOfCurrentProgram);
-
-    // Calculating beginOfCurrentProgram
-    if(beginOfCurrentProgram > beginOfProgramMemory) { // not at the beginning of program memory
-      beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
-    }
-
-    if((*beginOfCurrentProgram & 0x7f) == (ITM_END >> 8) && *(beginOfCurrentProgram + 1) == (ITM_END & 0xff)) { // END
-      beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
-      return;
-    }
-
-    while(((*beginOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(beginOfCurrentProgram + 1) != (ITM_END & 0xff)) && beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
-      beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
-    }
-
-    if(beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
-      beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
-    }
   }
+  beginOfCurrentProgram = endOfCurrentProgram;
+  endOfCurrentProgram = findNextStep(endOfCurrentProgram);
+
+  // Calculating beginOfCurrentProgram
+  if(beginOfCurrentProgram > beginOfProgramMemory) { // not at the beginning of program memory
+    beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
+  }
+
+  if((*beginOfCurrentProgram & 0x7f) == (ITM_END >> 8) && *(beginOfCurrentProgram + 1) == (ITM_END & 0xff)) { // END
+    beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
+decodeOneStep(beginOfCurrentProgram);
+stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+printf("1 begin %s (%4u)",   tmpString + 2000, (uint32_t)((uint64_t)(beginOfCurrentProgram - (uint8_t *)ram) - 57000)); fflush(stdout);
+decodeOneStep(endOfCurrentProgram);
+stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+printf("  end %s (%4u)\n", tmpString + 2000, (uint32_t)((uint64_t)(endOfCurrentProgram   - (uint8_t *)ram) - 57000)); fflush(stdout);
+    return;
+  }
+
+  while(((*beginOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(beginOfCurrentProgram + 1) != (ITM_END & 0xff)) && beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
+    beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
+  }
+
+  if(beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
+    beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
+  }
+decodeOneStep(beginOfCurrentProgram);
+stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+printf("2 begin %s (%4u)",   tmpString + 2000, (uint32_t)((uint64_t)(beginOfCurrentProgram - (uint8_t *)ram) - 57000)); fflush(stdout);
+decodeOneStep(endOfCurrentProgram);
+stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+printf("  end %s (%4u)\n", tmpString + 2000, (uint32_t)((uint64_t)(endOfCurrentProgram   - (uint8_t *)ram) - 57000)); fflush(stdout);
 }
 
 

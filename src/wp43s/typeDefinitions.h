@@ -296,3 +296,13 @@ typedef struct {
   uint8_t  *labelPointer;       ///< Pointer to the byte after the 0x01 op code (LBL)
   uint8_t  *instructionPointer; ///< Pointer to the instructiuon following the label
 } labelList_t;
+
+
+/********************************************//**
+ * \typedef programList_t
+ * \brief Structure keeping the information for a program
+ ***********************************************/
+typedef struct {
+  int32_t  step;                ///< (Step number + 1) of the program begin: <0 for a FLASH program and >0 for a RAM program
+  uint8_t  *instructionPointer; ///< Pointer to the program begin
+} programList_t;

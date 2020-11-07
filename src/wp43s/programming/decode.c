@@ -64,7 +64,7 @@ void listPrograms(void) {
 }
 
 
-void listLabels(void) {
+void listLabelsAndPrograms(void) {
   printf("\nnum program  step label\n");
   for(int i=0; i<numberOfLabels; i++) {
     printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].followingStep));
@@ -82,6 +82,13 @@ void listLabels(void) {
       stringToUtf8(tmpString + 100, (uint8_t *)tmpString);
       printf("'%s'\n", tmpString);
     }
+  }
+
+  printf("program  step OP\n");
+  for(int i=0; i<numberOfPrograms; i++) {
+    decodeOneStep(programList[i].instructionPointer);
+    stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+    printf("%7u %5u %s\n", i + 1, programList[i].step - 1, tmpString);
   }
 }
 #endif // !DMCP_BUILD
@@ -779,6 +786,7 @@ void decodeOneStep(uint8_t *step) {
           break;
 
         case 0x7fff:          // 32767
+          xcopy(tmpString, ".END.", 6);
           break;
 
         default:

@@ -463,7 +463,7 @@ void initVariableSoftmenu(int16_t menu) {
                       break;
 
     case MNU_RAM:
-    case MNU_FLASH:   scanLabels();
+    case MNU_FLASH:   scanLabelsAndPrograms();
                       numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);

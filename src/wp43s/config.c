@@ -5767,7 +5767,7 @@ void addTestPrograms(void) {
   *(currentStep++) = 255; // .END.
 
   freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - currentStep;
-  scanLabels();
+  scanLabelsAndPrograms();
 
   #ifndef DMCP_BUILD
     printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
@@ -5778,8 +5778,8 @@ void addTestPrograms(void) {
 
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
-    listPrograms();
-    listLabels();
+    //listPrograms();
+    listLabelsAndPrograms();
   #endif // !DMCP_BUILD
 }
 
@@ -5835,7 +5835,7 @@ void fnReset(uint16_t confirmation) {
     *(beginOfProgramMemory + 3) = 255; // .END.
     freeProgramBytes            = 0;
 printf("freeProgramBytes = %u\n", freeProgramBytes);
-    scanLabels();
+    scanLabelsAndPrograms();
 
     // "Not found glyph" initialization
     if(glyphNotFound.data == NULL) {

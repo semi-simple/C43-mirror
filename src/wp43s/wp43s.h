@@ -255,6 +255,7 @@ extern glyph_t               glyphNotFound;
 extern freeMemoryRegion_t    freeMemoryRegions[MAX_FREE_REGION];
 extern pcg32_random_t        pcg32_global;
 extern labelList_t          *labelList;
+extern programList_t        *programList;
 
 extern char                 *tmpString;
 extern char                 *errorMessage;
@@ -334,6 +335,7 @@ extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 extern uint16_t              freeProgramBytes;
 extern uint16_t              firstDisplayedStepNumber;
 extern uint16_t              numberOfLabels;
+extern uint16_t              numberOfPrograms;
 extern uint16_t              xCursor;
 extern uint16_t              yCursor;
 extern uint16_t              tamMode;

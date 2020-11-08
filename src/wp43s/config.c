@@ -516,7 +516,7 @@ void addTestPrograms(void) {
   currentStep               = beginOfProgramMemory;
   currentStepNumber         = 0;
   firstDisplayedStepNumber  = 0;
-
+/*
   { // Prime number checker
     // 0
     *(currentStep++) = ITM_LBL;
@@ -2451,7 +2451,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-
+*/
   { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
     // 505
     *(currentStep++) = ITM_LBL;
@@ -2645,7 +2645,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-
+/*
   { // All OP's
     // 553
     *(currentStep++) = ITM_LBL;
@@ -5755,7 +5755,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-
+*/
   firstFreeProgramByte = currentStep;
 
   // 1373

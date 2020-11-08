@@ -31,8 +31,8 @@
 //  |     |    | 253|          |
 //  |     |    |   2|          |
 //  |     |    | 'P'|          |
-//  |16375|    | '1'| 1.       |  ^
-//  |     |  1 | 114|          |  | 1 block = 4 bytes
+//  |16375|    | '1'|          |  ^
+//  |     |  1 | 114| 1.       |  | 1 block = 4 bytes
 //  |     |    |   6|          |  |
 //  |     |    |   1|          |  v
 //  |16376|    | '1'|          |
@@ -56,8 +56,8 @@
 //  |     |    | 253|          |
 //  |     |    |   2|          |
 //  |16381|    | 'P'|          |
-//  |     |    | '3'| 3.       |
-//  |     |  9 | 114|          |
+//  |     |    | '3'|          |
+//  |     |  9 | 114| 3.       |
 //  |     |    |   6|          |
 //  |16382|    |   1|          |
 //  |     |    | '3'|          |
@@ -135,7 +135,7 @@ void scanLabelsAndPrograms(void) {
     stepNumber++;
   }
 
-  listLabelsAndPrograms();
+  defineCurrentProgram();
 }
 
 
@@ -145,9 +145,7 @@ void deleteStepsFromTo(uint8_t *from, uint8_t *to) {
   xcopy(from, to, (firstFreeProgramByte - to) + 2);
   firstFreeProgramByte -= opSize;
   freeProgramBytes += opSize;
-printf("freeProgramBytes = %u\n", freeProgramBytes);
   scanLabelsAndPrograms();
-  defineCurrentProgram();
 }
 
 
@@ -165,65 +163,71 @@ void fnClPAll(uint16_t confirmation) {
     firstFreeProgramByte        = beginOfProgramMemory + 2;
     freeProgramBytes            = 0;
     currentStep                 = beginOfProgramMemory;
-    beginOfCurrentProgram       = beginOfProgramMemory;
-    endOfCurrentProgram         = beginOfProgramMemory + 2;
     firstDisplayedStep          = beginOfProgramMemory;
     firstDisplayedStepNumber    = 0;
     temporaryInformation        = TI_NO_INFO;
     scanLabelsAndPrograms();
-printf("freeProgramBytes = %u\n", freeProgramBytes);
   }
 }
 
 
 
 void fnClP(uint16_t unusedParamButMandatory) {
+  int16_t i = 0;
+
   if(beginOfCurrentProgram != beginOfProgramMemory || *endOfCurrentProgram != 255 || *(endOfCurrentProgram + 1) != 255) {
+    currentStep        = beginOfCurrentProgram;
+    firstDisplayedStep = beginOfCurrentProgram;
+    while(programList[i].instructionPointer != beginOfCurrentProgram) {
+      i++;
+    }
+    currentStepNumber        = programList[i].step - 1;
+    firstDisplayedStepNumber = currentStepNumber;
+
     deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram);
+
+    if(*currentStep == 255 && *(currentStep + 1) == 255) { // We just deleted the last program of the list
+      currentStepNumber        = programList[i - 1].step - 1;
+      firstDisplayedStepNumber = currentStepNumber;
+    }
+
+    if(firstDisplayedStepNumber >= 3) {
+      firstDisplayedStepNumber -= 3;
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+    }
+    else if(firstDisplayedStepNumber >= 2) {
+      firstDisplayedStepNumber -= 2;
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+    }
+    else if(firstDisplayedStepNumber >= 1) {
+      firstDisplayedStepNumber -= 1;
+      firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+    }
   }
-  defineCurrentProgram();
 }
 
 
 
 void defineCurrentProgram(void) {
-  // Calculating endOfCurrentProgram
-  endOfCurrentProgram = currentStep;
-  while((*endOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(endOfCurrentProgram + 1) != (ITM_END & 0xff)) { // not END
-    endOfCurrentProgram = findNextStep(endOfCurrentProgram);
-  }
-  beginOfCurrentProgram = endOfCurrentProgram;
-  endOfCurrentProgram = findNextStep(endOfCurrentProgram);
+  int16_t program;
 
-  // Calculating beginOfCurrentProgram
-  if(beginOfCurrentProgram > beginOfProgramMemory) { // not at the beginning of program memory
-    beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
+  program = 0;
+  while(currentStep >= programList[program].instructionPointer) {
+    program++;
   }
 
-  if((*beginOfCurrentProgram & 0x7f) == (ITM_END >> 8) && *(beginOfCurrentProgram + 1) == (ITM_END & 0xff)) { // END
-    beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
+  endOfCurrentProgram = programList[program--].instructionPointer;
+  beginOfCurrentProgram = programList[program].instructionPointer;
+
 decodeOneStep(beginOfCurrentProgram);
 stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("1 begin %s (%4u)",   tmpString + 2000, (uint32_t)((uint64_t)(beginOfCurrentProgram - (uint8_t *)ram) - 57000)); fflush(stdout);
+printf("begin %s (%4u)",   tmpString + 2000, (uint32_t)((uint64_t)(beginOfCurrentProgram - (uint8_t *)ram) - 57344)); fflush(stdout);
 decodeOneStep(endOfCurrentProgram);
 stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("  end %s (%4u)\n", tmpString + 2000, (uint32_t)((uint64_t)(endOfCurrentProgram   - (uint8_t *)ram) - 57000)); fflush(stdout);
-    return;
-  }
-
-  while(((*beginOfCurrentProgram & 0x7f) != (ITM_END >> 8) || *(beginOfCurrentProgram + 1) != (ITM_END & 0xff)) && beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
-    beginOfCurrentProgram = findPreviousStep(beginOfCurrentProgram);
-  }
-
-  if(beginOfCurrentProgram > beginOfProgramMemory) { // not END and not at the beginning of program memory
-    beginOfCurrentProgram = findNextStep(beginOfCurrentProgram);
-  }
-decodeOneStep(beginOfCurrentProgram);
-stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("2 begin %s (%4u)",   tmpString + 2000, (uint32_t)((uint64_t)(beginOfCurrentProgram - (uint8_t *)ram) - 57000)); fflush(stdout);
-decodeOneStep(endOfCurrentProgram);
-stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("  end %s (%4u)\n", tmpString + 2000, (uint32_t)((uint64_t)(endOfCurrentProgram   - (uint8_t *)ram) - 57000)); fflush(stdout);
+printf("  end %s (%4u)\n", tmpString + 2000, (uint32_t)((uint64_t)(endOfCurrentProgram   - (uint8_t *)ram) - 57344)); fflush(stdout);
 }
 
 
@@ -248,7 +252,9 @@ void fnPem(uint16_t unusedParamButMandatory) {
     if(firstDisplayedStepNumber + line == currentStepNumber) {
       showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
       currentStep = step;
-      defineCurrentProgram();
+      if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentSetep is outside the current program
+        defineCurrentProgram();
+      }
     }
     else {
       showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, true);

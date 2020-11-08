@@ -518,11 +518,9 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint8_t *currentStep;
   uint32_t numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
-  beginOfCurrentProgram     = beginOfProgramMemory;
   firstDisplayedStep        = beginOfProgramMemory;
   currentStep               = beginOfProgramMemory;
   currentStepNumber         = 0;
@@ -1047,8 +1045,6 @@ void addTestPrograms(void) {
     // 131
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
-
-    endOfCurrentProgram = currentStep;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
       printf("Prime : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
@@ -2655,7 +2651,7 @@ void addTestPrograms(void) {
     *(currentStep++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
+      printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
 
@@ -5765,7 +5761,7 @@ void addTestPrograms(void) {
     *(currentStep++) =  ITM_END       & 0xff;
 
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + AllOp's : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
+      printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
 
@@ -5776,6 +5772,7 @@ void addTestPrograms(void) {
   *(currentStep++) = 255; // .END.
 
   freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - currentStep;
+  currentStep = beginOfProgramMemory;
   scanLabelsAndPrograms();
 
   #ifndef DMCP_BUILD
@@ -5831,11 +5828,9 @@ void fnReset(uint16_t confirmation) {
     memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
 
     // Empty program initialization
-    beginOfProgramMemory = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
-    beginOfCurrentProgram       = beginOfProgramMemory;
-    endOfCurrentProgram         = beginOfProgramMemory + 2;
+    beginOfProgramMemory        = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
     currentStep                 = beginOfProgramMemory;
-    firstFreeProgramByte        = beginOfProgramMemory;
+    firstFreeProgramByte        = beginOfProgramMemory + 2;
     firstDisplayedStep          = beginOfProgramMemory;
     firstDisplayedStepNumber    = 0;
     *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
@@ -5843,7 +5838,6 @@ void fnReset(uint16_t confirmation) {
     *(beginOfProgramMemory + 2) = 255; // .END.
     *(beginOfProgramMemory + 3) = 255; // .END.
     freeProgramBytes            = 0;
-printf("freeProgramBytes = %u\n", freeProgramBytes);
     scanLabelsAndPrograms();
 
     // "Not found glyph" initialization

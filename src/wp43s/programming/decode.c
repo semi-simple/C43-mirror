@@ -22,11 +22,6 @@
 
 
 #ifndef DMCP_BUILD
-
-uint32_t pgmAddress(uint8_t *addr) {
-  return (uint32_t)(addr - beginOfProgramMemory);
-}
-
 void listPrograms(void) {
   uint16_t i, numberOfBytesInStep, stepNumber = 0;
   uint8_t *nextStep, *step;
@@ -93,7 +88,7 @@ void listLabelsAndPrograms(void) {
   for(int i=0; i<numberOfPrograms; i++) {
     decodeOneStep(programList[i].instructionPointer);
     stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-    printf("%7u %5u %s (ram + %u)\n", i + 1, programList[i].step - 1, tmpString, pgmAddress(programList[i].instructionPointer));
+    printf("%7u %5u %s\n", i + 1, programList[i].step - 1, tmpString);
   }
 }
 #endif // !DMCP_BUILD

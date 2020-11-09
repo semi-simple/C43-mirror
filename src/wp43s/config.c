@@ -518,14 +518,14 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep        = beginOfProgramMemory;
   currentStep               = beginOfProgramMemory;
   currentStepNumber         = 0;
   firstDisplayedStepNumber  = 0;
-/*
+
   { // Prime number checker
     // 0
     *(currentStep++) = ITM_LBL;
@@ -2460,7 +2460,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-*/
+
   { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
     // 505
     *(currentStep++) = ITM_LBL;
@@ -2654,7 +2654,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-/*
+
   { // All OP's
     // 553
     *(currentStep++) = ITM_LBL;
@@ -5764,7 +5764,7 @@ void addTestPrograms(void) {
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
     #endif
   }
-*/
+
   firstFreeProgramByte = currentStep;
 
   // 1373
@@ -5772,12 +5772,13 @@ void addTestPrograms(void) {
   *(currentStep++) = 255; // .END.
 
   freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - currentStep;
+  numberOfBytesUsed = (uint32_t)(currentStep - beginOfProgramMemory);
   currentStep = beginOfProgramMemory;
   scanLabelsAndPrograms();
 
   #ifndef DMCP_BUILD
-    printf("Prime + Bairstow + Speed + Fact + AllOp's + 2 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    if((uint32_t)(currentStep - beginOfProgramMemory) + 2 > numberOfBytesForTheTestPrograms) {
+    printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's + 2 : %u bytes\n", numberOfBytesUsed);
+    if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
       printf("Increase allocated memory for programs!\n");
       exit(0);
     }

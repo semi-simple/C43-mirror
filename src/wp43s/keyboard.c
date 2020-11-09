@@ -945,6 +945,7 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnKeyExit(uint16_t unusedParamButMandatory) {
+  uint32_t newProgramSize;
   int16_t tmp1;            //JM
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
@@ -1025,7 +1026,19 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_TAM:
     case CM_ASM:
+      calcModeNormal();
+      break;
+
     case CM_PEM:
+      if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
+        newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
+        currentStep        += (freeProgramBytes & 0xfffc);
+        firstDisplayedStep += (freeProgramBytes & 0xfffc);
+        freeProgramBytes &= 0x03;
+        resizeProgramMemory(TO_BLOCKS(newProgramSize));
+        scanLabelsAndPrograms();
+      }
+
       calcModeNormal();
       break;
 

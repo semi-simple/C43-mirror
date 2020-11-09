@@ -20,7 +20,6 @@
 
 void decodeOneStep          (uint8_t *step);
 #ifndef DMCP_BUILD
-  uint32_t pgmAddress(uint8_t *addr);
   void listPrograms         (void);
   void listLabelsAndPrograms(void);
 #endif // !DMCP_BUILD

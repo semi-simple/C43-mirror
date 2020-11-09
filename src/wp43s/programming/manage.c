@@ -36,7 +36,7 @@
 //  |     |    |   6|          |  |
 //  |     |    |   1|          |  v
 //  |16376|    | '1'|          |
-//  |     |  2 |  95| +        |
+//  |     |  2 |  95| +        | <-- firstDisplayedStep
 //  |     |  3 | 133| END      |
 //  |     |    | 168|          |
 //  |16377|  4 |   1| LBL 'P2' | <-- beginOfCurrentProgram
@@ -70,20 +70,6 @@
 //  +-----+----+----+----------+
 //
 //  freeProgramBytes = 1
-
-
-
-void debugPgmMem(const char *str) {
-  printf("\n%s\n", str);
-  printf("beginOfProgramMemory     = %u\n", pgmAddress(beginOfProgramMemory));
-  printf("beginOfCurrentProgram    = %u\n", pgmAddress(beginOfCurrentProgram));
-  printf("currentStep              = %u\n", pgmAddress(currentStep));
-  printf("endOfCurrentProgram      = %u\n", pgmAddress(endOfCurrentProgram));
-  printf("firstFreeProgramByte     = %u\n", pgmAddress(firstFreeProgramByte));
-  printf("firstDisplayedStepNumber = %u\n", firstDisplayedStepNumber);
-  printf("currentStepNumber        = %u\n", currentStepNumber);
-  printf("freeProgramBytes         = %u\n", freeProgramBytes);
-}
 
 
 
@@ -149,22 +135,18 @@ void scanLabelsAndPrograms(void) {
     stepNumber++;
   }
 
-debugPgmMem("scanLabelsAndPrograms 1");
   defineCurrentProgram();
-debugPgmMem("scanLabelsAndPrograms 2");
 }
 
 
 
 void deleteStepsFromTo(uint8_t *from, uint8_t *to) {
   uint16_t opSize = to - from;
-debugPgmMem("deleteStepsFromTo 1");
+
   xcopy(from, to, (firstFreeProgramByte - to) + 2);
   firstFreeProgramByte -= opSize;
   freeProgramBytes += opSize;
-debugPgmMem("deleteStepsFromTo 2");
   scanLabelsAndPrograms();
-debugPgmMem("deleteStepsFromTo 3");
 }
 
 
@@ -194,11 +176,11 @@ void fnClPAll(uint16_t confirmation) {
 void fnClP(uint16_t unusedParamButMandatory) {
   int16_t i = 0;
 
-  if(beginOfCurrentProgram != beginOfProgramMemory || *endOfCurrentProgram != 255 || *(endOfCurrentProgram + 1) != 255) {
-debugPgmMem("fnClP 1");
-    currentStep        = beginOfCurrentProgram;
-    firstDisplayedStep = beginOfCurrentProgram;
-debugPgmMem("fnClP 2");
+  if(beginOfCurrentProgram == beginOfProgramMemory && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is only one program in memory
+    fnClPAll(CONFIRMED);
+  }
+  else {
+    currentStep = beginOfCurrentProgram;
     while(programList[i].instructionPointer != beginOfCurrentProgram) {
       i++;
     }
@@ -207,35 +189,30 @@ debugPgmMem("fnClP 2");
       currentStepNumber        = programList[i - 1].step - 1;
       firstDisplayedStepNumber = currentStepNumber;
       currentStep              = programList[i - 1].instructionPointer;
-debugPgmMem("fnClP 3");
     }
     else {
       currentStepNumber        = programList[i].step - 1;
       firstDisplayedStepNumber = currentStepNumber;
       currentStep              = programList[i].instructionPointer;
-debugPgmMem("fnClP 4");
     }
 
     deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram);
-debugPgmMem("fnClP 5");
+    firstDisplayedStep = beginOfCurrentProgram;
 
     if(firstDisplayedStepNumber >= 3) {
       firstDisplayedStepNumber -= 3;
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
-debugPgmMem("fnClP 6");
     }
     else if(firstDisplayedStepNumber >= 2) {
       firstDisplayedStepNumber -= 2;
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
-debugPgmMem("fnClP 7");
     }
     else if(firstDisplayedStepNumber >= 1) {
       firstDisplayedStepNumber -= 1;
       firstDisplayedStep = findPreviousStep(firstDisplayedStep);
-debugPgmMem("fnClP 8");
     }
   }
 }
@@ -252,13 +229,6 @@ void defineCurrentProgram(void) {
 
   endOfCurrentProgram = programList[program--].instructionPointer;
   beginOfCurrentProgram = programList[program].instructionPointer;
-
-decodeOneStep(beginOfCurrentProgram);
-stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("begin %s (%4u)",   tmpString + 2000, pgmAddress(beginOfCurrentProgram)); fflush(stdout);
-decodeOneStep(endOfCurrentProgram);
-stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-printf("  end %s (%4u)\n", tmpString + 2000, pgmAddress(endOfCurrentProgram)); fflush(stdout);
 }
 
 

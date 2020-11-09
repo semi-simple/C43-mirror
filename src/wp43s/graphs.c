@@ -124,9 +124,9 @@ void fnScale (uint16_t unusedParamButMandatory) {
 
 void fnPshade (uint16_t unusedParamButMandatory) {
   PLOT_SHADE = !PLOT_SHADE;
-  
   if(PLOT_SHADE) PLOT_INTG = true;
   fnRefreshComboxState(CB_JC, JC_SHADE, PLOT_SHADE);                //jm
+  fnPlot(0);
 }    
 
 void fnPx (uint16_t unusedParamButMandatory) {
@@ -690,6 +690,7 @@ void graph_axis (void){
     showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
     plotintbig( 5, ypos+4+4-2 );
+    plotrect(5+4-1, (ypos+4+4-2+2)-1, 5+4+2, (ypos+4+4-2+2)+2);
     ypos += 20;
   }
 
@@ -708,6 +709,7 @@ void graph_axis (void){
     showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
     plotrms( 6, ypos+4+4-2);
+    plotrect(6-1, (ypos+4+4-2)-1, 6+2, (ypos+4+4-2)+2);
     ypos += 20;
   }
 

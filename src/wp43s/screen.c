@@ -929,7 +929,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   }
 
   data = (int8_t *)glyph->data;
-  int16_t y0 = y;                                                   //JMmin i
+  int16_t y0 = y;                                                   //JMmini 0-reference
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
   //xEndingCols = x + xGlyph + glyph->colsGlyph;   //JMmini
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;

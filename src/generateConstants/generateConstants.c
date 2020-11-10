@@ -716,7 +716,8 @@ void generateAllConstants(void) {
   generateConstantArray34("1on2",        "+5.000000000000000000000000000000000000000000000000000000e-01"); // cnst211
   generateConstantArray34("1",           "+1.000000000000000000000000000000000000000000000000000000e+00"); // cnst212
   generateConstantArray34("2pi",         "+6.283185307179586476925286766559005768394338798750211642e+00"); // cnst213
-  generateConstantArray34("1e6",         "+1.000000000000000000000000000000000000000000000000000000e+06"); // cnst214  if the number of constants changes: don't forget to update NUMBER_OF_CONSTANTS_* in wp43s.h
+  generateConstantArray34("1e6",         "+1.000000000000000000000000000000000000000000000000000000e+06"); // cnst214
+  generateConstantArray34("2p32",        "+4.294967296000000000000000000000000000000000000000000000e+09"); // cnst215  if the number of constants changes: don't forget to update NUMBER_OF_CONSTANTS_* in defines.h
 
   strcat(realArray, "};\n");
 }

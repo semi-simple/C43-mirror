@@ -405,7 +405,7 @@
 #define NUMBER_OF_CONSTANTS_39                   177+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                     7
+#define NUMBER_OF_CONSTANTS_34                     8
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 

@@ -131,7 +131,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
 
   uInt32ToReal34(value >> 32, REGISTER_REAL34_DATA(destination));
   uInt32ToReal34(value & 0x00000000ffffffff, &lowWord);
-  real34FMA(REGISTER_REAL34_DATA(destination), const_2p32, &lowWord, REGISTER_REAL34_DATA(destination));
+  real34FMA(REGISTER_REAL34_DATA(destination), const34_2p32, &lowWord, REGISTER_REAL34_DATA(destination));
 
   if(sign) {
     real34SetNegativeSign(REGISTER_REAL34_DATA(destination));

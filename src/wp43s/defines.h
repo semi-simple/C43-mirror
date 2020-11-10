@@ -44,7 +44,7 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2020.10"
+#define YEARMONTH                                 "2020.11"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
@@ -327,7 +327,7 @@
 #define NUMBER_OF_CONSTANTS_39                   177
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                     7
+#define NUMBER_OF_CONSTANTS_34                     8
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 

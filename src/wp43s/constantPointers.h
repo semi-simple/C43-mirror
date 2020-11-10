@@ -320,3 +320,4 @@ extern const real34_t * const const34_1on2;
 extern const real34_t * const const34_1;
 extern const real34_t * const const34_2pi;
 extern const real34_t * const const34_1e6;
+extern const real34_t * const const34_2p32;

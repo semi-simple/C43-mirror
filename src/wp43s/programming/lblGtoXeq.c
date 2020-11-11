@@ -15,8 +15,19 @@
  */
 
 /********************************************//**
- * \file fractions.h
+ * \file lblGtoXeq.c
  ***********************************************/
 
-void fnDenMax            (uint16_t unusedParamButMandatory);
-void fraction            (calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t *numer, uint64_t *denom, int16_t *lessEqualGreater);
+#include "wp43s.h"
+
+
+
+void fnGoto(uint16_t label) {
+  printf("GTO %02u\n", label);
+}
+
+
+
+void fnGotoDot(uint16_t label) {
+  printf("GTO. %02u\n", label);
+}

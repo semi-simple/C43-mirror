@@ -1755,7 +1755,6 @@ void tamTransitionSystem(uint16_t tamTransition) {
             if(i == 5) {
                 calcModeNormal();
                 return;
-                break;
               }
             if(tamBuffer[strlen(tamBuffer)-i] != '_') {
               tamBuffer[strlen(tamBuffer)-i] = '_';

@@ -59,7 +59,7 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
 }
 
 
-
+/* never used
 void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destination) {
   longInteger_t lgInt;
 
@@ -68,7 +68,7 @@ void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destina
   longIntegerFree(lgInt);
   stringToReal34(tmpString, destination);
 }
-
+*/
 
 
 void convertLongIntegerRegisterToReal(calcRegister_t source, real_t *destination, realContext_t *ctxt) {
@@ -96,7 +96,7 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
   else {
     #ifdef DMCP_BUILD // 32 bits
       uint64_t i64 = *(uint32_t *)(lgInt->_mp_d);
-      if(abs(lgInt->_mp_size > 1)) {
+      if(abs(lgInt->_mp_size) > 1) {
         i64 |= (int64_t)(*(((uint32_t *)(lgInt->_mp_d)) + 1)) << 32;
       }
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = i64 & shortIntegerMask;

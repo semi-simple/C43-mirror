@@ -121,7 +121,7 @@ void exportCStructure(char const *ttfName) {
   FT_Vector pen;
   char      glyphName[100];
   char      ttfName2[100], path[200], *fontName;
-  int       x, y, cc, bytesPerRow, bit; // ,dataLength
+  int       x, y, cc, bit; // ,dataLength
   int       fontHeightPixels, unitsPerEm, onePixelSize, numberOfGlyphs;
   int       colsBeforeGlyph, colsGlyph, colsAfterGlyph;
   int       rowsAboveGlyph, rowsGlyph, rowsBelowGlyph;
@@ -275,15 +275,6 @@ void exportCStructure(char const *ttfName) {
       // Render the glyph //
       //////////////////////
       fprintf(cFile, "    // %s \n", glyphName);
-
-      bytesPerRow = colsGlyph;
-
-      if(bytesPerRow % 8 == 0) {
-        bytesPerRow /= 8;
-      }
-      else {
-        bytesPerRow = bytesPerRow/8 + 1;
-      }
 
       fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d, .rank1=%3d, .rank2=%3d,\n",
                       (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph, rank1, rank2);

@@ -22,8 +22,7 @@
 
 #ifndef TESTSUITE_BUILD
 int16_t determineFunctionKeyItem(const char *data) {
-  int16_t row, item = ITM_NOP;
-  const softmenu_t *sm;
+  int16_t item = ITM_NOP;
   int16_t itemShift, fn = *(data) - '0';
 
   if(shiftF) {
@@ -37,8 +36,8 @@ int16_t determineFunctionKeyItem(const char *data) {
   }
 
   if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    int16_t row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
@@ -104,9 +103,7 @@ void btnFnPressed(void *data) {
     shiftF = false;
     shiftG = false;
     if(item != ITM_NOP && item != ITM_NULL) {
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-      }
+      lastErrorCode = 0;
 
       #if(FN_KEY_TIMEOUT_TO_NOP == 1)
         showFunctionName(item, 1000); // 1000ms = 1s
@@ -143,9 +140,7 @@ void btnFnReleased(void *data) {
       #endif
 
       if(calcMode != CM_CONFIRMATION) {
-        if(lastErrorCode != 0) {
-          lastErrorCode = 0;
-        }
+        lastErrorCode = 0;
 
         if(softmenuStackPointer > 0) {
           if(calcMode == CM_ASM) {
@@ -210,11 +205,7 @@ int16_t determineItem(const char *data) {
   // Shift f pressed and shift g not active
   if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     temporaryInformation = TI_NO_INFO;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-    }
-
+    lastErrorCode = 0;
     shiftF = !shiftF;
     return ITM_NOP;
   }
@@ -222,11 +213,7 @@ int16_t determineItem(const char *data) {
   // Shift g pressed and shift f not active
   else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
     temporaryInformation = TI_NO_INFO;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-    }
-
+    lastErrorCode = 0;
     shiftG = !shiftG;
     return ITM_NOP;
   }
@@ -656,8 +643,6 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnKeyExit(uint16_t unusedParamButMandatory) {
-  uint32_t newProgramSize;
-
   #ifndef TESTSUITE_BUILD
   switch(calcMode) {
     case CM_NORMAL:
@@ -708,7 +693,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_PEM:
       if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
-        newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
+        uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
         currentStep        += (freeProgramBytes & 0xfffc);
         firstDisplayedStep += (freeProgramBytes & 0xfffc);
         freeProgramBytes &= 0x03;
@@ -818,7 +803,7 @@ void fnKeyCC(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, x, y, newXCursor;
+  uint16_t lg;
   uint8_t *nextStep;
 
   switch(calcMode) {
@@ -840,6 +825,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
+        uint16_t x, y, newXCursor;
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
@@ -906,8 +892,6 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  int16_t itemShift;
-
   switch(calcMode) {
     case CM_NORMAL:
     case CM_AIM:
@@ -926,7 +910,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           alphaCase = AC_UPPER;
         }
         else {
-          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
@@ -1004,8 +988,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyDown(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  int16_t itemShift;
-
   switch(calcMode) {
     case CM_NORMAL:
     case CM_AIM:
@@ -1024,7 +1006,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           alphaCase = AC_LOWER;
         }
         else {
-          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
             softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;

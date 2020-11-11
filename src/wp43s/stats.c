@@ -50,11 +50,9 @@ bool_t checkMinimumDataPoints(const real_t *n) {
 
 
 void initStatisticalSums(void) {
-  int32_t sum;
-
   if(statisticalSumsPointer == NULL) {
     statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    for(sum=0; sum<NUMBER_OF_STATISTICAL_SUMS - 4; sum++) {
+    for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS - 4; sum++) {
       realZero((real_t *)(statisticalSumsPointer + REAL_SIZE * sum));
     }
 

@@ -64,7 +64,7 @@ void fnFactorial(uint16_t unusedParamButMandatory) {
 
 
 void factLonI(void) {
-  longInteger_t x, fact;
+  longInteger_t x, f;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
 
@@ -95,20 +95,20 @@ void factLonI(void) {
   longIntegerToUInt(x, n);
   #if (__linux__ == 1)
     //The more precise formula below is: (n*ln(n) - n + (ln(8n³ + 4n² + n + 1/30))/6 + ln(pi)/2) / ln(2)
-    longIntegerInitSizeInBits(fact, 1 + (uint32_t)((n * log(n) - n) / log(2)));
-    uIntToLongInteger(1, fact);
+    longIntegerInitSizeInBits(f, 1 + (uint32_t)((n * log(n) - n) / log(2)));
+    uIntToLongInteger(1, f);
     for(uint32_t i=2; i<=n; i++) {
-      longIntegerMultiplyUInt(fact, i, fact);
+      longIntegerMultiplyUInt(f, i, f);
     }
   #else
-    longIntegerInit(fact);
-    longIntegerFactorial(n, fact); //TODO why this line fails?
+    longIntegerInit(f);
+    longIntegerFactorial(n, f); //TODO why this line fails?
   #endif
 
 
-  convertLongIntegerToLongIntegerRegister(fact, REGISTER_X);
+  convertLongIntegerToLongIntegerRegister(f, REGISTER_X);
 
-  longIntegerFree(fact);
+  longIntegerFree(f);
   longIntegerFree(x);
 }
 
@@ -152,13 +152,12 @@ void factShoI(void) {
     return;
   }
 
-  uint64_t fact = fact_uint64(value);
-
-  if(fact > shortIntegerMask) {
+  uint64_t f = fact_uint64(value);
+  if(f > shortIntegerMask) {
     setSystemFlag(FLAG_OVERFLOW);
   }
 
-  convertUInt64ToShortIntegerRegister(0, fact, getRegisterTag(REGISTER_X), REGISTER_X);
+  convertUInt64ToShortIntegerRegister(0, f, getRegisterTag(REGISTER_X), REGISTER_X);
 }
 
 

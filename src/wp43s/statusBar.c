@@ -156,14 +156,14 @@ void showAngularMode(void) {
  * \return void
  ***********************************************/
 void showFracMode(void) {
-  int16_t x = 0;
-
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
   if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
     showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
   }
   else {
+    int16_t x = 0;
+
     if((getSystemFlag(FLAG_DENANY) && denMax!=MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
       sprintf(errorMessage, "/%" PRIu32, denMax);
       x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);

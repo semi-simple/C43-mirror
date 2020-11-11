@@ -64,6 +64,8 @@ bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
 bool_t                thereIsSomethingToUndo;
 bool_t                programListEnd;
+bool_t                serialIOIconEnabled;
+bool_t                neverUsed;
 
 realContext_t         ctxtReal34;   //   34 digits
 realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
@@ -124,7 +126,6 @@ uint8_t               cursorEnabled;
 uint8_t               nimNumberPart;
 uint8_t               hexDigits;
 uint8_t               lastErrorCode;
-uint8_t               serialIOIconEnabled;
 uint8_t               temporaryInformation;
 uint8_t               rbrMode;
 uint8_t               numScreensNumericFont;
@@ -656,7 +657,7 @@ return 0;
 
   processTests();
   printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
-  debugMemory();
+  debugMemory("End of testsuite");
 
   return 0;
 }

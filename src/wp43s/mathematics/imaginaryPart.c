@@ -71,16 +71,15 @@ void imagPartCxma(void) {
 
 
 void imagPartCplx(void) {
-  real34_t imagPart;
+  real34_t ip;
 
-  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &imagPart);
+  real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &ip);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  real34Copy(&imagPart, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Copy(&ip, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 void imagPartReal(void) {
-
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
 }

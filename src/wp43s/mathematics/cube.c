@@ -64,15 +64,15 @@ void fnCube(uint16_t unusedParamButMandatory) {
 
 
 void cubeLonI(void) {
-  longInteger_t x, cube;
+  longInteger_t x, c;
 
   convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
-  longIntegerInit(cube);
-  longIntegerMultiply(x, x, cube);
-  longIntegerMultiply(cube, x, cube);
-  convertLongIntegerToLongIntegerRegister(cube, REGISTER_X);
+  longIntegerInit(c);
+  longIntegerMultiply(x, x, c);
+  longIntegerMultiply(c, x, c);
+  convertLongIntegerToLongIntegerRegister(c, REGISTER_X);
   longIntegerFree(x);
-  longIntegerFree(cube);
+  longIntegerFree(c);
 }
 
 

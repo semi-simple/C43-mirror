@@ -156,7 +156,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
     strcat(displayString, STD_SUP_0);
   }
   else {
-    int16_t digit, digitCount=0;
+    int16_t digitCount=0;
     bool_t greaterThan9999;
 
     if(supNumber < 0) {
@@ -167,6 +167,8 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
     greaterThan9999 = (supNumber > 9999);
     while(supNumber > 0) {
+      int16_t digit;
+
       digit = supNumber % 10;
       supNumber /= 10;
 
@@ -216,10 +218,8 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
     strcat(displayString, STD_SUB_0);
   }
   else {
-    int16_t digit;
-
     while(subNumber > 0) {
-      digit = subNumber % 10;
+      int16_t digit = subNumber % 10;
       subNumber /= 10;
 
       xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
@@ -705,7 +705,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Case when 9.9999 rounds to 10.0000
     if(digitToRound < firstDigit) {
       firstDigit--;
-      lastDigit = firstDigit;
       numDigits = 1;
       exponent++;
     }
@@ -807,7 +806,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Case when 9.9999 rounds to 10.0000
     if(digitToRound < firstDigit) {
       firstDigit--;
-      lastDigit = firstDigit;
       numDigits = 1;
       exponent++;
     }
@@ -1484,7 +1482,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
 
 void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp, const char *separator) {
-  int16_t len, exponentStep;
+  int16_t exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
 
@@ -1520,7 +1518,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
   longIntegerFree(lgInt);
 
   if(groupingGap > 0) {
-    len = strlen(displayString);
+    int16_t len = strlen(displayString);
     for(int16_t i=len - groupingGap; i>0; i-=groupingGap) {
       if(i != 1 || displayString[0] != '-') {
         xcopy(displayString + i + 2, displayString + i, len - i + 1);
@@ -1617,7 +1615,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
 
 
 void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t strLen) {
-  int32_t digits, stringLen, counter;
+  int32_t numberOfDigits, stringLen, counter;
   longInteger_t x;
 
   str[0] = '0';
@@ -1627,15 +1625,15 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
     return;
   }
 
-  //digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
-  digits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
+  //numberOfDigits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
+  numberOfDigits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
   //if(longIntegerIsNegative(lgInt)) {
   if(lgInt->_mp_size < 0) {
-    stringLen = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
+    stringLen = numberOfDigits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
   }
   else {
-    stringLen = digits + 1; // 1 for the trailing 0
+    stringLen = numberOfDigits + 1; // 1 for the trailing 0
   }
 
   if(strLen < stringLen) {
@@ -1656,7 +1654,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
   stringLen -= 2; // set stringLen to the last digit of the base 10 representation
-  counter = digits;
+  counter = numberOfDigits;
   //while(!longIntegerIsZero(x)) {
   while(x->_mp_size != 0) {
     str[stringLen--] = '0' + mpz_tdiv_ui(x, 10);
@@ -1668,7 +1666,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   }
 
   if(counter == 1) { // digit was 1 too big
-    xcopy(str + stringLen, str + stringLen + 1, digits);
+    xcopy(str + stringLen, str + stringLen + 1, numberOfDigits);
   }
 
   //longIntegerFree(x);

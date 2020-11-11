@@ -1435,8 +1435,8 @@
 #define MNU_VAR                       1381
 #define MNU_TAMFLAG                   1382
 #define MNU_TAMSHUFFLE                1383
-#define CHR_1384                      1384
-#define CHR_1385                      1385
+#define MNU_PROG                      1384
+#define MNU_TAMLABEL                  1385
 #define CHR_1386                      1386
 #define CHR_1387                      1387
 #define CHR_1388                      1388

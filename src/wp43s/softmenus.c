@@ -322,6 +322,7 @@ const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,   
                                      ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_TamShuffle[]  = { ITM_ST_X,                      ITM_ST_Y,                   ITM_ST_Z,                 ITM_ST_T,              ITM_NULL,                    ITM_NULL,                     };
+const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T                      };
 
 #include "softmenuCatalogs.h"
 
@@ -329,15 +330,16 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
   {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 14 first menus are
+  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
   {.menuId = -MNU_VAR,         .numItems = 0,                                        .softkeyItem = NULL             }, // variable softmenus and
-  {.menuId = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
-  {.menuId = -MNU_STRINGS,     .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
-  {.menuId = -MNU_DATES,       .numItems = 0,                                        .softkeyItem = NULL             }, // variableSoftmenu area
-  {.menuId = -MNU_TIMES,       .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_ANGLES,      .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_SINTS,       .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_LINTS,       .numItems = 0,                                        .softkeyItem = NULL             },
+  {.menuId = -MNU_PROG,        .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
+  {.menuId = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
+  {.menuId = -MNU_STRINGS,     .numItems = 0,                                        .softkeyItem = NULL             }, // variableSoftmenu area.
+  {.menuId = -MNU_DATES,       .numItems = 0,                                        .softkeyItem = NULL             }, //
+  {.menuId = -MNU_TIMES,       .numItems = 0,                                        .softkeyItem = NULL             }, // If you add or remove one:
+  {.menuId = -MNU_ANGLES,      .numItems = 0,                                        .softkeyItem = NULL             }, // don't forget to adjust
+  {.menuId = -MNU_SINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // NUMBER_OF_VARIABLE_SOFTMENUS
+  {.menuId = -MNU_LINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // in defines.h
   {.menuId = -MNU_REALS,       .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_CPXS,        .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
@@ -421,6 +423,7 @@ const softmenu_t softmenu[] = {
   {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
   {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
   {.menuId = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
+  {.menuId = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
   {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
@@ -431,6 +434,7 @@ variableSoftmenu_t variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS] = {
   {.menuId = -MNU_FLASH,   .numItems = 0, .menuContent = NULL},
   {.menuId = -MNU_MyMenu,  .numItems = 0, .menuContent = NULL},
   {.menuId = -MNU_VAR,     .numItems = 0, .menuContent = NULL},
+  {.menuId = -MNU_PROG,    .numItems = 0, .menuContent = NULL},
   {.menuId = -MNU_MATRS,   .numItems = 0, .menuContent = NULL},
   {.menuId = -MNU_STRINGS, .numItems = 0, .menuContent = NULL},
   {.menuId = -MNU_DATES,   .numItems = 0, .menuContent = NULL},
@@ -451,7 +455,7 @@ static int sortMenu(void const *a, void const *b)
 
 
 void initVariableSoftmenu(int16_t menu) {
-  int16_t i, numberOfBytes, numberOfGlobalLabels, numberOfRows, bytesToAdd, len;
+  int16_t i, numberOfBytes, numberOfGlobalLabels, numberOfRows, bytesToAdd;
   uint8_t *ptr;
 
   free(variableSoftmenu[menu].menuContent);
@@ -459,6 +463,7 @@ void initVariableSoftmenu(int16_t menu) {
   switch(-variableSoftmenu[menu].menuId) {
     case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
                       xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000not\000yet\000defined\000\000", 27);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
@@ -489,7 +494,7 @@ void initVariableSoftmenu(int16_t menu) {
                       variableSoftmenu[menu].menuContent = ptr;
                       *(ptr++) = numberOfRows;
                       for(i=0; i<numberOfGlobalLabels; i++) {
-                        len = stringByteLength(tmpString + 15*i) + 1;
+                        int16_t len = stringByteLength(tmpString + 15*i) + 1;
                         xcopy(ptr, tmpString + 15*i, len);
                         ptr += len;
                       }
@@ -509,6 +514,11 @@ void initVariableSoftmenu(int16_t menu) {
 
     case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(24);
                       xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000not\000yet\000defined\000\000", 23);
+                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+                      break;
+
+    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(24);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000not\000yet\000defined\000\000", 23);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
@@ -697,11 +707,10 @@ void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t 
  * \return void
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
-  int16_t m, x, y, menu, yDotted=0, currentFirstItem, item, numberOfItems;
-  bool_t dottedTopLine;
-
   if(softmenuStackPointer > 0) {
-    m = softmenuStack[softmenuStackPointer-1].softmenu;
+    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+    bool_t dottedTopLine;
+
     if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
       initVariableSoftmenu(m);
       numberOfItems = variableSoftmenu[m].numItems;
@@ -756,7 +765,7 @@ void showSoftmenuCurrentPart(void) {
             item = softkeyItem[x];
           }
           if(item < 0) { // softmenu
-            menu = 0;
+            int16_t menu = 0;
             while(softmenu[menu].menuId != 0) {
               if(softmenu[menu].menuId == item) {
                 break;

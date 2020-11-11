@@ -34,9 +34,9 @@
  * \return void
  ***********************************************/
 static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t *sumY, real_t *numberY, void (*transform)(const real_t *operand, real_t *result)) {
-  real_t *mean, tempReal1, tempReal2;
-
   if(checkMinimumDataPoints(const_1)) {
+    real_t tempReal1, tempReal2;
+
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
@@ -45,7 +45,7 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
     if(transform != NULL) {
       (*transform)(&tempReal1, &tempReal2);
     }
-    mean = transform == NULL ? &tempReal1 : &tempReal2;
+    real_t *mean = transform == NULL ? &tempReal1 : &tempReal2;
     realToReal34(mean, REGISTER_REAL34_DATA(REGISTER_X));
 
     realDivide(sumY, numberY, &tempReal1, &ctxtReal39);

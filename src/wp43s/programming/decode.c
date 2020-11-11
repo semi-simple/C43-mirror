@@ -33,7 +33,7 @@ void listPrograms(void) {
     nextStep = findNextStep(step);
     if(nextStep) {
       numberOfBytesInStep = (uint16_t)(nextStep - step);
-      printf("\n%4u  ", stepNumber++); fflush(stdout);
+      printf("\n%4d  ", stepNumber++); fflush(stdout);
 
       for(i=0; i<numberOfBytesInStep; i++) {
         printf(" %02x", *(step + i)); fflush(stdout);
@@ -88,7 +88,7 @@ void listLabelsAndPrograms(void) {
   for(int i=0; i<numberOfPrograms; i++) {
     decodeOneStep(programList[i].instructionPointer);
     stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-    printf("%7u %5u %s\n", i + 1, programList[i].step - 1, tmpString);
+    printf("%7d %5d %s\n", i + 1, programList[i].step - 1, tmpString);
   }
 }
 #endif // !DMCP_BUILD
@@ -110,7 +110,7 @@ void getIndirectRegister(uint8_t *paramAddress, const char *op) {
     sprintf(tmpString, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
   }
   else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-    sprintf(tmpString, "%s " STD_RIGHT_ARROW ".%02u", op, opParam - FIRST_LOCAL_REGISTER);
+    sprintf(tmpString, "%s " STD_RIGHT_ARROW ".%02d", op, opParam - FIRST_LOCAL_REGISTER);
   }
   else {
     sprintf(tmpString, "\nIn function getIndirectRegister: %s " STD_RIGHT_ARROW " %u is not a valid parameter!", op, opParam);
@@ -183,7 +183,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
            sprintf(tmpString, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-           sprintf(tmpString, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
+           sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_REGISTER);
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
            getStringLabelOrVariableName(paramAddress);
@@ -211,10 +211,10 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
            sprintf(tmpString, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_FLAG) { // Local flag from .00 to .15 (or .31)
-           sprintf(tmpString, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
+           sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_FLAG);
          }
          else if(FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS <= opParam && opParam < FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS + NUMBER_OF_SYSTEM_FLAGS) { // Local register from .00 to .15 (or .31)
-           sprintf(tmpString, "%s .%02u", op, opParam - FIRST_LOCAL_FLAG);
+           sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_FLAG);
          }
          else if(opParam == INDIRECT_REGISTER) {
            getIndirectRegister(paramAddress, op);
@@ -250,7 +250,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
            sprintf(tmpString, "%s %s", op, indexOfItems[ITM_ST_X + opParam - REGISTER_X].itemSoftmenuName);
          }
          else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
-           sprintf(tmpString, "%s .%02u", op, opParam - FIRST_LOCAL_REGISTER);
+           sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_REGISTER);
          }
          else if(opParam == STRING_LABEL_VARIABLE) {
            getStringLabelOrVariableName(paramAddress);

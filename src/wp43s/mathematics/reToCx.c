@@ -44,19 +44,16 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
       if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
         setRegisterAngularMode(REGISTER_X, AM_NONE);
-        dataTypeX = dtReal34;
         xIsAReal = false;
       }
     }
 
     if(dataTypeX == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      dataTypeX = dtReal34;
     }
 
     if(dataTypeY == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-      dataTypeY = dtReal34;
     }
 
     complex34_t temp;

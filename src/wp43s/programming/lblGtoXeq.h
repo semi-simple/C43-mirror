@@ -15,8 +15,8 @@
  */
 
 /********************************************//**
- * \file fractions.h
+ * \file lblGtoXeq.h
  ***********************************************/
 
-void fnDenMax            (uint16_t unusedParamButMandatory);
-void fraction            (calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t *numer, uint64_t *denom, int16_t *lessEqualGreater);
+void fnGoto   (uint16_t label);
+void fnGotoDot(uint16_t label);

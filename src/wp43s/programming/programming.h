@@ -20,5 +20,6 @@
 
 
 #include "decode.h"
+#include "lblGtoXeq.h"
 #include "manage.h"
 #include "nextStep.h"

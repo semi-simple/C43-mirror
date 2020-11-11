@@ -704,9 +704,9 @@ void graph_axis (void){
   }
 
   if(PLOT_RMS && !invalid_rms) {
-    snprintf(tmpStr3000, sizeof(tmpStr3000), "  RMSy");
+    snprintf(tmpString, sizeof(tmpString), "  RMSy");
     miniC = 1;
-    showString(tmpStr3000, &numericFont, 1, ypos, vmNormal, true, true);  //JM
+    showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;
     plotrms( 6, ypos+4+4-2);
     plotrect(6-1, (ypos+4+4-2)-1, 6+2, (ypos+4+4-2)+2);

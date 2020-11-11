@@ -1,4 +1,4 @@
-1 Nov 2020 release pre-alpha REL45
+8 Nov 2020 release pre-alpha REL46
 
 
 
@@ -49,7 +49,9 @@ Notes:
 
 15. Try the new STAT / PLOT
 
-16. Try the new FIFO on all softmenu items
+16. Try the new FIFO on all softmenus
+
+17. Try the STAST/PLOT menu system. DEMO data is availble. Scroll down using Dn.
 
 ---
 

@@ -372,6 +372,8 @@ void Setup_MultiPresses(int16_t result){
       default:;
     }
   }
+  
+
   if(tmp != 0){
     if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
       JM_auto_doublepress_enabled = tmp;
@@ -430,11 +432,20 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
 
   if(calcMode == CM_NIM) {
     switch(*result) {
+      case ITM_XEQ      : firstdelayedResult=firstResult; firstResult = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
       case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      case KEY_BACKSPACE: firstResult = ITM_CLN; break;         //TRYOUT LONGPRESS EXIT DOES CLA
       default:;
     }
   }
 
+  if(calcMode == CM_AIM) {
+    switch(*result) {
+      case KEY_BACKSPACE    : firstResult = ITM_CLA; break;       //TRYOUT LONGPRESS EXIT DOES CLA
+      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
+      default:;
+    }
+  }
 
   if(firstResult !=0) {                                      //if activated key pressed 
     JM_auto_longpress_enabled = firstResult;

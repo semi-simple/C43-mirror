@@ -929,7 +929,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   }
 
   data = (int8_t *)glyph->data;
-  int16_t y0 = y;                                                   //JMmin i
+  int16_t y0 = y;                                                   //JMmini 0-reference
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
   //xEndingCols = x + xGlyph + glyph->colsGlyph;   //JMmini
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
@@ -1159,10 +1159,11 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     lines = 5;
     y_offset = 2;
   } else {
-    if(lines==5) last_CM = 253; //Force redraw
     lines = 2;
     y_offset = 3;
   }
+  if(lines==5 || lg == 0) last_CM = 253; //Force redraw if 
+
 
   orglastlines = lastline;
 

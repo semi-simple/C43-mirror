@@ -1441,6 +1441,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(PLOT_INTG);
   storeToDtConfigDescriptor(PLOT_DIFF);
   storeToDtConfigDescriptor(PLOT_RMS);
+  storeToDtConfigDescriptor(PLOT_SHADE);
   storeToDtConfigDescriptor(jm_HOME_SUM);
   storeToDtConfigDescriptor(jm_HOME_MIR);
   storeToDtConfigDescriptor(jm_HOME_FIX);
@@ -1772,6 +1773,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(PLOT_INTG);
     recallFromDtConfigDescriptor(PLOT_DIFF);
     recallFromDtConfigDescriptor(PLOT_RMS );
+    recallFromDtConfigDescriptor(PLOT_SHADE );
     recallFromDtConfigDescriptor(jm_HOME_MIR);      
     recallFromDtConfigDescriptor(jm_HOME_FIX);
     recallFromDtConfigDescriptor(jm_LARGELI);                                  //JMCFG^^         

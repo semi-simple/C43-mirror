@@ -31,4 +31,6 @@ void fnXEQMEDIT              (uint16_t unusedParamButMandatory);
 void fnXEQMXXEQ              (uint16_t unusedParamButMandatory);
 void fnXEQNEW                (uint16_t unusedParamButMandatory);
 void runkey                  (int16_t item);
+void fnCla                   (uint16_t unusedParamButMandatory);
+void fnCln                   (uint16_t unusedParamButMandatory);
 

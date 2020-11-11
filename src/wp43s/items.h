@@ -1909,8 +1909,8 @@
 #define ITM_GRF_DX                    1856   //JM GRAPH
 #define ITM_GRF_DY                    1857   //JM GRAPH
 #define ITM_GRF_HLP                   1858   //JM GRAPH
-#define ITM_1859                      1859
-#define ITM_1860                      1860
+#define ITM_CLA                       1859   //GRAPH
+#define ITM_CLN                       1860   //GRAPH
 #define ITM_1861                      1861
 #define ITM_1862                      1862
 #define CHR_caseUP                    1863   //JM CAPS
@@ -2237,8 +2237,9 @@
 #define ITM_INTG                      2184   //GRAPH
 #define ITM_DIFF                      2185   //GRAPH
 #define ITM_RMS                       2186   //GRAPH
+#define ITM_SHADE                     2187   //GRAPH
 
-#define LAST_ITEM                     2187   //JM
+#define LAST_ITEM                     2188   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

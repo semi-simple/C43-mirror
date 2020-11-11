@@ -262,6 +262,7 @@ char* itoa(int value, char* result, int base);
 #define JC_INTG                47    // graph setup
 #define JC_DIFF                48    // graph setup
 #define JC_RMS                 49    // graph setup
+#define JC_SHADE               50    // graph setup
 
 
 

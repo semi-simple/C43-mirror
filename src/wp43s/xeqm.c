@@ -557,7 +557,6 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,">RECT" )) {sprintf(commandnumber,"%d", ITM_toREC2);} else
                       if (strcompare(commandnumber,"ERPN" )) {sprintf(commandnumber,"%d", ITM_eRPN_ON);} else
                       if (strcompare(commandnumber,"RPN" )) {sprintf(commandnumber,"%d", ITM_eRPN_OFF);} else
-                      if (strcompare(commandnumber,"CASE" )) {sprintf(commandnumber,"%d", CHR_case);} else
                       if (strcompare(commandnumber,"TEST_45" )) {sprintf(commandnumber,"%d", ITM_PGMTST);} else
                       if (strcompare(commandnumber,"SIG" )) {sprintf(commandnumber,"%d", ITM_SIGFIG);} else
                       if (strcompare(commandnumber,"UNIT" )) {sprintf(commandnumber,"%d", ITM_UNIT);} else
@@ -587,6 +586,8 @@ printf("@@@ %s\n",commandnumber);
                       if (strcompare(commandnumber,">DEC" )) {sprintf(commandnumber,"%d", ITM_2DEC);} else
                       if (strcompare(commandnumber,">HEX" )) {sprintf(commandnumber,"%d", ITM_2HEX);} else
                       if (strcompare(commandnumber,">I" )) {sprintf(commandnumber,"%d", ITM_RI);} else
+                      if (strcompare(commandnumber,"CASEUP" )) {sprintf(commandnumber,"%d", CHR_caseUP);} else
+                      if (strcompare(commandnumber,"CASEDN" )) {sprintf(commandnumber,"%d", CHR_caseDN);} else
                       if (strcompare(commandnumber,"LISTXY" )) {sprintf(commandnumber,"%d", ITM_LISTXY);} else
                       if (strcompare(commandnumber,"ERPN?" )) {sprintf(commandnumber,"%d", ITM_SH_ERPN);} else
                       if (strcompare(commandnumber,"X.XEQ" )) {sprintf(commandnumber,"%d", ITM_XXEQ);} else
@@ -1104,6 +1105,8 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 }
 
 
+
+
 void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
     //printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
@@ -1117,10 +1120,37 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
 /*      refreshRegisterLine(REGISTER_T);
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);
-      refreshRegisterLine(REGISTER_X);
-*/
+*/      refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+      last_CM=253;
+
     }
   }
+  else
+  if(calcMode == CM_AIM && (getRegisterDataType(REGISTER_Y) == dtReal34 || getRegisterDataType(REGISTER_Y) == dtComplex34  || getRegisterDataType(REGISTER_Y) == dtLongInteger   || getRegisterDataType(REGISTER_Y) == dtShortInteger)) {
+    if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
+      if(eRPN) {      //JM NEWERPN 
+        setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
+      }                                        //JM NEWERPN 
+
+      char tmp[2];
+      tmp[0]=0;
+      int16_t len = stringByteLength(tmp) + 1;
+
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);           //Make blank string in X
+      xcopy(REGISTER_STRING_DATA(REGISTER_X), tmp, len);
+      addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();//Convert Y number to string in X REGISTER
+      adjustResult(REGISTER_X, false, false, -1, -1, -1);                          //Copy X string to Aimbuffer
+      strcpy(aimBuffer, REGISTER_STRING_DATA(REGISTER_X)); 
+
+      T_cursorPos = stringByteLength(aimBuffer);
+      fnDrop(0);
+      refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+      last_CM=253;
+
+    }
+  }
+
+
   else if (calcMode == CM_NORMAL && getRegisterDataType(REGISTER_X) == dtString) {
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) < AIM_BUFFER_LENGTH) {
       if(eRPN) {      //JM NEWERPN 
@@ -1172,6 +1202,35 @@ void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
 void fnXEQNEW (uint16_t unusedParamButMandatory) {
   fnStrtoX("XEQC43 XEQLBL 01 XXXXXX ");
   fnXEQMEDIT(0);
+}
+
+
+void fnCla(uint16_t unusedParamButMandatory){
+  //Not using calcModeAim becose some modes are reset which should not be
+  aimBuffer[0]=0;
+  T_cursorPos = 0;
+  nextChar = NC_NORMAL;
+  xCursor = 1;
+  yCursor = Y_POSITION_OF_AIM_LINE + 6;
+  cursorFont = &standardFont;
+  cursorEnabled = true;
+  last_CM=252;
+  #ifndef TESTSUITE_BUILD
+    clearRegisterLine(AIM_REGISTER_LINE, true, true);
+    refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
+  #endif
+  last_CM=253;
+}
+
+
+void fnCln(uint16_t unusedParamButMandatory){
+  #ifndef TESTSUITE_BUILD
+    calcModeNim(0);
+    last_CM=252;
+    refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+    last_CM=253;
+    addItemToNimBuffer(CHR_0);
+  #endif
 }
 
 

@@ -121,6 +121,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /*      */  { ITM_INTG,             JC_INTG,                CB_JC },  //
 /*      */  { ITM_DIFF,             JC_DIFF,                CB_JC },  //
 /*      */  { ITM_RMS ,             JC_RMS ,                CB_JC },  //
+/*      */  { ITM_SHADE ,           JC_SHADE ,              CB_JC },  //
 
 /*        { ITM_DEG2,             AM_DEGREE,              RB_AM2 },  //fnAngularModeJM  */
 /*        { ITM_DMS2,             AM_DMS,                 RB_AM2 },  //fnAngularModeJM  */
@@ -437,6 +438,11 @@ int8_t fnCbIsSet(int16_t item) {
             }
             break;
 
+          case JC_SHADE:
+            {
+              cb_param = PLOT_SHADE;
+            }
+            break;
 
 #ifdef INLINE_TEST
           case JC_ITM_TST:

@@ -56,12 +56,14 @@ uint8_t  last_CM;
 
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
-uint8_t  compressString;                                                                                        //JM compressString
-uint8_t  miniC;                                                              //JM miniature letters
+uint8_t  compressString;                                                                                        //JM global flags for character control: compressString
+uint8_t  miniC;                                                                                                 //JM global flags for character control:  miniature letters
+uint8_t  maxiC;                                                                                                 //JM global flags for character control:  enlarged letters
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
-void     refresh_gui                          (void);
-void     force_refresh                        (void);                                                  		//JM SCREEN
+void     refresh_gui                          (void);                                                           //JM
+void     force_refresh                        (void);                                                           //JM SCREEN
+
 void     clearScreen                          (void);
 void     refreshScreen                        (void);
 void     setPixel                             (int16_t x, int16_t y);

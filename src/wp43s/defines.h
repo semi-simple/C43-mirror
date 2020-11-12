@@ -39,6 +39,12 @@
 #define JMSHOWCODES_KB3   // top line right   Single Double Triple
 #undef JMSHOWCODES_KB3
 
+//wrapping editor
+#define  combinationFontsDefault 2; //JM 0 = no large font; 1 = enlarged standardfont; 2 = combination font enlargement
+                                    //JM for text wrapping editor. 
+                                    //JM Combintionfonts uses large numericfont characters, and if glyph not available then takes standardfont and enlarges it
+                                    //JM Otherwise, full enlarged standardfont is used.
+
 
 
 //*********************************

@@ -679,7 +679,7 @@ void fnReset(uint16_t confirmation) {
     #endif
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43_46, 2020-11-08");
+    fnStrtoX("C43_29-Working, 2020-11-13");
     fnStore(102);
     fnDrop(0);
 

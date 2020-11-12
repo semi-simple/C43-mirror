@@ -461,6 +461,7 @@ void fnInvGd                    (uint16_t unusedParamButMandatory) {}
 void fnClP                      (uint16_t unusedParamButMandatory) {}
 void fnPem                      (uint16_t unusedParamButMandatory) {}
 void fnGoto                     (uint16_t unusedParamButMandatory) {}
+void fnGotoDot                  (uint16_t unusedParamButMandatory) {}
 #endif
 
 const item_t indexOfItems[] = {

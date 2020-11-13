@@ -915,25 +915,25 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
   // There MUST be enough memory allocated to *haystack //
   // when strlen(newNeedle) > strlen(needle)            //
   ////////////////////////////////////////////////////////
-  char *tmpString, *needleLocation;
+  char *str, *needleLocation;
   int  needleLg;
 
   while(strstr(haystack, needle) != NULL) {
     needleLg = strlen(needle);
     needleLocation = strstr(haystack, needle);
-    tmpString = malloc(strlen(needleLocation + needleLg) + 1);
+    str = malloc(strlen(needleLocation + needleLg) + 1);
     #ifdef PC_BUILD
-      if(tmpString == NULL) {
-        moreInfoOnError("In function strReplace:", "error allocating memory for tmpString!", NULL, NULL);
+      if(str == NULL) {
+        moreInfoOnError("In function strReplace:", "error allocating memory for str!", NULL, NULL);
         exit(1);
       }
     #endif
 
-    strcpy(tmpString, needleLocation + needleLg);
+    strcpy(str, needleLocation + needleLg);
     *strstr(haystack, needle) = 0;
     strcat(haystack, newNeedle);
-    strcat(haystack, tmpString);
-    free(tmpString);
+    strcat(haystack, str);
+    free(str);
   }
 }
 #endif
@@ -950,7 +950,7 @@ void strReplace(char *haystack, const char *needle, const char *newNeedle) {
 void prepareCssData(void) {
   FILE *cssFile;
   char *toReplace, *replaceWith, needle[100], newNeedle[100];
-  int  i, fileLg;
+  int  fileLg;
 
   // Convert the pre-CSS data to CSS data
   cssFile = fopen(CSSFILE, "rb");
@@ -976,8 +976,8 @@ void prepareCssData(void) {
 
   toReplace = strstr(cssData, "/* Replace $");
   while(toReplace != NULL) {
+    int i = -1;
     toReplace += 11;
-    i = -1;
     while(toReplace[++i] != ' ') {
       needle[i] = toReplace[i];
     }
@@ -4209,6 +4209,10 @@ void calcModeTam(void) {
 
     case TM_SHUFFLE:
       showSoftmenu(NULL, -MNU_TAMSHUFFLE, true);
+      break;
+
+    case TM_LABEL:
+      showSoftmenu(NULL, -MNU_TAMLABEL, true);
       break;
 
     default:

@@ -71,11 +71,11 @@ void realPartCxma(void) {
 
 
 void realPartCplx(void) {
-  real34_t realPart;
+  real34_t rp;
 
-  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &realPart);
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &rp);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Copy(&rp, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 

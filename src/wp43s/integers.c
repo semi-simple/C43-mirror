@@ -476,11 +476,12 @@ uint64_t WP34S_intDivide(uint64_t y, uint64_t x) {
   return WP34S_build_value(quotient, divisorSign ^ dividendSign);
 }
 
-
+/* never used
 uint64_t WP34S_intSqr(uint64_t x) {
   return WP34S_intMultiply(x, x);
 }
-
+*/
+/* never used
 uint64_t WP34S_intCube(uint64_t x) {
   int64_t y = WP34S_intMultiply(x, x);
   int32_t overflow = (getSystemFlag(FLAG_OVERFLOW) == ON ? 1 : 0);
@@ -491,13 +492,11 @@ uint64_t WP34S_intCube(uint64_t x) {
   }
   return y;
 }
-
+*/
 
 static uint64_t WP34S_int_gcd(uint64_t a, uint64_t b) {
-  uint64_t t;
-
   while(b != 0) {
-    t = b;
+    uint64_t t = b;
     b = a % b;
     a = t;
   }
@@ -786,10 +785,8 @@ uint64_t WP34S_intLog2(uint64_t x) {
     clearSystemFlag(FLAG_CARRY);
   }
 
-  if(value != 0) {
-    while(value >>= 1) {
-      log2++;
-    }
+  while(value >>= 1) {
+    log2++;
   }
 
   return WP34S_build_value(log2, signValue);

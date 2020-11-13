@@ -33,7 +33,6 @@ gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
   cairo_surface_t *imageSurface;
 
   imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
-  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
   #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
     cairo_scale(cr, 2.0, 2.0);
   #endif
@@ -287,7 +286,7 @@ void copyStackRegistersToClipboard(void) {
 
 void copyAllRegistersToClipboard(void) {
   GtkClipboard *clipboard;
-  char clipboardString[15000], sumName[40], *ptr = clipboardString;
+  char clipboardString[15000], *ptr = clipboardString;
 
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
@@ -310,6 +309,7 @@ void copyAllRegistersToClipboard(void) {
   }
 
   if(statisticalSumsPointer != NULL) {
+    char sumName[40];
     for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
       ptr += strlen(ptr);
 
@@ -1080,7 +1080,7 @@ uint8_t  compressString = 0;                                                    
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
 int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint16_t ch, charCode, lg;
+  uint16_t ch, lg;
   bool_t   slc, sec;
 
   lg = stringByteLength(string);
@@ -1104,7 +1104,7 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
       sec = true;
     }
 
-    charCode = (uint8_t)string[ch++];
+    uint16_t charCode = (uint8_t)string[ch++];
     if(charCode & 0x80) {// MSB set?
       charCode = (charCode<<8) | (uint8_t)string[ch++];
     }
@@ -1759,25 +1759,19 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
         w = stringWidth(tmpString, &numericFont, false, true);
         lineWidth = w;
-        if(w + prefixWidth <= SCREEN_WIDTH) {
-          if(prefixWidth > 0) {
-            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
-          }
+        if(w <= SCREEN_WIDTH) {
           showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }
         else {
           w = stringWidth(tmpString, &standardFont, false, true);
           lineWidth = w;
-          if(w + prefixWidth > SCREEN_WIDTH) {
+          if(w > SCREEN_WIDTH) {
             #if (EXTRA_INFO_ON_CALC_ERROR == 1)
               moreInfoOnError("In function refreshRegisterLine:", "Fraction representation too wide!", tmpString, NULL);
             #endif
             strcpy(tmpString, "Fraction representation too wide!");
             w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
-          }
-          if(prefixWidth > 0) {
-            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE + TEMPORARY_INFO_OFFSET - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, true, true);
           }
           showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }

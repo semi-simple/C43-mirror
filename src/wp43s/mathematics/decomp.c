@@ -73,7 +73,7 @@ void decompReal(void) {
   }
   else {
     uint32_t savedDenMax = denMax;
-    uint64_t savedSystemFlags = systemFlags;
+    uint64_t ssf = systemFlags;
     int16_t sign, lessEqualGreater;
     uint64_t intPart, numer, denom;
     longInteger_t lgInt;
@@ -84,7 +84,7 @@ void decompReal(void) {
     fraction(REGISTER_Y, &sign, &intPart, &numer, &denom, &lessEqualGreater);
 
     denMax = savedDenMax;
-    systemFlags = savedSystemFlags;
+    systemFlags = ssf;
 
     longIntegerInit(lgInt);
 

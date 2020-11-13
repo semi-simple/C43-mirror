@@ -122,22 +122,15 @@ void freeGmp(void *pcMemPtr, size_t sizeInBytes) {
 
 
 void *wp43sAllocate(size_t sizeInBytes) {
-  uint16_t sizeInBlocks;
-  uint16_t minSizeInBlocks, minBlock;
+  uint16_t sizeInBlocks = (sizeInBytes == 0 ? 1 : TO_BLOCKS(sizeInBytes));
+  uint16_t minSizeInBlocks = 65535u, minBlock = WP43S_NULL;
   int i;
   void *pcMemPtr;
 
-  if(sizeInBytes == 0) {
-    sizeInBytes = 1;
-  }
-  sizeInBlocks = TO_BLOCKS(sizeInBytes);
-  sizeInBytes = TO_BYTES(sizeInBlocks);
-  //if(debugMemAllocation) printf("Allocating %" PRIu64 " bytes (%" PRIu16 " blocks)\n", sizeInBytes, sizeInBlocks);
+  //if(debugMemAllocation) printf("Allocating %" PRIu64 " bytes (%" PRIu16 " blocks)\n", (uint64_t)TO_BYTES(sizeInBlocks), sizeInBlocks);
 
   // Search the smalest hole where the claimed block fits
   //debugMemory();
-  minSizeInBlocks = 65535u;
-  minBlock = WP43S_NULL;
   for(i=0; i<numberOfFreeMemoryRegions; i++) {
     if(freeMemoryRegions[i].sizeInBlocks == sizeInBlocks) {
       //if(debugMemAllocation) printf("The block found is the size of the one claimed at address %u\n", freeMemoryRegions[i].address);
@@ -154,12 +147,12 @@ void *wp43sAllocate(size_t sizeInBytes) {
   }
 
   if(minBlock == WP43S_NULL) {
-    minSizeInBlocks = 0;
-    for(i=0; i<numberOfFreeMemoryRegions; i++) {
-      minSizeInBlocks += freeMemoryRegions[i].sizeInBlocks;
-    }
     #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
-      printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)sizeInBytes, TO_BYTES(minSizeInBlocks));
+      minSizeInBlocks = 0;
+      for(i=0; i<numberOfFreeMemoryRegions; i++) {
+        minSizeInBlocks += freeMemoryRegions[i].sizeInBlocks;
+      }
+      printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)TO_BYTES(sizeInBlocks), TO_BYTES(minSizeInBlocks));
       exit(-3);
     #endif
 

@@ -22,8 +22,7 @@
 
 #ifndef TESTSUITE_BUILD
 int16_t determineFunctionKeyItem(const char *data) {
-  int16_t row, item = ITM_NOP;
-  const softmenu_t *sm;
+  int16_t item = ITM_NOP;
   int16_t itemShift, fn = *(data) - '0';
 
   if(shiftF) {
@@ -37,8 +36,8 @@ int16_t determineFunctionKeyItem(const char *data) {
   }
 
   if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    int16_t row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
       item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
@@ -140,10 +139,6 @@ void btnFnPressed(void *data) {
 //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
     if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
 
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-      }
-
 //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
 //      showFunctionName(item, 1000); // 1000ms = 1s
 //    #else
@@ -193,9 +188,7 @@ void executeFunction(const char *data) {
       //printf("%d--\n",calcMode);
     {
       if(calcMode != CM_CONFIRMATION) {
-        if(lastErrorCode != 0) {
-          lastErrorCode = 0;
-        }
+        lastErrorCode = 0;
 
         if(softmenuStackPointer > 0) {
           if(calcMode == CM_ASM) {
@@ -295,10 +288,7 @@ int16_t determineItem(const char *data) {
   // Shift f pressed and JM REMOVED shift g not active
   if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {    //JM Mode added
     temporaryInformation = TI_NO_INFO;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-    }
+    lastErrorCode = 0;
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -313,10 +303,7 @@ int16_t determineItem(const char *data) {
   // Shift g pressed and JM REMOVED shift f not active
   else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {
     temporaryInformation = TI_NO_INFO;
-
-    if(lastErrorCode != 0) {
-      lastErrorCode = 0;
-    }
+    lastErrorCode = 0;
 
     fnTimerStop(TO_FG_LONG);                                //dr
     fnTimerStop(TO_FG_TIMR);                                //dr
@@ -945,7 +932,6 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyExit(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  uint32_t newProgramSize;
   int16_t tmp1;            //JM
   doRefreshSoftMenu = true;     //dr
   
@@ -1030,7 +1016,7 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 
     case CM_PEM:
       if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
-        newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
+        uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
         currentStep        += (freeProgramBytes & 0xfffc);
         firstDisplayedStep += (freeProgramBytes & 0xfffc);
         freeProgramBytes &= 0x03;
@@ -1200,6 +1186,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
+        uint16_t x, y, newXCursor;
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
@@ -1273,10 +1260,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedParamButMandatory) {
   doRefreshSoftMenu = true;     //dr
-  #ifndef TESTSUITE_BUILD
-  int16_t itemShift;
-
-  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
+  #ifndef TESTSUITE_BUILD  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
 
   switch(calcMode) {
     case CM_NORMAL:
@@ -1315,7 +1299,7 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
         else {
-          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
@@ -1460,7 +1444,7 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
         }
       else {
-          itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
           if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
             softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;

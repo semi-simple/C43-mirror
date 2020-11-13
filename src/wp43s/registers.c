@@ -593,10 +593,10 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
   }
 
   if(numberOfRegistersToAllocate != allLocalRegisterPointer->numberOfLocalRegisters) { // There is something to do
-    uint16_t numRegs, r;
+    uint16_t r;
 
     if(numberOfRegistersToAllocate == 0) { // free the allocated memory for the local registers
-      numRegs = allLocalRegisterPointer->numberOfLocalRegisters;
+      uint16_t numRegs = allLocalRegisterPointer->numberOfLocalRegisters;
 
       // free memory allocated to the data of the local registers
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numRegs; r++) {
@@ -1210,7 +1210,7 @@ void fnStore(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStore:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1242,7 +1242,7 @@ void fnStoreAdd(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStorePlus:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1274,7 +1274,7 @@ void fnStoreSub(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1306,7 +1306,7 @@ void fnStoreMult(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStoreMult:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1338,7 +1338,7 @@ void fnStoreDiv(uint16_t regist) {
   }
   #ifdef PC_BUILD
     else {
-      sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
       moreInfoOnError("In function fnStoreDiv:", errorMessage, "is not defined!", NULL);
     }
   #endif
@@ -1358,7 +1358,7 @@ void fnStoreMin(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1378,7 +1378,7 @@ void fnStoreMax(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1530,7 +1530,7 @@ void fnRecall(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecall:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1573,7 +1573,7 @@ void fnRecallAdd(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecallPlus:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1604,7 +1604,7 @@ void fnRecallSub(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1635,7 +1635,7 @@ void fnRecallMult(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecallMult:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1666,7 +1666,7 @@ void fnRecallDiv(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecallDiv:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1687,7 +1687,7 @@ void fnRecallMin(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -1708,7 +1708,7 @@ void fnRecallMax(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnReallMax:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -2398,7 +2398,7 @@ void fnDec(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnDec:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -2416,7 +2416,7 @@ void fnInc(uint16_t regist) {
   }
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnInc:", errorMessage, "is not defined!", NULL);
   }
   #endif

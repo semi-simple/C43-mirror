@@ -563,18 +563,17 @@ uint8_t *findNextStep(uint8_t *step) {
 
 
 uint8_t *findPreviousStep(uint8_t *step) {
-  int16_t label;
   uint8_t *searchFromStep = NULL, *nextStep;
 
   if(step == beginOfProgramMemory) {
     return step;
   }
 
-  if(numberOfLabels <= 0 || step <= labelList[0].instructionPointer) {
+  if(numberOfLabels == 0 || step <= labelList[0].instructionPointer) {
     searchFromStep = beginOfProgramMemory;
   }
   else {
-    for(label=numberOfLabels - 1; label >= 0; label--) {
+    for(int16_t label=numberOfLabels - 1; label >= 0; label--) {
       if(labelList[label].instructionPointer < step) {
         searchFromStep = labelList[label].instructionPointer;
         break;

@@ -106,7 +106,7 @@ void moreInfoOnError(const char *m1, const char *m2, const char *m3, const char 
 
 
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine) {
-  if(errorCode >= NUMBER_OF_ERROR_CODES || errorCode <= 0) {
+  if(errorCode >= NUMBER_OF_ERROR_CODES || errorCode == 0) {
     sprintf(errorMessage, "In function displayCalcErrorMessage: %d is an unexpected value for errorCode!", errorCode);
     displayBugScreen(errorMessage);
   }
@@ -139,7 +139,7 @@ void nextWord(const char *str, int16_t *pos, char *word) {
 
   word[i] = 0;
 
-  while(str[*pos] != 0 && str[*pos] == ' ') {
+  while(str[*pos] == ' ') {
     (*pos)++;
   }
 }

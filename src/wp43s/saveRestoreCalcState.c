@@ -269,9 +269,9 @@ void restoreCalc(void) {
 
     printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
     printf("               Backup file      Program\n");
-    printf("backupVersion  %6u           %6u\n", backupVersion, BACKUP_VERSION);
-    printf("ramSize blocks %6u           %6u\n", ramSize, RAM_SIZE);
-    printf("ramSize bytes  %6u           %6u\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
+    printf("backupVersion  %6u           %6d\n", backupVersion, BACKUP_VERSION);
+    printf("ramSize blocks %6u           %6d\n", ramSize, RAM_SIZE);
+    printf("ramSize bytes  %6u           %6d\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
     return;
   }
   else {

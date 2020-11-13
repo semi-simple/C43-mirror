@@ -174,13 +174,12 @@ void fnClPAll(uint16_t confirmation) {
 
 
 void fnClP(uint16_t unusedParamButMandatory) {
-  int16_t i = 0;
-
   if(beginOfCurrentProgram == beginOfProgramMemory && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is only one program in memory
     fnClPAll(CONFIRMED);
   }
   else {
-    currentStep = beginOfCurrentProgram;
+    int16_t i = 0;
+
     while(programList[i].instructionPointer != beginOfCurrentProgram) {
       i++;
     }
@@ -234,40 +233,42 @@ void defineCurrentProgram(void) {
 
 
 void fnPem(uint16_t unusedParamButMandatory) {
-  uint16_t line, stepSize;
-  uint8_t *step, *nextStep;
-  bool_t lblOrEnd;
+  #ifndef TESTSUITE_BUILD
+    uint16_t line;
+    uint8_t *step, *nextStep;
+    bool_t lblOrEnd;
 
-  if(calcMode != CM_PEM) {
-    calcMode = CM_PEM;
-    return;
-  }
+    if(calcMode != CM_PEM) {
+      calcMode = CM_PEM;
+      return;
+    }
 
-  step = firstDisplayedStep;
-  programListEnd = false;
+    step = firstDisplayedStep;
+    programListEnd = false;
 
-  for(line=0; line<7; line++) {
-    nextStep = findNextStep(step);
-    stepSize = (uint16_t)(nextStep - step);
-    sprintf(tmpString, "%04u:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStepNumber + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
-    if(firstDisplayedStepNumber + line == currentStepNumber) {
-      showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
-      currentStep = step;
-      if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentSetep is outside the current program
-        defineCurrentProgram();
+    for(line=0; line<7; line++) {
+      nextStep = findNextStep(step);
+      uint16_t stepSize = (uint16_t)(nextStep - step);
+      sprintf(tmpString, "%04d:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStepNumber + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
+      if(firstDisplayedStepNumber + line == currentStepNumber) {
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
+        currentStep = step;
+        if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentSetep is outside the current program
+          defineCurrentProgram();
+        }
       }
+      else {
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, true);
+      }
+      lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
+      decodeOneStep(step);
+      showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+      numberOfStepsOnScreen = line;
+      if(((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff))) && ((*nextStep == 255 && *(nextStep + 1) == 255))) {
+        programListEnd = true;
+        break;
+      }
+      step = nextStep;
     }
-    else {
-      showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, true);
-    }
-    lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
-    decodeOneStep(step);
-    showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
-    numberOfStepsOnScreen = line;
-    if(((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff))) && ((*nextStep == 255 && *(nextStep + 1) == 255))) {
-      programListEnd = true;
-      break;
-    }
-    step = nextStep;
-  }
+  #endif // TESTSUITE_BUILD
 }

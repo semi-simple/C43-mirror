@@ -30,7 +30,7 @@ uint32_t boundedRand(uint32_t s) { // random integer in [0 , s)
   uint32_t l = (uint32_t) m;
 
   if(l < s) {
-    uint32_t t = -s % s;
+    uint32_t t = (-s) % s;
     while(l < t) {
       x = pcg32_random_r(&pcg32_global);
       m = (uint64_t) x *(uint64_t)s;

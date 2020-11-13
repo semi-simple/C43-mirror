@@ -268,7 +268,7 @@ void fnConfigIndia              (uint16_t unusedParamButMandatory) {}
 void fnConfigJapan              (uint16_t unusedParamButMandatory) {}
 void fnConfigUk                 (uint16_t unusedParamButMandatory) {}
 void fnConfigUsa                (uint16_t unusedParamButMandatory) {}
-void fnToggleFractionType       (uint16_t unusedParamButMandatory) {}
+//void fnToggleFractionType       (uint16_t unusedParamButMandatory) {} //JMTOCHECK
 void fnLcm                      (uint16_t unusedParamButMandatory) {}
 void fnSign                     (uint16_t unusedParamButMandatory) {}
 void fnSlvq                     (uint16_t unusedParamButMandatory) {}
@@ -477,6 +477,8 @@ void fnGd                       (uint16_t unusedParamButMandatory) {}
 void fnInvGd                    (uint16_t unusedParamButMandatory) {}
 void fnClP                      (uint16_t unusedParamButMandatory) {}
 void fnPem                      (uint16_t unusedParamButMandatory) {}
+void fnGoto                     (uint16_t unusedParamButMandatory) {}
+void fnGotoDot                  (uint16_t unusedParamButMandatory) {}
 void fnJM                       (uint16_t unusedParamButMandatory) {}           //vv JM
 void fnSetSetJM                 (uint16_t unusedParamButMandatory) {}
 void fnDisplayFormatSigFig      (uint16_t unusedParamButMandatory) {}
@@ -561,9 +563,9 @@ const item_t indexOfItems[] = {
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
-/*    1 */  { itemToBeCoded,               NOPARAM,                     "LBL",                                         "LBL",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*    2 */  { itemToBeCoded,               NOPARAM,                     "GTO",                                         "GTO",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*    3 */  { fnRecall,                    TM_STORCL    /*# JM #*/,     "XEQ",                                         "XEQ",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },//TEMPORARY PLACEHOLDER FOR XEQ
+/*    1 */  { itemToBeCoded,               TM_LABEL,                    "LBL",                                         "LBL",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*    2 */  { fnGoto,                      TM_LABEL,                    "GTO",                                         "GTO",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*    3 */  { fnRecall,                    TM_LABEL     /*# JM #*/,     "XEQ",                                         "XEQ",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },//TEMPORARY PLACEHOLDER FOR XEQ
 /*    4 */  { itemToBeCoded,               NOPARAM,                     "RTN",                                         "RTN",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    5 */  { itemToBeCoded,               NOPARAM,                     "ISE",                                         "ISE",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    6 */  { itemToBeCoded,               NOPARAM,                     "ISG",                                         "ISG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -1976,8 +1978,8 @@ const item_t indexOfItems[] = {
 /* 1381 */  { itemToBeCoded,               NOPARAM,                     "VAR",                                         "VAR",                                         0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1382 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamFlag",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1383 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamShuffle",                                  0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1384 */  { itemToBeCoded,               NOPARAM,                     "1384",                                        "1384",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1385 */  { itemToBeCoded,               NOPARAM,                     "1385",                                        "1385",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1384 */  { itemToBeCoded,               NOPARAM,                     "PROG",                                        "PROG",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
+/* 1385 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamLabel",                                    0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1386 */  { itemToBeCoded,               NOPARAM,                     "1386",                                        "1386",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1387 */  { itemToBeCoded,               NOPARAM,                     "1387",                                        "1387",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1388 */  { itemToBeCoded,               NOPARAM,                     "1388",                                        "1388",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2067,7 +2069,7 @@ const item_t indexOfItems[] = {
 /* 1469 */  { fnInvGd,                     NOPARAM,                     "g" STD_SUB_d STD_SUP_MINUS_1,                 "g" STD_SUB_d STD_SUP_MINUS_1,                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1470 */  { fnAngularMode,               AM_GRAD,                     "GRAD",                                        "GRAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1471 */  { fnCvtToCurrentAngularMode,   AM_GRAD,                     "GRAD" STD_RIGHT_ARROW,                        "GRAD" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1472 */  { itemToBeCoded,               NOPARAM,                     "GTO.",                                        "GTO.",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1472 */  { fnGotoDot,                   NOPARAM,                     "GTO.",                                        "GTO.",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1473 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n,                                 "H" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1474 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n STD_SUB_P,                       "H" STD_SUB_n STD_SUB_P,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1475 */  { fnImaginaryPart,             NOPARAM,                     "Im",                                          "Im",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

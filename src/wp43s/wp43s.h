@@ -256,6 +256,8 @@ extern bool_t                updateDisplayValueX;
 extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
 extern bool_t                thereIsSomethingToUndo;
 extern bool_t                programListEnd;
+extern bool_t                serialIOIconEnabled;
+extern bool_t                neverUsed;
 
 extern realContext_t         ctxtReal34;   //   34 digits
 extern realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
@@ -318,7 +320,6 @@ extern uint8_t               cursorEnabled;
 extern uint8_t               nimNumberPart;
 extern uint8_t               hexDigits;
 extern uint8_t               lastErrorCode;
-extern uint8_t               serialIOIconEnabled;
 extern uint8_t               temporaryInformation;
 extern uint8_t               rbrMode;
 extern uint8_t               numScreensNumericFont;

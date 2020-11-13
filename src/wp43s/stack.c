@@ -178,7 +178,7 @@ void fnSwapX(uint16_t regist) {
 
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -201,7 +201,7 @@ void fnSwapY(uint16_t regist) {
 
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -223,7 +223,7 @@ void fnSwapZ(uint16_t regist) {
 
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -245,7 +245,7 @@ void fnSwapT(uint16_t regist) {
 
   #ifdef PC_BUILD
   else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
+    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
   }
   #endif
@@ -301,12 +301,11 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint16_t dataSizeXinBytes = TO_BYTES(getRegisterFullSize(REGISTER_X));
   uint16_t tag       = getRegisterTag(REGISTER_X);
-  void *newDataPointer;
 
   for(uint16_t i=REGISTER_Y; i<=getStackTop(); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
-    newDataPointer = allocWp43s(dataSizeXinBytes);
+    void *newDataPointer = allocWp43s(dataSizeXinBytes);
     setRegisterDataPointer(i, newDataPointer);
     xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeXinBytes);
   }
@@ -364,11 +363,6 @@ void fnUndo(uint16_t unusedParamButMandatory) {
   if(thereIsSomethingToUndo) {
     undo();
   }
-}
-
-
-
-void clearUndoBuffer(void) {
 }
 
 

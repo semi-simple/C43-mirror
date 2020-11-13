@@ -130,15 +130,13 @@ int16_t stringNextGlyph(const char *str, int16_t pos) {
  * \return int16_t              Pointer to the last glyph
  ***********************************************/
 int16_t stringLastGlyph(const char *str) {
-  int16_t lastGlyph, next, lg;
-
-  next = 0;
+  int16_t lastGlyph;
 
   if(str == NULL) {
     lastGlyph = -1;
   }
   else {
-    lg = stringByteLength(str);
+    int16_t lg = stringByteLength(str), next = 0;
     for(lastGlyph=0;;) {
       if(lastGlyph >= lg) {
         next = lg;
@@ -330,7 +328,7 @@ uint32_t utf8ToCodePoint(const uint8_t *utf8, uint32_t *codePoint) { // WP43S su
 }
 
 
-
+#ifndef DMCP_BUILD
 void stringToUtf8(const char *str, uint8_t *utf8) {
   int16_t len;
 
@@ -357,7 +355,7 @@ void stringToUtf8(const char *str, uint8_t *utf8) {
     }
   }
 }
-
+#endif // DMCP_BUILD
 
 
 void utf8ToString(const uint8_t *utf8, char *str) {

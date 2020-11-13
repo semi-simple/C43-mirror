@@ -51,7 +51,6 @@ static void oneSystemFlag(uint16_t systemFlag, const char *systemFlagNamename, i
 void flagBrowser(uint16_t unusedParamButMandatory) {
   static int16_t line;
   int16_t f;
-  char flagNumber[4];
   bool_t firstFlag;
 
   if(calcMode != CM_FLAG_BROWSER) {
@@ -68,8 +67,9 @@ void flagBrowser(uint16_t unusedParamButMandatory) {
   }
 
   if(currentFlgScr == 0) { // Init
-    currentFlgScr = 1;
+    char flagNumber[4];
 
+    currentFlgScr = 1;
     line = 0;
 
     // Free memory

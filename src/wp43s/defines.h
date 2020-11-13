@@ -351,7 +351,7 @@
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_VARIABLE_SOFTMENUS              14
+#define NUMBER_OF_VARIABLE_SOFTMENUS              15
 #define MY_ALPHA_MENU_CNST                         0  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -499,7 +499,8 @@
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
 #define TM_SHUFFLE                             10007
-#define TM_CMP                                 10008 // TM_CMP must be the last in this list
+#define TM_LABEL                               10008
+#define TM_CMP                                 10009 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0

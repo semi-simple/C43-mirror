@@ -52,9 +52,8 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
   }
 
   if(rbrMode == RBR_GLOBAL) { // Global registers
-    calcRegister_t regist;
     for(int16_t row=0; row<10; row++) {
-      regist = (currentRegisterBrowserScreen + row) % FIRST_LOCAL_REGISTER;
+      calcRegister_t regist = (currentRegisterBrowserScreen + row) % FIRST_LOCAL_REGISTER;
       switch(regist) {
         case REGISTER_X: strcpy(tmpString, "X:"); break;
         case REGISTER_Y: strcpy(tmpString, "Y:"); break;
@@ -153,9 +152,8 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
   else if(rbrMode == RBR_LOCAL) { // Local registers
     if(allLocalRegisterPointer->numberOfLocalRegisters != 0) { // Local registers are allocated
-      calcRegister_t regist;
       for(int16_t row=0; row<10; row++) {
-        regist = currentRegisterBrowserScreen + row;
+        calcRegister_t regist = currentRegisterBrowserScreen + row;
         if(regist - FIRST_LOCAL_REGISTER < allLocalRegisterPointer->numberOfLocalRegisters) {
           sprintf(tmpString, "R.%02d:", regist);
 

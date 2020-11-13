@@ -67,9 +67,8 @@ void fnSinc(uint16_t unusedParamButMandatory) {
 void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
   // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // sinc (a + ib) = sin(a + ib) / (a + ib), for the allowable conditions
-  real_t sina, cosa, sinhb, coshb;
-  real_t rr,sinReal;
-  real_t ii,sinImag;
+  real_t rr;
+  real_t ii;
 
 
 //  fnCvtFromCurrentAngularMode(AM_RADIAN);
@@ -82,15 +81,17 @@ void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t
     realCopy(const_0, resImag);
   }
   else {
+    real_t sina, cosa, sinhb, coshb, sinR, sinImag;
+
     WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
     WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
     realMultiply(&sina, &coshb, resReal, realContext);
     realMultiply(&cosa, &sinhb, resImag, realContext);
 
-    realCopy(resReal, &sinReal);
+    realCopy(resReal, &sinR);
     realCopy(resImag, &sinImag);
-    divComplexComplex(&sinReal, &sinImag, &rr, &ii, resReal, resImag, realContext);
+    divComplexComplex(&sinR, &sinImag, &rr, &ii, resReal, resImag, realContext);
   }
 }
 
@@ -144,7 +145,6 @@ void sincReal(void) {
 
   else {
     real_t x, sine;
-    uint32_t registerAngularMode;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
@@ -152,7 +152,7 @@ void sincReal(void) {
       realCopy(const_1, &x);
     }
     else {
-      registerAngularMode = getRegisterAngularMode(REGISTER_X);
+      uint32_t registerAngularMode = getRegisterAngularMode(REGISTER_X);
       if(registerAngularMode != AM_NONE) {
         convertAngleFromTo(&x, registerAngularMode, AM_RADIAN, &ctxtReal39);
       }

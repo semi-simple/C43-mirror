@@ -66,13 +66,7 @@ void fnSincpi(uint16_t unusedParamButMandatory) {
 void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
   // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
   // sinc(a + ib) = sin(a + ib) / (a + ib), for the allowable conditions
-  real_t sina, cosa, sinhb, coshb;
-  real_t rr,sinReal;
-  real_t ii,sinImag;
-  real_t rmdr;
-
-
-  //fnCvtFromCurrentAngularMode(AM_RADIAN);
+  real_t rr, ii, rmdr;
 
   realCopy(real, &rr);
   realCopy(imag, &ii);
@@ -87,6 +81,8 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
     realCopy(const_0, resImag);
   }
   else {
+    real_t sina, cosa, sinhb, coshb, sinR, sinImag;
+
     realMultiply(&rr, const_pi, &rr, realContext);
     realMultiply(&ii, const_pi, &ii, realContext);
 
@@ -96,9 +92,9 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
     realMultiply(&sina, &coshb, resReal, realContext);
     realMultiply(&cosa, &sinhb, resImag, realContext);
 
-    realCopy(resReal, &sinReal);
+    realCopy(resReal, &sinR);
     realCopy(resImag, &sinImag);
-    divComplexComplex(&sinReal, &sinImag, &rr, &ii, resReal, resImag, realContext);
+    divComplexComplex(&sinR, &sinImag, &rr, &ii, resReal, resImag, realContext);
   }
 }
 

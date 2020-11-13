@@ -59,7 +59,7 @@ C_SOURCES += $(wildcard src/wp43s/*.c) $(wildcard src/wp43s/mathematics/*.c) $(w
 #  -DDECIMAL_GLOBAL_EXCEPTION_FLAGS_ACCESS_FUNCTIONS=1
 
 # WP43S related defines
-C_DEFS += -DDMCP_BUILD
+C_DEFS += -DDMCP_BUILD -DOS32BIT
 
 # Libraries
 #LIBS += lib/gcc111libbid_hard.a

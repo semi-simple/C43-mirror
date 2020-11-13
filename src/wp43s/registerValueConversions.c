@@ -94,13 +94,13 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
     *(REGISTER_SHORT_INTEGER_DATA(destination)) = 0;
   }
   else {
-    #ifdef DMCP_BUILD // 32 bits
-      uint64_t i64 = *(uint32_t *)(lgInt->_mp_d);
+    #ifdef OS32BIT // 32 bit
+      uint64_t u64 = *(uint32_t *)(lgInt->_mp_d);
       if(abs(lgInt->_mp_size) > 1) {
-        i64 |= (int64_t)(*(((uint32_t *)(lgInt->_mp_d)) + 1)) << 32;
+        u64 |= (int64_t)(*(((uint32_t *)(lgInt->_mp_d)) + 1)) << 32;
       }
-      *(REGISTER_SHORT_INTEGER_DATA(destination)) = i64 & shortIntegerMask;
-    #else // 64 bits
+      *(REGISTER_SHORT_INTEGER_DATA(destination)) = u64 & shortIntegerMask;
+    #else // 64 bit
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
     #endif
     if(longIntegerIsNegative(lgInt)) {
@@ -362,12 +362,12 @@ void realToUInt32(const real_t *re, enum rounding mode, uint32_t *value32, bool_
 
   *overflow = false;
 
-  #ifdef DMCP_BUILD // 32 bits
+  #ifdef OS32BIT // 32 bit
     *value32 = (lgInt->_mp_size == 0 ? 0 : lgInt->_mp_d[0]);
     if(sign || lgInt->_mp_size > 1) {
       *overflow = true;
     }
-  #else // 64 bits
+  #else // 64 bit
     *value32 = (lgInt->_mp_size == 0 ? 0 : lgInt->_mp_d[0] & 0x00000000ffffffffULL);
     if(sign || lgInt->_mp_size > 1 || lgInt->_mp_d[0] & 0xffffffff00000000ULL) {
       *overflow = true;

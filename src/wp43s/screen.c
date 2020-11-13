@@ -18,6 +18,7 @@
  * \file screen.c Screen related functions
  ***********************************************/
 
+
 #include "wp43s.h"
 
 #ifdef PC_BUILD
@@ -887,7 +888,10 @@ void invertPixel(int16_t x, int16_t y) {           //JM
 }
 
 
+uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
+uint8_t  maxiC = 0;                                                              //JM ENLARGE letters
+
 
 /********************************************//**
  * \brief Displays a glyph using it's Unicode code point
@@ -905,6 +909,23 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   int16_t  col, row, xGlyph, /*xEndingCols, */endingCols, bit, glyphId;    //JMmini
   int8_t   byte, *data;
   const glyph_t  *glyph;
+
+  int8_t rep_enlarge;
+  bool_t enlarge = false;                                   //JM ENLARGE vv
+  if(combinationFonts == 2) {
+    if(maxiC == 1 && font == &numericFont) {                //JM allow enlargements
+      glyphId = findGlyph(font, charCode);
+      if(glyphId < 0) {           //JM if there is not a large glyph, enlarge the small letter
+        enlarge = true;
+        font = &standardFont;
+      }
+    }
+  } else
+  if(combinationFonts == 1) {
+    if(maxiC == 1 && font == &standardFont) {                //JM allow enlargements
+      enlarge = true;
+    }                                                       //JM ENLARGE ^^
+  }
 
   glyphId = findGlyph(font, charCode);
   if(glyphId >= 0) {
@@ -936,82 +957,104 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows above the glyph
   for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
-    #ifdef PC_BUILD                                                                 // Dani Rau
-      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+
+
+    rep_enlarge = 0;                                                     //JM ENLARGE vv
+    if(enlarge && combinationFonts !=0) rep_enlarge = 1;
+    while (rep_enlarge >= 0) {                                           //JM ENLARGE ^^
+
+      #ifdef PC_BUILD                                                                 // Dani Rau
+        for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
+          if(videoMode == vmNormal) {
+            if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+          else {
+            if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                   //JMmini                         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+        }
+      #endif                                                                          // vv Dani Rau
+
+      #if DMCP_BUILD
         if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0);              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                   //JMmini                         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0xFF);           //JMmini                                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
-      }
-    #endif                                                                          // vv Dani Rau
+      #endif                                                                          // ^^ Dani Rau
 
-    #if DMCP_BUILD
-      if(videoMode == vmNormal) {
-        if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0);              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-      else {
-        if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0xFF);           //JMmini                                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-    #endif                                                                          // ^^ Dani Rau
+
+    if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;   //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
+    rep_enlarge--;
+    }                                                                    //JM ENLARGE ^^
   }
 
   // Drawing the glyph
   for(row=0; row<glyph->rowsGlyph; row++, y++) {
-    // Clearing the columns before the glyph
-    if(showLeadingCols) {
-      for(col=0; col<glyph->colsBeforeGlyph; col++) {
-        if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                         //JMmini                      //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+
+    rep_enlarge = 0;                                                       //JM ENLARGE vv
+    if(enlarge && combinationFonts !=0) rep_enlarge = 1;
+    while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
+
+      // Clearing the columns before the glyph
+      if(showLeadingCols) {
+        for(col=0; col<glyph->colsBeforeGlyph; col++) {
+          if(videoMode == vmNormal) {
+            if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                         //JMmini                      //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+          else {
+            if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                           //JMmini                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+        }
+      }
+
+      // Drawing the columns of the glyph
+      bit = 7;
+      for(col=0; col<glyph->colsGlyph; col++) {
+        if(bit == 7) {
+  //        byte = *(data++);
+          byte = *(data);                                                  //JM ENLARGE
+          if(rep_enlarge == 0) data++;                                     //JM ENLARGE
+          if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
+        }
+
+        if(byte & 0x80) {// MSB set
+          if(videoMode == vmNormal) {
+            if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                   //JMmini                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+          else {
+            if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
         }
         else {
-          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                           //JMmini                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(videoMode == vmNormal) {
+            if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+          else {
+            if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          }
+        }
+
+        byte <<= 1;
+
+        if(--bit == -1) {
+          bit = 7;
         }
       }
-    }
 
-    // Drawing the columns of the glyph
-    bit = 7;
-    for(col=0; col<glyph->colsGlyph; col++) {
-      if(bit == 7) {
-        byte = *(data++);
-        if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
-      }
-
-      if(byte & 0x80) {// MSB set
+      // clearing the columns after the glyph
+      for(col=0; col<endingCols; col++) {
         if(videoMode == vmNormal) {
-          if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                   //JMmini                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) clearPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
         else {
-          if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-      }
-      else {
-        if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-        else {
-          if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+          if(y>=0) setPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
         }
       }
 
-      byte <<= 1;
-
-      if(--bit == -1) {
-        bit = 7;
-      }
-    }
-
-    // clearing the columns after the glyph
-    for(col=0; col<endingCols; col++) {
-      if(videoMode == vmNormal) {
-        if(y>=0) clearPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-      else {
-        if(y>=0) setPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-    }
+    if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;     //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
+    rep_enlarge--;
+    }                                                                      //JM ENLARGE ^^
   }
 
   // Clearing the rows below the glyph
@@ -1037,6 +1080,8 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
       #endif                                                                        // ^^ Dani Rau
   }
 
+  miniC = 0;                                                        //JMmini
+  maxiC = 0;                                                             //JMmaxi
   return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);   //JMmini
 }
 
@@ -1140,11 +1185,11 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 }
 
 
-uint8_t lines = 2;
+uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;
+uint8_t x_offset = 0;      //pixels 40
 
 //#define lines 5                                                          //JMCURSOR vv
-#define x_offset 0    //pixels 40
 //#define y_offset 2    //lines   0
 int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, charCode, lg;
@@ -1153,16 +1198,43 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
   int16_t numPixels, orglastlines;
   const glyph_t *glyph;
 
+  uint8_t editlines     = 5 ; 
+  uint8_t maxbeforejump = 30; 
+  uint8_t yincr         = 21; 
+
+
   lg = stringByteLength(string + offset);
 
-  if(lg>30) {
-    lines = 5;
-    y_offset = 2;
+  if(combinationFonts !=0) {
+    editlines     = 3 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
+    maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+    yincr         = 35;       //JM ENLARGE 21   distasnce between editing wrapped lines
+    x_offset      = 0;    //pixels 40
+    if(lg > maxbeforejump) {  //jump from large letters to small letters
+      if(lg > 3*maxbeforejump) combinationFonts = 0;  //Auto change to small font after some characters
+      lines = editlines;
+      y_offset = 1;
+    } else {
+      lines = 2;              //jump back to small letters
+      y_offset = 3;
+      last_CM = 253; //Force redraw
+    }
   } else {
-    lines = 2;
-    y_offset = 3;
+    editlines     = 5 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
+    maxbeforejump = 30;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+    yincr         = 21;       //JM ENLARGE 21   distasnce between editing wrapped lines
+    x_offset      = 0;    //pixels 40
+    if(lg>maxbeforejump) {
+      lines = editlines;
+      y_offset = 2;
+    } else {
+      lines = 2;
+      y_offset = 3;
+      combinationFonts = combinationFontsDefault;  //Auto change back to large font
+      last_CM = 253; //Force redraw
+    }
   }
-  if(lines==5 || lg == 0) last_CM = 253; //Force redraw if 
+  if(lines == editlines || lg == 0) last_CM = 253; //Force redraw if 
 
 
   orglastlines = lastline;
@@ -1170,7 +1242,7 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
   if(lastline > y_offset) {
     clearScreen_old(false, true,false);
     x = x_offset; 
-    y = 20 + y_offset * 20;
+    y = (yincr-1) + y_offset * (yincr-1);
   }
   
   ch = offset;
@@ -1194,7 +1266,7 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
 
     if((ch == edcursor && string[ch] != 0) ) {                 //draw cursor
        tmpxy = y-1;
-       while (tmpxy < y + 22) {
+       while (tmpxy < y + (yincr+1)) {
          setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
          tmpxy++;
        }
@@ -1210,6 +1282,18 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     if(glyphId >= 0) {
       glyph = (font->glyphs) + glyphId;
     }
+    else if(glyphId == -1) {                   //JMvv
+      generateNotFoundGlyph(-1, charCode);
+      glyph = &glyphNotFound;
+    }
+    else if(glyphId == -2) {
+      generateNotFoundGlyph(-2, charCode);
+      glyph = &glyphNotFound;
+    }
+    else {
+      glyph = NULL;
+    }                                         //JM^^
+
 
     numPixels = 0;
 
@@ -1220,12 +1304,12 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
 
     if(x + numPixels > SCREEN_WIDTH-1 && lastline == orglastlines) { 
       x = x_offset; 
-      y += 21; 
+      y += yincr; 
       lastline--;
     } else    
     if(x + numPixels > SCREEN_WIDTH-1 && lastline > 1) { 
       x = 1; 
-      y += 21; 
+      y += yincr; 
       lastline--;
     } else
     if(x + numPixels > SCREEN_WIDTH-1 && lastline <= 1) {   
@@ -1234,14 +1318,14 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
       return x;
     }
 
+    maxiC = 1;                                                                            //JM
     x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
-
+    maxiC = 0;                                                                            //JM
 
   }
   xCursor = x;
   yCursor = y;
-//  x = showGlyphCode(32, font, x, y, videoMode, showLeadingCols, showEndingCols) - compressString;
-  compressString = 0;        //JM compressString
+  compressString = 0;                                                                     //JM compressString
   return xCursor;
 }
 
@@ -1710,6 +1794,13 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
   //JMCURSOR vv
+        const font_t *font;
+        if(combinationFonts == 2) {
+          font = &numericFont;                             //JM ENLARGE
+        } else {
+          font = &standardFont;                             //JM ENLARGE
+        }
+
         if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
         if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
         int16_t tmp,cnt;
@@ -1721,18 +1812,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         else if(lines>2) {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}
         cnt = 0;
         do {
-          //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + tmp, &standardFont, true, true), - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true), sw);
+          //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + tmp, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
           while(cnt++ < 100 &&
-               (stringWidth(aimBuffer + tmp, &standardFont, true, true) - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
+               (stringWidth(aimBuffer + tmp, font, true, true) - stringWidth(aimBuffer + T_cursorPos, font, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
           	   (tmp <= stringByteLength(aimBuffer)) && 
           	   (tmp + 10 < T_cursorPos)
           	   ) 
             {
-              //printf(">>>b %d %d >? %d\n", stringWidth(aimBuffer + tmp, &standardFont, true, true), - stringWidth(aimBuffer + T_cursorPos, &standardFont, true, true), sw);
+              //printf(">>>b %d %d >? %d\n", stringWidth(aimBuffer + tmp, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
               tmp = stringNextGlyph(aimBuffer, tmp);
             }
 
-          showStringEd(lines ,tmp, T_cursorPos, aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
+          showStringEd(lines ,tmp, T_cursorPos, aimBuffer, font, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
 
           if(xCursor > SCREEN_WIDTH-1) tmp = stringNextGlyph(aimBuffer, tmp);
           //printf(">>>c length:%d T_cursorPos:%d tmp:%d x:%d y:%d\n",stringByteLength(aimBuffer), T_cursorPos, tmp, xCursor, yCursor);
@@ -1740,7 +1831,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
         if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
-        cursorFont = &standardFont;
+        cursorFont = font;
       }
   //JMCURSOR  ^^
 

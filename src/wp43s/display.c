@@ -1561,7 +1561,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
 
 void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t max_Width, int16_t maxExp, const char *separator, bool_t allowLARGELI) { //JM mod max_Width;   //JM added last parameter: Allow LARGELI
-  int16_t len, exponentStep;
+  int16_t exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
   int16_t maxWidth;                                         //JM align longints

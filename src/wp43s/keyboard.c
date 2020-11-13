@@ -1145,7 +1145,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedParamButMandatory) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, x, y, newXCursor;
+  uint16_t lg, newXCursor;
   uint8_t *nextStep;
 
   switch(calcMode) {
@@ -1186,7 +1186,7 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
-        uint16_t x, y, newXCursor;
+        uint16_t x, y;
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
@@ -1260,7 +1260,8 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedParamButMandatory) {
   doRefreshSoftMenu = true;     //dr
-  #ifndef TESTSUITE_BUILD  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
+  #ifndef TESTSUITE_BUILD  
+  if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
 
   switch(calcMode) {
     case CM_NORMAL:

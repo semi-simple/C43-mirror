@@ -1440,7 +1440,7 @@ void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t 
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
   if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
-    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+    int16_t x, y, menu, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
     bool_t dottedTopLine;
 
     //JMTOCHECK

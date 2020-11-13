@@ -242,16 +242,16 @@ switch (event_keyval) {
 
 //ROW 0
     case 65362:                                               //JM     // CursorUp //JM
-      btnFnClickedP(w, "1");
+      btnFnClicked(w, "1");
       break;
     case 65361:                                               //JM     // CursorLt BST //JM
-      btnFnClickedP(w, "5");
+      btnFnClicked(w, "5");
       break;
     case 65364:                                               //JM     // CursorDown //JM
-      btnFnClickedP(w, "2");
+      btnFnClicked(w, "2");
       break;
     case 65363:                                               //JM     // CursorRt SST //JM
-      btnFnClickedP(w, "6");
+      btnFnClicked(w, "6");
       break;
 
 

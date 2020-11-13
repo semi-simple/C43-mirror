@@ -53,7 +53,7 @@ else
 endif
 
 ifeq ($(RASPBERRY),YES32)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -DRASPBERRY -MMD -fshort-enums
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -DRASPBERRY -MMD
 endif
 
 ifeq ($(RASPBERRY),YES64)
@@ -61,7 +61,7 @@ ifeq ($(RASPBERRY),YES64)
 endif
 
 ifeq ($(RASPBERRY),NO32)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -MMD -fshort-enums
+        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -MMD
 endif
 
 ifeq ($(RASPBERRY),NO64)

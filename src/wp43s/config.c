@@ -518,7 +518,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
+  uint32_t numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep        = beginOfProgramMemory;
@@ -5772,11 +5772,14 @@ void addTestPrograms(void) {
   *(currentStep++) = 255; // .END.
 
   freeProgramBytes = (uint8_t *)(ram + RAM_SIZE) - currentStep;
-  numberOfBytesUsed = (uint32_t)(currentStep - beginOfProgramMemory);
-  currentStep = beginOfProgramMemory;
-  scanLabelsAndPrograms();
 
-  #ifndef DMCP_BUILD
+  #ifdef DMCP_BUILD
+    currentStep = beginOfProgramMemory;
+    scanLabelsAndPrograms();
+  #else // !DMCP_BUILD
+    uint32_t numberOfBytesUsed = (uint32_t)(currentStep - beginOfProgramMemory);
+
+    currentStep = beginOfProgramMemory;
     printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's + 2 : %u bytes\n", numberOfBytesUsed);
     if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
       printf("Increase allocated memory for programs!\n");
@@ -5785,9 +5788,11 @@ void addTestPrograms(void) {
 
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
+    scanLabelsAndPrograms();
     //listPrograms();
     listLabelsAndPrograms();
   #endif // !DMCP_BUILD
+
 }
 
 

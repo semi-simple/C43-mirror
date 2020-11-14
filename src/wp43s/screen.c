@@ -18,7 +18,6 @@
  * \file screen.c Screen related functions
  ***********************************************/
 
-
 #include "wp43s.h"
 
 #ifdef PC_BUILD
@@ -192,7 +191,7 @@ void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString)
 
 void copyRegisterXToClipboard(void) {
   GtkClipboard *clipboard;
-  char clipboardString[TMP_STR_LENGTH];                     //JM fixed
+  char clipboardString[3000];
 
   clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_clear(clipboard);
@@ -963,26 +962,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     if(enlarge && combinationFonts !=0) rep_enlarge = 1;
     while (rep_enlarge >= 0) {                                           //JM ENLARGE ^^
 
-      #ifdef PC_BUILD                                                                 // Dani Rau
-        for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
-          if(videoMode == vmNormal) {
-            if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-          else {
-            if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                   //JMmini                         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-        }
-      #endif                                                                          // vv Dani Rau
-
-      #if DMCP_BUILD
-        if(videoMode == vmNormal) {
-          if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0);              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-        else {
-          if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0xFF);           //JMmini                                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-      #endif                                                                          // ^^ Dani Rau
-
+    if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
 
     if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;   //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
     rep_enlarge--;
@@ -1059,25 +1039,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
 
   // Clearing the rows below the glyph
   for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
-    #ifdef PC_BUILD                                                                 // Dani Rau
-      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
-        if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                                     //JMmini          //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-        else {
-          if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                                      //JMmini         //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-      }
-    #endif                                                                          // vv Dani Rau
-
-    #if DMCP_BUILD
-      if(videoMode == vmNormal) {
-        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, 0);                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-      else {
-        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, 0xFF);             //JMmini                                  //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-      }
-      #endif                                                                        // ^^ Dani Rau
+        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));             //JMmini                                  //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
   }
 
   miniC = 0;                                                        //JMmini
@@ -1378,38 +1340,16 @@ void force_refresh(void) {
  * \return void
  ***********************************************/
 void hideCursor(void) {
-  #ifdef PC_BUILD                                         // Dani Rau
-    uint16_t x, y;
-
-    if(cursorEnabled) {
-      if(cursorFont == &standardFont) {
-        for(x=xCursor; x<xCursor+6; x++) {
-          for(y=yCursor+10; y<yCursor+16; y++) {
-            clearPixel(x, y);
-          }
-        }
-      }
-      else {
-        for(x=xCursor; x<xCursor+13; x++) {
-          for(y=yCursor+15; y<yCursor+28; y++) {
-            clearPixel(x, y);
-          }
-        }
-      }
+  if(cursorEnabled) {
+    if(cursorFont == &standardFont) {
+      lcd_fill_rect(xCursor, yCursor + 10,  6,  6, LCD_SET_VALUE);
     }
-  #endif                                                  // vv Dani Rau
-
-  #if DMCP_BUILD
-    if(cursorEnabled) {
-      if(cursorFont == &standardFont) {
-        lcd_fill_rect(xCursor, yCursor+10, 6, 6, 0);
-      }
-      else {
-        lcd_fill_rect(xCursor, yCursor+15, 13, 13, 0);
-      }
+    else {
+      lcd_fill_rect(xCursor, yCursor + 15, 13, 13, LCD_SET_VALUE);
     }
-  #endif                                                  // ^^ Dani Rau
+  }
 }
+
 
 
 
@@ -1492,18 +1432,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
       }
     }
 
-    #ifdef PC_BUILD
-      int16_t x, y;
-      for(x=0; x<SCREEN_WIDTH; x++) {
-        for(y=yStart; y<yStart+height; y++) {
-          clearPixel(x, y);
-        }
-      }
-    #endif
-
-    #ifdef DMCP_BUILD
-      lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
-    #endif
+    lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, LCD_SET_VALUE);
   }
 }
 
@@ -2085,16 +2014,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             realToInt32(SIGMA_N, w);
             sprintf(prefix, "Data point %03" PRId16, w);
             prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-
-            #ifdef PC_BUILD
-              for(w=0; w<SCREEN_WIDTH; w++) {
-                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-              }
-            #endif
-
-            #if DMCP_BUILD
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
-            #endif
+            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
           }
         }
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
@@ -2589,19 +2509,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
         }
         else {
           if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-            #ifdef PC_BUILD
-              int16_t x, y;
-
-              for(y=Y_POSITION_OF_TAM_LINE; y<Y_POSITION_OF_TAM_LINE+32; y++) {
-                for(x=0; x<100; x++) {
-                  clearPixel(x, y);
-                }
-              }
-            #endif
-
-            #if DMCP_BUILD
-              lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, 0);
-            #endif
+              lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
 
             showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
           }
@@ -2759,3 +2667,28 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
   create_screenshot(0);
 #endif
 }
+
+
+#ifndef DMCP_BUILD
+void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+//if(calcMode == CM_NIM) {
+//  printf("lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d\n", x, y, dx, dy, val);
+//}
+
+  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+    return;
+  }
+
+  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+  for(line=y; line<endY; line++) {
+    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+      *pixel = pixelColor;
+    }
+  }
+
+  screenChange = true;
+}
+#endif

@@ -52,6 +52,8 @@ uint8_t  last_CM;
 #ifdef DMCP_BUILD
   void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);                   //JMCSV Added for textfiles 
   void     refreshLcd                         (void);
+#else
+  void     lcd_fill_rect                      (uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val); // clone fron the DMCP function
 #endif
 
 #ifndef TESTSUITE_BUILD

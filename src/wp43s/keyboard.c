@@ -34,6 +34,7 @@ int16_t determineFunctionKeyItem(const char *data) {
   else {
     itemShift = 0;
   }
+  //printf("^^^^ Determinefunction: %d %d %d\n",itemShift,fn,*(data));
 
   if(softmenuStackPointer > 0) {
     const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];

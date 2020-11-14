@@ -1312,33 +1312,21 @@ bool_t emptyKeyBuffer()
 //########################################
 
 void fnT_ARROW(uint16_t command) {
-
-  uint16_t ix, in, ixx, in_old; 
-  int16_t yc;
-  char ss[4];
+#ifndef TESTSUITE_BUILD
+  const font_t *font;
+  uint16_t ixx;
+  uint16_t current_cursor_x_old;
+  uint16_t current_cursor_y_old;
 
   switch (command) {
 
      case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
-       ix = 0; 
-       in = 0;
-       in_old = 0;
-       while (ix<=T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
-         in_old = in;
-         in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
-         ix++;
-       }
-       T_cursorPos = in_old;
-       break;
+        T_cursorPos = stringPrevGlyph(aimBuffer, T_cursorPos);
+        break;
 
      case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
-        ix = 0; 
-        in = 0;
-        while (ix < T_cursorPos && in<T_cursorPos) {                //find the ix position in aimBuffer before the cursor
-          in = stringNextGlyph(aimBuffer, in);  //find the in position in aimBuffer which is then the cursor position
-          ix++;
-        }
-        T_cursorPos = stringNextGlyph(aimBuffer, in);
+
+        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
         break;
 
      case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
@@ -1358,44 +1346,48 @@ void fnT_ARROW(uint16_t command) {
         break;
 
 
-     case ITM_T_UP_ARROW /*UP */ :
+     case ITM_T_UP_ARROW /*UP */ :                      //JMCURSOR try make the cursor upo be more accurate. Add up the char widths...
+        if(combinationFonts == 2) {
+          font = &numericFont;                             //JM ENLARGE
+        } else {
+          font = &standardFont;                             //JM ENLARGE
+        }
+
         ixx = 0;
-        yc = 0;
+        current_cursor_x_old = current_cursor_x;
+        current_cursor_y_old = current_cursor_y;
+//        fnT_ARROW(ITM_T_RIGHT_ARROW);
         fnT_ARROW(ITM_T_RIGHT_ARROW);
-        fnT_ARROW(ITM_T_RIGHT_ARROW);
-        while(yc <= SCREEN_WIDTH && ixx < 50) {
+        while(ixx < 75 && (current_cursor_x >= current_cursor_x_old+5 || current_cursor_y == current_cursor_y_old)) {
           fnT_ARROW(ITM_T_LEFT_ARROW);
-          stringNextGlyph(aimBuffer, T_cursorPos);
-          ss[0] = aimBuffer[T_cursorPos];
-          if(ss[0] & 0x80) {
-            ss[1]=aimBuffer[T_cursorPos+1];
-            ss[2]=0;
-          } else {
-            ss[1]=0;           
-          }
-          yc += stringWidth(ss,&standardFont,true,true);
+          //if((ixx>33 && combinationFonts==0) || (ixx>25 && combinationFonts!=0))  refreshScreen();
+          showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+
+          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
           ixx++;
         }
         break;
 
 
      case ITM_T_DOWN_ARROW /*DN*/ :
+        if(combinationFonts == 2) {
+          font = &numericFont;                             //JM ENLARGE
+        } else {
+          font = &standardFont;                             //JM ENLARGE
+        }
+
         ixx = 0;
-        yc = 0;
+        current_cursor_x_old = current_cursor_x;
+        current_cursor_y_old = current_cursor_y;
+//        fnT_ARROW(ITM_T_LEFT_ARROW);
         fnT_ARROW(ITM_T_LEFT_ARROW);
-        fnT_ARROW(ITM_T_LEFT_ARROW);
-        while(yc <= SCREEN_WIDTH && ixx < 50) {
+        while(ixx < 75 && (current_cursor_x+5 <= current_cursor_x_old || current_cursor_y == current_cursor_y_old)) {
           fnT_ARROW(ITM_T_RIGHT_ARROW);
-          stringNextGlyph(aimBuffer, T_cursorPos);
-          ss[0] = aimBuffer[T_cursorPos];
-          if(ss[0] & 0x80) {
-            ss[1]=aimBuffer[T_cursorPos+1];
-            ss[2]=0;
-          } else {
-            ss[1]=0;           
-          }
-          yc += stringWidth(ss,&standardFont,true,true);
+          //if((ixx>33 && combinationFonts==0) || (ixx>25 && combinationFonts!=0))  refreshScreen();
+          showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, -100, vmNormal, true, true, true);  //display up to the cursor
           ixx++;
+
+          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
         }
         break;
 
@@ -1419,6 +1411,7 @@ void fnT_ARROW(uint16_t command) {
   if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
   if(T_cursorPos < 0) T_cursorPos = 0;
   //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
+#endif
 }
 
 

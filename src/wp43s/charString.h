@@ -20,6 +20,7 @@
 
 int16_t  stringLastGlyph  (const char *str);
 int16_t  stringNextGlyph  (const char *str, int16_t pos);
+int16_t  stringPrevGlyph  (const char *str, int16_t pos);   //JM
 int32_t  stringByteLength (const char *str);
 int32_t  stringGlyphLength(const char *str);
 int16_t  stringWidth      (const char *str, const font_t *font, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);

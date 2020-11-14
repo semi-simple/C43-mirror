@@ -1406,7 +1406,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 void fnKeyDown(uint16_t unusedParamButMandatory) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
-  int16_t itemShift;
 
   if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(2); return;}             //JMSHOW
 

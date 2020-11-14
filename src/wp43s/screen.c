@@ -1188,19 +1188,20 @@ void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
 uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;
 uint8_t x_offset = 0;      //pixels 40
-
+uint16_t current_cursor_x = 0;
+uint16_t current_cursor_y = 0;
+int16_t  displayAIMbufferoffset;
 //#define lines 5                                                          //JMCURSOR vv
 //#define y_offset 2    //lines   0
-int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
   uint16_t ch, charCode, lg;
-  int16_t tmpxy, glyphId;
+  int16_t  tmpxy, glyphId;
   bool_t   slc, sec;
-  int16_t numPixels, orglastlines;
-  const glyph_t *glyph;
-
-  uint8_t editlines     = 5 ; 
-  uint8_t maxbeforejump = 30; 
-  uint8_t yincr         = 21; 
+  int16_t  numPixels, orglastlines;
+  const    glyph_t *glyph;
+  uint8_t  editlines     = 5 ; 
+  uint8_t  maxbeforejump = 30; 
+  uint8_t  yincr         = 21; 
 
 
   lg = stringByteLength(string + offset);
@@ -1235,12 +1236,12 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     }
   }
   if(lines == editlines || lg == 0) last_CM = 253; //Force redraw if 
-
+  //printf("^^^^ combinationFonts=%d editlines=%d yincr=%d %d %d \n",combinationFonts, editlines, yincr, lines, last_CM);
 
   orglastlines = lastline;
 
   if(lastline > y_offset) {
-    clearScreen_old(false, true,false);
+    if(!noshow) clearScreen_old(false, true,false);
     x = x_offset; 
     y = (yincr-1) + y_offset * (yincr-1);
   }
@@ -1265,9 +1266,12 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     }
 
     if((ch == edcursor && string[ch] != 0) ) {                 //draw cursor
+       current_cursor_x = x;
+       current_cursor_y = y;
        tmpxy = y-1;
        while (tmpxy < y + (yincr+1)) {
-         setPixel(x,tmpxy); setPixel(x+1,tmpxy); 
+         if(!noshow) setPixel(x,tmpxy); 
+         if(!noshow) setPixel(x+1,tmpxy); 
          tmpxy++;
        }
        x+=2;
@@ -1319,7 +1323,10 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
     }
 
     maxiC = 1;                                                                            //JM
-    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+    if(!noshow) 
+      x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+    else 
+      x = showGlyphCode(charCode, font, x, -100, videoMode, slc, sec) - compressString;        //JM compressString      
     maxiC = 0;                                                                            //JM
 
   }
@@ -1803,30 +1810,30 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
         if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
         if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-        int16_t tmp,cnt;
-        tmp = 0;              //Determine offset to be able to display the latter part of the string
+        int16_t cnt;
+        displayAIMbufferoffset = 0;                                         //Determine offset to be able to display the latter part of the string
 
-        int16_t sw=SCREEN_WIDTH-1-x_offset;           //Calculate the total available pixels in the number of lines available.
+        int16_t sw=SCREEN_WIDTH-1-x_offset;              //Calculate the total available pixels in the number of lines available.
         if(lines==1 && y_offset<1) {sw = SCREEN_WIDTH-1 - x_offset;} 
         else if(lines==2 && y_offset<=1) {sw = (SCREEN_WIDTH-1 - x_offset)*(2-y_offset);}
         else if(lines>2) {sw = (SCREEN_WIDTH-1 - x_offset)*2 + (lines-2)*(SCREEN_WIDTH-1);}
         cnt = 0;
         do {
-          //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + tmp, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
-          while(cnt++ < 100 &&
-               (stringWidth(aimBuffer + tmp, font, true, true) - stringWidth(aimBuffer + T_cursorPos, font, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
-          	   (tmp <= stringByteLength(aimBuffer)) && 
-          	   (tmp + 10 < T_cursorPos)
+          //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
+          while(/*cnt++ < 100 && */
+               (stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true) - stringWidth(aimBuffer + T_cursorPos, font, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
+          	   (displayAIMbufferoffset <= stringByteLength(aimBuffer)) && 
+          	   (displayAIMbufferoffset + 10 < T_cursorPos)
           	   ) 
             {
-              //printf(">>>b %d %d >? %d\n", stringWidth(aimBuffer + tmp, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
-              tmp = stringNextGlyph(aimBuffer, tmp);
+              //printf(">>>b %d %d >? %d\n", stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
+              displayAIMbufferoffset = stringNextGlyph(aimBuffer, displayAIMbufferoffset);
             }
 
-          showStringEd(lines ,tmp, T_cursorPos, aimBuffer, font, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);  //display up to the cursor
+          showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true, false);  //display up to the cursor
 
-          if(xCursor > SCREEN_WIDTH-1) tmp = stringNextGlyph(aimBuffer, tmp);
-          //printf(">>>c length:%d T_cursorPos:%d tmp:%d x:%d y:%d\n",stringByteLength(aimBuffer), T_cursorPos, tmp, xCursor, yCursor);
+          if(xCursor > SCREEN_WIDTH-1) displayAIMbufferoffset = stringNextGlyph(aimBuffer, displayAIMbufferoffset);
+          //printf(">>>c length:%d T_cursorPos:%d displayAIMbufferoffset:%d x:%d y:%d\n",stringByteLength(aimBuffer), T_cursorPos, displayAIMbufferoffset, xCursor, yCursor);
         } while(cnt++ < 150 && xCursor > SCREEN_WIDTH-1);
 
 
@@ -2464,7 +2471,7 @@ void clearScreen(void) {
         clearPixel(x, y);
       }
     }
-  printf(">>> clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
+  printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
   #endif
 
   #if DMCP_BUILD

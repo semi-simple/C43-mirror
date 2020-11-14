@@ -329,6 +329,11 @@ switch (event_keyval) {
     case 65288: // Backspace
       btnClicked(w, "16");
       break;
+    case 65439:
+    case 65535: // Delete
+      fnT_ARROW(ITM_T_RIGHT_ARROW);
+      btnClicked(w, "16");
+      break;
 //ROW 5
     case 65360:                                               //JM     // HOME  //JM
       btnClicked(w, "17");

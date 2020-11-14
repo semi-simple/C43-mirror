@@ -1182,6 +1182,10 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
     strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);
     fnXEQMEDIT(0);
   }
+  last_CM=252;
+  refreshScreen();
+  last_CM=251;
+  refreshScreen();
 }
 
 

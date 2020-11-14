@@ -123,6 +123,27 @@ int16_t stringNextGlyph(const char *str, int16_t pos) {
 
 
 
+/********************************************//**              //JM
+ * \brief Returns a pointer to the glyph before pos a string
+ *
+ * \param[in] str const char*
+ * \param[in] pos int16_t       Location after which search the next glyph
+ * \return int16_t              Pointer to the glyph after pos
+ ***********************************************/
+int16_t stringPrevGlyph(const char *str, int16_t pos) {
+
+  if(pos <= 1) {
+    return 0;
+  }
+  else {
+    if(str[pos-2] & 0x80) pos -= 2;
+    else pos --;
+  }
+   return pos;
+}
+
+
+
 /********************************************//**
  * \brief Returns a pointer to the last glyph of a string
  *

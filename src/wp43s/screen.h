@@ -57,8 +57,16 @@ uint8_t  last_CM;
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
 uint8_t  compressString;                                                                                        //JM global flags for character control: compressString
+uint8_t  combinationFonts;
 uint8_t  miniC;                                                                                                 //JM global flags for character control:  miniature letters
 uint8_t  maxiC;                                                                                                 //JM global flags for character control:  enlarged letters
+uint8_t  lines;
+uint16_t current_cursor_x;
+uint16_t current_cursor_y;
+int16_t  displayAIMbufferoffset;
+
+int16_t  showStringEd                         (int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
 void     refresh_gui                          (void);                                                           //JM

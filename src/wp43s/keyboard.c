@@ -34,6 +34,7 @@ int16_t determineFunctionKeyItem(const char *data) {
   else {
     itemShift = 0;
   }
+  //printf("^^^^ Determinefunction: %d %d %d\n",itemShift,fn,*(data));
 
   if(softmenuStackPointer > 0) {
     const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
@@ -1405,7 +1406,6 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 void fnKeyDown(uint16_t unusedParamButMandatory) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
-  int16_t itemShift;
 
   if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(2); return;}             //JMSHOW
 

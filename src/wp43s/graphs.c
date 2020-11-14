@@ -704,7 +704,7 @@ void graph_axis (void){
   }
 
   if(PLOT_RMS && !invalid_rms) {
-    snprintf(tmpString, sizeof(tmpString), "  RMSy");
+    snprintf(tmpString, TMP_STR_LENGTH, "  RMSy");
     miniC = 1;
     showString(tmpString, &numericFont, 1, ypos, vmNormal, true, true);  //JM
     miniC = 0;

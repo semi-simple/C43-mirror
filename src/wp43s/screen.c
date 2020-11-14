@@ -584,27 +584,9 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   xEndingCols = x + xGlyph + glyph->colsGlyph;
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
-  // Clearing the rows above the glyph
+  // Clearing the rows above the glyph  TODO: remove the loop
   for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
-    #ifdef PC_BUILD                                                                 // Dani Rau
-      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
-        if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
-        }
-        else {
-          setPixel(x+col, y);
-        }
-      }
-    #endif                                                                          // vv Dani Rau
-
-    #if DMCP_BUILD
-      if(videoMode == vmNormal) {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
-      }
-      else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
-      }
-    #endif                                                                          // ^^ Dani Rau
+    lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
   }
 
   // Drawing the glyph
@@ -655,35 +637,17 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     // clearing the columns after the glyph
     for(col=0; col<endingCols; col++) {
       if(videoMode == vmNormal) {
-        clearPixel(xEndingCols+col, y);
+        clearPixel(xEndingCols + col, y);
       }
       else {
-        setPixel(xEndingCols+col, y);
+        setPixel(xEndingCols + col, y);
       }
     }
   }
 
-  // Clearing the rows below the glyph
+  // Clearing the rows below the glyph  TODO: remove the loop
   for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
-    #ifdef PC_BUILD                                                                 // Dani Rau
-      for(col=0; col<xGlyph + glyph->colsGlyph + endingCols; col++) {
-        if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
-        }
-        else {
-          setPixel(x+col, y);
-        }
-      }
-    #endif                                                                          // vv Dani Rau
-
-    #if DMCP_BUILD
-      if(videoMode == vmNormal) {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0);
-      }
-      else {
-        lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, 0xFF);
-      }
-      #endif                                                                        // ^^ Dani Rau
+    lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
   }
 
   return x + xGlyph + glyph->colsGlyph + endingCols;
@@ -771,37 +735,14 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
  * \return void
  ***********************************************/
 void hideCursor(void) {
-  #ifdef PC_BUILD                                         // Dani Rau
-    uint16_t x, y;
-
-    if(cursorEnabled) {
-      if(cursorFont == &standardFont) {
-        for(x=xCursor; x<xCursor+6; x++) {
-          for(y=yCursor+10; y<yCursor+16; y++) {
-            clearPixel(x, y);
-          }
-        }
-      }
-      else {
-        for(x=xCursor; x<xCursor+13; x++) {
-          for(y=yCursor+15; y<yCursor+28; y++) {
-            clearPixel(x, y);
-          }
-        }
-      }
+  if(cursorEnabled) {
+    if(cursorFont == &standardFont) {
+      lcd_fill_rect(xCursor, yCursor + 10,  6,  6, LCD_SET_VALUE);
     }
-  #endif                                                  // vv Dani Rau
-
-  #if DMCP_BUILD
-    if(cursorEnabled) {
-      if(cursorFont == &standardFont) {
-        lcd_fill_rect(xCursor, yCursor+10, 6, 6, 0);
-      }
-      else {
-        lcd_fill_rect(xCursor, yCursor+15, 13, 13, 0);
-      }
+    else {
+      lcd_fill_rect(xCursor, yCursor + 15, 13, 13, LCD_SET_VALUE);
     }
-  #endif                                                  // ^^ Dani Rau
+  }
 }
 
 
@@ -867,18 +808,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
       }
     }
 
-    #ifdef PC_BUILD
-      int16_t x, y;
-      for(x=0; x<SCREEN_WIDTH; x++) {
-        for(y=yStart; y<yStart+height; y++) {
-          clearPixel(x, y);
-        }
-      }
-    #endif
-
-    #ifdef DMCP_BUILD
-      lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, 0);
-    #endif
+    lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, LCD_SET_VALUE);
   }
 }
 
@@ -1392,16 +1322,7 @@ void refreshRegisterLine(calcRegister_t regist) {
             realToInt32(SIGMA_N, w);
             sprintf(prefix, "Data point %03" PRId16, w);
             prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-
-            #ifdef PC_BUILD
-              for(w=0; w<SCREEN_WIDTH; w++) {
-                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2);
-              }
-            #endif
-
-            #if DMCP_BUILD
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF);
-            #endif
+            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
           }
         }
 
@@ -1515,24 +1436,6 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 
 
-void clearScreen(void) {
-  #ifdef PC_BUILD
-    int16_t x, y;
-
-    for(y=0; y<SCREEN_HEIGHT; y++) {
-      for(x=0; x<SCREEN_WIDTH; x++) {
-        clearPixel(x, y);
-      }
-    }
-  #endif
-
-  #if DMCP_BUILD
-    lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
-  #endif
-}
-
-
-
 void refreshScreen(void) {
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -1589,20 +1492,7 @@ void refreshScreen(void) {
       }
       else {
         if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-          #ifdef PC_BUILD
-            int16_t x, y;
-
-            for(y=Y_POSITION_OF_TAM_LINE; y<Y_POSITION_OF_TAM_LINE+32; y++) {
-              for(x=0; x<100; x++) {
-                clearPixel(x, y);
-              }
-            }
-          #endif
-
-          #if DMCP_BUILD
-            lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, 0);
-          #endif
-
+          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
           showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
         }
       }
@@ -1742,3 +1632,28 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
   create_screenshot(0);
 #endif
 }
+
+
+#ifndef DMCP_BUILD
+void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+//if(calcMode == CM_NIM) {
+//  printf("lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d\n", x, y, dx, dy, val);
+//}
+
+  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+    return;
+  }
+
+  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+  for(line=y; line<endY; line++) {
+    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+      *pixel = pixelColor;
+    }
+  }
+
+  screenChange = true;
+}
+#endif

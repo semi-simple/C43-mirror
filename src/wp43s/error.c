@@ -165,19 +165,7 @@ void displayBugScreen(const char *msg) {
     hideCursor();
     cursorEnabled = false;
 
-    #ifdef PC_BUILD
-      int16_t x;
-
-      for(y=20; y<SCREEN_HEIGHT; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          clearPixel(x, y);
-        }
-      }
-    #endif
-
-    #if DMCP_BUILD
-      lcd_fill_rect(0, 20, SCREEN_WIDTH, 220, 0);
-    #endif
+    lcd_fill_rect(0, 20, SCREEN_WIDTH, 220, LCD_SET_VALUE);
 
     y = 20;
     showString("This is most likely a bug in the firmware!", &standardFont, 1, y, vmNormal, true, false);

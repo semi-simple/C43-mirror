@@ -1372,8 +1372,6 @@ void setupUI(void) {
     g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
 
     gtk_widget_show_all(frmCalc);
-
-    system("setleds +num"); // forces numlock on
   #endif // SCREEN_800X480
 }
 #endif

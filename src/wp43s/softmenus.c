@@ -707,7 +707,29 @@ void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t 
  * \return void
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
-  if(softmenuStackPointer > 0) {
+  printf("softmenuStackPointer = %u\n", softmenuStackPointer);
+  if(softmenuStackPointer == 0) { // The is no menu to display
+    switch(calcMode) {
+      case CM_NORMAL:
+      case CM_TAM:
+      case CM_NIM:
+      case CM_ASSIGN:
+      case CM_ERROR_MESSAGE:
+      case CM_CONFIRMATION:
+      case CM_PEM:
+        printf("Display MyMenu\n");
+        break;
+
+      case CM_AIM:
+        printf("Display MyAlpha\n");
+        break;
+
+      default:
+        sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  }
+  else { // There is a menu to display
     int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
     bool_t dottedTopLine;
 

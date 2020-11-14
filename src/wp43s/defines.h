@@ -584,6 +584,11 @@
 #define PARAM_COMPARE                              6
 
 
+#ifndef DMCP_BUILD
+  #define LCD_SET_VALUE                            0 // Black pixel
+  #define LCD_EMPTY_VALUE                        255 // White (or empty) pixel
+#endif // DMCP_BUILD
+
 
 //******************************
 //* Macros replacing functions *
@@ -619,6 +624,7 @@
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
+#define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
 
 
 //************************

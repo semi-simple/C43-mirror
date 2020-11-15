@@ -908,7 +908,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   int16_t  col, row, xGlyph, /*xEndingCols, */endingCols, bit, glyphId;    //JMmini
   int8_t   byte, *data;
   const glyph_t  *glyph;
-
+  //printf("^^^ %d %d %d %d\n",charCode, combinationFonts, miniC, maxiC);
   int8_t rep_enlarge;
   bool_t enlarge = false;                                   //JM ENLARGE vv
   if(combinationFonts == 2) {
@@ -1041,10 +1041,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
         if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));             //JMmini                                  //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
   }
-
-  miniC = 0;                                                        //JMmini
-  maxiC = 0;                                                             //JMmaxi
-  return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);   //JMmini
+  return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);        //JMmini
 }
 
 
@@ -2159,7 +2156,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
       else if(getRegisterDataType(regist) == dtString) {
         w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
-
         if(w >= SCREEN_WIDTH) {
           if(regist == REGISTER_X) {
             xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);

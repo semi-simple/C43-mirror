@@ -2319,78 +2319,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-/********************************************//**   //JM vv
- * \brief Clears parts of the screen
- *
- * \param[in] clearStatusBar bool_t Clear the status bar
- * \param[in] clearRegLines bool_t  Clear the register lines
- * \param[in] clearSoftkeys bool_t  Clear the softkey area
- * \return void
- ***********************************************/
-void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {      //JMOLD
-  #ifdef PC_BUILD
-    int16_t x, y;
-
-    if(clearStatusBar) {
-      for(y=0; y<20; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-         clearPixel(x, y);
-        }
-      }
-    }
-
-    if(clearRegisterLines) {
-      for(y=20; y<171; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          clearPixel(x, y);
-        }
-      }
-    }
-
-    if(clearSoftkeys) {
-      clear_ul(); //JMUL
-      for(y=171; y<SCREEN_HEIGHT; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          clearPixel(x, y);
-        }
-      }
-      for(y=171-5; y<171; y++) {
-        for(x=0; x<20; x++) {
-          clearPixel(x, y);
-        }
-      }
-    }
-  #endif
-
-  #if DMCP_BUILD
-    if(clearStatusBar) {
-      lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
-    }
-
-    if(clearRegisterLines) {
-      lcd_fill_rect(0, 20, SCREEN_WIDTH, 151, 0);
-    }
-
-    if(clearSoftkeys) {
-      clear_ul(); //JMUL
-      lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
-      lcd_fill_rect(0, 171-5, 20, 5, 0);
-    }
-  #endif
-}                                                       //JM ^^
-
-
-int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
-void clearScreen() {
-  #ifdef PC_BUILD
-  printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
-  #endif
-  clear_ul(); //JMUL
-  lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE);
-}
-
-
-
 int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
 uint8_t last_CM = 255;
 void refreshScreen(void) {
@@ -2657,9 +2585,41 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 }
 
 
-#ifndef DMCP_BUILD
+
+
+/********************************************//**   //JM vv
+ * \brief Clears parts of the screen
+ *
+ * \param[in] clearStatusBar bool_t Clear the status bar
+ * \param[in] clearRegLines bool_t  Clear the register lines
+ * \param[in] clearSoftkeys bool_t  Clear the softkey area
+ * \return void
+ ***********************************************/
+void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys) {      //JMOLD
+  if(clearStatusBar) {
+    lcd_fill_rect(0, 0, SCREEN_WIDTH, 20, 0);
+  }
+  if(clearRegisterLines) {
+    lcd_fill_rect(0, 20, SCREEN_WIDTH, 151, 0);
+  }
+  if(clearSoftkeys) {
+    clear_ul(); //JMUL
+    lcd_fill_rect(0, 171, SCREEN_WIDTH, 69, 0);
+    lcd_fill_rect(0, 171-5, 20, 5, 0);
+  }
+}                                                       //JM ^^
+
+
+#ifdef PC_BUILD
+int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
   uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+  if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {
+    printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
+    clear_ul(); //JMUL
+  }
+
 
 //if(calcMode == CM_NIM) {
 //  printf("lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d\n", x, y, dx, dy, val);

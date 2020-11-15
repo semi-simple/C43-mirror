@@ -2061,8 +2061,6 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
         #endif
 
         SHOW_reset();
-        temporaryInformation = TI_SHOW_REGISTER_SMALL;
-
         longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
         last = 2100 + stringByteLength(tmpStr3000 + 2100);

@@ -36,6 +36,8 @@ Modes available in the mode menu:
 
 #define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging
 uint8_t verbose_jm;
+#define PC_BUILD_TELLTALE
+#undef PC_BUILD_TELLTALE           //verbose
 
 
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43

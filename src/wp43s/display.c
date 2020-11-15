@@ -2001,6 +2001,11 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
   
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
+
+      #ifdef PC_BUILD_TELLTALE
+        printf("SHOW:Longint\n");
+      #endif
+
       separator = STD_SPACE_4_PER_EM;
       longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
@@ -2051,8 +2056,13 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
       //printf("### %d %d %d\n",(uint8_t) tmpStr3000[1200],(uint8_t)  tmpStr3000[1201],(uint8_t) tmpStr3000[1202]);
       if(tmpStr3000[1200] != 0) {
+        #ifdef PC_BUILD_TELLTALE
+          printf("SHOW:Longint too long\n");
+        #endif
 
         SHOW_reset();
+        temporaryInformation = TI_SHOW_REGISTER_SMALL;
+
         longIntegerRegisterToDisplayString(SHOWregis, tmpStr3000 + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
         last = 2100 + stringByteLength(tmpStr3000 + 2100);
@@ -2091,6 +2101,9 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtReal34:
+      #ifdef PC_BUILD_TELLTALE
+        printf("SHOW:Real\n");
+      #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
       separator = STD_SPACE_4_PER_EM;
       real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpStr3000 + 2103, &numericFont, 2000, 34, false, separator);
@@ -2111,6 +2124,9 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtComplex34:
+      #ifdef PC_BUILD_TELLTALE
+        printf("SHOW:Complex\n");
+      #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
       // Real part into +0
@@ -2225,6 +2241,9 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtShortInteger:
+      #ifdef PC_BUILD_TELLTALE
+        printf("SHOW:Shortint\n");
+      #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
       shortIntegerToDisplayString(SHOWregis, tmpStr3000 + 2103, true);
@@ -2277,6 +2296,9 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtString:
+      #ifdef PC_BUILD_TELLTALE
+        printf("SHOW:String\n");
+      #endif
       SHOW_reset();
       offset = 0;
       thereIsANextLine = true;
@@ -2385,5 +2407,8 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
   displayFormatDigits = savedDisplayFormatDigits;
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
+  #ifdef PC_BUILD_TELLTALE
+    printf("SHOW:Done\n");
+  #endif
 
 }

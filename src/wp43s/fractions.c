@@ -22,7 +22,7 @@
 
 
 
-void fnDenMax(uint16_t unusedParamButMandatory) {
+void fnDenMax(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);

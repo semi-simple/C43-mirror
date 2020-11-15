@@ -22,7 +22,7 @@
 
 
 
-void fnNeighb(uint16_t unusedParamButMandatory) {
+void fnNeighb(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX, dataTypeY;
   real_t x, y;
   longInteger_t lgIntX, lgIntY;

@@ -117,6 +117,7 @@
 			<Add option="-Wstrict-aliasing" />
 			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 			<Add option="-DPC_BUILD" />
+			<Add option="-DOS64BIT" />
 			<Add directory="decNumberICU" />
 			<Add directory="DMCP" />
 			<Add directory="src/wp43s" />
@@ -1383,6 +1384,11 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/expMOne.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/expt.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1550,6 +1556,11 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/lnPOne.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lnPOne.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1915,6 +1926,11 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/sincpi.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sincpi.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -23,7 +23,7 @@
   void   restoreCalc   (void);
 #endif
 
-void     fnSave        (uint16_t unusedParamButMandatory);
+void     fnSave        (uint16_t unusedButMandatoryParameter);
 void     fnLoad        (uint16_t loadMode);
 uint8_t  stringToUint8 (const char *str);
 uint16_t stringToUint16(const char *str);

@@ -42,7 +42,7 @@ void (* const power[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_
 /********************************************//**
  * \brief Data type error in power
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void powError(void) {
@@ -60,10 +60,10 @@ void powError(void) {
  * \brief regX ==> regL and regY ^ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnPower(uint16_t unusedParamButMandatory) {
+void fnPower(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   power[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

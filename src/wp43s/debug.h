@@ -41,8 +41,8 @@
   char * getComplexUnitName                 (bool_t cu);
   char * getProductSignName                 (bool_t ps);
   char * getFractionTypeName                (bool_t ft);
-  char * getFractionDenom1ModeName          (bool_t dm);
-  char * getFractionDenom2ModeName          (bool_t dm);
+  char * getFractionDenom1ModeName          (bool_t ft);
+  char * getFractionDenom2ModeName          (bool_t ft);
   char * getRadixMarkName                   (bool_t rm);
   char * getDisplayOvrName                  (bool_t dio);
   char * getStackSizeName                   (bool_t ss);
@@ -54,8 +54,8 @@
 #endif
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
-  void   formatReal34Debug                  (char *str, real34_t *addr);
-  void   formatRealDebug                    (char *str, real_t *addr);
+  void   formatReal34Debug                  (char *str, real34_t *real34);
+  void   formatRealDebug                    (char *str, real_t *real);
   void   formatComplex34Debug               (char *str, void *addr);
 #endif
 

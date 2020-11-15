@@ -63,10 +63,10 @@ static void calculateMean(int displayInfo, real_t *sumX, real_t *numberX, real_t
  * enables stack lift and refreshes the stack.
  * regX = MEAN x, regY = MEAN y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnMeanXY(uint16_t unusedParamButMandatory) {
+void fnMeanXY(uint16_t unusedButMandatoryParameter) {
   calculateMean(TI_MEANX_MEANY, SIGMA_X, SIGMA_N, SIGMA_Y, SIGMA_N, NULL);
 }
 
@@ -79,10 +79,10 @@ static void geometricMeanTransform(const real_t *operand, real_t *result) {
  * enables stack lift and refreshes the stack.
  * regX = GEOMTERIC MEAN x, regY = GEOMTERIC MEAN y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
+void fnGeometricMeanXY(uint16_t unusedButMandatoryParameter) {
   calculateMean(TI_GEOMMEANX_GEOMMEANY, SIGMA_lnX, SIGMA_N, SIGMA_lnY, SIGMA_N, &geometricMeanTransform);
 }
 
@@ -91,10 +91,10 @@ void fnGeometricMeanXY(uint16_t unusedParamButMandatory) {
  * enables stack lift and refreshes the stack.
  * regX = HARMONIC MEAN x, regY = HARMONIC MEAN y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnHarmonicMeanXY(uint16_t unusedParamButMandatory) {
+void fnHarmonicMeanXY(uint16_t unusedButMandatoryParameter) {
   calculateMean(TI_HARMMEANX_HARMMEANY, SIGMA_N, SIGMA_1onX, SIGMA_N, SIGMA_1onY, NULL);
 }
 
@@ -107,10 +107,10 @@ static void RMSMeanTransform(const real_t *operand, real_t *result) {
  * enables stack lift and refreshes the stack.
  * regX = RMS MEAN x, regY = RMS MEAN y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRMSMeanXY(uint16_t unusedParamButMandatory) {
+void fnRMSMeanXY(uint16_t unusedButMandatoryParameter) {
   calculateMean(TI_RMSMEANX_RMSMEANY, SIGMA_X2, SIGMA_N, SIGMA_Y2, SIGMA_N, &RMSMeanTransform);
 }
 
@@ -119,10 +119,10 @@ void fnRMSMeanXY(uint16_t unusedParamButMandatory) {
  * enables stack lift and refreshes the stack.
  * regX = Weighted MEAN
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnWeightedMeanX(uint16_t unusedParamButMandatory) {
+void fnWeightedMeanX(uint16_t unusedButMandatoryParameter) {
   real_t mean;
 
   if(statisticalSumsPointer == NULL) {

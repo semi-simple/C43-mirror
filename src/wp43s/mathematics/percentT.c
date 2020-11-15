@@ -66,10 +66,10 @@ static void dataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate x*y/100
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnPercentT(uint16_t unusedParamButMandatory) {
+void fnPercentT(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

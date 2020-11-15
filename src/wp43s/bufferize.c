@@ -23,7 +23,7 @@
 
 
 #ifndef TESTSUITE_BUILD
-void fnAim(uint16_t unusedParamButMandatory) {
+void fnAim(uint16_t unusedButMandatoryParameter) {
   shiftF = false;
   shiftG = false;
   aimBuffer[0] = 0;
@@ -1141,14 +1141,14 @@ int16_t getOperation(void) {
 
 
 
-void tamTransitionSystem(uint16_t tamTransition) {
+void tamTransitionSystem(uint16_t tamEvent) {
   calcRegister_t value, regist;
 
   switch(transitionSystemState) {
     //////////////////////////////
     // OP __
     case 0 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_OPERATION :
           if(tamMode == TM_STORCL) {
             if(tamCurrentOperation == ITM_Config || tamCurrentOperation == ITM_Stack) {
@@ -1243,7 +1243,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo __
     case 1 : // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_BACKSPACE :
           tamCurrentOperation = tamFunction;
           sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
@@ -1295,7 +1295,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OP d_
     case 2 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(tamNumberMin <= (tamNumber*10 + tamDigit) && (tamNumber*10 + tamDigit) <= tamNumberMax) {
             reallyRunFunction(getOperation(), tamNumber*10 + tamDigit);
@@ -1327,7 +1327,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       // Here we are sure that:
       // numberOfLocalFlags     > 0 in the case of a flag parameter
       // numberOfLocalRegisters > 0 in the case of a register parameter
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           tamNumber = tamDigit;
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber < allLocalRegisterPointer->numberOfLocalRegisters)) {
@@ -1358,7 +1358,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
       // Here we are sure that:
       // 0 <= tamNumber < numberOfLocalFlags      in the case of a flag parameter
       // 0 <= tamNumber < numberOfLocalRegisters  in the case of a register parameter
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 + tamDigit < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters)) {
             reallyRunFunction(getOperation(), tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
@@ -1384,7 +1384,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OP -->__
     case 5 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_LETTER :
           value = indirectAddressing(tamLetteredRegister, tamNumberMin, tamNumberMax);
 
@@ -1423,7 +1423,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OP -->d_
     case 6 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           value = indirectAddressing(tamNumber*10 + tamDigit, tamNumberMin, tamNumberMax);
 
@@ -1456,7 +1456,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 7 :
       // Here we are sure that:
       // numberOfLocalRegisters > 0
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           tamNumber = tamDigit;
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber < allLocalRegisterPointer->numberOfLocalRegisters)) {
@@ -1490,7 +1490,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 8 :
       // Here we are sure that:
       // 0 <= tamNumber < numberOfLocalRegisters
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 + tamDigit < numberOfLocalFlags) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters)) {
             value = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, tamNumberMin, tamNumberMax);
@@ -1524,7 +1524,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo d_
     case 9 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           reallyRunFunction(getOperation(), tamNumber*10 + tamDigit);
           calcModeNormal();
@@ -1549,7 +1549,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 10 :
       // Here we are sure that:
       // numberOfLocalRegisters > 0
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           tamNumber = tamDigit;
           if(tamNumber < allLocalRegisterPointer->numberOfLocalRegisters) {
@@ -1579,7 +1579,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo .d_
     case 11 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             reallyRunFunction(getOperation(), tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER);
@@ -1608,7 +1608,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo -->__
     case 12 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_LETTER :
           regist = indirectAddressing(tamLetteredRegister, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
@@ -1646,7 +1646,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo -->d_
     case 13 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           regist = indirectAddressing(tamNumber*10 + tamDigit, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
 
@@ -1679,7 +1679,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     case 14 :
       // Here we are sure that:
       // numberOfLocalRegisters > 0
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             tamNumber = tamDigit;
@@ -1700,7 +1700,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OPo -->.d_
     case 15 :
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_DIGIT :
           if(tamNumber*10 + tamDigit < allLocalRegisterPointer->numberOfLocalRegisters) {
             regist = indirectAddressing(tamNumber*10 + tamDigit + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters);
@@ -1734,7 +1734,7 @@ void tamTransitionSystem(uint16_t tamTransition) {
     //////////////////////////////
     // OP ____
     case 16:
-      switch(tamTransition) {
+      switch(tamEvent) {
         case TT_LETTER :
           if(tamLetteredRegister >= REGISTER_X && tamLetteredRegister <= REGISTER_T) {
             for(int i = 4; i > 0; i--) {

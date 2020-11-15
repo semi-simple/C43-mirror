@@ -54,10 +54,10 @@ void logxyError(void) {
  * \brief regX ==> regL and log(regX)(RegY) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLogXY(uint16_t unusedParamButMandatory) {
+void fnLogXY(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logBaseX[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

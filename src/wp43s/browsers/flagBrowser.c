@@ -45,10 +45,10 @@ static void oneSystemFlag(uint16_t systemFlag, const char *systemFlagNamename, i
 /********************************************//**
  * \brief The flag browser application
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void flagBrowser(uint16_t unusedParamButMandatory) {
+void flagBrowser(uint16_t unusedButMandatoryParameter) {
   static int16_t line;
   int16_t f;
   bool_t firstFlag;

@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 
-void fnUlp(uint16_t unusedParamButMandatory) {
+void fnUlp(uint16_t unusedButMandatoryParameter) {
   real34_t x34;
   longInteger_t lgInt;
 

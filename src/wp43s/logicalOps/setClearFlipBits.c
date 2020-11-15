@@ -26,7 +26,7 @@
  * \brief regX ==> regL and CB(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnCb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
@@ -50,7 +50,7 @@ void fnCb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
  * \brief regX ==> regL and SB(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
@@ -74,7 +74,7 @@ void fnSb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
  * \brief regX ==> regL and FB(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnFb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
@@ -97,7 +97,7 @@ void fnFb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
 /********************************************//**
  * \brief bit clear in register X
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnBc(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
@@ -119,7 +119,7 @@ void fnBc(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
 /********************************************//**
  * \brief bit set in register X
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnBs(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB

@@ -42,7 +42,7 @@ void (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYP
 /********************************************//**
  * \brief Data type error in division
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void divError(void) {
@@ -60,10 +60,10 @@ void divError(void) {
  * \brief regX ==> regL and regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnDivide(uint16_t unusedParamButMandatory) {
+void fnDivide(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   division[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

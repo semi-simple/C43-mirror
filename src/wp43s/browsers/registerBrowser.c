@@ -26,10 +26,10 @@
 /********************************************//**
  * \brief The register browser
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void registerBrowser(uint16_t unusedParamButMandatory) {
+void registerBrowser(uint16_t unusedButMandatoryParameter) {
   int16_t registerNameWidth;
 
   if(calcMode != CM_REGISTER_BROWSER) {
@@ -75,9 +75,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
       if(   (regist <  REGISTER_X && regist % 5 == 4)
          || (regist >= REGISTER_X && regist % 4 == 3)) {
-        for(int16_t x=0; x<SCREEN_WIDTH; x++) {
-          setPixel(x, 218 - 22 * row);
-        }
+        lcd_fill_rect(0, 218 - 22 * row, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
       }
 
       if(getRegisterDataType(regist) == dtReal34) {
@@ -162,9 +160,7 @@ void registerBrowser(uint16_t unusedParamButMandatory) {
 
           if(   (regist <  REGISTER_X && regist % 5 == 4)
              || (regist >= REGISTER_X && regist % 4 == 3)) {
-            for(int16_t x=0; x<SCREEN_WIDTH; x++) {
-              setPixel(x, 218 - 22 * row);
-            }
+            lcd_fill_rect(0, 218 - 22 * row, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
           }
 
           if(getRegisterDataType(regist) == dtReal34) {

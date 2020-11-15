@@ -42,7 +42,7 @@ void (* const mod[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FO
 /********************************************//**
  * \brief Data type error in IDiv
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void modError(void) {
@@ -60,10 +60,10 @@ void modError(void) {
  * \brief regX ==> regL and regY mod regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnMod(uint16_t unusedParamButMandatory) {
+void fnMod(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   mod[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

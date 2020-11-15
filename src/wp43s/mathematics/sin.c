@@ -50,10 +50,10 @@ void sinError(void) {
  * \brief regX ==> regL and sin(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSin(uint16_t unusedParamButMandatory) {
+void fnSin(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sin[getRegisterDataType(REGISTER_X)]();

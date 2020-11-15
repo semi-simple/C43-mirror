@@ -50,10 +50,10 @@ void swapReImError(void) {
  * \brief regX ==> regL and Re<>IM(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSwapRealImaginary(uint16_t unusedParamButMandatory) {
+void fnSwapRealImaginary(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   swapReIm[getRegisterDataType(REGISTER_X)]();

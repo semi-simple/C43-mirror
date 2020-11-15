@@ -33,7 +33,7 @@ void (* const square[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 /********************************************//**
  * \brief Data type error in squaring
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void squareError(void) {
@@ -50,10 +50,10 @@ void squareError(void) {
  * \brief regX ==> regL and regX × regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnSquare(uint16_t unusedParamButMandatory) {
+void fnSquare(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   square[getRegisterDataType(REGISTER_X)]();

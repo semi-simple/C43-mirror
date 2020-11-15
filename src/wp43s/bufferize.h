@@ -19,7 +19,7 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
-  void    fnAim                    (uint16_t unusedParamButMandatory);
+  void    fnAim                    (uint16_t unusedButMandatoryParameter);
   void    resetAlphaSelectionBuffer(void);
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);

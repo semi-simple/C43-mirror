@@ -173,7 +173,7 @@ void fnClPAll(uint16_t confirmation) {
 
 
 
-void fnClP(uint16_t unusedParamButMandatory) {
+void fnClP(uint16_t unusedButMandatoryParameter) {
   if(beginOfCurrentProgram == beginOfProgramMemory && *endOfCurrentProgram == 255 && *(endOfCurrentProgram + 1) == 255) { // There is only one program in memory
     fnClPAll(CONFIRMED);
   }
@@ -232,7 +232,7 @@ void defineCurrentProgram(void) {
 
 
 
-void fnPem(uint16_t unusedParamButMandatory) {
+void fnPem(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     uint16_t line;
     uint8_t *step, *nextStep;

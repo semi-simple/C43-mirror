@@ -170,10 +170,10 @@ void *wp43sAllocate(size_t sizeInBytes) {
   return pcMemPtr;
 }
 
-void *wp43sReallocate(void *oldMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
+void *wp43sReallocate(void *pcMemPtr, size_t oldSizeInBytes, size_t newSizeInBytes) {
   void *newMemPtr;
 
-  // GMP never calls realloc with oldMemPtr beeing NULL
+  // GMP never calls realloc with pcMemPtr beeing NULL
   if(oldSizeInBytes == 0) {
     oldSizeInBytes = 1;
   }
@@ -187,8 +187,8 @@ void *wp43sReallocate(void *oldMemPtr, size_t oldSizeInBytes, size_t newSizeInBy
   //printf("Allocating %zd bytes and freeing %zd bytes\n", newSizeInBytes, oldSizeInBytes);
 
   newMemPtr = wp43sAllocate(newSizeInBytes);
-  xcopy(newMemPtr, oldMemPtr, min(newSizeInBytes, oldSizeInBytes));
-  wp43sFree(oldMemPtr, oldSizeInBytes);
+  xcopy(newMemPtr, pcMemPtr, min(newSizeInBytes, oldSizeInBytes));
+  wp43sFree(pcMemPtr, oldSizeInBytes);
 
   return newMemPtr;
 }

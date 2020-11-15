@@ -50,10 +50,10 @@ void factError(void) {
  * \brief regX ==> regL and fact(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFactorial(uint16_t unusedParamButMandatory) {
+void fnFactorial(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   fact[getRegisterDataType(REGISTER_X)]();

@@ -25,10 +25,10 @@
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigChina(uint16_t unusedParamButMandatory) {
+void fnConfigChina(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 4;
   setSystemFlag(FLAG_TDM24); // time format = 24H
@@ -43,10 +43,10 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet European standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigEurope(uint16_t unusedParamButMandatory) {
+void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
@@ -61,10 +61,10 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet Indian standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigIndia(uint16_t unusedParamButMandatory) {
+void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
@@ -79,10 +79,10 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet Japanese standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigJapan(uint16_t unusedParamButMandatory) {
+void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
@@ -97,10 +97,10 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet English standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigUk(uint16_t unusedParamButMandatory) {
+void fnConfigUk(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   clearSystemFlag(FLAG_TDM24); // time format = 12H
@@ -115,10 +115,10 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet American standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigUsa(uint16_t unusedParamButMandatory) {
+void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   clearSystemFlag(FLAG_TDM24); // time format = 12H
@@ -146,10 +146,10 @@ void fnIntegerMode(uint16_t mode) {
  * \brief Displays credits to the brave men who
  * made this project work.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnWho(uint16_t unusedParamButMandatory) {
+void fnWho(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_WHO;
  }
 
@@ -158,10 +158,10 @@ void fnWho(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Displays the version of this software
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnVersion(uint16_t unusedParamButMandatory) {
+void fnVersion(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_VERSION;
 }
 
@@ -170,10 +170,10 @@ void fnVersion(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the amount of free RAM
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFreeMemory(uint16_t unusedParamButMandatory) {
+void fnFreeMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t mem;
 
   liftStack();
@@ -189,10 +189,10 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the value of the rounding mode
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
+void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t rounding;
 
   liftStack();
@@ -210,7 +210,7 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
  *
  * \return void
  ***********************************************/
-void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
+void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t ism;
 
   liftStack();
@@ -226,10 +226,10 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Gets the word size
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetWordSize(uint16_t unusedParamButMandatory) {
+void fnGetWordSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t wordSize;
 
   liftStack();
@@ -245,7 +245,7 @@ void fnGetWordSize(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the word size
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSetWordSize(uint16_t WS) {
@@ -289,10 +289,10 @@ void fnSetWordSize(uint16_t WS) {
 /********************************************//**
  * \brief Sets X to the amount of free flash memory
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
+void fnFreeFlashMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t flashMem;
 
   liftStack();
@@ -308,10 +308,10 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the battery voltage
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
+void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
   real_t value;
 
   liftStack();
@@ -346,10 +346,10 @@ uint32_t getFreeFlash(void) {
  * \brief Sets X to the number of signficant digits
  * rounding after each operation
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
+void fnGetSignificantDigits(uint16_t unusedButMandatoryParameter) {
   longInteger_t sigDigits;
 
   liftStack();
@@ -398,7 +398,7 @@ void fnAngularMode(uint16_t am) {
 
 
 
-void fnFractionType(uint16_t unusedParamButMandatory) {
+void fnFractionType(uint16_t unusedButMandatoryParameter) {
   if(getSystemFlag(FLAG_FRACT)) {
     flipSystemFlag(FLAG_PROPFR);
   }
@@ -420,7 +420,7 @@ void setConfirmationMode(void (*func)(uint16_t)) {
 
 
 
-void fnRange(uint16_t unusedParamButMandatory) {
+void fnRange(uint16_t unusedButMandatoryParameter) {
   longInteger_t longInt;
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
@@ -455,7 +455,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
 
 
 
-void fnGetRange(uint16_t unusedParamButMandatory) {
+void fnGetRange(uint16_t unusedButMandatoryParameter) {
   longInteger_t range;
 
   liftStack();
@@ -6022,7 +6022,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-void backToSystem(uint16_t unusedParamButMandatory) {
+void backToSystem(uint16_t unusedButMandatoryParameter) {
   #ifdef PC_BUILD
     fnOff(NOPARAM);
   #endif

@@ -888,10 +888,10 @@ void clearRegister(calcRegister_t regist) {
  * \brief Clears all the regs (globals and locals),
  * that is sets them to 0,0 real16s
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnClearRegisters(uint16_t unusedParamButMandatory) {
+void fnClearRegisters(uint16_t unusedButMandatoryParameter) {
   calcRegister_t regist;
 
   for(regist=0; regist<REGISTER_X; regist++) {
@@ -918,10 +918,10 @@ void fnClearRegisters(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the number of local registers
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetLocR(uint16_t unusedParamButMandatory) {
+void fnGetLocR(uint16_t unusedButMandatoryParameter) {
   longInteger_t locR;
 
   liftStack();
@@ -1315,7 +1315,7 @@ void fnStoreStack(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreElement(uint16_t unusedParamButMandatory) {
+void fnStoreElement(uint16_t unusedButMandatoryParameter) {
 #ifdef PC_BUILD
 printf("fnStoreElement\n");
 #endif
@@ -1333,7 +1333,7 @@ printf("fnStoreElement\n");
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnStoreIJ(uint16_t unusedParamButMandatory) {
+void fnStoreIJ(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
   copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);
 }
@@ -1374,10 +1374,10 @@ void fnRecall(uint16_t regist) {
 /********************************************//**
  * \brief Recalls register L in X
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLastX(uint16_t unusedParamButMandatory) {
+void fnLastX(uint16_t unusedButMandatoryParameter) {
   fnRecall(REGISTER_L);
 }
 
@@ -1624,7 +1624,7 @@ void fnRecallStack(uint16_t regist) {
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallElement(uint16_t unusedParamButMandatory) {
+void fnRecallElement(uint16_t unusedButMandatoryParameter) {
 #ifdef PC_BUILD
 printf("fnRecallElement\n");
 #endif
@@ -1642,7 +1642,7 @@ printf("fnRecallElement\n");
  * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnRecallIJ(uint16_t unusedParamButMandatory) {
+void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   copySourceRegisterToDestRegister(REGISTER_I, REGISTER_X);
@@ -1657,10 +1657,10 @@ void fnRecallIJ(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Tests if X is less than an other register
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnXLessThan(uint16_t unusedParamButMandatory) {
+void fnXLessThan(uint16_t unusedButMandatoryParameter) {
 #ifdef PC_BUILD
 printf("fnXLessThan\n");
 #endif
@@ -2071,7 +2071,7 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
 
 
 
-void fnToReal(uint16_t unusedParamButMandatory) {
+void fnToReal(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger :
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);

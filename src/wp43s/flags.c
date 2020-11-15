@@ -352,7 +352,7 @@ void fnFlipFlag(uint16_t flag) {
  * \param[in] flags uint16_t
  * \return void
  ***********************************************/
-void fnClFAll(uint16_t unusedParamButMandatory) {
+void fnClFAll(uint16_t unusedButMandatoryParameter) {
   memset(globalFlags, 0, sizeof(globalFlags));
   clearSystemFlag(FLAG_ALLENG);
   clearSystemFlag(FLAG_OVERFLOW);

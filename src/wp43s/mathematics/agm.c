@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 
-void fnAgm(uint16_t unusedParamButMandatory) {
+void fnAgm(uint16_t unusedButMandatoryParameter) {
   bool_t realInput=true;
   real_t aReal, bReal, cReal;
   real_t aImag, bImag, cImag;

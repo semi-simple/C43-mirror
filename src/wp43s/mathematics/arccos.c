@@ -50,10 +50,10 @@ void arccosError(void) {
  * \brief regX ==> regL and arccos(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArccos(uint16_t unusedParamButMandatory) {
+void fnArccos(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arccos[getRegisterDataType(REGISTER_X)]();

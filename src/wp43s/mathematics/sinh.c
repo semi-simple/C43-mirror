@@ -50,10 +50,10 @@ void sinhError(void) {
  * \brief regX ==> regL and sinh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSinh(uint16_t unusedParamButMandatory) {
+void fnSinh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sinh[getRegisterDataType(REGISTER_X)]();

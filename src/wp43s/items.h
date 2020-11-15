@@ -1812,5 +1812,5 @@
 void reallyRunFunction(int16_t func, uint16_t param);
 void runFunction      (int16_t func);
 void fnToBeCoded      (void);
-void itemToBeCoded    (uint16_t unusedParamButMandatory);
-void fnNop            (uint16_t unusedParamButMandatory);
+void itemToBeCoded    (uint16_t unusedButMandatoryParameter);
+void fnNop            (uint16_t unusedButMandatoryParameter);

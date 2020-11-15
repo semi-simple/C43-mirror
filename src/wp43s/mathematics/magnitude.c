@@ -49,10 +49,10 @@ void magnitudeError(void) {
 /********************************************//**
  * \brief Returns the absolute value of an integer or a real and the magnitude of a complex
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnMagnitude(uint16_t unusedParamButMandatory) {
+void fnMagnitude(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   magnitude[getRegisterDataType(REGISTER_X)]();

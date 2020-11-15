@@ -72,10 +72,10 @@ void xorError31(void) {
  * \brief regX ==> regL XOR regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnLogicalXor(uint16_t unusedParamButMandatory) {
+void fnLogicalXor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalXor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

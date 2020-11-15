@@ -492,14 +492,14 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
 /********************************************//**
  * \brief Sets a pixel on the screen (black).
  *
- * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void setPixel(int16_t x, int16_t y) {
+void setPixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
-    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
+    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+      printf("In function setPixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -517,14 +517,14 @@ void setPixel(int16_t x, int16_t y) {
 /********************************************//**
  * \brief Clears a pixel on the screen (white).
  *
- * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void clearPixel(int16_t x, int16_t y) {
+void clearPixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
-    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+      printf("In function clearPixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -538,21 +538,43 @@ void clearPixel(int16_t x, int16_t y) {
 }
 
 
+#ifndef DMCP_BUILD
+void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+    return;
+  }
+
+  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+  for(line=y; line<endY; line++) {
+    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+      *pixel = pixelColor;
+    }
+  }
+
+  screenChange = true;
+}
+#endif
+
+
 
 /********************************************//**
  * \brief Displays a glyph using it's Unicode code point
  *
  * \param[in] charCode uint16_t      Unicode code point of the glyph to display
  * \param[in] font font_t*           Font to use
- * \param[in] x int16_t              x coordinate where to display the glyph
- * \param[in] y int16_t              y coordinate where to display the glyph
+ * \param[in] x uint32_t             x coordinate where to display the glyph
+ * \param[in] y uint32_t             y coordinate where to display the glyph
  * \param[in] videoMode videoMode_t  Video mode normal or reverse
  * \param[in] showLeadingCols bool_t Display the leading empty columns
  * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return int16_t                   x coordinate for the next glyph
+ * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  int16_t  col, row, xGlyph, xEndingCols, endingCols, bit, glyphId;
+uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+  uint32_t  col, row, xGlyph, endingCols;
+  int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
 
@@ -581,49 +603,28 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   data = (int8_t *)glyph->data;
 
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
-  xEndingCols = x + xGlyph + glyph->colsGlyph;
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
-  // Clearing the rows above the glyph  TODO: remove the loop
-  for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
-    lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
-  }
+  // Clearing the space needed by the glyph
+  lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
+  y += glyph->rowsAboveGlyph;
+  x += xGlyph;
 
   // Drawing the glyph
   for(row=0; row<glyph->rowsGlyph; row++, y++) {
-    // Clearing the columns before the glyph
-    if(showLeadingCols) {
-      for(col=0; col<glyph->colsBeforeGlyph; col++) {
-        if(videoMode == vmNormal) {
-          clearPixel(x+col, y);
-        }
-        else {
-          setPixel(x+col, y);
-        }
-      }
-    }
-
     // Drawing the columns of the glyph
-    bit = 7;
+    int32_t bit = 7;
     for(col=0; col<glyph->colsGlyph; col++) {
       if(bit == 7) {
         byte = *(data++);
       }
 
       if(byte & 0x80) {// MSB set
-        if(videoMode == vmNormal) {
-          setPixel(x+xGlyph+col, y);
+        if(videoMode == vmNormal) { // Black pixel for white background
+          setPixel(x + col, y);
         }
-        else {
-          clearPixel(x+xGlyph+col, y);
-        }
-      }
-      else {
-        if(videoMode == vmNormal) {
-          clearPixel(x+xGlyph+col, y);
-        }
-        else {
-          setPixel(x+xGlyph+col, y);
+        else { // White pixel for black background
+          clearPixel(x +col, y);
         }
       }
 
@@ -633,24 +634,9 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
         bit = 7;
       }
     }
-
-    // clearing the columns after the glyph
-    for(col=0; col<endingCols; col++) {
-      if(videoMode == vmNormal) {
-        clearPixel(xEndingCols + col, y);
-      }
-      else {
-        setPixel(xEndingCols + col, y);
-      }
-    }
   }
 
-  // Clearing the rows below the glyph  TODO: remove the loop
-  for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
-    lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
-  }
-
-  return x + xGlyph + glyph->colsGlyph + endingCols;
+  return x + glyph->colsGlyph + endingCols;
 }
 
 
@@ -667,7 +653,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
  * \param[in] showEndingCols bool_t  Display the ending empty columns
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
-int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t charCode;
 
   charCode = (uint8_t)*ch;
@@ -684,14 +670,14 @@ int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, vide
  *
  * \param[in] string const char*     String whose first glyph is to display
  * \param[in] font font_t*           Font to use
- * \param[in] x int16_t              x coordinate where to display the glyph
- * \param[in] y int16_t              y coordinate where to display the glyph
+ * \param[in] x uint32_t             x coordinate where to display the glyph
+ * \param[in] y uint32_t             y coordinate where to display the glyph
  * \param[in] videoMode videoMode_t  Video mode normal or reverse
  * \param[in] showLeadingCols bool_t Display the leading empty columns
  * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return int16_t                   x coordinate for the next glyph
+ * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, lg;
   bool_t   slc, sec;
 
@@ -790,11 +776,9 @@ void hideFunctionName(void) {
  * \return void
  ***********************************************/
 void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
-  int16_t yStart, height;
-
   if(REGISTER_X <= regist && regist <= REGISTER_T) {
-    yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
-    height = 32;
+    uint32_t yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
+    uint32_t height = 32;
 
     if(clearTop) {
       yStart -= 4;
@@ -1632,28 +1616,3 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
   create_screenshot(0);
 #endif
 }
-
-
-#ifndef DMCP_BUILD
-void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
-  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
-
-//if(calcMode == CM_NIM) {
-//  printf("lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d\n", x, y, dx, dy, val);
-//}
-
-  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-    return;
-  }
-
-  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-  for(line=y; line<endY; line++) {
-    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-      *pixel = pixelColor;
-    }
-  }
-
-  screenChange = true;
-}
-#endif

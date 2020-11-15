@@ -42,7 +42,7 @@ uint32_t boundedRand(uint32_t s) { // random integer in [0 , s)
 
 
 
-void fnRandomI(uint16_t unusedParamButMandatory) {
+void fnRandomI(uint16_t unusedButMandatoryParameter) {
   longInteger_t regX, regY, mini, maxi;
   uint32_t maxRand;
   int32_t cmp;
@@ -116,7 +116,7 @@ void fnRandomI(uint16_t unusedParamButMandatory) {
 /////////////////////////////////////////////////////////////////////////////
 // Method for pseudo random number generation: http://www.pcg-random.org/
 
-void fnRandom(uint16_t unusedParamButMandatory) {
+void fnRandom(uint16_t unusedButMandatoryParameter) {
   real_t x1, x2;
 
   uInt32ToReal(boundedRand(100000000),  &x1);
@@ -137,7 +137,7 @@ void fnRandom(uint16_t unusedParamButMandatory) {
 
 
 
-void fnSeed(uint16_t unusedParamButMandatory) {
+void fnSeed(uint16_t unusedButMandatoryParameter) {
   uint64_t seed=0, sequ=0;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {

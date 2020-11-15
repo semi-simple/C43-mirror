@@ -60,10 +60,10 @@ void refreshStatusBar(void) {
  * \return void
  ***********************************************/
 void showDateTime(void) {
-  int16_t x;
+  uint32_t x;
 
-  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
-  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX - 12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX - 24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
 
   getDateString(dateTimeString);
   x = showString(dateTimeString, &standardFont, X_DATE, 0, vmNormal, true, true);
@@ -118,7 +118,7 @@ void showComplexMode(void) {
  *
  ***********************************************/
 void showAngularMode(void) {
-  int16_t x;
+  uint32_t x;
 
   x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
 
@@ -162,7 +162,7 @@ void showFracMode(void) {
     showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
   }
   else {
-    int16_t x = 0;
+    uint32_t x = 0;
 
     if((getSystemFlag(FLAG_DENANY) && denMax!=MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
       sprintf(errorMessage, "/%" PRIu32, denMax);
@@ -208,24 +208,14 @@ void showIntegerMode(void) {
  * \return void
  ***********************************************/
 void showOverflowCarry(void) {
-  int16_t x, y;
-
   showGlyph(STD_OVERFLOW_CARRY, &standardFont, X_OVERFLOW_CARRY, 0, vmNormal, true, false); // STD_OVERFLOW_CARRY is 0+6+3 pixel wide
 
   if(!getSystemFlag(FLAG_OVERFLOW)) { // Overflow flag is cleared
-    for(x=X_OVERFLOW_CARRY; x<X_OVERFLOW_CARRY+6; x++) {
-      for(y=2; y<=8; y++) {
-        clearPixel(x, y);
-      }
-    }
+    lcd_fill_rect(X_OVERFLOW_CARRY, 2, 6, 7, LCD_SET_VALUE);
   }
 
   if(!getSystemFlag(FLAG_CARRY)) { // Carry flag is cleared
-    for(x=X_OVERFLOW_CARRY; x<X_OVERFLOW_CARRY+6; x++) {
-      for(y=12; y<=18; y++) {
-        clearPixel(x, y);
-      }
-    }
+    lcd_fill_rect(X_OVERFLOW_CARRY, 12, 6, 7, LCD_SET_VALUE);
   }
 }
 

@@ -75,10 +75,10 @@ static void crossDataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate the cross (or vector) product between complex and matrix
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCross(uint16_t unusedParamButMandatory) {
+void fnCross(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

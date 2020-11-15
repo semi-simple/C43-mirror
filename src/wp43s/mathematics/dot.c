@@ -77,10 +77,10 @@ static void dotDataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate the dot (or scalar) product between complex and matrix
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDot(uint16_t unusedParamButMandatory) {
+void fnDot(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

@@ -26,10 +26,10 @@
  * \brief regX ==> regL and countBits(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCountBits(uint16_t unusedParamButMandatory) {
+void fnCountBits(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) != dtShortInteger) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

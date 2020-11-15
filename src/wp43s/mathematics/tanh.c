@@ -50,10 +50,10 @@ void tanhError(void) {
  * \brief regX ==> regL and tanh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnTanh(uint16_t unusedParamButMandatory) {
+void fnTanh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Tanh[getRegisterDataType(REGISTER_X)]();

@@ -50,10 +50,10 @@ void arcsinhError(void) {
  * \brief regX ==> regL and arcsinh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArcsinh(uint16_t unusedParamButMandatory) {
+void fnArcsinh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arcsinh[getRegisterDataType(REGISTER_X)]();

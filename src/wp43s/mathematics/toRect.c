@@ -22,7 +22,7 @@
 
 
 
-void fnToRect(uint16_t unusedParamButMandatory) {
+void fnToRect(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX, dataTypeY, yAngularMode;
   real_t x, y;
 

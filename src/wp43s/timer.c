@@ -31,7 +31,7 @@ uint32_t getUptimeMs(void) {
 }
 
 
-void fnTicks(uint16_t unusedParamButMandatory) {
+void fnTicks(uint16_t unusedButMandatoryParameter) {
   uint32_t tim;
   longInteger_t lgInt;
 

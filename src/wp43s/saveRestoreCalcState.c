@@ -485,7 +485,7 @@ static void registerToSaveString(calcRegister_t regist) {
 
 
 
-void fnSave(uint16_t unusedParamButMandatory) {
+void fnSave(uint16_t unusedButMandatoryParameter) {
   calcRegister_t regist;
   uint32_t i;
 

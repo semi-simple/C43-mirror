@@ -23,8 +23,8 @@
   void calcModeNormal   (void);
   void calcModeAsm      (void);
   void calcModeTam      (void);
-  void calcModeAim      (uint16_t unusedParamButMandatory);
-  void calcModeNim      (uint16_t unusedParamButMandatory);
+  void calcModeAim      (uint16_t unusedButMandatoryParameter);
+  void calcModeNim      (uint16_t unusedButMandatoryParameter);
 #endif // TESTSUITE_BUILD
 
 #ifdef PC_BUILD

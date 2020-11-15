@@ -34,10 +34,10 @@ static void (*const Decomp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * Decomposes x (after converting it to an improper fraction, if applicable), returning a stack with
  * [denominator(x), numerator(x)]
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDecomp(uint16_t unusedParamButMandatory) {
+void fnDecomp(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Decomp[getRegisterDataType(REGISTER_X)]();

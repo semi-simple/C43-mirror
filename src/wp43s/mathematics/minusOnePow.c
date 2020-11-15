@@ -50,10 +50,10 @@ void m1PowError(void) {
  * \brief regX ==> regL and 10^regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnM1Pow(uint16_t unusedParamButMandatory) {
+void fnM1Pow(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   m1Pow[getRegisterDataType(REGISTER_X)]();

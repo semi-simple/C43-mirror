@@ -962,7 +962,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
     if(enlarge && combinationFonts !=0) rep_enlarge = 1;
     while (rep_enlarge >= 0) {                                           //JM ENLARGE ^^
 
-    if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, 0, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
+    if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
 
     if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;   //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
     rep_enlarge--;
@@ -2381,24 +2381,12 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
 
 
 int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
-void clearScreen(void) {
+void clearScreen() {
   #ifdef PC_BUILD
-    int16_t x, y;
-    clear_ul(); //JMUL
-
-    for(y=0; y<SCREEN_HEIGHT; y++) {
-      for(x=0; x<SCREEN_WIDTH; x++) {
-        clearPixel(x, y);
-      }
-    }
   printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test
   #endif
-
-  #if DMCP_BUILD
-    clear_ul(); //JMUL
-    lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, 0);
-  #endif
-
+  clear_ul(); //JMUL
+  lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE);
 }
 
 

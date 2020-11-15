@@ -74,7 +74,6 @@ void     JM_DOT                               (int16_t xx, int16_t yy);         
 void     refresh_gui                          (void);                                                           //JM
 void     force_refresh                        (void);                                                           //JM SCREEN
 
-void     clearScreen                          (void);
 void     refreshScreen                        (void);
 void     setPixel                             (int16_t x, int16_t y);
 void     clearPixel                           (int16_t x, int16_t y);

@@ -781,7 +781,7 @@ void showSoftmenuCurrentPart(void) {
               int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
               for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
                 if(xStroke%3 == 0) yStroke--;
-                setPixel(xStroke, yStroke);
+                setBlackPixel(xStroke, yStroke);
               }
             }
           }
@@ -795,10 +795,10 @@ void showSoftmenuCurrentPart(void) {
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {
           if(x%8 < 4) {
-            setPixel(x, yDotted);
+            setBlackPixel(x, yDotted);
           }
           else {
-            clearPixel(x, yDotted);
+            setWhitePixel(x, yDotted);
           }
         }
       }

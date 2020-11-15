@@ -490,16 +490,16 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
 
 #ifndef TESTSUITE_BUILD
 /********************************************//**
- * \brief Sets a pixel on the screen (black).
+ * \brief Sets a black pixel on the screen.
  *
  * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
  * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void setPixel(uint32_t x, uint32_t y) {
+void setBlackPixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function setPixel: x=%u, y=%u outside the screen!\n", x, y);
+      printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -515,16 +515,16 @@ void setPixel(uint32_t x, uint32_t y) {
 
 
 /********************************************//**
- * \brief Clears a pixel on the screen (white).
+ * \brief Sets a white pixel on the screen.
  *
  * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
  * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void clearPixel(uint32_t x, uint32_t y) {
+void setWhitePixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function clearPixel: x=%u, y=%u outside the screen!\n", x, y);
+      printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -621,10 +621,10 @@ uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32
 
       if(byte & 0x80) {// MSB set
         if(videoMode == vmNormal) { // Black pixel for white background
-          setPixel(x + col, y);
+          setBlackPixel(x + col, y);
         }
         else { // White pixel for black background
-          clearPixel(x +col, y);
+          setWhitePixel(x +col, y);
         }
       }
 

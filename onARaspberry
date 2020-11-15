@@ -8,6 +8,5 @@ if [ -f $CPUINFO ]; then
   		echo "NO$(./32or64bit.c)"
 	fi
 else
-	echo NO
+	echo "NO$(./32or64bit.c)"
 fi
-

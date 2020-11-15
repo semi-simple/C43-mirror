@@ -90,6 +90,14 @@
   #error Only one of PC_BUILD and DMCP_BUILD must be defined
 #endif
 
+#if !defined(OS32BIT) && !defined(OS64BIT)
+  #error One of OS32BIT and OS64BIT must be defined
+#endif
+
+#if defined(OS32BIT) && defined(OS64BIT)
+  #error Only one of OS32BIT and OS64BIT must be defined
+#endif
+
 #ifdef PC_BUILD
   #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL

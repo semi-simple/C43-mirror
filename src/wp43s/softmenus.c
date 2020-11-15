@@ -1439,8 +1439,40 @@ void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t 
  * \return void
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
-  if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
-    int16_t x, y, menu, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+  printf("softmenuStackPointer = %u\n", softmenuStackPointer);
+  if(softmenuStackPointer == 0) { // The is no menu to display
+    switch(calcMode) {
+      case CM_NORMAL:
+      case CM_TAM:
+      case CM_NIM:
+      case CM_ASSIGN:
+      case CM_ERROR_MESSAGE:
+      case CM_CONFIRMATION:
+      case CM_PEM:
+        printf("Display MyMenu\n");
+        break;
+
+      case CM_AIM:
+        printf("Display MyAlpha\n");
+        break;
+
+      default:
+        sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  }
+  else { // There is a menu to display
+
+//This was like this before:
+//      if(softmenuStackPointer > 0 &&
+//      calcMode != CM_FLAG_BROWSER_OLD &&
+//      calcMode != CM_FLAG_BROWSER &&
+//      calcMode != CM_FONT_BROWSER &&
+//      calcMode != CM_REGISTER_BROWSER &&
+//      calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
+
+      
+      int16_t x, y, menu, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
     bool_t dottedTopLine;
 
     //JMTOCHECK

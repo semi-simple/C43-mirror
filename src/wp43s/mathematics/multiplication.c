@@ -42,7 +42,7 @@ void (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DA
 /********************************************//**
  * \brief Data type error in multiplication
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void mulError(void) {
@@ -60,10 +60,10 @@ void mulError(void) {
  * \brief regX ==> regL and regY × regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnMultiply(uint16_t unusedParamButMandatory) {
+void fnMultiply(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   multiplication[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

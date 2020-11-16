@@ -1281,10 +1281,10 @@ void CB_UNCHECKED(int16_t xx, int16_t yy) {
  * \param[in] bottomLine bool_t     Draw a bottom line
  * \return void
  ***********************************************/
-void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
-  int16_t x, y, x1, y1, x2, y2;
+void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) {     //dr
+  int16_t x1, y1, x2, y2;
   int16_t w;
-  char label[15];
+  char l[15];
 
   if(calcMode == CM_GRAPH && xSoftkey >= 2) {           //JM prevent softkeys columns 3-6 from displaying
       return;
@@ -1312,94 +1312,54 @@ void showSoftkey(const char *l, int16_t xSoftkey, int16_t ySoftKey, videoMode_t 
 
   // Draw the frame
   //   Top line
-  for(x=max(0,x1); x<min(x2,SCREEN_WIDTH); x++) {
-    if(videoMode == vmNormal) {
-      if(topLine) {
-        setPixel(x, y1);
-      }
-    }
-    else {
-      clearPixel(x, y1);
-    }
+  if(topLine) {
+    lcd_fill_rect(max(0, x1), y1, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
   }
 
   //   Bottom line
-  if(y1 + SOFTMENU_HEIGHT <= min(y2, 239)) {
-    y = y1 + SOFTMENU_HEIGHT;
-    for(x=max(0,x1); x<min(x2,SCREEN_WIDTH); x++) {
-      if(videoMode == vmNormal) {
-        if(bottomLine) {
-          setPixel(x, y);
-        }
-      }
-      else {
-        clearPixel(x, y);
-      }
-    }
+  if(y1 + SOFTMENU_HEIGHT <= min(y2, 239) && bottomLine) {
+    lcd_fill_rect(max(0, x1), y1 + SOFTMENU_HEIGHT, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
   }
 
   //   Left line
   if(x1 >= 0) {
-    for(y=y1; y<=min(y2,SCREEN_HEIGHT-1); y++) {
-      if(videoMode == vmNormal) {
-        setPixel(x1, y);
-      }
-      else {
-        clearPixel(x1, y);
-      }
-    }
+    lcd_fill_rect(x1, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
   }
 
   //   Right line
   if(x2 < SCREEN_WIDTH) {
-    for(y=y1; y<=min(y2,SCREEN_HEIGHT-1); y++) {
-      if(videoMode == vmNormal) {
-        setPixel(x2, y);
-      }
-      else {
-        clearPixel(x2, y);
-      }
-    }
+    lcd_fill_rect(x2, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
   }
 
   // Clear inside the frame
-  for(y=y1+1; y<min(y2,SCREEN_HEIGHT); y++) {
-    for(x=x1+1; x<min(x2,SCREEN_WIDTH); x++) {
-      if(videoMode == vmNormal) {
-        clearPixel(x, y);
-      }
-      else {
-        setPixel(x, y);
-      }
-    }
-  }
+  lcd_fill_rect(x1 + 1, y1 + 1, min(x2, SCREEN_WIDTH) - x1 - 1, min(y2, SCREEN_HEIGHT) - y1 - 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
 
-  xcopy(label, l, stringByteLength(l) + 1);
-  w = stringWidth(label, &standardFont, false, false);
+  xcopy(l, label, stringByteLength(label) + 1);
+  w = stringWidth(l, &standardFont, false, false);
   while(w > (xSoftkey == 5 ? 65 : 66)) {
-    label[stringLastGlyph(label)] = 0;
-    w = stringWidth(label, &standardFont, false, false);
+    l[stringLastGlyph(l)] = 0;
+    w = stringWidth(l, &standardFont, false, false);
   }
 
 //continue with trimmed labe
-  w = stringWidth(figlabel(label, showValue), &standardFont, false, false);                      //JM & dr vv
+  w = stringWidth(figlabel(l, showValue), &standardFont, false, false);                      //JM & dr vv
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
-    w = stringWidth(figlabel(label, showValue), &standardFont, false, false);
+    w = stringWidth(figlabel(l, showValue), &standardFont, false, false);
     compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(figlabel(label, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
+    showString(figlabel(l, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
   else {
-//  w = stringWidth(label, &standardFont, false, false);
-     showString(figlabel(label, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
+//  w = stringWidth(l, &standardFont, false, false);
+     showString(figlabel(l, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
   }                                                                                              //JM & dr ^^
 
-//  w = stringWidth(label, &standardFont, false, false);
+//  w = stringWidth(l, &standardFont, false, false);
 //  if(showCb >= 0) { compressString = 1; w = w +2; }         //JM compressString
-//  showString(label, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
+//  showString(l, &standardFont, x1 + 33 - w/2, y1 + 2, videoMode, false, false);
 //  if(showCb >= 0) { compressString = 0; }                   //JM unCompressString
 
 #ifdef JM_LINE2_DRAW
@@ -1661,10 +1621,11 @@ void showSoftmenuCurrentPart(void) {
             showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
             }
             if(indexOfItems[item%10000].func == itemToBeCoded) {
+              // Strike out non coded functions
               int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
               for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out
                 if(xStroke%3 == 0) yStroke--;
-                invertPixel(xStroke, yStroke -3);                                       //JM mod
+                setBlackPixel(xStroke, yStroke -3);                                       //JM mod
               }
             }
           }
@@ -1679,10 +1640,10 @@ void showSoftmenuCurrentPart(void) {
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {
           if(x%8 < 4) {
-            setPixel(x, yDotted);
+            setBlackPixel(x, yDotted);
           }
           else {
-            clearPixel(x, yDotted);
+            setWhitePixel(x, yDotted);
           }
         }
 

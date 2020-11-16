@@ -42,7 +42,7 @@ void (* const xthRoot[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPE
 /********************************************//**
  * \brief Data type error in xthRoot
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void xthRootError(void) {
@@ -60,10 +60,10 @@ void xthRootError(void) {
  * \brief regX ==> regL and regY ^ (1/regX) ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnXthRoot(uint16_t unusedParamButMandatory) {
+void fnXthRoot(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   xthRoot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

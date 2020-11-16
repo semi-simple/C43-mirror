@@ -89,7 +89,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
 
 
 
-void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
+void fnCvtDegToRad(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {
@@ -127,7 +127,7 @@ void fnCvtDegToRad(uint16_t unusedParamButMandatory) {
 
 
 
-void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
+void fnCvtRadToDeg(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {
@@ -165,7 +165,7 @@ void fnCvtRadToDeg(uint16_t unusedParamButMandatory) {
 
 
 
-void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
+void fnCvtDegToDms(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {
@@ -203,7 +203,7 @@ void fnCvtDegToDms(uint16_t unusedParamButMandatory) {
 
 
 
-void fnCvtDmsToDeg(uint16_t unusedParamButMandatory) {
+void fnCvtDmsToDeg(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   switch(getRegisterDataType(REGISTER_X)) {

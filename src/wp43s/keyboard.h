@@ -21,13 +21,13 @@
 void resetShiftState (void);  //JM
 void showShiftState  (void);
 void processKeyAction(int16_t item);
-void fnKeyEnter      (uint16_t unusedParamButMandatory);
-void fnKeyExit       (uint16_t unusedParamButMandatory);
-void fnKeyCC         (uint16_t unusedParamButMandatory);
-void fnKeyBackspace  (uint16_t unusedParamButMandatory);
-void fnKeyUp         (uint16_t unusedParamButMandatory);
-void fnKeyDown       (uint16_t unusedParamButMandatory);
-void fnKeyDotD       (uint16_t unusedParamButMandatory);
+void fnKeyEnter      (uint16_t unusedButMandatoryParameter);
+void fnKeyExit       (uint16_t unusedButMandatoryParameter);
+void fnKeyCC         (uint16_t unusedButMandatoryParameter);
+void fnKeyBackspace  (uint16_t unusedButMandatoryParameter);
+void fnKeyUp         (uint16_t unusedButMandatoryParameter);
+void fnKeyDown       (uint16_t unusedButMandatoryParameter);
+void fnKeyDotD       (uint16_t unusedButMandatoryParameter);
 
 void executeFunction (const char *data);
 
@@ -40,16 +40,16 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
 
 
 #ifdef PC_BUILD
-  void btnFnClicked  (GtkWidget *w, gpointer data);
-  void btnFnClickedP (GtkWidget *w, gpointer data);                     //JM
-  void btnFnClickedR (GtkWidget *w, gpointer data);                     //JM
-  void btnFnPressed  (GtkWidget *w, GdkEvent *event, gpointer data);
-  void btnFnReleased (GtkWidget *w, GdkEvent *event, gpointer data);
-  void btnClicked    (GtkWidget *w, gpointer data);
-  void btnClickedP   (GtkWidget *w, gpointer data);                     //JM
-  void btnClickedR   (GtkWidget *w, gpointer data);                     //JM
-  void btnPressed    (GtkWidget *w, GdkEvent *event, gpointer data);
-  void btnReleased   (GtkWidget *w, GdkEvent *event, gpointer data);
+  void btnFnClicked  (GtkWidget *notUsed, gpointer data);
+  void btnFnClickedP (GtkWidget *notUsed, gpointer data);                     //JM
+  void btnFnClickedR (GtkWidget *notUsed, gpointer data);                     //JM
+  void btnFnPressed  (GtkWidget *notUsed, GdkEvent *event, gpointer data);
+  void btnFnReleased (GtkWidget *notUsed, GdkEvent *event, gpointer data);
+  void btnClicked    (GtkWidget *notUsed, gpointer data);
+  void btnClickedP   (GtkWidget *notUsed, gpointer data);                     //JM
+  void btnClickedR   (GtkWidget *notUsed, gpointer data);                     //JM
+  void btnPressed    (GtkWidget *notUsed, GdkEvent *event, gpointer data);
+  void btnReleased   (GtkWidget *notUsed, GdkEvent *event, gpointer data);
 #endif
 
 #ifdef DMCP_BUILD

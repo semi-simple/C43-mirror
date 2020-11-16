@@ -25,10 +25,10 @@
  * \brief regX ==> regL and regY+i*regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnReToCx(uint16_t unusedParamButMandatory) {
+void fnReToCx(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
   bool_t xIsAReal;

@@ -50,10 +50,10 @@ void arccoshError(void) {
  * \brief regX ==> regL and arccosh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArccosh(uint16_t unusedParamButMandatory) {
+void fnArccosh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arccosh[getRegisterDataType(REGISTER_X)]();

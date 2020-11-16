@@ -50,10 +50,10 @@ void arctanError(void) {
  * \brief regX ==> regL and arctan(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArctan(uint16_t unusedParamButMandatory) {
+void fnArctan(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arctan[getRegisterDataType(REGISTER_X)]();

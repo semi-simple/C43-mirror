@@ -50,10 +50,10 @@ void log2Error(void) {
  * \brief regX ==> regL and log2(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLog2(uint16_t unusedParamButMandatory) {
+void fnLog2(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logBase2[getRegisterDataType(REGISTER_X)]();

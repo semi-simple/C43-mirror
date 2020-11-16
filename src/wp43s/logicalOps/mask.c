@@ -26,7 +26,7 @@
  * \brief MASKL n ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnMaskl(uint16_t numberOfBits) {
@@ -59,7 +59,7 @@ void fnMaskl(uint16_t numberOfBits) {
  * \brief MASKR n ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnMaskr(uint16_t numberOfBits) {

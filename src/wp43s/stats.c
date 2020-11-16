@@ -25,7 +25,7 @@
  * \brief Verifies that the statistical registers are allocated and that there are enough data
  * An appropriate error message is displayed if either condition fails
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return bool_t
  ***********************************************/
 bool_t checkMinimumDataPoints(const real_t *n) {
@@ -68,7 +68,7 @@ void initStatisticalSums(void) {
 
 
 
-void fnClSigma(uint16_t unusedParamButMandatory) {
+void fnClSigma(uint16_t unusedButMandatoryParameter) {
   if(statisticalSumsPointer != NULL) {
     freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
     graph_end();                                               //JMGRAPH
@@ -81,7 +81,7 @@ void fnClSigma(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Adds a value to the statistic registers
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSigma(uint16_t plusMinus) {
@@ -343,10 +343,10 @@ void fnStatSum(uint16_t sum) {
  * \brief SUM ==> regX, regY
  * regX = SUM x, regY = SUM y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSumXY(uint16_t unusedParamButMandatory) {
+void fnSumXY(uint16_t unusedButMandatoryParameter) {
   if(checkMinimumDataPoints(const_1)) {
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
@@ -365,10 +365,10 @@ void fnSumXY(uint16_t unusedParamButMandatory) {
  * \brief Xmin ==> regX, regY
  * regX = min x, regY = min y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnXmin(uint16_t unusedParamButMandatory) {
+void fnXmin(uint16_t unusedButMandatoryParameter) {
   if(checkMinimumDataPoints(const_1)) {
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
@@ -387,10 +387,10 @@ void fnXmin(uint16_t unusedParamButMandatory) {
  * \brief Xmax ==> regX, regY
  * regX = max x, regY = max y
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnXmax(uint16_t unusedParamButMandatory) {
+void fnXmax(uint16_t unusedButMandatoryParameter) {
   if(checkMinimumDataPoints(const_1)) {
     liftStack();
     setSystemFlag(FLAG_ASLIFT);

@@ -22,5 +22,5 @@ void scanLabelsAndPrograms(void);
 void defineCurrentProgram (void);
 void deleteStepsFromTo    (uint8_t *from, uint8_t *to);
 void fnClPAll             (uint16_t confirmation);
-void fnClP                (uint16_t unusedParamButMandatory);
-void fnPem                (uint16_t unusedParamButMandatory);
+void fnClP                (uint16_t unusedButMandatoryParameter);
+void fnPem                (uint16_t unusedButMandatoryParameter);

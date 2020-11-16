@@ -249,18 +249,18 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
 
 
 
-void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   if(updateDisplayValueX) {
     displayValueX[0] = 0;
   }
 
-  if(angulaMode == AM_NONE) {
+  if(tag == AM_NONE) {
     realToDisplayString2(real34, displayString, displayHasNDigits, limitExponent, separator);
   }
   else {
-    angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits, limitExponent, separator);
+    angle34ToDisplayString2(real34, tag, displayString, displayHasNDigits, limitExponent, separator);
   }
 
   while(stringWidth(displayString, font, true, true) > maxWidth) {
@@ -281,11 +281,11 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
       displayValueX[0] = 0;
     }
 
-    if(angulaMode == AM_NONE) {
+    if(tag == AM_NONE) {
       realToDisplayString2(real34, displayString, displayHasNDigits, limitExponent, separator);
     }
     else {
-      angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits, limitExponent, separator);
+      angle34ToDisplayString2(real34, tag, displayString, displayHasNDigits, limitExponent, separator);
     }
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -1769,7 +1769,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 
-void fnShow(uint16_t unusedParamButMandatory) {
+void fnShow(uint16_t unusedButMandatoryParameter) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   uint8_t savedSigFigMode = SigFigMode;           //JM
   bool_t savedUNITDisplay = UNITDisplay;          //JM

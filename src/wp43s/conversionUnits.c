@@ -61,10 +61,10 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
  * \brief Converts °Celcius to °Fahrenheit: (°Celcius * 1,8) + 32.
  * Refreshes the stack. This is the exact formula.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCvtCToF(uint16_t unusedParamButMandatory) {
+void fnCvtCToF(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -98,10 +98,10 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  * \brief Converts °Fahrenheit to °Celcius: (°Fahrenheit - 32) / 1,8.
  * Refreshes the stack. This is the exact formula.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCvtFToC(uint16_t unusedParamButMandatory) {
+void fnCvtFToC(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -356,7 +356,7 @@ void fnCvtLbfftNm(uint16_t multiplyDivide) {
  * \brief Converts power or field ratio to dB
  * dB = (10 or 20) * log10((power or field) ratio) this is the exact formula
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
@@ -394,7 +394,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
  * \brief Converts dB to power or field ratio
  * (power or field) ratio = 10^(dB / 10 or 20) this is the exact formula
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio

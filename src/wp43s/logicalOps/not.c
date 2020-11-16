@@ -50,10 +50,10 @@ void notError(void) {
  * \brief regX ==> regL and not(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLogicalNot(uint16_t unusedParamButMandatory) {
+void fnLogicalNot(uint16_t unusedButMandatoryParameter) {
   if(not[getRegisterDataType(REGISTER_X)] != notError) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 

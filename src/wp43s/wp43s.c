@@ -225,8 +225,6 @@ uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
 uint16_t              firstDisplayedStepNumber;
 uint16_t              numberOfLabels;
 uint16_t              numberOfPrograms;
-uint16_t              xCursor;
-uint16_t              yCursor;
 uint16_t              tamMode;
 uint16_t              currentStepNumber;
 uint16_t              numberOfStepsOnScreen;
@@ -238,6 +236,8 @@ uint32_t              firstGregorianDay;
 uint32_t              denMax;
 uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
+uint32_t              xCursor;
+uint32_t              yCursor;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;

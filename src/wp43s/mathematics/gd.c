@@ -65,10 +65,10 @@ static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
  * \brief regX ==> regL and gd(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGd(uint16_t unusedParamButMandatory) {
+void fnGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
   matrix[getRegisterDataType(REGISTER_X)](GD_DIRECT_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
@@ -78,10 +78,10 @@ void fnGd(uint16_t unusedParamButMandatory) {
  * \brief regX ==> regL and invGd(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnInvGd(uint16_t unusedParamButMandatory) {
+void fnInvGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
   matrix[getRegisterDataType(REGISTER_X)](GD_INVERSE_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);

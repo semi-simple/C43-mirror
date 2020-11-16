@@ -25,7 +25,7 @@
  * \brief regX ==> regL and SDL(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSdl(uint16_t numberOfShifts) {
@@ -53,7 +53,7 @@ void fnSdl(uint16_t numberOfShifts) {
  * \brief regX ==> regL and SDR(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSdr(uint16_t numberOfShifts) {

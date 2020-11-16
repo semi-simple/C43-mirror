@@ -703,9 +703,9 @@ uint64_t WP34S_intPower(uint64_t b, uint64_t e) {
 
 /* 2^x
  */
-uint64_t WP34S_int2pow(uint64_t exp) {
+uint64_t WP34S_int2pow(uint64_t x) {
   int32_t signExponent;
-  uint64_t exponent = WP34S_extract_value(exp, &signExponent);
+  uint64_t exponent = WP34S_extract_value(x, &signExponent);
   uint32_t wordSize = shortIntegerWordSize;
 
   clearSystemFlag(FLAG_OVERFLOW);
@@ -827,7 +827,7 @@ uint64_t WP34S_intLog10(uint64_t x) {
   return WP34S_build_value(r, signValue);
 }
 
-#ifdef DUMMY
+#if 0
 /* Calculate (a . b) mod c taking care to avoid overflow */
 static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
   uint64_t x = 0, y = a % c;
@@ -898,7 +898,6 @@ void intmsks(uint32_t arg, enum rarg op)
  {
   int64_t mask;
   int64_t x;
-  uint32_t i;
   int64_t (*f)(int64_t);
   const int32_t carry = (getSystemFlag(FLAG_CARRY) == ON ? 1 : 0);
 
@@ -922,7 +921,7 @@ void intmsks(uint32_t arg, enum rarg op)
   else
    {
     x = 0;
-    for(i=0; i<arg; i++)
+    for(uint32_t i=0; i<arg; i++)
      {
       x |= mask;
       mask = (*f)(mask);

@@ -33,7 +33,7 @@ void (* const invert[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 /********************************************//**
  * \brief Data type error in invert
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void invertError(void) {
@@ -50,10 +50,10 @@ void invertError(void) {
  * \brief regX ==> regL and 1 ÷ regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnInvert(uint16_t unusedParamButMandatory) {
+void fnInvert(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   invert[getRegisterDataType(REGISTER_X)]();

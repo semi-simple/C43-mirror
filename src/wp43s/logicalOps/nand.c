@@ -72,10 +72,10 @@ void nandError31(void) {
  * \brief regX ==> regL NAND regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnLogicalNand(uint16_t unusedParamButMandatory) {
+void fnLogicalNand(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalNand[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

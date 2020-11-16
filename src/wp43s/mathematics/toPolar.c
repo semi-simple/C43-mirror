@@ -22,7 +22,7 @@
 
 
 
-void fnToPolar(uint16_t unusedParamButMandatory) {
+void fnToPolar(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX, dataTypeY;
   real_t x, y;
 

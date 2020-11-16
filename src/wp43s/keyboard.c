@@ -78,33 +78,33 @@ int16_t determineFunctionKeyItem(const char *data) {
 /********************************************//**
  * \brief Simulate a function key click.
  *
- * \param w GtkWidget* The button to pass to btnFnPressed and btnFnReleased
+ * \param notUsed GtkWidget* The button to pass to btnFnPressed and btnFnReleased
  * \param data gpointer String containing the key ID
  * \return void
  //JM btnFnClicked is called by gui.c keyPressed, and by btnFnReleased_StateMachine
  ***********************************************/
 #ifdef PC_BUILD
-void btnFnClicked(GtkWidget *w, gpointer data) {
+void btnFnClicked(GtkWidget *notUsed, gpointer data) {
 #endif
 #ifdef DMCP_BUILD
-void btnFnClicked(void *w, void *data) {
+void btnFnClicked(void *notUsed, void *data) {
 #endif
 
   executeFunction(data);
 }
 
 #ifdef PC_BUILD
-void btnFnClickedP(GtkWidget *w, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
   GdkEvent mouseButton;
   mouseButton.button.button = 1;
   mouseButton.type = 0;
-  btnFnPressed(w, &mouseButton, data);
+  btnFnPressed(notUsed, &mouseButton, data);
 }
-void btnFnClickedR(GtkWidget *w, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+void btnFnClickedR(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
   GdkEvent mouseButton;
   mouseButton.button.button = 1;
   mouseButton.type = 0;
-  btnFnReleased(w, &mouseButton, data);
+  btnFnReleased(notUsed, &mouseButton, data);
 }
 #endif
 
@@ -113,7 +113,7 @@ void btnFnClickedR(GtkWidget *w, gpointer data) { //JM Added this portion to be 
 /********************************************//**
  * \brief A calc function key was pressed
  *
- * \param w GtkWidget*
+ * \param notUsed GtkWidget*
  * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
  * \return void
  ***********************************************/
@@ -158,7 +158,7 @@ void btnFnPressed(void *data) {
 /********************************************//**
  * \brief A calc function key was released
  *
- * \param w GtkWidget*
+ * \param notUsed GtkWidget*
  * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
  * \return void
  ***********************************************/
@@ -400,18 +400,18 @@ bool_t checkShifts(const char *data) {
 /********************************************//**
  * \brief Simulate a button click.
  *
- * \param w GtkWidget* The button to pass to btnPressed and btnReleased
+ * \param notUsed GtkWidget* The button to pass to btnPressed and btnReleased
  * \param data gpointer String containing the key ID
  * \return void
  ***********************************************/
 #ifdef PC_BUILD
-void btnClicked(GtkWidget *w, gpointer data) {
+void btnClicked(GtkWidget *notUsed, gpointer data) {
   GdkEvent mouseButton;
   mouseButton.button.button = 1;
   mouseButton.type = 0;
 
-  btnPressed(w, &mouseButton, data);
-  btnReleased(w, &mouseButton, data);
+  btnPressed(notUsed, &mouseButton, data);
+  btnReleased(notUsed, &mouseButton, data);
 }
 #endif
 #ifdef DMCP_BUILD
@@ -442,7 +442,7 @@ void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PR
 /********************************************//**
  * \brief A calc button was pressed
  *
- * \param w GtkWidget*
+ * \param notUsed GtkWidget*
  * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
  * \return void
  ***********************************************/
@@ -487,7 +487,7 @@ void btnPressed(void *data) {
 /********************************************//**
  * \brief A calc button was released
  *
- * \param w GtkWidget*
+ * \param notUsed GtkWidget*
  * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
  * \return void
  ***********************************************/
@@ -823,10 +823,10 @@ void processKeyAction(int16_t item) {
 /********************************************//**
  * \brief Processing ENTER key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyEnter(uint16_t unusedParamButMandatory) {
+void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
   switch(calcMode) {
@@ -928,10 +928,10 @@ void fnKeyEnter(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Processing EXIT key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyExit(uint16_t unusedParamButMandatory) {
+void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   int16_t tmp1;            //JM
   doRefreshSoftMenu = true;     //dr
@@ -1079,10 +1079,10 @@ void fnKeyExit(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Processing CC key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' complex_Type=KEY_COMPLEX
+void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter' complex_Type=KEY_COMPLEX
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
   uint32_t dataTypeX;
@@ -1141,12 +1141,12 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedParamButMandatory' co
 /********************************************//**
  * \brief Processing BACKSPACE key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyBackspace(uint16_t unusedParamButMandatory) {
+void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg, newXCursor;
+  uint16_t lg;
   uint8_t *nextStep;
 
   switch(calcMode) {
@@ -1187,16 +1187,9 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 
     case CM_ASM_OVER_AIM:
       if(stringByteLength(aimBuffer) > 0) {
-        uint16_t x, y;
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
-        newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-        for(x=newXCursor; x<xCursor+6; x++) {
-          for(y=Y_POSITION_OF_AIM_LINE+6; y<Y_POSITION_OF_AIM_LINE+26; y++) {
-            clearPixel(x, y);
-          }
-        }
-        xCursor = newXCursor;
+        xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
       }
       break;
 
@@ -1256,10 +1249,10 @@ void fnKeyBackspace(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Processing UP key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyUp(uint16_t unusedParamButMandatory) {
+void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD  
   if(calcMode == CM_NORMAL && softmenuStackPointer == 0)  {fnShow_SCROLL(1); return;}             //JMSHOW
@@ -1400,10 +1393,10 @@ void fnKeyUp(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Processing DOWN key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyDown(uint16_t unusedParamButMandatory) {
+void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
 
@@ -1542,10 +1535,10 @@ void fnKeyDown(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Processing .d key
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnKeyDotD(uint16_t unusedParamButMandatory) {
+void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
   switch(calcMode) {
     case CM_NORMAL:

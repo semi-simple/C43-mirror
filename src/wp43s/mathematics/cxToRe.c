@@ -25,10 +25,10 @@
  * \brief regX ==> regL and re(regX) ==> regY, im(regX) ==> regX or magnitude(regX) ==> regY, angle(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCxToRe(uint16_t unusedParamButMandatory) {
+void fnCxToRe(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtComplex34) {

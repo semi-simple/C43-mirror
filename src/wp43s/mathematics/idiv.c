@@ -42,7 +42,7 @@ void (* const idiv[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_F
 /********************************************//**
  * \brief Data type error in IDiv
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void idivError(void) {
@@ -60,10 +60,10 @@ void idivError(void) {
  * \brief regX ==> regL and regY idiv regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnIDiv(uint16_t unusedParamButMandatory) {
+void fnIDiv(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   idiv[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

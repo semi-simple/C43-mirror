@@ -60,10 +60,10 @@ void subError(void) {
  * \brief rexX ==> regL and regY - regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSubtract(uint16_t unusedParamButMandatory) {
+void fnSubtract(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

@@ -50,10 +50,10 @@ void exptError(void) {
  * \brief regX ==> regL and expt(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnExpt(uint16_t unusedParamButMandatory) {
+void fnExpt(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   expt[getRegisterDataType(REGISTER_X)]();

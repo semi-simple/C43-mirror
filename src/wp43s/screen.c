@@ -815,16 +815,16 @@ void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw th
 */
 
 /********************************************//**
- * \brief Sets a pixel on the screen (black).
+ * \brief Sets a black pixel on the screen.
  *
- * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void setPixel(int16_t x, int16_t y) {
+void setBlackPixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
-    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function setPixel: x=%d, y=%d outside the screen!\n", x, y);
+    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+      printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -840,16 +840,16 @@ void setPixel(int16_t x, int16_t y) {
 
 
 /********************************************//**
- * \brief Clears a pixel on the screen (white).
+ * \brief Sets a white pixel on the screen.
  *
- * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void clearPixel(int16_t x, int16_t y) {
+void setWhitePixel(uint32_t x, uint32_t y) {
   #ifdef PC_BUILD
-    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+      printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
     }
 
@@ -866,14 +866,14 @@ void clearPixel(int16_t x, int16_t y) {
 /********************************************//**                       //JM
  * \brief Inverts a pixel on the screen (white/black).
  *
- * \param[in] x int16_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y int16_t y coordinate from 0 (top) to 239 (bottom)
+ * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+ * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
  * \return void
  ***********************************************/
-void invertPixel(int16_t x, int16_t y) {           //JM
+void invertPixel(uint32_t x, uint32_t y) {           //JM
   #ifdef PC_BUILD
-    if(x<0 || x>=SCREEN_WIDTH || y<0 || y>=SCREEN_HEIGHT) {
-      //printf("In function clearPixel: x=%d, y=%d outside the screen!\n", x, y);
+    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+      printf("In function invertPixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 
@@ -887,6 +887,31 @@ void invertPixel(int16_t x, int16_t y) {           //JM
 }
 
 
+
+#ifndef DMCP_BUILD
+void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+    uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+    
+    if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+        printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+        return;
+    }
+    
+    pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+    for(line=y; line<endY; line++) {
+        for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+            *pixel = pixelColor;
+        }
+    }
+    
+    screenChange = true;
+}
+#endif
+
+
+
+
+
 uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
 uint8_t  maxiC = 0;                                                              //JM ENLARGE letters
@@ -897,15 +922,16 @@ uint8_t  maxiC = 0;                                                             
  *
  * \param[in] charCode uint16_t      Unicode code point of the glyph to display
  * \param[in] font font_t*           Font to use
- * \param[in] x int16_t              x coordinate where to display the glyph
- * \param[in] y int16_t              y coordinate where to display the glyph
+ * \param[in] x uint32_t             x coordinate where to display the glyph
+ * \param[in] y uint32_t             y coordinate where to display the glyph
  * \param[in] videoMode videoMode_t  Video mode normal or reverse
  * \param[in] showLeadingCols bool_t Display the leading empty columns
  * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return int16_t                   x coordinate for the next glyph
+ * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  int16_t  col, row, xGlyph, /*xEndingCols, */endingCols, bit, glyphId;    //JMmini
+uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+  uint32_t  col, row, xGlyph, endingCols;
+  int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
   //printf("^^^ %d %d %d %d\n",charCode, combinationFonts, miniC, maxiC);
@@ -949,98 +975,51 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
   }
 
   data = (int8_t *)glyph->data;
-  int16_t y0 = y;                                                   //JMmini 0-reference
+  uint32_t y0 = y;                                                   //JMmini 0-reference
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
-  //xEndingCols = x + xGlyph + glyph->colsGlyph;   //JMmini
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
-  // Clearing the rows above the glyph
-  for(row=0; row<glyph->rowsAboveGlyph; row++, y++) {
-
-
-    rep_enlarge = 0;                                                     //JM ENLARGE vv
-    if(enlarge && combinationFonts !=0) rep_enlarge = 1;
-    while (rep_enlarge >= 0) {                                           //JM ENLARGE ^^
-
-    if(y>=0) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));              //JMmini                                 //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-
-    if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;   //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
-    rep_enlarge--;
-    }                                                                    //JM ENLARGE ^^
-  }
+  // Clearing the space needed by the glyph
+  if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
+  lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode != vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
+  y += glyph->rowsAboveGlyph;
+  //x += xGlyph; //JM
 
   // Drawing the glyph
   for(row=0; row<glyph->rowsGlyph; row++, y++) {
-
-    rep_enlarge = 0;                                                       //JM ENLARGE vv
-    if(enlarge && combinationFonts !=0) rep_enlarge = 1;
+    if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
-      // Clearing the columns before the glyph
-      if(showLeadingCols) {
-        for(col=0; col<glyph->colsBeforeGlyph; col++) {
-          if(videoMode == vmNormal) {
-            if(y>=0) clearPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                         //JMmini                      //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-          else {
-            if(y>=0) setPixel(x+(col >> miniC), y0+((y-y0) >> miniC));                           //JMmini                     //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-        }
-      }
-
       // Drawing the columns of the glyph
-      bit = 7;
-      for(col=0; col<glyph->colsGlyph; col++) {
-        if(bit == 7) {
-  //        byte = *(data++);
+    int32_t bit = 7;
+    for(col=0; col<glyph->colsGlyph; col++) {
+      if(bit == 7) {
+          //        byte = *(data++);
           byte = *(data);                                                  //JM ENLARGE
           if(rep_enlarge == 0) data++;                                     //JM ENLARGE
           if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
-        }
+      }
 
-        if(byte & 0x80) {// MSB set
-          if(videoMode == vmNormal) {
-            if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                   //JMmini                            //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-          else {
-            if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
+      if(byte & 0x80) {// MSB set
+        if(videoMode == vmNormal) { // Black pixel for white background
+          setBlackPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
         }
-        else {
-          if(videoMode == vmNormal) {
-            if(y>=0) clearPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-          else {
-            if(y>=0) setPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));                //JMmini                               //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-          }
-        }
-
-        byte <<= 1;
-
-        if(--bit == -1) {
-          bit = 7;
+        else { // White pixel for black background
+          setWhitePixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
         }
       }
 
-      // clearing the columns after the glyph
-      for(col=0; col<endingCols; col++) {
-        if(videoMode == vmNormal) {
-          if(y>=0) clearPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));               //JMmini                                //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-        else {
-          if(y>=0) setPixel(x + ((col + xGlyph + glyph->colsGlyph) >> miniC), y0+((y-y0) >> miniC));                 //JMmini                              //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-        }
-      }
+      byte <<= 1;
 
+      if(--bit == -1) {
+        bit = 7;
+      }
+    }
     if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;     //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
     rep_enlarge--;
-    }                                                                      //JM ENLARGE ^^
+
   }
 
-  // Clearing the rows below the glyph
-  for(row=0; row<glyph->rowsBelowGlyph; row++, y++) {
-        if(y>=0) lcd_fill_rect(x, y, (xGlyph + glyph->colsGlyph + endingCols) >> miniC, 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));             //JMmini                                  //JM allow placing the glyph at y=-4, to get perfect alignemnt in the status bar without placing it out of bounds
-  }
   return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);        //JMmini
 }
 
@@ -1058,7 +1037,7 @@ int16_t showGlyphCode(uint16_t charCode, const font_t *font, int16_t x, int16_t 
  * \param[in] showEndingCols bool_t  Display the ending empty columns
  * \return int16_t                   x coordinate for the next glyph
  ***********************************************/
-int16_t showGlyph(const char *ch, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t charCode;
 
   charCode = (uint8_t)*ch;
@@ -1076,14 +1055,14 @@ uint8_t  compressString = 0;                                                    
  *
  * \param[in] string const char*     String whose first glyph is to display
  * \param[in] font font_t*           Font to use
- * \param[in] x int16_t              x coordinate where to display the glyph
- * \param[in] y int16_t              y coordinate where to display the glyph
+ * \param[in] x uint32_t             x coordinate where to display the glyph
+ * \param[in] y uint32_t             y coordinate where to display the glyph
  * \param[in] videoMode videoMode_t  Video mode normal or reverse
  * \param[in] showLeadingCols bool_t Display the leading empty columns
  * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return int16_t                   x coordinate for the next glyph
+ * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint16_t ch, lg;
   bool_t   slc, sec;
 
@@ -1120,30 +1099,6 @@ int16_t showString(const char *string, const font_t *font, int16_t x, int16_t y,
 }
 
 
-
-void cleararea(int16_t x0, int16_t y0, int16_t dx, int16_t dy) {
-  #ifdef PC_BUILD                                         // Dani Rau
-    uint16_t x, y;
-        for(x=x0; x<x0+dx; x++) {
-          for(y=y0; y<y0+dy; y++) {
-            clearPixel(x, y);
-          }
-        }
-  #endif                                                  // vv Dani Rau
-
-  #if DMCP_BUILD
-    if(cursorEnabled) {
-      if(cursorFont == &standardFont) {
-        lcd_fill_rect(x0, y0, dx, dy, 0);
-      }
-      else {
-        lcd_fill_rect(x0, y0, dx, dy, 0);
-      }
-    }
-  #endif                                                  // ^^ Dani Rau
-}
-
-
 uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;
 uint8_t x_offset = 0;      //pixels 40
@@ -1152,11 +1107,11 @@ uint16_t current_cursor_y = 0;
 int16_t  displayAIMbufferoffset;
 //#define lines 5                                                          //JMCURSOR vv
 //#define y_offset 2    //lines   0
-int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
+uint32_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
   uint16_t ch, charCode, lg;
-  int16_t  tmpxy, glyphId;
+  int16_t  glyphId;
   bool_t   slc, sec;
-  int16_t  numPixels, orglastlines;
+  uint32_t  numPixels, orglastlines, tmpxy;
   const    glyph_t *glyph;
   uint8_t  editlines     = 5 ; 
   uint8_t  maxbeforejump = 30; 
@@ -1229,8 +1184,8 @@ int16_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const c
        current_cursor_y = y;
        tmpxy = y-1;
        while (tmpxy < y + (yincr+1)) {
-         if(!noshow) setPixel(x,tmpxy); 
-         if(!noshow) setPixel(x+1,tmpxy); 
+         if(!noshow) setBlackPixel(x,tmpxy);
+         if(!noshow) setBlackPixel(x+1,tmpxy);
          tmpxy++;
        }
        x+=2;
@@ -1411,11 +1366,9 @@ void hideFunctionName(void) {
  * \return void
  ***********************************************/
 void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
-  int16_t yStart, height;
-
   if(REGISTER_X <= regist && regist <= REGISTER_T) {
-    yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
-    height = 32;
+    uint32_t yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
+    uint32_t height = 32;
 
     if(clearTop) {
       yStart -= 4;

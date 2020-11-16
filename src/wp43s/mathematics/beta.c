@@ -55,10 +55,10 @@ void betaError(void) {
  * \brief regX ==> regL and beta(regX, RegY) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnBeta(uint16_t unusedParamButMandatory) {
+void fnBeta(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

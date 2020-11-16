@@ -56,10 +56,10 @@ static void dataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate %Sigma
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnPercentSigma(uint16_t unusedParamButMandatory) {
+void fnPercentSigma(uint16_t unusedButMandatoryParameter) {
   if(statisticalSumsPointer == NULL) {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

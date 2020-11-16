@@ -72,10 +72,10 @@ void xnorError31(void) {
  * \brief regX ==> regL XNOR regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnLogicalXnor(uint16_t unusedParamButMandatory) {
+void fnLogicalXnor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logicalXnor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

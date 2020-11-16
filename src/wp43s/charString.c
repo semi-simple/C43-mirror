@@ -393,3 +393,22 @@ void utf8ToString(const uint8_t *utf8, char *str) {
   }
   *str = 0;
 }
+
+
+void *xcopy(void *dest, const void *source, int n) {
+  char       *pDest   = (char *)dest;
+  const char *pSource = (char *)source;
+
+  if(pSource > pDest) {
+    while(n--) {
+      *pDest++ = *pSource++;
+    }
+  }
+  else if(pSource < pDest) {
+    while(n--) {
+      pDest[n] = pSource[n];
+    }
+  }
+
+  return dest;
+}

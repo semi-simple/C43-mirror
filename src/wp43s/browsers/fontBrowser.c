@@ -26,7 +26,7 @@
 /********************************************//**
  * \brief The font browser application initialisation
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void initFontBrowser(void) {
@@ -75,10 +75,10 @@ void initFontBrowser(void) {
 /********************************************//**
  * \brief The font browser application
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fontBrowser(uint16_t unusedParamButMandatory) {
+void fontBrowser(uint16_t unusedButMandatoryParameter) {
   uint16_t x, y, first;
 
   if(calcMode != CM_FONT_BROWSER) {

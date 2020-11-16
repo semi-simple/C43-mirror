@@ -50,10 +50,10 @@ void twoPowError(void) {
  * \brief regX ==> regL and 2^regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fn2Pow(uint16_t unusedParamButMandatory) {
+void fn2Pow(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   twoPow[getRegisterDataType(REGISTER_X)]();

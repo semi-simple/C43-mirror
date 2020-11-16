@@ -50,10 +50,10 @@ void lnError(void) {
  * \brief regX ==> regL and ln(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLn(uint16_t unusedParamButMandatory) {
+void fnLn(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   ln[getRegisterDataType(REGISTER_X)]();

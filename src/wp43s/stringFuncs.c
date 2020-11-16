@@ -94,7 +94,7 @@ void fnAlphaToX(uint16_t regist) {
 
 
 
-void fnXToAlpha(uint16_t unusedParamButMandatory) {
+void fnXToAlpha(uint16_t unusedButMandatoryParameter) {
   longInteger_t lgInt;
   unsigned char char1, char2;
 

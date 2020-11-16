@@ -33,7 +33,7 @@ void (* const cube[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 /********************************************//**
  * \brief Data type error in cubing
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void cubeError(void) {
@@ -50,10 +50,10 @@ void cubeError(void) {
  * \brief regX ==> regL and regX × regX × regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnCube(uint16_t unusedParamButMandatory) {
+void fnCube(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cube[getRegisterDataType(REGISTER_X)]();

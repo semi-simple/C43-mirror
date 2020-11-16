@@ -46,7 +46,7 @@ uint8_t  last_CM;
   void     copyStackRegistersToClipboard      (void);
   void     copyAllRegistersToClipboard        (void);
   void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);
-  gboolean refreshLcd                         (gpointer data);
+  gboolean refreshLcd                         (gpointer unusedData);
 #endif
 
 #ifdef DMCP_BUILD
@@ -75,13 +75,13 @@ void     refresh_gui                          (void);                           
 void     force_refresh                        (void);                                                           //JM SCREEN
 
 void     refreshScreen                        (void);
-void     setPixel                             (int16_t x, int16_t y);
-void     clearPixel                           (int16_t x, int16_t y);
-void     invertPixel                          (int16_t x, int16_t y);
-int      getPixel                             (int16_t x, int16_t y);
-int16_t  showString                           (const char *str,   const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyph                            (const char *ch,    const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-int16_t  showGlyphCode                        (uint16_t charCode, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+void     setBlackPixel                        (uint32_t x, uint32_t y);
+void     setWhitePixel                        (uint32_t x, uint32_t y);
+//void     invertPixel                          (uint32_t x, uint32_t y);
+//int      getPixel                             (uint32_t x, uint32_t y);
+uint32_t showString                           (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+uint32_t showGlyph                            (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+uint32_t showGlyphCode                        (uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 void     hideCursor                           (void);
 void     showFunctionName                     (int16_t item, int16_t delayInMs);
 void     hideFunctionName                     (void);

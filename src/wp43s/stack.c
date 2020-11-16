@@ -23,10 +23,10 @@
 /********************************************//**
  * \brief Clears X and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnClX(uint16_t unusedParamButMandatory) {
+void fnClX(uint16_t unusedButMandatoryParameter) {
   clearRegister(REGISTER_X);
 }
 
@@ -35,11 +35,11 @@ void fnClX(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Clears the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  *
  ***********************************************/
-void fnClearStack(uint16_t unusedParamButMandatory) {
+void fnClearStack(uint16_t unusedButMandatoryParameter) {
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
   }
@@ -50,10 +50,10 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Drops X from the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDrop(uint16_t unusedParamButMandatory) {
+void fnDrop(uint16_t unusedButMandatoryParameter) {
   uint16_t sizeInBytes;
 
   freeRegisterData(REGISTER_X);
@@ -96,10 +96,10 @@ void liftStack(void) {
 /********************************************//**
  * \brief Drops Y from the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDropY(uint16_t unusedParamButMandatory) {
+void fnDropY(uint16_t unusedButMandatoryParameter) {
   uint16_t sizeInBytes;
 
   freeRegisterData(REGISTER_Y);
@@ -117,10 +117,10 @@ void fnDropY(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Rolls the stack up and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRollUp(uint16_t unusedParamButMandatory) {
+void fnRollUp(uint16_t unusedButMandatoryParameter) {
   registerDescriptor_t savedRegister = reg[getStackTop()];
 
   for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
@@ -134,10 +134,10 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Rolls the stack down and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRollDown(uint16_t unusedParamButMandatory) {
+void fnRollDown(uint16_t unusedButMandatoryParameter) {
   registerDescriptor_t savedRegister = reg[REGISTER_X];
 
   for(uint16_t i=REGISTER_X; i<getStackTop(); i++) {
@@ -255,10 +255,10 @@ void fnSwapT(uint16_t regist) {
 /********************************************//**
  * \brief Swaps X and Y and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSwapXY(uint16_t unusedParamButMandatory) {
+void fnSwapXY(uint16_t unusedButMandatoryParameter) {
   registerDescriptor_t savedRegister = reg[REGISTER_X];
 
   reg[REGISTER_X] = reg[REGISTER_Y];
@@ -269,10 +269,10 @@ void fnSwapXY(uint16_t unusedParamButMandatory) {
  * \brief Shuffles the registers and and refreshes the stack.
  * the Shuffle order is in the last four chars of the tamBuffer
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnShuffle(uint16_t unusedParamButMandatory) {
+void fnShuffle(uint16_t unusedButMandatoryParameter) {
   for(int i=0; i<4; i++) {
     if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
       copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X + i);
@@ -294,10 +294,10 @@ void fnShuffle(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Fills the stack with the value of X and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFillStack(uint16_t unusedParamButMandatory) {
+void fnFillStack(uint16_t unusedButMandatoryParameter) {
   uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint16_t dataSizeXinBytes = TO_BYTES(getRegisterFullSize(REGISTER_X));
   uint16_t tag       = getRegisterTag(REGISTER_X);
@@ -316,10 +316,10 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the stack size and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetStackSize(uint16_t unusedParamButMandatory) {
+void fnGetStackSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t stack;
 
   liftStack();
@@ -359,7 +359,7 @@ void saveForUndo(void) {
 
 
 
-void fnUndo(uint16_t unusedParamButMandatory) {
+void fnUndo(uint16_t unusedButMandatoryParameter) {
   if(thereIsSomethingToUndo) {
     undo();
   }

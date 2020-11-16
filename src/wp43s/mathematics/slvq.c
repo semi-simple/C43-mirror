@@ -25,10 +25,10 @@
  * \brief (c, b, a) ==> (x1, x2, r) c ==> regL
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSlvq(uint16_t unusedParamButMandatory) {
+void fnSlvq(uint16_t unusedButMandatoryParameter) {
   bool_t realCoefs=true, realRoots=true;
   real_t aReal, bReal, cReal, rReal, x1Real, x2Real;
   real_t aImag, bImag, cImag, rImag, x1Imag, x2Imag;

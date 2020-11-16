@@ -50,10 +50,10 @@ void floorError(void) {
  * \brief regX ==> regL and floor(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFloor(uint16_t unusedParamButMandatory) {
+void fnFloor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Floor[getRegisterDataType(REGISTER_X)]();

@@ -50,10 +50,10 @@ void chsError(void) {
  * \brief rexX ==> regL and -regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnChangeSign(uint16_t unusedParamButMandatory) {
+void fnChangeSign(uint16_t unusedButMandatoryParameter) {
   //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   chs[getRegisterDataType(REGISTER_X)]();

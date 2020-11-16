@@ -4073,10 +4073,10 @@ void calcModeNormal(void) {
 /********************************************//**
  * \brief Sets the calc mode to alpha input mode
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void calcModeAim(uint16_t unusedParamButMandatory) {
+void calcModeAim(uint16_t unusedButMandatoryParameter) {
   if(calcMode == CM_ASM_OVER_AIM) {
     popSoftmenu();
     calcMode = CM_AIM;
@@ -4118,7 +4118,7 @@ void calcModeAim(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc mode to alpha selection menu
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void calcModeAsm(void) {
@@ -4145,10 +4145,10 @@ void calcModeAsm(void) {
 /********************************************//**
  * \brief Sets the calc mode to number input mode
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void calcModeNim(uint16_t unusedParamButMandatory) {
+void calcModeNim(uint16_t unusedButMandatoryParameter) {
   saveForUndo();
 
   calcMode = CM_NIM;

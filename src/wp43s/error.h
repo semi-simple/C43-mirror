@@ -19,7 +19,7 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
-  void displayBugScreen     (const char *message);
+  void displayBugScreen     (const char *msg);
 #endif
 
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine);

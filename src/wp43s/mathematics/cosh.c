@@ -50,10 +50,10 @@ void coshError(void) {
  * \brief regX ==> regL and cosh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCosh(uint16_t unusedParamButMandatory) {
+void fnCosh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Cosh[getRegisterDataType(REGISTER_X)]();

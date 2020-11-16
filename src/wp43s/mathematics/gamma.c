@@ -72,10 +72,10 @@ void lnGammaError(void) {
  * \brief regX ==> regL and gamma(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGamma(uint16_t unusedParamButMandatory) {
+void fnGamma(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Gamma[getRegisterDataType(REGISTER_X)]();
@@ -89,10 +89,10 @@ void fnGamma(uint16_t unusedParamButMandatory) {
  * \brief regX ==> regL and lnGamma(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLnGamma(uint16_t unusedParamButMandatory) {
+void fnLnGamma(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   lnGamma[getRegisterDataType(REGISTER_X)]();

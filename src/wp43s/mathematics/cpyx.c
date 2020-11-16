@@ -45,7 +45,7 @@ void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_F
 /********************************************//**
  * \brief Data type error in Cyx
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 static void cpyxDataTypeError(uint16_t unused) {
@@ -225,10 +225,10 @@ static void pyxCplx(real_t *yReal, real_t *yImag, real_t *xReal, real_t *xImag, 
  * enables stack lift and refreshes the stack.
  * C(n,k) = n! / [k! * (n-k)!]
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCyx(uint16_t unusedParamButMandatory) {
+void fnCyx(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_COMBINATION);
@@ -242,10 +242,10 @@ void fnCyx(uint16_t unusedParamButMandatory) {
  * enables stack lift and refreshes the stack.
  * P(n,k) = n! / (n-k)!
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnPyx(uint16_t unusedParamButMandatory) {
+void fnPyx(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cpyx[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)](CP_PERMUTATION);

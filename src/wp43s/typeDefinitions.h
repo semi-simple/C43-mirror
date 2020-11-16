@@ -51,17 +51,17 @@ typedef struct {
  * \brief Structure keeping the informations for one glyph
  ***********************************************/
 typedef struct {
-  uint16_t charCode;        ///< Unicode code point
-  int8_t   colsBeforeGlyph; ///< Number of empty columns before the glyph
-  int8_t   colsGlyph;       ///< Number of columns of the glyph
-  int8_t   colsAfterGlyph;  ///< Number of empty columns afer the glyph
-  int8_t   rowsAboveGlyph;  ///< Number of empty rows above the glyph
-  int8_t   rowsGlyph;       ///< Number of rows of the glyph
-  int8_t   rowsBelowGlyph;  ///< Number of empty rows below the glypg
-  int16_t  rank1;           ///< Rank of the replacement glyph
-  int16_t  rank2;           ///< Rank of the glyph
-  char     *data;           ///< Hexadecimal data representing the glyph.
-                            ///< There are rowsGlyph x (colsGlyph rounded up to 8 bit boundary) bytes
+  uint16_t charCode;         ///< Unicode code point
+  uint8_t  colsBeforeGlyph;  ///< Number of empty columns before the glyph
+  uint8_t  colsGlyph;        ///< Number of columns of the glyph
+  uint8_t  colsAfterGlyph;   ///< Number of empty columns afer the glyph
+  uint8_t  rowsAboveGlyph;   ///< Number of empty rows above the glyph
+  uint8_t  rowsGlyph;        ///< Number of rows of the glyph
+  uint8_t  rowsBelowGlyph;   ///< Number of empty rows below the glypg
+  int16_t  rank1;            ///< Rank of the replacement glyph
+  int16_t  rank2;            ///< Rank of the glyph
+  char     *data;            ///< Hexadecimal data representing the glyph.
+                             ///< There are rowsGlyph x (colsGlyph rounded up to 8 bit boundary) bytes
 } glyph_t;
 
 
@@ -70,9 +70,9 @@ typedef struct {
  * \brief Font description
  ***********************************************/
 typedef struct {
-  int8_t  id;             ///< 0=numeric 1=standard
-  int16_t numberOfGlyphs; ///< Number of glyphs in the font
-  glyph_t glyphs[];       ///< Pointer to the glyph description structure
+  int8_t  id;              ///< 0=numeric 1=standard
+  uint16_t numberOfGlyphs; ///< Number of glyphs in the font
+  glyph_t glyphs[];        ///< Pointer to the glyph description structure
 } font_t;
 
 

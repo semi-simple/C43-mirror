@@ -61,10 +61,10 @@ void refreshStatusBar(void) {
  * \return void
  ***********************************************/
 void showDateTime(void) {
-  int16_t x;
+  uint32_t x;
 
-  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
-  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX-24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX - 12, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
+  showGlyph(STD_SPACE_EM, &standardFont, X_REAL_COMPLEX - 24, 0, vmNormal, true, true); // Clear garbage after time STD_SPACE_EM is 0+0+12 pixel wide
 
   getDateString(dateTimeString);
   x = showString(dateTimeString, &standardFont, X_DATE, 0, vmNormal, true, true);
@@ -119,7 +119,7 @@ void showComplexMode(void) {
  *
  ***********************************************/
 void showAngularMode(void) {
-  int16_t x;
+  uint32_t x;
 
   x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
 
@@ -184,7 +184,7 @@ void showFracMode(void) {
 
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
-  int16_t x = 0;
+  uint32_t x = 0;
 
   if(lastIntegerBase > 0 && lastIntegerBase <= 16) {                               //JMvv HEXKEYS
     str20[0]=0;
@@ -253,24 +253,14 @@ void showIntegerMode(void) {
  * \return void
  ***********************************************/
 void showOverflowCarry(void) {
-  int16_t x, y;
-
   showGlyph(STD_OVERFLOW_CARRY, &standardFont, X_OVERFLOW_CARRY, 0, vmNormal, true, false); // STD_OVERFLOW_CARRY is 0+6+3 pixel wide
 
   if(!getSystemFlag(FLAG_OVERFLOW)) { // Overflow flag is cleared
-    for(x=X_OVERFLOW_CARRY; x<X_OVERFLOW_CARRY+6; x++) {
-      for(y=2; y<=8; y++) {
-        clearPixel(x, y);
-      }
-    }
+    lcd_fill_rect(X_OVERFLOW_CARRY, 2, 6, 7, LCD_SET_VALUE);
   }
 
   if(!getSystemFlag(FLAG_CARRY)) { // Carry flag is cleared
-    for(x=X_OVERFLOW_CARRY; x<X_OVERFLOW_CARRY+6; x++) {
-      for(y=12; y<=18; y++) {
-        clearPixel(x, y);
-      }
-    }
+    lcd_fill_rect(X_OVERFLOW_CARRY, 12, 6, 7, LCD_SET_VALUE);
   }
 }
 
@@ -458,65 +448,65 @@ void showHideUsbLowBattery(void) {
 void showHideStackLift(void) {
   if(getSystemFlag(FLAG_ASLIFT)) {
     // Draw S
-    setPixel(392,  1);
-    setPixel(393,  1);
-    setPixel(394,  1);
-    setPixel(391,  2);
-    setPixel(395,  2);
-    setPixel(391,  3);
-    setPixel(392,  4);
-    setPixel(393,  4);
-    setPixel(394,  4);
-    setPixel(395,  5);
-    setPixel(391,  6);
-    setPixel(395,  6);
-    setPixel(392,  7);
-    setPixel(393,  7);
-    setPixel(394,  7);
+    setBlackPixel(392,  1);
+    setBlackPixel(393,  1);
+    setBlackPixel(394,  1);
+    setBlackPixel(391,  2);
+    setBlackPixel(395,  2);
+    setBlackPixel(391,  3);
+    setBlackPixel(392,  4);
+    setBlackPixel(393,  4);
+    setBlackPixel(394,  4);
+    setBlackPixel(395,  5);
+    setBlackPixel(391,  6);
+    setBlackPixel(395,  6);
+    setBlackPixel(392,  7);
+    setBlackPixel(393,  7);
+    setBlackPixel(394,  7);
 
     // Draw L
-    setPixel(391, 10);
-    setPixel(391, 11);
-    setPixel(391, 12);
-    setPixel(391, 13);
-    setPixel(391, 14);
-    setPixel(391, 15);
-    setPixel(391, 16);
-    setPixel(392, 16);
-    setPixel(393, 16);
-    setPixel(394, 16);
-    setPixel(395, 16);
+    setBlackPixel(391, 10);
+    setBlackPixel(391, 11);
+    setBlackPixel(391, 12);
+    setBlackPixel(391, 13);
+    setBlackPixel(391, 14);
+    setBlackPixel(391, 15);
+    setBlackPixel(391, 16);
+    setBlackPixel(392, 16);
+    setBlackPixel(393, 16);
+    setBlackPixel(394, 16);
+    setBlackPixel(395, 16);
   }
   else {
     // Erase S
-    clearPixel(392,  1);
-    clearPixel(393,  1);
-    clearPixel(394,  1);
-    clearPixel(391,  2);
-    clearPixel(395,  2);
-    clearPixel(391,  3);
-    clearPixel(392,  4);
-    clearPixel(393,  4);
-    clearPixel(394,  4);
-    clearPixel(395,  5);
-    clearPixel(391,  6);
-    clearPixel(395,  6);
-    clearPixel(392,  7);
-    clearPixel(393,  7);
-    clearPixel(394,  7);
+    setWhitePixel(392,  1);
+    setWhitePixel(393,  1);
+    setWhitePixel(394,  1);
+    setWhitePixel(391,  2);
+    setWhitePixel(395,  2);
+    setWhitePixel(391,  3);
+    setWhitePixel(392,  4);
+    setWhitePixel(393,  4);
+    setWhitePixel(394,  4);
+    setWhitePixel(395,  5);
+    setWhitePixel(391,  6);
+    setWhitePixel(395,  6);
+    setWhitePixel(392,  7);
+    setWhitePixel(393,  7);
+    setWhitePixel(394,  7);
 
     // Erase L
-    clearPixel(391, 10);
-    clearPixel(391, 11);
-    clearPixel(391, 12);
-    clearPixel(391, 13);
-    clearPixel(391, 14);
-    clearPixel(391, 15);
-    clearPixel(391, 16);
-    clearPixel(392, 16);
-    clearPixel(393, 16);
-    clearPixel(394, 16);
-    clearPixel(395, 16);
+    setWhitePixel(391, 10);
+    setWhitePixel(391, 11);
+    setWhitePixel(391, 12);
+    setWhitePixel(391, 13);
+    setWhitePixel(391, 14);
+    setWhitePixel(391, 15);
+    setWhitePixel(391, 16);
+    setWhitePixel(392, 16);
+    setWhitePixel(393, 16);
+    setWhitePixel(394, 16);
+    setWhitePixel(395, 16);
   }
 }
 #endif // DMCP_BUILD

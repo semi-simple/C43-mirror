@@ -42,7 +42,7 @@ void (* const idivr[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_
 /********************************************//**
  * \brief Data type error in IDiv
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
 void idivrError(void) {
@@ -60,10 +60,10 @@ void idivrError(void) {
  * \brief regX ==> regL and regY idivr regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnIDivR(uint16_t unusedParamButMandatory) {
+void fnIDivR(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   idivr[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();

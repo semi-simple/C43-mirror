@@ -655,9 +655,8 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_AIM:
-      if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU) {
+      if(softmenuStackPointer == 0) {
         calcModeNormal();
-        popSoftmenu();
 
         if(aimBuffer[0] == 0) {
           undo();
@@ -677,7 +676,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
        popSoftmenu();
        if(softmenuStackPointer == 0) {
          softmenuStackPointerBeforeAIM = 0;
-         showSoftmenu(NULL, -MNU_MyAlpha, false);
+         //showSoftmenu(NULL, -MNU_MyAlpha, false);
        }
       }
       break;
@@ -893,7 +892,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      if(softmenuStackPointer > 0) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
           alphaCase = AC_UPPER;
@@ -989,7 +988,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
     case CM_ASM_OVER_TAM:
     case CM_ASM_OVER_AIM:
       resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      if(softmenuStackPointer > 0) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
           alphaCase = AC_LOWER;

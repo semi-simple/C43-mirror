@@ -1444,6 +1444,20 @@ void refreshScreen(void) {
       clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
+
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
+      else {
+        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
+          showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+        }
+      }
+
       refreshStatusBar();
       break;
 

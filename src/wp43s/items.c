@@ -100,6 +100,14 @@ void runFunction(int16_t func) {
     #endif
   }
 
+  if(calcMode == CM_PEM) {
+    #ifndef DMCP_BUILD
+      stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
+      printf("Insert program step %s\n", tmpString);
+    #endif // DMCP_BUILD
+    return;
+  }
+
   if(calcMode != CM_ASM_OVER_TAM) {
     tamMode = indexOfItems[func].param;
   }

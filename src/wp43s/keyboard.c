@@ -203,7 +203,7 @@ int16_t determineItem(const char *data) {
   key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
   // Shift f pressed and shift g not active
-  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+  if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM)) {
     temporaryInformation = TI_NO_INFO;
     lastErrorCode = 0;
     shiftF = !shiftF;
@@ -211,7 +211,7 @@ int16_t determineItem(const char *data) {
   }
 
   // Shift g pressed and shift f not active
-  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM)) {
+  else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM)) {
     temporaryInformation = TI_NO_INFO;
     lastErrorCode = 0;
     shiftG = !shiftG;
@@ -546,8 +546,11 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           break;
 
+        case CM_PEM:
+          break;
+
         default:
-          sprintf(errorMessage, "In function btnPressed: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
+          sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
           displayBugScreen(errorMessage);
       }
   }
@@ -691,6 +694,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_PEM:
+      if(softmenuStackPointer > 0) {
+        popSoftmenu();
+        break;
+      }
+
       if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
         uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
         currentStep        += (freeProgramBytes & 0xfffc);
@@ -766,7 +774,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-          moreInfoOnError("In function btnPressed:", errorMessage, NULL, NULL);
+          moreInfoOnError("In function fnKeyCC:", errorMessage, NULL, NULL);
         #endif
       }
       break;
@@ -937,7 +945,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function fnKeyUp: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -953,13 +961,38 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_PEM:
-      if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
-        firstDisplayedStepNumber--;
-        firstDisplayedStep = findPreviousStep(firstDisplayedStep);
-      }
+      resetAlphaSelectionBuffer();
+      if(softmenuStackPointer > 0) {
+        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+        if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+        }
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+        }
+        else {
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-      if(currentStepNumber != 0) {
-        currentStepNumber--;
+          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+          }
+          else {
+            softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+          }
+
+          setCatalogLastPos();
+        }
+      }
+      else {
+        if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
+          firstDisplayedStepNumber--;
+          firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+        }
+
+        if(currentStepNumber != 0) {
+          currentStepNumber--;
+        }
       }
       break;
 
@@ -1037,7 +1070,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function fnKeyDown: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -1094,7 +1127,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
 
     case CM_NIM:
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
+        moreInfoOnError("In function fnKeyDotD:", "the data type date is to be coded!", NULL, NULL);
       #endif
       break;
 

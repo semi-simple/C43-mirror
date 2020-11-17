@@ -61,28 +61,28 @@ extern bool_t PLOT_SHADE;
 int8_t plotmode;                            //      _SCAT
 
 void graph_reset      ();
-void fnPline          (uint16_t unusedParamButMandatory);
-void fnPcros          (uint16_t unusedParamButMandatory);
-void fnPbox           (uint16_t unusedParamButMandatory);
-void fnPintg          (uint16_t unusedParamButMandatory);
-void fnPdiff          (uint16_t unusedParamButMandatory);
-void fnPrms           (uint16_t unusedParamButMandatory);
-void fnPvect          (uint16_t unusedParamButMandatory);
-void fnPNvect         (uint16_t unusedParamButMandatory);
-void fnScale          (uint16_t unusedParamButMandatory);
-void fnPshade         (uint16_t unusedParamButMandatory);
-void fnPx             (uint16_t unusedParamButMandatory);
-void fnPy             (uint16_t unusedParamButMandatory);
+void fnPline          (uint16_t unusedButMandatoryParameter);
+void fnPcros          (uint16_t unusedButMandatoryParameter);
+void fnPbox           (uint16_t unusedButMandatoryParameter);
+void fnPintg          (uint16_t unusedButMandatoryParameter);
+void fnPdiff          (uint16_t unusedButMandatoryParameter);
+void fnPrms           (uint16_t unusedButMandatoryParameter);
+void fnPvect          (uint16_t unusedButMandatoryParameter);
+void fnPNvect         (uint16_t unusedButMandatoryParameter);
+void fnScale          (uint16_t unusedButMandatoryParameter);
+void fnPshade         (uint16_t unusedButMandatoryParameter);
+void fnPx             (uint16_t unusedButMandatoryParameter);
+void fnPy             (uint16_t unusedButMandatoryParameter);
 void pixelline        (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void plotline         (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void graph_setupmemory(void);
 void graph_sigmaplus  (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 void graph_end        (void);
-void fnListXY         (uint16_t unusedParamButMandatory);
+void fnListXY         (uint16_t unusedButMandatoryParameter);
 void fnStatList       (void);
 void graph_plotmem    (void);
-void fnPlot           (uint16_t unusedParamButMandatory);
-void fnPlotLS         (uint16_t unusedParamButMandatory);
+void fnPlot           (uint16_t unusedButMandatoryParameter);
+void fnPlotLS         (uint16_t unusedButMandatoryParameter);
 
 #ifndef TESTSUITE_BUILD
 int16_t screen_window_x(float/*double*/ x_min, float/*double*/ x, float/*double*/ x_max);

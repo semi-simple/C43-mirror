@@ -719,22 +719,17 @@ void Shft_stop() {
  * \return void
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
+#if 0                         //Depreciated JM_DOT
 if(jm_FG_DOTS) {                                                               // Changed to INVERTPIXEL
-//  invertPixel (xx+4,yy+7);   //Used to be SetPixel vv
     invertPixel (xx+5,yy+6);
-//  invertPixel (xx+6,yy+6);
     invertPixel (xx+6,yy+5);
-//  invertPixel (xx+7,yy+4);
     invertPixel (xx+6,yy+3);
-//  invertPixel (xx+6,yy+2);
     invertPixel (xx+5,yy+2);
     invertPixel (xx+4,yy+2);
     invertPixel (xx+3,yy+2);
-//  invertPixel (xx+2,yy+2);
     invertPixel (xx+2,yy+3);
     invertPixel (xx+2,yy+4);
     invertPixel (xx+2,yy+5);
-//  invertPixel (xx+2,yy+6);
     invertPixel (xx+3,yy+6);
     invertPixel (xx+4,yy+6);
     invertPixel (xx+5,yy+5);
@@ -742,77 +737,11 @@ if(jm_FG_DOTS) {                                                               /
     invertPixel (xx+5,yy+3);
     invertPixel (xx+3,yy+3);
     invertPixel (xx+3,yy+5);
-/*  invertPixel (xx+4,yy+7);   //Used to be ClearPixel vv
-    invertPixel (xx+5,yy+7);
-    invertPixel (xx+6,yy+7);
-    invertPixel (xx+6,yy+6);
-    invertPixel (xx+7,yy+6);
-    invertPixel (xx+7,yy+5);
-    invertPixel (xx+7,yy+4);
-    invertPixel (xx+7,yy+3);
-    invertPixel (xx+6,yy+2);
-    invertPixel (xx+6,yy+1);
-    invertPixel (xx+5,yy+1);
-    invertPixel (xx+4,yy+1);
-    invertPixel (xx+3,yy+1);
-    invertPixel (xx+2,yy+2);
-    invertPixel (xx+1,yy+3);
-    invertPixel (xx+1,yy+4);
-    invertPixel (xx+1,yy+5);
-    invertPixel (xx+1,yy+6);
-    invertPixel (xx+2,yy+6);
-    invertPixel (xx+3,yy+7);*/
   }
+#endif
 }
 
 
-/*
-void JM_DOT_old(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
-
-//setPixel (xx+4,yy+7);
-  setPixel (xx+5,yy+6);
-//setPixel (xx+6,yy+6);
-  setPixel (xx+6,yy+5);
-//setPixel (xx+7,yy+4);
-  setPixel (xx+6,yy+3);
-//setPixel (xx+6,yy+2);
-  setPixel (xx+5,yy+2);
-  setPixel (xx+4,yy+2);
-  setPixel (xx+3,yy+2);
-//setPixel (xx+2,yy+2);
-  setPixel (xx+2,yy+3);
-  setPixel (xx+2,yy+4);
-  setPixel (xx+2,yy+5);
-//setPixel (xx+2,yy+6);
-  setPixel (xx+3,yy+6);
-  setPixel (xx+4,yy+6);
-  setPixel (xx+5,yy+5);
-  setPixel (xx+6,yy+4);
-  setPixel (xx+5,yy+3);
-  setPixel (xx+3,yy+3);
-  setPixel (xx+3,yy+5);
-  clearPixel (xx+4,yy+7);
-  clearPixel (xx+5,yy+7);
-  clearPixel (xx+6,yy+7);
-  clearPixel (xx+6,yy+6);
-  clearPixel (xx+7,yy+6);
-  clearPixel (xx+7,yy+5);
-  clearPixel (xx+7,yy+4);
-  clearPixel (xx+7,yy+3);
-  clearPixel (xx+6,yy+2);
-  clearPixel (xx+6,yy+1);
-  clearPixel (xx+5,yy+1);
-  clearPixel (xx+4,yy+1);
-  clearPixel (xx+3,yy+1);
-  clearPixel (xx+2,yy+2);
-  clearPixel (xx+1,yy+3);
-  clearPixel (xx+1,yy+4);
-  clearPixel (xx+1,yy+5);
-  clearPixel (xx+1,yy+6);
-  clearPixel (xx+2,yy+6);
-  clearPixel (xx+3,yy+7);
-}
-*/
 
 /********************************************//**
  * \brief Sets a black pixel on the screen.
@@ -889,8 +818,14 @@ void invertPixel(uint32_t x, uint32_t y) {           //JM
 
 
 #ifndef DMCP_BUILD
+int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
     uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+    if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {
+      printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
+      clear_ul(); //JMUL
+    }
     
     if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
         printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
@@ -929,13 +864,14 @@ uint8_t  maxiC = 0;                                                             
  * \param[in] showEndingCols bool_t  Display the ending empty columns
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols)   {
   uint32_t  col, row, xGlyph, endingCols;
   int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
   //printf("^^^ %d %d %d %d\n",charCode, combinationFonts, miniC, maxiC);
   int8_t rep_enlarge;
+
   bool_t enlarge = false;                                   //JM ENLARGE vv
   if(combinationFonts == 2) {
     if(maxiC == 1 && font == &numericFont) {                //JM allow enlargements
@@ -981,7 +917,7 @@ uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32
 
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
-  lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode != vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
+  lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
   y += glyph->rowsAboveGlyph;
   //x += xGlyph; //JM
 
@@ -990,36 +926,35 @@ uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
-      // Drawing the columns of the glyph
-    int32_t bit = 7;
-    for(col=0; col<glyph->colsGlyph; col++) {
-      if(bit == 7) {
-          //        byte = *(data++);
-          byte = *(data);                                                  //JM ENLARGE
-          if(rep_enlarge == 0) data++;                                     //JM ENLARGE
-          if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
-      }
-
-      if(byte & 0x80) {// MSB set
-        if(videoMode == vmNormal) { // Black pixel for white background
-          setBlackPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+        // Drawing the columns of the glyph
+      int32_t bit = 7;
+      for(col=0; col<glyph->colsGlyph; col++) {
+        if(bit == 7) {
+            //        byte = *(data++);
+            byte = *(data);                                                  //JM ENLARGE
+            if(rep_enlarge == 0) data++;                                     //JM ENLARGE
+            if(miniC!=0) byte = (uint8_t)byte | (((uint8_t)byte) << 1);           //JMmini
         }
-        else { // White pixel for black background
-          setWhitePixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+
+        if(byte & 0x80) {// MSB set
+          if(videoMode == vmNormal) { // Black pixel for white background
+            setBlackPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+          }
+          else { // White pixel for black background
+            setWhitePixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+          }
+        }
+
+        byte <<= 1;
+
+        if(--bit == -1) {
+          bit = 7;
         }
       }
-
-      byte <<= 1;
-
-      if(--bit == -1) {
-        bit = 7;
-      }
+      if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;     //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
+      rep_enlarge--;
     }
-    if(rep_enlarge == 1 && row!=3 && row!=6 && row!=9 && row!=12) y++;     //JM ENLARGE vv do not advance the row counter for four rows, to match the row height of the enlarge font
-    rep_enlarge--;
-
   }
-
   return x + ((xGlyph + glyph->colsGlyph + endingCols) >> miniC);        //JMmini
 }
 
@@ -1107,7 +1042,7 @@ uint16_t current_cursor_y = 0;
 int16_t  displayAIMbufferoffset;
 //#define lines 5                                                          //JMCURSOR vv
 //#define y_offset 2    //lines   0
-uint32_t showStringEd(int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
+uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
   uint16_t ch, charCode, lg;
   int16_t  glyphId;
   bool_t   slc, sec;
@@ -2188,24 +2123,12 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
           }
-          #ifdef PC_BUILD
-            for(w=0; w<SCREEN_WIDTH; w++) {
-              if(displayStack == 3)
-                setPixel(w, Y_POSITION_OF_REGISTER_Z_LINE - 2); else
-              if(displayStack == 2)
-                setPixel(w, Y_POSITION_OF_REGISTER_Y_LINE - 2); else
-              if(displayStack == 1)
-                setPixel(w, Y_POSITION_OF_REGISTER_X_LINE - 2);
-            }
-          #endif
-          #if DMCP_BUILD
             if(displayStack == 3)
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Z_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else
             if(displayStack == 2)
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else
             if(displayStack == 1)
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_X_LINE - 2, SCREEN_WIDTH, 1, 0xFF);            
-          #endif
         }                                                                 //JM ^^
 
               }
@@ -2558,34 +2481,3 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
   }
 }                                                       //JM ^^
 
-
-#ifdef PC_BUILD
-int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
-void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
-  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
-
-  if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {
-    printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
-    clear_ul(); //JMUL
-  }
-
-
-//if(calcMode == CM_NIM) {
-//  printf("lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d\n", x, y, dx, dy, val);
-//}
-
-  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-    return;
-  }
-
-  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-  for(line=y; line<endY; line++) {
-    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-      *pixel = pixelColor;
-    }
-  }
-
-  screenChange = true;
-}
-#endif

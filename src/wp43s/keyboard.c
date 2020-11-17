@@ -1169,9 +1169,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
           aimBuffer[T_cursorPos] = 0;                  //break it at the current cursor
           lg = stringLastGlyph(aimBuffer);             //find beginning of last glyoh, to delete
           aimBuffer[lg] = 0;                           //delete it
-//mod       newXCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-/*mod*/     newXCursor = 1+stringWidth(aimBuffer, &standardFont, true, true);
-          if(newXCursor !=0) newXCursor--;             //Adjust cursor position marginally closer to letter on left
           aimBuffer[T_cursorPos] = T_cursorPos_tmp;    //Restore broken glyph in middle at break point
           uint16_t ix = 0;
           while(aimBuffer[ix+T_cursorPos] != 0) {      //copy second part to append to first part
@@ -1179,7 +1176,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
             ix++;
           }
           aimBuffer[ix+lg]=0;                          //end new buffer
-//mod     T_cursorPos_tmp = showString(aimBuffer + T_cursorPos, &standardFont, xCursor + 6 /*Normally 8, reduced either side by 1*/, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
           fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left
 //JMCURSOR^^
       }

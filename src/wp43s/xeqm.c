@@ -995,7 +995,7 @@ void XEQMENU_loadAllfromdisk(void) {
 
 /*
 //Fixed test program, dispatching commands
-void testprogram_12(uint16_t unusedParamButMandatory){
+void testprogram_12(uint16_t unusedButMandatoryParameter){
 
     runkey(ITM_TICKS); //622
     runkey(684);       //X<>Y
@@ -1014,7 +1014,7 @@ void testprogram_12(uint16_t unusedParamButMandatory){
 
 
 //Fixed test program, dispatching commands from text string
-void testprogram_1(uint16_t unusedParamButMandatory){
+void testprogram_1(uint16_t unusedButMandatoryParameter){
 char line1[TMP_STR_LENGTH];
    strcpy(line1,
     "TICKS //RPN Program to demostrate PRIME// "
@@ -1107,7 +1107,7 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 
 
 
-void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
+void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
     //printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {
@@ -1189,7 +1189,7 @@ void fnXEQMEDIT (uint16_t unusedParamButMandatory) {
 }
 
 
-void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
+void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
   char line1[3000];
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
@@ -1203,13 +1203,13 @@ void fnXEQMXXEQ (uint16_t unusedParamButMandatory) {
 
 
 
-void fnXEQNEW (uint16_t unusedParamButMandatory) {
+void fnXEQNEW (uint16_t unusedButMandatoryParameter) {
   fnStrtoX("XEQC43 XEQLBL 01 XXXXXX ");
   fnXEQMEDIT(0);
 }
 
 
-void fnCla(uint16_t unusedParamButMandatory){
+void fnCla(uint16_t unusedButMandatoryParameter){
   //Not using calcModeAim becose some modes are reset which should not be
   aimBuffer[0]=0;
   T_cursorPos = 0;
@@ -1227,7 +1227,7 @@ void fnCla(uint16_t unusedParamButMandatory){
 }
 
 
-void fnCln(uint16_t unusedParamButMandatory){
+void fnCln(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
     calcModeNim(0);
     last_CM=252;

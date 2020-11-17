@@ -67,7 +67,7 @@ uint16_t current_cursor_x;
 uint16_t current_cursor_y;
 int16_t  displayAIMbufferoffset;
 
-int16_t  showStringEd                         (int16_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, int16_t x, int16_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+uint32_t showStringEd                         (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
 
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
@@ -77,7 +77,7 @@ void     force_refresh                        (void);                           
 void     refreshScreen                        (void);
 void     setBlackPixel                        (uint32_t x, uint32_t y);
 void     setWhitePixel                        (uint32_t x, uint32_t y);
-//void     invertPixel                          (uint32_t x, uint32_t y);
+void     invertPixel                          (uint32_t x, uint32_t y);  //JM
 //int      getPixel                             (uint32_t x, uint32_t y);
 uint32_t showString                           (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 uint32_t showGlyph                            (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);

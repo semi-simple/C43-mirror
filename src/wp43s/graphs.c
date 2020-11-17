@@ -34,8 +34,8 @@ float    x_min;
 float    x_max;
 float    y_min;
 float    y_max;
-uint16_t xzero;
-uint8_t  yzero;
+uint32_t xzero;
+uint32_t yzero;
 bool_t invalid_intg = true;
 bool_t invalid_diff = true;
 bool_t invalid_rms = true;
@@ -61,14 +61,14 @@ void graph_reset(){
 }
 
 
-void fnPline(uint16_t unusedParamButMandatory) {
+void fnPline(uint16_t unusedButMandatoryParameter) {
   PLOT_LINE = !PLOT_LINE;
   fnRefreshComboxState(CB_JC, JC_PLINE, PLOT_LINE);                //jm
   fnPlot(0);
 }
 
 
-void fnPcros(uint16_t unusedParamButMandatory) {
+void fnPcros(uint16_t unusedButMandatoryParameter) {
   PLOT_CROSS = !PLOT_CROSS;
   if(PLOT_CROSS) PLOT_BOX = false;
   fnRefreshComboxState(CB_JC, JC_PCROS, PLOT_CROSS);                //jm
@@ -76,72 +76,72 @@ void fnPcros(uint16_t unusedParamButMandatory) {
 }
 
 
-void fnPbox (uint16_t unusedParamButMandatory) {
+void fnPbox (uint16_t unusedButMandatoryParameter) {
   PLOT_BOX = !PLOT_BOX;
   if(PLOT_BOX) PLOT_CROSS = false;
   fnRefreshComboxState(CB_JC, JC_PBOX, PLOT_BOX);                //jm
   fnPlot(0);
 }
 
-void fnPintg (uint16_t unusedParamButMandatory) {
+void fnPintg (uint16_t unusedButMandatoryParameter) {
   PLOT_INTG = !PLOT_INTG;
   if(!PLOT_INTG) PLOT_SHADE = false;
   fnRefreshComboxState(CB_JC, JC_INTG, PLOT_INTG);                //jm
   fnPlot(0);
 }
 
-void fnPdiff (uint16_t unusedParamButMandatory) {
+void fnPdiff (uint16_t unusedButMandatoryParameter) {
   PLOT_DIFF = !PLOT_DIFF;
   fnRefreshComboxState(CB_JC, JC_DIFF, PLOT_DIFF);                //jm
   fnPlot(0);
 }
 
-void fnPrms (uint16_t unusedParamButMandatory) {
+void fnPrms (uint16_t unusedButMandatoryParameter) {
   PLOT_RMS = !PLOT_RMS;
   fnRefreshComboxState(CB_JC, JC_RMS, PLOT_RMS);                //jm
   fnPlot(0);
 }
 
-void fnPvect (uint16_t unusedParamButMandatory) {
+void fnPvect (uint16_t unusedButMandatoryParameter) {
   jm_VECT = !jm_VECT;
   if(jm_VECT) {jm_NVECT = false;}
   fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
   fnPlot(0);
 }    
 
-void fnPNvect (uint16_t unusedParamButMandatory) {
+void fnPNvect (uint16_t unusedButMandatoryParameter) {
   jm_NVECT = !jm_NVECT;
   if(jm_NVECT) {jm_VECT = false;}
   fnRefreshComboxState(CB_JC, JC_NVECT, jm_NVECT);                //jm
   fnPlot(0);
 }    
 
-void fnScale (uint16_t unusedParamButMandatory) {
+void fnScale (uint16_t unusedButMandatoryParameter) {
   jm_SCALE = !jm_SCALE;
   fnRefreshComboxState(CB_JC, JC_SCALE, jm_SCALE);                //jm
   fnPlot(0);
 }    
 
-void fnPshade (uint16_t unusedParamButMandatory) {
+void fnPshade (uint16_t unusedButMandatoryParameter) {
   PLOT_SHADE = !PLOT_SHADE;
   if(PLOT_SHADE) PLOT_INTG = true;
   fnRefreshComboxState(CB_JC, JC_SHADE, PLOT_SHADE);                //jm
   fnPlot(0);
 }    
 
-void fnPx (uint16_t unusedParamButMandatory) {
+void fnPx (uint16_t unusedButMandatoryParameter) {
   extentx = !extentx;
   fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
   fnPlot(0);
 }
 
-void fnPy (uint16_t unusedParamButMandatory) {
+void fnPy (uint16_t unusedButMandatoryParameter) {
   extenty = !extenty;
   fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
   fnPlot(0);
 }
 
-void fnPlot(uint16_t unusedParamButMandatory) {
+void fnPlot(uint16_t unusedButMandatoryParameter) {
   Aspect_Square = true;
   if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
   if(previousCalcMode == CM_GRAPH) {
@@ -156,7 +156,7 @@ void fnPlot(uint16_t unusedParamButMandatory) {
   doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
 }
 
-void fnPlotLS(uint16_t unusedParamButMandatory) {
+void fnPlotLS(uint16_t unusedButMandatoryParameter) {
   Aspect_Square = false;
   if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
   if(previousCalcMode == CM_GRAPH) {
@@ -167,7 +167,7 @@ void fnPlotLS(uint16_t unusedParamButMandatory) {
 }
 
 
-void fnListXY(uint16_t unusedParamButMandatory) {
+void fnListXY(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     if(telltale == MEM_INITIALIZED) {
       calcMode = CM_LISTXY; //Used to view graph/listing
@@ -331,65 +331,39 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 
 //###################################################################################
-void placePixel(uint16_t x, uint8_t y) {
+void placePixel(uint32_t x, uint32_t y) {
 #ifndef TESTSUITE_BUILD
-  int16_t minn;
+  uint32_t minn;
   if (!Aspect_Square) minn = SCREEN_MIN_GRAPH;
   else minn = 0;
     
   if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+minn) {
-    setPixel(x,y);
+    setBlackPixel(x,y);
   }
 #endif
 }
 
-void removePixel(uint16_t x, uint8_t y) {
+void removePixel(uint32_t x, uint32_t y) {
 #ifndef TESTSUITE_BUILD
-  int16_t minn;
+  uint32_t minn;
   if (!Aspect_Square) minn = SCREEN_MIN_GRAPH;
   else minn = 0;
 
   if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+minn) {
-    clearPixel(x,y);
+    setWhitePixel(x,y);
   }
 #endif
 }
 
 void clearScreenPixels() {
-  #ifdef PC_BUILD
-    int16_t x, y;
+  if (Aspect_Square) {
+    lcd_fill_rect(SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH, 0, SCREEN_HEIGHT_GRAPH, SCREEN_HEIGHT_GRAPH, 0);
+    lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH, 171-5-Y_POSITION_OF_REGISTER_T_LINE+1, 0);
+    lcd_fill_rect(19, 171-5, SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH-19+1, 5, 0);
+  }
+  else
+    lcd_fill_rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT_GRAPH, 0);
 
-    if (Aspect_Square) {
-      for(y=0; y<SCREEN_HEIGHT_GRAPH; y++) {
-        for(x=SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x<SCREEN_WIDTH; x++) {
-         clearPixel(x, y);
-        }
-      }
-      for(y=Y_POSITION_OF_REGISTER_T_LINE /*+ 20*/; y<171; y++) {  //To just above the softmenu
-        for(x=0; x<SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH; x++) {
-         if(!(y>171-5 && x<20)) clearPixel(x, y);                     //To allow to scroll up/down not to be deleted
-        }
-      }
-    } 
-
-    else {
-      for(y=/*SCREEN_MIN_GRAPH*/0; y<SCREEN_HEIGHT_GRAPH; y++) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-         clearPixel(x, y);
-        }
-      }
-    }  
-
-
-  #endif
-
-  #if DMCP_BUILD
-    if (Aspect_Square)
-      lcd_fill_rect(SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH, 0, SCREEN_HEIGHT_GRAPH, SCREEN_HEIGHT_GRAPH, 0);
-    else
-      lcd_fill_rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT_GRAPH, 0);
-
-  #endif
 }                                                       //JM ^^
 
 
@@ -549,8 +523,8 @@ float auto_tick(float tick_int_f) {
 //###################################################################################
 void graph_axis (void){
   #ifndef TESTSUITE_BUILD
-  uint16_t cnt;
-  uint16_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5;
+  uint32_t cnt;
+  uint32_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5;
 
   //GRAPH RANGE
   //  graph_xmin= -3*3.14150;  graph_xmax= 2*3.14159;
@@ -640,7 +614,7 @@ void graph_axis (void){
   yzero = screen_window_y(y_min,0,y_max);
   xzero = screen_window_x(x_min,0,x_max);
 
-  int16_t minnx, minny;
+  uint32_t minnx, minny;
   if (!Aspect_Square) {
     minny = SCREEN_MIN_GRAPH;
     minnx = 0;
@@ -722,8 +696,8 @@ void graph_axis (void){
   cnt = minny;
   while (cnt!=SCREEN_HEIGHT_GRAPH) { 
     if (Aspect_Square) {
-        setPixel(minnx-1,cnt);   
-        setPixel(minnx-2,cnt);   
+        setBlackPixel(minnx-1,cnt);   
+        setBlackPixel(minnx-2,cnt);   
     }
     cnt++; 
   }
@@ -744,7 +718,7 @@ void graph_axis (void){
       cnt = 0;
     }  
     while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
-      setPixel(cnt,yzero); 
+      setBlackPixel(cnt,yzero); 
       cnt++; 
     }
 
@@ -752,27 +726,27 @@ void graph_axis (void){
 
    for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
       cnt = screen_window_x(x_min,x,x_max);
-        setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-1,minny)); //tick
+        setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-1,minny)); //tick
      }
     for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
       cnt = screen_window_x(x_min,x,x_max);
-        setPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-1,minny)); //tick
+        setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-1,minny)); //tick
      }
     for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
       cnt = screen_window_x(x_min,x,x_max);
-        setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-2,minny)); //tick
-        setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-3,minny)); //tick
+        setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-2,minny)); //tick
+        setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-3,minny)); //tick
      }
     for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
       cnt = screen_window_x(x_min,x,x_max);
-        setPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-2,minny)); //tick
-        setPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setPixel(cnt,max(yzero-3,minny)); //tick
+        setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-2,minny)); //tick
+        setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+        setBlackPixel(cnt,max(yzero-3,minny)); //tick
      }
   }
 
@@ -790,37 +764,33 @@ void graph_axis (void){
     }
 
     //DRAW YAXIS
-    cnt = minny;
-    while (cnt!=SCREEN_HEIGHT_GRAPH) { 
-      setPixel(xzero,cnt); 
-      cnt++; 
-    }
+    lcd_fill_rect(xzero,minny,1,SCREEN_HEIGHT_GRAPH-minny,0xFF);
 
     force_refresh();
 
     for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
       cnt = screen_window_y(y_min,y,y_max);
-      setPixel(max(xzero-1,0),cnt); //tick
-      setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-1,0),cnt); //tick
+      setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
     }  
     for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
       cnt = screen_window_y(y_min,y,y_max);
-      setPixel(max(xzero-1,0),cnt); //tick
-      setPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-1,0),cnt); //tick
+      setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
     }  
     for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
       cnt = screen_window_y(y_min,y,y_max);
-      setPixel(max(xzero-2,0),cnt); //tick
-      setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      setPixel(max(xzero-3,0),cnt); //tick
-      setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-2,0),cnt); //tick
+      setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-3,0),cnt); //tick
+      setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
     }  
     for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
       cnt = screen_window_y(y_min,y,y_max);
-      setPixel(max(xzero-2,0),cnt); //tick
-      setPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      setPixel(max(xzero-3,0),cnt); //tick
-      setPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-2,0),cnt); //tick
+      setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      setBlackPixel(max(xzero-3,0),cnt); //tick
+      setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
     }  
   }
 

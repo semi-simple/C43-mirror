@@ -78,7 +78,7 @@ void fneRPN(uint16_t state) {
 
 
 
-void fnCFGsettings(uint16_t unusedParamButMandatory) {
+void fnCFGsettings(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
   runFunction(ITM_FF);
   showSoftmenu(NULL, -MNU_SYSFL, true);
@@ -87,7 +87,7 @@ void fnCFGsettings(uint16_t unusedParamButMandatory) {
 
 
 
-void fnClAIM(uint16_t unusedParamButMandatory) {  //clear input buffe
+void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
   if(calcMode == CM_NIM) {
     strcpy(aimBuffer,"+");
     fnKeyBackspace(0);
@@ -105,7 +105,7 @@ void fnClAIM(uint16_t unusedParamButMandatory) {  //clear input buffe
 
 //fnArg for real and longints in addition to the standard complex. Simply returns 0 angle
 
-void fnArg_all(uint16_t unusedParamButMandatory) {
+void fnArg_all(uint16_t unusedButMandatoryParameter) {
 longInteger_t li;
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {       //JM vv add the obvious case that a number has 0/180 degrees. Why error for this.
@@ -132,7 +132,7 @@ longInteger_t li;
 
 
 
-void fnToPolar2(uint16_t unusedParamButMandatory) {
+void fnToPolar2(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
 //    fnComplexMode(CM_POLAR);
       fnSetFlag(FLAG_POLAR);
@@ -144,7 +144,7 @@ void fnToPolar2(uint16_t unusedParamButMandatory) {
 
 
 
-void fnToRect2(uint16_t unusedParamButMandatory) {
+void fnToRect2(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
  //     fnComplexMode(CM_RECTANGULAR);
       fnClearFlag(FLAG_POLAR);
@@ -155,7 +155,7 @@ void fnToRect2(uint16_t unusedParamButMandatory) {
 
 
 
-void fnRoundi2(uint16_t unusedParamButMandatory) {
+void fnRoundi2(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
     //nothing
   }
@@ -164,7 +164,7 @@ void fnRoundi2(uint16_t unusedParamButMandatory) {
 }
 
 
-void fnRound2(uint16_t unusedParamButMandatory) {
+void fnRound2(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtShortInteger) {
     //nothing
   }
@@ -175,7 +175,7 @@ void fnRound2(uint16_t unusedParamButMandatory) {
 
 
 
-void fnTo_ms(uint16_t unusedParamButMandatory) {
+void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
 
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
@@ -264,7 +264,7 @@ void fnMultiplySI(uint16_t multiplier) {
 
 
 
-void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
+void fn_cnst_op_j(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -273,7 +273,7 @@ void fn_cnst_op_j(uint16_t unusedParamButMandatory) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
-void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
+void fn_cnst_op_aa(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -283,7 +283,7 @@ void fn_cnst_op_aa(uint16_t unusedParamButMandatory) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
-void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
+void fn_cnst_op_a(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -293,7 +293,7 @@ void fn_cnst_op_a(uint16_t unusedParamButMandatory) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
-void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
+void fn_cnst_0_cpx(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -302,7 +302,7 @@ void fn_cnst_0_cpx(uint16_t unusedParamButMandatory) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
-void fn_cnst_1_cpx(uint16_t unusedParamButMandatory) {
+void fn_cnst_1_cpx(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
@@ -335,7 +335,7 @@ void JM_convertReal34ToLongInteger(uint16_t confirmation) {
 
 
 
-void fnLongInt (uint16_t unusedParamButMandatory) {
+void fnLongInt (uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   int32_t dataTypeX = getRegisterDataType(REGISTER_X);
@@ -394,7 +394,7 @@ void JM_convertReal34ToShortInteger(uint16_t confirmation) {
 
 
 //Rounding
-void fnJM_2SI(uint16_t unusedParamButMandatory) {       //Convert Real to Longint; Longint to shortint; shortint to longint
+void fnJM_2SI(uint16_t unusedButMandatoryParameter) {       //Convert Real to Longint; Longint to shortint; shortint to longint
 
 
   switch(getRegisterDataType(REGISTER_X)) {

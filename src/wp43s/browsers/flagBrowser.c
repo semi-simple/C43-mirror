@@ -288,11 +288,11 @@ void flagBrowser(uint16_t unusedButMandatoryParameter) {
 /********************************************//**
  * \brief The flag browser application
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected from last old version JM
-  int16_t f, x, y, i;
+void flagBrowser_old(uint16_t unusedButMandatoryParameter) {           //Resurrected from last old version JM
+  int16_t f, i;
 
   if(calcMode != CM_FLAG_BROWSER_OLD) {
     if(calcMode == CM_AIM) {
@@ -315,13 +315,8 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
 
     for(f=0; f<=99/*79*/; f++) {                                          //JM 99
       if(getFlag(f)) {
-        for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-          for(y=22*(f/10)+66-1-44; y<22*(f/10)+66+20-1-44; y++) {         //JM-44
-            setPixel(x, y);
-          }
-        }
+        lcd_fill_rect(40*(f%10)+1,22*(f/10)+66-1-44,  40*(f%10)+39-(40*(f%10)+1),22*(f/10)+66+20-1-44-(22*(f/10)+66-1-44)+1,0xFF);
       }
-
       sprintf(tmpString, "%d", f);
       showString(tmpString, &standardFont, 40*(f%10) + 19 - stringWidth(tmpString, &standardFont, false, false)/2, 22*(f/10)+66-1-44, getFlag(f) ? vmReverse : vmNormal, true, true); //JM-44
     }
@@ -334,11 +329,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
 
     for(f=100/*80*/; f<NUMBER_OF_GLOBAL_FLAGS; f++) {                     //JM100
       if(getFlag(f)) {
-        for(x=80*(f%5); x<80*(f%5)+74; x++) {
-          for(y=22*(f/5)-132-1-44-220; y<22*(f/5)-132+20-1-44-220; y++) {       //JM-44
-           setPixel(x, y);
-          }
-        }
+        lcd_fill_rect(80*(f%5), 22*(f/5)-132-1-44-220, 80*(f%5)+74-(80*(f%5)), 22*(f/5)-132+20-1-44-220-(22*(f/5)-132-1-44-220)+1, 0xFF);
       }
 
       switch(f) {
@@ -375,11 +366,7 @@ void flagBrowser_old(uint16_t unusedParamButMandatory) {           //Resurrected
 
       for(f=0; f<16; f++) {
         if(getFlag(NUMBER_OF_GLOBAL_FLAGS+f)) {
-          for(x=40*(f%10)+1; x<40*(f%10)+39; x++) {
-            for(y=22*(f/10)+176-1-44; y<22*(f/10)+176+20-1-44; y++) {                 //JM-44
-             setPixel(x, y);
-            }
-          }
+          lcd_fill_rect(40*(f%10)+1, 22*(f/10)+176-1-44, 40*(f%10)+39-(40*(f%10)+1), 22*(f/10)+176+20-1-44-(22*(f/10)+176-1-44)+1,  0xFF);
         }
 
         sprintf(tmpString, "%d", f);

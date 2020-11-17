@@ -219,6 +219,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
+//NOTE SETPIXEL OPERANDS NOT CHANGED TO 32b
 
                     void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
                       #ifndef TESTSUITE_BUILD
@@ -234,10 +235,10 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
                       for(y=y_min; y<=y_max; y+=tick_y) {
                         cnt = screen_window_y(y_min,y,y_max);
-                        setPixel(max(0,xzero-1),cnt); //tick
-                        setPixel(max(0,xzero-2),cnt); //tick
-                        setPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
-                        setPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
+                        setBlackPixel(max(0,xzero-1),cnt); //tick
+                        setBlackPixel(max(0,xzero-2),cnt); //tick
+                        setBlackPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
+                        setBlackPixel(min(SCREEN_WIDTH_GRAPH-1,xzero+1),cnt); //tick
                       }  
 
                       //GRAPH
@@ -249,10 +250,10 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
                         int16_t a_int = (int) a_ft;
                         float a_frac = a_ft - a_int;
                         if(a_frac < (x_max-x_min)/300) {               //Frac < 6.6 % is deemed close enough
-                          setPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+1)); //tick
-                          setPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-1)); //tick
-                          setPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+2)); //tick
-                          setPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-2)); //tick
+                          setBlackPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+1)); //tick
+                          setBlackPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-1)); //tick
+                          setBlackPixel(cnt,min(SCREEN_WIDTH_GRAPH-1,yzero+2)); //tick
+                          setBlackPixel(cnt,max(SCREEN_MIN_GRAPH,yzero-2)); //tick
                           force_refresh();
                         }
 
@@ -280,18 +281,18 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
                           #endif
                           if(yo > yn) {
                             for(y1=yo; y1!=yn; y1-=1) {
-                              setPixel(x1,y1);
+                              setBlackPixel(x1,y1);
                             }
                           } 
                           else if(yo < yn) {
                             for(y1=yo; y1!=yn; y1+=1) {
-                            setPixel(x1,y1);
+                            setBlackPixel(x1,y1);
                             }
                           } else {
-                            setPixel(x1,yn);
+                            setBlackPixel(x1,yn);
                           }
-                        setPixel(cnt,SCREEN_HEIGHT_GRAPH-1 );
-                        setPixel(cnt,SCREEN_MIN_GRAPH);
+                        setBlackPixel(cnt,SCREEN_HEIGHT_GRAPH-1 );
+                        setBlackPixel(cnt,SCREEN_MIN_GRAPH);
                         }
                       cnt++;                      
                       }
@@ -324,12 +325,12 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
                       //DRAW AXIS
                       cnt = 0;  
                       while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
-                          setPixel(cnt,yzero); 
+                          setBlackPixel(cnt,yzero); 
                           cnt++; 
                         }
                       cnt = SCREEN_MIN_GRAPH;  
                       while (cnt!=SCREEN_HEIGHT_GRAPH-1) { 
-                          setPixel(xzero,cnt); 
+                          setBlackPixel(xzero,cnt); 
                           cnt++; 
                         }
 

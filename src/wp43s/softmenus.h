@@ -26,7 +26,7 @@ void pushSoftmenu           (int16_t softmenu);
 void popSoftmenu            (void);
 void setCatalogLastPos      (void);
 
-void    fnDumpMenus(uint16_t unusedParamButMandatory);  //JM
+void    fnDumpMenus(uint16_t unusedButMandatoryParameter);  //JM
 void    rolloutSoftmenusIncluding(int16_t target);      //JM
 int16_t mm(int16_t id);                                 //JM
 const   int16_t menu_A_HOME[360];                       //JM

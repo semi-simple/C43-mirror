@@ -398,7 +398,7 @@ void fnMirror(uint16_t unusedButMandatoryParameter) {
  * \brief regX ==> regL and Change Endianness(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSwapEndian(uint8_t bitWidth) {

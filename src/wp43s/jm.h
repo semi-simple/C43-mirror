@@ -159,11 +159,11 @@ char  indexOfItemsXEQM[18*8];                                       //JMXEQ
 
 
 // Additional routines needed in jm.c
-//void fnSeteRPN(uint16_t unusedParamButMandatory);         //dr - unused
-//void fnSetHOME3(uint16_t unusedParamButMandatory);        //dr - unused
+//void fnSeteRPN(uint16_t unusedButMandatoryParameter);         //dr - unused
+//void fnSetHOME3(uint16_t unusedButMandatoryParameter);        //dr - unused
 void fnSetSetJM(uint16_t jmConfig);
 void fnSigmaAssign(uint16_t sigmaAssign);
-void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory);
+void fnGetSigmaAssignToX(uint16_t unusedButMandatoryParameter);
 
 //void fnInfo(bool_t Info);
 

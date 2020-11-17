@@ -20,26 +20,26 @@
  * \file arctan.h
  ***********************************************/
 
-void fneRPN         (uint16_t unusedParamButMandatory);
-void fnCFGsettings  (uint16_t unusedParamButMandatory);
-void fnClAIM        (uint16_t unusedParamButMandatory);
-void fnArg_all      (uint16_t unusedParamButMandatory);
-void fnToPolar2     (uint16_t unusedParamButMandatory);
-void fnToRect2      (uint16_t unusedParamButMandatory);
-void fnTo_ms        (uint16_t unusedParamButMandatory);
+void fneRPN         (uint16_t unusedButMandatoryParameter);
+void fnCFGsettings  (uint16_t unusedButMandatoryParameter);
+void fnClAIM        (uint16_t unusedButMandatoryParameter);
+void fnArg_all      (uint16_t unusedButMandatoryParameter);
+void fnToPolar2     (uint16_t unusedButMandatoryParameter);
+void fnToRect2      (uint16_t unusedButMandatoryParameter);
+void fnTo_ms        (uint16_t unusedButMandatoryParameter);
 void fnMultiplySI   (uint16_t multiplier);
-void fn_cnst_op_j   (uint16_t unusedParamButMandatory);
-void fn_cnst_op_aa  (uint16_t unusedParamButMandatory);
-void fn_cnst_op_a   (uint16_t unusedParamButMandatory);
-void fn_cnst_0_cpx  (uint16_t unusedParamButMandatory);
-void fn_cnst_1_cpx  (uint16_t unusedParamButMandatory);
-void fnLongInt      (uint16_t unusedParamButMandatory);
-void fnJM_2SI       (uint16_t unusedParamButMandatory);
-void fnRoundi2      (uint16_t unusedParamButMandatory);
-void fnRound2       (uint16_t unusedParamButMandatory);
-void fnAngularModeJM(uint16_t unusedParamButMandatory);
-void fnChangeBaseJM (uint16_t unusedParamButMandatory);
-void fnChangeBaseMNU(uint16_t unusedParamButMandatory);
+void fn_cnst_op_j   (uint16_t unusedButMandatoryParameter);
+void fn_cnst_op_aa  (uint16_t unusedButMandatoryParameter);
+void fn_cnst_op_a   (uint16_t unusedButMandatoryParameter);
+void fn_cnst_0_cpx  (uint16_t unusedButMandatoryParameter);
+void fn_cnst_1_cpx  (uint16_t unusedButMandatoryParameter);
+void fnLongInt      (uint16_t unusedButMandatoryParameter);
+void fnJM_2SI       (uint16_t unusedButMandatoryParameter);
+void fnRoundi2      (uint16_t unusedButMandatoryParameter);
+void fnRound2       (uint16_t unusedButMandatoryParameter);
+void fnAngularModeJM(uint16_t unusedButMandatoryParameter);
+void fnChangeBaseJM (uint16_t unusedButMandatoryParameter);
+void fnChangeBaseMNU(uint16_t unusedButMandatoryParameter);
 void fnInDefault    (uint16_t inputDefault);
 
 

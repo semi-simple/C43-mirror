@@ -21,16 +21,16 @@
  ***********************************************/
 
 bool_t strcompare            ( char *in1, char *in2);
-void fnXEQMENU               (uint16_t unusedParamButMandatory);
+void fnXEQMENU               (uint16_t unusedButMandatoryParameter);
 void capture_sequence        (char *origin, uint16_t item);
 void XEQMENU_Selection       (uint16_t selection, char *line1, bool_t exec);
 void XEQMENU_loadAllfromdisk (void);
 void fnXEQMSAVE              (uint16_t XEQM_no);
 void fnXEQMLOAD              (uint16_t XEQM_no);
-void fnXEQMEDIT              (uint16_t unusedParamButMandatory);
-void fnXEQMXXEQ              (uint16_t unusedParamButMandatory);
-void fnXEQNEW                (uint16_t unusedParamButMandatory);
+void fnXEQMEDIT              (uint16_t unusedButMandatoryParameter);
+void fnXEQMXXEQ              (uint16_t unusedButMandatoryParameter);
+void fnXEQNEW                (uint16_t unusedButMandatoryParameter);
 void runkey                  (int16_t item);
-void fnCla                   (uint16_t unusedParamButMandatory);
-void fnCln                   (uint16_t unusedParamButMandatory);
+void fnCla                   (uint16_t unusedButMandatoryParameter);
+void fnCln                   (uint16_t unusedButMandatoryParameter);
 

@@ -932,16 +932,16 @@ int16_t mm(int16_t id) {
 #define JM_LINE2_DRAW
 #undef JM_LINE2_DRAW
 #ifdef JM_LINE2_DRAW
-void JM_LINE2(int16_t xx, int16_t yy) {                          // To draw the lines for radiobutton on screen
-  int16_t x, y;
+void JM_LINE2(uint32_t xx, uint32_t yy) {                          // To draw the lines for radiobutton on screen
+  uint32_t x, y;
   y = yy-3-1;
   for(x=xx-66+1; x<min(xx-1,SCREEN_WIDTH); x++) {
     if(mod(x, 2) == 0) {
-      setPixel(x, y);
-      setPixel(x, y+2);
+      setBlackPixel(x, y);
+      setBlackPixel(x, y+2);
     }
     else {
-      setPixel(x, y+1);
+      setBlackPixel(x, y+1);
     }
   }
 }
@@ -953,243 +953,166 @@ void JM_LINE2(int16_t xx, int16_t yy) {                          // To draw the 
 #define RB_CLEAR_CENTER
 #undef RB_CLEAR_CENTER
 #ifdef RB_EXTRA_BORDER
-void rbColumnCcccccc(int16_t xx, int16_t yy) {
-  clearPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  clearPixel (xx,yy+2);
+void rbColumnCcccccc(uint32_t xx, uint32_t yy) {
+  lcd_fill_rect(xx,yy+2,1,7,  0);
 }
 #endif
 
 
 
-void rbColumnCcSssssCc(int16_t xx, int16_t yy) {
+void rbColumnCcSssssCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+9);
-  clearPixel (xx,yy+8);
+  lcd_fill_rect(xx,yy+8,1,2,  0);
 #endif
-  setPixel (xx,yy+7);
-  setPixel (xx,yy+6);
-  setPixel (xx,yy+5);
-  setPixel (xx,yy+4);
-  setPixel (xx,yy+3);
+  lcd_fill_rect(xx,yy+3,1,5,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+2);
-  clearPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+1,1,1,  0);
 #endif
 }
 
 
 
-void rbColumnCcSssssssCc(int16_t xx, int16_t yy) {
+void rbColumnCcSssssssCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
-  clearPixel (xx,yy+9);
+  lcd_fill_rect(xx,yy+9,1,2,  0);
 #endif
-  setPixel (xx,yy+8);
-  setPixel (xx,yy+7);
-  setPixel (xx,yy+6);
-  setPixel (xx,yy+5);
-  setPixel (xx,yy+4);
-  setPixel (xx,yy+3);
-  setPixel (xx,yy+2);
+  lcd_fill_rect(xx,yy+2,1,7,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+1);
-  clearPixel (xx,yy+0);
+  lcd_fill_rect(xx,yy,1,2,  0);
 #endif
 }
 
 
 
-void rbColumnCSssCccSssC(int16_t xx, int16_t yy) {
+void rbColumnCSssCccSssC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
-  setPixel (xx,yy+8);
-  setPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  setPixel (xx,yy+3);
-  setPixel (xx,yy+2);
-  setPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+7,1,3,  0xFF);
+  lcd_fill_rect(xx,yy+4,1,3,  0);
+  lcd_fill_rect(xx,yy+1,1,3,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
-void rbColumnCSsCSssCSsC(int16_t xx, int16_t yy) {
+void rbColumnCSsCSssCSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
-  setPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  setPixel (xx,yy+6);
-  setPixel (xx,yy+5);
-  setPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  setPixel (xx,yy+2);
-  setPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+8,1,2,  0xFF);
+  setWhitePixel (xx,yy+7);
+  lcd_fill_rect(xx,yy+4,1,3,  0xFF);
+  setWhitePixel (xx,yy+3);
+  lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
-void rbColumnCcSsNnnSsCc(int16_t xx, int16_t yy) {
+
+void rbColumnCcSsNnnSsCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
-  clearPixel (xx,yy+9);
+  lcd_fill_rect(xx,yy+9,1,2,  0);
 #endif
-  setPixel (xx,yy+8);
-  setPixel (xx,yy+7);
+  lcd_fill_rect(xx,yy+7,1,2,  0xFF);
 #ifdef RB_CLEAR_CENTER
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
+  lcd_fill_rect(xx,yy+4,1,3,  0);
 #endif
-  setPixel (xx,yy+3);
-  setPixel (xx,yy+2);
+  lcd_fill_rect(xx,yy+2,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+1);
-  clearPixel (xx,yy+0);
+  lcd_fill_rect(xx,yy+0,1,2,  0);
 #endif
 }
 
 
 
-void rbColumnCSsNnnnnSsC(int16_t xx, int16_t yy) {
+void rbColumnCSsNnnnnSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
-  setPixel (xx,yy+8);
+  lcd_fill_rect(xx,yy+8,1,2,  0xFF);
 #ifdef RB_CLEAR_CENTER
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
+  lcd_fill_rect(xx,yy+3,1,5,  0);
 #endif
-  setPixel (xx,yy+2);
-  setPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
-void rbColumnCSNnnnnnnSC(int16_t xx, int16_t yy) {
+void rbColumnCSNnnnnnnSC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
+  setBlackPixel (xx,yy+9);
 #ifdef RB_CLEAR_CENTER
-  clearPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  clearPixel (xx,yy+2);
+  lcd_fill_rect(xx,yy+2,1,7,  0);
 #endif
-  setPixel (xx,yy+1);
+  setBlackPixel (xx,yy+1);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
 #ifdef RB_EXTRA_BORDER
-void cbColumnCcccccccccc(int16_t xx, int16_t yy) {
-  clearPixel (xx,yy+10);
-  clearPixel (xx,yy+9);
-  clearPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  clearPixel (xx,yy+2);
-  clearPixel (xx,yy+1);
-  clearPixel (xx,yy+0);
+void cbColumnCcccccccccc(uint32_t xx, uint32_t yy) {
+  lcd_fill_rect(xx,yy+0,1,11,  0);
 }
 #endif
 
 
 
-void cbColumnCSssssssssC(int16_t xx, int16_t yy) {
+void cbColumnCSssssssssC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
-  setPixel (xx,yy+8);
-  setPixel (xx,yy+7);
-  setPixel (xx,yy+6);
-  setPixel (xx,yy+5);
-  setPixel (xx,yy+4);
-  setPixel (xx,yy+3);
-  setPixel (xx,yy+2);
-  setPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+1,1,9,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
-void cbColumnCSsCccccSsC(int16_t xx, int16_t yy) {
+void cbColumnCSsCccccSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
-  setPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  setPixel (xx,yy+2);
-  setPixel (xx,yy+1);
+  lcd_fill_rect(xx,yy+8,1,2,  0xFF);
+  lcd_fill_rect(xx,yy+3,1,5,  0);
+  lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
-void cbColumnCSNnnnnnnSC(int16_t xx, int16_t yy) {
+void cbColumnCSNnnnnnnSC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+10);
+  setWhitePixel (xx,yy+10);
 #endif
-  setPixel (xx,yy+9);
+  setBlackPixel (xx,yy+9);
 #ifdef RB_CLEAR_CENTER
-  clearPixel (xx,yy+8);
-  clearPixel (xx,yy+7);
-  clearPixel (xx,yy+6);
-  clearPixel (xx,yy+5);
-  clearPixel (xx,yy+4);
-  clearPixel (xx,yy+3);
-  clearPixel (xx,yy+2);
+  lcd_fill_rect(xx,yy+2,1,7,  0);
 #endif
-  setPixel (xx,yy+1);
+  setBlackPixel (xx,yy+1);
 #ifdef RB_EXTRA_BORDER
-  clearPixel (xx,yy+0);
+  setWhitePixel (xx,yy+0);
 #endif
 }
 
 
 
-void RB_CHECKED(int16_t xx, int16_t yy) {
+void RB_CHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   rbColumnCcccccc(xx+0, yy);
 #endif
@@ -1209,7 +1132,7 @@ void RB_CHECKED(int16_t xx, int16_t yy) {
 
 
 
-void RB_UNCHECKED(int16_t xx, int16_t yy) {
+void RB_UNCHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   rbColumnCcccccc(xx+0, yy);
 #endif
@@ -1229,7 +1152,7 @@ void RB_UNCHECKED(int16_t xx, int16_t yy) {
 
 
 
-void CB_CHECKED(int16_t xx, int16_t yy) {
+void CB_CHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   cbColumnCcccccccccc(xx+0, yy);
 #endif
@@ -1249,7 +1172,7 @@ void CB_CHECKED(int16_t xx, int16_t yy) {
 
 
 
-void CB_UNCHECKED(int16_t xx, int16_t yy) {
+void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   cbColumnCcccccccccc(xx+0, yy);
 #endif
@@ -1648,16 +1571,17 @@ void showSoftmenuCurrentPart(void) {
         }
 
 
-        for(x=0; x<20; x++) {                                                //JMvv    //triangle centre point  // Triangles indicating more menus
-          clearPixel(x, yDotted);
-        }
+                                         //JMvv    //triangle centre point  // Triangles indicating more menus
         #define t 5
         #define t_o 1.6*t                                                             //offset
-        #define tt_o -t-2  +4                                                             //total offset
-        //pixelline(x,yDotted+1,x+2*t,yDotted+1,false);
-        for(x=0; x<=t; x++) {
-          pixelline(x,       tt_o + yDotted-x+t,   t*2-x,       tt_o + yDotted-x+t  ,true );
-          pixelline(x + t_o, tt_o + yDotted-t+x+t, t*2-x + t_o, tt_o + yDotted-t+x+t,true );
+        #define tt_o 2                                                             //total offset
+        lcd_fill_rect(0,(uint32_t)(yDotted-t), 20,t+1, 0);
+        uint32_t xx;
+        for(xx=0; xx<=t; xx++) {
+          lcd_fill_rect(xx,       (uint32_t)(tt_o-t + yDotted-xx+t),   2*(t-xx), 1 ,true );
+          lcd_fill_rect(xx + t_o, (uint32_t)(tt_o-t + yDotted-t+xx+t), 2*(t-xx), 1 ,true );
+//          pixelline(xx,       tt_o-t + yDotted-xx+t,   t*2-xx,       tt_o-t + yDotted-xx+t  ,true );
+  //        pixelline(xx + t_o, tt_o-t + yDotted-t+xx+t, t*2-xx + t_o, tt_o-t + yDotted-t+xx+t,true );
                                                                             //JM ^^
         }
       }
@@ -2106,7 +2030,7 @@ void setCatalogLastPos(void) {
 #endif
 
 
-void fnDumpMenus(uint16_t unusedParamButMandatory) {                      //JM
+void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM
   int16_t m,n;
   m = 0;
     while(softmenu[m].menuId != 0) {

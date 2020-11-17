@@ -571,10 +571,10 @@ void FN_cancel() {
 
 //*************----------*************------- FN KEY PRESSED -------***************-----------------
 #ifdef PC_BUILD                                                           //JM LONGPRESS FN
-void btnFnPressed_StateMachine(GtkWidget *w, gpointer data) { 
+void btnFnPressed_StateMachine(GtkWidget *unused, gpointer data) { 
 #endif
 #ifdef DMCP_BUILD
-void btnFnPressed_StateMachine(void *w, void *data) {
+void btnFnPressed_StateMachine(void *unused, void *data) {
 #endif
   bool_t exexute_double_g;
   bool_t double_click_detected;
@@ -701,10 +701,10 @@ Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
 
 //*************----------*************------- FN KEY RELEASED -------***************-----------------
 #ifdef PC_BUILD                                                             //JM LONGPRESS FN
-void btnFnReleased_StateMachine(GtkWidget *w, gpointer data) {              //JM LONGPRESS FN
+void btnFnReleased_StateMachine(GtkWidget *unused, gpointer data) {              //JM LONGPRESS FN
 #endif
 #ifdef DMCP_BUILD
-void btnFnReleased_StateMachine(void *w, void *data) {
+void btnFnReleased_StateMachine(void *unused, void *data) {
 #endif
 //#ifdef INLINE_TEST
 //  if(testEnabled) { fnSwStart(2); }     //dr
@@ -736,7 +736,7 @@ void btnFnReleased_StateMachine(void *w, void *data) {
     hideFunctionName();
 
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
-      btnFnClicked(w, charKey);                                             //Execute
+      btnFnClicked(unused, charKey);                                             //Execute
     }
     resetShiftState();
     FN_cancel();
@@ -758,7 +758,7 @@ void execFnTimeout(uint16_t key) {                          //dr - delayed call 
 
 
 
-void shiftCutoff(uint16_t unusedParamButMandatory) {        //dr - press shift three times within one second to call HOME timer
+void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shift three times within one second to call HOME timer
   fnTimerStop(TO_3S_CTFF);
 }
 

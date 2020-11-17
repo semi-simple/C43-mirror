@@ -98,10 +98,10 @@ void fnSetInlineTest(uint16_t drConfig) {
 /********************************************//**
  * \brief Get value of testBitset to X
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetInlineTestBsToX(uint16_t unusedParamButMandatory) {
+void fnGetInlineTestBsToX(uint16_t unusedButMandatoryParameter) {
   char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
@@ -121,10 +121,10 @@ void fnGetInlineTestBsToX(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Set X to testBitset value
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
+void fnSetInlineTestXToBs(uint16_t unusedButMandatoryParameter) {
   uint16_t X_REG;
   longInteger_t lgInt;
 
@@ -142,10 +142,10 @@ void fnSetInlineTestXToBs(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief sys_free_mem
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSysFreeMem(uint16_t unusedParamButMandatory) {
+void fnSysFreeMem(uint16_t unusedButMandatoryParameter) {
   real_t value;
 
   saveForUndo();

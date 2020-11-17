@@ -24,7 +24,7 @@
 /* ADDITIONAL WP43C functions and routines */
 #include "graphText.h"                  //JM include
 
-void         fnP_All_Regs(uint16_t unusedParamButMandatory);
+void         fnP_All_Regs(uint16_t unusedButMandatoryParameter);
 void         print_inlinestr(const char *line1, bool_t endline);
 void         print_Register_line(calcRegister_t regist, const char *before, const char *after, bool_t line_init);
 void         displaywords(char *line1);

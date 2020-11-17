@@ -84,7 +84,7 @@ void fnDenMax(uint16_t unusedButMandatoryParameter) {
                                                 * \param[in] fractionType uint16_t Fraction type
                                                 * \return void
                                                 ***********************************************/
-/*void fnToggleFractionType(uint16_t unusedParamButMandatory) {
+/*void fnToggleFractionType(uint16_t unusedButMandatoryParameter) {
     if(getSystemFlag(FLAG_FRACT)) {
         flipSystemFlag(FLAG_PROPFR);
     }

@@ -179,28 +179,12 @@ int32_t findFirstItem(const char *twoLetters) {
 
 #ifndef TESTSUITE_BUILD                          //JMvv
 void light_ASB_icon(void) {
-  int16_t ix = 0;
-  while(ix <= 9) {
-  int16_t iy = 18;
-    while(iy <= 19) {
-      setPixel(X_ALPHA_MODE+ix,iy);
-      iy++;
-    }
-    ix++;
-  }
+  lcd_fill_rect(X_ALPHA_MODE,18,9,2,0xFF);
   force_refresh();
 }
 
 void kill_ASB_icon(void) {
-  int16_t ix = 0;
-  while(ix <= 9) {
-  int16_t iy = 18;
-    while(iy <= 19) {
-      clearPixel(X_ALPHA_MODE+ix,iy);
-      iy++;
-    }
-    ix++;
-  }
+  lcd_fill_rect(X_ALPHA_MODE,18,9,2,0);
   force_refresh();
 }
 #endif                                           //JM^^

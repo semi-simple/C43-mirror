@@ -356,10 +356,10 @@ char* itoa(int value, char* result, int base) {      //DONE
 /********************************************//**
  * \brief Get item-value of assigned key to X
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {       //DONE
+void fnGetSigmaAssignToX(uint16_t unusedButMandatoryParameter) {       //DONE
   char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
@@ -380,10 +380,10 @@ void fnGetSigmaAssignToX(uint16_t unusedParamButMandatory) {       //DONE
 /********************************************//**
  * \brief
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnJM_GetXToNORMmode(uint16_t unusedParamButMandatory) {      //DONE
+void fnJM_GetXToNORMmode(uint16_t unusedButMandatoryParameter) {      //DONE
   int16_t X_REG;
   longInteger_t lgInt;
 

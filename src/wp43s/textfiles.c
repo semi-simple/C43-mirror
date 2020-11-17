@@ -80,14 +80,14 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 }
 
 
-void fnP_All_Regs(uint16_t unusedParamButMandatory){
+void fnP_All_Regs(uint16_t unusedButMandatoryParameter){
   #if defined (DMCP_BUILD)
   check_create_dir("DATA");  
   make_date_filename(filename_csv,"DATA\\",".REGS.TSV");
   #endif
 
 
-  switch (unusedParamButMandatory)
+  switch (unusedButMandatoryParameter)
   {
   case 0:           //All registers
     {

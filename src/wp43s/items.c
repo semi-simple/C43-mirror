@@ -562,7 +562,7 @@ const item_t indexOfItems[] = {
 // Items from 1 to 127 are 1 byte OP codes
 /*    1 */  { itemToBeCoded,               TM_LABEL,                    "LBL",                                         "LBL",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    2 */  { fnGoto,                      TM_LABEL,                    "GTO",                                         "GTO",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*    3 */  { fnRecall,                    TM_LABEL     /*# JM #*/,     "XEQ",                                         "XEQ",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },//TEMPORARY PLACEHOLDER FOR XEQ
+/*    3 */  { itemToBeCoded,               TM_LABEL,                    "XEQ",                                         "XEQ",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    4 */  { itemToBeCoded,               NOPARAM,                     "RTN",                                         "RTN",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    5 */  { itemToBeCoded,               NOPARAM,                     "ISE",                                         "ISE",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*    6 */  { itemToBeCoded,               NOPARAM,                     "ISG",                                         "ISG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

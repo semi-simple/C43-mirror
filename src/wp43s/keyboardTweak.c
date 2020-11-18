@@ -70,9 +70,9 @@ doRefreshSoftMenu = true;     //jm
 
 void showShiftState(void) {
 #ifndef TESTSUITE_BUILD
-#ifdef PC_BUILD
-printf("    >>> showShiftState: calcMode=%d\n",calcMode );
-#endif
+#ifdef PC_BUILD_TELLTALE
+  printf("    >>> showShiftState: calcMode=%d\n",calcMode );
+#endif //PC_BUILD_TELLTALE
   if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER && temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
     if(shiftF) {          //SEE screen.c:refreshScreen
       showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide

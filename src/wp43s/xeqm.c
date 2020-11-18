@@ -240,7 +240,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
           case 8 : //tab
           case 44: //,
           case 32: 
-printf("@@@ %s\n",commandnumber);
+                   //printf("@@@ %s\n",commandnumber);
                    if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
                       //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);

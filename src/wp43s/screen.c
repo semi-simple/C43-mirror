@@ -1058,7 +1058,8 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
 
 
   lg = stringByteLength(string + offset);
-
+  //printf("######## Printing:%s offset:%d length:%d:%s\n",string, offset, lg, string + offset);
+  //printf("##>> %d x:%d y:%d \n",edcursor, x,y);
   if(combinationFonts !=0) {
     editlines     = 3 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
     maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
@@ -1098,9 +1099,12 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
     x = x_offset; 
     y = (yincr-1) + y_offset * (yincr-1);
   }
-  
+  //****************************************
   ch = offset;
   while(string[ch] != 0) {
+
+    //printf("%3d:%3d ",ch,(uint8_t)string[ch]);
+    
     if(lg == 1 || (lg == 2 && (string[offset] & 0x80))) {// The string is 1 glyph long
       slc = showLeadingCols;
       sec = showEndingCols;
@@ -1118,7 +1122,9 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
       sec = true;
     }
 
-    if((ch == edcursor && string[ch] != 0) ) {                 //draw cursor
+    //printf("^^^^ ch=%d edcursor=%d string[ch]=%d \n",ch, edcursor, string[ch]);
+
+    if(ch == edcursor) {                 //draw cursor
        current_cursor_x = x;
        current_cursor_y = y;
        tmpxy = y-1;
@@ -1183,6 +1189,8 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
     maxiC = 0;                                                                            //JM
 
   }
+  //printf("\n");
+
   xCursor = x;
   yCursor = y;
   compressString = 0;                                                                     //JM compressString
@@ -1626,8 +1634,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           font = &standardFont;                             //JM ENLARGE
         }
 
-        if(T_cursorPos > stringByteLength(aimBuffer)) {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
-        if(T_cursorPos < 0)                           {T_cursorPos = stringByteLength(aimBuffer);}     //Do range checking in case the cursor starts off outside of range
+        int16_t tmplen = stringByteLength(aimBuffer);
+        if(T_cursorPos > tmplen) {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
+        if(T_cursorPos < 0)      {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
         int16_t cnt;
         displayAIMbufferoffset = 0;                                         //Determine offset to be able to display the latter part of the string
 
@@ -1640,7 +1649,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
           while(/*cnt++ < 100 && */
                (stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true) - stringWidth(aimBuffer + T_cursorPos, font, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
-          	   (displayAIMbufferoffset <= stringByteLength(aimBuffer)) && 
+          	   (displayAIMbufferoffset <= tmplen) && 
           	   (displayAIMbufferoffset + 10 < T_cursorPos)
           	   ) 
             {
@@ -1651,11 +1660,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true, false);  //display up to the cursor
 
           if(xCursor > SCREEN_WIDTH-1) displayAIMbufferoffset = stringNextGlyph(aimBuffer, displayAIMbufferoffset);
-          //printf(">>>c length:%d T_cursorPos:%d displayAIMbufferoffset:%d x:%d y:%d\n",stringByteLength(aimBuffer), T_cursorPos, displayAIMbufferoffset, xCursor, yCursor);
+          //printf(">>>c length:%d T_cursorPos:%d displayAIMbufferoffset:%d x:%d y:%d\n",tmplen, T_cursorPos, displayAIMbufferoffset, xCursor, yCursor);
         } while(cnt++ < 150 && xCursor > SCREEN_WIDTH-1);
 
 
-        if(T_cursorPos == stringByteLength(aimBuffer)) cursorEnabled = true; else cursorEnabled = false; 
+        if(T_cursorPos == tmplen) cursorEnabled = true; else cursorEnabled = false; 
         cursorFont = font;
       }
   //JMCURSOR  ^^

@@ -527,6 +527,8 @@ void btnReleased(void *data) {
   if(!checkShifts((char *)data)) {
     #ifdef PC_BUILD
     printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
+    #endif
+    #ifdef PC_BUILD
     jm_show_calc_state("keyboard.c: btnReleased end");
     #endif
     refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES

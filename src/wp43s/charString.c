@@ -131,15 +131,25 @@ int16_t stringNextGlyph(const char *str, int16_t pos) {
  * \return int16_t              Pointer to the glyph after pos
  ***********************************************/
 int16_t stringPrevGlyph(const char *str, int16_t pos) {
+  int16_t prev = 0;
+  int16_t lg;
+
+  lg = stringByteLength(str);
+  if(pos >= lg) {
+    pos = lg;
+  }
 
   if(pos <= 1) {
     return 0;
   }
   else {
-    if(str[pos-2] & 0x80) pos -= 2;
-    else pos --;
+    int16_t cnt = 0;
+    while ((str[cnt] != 0) && (cnt<pos)) {
+      prev = cnt;
+      cnt = stringNextGlyph(str, cnt);
+    }
   }
-   return pos;
+  return prev;
 }
 
 

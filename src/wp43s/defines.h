@@ -25,6 +25,22 @@
 //*********************************
 // JM VARIOUS OPTIONS
 //*********************************
+
+#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging
+#define PC_BUILD_TELLTALE
+#undef PC_BUILD_TELLTALE           //verbose
+
+//This is to allow the cursors to change the case. Normal on 43S. Off on C43
+#define arrowCasechange    false
+
+//This is to allow the creation of a logfile while you type
+#define RECORDLOG
+#undef  RECORDLOG
+
+//This is to really see what the LCD in the SIM does while programs are running. UGLY.
+#define FULLUPDATE
+//#undef  FULLUPDATE
+
 //* Key buffer and double clicck detection
 #define BUFFER_CLICK_DETECTION    //jm Evaluate the Single/Double/Triple presses
 #undef BUFFER_CLICK_DETECTION

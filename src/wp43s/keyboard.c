@@ -471,7 +471,7 @@ void btnPressed(void *data) {
     //refreshRegisterLine(REGISTER_X);       //JM Removed this one, for direct presses, add it in processKeyAction
     #ifdef PC_BUILD
       char tmp[200];
-      sprintf(tmp,"keyboard.c btnPressed --> processKeyAction(%d) which is str:%s",item,(char *)data);
+      sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s",item,(char *)data);
       jm_show_calc_state(tmp);
     #endif
 
@@ -493,7 +493,7 @@ void btnPressed(void *data) {
  ***********************************************/
 #ifdef PC_BUILD
 void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-jm_show_calc_state("btnReleased begin");
+jm_show_calc_state("keyboard.c: btnReleased begin");
 #endif
 #ifdef DMCP_BUILD
 void btnReleased(void *data) {
@@ -521,8 +521,8 @@ void btnReleased(void *data) {
 
   if(!checkShifts((char *)data)) {
     #ifdef PC_BUILD
-    printf(">>> btnReleased:   refreshScreen from keyboard.c  which is the main normal place for it.\n");
-    jm_show_calc_state("btnReleased end");
+    printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
+    jm_show_calc_state("keyboard.c: btnReleased end");
     #endif
     refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
   }
@@ -952,14 +952,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           }                                  //JM
         }                                    //JMvv
         else {
-          if(softmenuStackPointer > 0 && !(softmenuStackPointer == 1 && softmenuStack[0].softmenu == mm_MNU_HOME)) {
+          if(softmenuStackPointer > 0 && !(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME)) {
             popSoftmenu();
-            if(softmenuStackPointer == 0) {
-              showSoftmenu(NULL, -MNU_HOME, false); //Reset to BASE MENU HOME
-            }
+          }
+          if(softmenuStackPointer == 0) {
+            showSoftmenu(NULL, -MNU_HOME, false); //Reset to BASE MENU HOME
           } 
           else {
-            if(softmenuStackPointer == 1 && softmenuStack[0].softmenu == mm_MNU_HOME) {
+            if(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME) {
               softmenuStack[0].firstItem=0;        //Reset to default screen of HOME
             }
           }
@@ -989,20 +989,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         }
       }
       else {
-       if(!SH_BASE_AHOME) {
-         popSoftmenu();                        //TOCHECK
-         if(softmenuStackPointer == 0) {
-           softmenuStackPointerBeforeAIM = 0;
-           showSoftmenu(NULL, -MNU_MyAlpha, false);
-         }
-       } else
-       if(SH_BASE_AHOME) {
-         popSoftmenu();                        //TOCHECK
-         if(softmenuStackPointer == 0) {
-           softmenuStackPointerBeforeAIM = 0;
-           showSoftmenu(NULL, -MNU_ALPHA, false);
-         }
-       }
+        popSoftmenu();
+        if(softmenuStackPointer == 0) {
+          softmenuStackPointerBeforeAIM = 0;
+          if(!SH_BASE_AHOME) showSoftmenu(NULL, -MNU_MyAlpha, false); else showSoftmenu(NULL, -MNU_ALPHA, false);
+        }
+        else {
+          if(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) fnKeyExit(0);                       //Try again after exiting a menu. continue until stack empty
+        }
       }
       break;
 
@@ -1156,7 +1150,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       }
       else {
         runFunction(ITM_CLX);
-        keyActionProcessed = false;     //JM added to allow longpress and douple press to operate
       }
       break;
 

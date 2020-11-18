@@ -387,11 +387,11 @@ void Setup_MultiPresses(int16_t result){
 
 
 void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up longpress
-  int16_t firstResult = 0;
-  firstdelayedResult = 0;
-  delayedResult = 0;
+  int16_t longpressDelayedkey1 = 0;
+  longpressDelayedkey2 = 0;
+  longpressDelayedkey3 = 0;
 
-  if(firstResult == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
+  if(longpressDelayedkey1 == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
     bool_t flag_user = getSystemFlag(FLAG_USER);
     for(int i=0; i<=16; i++) {      //16 //0=E+  6=STO  12=ENTER 13=X<>Y 14=CHS 15=E 16=BKSPC
       if(key_no == i 
@@ -401,11 +401,11 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
         #endif
         && i!=16) {    //Do not allow longpress BKSPC
         if(flag_user) {
-          firstResult = kbd_usr[i].fShifted;
-          if(i!=13 && i!=14 && i!=15) delayedResult = kbd_usr[i].gShifted;
+          longpressDelayedkey1 = kbd_usr[i].fShifted;
+          if(i!=13 && i!=14 && i!=15) longpressDelayedkey3 = kbd_usr[i].gShifted;
         }
         else {
-          firstResult = kbd_std[i].fShifted;
+          longpressDelayedkey1 = kbd_std[i].fShifted;
           if(
                i!=12     //Do not allow second longpress ENTER
           	&& i!=13     //Do not allow second longpress x<>y
@@ -413,43 +413,44 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
           	&& i!=14     //Do not allow second longpress CHS
           	&& i!=15     //Do not allow second longpress EEX
           #endif
-          ) delayedResult = kbd_std[i].gShifted;
+          ) longpressDelayedkey3 = kbd_std[i].gShifted;
         }
         break;
       }
     }
-  }
+  }                                                                         //yellow and blue function keys ^^
 
   if(calcMode == CM_NORMAL) {
     switch(*result) {
-      case KEY_BACKSPACE: firstdelayedResult=firstResult; firstResult = ITM_CLSTK; break;   //backspace longpress to CLSTK
-      case ITM_XEQ      : firstdelayedResult=firstResult; firstResult = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
-      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
-      //case ITM_CHS      : firstResult = ITM_XexY;  break;   //sample on CHS, operating X<>Y. XEQ must still be created.
+      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1;   longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
+      case KEY_BACKSPACE: longpressDelayedkey2=longpressDelayedkey1;   longpressDelayedkey1 = ITM_CLSTK; break;    //backspace longpress to CLSTK
+      case KEY_EXIT1    :                                              longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      //case ITM_CHS    :                                              longpressDelayedkey1 = ITM_XexY;  break;     //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
-  }
+  } else
 
-  if(calcMode == CM_NIM) {
-    switch(*result) {
-      case ITM_XEQ      : firstdelayedResult=firstResult; firstResult = -MNU_XXEQ;  break;   //XEQ longpress to XEQMENU 
-      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
-      case KEY_BACKSPACE: firstResult = ITM_CLN; break;         //TRYOUT LONGPRESS EXIT DOES CLA
-      default:;
-    }
-  }
+	  if(calcMode == CM_NIM) {
+	    switch(*result) {
+	      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1; longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
+	      case KEY_BACKSPACE:                                            longpressDelayedkey1 = ITM_CLN;   break;    //BACKSPACE longpress clears input buffer
+        case KEY_EXIT1    :                                            longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+	      default:;
+	    }
+	  } else
 
-  if(calcMode == CM_AIM) {
-    switch(*result) {
-      case KEY_BACKSPACE    : firstResult = ITM_CLA; break;       //TRYOUT LONGPRESS EXIT DOES CLA
-      case KEY_EXIT1    : firstResult = ITM_CLAIM; break;       //TRYOUT LONGPRESS EXIT DOES CLX
-      default:;
-    }
-  }
+		  if(calcMode == CM_AIM) {
+		    switch(*result) {
+          case KEY_BACKSPACE:                                          longpressDelayedkey1 = ITM_CLA;   break;     //BACKSPACE longpress clears input buffer
+          case KEY_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
+		      default:;
+		    }
+		  }
 
-  if(firstResult !=0) {                                      //if activated key pressed 
-    JM_auto_longpress_enabled = firstResult;
+  if(longpressDelayedkey1 !=0) {                                      //if activated key pressed 
+    JM_auto_longpress_enabled = longpressDelayedkey1;
     fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
+
     if(JM_auto_doublepress_enabled != 0) {
        hideFunctionName();    
        undo();

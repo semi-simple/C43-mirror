@@ -366,8 +366,8 @@ extern int16_t               showFunctionNameCounter;
 extern int16_t              *menu_RAM;
 
 extern uint16_t              globalFlags[7];
-extern int16_t               firstdelayedResult;          //JM
-extern int16_t               delayedResult;               //JM
+extern int16_t               longpressDelayedkey2;          //JM
+extern int16_t               longpressDelayedkey3;               //JM
 extern int16_t               T_cursorPos;                 //JMCURSOR
 extern int16_t               SHOWregis;                   //JMSHOW
 extern int16_t               ListXYposition;              //JM

@@ -201,8 +201,8 @@ bool_t                PLOT_SHADE;                              //JM GRAPH
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
 #endif                                                         //^^
-int16_t               firstdelayedResult;          //JM
-int16_t               delayedResult;               //JM
+int16_t               longpressDelayedkey2;          //JM
+int16_t               longpressDelayedkey3;               //JM
 int16_t               T_cursorPos;                 //JMCURSOR
 int16_t               SHOWregis;                   //JMSHOW
 int16_t               ListXYposition;              //JMSHOW

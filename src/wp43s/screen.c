@@ -522,7 +522,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
 #ifndef TESTSUITE_BUILD
 void refreshFn(uint16_t timerType) {                        //vv dr - general timeout handler
   if(timerType == TO_FG_LONG) { Shft_handler(); }
-  if(timerType == TO_CL_LONG) { Clx_handler(); }
+  if(timerType == TO_CL_LONG) { LongpressKey_handler(); }
   if(timerType == TO_FG_TIMR) { Shft_stop(); }
   if(timerType == TO_FN_LONG) { FN_handler(); }
 }                                                           //^^
@@ -692,7 +692,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 
 
 
-void Clx_handler() {
+void LongpressKey_handler() {
   if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
     if(JM_auto_longpress_enabled != 0) {
       showFunctionName(JM_auto_longpress_enabled, 1000);            //fnClearStack(0);
@@ -751,6 +751,7 @@ if(jm_FG_DOTS) {                                                               /
  * \return void
  ***********************************************/
 void setBlackPixel(uint32_t x, uint32_t y) {
+  if(y > 4294967000) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
   #ifdef PC_BUILD
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
       printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
@@ -776,6 +777,7 @@ void setBlackPixel(uint32_t x, uint32_t y) {
  * \return void
  ***********************************************/
 void setWhitePixel(uint32_t x, uint32_t y) {
+  if(y > 4294967000) return;  //JM
   #ifdef PC_BUILD
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
       printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
@@ -821,6 +823,8 @@ void invertPixel(uint32_t x, uint32_t y) {           //JM
 int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
     uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+    if(y > 4294967000) return; //JM
 
     if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {
       printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
@@ -1252,15 +1256,15 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int16_t delayInMs) {
   char padding[20];                                          //JM
   if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
-    if(firstdelayedResult != 0) {
-      item = firstdelayedResult; 
+    if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
+      item = longpressDelayedkey2; 
       delayInMs = FUNCTION_NOPTIME;
-      firstdelayedResult = 0;
+      longpressDelayedkey2 = 0;
     } else
-    if(delayedResult != 0) {
-      item = delayedResult; 
+    if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
+      item = longpressDelayedkey3; 
       delayInMs = FUNCTION_NOPTIME;
-      delayedResult = 0;
+      longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^
   showFunctionNameItem = item;

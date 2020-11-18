@@ -622,7 +622,7 @@ const int16_t menu_ALPHA[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
 /* 03 */                             ITM_T_UP_ARROW,                ITM_T_DOWN_ARROW,           ITM_T_LLEFT_ARROW,        ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW, 
                                      -MNU_MyAlpha,                  ITM_XEDIT,                  -MNU_ALPHA_OMEGA,         -MNU_ALPHADOT,         -MNU_ALPHAMATH,              -MNU_ALPHAINTL,                     //JM
-                                     ITM_ASSIGN,                    KEY_USERMODE,               -MNU_ASN,                 -MNU_CATALOG,          -MNU_MODE,                   -MNU_FLAGS                     };    //JM
+                                     ITM_ASSIGN,                    KEY_USERMODE,               -MNU_ASN,                 -MNU_CATALOG,          ITM_NULL,                    ITM_NULL                     };    //JM
 
 
 const int16_t menu_T_EDIT[]      = { ITM_T_UP_ARROW,                ITM_T_DOWN_ARROW,           ITM_T_LLEFT_ARROW,       ITM_T_RRIGHT_ARROW,     ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW,                    //JM TEXTEDIT
@@ -1370,7 +1370,18 @@ void showSoftmenuCurrentPart(void) {
     }
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
-    if(numberOfItems <= 18) {
+    //JMvv Temporary method to ensure AIM is active if the 3 ALPHA menus are shown
+    if((softmenuStackPointer > 0) && (calcMode != CM_AIM && (softmenu[m].menuId == -MNU_ALPHA || softmenu[m].menuId == -MNU_T_EDIT || softmenu[m].menuId == -MNU_MyAlpha))) {
+      calcMode = CM_AIM;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+      setSystemFlag(FLAG_ALPHA);
+      refreshRegisterLine(AIM_REGISTER_LINE);
+    } //JM ^^
+
+
+
+    if(softmenu[m].numItems <= 18) {
       dottedTopLine = false;
     }
     else {
@@ -2002,7 +2013,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
         pushSoftmenu(m);
       }
       else {
-        while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+        while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {     //JM: CHECK, THIS IS DANGEROUS
           softmenuStackPointer--;
         }
         pushSoftmenu(m);

@@ -99,6 +99,8 @@ void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
     popSoftmenu();
   }
   calcModeNormal();
+  refreshScreen();
+  fnKeyExit(0);      //Call fnkeyExit to ensure the correct home screen is brought up, if HOME is selected.
 #endif
 }
 

@@ -523,7 +523,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
 #ifndef TESTSUITE_BUILD
 void refreshFn(uint16_t timerType) {                        //vv dr - general timeout handler
   if(timerType == TO_FG_LONG) { Shft_handler(); }
-  if(timerType == TO_CL_LONG) { Clx_handler(); }
+  if(timerType == TO_CL_LONG) { LongpressKey_handler(); }
   if(timerType == TO_FG_TIMR) { Shft_stop(); }
   if(timerType == TO_FN_LONG) { FN_handler(); }
 }                                                           //^^
@@ -693,7 +693,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 
 
 
-void Clx_handler() {
+void LongpressKey_handler() {
   if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
     if(JM_auto_longpress_enabled != 0) {
       showFunctionName(JM_auto_longpress_enabled, 1000);            //fnClearStack(0);
@@ -1422,15 +1422,15 @@ void hideCursor(void) {
 void showFunctionName(int16_t item, int16_t delayInMs) {
   char padding[20];                                          //JM
   if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
-    if(firstdelayedResult != 0) {
-      item = firstdelayedResult; 
+    if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
+      item = longpressDelayedkey2; 
       delayInMs = FUNCTION_NOPTIME;
-      firstdelayedResult = 0;
+      longpressDelayedkey2 = 0;
     } else
-    if(delayedResult != 0) {
-      item = delayedResult; 
+    if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
+      item = longpressDelayedkey3; 
       delayInMs = FUNCTION_NOPTIME;
-      delayedResult = 0;
+      longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^
   showFunctionNameItem = item;

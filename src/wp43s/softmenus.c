@@ -462,7 +462,7 @@ void initVariableSoftmenu(int16_t menu) {
 
   switch(-variableSoftmenu[menu].menuId) {
     case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000not\000yet\000defined\000\000", 27);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000to\000be\000coded\000\000", 27);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
@@ -508,7 +508,7 @@ void initVariableSoftmenu(int16_t menu) {
                       break;
 
     case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000not\000yet\000defined\000\000", 26);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 26);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
@@ -872,7 +872,7 @@ void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
     if(alphaSelectionMenu != ASM_NONE) {
       alphaSelectionMenu = ASM_NONE;
-      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM) {
+      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_PEM) {
         calcModeNormal();
       }
     }
@@ -900,11 +900,25 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
 
   if(id == -MNU_FCNS) {
     alphaSelectionMenu = ASM_FCNS;
-    calcModeAsm();
+    if(calcMode == CM_PEM) {
+      calcModeAsm();
+      calcMode = CM_ASM_OVER_PEM;
+      clearSystemFlag(FLAG_ALPHA);
+    }
+    else {
+      calcModeAsm();
+    }
   }
   else if(id == -MNU_CONST) {
     alphaSelectionMenu = ASM_CNST;
-    calcModeAsm();
+    if(calcMode == CM_PEM) {
+      calcModeAsm();
+      calcMode = CM_ASM_OVER_PEM;
+      clearSystemFlag(FLAG_ALPHA);
+    }
+    else {
+      calcModeAsm();
+    }
   }
   else if(id == -MNU_MENUS) {
     alphaSelectionMenu = ASM_MENU;
@@ -995,7 +1009,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_AIM || calcMode == CM_PEM) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
       if(push) {
         pushSoftmenu(m);
       }

@@ -35,12 +35,12 @@ void       fnScreenDump                       (uint16_t unusedButMandatoryParame
   void     refreshLcd                         (void);
 #else
   void     lcd_fill_rect                      (uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val); // clone fron the DMCP function
+  void     setBlackPixel                      (uint32_t x, uint32_t y);
+  void     setWhitePixel                      (uint32_t x, uint32_t y);
 #endif
 
 #ifndef TESTSUITE_BUILD
 void     refreshScreen                        (void);
-void     setBlackPixel                        (uint32_t x, uint32_t y);
-void     setWhitePixel                        (uint32_t x, uint32_t y);
 //void     invertPixel                          (uint32_t x, uint32_t y);
 //int      getPixel                             (uint32_t x, uint32_t y);
 uint32_t showString                           (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);

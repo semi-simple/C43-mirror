@@ -238,7 +238,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
     uint8_t *step, *nextStep;
     bool_t lblOrEnd;
 
-    if(calcMode != CM_PEM) {
+    if(calcMode != CM_PEM && calcMode != CM_ASM_OVER_PEM) {
       calcMode = CM_PEM;
       return;
     }
@@ -251,7 +251,8 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       uint16_t stepSize = (uint16_t)(nextStep - step);
       sprintf(tmpString, "%04d:" STD_SPACE_4_PER_EM "%s%u", firstDisplayedStepNumber + line, stepSize >= 10 ? "" : STD_SPACE_FIGURE, stepSize);
       if(firstDisplayedStepNumber + line == currentStepNumber) {
-        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmReverse, false, true);
+        tamOverPemYPos = Y_POSITION_OF_REGISTER_T_LINE + 21*line;
+        showString(tmpString, &standardFont, 1, tamOverPemYPos, vmReverse, false, true);
         currentStep = step;
         if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentSetep is outside the current program
           defineCurrentProgram();
@@ -271,4 +272,17 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       step = nextStep;
     }
   #endif // TESTSUITE_BUILD
+}
+
+
+
+void insertStepInProgram(int16_t func) {
+   if(func == ITM_GTOP) {
+     stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
+     printf("%s\n", tmpString);
+   }
+   else {
+     stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
+     printf("Insert program step %s\n", tmpString);
+   }
 }

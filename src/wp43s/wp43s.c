@@ -183,6 +183,7 @@ uint32_t              lastIntegerBase;
 uint32_t              alphaSelectionTimer;
 uint32_t              xCursor;
 uint32_t              yCursor;
+uint32_t              tamOverPemYPos;
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
 uint64_t              systemFlags;

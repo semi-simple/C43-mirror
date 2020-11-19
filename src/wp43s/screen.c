@@ -351,8 +351,6 @@ void copyAllRegistersToClipboard(void) {
  * called every SCREEN_REFRESH_PERIOD ms by a GTK timer.
  * * make the cursor blink if needed
  * * refresh date and time in the status bar if needed
- * * refresh the I flag in the status bar (CPXRES or REALRE) if needed
- * * refresh the overflow and carry flags in the status bar if needed
  * * refresh the whole screen if needed
  *
  * \param[in] data gpointer Not used
@@ -403,7 +401,7 @@ gboolean refreshLcd(gpointer unusedData) { // This function is called every SCRE
   }
 
   // Alpha selection timer
-  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
 
@@ -480,7 +478,7 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
   }
 
   // Alpha selection timer
-  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
     resetAlphaSelectionBuffer();
   }
 }
@@ -489,15 +487,17 @@ void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_P
 
 
 #ifndef TESTSUITE_BUILD
-/********************************************//**
- * \brief Sets a black pixel on the screen.
- *
- * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
- * \return void
- ***********************************************/
-void setBlackPixel(uint32_t x, uint32_t y) {
-  #ifdef PC_BUILD
+
+
+#ifndef DMCP_BUILD
+  /********************************************//**
+   * \brief Sets a black pixel on the screen.
+   *
+   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+   * \return void
+   ***********************************************/
+  void setBlackPixel(uint32_t x, uint32_t y) {
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
       printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
@@ -505,24 +505,18 @@ void setBlackPixel(uint32_t x, uint32_t y) {
 
     *(screenData + y*screenStride + x) = ON_PIXEL;
     screenChange = true;
-  #endif
-
-  #ifdef DMCP_BUILD
-    bitblt24(x, 1, y, 1, BLT_OR, BLT_NONE);
-  #endif
-}
+  }
 
 
 
-/********************************************//**
- * \brief Sets a white pixel on the screen.
- *
- * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
- * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
- * \return void
- ***********************************************/
-void setWhitePixel(uint32_t x, uint32_t y) {
-  #ifdef PC_BUILD
+  /********************************************//**
+   * \brief Sets a white pixel on the screen.
+   *
+   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+   * \return void
+   ***********************************************/
+  void setWhitePixel(uint32_t x, uint32_t y) {
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
       printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
       return;
@@ -530,33 +524,28 @@ void setWhitePixel(uint32_t x, uint32_t y) {
 
     *(screenData + y*screenStride + x) = OFF_PIXEL;
     screenChange = true;
-  #endif
-
-  #ifdef DMCP_BUILD
-    bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE);
-  #endif
-}
-
-
-#ifndef DMCP_BUILD
-void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
-  uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
-
-  if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-    printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-    return;
   }
 
-  pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-  for(line=y; line<endY; line++) {
-    for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-      *pixel = pixelColor;
+
+
+  void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+    uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+    if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+      printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+      return;
     }
-  }
 
-  screenChange = true;
-}
-#endif
+    pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+    for(line=y; line<endY; line++) {
+      for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+        *pixel = pixelColor;
+      }
+    }
+
+    screenChange = true;
+  }
+#endif //DMCP_BUILD
 
 
 
@@ -595,7 +584,7 @@ uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32
   }
 
   if(glyph == NULL) {
-    sprintf(errorMessage, "In function showGlyphCode: %d is an unexpected value returned by fingGlyph!", glyphId);
+    sprintf(errorMessage, "In function showGlyphCode: %" PRIi32 " is an unexpected value returned by fingGlyph!", glyphId);
     displayBugScreen(errorMessage);
     return 0;
   }
@@ -1420,6 +1409,31 @@ void refreshRegisterLine(calcRegister_t regist) {
 
 
 
+static void displayShiftAndTamBuffer(void) {
+  if(shiftF) {
+    showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+  }
+  else if(shiftG) {
+    showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+  }
+
+  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+    if(shiftF || shiftG) {
+      lcd_fill_rect(18, Y_POSITION_OF_TAM_LINE, 120, 32, LCD_SET_VALUE);
+    }
+    else {
+      lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 138, 32, LCD_SET_VALUE);
+    }
+    showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  }
+  else if(calcMode == CM_PEM /*|| calcMode == CM_TAM_OVER_PEM*/) {
+    lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
+    showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
+  }
+}
+
+
+
 void refreshScreen(void) {
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -1441,27 +1455,12 @@ void refreshScreen(void) {
       break;
 
     case CM_PEM:
+    case CM_ASM_OVER_PEM:
       clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
-
-      if(shiftF) {
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-      }
-      else if(shiftG) {
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-      }
-      else {
-        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
-          showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-        }
-      }
-
+      displayShiftAndTamBuffer();
       refreshStatusBar();
-      break;
-
-    case CM_BUG_ON_SCREEN:
       break;
 
     case CM_NORMAL:
@@ -1481,22 +1480,8 @@ void refreshScreen(void) {
       refreshRegisterLine(REGISTER_Z);
       refreshRegisterLine(REGISTER_Y);
       refreshRegisterLine(REGISTER_X);
-
-      if(shiftF) {
-        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-      }
-      else if(shiftG) {
-        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-      }
-      else {
-        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
-          showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-        }
-      }
-
+      displayShiftAndTamBuffer();
       showSoftmenuCurrentPart();
-
       hourGlassIconEnabled = false;
       refreshStatusBar();
       break;

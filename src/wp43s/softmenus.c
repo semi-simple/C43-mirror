@@ -832,6 +832,7 @@ void initVariableSoftmenu(int16_t menu) {
 
     case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
                       xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000not\000yet\000defined\000\000", 26);
+                      //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
@@ -1322,7 +1323,6 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
  * \return void
  ***********************************************/
 void showSoftmenuCurrentPart(void) {
-  printf("softmenuStackPointer = %u\n", softmenuStackPointer);
   if(softmenuStackPointer == 0) { // The is no menu to display
     switch(calcMode) {
       case CM_NORMAL:
@@ -1332,11 +1332,15 @@ void showSoftmenuCurrentPart(void) {
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
       case CM_PEM:
-        printf("Display MyMenu\n");
+        showSoftmenu(NULL, -MNU_MyMenu, false);
+        showSoftmenuCurrentPart();
+        softmenuStackPointer = 0;
         break;
 
       case CM_AIM:
-        printf("Display MyAlpha\n");
+        showSoftmenu(NULL, -MNU_MyAlpha, false);
+        showSoftmenuCurrentPart();
+        softmenuStackPointer = 0;
         break;
 
       default:
@@ -1346,7 +1350,7 @@ void showSoftmenuCurrentPart(void) {
   }
   else { // There is a menu to display
 
-//This was like this before:
+//This was like this before: JM TOCHECK
 //      if(softmenuStackPointer > 0 &&
 //      calcMode != CM_FLAG_BROWSER_OLD &&
 //      calcMode != CM_FLAG_BROWSER &&
@@ -1370,7 +1374,7 @@ void showSoftmenuCurrentPart(void) {
     }
     currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
-    //JMvv Temporary method to ensure AIM is active if the 3 ALPHA menus are shown
+    //JMvv Temporary method to ensure AIM is active if the 3 ALPHA menus are shown //JM TOCHECK
     if((softmenuStackPointer > 0) && (calcMode != CM_AIM && (softmenu[m].menuId == -MNU_ALPHA || softmenu[m].menuId == -MNU_T_EDIT || softmenu[m].menuId == -MNU_MyAlpha))) {
       calcMode = CM_AIM;
       cursorFont = &standardFont;
@@ -1791,19 +1795,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
                                                               //JM ^^
 
-
-
-
-//JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
-//        Here a HOME menu config can be loaded from disk
-/*void Load_HOME(void) {
-  menu_HOME[0] = 744; //pi=744
-  menu_HOME[1] = 744; //pi=744
-  menu_HOME[2] = 744; //pi=744
-}
-*/
-//JMHOMEDEMO: NOTE REMOVE comments TO MAKE JMHOME DEMO WORK ^^
-
 /********************************************//**
  * \brief Initializes the softmenu stack with a
  * softmenu and displays it's first part
@@ -2000,7 +1991,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
       if(push) {
         pushSoftmenu(m);
       }
@@ -2008,17 +1999,17 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
         initSoftmenuStack(m);
       }
     }
-    else if(calcMode == CM_AIM) {
-      if(push) {
-        pushSoftmenu(m);
-      }
-      else {
-        while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {     //JM: CHECK, THIS IS DANGEROUS
-          softmenuStackPointer--;
-        }
-        pushSoftmenu(m);
-      }
-    }
+    //else if(calcMode == CM_AIM) {
+    //  if(push) {
+    //    pushSoftmenu(m);
+    //  }
+    //  else {
+    //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {   //JM: CHECK, THIS IS DANGEROUS
+    //      softmenuStackPointer--;
+    //    }
+    //    pushSoftmenu(m);
+    //  }
+    //}
     else if(calcMode == CM_TAM) {
     }
     else {

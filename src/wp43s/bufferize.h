@@ -23,8 +23,8 @@
   void    resetAlphaSelectionBuffer(void);
   bool_t  timeoutAlphaSelectionBuffer(void);           //JM
   void    startAlphaSelectionBuffer  (void);           //JM
-  void light_ASB_icon(void); //JM
-  void kill_ASB_icon(void);  //JM
+  void    light_ASB_icon(void);                        //JM
+  void    kill_ASB_icon(void);                         //JM
 
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);

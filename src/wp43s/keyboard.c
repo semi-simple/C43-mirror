@@ -783,13 +783,13 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           break;
 
-        case CM_LISTXY:
-        case CM_GRAPH:                      //JM
+        case CM_LISTXY:                     //JM VV
+        case CM_GRAPH:
           if(item == KEY_EXIT1 || item == KEY_BACKSPACE) {
             calcMode = previousCalcMode;
           }
           keyActionProcessed = true;
-          break;
+          break;                            //JM ^^
 
 
         case CM_CONFIRMATION:
@@ -807,8 +807,11 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           break;
 
+        case CM_PEM:
+          break;
+
         default:
-          sprintf(errorMessage, "In function btnPressed: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
+          sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
           displayBugScreen(errorMessage);
       }
   }
@@ -854,7 +857,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
     case CM_AIM:
     case CM_ASM_OVER_AIM:
       calcModeNormal();
-      while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
+      while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {
         popSoftmenu();
       }
 
@@ -891,7 +894,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
           liftStack();
-          clearSystemFlag(FLAG_ASLIFT);               //TOCHECK
+          clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         }
       }
@@ -909,7 +912,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
     case CM_FONT_BROWSER:
     case CM_ERROR_MESSAGE:
     case CM_BUG_ON_SCREEN:
-    case CM_LISTXY:
+    case CM_LISTXY:                     //JM
     case CM_GRAPH:                      //JM
       break;
 
@@ -1012,6 +1015,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_PEM:
+      if(softmenuStackPointer > 0) {
+        popSoftmenu();
+        break;
+      }
+
       if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
         uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
         currentStep        += (freeProgramBytes & 0xfffc);
@@ -1031,9 +1039,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       tamTransitionSystem(TT_NOTHING);
 
-      if(tmp1 == -MNU_SYSFL) {                                                              //JM auto recover out of SYSFL 
+      if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL 
         calcModeNormal();
-       }                                                                                    //JM auto recover out of SYSFL 
+       }                                                                             //JM auto recover out of SYSFL 
       break;
 
     case CM_ASM_OVER_AIM:
@@ -1049,14 +1057,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_BUG_ON_SCREEN:
-    case CM_LISTXY:
+    case CM_LISTXY:                     //JM
       calcMode = previousCalcMode;
       break;
 
-    case CM_GRAPH:                      //JM
+    case CM_GRAPH:                      //JM vv
       calcMode = previousCalcMode;
       softmenuStack[softmenuStackPointer-1].firstItem = 0;
-      break;
+      break;                            //JM ^^
 
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
@@ -1086,7 +1094,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
 
   // The switch statement is broken up here, due to multiple conditions.                      //JM
   if((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX)) addItemToNimBuffer(KEY_EXIT1);    //JM Allow COMPLEX to be used from NIM
-  if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {
+  if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {      //JM
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
 
@@ -1101,13 +1109,13 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-          moreInfoOnError("In function btnPressed:", errorMessage, NULL, NULL);
+          moreInfoOnError("In function fnKeyCC:", errorMessage, NULL, NULL);
         #endif
       }
-      return;
+      return;                            //JM
   }
 
-  switch(calcMode) {
+  switch(calcMode) {                     //JM
     case CM_NIM:
       addItemToNimBuffer(KEY_CC);
       break;
@@ -1119,10 +1127,10 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
+    case CM_FLAG_BROWSER_OLD:           //JM vv
     case CM_FONT_BROWSER:
     case CM_LISTXY:
-    case CM_GRAPH:                      //JM
+    case CM_GRAPH:                      //JM ^^
       break;
 
     default:
@@ -1210,11 +1218,11 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       calcMode = previousCalcMode;
       break;
 
-    case CM_LISTXY:
-    case CM_GRAPH:                      //JM
+    case CM_LISTXY:                     //JM vv
+    case CM_GRAPH:
       calcMode = previousCalcMode;
       keyActionProcessed = true;
-      break;
+      break;                            //JM ^^
 
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;
@@ -1277,7 +1285,6 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           alphaCase = AC_UPPER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
-//JMXX          showSoftmenuCurrentPart();
         }
 
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
@@ -1303,12 +1310,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
             //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
             //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
-//JMXX            showSoftmenuCurrentPart();
           }
           else {
             softmenuStack[softmenuStackPointer - 1].firstItem = 0;
-
-//JMXX            showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();
@@ -1338,7 +1342,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function fnKeyUp: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -1358,19 +1362,43 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_PEM:
-      if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
-        firstDisplayedStepNumber--;
-        firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+      resetAlphaSelectionBuffer();
+      if(softmenuStackPointer > 0) {
+        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+        if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+        }
+        else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+        }
+        else {
+          int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+
+          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+            softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+          }
+          else {
+            softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+          }
+
+          setCatalogLastPos();
+        }
       }
+      else {
+        if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
+          firstDisplayedStepNumber--;
+          firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+        }
 
       if(currentStepNumber != 0) {
         currentStepNumber--;
       }
       break;
 
-    case CM_LISTXY:
+    case CM_LISTXY:                     //JM vv
       ListXYposition += 10;
-      break;
+      break;                            //JM ^^
           
     default:
       sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
@@ -1422,7 +1450,6 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           alphaCase = AC_LOWER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
           softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
-//JMXX          showSoftmenuCurrentPart();
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1438,7 +1465,6 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
             if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
             if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
-//JMXX/*JM*/      showSoftmenuCurrentPart();
           }
           else {
             if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
@@ -1447,7 +1473,6 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
             else {
               softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
             }
-//JMXX            showSoftmenuCurrentPart();
           }
 
           setCatalogLastPos();
@@ -1478,7 +1503,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
       }
       else {
-        sprintf(errorMessage, "In function btnPressed: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+        sprintf(errorMessage, "In function fnKeyDown: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
         displayBugScreen(errorMessage);
       }
       break;
@@ -1510,9 +1535,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_LISTXY:
+    case CM_LISTXY:                     //JM vv
       ListXYposition -= 10;
-      break;
+      break;                            //JM ^^
           
     default:
       sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
@@ -1543,7 +1568,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
 
     case CM_NIM:
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function btnPressed:", "the data type date is to be coded!", NULL, NULL);
+        moreInfoOnError("In function fnKeyDotD:", "the data type date is to be coded!", NULL, NULL);
       #endif
       break;
 
@@ -1551,8 +1576,8 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
     case CM_FLAG_BROWSER:
     case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
-    case CM_LISTXY:
-    case CM_GRAPH:                  //JM
+    case CM_LISTXY:                     //JM
+    case CM_GRAPH:                      //JM
       break;
 
     default:

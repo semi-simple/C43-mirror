@@ -456,13 +456,13 @@ void addItemToNimBuffer(int16_t item) {
       switch(nimNumberPart) {
         case NP_INT_10 :
           if(item == CHR_0) {
-            //if(aimBuffer[1] != '0') {  //JM_TYPE0
+            //if(aimBuffer[1] != '0') {  //JM_vv TYPE0; Allow starting the NIM buffer with 0000
               strcat(aimBuffer, "0");
             //}
           }
           else {
             if(aimBuffer[1] == '0') {
-              //aimBuffer[1] = 0;  //JM_TYPE0
+              //aimBuffer[1] = 0;        //JM_^^ TYPE0
             }
 
             strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);

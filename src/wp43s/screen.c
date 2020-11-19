@@ -868,7 +868,7 @@ uint8_t  maxiC = 0;                                                             
  * \param[in] showEndingCols bool_t  Display the ending empty columns
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols)   {
+uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint32_t  col, row, xGlyph, endingCols;
   int32_t glyphId;
   int8_t   byte, *data;
@@ -1301,7 +1301,6 @@ void hideFunctionName(void) {
   showFunctionNameCounter = 0;
   if(running_program_jm) return;                             //JM
   if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);                           //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
-  //  showString("           ", &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
 
 
@@ -1334,7 +1333,7 @@ void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBotto
 }
 
 
-uint8_t   displayStack_m = 255;                   //JMSHOIDISP
+uint8_t   displayStack_m = 255;                                                  //JMSHOIDISP
 /********************************************//**
  * \brief Displays one register line
  *
@@ -2204,7 +2203,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-int16_t refreshScreenCounter = 0;                       //JM ClearScreen Test
+int16_t refreshScreenCounter = 0;        //JM
 uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
@@ -2231,8 +2230,8 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
       last_CM = calcMode;
       clearScreen();
       flagBrowser_old(NOPARAM);
-      refreshStatusBar();            //JM ^^
-      break;
+      refreshStatusBar();
+      break;                
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;
@@ -2252,6 +2251,20 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
       clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
+
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
+      else {
+        if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 100, 32, LCD_SET_VALUE);
+          showString(tamBuffer, &standardFont, 20, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+        }
+      }
+
       refreshStatusBar();
       break;
 
@@ -2269,7 +2282,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
-    case CM_LISTXY:
+    case CM_LISTXY:                     //JM
     case CM_GRAPH:                      //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr

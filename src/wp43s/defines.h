@@ -74,7 +74,7 @@
 #define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
-#define MAX_FACTORIAL                    449 //JMMAX  1142   // 43S: 450 //JMMAX
+#define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98
@@ -92,6 +92,7 @@
 #define DECNUMDIGITS                    75 // Default number of digits used in the decNumber library
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
+
 
 
 
@@ -374,7 +375,7 @@
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
 #define NUMBER_OF_VARIABLE_SOFTMENUS              15
-#define MY_ALPHA_MENU_CNST                         0  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
+#define MY_ALPHA_MENU_CNST                         0  //JM TOCHECK This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -502,7 +503,7 @@
 #define CM_PEM                                    14 // Program entry mode
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
-#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old                                      //JM
+#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -649,9 +650,9 @@
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
 #ifdef DMCP_BUILD
-#define SCREEN_REFRESH_PERIOD                    160 // 500 //JM timeout for lcd refresh in ms 125
+#define SCREEN_REFRESH_PERIOD                    160 // 500 // in milliseconds //JM timeout for lcd refresh in ms 125
 #else
-#define SCREEN_REFRESH_PERIOD                    100 // 500 //JM timeout for lcd refresh in ms 100
+#define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #endif
 
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)

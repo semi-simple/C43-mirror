@@ -35,4 +35,4 @@ void exponentToDisplayString           (int32_t exponent, char *displayString, c
 void supNumberToDisplayString          (int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, const char *separator);
 void subNumberToDisplayString          (int32_t subNumber, char *displayString, char *displayValueString);
 void longIntegerToAllocatedString      (const longInteger_t lgInt, char *str, int32_t strLen);
-void fnShow_SCROLL                	   (uint16_t fnShow_param);    //JMSHOW
+void fnShow_SCROLL                     (uint16_t fnShow_param);    //JMSHOW

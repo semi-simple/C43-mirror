@@ -622,7 +622,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
 
-      if(SigFigMode == 0) {                       //JM SIGFIG vv
+      if(SigFigMode == 0) {                       //JM SIGFIG
       // Round the displayed number
       if(bcd[lastDigit+1] >= 5) {
         bcd[lastDigit]++;
@@ -642,7 +642,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         numDigits = 1;
         exponent++;
       }
-      }                                           //JM SIGFIG ^^
+      }                                           //JM SIGFIG
 
       // The sign
       if(sign) {

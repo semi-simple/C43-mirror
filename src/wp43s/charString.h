@@ -20,7 +20,7 @@
 
 int16_t  stringLastGlyph  (const char *str);
 int16_t  stringNextGlyph  (const char *str, int16_t pos);
-int16_t  stringPrevGlyph  (const char *str, int16_t pos);   //JM
+int16_t  stringPrevGlyph  (const char *str, int16_t pos);     //JM
 int32_t  stringByteLength (const char *str);
 int32_t  stringGlyphLength(const char *str);
 int16_t  stringWidth      (const char *str, const font_t *font, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);
@@ -29,4 +29,4 @@ uint32_t utf8ToCodePoint  (const uint8_t *utf8, uint32_t *codePoint);
 void     stringToUtf8     (const char *str, uint8_t *utf8);
 void     utf8ToString     (const uint8_t *utf8, char *str);
 void    *xcopy            (void *dest, const void *source, int n);
-uint8_t compressWidth;                                      //JM compressWidth
+uint8_t  compressWidth;                                      //JM compressWidth

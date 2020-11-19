@@ -258,10 +258,11 @@
 
 
 // PC GUI
-#if defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
+#if   defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
   #define CSSFILE "c43_pre_L2.css"              //JM L
-#endif //JM L
-#if defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
+#elif defined(JM_LAYOUT_2_DM42_STRICT) && defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
+  #define CSSFILE "c43_pre_L2B.css"              //JM L
+#elif defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
   #define CSSFILE "c43_pre.css"
 #endif //JM L
 

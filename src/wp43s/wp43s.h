@@ -393,6 +393,7 @@ extern uint32_t              lastIntegerBase;
 extern uint32_t              alphaSelectionTimer;
 extern uint32_t              xCursor;
 extern uint32_t              yCursor;
+extern uint32_t              tamOverPemYPos;
 extern uint64_t              shortIntegerMask;
 extern uint64_t              shortIntegerSignBit;
 extern uint64_t              systemFlags;

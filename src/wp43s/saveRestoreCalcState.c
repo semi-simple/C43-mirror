@@ -473,8 +473,9 @@ void restoreCalc(void) {
       else if(calcMode == CM_TAM)              {}
       else if(calcMode == CM_NIM)              {cursorEnabled = true;}
       else if(calcMode == CM_ASM)              {}
-      else if(calcMode == CM_ASM_OVER_TAM)     {calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_AIM)     {calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
+      else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
       else if(calcMode == CM_REGISTER_BROWSER) {}
       else if(calcMode == CM_FLAG_BROWSER)     {}
       else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM

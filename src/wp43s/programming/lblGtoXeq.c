@@ -23,11 +23,11 @@
 
 
 void fnGoto(uint16_t label) {
-  printf("GTO %02u\n", label);
+  printf("fnGoto: GTO %02u\n", label);
 }
 
 
 
 void fnGotoDot(uint16_t label) {
-  printf("GTO. %02u\n", label);
+  printf("fnGotoDot: GTO. %02u\n", label);
 }

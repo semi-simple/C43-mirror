@@ -54,6 +54,9 @@ uint8_t  last_CM;
   void     refreshLcd                         (void);
 #else
   void     lcd_fill_rect                      (uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val); // clone fron the DMCP function
+  void     setBlackPixel                      (uint32_t x, uint32_t y);
+  void     setWhitePixel                      (uint32_t x, uint32_t y);
+  void     invertPixel                        (uint32_t x, uint32_t y);  //JM
 #endif
 
 #ifndef TESTSUITE_BUILD
@@ -75,9 +78,6 @@ void     refresh_gui                          (void);                           
 void     force_refresh                        (void);                                                           //JM SCREEN
 
 void     refreshScreen                        (void);
-void     setBlackPixel                        (uint32_t x, uint32_t y);
-void     setWhitePixel                        (uint32_t x, uint32_t y);
-void     invertPixel                          (uint32_t x, uint32_t y);  //JM
 //int      getPixel                             (uint32_t x, uint32_t y);
 uint32_t showString                           (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
 uint32_t showGlyph                            (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);

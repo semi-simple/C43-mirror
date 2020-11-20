@@ -4083,9 +4083,9 @@ void calcModeAim(uint16_t unusedButMandatoryParameter) {
   }
   else {
   if(!SH_BASE_AHOME) {
-    softmenuStackPointerBeforeAIM = softmenuStackPointer;
-    if(softmenuStackPointer == 0) {
-      showSoftmenu(NULL, -MNU_MyAlpha, false);
+//    softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM TOCHECK
+//    if(softmenuStackPointer == 0) {
+//      showSoftmenu(NULL, -MNU_MyAlpha, false);
     }
   } else
   if(SH_BASE_AHOME) {

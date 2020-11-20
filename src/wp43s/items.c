@@ -116,6 +116,11 @@ void runFunction(int16_t func) {
     #endif
   }
 
+  if(calcMode == CM_PEM) {
+    insertStepInProgram(func);
+    return;
+  }
+
   if(calcMode != CM_ASM_OVER_TAM) {
     tamMode = indexOfItems[func].param;
   }

@@ -1621,13 +1621,11 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   str[0] = '0';
   str[1] = 0;
   if(lgInt->_mp_size == 0) {
-  //if(longIntegerIsZero(lgInt)) {
     return;
   }
 
   //numberOfDigits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
   numberOfDigits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
-  //if(longIntegerIsNegative(lgInt)) {
   if(lgInt->_mp_size < 0) {
     stringLen = numberOfDigits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
@@ -1637,7 +1635,8 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   }
 
   if(strLen < stringLen) {
-    printf("In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!\n", strLen, stringLen);
+    sprintf(errorMessage, "In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!\n", strLen, stringLen);
+    displayBugScreen(errorMessage);
     return;
   }
 

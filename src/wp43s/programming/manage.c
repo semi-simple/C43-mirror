@@ -94,12 +94,10 @@ void scanLabelsAndPrograms(void) {
 
   labelList = malloc(sizeof(labelList_t) * numberOfLabels);
   if(labelList == NULL) {
-    //printf("\n");
   }
 
   programList = malloc(sizeof(programList_t) * numberOfPrograms);
   if(programList == NULL) {
-    //printf("\n");
   }
 
   numberOfLabels = 0;
@@ -277,12 +275,24 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
 
 
 void insertStepInProgram(int16_t func) {
-   if(func == ITM_GTOP) {
-     stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
-     printf("%s\n", tmpString);
-   }
-   else {
-     stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
-     printf("Insert program step %s\n", tmpString);
-   }
+  switch(func) {
+    case ITM_LBL:      //    1
+      break;
+
+    case ITM_GTO:      //    2
+      break;
+
+    case ITM_GTOP:     // 1472
+      #ifndef DMCP_BUILD
+        stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
+        printf("%s\n", tmpString);
+      #endif // DMCP_BUILD
+      break;
+
+    default: {
+      #ifndef DMCP_BUILD
+        printf("\nERROR in function insertStepInProgram: func=%" PRId16 " is unknown!\n", func);
+      #endif // DMCP_BUILD
+    }
+  }
 }

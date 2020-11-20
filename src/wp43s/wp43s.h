@@ -34,30 +34,30 @@
 #include <stdint.h>
 #if (__linux__ == 1)
   #include <math.h>
-#endif
+#endif // (__linux__ == 1)
 
 #ifdef __APPLE__
   // needed by chdir
   #include<unistd.h>
-#endif
+#endif // __APPLE__
 
 #ifdef PC_BUILD
   #include <glib.h>
   #include <gtk/gtk.h>
   #include <gdk/gdk.h>
-#endif
+#endif // PC_BUILD
 
-#if defined(__MINGW64__)
+#ifdef __MINGW64__
   #include <locale.h>
-#endif
+#endif // __MINGW64__
 
 #ifdef DMCP_BUILD
   #include <main.h>
   #include <dmcp.h>
   #define TMP_STR_LENGTH       AUX_BUF_SIZE
-#else
+#else // !DMCP_BUILD
   #define TMP_STR_LENGTH       2560
-#endif
+#endif // DMCP_BUILD
 #define ERROR_MESSAGE_LENGTH    512
 #define DISPLAY_VALUE_LEN        80
 
@@ -70,44 +70,44 @@
   #include "decQuad.h"
   #include "decNumberWrappers.h"
   extern int decGetInt(const decNumber *x); // Because decNumberToInt32 seems buggy! Needs more investigation
-#endif
+#endif // (IBM_DECIMAL == 1)
 
 #if (LIBGMP == 1)
   #include <gmp.h>
   #include "gmpWrappers.h"
-#endif
+#endif // (LIBGMP == 1)
 
 #ifndef RASPBERRY
   #undef SCREEN_800X480
   #define SCREEN_800x480 0
-#endif
+#endif // RASPBERRY
 
 #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
   #error One of PC_BUILD and DMCP_BUILD must be defined
-#endif
+#endif // !defined(PC_BUILD) && !defined(DMCP_BUILD)
 
 #if defined(PC_BUILD) && defined(DMCP_BUILD)
   #error Only one of PC_BUILD and DMCP_BUILD must be defined
-#endif
+#endif // defined(PC_BUILD) && defined(DMCP_BUILD)
 
 #if !defined(OS32BIT) && !defined(OS64BIT)
   #error One of OS32BIT and OS64BIT must be defined
-#endif
+#endif // !defined(OS32BIT) && !defined(OS64BIT)
 
 #if defined(OS32BIT) && defined(OS64BIT)
   #error Only one of OS32BIT and OS64BIT must be defined
-#endif
+#endif // defined(OS32BIT) && defined(OS64BIT)
 
 #ifdef PC_BUILD
   #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
-  #endif
+  #endif // __MINGW64__
   #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
-  #endif
-#endif
+  #endif // RASPBERRY
+#endif // PC_BUILD
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #undef  DEBUG_PANEL
@@ -118,7 +118,7 @@
   #define SHOW_MEMORY_STATUS 0
   #undef  EXTRA_INFO_ON_CALC_ERROR
   #define EXTRA_INFO_ON_CALC_ERROR 0
-#endif
+#endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   #undef  PC_BUILD
@@ -143,7 +143,7 @@
   #define refreshScreen()         {}
   #define refreshLcd(a)           {}
   #define initFontBrowser()       {}
-#endif
+#endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 
 #include "assign.h"
@@ -204,7 +204,7 @@
   #if (SHOW_MEMORY_STATUS == 1)
     extern GtkWidget        *lblMemoryStatus;
   #endif
-#endif
+#endif //PC_BUILD
 
 // Variables stored in FLASH
 extern const item_t          indexOfItems[];

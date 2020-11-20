@@ -5783,7 +5783,6 @@ void addTestPrograms(void) {
     //listPrograms();
     listLabelsAndPrograms();
   #endif // !DMCP_BUILD
-
 }
 
 
@@ -5810,7 +5809,7 @@ void fnReset(uint16_t confirmation) {
          aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
          nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
          tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
-       #else
+       #else // !DMCP_BUILD
          tmpString        = (char *)malloc(TMP_STR_LENGTH);
          errorMessage     = (char *)malloc(ERROR_MESSAGE_LENGTH);
          aimBuffer        = (char *)malloc(AIM_BUFFER_LENGTH);

@@ -23,11 +23,15 @@
 
 
 void fnGoto(uint16_t label) {
-  printf("fnGoto: GTO %02u\n", label);
+  #ifndef DMCP_BUILD
+    printf("fnGoto: GTO %02u\n", label);
+  #endif // DMCP_BUILD
 }
 
 
 
 void fnGotoDot(uint16_t label) {
-  printf("fnGotoDot: GTO. %02u\n", label);
+  #ifndef DMCP_BUILD
+    printf("fnGotoDot: GTO. %02u\n", label);
+  #endif // DMCP_BUILD
 }

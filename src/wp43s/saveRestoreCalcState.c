@@ -28,9 +28,9 @@ static void save(const void *buffer, uint32_t size, void *stream) {
   #ifdef DMCP_BUILD
     UINT bytesWritten;
     f_write(stream, buffer, size, &bytesWritten);
-  #else
+  #else // !DMCP_BUILD
     fwrite(buffer, 1, size, stream);
-  #endif
+  #endif // DMCP_BUILD
 }
 
 
@@ -40,9 +40,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     UINT bytesRead;
     f_read(stream, buffer, size, &bytesRead);
     return(bytesRead);
-  #else
+  #else // !DMCP_BUILD
     return(fread(buffer, 1, size, stream));
-  #endif
+  #endif // DMCP_BUILD
 }
 
 
@@ -363,7 +363,7 @@ void restoreCalc(void) {
 
     #if (DEBUG_REGISTER_L == 1)
       refreshRegisterLine(REGISTER_X); // to show L register
-    #endif
+    #endif // (DEBUG_REGISTER_L == 1)
 
     #if (SCREEN_800X480 == 1)
       if(calcMode == CM_NORMAL)                {}
@@ -382,7 +382,7 @@ void restoreCalc(void) {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);
       }
-    #else // SCREEN_800X480 == 0
+    #else // (SCREEN_800X480 == 0)
       if(calcMode == CM_NORMAL)                calcModeNormalGui();
       else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
       else if(calcMode == CM_TAM)              calcModeTamGui();
@@ -398,12 +398,12 @@ void restoreCalc(void) {
         sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
         displayBugScreen(errorMessage);
       }
-    #endif // SCREEN_800X480
+    #endif // (SCREEN_800X480 == 1)
 
     refreshScreen();
   }
 }
-#endif
+#endif // PC_BUILD
 
 
 static void registerToSaveString(calcRegister_t regist) {
@@ -498,15 +498,17 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     result = f_open(BACKUP, "SAVFILES\\wp43s.sav", FA_CREATE_ALWAYS | FA_WRITE);
     if(result != FR_OK) {
       sys_disk_write_enable(0);
-  #else
+      return;
+    }
+  #else // !DMCP_BUILD
     FILE *ppgm_fp;
 
     BACKUP = fopen("wp43s.sav", "wb");
     if(BACKUP == NULL) {
       printf("Cannot SAVE in file wp43s.sav!\n");
-  #endif
       return;
     }
+  #endif // DMCP_BUILD
 
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wrestrict"
@@ -640,9 +642,9 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   #ifdef DMCP_BUILD
     f_close(BACKUP);
     sys_disk_write_enable(0);
-  #else
+  #else // !DMCP_BUILD
     fclose(BACKUP);
-  #endif
+  #endif // DMCP_BUILD
 
   temporaryInformation = TI_SAVED;
 }
@@ -1106,17 +1108,23 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 void fnLoad(uint16_t loadMode) {
   #ifdef DMCP_BUILD
     if(f_open(BACKUP, "SAVFILES\\wp43s.sav", FA_READ) != FR_OK) {
-  #else
-    FILE *ppgm_fp;
-
-    if((BACKUP = fopen("wp43s.sav", "rb")) == NULL) {
-  #endif
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
         return;
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
+  #else // !DMCP_BUILD
+    FILE *ppgm_fp;
+
+    if((BACKUP = fopen("wp43s.sav", "rb")) == NULL) {
+      displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
+        return;
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  #endif // DMCP_BUILD
 
   restoreOneSection(BACKUP, loadMode); // GLOBAL_REGISTERS
   restoreOneSection(BACKUP, loadMode); // GLOBAL_FLAGS
@@ -1130,15 +1138,15 @@ void fnLoad(uint16_t loadMode) {
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);
-  #else
+  #else // !DMCP_BUILD
     fclose(BACKUP);
-  #endif
+  #endif //DMCP_BUILD
 
   #ifndef TESTSUITE_BUILD
     if(loadMode == LM_ALL) {
       temporaryInformation = TI_BACKUP_RESTORED;
     }
-  #endif
+  #endif // TESTSUITE_BUILD
 }
 
 #undef BACKUP

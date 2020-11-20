@@ -33,7 +33,9 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + *step + 1;
          }
          else {
-           printf("\nIn function countOpBytes case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
@@ -48,7 +50,9 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + 1;
          }
          else {
-           printf("\nIn function countOpBytes: case PARAM_LABEL, %u is not a valid parameter!", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes: case PARAM_LABEL, %u is not a valid parameter!", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
@@ -63,7 +67,9 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + 1;
          }
          else {
-           printf("\nIn function countOpBytes: case PARAM_REGISTER, %u is not a valid parameter!", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes: case PARAM_REGISTER, %u is not a valid parameter!", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
@@ -78,7 +84,9 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + *step + 1;
          }
          else {
-           printf("\nIn function countOpBytes: case PARAM_FLAG, %u is not a valid parameter!", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes: case PARAM_FLAG, %u is not a valid parameter!", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
@@ -93,7 +101,9 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + *step + 1;
          }
          else {
-           printf("\nIn function countOpBytes: case PARAM_NUMBER, %u is not a valid parameter!", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes: case PARAM_NUMBER, %u is not a valid parameter!", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
@@ -108,12 +118,16 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
            return step + 1;
          }
          else {
-           printf("\nIn function countOpBytes: case PARAM_COMPARE, %u is not a valid parameter!", opParam);
+           #ifndef DMCP_BUILD
+             printf("\nIn function countOpBytes: case PARAM_COMPARE, %u is not a valid parameter!", opParam);
+           #endif // !DMCP_BUILD
            return NULL;
          }
 
     default:
-         printf("\nIn function countOpBytes: paramMode %u is not valid!\n", paramMode);
+         #ifndef DMCP_BUILD
+           printf("\nIn function countOpBytes: paramMode %u is not valid!\n", paramMode);
+         #endif // !DMCP_BUILD
          return NULL;
   }
 }
@@ -155,7 +169,9 @@ uint8_t *countLITTbytes(uint8_t *step) {
       return step + *step + 1;
 
     default:
-      printf("\nERROR: %u is not an acceptable parameter for ITM_LITT!\n", *(uint8_t *)(step - 1));
+      #ifndef DMCP_BUILD
+        printf("\nERROR: %u is not an acceptable parameter for ITM_LITT!\n", *(uint8_t *)(step - 1));
+      #endif // !DMCP_BUILD
       return NULL;
   }
 }
@@ -296,7 +312,9 @@ uint8_t *findNextStep(uint8_t *step) {
 
     default:
       if((item8 & 0x80) == 0) {
-        printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+        #ifndef DMCP_BUILD
+          printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+        #endif // !DMCP_BUILD
         return NULL;
       }
 
@@ -554,7 +572,9 @@ uint8_t *findNextStep(uint8_t *step) {
           return NULL;
 
         default:
-          printf("\nERROR: double byte instruction %u is unknown!\n", item16);
+          #ifndef DMCP_BUILD
+            printf("\nERROR: double byte instruction %u is unknown!\n", item16);
+          #endif // !DMCP_BUILD
           return NULL;
       }
   }

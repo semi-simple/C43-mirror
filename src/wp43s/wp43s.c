@@ -201,7 +201,7 @@ size_t                wp43sMemInBytes;
 
 #ifdef PC_BUILD
 int main(int argc, char* argv[]) {
-  #if defined __APPLE__
+  #ifdef __APPLE__
     // we take the directory where the application is as the root for this application.
     // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
     if(argc>=1) {
@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
         free(curdir);
       }
     }
-  #endif
+  #endif // __APPLE__
 
   wp43sMemInBytes = 0;
   gmpMemInBytes = 0;
@@ -258,7 +258,7 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-#endif
+#endif // PC_BUILD
 
 #ifdef DMCP_BUILD
 void program_main(void) {
@@ -608,7 +608,7 @@ void program_main(void) {
     }
   }
 }
-#endif
+#endif // DMCP_BUILD
 
 #ifdef TESTSUITE_BUILD
 #include "testSuite.h"
@@ -662,4 +662,4 @@ return 0;
 
   return 0;
 }
-#endif
+#endif // TESTSUITE_BUILD

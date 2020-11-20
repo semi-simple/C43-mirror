@@ -21,531 +21,529 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-/********************************************//**
- * \brief Draws the calc's screen on the PC window widget
- *
- * \param[in] widget GtkWidget* Not used
- * \param[in] cr cairo_t*
- * \param[in] data gpointer     Not used
- * \return gboolean
- ***********************************************/
-gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
-  cairo_surface_t *imageSurface;
+  /********************************************//**
+   * \brief Draws the calc's screen on the PC window widget
+   *
+   * \param[in] widget GtkWidget* Not used
+   * \param[in] cr cairo_t*
+   * \param[in] data gpointer     Not used
+   * \return gboolean
+   ***********************************************/
+  gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
+    cairo_surface_t *imageSurface;
 
-  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
-  #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
-    cairo_scale(cr, 2.0, 2.0);
-  #endif
-  cairo_set_source_surface(cr, imageSurface, 0, 0);
-  cairo_surface_mark_dirty(imageSurface);
-  #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
-    cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_FAST);
-  #endif
-  cairo_paint(cr);
-  cairo_surface_destroy(imageSurface);
+    imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
+    #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
+      cairo_scale(cr, 2.0, 2.0);
+    #endif // defined(RASPBERRY) && (SCREEN_800X480 == 1)
+    cairo_set_source_surface(cr, imageSurface, 0, 0);
+    cairo_surface_mark_dirty(imageSurface);
+    #if defined(RASPBERRY) && (SCREEN_800X480 == 1)
+      cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_FAST);
+    #endif // defined(RASPBERRY) && (SCREEN_800X480 == 1)
+    cairo_paint(cr);
+    cairo_surface_destroy(imageSurface);
 
-  screenChange = false;
+    screenChange = false;
 
-  return FALSE;
-}
-
-
-
-void copyScreenToClipboard(void) {
-  cairo_surface_t *imageSurface;
-  GtkClipboard *clipboard;
-
-  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
-
-  imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
-  gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
-}
-
-
-
-static void angularUnitToString(uint32_t angularMode, char *string) {
-  switch(angularMode) {
-    case AM_DEGREE: strcpy(string, STD_DEGREE); break;
-    case AM_DMS:    strcpy(string, "d.ms");     break;
-    case AM_GRAD:   strcpy(string, "g");        break;
-    case AM_RADIAN: strcpy(string, "r");        break;
-    case AM_MULTPI: strcpy(string, STD_pi);     break;
-    case AM_NONE:   break;
-    default:        strcpy(string, "?");
+    return FALSE;
   }
-}
 
 
 
-void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
-  longInteger_t lgInt;
-  int16_t base, sign, n;
-  uint64_t shortInt;
+  void copyScreenToClipboard(void) {
+    cairo_surface_t *imageSurface;
+    GtkClipboard *clipboard;
 
-  switch(getRegisterDataType(regist)) {
-    case dtLongInteger:
-      convertLongIntegerRegisterToLongInteger(regist, lgInt);
-      longIntegerToAllocatedString(lgInt, tmpString, sizeof(tmpString));
-      longIntegerFree(lgInt);
-      break;
+    clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_clear(clipboard);
+    gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
-    case dtTime:
-      strcpy(tmpString, "Copying a time to the clipboard is to be coded!");
-      break;
+    imageSurface = cairo_image_surface_create_for_data((unsigned char *)screenData, CAIRO_FORMAT_RGB24, SCREEN_WIDTH, SCREEN_HEIGHT, screenStride * 4);
+    gtk_clipboard_set_image(clipboard, gdk_pixbuf_get_from_surface(imageSurface, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+  }
 
-    case dtDate:
-      strcpy(tmpString, "Copying a date to the clipboard is to be coded!");
-      break;
 
-    case dtString:
-      xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
-      stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-      break;
 
-    case dtReal34Matrix:
-      strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
-      break;
+  static void angularUnitToString(uint32_t angularMode, char *string) {
+    switch(angularMode) {
+      case AM_DEGREE: strcpy(string, STD_DEGREE); break;
+      case AM_DMS:    strcpy(string, "d.ms");     break;
+      case AM_GRAD:   strcpy(string, "g");        break;
+      case AM_RADIAN: strcpy(string, "r");        break;
+      case AM_MULTPI: strcpy(string, STD_pi);     break;
+      case AM_NONE:   break;
+      default:        strcpy(string, "?");
+    }
+  }
 
-    case dtComplex34Matrix:
-      strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
-      break;
 
-    case dtShortInteger:
-      convertShortIntegerRegisterToUInt64(regist, &sign, &shortInt);
-      base = getRegisterShortIntegerBase(regist);
 
-      n = ERROR_MESSAGE_LENGTH - 100;
-      sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
+  void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
+    longInteger_t lgInt;
+    int16_t base, sign, n;
+    uint64_t shortInt;
 
-      if(shortInt == 0) {
-        errorMessage[n--] = '0';
+    switch(getRegisterDataType(regist)) {
+      case dtLongInteger:
+        convertLongIntegerRegisterToLongInteger(regist, lgInt);
+        longIntegerToAllocatedString(lgInt, tmpString, sizeof(tmpString));
+        longIntegerFree(lgInt);
+        break;
+
+      case dtTime:
+        strcpy(tmpString, "Copying a time to the clipboard is to be coded!");
+        break;
+
+      case dtDate:
+        strcpy(tmpString, "Copying a date to the clipboard is to be coded!");
+        break;
+
+      case dtString:
+        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
+        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        break;
+
+      case dtReal34Matrix:
+        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
+        break;
+
+      case dtComplex34Matrix:
+        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
+        break;
+
+      case dtShortInteger:
+        convertShortIntegerRegisterToUInt64(regist, &sign, &shortInt);
+        base = getRegisterShortIntegerBase(regist);
+
+        n = ERROR_MESSAGE_LENGTH - 100;
+        sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
+
+        if(shortInt == 0) {
+          errorMessage[n--] = '0';
+        }
+        else {
+          while(shortInt != 0) {
+            errorMessage[n--] = digits[shortInt % base];
+            shortInt /= base;
+          }
+          if(sign) {
+            errorMessage[n--] = '-';
+          }
+        }
+        n++;
+
+        strcpy(tmpString, errorMessage + n);
+        break;
+
+      case dtReal34:
+        real34ToString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2);
+        if(strchr(tmpString + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpString + TMP_STR_LENGTH/2, 'E') == NULL) {
+          strcat(tmpString + TMP_STR_LENGTH/2, ".");
+        }
+        angularUnitToString(getRegisterAngularMode(regist), tmpString + TMP_STR_LENGTH/2 + strlen(tmpString + TMP_STR_LENGTH/2));
+        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        break;
+
+      case dtComplex34:
+        real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
+        if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+          strcat(tmpString, " - ix");
+          real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
+          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
+          real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
+        }
+        else {
+          strcat(tmpString, " + ix");
+          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
+        }
+        break;
+
+      case dtConfig:
+        xcopy(tmpString, "Configuration data", 19);
+        break;
+
+      default:
+        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+    }
+
+    strcpy(clipboardString, tmpString);
+  }
+
+
+
+  void copyRegisterXToClipboard(void) {
+    GtkClipboard *clipboard;
+    char clipboardString[3000];
+
+    clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_clear(clipboard);
+    gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
+
+    copyRegisterToClipboardString(REGISTER_X, clipboardString);
+
+    gtk_clipboard_set_text(clipboard, tmpString, -1);
+  }
+
+
+
+  void copyStackRegistersToClipboardString(char *clipboardString) {
+    char *ptr = clipboardString;
+
+    strcpy(ptr, "K = ");
+    ptr += 4;
+    copyRegisterToClipboardString(REGISTER_K, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "J = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_J, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "I = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_I, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "L = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_L, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "D = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_D, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "C = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_C, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "B = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_B, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "A = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_A, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "T = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_T, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "Z = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_Z, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "Y = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_Y, ptr);
+
+    ptr += strlen(ptr);
+    strcpy(ptr, LINEBREAK "X = ");
+    ptr += strlen(ptr);
+    copyRegisterToClipboardString(REGISTER_X, ptr);
+  }
+
+
+
+  void copyStackRegistersToClipboard(void) {
+    GtkClipboard *clipboard;
+    char clipboardString[10000];
+
+    clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_clear(clipboard);
+    gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
+
+    copyStackRegistersToClipboardString(clipboardString);
+
+    gtk_clipboard_set_text(clipboard, clipboardString, -1);
+  }
+
+
+
+  void copyAllRegistersToClipboard(void) {
+    GtkClipboard *clipboard;
+    char clipboardString[15000], *ptr = clipboardString;
+
+    clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    gtk_clipboard_clear(clipboard);
+    gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
+
+    copyStackRegistersToClipboardString(ptr);
+
+    for(int32_t regist=99; regist>=0; --regist) {
+      ptr += strlen(ptr);
+      sprintf(ptr, LINEBREAK "R%02d = ", regist);
+      ptr += strlen(ptr);
+      copyRegisterToClipboardString(regist, ptr);
+    }
+
+    for(int32_t regist=allLocalRegisterPointer->numberOfLocalRegisters-1; regist>=0; --regist) {
+      ptr += strlen(ptr);
+      sprintf(ptr, LINEBREAK "R.%02d = ", regist);
+      ptr += strlen(ptr);
+      copyRegisterToClipboardString(FIRST_LOCAL_REGISTER + regist, ptr);
+    }
+
+    if(statisticalSumsPointer != NULL) {
+      char sumName[40];
+      for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
+        ptr += strlen(ptr);
+
+        switch(sum) {
+          case  0: strcpy(sumName,           "n             "           ); break;
+          case  1: strcpy(sumName, STD_SIGMA "(x)          "            ); break;
+          case  2: strcpy(sumName, STD_SIGMA "(y)          "            ); break;
+          case  3: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 ")         "); break;
+          case  4: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "y)        "); break;
+          case  5: strcpy(sumName, STD_SIGMA "(y" STD_SUP_2 ")         "); break;
+          case  6: strcpy(sumName, STD_SIGMA "(xy)         "            ); break;
+          case  7: strcpy(sumName, STD_SIGMA "(ln(x)" STD_CROSS "ln(y))"); break;
+          case  8: strcpy(sumName, STD_SIGMA "(ln(x))      "            ); break;
+          case  9: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(x))     "); break;
+          case 10: strcpy(sumName, STD_SIGMA "(y ln(x))    "            ); break;
+          case 11: strcpy(sumName, STD_SIGMA "(ln(y))      "            ); break;
+          case 12: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(y))     "); break;
+          case 13: strcpy(sumName, STD_SIGMA "(x ln(y))    "            ); break;
+          case 14: strcpy(sumName, STD_SIGMA "(ln(y)/x)    "            ); break;
+          case 15: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "/y)       "); break;
+          case 16: strcpy(sumName, STD_SIGMA "(1/x)        "            ); break;
+          case 17: strcpy(sumName, STD_SIGMA "(1/x" STD_SUP_2 ")       "); break;
+          case 18: strcpy(sumName, STD_SIGMA "(x/y)        "            ); break;
+          case 19: strcpy(sumName, STD_SIGMA "(1/y)        "            ); break;
+          case 20: strcpy(sumName, STD_SIGMA "(1/y" STD_SUP_2 ")       "); break;
+          case 21: strcpy(sumName, STD_SIGMA "(x" STD_SUP_3 ")         "); break;
+          case 22: strcpy(sumName, STD_SIGMA "(x" STD_SUP_4 ")         "); break;
+          case 23: strcpy(sumName,           "x min         "           ); break;
+          case 24: strcpy(sumName,           "x max         "           ); break;
+          case 25: strcpy(sumName,           "y min         "           ); break;
+          case 26: strcpy(sumName,           "y max         "           ); break;
+          default: strcpy(sumName,           "?             "           );
+        }
+
+        sprintf(ptr, LINEBREAK "SR%02d = ", sum);
+        ptr += strlen(ptr);
+        stringToUtf8(sumName, (uint8_t *)ptr);
+        ptr += strlen(ptr);
+        strcpy(ptr, " = ");
+        ptr += strlen(ptr);
+        realToString(statisticalSumsPointer + REAL_SIZE * sum, tmpString);
+        if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+          strcat(tmpString, ".");
+        }
+        strcpy(ptr, tmpString);
+      }
+    }
+
+    gtk_clipboard_set_text(clipboard, clipboardString, -1);
+  }
+
+
+
+  /********************************************//**
+   * \brief Refreshes calc's screen. This function is
+   * called every SCREEN_REFRESH_PERIOD ms by a GTK timer.
+   * * make the cursor blink if needed
+   * * refresh date and time in the status bar if needed
+   * * refresh the whole screen if needed
+   *
+   * \param[in] data gpointer Not used
+   * \return gboolean         What will happen next?
+   *                          * true  = timer will call this function again
+   *                          * false = timer stops calling this function
+   ***********************************************/
+  gboolean refreshLcd(gpointer unusedData) { // This function is called every SCREEN_REFRESH_PERIOD ms by a GTK timer
+    // Cursor blinking
+    static bool_t cursorBlink=true;
+
+    if(cursorEnabled) {
+      if(cursorBlink) {
+        showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
       }
       else {
-        while(shortInt != 0) {
-          errorMessage[n--] = digits[shortInt % base];
-          shortInt /= base;
-        }
-        if(sign) {
-          errorMessage[n--] = '-';
-        }
+        hideCursor();
       }
-      n++;
-
-      strcpy(tmpString, errorMessage + n);
-      break;
-
-    case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2);
-      if(strchr(tmpString + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpString + TMP_STR_LENGTH/2, 'E') == NULL) {
-        strcat(tmpString + TMP_STR_LENGTH/2, ".");
-      }
-      angularUnitToString(getRegisterAngularMode(regist), tmpString + TMP_STR_LENGTH/2 + strlen(tmpString + TMP_STR_LENGTH/2));
-      stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-      break;
-
-    case dtComplex34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
-      if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-        strcat(tmpString, " - ix");
-        real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
-        real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
-        real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
-      }
-      else {
-        strcat(tmpString, " + ix");
-        real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
-      }
-      break;
-
-    case dtConfig:
-      xcopy(tmpString, "Configuration data", 19);
-      break;
-
-    default:
-      sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
-  }
-
-  strcpy(clipboardString, tmpString);
-}
-
-
-
-void copyRegisterXToClipboard(void) {
-  GtkClipboard *clipboard;
-  char clipboardString[3000];
-
-  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
-
-  copyRegisterToClipboardString(REGISTER_X, clipboardString);
-
-  gtk_clipboard_set_text(clipboard, tmpString, -1);
-}
-
-
-
-void copyStackRegistersToClipboardString(char *clipboardString) {
-  char *ptr = clipboardString;
-
-  strcpy(ptr, "K = ");
-  ptr += 4;
-  copyRegisterToClipboardString(REGISTER_K, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "J = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_J, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "I = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_I, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "L = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_L, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "D = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_D, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "C = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_C, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "B = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_B, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "A = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_A, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "T = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_T, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "Z = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_Z, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "Y = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_Y, ptr);
-
-  ptr += strlen(ptr);
-  strcpy(ptr, LINEBREAK "X = ");
-  ptr += strlen(ptr);
-  copyRegisterToClipboardString(REGISTER_X, ptr);
-}
-
-
-
-void copyStackRegistersToClipboard(void) {
-  GtkClipboard *clipboard;
-  char clipboardString[10000];
-
-  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
-
-  copyStackRegistersToClipboardString(clipboardString);
-
-  gtk_clipboard_set_text(clipboard, clipboardString, -1);
-}
-
-
-
-void copyAllRegistersToClipboard(void) {
-  GtkClipboard *clipboard;
-  char clipboardString[15000], *ptr = clipboardString;
-
-  clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_clear(clipboard);
-  gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
-
-  copyStackRegistersToClipboardString(ptr);
-
-  for(int32_t regist=99; regist>=0; --regist) {
-    ptr += strlen(ptr);
-    sprintf(ptr, LINEBREAK "R%02d = ", regist);
-    ptr += strlen(ptr);
-    copyRegisterToClipboardString(regist, ptr);
-  }
-
-  for(int32_t regist=allLocalRegisterPointer->numberOfLocalRegisters-1; regist>=0; --regist) {
-    ptr += strlen(ptr);
-    sprintf(ptr, LINEBREAK "R.%02d = ", regist);
-    ptr += strlen(ptr);
-    copyRegisterToClipboardString(FIRST_LOCAL_REGISTER + regist, ptr);
-  }
-
-  if(statisticalSumsPointer != NULL) {
-    char sumName[40];
-    for(int32_t sum=0; sum<NUMBER_OF_STATISTICAL_SUMS; sum++) {
-      ptr += strlen(ptr);
-
-      switch(sum) {
-        case  0: strcpy(sumName,           "n             "           ); break;
-        case  1: strcpy(sumName, STD_SIGMA "(x)          "            ); break;
-        case  2: strcpy(sumName, STD_SIGMA "(y)          "            ); break;
-        case  3: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 ")         "); break;
-        case  4: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "y)        "); break;
-        case  5: strcpy(sumName, STD_SIGMA "(y" STD_SUP_2 ")         "); break;
-        case  6: strcpy(sumName, STD_SIGMA "(xy)         "            ); break;
-        case  7: strcpy(sumName, STD_SIGMA "(ln(x)" STD_CROSS "ln(y))"); break;
-        case  8: strcpy(sumName, STD_SIGMA "(ln(x))      "            ); break;
-        case  9: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(x))     "); break;
-        case 10: strcpy(sumName, STD_SIGMA "(y ln(x))    "            ); break;
-        case 11: strcpy(sumName, STD_SIGMA "(ln(y))      "            ); break;
-        case 12: strcpy(sumName, STD_SIGMA "(ln" STD_SUP_2 "(y))     "); break;
-        case 13: strcpy(sumName, STD_SIGMA "(x ln(y))    "            ); break;
-        case 14: strcpy(sumName, STD_SIGMA "(ln(y)/x)    "            ); break;
-        case 15: strcpy(sumName, STD_SIGMA "(x" STD_SUP_2 "/y)       "); break;
-        case 16: strcpy(sumName, STD_SIGMA "(1/x)        "            ); break;
-        case 17: strcpy(sumName, STD_SIGMA "(1/x" STD_SUP_2 ")       "); break;
-        case 18: strcpy(sumName, STD_SIGMA "(x/y)        "            ); break;
-        case 19: strcpy(sumName, STD_SIGMA "(1/y)        "            ); break;
-        case 20: strcpy(sumName, STD_SIGMA "(1/y" STD_SUP_2 ")       "); break;
-        case 21: strcpy(sumName, STD_SIGMA "(x" STD_SUP_3 ")         "); break;
-        case 22: strcpy(sumName, STD_SIGMA "(x" STD_SUP_4 ")         "); break;
-        case 23: strcpy(sumName,           "x min         "           ); break;
-        case 24: strcpy(sumName,           "x max         "           ); break;
-        case 25: strcpy(sumName,           "y min         "           ); break;
-        case 26: strcpy(sumName,           "y max         "           ); break;
-        default: strcpy(sumName,           "?             "           );
-      }
-
-      sprintf(ptr, LINEBREAK "SR%02d = ", sum);
-      ptr += strlen(ptr);
-      stringToUtf8(sumName, (uint8_t *)ptr);
-      ptr += strlen(ptr);
-      strcpy(ptr, " = ");
-      ptr += strlen(ptr);
-      realToString(statisticalSumsPointer + REAL_SIZE * sum, tmpString);
-      if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
-        strcat(tmpString, ".");
-      }
-      strcpy(ptr, tmpString);
+      cursorBlink = !cursorBlink;
     }
-  }
 
-  gtk_clipboard_set_text(clipboard, clipboardString, -1);
-}
-
-
-
-/********************************************//**
- * \brief Refreshes calc's screen. This function is
- * called every SCREEN_REFRESH_PERIOD ms by a GTK timer.
- * * make the cursor blink if needed
- * * refresh date and time in the status bar if needed
- * * refresh the whole screen if needed
- *
- * \param[in] data gpointer Not used
- * \return gboolean         What will happen next?
- *                          * true  = timer will call this function again
- *                          * false = timer stops calling this function
- ***********************************************/
-gboolean refreshLcd(gpointer unusedData) { // This function is called every SCREEN_REFRESH_PERIOD ms by a GTK timer
-  // Cursor blinking
-  static bool_t cursorBlink=true;
-
-  if(cursorEnabled) {
-    if(cursorBlink) {
-      showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
+    // Function name display
+    if(showFunctionNameCounter > 0) {
+      showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
+      if(showFunctionNameCounter <= 0) {
+        hideFunctionName();
+        showFunctionName(ITM_NOP, 0);
+      }
     }
-    else {
-      hideCursor();
+
+    // Update date and time
+    getTimeString(dateTimeString);
+    if(strcmp(dateTimeString, oldTime)) {
+      strcpy(oldTime, dateTimeString);
+      showDateTime();
     }
-    cursorBlink = !cursorBlink;
-  }
 
-  // Function name display
-  if(showFunctionNameCounter > 0) {
-    showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
-    if(showFunctionNameCounter <= 0) {
-      hideFunctionName();
-      showFunctionName(ITM_NOP, 0);
+    // If LCD has changed: update the GTK screen
+    if(screenChange) {
+      #if (__linux__ == 1) && (DEBUG_PANEL == 1)
+        refreshDebugPanel();
+      #endif // (__linux__ == 1) && (DEBUG_PANEL == 1)
+
+      gtk_widget_queue_draw(screen);
+      while(gtk_events_pending()) {
+        gtk_main_iteration();
+      }
     }
-  }
 
-  // Update date and time
-  getTimeString(dateTimeString);
-  if(strcmp(dateTimeString, oldTime)) {
-    strcpy(oldTime, dateTimeString);
-    showDateTime();
-  }
-
-  // If LCD has changed: update the GTK screen
-  if(screenChange) {
-    #if (__linux__ == 1) && (DEBUG_PANEL == 1)
-      refreshDebugPanel();
-    #endif
-
-    gtk_widget_queue_draw(screen);
-    while(gtk_events_pending()) {
-      gtk_main_iteration();
+    // Alpha selection timer
+    if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+      resetAlphaSelectionBuffer();
     }
-  }
 
-  // Alpha selection timer
-  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
-    resetAlphaSelectionBuffer();
+    return TRUE;
   }
-
-  return TRUE;
-}
 #elif defined DMCP_BUILD
-void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
-  // Cursor blinking
-  static bool_t cursorBlink=true;
+  void refreshLcd(void) {// This function is called roughly every SCREEN_REFRESH_PERIOD ms from the main loop
+    // Cursor blinking
+    static bool_t cursorBlink=true;
 
-  if(cursorEnabled) {
-    if(cursorBlink) {
-      showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
-    }
-    else {
-      hideCursor();
-    }
-    cursorBlink = !cursorBlink;
-  }
-
-  // Function name display
-  if(showFunctionNameCounter>0) {
-    showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
-    if(showFunctionNameCounter <= 0) {
-      hideFunctionName();
-      showFunctionName(ITM_NOP, 0);
-    }
-  }
-
-  // Update date and time
-  getTimeString(dateTimeString);
-  if(strcmp(dateTimeString, oldTime)) {
-    strcpy(oldTime, dateTimeString);
-    showDateTime();
-
-    if(!getSystemFlag(FLAG_AUTOFF)) {
-      reset_auto_off();
-    }
-
-
-  }
-
-  if(usb_powered() == 1) {
-    if(!getSystemFlag(FLAG_USB)) {
-      setSystemFlag(FLAG_USB);
-      clearSystemFlag(FLAG_LOWBAT);
-      showHideUsbLowBattery();
-    }
-  }
-  else {
-    if(getSystemFlag(FLAG_USB)) {
-      clearSystemFlag(FLAG_USB);
-    }
-
-    if(get_vbat() < 2000) {
-      if(!getSystemFlag(FLAG_LOWBAT)) {
-        setSystemFlag(FLAG_LOWBAT);
-        showHideUsbLowBattery();
+    if(cursorEnabled) {
+      if(cursorBlink) {
+        showGlyph(STD_CURSOR, cursorFont, xCursor, yCursor, vmNormal, true, false);
       }
-      SET_ST(STAT_PGM_END);
+      else {
+        hideCursor();
+      }
+      cursorBlink = !cursorBlink;
     }
-    else if(get_vbat() < 2500) {
-      if(!getSystemFlag(FLAG_LOWBAT)) {
-        setSystemFlag(FLAG_LOWBAT);
-        showHideUsbLowBattery();
+
+    // Function name display
+    if(showFunctionNameCounter>0) {
+      showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
+      if(showFunctionNameCounter <= 0) {
+        hideFunctionName();
+        showFunctionName(ITM_NOP, 0);
       }
     }
-    else {
-      if(getSystemFlag(FLAG_LOWBAT)) {
+
+    // Update date and time
+    getTimeString(dateTimeString);
+    if(strcmp(dateTimeString, oldTime)) {
+      strcpy(oldTime, dateTimeString);
+      showDateTime();
+
+      if(!getSystemFlag(FLAG_AUTOFF)) {
+        reset_auto_off();
+      }
+
+
+    }
+
+    if(usb_powered() == 1) {
+      if(!getSystemFlag(FLAG_USB)) {
+        setSystemFlag(FLAG_USB);
         clearSystemFlag(FLAG_LOWBAT);
         showHideUsbLowBattery();
       }
     }
-  }
+    else {
+      if(getSystemFlag(FLAG_USB)) {
+        clearSystemFlag(FLAG_USB);
+      }
 
-  // Alpha selection timer
-  if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
-    resetAlphaSelectionBuffer();
+      if(get_vbat() < 2000) {
+        if(!getSystemFlag(FLAG_LOWBAT)) {
+          setSystemFlag(FLAG_LOWBAT);
+          showHideUsbLowBattery();
+        }
+        SET_ST(STAT_PGM_END);
+      }
+      else if(get_vbat() < 2500) {
+        if(!getSystemFlag(FLAG_LOWBAT)) {
+          setSystemFlag(FLAG_LOWBAT);
+          showHideUsbLowBattery();
+        }
+      }
+      else {
+        if(getSystemFlag(FLAG_LOWBAT)) {
+          clearSystemFlag(FLAG_LOWBAT);
+          showHideUsbLowBattery();
+        }
+      }
+    }
+
+    // Alpha selection timer
+    if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000) { // More than 3 seconds elapsed since last keypress
+      resetAlphaSelectionBuffer();
+    }
   }
-}
-#endif
+#endif // PC_BUILD DMCP_BUILD
 
 
 
 #ifndef TESTSUITE_BUILD
-
-
-#ifndef DMCP_BUILD
-  /********************************************//**
-   * \brief Sets a black pixel on the screen.
-   *
-   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-   * \return void
-   ***********************************************/
-  void setBlackPixel(uint32_t x, uint32_t y) {
-    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
-      return;
-    }
-
-    *(screenData + y*screenStride + x) = ON_PIXEL;
-    screenChange = true;
-  }
-
-
-
-  /********************************************//**
-   * \brief Sets a white pixel on the screen.
-   *
-   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-   * \return void
-   ***********************************************/
-  void setWhitePixel(uint32_t x, uint32_t y) {
-    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
-      return;
-    }
-
-    *(screenData + y*screenStride + x) = OFF_PIXEL;
-    screenChange = true;
-  }
-
-
-
-  void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
-    uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
-
-    if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-      printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-      return;
-    }
-
-    pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-    for(line=y; line<endY; line++) {
-      for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-        *pixel = pixelColor;
+  #ifndef DMCP_BUILD
+    /********************************************//**
+     * \brief Sets a black pixel on the screen.
+     *
+     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+     * \return void
+     ***********************************************/
+    void setBlackPixel(uint32_t x, uint32_t y) {
+      if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+        printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
+        return;
       }
+
+      *(screenData + y*screenStride + x) = ON_PIXEL;
+      screenChange = true;
     }
 
-    screenChange = true;
-  }
-#endif //DMCP_BUILD
+
+
+    /********************************************//**
+     * \brief Sets a white pixel on the screen.
+     *
+     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+     * \return void
+     ***********************************************/
+    void setWhitePixel(uint32_t x, uint32_t y) {
+      if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+        printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
+        return;
+      }
+
+      *(screenData + y*screenStride + x) = OFF_PIXEL;
+      screenChange = true;
+    }
+
+
+
+    void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+      uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+
+      if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+        printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+        return;
+      }
+
+      pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+      for(line=y; line<endY; line++) {
+        for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+          *pixel = pixelColor;
+        }
+      }
+
+      screenChange = true;
+    }
+  #endif // !DMCP_BUILD
 
 
 
@@ -1426,7 +1424,7 @@ static void displayShiftAndTamBuffer(void) {
     }
     showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
   }
-  else if(calcMode == CM_PEM /*|| calcMode == CM_TAM_OVER_PEM*/) {
+  else if(calcMode == CM_TAM_OVER_PEM) {
     lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
     showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
   }

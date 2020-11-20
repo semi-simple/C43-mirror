@@ -35,7 +35,7 @@ void fnKeyDotD       (uint16_t unusedButMandatoryParameter);
   void btnClicked    (GtkWidget *notUsed, gpointer data);
   void btnPressed    (GtkWidget *notUsed, GdkEvent *event, gpointer data);
   void btnReleased   (GtkWidget *notUsed, GdkEvent *event, gpointer data);
-#endif
+#endif // PC_BUILD
 
 #ifdef DMCP_BUILD
   void btnFnPressed (void *data);

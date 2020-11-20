@@ -38,17 +38,17 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
         return POINTER_TO_LOCAL_REGISTER(regist)->dataType;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function getRegisterDataType:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+        moreInfoOnError("In function getRegisterDataType:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -58,11 +58,11 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
         return POINTER_TO_NAMED_VARIABLE(regist)->dataType;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -74,11 +74,11 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
       return savedStackRegister[regist - SAVED_REGISTER_X].dataType;
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -107,17 +107,17 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
         return TO_PCMEMPTR(POINTER_TO_LOCAL_REGISTER(regist)->dataPointer);
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters-1);
-        moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters-1);
+          moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function getRegisterDataPointer:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+        moreInfoOnError("In function getRegisterDataPointer:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -127,11 +127,11 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
         return TO_PCMEMPTR(POINTER_TO_NAMED_VARIABLE(regist)->dataPointer);
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -143,11 +143,11 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
       return TO_PCMEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].dataPointer);
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -177,17 +177,17 @@ uint32_t getRegisterTag(calcRegister_t regist) {
         return POINTER_TO_LOCAL_REGISTER(regist)->tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-     moreInfoOnError("In function getRegisterTag:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+       moreInfoOnError("In function getRegisterTag:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -197,11 +197,11 @@ uint32_t getRegisterTag(calcRegister_t regist) {
         return POINTER_TO_NAMED_VARIABLE(regist)->tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -213,11 +213,11 @@ uint32_t getRegisterTag(calcRegister_t regist) {
       return savedStackRegister[regist - SAVED_REGISTER_X].tag;
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -243,11 +243,11 @@ uint16_t getVariableNameLength(calcRegister_t regist) {
         return POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->variableNameLen;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function getVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function getVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
      #endif // PC_BUILD
     }
     else {
@@ -276,11 +276,11 @@ char *getVariableNamePointer(calcRegister_t regist) {
         return TO_PCMEMPTR(POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->ptrToVariableName);
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function getVariableNamePointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function getVariableNamePointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -316,17 +316,17 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
         POINTER_TO_LOCAL_REGISTER(regist)->tag = tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-     moreInfoOnError("In function setRegisterDataType:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+       moreInfoOnError("In function setRegisterDataType:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -337,11 +337,11 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
         POINTER_TO_NAMED_VARIABLE(regist)->tag = tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -354,11 +354,11 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
       savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -389,17 +389,17 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
         POINTER_TO_LOCAL_REGISTER(regist)->dataPointer = dataPointer;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function setRegisterDataPointer:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+        moreInfoOnError("In function setRegisterDataPointer:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -409,17 +409,17 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
         POINTER_TO_NAMED_VARIABLE(regist)->dataPointer = dataPointer;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function setRegisterDataPointer:", "no local registers defined!", NULL, NULL);
-    }
+      else {
+        moreInfoOnError("In function setRegisterDataPointer:", "no local registers defined!", NULL, NULL);
+      }
     #endif // PC_BUILD
   }
   else if(regist < 3000) { // Saved stack register
@@ -427,11 +427,11 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
       savedStackRegister[regist - SAVED_REGISTER_X].dataPointer = dataPointer;
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -461,17 +461,17 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
         POINTER_TO_LOCAL_REGISTER(regist)->tag = tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function setRegisterDataInfo:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
+      else {
+        moreInfoOnError("In function setRegisterDataInfo:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -481,11 +481,11 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
         POINTER_TO_NAMED_VARIABLE(regist)->tag = tag;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -497,11 +497,11 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
       savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
     }
     #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-      sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-      moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-    }
+      else {
+        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
+        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
+        moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+      }
     #endif // PC_BUILD
   }
   else {
@@ -527,11 +527,11 @@ void setVariableNameLength(calcRegister_t regist, uint16_t length) {
         POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->variableNameLen = length;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "named variable %" PRId16, regist);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-        moreInfoOnError("In function setVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
+        else {
+          sprintf(errorMessage, "named variable %" PRId16, regist);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          moreInfoOnError("In function setVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
+        }
       #endif // PC_BUILD
     }
     else {
@@ -728,17 +728,17 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
         getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
       }
       #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "local register %" PRId16 " is not defined!", regist - FIRST_LOCAL_REGISTER);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
-        moreInfoOnError("In function setRegisterMaxDataLength:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-      }
+        else {
+          sprintf(errorMessage, "local register %" PRId16 " is not defined!", regist - FIRST_LOCAL_REGISTER);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allLocalRegisterPointer->numberOfLocalRegisters - 1);
+          moreInfoOnError("In function setRegisterMaxDataLength:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
+        }
       #endif // PC_BUILD
     }
     #ifdef PC_BUILD
-    else {
-     moreInfoOnError("In function setRegisterMaxDataLength:", "no local registers defined!", NULL, NULL);
-    }
+      else {
+       moreInfoOnError("In function setRegisterMaxDataLength:", "no local registers defined!", NULL, NULL);
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -752,9 +752,9 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function setRegisterMaxDataLength:", "no named variables defined!", NULL, NULL);
-    }
+      else {
+        moreInfoOnError("In function setRegisterMaxDataLength:", "no named variables defined!", NULL, NULL);
+      }
     #endif // PC_BUILD
   }
   else if(regist < 3000) { // Saved stack register
@@ -798,9 +798,9 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function getRegisterMaxStringLength:", "no local registers defined!", NULL, NULL);
-    }
+      else {
+        moreInfoOnError("In function getRegisterMaxStringLength:", "no local registers defined!", NULL, NULL);
+      }
     #endif // PC_BUILD
   }
   else if(regist < SAVED_REGISTER_X) { // Named variable
@@ -814,9 +814,9 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function getRegisterMaxStringLength:", "no named variables defined!", NULL, NULL);
-    }
+      else {
+        moreInfoOnError("In function getRegisterMaxStringLength:", "no named variables defined!", NULL, NULL);
+      }
     #endif // PC_BUILD
   }
   else if(regist < 3000) { // Saved stack register
@@ -1081,10 +1081,10 @@ void fnStore(uint16_t regist) {
     copySourceRegisterToDestRegister(REGISTER_X, regist);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStore:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStore:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1113,10 +1113,10 @@ void fnStoreAdd(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStorePlus:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStorePlus:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1145,10 +1145,10 @@ void fnStoreSub(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1177,10 +1177,10 @@ void fnStoreMult(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStoreMult:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStoreMult:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1229,10 +1229,10 @@ void fnStoreMin(uint16_t regist) {
     registerMin(REGISTER_X, regist, regist);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1249,10 +1249,10 @@ void fnStoreMax(uint16_t regist) {
     registerMax(REGISTER_X, regist, regist);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1316,9 +1316,10 @@ void fnStoreStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreElement(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-printf("fnStoreElement\n");
-#endif // PC_BUILD
+  #ifdef PC_BUILD
+    printf("fnStoreElement\n");
+  #endif // PC_BUILD
+
   displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     moreInfoOnError("In function fnStoreElement:", "To be coded", NULL, NULL);
@@ -1362,10 +1363,10 @@ void fnRecall(uint16_t regist) {
     }
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecall:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecall:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1405,10 +1406,10 @@ void fnRecallAdd(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecallPlus:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecallPlus:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1436,10 +1437,10 @@ void fnRecallSub(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1467,10 +1468,10 @@ void fnRecallMult(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecallMult:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecallMult:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1498,10 +1499,10 @@ void fnRecallDiv(uint16_t regist) {
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecallDiv:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecallDiv:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1519,10 +1520,10 @@ void fnRecallMin(uint16_t regist) {
     registerMin(REGISTER_X, regist, REGISTER_X);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1540,10 +1541,10 @@ void fnRecallMax(uint16_t regist) {
     registerMax(REGISTER_X, regist, REGISTER_X);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnReallMax:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnReallMax:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -1625,9 +1626,10 @@ void fnRecallStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallElement(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-printf("fnRecallElement\n");
-#endif // PC_BUILD
+  #ifdef PC_BUILD
+    printf("fnRecallElement\n");
+  #endif // PC_BUILD
+
   displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     moreInfoOnError("In function fnRecallElement:", "To be coded", NULL, NULL);
@@ -1661,9 +1663,10 @@ void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnXLessThan(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-printf("fnXLessThan\n");
-#endif // PC_BUILD
+  #ifdef PC_BUILD
+    printf("fnXLessThan\n");
+  #endif // PC_BUILD
+
   displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     moreInfoOnError("In function fnXLessThan:", "To be coded", NULL, NULL);
@@ -2175,10 +2178,10 @@ void fnDec(uint16_t regist) {
     increment[getRegisterDataType(regist)](regist, DEC_FLAG);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnDec:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnDec:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 
@@ -2193,10 +2196,10 @@ void fnInc(uint16_t regist) {
     increment[getRegisterDataType(regist)](regist, INC_FLAG);
   }
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnInc:", errorMessage, "is not defined!", NULL);
-  }
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnInc:", errorMessage, "is not defined!", NULL);
+    }
   #endif // PC_BUILD
 }
 

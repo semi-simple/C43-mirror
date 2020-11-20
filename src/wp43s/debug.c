@@ -1374,7 +1374,7 @@ void debugNIM(void) {
   void chkHexaStringClicked(GtkWidget* w, gpointer data) {
     refreshDebugPanel();
   }
-#endif
+#endif // (DEBUG_PANEL == 1)
 
 
 
@@ -1472,7 +1472,7 @@ void debugNIM(void) {
     xcopy(strchr(str, '\0'), str + 64, strlen(str + 64) + 1);
     strcat(str, "i");
   }
-#endif
+#endif // DEBUG_PANEL == 1 || DEBUG_REGISTER_L == 1
 
 #ifdef PC_BUILD
   void dumpScreenToConsole(void) {
@@ -1712,4 +1712,4 @@ void debugNIM(void) {
     printf("v1=%d v2=%d v3=%d\n", v1, v2, v3);
                                                 stackCheck(stackBegin, stackEnd, 10000, "after printf(...");
   }
-#endif // defined(PC_BUILD ) || defined(TESTSUITE_BUILD)
+#endif // PC_BUILD || TESTSUITE_BUILD

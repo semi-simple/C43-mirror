@@ -157,7 +157,7 @@ bool_t getFlag(uint16_t flag) {
     else {
       moreInfoOnError("In function getFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
-    #endif
+    #endif // PC_BUILD
   }
   return false;
  }
@@ -195,7 +195,7 @@ void fnSetFlag(uint16_t flag) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnSetFlag:", "Tying to set a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -227,10 +227,10 @@ void fnSetFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function fnSetFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-    #endif
+      else {
+        moreInfoOnError("In function fnSetFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 
@@ -250,7 +250,7 @@ void fnClearFlag(uint16_t flag) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnClearFlag:", "Tying to clear a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -282,10 +282,10 @@ void fnClearFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-     moreInfoOnError("In function fnClearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-   #endif
+      else {
+       moreInfoOnError("In function fnClearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 
@@ -305,7 +305,7 @@ void fnFlipFlag(uint16_t flag) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
         moreInfoOnError("In function fnFlipFlag:", "Tying to flip a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -337,10 +337,10 @@ void fnFlipFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function fnFlipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-    #endif
+      else {
+        moreInfoOnError("In function fnFlipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 

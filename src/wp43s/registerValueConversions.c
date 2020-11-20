@@ -102,7 +102,7 @@ void convertLongIntegerToShortIntegerRegister(longInteger_t lgInt, uint32_t base
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = u64 & shortIntegerMask;
     #else // 64 bit
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = *(uint64_t *)(lgInt->_mp_d) & shortIntegerMask;
-    #endif
+    #endif // OS32BIT
     if(longIntegerIsNegative(lgInt)) {
       *(REGISTER_SHORT_INTEGER_DATA(destination)) = WP34S_intChs(*(REGISTER_SHORT_INTEGER_DATA(destination)));
     }
@@ -372,7 +372,7 @@ void realToUInt32(const real_t *re, enum rounding mode, uint32_t *value32, bool_
     if(sign || lgInt->_mp_size > 1 || lgInt->_mp_d[0] & 0xffffffff00000000ULL) {
       *overflow = true;
     }
-  #endif
+  #endif // OS32BIT
 
   longIntegerFree(lgInt);
 }

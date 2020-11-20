@@ -48,361 +48,361 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
 
 
 #ifdef PC_BUILD
-void saveCalc(void) {
-  uint32_t backupVersion = BACKUP_VERSION;
-  uint32_t ramSize       = RAM_SIZE;
-  uint32_t ramPtr;
-  FILE *ppgm_fp;
+  void saveCalc(void) {
+    uint32_t backupVersion = BACKUP_VERSION;
+    uint32_t ramSize       = RAM_SIZE;
+    uint32_t ramPtr;
+    FILE *ppgm_fp;
 
-  BACKUP = fopen("backup.bin", "wb");
-  if(BACKUP == NULL) {
-    printf("Cannot save calc's memory in file backup.bin!\n");
-    exit(0);
-  }
+    BACKUP = fopen("backup.bin", "wb");
+    if(BACKUP == NULL) {
+      printf("Cannot save calc's memory in file backup.bin!\n");
+      exit(0);
+    }
 
-  if(calcMode == CM_CONFIRMATION) {
-    calcMode = previousCalcMode;
-    refreshScreen();
-  }
+    if(calcMode == CM_CONFIRMATION) {
+      calcMode = previousCalcMode;
+      refreshScreen();
+    }
 
-  printf("Begin of calc's backup\n");
-
-
-  save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
-  save(&ramSize,                            sizeof(ramSize),                            BACKUP);
-  save(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
-  save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
-  save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
-  save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-  save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-  save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-  save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-  save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
-  save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
-  save(oldTime,                             sizeof(oldTime),                            BACKUP);
-  save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
-  save(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-  save(reg,                                 sizeof(reg),                                BACKUP);
-  save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
-  save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-  save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-  save(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-  save(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-  save(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-  save(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-  save(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-  save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-  save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
-  save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-  save(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-  ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  save(&xCursor,                            sizeof(xCursor),                            BACKUP);
-  save(&yCursor,                            sizeof(yCursor),                            BACKUP);
-  save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
-  save(&denMax,                             sizeof(denMax),                             BACKUP);
-  save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
-  save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
-  save(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
-  save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
-  save(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
-  save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
-  save(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
-  save(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
-  save(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
-  save(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
-  save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
-  save(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
-  save(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
-  save(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
-  save(&calcMode,                           sizeof(calcMode),                           BACKUP);
-  save(&nextChar,                           sizeof(nextChar),                           BACKUP);
-  save(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
-  save(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
-  save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
-  save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
-  save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-  save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
-  save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
-  save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
-  save(&shiftF,                             sizeof(shiftF),                             BACKUP);
-  save(&shiftG,                             sizeof(shiftG),                             BACKUP);
-  save(&tamMode,                            sizeof(tamMode),                            BACKUP);
-  save(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
-  save(&showContent,                        sizeof(showContent),                        BACKUP);
-  save(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
-  save(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
-  save(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
-  save(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
-  save(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
-  save(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
-  save(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
-  save(&displayStack,                       sizeof(displayStack),                       BACKUP);
-  save(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
-  save(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
-  save(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
-  save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
-  save(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
-  save(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
-  save(&funcOK,                             sizeof(funcOK),                             BACKUP);
-  save(&screenChange,                       sizeof(screenChange),                       BACKUP);
-  save(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
-  save(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
-  save(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
-  save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
-  save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
-  save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-  save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
-  save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
-  save(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
-  save(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
-  save(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
-  save(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
-  save(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
-  save(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
-  save(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
-  save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
-  save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
-  save(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
-  save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
-  save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
-  save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
-  save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(beginOfProgramMemory);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
-  ramPtr = (uint32_t)((void *)beginOfProgramMemory -        TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfProgramMemory)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
-  ramPtr = TO_WP43SMEMPTR(firstFreeProgramByte);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
-  ramPtr = (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
-  ramPtr = TO_WP43SMEMPTR(firstDisplayedStep);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
-  ramPtr = (uint32_t)((void *)firstDisplayedStep - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStep)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
-  ramPtr = TO_WP43SMEMPTR(currentStep);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
-  ramPtr = (uint32_t)((void *)currentStep - TO_PCMEMPTR(TO_WP43SMEMPTR(currentStep)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
-  save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-  save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
-  save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
-  save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
-
-  fclose(BACKUP);
-  printf("End of calc's backup\n");
-}
+    printf("Begin of calc's backup\n");
 
 
-
-void restoreCalc(void) {
-  uint32_t backupVersion, ramSize, ramPtr;
-  FILE *ppgm_fp;
-
-  fnReset(CONFIRMED);
-  BACKUP = fopen("backup.bin", "rb");
-  if(BACKUP == NULL) {
-    printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
-    return;
-  }
-
-  restore(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
-  restore(&ramSize,                            sizeof(ramSize),                            BACKUP);
-  if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
-    fclose(BACKUP);
-
-    printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
-    printf("               Backup file      Program\n");
-    printf("backupVersion  %6u           %6d\n", backupVersion, BACKUP_VERSION);
-    printf("ramSize blocks %6u           %6d\n", ramSize, RAM_SIZE);
-    printf("ramSize bytes  %6u           %6d\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
-    return;
-  }
-  else {
-    printf("Begin of calc's restoration\n");
-
-    restore(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
-    restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
-    restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
-    restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-    restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-    restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-    restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-    restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
-    restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
-    restore(oldTime,                             sizeof(oldTime),                            BACKUP);
-    restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
-    restore(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-    restore(reg,                                 sizeof(reg),                                BACKUP);
-    restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
-    restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-    restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-    restore(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-    restore(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-    restore(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-    restore(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-    restore(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-    restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-    restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
-    restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-    restore(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
-    restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
-    restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
-    restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
-    restore(&denMax,                             sizeof(denMax),                             BACKUP);
-    restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
-    restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
-    restore(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
-    restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
-    restore(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
-    restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
-    restore(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
-    restore(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
-    restore(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
-    restore(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
-    restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
-    restore(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
-    restore(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
-    restore(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
-    restore(&calcMode,                           sizeof(calcMode),                           BACKUP);
-    restore(&nextChar,                           sizeof(nextChar),                           BACKUP);
-    restore(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
-    restore(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
-    restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
-    restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
-    restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-    restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
-    restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
-    restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
-    restore(&shiftF,                             sizeof(shiftF),                             BACKUP);
-    restore(&shiftG,                             sizeof(shiftG),                             BACKUP);
-    restore(&tamMode,                            sizeof(tamMode),                            BACKUP);
-    restore(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
-    restore(&showContent,                        sizeof(showContent),                        BACKUP);
-    restore(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
-    restore(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
-    restore(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
-    restore(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
-    restore(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
-    restore(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
-    restore(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
-    restore(&displayStack,                       sizeof(displayStack),                       BACKUP);
-    restore(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
-    restore(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
-    restore(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
-    restore(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
-    restore(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
-
-    restore(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
-    glyphNotFound.data   = malloc(38);
-    xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
-
-    restore(&funcOK,                             sizeof(funcOK),                             BACKUP);
-    restore(&screenChange,                       sizeof(screenChange),                       BACKUP);
-    restore(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
-    restore(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
-    restore(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
-    restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
-    restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
-    restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-    restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
-    restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
-    restore(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
-    restore(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
-    restore(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
-    restore(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
-    restore(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
-    restore(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
-    restore(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
-    restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
-    restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
-    restore(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
-    restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
-    restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
-    restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
-    restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
-    beginOfProgramMemory = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
-    beginOfProgramMemory += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
-    firstFreeProgramByte = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
-    firstFreeProgramByte += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
-    firstDisplayedStep = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
-    firstDisplayedStep += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
-    currentStep = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
-    currentStep += ramPtr;
-    restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-    restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
-    restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
-    restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
+    save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
+    save(&ramSize,                            sizeof(ramSize),                            BACKUP);
+    save(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
+    save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
+    save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
+    save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
+    save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
+    save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
+    save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
+    save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+    save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
+    save(oldTime,                             sizeof(oldTime),                            BACKUP);
+    save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
+    save(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
+    save(reg,                                 sizeof(reg),                                BACKUP);
+    save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
+    save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+    save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
+    save(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
+    save(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
+    save(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
+    save(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
+    save(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
+    save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
+    save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+    save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+    save(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    save(&xCursor,                            sizeof(xCursor),                            BACKUP);
+    save(&yCursor,                            sizeof(yCursor),                            BACKUP);
+    save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
+    save(&denMax,                             sizeof(denMax),                             BACKUP);
+    save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
+    save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
+    save(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
+    save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
+    save(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
+    save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
+    save(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
+    save(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+    save(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
+    save(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
+    save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
+    save(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
+    save(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
+    save(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
+    save(&calcMode,                           sizeof(calcMode),                           BACKUP);
+    save(&nextChar,                           sizeof(nextChar),                           BACKUP);
+    save(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
+    save(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
+    save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
+    save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
+    save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+    save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
+    save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
+    save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
+    save(&shiftF,                             sizeof(shiftF),                             BACKUP);
+    save(&shiftG,                             sizeof(shiftG),                             BACKUP);
+    save(&tamMode,                            sizeof(tamMode),                            BACKUP);
+    save(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
+    save(&showContent,                        sizeof(showContent),                        BACKUP);
+    save(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
+    save(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
+    save(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
+    save(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
+    save(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
+    save(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
+    save(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
+    save(&displayStack,                       sizeof(displayStack),                       BACKUP);
+    save(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
+    save(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
+    save(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
+    save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
+    save(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
+    save(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
+    save(&funcOK,                             sizeof(funcOK),                             BACKUP);
+    save(&screenChange,                       sizeof(screenChange),                       BACKUP);
+    save(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
+    save(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
+    save(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
+    save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
+    save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
+    save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
+    save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+    save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
+    save(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
+    save(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
+    save(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
+    save(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
+    save(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
+    save(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+    save(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
+    save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
+    save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
+    save(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+    save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
+    save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
+    save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
+    save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(beginOfProgramMemory);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+    ramPtr = (uint32_t)((void *)beginOfProgramMemory -        TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfProgramMemory)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+    ramPtr = TO_WP43SMEMPTR(firstFreeProgramByte);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+    ramPtr = (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+    ramPtr = TO_WP43SMEMPTR(firstDisplayedStep);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+    ramPtr = (uint32_t)((void *)firstDisplayedStep - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStep)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+    ramPtr = TO_WP43SMEMPTR(currentStep);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+    ramPtr = (uint32_t)((void *)currentStep - TO_PCMEMPTR(TO_WP43SMEMPTR(currentStep)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
+    save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
+    save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+    save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+    save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
     fclose(BACKUP);
-    printf("End of calc's restoration\n");
-
-    scanLabelsAndPrograms();
-
-    #if (DEBUG_REGISTER_L == 1)
-      refreshRegisterLine(REGISTER_X); // to show L register
-    #endif // (DEBUG_REGISTER_L == 1)
-
-    #if (SCREEN_800X480 == 1)
-      if(calcMode == CM_NORMAL)                {}
-      else if(calcMode == CM_AIM)              {cursorEnabled = true;}
-      else if(calcMode == CM_TAM)              {}
-      else if(calcMode == CM_NIM)              {cursorEnabled = true;}
-      else if(calcMode == CM_ASM)              {}
-      else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_REGISTER_BROWSER) {}
-      else if(calcMode == CM_FLAG_BROWSER)     {}
-      else if(calcMode == CM_FONT_BROWSER)     {}
-      else if(calcMode == CM_PEM)              {}
-      else {
-        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
-        displayBugScreen(errorMessage);
-      }
-    #else // (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL)                calcModeNormalGui();
-      else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
-      else if(calcMode == CM_TAM)              calcModeTamGui();
-      else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
-      else if(calcMode == CM_ASM)              calcModeAsm();
-      else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
-      else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
-      else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
-      else if(calcMode == CM_PEM)              calcModeNormalGui();
-      else {
-        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
-        displayBugScreen(errorMessage);
-      }
-    #endif // (SCREEN_800X480 == 1)
-
-    refreshScreen();
+    printf("End of calc's backup\n");
   }
-}
+
+
+
+  void restoreCalc(void) {
+    uint32_t backupVersion, ramSize, ramPtr;
+    FILE *ppgm_fp;
+
+    fnReset(CONFIRMED);
+    BACKUP = fopen("backup.bin", "rb");
+    if(BACKUP == NULL) {
+      printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
+      return;
+    }
+
+    restore(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
+    restore(&ramSize,                            sizeof(ramSize),                            BACKUP);
+    if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
+      fclose(BACKUP);
+
+      printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
+      printf("               Backup file      Program\n");
+      printf("backupVersion  %6u           %6d\n", backupVersion, BACKUP_VERSION);
+      printf("ramSize blocks %6u           %6d\n", ramSize, RAM_SIZE);
+      printf("ramSize bytes  %6u           %6d\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
+      return;
+    }
+    else {
+      printf("Begin of calc's restoration\n");
+
+      restore(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
+      restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
+      restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
+      restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
+      restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
+      restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
+      restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
+      restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+      restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
+      restore(oldTime,                             sizeof(oldTime),                            BACKUP);
+      restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
+      restore(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
+      restore(reg,                                 sizeof(reg),                                BACKUP);
+      restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
+      restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+      restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
+      restore(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
+      restore(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
+      restore(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
+      restore(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
+      restore(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
+      restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
+      restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+      restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+      restore(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
+      restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
+      restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
+      restore(&denMax,                             sizeof(denMax),                             BACKUP);
+      restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
+      restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
+      restore(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
+      restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
+      restore(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
+      restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
+      restore(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
+      restore(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+      restore(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
+      restore(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
+      restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
+      restore(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
+      restore(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
+      restore(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
+      restore(&calcMode,                           sizeof(calcMode),                           BACKUP);
+      restore(&nextChar,                           sizeof(nextChar),                           BACKUP);
+      restore(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
+      restore(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
+      restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
+      restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
+      restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+      restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
+      restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
+      restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
+      restore(&shiftF,                             sizeof(shiftF),                             BACKUP);
+      restore(&shiftG,                             sizeof(shiftG),                             BACKUP);
+      restore(&tamMode,                            sizeof(tamMode),                            BACKUP);
+      restore(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
+      restore(&showContent,                        sizeof(showContent),                        BACKUP);
+      restore(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
+      restore(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
+      restore(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
+      restore(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
+      restore(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
+      restore(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
+      restore(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
+      restore(&displayStack,                       sizeof(displayStack),                       BACKUP);
+      restore(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
+      restore(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
+      restore(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
+      restore(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
+      restore(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
+
+      restore(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
+      glyphNotFound.data   = malloc(38);
+      xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+
+      restore(&funcOK,                             sizeof(funcOK),                             BACKUP);
+      restore(&screenChange,                       sizeof(screenChange),                       BACKUP);
+      restore(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
+      restore(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
+      restore(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
+      restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
+      restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
+      restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
+      restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+      restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
+      restore(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
+      restore(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
+      restore(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
+      restore(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
+      restore(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
+      restore(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+      restore(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
+      restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
+      restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
+      restore(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+      restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
+      restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
+      restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
+      restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+      beginOfProgramMemory = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+      beginOfProgramMemory += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+      firstFreeProgramByte = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+      firstFreeProgramByte += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+      firstDisplayedStep = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+      firstDisplayedStep += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+      currentStep = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
+      currentStep += ramPtr;
+      restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
+      restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+      restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+      restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
+
+      fclose(BACKUP);
+      printf("End of calc's restoration\n");
+
+      scanLabelsAndPrograms();
+
+      #if (DEBUG_REGISTER_L == 1)
+        refreshRegisterLine(REGISTER_X); // to show L register
+      #endif // (DEBUG_REGISTER_L == 1)
+
+      #if (SCREEN_800X480 == 1)
+        if(calcMode == CM_NORMAL)                {}
+        else if(calcMode == CM_AIM)              {cursorEnabled = true;}
+        else if(calcMode == CM_TAM)              {}
+        else if(calcMode == CM_NIM)              {cursorEnabled = true;}
+        else if(calcMode == CM_ASM)              {}
+        else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER) {}
+        else if(calcMode == CM_FLAG_BROWSER)     {}
+        else if(calcMode == CM_FONT_BROWSER)     {}
+        else if(calcMode == CM_PEM)              {}
+        else {
+          sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+          displayBugScreen(errorMessage);
+        }
+      #else // (SCREEN_800X480 == 0)
+        if(calcMode == CM_NORMAL)                calcModeNormalGui();
+        else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
+        else if(calcMode == CM_TAM)              calcModeTamGui();
+        else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
+        else if(calcMode == CM_ASM)              calcModeAsm();
+        else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
+        else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
+        else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+        else if(calcMode == CM_PEM)              calcModeNormalGui();
+        else {
+          sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+          displayBugScreen(errorMessage);
+        }
+      #endif // (SCREEN_800X480 == 1)
+
+      refreshScreen();
+    }
+  }
 #endif // PC_BUILD
 
 

@@ -319,10 +319,10 @@
     #define LINEBREAK                         "\n\r"
   #elif defined(__APPLE__)
     #define LINEBREAK                         "\r\n"
-  #else
+  #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
-  #endif
-#endif
+  #endif // OS
+#endif // PC_BUILD
 
 #define NUMBER_OF_DISPLAY_DIGITS                  16
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10

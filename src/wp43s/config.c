@@ -318,11 +318,11 @@ void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
 
   #ifdef PC_BUILD
     int32ToReal(3100, &value);
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     int32ToReal(get_vbat(), &value);
-  #endif
+  #endif // DMCP_BUILD
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
   realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
@@ -434,7 +434,7 @@ void fnRange(uint16_t unusedButMandatoryParameter) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s for setting RANGE", getRegisterDataTypeName(REGISTER_X, true, true));
       moreInfoOnError("In function fnRange:", errorMessage, NULL, NULL);
-    #endif
+    #endif //  (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -1037,9 +1037,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len1
@@ -1047,9 +1047,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len2
@@ -1066,9 +1066,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len3
@@ -1088,9 +1088,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len4
@@ -1114,9 +1114,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len5
@@ -1142,9 +1142,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len6
@@ -1174,9 +1174,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len7
@@ -1208,9 +1208,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Len8
@@ -1245,9 +1245,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Bairstow polynomial root finder
@@ -2447,9 +2447,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Speed test. See: https://forum.swissmicros.com/viewtopic.php?p=17308
@@ -2551,9 +2551,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // Factorial: the recursive way
@@ -2612,9 +2612,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // OM page 203
@@ -2641,9 +2641,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   { // All OP's
@@ -5751,9 +5751,9 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       printf("Prime + Len1 + Len2 + Len3 + Len4 + Len5 + Len6 + Len7 + Len8 + Bairstow + Speed + Fact + OMp203 + AllOp's : %u bytes\n", (uint32_t)(currentStep - beginOfProgramMemory));
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
   }
 
   firstFreeProgramByte = currentStep;
@@ -5885,7 +5885,7 @@ void fnReset(uint16_t confirmation) {
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
-    #endif
+    #endif // PC_BUILD
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
@@ -5957,17 +5957,17 @@ void fnReset(uint16_t confirmation) {
 
     #ifndef TESTSUITE_BUILD
       resetAlphaSelectionBuffer();
-    #endif
+    #endif // !TESTSUITE_BUILD
 
     #ifdef TESTSUITE_BUILD
       calcMode = CM_NORMAL;
-    #else
+    #else // TESTSUITE_BUILD
       calcModeNormal();
     #endif // TESTSUITE_BUILD
 
-    #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
       debugMemAllocation = true;
-    #endif
+    #endif // PC_BUILD || TESTSUITE_BUILD
 
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
@@ -6015,7 +6015,7 @@ void fnReset(uint16_t confirmation) {
       debugWindow = DBG_REGISTERS;
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
-    #endif
+    #endif //  (DEBUG_PANEL == 1)
   }
 }
 
@@ -6024,9 +6024,9 @@ void fnReset(uint16_t confirmation) {
 void backToSystem(uint16_t unusedButMandatoryParameter) {
   #ifdef PC_BUILD
     fnOff(NOPARAM);
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     backToDMCP = true;
-  #endif
+  #endif // DMCP_BUILD
 }

@@ -174,11 +174,11 @@ void fnSwapX(uint16_t regist) {
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -197,11 +197,11 @@ void fnSwapY(uint16_t regist) {
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -219,11 +219,11 @@ void fnSwapZ(uint16_t regist) {
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -241,11 +241,11 @@ void fnSwapT(uint16_t regist) {
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 

@@ -96,7 +96,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
       moreInfoOnError("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
-  #endif
+  #endif // PC_BUILD
 }*/
 
 
@@ -1417,7 +1417,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
     strcpy(displayString, "Integer data representation to wide!");
   }
@@ -1473,7 +1473,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
     strcpy(displayString, "Integer data representation to wide!");
   }
@@ -1807,7 +1807,7 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
         moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
 

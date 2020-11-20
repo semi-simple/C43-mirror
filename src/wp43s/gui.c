@@ -1417,7 +1417,7 @@
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
       calcModeNormalGui();
-    #endif // defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
 
@@ -1455,7 +1455,7 @@
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
       calcModeAimGui();
-    #endif // defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
 
@@ -1482,7 +1482,7 @@
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
       calcModeAimGui();
-    #endif //defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
 
@@ -1588,6 +1588,6 @@
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
       calcModeTamGui();
-    #endif // defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 #endif // !TESTSUITE_BUILD

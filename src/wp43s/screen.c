@@ -547,1069 +547,1069 @@
 
 
 
-/********************************************//**
- * \brief Displays a glyph using it's Unicode code point
- *
- * \param[in] charCode uint16_t      Unicode code point of the glyph to display
- * \param[in] font font_t*           Font to use
- * \param[in] x uint32_t             x coordinate where to display the glyph
- * \param[in] y uint32_t             y coordinate where to display the glyph
- * \param[in] videoMode videoMode_t  Video mode normal or reverse
- * \param[in] showLeadingCols bool_t Display the leading empty columns
- * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return uint32_t                  x coordinate for the next glyph
- ***********************************************/
-uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint32_t  col, row, xGlyph, endingCols;
-  int32_t glyphId;
-  int8_t   byte, *data;
-  const glyph_t  *glyph;
+  /********************************************//**
+   * \brief Displays a glyph using it's Unicode code point
+   *
+   * \param[in] charCode uint16_t      Unicode code point of the glyph to display
+   * \param[in] font font_t*           Font to use
+   * \param[in] x uint32_t             x coordinate where to display the glyph
+   * \param[in] y uint32_t             y coordinate where to display the glyph
+   * \param[in] videoMode videoMode_t  Video mode normal or reverse
+   * \param[in] showLeadingCols bool_t Display the leading empty columns
+   * \param[in] showEndingCols bool_t  Display the ending empty columns
+   * \return uint32_t                  x coordinate for the next glyph
+   ***********************************************/
+  uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+    uint32_t  col, row, xGlyph, endingCols;
+    int32_t glyphId;
+    int8_t   byte, *data;
+    const glyph_t  *glyph;
 
-  glyphId = findGlyph(font, charCode);
-  if(glyphId >= 0) {
-    glyph = (font->glyphs) + glyphId;
-  }
-  else if(glyphId == -1) {
-    generateNotFoundGlyph(-1, charCode);
-    glyph = &glyphNotFound;
-  }
-  else if(glyphId == -2) {
-    generateNotFoundGlyph(-2, charCode);
-    glyph = &glyphNotFound;
-  }
-  else {
-    glyph = NULL;
-  }
-
-  if(glyph == NULL) {
-    sprintf(errorMessage, "In function showGlyphCode: %" PRIi32 " is an unexpected value returned by fingGlyph!", glyphId);
-    displayBugScreen(errorMessage);
-    return 0;
-  }
-
-  data = (int8_t *)glyph->data;
-
-  xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
-  endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
-
-  // Clearing the space needed by the glyph
-  lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
-  y += glyph->rowsAboveGlyph;
-  x += xGlyph;
-
-  // Drawing the glyph
-  for(row=0; row<glyph->rowsGlyph; row++, y++) {
-    // Drawing the columns of the glyph
-    int32_t bit = 7;
-    for(col=0; col<glyph->colsGlyph; col++) {
-      if(bit == 7) {
-        byte = *(data++);
-      }
-
-      if(byte & 0x80) {// MSB set
-        if(videoMode == vmNormal) { // Black pixel for white background
-          setBlackPixel(x + col, y);
-        }
-        else { // White pixel for black background
-          setWhitePixel(x +col, y);
-        }
-      }
-
-      byte <<= 1;
-
-      if(--bit == -1) {
-        bit = 7;
-      }
+    glyphId = findGlyph(font, charCode);
+    if(glyphId >= 0) {
+      glyph = (font->glyphs) + glyphId;
     }
-  }
-
-  return x + glyph->colsGlyph + endingCols;
-}
-
-
-
-/********************************************//**
- * \brief Displays the first glyph of a string
- *
- * \param[in] ch const char*         String whose first glyph is to display
- * \param[in] font font_t*           Font to use
- * \param[in] x int16_t              x coordinate where to display the glyph
- * \param[in] y int16_t              y coordinate where to display the glyph
- * \param[in] videoMode videoMode_t  Video mode normal or reverse
- * \param[in] showLeadingCols bool_t Display the leading empty columns
- * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return int16_t                   x coordinate for the next glyph
- ***********************************************/
-uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint16_t charCode;
-
-  charCode = (uint8_t)*ch;
-  if(charCode &0x0080) {
-    charCode = (charCode << 8) | (uint8_t)*(ch+1);
-  }
-  return showGlyphCode(charCode, font, x, y, videoMode, showLeadingCols, showEndingCols);
-}
-
-
-
-/********************************************//**
- * \brief Displays a 0 terminated string
- *
- * \param[in] string const char*     String whose first glyph is to display
- * \param[in] font font_t*           Font to use
- * \param[in] x uint32_t             x coordinate where to display the glyph
- * \param[in] y uint32_t             y coordinate where to display the glyph
- * \param[in] videoMode videoMode_t  Video mode normal or reverse
- * \param[in] showLeadingCols bool_t Display the leading empty columns
- * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return uint32_t                  x coordinate for the next glyph
- ***********************************************/
-uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint16_t ch, lg;
-  bool_t   slc, sec;
-
-  lg = stringByteLength(string);
-
-  ch = 0;
-  while(string[ch] != 0) {
-    if(lg == 1 || (lg == 2 && (string[0] & 0x80))) {// The string is 1 glyph long
-      slc = showLeadingCols;
-      sec = showEndingCols;
+    else if(glyphId == -1) {
+      generateNotFoundGlyph(-1, charCode);
+      glyph = &glyphNotFound;
     }
-    else if(ch == 0) {// First glyph
-      slc = showLeadingCols;
-      sec = true;
-    }
-    else if(ch == lg-1 || (ch == lg-2 && (string[ch] & 0x80))) {// Last glyph
-      slc = true;
-      sec = showEndingCols;
-    }
-    else {// Glyph between first and last glyph
-      slc = true;
-      sec = true;
-    }
-
-    uint16_t charCode = (uint8_t)string[ch++];
-    if(charCode & 0x80) {// MSB set?
-      charCode = (charCode<<8) | (uint8_t)string[ch++];
-    }
-
-    x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec);
-  }
-  return x;
-}
-
-
-
-/********************************************//**
- * \brief Hides the cursor
- *
- * \param void
- * \return void
- ***********************************************/
-void hideCursor(void) {
-  if(cursorEnabled) {
-    if(cursorFont == &standardFont) {
-      lcd_fill_rect(xCursor, yCursor + 10,  6,  6, LCD_SET_VALUE);
+    else if(glyphId == -2) {
+      generateNotFoundGlyph(-2, charCode);
+      glyph = &glyphNotFound;
     }
     else {
-      lcd_fill_rect(xCursor, yCursor + 15, 13, 13, LCD_SET_VALUE);
-    }
-  }
-}
-
-
-
-
-/********************************************//**
- * \brief Displays the function of the
- * currently pressed button in the
- * upper left corner of the T register line
- *
- * \param[in] item     int16_t  Item ID to show
- * \param[in] counter  int8_t   number of 1/10 seconds until NOP
- * \return void
- ***********************************************/
-void showFunctionName(int16_t item, int16_t delayInMs) {
-  showFunctionNameItem = item;
-  showFunctionNameCounter = delayInMs;
-  if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
-    clearRegisterLine(REGISTER_T, true, false);
-  }
-  showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
-}
-
-
-
-/********************************************//**
- * \brief Hides the function name in the
- * upper left corner of the T register line
- * and clears the counter
- *
- * \param void
- * \return void
- ***********************************************/
-void hideFunctionName(void) {
-  showFunctionNameItem = 0;
-  showFunctionNameCounter = 0;
-}
-
-
-
-/********************************************//**
- * \brief Clears one register line
- *
- * \param[in] yStart int16_t y coordinate from where starting to clear
- * \return void
- ***********************************************/
-void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
-  if(REGISTER_X <= regist && regist <= REGISTER_T) {
-    uint32_t yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
-    uint32_t height = 32;
-
-    if(clearTop) {
-      yStart -= 4;
-      height += 4;
+      glyph = NULL;
     }
 
-    if(clearBottom) {
-      height += 4;
-      if(regist == REGISTER_X) {
-        height += 3;
-      }
+    if(glyph == NULL) {
+      sprintf(errorMessage, "In function showGlyphCode: %" PRIi32 " is an unexpected value returned by fingGlyph!", glyphId);
+      displayBugScreen(errorMessage);
+      return 0;
     }
 
-    lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, LCD_SET_VALUE);
-  }
-}
+    data = (int8_t *)glyph->data;
 
+    xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
+    endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
+    // Clearing the space needed by the glyph
+    lcd_fill_rect(x, y, xGlyph + glyph->colsGlyph + endingCols, glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
+    y += glyph->rowsAboveGlyph;
+    x += xGlyph;
 
-/********************************************//**
- * \brief Displays one register line
- *
- * \param[in] regist int16_t Register line to display
- * \return void
- ***********************************************/
-void refreshRegisterLine(calcRegister_t regist) {
-  int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
-  char prefix[18], lastBase[4];
-
-  #if (DEBUG_PANEL == 1)
-    refreshDebugPanel();
-  #endif
-
-  if(calcMode != CM_BUG_ON_SCREEN) {
-    clearRegisterLine(regist, true, (regist != REGISTER_Y));
-
-    #ifdef PC_BUILD
-      #if (DEBUG_REGISTER_L == 1 || SHOW_MEMORY_STATUS == 1)
-        char tmpStr[1000];
-      #endif
-      #if (DEBUG_REGISTER_L == 1)
-        char string1[1000], string2[1000], *p;
-        uint16_t i;
-
-        strcpy(string1, "L = ");
-
-        if(getRegisterDataType(REGISTER_L) == dtReal34) {
-          strcat(string1, "real34 = ");
-          formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
-          strcat(string2, " ");
-          strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
+    // Drawing the glyph
+    for(row=0; row<glyph->rowsGlyph; row++, y++) {
+      // Drawing the columns of the glyph
+      int32_t bit = 7;
+      for(col=0; col<glyph->colsGlyph; col++) {
+        if(bit == 7) {
+          byte = *(data++);
         }
 
-        else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
-          strcat(string1, "complex34 = ");
-          formatComplex34Debug(string2, (void *)getRegisterDataPointer(REGISTER_L));
-        }
-
-        else if(getRegisterDataType(REGISTER_L) == dtString) {
-          strcat(string1, "string = ");
-          for(i=0, p=REGISTER_STRING_DATA(REGISTER_L); i<=stringByteLength(REGISTER_STRING_DATA(REGISTER_L)); i++, p++) {
-            string2[i] = *p;
+        if(byte & 0x80) {// MSB set
+          if(videoMode == vmNormal) { // Black pixel for white background
+            setBlackPixel(x + col, y);
+          }
+          else { // White pixel for black background
+            setWhitePixel(x +col, y);
           }
         }
 
-        else if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
-          strcat(string1, "short integer = ");
-          shortIntegerToDisplayString(REGISTER_L, string2, false);
-          strcat(string2, STD_SPACE_3_PER_EM);
-          strcat(string2, getShortIntegerModeName(shortIntegerMode));
-        }
+        byte <<= 1;
 
-        else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
-          strcat(string1, "long integer = ");
-          longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-        }
-
-        else if(getRegisterDataType(REGISTER_L) == dtConfig) {
-          strcat(string1, "Configuration data");
-          string2[0] = 0;
-        }
-
-        else {
-          sprintf(string2, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
-        }
-
-        stringToUtf8(string1, (uint8_t *)tmpStr);
-        stringToUtf8(string2, (uint8_t *)tmpStr + 500);
-
-        gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr);
-        gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr + 500);
-        gtk_widget_show(lblRegisterL1);
-        gtk_widget_show(lblRegisterL2);
-      #endif
-      #if (SHOW_MEMORY_STATUS == 1)
-        char string[1000];
-
-        sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
-        stringToUtf8(string, (uint8_t *)tmpStr);
-        gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
-        gtk_widget_show(lblMemoryStatus);
-      #endif
-    #endif
-
-    if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
-      showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
-      showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
-      showString(VERSION, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_FALSE && regist == TRUE_FALSE_REGISTER_LINE) {
-      sprintf(tmpString, "false");
-      showString(tmpString, &standardFont, 1, Y_POSITION_OF_TRUE_FALSE_LINE + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_TRUE && regist == TRUE_FALSE_REGISTER_LINE) {
-      sprintf(tmpString, "true");
-      showString(tmpString, &standardFont, 1, Y_POSITION_OF_TRUE_FALSE_LINE + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_RESET && regist == REGISTER_X) {
-      sprintf(tmpString, "Data, programs, and definitions cleared");
-      w = stringWidth(tmpString, &standardFont, true, true);
-      showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_SAVED && regist == REGISTER_X) {
-      showString("Saved", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_BACKUP_RESTORED && regist == REGISTER_X) {
-      showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
-      w = stringWidth(tmpString, &standardFont, true, true);
-      showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
-    }
-
-    else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
-      w = stringWidth(tmpString + 300, &standardFont, true, true);
-      showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
-
-      if(tmpString[600]) {
-        w = stringWidth(tmpString + 600, &standardFont, true, true);
-        showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
-      }
-    }
-
-    else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
-      w = stringWidth(tmpString + 900, &standardFont, true, true);
-      showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
-
-      if(tmpString[1200]) {
-        w = stringWidth(tmpString + 1200, &standardFont, true, true);
-        showString(tmpString + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
-      }
-    }
-
-    else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
-      w = stringWidth(tmpString + 1500, &standardFont, true, true);
-      showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
-
-      if(tmpString[1800]) {
-        w = stringWidth(tmpString + 1800, &standardFont, true, true);
-        showString(tmpString + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
-      }
-    }
-
-    else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
-      prefixWidth = 0;
-
-      if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
-        if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
-          showString(errorMessages[lastErrorCode], &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-        }
-        else {
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "Error message %" PRIu8 " is too wide!", lastErrorCode);
-            moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
-          #endif
-          sprintf(tmpString, "Error message %" PRIu8 " is too wide!", lastErrorCode);
-          w = stringWidth(tmpString, &standardFont, true, true);
-          showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+        if(--bit == -1) {
+          bit = 7;
         }
       }
+    }
 
-      else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
-        if(lastIntegerBase != 0) {
-          lastBase[0] = '#';
-          if(lastIntegerBase > 9) {
-            lastBase[1] = '1';
-            lastBase[2] = '0' + (lastIntegerBase - 10);
-            lastBase[3] = 0;
+    return x + glyph->colsGlyph + endingCols;
+  }
+
+
+
+  /********************************************//**
+   * \brief Displays the first glyph of a string
+   *
+   * \param[in] ch const char*         String whose first glyph is to display
+   * \param[in] font font_t*           Font to use
+   * \param[in] x int16_t              x coordinate where to display the glyph
+   * \param[in] y int16_t              y coordinate where to display the glyph
+   * \param[in] videoMode videoMode_t  Video mode normal or reverse
+   * \param[in] showLeadingCols bool_t Display the leading empty columns
+   * \param[in] showEndingCols bool_t  Display the ending empty columns
+   * \return int16_t                   x coordinate for the next glyph
+   ***********************************************/
+  uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+    uint16_t charCode;
+
+    charCode = (uint8_t)*ch;
+    if(charCode &0x0080) {
+      charCode = (charCode << 8) | (uint8_t)*(ch+1);
+    }
+    return showGlyphCode(charCode, font, x, y, videoMode, showLeadingCols, showEndingCols);
+  }
+
+
+
+  /********************************************//**
+   * \brief Displays a 0 terminated string
+   *
+   * \param[in] string const char*     String whose first glyph is to display
+   * \param[in] font font_t*           Font to use
+   * \param[in] x uint32_t             x coordinate where to display the glyph
+   * \param[in] y uint32_t             y coordinate where to display the glyph
+   * \param[in] videoMode videoMode_t  Video mode normal or reverse
+   * \param[in] showLeadingCols bool_t Display the leading empty columns
+   * \param[in] showEndingCols bool_t  Display the ending empty columns
+   * \return uint32_t                  x coordinate for the next glyph
+   ***********************************************/
+  uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+    uint16_t ch, lg;
+    bool_t   slc, sec;
+
+    lg = stringByteLength(string);
+
+    ch = 0;
+    while(string[ch] != 0) {
+      if(lg == 1 || (lg == 2 && (string[0] & 0x80))) {// The string is 1 glyph long
+        slc = showLeadingCols;
+        sec = showEndingCols;
+      }
+      else if(ch == 0) {// First glyph
+        slc = showLeadingCols;
+        sec = true;
+      }
+      else if(ch == lg-1 || (ch == lg-2 && (string[ch] & 0x80))) {// Last glyph
+        slc = true;
+        sec = showEndingCols;
+      }
+      else {// Glyph between first and last glyph
+        slc = true;
+        sec = true;
+      }
+
+      uint16_t charCode = (uint8_t)string[ch++];
+      if(charCode & 0x80) {// MSB set?
+        charCode = (charCode<<8) | (uint8_t)string[ch++];
+      }
+
+      x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec);
+    }
+    return x;
+  }
+
+
+
+  /********************************************//**
+   * \brief Hides the cursor
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void hideCursor(void) {
+    if(cursorEnabled) {
+      if(cursorFont == &standardFont) {
+        lcd_fill_rect(xCursor, yCursor + 10,  6,  6, LCD_SET_VALUE);
+      }
+      else {
+        lcd_fill_rect(xCursor, yCursor + 15, 13, 13, LCD_SET_VALUE);
+      }
+    }
+  }
+
+
+
+
+  /********************************************//**
+   * \brief Displays the function of the
+   * currently pressed button in the
+   * upper left corner of the T register line
+   *
+   * \param[in] item     int16_t  Item ID to show
+   * \param[in] counter  int8_t   number of 1/10 seconds until NOP
+   * \return void
+   ***********************************************/
+  void showFunctionName(int16_t item, int16_t delayInMs) {
+    showFunctionNameItem = item;
+    showFunctionNameCounter = delayInMs;
+    if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+      clearRegisterLine(REGISTER_T, true, false);
+    }
+    showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+  }
+
+
+
+  /********************************************//**
+   * \brief Hides the function name in the
+   * upper left corner of the T register line
+   * and clears the counter
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void hideFunctionName(void) {
+    showFunctionNameItem = 0;
+    showFunctionNameCounter = 0;
+  }
+
+
+
+  /********************************************//**
+   * \brief Clears one register line
+   *
+   * \param[in] yStart int16_t y coordinate from where starting to clear
+   * \return void
+   ***********************************************/
+  void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
+    if(REGISTER_X <= regist && regist <= REGISTER_T) {
+      uint32_t yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
+      uint32_t height = 32;
+
+      if(clearTop) {
+        yStart -= 4;
+        height += 4;
+      }
+
+      if(clearBottom) {
+        height += 4;
+        if(regist == REGISTER_X) {
+          height += 3;
+        }
+      }
+
+      lcd_fill_rect(0, yStart, SCREEN_WIDTH, height, LCD_SET_VALUE);
+    }
+  }
+
+
+
+  /********************************************//**
+   * \brief Displays one register line
+   *
+   * \param[in] regist int16_t Register line to display
+   * \return void
+   ***********************************************/
+  void refreshRegisterLine(calcRegister_t regist) {
+    int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
+    char prefix[18], lastBase[4];
+
+    #if (DEBUG_PANEL == 1)
+      refreshDebugPanel();
+    #endif // (DEBUG_PANEL == 1)
+
+    if(calcMode != CM_BUG_ON_SCREEN) {
+      clearRegisterLine(regist, true, (regist != REGISTER_Y));
+
+      #ifdef PC_BUILD
+        #if (DEBUG_REGISTER_L == 1 || SHOW_MEMORY_STATUS == 1)
+          char tmpStr[1000];
+        #endif // (DEBUG_REGISTER_L == 1 || SHOW_MEMORY_STATUS == 1)
+        #if (DEBUG_REGISTER_L == 1)
+          char string1[1000], string2[1000], *p;
+          uint16_t i;
+
+          strcpy(string1, "L = ");
+
+          if(getRegisterDataType(REGISTER_L) == dtReal34) {
+            strcat(string1, "real34 = ");
+            formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
+            strcat(string2, " ");
+            strcat(string2, getAngularModeName(getRegisterAngularMode(REGISTER_L)));
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtComplex34) {
+            strcat(string1, "complex34 = ");
+            formatComplex34Debug(string2, (void *)getRegisterDataPointer(REGISTER_L));
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtString) {
+            strcat(string1, "string = ");
+            for(i=0, p=REGISTER_STRING_DATA(REGISTER_L); i<=stringByteLength(REGISTER_STRING_DATA(REGISTER_L)); i++, p++) {
+              string2[i] = *p;
+            }
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtShortInteger) {
+            strcat(string1, "short integer = ");
+            shortIntegerToDisplayString(REGISTER_L, string2, false);
+            strcat(string2, STD_SPACE_3_PER_EM);
+            strcat(string2, getShortIntegerModeName(shortIntegerMode));
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtLongInteger) {
+            strcat(string1, "long integer = ");
+            longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtConfig) {
+            strcat(string1, "Configuration data");
+            string2[0] = 0;
+          }
+
+          else {
+            sprintf(string2, "data type %s not supported for now!", getRegisterDataTypeName(REGISTER_L, false, false));
+          }
+
+          stringToUtf8(string1, (uint8_t *)tmpStr);
+          stringToUtf8(string2, (uint8_t *)tmpStr + 500);
+
+          gtk_label_set_label(GTK_LABEL(lblRegisterL1), tmpStr);
+          gtk_label_set_label(GTK_LABEL(lblRegisterL2), tmpStr + 500);
+          gtk_widget_show(lblRegisterL1);
+          gtk_widget_show(lblRegisterL2);
+        #endif // (DEBUG_REGISTER_L == 1)
+        #if (SHOW_MEMORY_STATUS == 1)
+          char string[1000];
+
+          sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
+          stringToUtf8(string, (uint8_t *)tmpStr);
+          gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
+          gtk_widget_show(lblMemoryStatus);
+        #endif // (SHOW_MEMORY_STATUS == 1)
+      #endif // PC_BUILD
+
+      if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
+        showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
+        showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
+        showString(VERSION, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_FALSE && regist == TRUE_FALSE_REGISTER_LINE) {
+        sprintf(tmpString, "false");
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_TRUE_FALSE_LINE + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_TRUE && regist == TRUE_FALSE_REGISTER_LINE) {
+        sprintf(tmpString, "true");
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_TRUE_FALSE_LINE + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_RESET && regist == REGISTER_X) {
+        sprintf(tmpString, "Data, programs, and definitions cleared");
+        w = stringWidth(tmpString, &standardFont, true, true);
+        showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_SAVED && regist == REGISTER_X) {
+        showString("Saved", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_BACKUP_RESTORED && regist == REGISTER_X) {
+        showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
+        w = stringWidth(tmpString, &standardFont, true, true);
+        showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
+      }
+
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
+        w = stringWidth(tmpString + 300, &standardFont, true, true);
+        showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
+
+        if(tmpString[600]) {
+          w = stringWidth(tmpString + 600, &standardFont, true, true);
+          showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+        }
+      }
+
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
+        w = stringWidth(tmpString + 900, &standardFont, true, true);
+        showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
+
+        if(tmpString[1200]) {
+          w = stringWidth(tmpString + 1200, &standardFont, true, true);
+          showString(tmpString + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
+        }
+      }
+
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
+        w = stringWidth(tmpString + 1500, &standardFont, true, true);
+        showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
+
+        if(tmpString[1800]) {
+          w = stringWidth(tmpString + 1800, &standardFont, true, true);
+          showString(tmpString + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
+        }
+      }
+
+      else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
+        prefixWidth = 0;
+
+        if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
+          if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
+            showString(errorMessages[lastErrorCode], &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
           }
           else {
-            lastBase[1] = '0' + lastIntegerBase;
-            lastBase[2] = 0;
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "Error message %" PRIu8 " is too wide!", lastErrorCode);
+              moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[lastErrorCode], NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(tmpString, "Error message %" PRIu8 " is too wide!", lastErrorCode);
+            w = stringWidth(tmpString, &standardFont, true, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
           }
-          wLastBaseNumeric  = stringWidth(lastBase, &numericFont,  true, true);
-          wLastBaseStandard = stringWidth(lastBase, &standardFont, true, true);
-        }
-        else {
-          wLastBaseNumeric  = 0;
-          wLastBaseStandard = 0;
         }
 
-        if(stringWidth(nimBufferDisplay, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
-          xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-          yCursor = Y_POSITION_OF_NIM_LINE;
-          cursorFont = &numericFont;
-
+        else if(regist == NIM_REGISTER_LINE && calcMode == CM_NIM) {
           if(lastIntegerBase != 0) {
-            showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-          }
-        }
-        else if(stringWidth(nimBufferDisplay, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-          xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-          yCursor = Y_POSITION_OF_NIM_LINE + 6;
-          cursorFont = &standardFont;
-
-          if(lastIntegerBase != 0) {
-            showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-          }
-        }
-        else {
-          w = stringByteLength(nimBufferDisplay) + 1;
-          xcopy(tmpString,        nimBufferDisplay, w);
-          xcopy(tmpString + 1500, nimBufferDisplay, w);
-          while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
-            w = stringLastGlyph(tmpString);
-            tmpString[w] = 0;
-          }
-
-          if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-            btnClicked(NULL, "16"); // back space
+            lastBase[0] = '#';
+            if(lastIntegerBase > 9) {
+              lastBase[1] = '1';
+              lastBase[2] = '0' + (lastIntegerBase - 10);
+              lastBase[3] = 0;
+            }
+            else {
+              lastBase[1] = '0' + lastIntegerBase;
+              lastBase[2] = 0;
+            }
+            wLastBaseNumeric  = stringWidth(lastBase, &numericFont,  true, true);
+            wLastBaseStandard = stringWidth(lastBase, &standardFont, true, true);
           }
           else {
-            showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
+            wLastBaseNumeric  = 0;
+            wLastBaseStandard = 0;
+          }
 
-            xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE + 18;
+          if(stringWidth(nimBufferDisplay, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
+            xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+            yCursor = Y_POSITION_OF_NIM_LINE;
+            cursorFont = &numericFont;
+
+            if(lastIntegerBase != 0) {
+              showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+            }
+          }
+          else if(stringWidth(nimBufferDisplay, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+            xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+            yCursor = Y_POSITION_OF_NIM_LINE + 6;
             cursorFont = &standardFont;
 
             if(lastIntegerBase != 0) {
-              showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+              showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+            }
+          }
+          else {
+            w = stringByteLength(nimBufferDisplay) + 1;
+            xcopy(tmpString,        nimBufferDisplay, w);
+            xcopy(tmpString + 1500, nimBufferDisplay, w);
+            while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
+              w = stringLastGlyph(tmpString);
+              tmpString[w] = 0;
+            }
+
+            if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+              btnClicked(NULL, "16"); // back space
+            }
+            else {
+              showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
+
+              xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+              yCursor = Y_POSITION_OF_NIM_LINE + 18;
+              cursorFont = &standardFont;
+
+              if(lastIntegerBase != 0) {
+                showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+              }
             }
           }
         }
-      }
 
-      else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
-        if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-          xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-          yCursor = Y_POSITION_OF_NIM_LINE + 6;
-          cursorFont = &standardFont;
-        }
-        else {
-          w = stringByteLength(aimBuffer) + 1;
-          xcopy(tmpString,        aimBuffer, w);
-          xcopy(tmpString + 1500, aimBuffer, w);
-          while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH - 1) {
-            w = stringLastGlyph(tmpString);
-            tmpString[w] = 0;
-          }
-
-          if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) >= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-            btnClicked(NULL, "16"); // back space
-          }
-          else {
-            showString(tmpString, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
-
-            xCursor = showString(tmpString + 1500 + w, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE + 18;
+        else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
+          if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+            xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+            yCursor = Y_POSITION_OF_NIM_LINE + 6;
             cursorFont = &standardFont;
           }
-        }
-      }
+          else {
+            w = stringByteLength(aimBuffer) + 1;
+            xcopy(tmpString,        aimBuffer, w);
+            xcopy(tmpString + 1500, aimBuffer, w);
+            while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH - 1) {
+              w = stringLastGlyph(tmpString);
+              tmpString[w] = 0;
+            }
 
-      else if(   getSystemFlag(FLAG_FRACT)
-              && (    getRegisterDataType(regist) == dtReal34
-                   && (
-                          (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)
-                           && real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1e6)
-                          )
-                       || real34IsZero(REGISTER_REAL34_DATA(regist))
-                      )
-                 )
-             ) {
-        fractionToDisplayString(regist, tmpString);
+            if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) >= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+              btnClicked(NULL, "16"); // back space
+            }
+            else {
+              showString(tmpString, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
 
-        w = stringWidth(tmpString, &numericFont, false, true);
-        lineWidth = w;
-        if(w <= SCREEN_WIDTH) {
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+              xCursor = showString(tmpString + 1500 + w, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+              yCursor = Y_POSITION_OF_NIM_LINE + 18;
+              cursorFont = &standardFont;
+            }
+          }
         }
-        else {
-          w = stringWidth(tmpString, &standardFont, false, true);
+
+        else if(   getSystemFlag(FLAG_FRACT)
+                && (    getRegisterDataType(regist) == dtReal34
+                     && (
+                            (   real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(regist), const34_1e_4)
+                             && real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1e6)
+                            )
+                         || real34IsZero(REGISTER_REAL34_DATA(regist))
+                        )
+                   )
+               ) {
+          fractionToDisplayString(regist, tmpString);
+
+          w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          if(w > SCREEN_WIDTH) {
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              moreInfoOnError("In function refreshRegisterLine:", "Fraction representation too wide!", tmpString, NULL);
-            #endif
-            strcpy(tmpString, "Fraction representation too wide!");
+          if(w <= SCREEN_WIDTH) {
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+          else {
             w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
-          }
-          showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-        }
-      }
-
-      else if(getRegisterDataType(regist) == dtReal34) {
-        if(temporaryInformation == TI_RADIUS_THETA) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "r" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_X_Y) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "x" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "y" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_RE_IM) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_SUMX_SUMY) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_SIGMA "x" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_SIGMA "y" STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_XMIN_YMIN) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "x" STD_SUB_m STD_SUB_i STD_SUB_n STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "y" STD_SUB_m STD_SUB_i STD_SUB_n STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_XMAX_YMAX) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "x" STD_SUB_m STD_SUB_a STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "y" STD_SUB_m STD_SUB_a STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_MEANX_MEANY) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_x_BAR STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_y_BAR STD_SPACE_FIGURE "=");
-             prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-         }
-
-        else if(temporaryInformation == TI_SAMPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "s" STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "s" STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_POPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_sigma STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_sigma STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_STDERR) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "s" STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, "s" STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_GEOMMEANX_GEOMMEANY) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_x_BAR STD_SUB_G STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_y_BAR STD_SUB_G STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_GEOMSAMPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_epsilon STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_epsilon STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_GEOMPOPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_GEOMSTDERR) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_x STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_y STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_WEIGHTEDMEANX) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_WEIGHTEDSAMPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "s" STD_SUB_w STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_WEIGHTEDPOPLSTDDEV) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_sigma STD_SUB_w STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_WEIGHTEDSTDERR) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, "s" STD_SUB_m STD_SUB_w STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_x_BAR STD_SUB_H STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_y_BAR STD_SUB_H STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_RMSMEANX_RMSMEANY) {
-          if(regist == REGISTER_X) {
-            strcpy(prefix, STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-          else if(regist == REGISTER_Y) {
-            strcpy(prefix, STD_y_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-          }
-        }
-
-        else if(temporaryInformation == TI_STATISTIC_SUMS) {
-          if(regist == REGISTER_Y) {
-            realToInt32(SIGMA_N, w);
-            sprintf(prefix, "Data point %03" PRId16, w);
-            prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-          }
-        }
-
-        real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
-
-        w = stringWidth(tmpString, &numericFont, false, true);
-        lineWidth = w;
-        if(prefixWidth > 0) {
-          showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
-        }
-        showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-      }
-
-      else if(getRegisterDataType(regist) == dtComplex34) {
-        complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
-
-        w = stringWidth(tmpString, &numericFont, false, true);
-        lineWidth = w;
-        showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
-      }
-
-      else if(getRegisterDataType(regist) == dtString) {
-        w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
-
-        if(w >= SCREEN_WIDTH) {
-          if(regist == REGISTER_X) {
-            xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-            do {
-              tmpString[stringLastGlyph(tmpString)] = 0;
+            if(w > SCREEN_WIDTH) {
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                moreInfoOnError("In function refreshRegisterLine:", "Fraction representation too wide!", tmpString, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+              strcpy(tmpString, "Fraction representation too wide!");
               w = stringWidth(tmpString, &standardFont, false, true);
-            } while(w >= SCREEN_WIDTH);
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - 3, vmNormal, false, true);
+              lineWidth = w;
+            }
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+        }
 
-            w = stringByteLength(tmpString);
-            xcopy(tmpString, REGISTER_STRING_DATA(regist) + w, stringByteLength(REGISTER_STRING_DATA(regist) + w) + 1);
-            w = stringWidth(tmpString, &standardFont, false, true);
-            if(w >= SCREEN_WIDTH) {
+        else if(getRegisterDataType(regist) == dtReal34) {
+          if(temporaryInformation == TI_RADIUS_THETA) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_theta STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_X_Y) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "x" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "y" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_RE_IM) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "Im" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "Re" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_SUMX_SUMY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_SIGMA "x" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_SIGMA "y" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_XMIN_YMIN) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "x" STD_SUB_m STD_SUB_i STD_SUB_n STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "y" STD_SUB_m STD_SUB_i STD_SUB_n STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_XMAX_YMAX) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "x" STD_SUB_m STD_SUB_a STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "y" STD_SUB_m STD_SUB_a STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_MEANX_MEANY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_BAR STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_y_BAR STD_SPACE_FIGURE "=");
+               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+           }
+
+          else if(temporaryInformation == TI_SAMPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "s" STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_POPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_sigma STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_sigma STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_STDERR) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_GEOMMEANX_GEOMMEANY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_y_BAR STD_SUB_G STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_GEOMSAMPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_epsilon STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_epsilon STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_GEOMPOPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_epsilon STD_SUB_m STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_GEOMSTDERR) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_x STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_epsilon STD_SUB_p STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_WEIGHTEDMEANX) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_BAR STD_SUB_w STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_WEIGHTEDSAMPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_w STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_WEIGHTEDPOPLSTDDEV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_sigma STD_SUB_w STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_WEIGHTEDSTDERR) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_w STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_y_BAR STD_SUB_H STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_RMSMEANX_RMSMEANY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_y_BAR STD_SUB_R STD_SUB_M STD_SUB_S STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_STATISTIC_SUMS) {
+            if(regist == REGISTER_Y) {
+              realToInt32(SIGMA_N, w);
+              sprintf(prefix, "Data point %03" PRId16, w);
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
+            }
+          }
+
+          real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
+
+          w = stringWidth(tmpString, &numericFont, false, true);
+          lineWidth = w;
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+          }
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+        }
+
+        else if(getRegisterDataType(regist) == dtComplex34) {
+          complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
+
+          w = stringWidth(tmpString, &numericFont, false, true);
+          lineWidth = w;
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+        }
+
+        else if(getRegisterDataType(regist) == dtString) {
+          w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
+
+          if(w >= SCREEN_WIDTH) {
+            if(regist == REGISTER_X) {
+              xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
+              do {
+                tmpString[stringLastGlyph(tmpString)] = 0;
+                w = stringWidth(tmpString, &standardFont, false, true);
+              } while(w >= SCREEN_WIDTH);
+              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - 3, vmNormal, false, true);
+
+              w = stringByteLength(tmpString);
+              xcopy(tmpString, REGISTER_STRING_DATA(regist) + w, stringByteLength(REGISTER_STRING_DATA(regist) + w) + 1);
+              w = stringWidth(tmpString, &standardFont, false, true);
+              if(w >= SCREEN_WIDTH) {
+                do {
+                  tmpString[stringLastGlyph(tmpString)] = 0;
+                  w = stringWidth(tmpString, &standardFont, false, true);
+                } while(w >= SCREEN_WIDTH - 14); // 14 is the width of STD_ELLIPSIS
+                xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
+                w += 14;
+              }
+              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE + 18, vmNormal, false, true);
+            }
+            else {
+              xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
               do {
                 tmpString[stringLastGlyph(tmpString)] = 0;
                 w = stringWidth(tmpString, &standardFont, false, true);
               } while(w >= SCREEN_WIDTH - 14); // 14 is the width of STD_ELLIPSIS
               xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
               w += 14;
+              lineWidth = w;
+              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
             }
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE + 18, vmNormal, false, true);
           }
           else {
-            xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-            do {
-              tmpString[stringLastGlyph(tmpString)] = 0;
-              w = stringWidth(tmpString, &standardFont, false, true);
-            } while(w >= SCREEN_WIDTH - 14); // 14 is the width of STD_ELLIPSIS
-            xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
-            w += 14;
+            lineWidth = w;
+            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+          }
+        }
+
+        else if(getRegisterDataType(regist) == dtShortInteger) {
+          shortIntegerToDisplayString(regist, tmpString, true);
+          showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+        }
+
+        else if(getRegisterDataType(regist) == dtLongInteger) {
+          longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+
+          w = stringWidth(tmpString, &numericFont, false, true);
+          lineWidth = w;
+
+          if(w <= SCREEN_WIDTH) {
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          }
+          else {
+            w = stringWidth(tmpString, &standardFont, false, true);
+            if(w > SCREEN_WIDTH) {
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                moreInfoOnError("In function refreshRegisterLine:", "Long integer representation too wide!", tmpString, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+              strcpy(tmpString, "Long integer representation too wide!");
+            }
+            w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
             showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           }
         }
-        else {
+
+        else if(getRegisterDataType(regist) == dtConfig) {
+          xcopy(tmpString, "Configuration data", 19);
+          w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
-        }
-      }
-
-      else if(getRegisterDataType(regist) == dtShortInteger) {
-        shortIntegerToDisplayString(regist, tmpString, true);
-        showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-      }
-
-      else if(getRegisterDataType(regist) == dtLongInteger) {
-        longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-
-        w = stringWidth(tmpString, &numericFont, false, true);
-        lineWidth = w;
-
-        if(w <= SCREEN_WIDTH) {
           showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }
+
         else {
-          w = stringWidth(tmpString, &standardFont, false, true);
-          if(w > SCREEN_WIDTH) {
-            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-              moreInfoOnError("In function refreshRegisterLine:", "Long integer representation too wide!", tmpString, NULL);
-            #endif
-            strcpy(tmpString, "Long integer representation too wide!");
-          }
-          w = stringWidth(tmpString, &standardFont, false, true);
-          lineWidth = w;
-          showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+          sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
+          showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
         }
       }
 
-      else if(getRegisterDataType(regist) == dtConfig) {
-        xcopy(tmpString, "Configuration data", 19);
-        w = stringWidth(tmpString, &numericFont, false, true);
-        lineWidth = w;
-        showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+      if(regist == REGISTER_T) {
+        lineTWidth = lineWidth;
       }
+    }
+  }
 
+
+
+  static void displayShiftAndTamBuffer(void) {
+    if(shiftF) {
+      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+    }
+    else if(shiftG) {
+      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+    }
+
+    if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+      if(shiftF || shiftG) {
+        lcd_fill_rect(18, Y_POSITION_OF_TAM_LINE, 120, 32, LCD_SET_VALUE);
+      }
       else {
-        sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
-        showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+        lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 138, 32, LCD_SET_VALUE);
       }
+      showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+    }
+    else if(calcMode == CM_TAM_OVER_PEM) {
+      lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
+      showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
+    }
+  }
+
+
+
+  void refreshScreen(void) {
+    switch(calcMode) {
+      case CM_FLAG_BROWSER:
+        clearScreen();
+        flagBrowser(NOPARAM);
+        refreshStatusBar();
+        break;
+
+      case CM_FONT_BROWSER:
+        clearScreen();
+        fontBrowser(NOPARAM);
+        refreshStatusBar();
+        break;
+
+      case CM_REGISTER_BROWSER:
+        clearScreen();
+        registerBrowser(NOPARAM);
+        refreshStatusBar();
+        break;
+
+      case CM_PEM:
+      case CM_ASM_OVER_PEM:
+        clearScreen();
+        showSoftmenuCurrentPart();
+        fnPem(NOPARAM);
+        displayShiftAndTamBuffer();
+        refreshStatusBar();
+        break;
+
+      case CM_NORMAL:
+      case CM_AIM:
+      case CM_TAM:
+      case CM_NIM:
+      case CM_ASM:
+      case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_AIM:
+      case CM_ASSIGN:
+      case CM_ERROR_MESSAGE:
+      case CM_CONFIRMATION:
+        clearScreen();
+
+        // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
+        refreshRegisterLine(REGISTER_T);
+        refreshRegisterLine(REGISTER_Z);
+        refreshRegisterLine(REGISTER_Y);
+        refreshRegisterLine(REGISTER_X);
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        hourGlassIconEnabled = false;
+        refreshStatusBar();
+        break;
+
+      default: {}
     }
 
-    if(regist == REGISTER_T) {
-      lineTWidth = lineWidth;
-    }
+    #ifndef DMCP_BUILD
+      refreshLcd(NULL);
+    #endif // !DMCP_BUILD
   }
-}
-
-
-
-static void displayShiftAndTamBuffer(void) {
-  if(shiftF) {
-    showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-  }
-  else if(shiftG) {
-    showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-  }
-
-  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-    if(shiftF || shiftG) {
-      lcd_fill_rect(18, Y_POSITION_OF_TAM_LINE, 120, 32, LCD_SET_VALUE);
-    }
-    else {
-      lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 138, 32, LCD_SET_VALUE);
-    }
-    showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
-  }
-  else if(calcMode == CM_TAM_OVER_PEM) {
-    lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
-    showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
-  }
-}
-
-
-
-void refreshScreen(void) {
-  switch(calcMode) {
-    case CM_FLAG_BROWSER:
-      clearScreen();
-      flagBrowser(NOPARAM);
-      refreshStatusBar();
-      break;
-
-    case CM_FONT_BROWSER:
-      clearScreen();
-      fontBrowser(NOPARAM);
-      refreshStatusBar();
-      break;
-
-    case CM_REGISTER_BROWSER:
-      clearScreen();
-      registerBrowser(NOPARAM);
-      refreshStatusBar();
-      break;
-
-    case CM_PEM:
-    case CM_ASM_OVER_PEM:
-      clearScreen();
-      showSoftmenuCurrentPart();
-      fnPem(NOPARAM);
-      displayShiftAndTamBuffer();
-      refreshStatusBar();
-      break;
-
-    case CM_NORMAL:
-    case CM_AIM:
-    case CM_TAM:
-    case CM_NIM:
-    case CM_ASM:
-    case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_AIM:
-    case CM_ASSIGN:
-    case CM_ERROR_MESSAGE:
-    case CM_CONFIRMATION:
-      clearScreen();
-
-      // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
-      refreshRegisterLine(REGISTER_T);
-      refreshRegisterLine(REGISTER_Z);
-      refreshRegisterLine(REGISTER_Y);
-      refreshRegisterLine(REGISTER_X);
-      displayShiftAndTamBuffer();
-      showSoftmenuCurrentPart();
-      hourGlassIconEnabled = false;
-      refreshStatusBar();
-      break;
-
-    default: {}
-  }
-
-  #ifndef DMCP_BUILD
-    refreshLcd(NULL);
-  #endif // !DMCP_BUILD
-}
 #endif // !TESTSUITE_BUILD
 
 
 
 void fnScreenDump(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-  FILE *bmp;
-  char bmpFileName[22];
-  time_t rawTime;
-  struct tm *timeInfo;
-  int32_t x, y;
-  uint32_t uint32;
-  uint16_t uint16;
-  uint8_t  uint8;
+  #ifdef PC_BUILD
+    FILE *bmp;
+    char bmpFileName[22];
+    time_t rawTime;
+    struct tm *timeInfo;
+    int32_t x, y;
+    uint32_t uint32;
+    uint16_t uint16;
+    uint8_t  uint8;
 
-  time(&rawTime);
-  timeInfo = localtime(&rawTime);
+    time(&rawTime);
+    timeInfo = localtime(&rawTime);
 
-  strftime(bmpFileName, 22, "%Y%m%d-%H%M%S00.bmp", timeInfo);
-  bmp = fopen(bmpFileName, "wb");
+    strftime(bmpFileName, 22, "%Y%m%d-%H%M%S00.bmp", timeInfo);
+    bmp = fopen(bmpFileName, "wb");
 
-  fwrite("BM", 1, 2, bmp);        // Offset 0x00  0  BMP header
+    fwrite("BM", 1, 2, bmp);        // Offset 0x00  0  BMP header
 
-  uint32 = (SCREEN_WIDTH/8 * SCREEN_HEIGHT) + 610;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x02  2  File size
+    uint32 = (SCREEN_WIDTH/8 * SCREEN_HEIGHT) + 610;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x02  2  File size
 
-  uint32 = 0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x06  6  unused
+    uint32 = 0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x06  6  unused
 
-  uint32 = 0x00000082;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x0a 10  Offset where the bitmap data can be found
+    uint32 = 0x00000082;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x0a 10  Offset where the bitmap data can be found
 
-  uint32 = 0x0000006c;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x0e 14  Number of bytes in DIB header
+    uint32 = 0x0000006c;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x0e 14  Number of bytes in DIB header
 
-  uint32 = SCREEN_WIDTH;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x12 18  Bitmap width
+    uint32 = SCREEN_WIDTH;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x12 18  Bitmap width
 
-  uint32 = SCREEN_HEIGHT;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x16 22  Bitmap height
+    uint32 = SCREEN_HEIGHT;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x16 22  Bitmap height
 
-  uint16 = 0x0001;
-  fwrite(&uint16, 1, 2, bmp);     // Offset 0x1a 26  Number of planes
+    uint16 = 0x0001;
+    fwrite(&uint16, 1, 2, bmp);     // Offset 0x1a 26  Number of planes
 
-  uint16 = 0x0001;
-  fwrite(&uint16, 1, 2, bmp);     // Offset 0x1c 28  Number of bits per pixel
+    uint16 = 0x0001;
+    fwrite(&uint16, 1, 2, bmp);     // Offset 0x1c 28  Number of bits per pixel
 
-  uint32 = 0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x1e 30  Compression
+    uint32 = 0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x1e 30  Compression
 
-  uint32 = 0x000030c0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x22 34  Size of bitmap data (including padding)
+    uint32 = 0x000030c0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x22 34  Size of bitmap data (including padding)
 
-  uint32 = 0x00001a7c; // 6780 pixels/m
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x26 38  Horizontal print resolution
+    uint32 = 0x00001a7c; // 6780 pixels/m
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x26 38  Horizontal print resolution
 
-  uint32 = 0x00001a7c; // 6780 pixels/m
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x2a 42  Vertical print resolution
+    uint32 = 0x00001a7c; // 6780 pixels/m
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x2a 42  Vertical print resolution
 
-  uint32 = 0x00000002;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x2e 46  Number of colors in the palette
+    uint32 = 0x00000002;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x2e 46  Number of colors in the palette
 
-  uint32 = 0x00000002;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x32 50  Number of important colors
+    uint32 = 0x00000002;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x32 50  Number of important colors
 
-  uint32 = 0x73524742;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x36  ???
+    uint32 = 0x73524742;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x36  ???
 
-  uint32 = 0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x3a  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x3e  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x42  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x46  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x4a  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x4e  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x52  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x56  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x5a  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x5e  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x62  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x66  ???
+    uint32 = 0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x3a  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x3e  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x42  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x46  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x4a  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x4e  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x52  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x56  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x5a  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x5e  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x62  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x66  ???
 
-  uint32 = 0x00000002;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x6a  ???
+    uint32 = 0x00000002;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x6a  ???
 
-  uint32 = 0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x6e  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x72  ???
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x76  ???
+    uint32 = 0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x6e  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x72  ???
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x76  ???
 
-  uint32 = 0x00dff5cc; // light green
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x7a  RGB color for 0
+    uint32 = 0x00dff5cc; // light green
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x7a  RGB color for 0
 
-  uint32 = 0;
-  fwrite(&uint32, 1, 4, bmp);     // Offset 0x7e  RGB color for 1
+    uint32 = 0;
+    fwrite(&uint32, 1, 4, bmp);     // Offset 0x7e  RGB color for 1
 
-  // Offset 0x82  bit map data
-  uint16 = 0;
-  uint32 = 0;
-  for(y=SCREEN_HEIGHT-1; y>=0; y--) {
-    for(x=0; x<SCREEN_WIDTH; x++) {
-      uint8 <<= 1;
-      if(*(screenData + y*screenStride + x) == ON_PIXEL) {
-        uint8 |= 1;
+    // Offset 0x82  bit map data
+    uint16 = 0;
+    uint32 = 0;
+    for(y=SCREEN_HEIGHT-1; y>=0; y--) {
+      for(x=0; x<SCREEN_WIDTH; x++) {
+        uint8 <<= 1;
+        if(*(screenData + y*screenStride + x) == ON_PIXEL) {
+          uint8 |= 1;
+        }
+
+        if((x % 8) == 7) {
+          fwrite(&uint8, 1, 1, bmp);
+          uint8 = 0;
+        }
       }
-
-      if((x % 8) == 7) {
-        fwrite(&uint8, 1, 1, bmp);
-        uint8 = 0;
-      }
+      fwrite(&uint16, 1, 2, bmp); // Padding
     }
-    fwrite(&uint16, 1, 2, bmp); // Padding
-  }
 
 
-  fclose(bmp);
-#endif
+    fclose(bmp);
+  #endif // PC_BUILD
 
-#ifdef DMCP_BUILD
-  create_screenshot(0);
-#endif
+  #ifdef DMCP_BUILD
+    create_screenshot(0);
+  #endif // DMCP_BUILD
 }

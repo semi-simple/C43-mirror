@@ -119,7 +119,7 @@ const int16_t menu_MODE[]        = { ITM_SF,                        ITM_DEG,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_RM,                   ITM_NULL,              ITM_SETSIG,                  ITM_DENMAX,
 #if DMCP_BUILD
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-#endif
+#endif // DMCP_BUILD
                                                                                                                                                                                                             };
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_DECOMP,
@@ -588,463 +588,463 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
 
 
 #ifndef TESTSUITE_BUILD
-/********************************************//**
- * \brief Displays one softkey
- *
- * \param[in] l const char*         Text to display
- * \param[in] xSoftkey int16_t      x location of softkey: from 0 (left) to 5 (right)
- * \param[in] ySoftKey int16_t      y location of softkey: from 0 (bottom) to 2 (top)
- * \param[in] videoMode videoMode_t Video mode normal or reverse
- * \param[in] topLineDotted bool_t  Is the item's top line dotted
- * \param[in] topLine bool_t        Draw a top line
- * \param[in] bottomLine bool_t     Draw a bottom line
- * \return void
- ***********************************************/
-void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
-  int16_t x1, y1, x2, y2;
-  int16_t w;
-  char l[15];
+  /********************************************//**
+   * \brief Displays one softkey
+   *
+   * \param[in] l const char*         Text to display
+   * \param[in] xSoftkey int16_t      x location of softkey: from 0 (left) to 5 (right)
+   * \param[in] ySoftKey int16_t      y location of softkey: from 0 (bottom) to 2 (top)
+   * \param[in] videoMode videoMode_t Video mode normal or reverse
+   * \param[in] topLineDotted bool_t  Is the item's top line dotted
+   * \param[in] topLine bool_t        Draw a top line
+   * \param[in] bottomLine bool_t     Draw a bottom line
+   * \return void
+   ***********************************************/
+  void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine) {
+    int16_t x1, y1, x2, y2;
+    int16_t w;
+    char l[15];
 
-  if(0 <= xSoftkey && xSoftkey <= 5) {
-    x1 = 67 * xSoftkey - 1;
-    x2 = x1 + 67;
-  }
-  else {
-    sprintf(errorMessage, "In function showSoftkey: xSoftkey=%" PRId16 " must be from 0 to 5" , xSoftkey);
-    displayBugScreen(errorMessage);
-    return;
-  }
+    if(0 <= xSoftkey && xSoftkey <= 5) {
+      x1 = 67 * xSoftkey - 1;
+      x2 = x1 + 67;
+    }
+    else {
+      sprintf(errorMessage, "In function showSoftkey: xSoftkey=%" PRId16 " must be from 0 to 5" , xSoftkey);
+      displayBugScreen(errorMessage);
+      return;
+    }
 
-  if(0 <= ySoftKey && ySoftKey <= 2) {
-    y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
-    y2 = y1 + SOFTMENU_HEIGHT;
-  }
-  else {
-    sprintf(errorMessage, "In function showSoftkey: ySoftKey=%" PRId16 " but must be from 0 to 2!" , ySoftKey);
-    displayBugScreen(errorMessage);
-    return;
-  }
+    if(0 <= ySoftKey && ySoftKey <= 2) {
+      y1 = 217 - SOFTMENU_HEIGHT * ySoftKey;
+      y2 = y1 + SOFTMENU_HEIGHT;
+    }
+    else {
+      sprintf(errorMessage, "In function showSoftkey: ySoftKey=%" PRId16 " but must be from 0 to 2!" , ySoftKey);
+      displayBugScreen(errorMessage);
+      return;
+    }
 
-  // Draw the frame
-  //   Top line
-  if(topLine) {
-    lcd_fill_rect(max(0, x1), y1, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    // Draw the frame
+    //   Top line
+    if(topLine) {
+      lcd_fill_rect(max(0, x1), y1, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Bottom line
-  if(y1 + SOFTMENU_HEIGHT <= min(y2, 239) && bottomLine) {
-    lcd_fill_rect(max(0, x1), y1 + SOFTMENU_HEIGHT, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Bottom line
+    if(y1 + SOFTMENU_HEIGHT <= min(y2, 239) && bottomLine) {
+      lcd_fill_rect(max(0, x1), y1 + SOFTMENU_HEIGHT, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Left line
-  if(x1 >= 0) {
-    lcd_fill_rect(x1, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Left line
+    if(x1 >= 0) {
+      lcd_fill_rect(x1, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Right line
-  if(x2 < SCREEN_WIDTH) {
-    lcd_fill_rect(x2, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Right line
+    if(x2 < SCREEN_WIDTH) {
+      lcd_fill_rect(x2, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  // Clear inside the frame
-  lcd_fill_rect(x1 + 1, y1 + 1, min(x2, SCREEN_WIDTH) - x1 - 1, min(y2, SCREEN_HEIGHT) - y1 - 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
+    // Clear inside the frame
+    lcd_fill_rect(x1 + 1, y1 + 1, min(x2, SCREEN_WIDTH) - x1 - 1, min(y2, SCREEN_HEIGHT) - y1 - 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
 
-  xcopy(l, label, stringByteLength(label) + 1);
-  w = stringWidth(l, &standardFont, false, false);
-  while(w > (xSoftkey == 5 ? 65 : 66)) {
-    l[stringLastGlyph(l)] = 0;
+    xcopy(l, label, stringByteLength(label) + 1);
     w = stringWidth(l, &standardFont, false, false);
+    while(w > (xSoftkey == 5 ? 65 : 66)) {
+      l[stringLastGlyph(l)] = 0;
+      w = stringWidth(l, &standardFont, false, false);
+    }
+
+    showString(l, &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
   }
 
-  showString(l, &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
-}
 
 
+  /********************************************//**
+   * \brief Displays the current part of a softmenu
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void showSoftmenuCurrentPart(void) {
+    if(softmenuStackPointer == 0) { // The is no menu to display
+      switch(calcMode) {
+        case CM_NORMAL:
+        case CM_TAM:
+        case CM_NIM:
+        case CM_ASSIGN:
+        case CM_ERROR_MESSAGE:
+        case CM_CONFIRMATION:
+        case CM_PEM:
+          showSoftmenu(NULL, -MNU_MyMenu, false);
+          showSoftmenuCurrentPart();
+          softmenuStackPointer = 0;
+          break;
 
-/********************************************//**
- * \brief Displays the current part of a softmenu
- *
- * \param void
- * \return void
- ***********************************************/
-void showSoftmenuCurrentPart(void) {
-  if(softmenuStackPointer == 0) { // The is no menu to display
-    switch(calcMode) {
-      case CM_NORMAL:
-      case CM_TAM:
-      case CM_NIM:
-      case CM_ASSIGN:
-      case CM_ERROR_MESSAGE:
-      case CM_CONFIRMATION:
-      case CM_PEM:
-        showSoftmenu(NULL, -MNU_MyMenu, false);
-        showSoftmenuCurrentPart();
-        softmenuStackPointer = 0;
-        break;
+        case CM_AIM:
+          showSoftmenu(NULL, -MNU_MyAlpha, false);
+          showSoftmenuCurrentPart();
+          softmenuStackPointer = 0;
+          break;
 
-      case CM_AIM:
-        showSoftmenu(NULL, -MNU_MyAlpha, false);
-        showSoftmenuCurrentPart();
-        softmenuStackPointer = 0;
-        break;
-
-      default:
-        sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
-        displayBugScreen(errorMessage);
-    }
-  }
-  else { // There is a menu to display
-    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
-    bool_t dottedTopLine;
-
-    if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
-      initVariableSoftmenu(m);
-      numberOfItems = variableSoftmenu[m].numItems;
-    }
-    else { // Static softmenu
-      numberOfItems = softmenu[m].numItems;
-    }
-    currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
-
-    if(numberOfItems <= 18) {
-      dottedTopLine = false;
-    }
-    else {
-      dottedTopLine = true;
-      yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
-
-      if(m >= NUMBER_OF_VARIABLE_SOFTMENUS) { // Static softmenu
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
-        }
-
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
-        }
-
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
-        }
+        default:
+          sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
+          displayBugScreen(errorMessage);
       }
     }
+    else { // There is a menu to display
+      int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+      bool_t dottedTopLine;
 
-    const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-    char *ptr;
-    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
-      for(x=0; x<6; x++) {
-        if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
-          ptr = getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
-          if(x + 6*y + currentFirstItem < numberOfItems) {
-            if(variableSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
-              showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true);
-            }
-          }
-        }
-        else { // Static softmenu
-          if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
-            item = ITM_NULL;
-          }
-          else {
-            item = softkeyItem[x];
-          }
-          if(item < 0) { // softmenu
-            int16_t menu = 0;
-            while(softmenu[menu].menuId != 0) {
-              if(softmenu[menu].menuId == item) {
-                break;
-              }
-              menu++;
-            }
-
-            if(softmenu[menu].menuId == 0) {
-              sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
-              displayBugScreen(errorMessage);
-            }
-            else {
-              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
-            }
-          }
-          else if(item == 9999) {
-            showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
-          }
-          else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
-            // item : +10000 -> no top line
-            //        +20000 -> no bottom line
-            //        +30000 -> neither top nor bottom line
-            if(softmenu[m].menuId == -MNU_FCNS) {
-              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
-            }
-            else {
-              showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
-            }
-            if(indexOfItems[item%10000].func == itemToBeCoded) {
-              // Strike out non coded functions
-              int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
-              for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
-                if(xStroke%3 == 0) yStroke--;
-                setBlackPixel(xStroke, yStroke);
-              }
-            }
-          }
-        }
+      if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
+        initVariableSoftmenu(m);
+        numberOfItems = variableSoftmenu[m].numItems;
       }
-    }
-
-    if(0 <= yDotted && yDotted <= 2) {
-      yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
-
-      if(dottedTopLine) {
-        for(x=0; x<SCREEN_WIDTH; x++) {
-          if(x%8 < 4) {
-            setBlackPixel(x, yDotted);
-          }
-          else {
-            setWhitePixel(x, yDotted);
-          }
-        }
+      else { // Static softmenu
+        numberOfItems = softmenu[m].numItems;
       }
-    }
-  }
-}
+      currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
 
-
-
-/********************************************//**
- * \brief Initializes the softmenu stack with a
- * softmenu and displays it's first part
- *
- * \param[in] softmenu int16_t Softmenu number
- * \return void
- ***********************************************/
-void initSoftmenuStack(int16_t softmenu) {
-  softmenuStack[0].softmenu = softmenu;
-  softmenuStack[0].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
-                               (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
-                               (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
-                               (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
-                               (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
-                               (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                0))))));
-  softmenuStackPointer = 1;
-}
-
-
-
-/********************************************//**
- * \brief Pushes a new softmenu on the softmenu stack
- * and displays it's first part
- *
- * \param[in] softmenu int16_t Softmenu number
- * \return void
- ***********************************************/
-void pushSoftmenu(int16_t softmenu) {
-  if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
-    softmenuStack[softmenuStackPointer].softmenu = softmenu;
-    softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
-                                                    (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
-                                                    (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
-                                                    (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
-                                                    (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
-                                                    (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                                     0))))));
-    softmenuStackPointer++;
-  }
-  else {
-    displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
-  }
-}
-
-
-
-/********************************************//**
- * \brief Pops a softmenu from the softmenu stack
- * and display it's current part or clear the
- * softmenu area of the screen if there's nothing
- * to pop.
- *
- * \param[in] softmenu int16_t Softmenu number
- * \return void
- ***********************************************/
-void popSoftmenu(void) {
-  if(softmenuStackPointer > 0) {
-    if(alphaSelectionMenu != ASM_NONE) {
-      alphaSelectionMenu = ASM_NONE;
-      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_PEM) {
-        calcModeNormal();
-      }
-    }
-    softmenuStackPointer--;
-  }
-  else {
-    displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");
-  }
-}
-
-
-
-/********************************************//**
- * \brief Displays a softmenu. One of the 2 first
- * parameter must be null and one must not be null
- *
- * \param[in] menu const char* Name of softmenu
- * \param[in] id int16_t       ID of softmenu
- * \param[in] push bool_t      * false: initialize the softmenu stack
- *                             * true: push the softmenu on the stack
- * \return void
- ***********************************************/
-void showSoftmenu(const char *menu, int16_t id, bool_t push) {
-  int16_t m;
-
-  if(id == -MNU_FCNS) {
-    alphaSelectionMenu = ASM_FCNS;
-    if(calcMode == CM_PEM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_PEM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_CONST) {
-    alphaSelectionMenu = ASM_CNST;
-    if(calcMode == CM_PEM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_PEM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_MENUS) {
-    alphaSelectionMenu = ASM_MENU;
-    calcModeAsm();
-  }
-  else if(id == -MNU_SYSFL) {
-    alphaSelectionMenu = ASM_SYFL;
-    if(calcMode == CM_TAM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_TAM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_ALPHAINTL) {
-    alphaSelectionMenu = ASM_AINT;
-    if(calcMode == CM_AIM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_AIM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_ALPHAintl) {
-    alphaSelectionMenu = ASM_aint;
-    if(calcMode == CM_AIM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_AIM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else {
-    alphaSelectionMenu = ASM_NONE;
-  }
-
-  if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
-    displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
-    return;
-  }
-
-  if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
-    id = -MNU_ALPHAintl;
-  }
-  else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
-    id = -MNU_alpha_omega;
-  }
-
-  if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
-    id = -MNU_ALPHAintl;
-  }
-  else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
-    id = -MNU_alpha_omega;
-  }
-
-  m = 0;
-
-  if(id != 0) { // Search by ID
-    while(softmenu[m].menuId != 0) {
-      if(softmenu[m].menuId == id) {
-       break;
-      }
-      m++;
-    }
-  }
-  else { // Search by name
-    while(softmenu[m].menuId != 0) {
-      if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
-        break;
-      }
-      m++;
-    }
-  }
-  if(softmenu[m].menuId == 0) {
-    if(menu == NULL) {
-      sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
-      displayBugScreen(errorMessage);
-    }
-    else {
-      sprintf(errorMessage, "In function showSoftmenu: softmenu %s not found!", menu);
-      displayBugScreen(errorMessage);
-    }
-  }
-  else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
-      if(push) {
-        pushSoftmenu(m);
+      if(numberOfItems <= 18) {
+        dottedTopLine = false;
       }
       else {
-        initSoftmenuStack(m);
+        dottedTopLine = true;
+        yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
+
+        if(m >= NUMBER_OF_VARIABLE_SOFTMENUS) { // Static softmenu
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
+
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
+
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
+        }
+      }
+
+      const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
+      char *ptr;
+      for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
+        for(x=0; x<6; x++) {
+          if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
+            ptr = getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
+            if(x + 6*y + currentFirstItem < numberOfItems) {
+              if(variableSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
+                showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true);
+              }
+            }
+          }
+          else { // Static softmenu
+            if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
+              item = ITM_NULL;
+            }
+            else {
+              item = softkeyItem[x];
+            }
+            if(item < 0) { // softmenu
+              int16_t menu = 0;
+              while(softmenu[menu].menuId != 0) {
+                if(softmenu[menu].menuId == item) {
+                  break;
+                }
+                menu++;
+              }
+
+              if(softmenu[menu].menuId == 0) {
+                sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
+                displayBugScreen(errorMessage);
+              }
+              else {
+                showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
+              }
+            }
+            else if(item == 9999) {
+              showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
+            }
+            else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
+              // item : +10000 -> no top line
+              //        +20000 -> no bottom line
+              //        +30000 -> neither top nor bottom line
+              if(softmenu[m].menuId == -MNU_FCNS) {
+                showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+              }
+              else {
+                showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
+              }
+              if(indexOfItems[item%10000].func == itemToBeCoded) {
+                // Strike out non coded functions
+                int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
+                for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
+                  if(xStroke%3 == 0) yStroke--;
+                  setBlackPixel(xStroke, yStroke);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if(0 <= yDotted && yDotted <= 2) {
+        yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
+
+        if(dottedTopLine) {
+          for(x=0; x<SCREEN_WIDTH; x++) {
+            if(x%8 < 4) {
+              setBlackPixel(x, yDotted);
+            }
+            else {
+              setWhitePixel(x, yDotted);
+            }
+          }
+        }
       }
     }
-    //else if(calcMode == CM_AIM) {
-    //  if(push) {
-    //    pushSoftmenu(m);
-    //  }
-    //  else {
-    //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
-    //      softmenuStackPointer--;
-    //    }
-    //    pushSoftmenu(m);
-    //  }
-    //}
-    else if(calcMode == CM_TAM) {
+  }
+
+
+
+  /********************************************//**
+   * \brief Initializes the softmenu stack with a
+   * softmenu and displays it's first part
+   *
+   * \param[in] softmenu int16_t Softmenu number
+   * \return void
+   ***********************************************/
+  void initSoftmenuStack(int16_t softmenu) {
+    softmenuStack[0].softmenu = softmenu;
+    softmenuStack[0].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
+                                 (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
+                                 (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
+                                 (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
+                                 (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
+                                 (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
+                                  0))))));
+    softmenuStackPointer = 1;
+  }
+
+
+
+  /********************************************//**
+   * \brief Pushes a new softmenu on the softmenu stack
+   * and displays it's first part
+   *
+   * \param[in] softmenu int16_t Softmenu number
+   * \return void
+   ***********************************************/
+  void pushSoftmenu(int16_t softmenu) {
+    if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
+      softmenuStack[softmenuStackPointer].softmenu = softmenu;
+      softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
+                                                      (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
+                                                      (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
+                                                      (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
+                                                      (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
+                                                      (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
+                                                       0))))));
+      softmenuStackPointer++;
     }
     else {
-      sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
-      displayBugScreen(errorMessage);
+      displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
     }
   }
-}
 
 
 
-void setCatalogLastPos(void) {
-       if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-}
-#endif
+  /********************************************//**
+   * \brief Pops a softmenu from the softmenu stack
+   * and display it's current part or clear the
+   * softmenu area of the screen if there's nothing
+   * to pop.
+   *
+   * \param[in] softmenu int16_t Softmenu number
+   * \return void
+   ***********************************************/
+  void popSoftmenu(void) {
+    if(softmenuStackPointer > 0) {
+      if(alphaSelectionMenu != ASM_NONE) {
+        alphaSelectionMenu = ASM_NONE;
+        if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_PEM) {
+          calcModeNormal();
+        }
+      }
+      softmenuStackPointer--;
+    }
+    else {
+      displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");
+    }
+  }
+
+
+
+  /********************************************//**
+   * \brief Displays a softmenu. One of the 2 first
+   * parameter must be null and one must not be null
+   *
+   * \param[in] menu const char* Name of softmenu
+   * \param[in] id int16_t       ID of softmenu
+   * \param[in] push bool_t      * false: initialize the softmenu stack
+   *                             * true: push the softmenu on the stack
+   * \return void
+   ***********************************************/
+  void showSoftmenu(const char *menu, int16_t id, bool_t push) {
+    int16_t m;
+
+    if(id == -MNU_FCNS) {
+      alphaSelectionMenu = ASM_FCNS;
+      if(calcMode == CM_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_PEM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_CONST) {
+      alphaSelectionMenu = ASM_CNST;
+      if(calcMode == CM_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_PEM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_MENUS) {
+      alphaSelectionMenu = ASM_MENU;
+      calcModeAsm();
+    }
+    else if(id == -MNU_SYSFL) {
+      alphaSelectionMenu = ASM_SYFL;
+      if(calcMode == CM_TAM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_TAM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_ALPHAINTL) {
+      alphaSelectionMenu = ASM_AINT;
+      if(calcMode == CM_AIM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_AIM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_ALPHAintl) {
+      alphaSelectionMenu = ASM_aint;
+      if(calcMode == CM_AIM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_AIM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else {
+      alphaSelectionMenu = ASM_NONE;
+    }
+
+    if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
+      displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
+      return;
+    }
+
+    if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
+      id = -MNU_ALPHAintl;
+    }
+    else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
+      id = -MNU_alpha_omega;
+    }
+
+    if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
+      id = -MNU_ALPHAintl;
+    }
+    else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
+      id = -MNU_alpha_omega;
+    }
+
+    m = 0;
+
+    if(id != 0) { // Search by ID
+      while(softmenu[m].menuId != 0) {
+        if(softmenu[m].menuId == id) {
+         break;
+        }
+        m++;
+      }
+    }
+    else { // Search by name
+      while(softmenu[m].menuId != 0) {
+        if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
+          break;
+        }
+        m++;
+      }
+    }
+    if(softmenu[m].menuId == 0) {
+      if(menu == NULL) {
+        sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
+        displayBugScreen(errorMessage);
+      }
+      else {
+        sprintf(errorMessage, "In function showSoftmenu: softmenu %s not found!", menu);
+        displayBugScreen(errorMessage);
+      }
+    }
+    else {
+      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
+        if(push) {
+          pushSoftmenu(m);
+        }
+        else {
+          initSoftmenuStack(m);
+        }
+      }
+      //else if(calcMode == CM_AIM) {
+      //  if(push) {
+      //    pushSoftmenu(m);
+      //  }
+      //  else {
+      //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      //      softmenuStackPointer--;
+      //    }
+      //    pushSoftmenu(m);
+      //  }
+      //}
+      else if(calcMode == CM_TAM) {
+      }
+      else {
+        sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
+        displayBugScreen(errorMessage);
+      }
+    }
+  }
+
+
+
+  void setCatalogLastPos(void) {
+         if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  }
+#endif // TESTSUITE_BUILD

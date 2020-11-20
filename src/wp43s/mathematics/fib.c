@@ -40,7 +40,7 @@ void fibError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate fib(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     moreInfoOnError("In function fnFib:", errorMessage, NULL, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 
@@ -71,7 +71,7 @@ void fibLonI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpString, "cannot calculate fib(%s)", errorMessage);
       moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -82,7 +82,7 @@ void fibLonI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpString, "cannot calculate fib(%s), the limit for UNSIGN is 93", errorMessage);
       moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -92,7 +92,7 @@ void fibLonI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
       sprintf(tmpString, "cannot calculate fib(%s), the limit is 4791, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
       moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }

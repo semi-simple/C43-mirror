@@ -40,7 +40,7 @@ void fnCb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot CB %s", getRegisterDataTypeName(REGISTER_X, true, false));
       moreInfoOnError("In function fnCb:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
@@ -64,7 +64,7 @@ void fnSb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot SB %s", getRegisterDataTypeName(REGISTER_X, true, false));
       moreInfoOnError("In function fnSb:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
@@ -88,7 +88,7 @@ void fnFb(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot FB %s", getRegisterDataTypeName(REGISTER_X, true, false));
       moreInfoOnError("In function fnFb:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
@@ -110,7 +110,7 @@ void fnBc(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot BC %s", getRegisterDataTypeName(REGISTER_X, true, false));
       moreInfoOnError("In function fnBc:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
@@ -132,6 +132,6 @@ void fnBs(uint16_t bit) { // bit from 0=LSB to shortIntegerWordSize-1=MSB
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot BS %s", getRegisterDataTypeName(REGISTER_X, true, false));
       moreInfoOnError("In function fnBs:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }

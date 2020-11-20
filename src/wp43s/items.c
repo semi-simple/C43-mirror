@@ -43,9 +43,9 @@ void fnToBeCoded(void) {
   displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
     moreInfoOnError("Function to be coded", "for that data type(s)!", NULL, NULL);
-  #endif
+  #endif // PC_BUILD
 }
-#endif
+#endif // GENERATE_CATALOGS
 
 
 
@@ -60,414 +60,413 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
 
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-void reallyRunFunction(int16_t func, uint16_t param) {
-  if(indexOfItems[func].undoStatus == US_ENABLED) {
-    saveForUndo();
-  }
-  else if(indexOfItems[func].undoStatus == US_CANCEL) {
-    thereIsSomethingToUndo = false;
-  }
-
-  indexOfItems[func].func(param);
-
-  if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
-    clearSystemFlag(FLAG_ASLIFT);
-  }
-  else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
-    setSystemFlag(FLAG_ASLIFT);
-  }
-
-  #ifdef PC_BUILD
-    refreshLcd(NULL);
-  #endif
-}
-
-
-
-/********************************************//**
- * \brief Runs a function
- *
- * \param[in] fn int16_t Index in the indexOfItems area of the function to run
- * \return void
- ***********************************************/
-void runFunction(int16_t func) {
-  funcOK = true;
-
-  if(func >= LAST_ITEM) {
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "item (%" PRId16 ") must be below LAST_ITEM", func);
-      moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
-    #endif
-  }
-
-  if(calcMode == CM_PEM) {
-    insertStepInProgram(func);
-    return;
-  }
-
-  if(calcMode != CM_ASM_OVER_TAM) {
-    tamMode = indexOfItems[func].param;
-  }
-
-  if(calcMode != CM_TAM && calcMode != CM_ASM_OVER_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
-    tamFunction = func;
-    strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
-    tamNumberMin = indexOfItems[func].tamMin;
-    tamNumberMax = indexOfItems[func].tamMax;
-
-    if(func == ITM_CNST) {
-      tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34;
+  void reallyRunFunction(int16_t func, uint16_t param) {
+    if(indexOfItems[func].undoStatus == US_ENABLED) {
+      saveForUndo();
+    }
+    else if(indexOfItems[func].undoStatus == US_CANCEL) {
+      thereIsSomethingToUndo = false;
     }
 
-    calcModeTam();
-    return;
-  }
+    indexOfItems[func].func(param);
 
-  reallyRunFunction(func, indexOfItems[func].param);
+    if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
+      clearSystemFlag(FLAG_ASLIFT);
+    }
+    else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
+      setSystemFlag(FLAG_ASLIFT);
+    }
 
-  if(!funcOK) {
-    displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
-      sprintf(errorMessage, "%" PRId16 " = %s", func, indexOfItems[func].itemCatalogName);
-      moreInfoOnError("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
-    #endif
+      refreshLcd(NULL);
+    #endif // PC_BUILD
   }
-}
 
-#endif
+
+
+  /********************************************//**
+   * \brief Runs a function
+   *
+   * \param[in] fn int16_t Index in the indexOfItems area of the function to run
+   * \return void
+   ***********************************************/
+  void runFunction(int16_t func) {
+    funcOK = true;
+
+    if(func >= LAST_ITEM) {
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "item (%" PRId16 ") must be below LAST_ITEM", func);
+        moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
+      #endif // PC_BUILD
+    }
+
+    if(calcMode == CM_PEM) {
+      insertStepInProgram(func);
+      return;
+    }
+
+    if(calcMode != CM_ASM_OVER_TAM) {
+      tamMode = indexOfItems[func].param;
+    }
+
+    if(calcMode != CM_TAM && calcMode != CM_ASM_OVER_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
+      tamFunction = func;
+      strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
+      tamNumberMin = indexOfItems[func].tamMin;
+      tamNumberMax = indexOfItems[func].tamMax;
+
+      if(func == ITM_CNST) {
+        tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34;
+      }
+
+      calcModeTam();
+      return;
+    }
+
+    reallyRunFunction(func, indexOfItems[func].param);
+
+    if(!funcOK) {
+      displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "%" PRId16 " = %s", func, indexOfItems[func].itemCatalogName);
+        moreInfoOnError("In function runFunction:", "Item not implemented", errorMessage, "to be coded");
+      #endif // PC_BUILD
+    }
+  }
+#endif // !TESTSUITE_BUILD && !GENERATE_CATALOGS
 
 #ifdef GENERATE_CATALOGS
-void registerBrowser            (uint16_t unusedButMandatoryParameter) {}
-void flagBrowser                (uint16_t unusedButMandatoryParameter) {}
-void fontBrowser                (uint16_t unusedButMandatoryParameter) {}
-void fnPow10                    (uint16_t unusedButMandatoryParameter) {}
-void fnIntegerMode              (uint16_t unusedButMandatoryParameter) {}
-void fnConstant                 (uint16_t unusedButMandatoryParameter) {}
-void fnInvert                   (uint16_t unusedButMandatoryParameter) {}
-void fn2Pow                     (uint16_t unusedButMandatoryParameter) {}
-void fn10Pow                    (uint16_t unusedButMandatoryParameter) {}
-void fnCubeRoot                 (uint16_t unusedButMandatoryParameter) {}
-void fnMagnitude                (uint16_t unusedButMandatoryParameter) {}
-void fnAgm                      (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayFormatAll         (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayFormatFix         (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayFormatSci         (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayFormatEng         (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayFormatGap         (uint16_t unusedButMandatoryParameter) {}
-void fnArccos                   (uint16_t unusedButMandatoryParameter) {}
-void fnArccosh                  (uint16_t unusedButMandatoryParameter) {}
-void fnArcsin                   (uint16_t unusedButMandatoryParameter) {}
-void fnArcsinh                  (uint16_t unusedButMandatoryParameter) {}
-void fnArctan                   (uint16_t unusedButMandatoryParameter) {}
-void fnArctanh                  (uint16_t unusedButMandatoryParameter) {}
-void fnCos                      (uint16_t unusedButMandatoryParameter) {}
-void fnCosh                     (uint16_t unusedButMandatoryParameter) {}
-void fnSin                      (uint16_t unusedButMandatoryParameter) {}
-void fnSinc                     (uint16_t unusedButMandatoryParameter) {}
-void fnSincpi                   (uint16_t unusedButMandatoryParameter) {}
-void fnSinh                     (uint16_t unusedButMandatoryParameter) {}
-void fnTan                      (uint16_t unusedButMandatoryParameter) {}
-void fnTanh                     (uint16_t unusedButMandatoryParameter) {}
-void fnDrop                     (uint16_t unusedButMandatoryParameter) {}
-void fnDropY                    (uint16_t unusedButMandatoryParameter) {}
-void fnBatteryVoltage           (uint16_t unusedButMandatoryParameter) {}
-void fnCurveFitting             (uint16_t unusedButMandatoryParameter) {}
-void fnCeil                     (uint16_t unusedButMandatoryParameter) {}
-void fnFloor                    (uint16_t unusedButMandatoryParameter) {}
-void fnClearFlag                (uint16_t unusedButMandatoryParameter) {}
-void fnFlipFlag                 (uint16_t unusedButMandatoryParameter) {}
-void fnSetFlag                  (uint16_t unusedButMandatoryParameter) {}
-void fnClAll                    (uint16_t unusedButMandatoryParameter) {}
-void fnClX                      (uint16_t unusedButMandatoryParameter) {}
-void fnClFAll                   (uint16_t unusedButMandatoryParameter) {}
-void fnClPAll                   (uint16_t unusedButMandatoryParameter) {}
-void fnClSigma                  (uint16_t unusedButMandatoryParameter) {}
-void fnClearStack               (uint16_t unusedButMandatoryParameter) {}
-void fnClearRegisters           (uint16_t unusedButMandatoryParameter) {}
-void fnTimeFormat               (uint16_t unusedButMandatoryParameter) {}
-void fnSetDateFormat            (uint16_t unusedButMandatoryParameter) {}
-void fnComplexUnit              (uint16_t unusedButMandatoryParameter) {}
-void fnComplexMode              (uint16_t unusedButMandatoryParameter) {}
-void fnComplexResult            (uint16_t unusedButMandatoryParameter) {}
-void fnConjugate                (uint16_t unusedButMandatoryParameter) {}
-void fnAngularMode              (uint16_t unusedButMandatoryParameter) {}
-void fnDenMode                  (uint16_t unusedButMandatoryParameter) {}
-void fnDenMax                   (uint16_t unusedButMandatoryParameter) {}
-void fnExp                      (uint16_t unusedButMandatoryParameter) {}
-void fnExpM1                    (uint16_t unusedButMandatoryParameter) {}
-void fnExpt                     (uint16_t unusedButMandatoryParameter) {}
-void fnMant                     (uint16_t unusedButMandatoryParameter) {}
-void fnCxToRe                   (uint16_t unusedButMandatoryParameter) {}
-void fnReToCx                   (uint16_t unusedButMandatoryParameter) {}
-void fnFillStack                (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagClear              (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagClearClear         (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagClearFlip          (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagClearSet           (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagSet                (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagSetClear           (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagSetFlip            (uint16_t unusedButMandatoryParameter) {}
-void fnIsFlagSetSet             (uint16_t unusedButMandatoryParameter) {}
-void fnKeyEnter                 (uint16_t unusedButMandatoryParameter) {}
-void fnKeyExit                  (uint16_t unusedButMandatoryParameter) {}
-void fnKeyUp                    (uint16_t unusedButMandatoryParameter) {}
-void fnKeyDown                  (uint16_t unusedButMandatoryParameter) {}
-void fnKeyDotD                  (uint16_t unusedButMandatoryParameter) {}
-void fnKeyCC                    (uint16_t unusedButMandatoryParameter) {}
-void fnKeyBackspace             (uint16_t unusedButMandatoryParameter) {}
-void fnDisplayStack             (uint16_t unusedButMandatoryParameter) {}
-void fnFreeFlashMemory          (uint16_t unusedButMandatoryParameter) {}
-void fnFreeMemory               (uint16_t unusedButMandatoryParameter) {}
-void fnFp                       (uint16_t unusedButMandatoryParameter) {}
-void fnIp                       (uint16_t unusedButMandatoryParameter) {}
-void allocateLocalRegisters     (uint16_t unusedButMandatoryParameter) {}
-void fnLeadingZeros             (uint16_t unusedButMandatoryParameter) {}
-void fnNeighb                   (uint16_t unusedButMandatoryParameter) {}
-void fnGcd                      (uint16_t unusedButMandatoryParameter) {}
-void fnMin                      (uint16_t unusedButMandatoryParameter) {}
-void fnMax                      (uint16_t unusedButMandatoryParameter) {}
-void fnStatSum                  (uint16_t unusedButMandatoryParameter) {}
-void fnIsPrime                  (uint16_t unusedButMandatoryParameter) {}
-void fnRandom                   (uint16_t unusedButMandatoryParameter) {}
-void fnRandomI                  (uint16_t unusedButMandatoryParameter) {}
-void fnImaginaryPart            (uint16_t unusedButMandatoryParameter) {}
-void fnRecall                   (uint16_t unusedButMandatoryParameter) {}
-void fnRecallConfig             (uint16_t unusedButMandatoryParameter) {}
-void fnRecallElement            (uint16_t unusedButMandatoryParameter) {}
-void fnRecallIJ                 (uint16_t unusedButMandatoryParameter) {}
-void fnRecallStack              (uint16_t unusedButMandatoryParameter) {}
-void fnRecallAdd                (uint16_t unusedButMandatoryParameter) {}
-void fnRecallSub                (uint16_t unusedButMandatoryParameter) {}
-void fnRecallMult               (uint16_t unusedButMandatoryParameter) {}
-void fnRecallDiv                (uint16_t unusedButMandatoryParameter) {}
-void fnRecallMin                (uint16_t unusedButMandatoryParameter) {}
-void fnRecallMax                (uint16_t unusedButMandatoryParameter) {}
-void fnRadixMark                (uint16_t unusedButMandatoryParameter) {}
-void fnReset                    (uint16_t unusedButMandatoryParameter) {}
-void fnRealPart                 (uint16_t unusedButMandatoryParameter) {}
-void fnRmd                      (uint16_t unusedButMandatoryParameter) {}
-void fnRound                    (uint16_t unusedButMandatoryParameter) {}
-void fnRoundi                   (uint16_t unusedButMandatoryParameter) {}
-void fnRollDown                 (uint16_t unusedButMandatoryParameter) {}
-void fnRollUp                   (uint16_t unusedButMandatoryParameter) {}
-void fnSeed                     (uint16_t unusedButMandatoryParameter) {}
-void fnConfigChina              (uint16_t unusedButMandatoryParameter) {}
-void fnConfigEurope             (uint16_t unusedButMandatoryParameter) {}
-void fnConfigIndia              (uint16_t unusedButMandatoryParameter) {}
-void fnConfigJapan              (uint16_t unusedButMandatoryParameter) {}
-void fnConfigUk                 (uint16_t unusedButMandatoryParameter) {}
-void fnConfigUsa                (uint16_t unusedButMandatoryParameter) {}
-void fnLcm                      (uint16_t unusedButMandatoryParameter) {}
-void fnSign                     (uint16_t unusedButMandatoryParameter) {}
-void fnSlvq                     (uint16_t unusedButMandatoryParameter) {}
-void fnGetIntegerSignMode       (uint16_t unusedButMandatoryParameter) {}
-void fnLog2                     (uint16_t unusedButMandatoryParameter) {}
-void fnLog10                    (uint16_t unusedButMandatoryParameter) {}
-void fnLn                       (uint16_t unusedButMandatoryParameter) {}
-void fnLogXY                    (uint16_t unusedButMandatoryParameter) {}
-void fnLnP1                     (uint16_t unusedButMandatoryParameter) {}
-void fnLnGamma                  (uint16_t unusedButMandatoryParameter) {}
-void fnLnBeta                   (uint16_t unusedButMandatoryParameter) {}
-void fnBeta                     (uint16_t unusedButMandatoryParameter) {}
-void fnGamma                    (uint16_t unusedButMandatoryParameter) {}
-void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
-void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
-void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
-void fnMod                      (uint16_t unusedButMandatoryParameter) {}
-void fnPower                    (uint16_t unusedButMandatoryParameter) {}
-void fnPi                       (uint16_t unusedButMandatoryParameter) {}
-void fnUserMode                 (uint16_t unusedButMandatoryParameter) {}
-void fnParallel                 (uint16_t unusedButMandatoryParameter) {}
-void fnSquareRoot               (uint16_t unusedButMandatoryParameter) {}
-void fnSubtract                 (uint16_t unusedButMandatoryParameter) {}
-void fnChangeSign               (uint16_t unusedButMandatoryParameter) {}
-void fnM1Pow                    (uint16_t unusedButMandatoryParameter) {}
-void backToSystem               (uint16_t unusedButMandatoryParameter) {}
-void fnMultiply                 (uint16_t unusedButMandatoryParameter) {}
-void fnChangeBase               (uint16_t unusedButMandatoryParameter) {}
-void fnToPolar                  (uint16_t unusedButMandatoryParameter) {}
-void fnToRect                   (uint16_t unusedButMandatoryParameter) {}
-void fnDivide                   (uint16_t unusedButMandatoryParameter) {}
-void fnAdd                      (uint16_t unusedButMandatoryParameter) {}
-void fnSigma                    (uint16_t unusedButMandatoryParameter) {}
-void fnXLessThan                (uint16_t unusedButMandatoryParameter) {}
-void fnGetLocR                  (uint16_t unusedButMandatoryParameter) {}
-void fnSwapRealImaginary        (uint16_t unusedButMandatoryParameter) {}
-void fnGetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
-void fnSetWordSize              (uint16_t unusedButMandatoryParameter) {}
-void fnGetWordSize              (uint16_t unusedButMandatoryParameter) {}
-void fnGetStackSize             (uint16_t unusedButMandatoryParameter) {}
-void fnStackSize                (uint16_t unusedButMandatoryParameter) {}
-void fnStore                    (uint16_t unusedButMandatoryParameter) {}
-void fnStoreConfig              (uint16_t unusedButMandatoryParameter) {}
-void fnStoreElement             (uint16_t unusedButMandatoryParameter) {}
-void fnStoreIJ                  (uint16_t unusedButMandatoryParameter) {}
-void fnStoreStack               (uint16_t unusedButMandatoryParameter) {}
-void fnStoreAdd                 (uint16_t unusedButMandatoryParameter) {}
-void fnStoreSub                 (uint16_t unusedButMandatoryParameter) {}
-void fnStoreMult                (uint16_t unusedButMandatoryParameter) {}
-void fnStoreDiv                 (uint16_t unusedButMandatoryParameter) {}
-void fnStoreMax                 (uint16_t unusedButMandatoryParameter) {}
-void fnStoreMin                 (uint16_t unusedButMandatoryParameter) {}
-void fnUlp                      (uint16_t unusedButMandatoryParameter) {}
-void fnUnitVector               (uint16_t unusedButMandatoryParameter) {}
-void fnVersion                  (uint16_t unusedButMandatoryParameter) {}
-void fnSquare                   (uint16_t unusedButMandatoryParameter) {}
-void fnCube                     (uint16_t unusedButMandatoryParameter) {}
-void fnFactorial                (uint16_t unusedButMandatoryParameter) {}
-void fnSwapX                    (uint16_t unusedButMandatoryParameter) {}
-void fnSwapY                    (uint16_t unusedButMandatoryParameter) {}
-void fnSwapZ                    (uint16_t unusedButMandatoryParameter) {}
-void fnSwapT                    (uint16_t unusedButMandatoryParameter) {}
-void fnSwapXY                   (uint16_t unusedButMandatoryParameter) {}
-void fnShuffle                  (uint16_t unusedButMandatoryParameter) {}
-void fnWho                      (uint16_t unusedButMandatoryParameter) {}
-void fnGetSignificantDigits     (uint16_t unusedButMandatoryParameter) {}
-void fnSdl                      (uint16_t unusedButMandatoryParameter) {}
-void fnSdr                      (uint16_t unusedButMandatoryParameter) {}
-void fnCvtToCurrentAngularMode  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtAcreM2                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtAcreusM2              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtAtmPa                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtAuM                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtBarPa                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtBtuJ                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtCalJ                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtCwtKg                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFtM                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtDegToRad              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtSfeetM                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFlozukM3              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFlozusM3              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtGalukM3               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtGalusM3               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtDbRatio               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtRatioDb               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtHpeW                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtHpmW                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtHpukW                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtInhgPa                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtMmhgPa                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtInchM                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtWhJ                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtLbKg                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtOzKg                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtStoneKg               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtShorttonKg            (uint16_t unusedButMandatoryParameter) {}
-void fnCvtTrozKg                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtLbfN                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtMiM                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtLyM                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtTonKg                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtTorrPa                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtYardM                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtPcM                   (uint16_t unusedButMandatoryParameter) {}
-void fnCvtPointM                (uint16_t unusedButMandatoryParameter) {}
-void fnCvtCToF                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFToC                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtNmiM                  (uint16_t unusedButMandatoryParameter) {}
-void fnCvtPsiPa                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtShortcwtKg            (uint16_t unusedButMandatoryParameter) {}
-void fnCvtLbfftNm               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtRadToDeg              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFromCurrentAngularMode(uint16_t unusedButMandatoryParameter) {}
-void fnCvtYearS                 (uint16_t unusedButMandatoryParameter) {}
-void fnCvtCaratKg               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtQuartM3               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtDmsToDeg              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtFathomM               (uint16_t unusedButMandatoryParameter) {}
-void fnCvtBarrelM3              (uint16_t unusedButMandatoryParameter) {}
-void fnCvtHectareM2             (uint16_t unusedButMandatoryParameter) {}
-void fnCvtDegToDms              (uint16_t unusedButMandatoryParameter) {}
-void addItemToBuffer            (uint16_t unusedButMandatoryParameter) {}
-void fnOff                      (uint16_t unusedButMandatoryParameter) {}
-void fnAim                      (uint16_t unusedButMandatoryParameter) {}
-void fnShow                     (uint16_t unusedButMandatoryParameter) {}
-void fnLastX                    (uint16_t unusedButMandatoryParameter) {}
-void fnCyx                      (uint16_t unusedButMandatoryParameter) {}
-void fnPyx                      (uint16_t unusedButMandatoryParameter) {}
-void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
-void fnDec                      (uint16_t unusedButMandatoryParameter) {}
-void fnInc                      (uint16_t unusedButMandatoryParameter) {}
-void fncountBits                (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalNand              (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalOr                (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalNor               (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalXor               (uint16_t unusedButMandatoryParameter) {}
-void fnLogicalXnor              (uint16_t unusedButMandatoryParameter) {}
-void fnDecomp                   (uint16_t unusedButMandatoryParameter) {}
-void fnSumXY                    (uint16_t unusedButMandatoryParameter) {}
-void fnMeanXY                   (uint16_t unusedButMandatoryParameter) {}
-void fnGeometricMeanXY          (uint16_t unusedButMandatoryParameter) {}
-void fnWeightedMeanX            (uint16_t unusedButMandatoryParameter) {}
-void fnHarmonicMeanXY           (uint16_t unusedButMandatoryParameter) {}
-void fnRMSMeanXY                (uint16_t unusedButMandatoryParameter) {}
-void fnWeightedSampleStdDev     (uint16_t unusedButMandatoryParameter) {}
-void fnWeightedPopulationStdDev (uint16_t unusedButMandatoryParameter) {}
-void fnWeightedStandardError    (uint16_t unusedButMandatoryParameter) {}
-void fnSampleStdDev             (uint16_t unusedButMandatoryParameter) {}
-void fnPopulationStdDev         (uint16_t unusedButMandatoryParameter) {}
-void fnStandardError            (uint16_t unusedButMandatoryParameter) {}
-void fnGeometricSampleStdDev    (uint16_t unusedButMandatoryParameter) {}
-void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter) {}
-void fnGeometricStandardError   (uint16_t unusedButMandatoryParameter) {}
-void fnMaskl                    (uint16_t unusedButMandatoryParameter) {}
-void fnMaskr                    (uint16_t unusedButMandatoryParameter) {}
-void fnAsr                      (uint16_t unusedButMandatoryParameter) {}
-void fnCb                       (uint16_t unusedButMandatoryParameter) {}
-void fnSb                       (uint16_t unusedButMandatoryParameter) {}
-void fnFb                       (uint16_t unusedButMandatoryParameter) {}
-void fnBs                       (uint16_t unusedButMandatoryParameter) {}
-void fnBc                       (uint16_t unusedButMandatoryParameter) {}
-void fnSl                       (uint16_t unusedButMandatoryParameter) {}
-void fnRl                       (uint16_t unusedButMandatoryParameter) {}
-void fnRlc                      (uint16_t unusedButMandatoryParameter) {}
-void fnSr                       (uint16_t unusedButMandatoryParameter) {}
-void fnRr                       (uint16_t unusedButMandatoryParameter) {}
-void fnRrc                      (uint16_t unusedButMandatoryParameter) {}
-void fnLj                       (uint16_t unusedButMandatoryParameter) {}
-void fnRj                       (uint16_t unusedButMandatoryParameter) {}
-void fnCountBits                (uint16_t unusedButMandatoryParameter) {}
-void fnNextPrime                (uint16_t unusedButMandatoryParameter) {}
-void fnScreenDump               (uint16_t unusedButMandatoryParameter) {}
-void fnArg                      (uint16_t unusedButMandatoryParameter) {}
-void fnRange                    (uint16_t unusedButMandatoryParameter) {}
-void fnGetRange                 (uint16_t unusedButMandatoryParameter) {}
-void fnDot                      (uint16_t unusedButMandatoryParameter) {}
-void fnCross                    (uint16_t unusedButMandatoryParameter) {}
-void fnPercent                  (uint16_t unusedButMandatoryParameter) {}
-void fnPercentMRR               (uint16_t unusedButMandatoryParameter) {}
-void fnPercentT                 (uint16_t unusedButMandatoryParameter) {}
-void fnPercentSigma             (uint16_t unusedButMandatoryParameter) {}
-void fnPercentPlusMG            (uint16_t unusedButMandatoryParameter) {}
-void fnDeltaPercent             (uint16_t unusedButMandatoryParameter) {}
-void fnXthRoot                  (uint16_t unusedButMandatoryParameter) {}
-void fnGetSystemFlag            (uint16_t unusedButMandatoryParameter) {}
-void fnFractionType             (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaLeng                (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaSR                  (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaSL                  (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaRR                  (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaRL                  (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaPos                 (uint16_t unusedButMandatoryParameter) {}
-void fnXToAlpha                 (uint16_t unusedButMandatoryParameter) {}
-void fnAlphaToX                 (uint16_t unusedButMandatoryParameter) {}
-void fnTicks                    (uint16_t unusedButMandatoryParameter) {}
-void fnSave                     (uint16_t unusedButMandatoryParameter) {}
-void fnLoad                     (uint16_t unusedButMandatoryParameter) {}
-void fnUndo                     (uint16_t unusedButMandatoryParameter) {}
-void fnXmax                     (uint16_t unusedButMandatoryParameter) {}
-void fnXmin                     (uint16_t unusedButMandatoryParameter) {}
-void fnFib                      (uint16_t unusedButMandatoryParameter) {}
-void fnGd                       (uint16_t unusedButMandatoryParameter) {}
-void fnInvGd                    (uint16_t unusedButMandatoryParameter) {}
-void fnClP                      (uint16_t unusedButMandatoryParameter) {}
-void fnPem                      (uint16_t unusedButMandatoryParameter) {}
-void fnGoto                     (uint16_t unusedButMandatoryParameter) {}
-void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
-#endif
+  void registerBrowser            (uint16_t unusedButMandatoryParameter) {}
+  void flagBrowser                (uint16_t unusedButMandatoryParameter) {}
+  void fontBrowser                (uint16_t unusedButMandatoryParameter) {}
+  void fnPow10                    (uint16_t unusedButMandatoryParameter) {}
+  void fnIntegerMode              (uint16_t unusedButMandatoryParameter) {}
+  void fnConstant                 (uint16_t unusedButMandatoryParameter) {}
+  void fnInvert                   (uint16_t unusedButMandatoryParameter) {}
+  void fn2Pow                     (uint16_t unusedButMandatoryParameter) {}
+  void fn10Pow                    (uint16_t unusedButMandatoryParameter) {}
+  void fnCubeRoot                 (uint16_t unusedButMandatoryParameter) {}
+  void fnMagnitude                (uint16_t unusedButMandatoryParameter) {}
+  void fnAgm                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatAll         (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatFix         (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatSci         (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatEng         (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatGap         (uint16_t unusedButMandatoryParameter) {}
+  void fnArccos                   (uint16_t unusedButMandatoryParameter) {}
+  void fnArccosh                  (uint16_t unusedButMandatoryParameter) {}
+  void fnArcsin                   (uint16_t unusedButMandatoryParameter) {}
+  void fnArcsinh                  (uint16_t unusedButMandatoryParameter) {}
+  void fnArctan                   (uint16_t unusedButMandatoryParameter) {}
+  void fnArctanh                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCos                      (uint16_t unusedButMandatoryParameter) {}
+  void fnCosh                     (uint16_t unusedButMandatoryParameter) {}
+  void fnSin                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSinc                     (uint16_t unusedButMandatoryParameter) {}
+  void fnSincpi                   (uint16_t unusedButMandatoryParameter) {}
+  void fnSinh                     (uint16_t unusedButMandatoryParameter) {}
+  void fnTan                      (uint16_t unusedButMandatoryParameter) {}
+  void fnTanh                     (uint16_t unusedButMandatoryParameter) {}
+  void fnDrop                     (uint16_t unusedButMandatoryParameter) {}
+  void fnDropY                    (uint16_t unusedButMandatoryParameter) {}
+  void fnBatteryVoltage           (uint16_t unusedButMandatoryParameter) {}
+  void fnCurveFitting             (uint16_t unusedButMandatoryParameter) {}
+  void fnCeil                     (uint16_t unusedButMandatoryParameter) {}
+  void fnFloor                    (uint16_t unusedButMandatoryParameter) {}
+  void fnClearFlag                (uint16_t unusedButMandatoryParameter) {}
+  void fnFlipFlag                 (uint16_t unusedButMandatoryParameter) {}
+  void fnSetFlag                  (uint16_t unusedButMandatoryParameter) {}
+  void fnClAll                    (uint16_t unusedButMandatoryParameter) {}
+  void fnClX                      (uint16_t unusedButMandatoryParameter) {}
+  void fnClFAll                   (uint16_t unusedButMandatoryParameter) {}
+  void fnClPAll                   (uint16_t unusedButMandatoryParameter) {}
+  void fnClSigma                  (uint16_t unusedButMandatoryParameter) {}
+  void fnClearStack               (uint16_t unusedButMandatoryParameter) {}
+  void fnClearRegisters           (uint16_t unusedButMandatoryParameter) {}
+  void fnTimeFormat               (uint16_t unusedButMandatoryParameter) {}
+  void fnSetDateFormat            (uint16_t unusedButMandatoryParameter) {}
+  void fnComplexUnit              (uint16_t unusedButMandatoryParameter) {}
+  void fnComplexMode              (uint16_t unusedButMandatoryParameter) {}
+  void fnComplexResult            (uint16_t unusedButMandatoryParameter) {}
+  void fnConjugate                (uint16_t unusedButMandatoryParameter) {}
+  void fnAngularMode              (uint16_t unusedButMandatoryParameter) {}
+  void fnDenMode                  (uint16_t unusedButMandatoryParameter) {}
+  void fnDenMax                   (uint16_t unusedButMandatoryParameter) {}
+  void fnExp                      (uint16_t unusedButMandatoryParameter) {}
+  void fnExpM1                    (uint16_t unusedButMandatoryParameter) {}
+  void fnExpt                     (uint16_t unusedButMandatoryParameter) {}
+  void fnMant                     (uint16_t unusedButMandatoryParameter) {}
+  void fnCxToRe                   (uint16_t unusedButMandatoryParameter) {}
+  void fnReToCx                   (uint16_t unusedButMandatoryParameter) {}
+  void fnFillStack                (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagClear              (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagClearClear         (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagClearFlip          (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagClearSet           (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagSet                (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagSetClear           (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagSetFlip            (uint16_t unusedButMandatoryParameter) {}
+  void fnIsFlagSetSet             (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyEnter                 (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyExit                  (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyUp                    (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyDown                  (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyDotD                  (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyCC                    (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyBackspace             (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayStack             (uint16_t unusedButMandatoryParameter) {}
+  void fnFreeFlashMemory          (uint16_t unusedButMandatoryParameter) {}
+  void fnFreeMemory               (uint16_t unusedButMandatoryParameter) {}
+  void fnFp                       (uint16_t unusedButMandatoryParameter) {}
+  void fnIp                       (uint16_t unusedButMandatoryParameter) {}
+  void allocateLocalRegisters     (uint16_t unusedButMandatoryParameter) {}
+  void fnLeadingZeros             (uint16_t unusedButMandatoryParameter) {}
+  void fnNeighb                   (uint16_t unusedButMandatoryParameter) {}
+  void fnGcd                      (uint16_t unusedButMandatoryParameter) {}
+  void fnMin                      (uint16_t unusedButMandatoryParameter) {}
+  void fnMax                      (uint16_t unusedButMandatoryParameter) {}
+  void fnStatSum                  (uint16_t unusedButMandatoryParameter) {}
+  void fnIsPrime                  (uint16_t unusedButMandatoryParameter) {}
+  void fnRandom                   (uint16_t unusedButMandatoryParameter) {}
+  void fnRandomI                  (uint16_t unusedButMandatoryParameter) {}
+  void fnImaginaryPart            (uint16_t unusedButMandatoryParameter) {}
+  void fnRecall                   (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallConfig             (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallElement            (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallIJ                 (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallStack              (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallAdd                (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallSub                (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallMult               (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallDiv                (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallMin                (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallMax                (uint16_t unusedButMandatoryParameter) {}
+  void fnRadixMark                (uint16_t unusedButMandatoryParameter) {}
+  void fnReset                    (uint16_t unusedButMandatoryParameter) {}
+  void fnRealPart                 (uint16_t unusedButMandatoryParameter) {}
+  void fnRmd                      (uint16_t unusedButMandatoryParameter) {}
+  void fnRound                    (uint16_t unusedButMandatoryParameter) {}
+  void fnRoundi                   (uint16_t unusedButMandatoryParameter) {}
+  void fnRollDown                 (uint16_t unusedButMandatoryParameter) {}
+  void fnRollUp                   (uint16_t unusedButMandatoryParameter) {}
+  void fnSeed                     (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigChina              (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigEurope             (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigIndia              (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigJapan              (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigUk                 (uint16_t unusedButMandatoryParameter) {}
+  void fnConfigUsa                (uint16_t unusedButMandatoryParameter) {}
+  void fnLcm                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSign                     (uint16_t unusedButMandatoryParameter) {}
+  void fnSlvq                     (uint16_t unusedButMandatoryParameter) {}
+  void fnGetIntegerSignMode       (uint16_t unusedButMandatoryParameter) {}
+  void fnLog2                     (uint16_t unusedButMandatoryParameter) {}
+  void fnLog10                    (uint16_t unusedButMandatoryParameter) {}
+  void fnLn                       (uint16_t unusedButMandatoryParameter) {}
+  void fnLogXY                    (uint16_t unusedButMandatoryParameter) {}
+  void fnLnP1                     (uint16_t unusedButMandatoryParameter) {}
+  void fnLnGamma                  (uint16_t unusedButMandatoryParameter) {}
+  void fnLnBeta                   (uint16_t unusedButMandatoryParameter) {}
+  void fnBeta                     (uint16_t unusedButMandatoryParameter) {}
+  void fnGamma                    (uint16_t unusedButMandatoryParameter) {}
+  void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
+  void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
+  void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
+  void fnMod                      (uint16_t unusedButMandatoryParameter) {}
+  void fnPower                    (uint16_t unusedButMandatoryParameter) {}
+  void fnPi                       (uint16_t unusedButMandatoryParameter) {}
+  void fnUserMode                 (uint16_t unusedButMandatoryParameter) {}
+  void fnParallel                 (uint16_t unusedButMandatoryParameter) {}
+  void fnSquareRoot               (uint16_t unusedButMandatoryParameter) {}
+  void fnSubtract                 (uint16_t unusedButMandatoryParameter) {}
+  void fnChangeSign               (uint16_t unusedButMandatoryParameter) {}
+  void fnM1Pow                    (uint16_t unusedButMandatoryParameter) {}
+  void backToSystem               (uint16_t unusedButMandatoryParameter) {}
+  void fnMultiply                 (uint16_t unusedButMandatoryParameter) {}
+  void fnChangeBase               (uint16_t unusedButMandatoryParameter) {}
+  void fnToPolar                  (uint16_t unusedButMandatoryParameter) {}
+  void fnToRect                   (uint16_t unusedButMandatoryParameter) {}
+  void fnDivide                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAdd                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSigma                    (uint16_t unusedButMandatoryParameter) {}
+  void fnXLessThan                (uint16_t unusedButMandatoryParameter) {}
+  void fnGetLocR                  (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapRealImaginary        (uint16_t unusedButMandatoryParameter) {}
+  void fnGetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
+  void fnSetWordSize              (uint16_t unusedButMandatoryParameter) {}
+  void fnGetWordSize              (uint16_t unusedButMandatoryParameter) {}
+  void fnGetStackSize             (uint16_t unusedButMandatoryParameter) {}
+  void fnStackSize                (uint16_t unusedButMandatoryParameter) {}
+  void fnStore                    (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreConfig              (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreElement             (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreIJ                  (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreStack               (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreAdd                 (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreSub                 (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreMult                (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreDiv                 (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreMax                 (uint16_t unusedButMandatoryParameter) {}
+  void fnStoreMin                 (uint16_t unusedButMandatoryParameter) {}
+  void fnUlp                      (uint16_t unusedButMandatoryParameter) {}
+  void fnUnitVector               (uint16_t unusedButMandatoryParameter) {}
+  void fnVersion                  (uint16_t unusedButMandatoryParameter) {}
+  void fnSquare                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCube                     (uint16_t unusedButMandatoryParameter) {}
+  void fnFactorial                (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapX                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapY                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapZ                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapT                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSwapXY                   (uint16_t unusedButMandatoryParameter) {}
+  void fnShuffle                  (uint16_t unusedButMandatoryParameter) {}
+  void fnWho                      (uint16_t unusedButMandatoryParameter) {}
+  void fnGetSignificantDigits     (uint16_t unusedButMandatoryParameter) {}
+  void fnSdl                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSdr                      (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtToCurrentAngularMode  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAcreM2                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAcreusM2              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAtmPa                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAuM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtBarPa                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtBtuJ                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCalJ                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCwtKg                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFtM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtDegToRad              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtSfeetM                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFlozukM3              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFlozusM3              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtGalukM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtGalusM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtDbRatio               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtRatioDb               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtHpeW                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtHpmW                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtHpukW                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtInhgPa                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMmhgPa                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtInchM                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtWhJ                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLbKg                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtOzKg                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtStoneKg               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtShorttonKg            (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtTrozKg                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLbfN                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMiM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLyM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtTonKg                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtTorrPa                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtYardM                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtPcM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtPointM                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCToF                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFToC                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtNmiM                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtPsiPa                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtShortcwtKg            (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLbfftNm               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtRadToDeg              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFromCurrentAngularMode(uint16_t unusedButMandatoryParameter) {}
+  void fnCvtYearS                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCaratKg               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtQuartM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtDmsToDeg              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFathomM               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtBarrelM3              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtHectareM2             (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtDegToDms              (uint16_t unusedButMandatoryParameter) {}
+  void addItemToBuffer            (uint16_t unusedButMandatoryParameter) {}
+  void fnOff                      (uint16_t unusedButMandatoryParameter) {}
+  void fnAim                      (uint16_t unusedButMandatoryParameter) {}
+  void fnShow                     (uint16_t unusedButMandatoryParameter) {}
+  void fnLastX                    (uint16_t unusedButMandatoryParameter) {}
+  void fnCyx                      (uint16_t unusedButMandatoryParameter) {}
+  void fnPyx                      (uint16_t unusedButMandatoryParameter) {}
+  void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
+  void fnDec                      (uint16_t unusedButMandatoryParameter) {}
+  void fnInc                      (uint16_t unusedButMandatoryParameter) {}
+  void fncountBits                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNand              (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalOr                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNor               (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalXor               (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalXnor              (uint16_t unusedButMandatoryParameter) {}
+  void fnDecomp                   (uint16_t unusedButMandatoryParameter) {}
+  void fnSumXY                    (uint16_t unusedButMandatoryParameter) {}
+  void fnMeanXY                   (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricMeanXY          (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedMeanX            (uint16_t unusedButMandatoryParameter) {}
+  void fnHarmonicMeanXY           (uint16_t unusedButMandatoryParameter) {}
+  void fnRMSMeanXY                (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedSampleStdDev     (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedPopulationStdDev (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedStandardError    (uint16_t unusedButMandatoryParameter) {}
+  void fnSampleStdDev             (uint16_t unusedButMandatoryParameter) {}
+  void fnPopulationStdDev         (uint16_t unusedButMandatoryParameter) {}
+  void fnStandardError            (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricSampleStdDev    (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricStandardError   (uint16_t unusedButMandatoryParameter) {}
+  void fnMaskl                    (uint16_t unusedButMandatoryParameter) {}
+  void fnMaskr                    (uint16_t unusedButMandatoryParameter) {}
+  void fnAsr                      (uint16_t unusedButMandatoryParameter) {}
+  void fnCb                       (uint16_t unusedButMandatoryParameter) {}
+  void fnSb                       (uint16_t unusedButMandatoryParameter) {}
+  void fnFb                       (uint16_t unusedButMandatoryParameter) {}
+  void fnBs                       (uint16_t unusedButMandatoryParameter) {}
+  void fnBc                       (uint16_t unusedButMandatoryParameter) {}
+  void fnSl                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRl                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRlc                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSr                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRr                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRrc                      (uint16_t unusedButMandatoryParameter) {}
+  void fnLj                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRj                       (uint16_t unusedButMandatoryParameter) {}
+  void fnCountBits                (uint16_t unusedButMandatoryParameter) {}
+  void fnNextPrime                (uint16_t unusedButMandatoryParameter) {}
+  void fnScreenDump               (uint16_t unusedButMandatoryParameter) {}
+  void fnArg                      (uint16_t unusedButMandatoryParameter) {}
+  void fnRange                    (uint16_t unusedButMandatoryParameter) {}
+  void fnGetRange                 (uint16_t unusedButMandatoryParameter) {}
+  void fnDot                      (uint16_t unusedButMandatoryParameter) {}
+  void fnCross                    (uint16_t unusedButMandatoryParameter) {}
+  void fnPercent                  (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentMRR               (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentT                 (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentSigma             (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentPlusMG            (uint16_t unusedButMandatoryParameter) {}
+  void fnDeltaPercent             (uint16_t unusedButMandatoryParameter) {}
+  void fnXthRoot                  (uint16_t unusedButMandatoryParameter) {}
+  void fnGetSystemFlag            (uint16_t unusedButMandatoryParameter) {}
+  void fnFractionType             (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaLeng                (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaSR                  (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaSL                  (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaRR                  (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaRL                  (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaPos                 (uint16_t unusedButMandatoryParameter) {}
+  void fnXToAlpha                 (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaToX                 (uint16_t unusedButMandatoryParameter) {}
+  void fnTicks                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSave                     (uint16_t unusedButMandatoryParameter) {}
+  void fnLoad                     (uint16_t unusedButMandatoryParameter) {}
+  void fnUndo                     (uint16_t unusedButMandatoryParameter) {}
+  void fnXmax                     (uint16_t unusedButMandatoryParameter) {}
+  void fnXmin                     (uint16_t unusedButMandatoryParameter) {}
+  void fnFib                      (uint16_t unusedButMandatoryParameter) {}
+  void fnGd                       (uint16_t unusedButMandatoryParameter) {}
+  void fnInvGd                    (uint16_t unusedButMandatoryParameter) {}
+  void fnClP                      (uint16_t unusedButMandatoryParameter) {}
+  void fnPem                      (uint16_t unusedButMandatoryParameter) {}
+  void fnGoto                     (uint16_t unusedButMandatoryParameter) {}
+  void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
+#endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
 

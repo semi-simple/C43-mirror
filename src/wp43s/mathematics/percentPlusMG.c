@@ -53,7 +53,7 @@ static void dataTypeError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot use %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnPercentPlusMG:", errorMessage, NULL, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //=============================================================================
@@ -92,7 +92,7 @@ static bool_t percentPlusMGReal(real_t *xReal, real_t *yReal, real_t *rReal, rea
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnPercentPlusMG:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
     }
   }
@@ -105,7 +105,7 @@ static bool_t percentPlusMGReal(real_t *xReal, real_t *yReal, real_t *rReal, rea
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnPercenPlusMG:", "cannot divide a real by 0", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
     }
   }

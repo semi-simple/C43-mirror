@@ -988,7 +988,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU || tmp1 == -MNU_T_EDIT) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) { //JM
         if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}    //JM
         calcModeNormal();
-        popSoftmenu();
 
         if(aimBuffer[0] == 0) {
           undo();
@@ -1008,7 +1007,10 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         if(softmenuStackPointer == 0) {
           softmenuStackPointerBeforeAIM = 0;
-          if(!SH_BASE_AHOME) showSoftmenu(NULL, -MNU_MyAlpha, false); else showSoftmenu(NULL, -MNU_ALPHA, false);
+          if(!SH_BASE_AHOME)
+            //showSoftmenu(NULL, -MNU_MyAlpha, false);
+          else
+            showSoftmenu(NULL, -MNU_ALPHA, false);
         }
         else {
           if(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) fnKeyExit(0);                       //Try again after exiting a menu. continue until stack empty
@@ -1057,6 +1059,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
     case CM_ASM_OVER_AIM:
       calcModeAim(NOPARAM);
+      break;
+
+    case CM_ASM_OVER_PEM: // TODO: is that correct
+      calcModeNormal();
+      calcMode = CM_PEM;
       break;
 
     case CM_REGISTER_BROWSER:

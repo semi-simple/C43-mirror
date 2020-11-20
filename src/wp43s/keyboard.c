@@ -1007,10 +1007,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         if(softmenuStackPointer == 0) {
           softmenuStackPointerBeforeAIM = 0;
-          if(!SH_BASE_AHOME)
+          if(!SH_BASE_AHOME) {
             //showSoftmenu(NULL, -MNU_MyAlpha, false);
-          else
+          } else {
             showSoftmenu(NULL, -MNU_ALPHA, false);
+          }
         }
         else {
           if(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) fnKeyExit(0);                       //Try again after exiting a menu. continue until stack empty
@@ -1287,7 +1288,7 @@ static void menuUp(void) {
 }
 
 
-void menuUp_org(void) {
+static void menuUp_org(void) {
 
       if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
         int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
@@ -1328,6 +1329,7 @@ void menuUp_org(void) {
           setCatalogLastPos();
         }
 
+      }
 }
 
 /********************************************//**
@@ -1501,6 +1503,7 @@ void menuDown_org(void) {
 
           setCatalogLastPos();
         }
+      }
 }
 
 

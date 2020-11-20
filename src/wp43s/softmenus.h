@@ -18,7 +18,7 @@
  * \file softmenu.h
  ***********************************************/
 
-void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
+void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) ;     //dr
 void showSoftmenuCurrentPart(void);
 void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
 void initSoftmenuStack      (int16_t softmenu);

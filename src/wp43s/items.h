@@ -577,16 +577,16 @@
 #define ITM_REG_B                      535
 #define ITM_REG_C                      536
 #define ITM_REG_D                      537
-#define CHR_0                          538
-#define CHR_1                          539
-#define CHR_2                          540
-#define CHR_3                          541
-#define CHR_4                          542
-#define CHR_5                          543
-#define CHR_6                          544
-#define CHR_7                          545
-#define CHR_8                          546
-#define CHR_9                          547
+#define ITM_0                          538
+#define ITM_1                          539
+#define ITM_2                          540
+#define ITM_3                          541
+#define ITM_4                          542
+#define ITM_5                          543
+#define ITM_6                          544
+#define ITM_7                          545
+#define ITM_8                          546
+#define ITM_9                          547
 #define CHR_A                          548
 #define CHR_B                          549
 #define CHR_C                          550
@@ -985,7 +985,7 @@
 #define CHR_SPACE                      943
 #define CHR_EXCLAMATION_MARK           944
 #define CHR_DOUBLE_QUOTE               945
-#define CHR_NUMBER_SIGN                946
+#define ITM_NUMBER_SIGN                946
 #define CHR_DOLLAR                     947
 #define CHR_PERCENT                    948
 #define CHR_AMPERSAND                  949
@@ -994,11 +994,11 @@
 #define CHR_RIGHT_PARENTHESIS          952
 #define CHR_ASTERISK                   953
 #define ITM_0954                       954
-#define CHR_PLUS                       955
+#define ITM_PLUS                       955
 #define CHR_COMMA                      956
-#define CHR_MINUS                      957
-#define CHR_PERIOD                     958
-#define CHR_SLASH                      959
+#define ITM_MINUS                      957
+#define ITM_PERIOD                     958
+#define ITM_SLASH                      959
 #define CHR_COLON                      960
 #define CHR_SEMICOLON                  961
 #define CHR_LESS_THAN                  962
@@ -1024,16 +1024,16 @@
 #define CHR_LEFT_DOUBLE_ANGLE          982
 #define CHR_NOT                        983
 #define CHR_DEGREE                     984
-#define CHR_PLUS_MINUS                 985
+#define ITM_PLUS_MINUS                 985
 #define CHR_mu_b                       986
-#define CHR_DOT                        987
+#define ITM_DOT                        987
 #define CHR_ORDINAL                    988
 #define CHR_RIGHT_DOUBLE_ANGLE         989
 #define CHR_ONE_HALF                   990
 #define CHR_ONE_QUARTER                991
 #define CHR_INVERTED_QUESTION_MARK     992
 #define CHR_ETH                        993
-#define CHR_CROSS                      994
+#define ITM_CROSS                      994
 #define CHR_eth                        995
 #define CHR_DIVIDE                     996
 #define CHR_E_DOT                      997
@@ -1125,7 +1125,7 @@
 #define CHR_CONTOUR_INTEGRAL          1083
 #define CHR_SURFACE_INTEGRAL          1084
 #define CHR_RATIO                     1085
-#define CHR_CHECK_MARK                1086
+#define ITM_CHECK_MARK                1086
 #define CHR_ASYMPOTICALLY_EQUAL       1087
 #define CHR_ALMOST_EQUAL              1088
 #define CHR_COLON_EQUALS              1089
@@ -1165,7 +1165,7 @@
 #define CHR_UK                        1123
 #define CHR_US                        1124
 #define CHR_NEG_EXCLAMATION_MARK      1125
-#define CHR_ex                        1126
+#define ITM_ex                        1126
 #define ITM_Max                       1127
 #define ITM_Min                       1128
 #define ITM_Config                    1129
@@ -1227,18 +1227,18 @@
 #define ITM_REGS                      1182
 #define ITM_ULIM                      1183
 #define ITM_DLIM                      1184
-#define CHR_1185                      1185
-#define CHR_1186                      1186
-#define CHR_1187                      1187
-#define CHR_1188                      1188
-#define CHR_1189                      1189
-#define CHR_1190                      1190
-#define CHR_1191                      1191
-#define CHR_1192                      1192
-#define CHR_1193                      1193
-#define CHR_1194                      1194
-#define CHR_1195                      1195
-#define CHR_1196                      1196
+#define ITM_1185                      1185
+#define ITM_1186                      1186
+#define ITM_1187                      1187
+#define ITM_1188                      1188
+#define ITM_1189                      1189
+#define ITM_1190                      1190
+#define ITM_1191                      1191
+#define ITM_1192                      1192
+#define ITM_1193                      1193
+#define ITM_1194                      1194
+#define ITM_1195                      1195
+#define ITM_1196                      1196
 
 
 // Probability distributions
@@ -1312,26 +1312,26 @@
 #define ITM_chi2x                     1264
 #define ITM_chi2ux                    1265
 #define ITM_chi2M1                    1266
-#define CHR_1267                      1267
-#define CHR_1268                      1268
-#define CHR_1269                      1269
-#define CHR_1270                      1270
-#define CHR_1271                      1271
-#define CHR_1272                      1272
-#define CHR_1273                      1273
-#define CHR_1274                      1274
-#define CHR_1275                      1275
-#define CHR_1276                      1276
-#define CHR_1277                      1277
-#define CHR_1278                      1278
-#define CHR_1279                      1279
-#define CHR_1280                      1280
-#define CHR_1281                      1281
-#define CHR_1282                      1282
-#define CHR_1283                      1283
-#define CHR_1284                      1284
-#define CHR_1285                      1285
-#define CHR_1286                      1286
+#define ITM_1267                      1267
+#define ITM_1268                      1268
+#define ITM_1269                      1269
+#define ITM_1270                      1270
+#define ITM_1271                      1271
+#define ITM_1272                      1272
+#define ITM_1273                      1273
+#define ITM_1274                      1274
+#define ITM_1275                      1275
+#define ITM_1276                      1276
+#define ITM_1277                      1277
+#define ITM_1278                      1278
+#define ITM_1279                      1279
+#define ITM_1280                      1280
+#define ITM_1281                      1281
+#define ITM_1282                      1282
+#define ITM_1283                      1283
+#define ITM_1284                      1284
+#define ITM_1285                      1285
+#define ITM_1286                      1286
 
 
 // Curve fitting
@@ -1346,11 +1346,11 @@
 #define ITM_PARABF                    1295
 #define ITM_HYPF                      1296
 #define ITM_ROOTF                     1297
-#define CHR_1298                      1298
-#define CHR_1299                      1299
-#define CHR_1300                      1300
-#define CHR_1301                      1301
-#define CHR_1302                      1302
+#define ITM_1298                      1298
+#define ITM_1299                      1299
+#define ITM_1300                      1300
+#define ITM_1301                      1301
+#define ITM_1302                      1302
 
 
 // Menus
@@ -1437,14 +1437,14 @@
 #define MNU_TAMSHUFFLE                1383
 #define MNU_PROG                      1384
 #define MNU_TAMLABEL                  1385
-#define CHR_1386                      1386
-#define CHR_1387                      1387
-#define CHR_1388                      1388
-#define CHR_1389                      1389
-#define CHR_1390                      1390
-#define CHR_1391                      1391
-#define CHR_1392                      1392
-#define CHR_1393                      1393
+#define ITM_1386                      1386
+#define ITM_1387                      1387
+#define ITM_1388                      1388
+#define ITM_1389                      1389
+#define ITM_1390                      1390
+#define ITM_1391                      1391
+#define ITM_1392                      1392
+#define ITM_1393                      1393
 
 
 #define ITM_1COMPL                    1394
@@ -1479,7 +1479,7 @@
 #define ITM_CORR                      1423
 #define ITM_COV                       1424
 #define ITM_BESTFQ                    1425
-#define ITM_CROSS                     1426
+#define ITM_CROSS_PROD                1426
 #define ITM_CXtoRE                    1427
 #define ITM_DATE                      1428
 #define ITM_DATEto                    1429
@@ -1492,7 +1492,7 @@
 #define ITM_DEGto                     1436
 #define ITM_SA                        1437
 #define ITM_DENMAX                    1438
-#define ITM_DOT                       1439
+#define ITM_DOT_PROD                  1439
 #define ITM_DSTACK                    1440
 #define ITM_DMS                       1441
 #define ITM_DMSto                     1442
@@ -1737,7 +1737,7 @@
 #define ITM_toREAL                    1681
 #define ITM_toREC                     1682
 #define ITM_DtoDMS                    1683
-#define ITM_ex                        1684
+#define ITM_SHUFFLE                   1684
 #define ITM_PC                        1685
 #define ITM_PCMRR                     1686
 #define ITM_PCT                       1687
@@ -1807,7 +1807,7 @@
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL
 #define NOT_CONFIRMED                 9878 // Confirmation for RESET, CLPALL, CLALL
-#define CHR_PROD_SIGN                 9999 // Multiplication sign × or ·
+#define ITM_PROD_SIGN                 9999 // Multiplication sign × or ·
 
 void reallyRunFunction(int16_t func, uint16_t param);
 void runFunction      (int16_t func);

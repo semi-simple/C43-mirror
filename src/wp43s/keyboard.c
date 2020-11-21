@@ -46,8 +46,8 @@
           item %= 10000;
         }
 
-        if(item == CHR_PROD_SIGN) {
-          item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
+        if(item == ITM_PROD_SIGN) {
+          item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
         }
       }
     }
@@ -192,7 +192,7 @@
                 showSoftmenu(NULL, item, true);
               }
             }
-            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=CHR_F)) {
               addItemToNimBuffer(item);
             }
             else if(calcMode == CM_TAM) {
@@ -264,8 +264,8 @@
       result = 0;
     }
 
-    if(result == CHR_PROD_SIGN) {
-      result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
+    if(result == ITM_PROD_SIGN) {
+      result = (getSystemFlag(FLAG_MULTx) ? ITM_CROSS : ITM_DOT);
     }
 
     shiftF = false;
@@ -450,7 +450,7 @@
       default:
         switch(calcMode) {
           case CM_NORMAL:
-            if(item == ITM_EXPONENT || item==CHR_PERIOD || (CHR_0<=item && item<=CHR_9)) {
+            if(item == ITM_EXPONENT || item==ITM_PERIOD || (ITM_0<=item && item<=ITM_9)) {
               addItemToNimBuffer(item);
               keyActionProcessed = true;
             }
@@ -514,7 +514,7 @@
             break;
 
           case CM_REGISTER_BROWSER:
-            if(item == CHR_PERIOD) {
+            if(item == ITM_PERIOD) {
               rbr1stDigit = true;
               if(rbrMode == RBR_GLOBAL) {
                 if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
@@ -555,14 +555,14 @@
               else if(rbrMode == RBR_NAMED) {
               }
             }
-            else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+            else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
               if(rbr1stDigit) {
                 rbr1stDigit = false;
-                rbrRegister = item - CHR_0;
+                rbrRegister = item - ITM_0;
               }
               else {
                 rbr1stDigit = true;
-                rbrRegister = rbrRegister*10 + item - CHR_0;
+                rbrRegister = rbrRegister*10 + item - ITM_0;
 
                 if(rbrMode == RBR_GLOBAL) {
                   currentRegisterBrowserScreen = rbrRegister;
@@ -585,13 +585,13 @@
             break;
 
           case CM_CONFIRMATION:
-            if(item == CHR_3 || item == ITM_XEQ) { // Yes or XEQ
+            if(item == ITM_3 || item == ITM_XEQ) { // Yes or XEQ
               calcMode = previousCalcMode;
               temporaryInformation = TI_NO_INFO;
               confirmedFunction(CONFIRMED);
             }
 
-            else if(item == CHR_7) { // No
+            else if(item == ITM_7) { // No
               calcMode = previousCalcMode;
               temporaryInformation = TI_NO_INFO;
             }

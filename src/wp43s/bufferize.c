@@ -45,18 +45,18 @@
         case CHR_t        : return CHR_SUB_t;
         case CHR_INFINITY : return CHR_SUB_INFINITY;
         case CHR_s        : return CHR_SUB_s;
-        case CHR_PLUS     : return CHR_SUB_PLUS;
-        case CHR_MINUS    : return CHR_SUB_MINUS;
-        case CHR_0        : return CHR_SUB_0;
-        case CHR_1        : return CHR_SUB_1;
-        case CHR_2        : return CHR_SUB_2;
-        case CHR_3        : return CHR_SUB_3;
-        case CHR_4        : return CHR_SUB_4;
-        case CHR_5        : return CHR_SUB_5;
-        case CHR_6        : return CHR_SUB_6;
-        case CHR_7        : return CHR_SUB_7;
-        case CHR_8        : return CHR_SUB_8;
-        case CHR_9        : return CHR_SUB_9;
+        case ITM_PLUS     : return CHR_SUB_PLUS;
+        case ITM_MINUS    : return CHR_SUB_MINUS;
+        case ITM_0        : return CHR_SUB_0;
+        case ITM_1        : return CHR_SUB_1;
+        case ITM_2        : return CHR_SUB_2;
+        case ITM_3        : return CHR_SUB_3;
+        case ITM_4        : return CHR_SUB_4;
+        case ITM_5        : return CHR_SUB_5;
+        case ITM_6        : return CHR_SUB_6;
+        case ITM_7        : return CHR_SUB_7;
+        case ITM_8        : return CHR_SUB_8;
+        case ITM_9        : return CHR_SUB_9;
         case CHR_a        : return CHR_SUB_a;
         case CHR_b        : return CHR_SUB_b;
         case CHR_c        : return CHR_SUB_c;
@@ -111,18 +111,18 @@
         case CHR_a        : return CHR_SUP_a;
         case CHR_x        : return CHR_SUP_x;
         case CHR_INFINITY : return CHR_SUP_INFINITY;
-        case CHR_PLUS     : return CHR_SUP_PLUS;
-        case CHR_MINUS    : return CHR_SUP_MINUS;
-        case CHR_0        : return CHR_SUP_0;
-        case CHR_1        : return CHR_SUP_1;
-        case CHR_2        : return CHR_SUP_2;
-        case CHR_3        : return CHR_SUP_3;
-        case CHR_4        : return CHR_SUP_4;
-        case CHR_5        : return CHR_SUP_5;
-        case CHR_6        : return CHR_SUP_6;
-        case CHR_7        : return CHR_SUP_7;
-        case CHR_8        : return CHR_SUP_8;
-        case CHR_9        : return CHR_SUP_9;
+        case ITM_PLUS     : return CHR_SUP_PLUS;
+        case ITM_MINUS    : return CHR_SUP_MINUS;
+        case ITM_0        : return CHR_SUP_0;
+        case ITM_1        : return CHR_SUP_1;
+        case ITM_2        : return CHR_SUP_2;
+        case ITM_3        : return CHR_SUP_3;
+        case ITM_4        : return CHR_SUP_4;
+        case ITM_5        : return CHR_SUP_5;
+        case ITM_6        : return CHR_SUP_6;
+        case ITM_7        : return CHR_SUP_7;
+        case ITM_8        : return CHR_SUP_8;
+        case ITM_9        : return CHR_SUP_9;
         case CHR_f        : return CHR_SUP_f;
         case CHR_g        : return CHR_SUP_g;
         case CHR_h        : return CHR_SUP_h;
@@ -225,17 +225,26 @@
         /*else if(namedVariable) {
           tamTransitionSystem(TT_VARIABLE);
         }*/
-        else if(CHR_0 <= item && item <= CHR_9) { // Digits from 0 to 9
-          tamDigit = item - CHR_0;
+        else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
+          tamDigit = item - ITM_0;
           tamTransitionSystem(TT_DIGIT);
         }
         else if(item == ITM_ENTER) {
           tamTransitionSystem(TT_ENTER);
         }
-        else if(item == CHR_PERIOD) { // --> .
-          tamTransitionSystem(TT_DOT);
+        else if(item == ITM_PERIOD) { // .
+          if(tamFunction == ITM_GTO && transitionSystemState == 0) {
+            tamFunction = ITM_GTOP;
+            tamNumberMin = 0;
+            tamNumberMax = programList[numberOfPrograms - 1].step - 2;
+            strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
+            strcat(tamBuffer, " _");
+          }
+          else {
+            tamTransitionSystem(TT_DOT);
+          }
         }
-        else if(item == ITM_INDIRECTION) { // --> Indirection
+        else if(item == ITM_INDIRECTION) { // Indirection
           tamTransitionSystem(TT_INDIRECT);
         }
         else if(item == ITM_BACKSPACE) {
@@ -317,7 +326,7 @@
           lastIntegerBase = 0;
           break;
 
-        case CHR_PERIOD :
+        case ITM_PERIOD :
           calcModeNim(NOPARAM);
           aimBuffer[0] = '+';
           aimBuffer[1] = '0';
@@ -325,16 +334,16 @@
           nimNumberPart = NP_INT_10;
           break;
 
-        case CHR_0 :
-        case CHR_1 :
-        case CHR_2 :
-        case CHR_3 :
-        case CHR_4 :
-        case CHR_5 :
-        case CHR_6 :
-        case CHR_7 :
-        case CHR_8 :
-        case CHR_9 :
+        case ITM_0 :
+        case ITM_1 :
+        case ITM_2 :
+        case ITM_3 :
+        case ITM_4 :
+        case ITM_5 :
+        case ITM_6 :
+        case ITM_7 :
+        case ITM_8 :
+        case ITM_9 :
         case CHR_A :
         case CHR_B :
         case CHR_C :
@@ -359,21 +368,21 @@
     done = false;
 
     switch(item) {
-      case CHR_0 :
-      case CHR_1 :
-      case CHR_2 :
-      case CHR_3 :
-      case CHR_4 :
-      case CHR_5 :
-      case CHR_6 :
-      case CHR_7 :
-      case CHR_8 :
-      case CHR_9 :
+      case ITM_0 :
+      case ITM_1 :
+      case ITM_2 :
+      case ITM_3 :
+      case ITM_4 :
+      case ITM_5 :
+      case ITM_6 :
+      case ITM_7 :
+      case ITM_8 :
+      case ITM_9 :
         done = true;
 
         switch(nimNumberPart) {
           case NP_INT_10 :
-            if(item == CHR_0) {
+            if(item == ITM_0) {
               if(aimBuffer[1] != '0') {
                 strcat(aimBuffer, "0");
               }
@@ -388,7 +397,7 @@
             break;
 
           case NP_REAL_EXPONENT :
-            if(item == CHR_0) {
+            if(item == ITM_0) {
               if(aimBuffer[exponentSignLocation + 1] == '0') {
                 aimBuffer[strlen(aimBuffer) - 1] = 0;
               }
@@ -415,7 +424,7 @@
             break;
 
           case NP_FRACTION_DENOMINATOR :
-            if(item == CHR_0) {
+            if(item == ITM_0) {
               strcat(aimBuffer, "0");
 
               if(aimBuffer[denominatorLocation] == '0') {
@@ -436,7 +445,7 @@
             break;
 
           case NP_COMPLEX_INT_PART :
-            if(item == CHR_0) {
+            if(item == ITM_0) {
               if(aimBuffer[imaginaryMantissaSignLocation + 2] != '0') {
                 strcat(aimBuffer, "0");
               }
@@ -451,7 +460,7 @@
             break;
 
           case NP_COMPLEX_EXPONENT :
-            if(item == CHR_0) {
+            if(item == ITM_0) {
               if(aimBuffer[imaginaryExponentSignLocation + 1] == '0') {
                 aimBuffer[strlen(aimBuffer) - 1] = 0;
               }
@@ -508,7 +517,7 @@
         }
         break;
 
-      case CHR_PERIOD :
+      case ITM_PERIOD :
         done = true;
 
         if(aimBuffer[strlen(aimBuffer)-1] == 'i') {

@@ -457,7 +457,7 @@
         gtk_widget_set_name(button, "calcKeyG");
       }
       else {
-        if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == CHR_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
+        if((key->fShiftedAim == key->keyLblAim || key->fShiftedAim == ITM_PROD_SIGN) && key->keyLblAim != ITM_NULL) {
           gtk_widget_set_name(button, "calcKeyGoldenBorder");
         }
         else {

@@ -192,7 +192,7 @@
                 showSoftmenu(NULL, item, true);
               }
             }
-            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=CHR_F)) {
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
             else if(calcMode == CM_TAM) {
@@ -230,7 +230,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == ITM_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftF = !shiftF;
@@ -238,7 +238,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -462,22 +462,22 @@
             break;
 
           case CM_AIM:
-            if(alphaCase == AC_LOWER && (CHR_A <= item && item <= CHR_Z)) {
+            if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
               addItemToBuffer(item + 26);
               keyActionProcessed = true;
             }
 
-            else if(alphaCase == AC_LOWER && (CHR_ALPHA <= item && item <= CHR_OMEGA)) {
+            else if(alphaCase == AC_LOWER && (ITM_ALPHA <= item && item <= ITM_OMEGA)) {
               addItemToBuffer(item + 36);
               keyActionProcessed = true;
             }
 
-            else if(item == CHR_DOWN_ARROW) {
+            else if(item == ITM_DOWN_ARROW) {
               nextChar = NC_SUBSCRIPT;
               keyActionProcessed = true;
             }
 
-            else if(item == CHR_UP_ARROW) {
+            else if(item == ITM_UP_ARROW) {
               nextChar = NC_SUPERSCRIPT;
               keyActionProcessed = true;
             }
@@ -492,17 +492,17 @@
           case CM_ASM_OVER_TAM:
           case CM_ASM_OVER_AIM:
           case CM_ASM_OVER_PEM:
-            if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+            if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
               addItemToBuffer(item + 26);
               keyActionProcessed = true;
             }
 
-            else if(alphaCase==AC_LOWER && (CHR_ALPHA<=item && item<=CHR_OMEGA)) {
+            else if(alphaCase==AC_LOWER && (ITM_ALPHA<=item && item<=ITM_OMEGA)) {
               addItemToBuffer(item + 36);
               keyActionProcessed = true;
             }
 
-            else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+            else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
               addItemToBuffer(item);
               keyActionProcessed = true;
             }

@@ -303,7 +303,7 @@ uint8_t *findNextStep(uint8_t *step) {
     case ITM_NEIGHB:      // 106
     case ITM_NEXTP:       // 107
     case ITM_XFACT:       // 108
-    case ITM_pi:          // 109
+    case ITM_CONSTpi:     // 109
     case ITM_sincpi:      // 113
       return step;
 

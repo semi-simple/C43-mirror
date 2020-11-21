@@ -436,10 +436,10 @@
 
 
     void labelCaptionNormal(const calcKey_t *key, GtkWidget *button) {
-      if(key->primary == ITM_f) {
+      if(key->primary == ITM_SHIFTf) {
         gtk_widget_set_name(button, "calcKeyF");
       }
-      else if(key->primary == ITM_g) {
+      else if(key->primary == ITM_SHIFTg) {
         gtk_widget_set_name(button, "calcKeyG");
       }
       else {
@@ -450,10 +450,10 @@
 
 
     void labelCaptionAim(const calcKey_t *key, GtkWidget *button) {
-      if(key->keyLblAim == ITM_f) {
+      if(key->keyLblAim == ITM_SHIFTf) {
         gtk_widget_set_name(button, "calcKeyF");
       }
-      else if(key->keyLblAim == ITM_g) {
+      else if(key->keyLblAim == ITM_SHIFTg) {
         gtk_widget_set_name(button, "calcKeyG");
       }
       else {

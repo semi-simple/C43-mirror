@@ -37,97 +37,97 @@
 
     if(subOrSup == NC_SUBSCRIPT) {
       switch(item) {
-        case CHR_alpha    : return CHR_SUB_alpha;
-        case CHR_delta    : return CHR_SUB_delta;
-        case CHR_mu       : return CHR_SUB_mu;
-        case CHR_SUN      : return CHR_SUB_SUN;
-        case CHR_h        : return CHR_SUB_h;
-        case CHR_t        : return CHR_SUB_t;
-        case CHR_INFINITY : return CHR_SUB_INFINITY;
-        case CHR_s        : return CHR_SUB_s;
-        case ITM_PLUS     : return CHR_SUB_PLUS;
-        case ITM_MINUS    : return CHR_SUB_MINUS;
-        case ITM_0        : return CHR_SUB_0;
-        case ITM_1        : return CHR_SUB_1;
-        case ITM_2        : return CHR_SUB_2;
-        case ITM_3        : return CHR_SUB_3;
-        case ITM_4        : return CHR_SUB_4;
-        case ITM_5        : return CHR_SUB_5;
-        case ITM_6        : return CHR_SUB_6;
-        case ITM_7        : return CHR_SUB_7;
-        case ITM_8        : return CHR_SUB_8;
-        case ITM_9        : return CHR_SUB_9;
-        case CHR_a        : return CHR_SUB_a;
-        case CHR_b        : return CHR_SUB_b;
-        case CHR_c        : return CHR_SUB_c;
-        case CHR_d        : return CHR_SUB_d;
-        case CHR_e        : return CHR_SUB_e;
-        case CHR_i        : return CHR_SUB_i;
-        case CHR_j        : return CHR_SUB_j;
-        case CHR_k        : return CHR_SUB_k;
-        case CHR_l        : return CHR_SUB_l;
-        case CHR_m        : return CHR_SUB_m;
-        case CHR_n        : return CHR_SUB_n;
-        case CHR_o        : return CHR_SUB_o;
-        case CHR_p        : return CHR_SUB_p;
-        case CHR_q        : return CHR_SUB_q;
-        case CHR_u        : return CHR_SUB_u;
-        case CHR_v        : return CHR_SUB_v;
-        case CHR_w        : return CHR_SUB_w;
-        case CHR_x        : return CHR_SUB_x;
-        case CHR_y        : return CHR_SUB_y;
-        case CHR_z        : return CHR_SUB_z;
-        case CHR_A        : return CHR_SUB_A;
-        case CHR_B        : return CHR_SUB_B;
-        case CHR_C        : return CHR_SUB_C;
-        case CHR_D        : return CHR_SUB_D;
-        case CHR_E        : return CHR_SUB_E;
-        case CHR_F        : return CHR_SUB_F;
-        case CHR_G        : return CHR_SUB_G;
-        case CHR_H        : return CHR_SUB_H;
-        case CHR_I        : return CHR_SUB_I;
-        case CHR_J        : return CHR_SUB_J;
-        case CHR_K        : return CHR_SUB_K;
-        case CHR_L        : return CHR_SUB_L;
-        case CHR_M        : return CHR_SUB_M;
-        case CHR_N        : return CHR_SUB_N;
-        case CHR_O        : return CHR_SUB_O;
-        case CHR_P        : return CHR_SUB_P;
-        case CHR_Q        : return CHR_SUB_Q;
-        case CHR_R        : return CHR_SUB_R;
-        case CHR_S        : return CHR_SUB_S;
-        case CHR_T        : return CHR_SUB_T;
-        case CHR_U        : return CHR_SUB_U;
-        case CHR_V        : return CHR_SUB_V;
-        case CHR_W        : return CHR_SUB_W;
-        case CHR_X        : return CHR_SUB_X;
-        case CHR_Y        : return CHR_SUB_Y;
-        case CHR_Z        : return CHR_SUB_Z;
+        case ITM_alpha    : return ITM_SUB_alpha;
+        case ITM_delta    : return ITM_SUB_delta;
+        case ITM_mu       : return ITM_SUB_mu;
+        case ITM_SUN      : return ITM_SUB_SUN;
+        case ITM_h        : return ITM_SUB_h;
+        case ITM_t        : return ITM_SUB_t;
+        case ITM_INFINITY : return ITM_SUB_INFINITY;
+        case ITM_s        : return ITM_SUB_s;
+        case ITM_PLUS     : return ITM_SUB_PLUS;
+        case ITM_MINUS    : return ITM_SUB_MINUS;
+        case ITM_0        : return ITM_SUB_0;
+        case ITM_1        : return ITM_SUB_1;
+        case ITM_2        : return ITM_SUB_2;
+        case ITM_3        : return ITM_SUB_3;
+        case ITM_4        : return ITM_SUB_4;
+        case ITM_5        : return ITM_SUB_5;
+        case ITM_6        : return ITM_SUB_6;
+        case ITM_7        : return ITM_SUB_7;
+        case ITM_8        : return ITM_SUB_8;
+        case ITM_9        : return ITM_SUB_9;
+        case ITM_a        : return ITM_SUB_a;
+        case ITM_b        : return ITM_SUB_b;
+        case ITM_c        : return ITM_SUB_c;
+        case ITM_d        : return ITM_SUB_d;
+        case ITM_e        : return ITM_SUB_e;
+        case ITM_i        : return ITM_SUB_i;
+        case ITM_j        : return ITM_SUB_j;
+        case ITM_k        : return ITM_SUB_k;
+        case ITM_l        : return ITM_SUB_l;
+        case ITM_m        : return ITM_SUB_m;
+        case ITM_n        : return ITM_SUB_n;
+        case ITM_o        : return ITM_SUB_o;
+        case ITM_p        : return ITM_SUB_p;
+        case ITM_q        : return ITM_SUB_q;
+        case ITM_u        : return ITM_SUB_u;
+        case ITM_v        : return ITM_SUB_v;
+        case ITM_w        : return ITM_SUB_w;
+        case ITM_x        : return ITM_SUB_x;
+        case ITM_y        : return ITM_SUB_y;
+        case ITM_z        : return ITM_SUB_z;
+        case ITM_A        : return ITM_SUB_A;
+        case ITM_B        : return ITM_SUB_B;
+        case ITM_C        : return ITM_SUB_C;
+        case ITM_D        : return ITM_SUB_D;
+        case ITM_E        : return ITM_SUB_E;
+        case ITM_F        : return ITM_SUB_F;
+        case ITM_G        : return ITM_SUB_G;
+        case ITM_H        : return ITM_SUB_H;
+        case ITM_I        : return ITM_SUB_I;
+        case ITM_J        : return ITM_SUB_J;
+        case ITM_K        : return ITM_SUB_K;
+        case ITM_L        : return ITM_SUB_L;
+        case ITM_M        : return ITM_SUB_M;
+        case ITM_N        : return ITM_SUB_N;
+        case ITM_O        : return ITM_SUB_O;
+        case ITM_P        : return ITM_SUB_P;
+        case ITM_Q        : return ITM_SUB_Q;
+        case ITM_R        : return ITM_SUB_R;
+        case ITM_S        : return ITM_SUB_S;
+        case ITM_T        : return ITM_SUB_T;
+        case ITM_U        : return ITM_SUB_U;
+        case ITM_V        : return ITM_SUB_V;
+        case ITM_W        : return ITM_SUB_W;
+        case ITM_X        : return ITM_SUB_X;
+        case ITM_Y        : return ITM_SUB_Y;
+        case ITM_Z        : return ITM_SUB_Z;
         default           : return item;
       }
     }
     else if(subOrSup == NC_SUPERSCRIPT) {
       switch(item) {
-        case CHR_a        : return CHR_SUP_a;
-        case CHR_x        : return CHR_SUP_x;
-        case CHR_INFINITY : return CHR_SUP_INFINITY;
-        case ITM_PLUS     : return CHR_SUP_PLUS;
-        case ITM_MINUS    : return CHR_SUP_MINUS;
-        case ITM_0        : return CHR_SUP_0;
-        case ITM_1        : return CHR_SUP_1;
-        case ITM_2        : return CHR_SUP_2;
-        case ITM_3        : return CHR_SUP_3;
-        case ITM_4        : return CHR_SUP_4;
-        case ITM_5        : return CHR_SUP_5;
-        case ITM_6        : return CHR_SUP_6;
-        case ITM_7        : return CHR_SUP_7;
-        case ITM_8        : return CHR_SUP_8;
-        case ITM_9        : return CHR_SUP_9;
-        case CHR_f        : return CHR_SUP_f;
-        case CHR_g        : return CHR_SUP_g;
-        case CHR_h        : return CHR_SUP_h;
-        case CHR_r        : return CHR_SUP_r;
-        case CHR_T        : return CHR_SUP_T;
+        case ITM_a        : return ITM_SUP_a;
+        case ITM_x        : return ITM_SUP_x;
+        case ITM_INFINITY : return ITM_SUP_INFINITY;
+        case ITM_PLUS     : return ITM_SUP_PLUS;
+        case ITM_MINUS    : return ITM_SUP_MINUS;
+        case ITM_0        : return ITM_SUP_0;
+        case ITM_1        : return ITM_SUP_1;
+        case ITM_2        : return ITM_SUP_2;
+        case ITM_3        : return ITM_SUP_3;
+        case ITM_4        : return ITM_SUP_4;
+        case ITM_5        : return ITM_SUP_5;
+        case ITM_6        : return ITM_SUP_6;
+        case ITM_7        : return ITM_SUP_7;
+        case ITM_8        : return ITM_SUP_8;
+        case ITM_9        : return ITM_SUP_9;
+        case ITM_f        : return ITM_SUP_f;
+        case ITM_g        : return ITM_SUP_g;
+        case ITM_h        : return ITM_SUP_h;
+        case ITM_r        : return ITM_SUP_r;
+        case ITM_T        : return ITM_SUP_T;
         default           : return item;
       }
     }
@@ -250,7 +250,7 @@
         else if(item == ITM_BACKSPACE) {
           tamTransitionSystem(TT_BACKSPACE);
         }
-        else if(item == CHR_alpha) {
+        else if(item == ITM_alpha) {
           #ifdef PC_BUILD
             moreInfoOnError("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
           #endif // PC_BUILD
@@ -344,12 +344,12 @@
         case ITM_7 :
         case ITM_8 :
         case ITM_9 :
-        case CHR_A :
-        case CHR_B :
-        case CHR_C :
-        case CHR_D :
-        case CHR_E :
-        case CHR_F :
+        case ITM_A :
+        case ITM_B :
+        case ITM_C :
+        case ITM_D :
+        case ITM_E :
+        case ITM_F :
           calcModeNim(NOPARAM);
           aimBuffer[0] = '+';
           aimBuffer[1] = 0;
@@ -496,12 +496,12 @@
         }
         break;
 
-      case CHR_A :
-      case CHR_B :
-      case CHR_C :
-      case CHR_D :
-      case CHR_E :
-      case CHR_F :
+      case ITM_A :
+      case ITM_B :
+      case ITM_C :
+      case ITM_D :
+      case ITM_E :
+      case ITM_F :
         done = true;
 
         if(nimNumberPart == NP_EMPTY || nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
@@ -713,7 +713,7 @@
         }
         break;
 
-      case ITM_pi :
+      case ITM_CONSTpi :
         if(nimNumberPart == NP_COMPLEX_INT_PART && aimBuffer[strlen(aimBuffer) - 1] == 'i') {
           done = true;
           strcat(aimBuffer, "3.141592653589793238462643383279503");
@@ -1030,7 +1030,7 @@
     else {
       closeNim();
       if(calcMode != CM_NIM) {
-        if(item == ITM_pi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
+        if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);
         }
 

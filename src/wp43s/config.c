@@ -2631,7 +2631,7 @@ void addTestPrograms(void) {
 
     *(currentStep++) = ITM_SQUARE;
 
-    *(currentStep++) = ITM_pi;
+    *(currentStep++) = ITM_CONSTpi;
 
     // 550
     *(currentStep++) = ITM_MULT;
@@ -4699,7 +4699,7 @@ void addTestPrograms(void) {
 
     *(currentStep++) = ITM_XFACT;
 
-    *(currentStep++) = ITM_pi;
+    *(currentStep++) = ITM_CONSTpi;
 
     *(currentStep++) = ITM_CF;
     *(currentStep++) = 0;

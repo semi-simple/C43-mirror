@@ -461,17 +461,18 @@ void initVariableSoftmenu(int16_t menu) {
   free(variableSoftmenu[menu].menuContent);
 
   switch(-variableSoftmenu[menu].menuId) {
-    case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 27);
+    case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 20);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001FLASH\000not\000yet\000defined\000\000", 25);
+    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001FLASH\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
+    //case MNU_FLASH:
     case MNU_RAM:     numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);
@@ -511,64 +512,64 @@ void initVariableSoftmenu(int16_t menu) {
                       variableSoftmenu[menu].numItems = 6 * numberOfRows;
                       break;
 
-    case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 50);
+    case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 22);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000not\000yet\000defined\000\000", 23);
+    case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(19);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000to\000be\000coded\000\000", 19);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000not\000yet\000defined\000\000", 23);
+    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000to\000be\000coded\000\000", 20);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000not\000yet\000defined\000\000", 25);
+    case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000not\000yet\000defined\000\000", 27);
+    case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(23);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000to\000be\000coded\000\000", 23);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000not\000yet\000defined\000\000", 25);
+    case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000not\000yet\000defined\000\000", 25);
+    case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000not\000yet\000defined\000\000", 26);
+    case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000to\000be\000coded\000\000", 22);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000not\000yet\000defined\000\000", 25);
+    case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000not\000yet\000defined\000\000", 25);
+    case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000not\000yet\000defined\000\000", 25);
+    case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(25);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000not\000yet\000defined\000\000", 24);
+    case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000to\000be\000coded\000\000", 20);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 

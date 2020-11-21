@@ -4065,7 +4065,7 @@ void calcModeNormal(void) {
 
   #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeNormalGui();
-  #endif
+  #endif // PC_BUILD && (SCREEN_800X480 == 0)
 }
 
 

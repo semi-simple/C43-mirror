@@ -910,7 +910,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
 
 
 
-//JM To determine the menu number for a given menuId
+//JM To determine the menu number for a given menuId          //JMvv
 int16_t mm(int16_t id) {
   int16_t m;
   m = 0;
@@ -924,7 +924,7 @@ int16_t mm(int16_t id) {
     }
   }
   return m;
-}
+}                                                             //JM^^
 
 
 
@@ -1265,7 +1265,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     w = stringWidth(l, &standardFont, false, false);
   }
 
-//continue with trimmed labe
+//continue with trimmed label
   w = stringWidth(figlabel(l, showValue), &standardFont, false, false);                      //JM & dr vv
   if((showCb >= 0) || (w >= 50)) {
     compressWidth = 1;         //JM compressWidth
@@ -1359,7 +1359,7 @@ void showSoftmenuCurrentPart(void) {
 //      calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
 
       
-      int16_t x, y, menu, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+      int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
     bool_t dottedTopLine;
 
     //JMTOCHECK
@@ -1385,7 +1385,7 @@ void showSoftmenuCurrentPart(void) {
 
 
 
-    if(softmenu[m].numItems <= 18) {
+    if(numberOfItems <= 18) {
       dottedTopLine = false;
     }
     else {
@@ -1466,7 +1466,7 @@ void showSoftmenuCurrentPart(void) {
 
 
             if(item < 0) { // softmenu
-            menu = 0;
+            int16_t menu = 0;
             while(softmenu[menu].menuId != 0) {
               if(softmenu[menu].menuId == item) {
                 break;
@@ -1595,8 +1595,6 @@ void showSoftmenuCurrentPart(void) {
         for(xx=0; xx<=t; xx++) {
           lcd_fill_rect(xx,       (uint32_t)(tt_o-t + yDotted-xx+t),   2*(t-xx), 1 ,true );
           lcd_fill_rect(xx + t_o, (uint32_t)(tt_o-t + yDotted-t+xx+t), 2*(t-xx), 1 ,true );
-//          pixelline(xx,       tt_o-t + yDotted-xx+t,   t*2-xx,       tt_o-t + yDotted-xx+t  ,true );
-  //        pixelline(xx + t_o, tt_o-t + yDotted-t+xx+t, t*2-xx + t_o, tt_o-t + yDotted-t+xx+t,true );
                                                                             //JM ^^
         }
       }

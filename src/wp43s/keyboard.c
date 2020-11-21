@@ -21,255 +21,273 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-int16_t determineFunctionKeyItem(const char *data) {
-  int16_t item = ITM_NOP;
-  int16_t itemShift, fn = *(data) - '0';
+  int16_t determineFunctionKeyItem(const char *data) {
+    int16_t item = ITM_NOP;
+    int16_t itemShift, fn = *(data) - '0';
 
-  if(shiftF) {
-    itemShift = 6;
-  }
-  else if(shiftG) {
-    itemShift = 12;
-  }
-  else {
-    itemShift = 0;
-  }
-  //printf("^^^^ Determinefunction: %d %d %d\n",itemShift,fn,*(data));
-
-  if(softmenuStackPointer > 0) {
-    const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
-    int16_t row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
-
-    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
-
-      if(item > 0) {
-        item %= 10000;
-      }
-
-      int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
-      if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
-                                                         /*JMEXEC XXX ^^*/
-
-      if(item == CHR_PROD_SIGN) {
-        item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
-      }
+    if(shiftF) {
+      itemShift = 6;
     }
-  }
-
-  else {              //if there is no SoftMenu showing
-    if(fn>=1 && fn<=6) {
-      if (itemShift ==0) {
-      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
-      } else {
-      //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
-        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
-      }
-    } else {
-      item = 0;
-    }
-  }
-  return item;
-}
-
-
-
-/********************************************//**
- * \brief Simulate a function key click.
- *
- * \param notUsed GtkWidget* The button to pass to btnFnPressed and btnFnReleased
- * \param data gpointer String containing the key ID
- * \return void
- //JM btnFnClicked is called by gui.c keyPressed, and by btnFnReleased_StateMachine
- ***********************************************/
-#ifdef PC_BUILD
-void btnFnClicked(GtkWidget *notUsed, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnFnClicked(void *notUsed, void *data) {
-#endif
-
-  executeFunction(data);
-}
-
-#ifdef PC_BUILD
-void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
-  GdkEvent mouseButton;
-  mouseButton.button.button = 1;
-  mouseButton.type = 0;
-  btnFnPressed(notUsed, &mouseButton, data);
-}
-void btnFnClickedR(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
-  GdkEvent mouseButton;
-  mouseButton.button.button = 1;
-  mouseButton.type = 0;
-  btnFnReleased(notUsed, &mouseButton, data);
-}
-#endif
-
-
-
-/********************************************//**
- * \brief A calc function key was pressed
- *
- * \param notUsed GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
-    return;
-  }
-  if(event->button.button == 2) { // Middle click
-    shiftF = true;
-    shiftG = false;
-  }
-  if(event->button.button == 3) { // Right click
-    shiftF = false;
-    shiftG = true;
-  }
-#endif
-#ifdef DMCP_BUILD
-void btnFnPressed(void *data) {
-#endif
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-    int16_t item = determineFunctionKeyItem((char *)data);
-
-//    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
-    if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
-
-//    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
-//      showFunctionName(item, 1000); // 1000ms = 1s
-//    #else
-//    showFunctionNameItem = item;
-        btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
-//    #endif
+    else if(shiftG) {
+      itemShift = 12;
     }
     else {
-      showFunctionNameItem = ITM_NOP;
+      itemShift = 0;
+    }
+    //printf("^^^^ Determinefunction: %d %d %d\n",itemShift,fn,*(data));
+
+    if(softmenuStackPointer > 0) {
+      const softmenu_t *sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+      int16_t row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+
+      if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
+        item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+
+        if(item > 0) {
+          item %= 10000;
+        }
+
+        int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
+        if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
+                                                           /*JMEXEC XXX ^^*/
+
+        if(item == CHR_PROD_SIGN) {
+          item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
+        }
+      }
+    }
+
+
+    else {              //if there is no SoftMenu showing
+      if(fn>=1 && fn<=6) {
+        if (itemShift ==0) {
+        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+        } else {
+        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+        }
+      } else {
+        item = 0;
+      }
+    }
+    return item;
+  }
+
+
+
+  /********************************************//**
+   * \brief Simulate a function key click.
+   *
+   * \param notUsed GtkWidget* The button to pass to btnFnPressed and btnFnReleased
+   * \param data gpointer String containing the key ID
+   * \return void
+   //JM btnFnClicked is called by gui.c keyPressed, and by btnFnReleased_StateMachine
+   ***********************************************/
+  #ifdef PC_BUILD
+  void btnFnClicked(GtkWidget *notUsed, gpointer data) {
+  #endif
+  #ifdef DMCP_BUILD
+  void btnFnClicked(void *notUsed, void *data) {
+  #endif
+  
+    executeFunction(data);
+  }
+  
+  #ifdef PC_BUILD
+  void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+    GdkEvent mouseButton;
+    mouseButton.button.button = 1;
+    mouseButton.type = 0;
+    btnFnPressed(notUsed, &mouseButton, data);
+  }
+  void btnFnClickedR(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+    GdkEvent mouseButton;
+    mouseButton.button.button = 1;
+    mouseButton.type = 0;
+    btnFnReleased(notUsed, &mouseButton, data);
+  }
+  #endif // PC_BUILD
+
+
+
+  /********************************************//**
+   * \brief A calc function key was pressed
+   *
+   * \param notUsed GtkWidget*
+   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+   * \return void
+   ***********************************************/
+  #ifdef PC_BUILD
+    void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
+        return;
+      }
+      if(event->button.button == 2) { // Middle click
+        shiftF = true;
+        shiftG = false;
+      }
+      if(event->button.button == 3) { // Right click
+        shiftF = false;
+        shiftG = true;
+      }
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+        int16_t item = determineFunctionKeyItem((char *)data);
+
+    //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
+        if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
+          lastErrorCode = 0;
+
+    //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
+    //      showFunctionName(item, 1000); // 1000ms = 1s
+    //    #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+    //    showFunctionNameItem = item;
+            btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+    //    #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+        }
+        else {
+          showFunctionNameItem = ITM_NOP;
+        }
+      }
+    }
+  #endif // PC_BUILD
+
+  #ifdef DMCP_BUILD
+    void btnFnPressed(void *data) {
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+        int16_t item = determineFunctionKeyItem((char *)data);
+
+    //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
+        if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
+          lastErrorCode = 0;
+    //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
+    //      showFunctionName(item, 1000); // 1000ms = 1s
+    //    #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+    //    showFunctionNameItem = item;
+            btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+    //    #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+        }
+        else {
+          showFunctionNameItem = ITM_NOP;
+        }
+      }
+    }
+  #endif // DMCP_BUILD
+
+
+
+  /********************************************//**
+   * \brief A calc function key was released
+   *
+   * \param notUsed GtkWidget*
+   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+   * \return void
+   ***********************************************/
+  #ifdef PC_BUILD
+    void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+  #endif // PC_BUILD
+  #ifdef DMCP_BUILD
+    void btnFnReleased(void *data) {
+  #endif // DMCP_BUILD
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+    btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
     }
   }
-}
 
+  /********************************************//**
+   * \brief Executes one function from a softmenu
+   * \return void
+   ***********************************************/
+  void executeFunction(const char *data) {
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+  
+      int16_t item = ITM_NOP;
+      item = determineFunctionKeyItem((char *)data);
+      resetShiftState();
+  
+        //printf("%d--\n",calcMode);
+      {
+        if(calcMode != CM_CONFIRMATION) {
+          lastErrorCode = 0;
 
-
-/********************************************//**
- * \brief A calc function key was released
- *
- * \param notUsed GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-#endif
-#ifdef DMCP_BUILD
-void btnFnReleased(void *data) {
-#endif
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-    btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
-  }
-}
-
-
-
-/********************************************//**
- * \brief Executes one function from a softmenu
- * \return void
- ***********************************************/
-void executeFunction(const char *data) {
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
-
-    int16_t item = ITM_NOP;
-    item = determineFunctionKeyItem((char *)data);
-    resetShiftState();
-
-      //printf("%d--\n",calcMode);
-    {
-      if(calcMode != CM_CONFIRMATION) {
-        lastErrorCode = 0;
-
-        if(softmenuStackPointer > 0) {
-          if(calcMode == CM_ASM) {
-            calcModeNormal();
-          }
-          else if(calcMode == CM_ASM_OVER_TAM) {
-            reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-            if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
+          if(softmenuStackPointer > 0) {
+            if(calcMode == CM_ASM) {
               calcModeNormal();
-            }                                                                                     //JM ^
-#ifdef PC_BUILD
-printf(">>>   refreshScreen1 from keyboard.c executeFunction\n");
-#endif
-            refreshScreen();
-            return;
-          }
-          else if(calcMode == CM_ASM_OVER_AIM) {
-            calcMode = CM_AIM;
-            addItemToBuffer(item);
-            calcMode = CM_ASM_OVER_AIM;
-#ifdef PC_BUILD
-printf(">>>   refreshScreen2 from keyboard.c executeFunction\n");
-#endif
-            refreshScreen();
-            return;
-          }
-          else if(calcMode == CM_ASM_OVER_PEM) { // TODO: is that correct
-            calcModeNormal();
-            calcMode = CM_PEM;
-            runFunction(item);
-            refreshScreen();
-            return;
-          }
-
-
-        }
-         // Broke the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
-        {
-          if(item < 0) { // softmenu
-            if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
-              showSoftmenu(NULL, item, true);
             }
+            else if(calcMode == CM_ASM_OVER_TAM) {
+              reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
+              if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
+                calcModeNormal();
+              }                                                                                     //JM ^
+  #ifdef PC_BUILD
+  printf(">>>   refreshScreen1 from keyboard.c executeFunction\n");
+  #endif
+              refreshScreen();
+              return;
+            }
+            else if(calcMode == CM_ASM_OVER_AIM) {
+              calcMode = CM_AIM;
+              addItemToBuffer(item);
+              calcMode = CM_ASM_OVER_AIM;
+  #ifdef PC_BUILD
+  printf(">>>   refreshScreen2 from keyboard.c executeFunction\n");
+  #endif
+              refreshScreen();
+              return;
+            }
+            else if(calcMode == CM_ASM_OVER_PEM) { // TODO: is that correct
+              calcModeNormal();
+              calcMode = CM_PEM;
+              runFunction(item);
+              refreshScreen();
+              return;
+            }
+
           }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
-            addItemToNimBuffer(item);
-          }
-          else if(calcMode == CM_TAM) {
-            addItemToBuffer(item);
-          }
-          else if(item > 0) { // function
-            if(calcMode == CM_NIM && item != KEY_CC) {
-              if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
-              if(calcMode != CM_NIM) {
-                if(indexOfItems[item].func == fnConstant) {
-                  setSystemFlag(FLAG_ASLIFT);
-                }
+           // Broke the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
+          {
+            if(item < 0) { // softmenu
+              if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+                showSoftmenu(NULL, item, true);
               }
             }
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+              addItemToNimBuffer(item);
+            }
+            else if(calcMode == CM_TAM) {
+              addItemToBuffer(item);
+            }
+            else if(item > 0) { // function
+              if(calcMode == CM_NIM && item != KEY_CC) {
+                if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+                if(calcMode != CM_NIM) {
+                  if(indexOfItems[item].func == fnConstant) {
+                    setSystemFlag(FLAG_ASLIFT);
+                  }
+                }
+              }
 
-            if(lastErrorCode == 0) {
-              temporaryInformation = TI_NO_INFO;
-              runFunction(item);
+              if(lastErrorCode == 0) {
+                temporaryInformation = TI_NO_INFO;
+                runFunction(item);
+              }
             }
           }
         }
       }
+  #ifdef PC_BUILD
+  printf(">>>  refreshScreen3 from keyboard.c executeFunction\n");
+  #endif
+      refreshScreen();
     }
-#ifdef PC_BUILD
-printf(">>>  refreshScreen3 from keyboard.c executeFunction\n");
-#endif
-    refreshScreen();
   }
-}
 
 
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
-int16_t determineItem(const char *data) {
-  int16_t result;
-  const calcKey_t *key;
+  int16_t determineItem(const char *data) {
+    int16_t result;
+    const calcKey_t *key;
 
 
   int8_t key_no = stringToKeyNumber(data);
@@ -295,249 +313,269 @@ int16_t determineItem(const char *data) {
 
 
 
-  // Shift f pressed and JM REMOVED shift g not active
-  if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
-    temporaryInformation = TI_NO_INFO;
-    lastErrorCode = 0;
+    // Shift f pressed and JM REMOVED shift g not active
+    if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
+      temporaryInformation = TI_NO_INFO;
+      lastErrorCode = 0;
 
-    fnTimerStop(TO_FG_LONG);                                //dr
-    fnTimerStop(TO_FG_TIMR);                                //dr
+      fnTimerStop(TO_FG_LONG);                                //dr
+      fnTimerStop(TO_FG_TIMR);                                //dr
+  
+      shiftF = !shiftF;
+      shiftG = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+      showShiftState();
 
-    shiftF = !shiftF;
-    shiftG = false;                                         //JM no shifted menu on g-shift-key as in WP43S
-    showShiftState();
-
-    return ITM_NOP;
-  }
-
-  // Shift g pressed and JM REMOVED shift f not active
-  else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
-    temporaryInformation = TI_NO_INFO;
-    lastErrorCode = 0;
-
-    fnTimerStop(TO_FG_LONG);                                //dr
-    fnTimerStop(TO_FG_TIMR);                                //dr
-
-    shiftG = !shiftG;
-    shiftF = false;                                         //JM no shifted menu on g-shift-key as in WP43S
-    showShiftState();
-
-    return ITM_NOP;
-  }
-
-
-  // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
-  // JM Inserted new section and removed old f and g key processing sections
-  else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {   //JM shifts
-    Shft_timeouts = true;                         //JM SHIFT NEW
-    fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
-    if(ShiftTimoutMode) {
-      fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
+      return ITM_NOP;
     }
-    temporaryInformation = TI_NO_INFO;
-                                                                                                                              //JM shifts
-    if(lastErrorCode != 0) {                                                                                                  //JM shifts
-      lastErrorCode = 0;                                                                                                      //JM shifts
-    }                                                                                                                         //JM shifts
 
-    fg_processing_jm();
+    // Shift g pressed and JM REMOVED shift f not active
+    else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
+      temporaryInformation = TI_NO_INFO;
+      lastErrorCode = 0;
 
-    showShiftState();                                                                                                         //JM shifts
+      fnTimerStop(TO_FG_LONG);                                //dr
+      fnTimerStop(TO_FG_TIMR);                                //dr
 
-    return ITM_NOP;
-  }                                                                                                                           //JM shifts
+      shiftG = !shiftG;
+      shiftF = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+      showShiftState();
 
-
-  if((calcMode == CM_NIM || calcMode == CM_NORMAL) && lastIntegerBase >= 11 && (key_no >= 0 && key_no <= 5 )) {               //JMNIM vv Added direct A-F for hex entry
-    result = shiftF ? key->fShifted :
-             shiftG ? key->gShifted :
-                      key->primaryAim;
-         //printf(">>> ±±±§§§ keys key:%d result:%d Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",key_no, result, calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
-         return result;  
-  } else                                                                                                                      //JM^^
- 
-  if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
-    result = shiftF ? key->fShifted :
-             shiftG ? key->gShifted :
-                      key->primary;
-  }
-  else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
-    result = shiftF ? key->fShiftedAim :
-             shiftG ? key->gShiftedAim :
-                      key->primaryAim;
-
-  }
-  else if(calcMode == CM_TAM) {
-    result = key->primaryTam; // No shifted function in TAM
-  }
-  else {
-    displayBugScreen("In function determineItem: item was not determined!");
-    result = 0;
-  }
-
-  Check_Assign_in_progress(&result, key_no);  //JM
-
-  Check_MultiPresses(&result, key_no);        //JM
-
-  if(result == CHR_PROD_SIGN) {
-    result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
-  }
-
-  resetShiftState();
-
-  return result;
-}
-
-
-
-bool_t checkShifts(const char *data) {
-  const calcKey_t *key;
-
-  int8_t key_no = stringToKeyNumber(data);
-
-  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);
-
-  if(key->primary == KEY_f || key->primary == KEY_g || key->primary == KEY_fg) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
-
-/********************************************//**
- * \brief Simulate a button click.
- *
- * \param notUsed GtkWidget* The button to pass to btnPressed and btnReleased
- * \param data gpointer String containing the key ID
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnClicked(GtkWidget *notUsed, gpointer data) {
-  GdkEvent mouseButton;
-  mouseButton.button.button = 1;
-  mouseButton.type = 0;
-
-  btnPressed(notUsed, &mouseButton, data);
-  btnReleased(notUsed, &mouseButton, data);
-}
-#endif
-#ifdef DMCP_BUILD
-void btnClicked(void *unused, void *data) {
-  btnPressed(data);
-  btnReleased(data);
-}
-#endif
-
-
-#ifdef PC_BUILD
-void btnClickedP(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
-  GdkEvent mouseButton;
-  mouseButton.button.button = 1;
-  mouseButton.type = 0;
-  btnPressed(w, &mouseButton, data);
-}
-
-void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
-  GdkEvent mouseButton;
-  mouseButton.button.button = 1;
-  btnReleased(w, &mouseButton, data);
-}
-#endif
-
-
-
-/********************************************//**
- * \brief A calc button was pressed
- *
- * \param notUsed GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-  if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
-    return;
-  }
-  if(event->button.button == 2) { // Middle click
-    shiftF = true;
-    shiftG = false;
-  }
-  if(event->button.button == 3) { // Right click
-    shiftF = false;
-    shiftG = true;
-  }
-#endif
-#ifdef DMCP_BUILD
-void btnPressed(void *data) {
-#endif
-  int16_t item = determineItem((char *)data);
-
-  showFunctionNameItem = 0;
-  if(item != ITM_NOP && item != ITM_NULL) {
-    //refreshScreen();
-    //refreshRegisterLine(REGISTER_X);       //JM Removed this one, for direct presses, add it in processKeyAction
-    #ifdef PC_BUILD
-      char tmp[200];
-      sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s",item,(char *)data);
-      jm_show_calc_state(tmp);
-    #endif
-
-    processKeyAction(item);
-    if(!keyActionProcessed) {
-      showFunctionName(item, 1000); // 1000ms = 1s
+      return ITM_NOP;
     }
-  }
-}
+
+    // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
+    // JM Inserted new section and removed old f and g key processing sections
+    else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {   //JM shifts
+      Shft_timeouts = true;                         //JM SHIFT NEW
+      fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
+      if(ShiftTimoutMode) {
+        fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
+      }
+      temporaryInformation = TI_NO_INFO;
+                                                                                                                                //JM shifts
+      if(lastErrorCode != 0) {                                                                                                  //JM shifts
+        lastErrorCode = 0;                                                                                                      //JM shifts
+      }                                                                                                                         //JM shifts
+
+      fg_processing_jm();
+
+      showShiftState();                                                                                                         //JM shifts
+
+      return ITM_NOP;
+    }                                                                                                                           //JM shifts
 
 
+    if((calcMode == CM_NIM || calcMode == CM_NORMAL) && lastIntegerBase >= 11 && (key_no >= 0 && key_no <= 5 )) {               //JMNIM vv Added direct A-F for hex entry
+      result = shiftF ? key->fShifted :
+               shiftG ? key->gShifted :
+                        key->primaryAim;
+           //printf(">>> ±±±§§§ keys key:%d result:%d Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",key_no, result, calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
+           return result;  
+    } else                                                                                                                      //JM^^
 
-/********************************************//**
- * \brief A calc button was released
- *
- * \param notUsed GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-#ifdef PC_BUILD
-void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-jm_show_calc_state("keyboard.c: btnReleased begin");
-#endif
-#ifdef DMCP_BUILD
-void btnReleased(void *data) {
-#endif //DMCP_BUILD
-    int16_t item;
-  Shft_timeouts = false;                         //JM SHIFT NEW
-  JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
-  if(showFunctionNameItem != 0) {
-    item = showFunctionNameItem;
-    hideFunctionName();
-    if(item < 0) {
-      showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
+      result = shiftF ? key->fShifted :
+               shiftG ? key->gShifted :
+                        key->primary;
+    }
+    else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
+      result = shiftF ? key->fShiftedAim :
+               shiftG ? key->gShiftedAim :
+                        key->primaryAim;
+
+    }
+    else if(calcMode == CM_TAM) {
+      result = key->primaryTam; // No shifted function in TAM
     }
     else {
-      runFunction(item);
+      displayBugScreen("In function determineItem: item was not determined!");
+      result = 0;
+    }
+
+    Check_Assign_in_progress(&result, key_no);  //JM
+
+    Check_MultiPresses(&result, key_no);        //JM
+
+    if(result == CHR_PROD_SIGN) {
+      result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
+    }
+
+    resetShiftState();
+
+    return result;
+  }
+
+
+
+  /********************************************//**
+   * \brief Simulate a button click.
+   *
+   * \param notUsed GtkWidget* The button to pass to btnPressed and btnReleased
+   * \param data gpointer String containing the key ID
+   * \return void
+   ***********************************************/
+  #ifdef PC_BUILD
+    void btnClicked(GtkWidget *notUsed, gpointer data) {
+      GdkEvent mouseButton;
+      mouseButton.button.button = 1;
+      mouseButton.type = 0;
+
+      btnPressed(notUsed, &mouseButton, data);
+      btnReleased(notUsed, &mouseButton, data);
+  }
+  #endif // PC_BUILD
+
+  #ifdef DMCP_BUILD
+    void btnClicked(void *unused, void *data) {
+      btnPressed(data);
+      btnReleased(data);
+    }
+  #endif // DMCP_BUILD
+
+
+
+  #ifdef PC_BUILD
+  void btnClickedP(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
+    GdkEvent mouseButton;
+    mouseButton.button.button = 1;
+    mouseButton.type = 0;
+    btnPressed(w, &mouseButton, data);
+  }
+
+  void btnClickedR(GtkWidget *w, gpointer data) {                          //JM PRESSED FOR KEYBOARD F REPEAT
+    GdkEvent mouseButton;
+    mouseButton.button.button = 1;
+    btnReleased(w, &mouseButton, data);
+  }
+  #endif
+
+
+  bool_t checkShifts(const char *data) {
+    const calcKey_t *key;
+
+    int8_t key_no = stringToKeyNumber(data);
+
+    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);
+
+    if(key->primary == KEY_f || key->primary == KEY_g || key->primary == KEY_fg) {
+      return true;
+    } else {
+      return false;
     }
   }
-//  #ifdef DMCP_BUILD                        //vv JMTOCHECK REMOVED autorepeat
-//  else if(keyAutoRepeat == 1) {
-//    item = determineItem((char *)data);
-//    hideFunctionName();
-//    runFunction(item);
-//  }
-//  #endif // DMCP_BUILD                     //^^
+
+
+
+  /********************************************//**
+   * \brief A calc button was pressed
+   *
+   * \param notUsed GtkWidget*
+   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+   * \return void
+   ***********************************************/
+  #ifdef PC_BUILD
+    void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      int16_t item = determineItem((char *)data);
+
+      if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
+        return;
+      }
+      if(event->button.button == 2) { // Middle click
+        shiftF = true;
+        shiftG = false;
+      }
+      if(event->button.button == 3) { // Right click
+        shiftF = false;
+        shiftG = true;
+      }
+      showFunctionNameItem = 0;
+      if(item != ITM_NOP && item != ITM_NULL) {
+
+      #ifdef PC_BUILD
+        char tmp[200];
+        sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s",item,(char *)data);
+        jm_show_calc_state(tmp);
+      #endif
+
+        processKeyAction(item);
+        if(!keyActionProcessed) {
+          showFunctionName(item, 1000); // 1000ms = 1s
+        }
+      }
+    }
+  #endif // PC_BUILD
+
+  #ifdef DMCP_BUILD
+    void btnPressed(void *data) {
+      int16_t item = determineItem((char *)data);
+
+      showFunctionNameItem = 0;
+      if(item != ITM_NOP && item != ITM_NULL) {
+        processKeyAction(item);
+        if(!keyActionProcessed) {
+          showFunctionName(item, 1000); // 1000ms = 1s
+        }
+      }
+    }
+  #endif // DMCP_BUILD
+
+
+
+  /********************************************//**
+   * \brief A calc button was released
+   *
+   * \param notUsed GtkWidget*
+   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+   * \return void
+   ***********************************************/
+  #ifdef PC_BUILD
+    void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      jm_show_calc_state("keyboard.c: btnReleased begin");
+
+      int16_t item;
+      Shft_timeouts = false;                         //JM SHIFT NEW
+      JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
+
+      if(showFunctionNameItem != 0) {
+        item = showFunctionNameItem;
+        hideFunctionName();
+        if(item < 0) {
+          showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
+        }
+        else {
+          runFunction(item);
+        }
+      }
+
+      if(!checkShifts((char *)data)) {
+        printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
+        jm_show_calc_state("keyboard.c: btnReleased end");
+        refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
+      }
+    }
+  #endif // PC_BUILD
+
+  #ifdef DMCP_BUILD
+    void btnReleased(void *data) {
+      int16_t item;
+      Shft_timeouts = false;                         //JM SHIFT NEW
+      JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
+      if(showFunctionNameItem != 0) {
+        item = showFunctionNameItem;
+        hideFunctionName();
+        if(item < 0) {
+          showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
+        }
+        else {
+          runFunction(item);
+        }
+      }
 
   if(!checkShifts((char *)data)) {
-    #ifdef PC_BUILD
-    printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
-    #endif
-    #ifdef PC_BUILD
-    jm_show_calc_state("keyboard.c: btnReleased end");
-    #endif
     refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
+    }
   }
-}
+  #endif //DMCP_BUILD
 
 
 

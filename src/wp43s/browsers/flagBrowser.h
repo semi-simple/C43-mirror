@@ -15,6 +15,6 @@
  */
 
 #ifndef TESTSUITE_BUILD
-void flagBrowser(uint16_t unusedButMandatoryParameter);
-void flagBrowser_old(uint16_t unusedButMandatoryParameter);
-#endif
+  void flagBrowser(uint16_t unusedButMandatoryParameter);
+  void flagBrowser_old(uint16_t unusedButMandatoryParameter);
+#endif // TESTSUITE_BUILD

@@ -56,10 +56,10 @@
   #include <dmcp.h>
   #define TMP_STR_LENGTH       AUX_BUF_SIZE
 #else
-  #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560  //JMTOCHECK
-#endif
-#define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
-#define DISPLAY_VALUE_LEN        80
+    #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560  //JMTOCHECK
+  #endif // DMCP_BUILD
+  #define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
+  #define DISPLAY_VALUE_LEN        80
 
 #include "typeDefinitions.h"
 
@@ -151,7 +151,7 @@
   #define initFontBrowser()       {}
 
   #define JM_LAYOUT_1A               //JM Preferred layout
-#endif
+  #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 #define INLINE_TEST                     //vv dr
 //#undef INLINE_TEST                    //^^
@@ -261,11 +261,11 @@ extern bool_t                shiftG;
 extern bool_t                showContent;
 extern bool_t                rbr1stDigit;
 extern bool_t                updateDisplayValueX;
-extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
 extern bool_t                thereIsSomethingToUndo;
 extern bool_t                programListEnd;
 extern bool_t                serialIOIconEnabled;
 extern bool_t                neverUsed;
+extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
 
 extern realContext_t         ctxtReal34;   //   34 digits
 extern realContext_t         ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
@@ -320,7 +320,7 @@ extern uint8_t               roundingMode;
 extern uint8_t               calcMode;
 extern uint8_t               nextChar;
 extern uint8_t               displayStack;
-extern uint8_t               displayStackSHOIDISP;        //JM SHOIDISP
+  extern uint8_t               displayStackSHOIDISP;        //JM SHOIDISP
 extern uint8_t               alphaCase;
 extern uint8_t               numLinesNumericFont;
 extern uint8_t               numLinesStandardFont;

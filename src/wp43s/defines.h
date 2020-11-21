@@ -488,23 +488,21 @@
 // Calc mode 5 bits
 #define CM_NORMAL                                  0 // Normal operation
 #define CM_AIM                                     1 // Alpha input mode
-#define CM_TAM                                     2 // Temporary input mode
+#define CM_TAM                                     2 // Temporary alpha mode
 #define CM_NIM                                     3 // Numeric input mode
 #define CM_ASM                                     4 // Alpha selection in FCNS, MENU, and CNST menu
 #define CM_ASM_OVER_TAM                            5 // Alpha selection in TAM
 #define CM_ASM_OVER_AIM                            6 // Alpha selection in AIM
 #define CM_ASM_OVER_PEM                            7 // Alpha selection in PEM
-#define CM_ASSIGN                                  8 // Assign mode
-#define CM_REGISTER_BROWSER                        9 // Register browser
-#define CM_FLAG_BROWSER                           10 // Flag browser
-#define CM_FONT_BROWSER                           11 // Font browser
-#define CM_ERROR_MESSAGE                          12 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN                          13 // Bug message on screen
-#define CM_CONFIRMATION                           14 // Waiting for confirmation or canceling
-#define CM_PEM                                    15 // Program entry mode
-#define CM_GRAPH                                  97 //JM Display graph       //JM
-#define CM_LISTXY                                 98 //JM Display stat list   //JM
-#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
+#define CM_TAM_OVER_PEM                            8 // Temporary alpha mode when PEM is active
+#define CM_ASSIGN                                  9 // Assign mode
+#define CM_REGISTER_BROWSER                       10 // Register browser
+#define CM_FLAG_BROWSER                           11 // Flag browser
+#define CM_FONT_BROWSER                           12 // Font browser
+#define CM_ERROR_MESSAGE                          13 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN                          14 // Bug message on screen
+#define CM_CONFIRMATION                           15 // Waiting for confirmation or canceling
+#define CM_PEM                                    16 // Program entry mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -537,6 +535,9 @@
 #define NP_COMPLEX_INT_PART                        7 // Integer part of the complex imaginary part
 #define NP_COMPLEX_FLOAT_PART                      8 // Decimal part of the complex imaginary part
 #define NP_COMPLEX_EXPONENT                        9 // Ten exponent of the complex imaginary part
+#define CM_GRAPH                                  97 //JM Display graph       //JM
+#define CM_LISTXY                                 98 //JM Display stat list   //JM
+#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
 
 // Temporary information
 #define TI_NO_INFO                                 0

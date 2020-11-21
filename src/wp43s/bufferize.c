@@ -24,7 +24,7 @@
 
 #ifndef TESTSUITE_BUILD
 void fnAim(uint16_t unusedButMandatoryParameter) {
-  resetShiftState();  //JM
+    resetShiftState();  //JM
   aimBuffer[0] = 0;
   calcModeAim(NOPARAM); // Alpha Input Mode
 }
@@ -194,10 +194,10 @@ void resetAlphaSelectionBuffer(void) {
   lgCatalogSelection = 0;
   alphaSelectionTimer = 0;
   asmBuffer[0] = 0;
-  AlphaSelectionBufferTimerRunning = false;     //JMvv
-#ifndef TESTSUITE_BUILD
-  kill_ASB_icon();
-#endif                                          //JM^^
+    AlphaSelectionBufferTimerRunning = false;     //JMvv
+  #ifndef TESTSUITE_BUILD
+    kill_ASB_icon();
+  #endif                                          //JM^^
 }
 
 

@@ -68,181 +68,181 @@ void saveCalc(void) {
   printf("Begin of calc's backup\n");
 
 
-  save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
-  save(&ramSize,                            sizeof(ramSize),                            BACKUP);
-  save(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
-  save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
-  save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
-  save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-  save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-  save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-  save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-  save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
-  save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
-  save(oldTime,                             sizeof(oldTime),                            BACKUP);
-  save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
-  save(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-  save(reg,                                 sizeof(reg),                                BACKUP);
-  save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
-  save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-  save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-  save(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-  save(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-  save(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-  save(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-  save(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-  save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-  save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
-  save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-  save(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-  ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-  save(&xCursor,                            sizeof(xCursor),                            BACKUP);
-  save(&yCursor,                            sizeof(yCursor),                            BACKUP);
-  save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
-  save(&denMax,                             sizeof(denMax),                             BACKUP);
-  save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
-  save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
-  save(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
-  save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
-  save(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
-  save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
-  save(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
-  save(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
-  save(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
-  save(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
-  save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
-  save(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
-  save(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
-  save(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
-  save(&calcMode,                           sizeof(calcMode),                           BACKUP);
-  save(&nextChar,                           sizeof(nextChar),                           BACKUP);
-  save(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
-  save(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
-  save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
-  save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
-  save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-  save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
-  save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
-  save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
-  save(&shiftF,                             sizeof(shiftF),                             BACKUP);
-  save(&shiftG,                             sizeof(shiftG),                             BACKUP);
-  save(&tamMode,                            sizeof(tamMode),                            BACKUP);
-  save(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
-  save(&showContent,                        sizeof(showContent),                        BACKUP);
-  save(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
-  save(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
-  save(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
-  save(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
-  save(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
-  save(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
-  save(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
-  save(&displayStack,                       sizeof(displayStack),                       BACKUP);
-  save(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
-  save(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
-  save(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
-  save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
-  save(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
-  save(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
-  save(&funcOK,                             sizeof(funcOK),                             BACKUP);
-  save(&screenChange,                       sizeof(screenChange),                       BACKUP);
-  save(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
-  save(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
-  save(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
-  save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
-  save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
-  save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-  save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
-  save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
-  save(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
-  save(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
-  save(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
-  save(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
-  save(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
-  save(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
-  save(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
-  save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
-  save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
-  save(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
-  save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
-  save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
-  save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
-  save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-  ramPtr = TO_WP43SMEMPTR(beginOfProgramMemory);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
-  ramPtr = (uint32_t)((void *)beginOfProgramMemory -        TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfProgramMemory)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
-  ramPtr = TO_WP43SMEMPTR(firstFreeProgramByte);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
-  ramPtr = (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
-  ramPtr = TO_WP43SMEMPTR(firstDisplayedStep);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
-  ramPtr = (uint32_t)((void *)firstDisplayedStep - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStep)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
-  ramPtr = TO_WP43SMEMPTR(currentStep);
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
-  ramPtr = (uint32_t)((void *)currentStep - TO_PCMEMPTR(TO_WP43SMEMPTR(currentStep)));
-  save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
-  save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-  save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
-  save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
-  save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
+    save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
+    save(&ramSize,                            sizeof(ramSize),                            BACKUP);
+    save(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
+    save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
+    save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
+    save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
+    save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
+    save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
+    save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
+    save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+    save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
+    save(oldTime,                             sizeof(oldTime),                            BACKUP);
+    save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
+    save(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
+    save(reg,                                 sizeof(reg),                                BACKUP);
+    save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
+    save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+    save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
+    save(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
+    save(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
+    save(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
+    save(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
+    save(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
+    save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
+    save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+    save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+    save(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    save(&xCursor,                            sizeof(xCursor),                            BACKUP);
+    save(&yCursor,                            sizeof(yCursor),                            BACKUP);
+    save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
+    save(&denMax,                             sizeof(denMax),                             BACKUP);
+    save(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
+    save(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
+    save(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
+    save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
+    save(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
+    save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
+    save(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
+    save(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+    save(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
+    save(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
+    save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
+    save(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
+    save(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
+    save(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
+    save(&calcMode,                           sizeof(calcMode),                           BACKUP);
+    save(&nextChar,                           sizeof(nextChar),                           BACKUP);
+    save(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
+    save(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
+    save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
+    save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
+    save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+    save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
+    save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
+    save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
+    save(&shiftF,                             sizeof(shiftF),                             BACKUP);
+    save(&shiftG,                             sizeof(shiftG),                             BACKUP);
+    save(&tamMode,                            sizeof(tamMode),                            BACKUP);
+    save(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
+    save(&showContent,                        sizeof(showContent),                        BACKUP);
+    save(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
+    save(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
+    save(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
+    save(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
+    save(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
+    save(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
+    save(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
+    save(&displayStack,                       sizeof(displayStack),                       BACKUP);
+    save(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
+    save(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
+    save(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
+    save(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
+    save(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
+    save(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
+    save(&funcOK,                             sizeof(funcOK),                             BACKUP);
+    save(&screenChange,                       sizeof(screenChange),                       BACKUP);
+    save(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
+    save(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
+    save(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
+    save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
+    save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
+    save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
+    save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+    save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
+    save(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
+    save(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
+    save(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
+    save(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
+    save(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
+    save(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+    save(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
+    save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
+    save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
+    save(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+    save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
+    save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
+    save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
+    save(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(beginOfProgramMemory);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+    ramPtr = (uint32_t)((void *)beginOfProgramMemory -        TO_PCMEMPTR(TO_WP43SMEMPTR(beginOfProgramMemory)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+    ramPtr = TO_WP43SMEMPTR(firstFreeProgramByte);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+    ramPtr = (uint32_t)((void *)firstFreeProgramByte - TO_PCMEMPTR(TO_WP43SMEMPTR(firstFreeProgramByte)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+    ramPtr = TO_WP43SMEMPTR(firstDisplayedStep);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+    ramPtr = (uint32_t)((void *)firstDisplayedStep - TO_PCMEMPTR(TO_WP43SMEMPTR(firstDisplayedStep)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+    ramPtr = TO_WP43SMEMPTR(currentStep);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+    ramPtr = (uint32_t)((void *)currentStep - TO_PCMEMPTR(TO_WP43SMEMPTR(currentStep)));
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
+    save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
+    save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+    save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+    save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
-  save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
-  save(&HOME3,                              sizeof(HOME3),                              BACKUP);
-  save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
-  save(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
-  save(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
-  save(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
-  save(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
-  save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
-  save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
-  save(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
-  save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
-  save(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
-  save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
-  save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
-  save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
-  save(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
-  save(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
-  save(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
-  save(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
-  save(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
-  save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-  save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-  save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-  save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
-  save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-  save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-  save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
-  save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-  save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-  save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-  save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-  save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-  save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-  save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-  save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
-  save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
-  save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
-  save(&indic_x,                            sizeof(indic_x),                            BACKUP);
-  save(&indic_y,                            sizeof(indic_y),                            BACKUP);
-  save(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
-  save(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
-  save(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
-  save(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
-  save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
-  save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
-  save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
-  save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
-  save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
+    save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
+    save(&HOME3,                              sizeof(HOME3),                              BACKUP);
+    save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
+    save(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
+    save(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
+    save(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
+    save(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
+    save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
+    save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
+    save(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+    save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
+    save(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
+    save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
+    save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
+    save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
+    save(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
+    save(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
+    save(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
+    save(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
+    save(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
+    save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+    save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+    save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+    save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+    save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+    save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+    save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+    save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+    save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+    save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+    save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
+    save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
+    save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
+    save(&indic_x,                            sizeof(indic_x),                            BACKUP);
+    save(&indic_y,                            sizeof(indic_y),                            BACKUP);
+    save(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
+    save(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
+    save(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
+    save(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
+    save(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
+    save(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
+    save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
+    save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
+    save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
 
 
   fclose(BACKUP);
@@ -277,183 +277,183 @@ void restoreCalc(void) {
   else {
     printf("Begin of calc's restoration\n");
 
-    restore(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
-    restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
-    restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
-    restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-    restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-    restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-    restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-    restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
-    restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
-    restore(oldTime,                             sizeof(oldTime),                            BACKUP);
-    restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
-    restore(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-    restore(reg,                                 sizeof(reg),                                BACKUP);
-    restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
-    restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-    restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-    restore(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-    restore(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-    restore(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-    restore(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-    restore(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-    restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-    restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
-    restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-    restore(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-    savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
-    restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
-    restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
-    restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
-    restore(&denMax,                             sizeof(denMax),                             BACKUP);
-    restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
-    restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
-    restore(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
-    restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
-    restore(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
-    restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
-    restore(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
-    restore(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
-    restore(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
-    restore(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
-    restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
-    restore(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
-    restore(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
-    restore(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
-    restore(&calcMode,                           sizeof(calcMode),                           BACKUP);
-    restore(&nextChar,                           sizeof(nextChar),                           BACKUP);
-    restore(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
-    restore(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
-    restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
-    restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
-    restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-    restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
-    restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
-    restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
-    restore(&shiftF,                             sizeof(shiftF),                             BACKUP);
-    restore(&shiftG,                             sizeof(shiftG),                             BACKUP);
-    restore(&tamMode,                            sizeof(tamMode),                            BACKUP);
-    restore(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
-    restore(&showContent,                        sizeof(showContent),                        BACKUP);
-    restore(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
-    restore(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
-    restore(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
-    restore(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
-    restore(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
-    restore(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
-    restore(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
-    restore(&displayStack,                       sizeof(displayStack),                       BACKUP);
-    restore(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
-    restore(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
-    restore(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
-    restore(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
-    restore(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
+      restore(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
+      restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
+      restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
+      restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
+      restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
+      restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
+      restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
+      restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+      restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
+      restore(oldTime,                             sizeof(oldTime),                            BACKUP);
+      restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
+      restore(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
+      restore(reg,                                 sizeof(reg),                                BACKUP);
+      restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
+      restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+      restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
+      restore(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
+      restore(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
+      restore(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
+      restore(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
+      restore(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
+      restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
+      restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+      restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+      restore(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
+      restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
+      restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
+      restore(&denMax,                             sizeof(denMax),                             BACKUP);
+      restore(&softmenuStackPointer,               sizeof(softmenuStackPointer),               BACKUP);
+      restore(&softmenuStackPointerBeforeAIM,      sizeof(softmenuStackPointerBeforeAIM),      BACKUP);
+      restore(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
+      restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
+      restore(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
+      restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
+      restore(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
+      restore(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+      restore(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
+      restore(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
+      restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
+      restore(&currentAngularMode,                 sizeof(currentAngularMode),                 BACKUP);
+      restore(&groupingGap,                        sizeof(groupingGap),                        BACKUP);
+      restore(&roundingMode,                       sizeof(roundingMode),                       BACKUP);
+      restore(&calcMode,                           sizeof(calcMode),                           BACKUP);
+      restore(&nextChar,                           sizeof(nextChar),                           BACKUP);
+      restore(&alphaCase,                          sizeof(alphaCase),                          BACKUP);
+      restore(&hourGlassIconEnabled,               sizeof(hourGlassIconEnabled),               BACKUP);
+      restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
+      restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
+      restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+      restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
+      restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
+      restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
+      restore(&shiftF,                             sizeof(shiftF),                             BACKUP);
+      restore(&shiftG,                             sizeof(shiftG),                             BACKUP);
+      restore(&tamMode,                            sizeof(tamMode),                            BACKUP);
+      restore(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
+      restore(&showContent,                        sizeof(showContent),                        BACKUP);
+      restore(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
+      restore(&numLinesNumericFont,                sizeof(numLinesNumericFont),                BACKUP);
+      restore(&numLinesStandardFont,               sizeof(numLinesStandardFont),               BACKUP);
+      restore(&numScreensStandardFont,             sizeof(numScreensStandardFont),             BACKUP);
+      restore(&previousCalcMode,                   sizeof(previousCalcMode),                   BACKUP);
+      restore(&lastErrorCode,                      sizeof(lastErrorCode),                      BACKUP);
+      restore(&nimNumberPart,                      sizeof(nimNumberPart),                      BACKUP);
+      restore(&displayStack,                       sizeof(displayStack),                       BACKUP);
+      restore(&hexDigits,                          sizeof(hexDigits),                          BACKUP);
+      restore(&errorMessageRegisterLine,           sizeof(errorMessageRegisterLine),           BACKUP);
+      restore(&shortIntegerMask,                   sizeof(shortIntegerMask),                   BACKUP);
+      restore(&shortIntegerSignBit,                sizeof(shortIntegerSignBit),                BACKUP);
+      restore(&temporaryInformation,               sizeof(temporaryInformation),               BACKUP);
 
-    restore(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
-    glyphNotFound.data   = malloc(38);
-    xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
+      restore(&glyphNotFound,                      sizeof(glyphNotFound),                      BACKUP);
+      glyphNotFound.data   = malloc(38);
+      xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
-    restore(&funcOK,                             sizeof(funcOK),                             BACKUP);
-    restore(&screenChange,                       sizeof(screenChange),                       BACKUP);
-    restore(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
-    restore(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
-    restore(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
-    restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
-    restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
-    restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-    restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
-    restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
-    restore(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
-    restore(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
-    restore(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
-    restore(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
-    restore(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
-    restore(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
-    restore(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
-    restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
-    restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
-    restore(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
-    restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
-    restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
-    restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
-    restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
-    beginOfProgramMemory = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
-    beginOfProgramMemory += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
-    firstFreeProgramByte = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
-    firstFreeProgramByte += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
-    firstDisplayedStep = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
-    firstDisplayedStep += ramPtr;
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
-    currentStep = TO_PCMEMPTR(ramPtr);
-    restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
-    currentStep += ramPtr;
-    restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
-    restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
-    restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
-    restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
+      restore(&funcOK,                             sizeof(funcOK),                             BACKUP);
+      restore(&screenChange,                       sizeof(screenChange),                       BACKUP);
+      restore(&exponentSignLocation,               sizeof(exponentSignLocation),               BACKUP);
+      restore(&denominatorLocation,                sizeof(denominatorLocation),                BACKUP);
+      restore(&imaginaryExponentSignLocation,      sizeof(imaginaryExponentSignLocation),      BACKUP);
+      restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
+      restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
+      restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
+      restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+      restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
+      restore(&alphaSelectionMenu,                 sizeof(alphaSelectionMenu),                 BACKUP);
+      restore(&lastFcnsMenuPos,                    sizeof(lastFcnsMenuPos),                    BACKUP);
+      restore(&lastMenuMenuPos,                    sizeof(lastMenuMenuPos),                    BACKUP);
+      restore(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
+      restore(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
+      restore(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+      restore(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
+      restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
+      restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
+      restore(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+      restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
+      restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
+      restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
+      restore(&thereIsSomethingToUndo,             sizeof(thereIsSomethingToUndo),             BACKUP);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory pointer to block
+      beginOfProgramMemory = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // beginOfProgramMemory offset within block
+      beginOfProgramMemory += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte pointer to block
+      firstFreeProgramByte = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstFreeProgramByte offset within block
+      firstFreeProgramByte += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep pointer to block
+      firstDisplayedStep = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // firstDisplayedStep offset within block
+      firstDisplayedStep += ramPtr;
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep pointer to block
+      currentStep = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
+      currentStep += ramPtr;
+      restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
+      restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
+      restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+      restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
-    restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
-    restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
-    restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
-    restore(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
-    restore(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
-    restore(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
-    restore(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
-    restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
-    restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
-    restore(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
-    restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
-    restore(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
-    restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
-    restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
-    restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
-    restore(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
-    restore(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
-    restore(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
-    restore(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
-    restore(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
-    restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-    restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-    restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-    restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
-    restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-    restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-    restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
-    restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-    restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-    restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-    restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-    restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-    restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-    restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-    restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
-    restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
-    restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
-    restore(&indic_x,                            sizeof(indic_x),                            BACKUP);
-    restore(&indic_y,                            sizeof(indic_y),                            BACKUP);
-    restore(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
-    restore(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
-    restore(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
-    restore(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
-    restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
-    restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
-    restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
-    restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
-    restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
+      restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
+      restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
+      restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
+      restore(&UNITDisplay,                        sizeof(UNITDisplay),                        BACKUP);
+      restore(&SigFigMode,                         sizeof(SigFigMode),                         BACKUP);
+      restore(&SH_BASE_HOME,                       sizeof(SH_BASE_HOME  ),                     BACKUP);
+      restore(&SH_BASE_AHOME,                      sizeof(SH_BASE_AHOME ),                     BACKUP);
+      restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
+      restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
+      restore(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+      restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
+      restore(&jm_FG_DOTS,                         sizeof(jm_FG_DOTS),                         BACKUP);
+      restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
+      restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
+      restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
+      restore(&jm_HOME_FIX,                        sizeof(jm_HOME_FIX),                        BACKUP);
+      restore(&graph_xmin,                         sizeof(graph_xmin),                         BACKUP);
+      restore(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
+      restore(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
+      restore(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
+      restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+      restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+      restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+      restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+      restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+      restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+      restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+      restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+      restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+      restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+      restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+      restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
+      restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
+      restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
+      restore(&indic_x,                            sizeof(indic_x),                            BACKUP);
+      restore(&indic_y,                            sizeof(indic_y),                            BACKUP);
+      restore(&fnXEQMENUpos,                       sizeof(fnXEQMENUpos),                       BACKUP);
+      restore(&indexOfItemsXEQM,                   sizeof(indexOfItemsXEQM),                   BACKUP);
+      restore(&T_cursorPos,                        sizeof(T_cursorPos),                        BACKUP);   //JM ^^
+      restore(&SHOWregis,                          sizeof(SHOWregis),                          BACKUP);   //JM ^^
+      restore(&mm_MNU_HOME,                        sizeof(mm_MNU_HOME),                        BACKUP);   //JM ^^
+      restore(&mm_MNU_ALPHA,                       sizeof(mm_MNU_ALPHA),                       BACKUP);   //JM ^^
+      restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
+      restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
+      restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
 
 
     fclose(BACKUP);

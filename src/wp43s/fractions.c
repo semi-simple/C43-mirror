@@ -111,10 +111,10 @@ void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t 
     real34Copy(REGISTER_REAL34_DATA(regist), &temp0);
   }
   else {
-    #ifdef PC_BUILD
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "%s cannot be shown as a fraction!", getRegisterDataTypeName(regist, true, false));
       moreInfoOnError("In function fraction:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     *sign             = 0;
     *intPart          = 0;
     *numer            = 0;

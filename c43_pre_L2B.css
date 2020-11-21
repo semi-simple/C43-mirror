@@ -36,7 +36,7 @@
 /* Replace $radius               with 3px     */
 /* Replace $fgGold               with #f1b053 */
 /* Replace $fgHoverGold          with #E7D7A0 */
-/**********************************************/
+  /**********************************************/
 
 #mainWindow {
   background:  $bezelBackground;
@@ -184,7 +184,7 @@
 
 #gShifted {
   background:  $bezelBackground;
-  color:       $bezelBackground;
+  color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;
@@ -193,8 +193,8 @@
 }
 
 #gShiftedUnderline {
-  background:  $bezelBackground;
-  color:       $bezelBackground;
+  background:  #303030;
+  color:       $gBlue;
   font-family: WP43S_StandardFont;
   font-style:  normal;
   font-weight: normal;

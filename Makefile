@@ -171,7 +171,7 @@ mrproper: clean_all
 	rm -f $(TESTTTF2RASTERFONTS_APP)
 	rm -f $(WP43S_APP)
 	rm -f $(TESTSUITE_APP)
-	#rm -f gmon.
+	rm -f gmon.out
 
 
 clean_decNumberICU:

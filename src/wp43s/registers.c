@@ -891,25 +891,30 @@ void clearRegister(calcRegister_t regist) {
  * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnClearRegisters(uint16_t unusedButMandatoryParameter) {
-  calcRegister_t regist;
-
-  for(regist=0; regist<REGISTER_X; regist++) {
-    clearRegister(regist);
+void fnClearRegisters(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnClPAll);
   }
+  else {
+    calcRegister_t regist;
 
-  for(regist=0; regist<allLocalRegisterPointer->numberOfLocalRegisters; regist++) {
-    clearRegister(FIRST_LOCAL_REGISTER + regist);
-  }
-
-  if(!getSystemFlag(FLAG_SSIZE8)) { // Stack size = 4
-    for(regist=REGISTER_A; regist<=REGISTER_D; regist++) {
+    for(regist=0; regist<REGISTER_X; regist++) {
       clearRegister(regist);
     }
-  }
 
-  for(regist=REGISTER_I; regist<=REGISTER_K; regist++) {
-    clearRegister(regist);
+    for(regist=0; regist<allLocalRegisterPointer->numberOfLocalRegisters; regist++) {
+      clearRegister(FIRST_LOCAL_REGISTER + regist);
+    }
+
+    if(!getSystemFlag(FLAG_SSIZE8)) { // Stack size = 4
+      for(regist=REGISTER_A; regist<=REGISTER_D; regist++) {
+        clearRegister(regist);
+      }
+    }
+
+    for(regist=REGISTER_I; regist<=REGISTER_K; regist++) {
+      clearRegister(regist);
+    }
   }
 }
 

@@ -35,7 +35,7 @@ void         allocateLocalRegisters          (uint16_t n);
 void         allocateNamedVariable           (const char *variableName);
 uint16_t     getRegisterFullSize             (calcRegister_t regist);
 void         clearRegister                   (calcRegister_t regist);
-void         fnClearRegisters                (uint16_t unusedButMandatoryParameter);
+void         fnClearRegisters                (uint16_t confirmation);
 void         fnGetLocR                       (uint16_t unusedButMandatoryParameter);
 void         adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
 void         copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);

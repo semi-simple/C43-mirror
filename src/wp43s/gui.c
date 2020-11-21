@@ -1435,9 +1435,6 @@
     }
     else {
       softmenuStackPointerBeforeAIM = softmenuStackPointer;
-      //if(softmenuStackPointer == 0) {
-      //  showSoftmenu(NULL, -MNU_MyAlpha, false);
-      //}
       alphaCase = AC_UPPER;
       calcMode = CM_AIM;
       nextChar = NC_NORMAL;

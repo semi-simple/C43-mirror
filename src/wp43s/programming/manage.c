@@ -276,22 +276,63 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
 
 void insertStepInProgram(int16_t func) {
   switch(func) {
-    case ITM_LBL:      //    1
-      break;
-
-    case ITM_GTO:      //    2
-      break;
-
-    case ITM_GTOP:     // 1472
+    case ITM_GTO:          //    2
+    case ITM_GTOP:         // 1472
       #ifndef DMCP_BUILD
         stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
         printf("%s\n", tmpString);
       #endif // DMCP_BUILD
       break;
 
+    case ITM_CLP:          // 1415
+      fnClP(NOPARAM);
+      break;
+
+    case ITM_CLPALL:       // 1416
+      fnClPAll(NOT_CONFIRMED);
+      break;
+
+    // Not programmable
+    case ITM_ASSIGN:       // 1401
+    case ITM_CLALL:        // 1409
+    case ITM_CLREGS:       // 1417
+    case ITM_EQ_DEL:       // 1453
+    case ITM_EQ_EDI:       // 1454
+    case ITM_EQ_NEW:       // 1455
+    case ITM_LOAD:         // 1499
+    case ITM_LOADP:        // 1500
+    case ITM_LOADR:        // 1501
+    case ITM_LOADSS:       // 1502
+    case ITM_LOADSIGMA:    // 1503
+    case ITM_LOADV:        // 1542
+    case ITM_M_DELR:       // 1515
+    case ITM_M_EDI:        // 1519
+    case ITM_M_EDIN:       // 1520
+    case ITM_M_GOTO:       // 1522
+    case ITM_M_GROW:       // 1523
+    case ITM_M_INSR:       // 1524
+    case ITM_M_OLD:        // 1527
+    case ITM_M_WRAP:       // 1531
+    case ITM_PSTO:         // 1545
+    case ITM_RBR:          // 1550
+    case ITM_RESET:        // 1558
+    case ITM_SAVE:         // 1576
+    case ITM_STATUS:       // 1600
+    case ITM_TIMER:        // 1612
+    case ITM_FBR:          // 1712
+    case KEY_UNDO:         // 1713
+    case ITM_SYSTEM:       // 1733
+      break;
+
     default: {
       #ifndef DMCP_BUILD
-        printf("\nERROR in function insertStepInProgram: func=%" PRId16 " is unknown!\n", func);
+        if(stringByteLength(indexOfItems[func].itemCatalogName) != 0) {
+          stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
+        }
+        else {
+          stringToUtf8(indexOfItems[func].itemSoftmenuName, (uint8_t *)tmpString);
+        }
+        printf("\nERROR in function insertStepInProgram: unexpected case %s (item=%" PRId16 ")\n", tmpString, func);
       #endif // DMCP_BUILD
     }
   }

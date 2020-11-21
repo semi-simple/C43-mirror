@@ -327,7 +327,7 @@ const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,  
 #include "softmenuCatalogs.h"
 
 const softmenu_t softmenu[] = {
-  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             }, // This menu MUST stay the 1st in this list or change #define MY_ALPHA_MENU 0
+  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             },
   {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
@@ -462,13 +462,17 @@ void initVariableSoftmenu(int16_t menu) {
 
   switch(-variableSoftmenu[menu].menuId) {
     case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000to\000be\000coded\000\000", 27);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 27);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_RAM:
-    case MNU_FLASH:   numberOfBytes = 1;
+    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(26);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001FLASH\000not\000yet\000defined\000\000", 25);
+                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+                      break;
+
+    case MNU_RAM:     numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);
                       for(i=0; i<numberOfLabels; i++) {
@@ -508,7 +512,7 @@ void initVariableSoftmenu(int16_t menu) {
                       break;
 
     case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 26);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 50);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
@@ -559,7 +563,7 @@ void initVariableSoftmenu(int16_t menu) {
                       break;
 
     case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000not\000yet\000defined\000\000", 24);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000not\000yet\000defined\000\000", 25);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 

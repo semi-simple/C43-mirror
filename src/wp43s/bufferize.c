@@ -238,7 +238,7 @@
         else if(item == ITM_INDIRECTION) { // --> Indirection
           tamTransitionSystem(TT_INDIRECT);
         }
-        else if(item == KEY_BACKSPACE) {
+        else if(item == ITM_BACKSPACE) {
           tamTransitionSystem(TT_BACKSPACE);
         }
         else if(item == CHR_alpha) {
@@ -258,7 +258,7 @@
       else if(calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
         int32_t firstItem = 0, pos;
 
-        if(item == KEY_BACKSPACE) {
+        if(item == ITM_BACKSPACE) {
           calcModeNormal();
           return;
         }
@@ -662,7 +662,7 @@
         }
         break;
 
-      case KEY_CC :
+      case ITM_CC :
         lastChar = strlen(aimBuffer) - 1;
 
         done = true;
@@ -711,7 +711,7 @@
         }
         break;
 
-      case KEY_BACKSPACE :
+      case ITM_BACKSPACE :
         lastChar = strlen(aimBuffer) - 1;
 
         done = true;
@@ -832,7 +832,7 @@
         }
         break;
 
-      case KEY_EXIT :
+      case ITM_EXIT :
         done = true;
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {

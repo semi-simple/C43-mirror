@@ -292,6 +292,14 @@ void insertStepInProgram(int16_t func) {
       fnClPAll(NOT_CONFIRMED);
       break;
 
+    case ITM_BST:          // 1724
+      fnBst(NOPARAM);
+      break;
+
+    case ITM_SST:          // 1726
+      fnSst(NOPARAM);
+      break;
+
     // Not programmable
     case ITM_ASSIGN:       // 1401
     case ITM_CLALL:        // 1409
@@ -320,7 +328,7 @@ void insertStepInProgram(int16_t func) {
     case ITM_STATUS:       // 1600
     case ITM_TIMER:        // 1612
     case ITM_FBR:          // 1712
-    case KEY_UNDO:         // 1713
+    case ITM_UNDO:         // 1713
     case ITM_SYSTEM:       // 1733
       break;
 

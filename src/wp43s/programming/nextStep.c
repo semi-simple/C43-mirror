@@ -609,3 +609,31 @@ uint8_t *findPreviousStep(uint8_t *step) {
 
   return searchFromStep;
 }
+
+
+
+void fnBst(uint16_t unusedButMandatoryParameter) {
+  if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
+    firstDisplayedStepNumber--;
+    firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+  }
+
+  if(currentStepNumber != 0) {
+    currentStepNumber--;
+  }
+}
+
+
+
+void fnSst(uint16_t unusedButMandatoryParameter) {
+  if(currentStepNumber++ >= 3) {
+    if(!programListEnd) {
+      firstDisplayedStepNumber++;
+      firstDisplayedStep = findNextStep(firstDisplayedStep);
+    }
+  }
+
+  if(currentStepNumber > firstDisplayedStepNumber + numberOfStepsOnScreen) {
+    currentStepNumber = firstDisplayedStepNumber + numberOfStepsOnScreen;
+  }
+}

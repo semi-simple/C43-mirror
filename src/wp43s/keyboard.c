@@ -199,7 +199,7 @@
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
-              if(calcMode == CM_NIM && item != KEY_CC) {
+              if(calcMode == CM_NIM && item != ITM_CC) {
                 closeNim();
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
@@ -230,7 +230,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == KEY_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    if(key->primary == ITM_f && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftF = !shiftF;
@@ -238,7 +238,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == KEY_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    else if(key->primary == ITM_g && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -412,36 +412,36 @@
   void processKeyAction(int16_t item) {
     keyActionProcessed = false;
 
-    if(lastErrorCode != 0 && item != KEY_EXIT && item != KEY_BACKSPACE) {
+    if(lastErrorCode != 0 && item != ITM_EXIT && item != ITM_BACKSPACE) {
       lastErrorCode = 0;
     }
 
     temporaryInformation = TI_NO_INFO;
 
     switch(item) {
-      case KEY_BACKSPACE:
+      case ITM_BACKSPACE:
         fnKeyBackspace(NOPARAM);
         keyActionProcessed = true;
         break;
 
-      case KEY_UP:
+      case ITM_UP:
         fnKeyUp(NOPARAM);
         keyActionProcessed = true;
         break;
 
-      case KEY_DOWN:
+      case ITM_DOWN:
         fnKeyDown(NOPARAM);
         keyActionProcessed = true;
         break;
 
-      case KEY_EXIT:
+      case ITM_EXIT:
         fnKeyExit(NOPARAM);
         keyActionProcessed = true;
         break;
 
-      case KEY_CC:
+      case ITM_CC:
       case ITM_ENTER:
-      case KEY_dotD:
+      case ITM_dotD:
         if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
           keyActionProcessed = true;
         }
@@ -455,7 +455,7 @@
               keyActionProcessed = true;
             }
             // Following commands do not timeout to NOP
-            else if(item == KEY_UNDO || item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {
+            else if(item == ITM_UNDO || item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {
               runFunction(item);
               keyActionProcessed = true;
             }
@@ -738,7 +738,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_NIM:
-        addItemToNimBuffer(KEY_EXIT);
+        addItemToNimBuffer(ITM_EXIT);
         break;
 
       case CM_TAM:
@@ -838,7 +838,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_NIM:
-        addItemToNimBuffer(KEY_CC);
+        addItemToNimBuffer(ITM_CC);
         break;
 
       case CM_ASM:
@@ -896,7 +896,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_NIM:
-        addItemToNimBuffer(KEY_BACKSPACE);
+        addItemToNimBuffer(ITM_BACKSPACE);
         break;
 
       case CM_TAM:
@@ -904,7 +904,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_ASM:
-        addItemToBuffer(KEY_BACKSPACE);
+        addItemToBuffer(ITM_BACKSPACE);
         break;
 
       case CM_ASM_OVER_TAM:
@@ -1033,14 +1033,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           menuUp();
         }
         else {
-          if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
-            firstDisplayedStepNumber--;
-            firstDisplayedStep = findPreviousStep(firstDisplayedStep);
-          }
-
-          if(currentStepNumber != 0) {
-            currentStepNumber--;
-          }
+          fnBst(NOPARAM);
         }
         break;
 
@@ -1148,16 +1141,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           menuDown();
         }
         else {
-          if(currentStepNumber++ >= 3) {
-            if(!programListEnd) {
-              firstDisplayedStepNumber++;
-              firstDisplayedStep = findNextStep(firstDisplayedStep);
-            }
-          }
-
-          if(currentStepNumber > firstDisplayedStepNumber + numberOfStepsOnScreen) {
-            currentStepNumber = firstDisplayedStepNumber + numberOfStepsOnScreen;
-          }
+          fnSst(NOPARAM);
         }
         break;
 

@@ -472,7 +472,6 @@ void initVariableSoftmenu(int16_t menu) {
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    //case MNU_FLASH:
     case MNU_RAM:     numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);

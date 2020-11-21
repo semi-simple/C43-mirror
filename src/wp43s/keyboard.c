@@ -85,28 +85,28 @@
    //JM btnFnClicked is called by gui.c keyPressed, and by btnFnReleased_StateMachine
    ***********************************************/
   #ifdef PC_BUILD
-  void btnFnClicked(GtkWidget *notUsed, gpointer data) {
+    void btnFnClicked(GtkWidget *notUsed, gpointer data) {
   #endif
   #ifdef DMCP_BUILD
-  void btnFnClicked(void *notUsed, void *data) {
+    void btnFnClicked(void *notUsed, void *data) {
   #endif
-  
-    executeFunction(data);
-  }
-  
+    
+      executeFunction(data);
+    }
+    
   #ifdef PC_BUILD
-  void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
-    GdkEvent mouseButton;
-    mouseButton.button.button = 1;
-    mouseButton.type = 0;
-    btnFnPressed(notUsed, &mouseButton, data);
-  }
-  void btnFnClickedR(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
-    GdkEvent mouseButton;
-    mouseButton.button.button = 1;
-    mouseButton.type = 0;
-    btnFnReleased(notUsed, &mouseButton, data);
-  }
+    void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+      GdkEvent mouseButton;
+      mouseButton.button.button = 1;
+      mouseButton.type = 0;
+      btnFnPressed(notUsed, &mouseButton, data);
+    }
+    void btnFnClickedR(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
+      GdkEvent mouseButton;
+      mouseButton.button.button = 1;
+      mouseButton.type = 0;
+      btnFnReleased(notUsed, &mouseButton, data);
+    }
   #endif // PC_BUILD
 
 
@@ -244,7 +244,7 @@
             }
 
           }
-           // Broke the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
+           // Broken the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
           {
             if(item < 0) { // softmenu
               if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {

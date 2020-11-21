@@ -21,22 +21,22 @@
 #include "wp43s.h"
 
 #ifdef PC_BUILD
-GtkWidget *grid;
-#if (SCREEN_800X480 == 0)
-GtkWidget *backgroundImage;
+  GtkWidget *grid;
+  #if (SCREEN_800X480 == 0)
+    GtkWidget *backgroundImage;
 #ifdef S43
-  GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
+    GtkWidget *lblFSoftkeyArea, *lblGSoftkeyArea;
 #endif
 GtkWidget *lblFKey2;
 GtkWidget *lblGKey2;
 //GtkWidget *lblEKey;
 //GtkWidget *lblEEKey;
 //GtkWidget *lblSKey;
-GtkWidget *lblBehindScreen;
+    GtkWidget *lblBehindScreen;
 
-GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
+    GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
 
-GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
+    GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
 GtkWidget *lbl21F,  *lbl22F,  *lbl23F,  *lbl24F,  *lbl25F,  *lbl26F;
 GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
 GtkWidget *lbl21L,  *lbl22L,  *lbl23L,  *lbl24L,  *lbl25L,  *lbl26L;
@@ -45,7 +45,7 @@ GtkWidget *lbl21Gr, *lbl22Gr, *lbl23Gr, *lbl24Gr, *lbl25Gr, *lbl26Gr;
 GtkWidget *btn21A,  *btn22A,  *btn23A,  *btn24A,  *btn25A,  *btn26A;    //dr - new AIM
 GtkWidget *lbl21Fa, *lbl22Fa, *lbl23Fa;                                 //JM
 
-GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
+    GtkWidget *btn31,   *btn32,   *btn33,   *btn34,   *btn35,   *btn36;
 GtkWidget *lbl31F,  *lbl32F,  *lbl33F,  *lbl34F,  *lbl35F,  *lbl36F;
 GtkWidget *lbl31G,  *lbl32G,  *lbl33G,  *lbl34G,  *lbl35G,  *lbl36G;
 GtkWidget *lbl31L,  *lbl32L,  *lbl33L,  *lbl34L,  *lbl35L,  *lbl36L; 
@@ -54,7 +54,7 @@ GtkWidget *lbl31Gr, *lbl32Gr, *lbl33Gr, *lbl34Gr, *lbl35Gr, *lbl36Gr;
 GtkWidget *btn31A,  *btn32A,  *btn33A,  *btn34A,  *btn35A,  *btn36A;    //dr - new AIM
 GtkWidget                               *lbl34Fa;                                 //JMALPHA2
 
-GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
+    GtkWidget *btn41,   *btn42,   *btn43,   *btn44,   *btn45;
 GtkWidget *lbl41F,  *lbl42F,  *lbl43F,  *lbl44F,  *lbl45F;
 GtkWidget *lbl41G,  *lbl42G,  *lbl43G,  *lbl44G,  *lbl45G;
 GtkWidget *lbl41L,  *lbl42L,  *lbl43L,  *lbl44L,  *lbl45L;
@@ -63,7 +63,7 @@ GtkWidget *lbl41Gr, *lbl42Gr, *lbl43Gr, *lbl44Gr, *lbl45Gr;
 GtkWidget           *btn42A,  *btn43A,  *btn44A;                        //vv dr - new AIM
 GtkWidget           *lbl42Fa, *lbl43Fa;                                 //^^
 
-GtkWidget *btn51,   *btn52,   *btn53,   *btn54,   *btn55;
+    GtkWidget *btn51,   *btn52,   *btn53,   *btn54,   *btn55;
 GtkWidget *lbl51F,  *lbl52F,  *lbl53F,  *lbl54F,  *lbl55F;
 GtkWidget *lbl51G,  *lbl52G,  *lbl53G,  *lbl54G,  *lbl55G;
 GtkWidget *lbl51L,  *lbl52L,  *lbl53L,  *lbl54L,  *lbl55L;
@@ -71,7 +71,7 @@ GtkWidget *lbl51Gr, *lbl52Gr, *lbl53Gr, *lbl54Gr, *lbl55Gr;
 GtkWidget           *btn52A,  *btn53A,  *btn54A,  *btn55A;              //vv dr - new AIM
 GtkWidget           *lbl52Fa, *lbl53Fa, *lbl54Fa, *lbl55Fa;             //^^
 
-GtkWidget *btn61,   *btn62,   *btn63,   *btn64,   *btn65;
+    GtkWidget *btn61,   *btn62,   *btn63,   *btn64,   *btn65;
 GtkWidget *lbl61F,  *lbl62F,  *lbl63F,  *lbl64F,  *lbl65F;
 GtkWidget *lbl61G,  *lbl62G,  *lbl63G,  *lbl64G,  *lbl65G;
 GtkWidget *lbl61L,  *lbl62L,  *lbl63L,  *lbl64L,  *lbl65L;
@@ -80,7 +80,7 @@ GtkWidget *lbl61Gr, *lbl62Gr, *lbl63Gr, *lbl64Gr, *lbl65Gr;
 GtkWidget           *btn62A,  *btn63A,  *btn64A,  *btn65A;              //vv dr - new AIM
 GtkWidget           *lbl62Fa, *lbl63Fa, *lbl64Fa, *lbl65Fa;             //^^
 
-GtkWidget *btn71,   *btn72,   *btn73,   *btn74,   *btn75;
+    GtkWidget *btn71,   *btn72,   *btn73,   *btn74,   *btn75;
 GtkWidget *lbl71F,  *lbl72F,  *lbl73F,  *lbl74F,  *lbl75F;
 GtkWidget *lbl71G,  *lbl72G,  *lbl73G,  *lbl74G,  *lbl75G;
 GtkWidget *lbl71L,  *lbl72L,  *lbl73L,  *lbl74L,  *lbl75L;
@@ -89,7 +89,7 @@ GtkWidget *lbl71Gr, *lbl72Gr, *lbl73Gr, *lbl74Gr, *lbl75Gr;
 GtkWidget           *btn72A,  *btn73A,  *btn74A,  *btn75A;              //vv dr - new AIM
 GtkWidget           *lbl72Fa, *lbl73Fa, *lbl74Fa, *lbl75Fa;             //^^
 
-GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
+    GtkWidget *btn81,   *btn82,   *btn83,   *btn84,   *btn85;
 GtkWidget *lbl81F,  *lbl82F,  *lbl83F,  *lbl84F,  *lbl85F;
 GtkWidget *lbl81G,  *lbl82G,  *lbl83G,  *lbl84G,  *lbl85G;
 GtkWidget *lbl81L,  *lbl82L,  *lbl83L,  *lbl84L,  *lbl85L;
@@ -101,24 +101,24 @@ GtkWidget *lblOn; //JM
 //JM7 GtkWidget  *lblConfirmY; //JM for Y/N
 //JM7 GtkWidget  *lblConfirmN; //JM for Y/N
 
-#if (DEBUG_PANEL == 1)
-  GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
-  GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedVariables, *btnSavedStackRegisters;
-  GtkWidget *chkHexaString;
-  int16_t debugWidgetDx, debugWidgetDy;
-#endif
+    #if (DEBUG_PANEL == 1)
+      GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
+      GtkWidget *btnBitFields, *btnFlags, *btnRegisters, *btnLocalRegisters, *btnStatisticalSums, *btnNamedVariables, *btnSavedStackRegisters;
+      GtkWidget *chkHexaString;
+      int16_t debugWidgetDx, debugWidgetDy;
+    #endif // (DEBUG_PANEL == 1)
 
-char *cssData;
-#endif // SCREEN_800X480
+    char *cssData;
+  #endif // (SCREEN_800X480 == 0)
 
 
 
-static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
-  saveCalc();
-  gtk_main_quit();
+  static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
+    saveCalc();
+    gtk_main_quit();
 
-  return 0;
-}
+    return 0;
+  }
 
 
 
@@ -164,47 +164,47 @@ void btnClicked_SNU(GtkWidget *w, gpointer data) {
 uint32_t CTRL_State, event_keyval;
 
 
-gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
-  //printf("Released %d\n", event->keyval);
+  gboolean keyReleased(GtkWidget *w, GdkEventKey *event, gpointer data) {     //JM
+    //printf("Released %d\n", event->keyval);
 
-  switch(event->keyval) {
+    switch(event->keyval) {
 
-    case 65507: // left Ctrl
-    case 65508: // right Ctrl
-      //printf("key depressed: CTRL De-activate\n");
-      CTRL_State = 0;
-      break;
+      case 65507: // left Ctrl
+      case 65508: // right Ctrl
+        //printf("key depressed: CTRL De-activate\n");
+        CTRL_State = 0;
+        break;
 
 
-    case 65470: // F1                      //JM Added this portion to be able to go to NOP on emulator
-      //printf("key pressed: F1\n");
-      btnFnClickedR(w, "1");
-      break;
+      case 65470: // F1                      //JM Added this portion to be able to go to NOP on emulator
+        //printf("key pressed: F1\n");
+        btnFnClickedR(w, "1");
+        break;
 
-    case 65471: // F2
-      //printf("key pressed: F2\n");
-      btnFnClickedR(w, "2");
-      break;
+      case 65471: // F2
+        //printf("key pressed: F2\n");
+        btnFnClickedR(w, "2");
+        break;
 
-    case 65472: // F3
-      //printf("key pressed: F3\n");
-      btnFnClickedR(w, "3");
-      break;
+      case 65472: // F3
+        //printf("key pressed: F3\n");
+        btnFnClickedR(w, "3");
+        break;
 
-    case 65473: // F4
-      //printf("key pressed: F4\n");
-      btnFnClickedR(w, "4");
-      break;
+      case 65473: // F4
+        //printf("key pressed: F4\n");
+        btnFnClickedR(w, "4");
+        break;
 
-    case 65474: // F5
-      //printf("key pressed: F5\n");
-      btnFnClickedR(w, "5");
-      break;
+      case 65474: // F5
+        //printf("key pressed: F5\n");
+        btnFnClickedR(w, "5");
+        break;
 
-    case 65475: // F6
-      //printf("key pressed: F6\n");
-      btnFnClickedR(w, "6");
-      break;
+      case 65475: // F6
+        //printf("key pressed: F6\n");
+        btnFnClickedR(w, "6");
+        break;
 
     case 65505: // left shift  //JM Added this portion to be able to repeat f key on emulator
       //printf("key pressed: Shift\n"); //dr
@@ -905,116 +905,115 @@ return FALSE;
       copyAllRegistersToClipboard();
       break;
 
-
-    default:
-      break;
+      default:
+        break;
+    }
+    return FALSE;
   }
-  return FALSE;
-}
-#endif
+#endif // PC_BUILD
 
 
 #ifndef DMCP_BUILD
-void strReplace(char *haystack, const char *needle, const char *newNeedle) {
-  ////////////////////////////////////////////////////////
-  // There MUST be enough memory allocated to *haystack //
-  // when strlen(newNeedle) > strlen(needle)            //
-  ////////////////////////////////////////////////////////
-  char *str, *needleLocation;
-  int  needleLg;
+  void strReplace(char *haystack, const char *needle, const char *newNeedle) {
+    ////////////////////////////////////////////////////////
+    // There MUST be enough memory allocated to *haystack //
+    // when strlen(newNeedle) > strlen(needle)            //
+    ////////////////////////////////////////////////////////
+    char *str, *needleLocation;
+    int  needleLg;
 
-  while(strstr(haystack, needle) != NULL) {
-    needleLg = strlen(needle);
-    needleLocation = strstr(haystack, needle);
-    str = malloc(strlen(needleLocation + needleLg) + 1);
-    #ifdef PC_BUILD
-      if(str == NULL) {
-        moreInfoOnError("In function strReplace:", "error allocating memory for str!", NULL, NULL);
-        exit(1);
-      }
-    #endif
+    while(strstr(haystack, needle) != NULL) {
+      needleLg = strlen(needle);
+      needleLocation = strstr(haystack, needle);
+      str = malloc(strlen(needleLocation + needleLg) + 1);
+      #ifdef PC_BUILD
+        if(str == NULL) {
+          moreInfoOnError("In function strReplace:", "error allocating memory for str!", NULL, NULL);
+          exit(1);
+        }
+      #endif // PC_BUILD
 
-    strcpy(str, needleLocation + needleLg);
-    *strstr(haystack, needle) = 0;
-    strcat(haystack, newNeedle);
-    strcat(haystack, str);
-    free(str);
+      strcpy(str, needleLocation + needleLg);
+      *strstr(haystack, needle) = 0;
+      strcat(haystack, newNeedle);
+      strcat(haystack, str);
+      free(str);
+    }
   }
-}
-#endif
+#endif // !DMCP_BUILD
 
 
 #ifdef PC_BUILD
-#if (SCREEN_800X480 == 0)
-/********************************************//**
- * \brief Reads the CSS file to configure the calc's GUI style
- *
- * \param void
- * \return void
- ***********************************************/
-void prepareCssData(void) {
-  FILE *cssFile;
-  char *toReplace, *replaceWith, needle[100], newNeedle[100];
-  int  fileLg;
+  #if (SCREEN_800X480 == 0)
+    /********************************************//**
+     * \brief Reads the CSS file to configure the calc's GUI style
+     *
+     * \param void
+     * \return void
+     ***********************************************/
+    void prepareCssData(void) {
+      FILE *cssFile;
+      char *toReplace, *replaceWith, needle[100], newNeedle[100];
+      int  fileLg;
 
-  // Convert the pre-CSS data to CSS data
-  cssFile = fopen(CSSFILE, "rb");
-  if(cssFile == NULL) {
-    moreInfoOnError("In function prepareCssData:", "error opening file " CSSFILE "!", NULL, NULL);
-    exit(1);
-  }
+      // Convert the pre-CSS data to CSS data
+      cssFile = fopen(CSSFILE, "rb");
+      if(cssFile == NULL) {
+        moreInfoOnError("In function prepareCssData:", "error opening file " CSSFILE "!", NULL, NULL);
+        exit(1);
+      }
 
-  // Get the file length
-  fseek(cssFile, 0L, SEEK_END);
-  fileLg = ftell(cssFile);
-  fseek(cssFile, 0L, SEEK_SET);
+      // Get the file length
+      fseek(cssFile, 0L, SEEK_END);
+      fileLg = ftell(cssFile);
+      fseek(cssFile, 0L, SEEK_SET);
 
-  cssData = malloc(2*fileLg); // To be sure there is enough space
-  if(cssData == NULL) {
-    moreInfoOnError("In function prepareCssData:", "error allocating 10000 bytes for CSS data", NULL, NULL);
-    exit(1);
-  }
+      cssData = malloc(2*fileLg); // To be sure there is enough space
+      if(cssData == NULL) {
+        moreInfoOnError("In function prepareCssData:", "error allocating 10000 bytes for CSS data", NULL, NULL);
+        exit(1);
+      }
 
-  fread(cssData, 1, fileLg, cssFile);
-  fclose(cssFile);
-  cssData[fileLg] = 0;
+      fread(cssData, 1, fileLg, cssFile);
+      fclose(cssFile);
+      cssData[fileLg] = 0;
 
-  toReplace = strstr(cssData, "/* Replace $");
-  while(toReplace != NULL) {
-    int i = -1;
-    toReplace += 11;
-    while(toReplace[++i] != ' ') {
-      needle[i] = toReplace[i];
+      toReplace = strstr(cssData, "/* Replace $");
+      while(toReplace != NULL) {
+        int i = -1;
+        toReplace += 11;
+        while(toReplace[++i] != ' ') {
+          needle[i] = toReplace[i];
+        }
+        needle[i] = 0;
+
+        *toReplace = ' ';
+
+        replaceWith = strstr(toReplace, " with ");
+        if(replaceWith == NULL) {
+          moreInfoOnError("In function prepareCssData:", "Can't find \" with \" after \"/* Replace $\" in CSS file " CSSFILE, NULL, NULL);
+          exit(1);
+        }
+
+        replaceWith[1] = ' ';
+        replaceWith += 6;
+        i = -1;
+        while(replaceWith[++i] != ' ') {
+          newNeedle[i] = replaceWith[i];
+        }
+        newNeedle[i] = 0;
+
+        strReplace(toReplace, needle, newNeedle);
+
+        toReplace = strstr(cssData, "/* Replace $");
+      }
+
+      if(strstr(cssData, "$") != NULL) {
+        moreInfoOnError("In function prepareCssData:", "There is still an unreplaced $ in the CSS file!\nPlease check file " CSSFILE, NULL, NULL);
+        printf("%s\n", cssData);
+        exit(1);
+      }
     }
-    needle[i] = 0;
-
-    *toReplace = ' ';
-
-    replaceWith = strstr(toReplace, " with ");
-    if(replaceWith == NULL) {
-      moreInfoOnError("In function prepareCssData:", "Can't find \" with \" after \"/* Replace $\" in CSS file " CSSFILE, NULL, NULL);
-      exit(1);
-    }
-
-    replaceWith[1] = ' ';
-    replaceWith += 6;
-    i = -1;
-    while(replaceWith[++i] != ' ') {
-      newNeedle[i] = replaceWith[i];
-    }
-    newNeedle[i] = 0;
-
-    strReplace(toReplace, needle, newNeedle);
-
-    toReplace = strstr(cssData, "/* Replace $");
-  }
-
-  if(strstr(cssData, "$") != NULL) {
-    moreInfoOnError("In function prepareCssData:", "There is still an unreplaced $ in the CSS file!\nPlease check file " CSSFILE, NULL, NULL);
-    printf("%s\n", cssData);
-    exit(1);
-  }
-}
 
 
 
@@ -2060,8 +2059,8 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
 
 
 
-void calcModeNormalGui(void) {
-  const calcKey_t *keys;
+    void calcModeNormalGui(void) {
+      const calcKey_t *keys;
 
   if(running_program_jm) return;                        //JM faster during program excution
 
@@ -3926,323 +3925,324 @@ void setupUI(void) {
 
   // gtk_fixed_put(GTK_FIXED(grid), lblOn,   0, 0);     //JM Removed ON to 81
 
-  // The debug window
-  #if (DEBUG_PANEL == 1)
-    for(int i=0; i<DEBUG_LINES; i++) {
-      lbl1[i] = gtk_label_new("");
-      gtk_widget_set_name(lbl1[i], "debugDejaVu");
-      gtk_fixed_put(GTK_FIXED(grid), lbl1[i], 1 + debugWidgetDx, 26 + i*14 + debugWidgetDy);
-      lbl2[i] = gtk_label_new("");
-      gtk_widget_set_name(lbl2[i], "debugWP43S");
-      gtk_fixed_put(GTK_FIXED(grid), lbl2[i], 270 + debugWidgetDx, 25 + i*14 + debugWidgetDy);
-    }
+      // The debug window
+      #if (DEBUG_PANEL == 1)
+        for(int i=0; i<DEBUG_LINES; i++) {
+          lbl1[i] = gtk_label_new("");
+          gtk_widget_set_name(lbl1[i], "debugDejaVu");
+          gtk_fixed_put(GTK_FIXED(grid), lbl1[i], 1 + debugWidgetDx, 26 + i*14 + debugWidgetDy);
+          lbl2[i] = gtk_label_new("");
+          gtk_widget_set_name(lbl2[i], "debugWP43S");
+          gtk_fixed_put(GTK_FIXED(grid), lbl2[i], 270 + debugWidgetDx, 25 + i*14 + debugWidgetDy);
+        }
 
-    btnBitFields           = gtk_button_new_with_label("Bitfields");
-    btnFlags               = gtk_button_new_with_label("Flags");
-    btnRegisters           = gtk_button_new_with_label("Registers");
-    btnLocalRegisters      = gtk_button_new_with_label("Local registers");
-    btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
-    btnNamedVariables      = gtk_button_new_with_label("Named variables");
-    btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
-    chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
+        btnBitFields           = gtk_button_new_with_label("Bitfields");
+        btnFlags               = gtk_button_new_with_label("Flags");
+        btnRegisters           = gtk_button_new_with_label("Registers");
+        btnLocalRegisters      = gtk_button_new_with_label("Local registers");
+        btnStatisticalSums     = gtk_button_new_with_label("Statistical sums");
+        btnNamedVariables      = gtk_button_new_with_label("Named variables");
+        btnSavedStackRegisters = gtk_button_new_with_label("Saved stack registers");
+        chkHexaString          = gtk_check_button_new_with_label("Strings in hexadecimal form");
 
-    gtk_widget_set_name(btnBitFields,           "debugButton");
-    gtk_widget_set_name(btnFlags,               "debugButton");
-    gtk_widget_set_name(btnRegisters,           "debugButton");
-    gtk_widget_set_name(btnLocalRegisters,      "debugButton");
-    gtk_widget_set_name(btnStatisticalSums,     "debugButton");
-    gtk_widget_set_name(btnNamedVariables,      "debugButton");
-    gtk_widget_set_name(btnSavedStackRegisters, "debugButton");
-    gtk_widget_set_name(chkHexaString,          "debugCheckbox");
+        gtk_widget_set_name(btnBitFields,           "debugButton");
+        gtk_widget_set_name(btnFlags,               "debugButton");
+        gtk_widget_set_name(btnRegisters,           "debugButton");
+        gtk_widget_set_name(btnLocalRegisters,      "debugButton");
+        gtk_widget_set_name(btnStatisticalSums,     "debugButton");
+        gtk_widget_set_name(btnNamedVariables,      "debugButton");
+        gtk_widget_set_name(btnSavedStackRegisters, "debugButton");
+        gtk_widget_set_name(chkHexaString,          "debugCheckbox");
 
-    g_signal_connect(btnBitFields,           "clicked", G_CALLBACK(btnBitFieldsClicked),           NULL);
-    g_signal_connect(btnFlags,               "clicked", G_CALLBACK(btnFlagsClicked),               NULL);
-    g_signal_connect(btnRegisters,           "clicked", G_CALLBACK(btnRegistersClicked),           NULL);
-    g_signal_connect(btnLocalRegisters,      "clicked", G_CALLBACK(btnLocalRegistersClicked),      NULL);
-    g_signal_connect(btnStatisticalSums,     "clicked", G_CALLBACK(btnStatisticalSumsClicked),     NULL);
-    g_signal_connect(btnNamedVariables,      "clicked", G_CALLBACK(btnNamedVariablesClicked),      NULL);
-    g_signal_connect(btnSavedStackRegisters, "clicked", G_CALLBACK(btnSavedStackRegistersClicked), NULL);
-    g_signal_connect(chkHexaString,          "clicked", G_CALLBACK(chkHexaStringClicked),          NULL);
+        g_signal_connect(btnBitFields,           "clicked", G_CALLBACK(btnBitFieldsClicked),           NULL);
+        g_signal_connect(btnFlags,               "clicked", G_CALLBACK(btnFlagsClicked),               NULL);
+        g_signal_connect(btnRegisters,           "clicked", G_CALLBACK(btnRegistersClicked),           NULL);
+        g_signal_connect(btnLocalRegisters,      "clicked", G_CALLBACK(btnLocalRegistersClicked),      NULL);
+        g_signal_connect(btnStatisticalSums,     "clicked", G_CALLBACK(btnStatisticalSumsClicked),     NULL);
+        g_signal_connect(btnNamedVariables,      "clicked", G_CALLBACK(btnNamedVariablesClicked),      NULL);
+        g_signal_connect(btnSavedStackRegisters, "clicked", G_CALLBACK(btnSavedStackRegistersClicked), NULL);
+        g_signal_connect(chkHexaString,          "clicked", G_CALLBACK(chkHexaStringClicked),          NULL);
 
-    gtk_fixed_put(GTK_FIXED(grid), btnBitFields,             1 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnFlags,                60 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnRegisters,           101 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnLocalRegisters,      166 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnStatisticalSums,     260 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnNamedVariables,      360 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), btnSavedStackRegisters, 465 + debugWidgetDx, 1 + debugWidgetDy);
-    gtk_fixed_put(GTK_FIXED(grid), chkHexaString,          630 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnBitFields,             1 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnFlags,                60 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnRegisters,           101 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnLocalRegisters,      166 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnStatisticalSums,     260 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnNamedVariables,      360 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), btnSavedStackRegisters, 465 + debugWidgetDx, 1 + debugWidgetDy);
+        gtk_fixed_put(GTK_FIXED(grid), chkHexaString,          630 + debugWidgetDx, 1 + debugWidgetDy);
 
-    gtk_widget_show(btnBitFields);
-    gtk_widget_show(btnFlags);
-    gtk_widget_show(btnRegisters);
-    gtk_widget_show(btnLocalRegisters);
-    gtk_widget_show(btnStatisticalSums);
-    gtk_widget_show(btnNamedVariables);
-    gtk_widget_show(btnSavedStackRegisters);
-    gtk_widget_show(chkHexaString);
+        gtk_widget_show(btnBitFields);
+        gtk_widget_show(btnFlags);
+        gtk_widget_show(btnRegisters);
+        gtk_widget_show(btnLocalRegisters);
+        gtk_widget_show(btnStatisticalSums);
+        gtk_widget_show(btnNamedVariables);
+        gtk_widget_show(btnSavedStackRegisters);
+        gtk_widget_show(chkHexaString);
 
-    debugWindow = DBG_REGISTERS;
-  #endif
+        debugWindow = DBG_REGISTERS;
+      #endif // (DEBUG_PANEL == 1)
 
-  gtk_widget_show_all(frmCalc);
-#else // SCREEN_800X480 == 1
-    // The main window
-    frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
-    gtk_window_fullscreen(GTK_WINDOW(frmCalc));
-    gtk_window_set_decorated (GTK_WINDOW (frmCalc), FALSE);
-    
-    gtk_widget_set_name(frmCalc, "mainWindow");
-    gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
-    g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
-    g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
-    
-    gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
-    
-    // Fixed grid to freely put widgets on it
-    grid = gtk_fixed_new();
-    gtk_container_add(GTK_CONTAINER(frmCalc), grid);
-    
-    // LCD screen 800x480
-    screen = gtk_drawing_area_new();
-    gtk_widget_set_size_request(screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
-    gtk_fixed_put(GTK_FIXED(grid), screen, 0, 0);
-    screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
-    int numBytes = screenStride * SCREEN_HEIGHT * 4;
-    screenData = malloc(numBytes);
-    if(screenData == NULL) {
+      gtk_widget_show_all(frmCalc);
+
+    #else // SCREEN_800X480 == 1
+      // The main window
+      frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
+      gtk_window_fullscreen(GTK_WINDOW(frmCalc));
+      gtk_window_set_decorated (GTK_WINDOW (frmCalc), FALSE);
+
+      gtk_widget_set_name(frmCalc, "mainWindow");
+      gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
+      g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
+      g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
+
+      gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
+
+      // Fixed grid to freely put widgets on it
+      grid = gtk_fixed_new();
+      gtk_container_add(GTK_CONTAINER(frmCalc), grid);
+
+      // LCD screen 800x480
+      screen = gtk_drawing_area_new();
+      gtk_widget_set_size_request(screen, SCREEN_WIDTH*2, SCREEN_HEIGHT*2);
+      gtk_fixed_put(GTK_FIXED(grid), screen, 0, 0);
+      screenStride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, SCREEN_WIDTH)/4;
+      int numBytes = screenStride * SCREEN_HEIGHT * 4;
+      screenData = malloc(numBytes);
+      if(screenData == NULL) {
         sprintf(errorMessage, "error allocating %d x %d = %d bytes for screenData", screenStride * 4, SCREEN_HEIGHT, numBytes);
         moreInfoOnError("In function setupUI:", errorMessage, NULL, NULL);
         exit(1);
-    }
-    
-    g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
-    
-    gtk_widget_show_all(frmCalc);
-#endif // SCREEN_800X480
-}
-#endif
+      }
+
+      g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
+
+      gtk_widget_show_all(frmCalc);
+    #endif //  (SCREEN_800X480 == 0)
+  }
+#endif // PC_BUILD
 
 
 
 #ifndef TESTSUITE_BUILD
-void fnOff(uint16_t unsuedParamButMandatory) {
-  shiftF = false;
-  shiftG = false;
+  void fnOff(uint16_t unsuedParamButMandatory) {
+    shiftF = false;
+    shiftG = false;
 
-  #ifdef PC_BUILD
-    saveCalc();
-    gtk_main_quit();
-  #endif
+    #ifdef PC_BUILD
+      saveCalc();
+      gtk_main_quit();
+    #endif // PC_BUILD
 
-  #ifdef DMCP_BUILD
-    SET_ST(STAT_PGM_END);
-  #endif
-}
+    #ifdef DMCP_BUILD
+      SET_ST(STAT_PGM_END);
+    #endif // DMCP_BUILD
+  }
 
 
 
-/********************************************//**
- * \brief Sets the calc mode to normal
- *
- * \param void
- * \return void
- ***********************************************/
-void calcModeNormal(void) {
-  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-    popSoftmenu();
-    if(calcMode == CM_ASM_OVER_TAM) {
+  /********************************************//**
+   * \brief Sets the calc mode to normal
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void calcModeNormal(void) {
+    if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
       popSoftmenu();
+      if(calcMode == CM_ASM_OVER_TAM) {
+        popSoftmenu();
+      }
+      setSystemFlag(FLAG_ASLIFT);
     }
-    setSystemFlag(FLAG_ASLIFT);
+
+    calcMode = CM_NORMAL;
+    clearSystemFlag(FLAG_ALPHA);
+    hideCursor();
+    cursorEnabled = false;
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeNormalGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
-  calcMode = CM_NORMAL;
-  clearSystemFlag(FLAG_ALPHA);
-  hideCursor();
-  cursorEnabled = false;
-
-  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-    calcModeNormalGui();
-  #endif // PC_BUILD && (SCREEN_800X480 == 0)
-}
 
 
+  /********************************************//**
+   * \brief Sets the calc mode to alpha input mode
+   *
+   * \param[in] unusedButMandatoryParameter uint16_t
+   * \return void
+   ***********************************************/
+  void calcModeAim(uint16_t unusedButMandatoryParameter) {
+    if(calcMode == CM_ASM_OVER_AIM) {
+      popSoftmenu();
+      calcMode = CM_AIM;
+    }
+    else {
+    if(!SH_BASE_AHOME) {
+  //    softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM TOCHECK
+  //    if(softmenuStackPointer == 0) {
+  //      showSoftmenu(NULL, -MNU_MyAlpha, false);
+  //    }
+    } else
+    if(SH_BASE_AHOME) {
+      softmenuStackPointerBeforeAIM = softmenuStackPointer;
+        showSoftmenu(NULL, -MNU_ALPHA, true);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+    }
 
-/********************************************//**
- * \brief Sets the calc mode to alpha input mode
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
-void calcModeAim(uint16_t unusedButMandatoryParameter) {
-  if(calcMode == CM_ASM_OVER_AIM) {
-    popSoftmenu();
-    calcMode = CM_AIM;
+      alphaCase = AC_UPPER;
+      calcMode = CM_AIM;
+      nextChar = NC_NORMAL;
+
+      liftStack();
+
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_AIM_LINE + 6;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+    }
+
+    setSystemFlag(FLAG_ALPHA);
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeAimGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
-  else {
-  if(!SH_BASE_AHOME) {
-//    softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM TOCHECK
-//    if(softmenuStackPointer == 0) {
-//      showSoftmenu(NULL, -MNU_MyAlpha, false);
-//    }
-  } else
-  if(SH_BASE_AHOME) {
-    softmenuStackPointerBeforeAIM = softmenuStackPointer;
-      showSoftmenu(NULL, -MNU_ALPHA, true);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+
+
+
+  /********************************************//**
+   * \brief Sets the calc mode to alpha selection menu
+   *
+   * \param[in] unusedButMandatoryParameter uint16_t
+   * \return void
+   ***********************************************/
+  void calcModeAsm(void) {
+    if(calcMode == CM_NIM) {
+      closeNim();
+    }
+
+    if(calcMode != CM_AIM) {
+      alphaCase = AC_UPPER;
+      nextChar = NC_NORMAL;
+    }
+
+    calcMode = CM_ASM;
+    clearSystemFlag(FLAG_ALPHA);
+    resetAlphaSelectionBuffer();
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeAimGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
-    alphaCase = AC_UPPER;
-    calcMode = CM_AIM;
-    nextChar = NC_NORMAL;
+
+
+  /********************************************//**
+   * \brief Sets the calc mode to number input mode
+   *
+   * \param[in] unusedButMandatoryParameter uint16_t
+   * \return void
+   ***********************************************/
+  void calcModeNim(uint16_t unusedButMandatoryParameter) {
+    saveForUndo();
+
+    calcMode = CM_NIM;
+    clearSystemFlag(FLAG_ALPHA);
 
     liftStack();
+    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
 
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
+    aimBuffer[0] = 0;
+    hexDigits = 0;
+
+    clearRegisterLine(NIM_REGISTER_LINE, true, true);
     xCursor = 1;
-    yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = &standardFont;
     cursorEnabled = true;
   }
 
-  setSystemFlag(FLAG_ALPHA);
-
-  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-    calcModeAimGui();
-  #endif
-}
 
 
+  /********************************************//**
+   * \brief Sets the calc mode to temporary alpha mode
+   *
+   * \param[in] tamMode int16_t    TAM mode
+   *                               TAM        = general operation code
+   *                               TAMCMP     = comparison operation code
+   *                               TAMSTORCL  = STO or RCL operation code
+   *                               TAMSHUFFLE = Shuffle Registers operation code
+   * \param[in] opCode const char* Operation code
+   * \param[in] minN int16_t       Min value in TAM mode
+   * \param[in] maxN int16_t       Max value in TAM mode
+   * \return void
+   ***********************************************/
+  void calcModeTam(void) {
+    transitionSystemState = 0;
 
-/********************************************//**
- * \brief Sets the calc mode to alpha selection menu
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
-void calcModeAsm(void) {
-  if(calcMode == CM_NIM) {
-    closeNim();
-  }
+    if(calcMode == CM_NIM) {
+      closeNim();
+    }
+    else if(calcMode == CM_ASM_OVER_TAM) {
+      popSoftmenu();
+    }
 
-  if(calcMode != CM_AIM) {
-    alphaCase = AC_UPPER;
-    nextChar = NC_NORMAL;
-  }
+    switch(tamMode) {
+      case TM_VALUE:
+      case TM_VALUE_CHB:
+      case TM_REGISTER:
+        showSoftmenu(NULL, -MNU_TAM, true);
+        break;
 
-  calcMode = CM_ASM;
-  clearSystemFlag(FLAG_ALPHA);
-  resetAlphaSelectionBuffer();
+      case TM_CMP:
+        showSoftmenu(NULL, -MNU_TAMCMP, true);
+        break;
 
-  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-    calcModeAimGui();
-  #endif
-}
+      case TM_FLAGR:
+      case TM_FLAGW:
+        if(calcMode != CM_ASM_OVER_TAM) {
+          showSoftmenu(NULL, -MNU_TAMFLAG, true);
+        }
+        break;
 
+      case TM_STORCL:
+        showSoftmenu(NULL, -MNU_TAMSTORCL, true);
+        break;
 
+      case TM_SHUFFLE:
+        showSoftmenu(NULL, -MNU_TAMSHUFFLE, true);
+        break;
 
-/********************************************//**
- * \brief Sets the calc mode to number input mode
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
-void calcModeNim(uint16_t unusedButMandatoryParameter) {
-  saveForUndo();
+      case TM_LABEL:
+        showSoftmenu(NULL, -MNU_TAMLABEL, true);
+        break;
 
-  calcMode = CM_NIM;
-  clearSystemFlag(FLAG_ALPHA);
+      default:
+        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
+        displayBugScreen(errorMessage);
+        return;
+    }
 
-  liftStack();
-  real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
-
-  aimBuffer[0] = 0;
-  hexDigits = 0;
-
-  clearRegisterLine(NIM_REGISTER_LINE, true, true);
-  xCursor = 1;
-  cursorEnabled = true;
-}
-
-
-
-/********************************************//**
- * \brief Sets the calc mode to temporary alpha mode
- *
- * \param[in] tamMode int16_t    TAM mode
- *                               TAM        = general operation code
- *                               TAMCMP     = comparison operation code
- *                               TAMSTORCL  = STO or RCL operation code
- *                               TAMSHUFFLE = Shuffle Registers operation code
- * \param[in] opCode const char* Operation code
- * \param[in] minN int16_t       Min value in TAM mode
- * \param[in] maxN int16_t       Max value in TAM mode
- * \return void
- ***********************************************/
-void calcModeTam(void) {
-  transitionSystemState = 0;
-
-  if(calcMode == CM_NIM) {
-    closeNim();
-  }
-  else if(calcMode == CM_ASM_OVER_TAM) {
-    popSoftmenu();
-  }
-
-  switch(tamMode) {
-    case TM_VALUE:
-    case TM_VALUE_CHB:
-    case TM_REGISTER:
-      showSoftmenu(NULL, -MNU_TAM, true);
-      break;
-
-    case TM_CMP:
-      showSoftmenu(NULL, -MNU_TAMCMP, true);
-      break;
-
-    case TM_FLAGR:
-    case TM_FLAGW:
-      if(calcMode != CM_ASM_OVER_TAM) {
-        showSoftmenu(NULL, -MNU_TAMFLAG, true);
+    if(calcMode != CM_ASM_OVER_TAM) {
+      if(tamMode != TM_SHUFFLE) {
+        strcat(tamBuffer, " __");
       }
-      break;
-
-    case TM_STORCL:
-      showSoftmenu(NULL, -MNU_TAMSTORCL, true);
-      break;
-
-    case TM_SHUFFLE:
-      showSoftmenu(NULL, -MNU_TAMSHUFFLE, true);
-      break;
-
-    case TM_LABEL:
-      showSoftmenu(NULL, -MNU_TAMLABEL, true);
-      break;
-
-    default:
-      sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
-      displayBugScreen(errorMessage);
-      return;
-  }
-
-  if(calcMode != CM_ASM_OVER_TAM) {
-    if(tamMode != TM_SHUFFLE) {
-      strcat(tamBuffer, " __");
+      else {
+        strcat(tamBuffer, " ____");
+        transitionSystemState = 16;
+      }
     }
-    else {
-      strcat(tamBuffer, " ____");
-      transitionSystemState = 16;
-    }
+
+    calcMode = CM_TAM;
+    clearSystemFlag(FLAG_ALPHA);
+
+    tamCurrentOperation = 0;
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeTamGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
-
-  calcMode = CM_TAM;
-  clearSystemFlag(FLAG_ALPHA);
-
-  tamCurrentOperation = 0;
-
-  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-    calcModeTamGui();
-  #endif
-}
-#endif
+#endif // !TESTSUITE_BUILD

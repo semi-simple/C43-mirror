@@ -89,7 +89,7 @@ void getDateString(char *dateString) {
         strcpy(dateString, "?? ?? ????");
       }
     }
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     tm_t timeInfo;
@@ -124,7 +124,7 @@ void getDateString(char *dateString) {
         strcpy(dateString, "?? ?? ????");
       }
     }
-  #endif
+  #endif // DMCP_BUILD
 }
 
 
@@ -156,7 +156,7 @@ void getTimeString(char *timeString) {
         strcat(timeString, "am");
       }
     }
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     tm_t timeInfo;
@@ -175,5 +175,5 @@ void getTimeString(char *timeString) {
     else {
       sprintf(timeString, "%02d:%02d", timeInfo.hour, timeInfo.min);
     }
-  #endif
+  #endif // DMCP_BUILD
 }

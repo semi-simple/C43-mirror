@@ -320,9 +320,9 @@ int main(void) {
   #elif defined(__APPLE__)
     sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
     cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
-  #else
+  #else // Unsupported OS
     #error Only Linux, MacOS and Windows MINGW64 are supported for now
-  #endif
+  #endif // OS
 
   if(sortingOrder == NULL) {
     fprintf(stderr, "Cannot open file fonts/sortingOrder.csv\n");

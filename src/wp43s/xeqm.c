@@ -137,8 +137,8 @@ bool_t strcompare( char *in1, char *in2) {
 
 
 bool_t running_program_jm = false;
-uint16_t indic_x = 0;
-uint16_t indic_y = SCREEN_HEIGHT-1;
+uint32_t indic_x = 0;
+uint32_t indic_y = SCREEN_HEIGHT-1;
 
 
 void execute_string(const char *inputstring, bool_t exec1) {
@@ -772,7 +772,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           if(strcompare(commandnumber,"M4")) ix_m4 = ix;
                           xeqlblinprogress = 0;
                           commandnumber[0]=0;   //Processed
-                          invertPixel(indic_x, indic_y-1);
+                          invert_Pixel(indic_x, indic_y-1);
                         break;
 //HERE DEFAULT !!
 //NOT IN PROGRESS                        
@@ -781,7 +781,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           //printf("   Command send %s EXEC=%d no=%d ",commandnumber,exec,no);
                           if(no > LAST_ITEM-1) {no = 0;}
                           if(no!=0 && exec) {
-                            invertPixel(indic_x++, indic_y);
+                            invert_Pixel(indic_x++, indic_y);
                             if(indic_x==SCREEN_WIDTH) {indic_x=0;indic_y--;indic_y--;}
 
                             if(exec) {

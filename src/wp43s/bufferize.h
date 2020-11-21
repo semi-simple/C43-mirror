@@ -32,4 +32,4 @@
   void    closeNim                 (void);
   void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);
   int16_t getOperation             (void);
-#endif
+#endif // TESTSUITE_BUILD

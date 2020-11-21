@@ -416,10 +416,10 @@
     #define LINEBREAK                         "\n\r"
   #elif defined(__APPLE__)
     #define LINEBREAK                         "\r\n"
-  #else
+  #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
-  #endif
-#endif
+  #endif // OS
+#endif // PC_BUILD
 
 #define NUMBER_OF_DISPLAY_DIGITS                  16
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
@@ -739,7 +739,7 @@
 #ifdef DMCP_BUILD
   #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)
   #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
-  #define invertPixel  (x, y)                bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE);
+  #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
 
 #endif // DMCP_BUILD
 

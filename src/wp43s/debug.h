@@ -51,13 +51,13 @@
   char * getCursorFontName                  (uint16_t cf);
   char * getSystemFlagName                  (uint16_t sf);
   void   memoryDump                         (bool_t bitFields, bool_t globalFlags, bool_t globalRegisters, bool_t localFlags, bool_t FIRSTLOCALREGISTERs, bool_t otherVars);
-#endif
+#endif // (DEBUG_PANEL == 1)
 
 #if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
   void   formatReal34Debug                  (char *str, real34_t *real34);
   void   formatRealDebug                    (char *str, real_t *real);
   void   formatComplex34Debug               (char *str, void *addr);
-#endif
+#endif // (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
 
 char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
 char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
@@ -68,12 +68,12 @@ char *getAngularModeName                  (uint16_t angularMode);
 
 #ifdef PC_BUILD
   void dumpScreenToConsole(void);
-#endif
+#endif // PC_BUILD
 
-#if defined(PC_BUILD ) || defined(TESTSUITE_BUILD)
+#if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
   void testRegisters    (const char *text);
   void memoryDump2      (const char *text);
   void stackCheck       (const unsigned char *begin, const unsigned char *end, int size, const char *where);
   void initStackCheck   (unsigned char *begin, unsigned char *end, int size);
   void stackSmashingTest(void);
-#endif
+#endif // PC_BUILD || TESTSUITE_BUILD

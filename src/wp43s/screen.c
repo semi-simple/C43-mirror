@@ -587,11 +587,11 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
     if(y>=0) {                                  //JM Make provision for out of range parameter, used to not plot the line and only for the recursive line removal
       for(x=x2-66+1; x<min(x2-1,SCREEN_WIDTH); x++) {
         if(mod(x, 2) == 0) {
-            invertPixel  (x, y);
-            invertPixel  (x, y+2);
+            invert_Pixel  ((uint32_t) x, (uint32_t) y);
+            invert_Pixel  ((uint32_t) x, (uint32_t) (y+2));
         }
         else {
-            invertPixel  (x, y+1);
+            invert_Pixel  (x, y+1);
         }
       }
     }
@@ -718,23 +718,23 @@ void Shft_stop() {
  ***********************************************/
 void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
 #if 0                         //Depreciated JM_DOT
-if(jm_FG_DOTS) {                                                               // Changed to INVERTPIXEL
-    invertPixel (xx+5,yy+6);
-    invertPixel (xx+6,yy+5);
-    invertPixel (xx+6,yy+3);
-    invertPixel (xx+5,yy+2);
-    invertPixel (xx+4,yy+2);
-    invertPixel (xx+3,yy+2);
-    invertPixel (xx+2,yy+3);
-    invertPixel (xx+2,yy+4);
-    invertPixel (xx+2,yy+5);
-    invertPixel (xx+3,yy+6);
-    invertPixel (xx+4,yy+6);
-    invertPixel (xx+5,yy+5);
-    invertPixel (xx+6,yy+4);
-    invertPixel (xx+5,yy+3);
-    invertPixel (xx+3,yy+3);
-    invertPixel (xx+3,yy+5);
+if(jm_FG_DOTS) {                                                               // Changed to INVERT_PIXEL
+    invert_Pixel (xx+5,yy+6);
+    invert_Pixel (xx+6,yy+5);
+    invert_Pixel (xx+6,yy+3);
+    invert_Pixel (xx+5,yy+2);
+    invert_Pixel (xx+4,yy+2);
+    invert_Pixel (xx+3,yy+2);
+    invert_Pixel (xx+2,yy+3);
+    invert_Pixel (xx+2,yy+4);
+    invert_Pixel (xx+2,yy+5);
+    invert_Pixel (xx+3,yy+6);
+    invert_Pixel (xx+4,yy+6);
+    invert_Pixel (xx+5,yy+5);
+    invert_Pixel (xx+6,yy+4);
+    invert_Pixel (xx+5,yy+3);
+    invert_Pixel (xx+3,yy+3);
+    invert_Pixel (xx+3,yy+5);
   }
 #endif
 }
@@ -788,9 +788,9 @@ if(jm_FG_DOTS) {                                                               /
    * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
    * \return void
    ***********************************************/
-void invertPixel(uint32_t x, uint32_t y) {           //JM
+void invert_Pixel(uint32_t x, uint32_t y) {           //JM
     if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function invertPixel: x=%d, y=%d outside the screen!\n", x, y);
+      printf("In function invert_Pixel: x=%d, y=%d outside the screen!\n", x, y);
       return;
     }
 

@@ -51,8 +51,8 @@
         if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
                                                            /*JMEXEC XXX ^^*/
 
-        if(item == CHR_PROD_SIGN) {
-          item = (getSystemFlag(FLAG_MULTx) ? CHR_DOT : CHR_CROSS);
+        if(item == ITM_PROD_SIGN) {
+          item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
         }
       }
     }
@@ -251,14 +251,14 @@
                 showSoftmenu(NULL, item, true);
               }
             }
-            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (CHR_0<=item && item<=CHR_F)) {
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
             else if(calcMode == CM_TAM) {
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
-              if(calcMode == CM_NIM && item != KEY_CC) {
+              if(calcMode == CM_NIM && item != ITM_CC) {
                 if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
@@ -295,7 +295,7 @@
 //  //key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 //  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
-  if (kbd_usr[36].primaryTam == KEY_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
+  if (kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
@@ -303,8 +303,8 @@
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
   switch(key->primary) {                              //JMSHOW vv
-    case      KEY_UP1:
-    case      KEY_DOWN1: break;                       //JM SHOWregis unchanged
+    case      ITM_UP1:
+    case      ITM_DOWN1: break;                       //JM SHOWregis unchanged
     default:  SHOWregis = 9999; break;     
   }                                                   //JMSHOW ^^
   //printf("###\n"); //JMEXEC
@@ -314,7 +314,7 @@
 
 
     // Shift f pressed and JM REMOVED shift g not active
-    if(key->primary == KEY_f && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
+    if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -329,7 +329,7 @@
     }
 
     // Shift g pressed and JM REMOVED shift f not active
-    else if(key->primary == KEY_g && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
+    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -396,8 +396,8 @@
 
     Check_MultiPresses(&result, key_no);        //JM
 
-    if(result == CHR_PROD_SIGN) {
-      result = (getSystemFlag(FLAG_MULTx) ? CHR_CROSS : CHR_DOT);
+    if(result == ITM_PROD_SIGN) {
+      result = (getSystemFlag(FLAG_MULTx) ? ITM_CROSS : ITM_DOT);
     }
 
     resetShiftState();
@@ -457,7 +457,7 @@
 
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM)) ? (kbd_usr + key_no) : (kbd_std + key_no);
 
-    if(key->primary == KEY_f || key->primary == KEY_g || key->primary == KEY_fg) {
+    if(key->primary == ITM_SHIFTf || key->primary == ITM_SHIFTg || key->primary == KEY_fg) {
       return true;
     } else {
       return false;
@@ -589,39 +589,39 @@
 void processKeyAction(int16_t item) {
   keyActionProcessed = false;
 
-  if(lastErrorCode != 0 && item != KEY_EXIT1 && item != KEY_BACKSPACE) {
+  if(lastErrorCode != 0 && item != ITM_EXIT1 && item != ITM_BACKSPACE) {
     lastErrorCode = 0;
   }
 
   temporaryInformation = TI_NO_INFO;
 
   switch(item) {
-    case KEY_BACKSPACE:
+    case ITM_BACKSPACE:
       keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
       fnKeyBackspace(NOPARAM);
       if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
       break;
 
-    case KEY_UP1:
+    case ITM_UP1:
       keyActionProcessed = true;   //JM swapped to before fnKeyUp to be able to check if key was processed below. Chose to process it here, as fnKeyUp does not have access to item.
       fnKeyUp(NOPARAM);
       if(!keyActionProcessed){     //JMvv
          keyActionProcessed = true;
-         addItemToBuffer(CHR_UP_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
+         addItemToBuffer(ITM_UP_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
       }                            //JM^^
       break;
 
-    case KEY_DOWN1:
+    case ITM_DOWN1:
       keyActionProcessed = true;   //swapped to before fnKeyUp to be able to check if key was processed below. Chose to process it here, as fnKeyUp does not have access to item.
       fnKeyDown(NOPARAM);
       if(!keyActionProcessed){     //JM
          keyActionProcessed = true;
-         addItemToBuffer(CHR_DOWN_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
+         addItemToBuffer(ITM_DOWN_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
       }                            //JM^^
       break;
 
 
-    case KEY_BST:                    //JMvv used for arrows in AIM
+    case ITM_BST:                    //JMvv used for arrows in AIM
       if(calcMode == CM_AIM) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_LEFT_ARROW);
@@ -631,11 +631,11 @@ void processKeyAction(int16_t item) {
       }
       if(!keyActionProcessed){
          keyActionProcessed = true;
-         addItemToBuffer(KEY_BST);
+         addItemToBuffer(ITM_BST);
       }
       break;
 
-    case KEY_SST:
+    case ITM_SST:
       if(calcMode == CM_AIM) {
         keyActionProcessed = true;
         fnT_ARROW(ITM_T_RIGHT_ARROW);
@@ -645,19 +645,19 @@ void processKeyAction(int16_t item) {
       }
       if(!keyActionProcessed){
          keyActionProcessed = true;
-         addItemToBuffer(KEY_SST);
+         addItemToBuffer(ITM_SST);
       }     
       break;                       //JM^^
 
 
-    case KEY_EXIT1:
+    case ITM_EXIT1:
       fnKeyExit(NOPARAM);
       keyActionProcessed = true;
       break;
 
-    case KEY_CC:
+    case ITM_CC:
     case ITM_ENTER:
-    case KEY_dotD:
+    case ITM_dotD:
       if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
         keyActionProcessed = true;
       }
@@ -685,40 +685,40 @@ void processKeyAction(int16_t item) {
     default:
       switch(calcMode) {
         case CM_NORMAL:
-          if(item == ITM_EXPONENT || item==CHR_PERIOD || ((CHR_0<=item && item<=CHR_9) || ((CHR_A <= item && item <= CHR_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
+          if(item == ITM_EXPONENT || item==ITM_PERIOD || ((ITM_0<=item && item<=ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
             addItemToNimBuffer(item);
             keyActionProcessed = true;
             refreshRegisterLine(REGISTER_X);           //JM to force direct display
           }
           // Following commands do not timeout to NOP
-          else if(/*item == KEY_UNDO ||JM*/ item == KEY_BST || item == KEY_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
+          else if(/*item == ITM_UNDO ||JM*/ item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
             runFunction(item);
             keyActionProcessed = true;
           }
           break;
 
         case CM_AIM:
-          if(alphaCase == AC_LOWER && (CHR_A <= item && item <= CHR_Z)) {
+          if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
           }
 
-          else if((CHR_A <= item && item <= CHR_Z) || item == CHR_COLON || item == CHR_COMMA || item == CHR_QUESTION_MARK || item == CHR_SPACE || item == CHR_UNDERSCORE )  {  //JM vv DIRECT LETTERS
+          else if((ITM_A <= item && item <= ITM_Z) || item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
             addItemToBuffer(item);
             keyActionProcessed = true;
           }                                           //JM ^^
 
-          else if(alphaCase == AC_LOWER && ( (CHR_ALPHA <= item && item <= CHR_OMEGA) || (CHR_QOPPA <= item && item <= CHR_SAMPI) ))  {  //JM GREEK
+          else if(alphaCase == AC_LOWER && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }
 
-          else if(item == CHR_DOWN_ARROW) {
+          else if(item == ITM_DOWN_ARROW) {
             nextChar = NC_SUBSCRIPT;
             keyActionProcessed = true;
           }
 
-          else if(item == CHR_UP_ARROW) {
+          else if(item == ITM_UP_ARROW) {
             nextChar = NC_SUPERSCRIPT;
             keyActionProcessed = true;
           }
@@ -734,17 +734,17 @@ void processKeyAction(int16_t item) {
         case CM_ASM_OVER_TAM:
         case CM_ASM_OVER_AIM:
         case CM_ASM_OVER_PEM:
-          if(alphaCase==AC_LOWER && (CHR_A<=item && item<=CHR_Z)) {
+          if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
           }
 
-          else if(alphaCase==AC_LOWER && ((CHR_ALPHA<=item && item<=CHR_OMEGA) || (CHR_QOPPA<=item && item<=CHR_SAMPI) ))  {  //JM GREEK
+          else if(alphaCase==AC_LOWER && ((ITM_ALPHA<=item && item<=ITM_OMEGA) || (ITM_QOPPA<=item && item<=ITM_SAMPI) ))  {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }
 
-          else if(item == CHR_DOWN_ARROW || item == CHR_UP_ARROW) {
+          else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
             addItemToBuffer(item);
             keyActionProcessed = true;
           }
@@ -754,13 +754,13 @@ void processKeyAction(int16_t item) {
           keyActionProcessed = true;
           addItemToNimBuffer(item);
 
-          if( ((CHR_0 <= item && item <= CHR_9) || ((CHR_A <= item && item <= CHR_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == CHR_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
+          if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
             refreshRegisterLine(REGISTER_X);
           }                                                                                   //JM^^
           break;
 
         case CM_REGISTER_BROWSER:
-          if(item == CHR_PERIOD) {
+          if(item == ITM_PERIOD) {
             rbr1stDigit = true;
             if(rbrMode == RBR_GLOBAL) {
               if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
@@ -801,14 +801,14 @@ void processKeyAction(int16_t item) {
             else if(rbrMode == RBR_NAMED) {
             }
           }
-          else if(CHR_0 <= item && item <= CHR_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+          else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
             if(rbr1stDigit) {
               rbr1stDigit = false;
-              rbrRegister = item - CHR_0;
+              rbrRegister = item - ITM_0;
             }
             else {
               rbr1stDigit = true;
-              rbrRegister = rbrRegister*10 + item - CHR_0;
+              rbrRegister = rbrRegister*10 + item - ITM_0;
 
               if(rbrMode == RBR_GLOBAL) {
                 currentRegisterBrowserScreen = rbrRegister;
@@ -833,7 +833,7 @@ void processKeyAction(int16_t item) {
 
         case CM_LISTXY:                     //JM VV
         case CM_GRAPH:
-          if(item == KEY_EXIT1 || item == KEY_BACKSPACE) {
+          if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
             calcMode = previousCalcMode;
           }
           keyActionProcessed = true;
@@ -847,7 +847,7 @@ void processKeyAction(int16_t item) {
             confirmedFunction(CONFIRMED);
           }
 
-          else if(item == ITEM_CONF_N || item == KEY_EXIT1) { // No
+          else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
             calcMode = previousCalcMode;
             temporaryInformation = TI_NO_INFO;
           }
@@ -1058,7 +1058,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_NIM:
-      addItemToNimBuffer(KEY_EXIT1);
+      addItemToNimBuffer(ITM_EXIT1);
       break;
 
     case CM_TAM:
@@ -1150,7 +1150,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
   uint32_t dataTypeY;
 
   // The switch statement is broken up here, due to multiple conditions.                      //JM
-  if((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX)) addItemToNimBuffer(KEY_EXIT1);    //JM Allow COMPLEX to be used from NIM
+  if((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX)) addItemToNimBuffer(ITM_EXIT1);    //JM Allow COMPLEX to be used from NIM
   if(calcMode == CM_NORMAL || ((calcMode == CM_NIM) && (complex_Type == KEY_COMPLEX))) {      //JM
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
@@ -1174,7 +1174,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
 
   switch(calcMode) {                     //JM
     case CM_NIM:
-      addItemToNimBuffer(KEY_CC);
+      addItemToNimBuffer(ITM_CC);
       break;
 
     case CM_ASM:
@@ -1249,7 +1249,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_NIM:
-      addItemToNimBuffer(KEY_BACKSPACE);
+      addItemToNimBuffer(ITM_BACKSPACE);
       break;
 
     case CM_TAM:
@@ -1257,7 +1257,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       break;
 
     case CM_ASM:
-      addItemToBuffer(KEY_BACKSPACE);
+      addItemToBuffer(ITM_BACKSPACE);
       break;
 
     case CM_ASM_OVER_TAM:
@@ -1397,7 +1397,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         if(!arrowCasechange && (softmenuStackPointer > 0) && (
           softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
           softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
-          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(KEY_UP1);}
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(ITM_UP1);}
               //ignoring the base menu, MY_ALPHA_MENU below
               // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
               // make arrowCasechnage true
@@ -1573,7 +1573,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         if(!arrowCasechange && (softmenuStackPointer > 0) && (
           softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
           softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
-          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(KEY_DOWN1);}
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(ITM_DOWN1);}
               //ignoring the base menu, MY_ALPHA_MENU below
               // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
               // make arrowCasechnage true

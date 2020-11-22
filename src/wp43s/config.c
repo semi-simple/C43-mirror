@@ -2640,7 +2640,7 @@ void addTestPrograms(void) {
 
     *(currentStep++) = ITM_SQUARE;
 
-    *(currentStep++) = ITM_pi;
+    *(currentStep++) = ITM_CONSTpi;
 
     // 550
     *(currentStep++) = ITM_MULT;
@@ -4708,7 +4708,7 @@ void addTestPrograms(void) {
 
     *(currentStep++) = ITM_XFACT;
 
-    *(currentStep++) = ITM_pi;
+    *(currentStep++) = ITM_CONSTpi;
 
     *(currentStep++) = ITM_CF;
     *(currentStep++) = 0;
@@ -5853,10 +5853,10 @@ void fnReset(uint16_t confirmation) {
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-    //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
-    //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
-    //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
-    //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
+    //kbd_usr[ 0].keyLblAim   = ITM_A_GRAVE;
+    //kbd_usr[ 0].fShiftedAim = ITM_A_GRAVE;
+    //kbd_usr[ 4].keyLblAim   = ITM_E_ACUTE;
+    //kbd_usr[ 4].fShiftedAim = ITM_E_ACUTE;
     //kbd_usr[18].fShifted    = -MNU_VARS;
     //kbd_usr[18].gShifted    = CST_54;
     //kbd_usr[19].fShifted    = ITM_SW;
@@ -6050,7 +6050,7 @@ void fnReset(uint16_t confirmation) {
       
     //JM Default USER
     fnUserJM(USER_RESET);                                      //JM USER
-//    kbd_usr[0].primary     = KEY_CC;                         //JM CPX TEMP DEFAULT        //JM note. over-writing the content of setupdefaults
+//    kbd_usr[0].primary     = ITM_CC;                         //JM CPX TEMP DEFAULT        //JM note. over-writing the content of setupdefaults
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 

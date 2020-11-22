@@ -22,75 +22,75 @@
 
 
 #ifndef DMCP_BUILD
-void listPrograms(void) {
-  uint16_t i, numberOfBytesInStep, stepNumber = 0;
-  uint8_t *nextStep, *step;
+  void listPrograms(void) {
+    uint16_t i, numberOfBytesInStep, stepNumber = 0;
+    uint8_t *nextStep, *step;
 
-  printf("\nProgram listing");
-  printf("\nStep   Bytes         OP");
-  step = beginOfCurrentProgram;
-  while(step) {
-    nextStep = findNextStep(step);
-    if(nextStep) {
-      numberOfBytesInStep = (uint16_t)(nextStep - step);
-      printf("\n%4d  ", stepNumber++); fflush(stdout);
+    printf("\nProgram listing");
+    printf("\nStep   Bytes         OP");
+    step = beginOfCurrentProgram;
+    while(step) {
+      nextStep = findNextStep(step);
+      if(nextStep) {
+        numberOfBytesInStep = (uint16_t)(nextStep - step);
+        printf("\n%4d  ", stepNumber++); fflush(stdout);
 
-      for(i=0; i<numberOfBytesInStep; i++) {
-        printf(" %02x", *(step + i)); fflush(stdout);
-        if(i == 3 && numberOfBytesInStep > 4) {
+        for(i=0; i<numberOfBytesInStep; i++) {
+          printf(" %02x", *(step + i)); fflush(stdout);
+          if(i == 3 && numberOfBytesInStep > 4) {
+            decodeOneStep(step);
+            stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+            printf("   %s", tmpString + 2000); fflush(stdout);
+          }
+
+          if(i%4 == 3 && i != numberOfBytesInStep - 1) {
+            printf("\n      "); fflush(stdout);
+          }
+        }
+
+        if(numberOfBytesInStep <= 4) {
+          for(i=1; i<=4 - ((numberOfBytesInStep - 1) % 4); i++) {
+            printf("   "); fflush(stdout);
+          }
           decodeOneStep(step);
           stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-          printf("   %s", tmpString + 2000); fflush(stdout);
-        }
-
-        if(i%4 == 3 && i != numberOfBytesInStep - 1) {
-          printf("\n      "); fflush(stdout);
+          printf("%s", tmpString + 2000); fflush(stdout);
         }
       }
 
-      if(numberOfBytesInStep <= 4) {
-        for(i=1; i<=4 - ((numberOfBytesInStep - 1) % 4); i++) {
-          printf("   "); fflush(stdout);
+      step = nextStep;
+    }
+    printf("\n");
+  }
+
+
+  void listLabelsAndPrograms(void) {
+    printf("\nnum program  step label\n");
+    for(int i=0; i<numberOfLabels; i++) {
+      printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].followingStep));
+      if(labelList[i].followingStep < 0) { // Local label
+        if(*(labelList[i].labelPointer) < 100) {
+          printf("%d\n", *(labelList[i].labelPointer));
         }
-        decodeOneStep(step);
-        stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-        printf("%s", tmpString + 2000); fflush(stdout);
+        else if(*(labelList[i].labelPointer) < 110) {
+          printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
+        }
+      }
+      else { // Global label
+        xcopy(tmpString + 100, labelList[i].labelPointer + 1, *(labelList[i].labelPointer));
+        tmpString[100 + *(labelList[i].labelPointer)] = 0;
+        stringToUtf8(tmpString + 100, (uint8_t *)tmpString);
+        printf("'%s'\n", tmpString);
       }
     }
 
-    step = nextStep;
-  }
-  printf("\n");
-}
-
-
-void listLabelsAndPrograms(void) {
-  printf("\nnum program  step label\n");
-  for(int i=0; i<numberOfLabels; i++) {
-    printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].followingStep));
-    if(labelList[i].followingStep < 0) { // Local label
-      if(*(labelList[i].labelPointer) < 100) {
-        printf("%d\n", *(labelList[i].labelPointer));
-      }
-      else if(*(labelList[i].labelPointer) < 110) {
-        printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
-      }
-    }
-    else { // Global label
-      xcopy(tmpString + 100, labelList[i].labelPointer + 1, *(labelList[i].labelPointer));
-      tmpString[100 + *(labelList[i].labelPointer)] = 0;
-      stringToUtf8(tmpString + 100, (uint8_t *)tmpString);
-      printf("'%s'\n", tmpString);
+    printf("program  step OP\n");
+    for(int i=0; i<numberOfPrograms; i++) {
+      decodeOneStep(programList[i].instructionPointer);
+      stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+      printf("%7d %5d %s\n", i + 1, programList[i].step - 1, tmpString);
     }
   }
-
-  printf("program  step OP\n");
-  for(int i=0; i<numberOfPrograms; i++) {
-    decodeOneStep(programList[i].instructionPointer);
-    stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
-    printf("%7d %5d %s\n", i + 1, programList[i].step - 1, tmpString);
-  }
-}
 #endif // !DMCP_BUILD
 
 
@@ -380,9 +380,11 @@ void decodeLITT(uint8_t *litteralAddress) {
     //case STRING_TIME:
     //  break;
 
-    default:
-      printf("\nERROR: %u is not an acceptable parameter for ITM_LITT!\n", *(uint8_t *)(litteralAddress - 1));
-      break;
+    default: {
+      #ifndef DMCP_BUILD
+        printf("\nERROR: %u is not an acceptable parameter for ITM_LITT!\n", *(uint8_t *)(litteralAddress - 1));
+      #endif // !DMCP_BUILD
+    }
   }
 }
 
@@ -518,7 +520,7 @@ void decodeOneStep(uint8_t *step) {
     case ITM_NEIGHB:      // 106
     case ITM_NEXTP:       // 107
     case ITM_XFACT:       // 108
-    case ITM_CONSTpi:          // 109
+    case ITM_CONSTpi:     // 109
     case ITM_sincpi:      // 113
       sprintf(tmpString, "%s", indexOfItems[item8].itemCatalogName);
       break;
@@ -529,7 +531,9 @@ void decodeOneStep(uint8_t *step) {
 
     default:
       if((item8 & 0x80) == 0) {
-        printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+        #ifndef DMCP_BUILD
+          printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+        #endif // !DMCP_BUILD
         break;
       }
 
@@ -789,9 +793,11 @@ void decodeOneStep(uint8_t *step) {
           xcopy(tmpString, ".END.", 6);
           break;
 
-        default:
-          printf("\nERROR: double byte instruction %u is unknown!\n", item16);
-          break;
+        default: {
+          #ifndef DMCP_BUILD
+            printf("\nERROR: double byte instruction %u is unknown!\n", item16);
+          #endif // !DMCP_BUILD
+        }
       }
   }
 }

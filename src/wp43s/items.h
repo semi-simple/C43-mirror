@@ -129,7 +129,7 @@
 #define ITM_NEIGHB                     106
 #define ITM_NEXTP                      107
 #define ITM_XFACT                      108
-#define ITM_CONSTpi                         109
+#define ITM_CONSTpi                    109
 #define ITM_CF                         110
 #define ITM_SF                         111
 #define ITM_FF                         112
@@ -422,13 +422,13 @@
 #define ITM_FSC                        389
 #define ITM_FSS                        390
 #define ITM_FSF                        391
-#define ITM_LOGICALNOT                        392
-#define ITM_LOGICALAND                        393
-#define ITM_LOGICALOR                         394
-#define ITM_LOGICALXOR                        395
-#define ITM_LOGICALNAND                       396
-#define ITM_LOGICALNOR                        397
-#define ITM_LOGICALXNOR                       398
+#define ITM_LOGICALNOT                 392
+#define ITM_LOGICALAND                 393
+#define ITM_LOGICALOR                  394
+#define ITM_LOGICALXOR                 395
+#define ITM_LOGICALNAND                396
+#define ITM_LOGICALNOR                 397
+#define ITM_LOGICALXNOR                398
 #define ITM_BS                         399
 #define ITM_BC                         400
 #define ITM_CB                         401
@@ -486,6 +486,9 @@
 #define ITM_0450                       450
 #define ITM_0451                       451
 #define ITM_0452                       452
+
+
+// System flags
 #define SFL_TDM24                      453
 #define SFL_YMD                        454
 #define SFL_DMY                        455
@@ -1076,10 +1079,10 @@
 #define ITM_SERIAL_IO                 1037
 #define ITM_RIGHT_SHORT_ARROW         1038
 #define ITM_LEFT_RIGHT_ARROWS         1039
-#define ITM_BST_SIGN                       1040
-#define ITM_SST_SIGN                       1041
+#define ITM_BST_SIGN                  1040
+#define ITM_SST_SIGN                  1041
 #define ITM_HAMBURGER                 1042
-#define ITM_UNDO_SIGN                      1043
+#define ITM_UNDO_SIGN                 1043
 #define ITM_FOR_ALL                   1044
 #define ITM_COMPLEMENT                1045
 #define ITM_PARTIAL_DIFF              1046
@@ -1107,17 +1110,17 @@
 #define ITM_PROPORTIONAL              1068
 #define ITM_INFINITY                  1069
 #define ITM_RIGHT_ANGLE               1070
-#define ITM_ANGLE_SIGN                     1071
+#define ITM_ANGLE_SIGN                1071
 #define ITM_MEASURED_ANGLE            1072
 #define ITM_DIVIDES                   1073
 #define ITM_DOES_NOT_DIVIDE           1074
-#define ITM_PARALLEL_SIGN                  1075
+#define ITM_PARALLEL_SIGN             1075
 #define ITM_NOT_PARALLEL              1076
 #define ITM_AND                       1077
 #define ITM_OR                        1078
 #define ITM_INTERSECTION              1079
 #define ITM_UNION                     1080
-#define ITM_INTEGRAL_SIGN                  1081
+#define ITM_INTEGRAL_SIGN             1081
 #define ITM_DOUBLE_INTEGRAL           1082
 #define ITM_CONTOUR_INTEGRAL          1083
 #define ITM_SURFACE_INTEGRAL          1084
@@ -1476,7 +1479,7 @@
 #define ITM_CORR                      1423
 #define ITM_COV                       1424
 #define ITM_BESTFQ                    1425
-#define ITM_CROSS_PROD                     1426
+#define ITM_CROSS_PROD                1426
 #define ITM_CXtoRE                    1427
 #define ITM_DATE                      1428
 #define ITM_DATEto                    1429
@@ -1489,7 +1492,7 @@
 #define ITM_DEGto                     1436
 #define ITM_SA                        1437
 #define ITM_DENMAX                    1438
-#define ITM_DOT_PROD                       1439
+#define ITM_DOT_PROD                  1439
 #define ITM_DSTACK                    1440
 #define ITM_DMS                       1441
 #define ITM_DMSto                     1442
@@ -1625,7 +1628,7 @@
 #define ITM_R_SORT                    1572
 #define ITM_R_SWAP                    1573
 #define ITM_RtoD                      1574
-#define ITM_STDDEVWEIGHTED                         1575
+#define ITM_STDDEVWEIGHTED            1575
 #define ITM_SAVE                      1576
 #define ITM_SCI                       1577
 #define ITM_SDIGS                     1578
@@ -1707,14 +1710,14 @@
 #define ITM_GAMMAX                    1654
 #define ITM_deltaX                    1655
 #define ITM_DELTAPC                   1656
-#define ITM_SCATTFACT                   1657
-#define ITM_SCATTFACTm                  1658
-#define ITM_SCATTFACTp                  1659
+#define ITM_SCATTFACT                 1657
+#define ITM_SCATTFACTm                1658
+#define ITM_SCATTFACTp                1659
 #define ITM_zetaX                     1660
-#define ITM_PIn                        1661
-#define ITM_SIGMAn                     1662
-#define ITM_STDDEV                     1663
-#define ITM_STDDEVPOP                    1664
+#define ITM_PIn                       1661
+#define ITM_SIGMAn                    1662
+#define ITM_STDDEV                    1663
+#define ITM_STDDEVPOP                 1664
 #define ITM_RANI                      1665
 #define ITM_PRINTERX                  1666
 #define ITM_RANGE                     1667
@@ -1734,7 +1737,7 @@
 #define ITM_toREAL                    1681
 #define ITM_toREC                     1682
 #define ITM_DtoDMS                    1683
-#define ITM_SHUFFLE                        1684
+#define ITM_SHUFFLE                   1684
 #define ITM_PC                        1685
 #define ITM_PCMRR                     1686
 #define ITM_PCT                       1687
@@ -1762,7 +1765,9 @@
 #define ITM_PRINTERWIDTH              1709
 #define ITM_PRINTERSIGMA              1710
 #define ITM_PRINTERHASH               1711
+
 #define ITM_FBR                       1712
+
 #define ITM_UNDO                      1713
 #define ITM_PR                        1714
 #define ITM_RS                        1715
@@ -1771,8 +1776,8 @@
 #define ITM_1718                      1718
 #define ITM_USERMODE                  1719
 #define ITM_CC                        1720
-#define ITM_SHIFTf                         1721
-#define ITM_SHIFTg                         1722
+#define ITM_SHIFTf                    1721
+#define ITM_SHIFTg                    1722
 #define ITM_UP1                       1723
 #define ITM_BST                       1724
 #define ITM_DOWN1                     1725

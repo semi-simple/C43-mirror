@@ -295,10 +295,20 @@ void kill_ASB_icon(void) {
         else if(item == ITM_ENTER) {
           tamTransitionSystem(TT_ENTER);
         }
-        else if(item == ITM_PERIOD) { // --> .
-          tamTransitionSystem(TT_DOT);
+        else if(item == ITM_PERIOD) { // .
+          if(tamFunction == ITM_GTO && transitionSystemState == 0) {
+            tamFunction = ITM_GTOP;
+            tamNumberMin = 0;
+            tamNumberMax = programList[numberOfPrograms - 1].step - 2;
+            strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
+            strcat(tamBuffer, " _____");
+            transitionSystemState = 17;
+          }
+          else {
+            tamTransitionSystem(TT_DOT);
+          }
         }
-        else if(item == ITM_INDIRECTION) { // --> Indirection
+        else if(item == ITM_INDIRECTION) { // Indirection
           tamTransitionSystem(TT_INDIRECT);
         }
         else if(item == ITM_BACKSPACE) {
@@ -1890,6 +1900,178 @@ void kill_ASB_icon(void) {
               }
             }
             break;
+        }
+        break;
+
+      //////////////////////////////
+      // GTO. _____
+      case 17:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamDigit;
+            if(tamNumber > tamNumberMax) {
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "GTO. %d____", tamNumber);
+              transitionSystemState = 18;
+            }
+            break;
+
+          case TT_BACKSPACE :
+            tamFunction = ITM_GTO;
+            tamNumberMin = indexOfItems[ITM_GTO].tamMin;
+            tamNumberMax = indexOfItems[ITM_GTO].tamMax;
+            strcpy(tamBuffer, indexOfItems[ITM_GTO].itemSoftmenuName);
+            strcat(tamBuffer, " __");
+            transitionSystemState = 0;
+            break;
+
+          case TT_DOT:
+            reallyRunFunction(ITM_GTOP, tamNumberMax);
+            calcModeNormal();
+            return;
+
+          case TT_OPERATION:
+            if(tamOperation == ITM_Max || tamOperation == ITM_Min) { // UP or DOWN
+              uint16_t zeroOrOne = (tamOperation == ITM_Min ? 1 : 0);
+              tamNumber = programList[currentProgramNumber + zeroOrOne].step - 1;
+              if(zeroOrOne == 1) {
+                if(currentProgramNumber == numberOfPrograms - 2) {
+                  tamNumber--;
+                }
+              }
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+            }
+        }
+        break;
+
+      //////////////////////////////
+      // GTO. d____
+      case 18:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "GTO. %02d___", tamNumber);
+              transitionSystemState = 19;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            xcopy(tamBuffer, "GTO. _____", 11);
+            transitionSystemState = 17;
+        }
+        break;
+
+      //////////////////////////////
+      // GTO. dd___
+      case 19:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "GTO. %03d__", tamNumber);
+              transitionSystemState = 20;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "GTO. %01d____", tamNumber);
+            transitionSystemState = 18;
+        }
+        break;
+
+      //////////////////////////////
+      // GTO. ddd__
+      case 20:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "GTO. %04d_", tamNumber);
+              transitionSystemState = 21;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "GTO. %02d___", tamNumber);
+            transitionSystemState = 19;
+        }
+        break;
+
+      //////////////////////////////
+      // GTO. dddd_
+      case 21:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else {
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "GTO. %03d__", tamNumber);
+            transitionSystemState = 20;
         }
         break;
 

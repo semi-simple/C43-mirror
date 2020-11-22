@@ -23,9 +23,9 @@
 
 #include "wp43s.h"
 
-#if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
+#if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
   bool_t             debugMemAllocation;
-#endif
+#endif // PC_BUILD || TESTSUITE_BUILD
 #ifdef PC_BUILD
   bool_t             calcLandscape;
   bool_t             calcAutoLandscapePortrait;
@@ -39,11 +39,11 @@
   #if (DEBUG_REGISTER_L == 1)
     GtkWidget        *lblRegisterL1;
     GtkWidget        *lblRegisterL2;
-  #endif
+  #endif // (DEBUG_REGISTER_L == 1)
   #if (SHOW_MEMORY_STATUS == 1)
     GtkWidget        *lblMemoryStatus;
-  #endif
-#endif
+  #endif // (SHOW_MEMORY_STATUS == 1)
+#endif // PC_BUILD
 
 const font_t         *fontForShortInteger;
 const font_t         *cursorFont;
@@ -228,6 +228,7 @@ uint16_t              numberOfLabels;
 uint16_t              numberOfPrograms;
 uint16_t              tamMode;
 uint16_t              currentStepNumber;
+uint16_t              currentProgramNumber;
 uint16_t              numberOfStepsOnScreen;
 
 int32_t               numberOfFreeMemoryRegions;
@@ -264,54 +265,54 @@ size_t                wp43sMemInBytes;
 
 
 #ifdef PC_BUILD
-int main(int argc, char* argv[]) {
-  #if defined __APPLE__
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if(argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if(s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
+  int main(int argc, char* argv[]) {
+    #ifdef __APPLE__
+      // we take the directory where the application is as the root for this application.
+      // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
+      if(argc>=1) {
+        char *curdir = malloc(1000);
+        // find last /:
+        char *s = strrchr(argv[0], '/');
+        if(s != 0) {
+          // take the directory before the appname:
+          strncpy(curdir, argv[0], s-argv[0]);
+          chdir(curdir);
+          free(curdir);
+        }
+      }
+    #endif // __APPLE__
+
+    wp43sMemInBytes = 0;
+    gmpMemInBytes = 0;
+    mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+
+    calcLandscape             = false;
+    calcAutoLandscapePortrait = true;
+
+    for(int arg=1; arg<argc; arg++) {
+      if(strcmp(argv[arg], "--landscape") == 0) {
+        calcLandscape             = true;
+        calcAutoLandscapePortrait = false;
+      }
+
+      if(strcmp(argv[arg], "--portrait") == 0) {
+        calcLandscape             = false;
+        calcAutoLandscapePortrait = false;
+      }
+
+      if(strcmp(argv[arg], "--auto") == 0) {
+        calcLandscape             = false;
+        calcAutoLandscapePortrait = true;
       }
     }
-  #endif
 
-  wp43sMemInBytes = 0;
-  gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
-
-  calcLandscape             = false;
-  calcAutoLandscapePortrait = true;
-
-  for(int arg=1; arg<argc; arg++) {
-    if(strcmp(argv[arg], "--landscape") == 0) {
-      calcLandscape             = true;
-      calcAutoLandscapePortrait = false;
+    if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
+      printf("The last item of indexOfItems[] is not \"Last item\"\n");
+      exit(1);
     }
 
-    if(strcmp(argv[arg], "--portrait") == 0) {
-      calcLandscape             = false;
-      calcAutoLandscapePortrait = false;
-    }
-
-    if(strcmp(argv[arg], "--auto") == 0) {
-      calcLandscape             = false;
-      calcAutoLandscapePortrait = true;
-    }
-  }
-
-  if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
-    printf("The last item of indexOfItems[] is not \"Last item\"\n");
-    exit(1);
-  }
-
-  gtk_init(&argc, &argv);
-  setupUI();
+    gtk_init(&argc, &argv);
+    setupUI();
 
 // Without the following 8 lines of code
   // the f- and g-shifted labels are
@@ -340,11 +341,11 @@ int main(int argc, char* argv[]) {
 //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);  //dr no keyboard scan boost for emulator
   gdk_threads_add_timeout(5, refreshTimer, NULL);                     //dr refreshTimer is called every 5 ms    //^^
 
-  gtk_main();
+    gtk_main();
 
-  return 0;
-}
-#endif
+    return 0;
+  }
+#endif // PC_BUILD
 
 #ifdef DMCP_BUILD
 void program_main(void) {
@@ -391,88 +392,88 @@ void program_main(void) {
     longInteger_t li;
     uint32_t addr, min, max, *ptr;
 
-    min = 1;
-    max = 100000000;
-    while(min+1 < max) {
-      ptr = malloc((max + min) >> 1);
-      if(ptr) {
-        free(ptr);
-        min = (max + min) >> 1;
+      min = 1;
+      max = 100000000;
+      while(min+1 < max) {
+        ptr = malloc((max + min) >> 1);
+        if(ptr) {
+          free(ptr);
+          min = (max + min) >> 1;
+        }
+        else {
+          max = (max + min) >> 1;
+        }
       }
-      else {
-        max = (max + min) >> 1;
-      }
-    }
 
-    ptr = malloc(min);
-    xcopy(&addr, &ptr, 4);
-    free(ptr);
-    longIntegerInit(li);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 50);
+      ptr = malloc(min);
+      xcopy(&addr, &ptr, 4);
+      free(ptr);
+      longIntegerInit(li);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 50);
 
-    uIntToLongInteger(min, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 51);
+      uIntToLongInteger(min, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 51);
 
-    ptr = (uint32_t *)qspi_user_addr();
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 52);
+      ptr = (uint32_t *)qspi_user_addr();
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 52);
 
-    addr = (uint32_t)qspi_user_size(); // QSPI user size in bytes
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 53);
+      addr = (uint32_t)qspi_user_size(); // QSPI user size in bytes
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 53);
 
-    ptr = (uint32_t *)&ram;
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 54);
+      ptr = (uint32_t *)&ram;
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 54);
 
-    ptr = (uint32_t *)&indexOfItems;
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 55);
+      ptr = (uint32_t *)&indexOfItems;
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 55);
 
-    ptr = (uint32_t *)ppgm_fp;
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 56);
+      ptr = (uint32_t *)ppgm_fp;
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 56);
 
-    ptr = (uint32_t *)get_reset_state_file();
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 57);
+      ptr = (uint32_t *)get_reset_state_file();
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 57);
 
-    addr = 0x38; // RESET_STATE_FILE_SIZE;
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 58);
+      addr = 0x38; // RESET_STATE_FILE_SIZE;
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 58);
 
-    ptr = (uint32_t *)aux_buf_ptr();
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 59);
+      ptr = (uint32_t *)aux_buf_ptr();
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 59);
 
-    addr = AUX_BUF_SIZE;
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 60);
+      addr = AUX_BUF_SIZE;
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 60);
 
-    ptr = (uint32_t *)write_buf_ptr();
-    xcopy(&addr, &ptr, 4);
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 16, 61);
+      ptr = (uint32_t *)write_buf_ptr();
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 61);
 
-    addr = (uint32_t)write_buf_size();
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 62);
+      addr = (uint32_t)write_buf_size();
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 62);
 
-    addr = (uint32_t)get_hw_id();
-    uIntToLongInteger(addr, li);
-    convertLongIntegerToShortIntegerRegister(li, 10, 63);
+      addr = (uint32_t)get_hw_id();
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 10, 63);
 
-    longIntegerFree(li);
-  #endif
+      longIntegerFree(li);
+    #endif // 1
 
-  backToDMCP = false;
+    backToDMCP = false;
 
   lcd_forced_refresh();                                        //JM 
   nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
@@ -517,43 +518,43 @@ void program_main(void) {
       sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
     }
 
-    // Wakeup in off state or going to sleep
-    if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
-      if(!ST(STAT_SUSPENDED)) {
-        // Going to off mode
-        lcd_set_buf_cleared(0); // Mark no buffer change region
-        draw_power_off_image(1);
+      // Wakeup in off state or going to sleep
+      if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
+        if(!ST(STAT_SUSPENDED)) {
+          // Going to off mode
+          lcd_set_buf_cleared(0); // Mark no buffer change region
+          draw_power_off_image(1);
 
-        LCD_power_off(0);
-        SET_ST(STAT_SUSPENDED);
-        SET_ST(STAT_OFF);
+          LCD_power_off(0);
+          SET_ST(STAT_SUSPENDED);
+          SET_ST(STAT_OFF);
+        }
+        // Already in OFF -> just continue to sleep above
+        continue;
       }
-      // Already in OFF -> just continue to sleep above
-      continue;
-    }
 
-    // Well, we are woken-up
-    SET_ST(STAT_RUNNING);
+      // Well, we are woken-up
+      SET_ST(STAT_RUNNING);
 
-    // Clear suspended state, because now we are definitely reached the active state
-    CLR_ST(STAT_SUSPENDED);
+      // Clear suspended state, because now we are definitely reached the active state
+      CLR_ST(STAT_SUSPENDED);
 
-    // Get up from OFF state
-    if(ST(STAT_OFF)) {
-      LCD_power_on();
-      rtc_wakeup_delay(); // Ensure that RTC readings after power off will be OK
+      // Get up from OFF state
+      if(ST(STAT_OFF)) {
+        LCD_power_on();
+        rtc_wakeup_delay(); // Ensure that RTC readings after power off will be OK
 
-      CLR_ST(STAT_OFF);
+        CLR_ST(STAT_OFF);
 
-      if(!lcd_get_buf_cleared()) {
-        lcd_forced_refresh(); // Just redraw from LCD buffer
+        if(!lcd_get_buf_cleared()) {
+          lcd_forced_refresh(); // Just redraw from LCD buffer
+        }
       }
-    }
 
-    // Key is ready -> clear auto off timer
-    if(!key_empty()) {
-      reset_auto_off();
-    }
+      // Key is ready -> clear auto off timer
+      if(!key_empty()) {
+        reset_auto_off();
+      }
 
     // Fetch the key
     //  < 0 -> No key event
@@ -616,22 +617,22 @@ void program_main(void) {
     if(key == 44 ) { //sys_last_key DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
       resetShiftState();                                       //JM to avoid f or g top left of the screen
 
-      currentVolumeSetting = get_beep_volume();
-      savedVoluleSetting = currentVolumeSetting;
-      while(currentVolumeSetting < 11) {
-        beep_volume_up();
         currentVolumeSetting = get_beep_volume();
-      }
+        savedVoluleSetting = currentVolumeSetting;
+        while(currentVolumeSetting < 11) {
+          beep_volume_up();
+          currentVolumeSetting = get_beep_volume();
+        }
 
-      start_buzzer_freq(100000); //Click before screen dump
-      sys_delay(5);
-      stop_buzzer();
+        start_buzzer_freq(100000); //Click before screen dump
+        sys_delay(5);
+        stop_buzzer();
 
-      create_screenshot(0);      //Screen dump
+        create_screenshot(0);      //Screen dump
 
-      start_buzzer_freq(400000); //Click after screen dump
-      sys_delay(5);
-      stop_buzzer();
+        start_buzzer_freq(400000); //Click after screen dump
+        sys_delay(5);
+        stop_buzzer();
 
       while(currentVolumeSetting != savedVoluleSetting) { //Restore volume
         beep_volume_down();
@@ -725,36 +726,36 @@ int main(int argc, char* argv[]) {
     }
   #endif
 
-  wp43sMemInBytes = 0;
-  gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+    wp43sMemInBytes = 0;
+    gmpMemInBytes = 0;
+    mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
-  fnReset(CONFIRMED);
+    fnReset(CONFIRMED);
 
-/*
-longInteger_t li;
-longIntegerInit(li);
-uIntToLongInteger(1, li);
-convertLongIntegerToLongIntegerRegister(li, REGISTER_Z);
-uIntToLongInteger(2, li);
-convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
-uIntToLongInteger(2203, li);
-convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
-fnPower(NOPARAM);
-fnSwapXY(NOPARAM);
-fnSubtract(NOPARAM);
-printf("a\n");
-fnIsPrime(NOPARAM);
-printf("b\n");
-longIntegerFree(li);
-return 0;
-*/
+    /*
+    longInteger_t li;
+    longIntegerInit(li);
+    uIntToLongInteger(1, li);
+    convertLongIntegerToLongIntegerRegister(li, REGISTER_Z);
+    uIntToLongInteger(2, li);
+    convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
+    uIntToLongInteger(2203, li);
+    convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
+    fnPower(NOPARAM);
+    fnSwapXY(NOPARAM);
+    fnSubtract(NOPARAM);
+    printf("a\n");
+    fnIsPrime(NOPARAM);
+    printf("b\n");
+    longIntegerFree(li);
+    return 0;
+    */
 
 
-  processTests();
-  printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
-  debugMemory("End of testsuite");
+    processTests();
+    printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
+    debugMemory("End of testsuite");
 
-  return 0;
-}
-#endif
+    return 0;
+  }
+#endif // TESTSUITE_BUILD

@@ -263,6 +263,8 @@ typedef struct {
 } softmenuStack_t;
 
 
+
+
 /********************************************//**
  * \typedef calcRegister_t
  * \brief A type for calculator registers

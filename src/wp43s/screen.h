@@ -47,17 +47,17 @@ uint8_t  last_CM;
   void     copyAllRegistersToClipboard        (void);
   void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);
   gboolean refreshLcd                         (gpointer unusedData);
-#endif
+#endif // PC_BUILD
 
 #ifdef DMCP_BUILD
   void     copyRegisterToClipboardString      (calcRegister_t regist, char *clipboardString);                   //JMCSV Added for textfiles 
   void     refreshLcd                         (void);
-#else
+#else // !DMCP_BUILD
   void     lcd_fill_rect                      (uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val); // clone fron the DMCP function
   void     setBlackPixel                      (uint32_t x, uint32_t y);
   void     setWhitePixel                      (uint32_t x, uint32_t y);
   void     invert_Pixel                       (uint32_t x, uint32_t y);  //JM
-#endif
+#endif // DMCP_BUILD
 
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
@@ -78,13 +78,13 @@ void     refresh_gui                          (void);                           
 void     force_refresh                        (void);                                                           //JM SCREEN
 
 void     refreshScreen                        (void);
-//int      getPixel                             (uint32_t x, uint32_t y);
-uint32_t showString                           (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-uint32_t showGlyph                            (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-uint32_t showGlyphCode                        (uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
-void     hideCursor                           (void);
-void     showFunctionName                     (int16_t item, int16_t delayInMs);
-void     hideFunctionName                     (void);
-void     clearRegisterLine                    (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
-void     refreshRegisterLine                  (calcRegister_t regist);
-#endif
+  //int      getPixel                           (uint32_t x, uint32_t y);
+  uint32_t showString                         (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+  uint32_t showGlyph                          (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+  uint32_t showGlyphCode                      (uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
+  void     hideCursor                         (void);
+  void     showFunctionName                   (int16_t item, int16_t delayInMs);
+  void     hideFunctionName                   (void);
+  void     clearRegisterLine                  (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
+  void     refreshRegisterLine                (calcRegister_t regist);
+#endif // TESTSUITE_BUILD

@@ -289,12 +289,10 @@
     int16_t result;
     const calcKey_t *key;
 
+//    key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
+//    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   int8_t key_no = stringToKeyNumber(data);
-
-//  //key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
-//  key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
-
   if (kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
@@ -570,6 +568,11 @@
           runFunction(item);
         }
       }
+//      else if(keyAutoRepeat == 1) {         //JMTOCHECK AUTOREPR
+//        item = determineItem((char *)data);
+//        hideFunctionName();
+//        runFunction(item);
+//      }
 
   if(!checkShifts((char *)data)) {
     refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
@@ -579,28 +582,29 @@
 
 
 
-/********************************************//**
- * \brief A calc button was pressed
- *
- * \param w GtkWidget*
- * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
- * \return void
- ***********************************************/
-void processKeyAction(int16_t item) {
-  keyActionProcessed = false;
+  /********************************************//**
+   * \brief A calc button was pressed
+   *
+   * \param w GtkWidget*
+   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
+   * \return void
+   ***********************************************/
+  void processKeyAction(int16_t item) {
+    keyActionProcessed = false;
 
-  if(lastErrorCode != 0 && item != ITM_EXIT1 && item != ITM_BACKSPACE) {
-    lastErrorCode = 0;
-  }
+    if(lastErrorCode != 0 && item != ITM_EXIT1 && item != ITM_BACKSPACE) {
+      lastErrorCode = 0;
+    }
 
   temporaryInformation = TI_NO_INFO;
 
-  switch(item) {
-    case ITM_BACKSPACE:
-      keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
-      fnKeyBackspace(NOPARAM);
-      if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
-      break;
+    switch(item) {
+      case ITM_BACKSPACE:
+
+        keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
+        fnKeyBackspace(NOPARAM);
+        if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE); //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
+        break;
 
     case ITM_UP1:
       keyActionProcessed = true;   //JM swapped to before fnKeyUp to be able to check if key was processed below. Chose to process it here, as fnKeyUp does not have access to item.
@@ -650,18 +654,18 @@ void processKeyAction(int16_t item) {
       break;                       //JM^^
 
 
-    case ITM_EXIT1:
-      fnKeyExit(NOPARAM);
-      keyActionProcessed = true;
-      break;
-
-    case ITM_CC:
-    case ITM_ENTER:
-    case ITM_dotD:
-      if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
+      case ITM_EXIT1:
+        fnKeyExit(NOPARAM);
         keyActionProcessed = true;
-      }
-      break;
+        break;
+
+      case ITM_CC:
+      case ITM_ENTER:
+      case ITM_dotD:
+        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
+          keyActionProcessed = true;
+        }
+        break;
 
     case CHR_case: {
       int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                      //JMvv
@@ -682,193 +686,193 @@ void processKeyAction(int16_t item) {
       }
       break;                                                                                                               //JM^^
 
-    default:
-      switch(calcMode) {
-        case CM_NORMAL:
-          if(item == ITM_EXPONENT || item==ITM_PERIOD || ((ITM_0<=item && item<=ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
-            addItemToNimBuffer(item);
-            keyActionProcessed = true;
-            refreshRegisterLine(REGISTER_X);           //JM to force direct display
-          }
-          // Following commands do not timeout to NOP
-          else if(/*item == ITM_UNDO ||JM*/ item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
-            runFunction(item);
-            keyActionProcessed = true;
-          }
-          break;
-
-        case CM_AIM:
-          if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
-            addItemToBuffer(item + 26);
-            keyActionProcessed = true;
-          }
-
-          else if((ITM_A <= item && item <= ITM_Z) || item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
-            addItemToBuffer(item);
-            keyActionProcessed = true;
-          }                                           //JM ^^
-
-          else if(alphaCase == AC_LOWER && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
-            addItemToBuffer(item + 36);
-            keyActionProcessed = true;
-          }
-
-          else if(item == ITM_DOWN_ARROW) {
-            nextChar = NC_SUBSCRIPT;
-            keyActionProcessed = true;
-          }
-
-          else if(item == ITM_UP_ARROW) {
-            nextChar = NC_SUPERSCRIPT;
-            keyActionProcessed = true;
-          }
-          refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
-          break;
-
-        case CM_TAM:
-          addItemToBuffer(item);
-          keyActionProcessed = true;
-          break;
-
-        case CM_ASM:
-        case CM_ASM_OVER_TAM:
-        case CM_ASM_OVER_AIM:
-        case CM_ASM_OVER_PEM:
-          if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
-            addItemToBuffer(item + 26);
-            keyActionProcessed = true;
-          }
-
-          else if(alphaCase==AC_LOWER && ((ITM_ALPHA<=item && item<=ITM_OMEGA) || (ITM_QOPPA<=item && item<=ITM_SAMPI) ))  {  //JM GREEK
-            addItemToBuffer(item + 36);
-            keyActionProcessed = true;
-          }
-
-          else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
-            addItemToBuffer(item);
-            keyActionProcessed = true;
-          }
-          break;
-
-        case CM_NIM:
-          keyActionProcessed = true;
-          addItemToNimBuffer(item);
-
-          if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
-            refreshRegisterLine(REGISTER_X);
-          }                                                                                   //JM^^
-          break;
-
-        case CM_REGISTER_BROWSER:
-          if(item == ITM_PERIOD) {
-            rbr1stDigit = true;
-            if(rbrMode == RBR_GLOBAL) {
-              if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
-                rbrMode = RBR_LOCAL;
-                currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
-              }
-              else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                rbrMode = RBR_NAMED;
-                currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
-              }
+      default:
+        switch(calcMode) {
+          case CM_NORMAL:
+            if(item == ITM_EXPONENT || item==ITM_PERIOD || ((ITM_0<=item && item<=ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
+              addItemToNimBuffer(item);
+              keyActionProcessed = true;
+              refreshRegisterLine(REGISTER_X);           //JM to force direct display
             }
-            else if(rbrMode == RBR_LOCAL) {
-              if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                rbrMode = RBR_NAMED;
-                currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+            // Following commands do not timeout to NOP
+            else if(/*item == ITM_UNDO ||JM*/ item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
+              runFunction(item);
+              keyActionProcessed = true;
+            }
+            break;
+
+          case CM_AIM:
+            if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
+              addItemToBuffer(item + 26);
+              keyActionProcessed = true;
+            }
+
+            else if((ITM_A <= item && item <= ITM_Z) || item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
+              addItemToBuffer(item);
+              keyActionProcessed = true;
+            }                                           //JM ^^
+
+            else if(alphaCase == AC_LOWER && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
+              addItemToBuffer(item + 36);
+              keyActionProcessed = true;
+            }
+
+            else if(item == ITM_DOWN_ARROW) {
+              nextChar = NC_SUBSCRIPT;
+              keyActionProcessed = true;
+            }
+
+            else if(item == ITM_UP_ARROW) {
+              nextChar = NC_SUPERSCRIPT;
+              keyActionProcessed = true;
+            }
+            refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
+            break;
+
+          case CM_TAM:
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+            break;
+
+          case CM_ASM:
+          case CM_ASM_OVER_TAM:
+          case CM_ASM_OVER_AIM:
+          case CM_ASM_OVER_PEM:
+            if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
+              addItemToBuffer(item + 26);
+              keyActionProcessed = true;
+            }
+
+            else if(alphaCase==AC_LOWER && ((ITM_ALPHA<=item && item<=ITM_OMEGA) || (ITM_QOPPA<=item && item<=ITM_SAMPI) ))  {  //JM GREEK
+              addItemToBuffer(item + 36);
+              keyActionProcessed = true;
+            }
+
+            else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
+              addItemToBuffer(item);
+              keyActionProcessed = true;
+            }
+            break;
+
+          case CM_NIM:
+            keyActionProcessed = true;
+            addItemToNimBuffer(item);
+
+            if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
+              refreshRegisterLine(REGISTER_X);
+            }                                                                                   //JM^^
+            break;
+
+          case CM_REGISTER_BROWSER:
+            if(item == ITM_PERIOD) {
+              rbr1stDigit = true;
+              if(rbrMode == RBR_GLOBAL) {
+                if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
+                  rbrMode = RBR_LOCAL;
+                  currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+                }
+                else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                  rbrMode = RBR_NAMED;
+                  currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                }
               }
-              else {
+              else if(rbrMode == RBR_LOCAL) {
+                if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                  rbrMode = RBR_NAMED;
+                  currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                }
+                else {
+                  rbrMode = RBR_GLOBAL;
+                  currentRegisterBrowserScreen = REGISTER_X;
+                }
+              }
+              else if(rbrMode == RBR_NAMED) {
                 rbrMode = RBR_GLOBAL;
                 currentRegisterBrowserScreen = REGISTER_X;
               }
             }
-            else if(rbrMode == RBR_NAMED) {
-              rbrMode = RBR_GLOBAL;
-              currentRegisterBrowserScreen = REGISTER_X;
-            }
-          }
-          else if(item == ITM_RS) {
-            rbr1stDigit = true;
-            showContent = !showContent;
-          }
-          else if(item == ITM_RCL) {
-            rbr1stDigit = true;
-            if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
-              calcMode = previousCalcMode;
-              fnRecall(currentRegisterBrowserScreen);
-              setSystemFlag(FLAG_ASLIFT);
-            }
-            else if(rbrMode == RBR_NAMED) {
-            }
-          }
-          else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
-            if(rbr1stDigit) {
-              rbr1stDigit = false;
-              rbrRegister = item - ITM_0;
-            }
-            else {
+            else if(item == ITM_RS) {
               rbr1stDigit = true;
-              rbrRegister = rbrRegister*10 + item - ITM_0;
-
-              if(rbrMode == RBR_GLOBAL) {
-                currentRegisterBrowserScreen = rbrRegister;
+              showContent = !showContent;
+            }
+            else if(item == ITM_RCL) {
+              rbr1stDigit = true;
+              if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
+                calcMode = previousCalcMode;
+                fnRecall(currentRegisterBrowserScreen);
+                setSystemFlag(FLAG_ASLIFT);
+              }
+              else if(rbrMode == RBR_NAMED) {
+              }
+            }
+            else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+              if(rbr1stDigit) {
+                rbr1stDigit = false;
+                rbrRegister = item - ITM_0;
               }
               else {
-                rbrRegister = (rbrRegister >= allLocalRegisterPointer->numberOfLocalRegisters ? 0 : rbrRegister);
-                currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+                rbr1stDigit = true;
+                rbrRegister = rbrRegister*10 + item - ITM_0;
+
+                if(rbrMode == RBR_GLOBAL) {
+                  currentRegisterBrowserScreen = rbrRegister;
+                }
+                else {
+                  rbrRegister = (rbrRegister >= allLocalRegisterPointer->numberOfLocalRegisters ? 0 : rbrRegister);
+                  currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+                }
               }
             }
-          }
 
-          keyActionProcessed = true;
-          break;
+            keyActionProcessed = true;
+            break;
 
-        case CM_FLAG_BROWSER:
-        case CM_FLAG_BROWSER_OLD:           //JM
-        case CM_FONT_BROWSER:
-        case CM_ERROR_MESSAGE:
-        case CM_BUG_ON_SCREEN:
-          keyActionProcessed = true;
-          break;
+          case CM_FLAG_BROWSER:
+          case CM_FLAG_BROWSER_OLD:           //JM
+          case CM_FONT_BROWSER:
+          case CM_ERROR_MESSAGE:
+          case CM_BUG_ON_SCREEN:
+            keyActionProcessed = true;
+            break;
 
-        case CM_LISTXY:                     //JM VV
-        case CM_GRAPH:
-          if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
-            calcMode = previousCalcMode;
-          }
-          keyActionProcessed = true;
-          break;                            //JM ^^
+          case CM_LISTXY:                     //JM VV
+          case CM_GRAPH:
+            if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
+              calcMode = previousCalcMode;
+            }
+            keyActionProcessed = true;
+            break;                            //JM ^^
 
 
-        case CM_CONFIRMATION:
-          if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
-            calcMode = previousCalcMode;
-            temporaryInformation = TI_NO_INFO;
-            confirmedFunction(CONFIRMED);
-          }
+          case CM_CONFIRMATION:
+            if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
+              calcMode = previousCalcMode;
+              temporaryInformation = TI_NO_INFO;
+              confirmedFunction(CONFIRMED);
+            }
 
-          else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
-            calcMode = previousCalcMode;
-            temporaryInformation = TI_NO_INFO;
-          }
+            else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
+              calcMode = previousCalcMode;
+              temporaryInformation = TI_NO_INFO;
+            }
 
-          keyActionProcessed = true;
-          break;
+            keyActionProcessed = true;
+            break;
 
-        case CM_PEM:
-          break;
+          case CM_PEM:
+            break;
 
-        default:
-          sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
-          displayBugScreen(errorMessage);
-      }
-  }
-  #ifdef RECORDLOG
-  if(keyActionProcessed) {                         //JMEXEC
-    capture_sequence("keyActionProcessed:", item);  //JMEXEC
-  }                                                //JMEXEC
-  #endif
-}
+          default:
+            sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
+            displayBugScreen(errorMessage);
+        }
+    }
+          #ifdef RECORDLOG
+          if(keyActionProcessed) {                         //JMEXEC
+            capture_sequence("keyActionProcessed:", item);  //JMEXEC
+          }                                                //JMEXEC
+          #endif
+        }
 #endif // TESTSUITE_BUILD
 
 
@@ -902,42 +906,44 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }                                               //JM NEWERPN ^^
       break;
 
-    case CM_AIM:
-    case CM_ASM_OVER_AIM:
-      calcModeNormal();
-      while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {
-        popSoftmenu();
-      }
-
-      if(aimBuffer[0] == 0) {
-        undo();
-      }
-      else {
-        int16_t len = stringByteLength(aimBuffer) + 1;
-
-        reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-        xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
-
-        if( !eRPN ) {                                    //JM NEWERPN
-          setSystemFlag(FLAG_ASLIFT);
-          liftStack();
-          clearSystemFlag(FLAG_ASLIFT);
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          aimBuffer[0] = 0;
-        } else {
-            setSystemFlag(FLAG_ASLIFT);
-            aimBuffer[0] = 0;
+      case CM_AIM:
+      case CM_ASM_OVER_AIM:
+        calcModeNormal();
+        while(softmenuStackPointer > softmenuStackPointerBeforeAIM) {
+          popSoftmenu();
         }
-      }
-      break;
 
-    case CM_NIM:
-      closeNim();
+        if(aimBuffer[0] == 0) {
+          undo();
+        }
+        else {
+          int16_t len = stringByteLength(aimBuffer) + 1;
+
+          reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+          xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
+
+          if( !eRPN ) {                                    //JM NEWERPN
+            setSystemFlag(FLAG_ASLIFT);
+            liftStack();
+            clearSystemFlag(FLAG_ASLIFT);
+
+            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+            aimBuffer[0] = 0;
+          } else {
+              setSystemFlag(FLAG_ASLIFT);
+              aimBuffer[0] = 0;
+          }
+        }
+        break;
+
+      case CM_NIM:
+        closeNim();
 
       if( !eRPN ) {                                    //JM NEWERPN
         setSystemFlag(FLAG_ASLIFT);
         liftStack();
         clearSystemFlag(FLAG_ASLIFT);
+
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
@@ -948,9 +954,9 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_TAM:
-      tamTransitionSystem(TT_ENTER);
-      break;
+      case CM_TAM:
+        tamTransitionSystem(TT_ENTER);
+        break;
 
     case CM_ASM:
     case CM_ASM_OVER_TAM:
@@ -965,16 +971,16 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
     case CM_GRAPH:                      //JM
       break;
 
-    case CM_CONFIRMATION:
-      calcMode = previousCalcMode;
-      confirmedFunction(CONFIRMED);
-      break;
+      case CM_CONFIRMATION:
+        calcMode = previousCalcMode;
+        confirmedFunction(CONFIRMED);
+        break;
 
-    default:
-      sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif
+      default:
+        sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // TESTSUITE_BUILD
 }
 
 
@@ -1027,16 +1033,16 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}    //JM
         calcModeNormal();
 
-        if(aimBuffer[0] == 0) {
-          undo();
-        }
-        else {
-          int16_t len = stringByteLength(aimBuffer) + 1;
+          if(aimBuffer[0] == 0) {
+            undo();
+          }
+          else {
+            int16_t len = stringByteLength(aimBuffer) + 1;
 
-          reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+            reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
 
-          xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
-          aimBuffer[0] = 0;
+            xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
+            aimBuffer[0] = 0;
 
           setSystemFlag(FLAG_ASLIFT);
         }
@@ -1057,32 +1063,32 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_NIM:
-      addItemToNimBuffer(ITM_EXIT1);
-      break;
-
-    case CM_TAM:
-    case CM_ASM:
-      calcModeNormal();
-      break;
-
-    case CM_PEM:
-      if(softmenuStackPointer > 0) {
-        popSoftmenu();
+      case CM_NIM:
+        addItemToNimBuffer(ITM_EXIT1);
         break;
-      }
 
-      if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
-        uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
-        currentStep        += (freeProgramBytes & 0xfffc);
-        firstDisplayedStep += (freeProgramBytes & 0xfffc);
-        freeProgramBytes &= 0x03;
-        resizeProgramMemory(TO_BLOCKS(newProgramSize));
-        scanLabelsAndPrograms();
-      }
+      case CM_TAM:
+      case CM_ASM:
+        calcModeNormal();
+        break;
 
-      calcModeNormal();
-      break;
+      case CM_PEM:
+        if(softmenuStackPointer > 0) {
+          popSoftmenu();
+          break;
+        }
+
+        if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
+          uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
+          currentStep        += (freeProgramBytes & 0xfffc);
+          firstDisplayedStep += (freeProgramBytes & 0xfffc);
+          freeProgramBytes &= 0x03;
+          resizeProgramMemory(TO_BLOCKS(newProgramSize));
+          scanLabelsAndPrograms();
+        }
+
+        calcModeNormal();
+        break;
 
     case CM_ASM_OVER_TAM:
       tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;      //JM
@@ -1096,14 +1102,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
        }                                                                             //JM auto recover out of SYSFL 
       break;
 
-    case CM_ASM_OVER_AIM:
-      calcModeAim(NOPARAM);
-      break;
+      case CM_ASM_OVER_AIM:
+        calcModeAim(NOPARAM);
+        break;
 
-    case CM_ASM_OVER_PEM: // TODO: is that correct
-      calcModeNormal();
-      calcMode = CM_PEM;
-      break;
+      case CM_ASM_OVER_PEM: // TODO: is that correct
+        calcModeNormal();
+        calcMode = CM_PEM;
+        break;
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
@@ -1189,11 +1195,11 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
     case CM_GRAPH:                      //JM ^^
       break;
 
-    default:
-      sprintf(errorMessage, "In function fnKeyCC: unexpected calcMode value (%" PRIu8 ") while processing key CC!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif
+      default:
+        sprintf(errorMessage, "In function fnKeyCC: unexpected calcMode value (%" PRIu8 ") while processing key CC!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // TESTSUITE_BUILD
 }
 
 
@@ -1206,18 +1212,18 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
  ***********************************************/
 void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-  uint16_t lg;
-  uint8_t *nextStep;
+    uint16_t lg;
+    uint8_t *nextStep;
 
-  switch(calcMode) {
-    case CM_NORMAL:
-      if(lastErrorCode != 0) {
-        lastErrorCode = 0;
-      }
-      else {
-        runFunction(ITM_CLX);
-      }
-      break;
+    switch(calcMode) {
+      case CM_NORMAL:
+        if(lastErrorCode != 0) {
+          lastErrorCode = 0;
+        }
+        else {
+          runFunction(ITM_CLX);
+        }
+        break;
 
     case CM_AIM:
       if(stringByteLength(aimBuffer) > 0) {
@@ -1240,29 +1246,29 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_ASM_OVER_AIM:
-      if(stringByteLength(aimBuffer) > 0) {
-        lg = stringLastGlyph(aimBuffer);
-        aimBuffer[lg] = 0;
-        xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
-      }
-      break;
+      case CM_ASM_OVER_AIM:
+        if(stringByteLength(aimBuffer) > 0) {
+          lg = stringLastGlyph(aimBuffer);
+          aimBuffer[lg] = 0;
+          xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_AIM_LINE + 6, vmNormal, true, true);
+        }
+        break;
 
-    case CM_NIM:
-      addItemToNimBuffer(ITM_BACKSPACE);
-      break;
+      case CM_NIM:
+        addItemToNimBuffer(ITM_BACKSPACE);
+        break;
 
-    case CM_TAM:
-      tamTransitionSystem(TT_BACKSPACE);
-      break;
+      case CM_TAM:
+        tamTransitionSystem(TT_BACKSPACE);
+        break;
 
-    case CM_ASM:
-      addItemToBuffer(ITM_BACKSPACE);
-      break;
+      case CM_ASM:
+        addItemToBuffer(ITM_BACKSPACE);
+        break;
 
-    case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_PEM:
-      break;
+      case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_PEM:
+        break;
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
@@ -1271,9 +1277,9 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       calcMode = previousCalcMode;
       break;
 
-    case CM_BUG_ON_SCREEN:
-      calcMode = previousCalcMode;
-      break;
+      case CM_BUG_ON_SCREEN:
+        calcMode = previousCalcMode;
+        break;
 
     case CM_LISTXY:                     //JM vv
     case CM_GRAPH:
@@ -1286,44 +1292,46 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       temporaryInformation = TI_NO_INFO;
       break;
 
-    case CM_PEM:
-      nextStep = findNextStep(currentStep);
-      if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
-        deleteStepsFromTo(currentStep, nextStep);
-      }
-      break;
+      case CM_PEM:
+        nextStep = findNextStep(currentStep);
+        if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
+          deleteStepsFromTo(currentStep, nextStep);
+        }
+        break;
 
-    default:
-      sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif
+      default:
+        sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // TESTSUITE_BUILD
 }
 
 
 
-static void menuUp(void) {
-  int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-  if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
-    alphaCase = AC_UPPER;
-    softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
-  }
-  else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
-    alphaCase = AC_UPPER;
-  }
-  else {
-    int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
-
-    if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
-      softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+#ifndef TESTSUITE_BUILD
+  static void menuUp(void) {
+    int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+    if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
+      alphaCase = AC_UPPER;
+      softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+    }
+    else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
+      alphaCase = AC_UPPER;
     }
     else {
-      softmenuStack[softmenuStackPointer - 1].firstItem = 0;
-    }
+      int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-    setCatalogLastPos();
+      if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {
+        softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
+      }
+      else {
+        softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+      }
+
+      setCatalogLastPos();
+    }
   }
-}
+#endif // TESTSUITE_BUILD
 
 
 static void menuUp_org(void) {
@@ -1415,26 +1423,26 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_TAM:
-      addItemToBuffer(ITM_Max);
-      break;
+      case CM_TAM:
+        addItemToBuffer(ITM_Max);
+        break;
 
-    case CM_REGISTER_BROWSER:
-      rbr1stDigit = true;
-      if(rbrMode == RBR_GLOBAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
-      }
-      else if(rbrMode == RBR_LOCAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
-      }
-      else if(rbrMode == RBR_NAMED) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
-      }
-      else {
-        sprintf(errorMessage, "In function fnKeyUp: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
-        displayBugScreen(errorMessage);
-      }
-      break;
+      case CM_REGISTER_BROWSER:
+        rbr1stDigit = true;
+        if(rbrMode == RBR_GLOBAL) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
+        }
+        else if(rbrMode == RBR_LOCAL) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+        }
+        else if(rbrMode == RBR_NAMED) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
+        }
+        else {
+          sprintf(errorMessage, "In function fnKeyUp: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+          displayBugScreen(errorMessage);
+        }
+        break;
 
     case CM_FLAG_BROWSER:
       currentFlgScr--;                          //JM removed the 3-x part
@@ -1450,60 +1458,56 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_PEM:
-      resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].numItems > 18) {
-        menuUp();
-      }
-      else {
-        if(firstDisplayedStepNumber > 0 && currentStepNumber <= firstDisplayedStepNumber + 3) {
-          firstDisplayedStepNumber--;
-          firstDisplayedStep = findPreviousStep(firstDisplayedStep);
+      case CM_PEM:
+        resetAlphaSelectionBuffer();
+        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].numItems > 18) {
+          menuUp();
         }
-
-        if(currentStepNumber != 0) {
-          currentStepNumber--;
+        else {
+          fnBst(NOPARAM);
         }
-      }
-      break;
+        break;
 
-    case CM_LISTXY:                     //JM vv
-      ListXYposition += 10;
-      break;                            //JM ^^
+      case CM_LISTXY:                     //JM vv
+        ListXYposition += 10;
+        break;                            //JM ^^
           
-    default:
-      sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif
+      default:
+        sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // TESTSUITE_BUILD
 }
 
 
-static void menuDown(void) {
-  int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
-  if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
-    alphaCase = AC_LOWER;
-    softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
-  }
-  else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
-    alphaCase = AC_LOWER;
-  }
-  else {
-    int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-    if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
-      softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
+#ifndef TESTSUITE_BUILD
+  static void menuDown(void) {
+    int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+    if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
+      alphaCase = AC_LOWER;
+      softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
     }
-    else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
-      softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+    else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
+      alphaCase = AC_LOWER;
     }
     else {
-      softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
-    }
+      int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-    setCatalogLastPos();
+      if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
+        softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
+      }
+      else if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= -5) {
+        softmenuStack[softmenuStackPointer - 1].firstItem = 0;
+      }
+      else {
+        softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
+      }
+
+      setCatalogLastPos();
+    }
   }
-}
+#endif // TESTSUITE_BUILD
 
 
 void menuDown_org(void) {
@@ -1591,27 +1595,27 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_TAM:
-      addItemToBuffer(ITM_Min);
-      break;
+      case CM_TAM:
+        addItemToBuffer(ITM_Min);
+        break;
 
 
-    case CM_REGISTER_BROWSER:
-      rbr1stDigit = true;
-      if(rbrMode == RBR_GLOBAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
-      }
-      else if(rbrMode == RBR_LOCAL) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
-      }
-      else if(rbrMode == RBR_NAMED) {
-        currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
-      }
-      else {
-        sprintf(errorMessage, "In function fnKeyDown: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
-        displayBugScreen(errorMessage);
-      }
-      break;
+      case CM_REGISTER_BROWSER:
+        rbr1stDigit = true;
+        if(rbrMode == RBR_GLOBAL) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
+        }
+        else if(rbrMode == RBR_LOCAL) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+        }
+        else if(rbrMode == RBR_NAMED) {
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
+        }
+        else {
+          sprintf(errorMessage, "In function fnKeyDown: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
+          displayBugScreen(errorMessage);
+        }
+        break;
 
     case CM_FLAG_BROWSER:
       currentFlgScr++;                          //JM removed the 3-x part
@@ -1627,24 +1631,15 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       }
       break;
 
-    case CM_PEM:
-      resetAlphaSelectionBuffer();
-      if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].numItems > 18) {
-        menuDown();
-      }
-      else {
-        if(currentStepNumber++ >= 3) {
-          if(!programListEnd) {
-            firstDisplayedStepNumber++;
-            firstDisplayedStep = findNextStep(firstDisplayedStep);
-          }
+      case CM_PEM:
+        resetAlphaSelectionBuffer();
+        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].numItems > 18) {
+          menuDown();
         }
-
-        if(currentStepNumber > firstDisplayedStepNumber + numberOfStepsOnScreen) {
-          currentStepNumber = firstDisplayedStepNumber + numberOfStepsOnScreen;
+        else {
+          fnSst(NOPARAM);
         }
-      }
-      break;
+        break;
 
     case CM_LISTXY:                     //JM vv
       ListXYposition -= 10;
@@ -1667,33 +1662,33 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-  switch(calcMode) {
-    case CM_NORMAL:
-      if(getSystemFlag(FLAG_FRACT)) {
-        clearSystemFlag(FLAG_FRACT);
-      }
-      else {
-        runFunction(ITM_toREAL);
-      }
+    switch(calcMode) {
+      case CM_NORMAL:
+        if(getSystemFlag(FLAG_FRACT)) {
+          clearSystemFlag(FLAG_FRACT);
+        }
+        else {
+          runFunction(ITM_toREAL);
+        }
+        break;
+
+      case CM_NIM:
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function fnKeyDotD:", "the data type date is to be coded!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        break;
+
+      case CM_REGISTER_BROWSER:
+      case CM_FLAG_BROWSER:
+      case CM_FLAG_BROWSER_OLD:           //JM
+      case CM_FONT_BROWSER:
+      case CM_LISTXY:                     //JM
+      case CM_GRAPH:                      //JM
       break;
 
-    case CM_NIM:
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function fnKeyDotD:", "the data type date is to be coded!", NULL, NULL);
-      #endif
-      break;
-
-    case CM_REGISTER_BROWSER:
-    case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
-    case CM_FONT_BROWSER:
-    case CM_LISTXY:                     //JM
-    case CM_GRAPH:                      //JM
-      break;
-
-    default:
-      sprintf(errorMessage, "In function fnKeyDotD: unexpected calcMode value (%" PRIu8 ") while processing key .d!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif
+      default:
+        sprintf(errorMessage, "In function fnKeyDotD: unexpected calcMode value (%" PRIu8 ") while processing key .d!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // TESTSUITE_BUILD
 }

@@ -28,9 +28,9 @@ static void save(const void *buffer, uint32_t size, void *stream) {
   #ifdef DMCP_BUILD
     UINT bytesWritten;
     f_write(stream, buffer, size, &bytesWritten);
-  #else
+  #else // !DMCP_BUILD
     fwrite(buffer, 1, size, stream);
-  #endif
+  #endif // DMCP_BUILD
 }
 
 
@@ -40,32 +40,32 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     UINT bytesRead;
     f_read(stream, buffer, size, &bytesRead);
     return(bytesRead);
-  #else
+  #else // !DMCP_BUILD
     return(fread(buffer, 1, size, stream));
-  #endif
+  #endif // DMCP_BUILD
 }
 
 
 
 #ifdef PC_BUILD
-void saveCalc(void) {
-  uint32_t backupVersion = BACKUP_VERSION;
-  uint32_t ramSize       = RAM_SIZE;
-  uint32_t ramPtr;
-  FILE *ppgm_fp;
+  void saveCalc(void) {
+    uint32_t backupVersion = BACKUP_VERSION;
+    uint32_t ramSize       = RAM_SIZE;
+    uint32_t ramPtr;
+    FILE *ppgm_fp;
 
-  BACKUP = fopen("backup.bin", "wb");
-  if(BACKUP == NULL) {
-    printf("Cannot save calc's memory in file backup.bin!\n");
-    exit(0);
-  }
+    BACKUP = fopen("backup.bin", "wb");
+    if(BACKUP == NULL) {
+      printf("Cannot save calc's memory in file backup.bin!\n");
+      exit(0);
+    }
 
-  if(calcMode == CM_CONFIRMATION) {
-    calcMode = previousCalcMode;
-    refreshScreen();
-  }
+    if(calcMode == CM_CONFIRMATION) {
+      calcMode = previousCalcMode;
+      refreshScreen();
+    }
 
-  printf("Begin of calc's backup\n");
+    printf("Begin of calc's backup\n");
 
 
     save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
@@ -193,6 +193,7 @@ void saveCalc(void) {
     save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
     save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+    save(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
@@ -243,39 +244,37 @@ void saveCalc(void) {
     save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
     save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
     save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
-
-
-  fclose(BACKUP);
-  printf("End of calc's backup\n");
-}
-
-
-
-void restoreCalc(void) {
-  uint32_t backupVersion, ramSize, ramPtr;
-  FILE *ppgm_fp;
-
-  fnReset(CONFIRMED);
-  BACKUP = fopen("backup.bin", "rb");
-  if(BACKUP == NULL) {
-    printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
-    return;
-  }
-
-  restore(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
-  restore(&ramSize,                            sizeof(ramSize),                            BACKUP);
-  if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
     fclose(BACKUP);
-
-    printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
-    printf("               Backup file      Program\n");
-    printf("backupVersion  %6u           %6d\n", backupVersion, BACKUP_VERSION);
-    printf("ramSize blocks %6u           %6d\n", ramSize, RAM_SIZE);
-    printf("ramSize bytes  %6u           %6d\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
-    return;
+    printf("End of calc's backup\n");
   }
-  else {
-    printf("Begin of calc's restoration\n");
+
+
+
+  void restoreCalc(void) {
+    uint32_t backupVersion, ramSize, ramPtr;
+    FILE *ppgm_fp;
+
+    fnReset(CONFIRMED);
+    BACKUP = fopen("backup.bin", "rb");
+    if(BACKUP == NULL) {
+      printf("Cannot restore calc's memory from file backup.bin! Performing RESET\n");
+      return;
+    }
+
+    restore(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
+    restore(&ramSize,                            sizeof(ramSize),                            BACKUP);
+    if(backupVersion != BACKUP_VERSION || ramSize != RAM_SIZE) {
+      fclose(BACKUP);
+
+      printf("Cannot restore calc's memory from file backup.bin! File backup.bin is from another backup version.\n");
+      printf("               Backup file      Program\n");
+      printf("backupVersion  %6u           %6d\n", backupVersion, BACKUP_VERSION);
+      printf("ramSize blocks %6u           %6d\n", ramSize, RAM_SIZE);
+      printf("ramSize bytes  %6u           %6d\n", TO_BYTES(ramSize), TO_BYTES(RAM_SIZE));
+      return;
+    }
+    else {
+      printf("Begin of calc's restoration\n");
 
       restore(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
       restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
@@ -404,6 +403,7 @@ void restoreCalc(void) {
       restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
       restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
       restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+      restore(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
@@ -454,64 +454,62 @@ void restoreCalc(void) {
       restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
       restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
       restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
+      fclose(BACKUP);
+      printf("End of calc's restoration\n");
 
+      if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM
 
-    fclose(BACKUP);
-    printf("End of calc's restoration\n");
+      scanLabelsAndPrograms();
 
-    if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM
+      #if (DEBUG_REGISTER_L == 1)
+        refreshRegisterLine(REGISTER_X); // to show L register
+      #endif // (DEBUG_REGISTER_L == 1)
 
-    scanLabelsAndPrograms();
+      #if (SCREEN_800X480 == 1)
+        if(calcMode == CM_NORMAL)                {}
+        else if(calcMode == CM_AIM)              {cursorEnabled = true;}
+        else if(calcMode == CM_TAM)              {}
+        else if(calcMode == CM_NIM)              {cursorEnabled = true;}
+        else if(calcMode == CM_ASM)              {}
+        else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER) {}
+        else if(calcMode == CM_FLAG_BROWSER)     {}
+        else if(calcMode == CM_FONT_BROWSER)     {}
+        else if(calcMode == CM_PEM)              {}
+        else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM
+        else if(calcMode == CM_LISTXY)           {}             //JM
+        else if(calcMode == CM_GRAPH)            {}             //JM
+        else {
+          sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+          displayBugScreen(errorMessage);
+        }
+      #else // SCREEN_800X480 == 0
+        if(calcMode == CM_NORMAL)                calcModeNormalGui();
+        else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
+        else if(calcMode == CM_TAM)              calcModeTamGui();
+        else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
+        else if(calcMode == CM_ASM)              calcModeAsm();
+        else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
+        else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
+        else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
+        else if(calcMode == CM_PEM)              calcModeNormalGui();
+        else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
+        else if(calcMode == CM_LISTXY)           calcModeNormalGui();
+        else if(calcMode == CM_GRAPH)            calcModeNormalGui();
+        else {
+          sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
+          displayBugScreen(errorMessage);
+        }
+      #endif // (SCREEN_800X480 == 1)
 
-    #if (DEBUG_REGISTER_L == 1)
-      refreshRegisterLine(REGISTER_X); // to show L register
-    #endif
-
-    #if (SCREEN_800X480 == 1)
-      if(calcMode == CM_NORMAL)                {}
-      else if(calcMode == CM_AIM)              {cursorEnabled = true;}
-      else if(calcMode == CM_TAM)              {}
-      else if(calcMode == CM_NIM)              {cursorEnabled = true;}
-      else if(calcMode == CM_ASM)              {}
-      else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_REGISTER_BROWSER) {}
-      else if(calcMode == CM_FLAG_BROWSER)     {}
-      else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM
-      else if(calcMode == CM_FONT_BROWSER)     {}
-      else if(calcMode == CM_LISTXY)           {}             //JM
-      else if(calcMode == CM_GRAPH)            {}             //JM
-      else if(calcMode == CM_PEM)              {}
-      else {
-        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
-        displayBugScreen(errorMessage);
-      }
-    #else // SCREEN_800X480 == 0
-      if(calcMode == CM_NORMAL)                calcModeNormalGui();
-      else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
-      else if(calcMode == CM_TAM)              calcModeTamGui();
-      else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
-      else if(calcMode == CM_ASM)              calcModeAsm();
-      else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
-      else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
-      else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
-      else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
-      else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
-      else if(calcMode == CM_LISTXY)           calcModeNormalGui();
-      else if(calcMode == CM_GRAPH)            calcModeNormalGui();
-      else if(calcMode == CM_PEM)              calcModeNormalGui();
-      else {
-        sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
-        displayBugScreen(errorMessage);
-      }
-    #endif // SCREEN_800X480
-
-    refreshScreen();
+      refreshScreen();
+    }
   }
-}
-#endif
+#endif // PC_BUILD
 
 
 static void registerToSaveString(calcRegister_t regist) {
@@ -606,15 +604,17 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     result = f_open(BACKUP, "SAVFILES\\wp43s.sav", FA_CREATE_ALWAYS | FA_WRITE);
     if(result != FR_OK) {
       sys_disk_write_enable(0);
-  #else
+      return;
+    }
+  #else // !DMCP_BUILD
     FILE *ppgm_fp;
 
     BACKUP = fopen("wp43s.sav", "wb");
     if(BACKUP == NULL) {
       printf("Cannot SAVE in file wp43s.sav!\n");
-  #endif
       return;
     }
+  #endif // DMCP_BUILD
 
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wrestrict"
@@ -750,9 +750,9 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   #ifdef DMCP_BUILD
     f_close(BACKUP);
     sys_disk_write_enable(0);
-  #else
+  #else // !DMCP_BUILD
     fclose(BACKUP);
-  #endif
+  #endif // DMCP_BUILD
 
   temporaryInformation = TI_SAVED;
 }
@@ -1219,17 +1219,23 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 void fnLoad(uint16_t loadMode) {
   #ifdef DMCP_BUILD
     if(f_open(BACKUP, "SAVFILES\\wp43s.sav", FA_READ) != FR_OK) {
-  #else
-    FILE *ppgm_fp;
-
-    if((BACKUP = fopen("wp43s.sav", "rb")) == NULL) {
-  #endif
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
         return;
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
+  #else // !DMCP_BUILD
+    FILE *ppgm_fp;
+
+    if((BACKUP = fopen("wp43s.sav", "rb")) == NULL) {
+      displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
+        return;
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  #endif // DMCP_BUILD
 
   restoreOneSection(BACKUP, loadMode); // GLOBAL_REGISTERS
   restoreOneSection(BACKUP, loadMode); // GLOBAL_FLAGS
@@ -1243,15 +1249,15 @@ void fnLoad(uint16_t loadMode) {
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);
-  #else
+  #else // !DMCP_BUILD
     fclose(BACKUP);
-  #endif
+  #endif //DMCP_BUILD
 
   #ifndef TESTSUITE_BUILD
     if(loadMode == LM_ALL) {
       temporaryInformation = TI_BACKUP_RESTORED;
     }
-  #endif
+  #endif // TESTSUITE_BUILD
 }
 
 #undef BACKUP

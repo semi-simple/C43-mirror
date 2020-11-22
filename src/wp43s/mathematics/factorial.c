@@ -41,7 +41,7 @@ void factError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate x! for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnFactorial:", errorMessage, NULL, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 
@@ -74,7 +74,7 @@ void factLonI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
       sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
       moreInfoOnError("In function factLonI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -85,7 +85,7 @@ void factLonI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
       sprintf(tmpString, "cannot calculate factorial(%s), the limit is 450, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
       moreInfoOnError("In function factLonI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -100,10 +100,10 @@ void factLonI(void) {
     for(uint32_t i=2; i<=n; i++) {
       longIntegerMultiplyUInt(f, i, f);
     }
-  #else
+  #else // (__linux__ == 0)
     longIntegerInit(f);
     longIntegerFactorial(n, f); //TODO why this line fails?
-  #endif
+  #endif // __linux__ == 1
 
 
   convertLongIntegerToLongIntegerRegister(f, REGISTER_X);
@@ -138,7 +138,7 @@ void factShoI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
       sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
       moreInfoOnError("In function factShoI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -148,7 +148,7 @@ void factShoI(void) {
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
       sprintf(tmpString, "cannot calculate factorial(%s)", errorMessage);
       moreInfoOnError("In function factShoI:", tmpString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 

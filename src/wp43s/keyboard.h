@@ -50,7 +50,7 @@ uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
   void btnClickedR   (GtkWidget *notUsed, gpointer data);                     //JM
   void btnPressed    (GtkWidget *notUsed, GdkEvent *event, gpointer data);
   void btnReleased   (GtkWidget *notUsed, GdkEvent *event, gpointer data);
-#endif
+#endif // PC_BUILD
 
 #ifdef DMCP_BUILD
   void btnFnClicked (void *w, void *data);

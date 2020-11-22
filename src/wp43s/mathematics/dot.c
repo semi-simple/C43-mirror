@@ -56,16 +56,16 @@ static void dotDataTypeError(void) {
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //static void dotSizeError() {
-//    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+//  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-//#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+//  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 //    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
 //    moreInfoOnError("In function fnDot:", errorMessage, NULL, NULL);
-//#endif
+//  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 //}
 
 //=============================================================================

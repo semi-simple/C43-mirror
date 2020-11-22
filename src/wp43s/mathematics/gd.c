@@ -43,7 +43,7 @@ void gdTypeError(uint16_t gdOrInvGd) {
       sprintf(errorMessage, "cannot calculate invGd(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
       moreInfoOnError("In function fnInvGd:", errorMessage, NULL, NULL);
     }
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
@@ -57,7 +57,7 @@ static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
       sprintf(errorMessage, "cannot calculate invGd(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
       moreInfoOnError("In function fnInvGd:", errorMessage, NULL, NULL);
     }
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 

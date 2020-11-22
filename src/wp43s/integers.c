@@ -29,7 +29,7 @@ void fnChangeBase(uint16_t base) {
     }
     else {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);
-      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "base = %" PRIu16 "! The base must be fron 2 to 16.", base);
         moreInfoOnError("In function fnChangeBase:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)

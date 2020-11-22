@@ -54,7 +54,7 @@ void orError24(void) {
     sprintf(errorMessage, "%s OR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "data type of one of the OR parameters is not allowed");
     moreInfoOnError("In function orError24:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 void orError31(void) {
@@ -63,7 +63,7 @@ void orError31(void) {
     sprintf(errorMessage, "%s OR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "OR doesn't allow mixing data types real/long integer and short integer");
     moreInfoOnError("In function orError31:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 

@@ -54,11 +54,8 @@ void fnSetDateFormat(uint16_t dateFormat) {
  ***********************************************/
 void getDateString(char *dateString) {
   #ifdef PC_BUILD
-    time_t rawTime;
-    struct tm *timeInfo;
-
-    time(&rawTime);
-    timeInfo = localtime(&rawTime);
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
 
     // For the format string : man strftime
     if(!getSystemFlag(FLAG_TDM24)) { // time format = 12H ==> 2 digit year
@@ -137,11 +134,8 @@ void getDateString(char *dateString) {
  ***********************************************/
 void getTimeString(char *timeString) {
   #ifdef PC_BUILD
-    time_t rawTime;
-    struct tm *timeInfo;
-
-    time(&rawTime);
-    timeInfo = localtime(&rawTime);
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
 
     // For the format string : man strftime
     if(getSystemFlag(FLAG_TDM24)) { // time format = 24H

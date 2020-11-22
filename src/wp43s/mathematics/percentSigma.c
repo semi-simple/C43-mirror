@@ -44,7 +44,7 @@ static void dataTypeError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot use %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnPercentSigma:", errorMessage, NULL, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //=============================================================================
@@ -65,7 +65,7 @@ void fnPercentSigma(uint16_t unusedButMandatoryParameter) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "There is no statistical data available!");
       moreInfoOnError("In function fnPercentSigma:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -91,7 +91,7 @@ static bool_t percentSigma(real_t *xReal, real_t *rReal, realContext_t *realCont
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnPercentSigma:", "cannot divide a real by 0", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
     }
   }

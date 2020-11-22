@@ -193,6 +193,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     save(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
     save(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+    save(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
     fclose(BACKUP);
@@ -354,6 +355,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
       restore(&firstDisplayedStepNumber,           sizeof(firstDisplayedStepNumber),           BACKUP);
       restore(&currentStepNumber,                  sizeof(currentStepNumber),                  BACKUP);
+      restore(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
 
       fclose(BACKUP);

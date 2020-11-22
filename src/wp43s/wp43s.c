@@ -172,6 +172,7 @@ uint16_t              numberOfLabels;
 uint16_t              numberOfPrograms;
 uint16_t              tamMode;
 uint16_t              currentStepNumber;
+uint16_t              currentProgramNumber;
 uint16_t              numberOfStepsOnScreen;
 
 int32_t               numberOfFreeMemoryRegions;

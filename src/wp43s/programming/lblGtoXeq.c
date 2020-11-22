@@ -30,8 +30,30 @@ void fnGoto(uint16_t label) {
 
 
 
-void fnGotoDot(uint16_t label) {
-  #ifndef DMCP_BUILD
-    printf("fnGotoDot: GTO. %02u\n", label);
-  #endif // DMCP_BUILD
+void fnGotoDot(uint16_t stepNumber) {
+  printf("\nGTO.%4u", stepNumber);
+  currentStepNumber = stepNumber;
+
+  defineCurrentProgramFromCurrentStepNumber();
+
+  uint8_t *stepPointer = beginOfCurrentProgram;
+  stepNumber = programList[currentProgramNumber].step - 1;
+  while(true) {
+    if(stepNumber == currentStepNumber) {
+      currentStep = stepPointer;
+      break;
+    }
+
+    stepPointer = findNextStep(stepPointer);
+    stepNumber++;
+  }
+
+  if(currentStepNumber >= 3) {
+    firstDisplayedStepNumber = currentStepNumber - 3;
+    firstDisplayedStep = findPreviousStep(findPreviousStep(findPreviousStep(currentStep)));
+  }
+  else {
+    firstDisplayedStepNumber = 0;
+    firstDisplayedStep = beginOfProgramMemory;
+  }
 }

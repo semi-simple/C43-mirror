@@ -347,6 +347,7 @@
   extern uint16_t              numberOfPrograms;
   extern uint16_t              tamMode;
   extern uint16_t              currentStepNumber;
+  extern uint16_t              currentProgramNumber;
   extern uint16_t              numberOfStepsOnScreen;
 
   extern int32_t               numberOfFreeMemoryRegions;

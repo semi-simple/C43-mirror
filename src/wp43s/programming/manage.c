@@ -133,7 +133,7 @@ void scanLabelsAndPrograms(void) {
     stepNumber++;
   }
 
-  defineCurrentProgram();
+  defineCurrentProgramFromCurrentStep();
 }
 
 
@@ -216,16 +216,26 @@ void fnClP(uint16_t unusedButMandatoryParameter) {
 
 
 
-void defineCurrentProgram(void) {
-  int16_t program;
-
-  program = 0;
-  while(currentStep >= programList[program].instructionPointer) {
-    program++;
+void defineCurrentProgramFromCurrentStepNumber(void) {
+  currentProgramNumber = 0;
+  while(currentStepNumber >= programList[currentProgramNumber].step - 1) {
+    currentProgramNumber++;
   }
 
-  endOfCurrentProgram = programList[program--].instructionPointer;
-  beginOfCurrentProgram = programList[program].instructionPointer;
+  endOfCurrentProgram = programList[currentProgramNumber--].instructionPointer;
+  beginOfCurrentProgram = programList[currentProgramNumber].instructionPointer;
+}
+
+
+
+void defineCurrentProgramFromCurrentStep(void) {
+  currentProgramNumber = 0;
+  while(currentStep >= programList[currentProgramNumber].instructionPointer) {
+    currentProgramNumber++;
+  }
+
+  endOfCurrentProgram = programList[currentProgramNumber--].instructionPointer;
+  beginOfCurrentProgram = programList[currentProgramNumber].instructionPointer;
 }
 
 
@@ -253,7 +263,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
         showString(tmpString, &standardFont, 1, tamOverPemYPos, vmReverse, false, true);
         currentStep = step;
         if(currentStep < beginOfCurrentProgram || currentStep >= endOfCurrentProgram) { // currentSetep is outside the current program
-          defineCurrentProgram();
+          defineCurrentProgramFromCurrentStep();
         }
       }
       else {

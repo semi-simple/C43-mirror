@@ -116,16 +116,11 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       #endif // PC_BUILD
     }
 
-    if(calcMode == CM_PEM) {
-      insertStepInProgram(func);
-      return;
-    }
-
-    if(calcMode != CM_ASM_OVER_TAM) {
+    if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
       tamMode = indexOfItems[func].param;
     }
 
-    if(calcMode != CM_TAM && calcMode != CM_ASM_OVER_TAM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
+    if(calcMode != CM_TAM && calcMode != CM_TAM_OVER_PEM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && TM_VALUE <= tamMode && tamMode <= TM_CMP) {
       tamFunction = func;
       strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
       tamNumberMin = indexOfItems[func].tamMin;
@@ -136,6 +131,11 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
 
       calcModeTam();
+      return;
+    }
+
+    if(calcMode == CM_PEM) {
+      insertStepInProgram(func);
       return;
     }
 

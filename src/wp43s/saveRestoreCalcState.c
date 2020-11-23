@@ -466,40 +466,44 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       #endif // (DEBUG_REGISTER_L == 1)
 
       #if (SCREEN_800X480 == 1)
-        if(calcMode == CM_NORMAL)                {}
-        else if(calcMode == CM_AIM)              {cursorEnabled = true;}
-        else if(calcMode == CM_TAM)              {}
-        else if(calcMode == CM_NIM)              {cursorEnabled = true;}
-        else if(calcMode == CM_ASM)              {}
-        else if(calcMode == CM_ASM_OVER_TAM)     {clearSystemFlag(FLAG_ALPHA);}
-        else if(calcMode == CM_ASM_OVER_AIM)     {clearSystemFlag(FLAG_ALPHA);}
-        else if(calcMode == CM_ASM_OVER_PEM)     {clearSystemFlag(FLAG_ALPHA);}
-        else if(calcMode == CM_REGISTER_BROWSER) {}
-        else if(calcMode == CM_FLAG_BROWSER)     {}
-        else if(calcMode == CM_FONT_BROWSER)     {}
-        else if(calcMode == CM_PEM)              {}
-        else if(calcMode == CM_FLAG_BROWSER_OLD) {}             //JM
-        else if(calcMode == CM_LISTXY)           {}             //JM
-        else if(calcMode == CM_GRAPH)            {}             //JM
+        if(calcMode == CM_NORMAL)                     {}
+        else if(calcMode == CM_AIM)                   {cursorEnabled = true;}
+        else if(calcMode == CM_TAM)                   {}
+        else if(calcMode == CM_TAM_OVER_PEM)          {}
+        else if(calcMode == CM_NIM)                   {cursorEnabled = true;}
+        else if(calcMode == CM_ASM)                   {}
+        else if(calcMode == CM_ASM_OVER_TAM)          {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_TAM_OVER_PEM) {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)          {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_PEM)          {clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER)      {}
+        else if(calcMode == CM_FLAG_BROWSER)          {}
+        else if(calcMode == CM_FONT_BROWSER)          {}
+        else if(calcMode == CM_PEM)                   {}
+        else if(calcMode == CM_FLAG_BROWSER_OLD)      {}             //JM
+        else if(calcMode == CM_LISTXY)                {}             //JM
+        else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
         }
-      #else // SCREEN_800X480 == 0
-        if(calcMode == CM_NORMAL)                calcModeNormalGui();
-        else if(calcMode == CM_AIM)             {calcModeAimGui(); cursorEnabled = true;}
-        else if(calcMode == CM_TAM)              calcModeTamGui();
-        else if(calcMode == CM_NIM)             {calcModeNormalGui(); cursorEnabled = true;}
-        else if(calcMode == CM_ASM)              calcModeAsm();
-        else if(calcMode == CM_ASM_OVER_TAM)    {calcModeAsm(); calcMode = CM_ASM_OVER_TAM; clearSystemFlag(FLAG_ALPHA);}
-        else if(calcMode == CM_ASM_OVER_AIM)    {calcModeAsm(); calcMode = CM_ASM_OVER_AIM; clearSystemFlag(FLAG_ALPHA);}
-        else if(calcMode == CM_REGISTER_BROWSER) calcModeNormalGui();
-        else if(calcMode == CM_FLAG_BROWSER)     calcModeNormalGui();
-        else if(calcMode == CM_FONT_BROWSER)     calcModeNormalGui();
-        else if(calcMode == CM_PEM)              calcModeNormalGui();
-        else if(calcMode == CM_FLAG_BROWSER_OLD) calcModeNormalGui();             //JM
-        else if(calcMode == CM_LISTXY)           calcModeNormalGui();
-        else if(calcMode == CM_GRAPH)            calcModeNormalGui();
+      #else // (SCREEN_800X480 == 0)
+        if(calcMode == CM_NORMAL)                      calcModeNormalGui();
+        else if(calcMode == CM_AIM)                   {calcModeAimGui(); cursorEnabled = true;}
+        else if(calcMode == CM_TAM)                    calcModeTamGui();
+        else if(calcMode == CM_TAM_OVER_PEM)           calcModeTamGui();
+        else if(calcMode == CM_NIM)                   {calcModeNormalGui(); cursorEnabled = true;}
+        else if(calcMode == CM_ASM)                    calcModeAsm();
+        else if(calcMode == CM_ASM_OVER_TAM)          {calcModeAsm(); calcMode = CM_ASM_OVER_TAM;          clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_TAM_OVER_PEM) {calcModeAsm(); calcMode = CM_ASM_OVER_TAM_OVER_PEM; clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_ASM_OVER_AIM)          {calcModeAsm(); calcMode = CM_ASM_OVER_AIM;          clearSystemFlag(FLAG_ALPHA);}
+        else if(calcMode == CM_REGISTER_BROWSER)       calcModeNormalGui();
+        else if(calcMode == CM_FLAG_BROWSER)           calcModeNormalGui();
+        else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
+        else if(calcMode == CM_PEM)                    calcModeNormalGui();
+        else if(calcMode == CM_FLAG_BROWSER_OLD)       calcModeNormalGui();             //JM
+        else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
+        else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);

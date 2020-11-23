@@ -1329,6 +1329,7 @@ void showSoftmenuCurrentPart(void) {
     switch(calcMode) {
       case CM_NORMAL:
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
       case CM_NIM:
       case CM_ASSIGN:
       case CM_ERROR_MESSAGE:
@@ -1865,7 +1866,7 @@ void popSoftmenu(void) {
   if(softmenuStackPointer > 0) {
     if(alphaSelectionMenu != ASM_NONE) {
       alphaSelectionMenu = ASM_NONE;
-      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_PEM) {
+      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
         calcModeNormal();
       }
     }
@@ -1926,6 +1927,11 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
       calcModeAsm();
       calcMode = CM_ASM_OVER_TAM;
       clearSystemFlag(FLAG_ALPHA);
+    }
+    else if(calcMode == CM_TAM_OVER_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_TAM_OVER_PEM;
+        clearSystemFlag(FLAG_ALPHA);
     }
     else {
       calcModeAsm();
@@ -2005,7 +2011,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     }
   }
   else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
+    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
       if(push) {
         pushSoftmenu(m);
       }
@@ -2024,7 +2030,7 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     //    pushSoftmenu(m);
     //  }
     //}
-    else if(calcMode == CM_TAM) {
+    else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
     }
     else {
       sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);

@@ -214,7 +214,7 @@
             if(calcMode == CM_ASM) {
               calcModeNormal();
             }
-            else if(calcMode == CM_ASM_OVER_TAM) {
+            else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
               reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
               if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
                 calcModeNormal();
@@ -247,14 +247,14 @@
            // Broken the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
           {
             if(item < 0) { // softmenu
-              if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+              if(item != -MNU_SYSFL || (calcMode != CM_TAM && calcMode != CM_TAM_OVER_PEM) || transitionSystemState == 0) {
                 showSoftmenu(NULL, item, true);
               }
             }
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
-            else if(calcMode == CM_TAM) {
+            else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
@@ -296,7 +296,7 @@
   if (kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
-    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
@@ -312,7 +312,7 @@
 
 
     // Shift f pressed and JM REMOVED shift g not active
-    if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
+    if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -327,7 +327,7 @@
     }
 
     // Shift g pressed and JM REMOVED shift f not active
-    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
+    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_GRAPH)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -343,7 +343,7 @@
 
     // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
     // JM Inserted new section and removed old f and g key processing sections
-    else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {   //JM shifts
+    else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_GRAPH)) {   //JM shifts
       Shft_timeouts = true;                         //JM SHIFT NEW
       fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
       if(ShiftTimoutMode) {
@@ -376,13 +376,13 @@
                shiftG ? key->gShifted :
                         key->primary;
     }
-    else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
+    else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
 
     }
-    else if(calcMode == CM_TAM) {
+    else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
       result = key->primaryTam; // No shifted function in TAM
     }
     else {
@@ -731,12 +731,14 @@
             break;
 
           case CM_TAM:
+          case CM_TAM_OVER_PEM:
             addItemToBuffer(item);
             keyActionProcessed = true;
             break;
 
           case CM_ASM:
           case CM_ASM_OVER_TAM:
+          case CM_ASM_OVER_TAM_OVER_PEM:
           case CM_ASM_OVER_AIM:
           case CM_ASM_OVER_PEM:
             if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
@@ -956,21 +958,23 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         tamTransitionSystem(TT_ENTER);
         break;
 
-    case CM_ASM:
-    case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_PEM:
-    case CM_REGISTER_BROWSER:
-    case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
-    case CM_FONT_BROWSER:
-    case CM_ERROR_MESSAGE:
-    case CM_BUG_ON_SCREEN:
-    case CM_LISTXY:                     //JM
-    case CM_GRAPH:                      //JM
-      break;
+      case CM_ASM:
+      case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
+      case CM_ASM_OVER_PEM:
+      case CM_REGISTER_BROWSER:
+      case CM_FLAG_BROWSER:
+      case CM_FONT_BROWSER:
+      case CM_ERROR_MESSAGE:
+      case CM_BUG_ON_SCREEN:
+      case CM_FLAG_BROWSER_OLD:           //JM
+      case CM_LISTXY:                     //JM
+      case CM_GRAPH:                      //JM
+        break;
 
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
@@ -1069,6 +1073,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
       case CM_ASM:
         calcModeNormal();
         break;
@@ -1091,17 +1096,18 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcModeNormal();
         break;
 
-    case CM_ASM_OVER_TAM:
-      tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;      //JM
-      transitionSystemState = 0;
-      calcModeTam();
-      sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
-      tamTransitionSystem(TT_NOTHING);
+      case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
+        tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;      //JM
+        transitionSystemState = 0;
+        calcModeTam();
+        sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
+        tamTransitionSystem(TT_NOTHING);
 
-      if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL 
-        calcModeNormal();
-       }                                                                             //JM auto recover out of SYSFL 
-      break;
+        if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL
+          calcModeNormal();
+         }                                                                             //JM auto recover out of SYSFL
+        break;
 
       case CM_ASM_OVER_AIM:
         calcModeAim(NOPARAM);
@@ -1174,7 +1180,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
           moreInfoOnError("In function fnKeyCC:", errorMessage, NULL, NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       return;                            //JM
   }
@@ -1190,10 +1196,10 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
     case CM_ASM_OVER_PEM:
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM vv
     case CM_FONT_BROWSER:
-    case CM_LISTXY:
-    case CM_GRAPH:                      //JM ^^
+    case CM_FLAG_BROWSER_OLD:           //JM
+    case CM_LISTXY:                     //JM
+    case CM_GRAPH:                      //JM
       break;
 
       default:
@@ -1260,6 +1266,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         tamTransitionSystem(TT_BACKSPACE);
         break;
 
@@ -1268,6 +1275,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_PEM:
         break;
 
@@ -1396,6 +1404,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
     case CM_NIM:
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_TAM_OVER_PEM:
     case CM_ASM_OVER_AIM:
     case CM_ASM_OVER_PEM:
     case CM_GRAPH:                  //JM
@@ -1425,6 +1434,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         addItemToBuffer(ITM_Max);
         break;
 
@@ -1568,6 +1578,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
     case CM_NIM:
     case CM_ASM:
     case CM_ASM_OVER_TAM:
+    case CM_ASM_OVER_TAM_OVER_PEM:
     case CM_ASM_OVER_AIM:
     case CM_ASM_OVER_PEM:
     case CM_GRAPH:                  //JM
@@ -1597,6 +1608,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         addItemToBuffer(ITM_Min);
         break;
 

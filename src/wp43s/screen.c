@@ -424,7 +424,7 @@
 
     // Alpha selection timer
     if(AlphaSelectionBufferTimerRunning) {         //JMvv
-      if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
+      if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
       timeoutAlphaSelectionBuffer();               //JM^^
       }
     }
@@ -508,7 +508,7 @@
 
     // Alpha selection timer
   if(AlphaSelectionBufferTimerRunning) {         //JMvv
-    if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
+    if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
       timeoutAlphaSelectionBuffer();             //JM^^
     }
   }
@@ -2201,7 +2201,7 @@ static void displayShiftAndTamBuffer(void) {  //JMTOCHECK new routine
       }
       showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
     }
-    else if(calcMode == CM_TAM_OVER_PEM) {
+    else if(calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
       lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
       showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
     }
@@ -2255,6 +2255,8 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 
     case CM_PEM:
     case CM_ASM_OVER_PEM:
+    case CM_TAM_OVER_PEM:
+    case CM_ASM_OVER_TAM_OVER_PEM:
       clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);

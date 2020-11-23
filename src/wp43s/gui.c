@@ -4050,15 +4050,21 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeNormal(void) {
-    if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+    if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
       popSoftmenu();
-      if(calcMode == CM_ASM_OVER_TAM) {
+      if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
         popSoftmenu();
       }
       setSystemFlag(FLAG_ASLIFT);
     }
 
-    calcMode = CM_NORMAL;
+    if(calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
+      calcMode = CM_PEM;
+    }
+    else {
+      calcMode = CM_NORMAL;
+    }
+
     clearSystemFlag(FLAG_ALPHA);
     hideCursor();
     cursorEnabled = false;
@@ -4186,7 +4192,7 @@ void setupUI(void) {
     if(calcMode == CM_NIM) {
       closeNim();
     }
-    else if(calcMode == CM_ASM_OVER_TAM) {
+    else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
       popSoftmenu();
     }
 
@@ -4203,7 +4209,7 @@ void setupUI(void) {
 
       case TM_FLAGR:
       case TM_FLAGW:
-        if(calcMode != CM_ASM_OVER_TAM) {
+        if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
           showSoftmenu(NULL, -MNU_TAMFLAG, true);
         }
         break;
@@ -4226,7 +4232,7 @@ void setupUI(void) {
         return;
     }
 
-    if(calcMode != CM_ASM_OVER_TAM) {
+    if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
       if(tamMode != TM_SHUFFLE) {
         strcat(tamBuffer, " __");
       }
@@ -4236,7 +4242,13 @@ void setupUI(void) {
       }
     }
 
-    calcMode = CM_TAM;
+    if(calcMode == CM_PEM) {
+      calcMode = CM_TAM_OVER_PEM;
+    }
+    else {
+      calcMode = CM_TAM;
+    }
+
     clearSystemFlag(FLAG_ALPHA);
 
     tamCurrentOperation = 0;

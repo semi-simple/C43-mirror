@@ -207,7 +207,7 @@
         }
       }
 
-      else if(calcMode == CM_TAM) {
+      else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
         if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
@@ -265,7 +265,7 @@
         }
       }
 
-      else if(calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
+      else if(calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
         int32_t firstItem = 0, pos;
 
         if(item == ITM_BACKSPACE) {

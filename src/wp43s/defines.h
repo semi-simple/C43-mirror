@@ -391,17 +391,18 @@
 #define CM_NIM                                     3 // Numeric input mode
 #define CM_ASM                                     4 // Alpha selection in FCNS, MENU, and CNST menu
 #define CM_ASM_OVER_TAM                            5 // Alpha selection in TAM
-#define CM_ASM_OVER_AIM                            6 // Alpha selection in AIM
-#define CM_ASM_OVER_PEM                            7 // Alpha selection in PEM
-#define CM_TAM_OVER_PEM                            8 // Temporary alpha mode when PEM is active
-#define CM_ASSIGN                                  9 // Assign mode
-#define CM_REGISTER_BROWSER                       10 // Register browser
-#define CM_FLAG_BROWSER                           11 // Flag browser
-#define CM_FONT_BROWSER                           12 // Font browser
-#define CM_ERROR_MESSAGE                          13 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN                          14 // Bug message on screen
-#define CM_CONFIRMATION                           15 // Waiting for confirmation or canceling
-#define CM_PEM                                    16 // Program entry mode
+#define CM_ASM_OVER_TAM_OVER_PEM                   6 // Alpha selection in TAM over PEM
+#define CM_ASM_OVER_AIM                            7 // Alpha selection in AIM
+#define CM_ASM_OVER_PEM                            8 // Alpha selection in PEM
+#define CM_TAM_OVER_PEM                            9 // Temporary alpha mode when PEM is active
+#define CM_ASSIGN                                 10 // Assign mode
+#define CM_REGISTER_BROWSER                       11 // Register browser
+#define CM_FLAG_BROWSER                           12 // Flag browser
+#define CM_FONT_BROWSER                           13 // Font browser
+#define CM_ERROR_MESSAGE                          14 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN                          15 // Bug message on screen
+#define CM_CONFIRMATION                           16 // Waiting for confirmation or canceling
+#define CM_PEM                                    17 // Program entry mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0

@@ -676,6 +676,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       switch(calcMode) {
         case CM_NORMAL:
         case CM_TAM:
+        case CM_TAM_OVER_PEM:
         case CM_NIM:
         case CM_ASSIGN:
         case CM_ERROR_MESSAGE:
@@ -876,7 +877,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
     if(softmenuStackPointer > 0) {
       if(alphaSelectionMenu != ASM_NONE) {
         alphaSelectionMenu = ASM_NONE;
-        if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_PEM) {
+        if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
           calcModeNormal();
         }
       }
@@ -933,6 +934,11 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       if(calcMode == CM_TAM) {
         calcModeAsm();
         calcMode = CM_ASM_OVER_TAM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else if(calcMode == CM_TAM_OVER_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_TAM_OVER_PEM;
         clearSystemFlag(FLAG_ALPHA);
       }
       else {
@@ -1013,7 +1019,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       }
     }
     else {
-      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
+      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
         if(push) {
           pushSoftmenu(m);
         }
@@ -1032,7 +1038,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       //    pushSoftmenu(m);
       //  }
       //}
-      else if(calcMode == CM_TAM) {
+      else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
       }
       else {
         sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);

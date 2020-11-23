@@ -166,7 +166,7 @@
             if(calcMode == CM_ASM) {
               calcModeNormal();
             }
-            else if(calcMode == CM_ASM_OVER_TAM) {
+            else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
               reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
               calcModeNormal();
               refreshScreen();
@@ -188,14 +188,14 @@
             }
 
             if(item < 0) { // softmenu
-              if(item != -MNU_SYSFL || calcMode != CM_TAM || transitionSystemState == 0) {
+              if(item != -MNU_SYSFL || (calcMode != CM_TAM && calcMode != CM_TAM_OVER_PEM) || transitionSystemState == 0) {
                 showSoftmenu(NULL, item, true);
               }
             }
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
-            else if(calcMode == CM_TAM) {
+            else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
@@ -230,7 +230,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftF = !shiftF;
@@ -238,7 +238,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_PEM || calcMode == CM_ASM_OVER_PEM)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -250,13 +250,13 @@
                shiftG ? key->gShifted :
                         key->primary;
     }
-    else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
+    else if(calcMode == CM_AIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
 
     }
-    else if(calcMode == CM_TAM) {
+    else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
       result = key->primaryTam; // No shifted function in TAM
     }
     else {
@@ -484,12 +484,14 @@
             break;
 
           case CM_TAM:
+          case CM_TAM_OVER_PEM:
             addItemToBuffer(item);
             keyActionProcessed = true;
             break;
 
           case CM_ASM:
           case CM_ASM_OVER_TAM:
+          case CM_ASM_OVER_TAM_OVER_PEM:
           case CM_ASM_OVER_AIM:
           case CM_ASM_OVER_PEM:
             if(alphaCase==AC_LOWER && (ITM_A<=item && item<=ITM_Z)) {
@@ -666,11 +668,13 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         tamTransitionSystem(TT_ENTER);
         break;
 
       case CM_ASM:
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_PEM:
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
@@ -742,6 +746,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
       case CM_ASM:
         calcModeNormal();
         break;
@@ -765,6 +770,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
         transitionSystemState = 0;
         calcModeTam();
         sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
@@ -843,6 +849,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
 
       case CM_ASM:
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_AIM:
       case CM_ASM_OVER_PEM:
       case CM_REGISTER_BROWSER:
@@ -900,6 +907,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         tamTransitionSystem(TT_BACKSPACE);
         break;
 
@@ -908,6 +916,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_PEM:
         break;
 
@@ -983,6 +992,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
       case CM_ASM:
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_AIM:
       case CM_ASM_OVER_PEM:
         resetAlphaSelectionBuffer();
@@ -997,6 +1007,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         addItemToBuffer(ITM_Max);
         break;
 
@@ -1090,6 +1101,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
       case CM_ASM:
       case CM_ASM_OVER_TAM:
+      case CM_ASM_OVER_TAM_OVER_PEM:
       case CM_ASM_OVER_AIM:
       case CM_ASM_OVER_PEM:
         resetAlphaSelectionBuffer();
@@ -1104,6 +1116,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_TAM:
+      case CM_TAM_OVER_PEM:
         addItemToBuffer(ITM_Min);
         break;
 

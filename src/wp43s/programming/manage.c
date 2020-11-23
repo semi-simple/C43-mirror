@@ -240,13 +240,30 @@ void defineCurrentProgramFromCurrentStep(void) {
 
 
 
+static uint32_t programLengthInByte(uint8_t *step, uint32_t *steps) {
+  if(step == beginOfCurrentProgram) {
+    for(int i=0; i<numberOfPrograms; i++) {
+     if(programList[i].instructionPointer == step) {
+       *steps = programList[i + 1].step - programList[i].step;
+       return (programList[i + 1].instructionPointer - programList[i].instructionPointer);
+     }
+    }
+  }
+
+  *steps = 0;
+  return 0;
+}
+
+
+
 void fnPem(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
+    uint32_t x, len,steps;
     uint16_t line;
     uint8_t *step, *nextStep;
     bool_t lblOrEnd;
 
-    if(calcMode != CM_PEM && calcMode != CM_ASM_OVER_PEM) {
+    if(calcMode != CM_PEM && calcMode != CM_ASM_OVER_PEM && calcMode != CM_TAM_OVER_PEM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
       calcMode = CM_PEM;
       return;
     }
@@ -271,7 +288,12 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       }
       lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
       decodeOneStep(step);
-      showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+      x = showString(tmpString, &standardFont, lblOrEnd ? 45+20 : 75+20, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+      len = programLengthInByte(step, &steps);
+      if(len != 0) {
+        sprintf(tmpString, "{%" PRIu32 "b;%" PRIu32 "s}", len, steps);
+        showString(tmpString, &standardFont, x + 10, Y_POSITION_OF_REGISTER_T_LINE + 21*line, vmNormal,  false, false);
+      }
       numberOfStepsOnScreen = line;
       if(((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff))) && ((*nextStep == 255 && *(nextStep + 1) == 255))) {
         programListEnd = true;
@@ -290,7 +312,7 @@ void insertStepInProgram(int16_t func) {
     case ITM_GTOP:         // 1472
       #ifndef DMCP_BUILD
         stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
-        printf("%s\n", tmpString);
+        printf("insertStepInProgram: %s\n", tmpString);
       #endif // DMCP_BUILD
       break;
 

@@ -1027,17 +1027,6 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
           initSoftmenuStack(m);
         }
       }
-      //else if(calcMode == CM_AIM) {
-      //  if(push) {
-      //    pushSoftmenu(m);
-      //  }
-      //  else {
-      //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
-      //      softmenuStackPointer--;
-      //    }
-      //    pushSoftmenu(m);
-      //  }
-      //}
       else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
       }
       else {

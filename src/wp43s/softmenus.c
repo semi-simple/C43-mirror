@@ -29,13 +29,13 @@
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_ADV[]         = { ITM_SOLVE,                     ITM_SLVQ,                   ITM_FQX,                  ITM_PIn,                ITM_SIGMAn,                   -MNU_Sfdx,
+const int16_t menu_ADV[]         = { ITM_SOLVE,                     ITM_SLVQ,                   ITM_FQX,                  ITM_PIn,               ITM_SIGMAn,                  -MNU_Sfdx,
                                      ITM_PGMSLV,                    ITM_NULL,                   ITM_FDQX,                 ITM_NULL,              ITM_NULL,                    ITM_PGMINT                    };
 
 const int16_t menu_Sfdx[]        = { ITM_NULL,                      ITM_NULL,                   ITM_ACC,                  ITM_DLIM,              ITM_ULIM,                    ITM_INTEGRAL                  };
 
-const int16_t menu_BITS[]        = { ITM_LOGICALAND,                       ITM_LOGICALOR,                     ITM_LOGICALXOR,                  ITM_LOGICALNOT,               ITM_MASKL,                   ITM_MASKR,
-                                     ITM_LOGICALNAND,                      ITM_LOGICALNOR,                    ITM_LOGICALXNOR,                 ITM_MIRROR,            ITM_NULL,                    ITM_ASR,
+const int16_t menu_BITS[]        = { ITM_LOGICALAND,                ITM_LOGICALOR,              ITM_LOGICALXOR,           ITM_LOGICALNOT,        ITM_MASKL,                   ITM_MASKR,
+                                     ITM_LOGICALNAND,               ITM_LOGICALNOR,             ITM_LOGICALXNOR,          ITM_MIRROR,            ITM_NULL,                    ITM_ASR,
                                      ITM_SB,                        ITM_BS,                     ITM_NUMB,                 ITM_FB,                ITM_BC,                      ITM_CB,
                                      ITM_SL,                        ITM_RL,                     ITM_RLC,                  ITM_RRC,               ITM_RR,                      ITM_SR,
                                      ITM_LJ,                        ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_RJ,
@@ -118,7 +118,7 @@ const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,    
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 const int16_t menu_MATX[]        = { ITM_M_NEW,                     ITM_M_INV,                  ITM_M_DET,                ITM_M_TRANSP,          ITM_SIM_EQ,                  ITM_M_EDI,
-                                     ITM_DOT_PROD,                       ITM_CROSS_PROD,                  ITM_UNITV,                ITM_M_DIM,             ITM_INDEX,                   ITM_M_EDIN,
+                                     ITM_DOT_PROD,                  ITM_CROSS_PROD,             ITM_UNITV,                ITM_M_DIM,             ITM_INDEX,                   ITM_M_EDIN,
                                      ITM_ENORM,                     ITM_NULL,                   ITM_STOEL,                ITM_RCLEL,             ITM_M_PUT,                   ITM_M_GET,
                                      ITM_IPLUS,                     ITM_IMINUS,                 ITM_STOIJ,                ITM_RCLIJ,             ITM_JMINUS,                  ITM_JPLUS,
                                      ITM_RSUM,                      ITM_RNORM,                  ITM_M_LU,                 ITM_M_DIMQ,            ITM_NULL,                    ITM_M_RR,
@@ -219,7 +219,7 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
                                      ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
                                      ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_WM,                        ITM_WP,                     ITM_WM1,                  ITM_BETAXY,            ITM_gammaXY,                 ITM_GAMMAXY,
@@ -323,7 +323,7 @@ const int16_t menu_alphaFN[]     = { ITM_XtoALPHA,                  ITM_ALPHARL,
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 const int16_t menu_alphaMATH[]   = { ITM_LESS_THAN,                 ITM_LESS_EQUAL,             ITM_EQUAL,                ITM_ALMOST_EQUAL,      ITM_GREATER_EQUAL,           ITM_GREATER_THAN,
                                      ITM_LEFT_CURLY_BRACKET,        ITM_LEFT_SQUARE_BRACKET,    ITM_LEFT_PARENTHESIS,     ITM_RIGHT_PARENTHESIS, ITM_RIGHT_SQUARE_BRACKET,    ITM_RIGHT_CURLY_BRACKET,
-                                     ITM_PROD_SIGN,                 ITM_OBELUS,                 ITM_INTEGRAL_SIGN,             ITM_SUB_INFINITY,      ITM_SUP_INFINITY,            ITM_INFINITY,
+                                     ITM_PROD_SIGN,                 ITM_OBELUS,                 ITM_INTEGRAL_SIGN,        ITM_SUB_INFINITY,      ITM_SUP_INFINITY,            ITM_INFINITY,
                                      ITM_NOT,                       ITM_AND,                    ITM_OR,                   ITM_NOT_EQUAL,         ITM_PIPE,                    ITM_AMPERSAND,
                                      ITM_MEASURED_ANGLE,            ITM_RIGHT_ANGLE,            ITM_PERPENDICULAR,        ITM_CUBE_ROOT,         ITM_SQUARE_ROOT,             ITM_xTH_ROOT,
                                      ITM_x_BAR,                     ITM_y_BAR,                  ITM_x_CIRC,               ITM_y_CIRC,            ITM_x_UNDER_ROOT,            ITM_y_UNDER_ROOT,
@@ -786,14 +786,18 @@ void initVariableSoftmenu(int16_t menu) {
   free(variableSoftmenu[menu].menuContent);
 
   switch(-variableSoftmenu[menu].menuId) {
-    case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyAlpha\000to\000be\000coded\000\000", 27);
+    case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 20);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_RAM:
-    case MNU_FLASH:   numberOfBytes = 1;
+    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001FLASH\000to\000be\000coded\000\000", 21);
+                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+                      break;
+
+    case MNU_RAM:     numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);
                       for(i=0; i<numberOfLabels; i++) {
@@ -832,64 +836,64 @@ void initVariableSoftmenu(int16_t menu) {
                       variableSoftmenu[menu].numItems = 6 * numberOfRows;
                       break;
 
-    case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 26);
+    case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 22);
                       //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000not\000yet\000defined\000\000", 23);
+    case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(19);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000to\000be\000coded\000\000", 19);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(24);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000not\000yet\000defined\000\000", 23);
+    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000to\000be\000coded\000\000", 20);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000not\000yet\000defined\000\000", 25);
+    case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(28);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000not\000yet\000defined\000\000", 27);
+    case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(23);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000to\000be\000coded\000\000", 23);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000not\000yet\000defined\000\000", 25);
+    case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000not\000yet\000defined\000\000", 25);
+    case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(27);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000not\000yet\000defined\000\000", 26);
+    case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000to\000be\000coded\000\000", 22);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000not\000yet\000defined\000\000", 25);
+    case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000not\000yet\000defined\000\000", 25);
+    case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(26);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000not\000yet\000defined\000\000", 24);
+    case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000to\000be\000coded\000\000", 21);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(25);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000not\000yet\000defined\000\000", 24);
+    case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000to\000be\000coded\000\000", 20);
                       variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
                       break;
 
@@ -1236,36 +1240,36 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     return;
   }
 
-  // Draw the frame
-  //   Top line
-  if(topLine) {
-    lcd_fill_rect(max(0, x1), y1, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    // Draw the frame
+    //   Top line
+    if(topLine) {
+      lcd_fill_rect(max(0, x1), y1, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Bottom line
-  if(y1 + SOFTMENU_HEIGHT <= min(y2, 239) && bottomLine) {
-    lcd_fill_rect(max(0, x1), y1 + SOFTMENU_HEIGHT, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Bottom line
+    if(y1 + SOFTMENU_HEIGHT <= min(y2, 239) && bottomLine) {
+      lcd_fill_rect(max(0, x1), y1 + SOFTMENU_HEIGHT, min(x2, SCREEN_WIDTH) - max(0, x1), 1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Left line
-  if(x1 >= 0) {
-    lcd_fill_rect(x1, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Left line
+    if(x1 >= 0) {
+      lcd_fill_rect(x1, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  //   Right line
-  if(x2 < SCREEN_WIDTH) {
-    lcd_fill_rect(x2, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
-  }
+    //   Right line
+    if(x2 < SCREEN_WIDTH) {
+      lcd_fill_rect(x2, y1, 1, min(y2, SCREEN_HEIGHT - 1) + 1 - y1, (videoMode == vmNormal ? LCD_EMPTY_VALUE : LCD_SET_VALUE));
+    }
 
-  // Clear inside the frame
-  lcd_fill_rect(x1 + 1, y1 + 1, min(x2, SCREEN_WIDTH) - x1 - 1, min(y2, SCREEN_HEIGHT) - y1 - 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
+    // Clear inside the frame
+    lcd_fill_rect(x1 + 1, y1 + 1, min(x2, SCREEN_WIDTH) - x1 - 1, min(y2, SCREEN_HEIGHT) - y1 - 1, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));
 
-  xcopy(l, label, stringByteLength(label) + 1);
-  w = stringWidth(l, &standardFont, false, false);
-  while(w > (xSoftkey == 5 ? 65 : 66)) {
-    l[stringLastGlyph(l)] = 0;
+    xcopy(l, label, stringByteLength(label) + 1);
     w = stringWidth(l, &standardFont, false, false);
-  }
+    while(w > (xSoftkey == 5 ? 65 : 66)) {
+      l[stringLastGlyph(l)] = 0;
+      w = stringWidth(l, &standardFont, false, false);
+    }
 
 //continue with trimmed label
   w = stringWidth(figlabel(l, showValue), &standardFont, false, false);                      //JM & dr vv
@@ -1318,52 +1322,51 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
 
 
 
-/********************************************//**
- * \brief Displays the current part of a softmenu
- *
- * \param void
- * \return void
- ***********************************************/
-void showSoftmenuCurrentPart(void) {
-  if(softmenuStackPointer == 0) { // The is no menu to display
-    switch(calcMode) {
-      case CM_NORMAL:
-      case CM_TAM:
-      case CM_TAM_OVER_PEM:
-      case CM_NIM:
-      case CM_ASSIGN:
-      case CM_ERROR_MESSAGE:
-      case CM_CONFIRMATION:
-      case CM_PEM:
-        showSoftmenu(NULL, -MNU_MyMenu, false);
-        showSoftmenuCurrentPart();
-        softmenuStackPointer = 0;
-        break;
+  /********************************************//**
+   * \brief Displays the current part of a softmenu
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void showSoftmenuCurrentPart(void) {
+    if(softmenuStackPointer == 0) { // The is no menu to display
+      switch(calcMode) {
+        case CM_NORMAL:
+        case CM_TAM:
+        case CM_TAM_OVER_PEM:
+        case CM_NIM:
+        case CM_ASSIGN:
+        case CM_ERROR_MESSAGE:
+        case CM_CONFIRMATION:
+        case CM_PEM:
+          showSoftmenu(NULL, -MNU_MyMenu, false);
+          showSoftmenuCurrentPart();
+          softmenuStackPointer = 0;
+          break;
 
-      case CM_AIM:
-        showSoftmenu(NULL, -MNU_MyAlpha, false);
-        showSoftmenuCurrentPart();
-        softmenuStackPointer = 0;
-        break;
+        case CM_AIM:
+          showSoftmenu(NULL, -MNU_MyAlpha, false);
+          showSoftmenuCurrentPart();
+          softmenuStackPointer = 0;
+          break;
 
       default:
         sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
         displayBugScreen(errorMessage);
     }
   }
-  else { // There is a menu to display
+  else //{ // There is a menu to display
 
-//This was like this before: JM TOCHECK
-//      if(softmenuStackPointer > 0 &&
-//      calcMode != CM_FLAG_BROWSER_OLD &&
-//      calcMode != CM_FLAG_BROWSER &&
-//      calcMode != CM_FONT_BROWSER &&
-//      calcMode != CM_REGISTER_BROWSER &&
-//      calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
+      if(softmenuStackPointer > 0 &&  //This was like this before: JM TOCHECK
+      calcMode != CM_FLAG_BROWSER_OLD &&
+      calcMode != CM_FLAG_BROWSER &&
+      calcMode != CM_FONT_BROWSER &&
+      calcMode != CM_REGISTER_BROWSER &&
+      calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
 
       
       int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
-    bool_t dottedTopLine;
+      bool_t dottedTopLine;
 
     //JMTOCHECK
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
@@ -1395,23 +1398,23 @@ void showSoftmenuCurrentPart(void) {
       dottedTopLine = true;
       yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
 
-      if(m >= NUMBER_OF_VARIABLE_SOFTMENUS) { // Static softmenu
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
-        }
+        if(m >= NUMBER_OF_VARIABLE_SOFTMENUS) { // Static softmenu
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
 
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
-        }
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
 
-        item = 6 * (currentFirstItem / 6 + yDotted);
-        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-          yDotted--;
+          item = 6 * (currentFirstItem / 6 + yDotted);
+          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+            yDotted--;
+          }
         }
       }
-    }
 
 
 
@@ -1469,13 +1472,13 @@ void showSoftmenuCurrentPart(void) {
 
 
             if(item < 0) { // softmenu
-            int16_t menu = 0;
-            while(softmenu[menu].menuId != 0) {
-              if(softmenu[menu].menuId == item) {
-                break;
+              int16_t menu = 0;
+              while(softmenu[menu].menuId != 0) {
+                if(softmenu[menu].menuId == item) {
+                  break;
+                }
+                menu++;
               }
-              menu++;
-            }
 
             if(softmenu[menu].menuId == 0) {
               sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
@@ -1575,8 +1578,8 @@ void showSoftmenuCurrentPart(void) {
     }
 //JMCHECK spacing above
 
-    if(0 <= yDotted && yDotted <= 2) {
-      yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
+      if(0 <= yDotted && yDotted <= 2) {
+        yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
 
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {
@@ -1895,161 +1898,161 @@ void showSoftmenu(const char *menu, int16_t id, bool_t push) {
 //printf(">>> ###### showsoftmenu %d\n",id);
   push = true;                                   //JM Experiment to force all menus to push onto stack
 
-  if(id == -MNU_FCNS) {
-    alphaSelectionMenu = ASM_FCNS;
-    if(calcMode == CM_PEM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_PEM;
-      clearSystemFlag(FLAG_ALPHA);
+    if(id == -MNU_FCNS) {
+      alphaSelectionMenu = ASM_FCNS;
+      if(calcMode == CM_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_PEM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
     }
-    else {
+    else if(id == -MNU_CONST) {
+      alphaSelectionMenu = ASM_CNST;
+      if(calcMode == CM_PEM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_PEM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_MENUS) {
+      alphaSelectionMenu = ASM_MENU;
       calcModeAsm();
     }
-  }
-  else if(id == -MNU_CONST) {
-    alphaSelectionMenu = ASM_CNST;
-    if(calcMode == CM_PEM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_PEM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_MENUS) {
-    alphaSelectionMenu = ASM_MENU;
-    calcModeAsm();
-  }
-  else if(id == -MNU_SYSFL) {
-    alphaSelectionMenu = ASM_SYFL;
-    if(calcMode == CM_TAM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_TAM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else if(calcMode == CM_TAM_OVER_PEM) {
+    else if(id == -MNU_SYSFL) {
+      alphaSelectionMenu = ASM_SYFL;
+      if(calcMode == CM_TAM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_TAM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else if(calcMode == CM_TAM_OVER_PEM) {
         calcModeAsm();
         calcMode = CM_ASM_OVER_TAM_OVER_PEM;
         clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_ALPHAINTL) {
-    alphaSelectionMenu = ASM_AINT;
-    if(calcMode == CM_AIM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_AIM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else if(id == -MNU_ALPHAintl) {
-    alphaSelectionMenu = ASM_aint;
-    if(calcMode == CM_AIM) {
-      calcModeAsm();
-      calcMode = CM_ASM_OVER_AIM;
-      clearSystemFlag(FLAG_ALPHA);
-    }
-    else {
-      calcModeAsm();
-    }
-  }
-  else {
-    alphaSelectionMenu = ASM_NONE;
-  }
-
-  if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
-    displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
-    return;
-  }
-
-  if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
-    id = -MNU_ALPHAintl;
-  }
-  else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
-    id = -MNU_alpha_omega;
-  }
-
-  if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
-    id = -MNU_ALPHAintl;
-  }
-  else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
-    id = -MNU_alpha_omega;
-  }
-
-  m = 0;
-
-  if(id != 0) { // Search by ID
-    while(softmenu[m].menuId != 0) {
-      if(softmenu[m].menuId == id) {
-       break;
-      }
-      m++;
-    }
-  }
-  else { // Search by name
-    while(softmenu[m].menuId != 0) {
-      if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
-        break;
-      }
-      m++;
-    }
-  }
-  if(softmenu[m].menuId == 0) {
-    if(menu == NULL) {
-      sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
-      displayBugScreen(errorMessage);
-    }
-    else {
-      sprintf(errorMessage, "In function showSoftmenu: softmenu %s not found!", menu);
-      displayBugScreen(errorMessage);
-    }
-  }
-  else {
-    if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
-      if(push) {
-        pushSoftmenu(m);
       }
       else {
-        initSoftmenuStack(m);
+        calcModeAsm();
       }
     }
-    //else if(calcMode == CM_AIM) {
-    //  if(push) {
-    //    pushSoftmenu(m);
-    //  }
-    //  else {
-    //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {   //JM: CHECK, THIS IS DANGEROUS
-    //      softmenuStackPointer--;
-    //    }
-    //    pushSoftmenu(m);
-    //  }
-    //}
-    else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
+    else if(id == -MNU_ALPHAINTL) {
+      alphaSelectionMenu = ASM_AINT;
+      if(calcMode == CM_AIM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_AIM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
+    }
+    else if(id == -MNU_ALPHAintl) {
+      alphaSelectionMenu = ASM_aint;
+      if(calcMode == CM_AIM) {
+        calcModeAsm();
+        calcMode = CM_ASM_OVER_AIM;
+        clearSystemFlag(FLAG_ALPHA);
+      }
+      else {
+        calcModeAsm();
+      }
     }
     else {
-      sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
-      displayBugScreen(errorMessage);
+      alphaSelectionMenu = ASM_NONE;
+    }
+
+    if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
+      displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
+      return;
+    }
+
+    if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
+      id = -MNU_ALPHAintl;
+    }
+    else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
+      id = -MNU_alpha_omega;
+    }
+
+    if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
+      id = -MNU_ALPHAintl;
+    }
+    else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
+      id = -MNU_alpha_omega;
+    }
+
+    m = 0;
+
+    if(id != 0) { // Search by ID
+      while(softmenu[m].menuId != 0) {
+        if(softmenu[m].menuId == id) {
+         break;
+        }
+        m++;
+      }
+    }
+    else { // Search by name
+      while(softmenu[m].menuId != 0) {
+        if(strcmp(indexOfItems[-softmenu[m].menuId].itemSoftmenuName, menu) == 0) {
+          break;
+        }
+        m++;
+      }
+    }
+    if(softmenu[m].menuId == 0) {
+      if(menu == NULL) {
+        sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
+        displayBugScreen(errorMessage);
+      }
+      else {
+        sprintf(errorMessage, "In function showSoftmenu: softmenu %s not found!", menu);
+        displayBugScreen(errorMessage);
+      }
+    }
+    else {
+      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
+        if(push) {
+          pushSoftmenu(m);
+        }
+        else {
+          initSoftmenuStack(m);
+        }
+      }
+      //else if(calcMode == CM_AIM) {
+      //  if(push) {
+      //    pushSoftmenu(m);
+      //  }
+      //  else {
+      //    while(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) {
+      //      softmenuStackPointer--;
+      //    }
+      //    pushSoftmenu(m);
+      //  }
+      //}
+      else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
+      }
+      else {
+        sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
+        displayBugScreen(errorMessage);
+      }
     }
   }
-}
 
 
 
-void setCatalogLastPos(void) {
-       if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-  else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-}
-#endif
+  void setCatalogLastPos(void) {
+         if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+    else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+  }
+#endif // TESTSUITE_BUILD
 
 
 void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM

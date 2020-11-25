@@ -31,7 +31,6 @@ void fnGoto(uint16_t label) {
 
 
 void fnGotoDot(uint16_t stepNumber) {
-  printf("\nGTO.%4u", stepNumber);
   currentStepNumber = stepNumber;
 
   defineCurrentProgramFromCurrentStepNumber();

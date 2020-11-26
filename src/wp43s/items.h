@@ -1437,7 +1437,7 @@
 #define MNU_TAMSHUFFLE                1383
 #define MNU_PROG                      1384
 #define MNU_TAMLABEL                  1385
-#define ITM_1386                      1386
+#define MNU_DYNAMIC                   1386
 #define ITM_1387                      1387
 #define ITM_1388                      1388
 #define ITM_1389                      1389

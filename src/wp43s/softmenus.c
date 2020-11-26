@@ -327,123 +327,123 @@ const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,  
 #include "softmenuCatalogs.h"
 
 const softmenu_t softmenu[] = {
-  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
-  {.menuId = -MNU_VAR,         .numItems = 0,                                        .softkeyItem = NULL             }, // variable softmenus and
-  {.menuId = -MNU_PROG,        .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
-  {.menuId = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
-  {.menuId = -MNU_STRINGS,     .numItems = 0,                                        .softkeyItem = NULL             }, // variableSoftmenu area.
-  {.menuId = -MNU_DATES,       .numItems = 0,                                        .softkeyItem = NULL             }, //
-  {.menuId = -MNU_TIMES,       .numItems = 0,                                        .softkeyItem = NULL             }, // If you add or remove one:
-  {.menuId = -MNU_ANGLES,      .numItems = 0,                                        .softkeyItem = NULL             }, // don't forget to adjust
-  {.menuId = -MNU_SINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // NUMBER_OF_VARIABLE_SOFTMENUS
-  {.menuId = -MNU_LINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // in defines.h
-  {.menuId = -MNU_REALS,       .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_CPXS,        .numItems = 0,                                        .softkeyItem = NULL             },
-  {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
-  {.menuId = -MNU_SYSFL,       .numItems = sizeof(menu_SYSFL      )/sizeof(int16_t), .softkeyItem = menu_SYSFL       },
-  {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
-  {.menuId = -MNU_ALPHAintl,   .numItems = sizeof(menu_alpha_intl )/sizeof(int16_t), .softkeyItem = menu_alpha_intl  },
-  {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
-  {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
-  {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
-  {.menuId = -MNU_CLK,         .numItems = sizeof(menu_CLK        )/sizeof(int16_t), .softkeyItem = menu_CLK         },
-  {.menuId = -MNU_CLR,         .numItems = sizeof(menu_CLR        )/sizeof(int16_t), .softkeyItem = menu_CLR         },
-  {.menuId = -MNU_CPX,         .numItems = sizeof(menu_CPX        )/sizeof(int16_t), .softkeyItem = menu_CPX         },
-  {.menuId = -MNU_DSP,         .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
-  {.menuId = -MNU_EQN,         .numItems = sizeof(menu_EQN        )/sizeof(int16_t), .softkeyItem = menu_EQN         },
-  {.menuId = -MNU_1STDERIV,    .numItems = sizeof(menu_1stDeriv   )/sizeof(int16_t), .softkeyItem = menu_1stDeriv    },
-  {.menuId = -MNU_2NDDERIV,    .numItems = sizeof(menu_2ndDeriv   )/sizeof(int16_t), .softkeyItem = menu_2ndDeriv    },
-  {.menuId = -MNU_Sf,          .numItems = sizeof(menu_Sf         )/sizeof(int16_t), .softkeyItem = menu_Sf          },
-  {.menuId = -MNU_Solver,      .numItems = sizeof(menu_Solver     )/sizeof(int16_t), .softkeyItem = menu_Solver      },
-  {.menuId = -MNU_EXP,         .numItems = sizeof(menu_EXP        )/sizeof(int16_t), .softkeyItem = menu_EXP         },
-  {.menuId = -MNU_TRI,         .numItems = sizeof(menu_TRI        )/sizeof(int16_t), .softkeyItem = menu_TRI         },
-  {.menuId = -MNU_FIN,         .numItems = sizeof(menu_FIN        )/sizeof(int16_t), .softkeyItem = menu_FIN         },
-  {.menuId = -MNU_TVM,         .numItems = sizeof(menu_TVM        )/sizeof(int16_t), .softkeyItem = menu_TVM         },
-  {.menuId = -MNU_FLAGS,       .numItems = sizeof(menu_FLAGS      )/sizeof(int16_t), .softkeyItem = menu_FLAGS       },
-  {.menuId = -MNU_INFO,        .numItems = sizeof(menu_INFO       )/sizeof(int16_t), .softkeyItem = menu_INFO        },
-  {.menuId = -MNU_INTS,        .numItems = sizeof(menu_INTS       )/sizeof(int16_t), .softkeyItem = menu_INTS        },
-  {.menuId = -MNU_LOOP,        .numItems = sizeof(menu_LOOP       )/sizeof(int16_t), .softkeyItem = menu_LOOP        },
-  {.menuId = -MNU_MATX,        .numItems = sizeof(menu_MATX       )/sizeof(int16_t), .softkeyItem = menu_MATX        },
-  {.menuId = -MNU_SIMQ,        .numItems = sizeof(menu_M_SIM_Q    )/sizeof(int16_t), .softkeyItem = menu_M_SIM_Q     },
-  {.menuId = -MNU_M_EDIT,      .numItems = sizeof(menu_M_EDIT     )/sizeof(int16_t), .softkeyItem = menu_M_EDIT      },
-  {.menuId = -MNU_MODE,        .numItems = sizeof(menu_MODE       )/sizeof(int16_t), .softkeyItem = menu_MODE        },
-  {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
-  {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
-  {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
-  {.menuId = -MNU_F,           .numItems = sizeof(menu_F          )/sizeof(int16_t), .softkeyItem = menu_F           },
-  {.menuId = -MNU_CHI2,        .numItems = sizeof(menu_chi2       )/sizeof(int16_t), .softkeyItem = menu_chi2        },
-  {.menuId = -MNU_NORML,       .numItems = sizeof(menu_Norml      )/sizeof(int16_t), .softkeyItem = menu_Norml       },
-  {.menuId = -MNU_LGNRM,       .numItems = sizeof(menu_LgNrm      )/sizeof(int16_t), .softkeyItem = menu_LgNrm       },
-  {.menuId = -MNU_CAUCH,       .numItems = sizeof(menu_Cauch      )/sizeof(int16_t), .softkeyItem = menu_Cauch       },
-  {.menuId = -MNU_EXPON,       .numItems = sizeof(menu_Expon      )/sizeof(int16_t), .softkeyItem = menu_Expon       },
-  {.menuId = -MNU_LOGIS,       .numItems = sizeof(menu_Logis      )/sizeof(int16_t), .softkeyItem = menu_Logis       },
-  {.menuId = -MNU_WEIBL,       .numItems = sizeof(menu_Weibl      )/sizeof(int16_t), .softkeyItem = menu_Weibl       },
-  {.menuId = -MNU_BINOM,       .numItems = sizeof(menu_Binom      )/sizeof(int16_t), .softkeyItem = menu_Binom       },
-  {.menuId = -MNU_GEOM,        .numItems = sizeof(menu_Geom       )/sizeof(int16_t), .softkeyItem = menu_Geom        },
-  {.menuId = -MNU_HYPER,       .numItems = sizeof(menu_Hyper      )/sizeof(int16_t), .softkeyItem = menu_Hyper       },
-  {.menuId = -MNU_NBIN,        .numItems = sizeof(menu_Nbin       )/sizeof(int16_t), .softkeyItem = menu_Nbin        },
-  {.menuId = -MNU_POISS,       .numItems = sizeof(menu_Poiss      )/sizeof(int16_t), .softkeyItem = menu_Poiss       },
-  {.menuId = -MNU_PFN,         .numItems = sizeof(menu_PFN        )/sizeof(int16_t), .softkeyItem = menu_PFN         },
-  {.menuId = -MNU_PFN2,        .numItems = sizeof(menu_PFN2       )/sizeof(int16_t), .softkeyItem = menu_PFN2        },
-  {.menuId = -MNU_STAT,        .numItems = sizeof(menu_STAT       )/sizeof(int16_t), .softkeyItem = menu_STAT        },
-  {.menuId = -MNU_SUMS,        .numItems = sizeof(menu_SUMS       )/sizeof(int16_t), .softkeyItem = menu_SUMS        },
-  {.menuId = -MNU_STK,         .numItems = sizeof(menu_STK        )/sizeof(int16_t), .softkeyItem = menu_STK         },
-  {.menuId = -MNU_TEST,        .numItems = sizeof(menu_TEST       )/sizeof(int16_t), .softkeyItem = menu_TEST        },
-  {.menuId = -MNU_XFN,         .numItems = sizeof(menu_XFN        )/sizeof(int16_t), .softkeyItem = menu_XFN         },
-  {.menuId = -MNU_ORTHOG,      .numItems = sizeof(menu_Orthog     )/sizeof(int16_t), .softkeyItem = menu_Orthog      },
-  {.menuId = -MNU_REGIST,      .numItems = sizeof(menu_REGIST     )/sizeof(int16_t), .softkeyItem = menu_REGIST      },
-  {.menuId = -MNU_CATALOG,     .numItems = sizeof(menu_CATALOG    )/sizeof(int16_t), .softkeyItem = menu_CATALOG     },
-  {.menuId = -MNU_DIGITS,      .numItems = sizeof(menu_DIGITS     )/sizeof(int16_t), .softkeyItem = menu_DIGITS      },
-  {.menuId = -MNU_CHARS,       .numItems = sizeof(menu_CHARS      )/sizeof(int16_t), .softkeyItem = menu_CHARS       },
-  {.menuId = -MNU_PROGS,       .numItems = sizeof(menu_PROGS      )/sizeof(int16_t), .softkeyItem = menu_PROGS       },
-  {.menuId = -MNU_VARS,        .numItems = sizeof(menu_VARS       )/sizeof(int16_t), .softkeyItem = menu_VARS        },
-  {.menuId = -MNU_ALPHA_OMEGA, .numItems = sizeof(menu_ALPHA_OMEGA)/sizeof(int16_t), .softkeyItem = menu_ALPHA_OMEGA },
-  {.menuId = -MNU_alpha_omega, .numItems = sizeof(menu_alpha_omega)/sizeof(int16_t), .softkeyItem = menu_alpha_omega },
-  {.menuId = -MNU_FCNS,        .numItems = sizeof(menu_FCNS       )/sizeof(int16_t), .softkeyItem = menu_FCNS        },
-  {.menuId = -MNU_MENUS,       .numItems = sizeof(menu_MENUS      )/sizeof(int16_t), .softkeyItem = menu_MENUS       },
-  {.menuId = -MNU_ALPHAMATH,   .numItems = sizeof(menu_alphaMATH  )/sizeof(int16_t), .softkeyItem = menu_alphaMATH   },
-  {.menuId = -MNU_ALPHADOT,    .numItems = sizeof(menu_alphaDot   )/sizeof(int16_t), .softkeyItem = menu_alphaDot    },
-  {.menuId = -MNU_ALPHAFN,     .numItems = sizeof(menu_alphaFN    )/sizeof(int16_t), .softkeyItem = menu_alphaFN     },
-  {.menuId = -MNU_ANGLECONV,   .numItems = sizeof(menu_AngleConv  )/sizeof(int16_t), .softkeyItem = menu_AngleConv   },
-  {.menuId = -MNU_UNITCONV,    .numItems = sizeof(menu_UnitConv   )/sizeof(int16_t), .softkeyItem = menu_UnitConv    },
-  {.menuId = -MNU_CONVE,       .numItems = sizeof(menu_ConvE      )/sizeof(int16_t), .softkeyItem = menu_ConvE       },
-  {.menuId = -MNU_CONVP,       .numItems = sizeof(menu_ConvP      )/sizeof(int16_t), .softkeyItem = menu_ConvP       },
-  {.menuId = -MNU_CONVFP,      .numItems = sizeof(menu_ConvFP     )/sizeof(int16_t), .softkeyItem = menu_ConvFP      },
-  {.menuId = -MNU_CONVM,       .numItems = sizeof(menu_ConvM      )/sizeof(int16_t), .softkeyItem = menu_ConvM       },
-  {.menuId = -MNU_CONVX,       .numItems = sizeof(menu_ConvX      )/sizeof(int16_t), .softkeyItem = menu_ConvX       },
-  {.menuId = -MNU_CONVV,       .numItems = sizeof(menu_ConvV      )/sizeof(int16_t), .softkeyItem = menu_ConvV       },
-  {.menuId = -MNU_CONVA,       .numItems = sizeof(menu_ConvA      )/sizeof(int16_t), .softkeyItem = menu_ConvA       },
-  {.menuId = -MNU_CONST,       .numItems = sizeof(menu_CONST      )/sizeof(int16_t), .softkeyItem = menu_CONST       },
-  {.menuId = -MNU_IO,          .numItems = sizeof(menu_IO         )/sizeof(int16_t), .softkeyItem = menu_IO          },
-  {.menuId = -MNU_PRINT,       .numItems = sizeof(menu_PRINT      )/sizeof(int16_t), .softkeyItem = menu_PRINT       },
-  {.menuId = -MNU_TAM,         .numItems = sizeof(menu_Tam        )/sizeof(int16_t), .softkeyItem = menu_Tam         },
-  {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
-  {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
-  {.menuId = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
-  {.menuId = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
-  {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
+/*   0 */  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             },
+/*   1 */  {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
+/*   2 */  {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             },
+/*   3 */  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
+/*   4 */  {.menuId = -MNU_VAR,         .numItems = 0,                                        .softkeyItem = NULL             }, // variable softmenus and
+/*   5 */  {.menuId = -MNU_PROG,        .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
+/*   6 */  {.menuId = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
+/*   7 */  {.menuId = -MNU_STRINGS,     .numItems = 0,                                        .softkeyItem = NULL             }, // dynamicSoftmenu area.
+/*   8 */  {.menuId = -MNU_DATES,       .numItems = 0,                                        .softkeyItem = NULL             }, //
+/*   9 */  {.menuId = -MNU_TIMES,       .numItems = 0,                                        .softkeyItem = NULL             }, // If you add or remove one:
+/*  10 */  {.menuId = -MNU_ANGLES,      .numItems = 0,                                        .softkeyItem = NULL             }, // don't forget to adjust
+/*  11 */  {.menuId = -MNU_SINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // NUMBER_OF_DYNAMIC_SOFTMENUS
+/*  12 */  {.menuId = -MNU_LINTS,       .numItems = 0,                                        .softkeyItem = NULL             }, // in defines.h
+/*  13 */  {.menuId = -MNU_REALS,       .numItems = 0,                                        .softkeyItem = NULL             },
+/*  14 */  {.menuId = -MNU_CPXS,        .numItems = 0,                                        .softkeyItem = NULL             },
+/*  15 */  {.menuId = -MNU_TAMFLAG,     .numItems = sizeof(menu_TamFlag    )/sizeof(int16_t), .softkeyItem = menu_TamFlag     },
+/*  16 */  {.menuId = -MNU_SYSFL,       .numItems = sizeof(menu_SYSFL      )/sizeof(int16_t), .softkeyItem = menu_SYSFL       },
+/*  17 */  {.menuId = -MNU_ALPHAINTL,   .numItems = sizeof(menu_alpha_INTL )/sizeof(int16_t), .softkeyItem = menu_alpha_INTL  },
+/*  18 */  {.menuId = -MNU_ALPHAintl,   .numItems = sizeof(menu_alpha_intl )/sizeof(int16_t), .softkeyItem = menu_alpha_intl  },
+/*  19 */  {.menuId = -MNU_ADV,         .numItems = sizeof(menu_ADV        )/sizeof(int16_t), .softkeyItem = menu_ADV         },
+/*  20 */  {.menuId = -MNU_Sfdx,        .numItems = sizeof(menu_Sfdx       )/sizeof(int16_t), .softkeyItem = menu_Sfdx        },
+/*  21 */  {.menuId = -MNU_BITS,        .numItems = sizeof(menu_BITS       )/sizeof(int16_t), .softkeyItem = menu_BITS        },
+/*  22 */  {.menuId = -MNU_CLK,         .numItems = sizeof(menu_CLK        )/sizeof(int16_t), .softkeyItem = menu_CLK         },
+/*  23 */  {.menuId = -MNU_CLR,         .numItems = sizeof(menu_CLR        )/sizeof(int16_t), .softkeyItem = menu_CLR         },
+/*  24 */  {.menuId = -MNU_CPX,         .numItems = sizeof(menu_CPX        )/sizeof(int16_t), .softkeyItem = menu_CPX         },
+/*  25 */  {.menuId = -MNU_DSP,         .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
+/*  26 */  {.menuId = -MNU_EQN,         .numItems = sizeof(menu_EQN        )/sizeof(int16_t), .softkeyItem = menu_EQN         },
+/*  27 */  {.menuId = -MNU_1STDERIV,    .numItems = sizeof(menu_1stDeriv   )/sizeof(int16_t), .softkeyItem = menu_1stDeriv    },
+/*  28 */  {.menuId = -MNU_2NDDERIV,    .numItems = sizeof(menu_2ndDeriv   )/sizeof(int16_t), .softkeyItem = menu_2ndDeriv    },
+/*  29 */  {.menuId = -MNU_Sf,          .numItems = sizeof(menu_Sf         )/sizeof(int16_t), .softkeyItem = menu_Sf          },
+/*  30 */  {.menuId = -MNU_Solver,      .numItems = sizeof(menu_Solver     )/sizeof(int16_t), .softkeyItem = menu_Solver      },
+/*  31 */  {.menuId = -MNU_EXP,         .numItems = sizeof(menu_EXP        )/sizeof(int16_t), .softkeyItem = menu_EXP         },
+/*  32 */  {.menuId = -MNU_TRI,         .numItems = sizeof(menu_TRI        )/sizeof(int16_t), .softkeyItem = menu_TRI         },
+/*  33 */  {.menuId = -MNU_FIN,         .numItems = sizeof(menu_FIN        )/sizeof(int16_t), .softkeyItem = menu_FIN         },
+/*  34 */  {.menuId = -MNU_TVM,         .numItems = sizeof(menu_TVM        )/sizeof(int16_t), .softkeyItem = menu_TVM         },
+/*  35 */  {.menuId = -MNU_FLAGS,       .numItems = sizeof(menu_FLAGS      )/sizeof(int16_t), .softkeyItem = menu_FLAGS       },
+/*  36 */  {.menuId = -MNU_INFO,        .numItems = sizeof(menu_INFO       )/sizeof(int16_t), .softkeyItem = menu_INFO        },
+/*  37 */  {.menuId = -MNU_INTS,        .numItems = sizeof(menu_INTS       )/sizeof(int16_t), .softkeyItem = menu_INTS        },
+/*  38 */  {.menuId = -MNU_LOOP,        .numItems = sizeof(menu_LOOP       )/sizeof(int16_t), .softkeyItem = menu_LOOP        },
+/*  39 */  {.menuId = -MNU_MATX,        .numItems = sizeof(menu_MATX       )/sizeof(int16_t), .softkeyItem = menu_MATX        },
+/*  40 */  {.menuId = -MNU_SIMQ,        .numItems = sizeof(menu_M_SIM_Q    )/sizeof(int16_t), .softkeyItem = menu_M_SIM_Q     },
+/*  41 */  {.menuId = -MNU_M_EDIT,      .numItems = sizeof(menu_M_EDIT     )/sizeof(int16_t), .softkeyItem = menu_M_EDIT      },
+/*  42 */  {.menuId = -MNU_MODE,        .numItems = sizeof(menu_MODE       )/sizeof(int16_t), .softkeyItem = menu_MODE        },
+/*  43 */  {.menuId = -MNU_PARTS,       .numItems = sizeof(menu_PARTS      )/sizeof(int16_t), .softkeyItem = menu_PARTS       },
+/*  44 */  {.menuId = -MNU_PROB,        .numItems = sizeof(menu_PROB       )/sizeof(int16_t), .softkeyItem = menu_PROB        },
+/*  45 */  {.menuId = -MNU_T,           .numItems = sizeof(menu_t          )/sizeof(int16_t), .softkeyItem = menu_t           },
+/*  46 */  {.menuId = -MNU_F,           .numItems = sizeof(menu_F          )/sizeof(int16_t), .softkeyItem = menu_F           },
+/*  47 */  {.menuId = -MNU_CHI2,        .numItems = sizeof(menu_chi2       )/sizeof(int16_t), .softkeyItem = menu_chi2        },
+/*  48 */  {.menuId = -MNU_NORML,       .numItems = sizeof(menu_Norml      )/sizeof(int16_t), .softkeyItem = menu_Norml       },
+/*  49 */  {.menuId = -MNU_LGNRM,       .numItems = sizeof(menu_LgNrm      )/sizeof(int16_t), .softkeyItem = menu_LgNrm       },
+/*  50 */  {.menuId = -MNU_CAUCH,       .numItems = sizeof(menu_Cauch      )/sizeof(int16_t), .softkeyItem = menu_Cauch       },
+/*  51 */  {.menuId = -MNU_EXPON,       .numItems = sizeof(menu_Expon      )/sizeof(int16_t), .softkeyItem = menu_Expon       },
+/*  52 */  {.menuId = -MNU_LOGIS,       .numItems = sizeof(menu_Logis      )/sizeof(int16_t), .softkeyItem = menu_Logis       },
+/*  53 */  {.menuId = -MNU_WEIBL,       .numItems = sizeof(menu_Weibl      )/sizeof(int16_t), .softkeyItem = menu_Weibl       },
+/*  54 */  {.menuId = -MNU_BINOM,       .numItems = sizeof(menu_Binom      )/sizeof(int16_t), .softkeyItem = menu_Binom       },
+/*  55 */  {.menuId = -MNU_GEOM,        .numItems = sizeof(menu_Geom       )/sizeof(int16_t), .softkeyItem = menu_Geom        },
+/*  56 */  {.menuId = -MNU_HYPER,       .numItems = sizeof(menu_Hyper      )/sizeof(int16_t), .softkeyItem = menu_Hyper       },
+/*  57 */  {.menuId = -MNU_NBIN,        .numItems = sizeof(menu_Nbin       )/sizeof(int16_t), .softkeyItem = menu_Nbin        },
+/*  58 */  {.menuId = -MNU_POISS,       .numItems = sizeof(menu_Poiss      )/sizeof(int16_t), .softkeyItem = menu_Poiss       },
+/*  59 */  {.menuId = -MNU_PFN,         .numItems = sizeof(menu_PFN        )/sizeof(int16_t), .softkeyItem = menu_PFN         },
+/*  60 */  {.menuId = -MNU_PFN2,        .numItems = sizeof(menu_PFN2       )/sizeof(int16_t), .softkeyItem = menu_PFN2        },
+/*  61 */  {.menuId = -MNU_STAT,        .numItems = sizeof(menu_STAT       )/sizeof(int16_t), .softkeyItem = menu_STAT        },
+/*  62 */  {.menuId = -MNU_SUMS,        .numItems = sizeof(menu_SUMS       )/sizeof(int16_t), .softkeyItem = menu_SUMS        },
+/*  63 */  {.menuId = -MNU_STK,         .numItems = sizeof(menu_STK        )/sizeof(int16_t), .softkeyItem = menu_STK         },
+/*  64 */  {.menuId = -MNU_TEST,        .numItems = sizeof(menu_TEST       )/sizeof(int16_t), .softkeyItem = menu_TEST        },
+/*  65 */  {.menuId = -MNU_XFN,         .numItems = sizeof(menu_XFN        )/sizeof(int16_t), .softkeyItem = menu_XFN         },
+/*  66 */  {.menuId = -MNU_ORTHOG,      .numItems = sizeof(menu_Orthog     )/sizeof(int16_t), .softkeyItem = menu_Orthog      },
+/*  67 */  {.menuId = -MNU_REGIST,      .numItems = sizeof(menu_REGIST     )/sizeof(int16_t), .softkeyItem = menu_REGIST      },
+/*  68 */  {.menuId = -MNU_CATALOG,     .numItems = sizeof(menu_CATALOG    )/sizeof(int16_t), .softkeyItem = menu_CATALOG     },
+/*  69 */  {.menuId = -MNU_DIGITS,      .numItems = sizeof(menu_DIGITS     )/sizeof(int16_t), .softkeyItem = menu_DIGITS      },
+/*  70 */  {.menuId = -MNU_CHARS,       .numItems = sizeof(menu_CHARS      )/sizeof(int16_t), .softkeyItem = menu_CHARS       },
+/*  71 */  {.menuId = -MNU_PROGS,       .numItems = sizeof(menu_PROGS      )/sizeof(int16_t), .softkeyItem = menu_PROGS       },
+/*  72 */  {.menuId = -MNU_VARS,        .numItems = sizeof(menu_VARS       )/sizeof(int16_t), .softkeyItem = menu_VARS        },
+/*  73 */  {.menuId = -MNU_ALPHA_OMEGA, .numItems = sizeof(menu_ALPHA_OMEGA)/sizeof(int16_t), .softkeyItem = menu_ALPHA_OMEGA },
+/*  74 */  {.menuId = -MNU_alpha_omega, .numItems = sizeof(menu_alpha_omega)/sizeof(int16_t), .softkeyItem = menu_alpha_omega },
+/*  75 */  {.menuId = -MNU_FCNS,        .numItems = sizeof(menu_FCNS       )/sizeof(int16_t), .softkeyItem = menu_FCNS        },
+/*  76 */  {.menuId = -MNU_MENUS,       .numItems = sizeof(menu_MENUS      )/sizeof(int16_t), .softkeyItem = menu_MENUS       },
+/*  77 */  {.menuId = -MNU_ALPHAMATH,   .numItems = sizeof(menu_alphaMATH  )/sizeof(int16_t), .softkeyItem = menu_alphaMATH   },
+/*  78 */  {.menuId = -MNU_ALPHADOT,    .numItems = sizeof(menu_alphaDot   )/sizeof(int16_t), .softkeyItem = menu_alphaDot    },
+/*  79 */  {.menuId = -MNU_ALPHAFN,     .numItems = sizeof(menu_alphaFN    )/sizeof(int16_t), .softkeyItem = menu_alphaFN     },
+/*  80 */  {.menuId = -MNU_ANGLECONV,   .numItems = sizeof(menu_AngleConv  )/sizeof(int16_t), .softkeyItem = menu_AngleConv   },
+/*  81 */  {.menuId = -MNU_UNITCONV,    .numItems = sizeof(menu_UnitConv   )/sizeof(int16_t), .softkeyItem = menu_UnitConv    },
+/*  82 */  {.menuId = -MNU_CONVE,       .numItems = sizeof(menu_ConvE      )/sizeof(int16_t), .softkeyItem = menu_ConvE       },
+/*  83 */  {.menuId = -MNU_CONVP,       .numItems = sizeof(menu_ConvP      )/sizeof(int16_t), .softkeyItem = menu_ConvP       },
+/*  84 */  {.menuId = -MNU_CONVFP,      .numItems = sizeof(menu_ConvFP     )/sizeof(int16_t), .softkeyItem = menu_ConvFP      },
+/*  85 */  {.menuId = -MNU_CONVM,       .numItems = sizeof(menu_ConvM      )/sizeof(int16_t), .softkeyItem = menu_ConvM       },
+/*  86 */  {.menuId = -MNU_CONVX,       .numItems = sizeof(menu_ConvX      )/sizeof(int16_t), .softkeyItem = menu_ConvX       },
+/*  87 */  {.menuId = -MNU_CONVV,       .numItems = sizeof(menu_ConvV      )/sizeof(int16_t), .softkeyItem = menu_ConvV       },
+/*  88 */  {.menuId = -MNU_CONVA,       .numItems = sizeof(menu_ConvA      )/sizeof(int16_t), .softkeyItem = menu_ConvA       },
+/*  89 */  {.menuId = -MNU_CONST,       .numItems = sizeof(menu_CONST      )/sizeof(int16_t), .softkeyItem = menu_CONST       },
+/*  90 */  {.menuId = -MNU_IO,          .numItems = sizeof(menu_IO         )/sizeof(int16_t), .softkeyItem = menu_IO          },
+/*  91 */  {.menuId = -MNU_PRINT,       .numItems = sizeof(menu_PRINT      )/sizeof(int16_t), .softkeyItem = menu_PRINT       },
+/*  92 */  {.menuId = -MNU_TAM,         .numItems = sizeof(menu_Tam        )/sizeof(int16_t), .softkeyItem = menu_Tam         },
+/*  93 */  {.menuId = -MNU_TAMCMP,      .numItems = sizeof(menu_TamCmp     )/sizeof(int16_t), .softkeyItem = menu_TamCmp      },
+/*  94 */  {.menuId = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
+/*  95 */  {.menuId = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
+/*  96 */  {.menuId = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
+/*  97 */  {.menuId =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
 
-variableSoftmenu_t variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS] = {
-  {.menuId = -MNU_MyAlpha, .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_RAM,     .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_FLASH,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_MyMenu,  .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_VAR,     .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_PROG,    .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_MATRS,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_STRINGS, .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_DATES,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_TIMES,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_ANGLES,  .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_SINTS,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_LINTS,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_REALS,   .numItems = 0, .menuContent = NULL},
-  {.menuId = -MNU_CPXS,    .numItems = 0, .menuContent = NULL},
+dynamicSoftmenu_t dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS] = {
+/*   0 */  {.menuId = -MNU_MyAlpha, .numItems = 0, .menuContent = NULL},
+/*   1 */  {.menuId = -MNU_RAM,     .numItems = 0, .menuContent = NULL},
+/*   2 */  {.menuId = -MNU_FLASH,   .numItems = 0, .menuContent = NULL},
+/*   3 */  {.menuId = -MNU_MyMenu,  .numItems = 0, .menuContent = NULL},
+/*   4 */  {.menuId = -MNU_VAR,     .numItems = 0, .menuContent = NULL},
+/*   5 */  {.menuId = -MNU_PROG,    .numItems = 0, .menuContent = NULL},
+/*   6 */  {.menuId = -MNU_MATRS,   .numItems = 0, .menuContent = NULL},
+/*   7 */  {.menuId = -MNU_STRINGS, .numItems = 0, .menuContent = NULL},
+/*   8 */  {.menuId = -MNU_DATES,   .numItems = 0, .menuContent = NULL},
+/*   9 */  {.menuId = -MNU_TIMES,   .numItems = 0, .menuContent = NULL},
+/*  10 */  {.menuId = -MNU_ANGLES,  .numItems = 0, .menuContent = NULL},
+/*  11 */  {.menuId = -MNU_SINTS,   .numItems = 0, .menuContent = NULL},
+/*  12 */  {.menuId = -MNU_LINTS,   .numItems = 0, .menuContent = NULL},
+/*  13 */  {.menuId = -MNU_REALS,   .numItems = 0, .menuContent = NULL},
+/*  14 */  {.menuId = -MNU_CPXS,    .numItems = 0, .menuContent = NULL},
 };
 
 
@@ -454,29 +454,29 @@ static int sortMenu(void const *a, void const *b)
  }
 
 
-void initVariableSoftmenu(int16_t menu) {
+static void initVariableSoftmenu(int16_t menu) {
   int16_t i, numberOfBytes, numberOfGlobalLabels, numberOfRows, bytesToAdd;
   uint8_t *ptr;
 
-  free(variableSoftmenu[menu].menuContent);
+  free(dynamicSoftmenu[menu].menuContent);
 
-  switch(-variableSoftmenu[menu].menuId) {
-    case MNU_MyAlpha: variableSoftmenu[menu].menuContent = malloc(20);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 20);
-                      //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+  switch(-dynamicSoftmenu[menu].menuId) {
+    case MNU_MyAlpha: dynamicSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001My" STD_alpha "\000to\000be\000coded\000\000", 20);
+                      //xcopy(dynamicSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_FLASH:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001FLASH\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_FLASH:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001FLASH\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
     case MNU_RAM:     numberOfBytes = 1;
                       numberOfGlobalLabels = 0;
                       memset(tmpString, 0, TMP_STR_LENGTH);
                       for(i=0; i<numberOfLabels; i++) {
-                        if((variableSoftmenu[menu].menuId == -MNU_RAM ? 1 : -1) * labelList[i].program > 0 && labelList[i].followingStep > 0) { // (RAM or FLASH) and Global label
+                        if((dynamicSoftmenu[menu].menuId == -MNU_RAM ? 1 : -1) * labelList[i].program > 0 && labelList[i].followingStep > 0) { // (RAM or FLASH) and Global label
                           xcopy(tmpString + 15 * numberOfGlobalLabels, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
                           numberOfGlobalLabels++;
                           numberOfBytes += 1 + labelList[i].labelPointer[0];
@@ -495,7 +495,7 @@ void initVariableSoftmenu(int16_t menu) {
                       }
 
                       ptr = malloc(numberOfBytes + bytesToAdd);
-                      variableSoftmenu[menu].menuContent = ptr;
+                      dynamicSoftmenu[menu].menuContent = ptr;
                       *(ptr++) = numberOfRows;
                       for(i=0; i<numberOfGlobalLabels; i++) {
                         int16_t len = stringByteLength(tmpString + 15*i) + 1;
@@ -507,72 +507,106 @@ void initVariableSoftmenu(int16_t menu) {
                         *(ptr++) = 0;
                       }
 
-                      variableSoftmenu[menu].menuContent[0] = numberOfRows;
-                      variableSoftmenu[menu].numItems = 6 * numberOfRows;
+                      dynamicSoftmenu[menu].menuContent[0] = numberOfRows;
+                      dynamicSoftmenu[menu].numItems = 6 * numberOfRows;
                       break;
 
-    case MNU_MyMenu:  variableSoftmenu[menu].menuContent = malloc(22);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 22);
-                      //xcopy(variableSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_MyMenu:  dynamicSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001MyMenu\000to\000be\000coded\000\000", 22);
+                      //xcopy(dynamicSoftmenu[menu].menuContent, "\001\000\000\000\000\000\000", 27);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_VAR:     variableSoftmenu[menu].menuContent = malloc(19);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001VAR\000to\000be\000coded\000\000", 19);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_VAR:     dynamicSoftmenu[menu].menuContent = malloc(19);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001VAR\000to\000be\000coded\000\000", 19);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_PROG:    variableSoftmenu[menu].menuContent = malloc(20);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001PROG\000to\000be\000coded\000\000", 20);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_PROG:    numberOfBytes = 1;
+                      numberOfGlobalLabels = 0;
+                      memset(tmpString, 0, TMP_STR_LENGTH);
+                      for(i=0; i<numberOfLabels; i++) {
+                        if(labelList[i].program > 0 && labelList[i].followingStep > 0) { // RAM and Global label
+                          xcopy(tmpString + 15 * numberOfGlobalLabels, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
+                          numberOfGlobalLabels++;
+                          numberOfBytes += 1 + labelList[i].labelPointer[0];
+                        }
+                      }
+
+                      if(numberOfGlobalLabels == 0) {
+                        numberOfRows = 1;
+                        bytesToAdd = 6;
+                      }
+                      else {
+                        numberOfRows = (numberOfGlobalLabels - 1) / 6 + 1;
+                        bytesToAdd = 6 * numberOfRows - numberOfGlobalLabels;
+
+                        qsort(tmpString, numberOfGlobalLabels, 15, sortMenu);
+                      }
+
+                      ptr = malloc(numberOfBytes + bytesToAdd);
+                      dynamicSoftmenu[menu].menuContent = ptr;
+                      *(ptr++) = numberOfRows;
+                      for(i=0; i<numberOfGlobalLabels; i++) {
+                        int16_t len = stringByteLength(tmpString + 15*i) + 1;
+                        xcopy(ptr, tmpString + 15*i, len);
+                        ptr += len;
+                      }
+
+                      for(i=0; i<bytesToAdd; i++) {
+                        *(ptr++) = 0;
+                      }
+
+                      dynamicSoftmenu[menu].menuContent[0] = numberOfRows;
+                      dynamicSoftmenu[menu].numItems = 6 * numberOfRows;
                       break;
 
-    case MNU_MATRS:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001MATRS\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_MATRS:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001MATRS\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_STRINGS: variableSoftmenu[menu].menuContent = malloc(23);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001STRINGS\000to\000be\000coded\000\000", 23);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_STRINGS: dynamicSoftmenu[menu].menuContent = malloc(23);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001STRINGS\000to\000be\000coded\000\000", 23);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_DATES:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001DATES\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_DATES:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001DATES\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_TIMES:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001TIMES\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_TIMES:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001TIMES\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_ANGLES:  variableSoftmenu[menu].menuContent = malloc(22);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001ANGLES\000to\000be\000coded\000\000", 22);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_ANGLES:  dynamicSoftmenu[menu].menuContent = malloc(22);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001ANGLES\000to\000be\000coded\000\000", 22);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_SINTS:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001SINTS\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_SINTS:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001SINTS\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_LINTS:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001LINTS\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_LINTS:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001LINTS\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_REALS:   variableSoftmenu[menu].menuContent = malloc(21);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001REALS\000to\000be\000coded\000\000", 21);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_REALS:   dynamicSoftmenu[menu].menuContent = malloc(21);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001REALS\000to\000be\000coded\000\000", 21);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    case MNU_CPXS:    variableSoftmenu[menu].menuContent = malloc(20);
-                      xcopy(variableSoftmenu[menu].menuContent, "\001CPXS\000to\000be\000coded\000\000", 20);
-                      variableSoftmenu[menu].numItems = 6 * variableSoftmenu[menu].menuContent[0];
+    case MNU_CPXS:    dynamicSoftmenu[menu].menuContent = malloc(20);
+                      xcopy(dynamicSoftmenu[menu].menuContent, "\001CPXS\000to\000be\000coded\000\000", 20);
+                      dynamicSoftmenu[menu].numItems = 6 * dynamicSoftmenu[menu].menuContent[0];
                       break;
 
-    default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", -variableSoftmenu[menu].menuId);
+    default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", -dynamicSoftmenu[menu].menuId);
                       displayBugScreen(errorMessage);
   }
 }
@@ -587,6 +621,12 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
   }
 
   return (char *)ptr;
+}
+
+
+
+void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
+  printf("fnDynamicMenu:\n         softmenu = %d\n  dynamicMenuItem = %d\n", softmenuStack[softmenuStackPointer].softmenu, dynamicMenuItem);
 }
 
 
@@ -672,7 +712,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
    * \return void
    ***********************************************/
   void showSoftmenuCurrentPart(void) {
-    if(softmenuStackPointer == 0) { // The is no menu to display
+    if(softmenuStackPointer < 0) { // The is no menu to display
       switch(calcMode) {
         case CM_NORMAL:
         case CM_TAM:
@@ -684,13 +724,11 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
         case CM_PEM:
           showSoftmenu(NULL, -MNU_MyMenu, false);
           showSoftmenuCurrentPart();
-          softmenuStackPointer = 0;
           break;
 
         case CM_AIM:
           showSoftmenu(NULL, -MNU_MyAlpha, false);
           showSoftmenuCurrentPart();
-          softmenuStackPointer = 0;
           break;
 
         default:
@@ -699,17 +737,17 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       }
     }
     else { // There is a menu to display
-      int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer-1].softmenu;
+      int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer].softmenu;
       bool_t dottedTopLine;
 
-      if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
+      if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
         initVariableSoftmenu(m);
-        numberOfItems = variableSoftmenu[m].numItems;
+        numberOfItems = dynamicSoftmenu[m].numItems;
       }
       else { // Static softmenu
         numberOfItems = softmenu[m].numItems;
       }
-      currentFirstItem = softmenuStack[softmenuStackPointer-1].firstItem;
+      currentFirstItem = softmenuStack[softmenuStackPointer].firstItem;
 
       if(numberOfItems <= 18) {
         dottedTopLine = false;
@@ -718,7 +756,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
         dottedTopLine = true;
         yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
 
-        if(m >= NUMBER_OF_VARIABLE_SOFTMENUS) { // Static softmenu
+        if(m >= NUMBER_OF_DYNAMIC_SOFTMENUS) { // Static softmenu
           item = 6 * (currentFirstItem / 6 + yDotted);
           if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
             yDotted--;
@@ -740,10 +778,10 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       char *ptr;
       for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
         for(x=0; x<6; x++) {
-          if(m < NUMBER_OF_VARIABLE_SOFTMENUS) { // Variable softmenu
-            ptr = getNthString(variableSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
+          if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
+            ptr = getNthString(dynamicSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
             if(x + 6*y + currentFirstItem < numberOfItems) {
-              if(variableSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
+              if(dynamicSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
                 showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true);
               }
             }
@@ -832,8 +870,9 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
                                  (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
                                  (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
                                  (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                  0))))));
-    softmenuStackPointer = 1;
+                                 (alphaSelectionMenu == ASM_PROG ? lastProgMenuPos :
+                                  0)))))));
+    softmenuStackPointer = 0;
   }
 
 
@@ -846,6 +885,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
    * \return void
    ***********************************************/
   void pushSoftmenu(int16_t softmenu) {
+    softmenuStackPointer++;
     if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
       softmenuStack[softmenuStackPointer].softmenu = softmenu;
       softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
@@ -854,10 +894,11 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
                                                       (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
                                                       (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
                                                       (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                                       0))))));
-      softmenuStackPointer++;
+                                                      (alphaSelectionMenu == ASM_PROG ? lastProgMenuPos :
+                                                       0)))))));
     }
     else {
+      softmenuStackPointer--;
       displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
     }
   }
@@ -874,7 +915,7 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
-    if(softmenuStackPointer > 0) {
+    if(softmenuStackPointer >= 0) {
       if(alphaSelectionMenu != ASM_NONE) {
         alphaSelectionMenu = ASM_NONE;
         if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
@@ -903,72 +944,101 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
   void showSoftmenu(const char *menu, int16_t id, bool_t push) {
     int16_t m;
 
-    if(id == -MNU_FCNS) {
-      alphaSelectionMenu = ASM_FCNS;
-      if(calcMode == CM_PEM) {
+    switch(-id) {
+      case MNU_FCNS:
+        alphaSelectionMenu = ASM_FCNS;
+        if(calcMode == CM_PEM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_PEM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      case MNU_CONST:
+        alphaSelectionMenu = ASM_CNST;
+        if(calcMode == CM_PEM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_PEM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      case MNU_MENUS:
+        alphaSelectionMenu = ASM_MENU;
         calcModeAsm();
-        calcMode = CM_ASM_OVER_PEM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else {
-        calcModeAsm();
-      }
-    }
-    else if(id == -MNU_CONST) {
-      alphaSelectionMenu = ASM_CNST;
-      if(calcMode == CM_PEM) {
-        calcModeAsm();
-        calcMode = CM_ASM_OVER_PEM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else {
-        calcModeAsm();
-      }
-    }
-    else if(id == -MNU_MENUS) {
-      alphaSelectionMenu = ASM_MENU;
-      calcModeAsm();
-    }
-    else if(id == -MNU_SYSFL) {
-      alphaSelectionMenu = ASM_SYFL;
-      if(calcMode == CM_TAM) {
-        calcModeAsm();
-        calcMode = CM_ASM_OVER_TAM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else if(calcMode == CM_TAM_OVER_PEM) {
-        calcModeAsm();
-        calcMode = CM_ASM_OVER_TAM_OVER_PEM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else {
-        calcModeAsm();
-      }
-    }
-    else if(id == -MNU_ALPHAINTL) {
-      alphaSelectionMenu = ASM_AINT;
-      if(calcMode == CM_AIM) {
-        calcModeAsm();
-        calcMode = CM_ASM_OVER_AIM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else {
-        calcModeAsm();
-      }
-    }
-    else if(id == -MNU_ALPHAintl) {
-      alphaSelectionMenu = ASM_aint;
-      if(calcMode == CM_AIM) {
-        calcModeAsm();
-        calcMode = CM_ASM_OVER_AIM;
-        clearSystemFlag(FLAG_ALPHA);
-      }
-      else {
-        calcModeAsm();
-      }
-    }
-    else {
-      alphaSelectionMenu = ASM_NONE;
+        break;
+
+      case MNU_SYSFL:
+        alphaSelectionMenu = ASM_SYFL;
+        if(calcMode == CM_TAM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_TAM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else if(calcMode == CM_TAM_OVER_PEM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_TAM_OVER_PEM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      case MNU_ALPHAINTL:
+        alphaSelectionMenu = ASM_AINT;
+        if(calcMode == CM_AIM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_AIM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      case MNU_ALPHAintl:
+        alphaSelectionMenu = ASM_aint;
+        if(calcMode == CM_AIM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_AIM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      case MNU_PROG:
+        alphaSelectionMenu = ASM_PROG;
+        if(calcMode == CM_PEM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_PEM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else if(calcMode == CM_TAM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_TAM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else if(calcMode == CM_TAM_OVER_PEM) {
+          calcModeAsm();
+          calcMode = CM_ASM_OVER_TAM_OVER_PEM;
+          clearSystemFlag(FLAG_ALPHA);
+        }
+        else {
+          calcModeAsm();
+        }
+        break;
+
+      default:
+        alphaSelectionMenu = ASM_NONE;
     }
 
     if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
@@ -976,17 +1046,17 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
       return;
     }
 
-    if(id==-MNU_ALPHAINTL && alphaCase==AC_LOWER) { // alphaINTL
+    if(id == -MNU_ALPHAINTL && alphaCase == AC_LOWER) { // alphaINTL
       id = -MNU_ALPHAintl;
     }
-    else if(id==-MNU_ALPHA_OMEGA && alphaCase==AC_LOWER) { // alpha...omega
+    else if(id == -MNU_ALPHA_OMEGA && alphaCase == AC_LOWER) { // alpha...omega
       id = -MNU_alpha_omega;
     }
 
-    if((id==0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase==AC_LOWER) { // alphaINTL
+    if((id == 0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase == AC_LOWER) { // alphaINTL
       id = -MNU_ALPHAintl;
     }
-    else if((id==0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase==AC_LOWER) { // alpha...omega
+    else if((id == 0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase == AC_LOWER) { // alpha...omega
       id = -MNU_alpha_omega;
     }
 
@@ -1039,11 +1109,12 @@ char *getNthString(const uint8_t *ptr, int16_t n) {
 
 
   void setCatalogLastPos(void) {
-         if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-    else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-    else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-    else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-    else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
-    else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer - 1].firstItem;
+         if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer].firstItem;
+    else if(alphaSelectionMenu == ASM_PROG) lastProgMenuPos = softmenuStack[softmenuStackPointer].firstItem;
   }
 #endif // TESTSUITE_BUILD

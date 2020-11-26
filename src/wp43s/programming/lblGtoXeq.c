@@ -31,6 +31,12 @@ void fnGoto(uint16_t label) {
 
 
 void fnGotoDot(uint16_t stepNumber) {
+  if(dynamicMenuItem >= 0) {
+    printf("                                dynamicMenuItem = %d\n", dynamicMenuItem);
+    printf("   softmenuStack[softmenuStackPointer].softmenu = %d\n", softmenuStack[softmenuStackPointer].softmenu);
+    return;
+  }
+
   currentStepNumber = stepNumber;
 
   defineCurrentProgramFromCurrentStepNumber();

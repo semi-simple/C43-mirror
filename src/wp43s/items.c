@@ -93,12 +93,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void runFunction(int16_t func) {
     funcOK = true;
 
-    if(func >= LAST_ITEM) {
-      #ifdef PC_BUILD
+    #ifdef PC_BUILD
+      if(func >= LAST_ITEM) {
         sprintf(errorMessage, "item (%" PRId16 ") must be below LAST_ITEM", func);
         moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
-      #endif // PC_BUILD
-    }
+      }
+    #endif // PC_BUILD
 
     if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
       tamMode = indexOfItems[func].param;
@@ -1895,7 +1895,7 @@ const item_t indexOfItems[] = {
 /* 1383 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamShuffle",                                  0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1384 */  { itemToBeCoded,               NOPARAM,                     "PROG",                                        "PROG",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1385 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamLabel",                                    0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1386 */  { itemToBeCoded,               NOPARAM,                     "1386",                                        "1386",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1386 */  { fnDynamicMenu,               NOPARAM,                     "",                                            "DYNMNU",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1387 */  { itemToBeCoded,               NOPARAM,                     "1387",                                        "1387",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1388 */  { itemToBeCoded,               NOPARAM,                     "1388",                                        "1388",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1389 */  { itemToBeCoded,               NOPARAM,                     "1389",                                        "1389",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},

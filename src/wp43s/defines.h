@@ -289,7 +289,7 @@
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_VARIABLE_SOFTMENUS              15
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               15
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -493,6 +493,7 @@
 #define ASM_SYFL                                   4
 #define ASM_AINT                                   5
 #define ASM_aint                                   6
+#define ASM_PROG                                   7
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1

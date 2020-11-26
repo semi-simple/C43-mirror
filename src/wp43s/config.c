@@ -5946,7 +5946,7 @@ void fnReset(uint16_t confirmation) {
     initFontBrowser();
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
-    softmenuStackPointer = 0;
+    softmenuStackPointer = -1;
     aimBuffer[0] = 0;
     lastErrorCode = 0;
 
@@ -5978,6 +5978,7 @@ void fnReset(uint16_t confirmation) {
     lastCnstMenuPos = 0;
     lastSyFlMenuPos = 0;
     lastAIntMenuPos = 0;
+    lastProgMenuPos = 0;
     firstGregorianDay = 1752;
     exponentLimit = 6145;
     lastIntegerBase = 0;

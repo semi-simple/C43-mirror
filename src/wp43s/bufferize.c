@@ -140,14 +140,14 @@
   int32_t findFirstItem(const char *twoLetters) {
     const int16_t *first, *middle, *last;
 
-    first = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
-    last = first + softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1;
+    first = softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
+    last = first + softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems - 1;
     while(*last == ITM_NULL) {
       last--;
     }
 
     middle = first + (last - first) / 2;
-    //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+    //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
     //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
     //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
     //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
@@ -167,11 +167,11 @@
 
     if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
       //printf("first\n");
-      return first - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+      return first - softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
     }
     else {
       //printf("last\n");
-      return last - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+      return last - softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
     }
   }
 
@@ -290,7 +290,7 @@
           }
         }
 
-        softmenuStack[softmenuStackPointer-1].firstItem = firstItem;
+        softmenuStack[softmenuStackPointer].firstItem = firstItem;
         setCatalogLastPos();
         alphaSelectionTimer = getUptimeMs();
       }

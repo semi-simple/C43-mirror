@@ -250,7 +250,7 @@
 
   extern registerDescriptor_t  reg[112];
   extern registerDescriptor_t  savedStackRegister[9+1];
-  extern variableSoftmenu_t    variableSoftmenu[NUMBER_OF_VARIABLE_SOFTMENUS];
+  extern dynamicSoftmenu_t     dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS];
 
   extern dataBlock_t          *allLocalRegisterPointer;
   extern dataBlock_t          *allNamedVariablePointer;
@@ -277,8 +277,9 @@
   extern char                  dateTimeString[12];
   extern char                  displayValueX[DISPLAY_VALUE_LEN];
 
-  extern uint8_t               softmenuStackPointer;
-  extern uint8_t               softmenuStackPointerBeforeAIM;
+  extern int8_t                softmenuStackPointer;
+  extern int8_t                softmenuStackPointerBeforeAIM;
+
   extern uint8_t               transitionSystemState;
   extern uint8_t               numScreensStandardFont;
   extern uint8_t               currentFntScr;
@@ -329,6 +330,7 @@
   extern int16_t               lastCnstMenuPos;
   extern int16_t               lastSyFlMenuPos;
   extern int16_t               lastAIntMenuPos;
+  extern int16_t               lastProgMenuPos;
   extern int16_t               showFunctionNameItem;
   extern int16_t               exponentSignLocation;
   extern int16_t               denominatorLocation;
@@ -336,6 +338,7 @@
   extern int16_t               imaginaryMantissaSignLocation;
   extern int16_t               exponentLimit;
   extern int16_t               showFunctionNameCounter;
+  extern int16_t               dynamicMenuItem;
   extern int16_t              *menu_RAM;
 
   extern uint16_t              globalFlags[7];

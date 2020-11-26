@@ -102,8 +102,9 @@ char                  oldTime[8];
 char                  dateTimeString[12];
 char                  displayValueX[DISPLAY_VALUE_LEN];
 
-uint8_t               softmenuStackPointer;
-uint8_t               softmenuStackPointerBeforeAIM;
+int8_t                softmenuStackPointer;
+int8_t                softmenuStackPointerBeforeAIM;
+
 uint8_t               transitionSystemState;
 uint8_t               numScreensStandardFont;
 uint8_t               currentFntScr;
@@ -154,6 +155,7 @@ int16_t               lastMenuMenuPos;
 int16_t               lastCnstMenuPos;
 int16_t               lastSyFlMenuPos;
 int16_t               lastAIntMenuPos;
+int16_t               lastProgMenuPos;
 int16_t               showFunctionNameItem;
 int16_t               exponentSignLocation;
 int16_t               denominatorLocation;
@@ -161,6 +163,7 @@ int16_t               imaginaryExponentSignLocation;
 int16_t               imaginaryMantissaSignLocation;
 int16_t               exponentLimit;
 int16_t               showFunctionNameCounter;
+int16_t               dynamicMenuItem;
 int16_t              *menu_RAM;
 
 uint16_t              globalFlags[7];

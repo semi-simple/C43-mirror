@@ -111,7 +111,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       tamNumberMax = indexOfItems[func].tamMax;
 
       if(func == ITM_CNST) {
-        tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34;
+        tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1;
       }
 
       calcModeTam();
@@ -685,7 +685,7 @@ const item_t indexOfItems[] = {
 /*  204 */  { fnConstant,                  76,                          "-" STD_INFINITY,                              "-" STD_INFINITY,                              0,       0,       CAT_CNST, SLS_ENABLED  , US_ENABLED  },
 /*  205 */  { fnConstant,                  77,                          STD_INFINITY,                                  STD_INFINITY,                                  0,       0,       CAT_CNST, SLS_ENABLED  , US_ENABLED  },
 /*  206 */  { itemToBeCoded,               78,                          "#",                                           "#",                                           0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/*  207 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  207 */  { fnConstant,                  TM_VALUE,                    "CNST",                                        "CNST",                                        0,     215,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  }, // 215 is replaced at run time by NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1
 /*  208 */  { itemToBeCoded,               NOPARAM,                     "0208",                                        "0208",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  209 */  { itemToBeCoded,               NOPARAM,                     "0209",                                        "0209",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  210 */  { itemToBeCoded,               NOPARAM,                     "0210",                                        "0210",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -1983,7 +1983,7 @@ const item_t indexOfItems[] = {
 /* 1469 */  { fnInvGd,                     NOPARAM,                     "g" STD_SUB_d STD_SUP_MINUS_1,                 "g" STD_SUB_d STD_SUP_MINUS_1,                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1470 */  { fnAngularMode,               AM_GRAD,                     "GRAD",                                        "GRAD",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1471 */  { fnCvtToCurrentAngularMode,   AM_GRAD,                     "GRAD" STD_RIGHT_ARROW,                        "GRAD" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1472 */  { fnGotoDot,                   NOPARAM,                     "GTO.",                                        "GTO.",                                        0,   29999,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1472 */  { fnGotoDot,                   NOPARAM,                     "GTO.",                                        "GTO.",                                        0,   32766,       CAT_FNCT, SLS_UNCHANGED, US_CANCEL   },
 /* 1473 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n,                                 "H" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1474 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n STD_SUB_P,                       "H" STD_SUB_n STD_SUB_P,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1475 */  { fnImaginaryPart,             NOPARAM,                     "Im",                                          "Im",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

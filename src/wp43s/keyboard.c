@@ -47,11 +47,7 @@
           sm = &softmenu[softmenuStack[softmenuStackPointer].softmenu];
           row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer].firstItem/6) - 1;
           if(itemShift/6 <= row && softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1) < sm->numItems) {
-            item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1)];
-
-            if(item > 0) {
-              item %= 10000;
-            }
+            item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1)] % 10000;
 
             if(item == ITM_PROD_SIGN) {
               item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
@@ -199,7 +195,7 @@
 
             if(item < 0) { // softmenu
               if(item != -MNU_SYSFL || (calcMode != CM_TAM && calcMode != CM_TAM_OVER_PEM) || transitionSystemState == 0) {
-                showSoftmenu(NULL, item, true);
+                showSoftmenu(NULL, item, MS_PUSH);
               }
             }
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
@@ -237,6 +233,7 @@
     int16_t result;
     const calcKey_t *key;
 
+    dynamicMenuItem = -1;
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
@@ -376,7 +373,7 @@
         item = showFunctionNameItem;
         hideFunctionName();
         if(item < 0) {
-          showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
+          showSoftmenu(NULL, item, MS_PUSH);
         }
         else {
           runFunction(item);
@@ -394,7 +391,7 @@
         item = showFunctionNameItem;
         hideFunctionName();
         if(item < 0) {
-          showSoftmenu(NULL, item, calcMode == CM_AIM ? true : false);
+          showSoftmenu(NULL, item, MS_PUSH);
         }
         else {
           runFunction(item);

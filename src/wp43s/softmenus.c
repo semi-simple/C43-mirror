@@ -327,10 +327,10 @@ const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,  
 #include "softmenuCatalogs.h"
 
 const softmenu_t softmenu[] = {
-/*   0 */  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             },
-/*   1 */  {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
-/*   2 */  {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             },
-/*   3 */  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
+/*   0 */  {.menuId = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // MyMenu must be the 1st
+/*   1 */  {.menuId = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             }, // Myalpha must be the 2nd
+/*   2 */  {.menuId = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
+/*   3 */  {.menuId = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
 /*   4 */  {.menuId = -MNU_VAR,         .numItems = 0,                                        .softkeyItem = NULL             }, // variable softmenus and
 /*   5 */  {.menuId = -MNU_PROG,        .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
 /*   6 */  {.menuId = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
@@ -429,10 +429,10 @@ const softmenu_t softmenu[] = {
 
 
 dynamicSoftmenu_t dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS] = {
-/*   0 */  {.menuId = -MNU_MyAlpha, .numItems = 0, .menuContent = NULL},
-/*   1 */  {.menuId = -MNU_RAM,     .numItems = 0, .menuContent = NULL},
-/*   2 */  {.menuId = -MNU_FLASH,   .numItems = 0, .menuContent = NULL},
-/*   3 */  {.menuId = -MNU_MyMenu,  .numItems = 0, .menuContent = NULL},
+/*   0 */  {.menuId = -MNU_MyMenu,  .numItems = 0, .menuContent = NULL},
+/*   1 */  {.menuId = -MNU_MyAlpha, .numItems = 0, .menuContent = NULL},
+/*   2 */  {.menuId = -MNU_RAM,     .numItems = 0, .menuContent = NULL},
+/*   3 */  {.menuId = -MNU_FLASH,   .numItems = 0, .menuContent = NULL},
 /*   4 */  {.menuId = -MNU_VAR,     .numItems = 0, .menuContent = NULL},
 /*   5 */  {.menuId = -MNU_PROG,    .numItems = 0, .menuContent = NULL},
 /*   6 */  {.menuId = -MNU_MATRS,   .numItems = 0, .menuContent = NULL},
@@ -706,147 +706,121 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
 
   /********************************************//**
-   * \brief Displays the current part of a softmenu
+   * \brief Displays the current part of the displayed softmenu
    *
    * \param void
    * \return void
    ***********************************************/
   void showSoftmenuCurrentPart(void) {
-    if(softmenuStackPointer < 0) { // The is no menu to display
-      switch(calcMode) {
-        case CM_NORMAL:
-        case CM_TAM:
-        case CM_TAM_OVER_PEM:
-        case CM_NIM:
-        case CM_ASSIGN:
-        case CM_ERROR_MESSAGE:
-        case CM_CONFIRMATION:
-        case CM_PEM:
-          showSoftmenu(NULL, -MNU_MyMenu, false);
-          showSoftmenuCurrentPart();
-          break;
+    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer].softmenu;
+    bool_t dottedTopLine;
 
-        case CM_AIM:
-          showSoftmenu(NULL, -MNU_MyAlpha, false);
-          showSoftmenuCurrentPart();
-          break;
+    if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
+      initVariableSoftmenu(m);
+      numberOfItems = dynamicSoftmenu[m].numItems;
+    }
+    else { // Static softmenu
+      numberOfItems = softmenu[m].numItems;
+    }
+    currentFirstItem = softmenuStack[softmenuStackPointer].firstItem;
 
-        default:
-          sprintf(errorMessage, "In function showSoftmenuCurrentPart: unexpected calcMode %" PRId16 "!", calcMode);
-          displayBugScreen(errorMessage);
+    if(numberOfItems <= 18) {
+      dottedTopLine = false;
+    }
+    else {
+      dottedTopLine = true;
+      yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
+
+      if(m >= NUMBER_OF_DYNAMIC_SOFTMENUS) { // Static softmenu
+        item = 6 * (currentFirstItem / 6 + yDotted);
+        if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+          yDotted--;
+        }
+
+        item = 6 * (currentFirstItem / 6 + yDotted);
+        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+          yDotted--;
+        }
+
+        item = 6 * (currentFirstItem / 6 + yDotted);
+        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+          yDotted--;
+        }
       }
     }
-    else { // There is a menu to display
-      int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer].softmenu;
-      bool_t dottedTopLine;
 
-      if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
-        initVariableSoftmenu(m);
-        numberOfItems = dynamicSoftmenu[m].numItems;
-      }
-      else { // Static softmenu
-        numberOfItems = softmenu[m].numItems;
-      }
-      currentFirstItem = softmenuStack[softmenuStackPointer].firstItem;
-
-      if(numberOfItems <= 18) {
-        dottedTopLine = false;
-      }
-      else {
-        dottedTopLine = true;
-        yDotted = min(3, (numberOfItems + modulo(currentFirstItem - numberOfItems, 6))/6 - currentFirstItem/6) - 1;
-
-        if(m >= NUMBER_OF_DYNAMIC_SOFTMENUS) { // Static softmenu
-          item = 6 * (currentFirstItem / 6 + yDotted);
-          if(                softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-            yDotted--;
-          }
-
-          item = 6 * (currentFirstItem / 6 + yDotted);
-          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-            yDotted--;
-          }
-
-          item = 6 * (currentFirstItem / 6 + yDotted);
-          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-            yDotted--;
+    const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
+    char *ptr;
+    for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
+      for(x=0; x<6; x++) {
+        if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
+          ptr = getNthString(dynamicSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
+          if(x + 6*y + currentFirstItem < numberOfItems) {
+            if(dynamicSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
+              showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true);
+            }
           }
         }
-      }
-
-      const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
-      char *ptr;
-      for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
-        for(x=0; x<6; x++) {
-          if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
-            ptr = getNthString(dynamicSoftmenu[m].menuContent, x + 6*y + currentFirstItem);
-            if(x + 6*y + currentFirstItem < numberOfItems) {
-              if(dynamicSoftmenu[m].menuContent[1] == 0 || *ptr != 0) {
-                showSoftkey(ptr, x, y-currentFirstItem/6, vmNormal, true, true);
-              }
-            }
+        else { // Static softmenu
+          if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
+            item = ITM_NULL;
           }
-          else { // Static softmenu
-            if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
-              item = ITM_NULL;
+          else {
+            item = softkeyItem[x];
+          }
+          if(item < 0) { // softmenu
+            int16_t menu = 0;
+            while(softmenu[menu].menuId != 0) {
+              if(softmenu[menu].menuId == item) {
+                break;
+              }
+              menu++;
+            }
+
+            if(softmenu[menu].menuId == 0) {
+              sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
+              displayBugScreen(errorMessage);
             }
             else {
-              item = softkeyItem[x];
+              showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
             }
-            if(item < 0) { // softmenu
-              int16_t menu = 0;
-              while(softmenu[menu].menuId != 0) {
-                if(softmenu[menu].menuId == item) {
-                  break;
-                }
-                menu++;
-              }
-
-              if(softmenu[menu].menuId == 0) {
-                sprintf(errorMessage, "In function showSoftmenuCurrentPart: softmenu ID %" PRId16 " not found!", item);
-                displayBugScreen(errorMessage);
-              }
-              else {
-                showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
-              }
+          }
+          else if(item == 9999) {
+            showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
+          }
+          else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
+            // item : +10000 -> no top line
+            //        +20000 -> no bottom line
+            //        +30000 -> neither top nor bottom line
+            if(softmenu[m].menuId == -MNU_FCNS) {
+              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
             }
-            else if(item == 9999) {
-              showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true);
+            else {
+              showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
             }
-            else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
-              // item : +10000 -> no top line
-              //        +20000 -> no bottom line
-              //        +30000 -> neither top nor bottom line
-              if(softmenu[m].menuId == -MNU_FCNS) {
-                showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
-              }
-              else {
-                showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1);
-              }
-              if(indexOfItems[item%10000].func == itemToBeCoded) {
-                // Strike out non coded functions
-                int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
-                for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
-                  if(xStroke%3 == 0) yStroke--;
-                  setBlackPixel(xStroke, yStroke);
-                }
+            if(indexOfItems[item%10000].func == itemToBeCoded) {
+              // Strike out non coded functions
+              int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 3;
+              for(int16_t xStroke=x*67 + 10; xStroke<x*67 + 57; xStroke++) {
+                if(xStroke%3 == 0) yStroke--;
+                setBlackPixel(xStroke, yStroke);
               }
             }
           }
         }
       }
+    }
 
-      if(0 <= yDotted && yDotted <= 2) {
-        yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
+    if(0 <= yDotted && yDotted <= 2) {
+      yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
 
-        if(dottedTopLine) {
-          for(x=0; x<SCREEN_WIDTH; x++) {
-            if(x%8 < 4) {
-              setBlackPixel(x, yDotted);
-            }
-            else {
-              setWhitePixel(x, yDotted);
-            }
+      if(dottedTopLine) {
+        for(x=0; x<SCREEN_WIDTH; x++) {
+          if(x%8 < 4) {
+            setBlackPixel(x, yDotted);
+          }
+          else {
+            setWhitePixel(x, yDotted);
           }
         }
       }
@@ -859,11 +833,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
    * \brief Initializes the softmenu stack with a
    * softmenu and displays it's first part
    *
-   * \param[in] softmenu int16_t Softmenu number
+   * \param[in] softmenuId int16_t Softmenu ID
    * \return void
    ***********************************************/
-  void initSoftmenuStack(int16_t softmenu) {
-    softmenuStack[0].softmenu = softmenu;
+  void initSoftmenuStack(int16_t softmenuId) {
+    softmenuStack[0].softmenu = softmenuId;
     softmenuStack[0].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
                                  (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
                                  (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
@@ -881,13 +855,13 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
    * \brief Pushes a new softmenu on the softmenu stack
    * and displays it's first part
    *
-   * \param[in] softmenu int16_t Softmenu number
+   * \param[in] softmenuId int16_t Softmenu ID
    * \return void
    ***********************************************/
-  void pushSoftmenu(int16_t softmenu) {
+  void pushSoftmenu(int16_t softmenuId) {
     softmenuStackPointer++;
     if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
-      softmenuStack[softmenuStackPointer].softmenu = softmenu;
+      softmenuStack[softmenuStackPointer].softmenu = softmenuId;
       softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
                                                       (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
                                                       (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
@@ -915,17 +889,18 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
-    if(softmenuStackPointer >= 0) {
-      if(alphaSelectionMenu != ASM_NONE) {
-        alphaSelectionMenu = ASM_NONE;
-        if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
-          calcModeNormal();
-        }
+    if(alphaSelectionMenu != ASM_NONE) {
+      alphaSelectionMenu = ASM_NONE;
+      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
+        calcModeNormal();
       }
-      softmenuStackPointer--;
     }
-    else {
-      displayBugScreen("In function popSoftmenu: the softmenu stack is empty, there is no softmenu to pop!");
+    softmenuStackPointer--;
+
+    if(softmenuStackPointer <= 0) { // There is always a softmenu to display
+      softmenuStack[0].softmenu = (calcMode == CM_AIM ? 1 : 0); // 1=MyAlpha and 0=MyMenu
+      softmenuStack[0].firstItem = 0;
+      softmenuStackPointer = 0;
     }
   }
 
@@ -937,11 +912,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
    *
    * \param[in] menu const char* Name of softmenu
    * \param[in] id int16_t       ID of softmenu
-   * \param[in] push bool_t      * false: initialize the softmenu stack
-   *                             * true: push the softmenu on the stack
+   * \param[in] initOrPushOnMenuStack int16_t  * MS_INIT initialize the softmenu stack
+   *                                           * MS_PUSH push the softmenu on the stack
    * \return void
    ***********************************************/
-  void showSoftmenu(const char *menu, int16_t id, bool_t push) {
+  void showSoftmenu(const char *menu, int16_t id, int16_t initOrPushOnMenuStack) {
     int16_t m;
 
     switch(-id) {
@@ -1090,7 +1065,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     }
     else {
       if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
-        if(push) {
+        if(initOrPushOnMenuStack) {
           pushSoftmenu(m);
         }
         else {

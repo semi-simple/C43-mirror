@@ -22,9 +22,9 @@ void fnDynamicMenu            (uint16_t unusedButMandatoryParameter);
 #ifndef TESTSUITE_BUILD
   void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
   void showSoftmenuCurrentPart(void);
-  void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
-  void initSoftmenuStack      (int16_t softmenu);
-  void pushSoftmenu           (int16_t softmenu);
+  void showSoftmenu           (const char *menu, int16_t id, int16_t initOrPushOnMenuStack);
+  void initSoftmenuStack      (int16_t softmenuId);
+  void pushSoftmenu           (int16_t softmenuId);
   void popSoftmenu            (void);
   void setCatalogLastPos      (void);
 #endif // !TESTSUITE_BUILD

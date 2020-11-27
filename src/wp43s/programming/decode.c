@@ -40,6 +40,11 @@
           if(i == 3 && numberOfBytesInStep > 4) {
             decodeOneStep(step);
             stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+
+            if(*step != ITM_LBL && (*step != ((ITM_END >> 8) | 0x80) || *(step + 1) != (ITM_END & 0xff))) { // Not LBL and not END
+              printf("   "); fflush(stdout);
+            }
+
             printf("   %s", tmpString + 2000); fflush(stdout);
           }
 
@@ -54,6 +59,11 @@
           }
           decodeOneStep(step);
           stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+
+          if(*step != ITM_LBL && (*step != ((ITM_END >> 8) | 0x80) || *(step + 1) != (ITM_END & 0xff))) { // Not LBL and not END
+            printf("   "); fflush(stdout);
+          }
+
           printf("%s", tmpString + 2000); fflush(stdout);
         }
       }
@@ -65,12 +75,13 @@
 
 
   void listLabelsAndPrograms(void) {
-    printf("\nnum program  step label\n");
+    printf("\nModified content of labelList\n");
+    printf("num program  step label\n");
     for(int i=0; i<numberOfLabels; i++) {
       printf("%3d%8d%6d ", i, labelList[i].program, abs(labelList[i].followingStep));
       if(labelList[i].followingStep < 0) { // Local label
         if(*(labelList[i].labelPointer) < 100) {
-          printf("%d\n", *(labelList[i].labelPointer));
+          printf("%02d\n", *(labelList[i].labelPointer));
         }
         else if(*(labelList[i].labelPointer) < 110) {
           printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
@@ -84,11 +95,40 @@
       }
     }
 
+    printf("\nraw content of labelList\n");
+    printf("num program  step label\n");
+    for(int i=0; i<numberOfLabels; i++) {
+      printf("%3d%8d%6d ", i, labelList[i].program, labelList[i].followingStep);
+      if(labelList[i].followingStep < 0) { // Local label
+        if(*(labelList[i].labelPointer) < 100) {
+          printf("%02d\n", *(labelList[i].labelPointer));
+        }
+        else if(*(labelList[i].labelPointer) < 110) {
+          printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
+        }
+      }
+      else { // Global label
+        xcopy(tmpString + 100, labelList[i].labelPointer + 1, *(labelList[i].labelPointer));
+        tmpString[100 + *(labelList[i].labelPointer)] = 0;
+        stringToUtf8(tmpString + 100, (uint8_t *)tmpString);
+        printf("'%s'\n", tmpString);
+      }
+    }
+
+    printf("\nModified content of programList\n");
     printf("program  step OP\n");
     for(int i=0; i<numberOfPrograms; i++) {
       decodeOneStep(programList[i].instructionPointer);
       stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
       printf("%7d %5d %s\n", i + 1, programList[i].step - 1, tmpString);
+    }
+
+    printf("\nRaw content of programList\n");
+    printf("program  step OP\n");
+    for(int i=0; i<numberOfPrograms; i++) {
+      decodeOneStep(programList[i].instructionPointer);
+      stringToUtf8(tmpString, (uint8_t *)(tmpString + 2000));
+      printf("%7d %5d %s\n", i, programList[i].step, tmpString);
     }
   }
 #endif // !DMCP_BUILD
@@ -409,6 +449,7 @@ void decodeOneStep(uint8_t *step) {
     case ITM_DSE:         //   8
     case ITM_DSL:         //   9
     case ITM_DSZ:         //  10
+    case ITM_INPUT:       //  43
     case ITM_STO:         //  44
     case ITM_STOADD:      //  45
     case ITM_STOSUB:      //  46
@@ -470,7 +511,6 @@ void decodeOneStep(uint8_t *step) {
     case ITM_Rdown:       //  40
     case ITM_CLX:         //  41
     case ITM_FILL:        //  42
-    case ITM_INPUT:       //  43
     case ITM_SQUARE:      //  58
     case ITM_CUBE:        //  59
     case ITM_YX:          //  60
@@ -532,7 +572,7 @@ void decodeOneStep(uint8_t *step) {
     default:
       if((item8 & 0x80) == 0) {
         #ifndef DMCP_BUILD
-          printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+          printf("\nERROR in decodeOneStep: single byte instruction %u is unknown!\n", item8);
         #endif // !DMCP_BUILD
         break;
       }
@@ -546,6 +586,11 @@ void decodeOneStep(uint8_t *step) {
         case ITM_LocR:        //  1504
         case ITM_SCI:         //  1577
           decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_NUMBER);
+          break;
+
+        case ITM_VIEW:        //  1622
+        case ITM_Xex:         //  1636
+          decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_REGISTER);
           break;
 
         case CST_01:          //   128
@@ -784,6 +829,8 @@ void decodeOneStep(uint8_t *step) {
         case ITM_CLSTK:       //  1418
         case ITM_END:         //  1448
         case ITM_NOP:         //  1532
+        case ITM_RAN:         //  1549
+        case ITM_SIGN:        //  1590
         case ITM_STOP:        //  1604
         case ITM_TICKS:       //  1610
           sprintf(tmpString, "%s%s", item16 <= CST_79 ? "# " : "", indexOfItems[item16].itemCatalogName);
@@ -795,7 +842,7 @@ void decodeOneStep(uint8_t *step) {
 
         default: {
           #ifndef DMCP_BUILD
-            printf("\nERROR: double byte instruction %u is unknown!\n", item16);
+            printf("\nERROR in decodeOneStep: double byte instruction %u is unknown!\n", item16);
           #endif // !DMCP_BUILD
         }
       }

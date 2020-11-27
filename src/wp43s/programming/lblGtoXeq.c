@@ -32,9 +32,34 @@ void fnGoto(uint16_t label) {
 
 void fnGotoDot(uint16_t stepNumber) {
   if(dynamicMenuItem >= 0) {
-    printf("                                dynamicMenuItem = %d\n", dynamicMenuItem);
-    printf("   softmenuStack[softmenuStackPointer].softmenu = %d\n", softmenuStack[softmenuStackPointer].softmenu);
-    return;
+    if(dynamicMenuItem >= 6 * *dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenu].menuContent) {
+      return;
+    }
+
+    uint8_t *labelName = dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenu].menuContent + 1;
+    while(dynamicMenuItem > 0) {
+      labelName += stringByteLength((char *)labelName) + 1;
+      dynamicMenuItem--;
+    }
+
+    if(*labelName == 0) {
+      return;
+    }
+
+    int16_t c, len = stringByteLength((char *)labelName);
+    for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
+      if(labelList[lbl].followingStep > 0 && labelList[lbl].labelPointer[c] == len) { // It's a global label and the length is OK
+        for(c=0; c<len; c++) {
+          if(labelName[c] != labelList[lbl].labelPointer[c + 1]) {
+            break;
+          }
+        }
+        if(c == len) {
+          stepNumber = labelList[lbl].followingStep - 1;
+          break;
+        }
+      }
+    }
   }
 
   currentStepNumber = stepNumber;

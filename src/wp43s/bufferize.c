@@ -1948,6 +1948,208 @@
         }
         break;
 
+      //////////////////////////////
+      // CNST ___
+      case 22:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamDigit;
+            if(tamNumber > tamNumberMax) {
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "CNST %d__", tamNumber);
+              transitionSystemState = 23;
+            }
+            break;
+
+          case TT_BACKSPACE :
+            calcModeNormal();
+            return;
+        }
+        break;
+
+      //////////////////////////////
+      // CNST d__
+      case 23:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "CNST %02d_", tamNumber);
+              transitionSystemState = 24;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            xcopy(tamBuffer, "CNST ___", 11);
+            transitionSystemState = 22;
+        }
+        break;
+
+      //////////////////////////////
+      // CNST dd_
+      case 24:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "CNST %d__", tamNumber);
+            transitionSystemState = 23;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF ____
+      case 25:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamDigit;
+            if(tamNumber > tamNumberMax) {
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %d___", tamNumber);
+              transitionSystemState = 26;
+            }
+            break;
+
+          case TT_BACKSPACE :
+            calcModeNormal();
+            return;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF d___
+      case 26:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %02d__", tamNumber);
+              transitionSystemState = 27;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            xcopy(tamBuffer, "BestF ____", 11);
+            transitionSystemState = 25;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF dd__
+      case 27:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %03d_", tamNumber);
+              transitionSystemState = 28;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            sprintf(tamBuffer, "BestF %d___", tamNumber);
+            transitionSystemState = 26;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF ddd_
+      case 28:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "BestF %02d__", tamNumber);
+            transitionSystemState = 27;
+        }
+        break;
+
 
       //////////////////////////////
       // This should never happen

@@ -284,6 +284,9 @@
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 
+#define MS_INIT                                    0 // Initializes the softmenu stack
+#define MS_PUSH                                    1 // Pushes the softmenu on the stack
+
 #define Y_POSITION_OF_REGISTER_T_LINE             24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
 #define Y_POSITION_OF_REGISTER_Z_LINE             60
 #define Y_POSITION_OF_REGISTER_Y_LINE             96

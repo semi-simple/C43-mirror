@@ -240,19 +240,21 @@ void defineCurrentProgramFromCurrentStep(void) {
 
 
 
-static uint32_t programLengthInByte(uint8_t *step, uint32_t *steps) {
-  //if(step == beginOfCurrentProgram || step == endOfCurrentProgram) {
-    for(int i=0; i<numberOfPrograms; i++) {
-     if(programList[i].instructionPointer == step) {
-       *steps = programList[i + 1].step - programList[i].step;
-       return (programList[i + 1].instructionPointer - programList[i].instructionPointer);
-     }
-    }
-  //}
+#ifndef TESTSUITE_BUILD
+  static uint32_t programLengthInByte(uint8_t *step, uint32_t *steps) {
+    //if(step == beginOfCurrentProgram || step == endOfCurrentProgram) {
+      for(int i=0; i<numberOfPrograms; i++) {
+       if(programList[i].instructionPointer == step) {
+         *steps = programList[i + 1].step - programList[i].step;
+         return (programList[i + 1].instructionPointer - programList[i].instructionPointer);
+       }
+      }
+    //}
 
-  *steps = 0;
-  return 0;
-}
+    *steps = 0;
+    return 0;
+  }
+#endif // TESTSUITE_BUILD
 
 
 

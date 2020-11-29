@@ -466,6 +466,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnPem                      (uint16_t unusedButMandatoryParameter) {}
   void fnGoto                     (uint16_t unusedButMandatoryParameter) {}
   void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
+  void fnDynamicMenu              (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
@@ -1878,14 +1879,14 @@ const item_t indexOfItems[] = {
 /* 1366 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "INTL",                              STD_alpha "INTL",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1367 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "MATH",                              STD_alpha "MATH",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1368 */  { itemToBeCoded,               NOPARAM,                     STD_alpha ".FN",                               STD_alpha ".FN",                               0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1369 */  { itemToBeCoded,               NOPARAM,                     STD_ALPHA STD_ELLIPSIS STD_OMEGA,              STD_ALPHA STD_ELLIPSIS STD_OMEGA,              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1370 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_BULLET,                          STD_alpha STD_BULLET,                          0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
+/* 1369 */  { itemToBeCoded,               NOPARAM,                     STD_ALPHA STD_ELLIPSIS STD_OMEGA,              STD_ALPHA STD_ELLIPSIS STD_OMEGA,              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // Upper case greek letters
+/* 1370 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_BULLET,                          STD_alpha STD_BULLET,                          0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // Upper case intl letters
 /* 1371 */  { itemToBeCoded,               NOPARAM,                     "SYS.FL",                                      "SYS.FL",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1372 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL "f",                              STD_INTEGRAL "f",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1373 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL "fdx",                            STD_INTEGRAL "fdx",                            0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1374 */  { itemToBeCoded,               NOPARAM,                     STD_MEASURED_ANGLE STD_RIGHT_ARROW,            STD_MEASURED_ANGLE STD_RIGHT_ARROW,            0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1375 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_ELLIPSIS STD_omega,              STD_alpha STD_ELLIPSIS STD_omega,              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // Small greek letters
-/* 1376 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "intl",                              STD_alpha "intl",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // Small intl letters
+/* 1375 */  { itemToBeCoded,               NOPARAM,                     STD_alpha STD_ELLIPSIS STD_omega,              STD_alpha STD_ELLIPSIS STD_omega,              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // Lower case greek letters
+/* 1376 */  { itemToBeCoded,               NOPARAM,                     STD_alpha "intl",                              STD_alpha "intl",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED}, // lower case intl letters
 /* 1377 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Tam",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1378 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamCmp",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1379 */  { itemToBeCoded,               NOPARAM,                     "",                                            "TamStoRcl",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

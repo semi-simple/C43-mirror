@@ -23,20 +23,78 @@
 
 
 void fnGoto(uint16_t label) {
-  #ifndef DMCP_BUILD
-    printf("fnGoto: GTO %02u\n", label);
-  #endif // DMCP_BUILD
+  if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
+    if(dynamicMenuItem >= 0) {
+      fnGotoDot(label);
+      return;
+    }
+
+    // Local Label
+    if(label < REGISTER_X || (label != REGISTER_L && REGISTER_A <= label && label <= REGISTER_J)) {
+      switch(label) {
+        case REGISTER_A: label = 100 - 'A' + 'A'; break;
+        case REGISTER_B: label = 100 - 'A' + 'B'; break;
+        case REGISTER_C: label = 100 - 'A' + 'C'; break;
+        case REGISTER_D: label = 100 - 'A' + 'D'; break;
+        case REGISTER_I: label = 100 - 'A' + 'I'; break;
+        case REGISTER_J: label = 100 - 'A' + 'J'; break;
+        default: {}
+      }
+
+      // Search for local label
+      for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
+        if(labelList[lbl].program - 1 == currentProgramNumber && labelList[lbl].followingStep < 0 && *(labelList[lbl].labelPointer) == label) { // Is in the current program and is a local label and is the searched label
+          fnGotoDot(-labelList[lbl].followingStep - 1);
+          return;
+        }
+      }
+
+      #ifndef DMCP_BUILD
+        if(label < REGISTER_X) {
+          printf("Error in function fnGoto: there is no local label %02u in current program\n", label);
+        }
+        else {
+          printf("Error in function fnGoto: there is no local label %c in current program\n", 'A' + (label - 100));
+        }
+      #endif // DMCP_BUILD
+    }
+    else { // Global label X, Y, Z, T, K, or L
+      switch(label) {
+        case REGISTER_X: label = 'X'; break;
+        case REGISTER_Y: label = 'Y'; break;
+        case REGISTER_Z: label = 'Z'; break;
+        case REGISTER_T: label = 'T'; break;
+        case REGISTER_K: label = 'K'; break;
+        case REGISTER_L: label = 'L'; break;
+        default: {}
+      }
+
+      for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
+        if(labelList[lbl].followingStep > 0 && *(labelList[lbl].labelPointer) == 1 && *(labelList[lbl].labelPointer + 1) == label) { // Is a global label and is the searched label
+          fnGotoDot(labelList[lbl].followingStep - 1);
+          return;
+        }
+      }
+
+      #ifndef DMCP_BUILD
+        printf("Error in function fnGoto: there is no global label %c\n", label);
+      #endif // DMCP_BUILD
+    }
+  }
+  else {
+    insertStepInProgram(ITM_GTO);
+  }
 }
 
 
 
 void fnGotoDot(uint16_t stepNumber) {
   if(dynamicMenuItem >= 0) {
-    if(dynamicMenuItem >= 6 * *dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenu].menuContent) {
+    if(dynamicMenuItem >= dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenuId].numItems) {
       return;
     }
 
-    uint8_t *labelName = dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenu].menuContent + 1;
+    uint8_t *labelName = dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenuId].menuContent;
     while(dynamicMenuItem > 0) {
       labelName += stringByteLength((char *)labelName) + 1;
       dynamicMenuItem--;
@@ -48,7 +106,7 @@ void fnGotoDot(uint16_t stepNumber) {
 
     int16_t c, len = stringByteLength((char *)labelName);
     for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
-      if(labelList[lbl].followingStep > 0 && labelList[lbl].labelPointer[c] == len) { // It's a global label and the length is OK
+      if(labelList[lbl].followingStep > 0 && *labelList[lbl].labelPointer == len) { // It's a global label and the length is OK
         for(c=0; c<len; c++) {
           if(labelName[c] != labelList[lbl].labelPointer[c + 1]) {
             break;

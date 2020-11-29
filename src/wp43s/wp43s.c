@@ -293,7 +293,7 @@ size_t                wp43sMemInBytes;
     fnReset(CONFIRMED);
     refreshScreen();
 
-    #if 1
+    #if 0
       longInteger_t li;
       uint32_t addr, min, max, *ptr;
 
@@ -552,7 +552,6 @@ size_t                wp43sMemInBytes;
           key = 0; // to trigger btnReleased
         }
         else {
-          keyAutoRepeat = 0;
           key = -1;
         }
       }
@@ -584,23 +583,24 @@ size_t                wp43sMemInBytes;
         }
       }
 
-      if(38 <= key && key <=43) {
+      if(38 <= key && key <=43) { // Function key
         sprintf(charKey, "%c", key+11);
         btnFnPressed(charKey);
         lcd_refresh();
       }
-      else if(1 <= key && key <= 37) {
+      else if(1 <= key && key <= 37) { // Not a function key
         sprintf(charKey, "%02d", key - 1);
         btnPressed(charKey);
         lcd_refresh();
       }
-      else if(key == 0) {
+      else if(key == 0) { // Autorepeat
         if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
           btnFnReleased(charKey);
         }
         else { // Last key pressed was not one of the 6 function keys
           btnReleased(charKey);
         }
+        keyAutoRepeat = 0;
         lcd_refresh();
       }
 

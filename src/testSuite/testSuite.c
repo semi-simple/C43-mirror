@@ -1972,8 +1972,8 @@ void processOneFile(void) {
 void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const char *catalogName) {
   int32_t i, nbElements;
 
-  for(nbElements=0, i=0; softmenu[i].menuId; i++) {
-    if(softmenu[i].menuId == -catalogId) {
+  for(nbElements=0, i=0; softmenu[i].menuItem; i++) {
+    if(softmenu[i].menuItem == -catalogId) {
       nbElements = softmenu[i].numItems;
       break;
     }

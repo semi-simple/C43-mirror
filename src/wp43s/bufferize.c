@@ -138,40 +138,74 @@
 
 
   int32_t findFirstItem(const char *twoLetters) {
-    const int16_t *first, *middle, *last;
+    int16_t menuId = softmenuStack[softmenuStackPointer].softmenuId;
 
-    first = softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
-    last = first + softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems - 1;
-    while(*last == ITM_NULL) {
-      last--;
-    }
+    if(menuId < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
+      uint8_t *firstString, *middleString;
+      int16_t first, middle, last;
 
-    middle = first + (last - first) / 2;
-    //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
-    //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
-    //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
-    //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
-    while(first + 1 < last) {
-      if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
-        last = middle;
+      first = 0;
+      firstString = dynamicSoftmenu[menuId].menuContent;
+
+      last = dynamicSoftmenu[menuId].numItems - 1;
+
+      middle = first + (last - first) / 2;
+      middleString = getNthString(dynamicSoftmenu[menuId].menuContent, middle);
+
+      while(first + 1 < last) {
+        if(compareString(twoLetters, (char *)middleString, CMP_CLEANED_STRING_ONLY) <= 0) {
+          last = middle;
+        }
+        else {
+          first = middle;
+          firstString = middleString;
+        }
+
+        middle = first + (last - first) / 2;
+        middleString = getNthString(dynamicSoftmenu[menuId].menuContent, middle);
+      }
+
+      if(compareString(twoLetters, (char *)firstString, CMP_CLEANED_STRING_ONLY) <= 0) {
+        return first;
       }
       else {
-        first = middle;
+        return last;
+      }
+    }
+
+    else { // Static softmenu
+      const int16_t *first, *middle, *last;
+      first = softmenu[menuId].softkeyItem;
+      last = first + softmenu[menuId].numItems - 1;
+      while(*last == ITM_NULL) {
+        last--;
       }
 
       middle = first + (last - first) / 2;
-    //printf("\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
-    //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
-    //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
-    }
+      //const int16_t *f = softmenu[menuId].softkeyItem;
+      //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+      //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+      //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
+      while(first + 1 < last) {
+        if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+          last = middle;
+        }
+        else {
+          first = middle;
+        }
 
-    if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
-      //printf("first\n");
-      return first - softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
-    }
-    else {
-      //printf("last\n");
-      return last - softmenu[softmenuStack[softmenuStackPointer].softmenu].softkeyItem;
+        middle = first + (last - first) / 2;
+      //printf("\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+      //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+      //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
+      }
+
+      if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+        return first - softmenu[menuId].softkeyItem;
+      }
+      else {
+        return last - softmenu[menuId].softkeyItem;
+      }
     }
   }
 

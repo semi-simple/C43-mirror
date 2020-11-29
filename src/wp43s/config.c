@@ -6421,7 +6421,7 @@ void addTestPrograms(void) {
 
     scanLabelsAndPrograms();
     //listPrograms();
-    //listLabelsAndPrograms();
+    listLabelsAndPrograms();
   #endif // !DMCP_BUILD
 }
 
@@ -6586,7 +6586,11 @@ void fnReset(uint16_t confirmation) {
     initFontBrowser();
     currentFlgScr = 0;
     currentRegisterBrowserScreen = 9999;
-    initSoftmenuStack(0); // 0=MyMenu
+
+    softmenuStackPointer = 0;
+    softmenuStack[0].softmenuId = 0; // MyMemu
+    softmenuStack[0].firstItem = 0;
+
     aimBuffer[0] = 0;
     lastErrorCode = 0;
 

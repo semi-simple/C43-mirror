@@ -35,19 +35,20 @@
       int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
       int16_t fn = *(data) - '0';
       const softmenu_t *sm;
-      int16_t row;
+      int16_t row, menuId = softmenuStack[softmenuStackPointer].softmenuId;
+      int16_t firstItem = softmenuStack[softmenuStackPointer].firstItem;
 
-      switch(-softmenu[softmenuStack[softmenuStackPointer].softmenu].menuId) {
+      switch(-softmenu[menuId].menuItem) {
         case MNU_PROG:
-          dynamicMenuItem = softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1);
-          item = (dynamicMenuItem >= dynamicSoftmenu[softmenuStack[softmenuStackPointer].softmenu].numItems ? ITM_NOP : MNU_DYNAMIC);
+          dynamicMenuItem = firstItem + itemShift + (fn - 1);
+          item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
           break;
 
         default:
-          sm = &softmenu[softmenuStack[softmenuStackPointer].softmenu];
-          row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer].firstItem/6) - 1;
-          if(itemShift/6 <= row && softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1) < sm->numItems) {
-            item = (sm->softkeyItem)[softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1)] % 10000;
+          sm = &softmenu[menuId];
+          row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;
+          if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
+            item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
 
             if(item == ITM_PROD_SIGN) {
               item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
@@ -397,10 +398,8 @@
           runFunction(item);
         }
       }
-      else if(keyAutoRepeat == 1) {
-        item = determineItem((char *)data);
-        hideFunctionName();
-        runFunction(item);
+      else if(keyAutoRepeat) {
+        btnPressed(data);
       }
 
       refreshScreen();
@@ -960,18 +959,19 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
 #ifndef TESTSUITE_BUILD
   static void menuUp(void) {
-    int16_t sm = softmenu[softmenuStack[softmenuStackPointer].softmenu].menuId;
+    int16_t menuId = softmenuStack[softmenuStackPointer].softmenuId;
+    int16_t sm = softmenu[menuId].menuItem;
     if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER) {
       alphaCase = AC_UPPER;
-      softmenuStack[softmenuStackPointer].softmenu--; // Switch to the upper case menu
+      softmenuStack[softmenuStackPointer].softmenuId--; // Switch to the upper case menu
     }
     else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_LOWER) {
       alphaCase = AC_UPPER;
     }
     else {
-      int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+      int16_t itemShift = (alphaSelectionMenu == ASM_NONE ? 18 : 6);
 
-      if((softmenuStack[softmenuStackPointer].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems) {
+      if((softmenuStack[softmenuStackPointer].firstItem + itemShift) < (menuId < NUMBER_OF_DYNAMIC_SOFTMENUS ? dynamicSoftmenu[menuId].numItems : softmenu[menuId].numItems)) {
         softmenuStack[softmenuStackPointer].firstItem += itemShift;
       }
       else {
@@ -993,6 +993,8 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
+    int16_t menuId;
+
     switch(calcMode) {
       case CM_NORMAL:
       case CM_AIM:
@@ -1003,7 +1005,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       case CM_ASM_OVER_AIM:
       case CM_ASM_OVER_PEM:
         resetAlphaSelectionBuffer();
-        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems > 18) {
+        menuId = softmenuStack[softmenuStackPointer].softmenuId;
+        if(softmenuStackPointer > 0 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+                                        || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
           menuUp();
         }
         else {
@@ -1047,7 +1051,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems > 18) {
+        menuId = softmenuStack[softmenuStackPointer].softmenuId;
+        if(softmenuStackPointer > 0 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+                                        || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
           menuUp();
         }
         else {
@@ -1066,16 +1072,17 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
 #ifndef TESTSUITE_BUILD
   static void menuDown(void) {
-    int16_t sm = softmenu[softmenuStack[softmenuStackPointer].softmenu].menuId;
+    int16_t menuId = softmenuStack[softmenuStackPointer].softmenuId;
+    int16_t sm = softmenu[menuId].menuItem;
     if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER) {
       alphaCase = AC_LOWER;
-      softmenuStack[softmenuStackPointer].softmenu++; // Switch to the lower case menu
+      softmenuStack[softmenuStackPointer].softmenuId++; // Switch to the lower case menu
     }
     else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH) && alphaCase == AC_UPPER) {
       alphaCase = AC_LOWER;
     }
     else {
-      int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
+      int16_t itemShift = (alphaSelectionMenu == ASM_NONE ? 18 : 6);
 
       if((softmenuStack[softmenuStackPointer].firstItem - itemShift) >= 0) {
         softmenuStack[softmenuStackPointer].firstItem -= itemShift;
@@ -1084,7 +1091,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         softmenuStack[softmenuStackPointer].firstItem = 0;
       }
       else {
-        softmenuStack[softmenuStackPointer].firstItem = ((softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
+        if(menuId < NUMBER_OF_DYNAMIC_SOFTMENUS) {
+          softmenuStack[softmenuStackPointer].firstItem = ((dynamicSoftmenu[menuId].numItems - 1)/6) / (itemShift/6) * itemShift;
+        }
+        else {
+          softmenuStack[softmenuStackPointer].firstItem = ((       softmenu[menuId].numItems - 1)/6) / (itemShift/6) * itemShift;
+        }
       }
 
       setCatalogLastPos();
@@ -1102,6 +1114,8 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
+    int16_t menuId;
+
     switch(calcMode) {
       case CM_NORMAL:
       case CM_AIM:
@@ -1112,7 +1126,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       case CM_ASM_OVER_AIM:
       case CM_ASM_OVER_PEM:
         resetAlphaSelectionBuffer();
-        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems > 18) {
+        menuId = softmenuStack[softmenuStackPointer].softmenuId;
+        if(softmenuStackPointer > 0 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+                                        || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
           menuDown();
         }
         else {
@@ -1157,7 +1173,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(softmenuStackPointer > 0 && softmenu[softmenuStack[softmenuStackPointer].softmenu].numItems > 18) {
+        menuId = softmenuStack[softmenuStackPointer].softmenuId;
+        if(softmenuStackPointer > 0 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+                                        || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
           menuDown();
         }
         else {

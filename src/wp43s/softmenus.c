@@ -481,8 +481,8 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
     switch(-dynamicSoftmenu[menu].menuItem) {
       case MNU_MyAlpha: dynamicSoftmenu[menu].menuContent = malloc(17);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "My" STD_alpha "\000to\000be\000coded", 17);
-                        //xcopy(dynamicSoftmenu[menu].menuContent, "", 1);
+                        //xcopy(dynamicSoftmenu[menu].menuContent, "My" STD_alpha "\000to\000be\000coded", 17);
+                        xcopy(dynamicSoftmenu[menu].menuContent, "", 1);
                         dynamicSoftmenu[menu].numItems = 4;
                         break;
 
@@ -518,8 +518,8 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         break;
 
       case MNU_MyMenu:  dynamicSoftmenu[menu].menuContent = malloc(19);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "MyMenu\000to\000be\000coded", 19);
-                        //xcopy(dynamicSoftmenu[menu].menuContent, "", 1);
+                        //xcopy(dynamicSoftmenu[menu].menuContent, "MyMenu\000to\000be\000coded", 19);
+                        xcopy(dynamicSoftmenu[menu].menuContent, "", 1);
                         dynamicSoftmenu[menu].numItems = 4;
                         break;
 

@@ -345,7 +345,16 @@
 
   #ifdef DMCP_BUILD
     void btnPressed(void *data) {
-      int16_t item = determineItem((char *)data);
+      int16_t item;
+
+      if(keyAutoRepeat) {
+        //beep(880, 50);
+        item = previousItem;
+      }
+      else {
+        item = determineItem((char *)data);
+        previousItem = item;
+      }
 
       showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {

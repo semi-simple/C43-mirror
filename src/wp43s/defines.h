@@ -635,6 +635,7 @@
 #ifdef DMCP_BUILD
   #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)
   #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
+  #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
 #endif // DMCP_BUILD
 
 //************************

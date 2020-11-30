@@ -233,6 +233,8 @@
   extern bool_t                printerIconEnabled;
   extern bool_t                shiftF;
   extern bool_t                shiftG;
+  extern bool_t                previousShiftF;
+  extern bool_t                previousShiftG;
   extern bool_t                showContent;
   extern bool_t                rbr1stDigit;
   extern bool_t                updateDisplayValueX;
@@ -374,6 +376,7 @@
   #ifdef DMCP_BUILD
     extern bool_t              backToDMCP;
     extern int                 keyAutoRepeat; // Key repetition
+    extern int16_t             previousItem;
   #endif // DMCP_BUILD
 
   #include "constantPointers.h"

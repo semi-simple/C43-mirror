@@ -149,7 +149,7 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
   }
   calcMode = CM_GRAPH;
   #ifndef TESTSUITE_BUILD
-    if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_PLOT) {
+    if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem != -MNU_PLOT) {
       showSoftmenu(NULL, -MNU_PLOT, true);                         //JM MENU Prevent resetting the softmenu to the default no 1 page position
     }
   #endif

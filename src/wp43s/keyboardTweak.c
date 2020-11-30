@@ -226,7 +226,7 @@ void fg_processing_jm(void) {
             if(HOME3) {
               //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer-1].softmenu, mm_MNU_HOME);
               jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
-              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {              //JM shifts
+              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenuId == mm_MNU_HOME)) {              //JM shifts
                  //printf("popping\n");
                  popSoftmenu();                                                                                                //JM shifts
               }
@@ -326,7 +326,7 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
 
   ix = itemShift + (fn - 1);
   ix0 = softmenuStack[softmenuStackPointer - 1].firstItem;
-  ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+  ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
   
   if(ix_sm == -MNU_HOME) {
     if(menu_A_HOME[ix0+ix]!=-1) {
@@ -474,7 +474,7 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   const softmenu_t *sm;
 
   if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenu];
+    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId];
     row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
 
     if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {

@@ -671,7 +671,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
           jm_show_calc_state("screen.c: Shft_handler: HOME3");
-          if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenu == mm_MNU_HOME)) {                            //JM shifts
+          if((softmenuStackPointer >= 0) && (softmenuStack[softmenuStackPointer].softmenuId == mm_MNU_HOME)) {              //JM shifts    //softmenuStackPointerJM
             popSoftmenu();                                                                                                  //JM shifts
           }
           else {

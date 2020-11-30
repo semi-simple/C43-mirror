@@ -30,8 +30,8 @@ void jm_show_calc_state(char comment[]) {
 #ifdef PC_BUILD_TELLTALE
   printf("\n%s\n",comment);
   printf(".  calcMode: %d   last_CM=%d (CM_AIM=%d)  softmenuStackPointer=%d   doRefreshSoftMenu=%d    lastErrorCode=%d\n",calcMode, last_CM, CM_AIM, softmenuStackPointer,doRefreshSoftMenu,lastErrorCode);
-  printf(".    softmenuStack[softmenuStackPointer-1].softmenu=%d       MY_ALPHA_MENU=%d    softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId=%d -MNU_ALPHA=%d\n",softmenuStack[softmenuStackPointer-1].softmenu,MY_ALPHA_MENU,softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId, -MNU_ALPHA);
-  printf(".  ");int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ", softmenuStack[ix].softmenu); ix++;} printf("\n");
+  printf(".    softmenuStack[softmenuStackPointer-1].softmenuId=%d       MY_ALPHA_MENU=%d    softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem=%d -MNU_ALPHA=%d\n",softmenuStack[softmenuStackPointer-1].softmenuId,MY_ALPHA_MENU,softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem, -MNU_ALPHA);
+  printf(".  ");int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ", softmenuStack[ix].softmenuId); ix++;} printf("\n");
   printf(".  mmMNU_HOME=%d, mmMNU_ALPHA=%d\n",mm_MNU_HOME, mm_MNU_ALPHA);
 #endif  
 }

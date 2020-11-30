@@ -31,43 +31,43 @@
       int16_t row, menuId = softmenuStack[softmenuStackPointer].softmenuId;
       int16_t firstItem = softmenuStack[softmenuStackPointer].firstItem;
 
-    if(softmenuStackPointer > 0) {
-      	switch(-softmenu[menuId].menuItem) {
-        case MNU_PROG:
-          dynamicMenuItem = firstItem + itemShift + (fn - 1);
-          item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
-          break;
+      if(softmenuStackPointer > 0) {
+        	switch(-softmenu[menuId].menuItem) {
+          case MNU_PROG:
+            dynamicMenuItem = firstItem + itemShift + (fn - 1);
+            item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
+            break;
 
-        default:
-          sm = &softmenu[menuId];
-          row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;
-          if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
-            item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
+          default:
+            sm = &softmenu[menuId];
+            row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;
+            if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
+              item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
 
-        int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
-        if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
-                                                           /*JMEXEC XXX ^^*/
+            int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
+            if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
+                                                             /*JMEXEC XXX ^^*/
 
-        if(item == ITM_PROD_SIGN) {
-          item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
+            if(item == ITM_PROD_SIGN) {
+              item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
+            }
+          }
         }
       }
-    }
 
-
-    else {              //if there is no SoftMenu showing
-      if(fn>=1 && fn<=6) {
-        if (itemShift ==0) {
-        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+      else {              //if there is no SoftMenu showing
+        if(fn>=1 && fn<=6) {
+          if (itemShift ==0) {
+          //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
+            temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+          } else {
+          //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
+            temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+          }
         } else {
-        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
-          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+          item = 0;
         }
-      } else {
-        item = 0;
       }
-    }
     return item;
   }
 
@@ -212,7 +212,7 @@
             }
             else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
               reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-              if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
+              if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
                 calcModeNormal();
               }                                                                                     //JM ^
   #ifdef PC_BUILD
@@ -526,7 +526,7 @@
    ***********************************************/
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      jm_show_calc_state("keyboard.c: btnReleased begin");
+      jm_show_calc_state("##### keyboard.c: btnReleased begin");
 
       int16_t item;
       Shft_timeouts = false;                         //JM SHIFT NEW
@@ -535,6 +535,7 @@
       if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
         hideFunctionName();
+        //printf("^^^^ item=%d\n",item);
         if(item < 0) {
           showSoftmenu(NULL, item, MS_PUSH);
         }
@@ -545,7 +546,7 @@
 
       if(!checkShifts((char *)data)) {
         printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
-        jm_show_calc_state("keyboard.c: btnReleased end");
+        jm_show_calc_state("      ##### keyboard.c: btnReleased end");
         refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
       }
     }
@@ -664,16 +665,16 @@
         break;
 
     case CHR_case: {
-      int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;                                      //JMvv
+      int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;                                      //JMvv
       if(alphaCase == AC_LOWER) {
         alphaCase = AC_UPPER;
         if(sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) {
-          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch case menu
+          softmenuStack[softmenuStackPointer - 1].softmenuId--; // Switch case menu
         }
       } else {
         alphaCase = AC_LOWER;
         if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) {
-          softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch case menu
+          softmenuStack[softmenuStackPointer - 1].softmenuId++; // Switch case menu
         }
       }
       showAlphaModeonGui(); //dr JM, see keyboardtweaks
@@ -1012,14 +1013,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           }                                  //JM
         }                                    //JMvv
         else {
-          if(softmenuStackPointer > 0 && !(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME)) {
+          if(softmenuStackPointer > 0 && !(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem == -MNU_HOME)) {
             popSoftmenu();
           }
           if(softmenuStackPointer == 0) {
             showSoftmenu(NULL, -MNU_HOME, false); //Reset to BASE MENU HOME
           } 
           else {
-            if(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_HOME) {
+            if(softmenuStackPointer == 1 && softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem == -MNU_HOME) {
               softmenuStack[0].firstItem=0;        //Reset to default screen of HOME
             }
           }
@@ -1028,8 +1029,8 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       break;
 
       case CM_AIM:
-      tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;  //JM TOCHECK
-      if(softmenuStack[softmenuStackPointer-1].softmenu == MY_ALPHA_MENU || tmp1 == -MNU_T_EDIT) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA) { //JM
+      tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;  //JM TOCHECK
+      if(softmenuStack[softmenuStackPointer-1].softmenuId == MY_ALPHA_MENU || tmp1 == -MNU_T_EDIT) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuId != -MNU_ALPHA) { //JM
         if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}    //JM
         calcModeNormal();
 
@@ -1058,7 +1059,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           }
         }
         else {
-          if(softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) fnKeyExit(0);                       //Try again after exiting a menu. continue until stack empty
+          if(softmenuStack[softmenuStackPointer - 1].softmenuId != MY_ALPHA_MENU) fnKeyExit(0);                       //Try again after exiting a menu. continue until stack empty
         }
       }
         break;
@@ -1093,7 +1094,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_ASM_OVER_TAM:
       case CM_ASM_OVER_TAM_OVER_PEM:
-        tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;      //JM
+        tmp1 = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;      //JM
         transitionSystemState = 0;
         calcModeTam();
         sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
@@ -1342,12 +1343,12 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
 static void menuUp_org(void) {
 
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
-        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenuId != MY_ALPHA_MENU) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuId != -MNU_ALPHA)) {
+        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
         if((sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
           alphaCase = AC_UPPER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
-          softmenuStack[softmenuStackPointer - 1].softmenu--; // Switch to the upper case menu
+          softmenuStack[softmenuStackPointer - 1].softmenuId--; // Switch to the upper case menu
         }
 
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_LOWER && arrowCasechange) {  //JMcase
@@ -1357,7 +1358,7 @@ static void menuUp_org(void) {
         else {
           int16_t itemShift = alphaSelectionMenu == ASM_NONE ? 18 : 6;
 
-          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems) {         //JM
+          if((softmenuStack[softmenuStackPointer - 1].firstItem + itemShift) < softmenu[softmenuStack[softmenuStackPointer-1].softmenuId].numItems) {         //JM
             softmenuStack[softmenuStackPointer - 1].firstItem += itemShift;
             //JM Include or exclude HOME menu screens  //JMHOME
             #define A1 3   //HAAKON //jm_HOME_MIR
@@ -1366,12 +1367,12 @@ static void menuUp_org(void) {
             #define B2 11  //NIGEL
             #define C1 12  //JACO   //jm_HOME_FIX
             #define C2 18  //JACO
-            int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+            int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
             //printf("--1:%d %d %d menuId:%d item:%d  \n",jm_HOME_MIR,jm_HOME_SUM,jm_HOME_FIX,smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
             if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A2+1)*18;} 
             if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B2+1)*18;} 
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C1*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C2+1)*18;}
-            //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+            //smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuId;
             //printf(   "--2:      menuId:%d item:%d  \n",smm,softmenuStack[softmenuStackPointer - 1].firstItem/18);
           }
           else {
@@ -1412,9 +1413,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
         //JM Arrow up and down if no menu other than AHOME of MyA       //JMvv
         if(!arrowCasechange && (softmenuStackPointer > 0) && (
-          softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
-          softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
-          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(ITM_UP1);}
+          softmenuStack[softmenuStackPointer - 1].softmenuId == mm_MNU_ALPHA        ||
+          softmenuStack[softmenuStackPointer - 1].softmenuId == MY_ALPHA_MENU_CNST  ||
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem == -MNU_T_EDIT)) {fnT_ARROW(ITM_UP1);}
               //ignoring the base menu, MY_ALPHA_MENU below
               // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
               // make arrowCasechnage true
@@ -1531,12 +1532,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
 void menuDown_org(void) {
 
-      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenu != MY_ALPHA_MENU) { //&& softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_T_EDIT)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId != -MNU_ALPHA)) {
-        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+      if(softmenuStackPointer > 0  && softmenuStack[softmenuStackPointer - 1].softmenuId != MY_ALPHA_MENU) { //&& softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuId != -MNU_T_EDIT)) { // || softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuId != -MNU_ALPHA)) {
+        int16_t sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
         if((sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
           showAlphaModeonGui(); //dr JM, see keyboardtweaks
-          softmenuStack[softmenuStackPointer - 1].softmenu++; // Switch to the lower case menu
+          softmenuStack[softmenuStackPointer - 1].softmenuId++; // Switch to the lower case menu
         }
         else if((sm == -MNU_ALPHADOT || sm == -MNU_ALPHAMATH || sm == -MNU_ALPHA) && alphaCase == AC_UPPER && arrowCasechange) {  //JMcase
           alphaCase = AC_LOWER;
@@ -1548,7 +1549,7 @@ void menuDown_org(void) {
           if((softmenuStack[softmenuStackPointer - 1].firstItem - itemShift) >= 0) {
             softmenuStack[softmenuStackPointer - 1].firstItem -= itemShift;
             //JM Include or exclude HOME menu screens  //JMHOME
-            int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId;
+            int16_t smm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
             if (!jm_HOME_FIX && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == C2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (C1-1)*18;}
             if (!jm_HOME_SUM && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == B2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (B1-1)*18;} 
             if (!jm_HOME_MIR && smm == -MNU_HOME && softmenuStack[softmenuStackPointer - 1].firstItem == A2*18) {softmenuStack[softmenuStackPointer - 1].firstItem = (A1-1)*18;}
@@ -1558,7 +1559,7 @@ void menuDown_org(void) {
               softmenuStack[softmenuStackPointer - 1].firstItem = 0;
             }
             else {
-              softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1)/6) / (itemShift/6) * itemShift;
+              softmenuStack[softmenuStackPointer - 1].firstItem = ((softmenu[softmenuStack[softmenuStackPointer-1].softmenuId].numItems - 1)/6) / (itemShift/6) * itemShift;
             }
           }
 
@@ -1596,9 +1597,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
 
         //JM Arrow up and down if no menu other than AHOME of MyA       //JMvv
         if(!arrowCasechange && (softmenuStackPointer > 0) && (
-          softmenuStack[softmenuStackPointer - 1].softmenu == mm_MNU_ALPHA        ||
-          softmenuStack[softmenuStackPointer - 1].softmenu == MY_ALPHA_MENU_CNST  ||
-          softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId == -MNU_T_EDIT)) {fnT_ARROW(ITM_DOWN1);}
+          softmenuStack[softmenuStackPointer - 1].softmenuId == mm_MNU_ALPHA        ||
+          softmenuStack[softmenuStackPointer - 1].softmenuId == MY_ALPHA_MENU_CNST  ||
+          softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem == -MNU_T_EDIT)) {fnT_ARROW(ITM_DOWN1);}
               //ignoring the base menu, MY_ALPHA_MENU below
               // make this keyActionProcessed = false; to have arrows up and down placed in bufferize
               // make arrowCasechnage true

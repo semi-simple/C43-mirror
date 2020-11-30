@@ -195,6 +195,7 @@ uint8_t *findNextStep(uint8_t *step) {
     case ITM_DSE:         //   8
     case ITM_DSL:         //   9
     case ITM_DSZ:         //  10
+    case ITM_INPUT:       //  43
     case ITM_STO:         //  44
     case ITM_STOADD:      //  45
     case ITM_STOSUB:      //  46
@@ -253,7 +254,6 @@ uint8_t *findNextStep(uint8_t *step) {
     case ITM_Rdown:       //  40
     case ITM_CLX:         //  41
     case ITM_FILL:        //  42
-    case ITM_INPUT:       //  43
     case ITM_SQUARE:      //  58
     case ITM_CUBE:        //  59
     case ITM_YX:          //  60
@@ -313,7 +313,7 @@ uint8_t *findNextStep(uint8_t *step) {
     default:
       if((item8 & 0x80) == 0) {
         #ifndef DMCP_BUILD
-          printf("\nERROR: single byte instruction %u is unknown!\n", item8);
+          printf("\nERROR in findNextStep: single byte instruction %u is unknown!\n", item8);
         #endif // !DMCP_BUILD
         return NULL;
       }
@@ -327,6 +327,10 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_LocR:        //  1504
         case ITM_SCI:         //  1577
           return countOpBytes(step, PARAM_NUMBER);
+
+        case ITM_VIEW:        //  1622
+        case ITM_Xex:         //  1636
+          return countOpBytes(step, PARAM_REGISTER);
 
         case CST_01:          //   128
         case CST_02:          //   129
@@ -564,6 +568,8 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_CLSTK:       //  1418
         case ITM_END:         //  1448
         case ITM_NOP:         //  1532
+        case ITM_RAN:         //  1549
+        case ITM_SIGN:        //  1590
         case ITM_STOP:        //  1604
         case ITM_TICKS:       //  1610
           return step;
@@ -573,7 +579,7 @@ uint8_t *findNextStep(uint8_t *step) {
 
         default:
           #ifndef DMCP_BUILD
-            printf("\nERROR: double byte instruction %u is unknown!\n", item16);
+            printf("\nERROR in findNextStep: double byte instruction %u is unknown!\n", item16);
           #endif // !DMCP_BUILD
           return NULL;
       }

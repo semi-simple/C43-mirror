@@ -18,15 +18,20 @@
  * \file softmenu.h
  ***********************************************/
 
-void showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine, int8_t showCb, int16_t showValue) ;     //dr
-void showSoftmenuCurrentPart(void);
-void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
-void initSoftmenuStack      (int16_t softmenu);
-void pushSoftmenu           (int16_t softmenu);
-void popSoftmenu            (void);
-void setCatalogLastPos      (void);
+uint8_t *getNthString           (uint8_t *ptr, int16_t n); // Starting with string 0 (the 1st string is returned for n=0)
+void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
+#ifndef TESTSUITE_BUILD
+  void   showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
+  void   showSoftmenuCurrentPart(void);
+  void   showSoftmenu           (const char *menu, int16_t id, int16_t initOrPushOnMenuStack);
+  void   initSoftmenuStack      (int16_t softmenuId);
+  void   pushSoftmenu           (int16_t softmenuId);
+  void   popSoftmenu            (void);
+  void   setCatalogLastPos      (void);
 
 void    fnDumpMenus(uint16_t unusedButMandatoryParameter);  //JM
-void    rolloutSoftmenusIncluding(int16_t target);      //JM
-int16_t mm(int16_t id);                                 //JM
-const   int16_t menu_A_HOME[360];                       //JM
+void    rolloutSoftmenusIncluding(int16_t target);          //JM
+int16_t mm(int16_t id);                                     //JM
+const   int16_t menu_A_HOME[360];                           //JM
+
+#endif // !TESTSUITE_BUILD

@@ -370,12 +370,15 @@
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
 #define REGISTER_LINE_HEIGHT                      36 //
 
+#define MS_INIT                                    0 // Initializes the softmenu stack
+#define MS_PUSH                                    1 // Pushes the softmenu on the stack
+
 #define Y_POSITION_OF_REGISTER_T_LINE             24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
 #define Y_POSITION_OF_REGISTER_Z_LINE             60
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_VARIABLE_SOFTMENUS              15
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               15
 #define MY_ALPHA_MENU_CNST                         0  //JM TOCHECK This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -505,6 +508,9 @@
 #define CM_BUG_ON_SCREEN                          15 // Bug message on screen
 #define CM_CONFIRMATION                           16 // Waiting for confirmation or canceling
 #define CM_PEM                                    17 // Program entry mode
+#define CM_GRAPH                                  97 //JM Display graph       //JM
+#define CM_LISTXY                                 98 //JM Display stat list   //JM
+#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -537,9 +543,6 @@
 #define NP_COMPLEX_INT_PART                        7 // Integer part of the complex imaginary part
 #define NP_COMPLEX_FLOAT_PART                      8 // Decimal part of the complex imaginary part
 #define NP_COMPLEX_EXPONENT                        9 // Ten exponent of the complex imaginary part
-#define CM_GRAPH                                  97 //JM Display graph       //JM
-#define CM_LISTXY                                 98 //JM Display stat list   //JM
-#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
 
 // Temporary information
 #define TI_NO_INFO                                 0
@@ -598,6 +601,7 @@
 #define ASM_SYFL                                   4
 #define ASM_AINT                                   5
 #define ASM_aint                                   6
+#define ASM_PROG                                   7
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1

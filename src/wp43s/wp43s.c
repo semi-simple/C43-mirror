@@ -105,8 +105,9 @@ char                  oldTime[8];
 char                  dateTimeString[12];
 char                  displayValueX[DISPLAY_VALUE_LEN];
 
-uint8_t               softmenuStackPointer;
-uint8_t               softmenuStackPointerBeforeAIM;
+int8_t                softmenuStackPointer;
+int8_t                softmenuStackPointerBeforeAIM;
+
 uint8_t               transitionSystemState;
 uint8_t               numScreensStandardFont;
 uint8_t               currentFntScr;
@@ -157,6 +158,7 @@ int16_t               lastMenuMenuPos;
 int16_t               lastCnstMenuPos;
 int16_t               lastSyFlMenuPos;
 int16_t               lastAIntMenuPos;
+int16_t               lastProgMenuPos;
 int16_t               showFunctionNameItem;
 
 uint8_t               displayStackSHOIDISP;          //JM SHOIDISP
@@ -217,6 +219,7 @@ int16_t               imaginaryExponentSignLocation;
 int16_t               imaginaryMantissaSignLocation;
 int16_t               exponentLimit;
 int16_t               showFunctionNameCounter;
+int16_t               dynamicMenuItem;
 int16_t              *menu_RAM;
 
 uint16_t              globalFlags[7];
@@ -361,9 +364,9 @@ void program_main(void) {
 //bool_t wp43sKbdLayout;                                       //dr - no keymap is used
   uint16_t currentVolumeSetting, savedVoluleSetting;             //used for beep signaling screen shot
 
-  wp43sMemInBytes = 0;
-  gmpMemInBytes = 0;
-  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+    wp43sMemInBytes = 0;
+    gmpMemInBytes = 0;
+    mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   lcd_clear_buf();
 /*lcd_putsAt(t24, 4, "Press the bottom left key.");            //vv dr - no keymap is used
@@ -376,8 +379,8 @@ void program_main(void) {
     }
   }
 
-  wp43sKbdLayout = (key == 37); // bottom left key
-  key = 0;
+    wp43sKbdLayout = (key == 37); // bottom left key
+    key = 0;
 
   lcd_clear_buf();*/                                           //^^
   fnReset(CONFIRMED);
@@ -388,7 +391,7 @@ void program_main(void) {
   telltale_pos = 0;                                            //JM test
   #endif                                                       //JM test
 
-  #if 1
+  #if 0
     longInteger_t li;
     uint32_t addr, min, max, *ptr;
 
@@ -614,8 +617,20 @@ void program_main(void) {
     //sprintf(sysLastKeyCh, "%2d", sys_last_key());
     //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
 
-    if(key == 44 ) { //sys_last_key DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-      resetShiftState();                                       //JM to avoid f or g top left of the screen
+//JMCHECK AUTOREPEAT
+//      if(keyAutoRepeat) {
+//        if(key == 27 || key == 32) { // UP or DOWN keys
+//          key = 0; // to trigger btnReleased
+//        }
+//        else {
+//          keyAutoRepeat = 0;
+//          key = -1;
+//        }
+//      }
+
+      if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
+        shiftF = false;
+        shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
 
         currentVolumeSetting = get_beep_volume();
         savedVoluleSetting = currentVolumeSetting;
@@ -634,12 +649,12 @@ void program_main(void) {
         sys_delay(5);
         stop_buzzer();
 
-      while(currentVolumeSetting != savedVoluleSetting) { //Restore volume
-        beep_volume_down();
-        currentVolumeSetting = get_beep_volume();
+        while(currentVolumeSetting != savedVoluleSetting) { //Restore volume
+          beep_volume_down();
+          currentVolumeSetting = get_beep_volume();
+        }
       }
-    }
-   
+
    #ifdef JMSHOWCODES 
     fnDisplayStack(1);
     //Show key codes
@@ -657,16 +672,18 @@ void program_main(void) {
      }
     #endif
 
-    if(38 <= key && key <=43) {
+    if(38 <= key && key <=43) {  // Function key
       sprintf(charKey, "%c", key+11);
       btnFnPressed(charKey);
     //lcd_refresh_dma();
     }
-    else if(1 <= key && key <= 37) {
+    else if(1 <= key && key <= 37) { // Not a function key
       sprintf(charKey, "%02d", key - 1);
       btnPressed(charKey);
     //lcd_refresh_dma();
     }
+
+//JMCHECK AUTOREPEAT IN 43S
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
       btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
     }
@@ -704,13 +721,13 @@ void program_main(void) {
     }                                                       //^^
   }
 }
-#endif
+#endif // DMCP_BUILD
 
 #ifdef TESTSUITE_BUILD
-#include "testSuite.h"
+  #include "testSuite.h"
 
 int main(int argc, char* argv[]) {
-  #if defined __APPLE__
+  #ifdef __APPLE__
     // we take the directory where the application is as the root for this application.
     // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
     if(argc>=1) {
@@ -724,7 +741,7 @@ int main(int argc, char* argv[]) {
         free(curdir);
       }
     }
-  #endif
+  #endif // __APPLE__
 
     wp43sMemInBytes = 0;
     gmpMemInBytes = 0;

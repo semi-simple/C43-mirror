@@ -4065,6 +4065,10 @@ void setupUI(void) {
       calcMode = CM_NORMAL;
     }
 
+    if(softmenuStackPointer == 0) {
+      popSoftmenu();
+    }
+
     clearSystemFlag(FLAG_ALPHA);
     hideCursor();
     cursorEnabled = false;
@@ -4110,6 +4114,10 @@ void setupUI(void) {
       yCursor = Y_POSITION_OF_AIM_LINE + 6;
       cursorFont = &standardFont;
       cursorEnabled = true;
+    }
+
+    if(softmenuStackPointer == 0) {
+      popSoftmenu();
     }
 
     setSystemFlag(FLAG_ALPHA);
@@ -4200,30 +4208,30 @@ void setupUI(void) {
       case TM_VALUE:
       case TM_VALUE_CHB:
       case TM_REGISTER:
-        showSoftmenu(NULL, -MNU_TAM, true);
+        showSoftmenu(NULL, -MNU_TAM, MS_PUSH);
         break;
 
       case TM_CMP:
-        showSoftmenu(NULL, -MNU_TAMCMP, true);
+        showSoftmenu(NULL, -MNU_TAMCMP, MS_PUSH);
         break;
 
       case TM_FLAGR:
       case TM_FLAGW:
         if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
-          showSoftmenu(NULL, -MNU_TAMFLAG, true);
+          showSoftmenu(NULL, -MNU_TAMFLAG, MS_PUSH);
         }
         break;
 
       case TM_STORCL:
-        showSoftmenu(NULL, -MNU_TAMSTORCL, true);
+        showSoftmenu(NULL, -MNU_TAMSTORCL, MS_PUSH);
         break;
 
       case TM_SHUFFLE:
-        showSoftmenu(NULL, -MNU_TAMSHUFFLE, true);
+        showSoftmenu(NULL, -MNU_TAMSHUFFLE, MS_PUSH);
         break;
 
       case TM_LABEL:
-        showSoftmenu(NULL, -MNU_TAMLABEL, true);
+        showSoftmenu(NULL, -MNU_TAMLABEL, MS_PUSH);
         break;
 
       default:
@@ -4233,12 +4241,20 @@ void setupUI(void) {
     }
 
     if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
-      if(tamMode != TM_SHUFFLE) {
-        strcat(tamBuffer, " __");
-      }
-      else {
+      if(tamMode == TM_SHUFFLE) {
         strcat(tamBuffer, " ____");
         transitionSystemState = 16;
+      }
+      else if(tamFunction == ITM_CNST) {
+        strcat(tamBuffer, " ___");
+        transitionSystemState = 22;
+      }
+      else if(tamFunction == ITM_BESTF) {
+        strcat(tamBuffer, " ____");
+        transitionSystemState = 25;
+      }
+      else {
+        strcat(tamBuffer, " __");
       }
     }
 

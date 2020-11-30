@@ -137,40 +137,74 @@
 
 
   int32_t findFirstItem(const char *twoLetters) {
-    const int16_t *first, *middle, *last;
+    int16_t menuId = softmenuStack[softmenuStackPointer].softmenuId;
 
-    first = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
-    last = first + softmenu[softmenuStack[softmenuStackPointer-1].softmenu].numItems - 1;
-    while(*last == ITM_NULL) {
-      last--;
-    }
+    if(menuId < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
+      uint8_t *firstString, *middleString;
+      int16_t first, middle, last;
 
-    middle = first + (last - first) / 2;
-    //const int16_t *f = softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
-    //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
-    //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
-    //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
-    while(first + 1 < last) {
-      if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
-        last = middle;
+      first = 0;
+      firstString = dynamicSoftmenu[menuId].menuContent;
+
+      last = dynamicSoftmenu[menuId].numItems - 1;
+
+      middle = first + (last - first) / 2;
+      middleString = getNthString(dynamicSoftmenu[menuId].menuContent, middle);
+
+      while(first + 1 < last) {
+        if(compareString(twoLetters, (char *)middleString, CMP_CLEANED_STRING_ONLY) <= 0) {
+          last = middle;
+        }
+        else {
+          first = middle;
+          firstString = middleString;
+        }
+
+        middle = first + (last - first) / 2;
+        middleString = getNthString(dynamicSoftmenu[menuId].menuContent, middle);
+      }
+
+      if(compareString(twoLetters, (char *)firstString, CMP_CLEANED_STRING_ONLY) <= 0) {
+        return first;
       }
       else {
-        first = middle;
+        return last;
+      }
+    }
+
+    else { // Static softmenu
+      const int16_t *first, *middle, *last;
+      first = softmenu[menuId].softkeyItem;
+      last = first + softmenu[menuId].numItems - 1;
+      while(*last == ITM_NULL) {
+        last--;
       }
 
       middle = first + (last - first) / 2;
-    //printf("\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
-    //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
-    //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
-    }
+      //const int16_t *f = softmenu[menuId].softkeyItem;
+      //printf("\n----------------------------------\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+      //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+      //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
+      while(first + 1 < last) {
+        if(compareString(twoLetters, indexOfItems[abs(*middle)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+          last = middle;
+        }
+        else {
+          first = middle;
+        }
 
-    if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
-      //printf("first\n");
-      return first - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
-    }
-    else {
-      //printf("last\n");
-      return last - softmenu[softmenuStack[softmenuStackPointer-1].softmenu].softkeyItem;
+        middle = first + (last - first) / 2;
+      //printf("\nfirst  = %3" PRIu64 "   %3d\n", (int64_t)(first - f), *first);
+      //printf("middle = %3" PRIu64 "   %3d\n", (int64_t)(middle - f), *middle);
+      //printf("last   = %3" PRIu64 "   %3d\n", (int64_t)(last - f), *last);
+      }
+
+      if(compareString(twoLetters, indexOfItems[abs(*first)].itemCatalogName, CMP_CLEANED_STRING_ONLY) <= 0) {
+        return first - softmenu[menuId].softkeyItem;
+      }
+      else {
+        return last - softmenu[menuId].softkeyItem;
+      }
     }
   }
 
@@ -353,7 +387,7 @@ void kill_ASB_icon(void) {
           }
         }
 
-        softmenuStack[softmenuStackPointer-1].firstItem = firstItem;
+        softmenuStack[softmenuStackPointer].firstItem = firstItem;
         setCatalogLastPos();
         startAlphaSelectionBuffer();               //JM
       }
@@ -2072,6 +2106,208 @@ void kill_ASB_icon(void) {
             tamNumber /= 10;
             sprintf(tamBuffer, "GTO. %03d__", tamNumber);
             transitionSystemState = 20;
+        }
+        break;
+
+      //////////////////////////////
+      // CNST ___
+      case 22:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamDigit;
+            if(tamNumber > tamNumberMax) {
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "CNST %d__", tamNumber);
+              transitionSystemState = 23;
+            }
+            break;
+
+          case TT_BACKSPACE :
+            calcModeNormal();
+            return;
+        }
+        break;
+
+      //////////////////////////////
+      // CNST d__
+      case 23:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "CNST %02d_", tamNumber);
+              transitionSystemState = 24;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            xcopy(tamBuffer, "CNST ___", 11);
+            transitionSystemState = 22;
+        }
+        break;
+
+      //////////////////////////////
+      // CNST dd_
+      case 24:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "CNST %d__", tamNumber);
+            transitionSystemState = 23;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF ____
+      case 25:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamDigit;
+            if(tamNumber > tamNumberMax) {
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %d___", tamNumber);
+              transitionSystemState = 26;
+            }
+            break;
+
+          case TT_BACKSPACE :
+            calcModeNormal();
+            return;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF d___
+      case 26:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %02d__", tamNumber);
+              transitionSystemState = 27;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            xcopy(tamBuffer, "BestF ____", 11);
+            transitionSystemState = 25;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF dd__
+      case 27:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else if(tamNumber*10 > tamNumberMax) {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            else {
+              sprintf(tamBuffer, "BestF %03d_", tamNumber);
+              transitionSystemState = 28;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber = 0;
+            sprintf(tamBuffer, "BestF %d___", tamNumber);
+            transitionSystemState = 26;
+        }
+        break;
+
+      //////////////////////////////
+      // BestF ddd_
+      case 28:
+        switch(tamEvent) {
+          case TT_DIGIT :
+            tamNumber = tamNumber*10 + tamDigit;
+            if(tamNumber > tamNumberMax) {
+              tamNumber /= 10;
+            }
+            else {
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+            }
+            break;
+
+          case TT_ENTER :
+              reallyRunFunction(ITM_CNST, tamNumber);
+              calcModeNormal();
+              return;
+
+          case TT_BACKSPACE :
+            tamNumber /= 10;
+            sprintf(tamBuffer, "BestF %02d__", tamNumber);
+            transitionSystemState = 27;
         }
         break;
 

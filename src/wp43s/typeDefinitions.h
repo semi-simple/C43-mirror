@@ -236,21 +236,21 @@ typedef enum {
  * \brief Structure keeping the informations for one softmenu
  ***********************************************/
 typedef struct {
-  int16_t menuId;             ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
+  int16_t menuItem;           ///< ID of the menu. The item is always negative and -item must be in the indexOfItems area
   int16_t numItems;           ///< Number of items in the softmenu (must be a multiple of 6 for now)
   const int16_t *softkeyItem; ///< Pointer to the first item of the menu
 } softmenu_t;
 
 
 /********************************************//**
- * \struct variableSoftmenu_t
+ * \struct dynamicSoftmenu_t
  * \brief Structure keeping the informations for one variable softmenu
  ***********************************************/
 typedef struct {
-  int16_t menuId;             ///< ID of the menu. The ID is always negative and -ID must be in the indexOfItems area
-  int16_t numItems;           ///< Number of items in the softmenu (must be a multiple of 6 for now)
+  int16_t menuItem;           ///< ID of the menu. The item is always negative and -item must be in the indexOfItems area
+  int16_t numItems;           ///< Number of items in the dynamic softmenu (must be a multiple of 6 for now)
   uint8_t *menuContent;       ///< Pointer to the menu content
-} variableSoftmenu_t;
+} dynamicSoftmenu_t;
 
 
 /********************************************//**
@@ -258,8 +258,8 @@ typedef struct {
  * \brief Stack of softmenus
  ***********************************************/
 typedef struct {
-  int16_t softmenu;  ///< Softmenu ID
-  int16_t firstItem; ///< Current first item on the screen (unshifted F1 = bottom left)
+  int16_t softmenuId; ///< Softmenu ID = rank in dynamicSoftmenu or softmenu
+  int16_t firstItem;  ///< Current first item on the screen (unshifted F1 = bottom left)
 } softmenuStack_t;
 
 

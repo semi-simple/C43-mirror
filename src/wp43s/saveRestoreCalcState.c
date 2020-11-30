@@ -166,6 +166,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
     save(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
     save(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+    save(&lastProgMenuPos,                    sizeof(lastProgMenuPos),                    BACKUP);
     save(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
     save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
     save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
@@ -376,6 +377,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&lastCnstMenuPos,                    sizeof(lastCnstMenuPos),                    BACKUP);
       restore(&lastSyFlMenuPos,                    sizeof(lastSyFlMenuPos),                    BACKUP);
       restore(&lastAIntMenuPos,                    sizeof(lastAIntMenuPos),                    BACKUP);
+      restore(&lastProgMenuPos,                    sizeof(lastProgMenuPos),                    BACKUP);
       restore(&lgCatalogSelection,                 sizeof(lgCatalogSelection),                 BACKUP);
       restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
       restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);

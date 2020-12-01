@@ -62,6 +62,8 @@ bool_t                watchIconEnabled;
 bool_t                printerIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
+bool_t                previousShiftF;
+bool_t                previousShiftG;
 bool_t                showContent;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
@@ -263,6 +265,7 @@ size_t                wp43sMemInBytes;
 #endif
   bool_t              backToDMCP;
 //  int                 keyAutoRepeat;   //JMTOCHECK removed autorepeat stuff
+  int16_t             previousItem;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 

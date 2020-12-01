@@ -6688,7 +6688,12 @@ void fnReset(uint16_t confirmation) {
       
       //    showRealComplexResult();                                   //JM, from wp43s.c
       reset_jm_defaults(true); 
-      
+
+#ifndef TESTSUITE_BUILD
+      mm_MNU_HOME       = mm(-MNU_HOME);                           //JM
+      mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM
+#endif // TESTSUITE_BUILD
+
 //********** JM CHECKQQ
 
       

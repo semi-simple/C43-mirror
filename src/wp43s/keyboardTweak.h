@@ -35,11 +35,6 @@ void     fnCase              (uint16_t Param);
 void     processKeyAction    (int16_t item); //JM
 
 #ifndef TESTSUITE_BUILD
-bool_t   DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
-void 	 DOT_F();
-void 	 DOT_G();
-void 	 DOT_F_clear();
-void 	 DOT_G_clear();
 void     show_f_jm           (void);
 void     show_g_jm           (void);
 void     clear_fg_jm         (void);

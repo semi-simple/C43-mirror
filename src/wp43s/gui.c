@@ -4093,10 +4093,8 @@ void setupUI(void) {
     }
     else {
     if(!SH_BASE_AHOME) {
-  //    softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM TOCHECK
-  //    if(softmenuStackPointer == 0) {
-  //      showSoftmenu(NULL, -MNU_MyAlpha, false);
-  //    }
+      softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM
+        showSoftmenu(NULL, -MNU_MyAlpha, false);
     } else
     if(SH_BASE_AHOME) {
       softmenuStackPointerBeforeAIM = softmenuStackPointer;

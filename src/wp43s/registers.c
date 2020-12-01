@@ -2231,7 +2231,7 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
    * \return void
    ***********************************************/
   void printLongIntegerToConsole(const longInteger_t value, const char *before, const char *after) {
-    char str[TMP_STR_LENGTH];
+    char str[TMP_STR_LENGTH];   //JMMAX
 
     longIntegerToAllocatedString(value, str, sizeof(str));
     printf("%slong integer (%" PRIu64 " + %" PRIu64 " <%" PRIu64 " reserved> bytes) %s%s", before, (uint64_t)(sizeof(value->_mp_size) + sizeof(value->_mp_d) + sizeof(value->_mp_alloc)), (uint64_t)longIntegerSizeInBytes(value), (uint64_t)(value->_mp_alloc * LIMB_SIZE), str, after);

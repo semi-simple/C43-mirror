@@ -144,11 +144,11 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 
 
 #if defined (INLINE_TEST)                                                       //vv dr
-                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
 #else                                                                           //^^
-                                     ITM_BASE_HOME,                 ITM_BASE_AHOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_FG_DOTS,                 ITM_G_DOUBLETAP,                    //JM
+                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
 #endif                                                                          //dr
-                                     -MNU_ASN,                      ITM_NULL,                   ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
+                                     -MNU_ASN,                      ITM_FG_DOTS,                ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
 
 
 
@@ -734,15 +734,15 @@ const softmenu_t softmenu[] = {
 /*  94 */  {.menuItem = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
 /*  95 */  {.menuItem = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
 /*  96 */  {.menuItem = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
-/*  96 */  {.menuItem = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
-/*  96 */  {.menuItem = -MNU_ASN_U,       .numItems = sizeof(menu_ASN_U      )/sizeof(int16_t), .softkeyItem = menu_ASN_U       },  //JM USER 
-/*  96 */  {.menuItem = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
-/*  96 */  {.menuItem = -MNU_XEQ,         .numItems = sizeof(menu_XEQ        )/sizeof(int16_t), .softkeyItem = menu_XEQ         },  //JM EXEC
-/*  96 */  {.menuItem = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
-/*  96 */  {.menuItem = -MNU_GRAPH,       .numItems = sizeof(menu_GRAPH      )/sizeof(int16_t), .softkeyItem = menu_GRAPH       },  //JM GRAPH
-/*  96 */  {.menuItem = -MNU_PLOT,        .numItems = sizeof(menu_PLOT       )/sizeof(int16_t), .softkeyItem = menu_PLOT        },  //JM GRAPH
-/*  96 */  {.menuItem = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
-/*  96 */  {.menuItem = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
+/*  97 */  {.menuItem = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
+/*  98 */  {.menuItem = -MNU_ASN_U,       .numItems = sizeof(menu_ASN_U      )/sizeof(int16_t), .softkeyItem = menu_ASN_U       },  //JM USER 
+/*  99 */  {.menuItem = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
+/* 101 */  {.menuItem = -MNU_XEQ,         .numItems = sizeof(menu_XEQ        )/sizeof(int16_t), .softkeyItem = menu_XEQ         },  //JM EXEC
+/* 102 */  {.menuItem = -MNU_HOME,        .numItems = sizeof(menu_HOME       )/sizeof(int16_t), .softkeyItem = menu_HOME        },  //JM HOME
+/* 103 */  {.menuItem = -MNU_GRAPH,       .numItems = sizeof(menu_GRAPH      )/sizeof(int16_t), .softkeyItem = menu_GRAPH       },  //JM GRAPH
+/* 104 */  {.menuItem = -MNU_PLOT,        .numItems = sizeof(menu_PLOT       )/sizeof(int16_t), .softkeyItem = menu_PLOT        },  //JM GRAPH
+/* 105 */  {.menuItem = -MNU_ALPHA,       .numItems = sizeof(menu_ALPHA      )/sizeof(int16_t), .softkeyItem = menu_ALPHA       },  //JM ALPHA
+/* 106 */  {.menuItem = -MNU_BASE,        .numItems = sizeof(menu_BASE       )/sizeof(int16_t), .softkeyItem = menu_BASE        },  //JM BASE
 /*  96 */  {.menuItem = -MNU_EE,          .numItems = sizeof(menu_EE         )/sizeof(int16_t), .softkeyItem = menu_EE          },  //JM EE
 /*  96 */  {.menuItem = -MNU_T_EDIT,      .numItems = sizeof(menu_T_EDIT     )/sizeof(int16_t), .softkeyItem = menu_T_EDIT      },  //JM TEXTEDIT
 /*  96 */  {.menuItem = -MNU_XXEQ,        .numItems = sizeof(menu_XXEQ       )/sizeof(int16_t), .softkeyItem = menu_XXEQ        },  //JM TEXTEDIT
@@ -937,7 +937,7 @@ int16_t mm(int16_t id) {
   m = 0;
   if(id != 0) { // Search by ID
     while(softmenu[m].menuItem != 0) {
-      //printf(">>> mm %d %d %s \n",id, softmenu[m].menuId, indexOfItems[-softmenu[m].menuId].itemSoftmenuName);
+      printf(">>> mm %d %d %d %s \n",id, m, softmenu[m].menuItem, indexOfItems[-softmenu[m].menuItem].itemSoftmenuName);
       if(softmenu[m].menuItem == id) {
        break;
       }
@@ -1348,8 +1348,9 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
 //JMTOCHECK: Removed exceptions for underline removal. 
     int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer].softmenuId;
     bool_t dottedTopLine;
-  if(softmenuStackPointer > 0 && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
-  clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
+    printf("^^^^* m=%d\n",m);
+    if(softmenuStackPointer >= 0 && !(m==0 && jm_FG_DOTS) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
+    clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
       initVariableSoftmenu(m);
@@ -1429,8 +1430,8 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
             else {
 
               int16_t xx = x + y*6;
-              //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer - 1].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
-              if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem == -MNU_HOME)
+              //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
+              if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem == -MNU_HOME)
               {                                          //JMHOME
                   if(menu_A_HOME[xx] < 100) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]    ].primary ) : (kbd_usr[menu_A_HOME[xx]    ].primary );}             else
                   if(menu_A_HOME[xx] < 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
@@ -1517,30 +1518,29 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
               //        +20000 -> no bottom line
               //        +30000 -> neither top nor bottom line
               if(softmenu[m].menuItem == -MNU_FCNS) {
-                showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1, -1);
+                showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }
 
-          else   //JM vv display i or j properly on display
-          if(item%10000 == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
-            showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          }
-          else if(item%10000 == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
-            showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          }     //JM ^^
-          else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
-            showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
-          }                                                        //JM^^
-
+              else                                                                            //JM vv display i or j properly on display
+              if(item%10000 == ITM_op_j && getSystemFlag(FLAG_CPXj)) {
+                showSoftkey(STD_j, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+              }
+              else if(item%10000 == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
+                showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+              }                                                                                //JM ^^
+              else if((item == ITM_CFG) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour CFG and PLOT in reverse font to pretend it is menus
+                showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
+              }                                                                                //JM^^
 
               else {
-                showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, -1, -1);
+                showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }
               if(indexOfItems[item%10000].func == itemToBeCoded) {
                 // Strike out non coded functions
                 int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
-                for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {     //JM mod stroke slash cross out
+                for(int16_t xStroke=x*67 + 1 +9 ; xStroke<x*67 + 66 -10; xStroke++) {      //JM mod stroke slash cross out
                   if(xStroke%3 == 0) yStroke--;
-                  setBlackPixel(xStroke, yStroke -3);                                       //JM mod
+                  setBlackPixel(xStroke, yStroke -3);                                      //JM mod
                 }
               }
             }
@@ -1577,11 +1577,11 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
     showShiftState(); //JM
   }
-  if(softmenuStackPointer == 0) clearScreen_old(false, false, true); //JM, added to ensure the HOME is deleted
+//  if(softmenuStackPointer == 0) clearScreen_old(false, false, true); //JM, added to ensure the HOME is deleted
 }
 
 
-void rollBackOneSoftmenu(void) {                                       //JM vv  Roll out one softmenu First in goes out
+void rollBackOneSoftmenu(void) {                                       //JM vv  Roll out one softmenu (oldest element pushed out)
   int8_t ix;
   if(softmenuStackPointer <= 0) {
     softmenuStackPointer = -1;
@@ -1603,7 +1603,7 @@ void rollBackOneSoftmenu(void) {                                       //JM vv  
 
 void popOneSoftmenu(int16_t ix0) {                                       //JM vv  Pop a softmenu from the middle of the stack and drop the stack (to the top)
   int8_t ix;
-  if(softmenuStackPointer == 0) return; 
+  if(softmenuStackPointer <= 0) return; 
   else {
     doRefreshSoftMenu = true;     //dr
     ix = ix0;
@@ -1646,7 +1646,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
   doRefreshSoftMenu = true;
   showSoftmenu(NULL, softmenu[menu].menuItem, true);
-  softmenuStack[softmenuStackPointer - 1].firstItem += item;
+  softmenuStack[softmenuStackPointer].firstItem += item;
   showSoftmenuCurrentPart();
 
 #ifdef PC_BUILD
@@ -1810,6 +1810,8 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
       rollBackOneSoftmenu();                             //Rather just make space for a new menu than complain there is not enough space.
     }
    
+    softmenuStackPointer++;
+
     if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
       softmenuStack[softmenuStackPointer].softmenuId = softmenuId;
       softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
@@ -1820,12 +1822,9 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
                                                       (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
                                                       (alphaSelectionMenu == ASM_PROG ? lastProgMenuPos :
                                                        0)))))));
-      softmenuStackPointer++;
       doRefreshSoftMenu = true;     //dr
     }
-    else {
-      //displayBugScreen("In function pushSoftmenu: the softmenu stack is full! Please increase the value of #define SOFTMENU_STACK_SIZE in defines.h");
-    }
+
   }
 
 
@@ -1840,6 +1839,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
+    printf("^^^^^*1 popping, softmenuStackPointer=%d\n",softmenuStackPointer);
     if(alphaSelectionMenu != ASM_NONE) {
       alphaSelectionMenu = ASM_NONE;
       if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
@@ -1849,13 +1849,23 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     softmenuStackPointer--;
     doRefreshSoftMenu = true;     //dr
 
-
     if(softmenuStackPointer <= 0) { // There is always a softmenu to display
-      softmenuStack[0].softmenuId = (calcMode == CM_AIM ? 1 : 0); // 1=MyAlpha and 0=MyMenu
+      if(SH_BASE_HOME && calcMode != CM_AIM) {                  //JM
+          softmenuStack[0].softmenuId = mm_MNU_HOME;
+        } else
+          if(jm_FG_DOTS && calcMode != CM_AIM) {
+          softmenuStack[0].softmenuId = 0; //0=MyMenu JM for blank screen
+          } else
+            if(SH_BASE_AHOME && calcMode == CM_AIM) {
+              softmenuStack[0].softmenuId = mm_MNU_ALPHA;
+            } else {
+              softmenuStack[0].softmenuId = (calcMode == CM_AIM ? 1 : 0); // 1=MyAlpha and 0=MyMenu
+            }
       softmenuStack[0].firstItem = 0;
       softmenuStackPointer = 0;
+      }
     }
-  }
+  
 
 
 
@@ -1872,7 +1882,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
   void showSoftmenu(const char *menu, int16_t id, int16_t initOrPushOnMenuStack) {
     int16_t m;
     initOrPushOnMenuStack = MS_PUSH;                                   //JM Experiment to force all menus to push onto stack
-    //printf("^^^^! id=%d\n",id);
+printf("^^^^! id=%d\n",id);
     switch(-id) {
       case MNU_FCNS:
         alphaSelectionMenu = ASM_FCNS;
@@ -2036,6 +2046,8 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
   }
 
 
+#endif // TESTSUITE_BUILDw
+
 
   void setCatalogLastPos(void) {
          if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer].firstItem;
@@ -2048,6 +2060,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
   }
 
 
+
 void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM
   int16_t m,n;
   m = 0;
@@ -2055,11 +2068,12 @@ void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //
       n=0;
       while(n <= softmenu[m].numItems) {
         printf("m=%d n=%d\n",m,n );
-        fnMenuDump(m, n);
+        #ifndef TESTSUITE_BUILD
+          fnMenuDump(m, n);
+        #endif //TESTSUITE_BUILD
         n += 18;
       }
       m++;
     }
 }                                                         //JM^^
 
-#endif // TESTSUITE_BUILD

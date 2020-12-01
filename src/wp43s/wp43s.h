@@ -55,8 +55,8 @@
     #include <main.h>
     #include <dmcp.h>
     #define TMP_STR_LENGTH       AUX_BUF_SIZE
-  #else
-      #define TMP_STR_LENGTH       3000 //JMMAX ORG:2560  //JMTOCHECK
+  #else // !DMCP_BUILD
+      #define TMP_STR_LENGTH       2560 // 3000 //JMMAX ORG:2560  //JMTOCHECK
   #endif // DMCP_BUILD
   #define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
   #define DISPLAY_VALUE_LEN        80
@@ -369,8 +369,8 @@
   extern int16_t              *menu_RAM;
 
   extern uint16_t              globalFlags[7];
-  extern int16_t               longpressDelayedkey2;          //JM
-  extern int16_t               longpressDelayedkey3;               //JM
+  extern int16_t               longpressDelayedkey2;        //JM
+  extern int16_t               longpressDelayedkey3;        //JM
   extern int16_t               T_cursorPos;                 //JMCURSOR
   extern int16_t               SHOWregis;                   //JMSHOW
   extern int16_t               ListXYposition;              //JM

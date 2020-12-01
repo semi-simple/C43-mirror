@@ -710,35 +710,6 @@ void Shft_stop() {
 
 
 
-/********************************************//**
- * \brief Draws the dots on the margins of the f and g lines on screen
- *
- * \param[in] Info uint16_t
- * \return void
- ***********************************************/
-void JM_DOT(int16_t xx, int16_t yy) {                          // To draw the dots for f/g on screen
-#if 0                         //Depreciated JM_DOT
-if(jm_FG_DOTS) {                                                               // Changed to INVERT_PIXEL
-    invert_Pixel (xx+5,yy+6);
-    invert_Pixel (xx+6,yy+5);
-    invert_Pixel (xx+6,yy+3);
-    invert_Pixel (xx+5,yy+2);
-    invert_Pixel (xx+4,yy+2);
-    invert_Pixel (xx+3,yy+2);
-    invert_Pixel (xx+2,yy+3);
-    invert_Pixel (xx+2,yy+4);
-    invert_Pixel (xx+2,yy+5);
-    invert_Pixel (xx+3,yy+6);
-    invert_Pixel (xx+4,yy+6);
-    invert_Pixel (xx+5,yy+5);
-    invert_Pixel (xx+6,yy+4);
-    invert_Pixel (xx+5,yy+3);
-    invert_Pixel (xx+3,yy+3);
-    invert_Pixel (xx+3,yy+5);
-  }
-#endif
-}
-
 #ifndef DMCP_BUILD
 
 
@@ -848,7 +819,7 @@ uint8_t  maxiC = 0;                                                             
  * \param[in] showEndingCols bool_t  Display the ending empty columns
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
-uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
+  uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint32_t  col, row, xGlyph, endingCols;
   int32_t glyphId;
   int8_t   byte, *data;
@@ -2214,7 +2185,7 @@ uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
-jm_show_calc_state("refreshScreen\n");
+jm_show_calc_state("refreshScreen");
 printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
 #endif
 #ifdef INLINE_TEST
@@ -2466,7 +2437,7 @@ void fnScreenDump(uint16_t unusedButMandatoryParameter) {
 
 
 
-
+#ifndef TESTSUITE_BUILD 
 /********************************************//**   //JM vv
  * \brief Clears parts of the screen
  *
@@ -2488,4 +2459,4 @@ void clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t cl
     lcd_fill_rect(0, 171-5, 20, 5, 0);
   }
 }                                                       //JM ^^
-
+#endif //TESTSUITE_BUILD

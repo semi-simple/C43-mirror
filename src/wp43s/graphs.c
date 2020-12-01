@@ -149,7 +149,7 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
   }
   calcMode = CM_GRAPH;
   #ifndef TESTSUITE_BUILD
-    if(softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem != -MNU_PLOT) {
+    if(softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem != -MNU_PLOT) {
       showSoftmenu(NULL, -MNU_PLOT, true);                         //JM MENU Prevent resetting the softmenu to the default no 1 page position
     }
   #endif
@@ -340,7 +340,7 @@ void placePixel(uint32_t x, uint32_t y) {
   if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+minn) {
     setBlackPixel(x,y);
   }
-#endif
+#endif //!TESTSUITE_BUILD
 }
 
 void removePixel(uint32_t x, uint32_t y) {
@@ -352,10 +352,11 @@ void removePixel(uint32_t x, uint32_t y) {
   if(x<SCREEN_WIDTH_GRAPH && x>0 && y<SCREEN_HEIGHT_GRAPH && y>1+minn) {
     setWhitePixel(x,y);
   }
-#endif
+#endif //!TESTSUITE_BUILD
 }
 
 void clearScreenPixels() {
+#ifndef TESTSUITE_BUILD
   if (Aspect_Square) {
     lcd_fill_rect(SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH, 0, SCREEN_HEIGHT_GRAPH, SCREEN_HEIGHT_GRAPH, 0);
     lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH, 171-5-Y_POSITION_OF_REGISTER_T_LINE+1, 0);
@@ -363,6 +364,7 @@ void clearScreenPixels() {
   }
   else
     lcd_fill_rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT_GRAPH, 0);
+#endif //!TESTSUITE_BUILD
 
 }                                                       //JM ^^
 

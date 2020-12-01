@@ -27,11 +27,11 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   void   initSoftmenuStack      (int16_t softmenuId);
   void   pushSoftmenu           (int16_t softmenuId);
   void   popSoftmenu            (void);
-  void   setCatalogLastPos      (void);
-
-void    fnDumpMenus(uint16_t unusedButMandatoryParameter);  //JM
-void    rolloutSoftmenusIncluding(int16_t target);          //JM
-int16_t mm(int16_t id);                                     //JM
+  void    rolloutSoftmenusIncluding(int16_t target);          //JM
+  int16_t mm(int16_t id);                                     //JM
 const   int16_t menu_A_HOME[360];                           //JM
 
 #endif // !TESTSUITE_BUILD
+
+  void   setCatalogLastPos      (void);
+  void   fnDumpMenus            (uint16_t unusedButMandatoryParameter);  //JM

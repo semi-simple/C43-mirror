@@ -121,40 +121,10 @@ void resetShiftState(void) {
  * \param void
  * \return void
  ***********************************************/
-bool_t DOT_G_painted, DOT_F_painted;                                      //JM OPTIMISE the dot placement by removing the same pixels placed. No need for the full redraw of the softmenu.
-
-void DOT_F() {
-  JM_DOT( -1, 201 );                                                      //JM - Display dot in the f - line
-  JM_DOT( 392, 201 );                                                     //JM - Display dot in the f - line
-  DOT_F_painted = !DOT_F_painted;
-}
-
-void DOT_G() {
-  JM_DOT( -1, 175-2 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 175-2 );                                                     //JM - Display dot in the g - line
-  JM_DOT( -1, 182+3 );                                                      //JM - Display dot in the g - line
-  JM_DOT( 392, 182+3 );                                                     //JM - Display dot in the g - line
-  DOT_G_painted = !DOT_G_painted;
-}
-
-void DOT_F_clear() {
-  if(DOT_F_painted) {
-    DOT_F();
-  }
-}
-
-void DOT_G_clear() {
-  if(DOT_G_painted) {
-    DOT_G();
-  }
-}
-
 
 void show_f_jm(void){
           //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the f - line
-          DOT_G_clear();
-          DOT_F();
+        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the f - line
           if(!FN_timeouts_in_progress) {
             if(!ULFL) {
               underline(1);
@@ -173,9 +143,7 @@ void show_f_jm(void){
 
 void show_g_jm(void){
       //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer > 0) {                                            //JM - Display dot in the g - line
-          DOT_F_clear(); //cancel dots
-          DOT_G();
+        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the g - line
           if(!FN_timeouts_in_progress) {
             if(ULFL) {
               underline(1);
@@ -193,11 +161,7 @@ void show_g_jm(void){
 
 
 void clear_fg_jm(void){
-      //DOT_G_clear(); //cancel dots
       //  showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
-        DOT_G_painted = false;
-        DOT_F_painted = false;
-
         if(!FN_timeouts_in_progress) {        //Cancel lines
           if(ULFL) {
             underline(1);
@@ -224,9 +188,9 @@ void fg_processing_jm(void) {
             shiftF = false;  // Set it up, for flags to be cleared below.
             shiftG = true;
             if(HOME3) {
-              //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer-1].softmenu, mm_MNU_HOME);
+              //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer].softmenu, mm_MNU_HOME);
               jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
-              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer-1].softmenuId == mm_MNU_HOME)) {              //JM shifts
+              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer].softmenuId == mm_MNU_HOME)) {              //JM shifts
                  //printf("popping\n");
                  popSoftmenu();                                                                                                //JM shifts
               }
@@ -325,8 +289,8 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
   tmp = false;
 
   ix = itemShift + (fn - 1);
-  ix0 = softmenuStack[softmenuStackPointer - 1].firstItem;
-  ix_sm = softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId].menuItem;
+  ix0 = softmenuStack[softmenuStackPointer].firstItem;
+  ix_sm = softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem;
   
   if(ix_sm == -MNU_HOME) {
     if(menu_A_HOME[ix0+ix]!=-1) {
@@ -474,11 +438,11 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   const softmenu_t *sm;
 
   if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer - 1].softmenuId];
-    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer - 1].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer - 1].firstItem/6) - 1;
+    sm = &softmenu[softmenuStack[softmenuStackPointer].softmenuId];
+    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer].firstItem/6) - 1;
 
-    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer - 1].firstItem + itemShift + (fn - 1)];
+    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1) < sm->numItems) {
+      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1)];
 /*XXX*/
       ix_fn = 0;
       if(func_lookup(fn,itemShift,&ix_fn)) {

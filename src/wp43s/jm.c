@@ -57,7 +57,7 @@ void reset_jm_defaults(int16_t toload) {
     Norm_Key_00_VAR  = ITM_SIGMAPLUS;                            //JM
     Input_Default =  ID_43S;                                     //JM Input Default
     jm_FG_LINE = true;                                           //JM Screen / keyboard operation setup
-    jm_FG_DOTS = false;                                          //JM Screen / keyboard operation setup
+    jm_FG_DOTS = true;                                           //JM Menu system default
     jm_G_DOUBLETAP = true;                                       //JM Screen / keyboard operation setup
     graph_xmin = -3*3.14159265;                                //JM GRAPH
     graph_xmax = +3*3.14159265;                                //JM GRAPH

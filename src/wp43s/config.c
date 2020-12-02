@@ -6739,8 +6739,17 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43TEST, 2020-11-22, C43-PEM-IMP53 & c43-29");
+    fnStrtoX("C43TEST, 2020-12-02, C43-PEM-XEQ-IMPORTED");
     fnStore(102);
+    fnDrop(0);
+  
+    #ifdef JM_LAYOUT_1A
+    fnStrtoX("LAYOUT1 (Main C43 template)");
+    #endif
+    #ifdef JM_LAYOUT_2_DM42_STRICT
+    fnStrtoX("LAYOUT42 (DM42 compatible)");
+    #endif
+    fnStore(103);
     fnDrop(0);
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS

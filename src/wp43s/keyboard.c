@@ -1222,7 +1222,10 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
             ix++;
           }
           aimBuffer[ix+lg]=0;                          //end new buffer
-          //fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left; removed on 2020-12-01
+          //printf("newXCursor=%d  T_cursorPos=%d  stringLastGlyph(aimBuffer)=%d\n",newXCursor,T_cursorPos,stringLastGlyph(aimBuffer));
+          if(T_cursorPos <= 1 + stringLastGlyph(aimBuffer)) {
+            fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left
+          }          
 //JMCURSOR^^
       }
       break;

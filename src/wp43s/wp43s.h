@@ -258,8 +258,8 @@
   extern bool_t                printerIconEnabled;
   extern bool_t                shiftF;
   extern bool_t                shiftG;
-  extern bool_t                previousShiftF;
-  extern bool_t                previousShiftG;
+  //extern bool_t                previousShiftF;       //JMTOCHECK cannot see the use
+  //extern bool_t                previousShiftG;       //JMTOCHECK cannot see the use
   extern bool_t                showContent;
   extern bool_t                rbr1stDigit;
   extern bool_t                updateDisplayValueX;
@@ -415,7 +415,7 @@
     extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC
   #endif
   //extern int                 keyAutoRepeat; // Key repetition //JMTOCHECK Removed the autorepeat stuff
-    extern int16_t             previousItem;
+  //extern int16_t             previousItem;                    //JMTOCHECK Removed the autorepeat stuff
   #endif // DMCP_BUILD
 
   #include "constantPointers.h"

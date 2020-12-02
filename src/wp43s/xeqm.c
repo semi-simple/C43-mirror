@@ -255,7 +255,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       } else
 
 // FAST TRACKED FOR QUICKER RESPONSE DUPLICATED ************************************************************************
-                      if (strcompare(commandnumber,"TICKS" )) {sprintf(commandnumber,"%d",ITM_TICKS);} else
+/*                      if (strcompare(commandnumber,"TICKS" )) {sprintf(commandnumber,"%d",ITM_TICKS);} else
                       if (strcompare(commandnumber,"PRIME?" )) {sprintf(commandnumber,"%d", ITM_PRIME);} else
                       if (strcompare(commandnumber,"ENTER" )) {sprintf(commandnumber,"%d", ITM_ENTER);} else
                       if (strcompare(commandnumber,"X<>Y" )) {sprintf(commandnumber,"%d", ITM_XexY);} else
@@ -283,7 +283,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ARG" )) {sprintf(commandnumber,"%d", ITM_ANGLE);} else
                       if (strcompare(commandnumber,"RE" )) {sprintf(commandnumber,"%d", ITM_RE);} else
                       if (strcompare(commandnumber,"IM" )) {sprintf(commandnumber,"%d", ITM_IM);} else
-
+*/
 // FROM SPREADSHEET vvv ****************************************************************************************************
 
 
@@ -415,24 +415,23 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"PROPFR" )) {sprintf(commandnumber,"%d", SFL_PROPFR);} else
                       if (strcompare(commandnumber,"DENANY" )) {sprintf(commandnumber,"%d", SFL_DENANY);} else
                       if (strcompare(commandnumber,"DENFIX" )) {sprintf(commandnumber,"%d", SFL_DENFIX);} else
+                      if (strcompare(commandnumber,"ST.X" )) {sprintf(commandnumber,"%d", ITM_ST_X);} else
+                      if (strcompare(commandnumber,"ST.Y" )) {sprintf(commandnumber,"%d", ITM_ST_Y);} else
+                      if (strcompare(commandnumber,"ST.Z" )) {sprintf(commandnumber,"%d", ITM_ST_Z);} else
+                      if (strcompare(commandnumber,"ST.T" )) {sprintf(commandnumber,"%d", ITM_ST_T);} else
                       if (strcompare(commandnumber,"ST.A" )) {sprintf(commandnumber,"%d", ITM_ST_A);} else
                       if (strcompare(commandnumber,"ST.B" )) {sprintf(commandnumber,"%d", ITM_ST_B);} else
                       if (strcompare(commandnumber,"ST.C" )) {sprintf(commandnumber,"%d", ITM_ST_C);} else
                       if (strcompare(commandnumber,"ST.D" )) {sprintf(commandnumber,"%d", ITM_ST_D);} else
-                      if (strcompare(commandnumber,"ST.T" )) {sprintf(commandnumber,"%d", ITM_ST_T);} else
-                      if (strcompare(commandnumber,"ST.X" )) {sprintf(commandnumber,"%d", ITM_ST_X);} else
-                      if (strcompare(commandnumber,"ST.Y" )) {sprintf(commandnumber,"%d", ITM_ST_Y);} else
-                      if (strcompare(commandnumber,"ST.Z" )) {sprintf(commandnumber,"%d", ITM_ST_Z);} else
+                      if (strcompare(commandnumber,"REG_L" )) {sprintf(commandnumber,"%d", ITM_REG_L);} else
+                      if (strcompare(commandnumber,"REG_I" )) {sprintf(commandnumber,"%d", ITM_REG_I);} else
+                      if (strcompare(commandnumber,"REG_J" )) {sprintf(commandnumber,"%d", ITM_REG_J);} else
+                      if (strcompare(commandnumber,"REG_K" )) {sprintf(commandnumber,"%d", ITM_REG_K);} else
                       if (strcompare(commandnumber,"IND>" )) {sprintf(commandnumber,"%d", ITM_INDIRECTION);} else
                       if (strcompare(commandnumber,"REG_A" )) {sprintf(commandnumber,"%d", ITM_REG_A);} else
                       if (strcompare(commandnumber,"REG_B" )) {sprintf(commandnumber,"%d", ITM_REG_B);} else
                       if (strcompare(commandnumber,"REG_C" )) {sprintf(commandnumber,"%d", ITM_REG_C);} else
                       if (strcompare(commandnumber,"REG_D" )) {sprintf(commandnumber,"%d", ITM_REG_D);} else
-                      if (strcompare(commandnumber,"REG_L" )) {sprintf(commandnumber,"%d", ITM_REG_L);} else
-                      if (strcompare(commandnumber,"REG_I" )) {sprintf(commandnumber,"%d", ITM_REG_I);} else
-                      if (strcompare(commandnumber,"REG_J" )) {sprintf(commandnumber,"%d", ITM_REG_J);} else
-                      if (strcompare(commandnumber,"REG_K" )) {sprintf(commandnumber,"%d", ITM_REG_K);} else
-                      if (strcompare(commandnumber,"E" )) {sprintf(commandnumber,"%d", ITM_EXPONENT);} else
                       if (strcompare(commandnumber,"1COMPL" )) {sprintf(commandnumber,"%d", ITM_1COMPL);} else
                       if (strcompare(commandnumber,"SNAP" )) {sprintf(commandnumber,"%d", ITM_SCRDMP);} else
                       if (strcompare(commandnumber,"2COMPL" )) {sprintf(commandnumber,"%d", ITM_2COMPL);} else
@@ -542,16 +541,14 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"PARL" )) {sprintf(commandnumber,"%d", ITM_PARALLEL);} else
                       if (strcompare(commandnumber,"ARG" )) {sprintf(commandnumber,"%d", ITM_ANGLE);} else
                       if (strcompare(commandnumber,"MULPI>" )) {sprintf(commandnumber,"%d", ITM_MULPIto);} else
-                      if (strcompare(commandnumber,"CC" )) {sprintf(commandnumber,"%d", ITM_CC);} else
-                      if (strcompare(commandnumber,"EXIT" )) {sprintf(commandnumber,"%d", ITM_EXIT1);} else
                       if (strcompare(commandnumber,"ALPHA" )) {sprintf(commandnumber,"%d", ITM_AIM);} else
-                      if (strcompare(commandnumber,"DOTD" )) {sprintf(commandnumber,"%d", ITM_dotD);} else
                       if (strcompare(commandnumber,"D.MS>D" )) {sprintf(commandnumber,"%d", ITM_DMStoD);} else
                       if (strcompare(commandnumber,"X_HARM" )) {sprintf(commandnumber,"%d", ITM_XH);} else
                       if (strcompare(commandnumber,"X_RMS" )) {sprintf(commandnumber,"%d", ITM_XRMS);} else
                       if (strcompare(commandnumber,"DET" )) {sprintf(commandnumber,"%d", ITM_DET);} else
                       if (strcompare(commandnumber,"INVRT" )) {sprintf(commandnumber,"%d", ITM_INVRT);} else
                       if (strcompare(commandnumber,"TRANS" )) {sprintf(commandnumber,"%d", ITM_TRANS);} else
+                      if (strcompare(commandnumber,"XOUT" )) {sprintf(commandnumber,"%d", ITM_XOUT);} else
                       if (strcompare(commandnumber,"COMPLEX" )) {sprintf(commandnumber,"%d", KEY_COMPLEX);} else
                       if (strcompare(commandnumber,">POLAR" )) {sprintf(commandnumber,"%d", ITM_toPOL2);} else
                       if (strcompare(commandnumber,">RECT" )) {sprintf(commandnumber,"%d", ITM_toREC2);} else
@@ -588,7 +585,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,">I" )) {sprintf(commandnumber,"%d", ITM_RI);} else
                       if (strcompare(commandnumber,"CASEUP" )) {sprintf(commandnumber,"%d", CHR_caseUP);} else
                       if (strcompare(commandnumber,"CASEDN" )) {sprintf(commandnumber,"%d", CHR_caseDN);} else
-                      if (strcompare(commandnumber,"LISTXY" )) {sprintf(commandnumber,"%d", ITM_LISTXY);} else
                       if (strcompare(commandnumber,"ERPN?" )) {sprintf(commandnumber,"%d", ITM_SH_ERPN);} else
                       if (strcompare(commandnumber,"X.XEQ" )) {sprintf(commandnumber,"%d", ITM_XXEQ);} else
                       if (strcompare(commandnumber,"CPXI" )) {sprintf(commandnumber,"%d", ITM_CPXI);} else

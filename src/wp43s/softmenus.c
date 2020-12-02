@@ -2028,7 +2028,7 @@ printf("^^^^! id=%d\n",id);
       }
     }
     else {
-      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM) {
+      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
         if(initOrPushOnMenuStack) {
           pushSoftmenu(m);
         }

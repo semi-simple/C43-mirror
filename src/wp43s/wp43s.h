@@ -374,6 +374,7 @@
   #ifdef DMCP_BUILD
     extern bool_t              backToDMCP;
     extern int                 keyAutoRepeat; // Key repetition
+    extern int16_t             previousItem;
   #endif // DMCP_BUILD
 
   #include "constantPointers.h"

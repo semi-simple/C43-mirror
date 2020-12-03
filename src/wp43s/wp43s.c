@@ -199,6 +199,7 @@ size_t                wp43sMemInBytes;
 #ifdef DMCP_BUILD
   bool_t              backToDMCP;
   int                 keyAutoRepeat;
+  int16_t             previousItem;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
@@ -477,7 +478,7 @@ size_t                wp43sMemInBytes;
         //  > 0 -> Key pressed
         // == 0 -> Key released
         //key = key_pop();
-        key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
+        key = runner_get_key_delay(&keyAutoRepeat, 10, 50, 50, 100); // TODO: make the autorepeat faster
         //key = runner_get_key(&keyAutoRepeat);
 
         //The switch instruction below is implemented as follows e.g. for the up arrow key on the WP43S layout:
@@ -538,7 +539,7 @@ size_t                wp43sMemInBytes;
         //  > 0 -> Key pressed
         // == 0 -> Key released
         //key = key_pop();
-        key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
+        key = runner_get_key_delay(&keyAutoRepeat, 10, 50, 50, 100); // TODO: make the autorepeat faster
         //key = runner_get_key(&keyAutoRepeat);
 
         //The 3 lines below to see in the top left screen corner the pressed keycode
@@ -549,6 +550,7 @@ size_t                wp43sMemInBytes;
 
       if(keyAutoRepeat) {
         if(key == 27 || key == 32) { // UP or DOWN keys
+          //beep(2200, 50);
           key = 0; // to trigger btnReleased
         }
         else {
@@ -598,6 +600,7 @@ size_t                wp43sMemInBytes;
           btnFnReleased(charKey);
         }
         else { // Last key pressed was not one of the 6 function keys
+          //beep(440, 50);
           btnReleased(charKey);
         }
         keyAutoRepeat = 0;

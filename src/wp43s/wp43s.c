@@ -59,8 +59,6 @@ bool_t                watchIconEnabled;
 bool_t                printerIconEnabled;
 bool_t                shiftF;
 bool_t                shiftG;
-bool_t                previousShiftF;
-bool_t                previousShiftG;
 bool_t                showContent;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;

@@ -495,7 +495,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         numberOfGlobalLabels = 0;
                         memset(tmpString, 0, TMP_STR_LENGTH);
                         for(i=0; i<numberOfLabels; i++) {
-                          if(labelList[i].program > 0 && labelList[i].followingStep > 0) { // RAM and Global label
+                          if(labelList[i].program > 0 && labelList[i].step > 0) { // RAM and Global label
                             xcopy(tmpString + 15 * numberOfGlobalLabels, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
                             numberOfGlobalLabels++;
                             numberOfBytes += 1 + labelList[i].labelPointer[0];
@@ -532,7 +532,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         numberOfGlobalLabels = 0;
                         memset(tmpString, 0, TMP_STR_LENGTH);
                         for(i=0; i<numberOfLabels; i++) {
-                          if(labelList[i].program > 0 && labelList[i].followingStep > 0) { // RAM and Global label
+                          if(labelList[i].program > 0 && labelList[i].step > 0) { // RAM and Global label
                             xcopy(tmpString + 15 * numberOfGlobalLabels, labelList[i].labelPointer + 1, labelList[i].labelPointer[0]);
                             numberOfGlobalLabels++;
                             numberOfBytes += 1 + labelList[i].labelPointer[0];

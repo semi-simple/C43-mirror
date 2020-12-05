@@ -63,6 +63,7 @@ bool_t                showContent;
 bool_t                rbr1stDigit;
 bool_t                updateDisplayValueX;
 bool_t                thereIsSomethingToUndo;
+bool_t                lastProgramListEnd;
 bool_t                programListEnd;
 bool_t                serialIOIconEnabled;
 bool_t                neverUsed;
@@ -170,13 +171,12 @@ uint16_t              globalFlags[7];
 uint16_t              numberOfLocalFlags;
 uint16_t              freeProgramBytes;
 uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
-uint16_t              firstDisplayedStepNumber;
+uint16_t              firstDisplayedLocalStepNumber;
 uint16_t              numberOfLabels;
 uint16_t              numberOfPrograms;
 uint16_t              tamMode;
-uint16_t              currentStepNumber;
+uint16_t              currentLocalStepNumber;
 uint16_t              currentProgramNumber;
-uint16_t              numberOfStepsOnScreen;
 
 int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
@@ -255,6 +255,8 @@ size_t                wp43sMemInBytes;
     setupUI();
 
     restoreCalc();
+listPrograms();
+listLabelsAndPrograms();
     refreshScreen();
 
     gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms

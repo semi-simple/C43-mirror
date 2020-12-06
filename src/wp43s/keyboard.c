@@ -634,6 +634,10 @@
               calcModeNormal();
               keyActionProcessed = true;
             }
+            else if(item == ITM_OFF) {
+              fnOff(NOPARAM);
+              keyActionProcessed = true;
+            }
             break;
 
           default:

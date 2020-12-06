@@ -246,7 +246,7 @@
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_ST_D) {
+        else if(tamFunction == ITM_toINT && item == ITM_STACK_D) {
           tamTransitionSystem(TT_BASE10);
         }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {

@@ -332,8 +332,8 @@ void kill_ASB_icon(void) {
         else if(item == ITM_PERIOD) { // .
           if(tamFunction == ITM_GTO && transitionSystemState == 0) {
             tamFunction = ITM_GTOP;
-            tamNumberMin = 0;
-            tamNumberMax = programList[numberOfPrograms - 1].step - 2;
+            tamNumberMin = 1;
+            tamNumberMax = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
             strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
             strcat(tamBuffer, " _____");
             transitionSystemState = 17;
@@ -1835,7 +1835,7 @@ void kill_ASB_icon(void) {
               reallyRunFunction(getOperation(), regist);
             }
             calcModeNormal();
-            return;
+            break;
 
           case TT_BACKSPACE :
             sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
@@ -1881,7 +1881,6 @@ void kill_ASB_icon(void) {
                 reallyRunFunction(getOperation(), regist);
               }
               calcModeNormal();
-              return;
             }
             break;
 
@@ -1892,7 +1891,7 @@ void kill_ASB_icon(void) {
               reallyRunFunction(getOperation(), regist);
             }
             calcModeNormal();
-            return;
+            break;
 
           case TT_BACKSPACE :
             sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
@@ -1943,17 +1942,8 @@ void kill_ASB_icon(void) {
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamDigit;
-            if(tamNumber > tamNumberMax) {
-            }
-            else if(tamNumber*10 > tamNumberMax) {
-              reallyRunFunction(ITM_GTOP, tamNumber);
-              calcModeNormal();
-              return;
-            }
-            else {
-              sprintf(tamBuffer, "GTO. %d____", tamNumber);
-              transitionSystemState = 18;
-            }
+            sprintf(tamBuffer, "GTO. %d____", tamNumber);
+            transitionSystemState = 18;
             break;
 
           case TT_BACKSPACE :
@@ -1971,17 +1961,38 @@ void kill_ASB_icon(void) {
             return;
 
           case TT_OPERATION:
-            if(tamOperation == ITM_Max || tamOperation == ITM_Min) { // UP or DOWN
-              uint16_t zeroOrOne = (tamOperation == ITM_Min ? 1 : 0);
-              tamNumber = programList[currentProgramNumber + zeroOrOne].step - 1;
-              if(zeroOrOne == 1) {
-                if(currentProgramNumber == numberOfPrograms - 2) {
-                  tamNumber--;
+            if(tamOperation == ITM_Max) { // UP
+              if(currentLocalStepNumber == 1) { // We are on 1st step of current program
+                if(currentProgramNumber == 1) { // It's the 1st program in memory
+                  break;
                 }
+                else { // It isn't the 1st program in memory
+                  tamNumber = programList[currentProgramNumber - 2].step;
+                }
+              }
+              else { // We aren't on 1st step of current program
+                tamNumber = programList[currentProgramNumber - 1].step;
               }
               reallyRunFunction(ITM_GTOP, tamNumber);
               calcModeNormal();
+              break;
             }
+
+            if(tamOperation == ITM_Min) { // DOWN
+              if(currentProgramNumber == numberOfPrograms - 1) { // We are in the last program in memory
+                break;
+              }
+
+              tamNumber = programList[currentProgramNumber].step;
+              reallyRunFunction(ITM_GTOP, tamNumber);
+              calcModeNormal();
+            }
+            break;
+
+          case TT_LETTER:
+            fnGoto(tamLetteredRegister);
+            calcModeNormal();
+            break;
         }
         break;
 
@@ -1991,24 +2002,14 @@ void kill_ASB_icon(void) {
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
-            if(tamNumber > tamNumberMax) {
-              tamNumber /= 10;
-            }
-            else if(tamNumber*10 > tamNumberMax) {
-              reallyRunFunction(ITM_GTOP, tamNumber);
-              calcModeNormal();
-              return;
-            }
-            else {
-              sprintf(tamBuffer, "GTO. %02d___", tamNumber);
-              transitionSystemState = 19;
-            }
+            sprintf(tamBuffer, "GTO. %02d___", tamNumber);
+            transitionSystemState = 19;
             break;
 
-          case TT_ENTER :
-              reallyRunFunction(ITM_GTOP, tamNumber);
-              calcModeNormal();
-              return;
+          case TT_ENTER : // GTO local label tamNumber
+            fnGoto(tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber = 0;
@@ -2027,7 +2028,7 @@ void kill_ASB_icon(void) {
               tamNumber /= 10;
             }
             else if(tamNumber*10 > tamNumberMax) {
-              reallyRunFunction(ITM_GTOP, tamNumber);
+              reallyRunFunction(ITM_GTOP, tamNumber + programList[currentProgramNumber - 1].step - 1);
               calcModeNormal();
               return;
             }
@@ -2037,10 +2038,10 @@ void kill_ASB_icon(void) {
             }
             break;
 
-          case TT_ENTER :
-              reallyRunFunction(ITM_GTOP, tamNumber);
-              calcModeNormal();
-              return;
+          case TT_ENTER : // GTO local label tamNumber
+            fnGoto(tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber /= 10;
@@ -2059,7 +2060,7 @@ void kill_ASB_icon(void) {
               tamNumber /= 10;
             }
             else if(tamNumber*10 > tamNumberMax) {
-              reallyRunFunction(ITM_GTOP, tamNumber);
+              reallyRunFunction(ITM_GTOP, tamNumber + programList[currentProgramNumber - 1].step - 1);
               calcModeNormal();
               return;
             }
@@ -2070,9 +2071,11 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_GTOP, tamNumber);
+            if(tamNumber >= tamNumberMin) {
+              reallyRunFunction(ITM_GTOP, tamNumber + programList[currentProgramNumber - 1].step - 1);
               calcModeNormal();
-              return;
+            }
+            break;
 
           case TT_BACKSPACE :
             tamNumber /= 10;
@@ -2087,20 +2090,21 @@ void kill_ASB_icon(void) {
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
-            if(tamNumber > tamNumberMax) {
+            if(tamNumber > tamNumberMax || tamNumber < tamNumberMin) {
               tamNumber /= 10;
             }
             else {
-              reallyRunFunction(ITM_GTOP, tamNumber);
+              reallyRunFunction(ITM_GTOP, tamNumber + programList[currentProgramNumber - 1].step - 1);
               calcModeNormal();
-              return;
             }
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_GTOP, tamNumber);
+            if(tamNumber >= tamNumberMin) {
+              reallyRunFunction(ITM_GTOP, tamNumber + programList[currentProgramNumber - 1].step - 1);
               calcModeNormal();
-              return;
+            }
+            break;
 
           case TT_BACKSPACE :
             tamNumber /= 10;
@@ -2155,9 +2159,9 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_CNST, tamNumber);
-              calcModeNormal();
-              return;
+            reallyRunFunction(ITM_CNST, tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber = 0;
@@ -2183,9 +2187,9 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_CNST, tamNumber);
-              calcModeNormal();
-              return;
+            reallyRunFunction(ITM_CNST, tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber /= 10;
@@ -2240,9 +2244,9 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_CNST, tamNumber);
-              calcModeNormal();
-              return;
+            reallyRunFunction(ITM_CNST, tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber = 0;
@@ -2272,9 +2276,9 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_CNST, tamNumber);
-              calcModeNormal();
-              return;
+            reallyRunFunction(ITM_CNST, tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber = 0;
@@ -2300,9 +2304,9 @@ void kill_ASB_icon(void) {
             break;
 
           case TT_ENTER :
-              reallyRunFunction(ITM_CNST, tamNumber);
-              calcModeNormal();
-              return;
+            reallyRunFunction(ITM_CNST, tamNumber);
+            calcModeNormal();
+            return;
 
           case TT_BACKSPACE :
             tamNumber /= 10;

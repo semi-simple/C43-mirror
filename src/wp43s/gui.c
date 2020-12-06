@@ -4200,6 +4200,9 @@ void setupUI(void) {
     }
     else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
       popSoftmenu();
+      if(calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
+        popSoftmenu();
+      }
     }
 
     switch(tamMode) {
@@ -4256,7 +4259,7 @@ void setupUI(void) {
       }
     }
 
-    if(calcMode == CM_PEM) {
+    if(calcMode == CM_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
       calcMode = CM_TAM_OVER_PEM;
     }
     else {

@@ -563,6 +563,7 @@ void program_main(void) {
         reset_auto_off();
       }
 
+#ifdef P0
       if(wp43sKbdLayout) {
         /////////////////////////////////////////////////
         // For key reassignment see:
@@ -664,6 +665,7 @@ void program_main(void) {
         //key = key_pop();
         key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100); // TODO: make the autorepeat faster
         //key = runner_get_key(&keyAutoRepeat);
+#endif //P0
 
     //The 3 lines below to see in the top left screen corner the pressed keycode
     //char sysLastKeyCh[5];
@@ -682,8 +684,7 @@ void program_main(void) {
 //      }
 
       if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
-        shiftF = false;
-        shiftG = false; //To avoid f or g top left of the screen, clear again to make sure
+      resetShiftState();                                       //JM to avoid f or g top left of the screen
 
         currentVolumeSetting = get_beep_volume();
         savedVoluleSetting = currentVolumeSetting;
@@ -707,26 +708,47 @@ void program_main(void) {
           currentVolumeSetting = get_beep_volume();
         }
       }
+   
+   #ifdef JMSHOWCODES 
+    fnDisplayStack(1);
+    //Show key codes
+    if(sys_last_key()!=telltale_lastkey) {
+       telltale_lastkey = sys_last_key();
+       telltale_pos++;
+       telltale_pos = telltale_pos & 0x03;
+       char aaa[100];
+       sprintf   (aaa,"k=%d d=%ld      ",key, timeSpan);
+       showString(aaa, &standardFont, 300, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X), vmNormal, true, true);
+       sprintf   (aaa,"Rel=%d, nop=%d, St=%d, Key=%d, FN_kp=%d   ",FN_timed_out_to_RELEASE_EXEC, FN_timed_out_to_NOP, FN_state, sys_last_key(), FN_key_pressed);
+       showString(aaa, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X), vmNormal, true, true);
+       sprintf   (aaa,"%4d(%4ld)<<",sys_last_key(),timeSpan);
+       showString(aaa, &standardFont, telltale_pos*90+ 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+     }
+    #endif
 
       if(38 <= key && key <=43) { // Function key
         sprintf(charKey, "%c", key+11);
         btnFnPressed(charKey);
-        lcd_refresh();
+      //lcd_refresh_dma();
       }
       else if(1 <= key && key <= 37) { // Not a function key
         sprintf(charKey, "%02d", key - 1);
         btnPressed(charKey);
-        lcd_refresh();
+      //lcd_refresh_dma();
       }
-      else if(key == 0) { // Autorepeat
-        if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
-          btnFnReleased(charKey);
-        }
-        else { // Last key pressed was not one of the 6 function keys
-          btnReleased(charKey);
-        }
-        keyAutoRepeat = 0;
-        lcd_refresh();
+    else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
+      btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
+    //lcd_refresh_dma();
+    }
+    else if(key == 0) {
+      btnReleased(NULL);
+    //lcd_refresh_dma();
+    }
+
+    if(key >= 0) {                                          //dr
+      lcd_refresh_dma();
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
+      count_refreshes = 10;                                 //dr
       }
 
     uint32_t now = sys_current_ms();

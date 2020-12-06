@@ -125,7 +125,7 @@
     #define JM_LAYOUT_1A
     #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
   #endif
-#endif
+ #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   #undef  JM_LAYOUT_1A

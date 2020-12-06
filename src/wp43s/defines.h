@@ -280,9 +280,9 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE                        7 // Maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define SOFTMENU_STACK_SIZE                        7
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
-#define REGISTER_LINE_HEIGHT                      36 //
+#define REGISTER_LINE_HEIGHT                      36
 
 #define MS_INIT                                    0 // Initializes the softmenu stack
 #define MS_PUSH                                    1 // Pushes the softmenu on the stack

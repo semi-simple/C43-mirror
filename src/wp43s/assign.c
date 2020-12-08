@@ -26,19 +26,19 @@ const calcKey_t kbd_std[37] = {
 /*
 // JM Latest WP43S, for reference only, not used.
 //keyId primary        fShifted         gShifted         keyLblAim        primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_1ONX,      ITM_TGLFRT,     -MNU_ALPHAFN,     ITM_NULL,        ITM_A,            -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_ST_A     },
- {22,   ITM_YX,        ITM_toINT,      -MNU_EXP,         ITM_NUMBER_SIGN, ITM_B,             ITM_NUMBER_SIGN, ITM_BETA,      ITM_ST_B     },
- {23,  -MNU_TRI,       ITM_DMS,         ITM_CONSTpi,          ITM_NULL,        ITM_C,             ITM_NULL,        ITM_GAMMA,     ITM_ST_C     },
- {24,   ITM_LN,        ITM_dotD,        ITM_LOG10,       ITM_NULL,        ITM_D,             ITM_NULL,        ITM_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
- {25,   ITM_EXP,        ITM_toHMS,       ITM_10x,         ITM_NULL,        ITM_E,             ITM_NULL,        ITM_EPSILON,   ITM_NULL     },
+ {21,   ITM_1ONX,      ITM_TGLFRT,     -MNU_ALPHAFN,     ITM_NULL,        ITM_A,            -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_STACK_A  },
+ {22,   ITM_YX,        ITM_toINT,      -MNU_EXP,         ITM_NUMBER_SIGN, ITM_B,             ITM_NUMBER_SIGN, ITM_BETA,      ITM_STACK_B  },
+ {23,  -MNU_TRI,       ITM_DMS,         ITM_CONSTpi,     ITM_NULL,        ITM_C,             ITM_NULL,        ITM_GAMMA,     ITM_STACK_C  },
+ {24,   ITM_LN,        ITM_dotD,        ITM_LOG10,       ITM_NULL,        ITM_D,             ITM_NULL,        ITM_DELTA,     ITM_STACK_D  }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base
+ {25,   ITM_EXP,       ITM_toHMS,       ITM_10x,         ITM_NULL,        ITM_E,             ITM_NULL,        ITM_EPSILON,   ITM_NULL     },
  {26,   ITM_SQUARE,    ITM_AIM,         ITM_SQUAREROOTX, ITM_CHECK_MARK,  ITM_F,             ITM_CHECK_MARK,  ITM_PHI,       ITM_alpha    },
 
  {31,   ITM_STO,       ITM_ASSIGN,      ITM_SAVE,        ITM_NULL,        ITM_G,             ITM_ASSIGN,      ITM_GAMMA,     ITM_NULL     },
  {32,   ITM_RCL,       ITM_RBR,         ITM_VIEW,        ITM_NULL,        ITM_H,             ITM_RBR,         ITM_CHI,       ITM_HEX      }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {33,   ITM_Rdown,     ITM_Rup,        -MNU_CPX,         ITM_NULL,        ITM_I,             ITM_DOWN_ARROW,  ITM_IOTA,      ITM_REGI     },
  {34,   ITM_CC,        ITM_MAGNITUDE,   ITM_ANGLE,       ITM_NULL,        ITM_J,             ITM_NULL,        ITM_ETA,       ITM_REGJ     },
- {35,   ITM_SHIFTf,         ITM_NULL,        ITM_SCRDMP,      ITM_SHIFTf,           ITM_SHIFTf,             ITM_NULL,        ITM_SCRDMP,    ITM_SHIFTf        },
- {36,   ITM_SHIFTg,         ITM_USERMODE,    ITM_NULL,        ITM_SHIFTg,           ITM_SHIFTg,             ITM_USERMODE,    ITM_NULL,      ITM_SHIFTg        },
+ {35,   ITM_SHIFTf,    ITM_NULL,        ITM_SCRDMP,      ITM_SHIFTf,      ITM_SHIFTf,        ITM_NULL,        ITM_SCRDMP,    ITM_SHIFTf   },
+ {36,   ITM_SHIFTg,    ITM_USERMODE,    ITM_NULL,        ITM_SHIFTg,      ITM_SHIFTg,        ITM_USERMODE,    ITM_NULL,      ITM_SHIFTg   },
 
  {41,   ITM_ENTER,     ITM_STATUS,      ITM_DROP,        ITM_ENTER,       ITM_ENTER,         ITM_STATUS,      ITM_DROP,      ITM_ENTER    },
  {42,   ITM_XexY,      ITM_FILL,       -MNU_STK,         ITM_ex,          ITM_K,             ITM_ex,          ITM_KAPPA,     ITM_REGK     },
@@ -56,28 +56,28 @@ const calcKey_t kbd_std[37] = {
  {62,   ITM_4,        -MNU_STAT,       -MNU_SUMS,        ITM_4,           ITM_S,             ITM_4,           ITM_SIGMA,     ITM_4        },
  {63,   ITM_5,         ITM_toREC,       ITM_toPOL,       ITM_5,           ITM_T,             ITM_5,           ITM_TAU,       ITM_5        },
  {64,   ITM_6,        -MNU_UNITCONV,   -MNU_ANGLECONV,   ITM_6,           ITM_U,             ITM_6,           ITM_THETA,     ITM_6        },
- {65,   KEY_UP,        ITM_BST,        -MNU_FLAGS,       KEY_UP,          KEY_UP,            ITM_BST,        -MNU_FLAGS,     KEY_UP       },
+ {65,   ITM_UP,        ITM_BST,        -MNU_FLAGS,       ITM_UP,          ITM_UP,            ITM_BST,        -MNU_FLAGS,     ITM_UP       },
 
  {71,   ITM_SUB,      -MNU_BITS,       -MNU_INTS,        ITM_MINUS,       ITM_V,             ITM_MINUS,      -MNU_ALPHAMATH, ITM_SUB      },
  {72,   ITM_1,        -MNU_ADV,        -MNU_EQN,         ITM_1,           ITM_W,             ITM_1,           ITM_PSI,       ITM_1        },
  {73,   ITM_2,        -MNU_MATX,       -MNU_XFN,         ITM_2,           ITM_X,             ITM_2,           ITM_XI,        ITM_2        },
  {74,   ITM_3,         ITM_TIMER,      -MNU_CLK,         ITM_3,           ITM_Y,             ITM_3,           ITM_UPSILON,   ITM_3        },
- {75,   KEY_DOWN,      ITM_SST,        -MNU_MODE,        KEY_DOWN,        KEY_DOWN,          ITM_SST,        -MNU_MODE,      KEY_DOWN     },
+ {75,   ITM_DOWN,      ITM_SST,        -MNU_MODE,        ITM_DOWN,        ITM_DOWN,          ITM_SST,        -MNU_MODE,      ITM_DOWN     },
 
  {81,   ITM_ADD,      -MNU_IO,         -MNU_PRINT,       ITM_PLUS,        ITM_Z,             ITM_PLUS,        ITM_ZETA,      ITM_ADD      },
  {82,   ITM_0,        -MNU_LOOP,       -MNU_TEST,        ITM_0,           ITM_QUESTION_MARK, ITM_0,           ITM_PRINTER,   ITM_0        },
  {83,   ITM_PERIOD,   -MNU_PARTS,      -MNU_INFO,        ITM_PERIOD,      ITM_COMMA,         ITM_PERIOD,     -MNU_ALPHADOT,  ITM_PERIOD   },
  {84,   ITM_RS,        ITM_PR,         -MNU_PFN,         ITM_NULL,        ITM_SPACE,         ITM_NULL,        ITM_NULL,      ITM_NULL     },
- {85,   KEY_EXIT,     -MNU_CATALOG,     ITM_OFF,         KEY_EXIT,        KEY_EXIT,         -MNU_CATALOG,     ITM_OFF,       KEY_EXIT     }
+ {85,   ITM_EXIT,     -MNU_CATALOG,     ITM_OFF,         ITM_EXIT,        ITM_EXIT,         -MNU_CATALOG,     ITM_OFF,       ITM_EXIT     }
 */
 
 
  #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1C. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_SIGMAPLUS,    ITM_RI/*ITM_RND*/,ITM_TGLFRT,  ITM_NULL,       ITM_A,            -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_1ONX,         ITM_YX,          ITM_HASH_JM/*ITM_toINT*/,    ITM_NUMBER_SIGN,ITM_B,             ITM_NUMBER_SIGN, ITM_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,       ITM_CHECK_MARK, ITM_C,             ITM_CHECK_MARK,  ITM_CHI,       ITM_ST_C     }, //JM
- {24,   ITM_LOG10,        ITM_10x,         ITM_dotD,     ITM_NULL,       ITM_D,             ITM_NULL,        ITM_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
+ {21,   ITM_SIGMAPLUS,    ITM_RI/*ITM_RND*/,ITM_TGLFRT,  ITM_NULL,       ITM_A,            -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_STACK_A     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_HASH_JM/*ITM_toINT*/,    ITM_NUMBER_SIGN,ITM_B,             ITM_NUMBER_SIGN, ITM_BETA,      ITM_STACK_B     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,       ITM_CHECK_MARK, ITM_C,             ITM_CHECK_MARK,  ITM_CHI,       ITM_STACK_C     }, //JM
+ {24,   ITM_LOG10,        ITM_10x,         ITM_dotD,     ITM_NULL,       ITM_D,             ITM_NULL,        ITM_DELTA,     ITM_STACK_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EXP,          ITM_toREC2,   ITM_NULL,       ITM_E,             ITM_NULL,        ITM_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_AIM,         ITM_toPOL2,   ITM_NULL,       ITM_F,             ITM_NULL,        ITM_DIGAMMA,   ITM_alpha    }, //JM
 
@@ -123,10 +123,10 @@ const calcKey_t kbd_std[37] = {
 
 #ifdef JM_LAYOUT_2_DM42_STRICT //JM DM42 STRICT. NAME CHANGE FROM LAYOUT 2 TO LAYOUT 42C
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
- {21,   ITM_SIGMAPLUS,    ITM_SIGMAMINUS,  ITM_TGLFRT,    ITM_NULL,       ITM_A,           -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_ST_A     }, //JM
- {22,   ITM_1ONX,         ITM_YX,          ITM_HASH_JM,   ITM_NUMBER_SIGN,ITM_B,            ITM_NUMBER_SIGN, ITM_BETA,      ITM_ST_B     }, //JM
- {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,        ITM_CHECK_MARK, ITM_C,            ITM_CHECK_MARK,  ITM_CHI,       ITM_ST_C     }, //JM
- {24,   ITM_LOG10,        ITM_10x,         ITM_dotD,      ITM_NULL,       ITM_D,            ITM_NULL,        ITM_DELTA,     ITM_ST_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
+ {21,   ITM_SIGMAPLUS,    ITM_SIGMAMINUS,  ITM_TGLFRT,    ITM_NULL,       ITM_A,           -MNU_ALPHAINTL,   ITM_ALPHA,     ITM_STACK_A     }, //JM
+ {22,   ITM_1ONX,         ITM_YX,          ITM_HASH_JM,   ITM_NUMBER_SIGN,ITM_B,            ITM_NUMBER_SIGN, ITM_BETA,      ITM_STACK_B     }, //JM
+ {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,        ITM_CHECK_MARK, ITM_C,            ITM_CHECK_MARK,  ITM_CHI,       ITM_STACK_C     }, //JM
+ {24,   ITM_LOG10,        ITM_10x,         ITM_dotD,      ITM_NULL,       ITM_D,            ITM_NULL,        ITM_DELTA,     ITM_STACK_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
  {25,   ITM_LN,           ITM_EXP,          ITM_toREC2,    ITM_NULL,       ITM_E,            ITM_NULL,        ITM_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_toPOL2,    ITM_NULL,       ITM_F,            ITM_NULL,        ITM_DIGAMMA,   ITM_alpha    }, //JM
  

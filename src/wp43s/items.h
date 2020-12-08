@@ -535,14 +535,14 @@
 #define ITM_0514                       514
 #define ITM_0515                       515
 #define ITM_0516                       516
-#define ITM_ST_X                       517
-#define ITM_ST_Y                       518
-#define ITM_ST_Z                       519
-#define ITM_ST_T                       520
-#define ITM_ST_A                       521
-#define ITM_ST_B                       522
-#define ITM_ST_C                       523
-#define ITM_ST_D                       524
+#define ITM_STACK_X                    517
+#define ITM_STACK_Y                    518
+#define ITM_STACK_Z                    519
+#define ITM_STACK_T                    520
+#define ITM_STACK_A                    521
+#define ITM_STACK_B                    522
+#define ITM_STACK_C                    523
+#define ITM_STACK_D                    524
 #define ITM_REG_L                      525
 #define ITM_REG_I                      526
 #define ITM_REG_J                      527
@@ -1479,7 +1479,7 @@
 #define ITM_ERR                       1458
 #define ITM_EXITALL                   1459
 #define ITM_EXPT                      1460
-#define MNU_PLOT                      1461
+#define ITM_1461                      1461
 #define ITM_FIB                       1462
 #define ITM_FIX                       1463
 #define ITM_FLASH                     1464
@@ -2206,8 +2206,9 @@
 #define ITM_DIFF                      2185
 #define ITM_RMS                       2186
 #define ITM_SHADE                     2187
+#define MNU_PLOT                      2188
 
-#define LAST_ITEM                     2188   //JM
+#define LAST_ITEM                     2189   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

@@ -284,7 +284,7 @@ const int16_t menu_ConvE[]       = { ITM_CALtoJ,                    ITM_JtoCAL, 
 
 const int16_t menu_ConvP[]       = { ITM_HPEtoW,                    ITM_WtoHPE,                 ITM_HPUKtoW,              ITM_WtoHPUK,           ITM_HPMtoW,                  ITM_WtoHPM                    };
 
-const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_BARtoPA,              ITM_PAtoBAR,           ITM_PSItoPA,                 ITM_PAtoPSI,
+const int16_t menu_ConvFP[]      = { ITM_LBFtoN,                    ITM_NtoLBF,                 ITM_PAtoBAR,              ITM_BARtoPA,           ITM_PSItoPA,                 ITM_PAtoPSI,
                                      10000+ITM_IHGtoPAb,            10000+ITM_PAtoIHGb,         10000+ITM_TORtoPAb,       10000+ITM_PAtoTORb,    10000+ITM_ATMtoPA,           10000+ITM_PAtoATM,
                                      20000+ITM_IHGtoPA,             20000+ITM_PAtoIHG,          20000+ITM_TORtoPA,        20000+ITM_PAtoTOR,     20000+ITM_ATMtoPAb,          20000+ITM_PAtoATMb,
                                      ITM_NULL,                      ITM_NULL,                   10000+ITM_MMHGtoPAb,      10000+ITM_PAtoMMHGb,   ITM_NULL,                    ITM_NULL,
@@ -349,16 +349,16 @@ const int16_t menu_IO[]          = { ITM_LOAD,                      ITM_LOADP,  
                                      ITM_BEEP,                      ITM_TONE,                   ITM_SAVE,                 -MNU_PRINT,            ITM_RECV,                    ITM_SEND                      };
 const int16_t menu_PRINT[]       = { ITM_PRINTERX,                  ITM_PRINTERR,               ITM_PRINTERSIGMA,         ITM_PRINTERADV,        ITM_PRINTERLCD,              ITM_PRINTERPROG,
                                      ITM_PRINTERSTK,                ITM_PRINTERREGS,            ITM_PRINTERUSER,          ITM_PRINTERTAB,        ITM_PRINTERHASH,             ITM_PRINTERCHAR,
-                                     ITM_NULL,                      ITM_P_ALLREGS,              ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };
-const int16_t menu_Tam[]         = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T                      };
-const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };
+const int16_t menu_Tam[]         = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_STACK_X,              ITM_STACK_Y,           ITM_STACK_Z,                 ITM_STACK_T                   };
+const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_STACK_X,              ITM_STACK_Y,           ITM_STACK_Z,                 ITM_STACK_T,
                                      ITM_0P,                        ITM_1P,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 const int16_t menu_TamFlag[]     = { ITM_INDIRECTION,               -MNU_SYSFL,                 ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T                     };
-const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T,
+const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_STACK_X,              ITM_STACK_Y,           ITM_STACK_Z,                 ITM_STACK_T,
                                      ITM_Config,                    ITM_Stack,                  ITM_NULL,                 ITM_NULL,              ITM_Max,                     ITM_Min,
                                      ITM_dddEL,                     ITM_dddIJ,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
-const int16_t menu_TamShuffle[]  = { ITM_ST_X,                      ITM_ST_Y,                   ITM_ST_Z,                 ITM_ST_T,              ITM_NULL,                    ITM_NULL,                     };
-const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_ST_X,                 ITM_ST_Y,              ITM_ST_Z,                    ITM_ST_T                      };
+const int16_t menu_TamShuffle[]  = { ITM_STACK_X,                   ITM_STACK_Y,                ITM_STACK_Z,              ITM_STACK_T,           ITM_NULL,                    ITM_NULL,                     };
+const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_STACK_X,              ITM_STACK_Y,           ITM_STACK_Z,                 ITM_STACK_T                   };
 
 const int16_t menu_BASE[]        = { 
                                      ITM_LI,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
@@ -1402,7 +1402,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
 
 
   /********************************************//**
-   * \brief Displays the current part of a softmenu
+   * \brief Displays the current part of the displayed softmenu
    *
    * \param void
    * \return void
@@ -1453,17 +1453,17 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
           yDotted--;
         }
 
-          item = 6 * (currentFirstItem / 6 + yDotted);
-          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-            yDotted--;
-          }
+        item = 6 * (currentFirstItem / 6 + yDotted);
+        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+          yDotted--;
+        }
 
-          item = 6 * (currentFirstItem / 6 + yDotted);
-          if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
-            yDotted--;
-          }
+        item = 6 * (currentFirstItem / 6 + yDotted);
+        if(yDotted >= 0 && softmenu[m].softkeyItem[item]==0 && softmenu[m].softkeyItem[item+1]==0 && softmenu[m].softkeyItem[item+2]==0 && softmenu[m].softkeyItem[item+3]==0 && softmenu[m].softkeyItem[item+4]==0 && softmenu[m].softkeyItem[item+5]==0) {
+          yDotted--;
         }
       }
+    }
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
       if(numberOfItems == 0) {
@@ -1612,8 +1612,8 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
         }
       }
 
-      if(0 <= yDotted && yDotted <= 2) {
-        yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
+    if(0 <= yDotted && yDotted <= 2) {
+      yDotted = 217 - SOFTMENU_HEIGHT * yDotted;
 
       if(dottedTopLine) {
         for(x=0; x<SCREEN_WIDTH; x++) {
@@ -1862,7 +1862,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \brief Pushes a new softmenu on the softmenu stack
    * and displays it's first part
    *
-   * \param[in] softmenu int16_t Softmenu number
+   * \param[in] softmenuId int16_t Softmenu ID
    * \return void
    ***********************************************/
   void pushSoftmenu(int16_t softmenuId) {
@@ -1875,7 +1875,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     }
    
     softmenuStackPointer++;
-
     if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
       softmenuStack[softmenuStackPointer].softmenuId = softmenuId;
       softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
@@ -1930,7 +1929,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
       }
     }
   
-
 
 
   /********************************************//**

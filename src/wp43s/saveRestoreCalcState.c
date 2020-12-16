@@ -246,6 +246,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
     save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
     save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
+    save(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -458,6 +459,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&MY_ALPHA_MENU,                      sizeof(MY_ALPHA_MENU),                      BACKUP);   //JM ^^
       restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
       restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
+      restore(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
       fclose(BACKUP);
       printf("End of calc's restoration\n");
 

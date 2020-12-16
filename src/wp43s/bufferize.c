@@ -31,8 +31,8 @@
 
 
 
-  uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
-    nextChar = NC_NORMAL;
+uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
+/*JM*/ //nextChar = NC_NORMAL;
 
     if(subOrSup == NC_SUBSCRIPT) {
       switch(item) {

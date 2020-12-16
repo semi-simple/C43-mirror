@@ -24,7 +24,7 @@
    #undef  BLUES_WHEN_SWAPPED
 
 #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
-//#undef  SWAP_TO_L1_ON_DM42
+#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
 
 //*********************************
 // JM VARIOUS OPTIONS

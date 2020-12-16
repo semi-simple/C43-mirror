@@ -163,6 +163,7 @@ int16_t               lastProgMenuPos;
 int16_t               showFunctionNameItem;
 
 uint8_t               displayStackSHOIDISP;          //JM SHOIDISP
+bool_t                numLock;                       //JM
 bool_t   doRefreshSoftMenu;                                    //dr
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_FG_DOTS;                              //JM Screen / keyboard operation setup

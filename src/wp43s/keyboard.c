@@ -686,8 +686,44 @@
         }
         break;
 
-    case CHR_case: {
+
+    case CHR_numL:   //JMvv
+      if(!numLock)  { processKeyAction(CHR_num); } 
+      keyActionProcessed = true;
+      break;
+
+    case CHR_numU:
+      if(numLock)  { processKeyAction(CHR_num); } 
+      keyActionProcessed = true;
+      break;
+
+    case CHR_num:
+      alphaCase = AC_UPPER;
+      numLock = !numLock;
+      if(!numLock) { nextChar = NC_NORMAL;}
+      showAlphaModeonGui(); //dr JM, see keyboardtweaks
+      keyActionProcessed = true;
+      break;
+
+    case CHR_caseUP:
+      if(numLock)  { } else
+      if(alphaCase == AC_LOWER)  { processKeyAction(CHR_case); } else
+      if(alphaCase == AC_UPPER)  { processKeyAction(CHR_numL); }
+      nextChar = NC_NORMAL;
+      keyActionProcessed = true;
+      break;
+
+    case CHR_caseDN:
+      if(numLock)  { alphaCase = AC_UPPER; processKeyAction(CHR_numU); } else
+      if(alphaCase == AC_UPPER)  { processKeyAction(CHR_case); } 
+      nextChar = NC_NORMAL;
+      keyActionProcessed = true;
+      break;
+
+    case CHR_case:
+      numLock = false;
       int16_t sm = softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem;                                      //JMvv
+      nextChar = NC_NORMAL;
       if(alphaCase == AC_LOWER) {
         alphaCase = AC_UPPER;
         if(sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) {
@@ -700,9 +736,7 @@
         }
       }
       showAlphaModeonGui(); //dr JM, see keyboardtweaks
-//JMXX      showSoftmenuCurrentPart();
       keyActionProcessed = true;
-      }
       break;                                                                                                               //JM^^
 
       default:
@@ -720,11 +754,46 @@
             }
             break;
 
-          case CM_AIM:
-            if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
-              addItemToBuffer(item + 26);
-              keyActionProcessed = true;
+        case CM_AIM:
+          if(numLock) {                           //JMvv Numlock translation
+            int16_t item1;
+            switch(item) {
+              case ITM_P          : item1 = ITM_7;      break;
+              case ITM_Q          : item1 = ITM_8;      break;
+              case ITM_R          : item1 = ITM_9;      break;
+              case ITM_T          : item1 = ITM_4;      break;
+              case ITM_U          : item1 = ITM_5;      break;
+              case ITM_V          : item1 = ITM_6;      break;
+              case ITM_X          : item1 = ITM_1;      break;
+              case ITM_Y          : item1 = ITM_2;      break;
+              case ITM_Z          : item1 = ITM_3;      break;
+              case ITM_COLON      : item1 = ITM_0;      break;
+              case ITM_COMMA      : item1 = ITM_PERIOD; break;
+              case ITM_DOWN_ARROW : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
+              case ITM_UP_ARROW   : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
+              case CHR_num        : item1 = 0;          break;
+              case CHR_case       : item1 = 0;          break;
+              case ITM_O          : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
+
+              case ITM_S          : item1 = ITM_OBELUS; break;
+              case ITM_W          : item1 = ITM_MULT;   break;
+              case ITM_UNDERSCORE : item1 = ITM_SUB;    break;
+              case ITM_SPACE      : item1 = ITM_ADD;    break;
+
+              default: 
+                   printf("^^^^ In AIM not handled %d\n",item);
+                   item1 = item;
             }
+            if(item1>0) {
+              addItemToBuffer(item1);
+            }
+            keyActionProcessed = true;
+          }                                       //JM^^
+
+          else if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
+            addItemToBuffer(item + 26);
+            keyActionProcessed = true;
+          }
 
             else if((ITM_A <= item && item <= ITM_Z) || item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
               addItemToBuffer(item);
@@ -736,23 +805,22 @@
               keyActionProcessed = true;
             }
 
-            else if(item == ITM_DOWN_ARROW) {
-              nextChar = NC_SUBSCRIPT;
-              keyActionProcessed = true;
-            }
-
-            else if(item == ITM_UP_ARROW) {
-              nextChar = NC_SUPERSCRIPT;
-              keyActionProcessed = true;
-            }
-            refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
-            break;
-
-          case CM_TAM:
-          case CM_TAM_OVER_PEM:
-            addItemToBuffer(item);
+          else if(item == ITM_DOWN_ARROW) {
+            if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; 
             keyActionProcessed = true;
-            break;
+          }
+
+          else if(item == ITM_UP_ARROW) {
+            if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;
+            keyActionProcessed = true;
+          }
+          refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
+          break;
+
+        case CM_TAM:
+          addItemToBuffer(item);
+          keyActionProcessed = true;
+          break;
 
           case CM_ASM:
           case CM_ASM_OVER_TAM:

@@ -83,9 +83,9 @@ const calcKey_t kbd_std[37] = {
 
  {31,   ITM_STO,          ITM_MAGNITUDE,   ITM_ANGLE,    ITM_NULL,       ITM_G,             ITM_NULL,        ITM_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_DELTAPC,  ITM_NULL,       ITM_H,             ITM_NULL,        ITM_ETA,       ITM_HEX      }, //JM
- {33,   ITM_Rdown,        ITM_CONSTpi,          ITM_XTHROOT,  ITM_NULL,       ITM_I,             ITM_DOWN_ARROW,  ITM_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
+ {33,   ITM_Rdown,        ITM_CONSTpi,     ITM_XTHROOT,  ITM_NULL,       ITM_I,             ITM_DOWN_ARROW,  ITM_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   ITM_sin,          ITM_arcsin,      ITM_GTO,      ITM_NULL,       ITM_J,             CHR_case,        ITM_THETA,     ITM_REGJ     }, //JM
- {35,   ITM_cos,          ITM_arccos,      ITM_LBL,      ITM_NULL,       ITM_K,             ITM_NULL,        ITM_KAPPA,     ITM_REGK     }, //JM
+ {35,   ITM_cos,          ITM_arccos,      ITM_LBL,      ITM_NULL,       ITM_K,             CHR_num,         ITM_KAPPA,     ITM_REGK     }, //JM
  {36,   ITM_tan,          ITM_arctan,      ITM_RTN,      ITM_NULL,       ITM_L,             ITM_NULL,        ITM_LAMBDA,    ITM_REGL     }, //JM
        
  {41,   ITM_ENTER,        KEY_COMPLEX,    -MNU_CPX,      ITM_ENTER,      ITM_ENTER,         ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
@@ -94,13 +94,13 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DSP,        -MNU_EXP,      ITM_NULL,       ITM_O,             ITM_UP_ARROW,    ITM_OMICRON,   ITM_NULL     }, //JM
  {45,   ITM_BACKSPACE,    ITM_UNDO,       -MNU_CLR,      ITM_BACKSPACE,  ITM_BACKSPACE,     ITM_UNDO,       -MNU_CLR,       ITM_BACKSPACE}, //JM
                   
- {51,   ITM_UP1,          ITM_BST,         ITM_RBR,      ITM_UP1,        ITM_UP1,           CHR_caseUP,     -MNU_ALPHA,     ITM_UP1      }, //JM
+ {51,   ITM_UP1,          ITM_BST,         ITM_RBR,      ITM_UP1,        ITM_UP1,           CHR_caseUP,      ITM_UP_ARROW,  ITM_UP1      }, //JM
  {52,   ITM_7,           -MNU_EQN,        -MNU_HOME,     ITM_7,          ITM_P,             ITM_7,           ITM_PI,        ITM_7        }, //JM
  {53,   ITM_8,           -MNU_ADV,        -MNU_CONST,    ITM_8,          ITM_Q,             ITM_8,           ITM_QOPPA,     ITM_8        }, //JM
  {54,   ITM_9,           -MNU_MATX,       -MNU_XFN,      ITM_9,          ITM_R,             ITM_9,           ITM_RHO,       ITM_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     ITM_OBELUS,     ITM_S,             ITM_OBELUS,      ITM_SIGMA,     ITM_DIV      }, //JM
 
- {61,   ITM_DOWN1,        ITM_SST,         ITM_FLGSV,    ITM_DOWN1,      ITM_DOWN1,         CHR_caseDN,      CHR_case,      ITM_DOWN1    }, //JM
+ {61,   ITM_DOWN1,        ITM_SST,         ITM_FLGSV,    ITM_DOWN1,      ITM_DOWN1,         CHR_caseDN,      ITM_DOWN_ARROW,ITM_DOWN1    }, //JM
  {62,   ITM_4,           -MNU_BASE,       -MNU_CLK,      ITM_4,          ITM_T,             ITM_4,           ITM_TAU,       ITM_4        }, //JM
  {63,   ITM_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, ITM_5,          ITM_U,             ITM_5,           ITM_PHI,       ITM_5        }, //JM
  {64,   ITM_6,           -MNU_FLAGS,      -MNU_BITS,     ITM_6,          ITM_V,             ITM_6,           ITM_PSI,       ITM_6        }, //JM
@@ -127,14 +127,14 @@ const calcKey_t kbd_std[37] = {
  {22,   ITM_1ONX,         ITM_YX,          ITM_HASH_JM,   ITM_NUMBER_SIGN,ITM_B,            ITM_NUMBER_SIGN, ITM_BETA,      ITM_STACK_B     }, //JM
  {23,   ITM_SQUAREROOTX,  ITM_SQUARE,      ITM_ms,        ITM_CHECK_MARK, ITM_C,            ITM_CHECK_MARK,  ITM_CHI,       ITM_STACK_C     }, //JM
  {24,   ITM_LOG10,        ITM_10x,         ITM_dotD,      ITM_NULL,       ITM_D,            ITM_NULL,        ITM_DELTA,     ITM_STACK_D     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case D for decimal base; //JM2 changed top line primary to DM42 keyboard
- {25,   ITM_LN,           ITM_EXP,          ITM_toREC2,    ITM_NULL,       ITM_E,            ITM_NULL,        ITM_EPSILON,   ITM_NULL     }, //JM
+ {25,   ITM_LN,           ITM_EXP,         ITM_toREC2,    ITM_NULL,       ITM_E,            ITM_NULL,        ITM_EPSILON,   ITM_NULL     }, //JM
  {26,   ITM_XEQ,          ITM_GTO,         ITM_toPOL2,    ITM_NULL,       ITM_F,            ITM_NULL,        ITM_DIGAMMA,   ITM_alpha    }, //JM
  
  {31,   ITM_STO,          KEY_COMPLEX,     ITM_MAGNITUDE, ITM_NULL,       ITM_G,            ITM_NULL,        ITM_GAMMA,     ITM_NULL     }, //JM
  {32,   ITM_RCL,          ITM_PC,          ITM_ANGLE,     ITM_NULL,       ITM_H,            ITM_NULL,        ITM_ETA,       ITM_HEX      }, //JM
- {33,   ITM_Rdown,        ITM_CONSTpi,          ITM_XTHROOT,   ITM_NULL,       ITM_I,            ITM_DOWN_ARROW,  ITM_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
+ {33,   ITM_Rdown,        ITM_CONSTpi,     ITM_XTHROOT,   ITM_NULL,       ITM_I,            ITM_DOWN_ARROW,  ITM_IOTA,      ITM_REGI     }, // if f or g are changed: adapt the function btnClicked section if(calcMode == CM_NIM) in keyboard.c. Case H for hexadecimal base
  {34,   ITM_sin,          ITM_arcsin,      ITM_CC,        ITM_NULL,       ITM_J,            CHR_case,        ITM_THETA,     ITM_REGJ     }, //JM
- {35,   ITM_cos,          ITM_arccos,      ITM_LBL,       ITM_NULL,       ITM_K,            ITM_NULL,        ITM_KAPPA,     ITM_REGK     }, //JM
+ {35,   ITM_cos,          ITM_arccos,      ITM_LBL,       ITM_NULL,       ITM_K,            CHR_num,         ITM_KAPPA,     ITM_REGK     }, //JM
  {36,   ITM_tan,          ITM_arctan,      ITM_RTN,       ITM_NULL,       ITM_L,            ITM_NULL,        ITM_LAMBDA,    ITM_REGL     }, //JM
        
  {41,   ITM_ENTER,        ITM_AIM,        -MNU_CPX,      ITM_ENTER,      ITM_ENTER,        ITM_NULL,        ITM_NULL,      ITM_ENTER    }, //JM
@@ -143,14 +143,14 @@ const calcKey_t kbd_std[37] = {
  {44,   ITM_EXPONENT,    -MNU_DSP,        -MNU_EXP,      ITM_NULL,       ITM_O,            ITM_UP_ARROW,    ITM_OMICRON,   ITM_NULL     }, //JM
  {45,   ITM_BACKSPACE,   -MNU_CLR,         ITM_UNDO,     ITM_BACKSPACE,  ITM_BACKSPACE,   -MNU_CLR,         ITM_UNDO,      ITM_BACKSPACE}, //JM
                  
- {51,   ITM_UP1,          ITM_BST,         ITM_RBR,      ITM_UP1,        ITM_UP1,          CHR_caseUP,     -MNU_ALPHA,     ITM_UP1      }, //JM
+ {51,   ITM_UP1,          ITM_BST,         ITM_RBR,      ITM_UP1,        ITM_UP1,          CHR_caseUP,      ITM_UP_ARROW,  ITM_UP1      }, //JM
  {52,   ITM_7,           -MNU_EQN,        -MNU_INFO,     ITM_7,          ITM_P,            ITM_7,           ITM_PI,        ITM_7        }, //JM
  {53,   ITM_8,           -MNU_ADV,        -MNU_CONST,    ITM_8,          ITM_Q,            ITM_8,           ITM_QOPPA,     ITM_8        }, //JM
  {54,   ITM_9,           -MNU_MATX,       -MNU_XFN,      ITM_9,          ITM_R,            ITM_9,           ITM_RHO,       ITM_9        }, //JM
  {55,   ITM_DIV,         -MNU_STAT,       -MNU_SUMS,     ITM_OBELUS,     ITM_S,            ITM_OBELUS,      ITM_SIGMA,     ITM_DIV      }, //JM
 
- {61,   ITM_DOWN1,        ITM_SST,         ITM_FLGSV,    ITM_DOWN1,      ITM_DOWN1,        CHR_caseDN,      CHR_case,      ITM_DOWN1    }, //JM
- {62,   ITM_4,           -MNU_BASE,     -MNU_FIN,      ITM_4,          ITM_T,            ITM_4,           ITM_TAU,       ITM_4        }, //JM
+ {61,   ITM_DOWN1,        ITM_SST,         ITM_FLGSV,    ITM_DOWN1,      ITM_DOWN1,        CHR_caseDN,      ITM_DOWN_ARROW,ITM_DOWN1    }, //JM
+ {62,   ITM_4,           -MNU_BASE,       -MNU_FIN,      ITM_4,          ITM_T,            ITM_4,           ITM_TAU,       ITM_4        }, //JM
  {63,   ITM_5,           -MNU_ANGLECONV,  -MNU_UNITCONV, ITM_5,          ITM_U,            ITM_5,           ITM_PHI,       ITM_5        }, //JM
  {64,   ITM_6,           -MNU_FLAGS,      -MNU_BITS,     ITM_6,          ITM_V,            ITM_6,           ITM_PSI,       ITM_6        }, //JM
  {65,   ITM_MULT,        -MNU_PROB,       -MNU_INTS,     ITM_CROSS,      ITM_W,            ITM_CROSS,       ITM_OMEGA,     ITM_MULT     }, //JM

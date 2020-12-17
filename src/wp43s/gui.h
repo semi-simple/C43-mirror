@@ -19,12 +19,14 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
-  void fnOff              (uint16_t unsuedParamButMandatory);
-  void calcModeNormal     (void);
-  void calcModeAsm        (void);
-  void calcModeTam        (void);
-  void calcModeAim        (uint16_t unusedButMandatoryParameter);
-  void calcModeNim        (uint16_t unusedButMandatoryParameter);
+  void fnOff                       (uint16_t unsuedParamButMandatory);
+  void calcModeNormal              (void);
+  void calcModeAim                 (uint16_t unusedButMandatoryParameter);
+  void calcModeNim                 (uint16_t unusedButMandatoryParameter);
+  void enterAsmModeIfMenuIsACatalog(int16_t id);
+  void enterTamMode                (void);
+  void leaveAsmMode                (void);
+  void leaveTamMode                (void);
 #endif // TESTSUITE_BUILD
 
 #ifdef PC_BUILD

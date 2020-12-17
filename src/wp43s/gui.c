@@ -4077,23 +4077,10 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeNormal(void) {
-    if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-      popSoftmenu();
-      if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-        popSoftmenu();
-      }
-      setSystemFlag(FLAG_ASLIFT);
-    }
+    calcMode = CM_NORMAL;
 
-    if(calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-      calcMode = CM_PEM;
-    }
-    else {
-      calcMode = CM_NORMAL;
-    }
-
-    if(softmenuStackPointer == 0) {
-      popSoftmenu();
+    if(softmenuStack[0].softmenuId == 1) { // MyAlpha
+      softmenuStack[0].softmenuId = 0; // MyMenu
     }
 
     clearSystemFlag(FLAG_ALPHA);
@@ -4114,18 +4101,12 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
-    if(calcMode == CM_ASM_OVER_AIM) {
-      popSoftmenu();
-      calcMode = CM_AIM;
-    }
-    else {
+
     if(!SH_BASE_AHOME) {
-      softmenuStackPointerBeforeAIM = softmenuStackPointer;  //JM
-        showSoftmenu(NULL, -MNU_MyAlpha, false);
+        showSoftmenu(-MNU_MyAlpha);
     } else
     if(SH_BASE_AHOME) {
-      softmenuStackPointerBeforeAIM = softmenuStackPointer;
-        showSoftmenu(NULL, -MNU_ALPHA, true);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
+        showSoftmenu(-MNU_ALPHA);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     }
 
     alphaCase = AC_UPPER;
@@ -4141,10 +4122,9 @@ void setupUI(void) {
       yCursor = Y_POSITION_OF_AIM_LINE + 6;
       cursorFont = &standardFont;
       cursorEnabled = true;
-    }
 
-    if(softmenuStackPointer == 0) {
-      popSoftmenu();
+    if(softmenuStack[0].softmenuId == 0) { // MyMenu
+      softmenuStack[0].softmenuId = 1; // MyAlpha
     }
 
     setSystemFlag(FLAG_ALPHA);
@@ -4159,26 +4139,59 @@ void setupUI(void) {
   /********************************************//**
    * \brief Sets the calc mode to alpha selection menu
    *
-   * \param[in] unusedButMandatoryParameter uint16_t
    * \return void
    ***********************************************/
-  void calcModeAsm(void) {
-    if(calcMode == CM_NIM) {
-      closeNim();
+  void enterAsmModeIfMenuIsACatalog(int16_t id) {
+    switch(-id) {
+      case MNU_FCNS:      catalog = CATALOG_FCNS; break;
+      case MNU_CONST:     catalog = CATALOG_CNST; break;
+      case MNU_MENUS:     catalog = CATALOG_MENU; break;
+      case MNU_SYSFL:     catalog = CATALOG_SYFL; break;
+      case MNU_ALPHAINTL: catalog = CATALOG_AINT; break;
+      case MNU_ALPHAintl: catalog = CATALOG_aint; break;
+      case MNU_PROG:      catalog = CATALOG_PROG; break;
+      default:            catalog = CATALOG_NONE;
     }
 
-  if(calcMode != CM_AIM) {
-    alphaCase = AC_UPPER;
-    numLock = false;
-    nextChar = NC_NORMAL;
+    if(catalog) {
+      if(calcMode == CM_NIM) {
+        closeNim();
+      }
+
+      alphaCase = AC_UPPER;
+      nextChar = NC_NORMAL;
+
+      clearSystemFlag(FLAG_ALPHA);
+      resetAlphaSelectionBuffer();
+
+      #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+        calcModeAimGui();
+      #endif // PC_BUILD && (SCREEN_800X480 == 0)
+    }
   }
 
-    calcMode = CM_ASM;
-    clearSystemFlag(FLAG_ALPHA);
-    resetAlphaSelectionBuffer();
+
+
+  /********************************************//**
+   * \brief Leaves the alpha selection mode
+   *
+   * \return void
+   ***********************************************/
+  void leaveAsmMode(void) {
+    catalog = CATALOG_NONE;
+
+    if(tamMode) {
+      enterTamMode();
+      return;
+    }
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      calcModeAimGui();
+      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
+        calcModeNormalGui();
+      }
+      else if(calcMode == CM_AIM) {
+        calcModeAimGui();
+      }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
@@ -4222,47 +4235,40 @@ void setupUI(void) {
    * \param[in] maxN int16_t       Max value in TAM mode
    * \return void
    ***********************************************/
-  void calcModeTam(void) {
+  void enterTamMode(void) {
     transitionSystemState = 0;
+    tamCurrentOperation = 0;
 
     if(calcMode == CM_NIM) {
       closeNim();
-    }
-    else if(calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-      popSoftmenu();
-      if(calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-        popSoftmenu();
-      }
     }
 
     switch(tamMode) {
       case TM_VALUE:
       case TM_VALUE_CHB:
       case TM_REGISTER:
-        showSoftmenu(NULL, -MNU_TAM, MS_PUSH);
+        showSoftmenu(-MNU_TAM);
         break;
 
       case TM_CMP:
-        showSoftmenu(NULL, -MNU_TAMCMP, MS_PUSH);
+        showSoftmenu(-MNU_TAMCMP);
         break;
 
       case TM_FLAGR:
       case TM_FLAGW:
-        if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
-          showSoftmenu(NULL, -MNU_TAMFLAG, MS_PUSH);
-        }
+        showSoftmenu(-MNU_TAMFLAG);
         break;
 
       case TM_STORCL:
-        showSoftmenu(NULL, -MNU_TAMSTORCL, MS_PUSH);
+        showSoftmenu(-MNU_TAMSTORCL);
         break;
 
       case TM_SHUFFLE:
-        showSoftmenu(NULL, -MNU_TAMSHUFFLE, MS_PUSH);
+        showSoftmenu(-MNU_TAMSHUFFLE);
         break;
 
       case TM_LABEL:
-        showSoftmenu(NULL, -MNU_TAMLABEL, MS_PUSH);
+        showSoftmenu(-MNU_TAMLABEL);
         break;
 
       default:
@@ -4271,37 +4277,53 @@ void setupUI(void) {
         return;
     }
 
-    if(calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM) {
-      if(tamMode == TM_SHUFFLE) {
-        strcat(tamBuffer, " ____");
-        transitionSystemState = 16;
-      }
-      else if(tamFunction == ITM_CNST) {
-        strcat(tamBuffer, " ___");
-        transitionSystemState = 22;
-      }
-      else if(tamFunction == ITM_BESTF) {
-        strcat(tamBuffer, " ____");
-        transitionSystemState = 25;
-      }
-      else {
-        strcat(tamBuffer, " __");
-      }
-    }
+    numberOfTamMenusToPop = 1;
 
-    if(calcMode == CM_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-      calcMode = CM_TAM_OVER_PEM;
+    if(tamMode == TM_SHUFFLE) {
+      strcat(tamBuffer, " ____");
+      transitionSystemState = 16;
+    }
+    else if(tamFunction == ITM_CNST) {
+      strcat(tamBuffer, " ___");
+      transitionSystemState = 22;
+    }
+    else if(tamFunction == ITM_BESTF) {
+      strcat(tamBuffer, " ____");
+      transitionSystemState = 25;
     }
     else {
-      calcMode = CM_TAM;
+      strcat(tamBuffer, " __");
     }
 
     clearSystemFlag(FLAG_ALPHA);
 
-    tamCurrentOperation = 0;
-
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
       calcModeTamGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
+  }
+
+
+
+  /********************************************//**
+   * \brief Leaves the alpha selection mode
+   *
+   * \return void
+   ***********************************************/
+  void leaveTamMode(void) {
+    tamMode = 0;
+    catalog = CATALOG_NONE;
+
+    while(numberOfTamMenusToPop--) {
+      popSoftmenu();
+    }
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
+        calcModeNormalGui();
+      }
+      else if(calcMode == CM_AIM) {
+        calcModeAimGui();
+      }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 #endif // !TESTSUITE_BUILD

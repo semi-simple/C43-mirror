@@ -81,7 +81,7 @@ void fneRPN(uint16_t state) {
 void fnCFGsettings(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
   runFunction(ITM_FF);
-  showSoftmenu(NULL, -MNU_SYSFL, true);
+  showSoftmenu(-MNU_SYSFL);
   #endif
 }
 
@@ -95,9 +95,10 @@ void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
   }
   lastIntegerBase = 0;
 #ifndef TESTSUITE_BUILD
-  while(softmenuStackPointer > 0 /*softmenuStackPointerBeforeAIM*/ ) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
+//  while(softmenuStackPointer > 0 /*softmenuStackPointerBeforeAIM*/ ) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
+//JMTOCHECK2
     popSoftmenu();
-  }
+//  }
   calcModeNormal();
   refreshScreen();
   fnKeyExit(0);      //Call fnkeyExit to ensure the correct home screen is brought up, if HOME is selected.

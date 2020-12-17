@@ -1,0 +1,1 @@
+s/\bjm_FG_DOTS\b/jm_NO_BASE_SCREEN/g;

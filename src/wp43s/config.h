@@ -17,7 +17,7 @@
 /********************************************//**
  * \file config.h
  ***********************************************/
-void     showSoftmenu          (const char *menu, int16_t id, int16_t initOrPushOnMenuStack);  //JM repeat here to make DMCP compile
+void     showSoftmenu          (int16_t id);  //JM repeat here to make DMCP compile
 
 void     fnConfigChina         (uint16_t unusedButMandatoryParameter);
 void     fnConfigEurope        (uint16_t unusedButMandatoryParameter);

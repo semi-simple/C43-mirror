@@ -39,7 +39,7 @@ uint32_t    timerLastCalled;
 
 
 void showAlphaModeonGui(void) {
-  if(calcMode == CM_AIM || calcMode == CM_ASM || CM_ASM_OVER_TAM || CM_ASM_OVER_AIM)    //vv dr JM
+  if(calcMode == CM_AIM || tamMode)    //vv dr JM
   {
     #ifndef TESTSUITE_BUILD
     showHideAlphaMode();
@@ -113,7 +113,7 @@ void resetShiftState(void) {
 
 void show_f_jm(void){
           //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the f - line
+//JMTOCHECK2        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the f - line
           if(!FN_timeouts_in_progress) {
             if(!ULFL) {
               underline(1);
@@ -126,13 +126,13 @@ void show_f_jm(void){
               doRefreshSoftMenu = true;
             }
           }
-        }                                                                         //JM - Display dot in the f - line
+    //    }                                                                         //JM - Display dot in the f - line
 }
 
 
 void show_g_jm(void){
       //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the g - line
+//JMTOCHECK2        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the g - line
           if(!FN_timeouts_in_progress) {
             if(ULFL) {
               underline(1);
@@ -145,7 +145,7 @@ void show_g_jm(void){
               doRefreshSoftMenu = true;
             }
           }
-        }                                                                         //JM - Display dot in the g - line
+  //      }                                                                         //JM - Display dot in the g - line
 }
 
 
@@ -179,7 +179,7 @@ void fg_processing_jm(void) {
             if(HOME3) {
               //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer].softmenu, mm_MNU_HOME);
               jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
-              if((softmenuStackPointer > 0) && (softmenuStack[softmenuStackPointer].softmenuId == mm_MNU_HOME)) {              //JM shifts
+              if((softmenuStack[0].softmenuId == mm_MNU_HOME)) {              //JM shifts
                  //printf("popping\n");
                  popSoftmenu();                                                                                                //JM shifts
               }
@@ -188,7 +188,7 @@ void fg_processing_jm(void) {
                   processKeyAction(CHR_num);
                 }
                 else {                                                                                                        //JM SHIFTS
-                  showSoftmenu(NULL, -MNU_HOME, true);                                                                        //JM shifts  //JM ALPHA-HOME
+                  showSoftmenu(-MNU_HOME);                                                                        //JM shifts  //JM ALPHA-HOME
                 }                                                                                                             //JM shifts                                                                                                                              //JM shifts
               }
             showSoftmenuCurrentPart();
@@ -279,8 +279,8 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
   tmp = false;
 
   ix = itemShift + (fn - 1);
-  ix0 = softmenuStack[softmenuStackPointer].firstItem;
-  ix_sm = softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem;
+  ix0 = softmenuStack[0].firstItem;
+  ix_sm = softmenu[softmenuStack[0].softmenuId].menuItem;
   
   if(ix_sm == -MNU_HOME) {
     if(menu_A_HOME[ix0+ix]!=-1) {
@@ -427,12 +427,13 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
   func = 0;
   const softmenu_t *sm;
 
-  if(softmenuStackPointer > 0) {
-    sm = &softmenu[softmenuStack[softmenuStackPointer].softmenuId];
-    row = min(3, (sm->numItems + modulo(softmenuStack[softmenuStackPointer].firstItem - sm->numItems, 6))/6 - softmenuStack[softmenuStackPointer].firstItem/6) - 1;
+//JMTOCHECK2
+  if(/*softmenuStackPointer > 0*/true) {
+    sm = &softmenu[softmenuStack[0].softmenuId];
+    row = min(3, (sm->numItems + modulo(softmenuStack[0].firstItem - sm->numItems, 6))/6 - softmenuStack[0].firstItem/6) - 1;
 
-    if(itemShift/6 <= row && softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[softmenuStackPointer].firstItem + itemShift + (fn - 1)];
+    if(itemShift/6 <= row && softmenuStack[0].firstItem + itemShift + (fn - 1) < sm->numItems) {
+      func = (sm->softkeyItem)[softmenuStack[0].firstItem + itemShift + (fn - 1)];
 /*XXX*/
       ix_fn = 0;
       if(func_lookup(fn,itemShift,&ix_fn)) {

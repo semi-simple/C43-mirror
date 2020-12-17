@@ -424,8 +424,8 @@
 
     // Alpha selection timer
     if(AlphaSelectionBufferTimerRunning) {         //JMvv
-      if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
-      timeoutAlphaSelectionBuffer();               //JM^^
+      if(catalog/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
+        timeoutAlphaSelectionBuffer();               //JM^^
       }
     }
 
@@ -464,7 +464,9 @@
     getTimeString(dateTimeString);
     if(strcmp(dateTimeString, oldTime)) {
       strcpy(oldTime, dateTimeString);
-      showDateTime();
+      #if (DEBUG_INSTEAD_STATUS_BAR != 1)
+        showDateTime();
+      #endif // (DEBUG_INSTEAD_STATUS_BAR != 1)
 
       if(!getSystemFlag(FLAG_AUTOFF)) {
         reset_auto_off();
@@ -508,7 +510,7 @@
 
     // Alpha selection timer
   if(AlphaSelectionBufferTimerRunning) {         //JMvv
-    if((calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
+    if(catalog)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
       timeoutAlphaSelectionBuffer();             //JM^^
     }
   }
@@ -671,14 +673,14 @@ void Shft_handler() {                        //JM SHIFT NEW vv
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
           jm_show_calc_state("screen.c: Shft_handler: HOME3");
-          if((softmenuStackPointer >= 0) && (softmenuStack[softmenuStackPointer].softmenuId == mm_MNU_HOME)) {              //JM shifts    //softmenuStackPointerJM
+          if((softmenuStack[0].softmenuId == mm_MNU_HOME)) {              //JM shifts    //softmenuStackPointerJM
             popSoftmenu();                                                                                                  //JM shifts
           }
           else {
             if(calcMode == CM_AIM) {                                                                                        //JM shifts
             }
             else {                                                                                                          //JM SHIFTS
-              showSoftmenu(NULL, -MNU_HOME, true);                                                                          //JM shifts  //JM ALPHA-HOME
+              showSoftmenu(-MNU_HOME);                                                                          //JM shifts  //JM ALPHA-HOME
             }                                                                                                               //JM shifts
           }
         showSoftmenuCurrentPart();
@@ -1571,7 +1573,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
-      else if(regist == AIM_REGISTER_LINE && (calcMode == CM_AIM || calcMode == CM_ASM_OVER_AIM)) {
+      else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM) {
 
 
 
@@ -2155,26 +2157,28 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-static void displayShiftAndTamBuffer(void) {  //JMTOCHECK new routine
-  if(shiftF) {
-    showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-  }
-  else if(shiftG) {
-    showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
-  }
-
-    if(calcMode == CM_TAM || calcMode == CM_ASM_OVER_TAM) {
-      if(shiftF || shiftG) {
-        lcd_fill_rect(18, Y_POSITION_OF_TAM_LINE, 120, 32, LCD_SET_VALUE);
-      }
-      else {
-        lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 138, 32, LCD_SET_VALUE);
-      }
-      showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+  static void displayShiftAndTamBuffer(void) {
+    if(shiftF) {
+      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
     }
-    else if(calcMode == CM_TAM_OVER_PEM || calcMode == CM_ASM_OVER_TAM_OVER_PEM) {
-      lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
-      showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
+    else if(shiftG) {
+      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+    }
+
+    if(tamMode) {
+      if(calcMode == CM_PEM) { // Variable line to display TAM informations
+        lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
+        showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
+      }
+      else { // Fixed line to display TAM informations
+        if(shiftF || shiftG) {
+          lcd_fill_rect(18, Y_POSITION_OF_TAM_LINE, 120, 32, LCD_SET_VALUE);
+        }
+        else {
+          lcd_fill_rect(0, Y_POSITION_OF_TAM_LINE, 138, 32, LCD_SET_VALUE);
+        }
+        showString(tamBuffer, &standardFont, 18, Y_POSITION_OF_TAM_LINE + 6, vmNormal, true, true);
+      }
     }
   }
 
@@ -2185,12 +2189,14 @@ uint8_t last_CM = 255;
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
-jm_show_calc_state("refreshScreen");
-printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
+  jm_show_calc_state("refreshScreen");
+  printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
 #endif
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(3); }     //dr
 #endif
+
+  clearScreen();
 
 
   if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
@@ -2198,37 +2204,34 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_FLAG_BROWSER_OLD:        //JM vv
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       flagBrowser_old(NOPARAM);
       refreshStatusBar();
       break;                
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       fontBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_REGISTER_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       registerBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_PEM:
-    case CM_ASM_OVER_PEM:
-    case CM_TAM_OVER_PEM:
-    case CM_ASM_OVER_TAM_OVER_PEM:
-      clearScreen();
+       //clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
       displayShiftAndTamBuffer();
@@ -2237,11 +2240,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 
     case CM_NORMAL:
     case CM_AIM:
-    case CM_TAM:
     case CM_NIM:
-    case CM_ASM:
-    case CM_ASM_OVER_TAM:
-    case CM_ASM_OVER_AIM:
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
@@ -2252,7 +2251,7 @@ printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCoun
 #endif
       if(last_CM != calcMode) {
         if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
-          clearScreen();
+          //clearScreen();
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);

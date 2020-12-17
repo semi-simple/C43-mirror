@@ -8346,11 +8346,11 @@ void fnReset(uint16_t confirmation) {
       
             
 #ifndef TESTSUITE_BUILD
-      while(softmenuStackPointer > 0) {
-          popSoftmenu();
-      }
+//      while(softmenuStackPointer > 0) {
+//          popSoftmenu();
+//JMTOCHECK2      }
       calcModeNormal();
-      if(SH_BASE_HOME && softmenuStackPointer == 0) pushSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;
+      if(SH_BASE_HOME) showSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;
 #endif // TESTSUITE_BUILD
       
       //    showRealComplexResult();                                   //JM, from wp43s.c

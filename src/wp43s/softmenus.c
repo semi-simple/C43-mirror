@@ -849,14 +849,13 @@ uint8_t *getNthString(uint8_t *ptr, int16_t n) { // Starting with string 0 (the 
 
 
 void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
-  printf("fnDynamicMenu:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[softmenuStackPointer].softmenuId, dynamicMenuItem);
+  printf("fnDynamicMenu:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[0].softmenuId, dynamicMenuItem);
 }
 
 
 
 #ifndef TESTSUITE_BUILD
-  static int sortMenu(void const *a, void const *b)
-   {
+  static int sortMenu(void const *a, void const *b) {
     return compareString(a, b, CMP_EXTENSIVE);
    }
 
@@ -1410,10 +1409,10 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
   void showSoftmenuCurrentPart(void) {
 
 //JMTOCHECK: Removed exceptions for underline removal. 
-    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[softmenuStackPointer].softmenuId;
+    int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[0].softmenuId;
     bool_t dottedTopLine;
     printf("^^^^* m=%d\n",m);
-    if(softmenuStackPointer >= 0 && !(m==0 && jm_FG_DOTS) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
+    if(!(m==0 && jm_FG_DOTS) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
@@ -1423,7 +1422,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     else { // Static softmenu
       numberOfItems = softmenu[m].numItems;
     }
-    currentFirstItem = softmenuStack[softmenuStackPointer].firstItem;
+    currentFirstItem = softmenuStack[0].firstItem;
 
 //JMTOCHECK
 /*
@@ -1494,8 +1493,8 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
             else {
 
               int16_t xx = x + y*6;
-              //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[softmenuStackPointer].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
-              if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[softmenuStackPointer].softmenuId].menuItem == -MNU_HOME)
+              //printf("x:%d y:%d 6y:%d xx:%d menu_A_HOME[xx]=%d menuId=%d currentFirstItem=%d/18=%d --> ",x,y,6*y,xx,menu_A_HOME[xx],softmenu[softmenuStack[0].softmenu].menuId,currentFirstItem,currentFirstItem/18);  //JMHOME
+              if(  menu_A_HOME[xx] >= 0  &&  softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_HOME)
               {                                          //JMHOME
                   if(menu_A_HOME[xx] < 100) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]    ].primary ) : (kbd_usr[menu_A_HOME[xx]    ].primary );}             else
                   if(menu_A_HOME[xx] < 200) {item = !getSystemFlag(FLAG_USER) ? (kbd_std[menu_A_HOME[xx]-100].fShifted) : (kbd_usr[menu_A_HOME[xx]-100].fShifted);}             else
@@ -1641,67 +1640,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     }
     showShiftState(); //JM
   }
-//  if(softmenuStackPointer == 0) clearScreen_old(false, false, true); //JM, added to ensure the HOME is deleted
 }
-
-
-void rollBackOneSoftmenu(void) {                                       //JM vv  Roll out one softmenu (oldest element pushed out)
-  int8_t ix;
-  if(softmenuStackPointer <= 0) {
-    softmenuStackPointer = -1;
-    if(softmenuStackPointer == 0) doRefreshSoftMenu = true;     //dr
-    return;
-  } 
-  else {
-    doRefreshSoftMenu = true;     //dr
-    ix = 1;
-    while(ix <= softmenuStackPointer - 1) {
-      softmenuStack[ix-1].softmenuId = softmenuStack[ix].softmenuId;
-      softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
-      ix++;
-    }
-    softmenuStackPointer--;
-  }
-}
-
-
-void popOneSoftmenu(int16_t ix0) {                                       //JM vv  Pop a softmenu from the middle of the stack and drop the stack (to the top)
-  int8_t ix;
-  if(softmenuStackPointer <= 0) return; 
-  else {
-    doRefreshSoftMenu = true;     //dr
-    ix = ix0;
-    while(ix <= softmenuStackPointer) {
-      softmenuStack[ix-1].softmenuId = softmenuStack[ix].softmenuId;
-      softmenuStack[ix-1].firstItem = softmenuStack[ix].firstItem;
-      ix++;
-    }
-    softmenuStackPointer--;
-  }
-}
-
-
-
-void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a second copy to be pushed onto the stack. Remove all copies of target softmenu from stack
-  int8_t ix;
-  printf(">>> softmenuStackPointer  PRE=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
-  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenuId); ix++;} printf("\n");
-  if(softmenuStackPointer == 0) return; 
-  else {
-    ix = softmenuStackPointer;
-    while(ix>1 && softmenuStack[ix-1].softmenuId != target) {
-      ix--;
-    }
-    if(softmenuStack[ix-1].softmenuId == target) {
-      popOneSoftmenu(ix);
-      rolloutSoftmenusIncluding(target);     //recursively checkl
-    }
-  }
-  printf(">>> softmenuStackPointer POST=%d, rolloutSoftmenusIncluding(%d), stack: ",softmenuStackPointer, target);
-  ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%d ",softmenuStack[ix].softmenuId); ix++;} printf("\n");
-}
-
-
 
 
 
@@ -1709,8 +1648,8 @@ void rolloutSoftmenusIncluding(int16_t target) {          //JM Do not allow a se
 void fnMenuDump(uint16_t menu, uint16_t item) {                              //JMvv procedure to dump all menus. First page only. To mod todump all pages
 
   doRefreshSoftMenu = true;
-  showSoftmenu(NULL, softmenu[menu].menuItem, true);
-  softmenuStack[softmenuStackPointer].firstItem += item;
+  showSoftmenu(softmenu[menu].menuItem);
+  softmenuStack[0].firstItem += item;
   showSoftmenuCurrentPart();
 
 #ifdef PC_BUILD
@@ -1835,27 +1774,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
                                                               //JM ^^
 
-  /********************************************//**
-   * \brief Initializes the softmenu stack with a
-   * softmenu and displays it's first part
-   *
-   * \param[in] softmenuId int16_t Softmenu ID
-   * \return void
-   ***********************************************/
-  void initSoftmenuStack(int16_t softmenuId) {
-    softmenuStack[0].softmenuId = softmenuId;
-    softmenuStack[0].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
-                                 (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
-                                 (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
-                                 (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
-                                 (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
-                                 (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                 (alphaSelectionMenu == ASM_PROG ? lastProgMenuPos :
-                                  0)))))));
-    softmenuStackPointer = 0;
-  doRefreshSoftMenu = true;     //dr
-  }
-
 
 
   /********************************************//**
@@ -1865,29 +1783,30 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \param[in] softmenuId int16_t Softmenu ID
    * \return void
    ***********************************************/
-  void pushSoftmenu(int16_t softmenuId) {
+  static void pushSoftmenu(int16_t softmenuId) {
+    int i;
+
     printf(">>> ###### pushing %d\n",softmenuId);
-    
-    rolloutSoftmenusIncluding(softmenuId);               //JM Do not allow a second copy to be pushed onto the stack. Roll out of history the stack until only the last copy of the menu is gone.
-
-    while(softmenuStackPointer >= SOFTMENU_STACK_SIZE) {  //JM
-      rollBackOneSoftmenu();                             //Rather just make space for a new menu than complain there is not enough space.
+    if(softmenuStack[0].softmenuId == softmenuId) { // The menu to push on the stack is already displayed
+      return;
     }
+
+    for(i=0; i<SOFTMENU_STACK_SIZE; i++) { // Searching the stack for the menu to push on the stack
+      if(softmenuStack[i].softmenuId == softmenuId) { // if found, remove it
+        xcopy(softmenuStack + 1, softmenuStack, i * sizeof(softmenuStack_t));
+        break;
+      }
+    }
+
+    if(i == SOFTMENU_STACK_SIZE) { // The menu to push was not found on the stack
+      xcopy(softmenuStack + 1, softmenuStack, (SOFTMENU_STACK_SIZE - 1) * sizeof(softmenuStack_t)); // shifting the entire stack
+    }
+
+
+    softmenuStack[0].softmenuId = softmenuId;
+    softmenuStack[0].firstItem = lastCatalogPosition[catalog];
    
-    softmenuStackPointer++;
-    if(softmenuStackPointer < SOFTMENU_STACK_SIZE) {
-      softmenuStack[softmenuStackPointer].softmenuId = softmenuId;
-      softmenuStack[softmenuStackPointer].firstItem = (alphaSelectionMenu == ASM_CNST ? lastCnstMenuPos :
-                                                      (alphaSelectionMenu == ASM_FCNS ? lastFcnsMenuPos :
-                                                      (alphaSelectionMenu == ASM_MENU ? lastMenuMenuPos :
-                                                      (alphaSelectionMenu == ASM_SYFL ? lastSyFlMenuPos :
-                                                      (alphaSelectionMenu == ASM_AINT ? lastAIntMenuPos :
-                                                      (alphaSelectionMenu == ASM_aint ? lastAIntMenuPos :
-                                                      (alphaSelectionMenu == ASM_PROG ? lastProgMenuPos :
-                                                       0)))))));
       doRefreshSoftMenu = true;     //dr
-    }
-
   }
 
 
@@ -1902,31 +1821,34 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
-    printf("^^^^^*1 popping, softmenuStackPointer=%d\n",softmenuStackPointer);
-    if(alphaSelectionMenu != ASM_NONE) {
-      alphaSelectionMenu = ASM_NONE;
-      if(calcMode != CM_ASM_OVER_AIM && calcMode != CM_ASM_OVER_TAM && calcMode != CM_ASM_OVER_TAM_OVER_PEM && calcMode != CM_PEM) {
-        calcModeNormal();
-      }
-    }
-    softmenuStackPointer--;
+    xcopy(softmenuStack, softmenuStack + 1, (SOFTMENU_STACK_SIZE - 1) * sizeof(softmenuStack_t)); // shifting the entire stack
+    memset(softmenuStack + SOFTMENU_STACK_SIZE - 1, 0, sizeof(softmenuStack_t)); // Put MyMenu in the last stack element
+
+
     doRefreshSoftMenu = true;     //dr
 
-    if(softmenuStackPointer <= 0) { // There is always a softmenu to display
-      if(SH_BASE_HOME && calcMode != CM_AIM) {                  //JM
+
+        if(SH_BASE_HOME && calcMode != CM_AIM) {                  //JM vv
           softmenuStack[0].softmenuId = mm_MNU_HOME;
-        } else
-          if(jm_FG_DOTS && calcMode != CM_AIM) {
+        } 
+        else if(jm_FG_DOTS && calcMode != CM_AIM) {
           softmenuStack[0].softmenuId = 0; //0=MyMenu JM for blank screen
-          } else
-            if(SH_BASE_AHOME && calcMode == CM_AIM) {
-              softmenuStack[0].softmenuId = mm_MNU_ALPHA;
-            } else {
-              softmenuStack[0].softmenuId = (calcMode == CM_AIM ? 1 : 0); // 1=MyAlpha and 0=MyMenu
-            }
-      softmenuStack[0].firstItem = 0;
-      softmenuStackPointer = 0;
-      }
+        } 
+        else if(SH_BASE_AHOME && calcMode == CM_AIM) {
+          softmenuStack[0].softmenuId = mm_MNU_ALPHA;
+        } 
+        else                                                      //JM ^^
+
+    if(softmenuStack[0].softmenuId == 0 && calcMode == CM_AIM) { // MyMenu displayed and in AIM
+      softmenuStack[0].softmenuId = 1; // MyAlpha
+    }
+    else if(softmenuStack[0].softmenuId == 1 && calcMode != CM_AIM) { // MyAlpha displayed and not in AIM
+      softmenuStack[0].softmenuId = 0; // MyMenu
+    }
+
+//        softmenuStack[0].firstItem = 0;
+
+
     }
   
 
@@ -1941,109 +1863,14 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    *                                           * MS_PUSH push the softmenu on the stack
    * \return void
    ***********************************************/
-  void showSoftmenu(const char *menu, int16_t id, int16_t initOrPushOnMenuStack) {
+  void showSoftmenu(int16_t id) {
     int16_t m;
-    initOrPushOnMenuStack = MS_PUSH;                                   //JM Experiment to force all menus to push onto stack
 printf("^^^^! id=%d\n",id);
-    switch(-id) {
-      case MNU_FCNS:
-        alphaSelectionMenu = ASM_FCNS;
-        if(calcMode == CM_PEM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_PEM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
 
-      case MNU_CONST:
-        alphaSelectionMenu = ASM_CNST;
-        if(calcMode == CM_PEM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_PEM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
+    enterAsmModeIfMenuIsACatalog(id);
 
-      case MNU_MENUS:
-        alphaSelectionMenu = ASM_MENU;
-        calcModeAsm();
-        break;
-
-      case MNU_SYSFL:
-        alphaSelectionMenu = ASM_SYFL;
-        if(calcMode == CM_TAM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_TAM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else if(calcMode == CM_TAM_OVER_PEM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_TAM_OVER_PEM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
-
-      case MNU_ALPHAINTL:
-        alphaSelectionMenu = ASM_AINT;
-        if(calcMode == CM_AIM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_AIM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
-
-      case MNU_ALPHAintl:
-        alphaSelectionMenu = ASM_aint;
-        if(calcMode == CM_AIM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_AIM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
-
-      case MNU_PROG:
-        alphaSelectionMenu = ASM_PROG;
-        if(calcMode == CM_PEM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_PEM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else if(calcMode == CM_TAM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_TAM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else if(calcMode == CM_TAM_OVER_PEM) {
-          calcModeAsm();
-          calcMode = CM_ASM_OVER_TAM_OVER_PEM;
-          clearSystemFlag(FLAG_ALPHA);
-        }
-        else {
-          calcModeAsm();
-        }
-        break;
-
-      default:
-        alphaSelectionMenu = ASM_NONE;
-    }
-
-    if((menu != NULL && id != 0) || (menu == NULL && id == 0)) {
-      displayBugScreen("In function showSoftmenu: one parameter must be 0 and one parameter must not be 0!");
+    if(id == 0) {
+      displayBugScreen("In function showSoftmenu: id must not be 0!");
       return;
     }
 
@@ -2054,73 +1881,38 @@ printf("^^^^! id=%d\n",id);
       id = -MNU_alpha_omega;
     }
 
-    if((id == 0 && !strcmp(menu, STD_alpha "INTL")) && alphaCase == AC_LOWER) { // alphaINTL
-      id = -MNU_ALPHAintl;
-    }
-    else if((id == 0 && !strcmp(menu, STD_ALPHA STD_ELLIPSIS STD_OMEGA)) && alphaCase == AC_LOWER) { // alpha...omega
-      id = -MNU_alpha_omega;
-    }
-
     m = 0;
+    while(softmenu[m].menuItem != 0) {
+      if(softmenu[m].menuItem == id) {
+       break;
+      }
+      m++;
+    }
 
-    if(id != 0) { // Search by ID
-      while(softmenu[m].menuItem != 0) {
-        if(softmenu[m].menuItem == id) {
-         break;
-        }
-        m++;
-      }
-    }
-    else { // Search by name
-      while(softmenu[m].menuItem != 0) {
-        if(strcmp(indexOfItems[-softmenu[m].menuItem].itemSoftmenuName, menu) == 0) {
-          break;
-        }
-        m++;
-      }
-    }
     if(softmenu[m].menuItem == 0) {
-      if(menu == NULL) {
-        sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
-        displayBugScreen(errorMessage);
-      }
-      else {
-        sprintf(errorMessage, "In function showSoftmenu: softmenu %s not found!", menu);
-        displayBugScreen(errorMessage);
-      }
+      sprintf(errorMessage, "In function showSoftmenu: softmenu %" PRId16 " not found!", id);
+      displayBugScreen(errorMessage);
     }
     else {
-      if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_ASM || calcMode == CM_ASM_OVER_TAM || calcMode == CM_ASM_OVER_TAM_OVER_PEM || calcMode == CM_ASM_OVER_AIM || calcMode == CM_ASM_OVER_PEM || calcMode == CM_AIM || calcMode == CM_PEM || calcMode == CM_GRAPH) {
-        if(initOrPushOnMenuStack) {
-          pushSoftmenu(m);
-        }
-        else {
-          initSoftmenuStack(m);
-        }
+      if(tamMode) {
+        numberOfTamMenusToPop++;
       }
-      else if(calcMode == CM_TAM || calcMode == CM_TAM_OVER_PEM) {
-      }
-      else {
-        sprintf(errorMessage, "In fuction showSoftMenu: %" PRIu8 " is an unexpected value for calcMode!", calcMode);
-        displayBugScreen(errorMessage);
-      }
+      pushSoftmenu(m);
     }
   }
 
-
-#endif // TESTSUITE_BUILDw
 
 
   void setCatalogLastPos(void) {
-         if(alphaSelectionMenu == ASM_CNST) lastCnstMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_FCNS) lastFcnsMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_MENU) lastMenuMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_SYFL) lastSyFlMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_AINT) lastAIntMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_aint) lastAIntMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-    else if(alphaSelectionMenu == ASM_PROG) lastProgMenuPos = softmenuStack[softmenuStackPointer].firstItem;
-  }
+    lastCatalogPosition[catalog] = (catalog ? softmenuStack[0].firstItem : 0);
 
+    if(catalog == CATALOG_AINT) {
+      lastCatalogPosition[CATALOG_aint] = softmenuStack[0].firstItem;
+    }
+    else if(catalog == CATALOG_aint) {
+      lastCatalogPosition[CATALOG_AINT] = softmenuStack[0].firstItem;
+    }
+  }
 
 
 void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM
@@ -2137,5 +1929,7 @@ void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //
       }
       m++;
     }
-}                                                         //JM^^
+}                                                                            //JM^^
 
+
+#endif // !TESTSUITE_BUILD

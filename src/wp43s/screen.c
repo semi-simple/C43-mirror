@@ -425,7 +425,7 @@
     // Alpha selection timer
     if(AlphaSelectionBufferTimerRunning) {         //JMvv
       if(catalog/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
-        timeoutAlphaSelectionBuffer();               //JM^^
+        timeoutAlphaSelectionBuffer();             //JM^^
       }
     }
 
@@ -2196,7 +2196,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   if(testEnabled) { fnSwStart(3); }     //dr
 #endif
 
-  clearScreen();
+  //clearScreen();  //JM do not use this clearscreen. Rather use the distributed clearscreens, WITH the if(last_CM != calcMode)
 
 
   if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
@@ -2204,34 +2204,34 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_FLAG_BROWSER_OLD:        //JM vv
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       flagBrowser_old(NOPARAM);
       refreshStatusBar();
       break;                
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       fontBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_REGISTER_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       registerBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_PEM:
-       //clearScreen();
+      clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
       displayShiftAndTamBuffer();
@@ -2251,7 +2251,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
 #endif
       if(last_CM != calcMode) {
         if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
-          //clearScreen();
+          clearScreen();
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);

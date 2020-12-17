@@ -1,0 +1,1 @@
+s/\bFG_DOTS\b/NO_BASE_SCREEN/g;

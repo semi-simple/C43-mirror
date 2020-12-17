@@ -99,7 +99,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1748 */  { ITM_CB_SPCRES,        JC_BSR,                 CB_JC },  //fnSetSetJM
 /* 1696 */  { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
 /* 1678 */  { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
-/* 1909 */  { ITM_FG_DOTS,          JC_FG_DOTS,             CB_JC },  //fnSetSetJM
+/* 1909 */  { ITM_NO_BASE_SCREEN,          JC_NO_BASE_SCREEN,             CB_JC },  //fnSetSetJM
 /* 1906 */  { ITM_FG_LINE,          JC_FG_LINE,             CB_JC },  //fnSetSetJM
 /* 1911 */  { ITM_G_DOUBLETAP,      JC_G_DOUBLETAP,         CB_JC },  //fnSetSetJM
 /* 1679 */  { ITM_HOMEx3,           JC_HOME_TRIPLE,         CB_JC },  //fnSetSetJM
@@ -312,9 +312,9 @@ int8_t fnCbIsSet(int16_t item) {
             }
             break;
 
-          case JC_FG_DOTS:
+          case JC_NO_BASE_SCREEN:
             {
-              cb_param = jm_FG_DOTS;
+              cb_param = jm_NO_BASE_SCREEN;
             }
             break;
 
@@ -820,8 +820,8 @@ void fnRebuildRadioState() {
   fnRefreshComboxState(CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
 // 1678     { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);
-// 1909     { ITM_FG_DOTS,          JC_FG_DOTS,             CB_JC },  //fnSetSetJM
-  fnRefreshComboxState(CB_JC, JC_FG_DOTS, jm_FG_DOTS);
+// 1909     { ITM_NO_BASE_SCREEN,          JC_NO_BASE_SCREEN,             CB_JC },  //fnSetSetJM
+  fnRefreshComboxState(CB_JC, JC_NO_BASE_SCREEN, jm_NO_BASE_SCREEN);
 // 1906     { ITM_FG_LINE,          JC_FG_LINE,             CB_JC },  //fnSetSetJM
   fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);
 // 1911     { ITM_G_DOUBLETAP,      JC_G_DOUBLETAP,         CB_JC },  //fnSetSetJM
@@ -864,7 +864,7 @@ void fnRebuildRadioState() {
   printf("CB_JC, JC_BSR, getSystemFlag(FLAG_SPCRES)  %d %d %d\n",CB_JC, JC_BSR, getSystemFlag(FLAG_SPCRES));
   printf("CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0)   %d %d %d\n",CB_JC, JC_BLZ, getSystemFlag(FLAG_LEAD0));
   printf("CB_JC, JC_ERPN, eRPN                       %d %d %d\n",CB_JC, JC_ERPN, eRPN);
-  printf("CB_JC, JC_FG_DOTS, jm_FG_DOTS              %d %d %d\n", CB_JC, JC_FG_DOTS, jm_FG_DOTS);
+  printf("CB_JC, JC_NO_BASE_SCREEN, jm_NO_BASE_SCREEN              %d %d %d\n", CB_JC, JC_NO_BASE_SCREEN, jm_NO_BASE_SCREEN);
   printf("CB_JC, JC_FG_LINE, jm_FG_LINE              %d %d %d\n", CB_JC, JC_FG_LINE, jm_FG_LINE);
   printf("CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP      %d %d %d\n", CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);
   printf("CB_JC, JC_HOME_TRIPLE, HOME3               %d %d %d\n", CB_JC, JC_HOME_TRIPLE, HOME3 );
@@ -1167,8 +1167,8 @@ void fnRebuildRadioState() {
         rb.state = jm_FG_LINE? 3 : 2;
         break;
 
-      case JC_FG_DOTS:
-        rb.state = jm_FG_DOTS? 3 : 2;
+      case JC_NO_BASE_SCREEN:
+        rb.state = jm_NO_BASE_SCREEN? 3 : 2;
         break;
 
       case JC_G_DOUBLETAP:

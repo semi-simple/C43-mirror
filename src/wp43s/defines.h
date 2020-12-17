@@ -72,11 +72,11 @@
 //*********************************
 #define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
-#define DEBUG_PANEL                      1 // Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
+#define DEBUG_PANEL                       0 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
 #define DEBUG_REGISTER_L                 1 // Showing register L content on the PC GUI
-#define SHOW_MEMORY_STATUS               1 // Showing the memory status on the PC GUI
+#define SHOW_MEMORY_STATUS                0 //JM Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers
-#define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
+#define MMHG_PA_133_3224                  0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
 #define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX
@@ -120,9 +120,9 @@
 #define AIM_BUFFER_LENGTH                        220 //JMMAX changed from 400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32                          // TODO: find the exact maximum needed
 #ifdef BUFFER_CLICK_DETECTION
-#define NIM_BUFFER_LENGTH                        100-24-10 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#define NIM_BUFFER_LENGTH                        100-24-10 //JM TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 #else
-#define NIM_BUFFER_LENGTH                        100-24 //TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
+#define NIM_BUFFER_LENGTH                        100-24 //JM TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 #endif
 
 // TAM transition system
@@ -384,7 +384,7 @@
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
 #define NUMBER_OF_DYNAMIC_SOFTMENUS               15
-#define MY_ALPHA_MENU_CNST                         0  //JM TOCHECK This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
+#define MY_ALPHA_MENU_CNST                         1  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar

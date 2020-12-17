@@ -122,7 +122,7 @@ extern bool_t SH_BASE_AHOME;                                         //JM BASEHO
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 extern uint8_t Input_Default;                                        //JM Input Default
 extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
-extern bool_t jm_FG_DOTS;                                            //JM Screen / keyboard operation setup
+extern bool_t jm_NO_BASE_SCREEN;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
 extern float graph_xmin;                                             //JM Graph
 extern float graph_xmax;                                             //JM Graph
@@ -223,7 +223,7 @@ char* itoa(int value, char* result, int base);
 #define JM_INP_DFLT            15    // Input_Default
 
 #define JC_FG_LINE             20    // screen setup
-#define JC_FG_DOTS             21    // screen setup
+#define JC_NO_BASE_SCREEN             21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
 
 #define JC_H_SUM               24    //JMHOME

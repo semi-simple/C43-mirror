@@ -1426,7 +1426,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(Norm_Key_00_VAR);
   storeToDtConfigDescriptor(Input_Default);
   storeToDtConfigDescriptor(jm_FG_LINE);
-  storeToDtConfigDescriptor(jm_FG_DOTS);
+  storeToDtConfigDescriptor(jm_NO_BASE_SCREEN);
   storeToDtConfigDescriptor(jm_G_DOUBLETAP);
   storeToDtConfigDescriptor(graph_xmin);
   storeToDtConfigDescriptor(graph_xmax);
@@ -1759,7 +1759,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(Norm_Key_00_VAR); 
     recallFromDtConfigDescriptor(Input_Default);   
     recallFromDtConfigDescriptor(jm_FG_LINE);       
-    recallFromDtConfigDescriptor(jm_FG_DOTS);       
+    recallFromDtConfigDescriptor(jm_NO_BASE_SCREEN);       
     recallFromDtConfigDescriptor(jm_G_DOUBLETAP);   
     recallFromDtConfigDescriptor(graph_xmin);        
     recallFromDtConfigDescriptor(graph_xmax);        

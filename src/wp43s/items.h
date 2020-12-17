@@ -1766,7 +1766,7 @@
 #define ITM_XIN                       1744
 #define ITM_XOUT                      1745
 #define ITM_FG_LINE                   1746
-#define ITM_FG_DOTS                   1747
+#define ITM_NO_BASE_SCREEN            1747
 #define ITM_G_DOUBLETAP               1748
 #define ITM_1749                      1749
 #define ITM_P_ALLREGS                 1750

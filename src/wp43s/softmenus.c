@@ -148,7 +148,7 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
 #else                                                                           //^^
                                      ITM_BASE_AHOME,                ITM_BASE_HOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
 #endif                                                                          //dr
-                                     -MNU_ASN,                      ITM_FG_DOTS,                ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
+                                     -MNU_ASN,                      ITM_NO_BASE_SCREEN,                ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
 
 
 
@@ -1412,7 +1412,7 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
     int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[0].softmenuId;
     bool_t dottedTopLine;
     printf("^^^^* m=%d\n",m);
-    if(!(m==0 && jm_FG_DOTS) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
+    if(!(m==0 && jm_NO_BASE_SCREEN) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
@@ -1821,23 +1821,12 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
+    printf(">>> ###### popping \n");
+
     xcopy(softmenuStack, softmenuStack + 1, (SOFTMENU_STACK_SIZE - 1) * sizeof(softmenuStack_t)); // shifting the entire stack
     memset(softmenuStack + SOFTMENU_STACK_SIZE - 1, 0, sizeof(softmenuStack_t)); // Put MyMenu in the last stack element
 
-
     doRefreshSoftMenu = true;     //dr
-
-
-        if(SH_BASE_HOME && calcMode != CM_AIM) {                  //JM vv
-          softmenuStack[0].softmenuId = mm_MNU_HOME;
-        } 
-        else if(jm_FG_DOTS && calcMode != CM_AIM) {
-          softmenuStack[0].softmenuId = 0; //0=MyMenu JM for blank screen
-        } 
-        else if(SH_BASE_AHOME && calcMode == CM_AIM) {
-          softmenuStack[0].softmenuId = mm_MNU_ALPHA;
-        } 
-        else                                                      //JM ^^
 
     if(softmenuStack[0].softmenuId == 0 && calcMode == CM_AIM) { // MyMenu displayed and in AIM
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -1845,11 +1834,21 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     else if(softmenuStack[0].softmenuId == 1 && calcMode != CM_AIM) { // MyAlpha displayed and not in AIM
       softmenuStack[0].softmenuId = 0; // MyMenu
     }
+    else
 
+    if(softmenuStack[0].softmenuId == 0 && SH_BASE_HOME && calcMode != CM_AIM) {                  //JM vv
+      softmenuStack[0].softmenuId = mm_MNU_HOME;
+    } 
+//    else if(softmenuStack[0].softmenuId == 0 && jm_NO_BASE_SCREEN && calcMode != CM_AIM) {
+//      softmenuStack[0].softmenuId = 0; //0=MyMenu JM for blank screen
+//    } 
+    else if(softmenuStack[0].softmenuId == 1 && SH_BASE_AHOME && calcMode == CM_AIM) {
+      softmenuStack[0].softmenuId = mm_MNU_ALPHA;
+    } 
+                                                              //JM ^^
 //        softmenuStack[0].firstItem = 0;
 
-
-    }
+  }
   
 
 
@@ -1865,7 +1864,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    ***********************************************/
   void showSoftmenu(int16_t id) {
     int16_t m;
-printf("^^^^! id=%d\n",id);
+printf("^^^^Showing Softmenu id=%d\n",id);
 
     enterAsmModeIfMenuIsACatalog(id);
 

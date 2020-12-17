@@ -57,7 +57,7 @@ void reset_jm_defaults(int16_t toload) {
     Norm_Key_00_VAR  = ITM_SIGMAPLUS;                            //JM
     Input_Default =  ID_43S;                                     //JM Input Default
     jm_FG_LINE = true;                                           //JM Screen / keyboard operation setup
-    jm_FG_DOTS = true;                                           //JM Menu system default
+    jm_NO_BASE_SCREEN = true;                                           //JM Menu system default
     jm_G_DOUBLETAP = true;                                       //JM Screen / keyboard operation setup
     graph_xmin = -3*3.14159265;                                //JM GRAPH
     graph_xmax = +3*3.14159265;                                //JM GRAPH
@@ -132,9 +132,9 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);                        //jm
     break;
 
-  case JC_FG_DOTS:                                          //JM
-    jm_FG_DOTS = !jm_FG_DOTS;
-    fnRefreshComboxState(CB_JC, JC_FG_DOTS, jm_FG_DOTS);                        //jm
+  case JC_NO_BASE_SCREEN:                                          //JM
+    jm_NO_BASE_SCREEN = !jm_NO_BASE_SCREEN;
+    fnRefreshComboxState(CB_JC, JC_NO_BASE_SCREEN, jm_NO_BASE_SCREEN);                        //jm
     break;
 
   case JC_G_DOUBLETAP:                                      //JM
@@ -164,7 +164,7 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     SH_BASE_AHOME = !SH_BASE_AHOME;
     //fnInfo(SH_BASE_AHOME);
     if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA;
-    else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
+    else              MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
     fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
     break;
 

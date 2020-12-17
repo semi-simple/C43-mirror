@@ -2347,7 +2347,7 @@ const item_t indexOfItems[] = {
 
 
 /* 1746 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED,  US_UNCHANGED},//JM UNDERLINING
-/* 1747 */  { fnSetSetJM,                  JC_FG_DOTS,                  "NO" STD_SPACE_3_PER_EM "BASE",                "NO" STD_SPACE_3_PER_EM "BASE",                0,       0,       CAT_FNCT, SLS_UNCHANGED,  US_UNCHANGED},//JM NOBASE MENU SETTING
+/* 1747 */  { fnSetSetJM,                  JC_NO_BASE_SCREEN,           "NO" STD_SPACE_3_PER_EM "BASE",                "NO" STD_SPACE_3_PER_EM "BASE",                0,       0,       CAT_FNCT, SLS_UNCHANGED,  US_UNCHANGED},//JM NOBASE MENU SETTING
 /* 1748 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 0,       0,       CAT_FNCT, SLS_UNCHANGED,  US_UNCHANGED},//JM KEY TAP DOUBLE SETTING
 /* 1749 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        0,       0,       CAT_FREE, SLS_UNCHANGED,  US_UNCHANGED},
 /* 1750 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            0,       0,       CAT_FNCT, SLS_UNCHANGED,  US_UNCHANGED},

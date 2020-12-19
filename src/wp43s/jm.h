@@ -83,7 +83,8 @@ uint8_t verbose_jm;
 
 
 void jm_show_calc_state(char comment[]);
-void reset_jm_defaults(int16_t toload);
+void jm_show_comment   (char comment[]);
+void reset_jm_defaults (int16_t toload);
 
 
 //keyboard.c  screen.c

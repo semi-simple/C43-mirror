@@ -4077,6 +4077,9 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeNormal(void) {
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### calcModeNormal"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     calcMode = CM_NORMAL;
 
     if(softmenuStack[0].softmenuId == 1) { // MyAlpha
@@ -4101,7 +4104,9 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
-
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     if(!SH_BASE_AHOME) {
         showSoftmenu(-MNU_MyAlpha);
     } else
@@ -4110,10 +4115,9 @@ void setupUI(void) {
     }
 
     alphaCase = AC_UPPER;
-    nextChar = NC_NORMAL;
-    numLock = false;
     calcMode = CM_AIM;
     nextChar = NC_NORMAL;
+    numLock = false;
 
       liftStack();
 
@@ -4152,6 +4156,9 @@ void setupUI(void) {
       case MNU_PROG:      catalog = CATALOG_PROG; break;
       default:            catalog = CATALOG_NONE;
     }
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### enterAsmMode catalog=%d",catalog); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     if(catalog) {
       if(calcMode == CM_NIM) {
@@ -4160,6 +4167,8 @@ void setupUI(void) {
 
       alphaCase = AC_UPPER;
       nextChar = NC_NORMAL;
+      numLock = false;
+
 
       clearSystemFlag(FLAG_ALPHA);
       resetAlphaSelectionBuffer();
@@ -4178,6 +4187,9 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void leaveAsmMode(void) {
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### leaveAsmMode"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     catalog = CATALOG_NONE;
 
     if(tamMode) {
@@ -4204,6 +4216,9 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void calcModeNim(uint16_t unusedButMandatoryParameter) {
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### calcModeNim"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     saveForUndo();
 
     calcMode = CM_NIM;
@@ -4225,17 +4240,12 @@ void setupUI(void) {
   /********************************************//**
    * \brief Sets the calc mode to temporary alpha mode
    *
-   * \param[in] tamMode int16_t    TAM mode
-   *                               TAM        = general operation code
-   *                               TAMCMP     = comparison operation code
-   *                               TAMSTORCL  = STO or RCL operation code
-   *                               TAMSHUFFLE = Shuffle Registers operation code
-   * \param[in] opCode const char* Operation code
-   * \param[in] minN int16_t       Min value in TAM mode
-   * \param[in] maxN int16_t       Max value in TAM mode
    * \return void
    ***********************************************/
   void enterTamMode(void) {
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### enterTamMode"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     transitionSystemState = 0;
     tamCurrentOperation = 0;
 
@@ -4310,6 +4320,9 @@ void setupUI(void) {
    * \return void
    ***********************************************/
   void leaveTamMode(void) {
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^### leaveTamMode"); jm_show_comment(tmp);
+    #endif //PC_BUILD
     tamMode = 0;
     catalog = CATALOG_NONE;
 
@@ -4326,4 +4339,15 @@ void setupUI(void) {
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
+
+  void refreshModeGui(void) {  //JM Added here to force icon update in Gui
+    #ifdef PC_BUILD
+      if     (calcMode == CM_NORMAL || calcMode == CM_PEM) calcModeNormalGui();
+      else if(calcMode == CM_AIM) calcModeAimGui();
+      else if(tamMode) calcModeTamGui();
+      else if(catalog) calcModeAimGui();
+    #endif
+  }
+
+
 #endif // !TESTSUITE_BUILD

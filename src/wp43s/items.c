@@ -70,6 +70,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   void reallyRunFunction(int16_t func, uint16_t param) {
+    printf("^^^^rRunfunction itemC func=%d param=%d\n",func, param);
     if(indexOfItems[func].undoStatus == US_ENABLED) {
       saveForUndo();
     }

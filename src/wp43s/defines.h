@@ -34,6 +34,14 @@
 #define PC_BUILD_TELLTALE
 #undef PC_BUILD_TELLTALE           //verbose
 
+#define PC_BUILD_VERBOSE2
+
+
+//Allow longpress CHS and EEX
+#define TESTING
+#undef TESTING
+
+
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43
 #define arrowCasechange    false
 
@@ -70,9 +78,9 @@
 //*********************************
 //* General configuration defines *
 //*********************************
-#define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
+#define DEBUG_INSTEAD_STATUS_BAR        0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
-#define DEBUG_PANEL                       0 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
+#define DEBUG_PANEL                       1 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
 #define DEBUG_REGISTER_L                 1 // Showing register L content on the PC GUI
 #define SHOW_MEMORY_STATUS                0 //JM Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers

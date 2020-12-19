@@ -424,7 +424,6 @@ void showHideASB(void) {                     //JMvv
   else {
     kill_ASB_icon();
   }
-
 }                                             //JM^^
 
 
@@ -440,15 +439,9 @@ void showHideUserMode(void) {
   if(getSystemFlag(FLAG_USER)) {
     showGlyph(STD_USER_MODE, &standardFont, X_USER_MODE, 0, vmNormal, false, false); // STD_USER_MODE is 0+12+2 pixel wide
   }
-
-  #ifdef PC_BUILD
-//JMXX    showSoftmenuCurrentPart();                       //JM Added here to force icon update in Gui
-    if(calcMode == CM_NORMAL) calcModeNormalGui();
-    else if(calcMode == CM_AIM) calcModeAimGui();
-    else if(tamMode) calcModeTamGui();
-  #endif
+  refreshModeGui(); //JM Added here to force icon update in Gui
 }
-
+  
 
 
   #ifdef DMCP_BUILD

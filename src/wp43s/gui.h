@@ -32,10 +32,11 @@
 #ifdef PC_BUILD
   void setupUI            (void);
   #if (SCREEN_800X480 == 0)
-    void moveLabels       (void);     //JM Keep here
+    void moveLabels       (void);     //JM Keep here: legacy of old gui
     void calcModeNormalGui(void);
     void calcModeAimGui   (void);
     void calcModeTamGui   (void);
+    void refreshModeGui   (void);     //JM Added here to force icon update in Gui
   #endif // SCREEN_800X480
 #endif // PC_BUILD
 

@@ -31,7 +31,9 @@
       const softmenu_t *sm;
       int16_t row, menuId = softmenuStack[0].softmenuId;
       int16_t firstItem = softmenuStack[0].firstItem;
-      printf("^^^^^@ softmenuStackPointer=%d menuId=%d menuItem=%d\n",0, menuId, -softmenu[menuId].menuItem);
+      #ifdef PC_BUILD
+        char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp);
+      #endif //PC_BUILD
       if(!(menuId==0 && jm_NO_BASE_SCREEN) ) {
         	switch(-softmenu[menuId].menuItem) {
           case MNU_PROG:
@@ -479,12 +481,14 @@
       }
       showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
-      printf("^^^^Pressed: %d\n",item);
+      #ifdef PC_BUILD
+        char tmp[200]; sprintf(tmp,"^^^^btnPressed %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
+      #endif //PC_BUILD
 
       if(item != ITM_NOP && item != ITM_NULL) {
         #ifdef PC_BUILD
           char tmp[200];
-          sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s",item,(char *)data);
+          sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s\n",item,(char *)data);
           jm_show_calc_state(tmp);
         #endif
         processKeyAction(item);
@@ -537,7 +541,11 @@
 
       if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
-        printf("^^^^Released item=%d\n",item);
+        #ifdef PC_BUILD
+          char tmp[200]; sprintf(tmp,"^^^^btnReleased %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
+        #endif //PC_BUILD
+
+
         hideFunctionName();
         if(item < 0) {
           showSoftmenu(item);
@@ -548,8 +556,10 @@
       }
 
       if(!checkShifts((char *)data)) {
-        printf(">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.\n", (char *)data);
-        jm_show_calc_state("      ##### keyboard.c: btnReleased end");
+        #ifdef PC_BUILD
+          char tmp[200]; sprintf(tmp,">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.", (char *)data); jm_show_comment(tmp);
+          jm_show_calc_state("      ##### keyboard.c: btnReleased end");
+        #endif //PC_BUILD
         refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
       }
     }
@@ -740,7 +750,7 @@
             keyActionProcessed = true;
           }
 
-          else if(((ITM_ALPHA<=item && item<=ITM_OMEGA) || (ITM_QOPPA<=item && item<=ITM_SAMPI)) && alphaCase == AC_LOWER) {  //JM GREEK
+          else if(((ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI)) && alphaCase == AC_LOWER) {  //JM GREEK
             addItemToBuffer(item + 36);
             keyActionProcessed = true;
           }
@@ -798,8 +808,11 @@
               case ITM_SPACE      : item1 = ITM_ADD;    break;
 
               default: 
-                   printf("^^^^ In AIM not handled %d\n",item);
+                   #ifdef PC_BUILD
+                     jm_show_comment("^^^^processKeyAction:CM_AIM: In AIM, not handled");
+                   #endif //PC_BUILD
                    item1 = item;
+                   break;
             }
             if(item1>0) {
               addItemToBuffer(item1);
@@ -1164,18 +1177,20 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
     jm_show_calc_state("fnKeyExit");
   #endif
 
+    if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL
+      numberOfTamMenusToPop = 2;
+      leaveTamMode();
+      return;
+    }
+
     if(catalog) {
-        if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL
-          leaveAsmMode();
-          return;
-        }                                                                             //JM auto recover out of SYSFL
+      leaveAsmMode();
+      return;
     }
 
     if(tamMode) {
-        if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL
-          leaveTamMode();
-          return;
-        }                                                                             //JM auto recover out of SYSFL
+      leaveTamMode();
+      return;
     }
 
     switch(calcMode) {
@@ -1186,13 +1201,15 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         break;
 
-      case CM_AIM: //JMTOCHECK2
-//        if(tmp1 == -MNU_ALPHA || tmp1 == -MNU_T_EDIT || tmp1 == -MNU_MyAlpha) {  //JM
-//        if(softmenuStackPointer >  0 && tmp1 == -MNU_T_EDIT) {popSoftmenu();}    //JM
-//        popSoftmenu();
+      case CM_AIM:
+        if(tmp1 == -MNU_ALPHA || tmp1 == -MNU_T_EDIT) {  //JM
+          if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}       //JM
+          softmenuStack[0].softmenuId = 1;               //JM
+        }                                                //JM
 
         if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
-        calcModeNormal();
+          popSoftmenu(); //JM
+          calcModeNormal();
 
           if(aimBuffer[0] == 0) {
             undo();
@@ -1215,7 +1232,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_NIM:
         addItemToNimBuffer(ITM_EXIT1);
-//JMTOCHECK2        calcModeNormal();
         break;
 
       case CM_PEM:

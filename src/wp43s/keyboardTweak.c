@@ -21,10 +21,6 @@
  ***********************************************/
 
 
-#define TESTING        //Allow longpress CHS and EEX
-#undef TESTING
-
-
 #include "wp43s.h"
 
 
@@ -39,6 +35,9 @@ uint32_t    timerLastCalled;
 
 
 void showAlphaModeonGui(void) {
+  #ifdef PC_BUILD
+    char tmp[200]; sprintf(tmp,"^^^^showAlphaModeonGui\n"); jm_show_comment(tmp);
+  #endif //PC_BUILD
   if(calcMode == CM_AIM || tamMode)    //vv dr JM
   {
     #ifndef TESTSUITE_BUILD
@@ -346,7 +345,6 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
   longpressDelayedkey3 = 0;
 
   if(longpressDelayedkey1 == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
-    bool_t flag_user = getSystemFlag(FLAG_USER);
     for(int i=0; i<=16; i++) {      //16 //0=E+  6=STO  12=ENTER 13=X<>Y 14=CHS 15=E 16=BKSPC
       if(key_no == i 
         #ifndef TESTING
@@ -354,7 +352,7 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
           && i!=15       //Do not allow longpress EEX as EEX is a leading edge button
         #endif
         && i!=16) {    //Do not allow longpress BKSPC
-        if(flag_user) {
+        if(getSystemFlag(FLAG_USER)) {
           longpressDelayedkey1 = kbd_usr[i].fShifted;
           if(i!=13 && i!=14 && i!=15) longpressDelayedkey3 = kbd_usr[i].gShifted;
         }
@@ -1274,6 +1272,11 @@ void fnT_ARROW(uint16_t command) {
   uint16_t current_cursor_x_old;
   uint16_t current_cursor_y_old;
 
+  #ifdef PC_BUILD
+    char tmp[200]; sprintf(tmp,"^^^^fnT_ARROW: command=%d current_cursor_x=%d current_cursor_y=%d \n",command,current_cursor_x, current_cursor_y); jm_show_comment(tmp);
+  #endif //PC_BUILD
+
+
   switch (command) {
 
      case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
@@ -1318,6 +1321,7 @@ void fnT_ARROW(uint16_t command) {
           fnT_ARROW(ITM_T_LEFT_ARROW);
           //if((ixx>33 && combinationFonts==0) || (ixx>25 && combinationFonts!=0))  refreshScreen();
           showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+
 
           //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
           ixx++;

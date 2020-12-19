@@ -1847,6 +1847,9 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     } 
                                                               //JM ^^
 //        softmenuStack[0].firstItem = 0;
+  #ifdef PC_BUILD
+    jm_show_calc_state("popped");
+  #endif
 
   }
   

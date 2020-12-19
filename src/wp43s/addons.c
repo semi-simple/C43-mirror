@@ -88,21 +88,27 @@ void fnCFGsettings(uint16_t unusedButMandatoryParameter) {
 
 
 void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
+  #ifdef PC_BUILD
+  jm_show_comment("^^^^fnClAIMa");
+  #endif //PC_BUILD
   if(calcMode == CM_NIM) {
     strcpy(aimBuffer,"+");
     fnKeyBackspace(0);
     //printf("|%s|\n",aimBuffer);
   }
   lastIntegerBase = 0;
-#ifndef TESTSUITE_BUILD
-//  while(softmenuStackPointer > 0 /*softmenuStackPointerBeforeAIM*/ ) {     //JMMENU was 0, to POP OFF ALL MENUS; changed by Martin to before AIM
-//JMTOCHECK2
-    popSoftmenu();
-//  }
-  calcModeNormal();
-  refreshScreen();
-  fnKeyExit(0);      //Call fnkeyExit to ensure the correct home screen is brought up, if HOME is selected.
-#endif
+  #ifndef TESTSUITE_BUILD
+    int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE && softmenuStack[0].softmenuId != 0) {
+      #ifdef PC_BUILD
+      jm_show_comment("^^^^fnClAIMb");
+      #endif //PC_BUILD
+      popSoftmenu();
+      ix++;
+    }
+    calcModeNormal();
+    refreshScreen();
+    fnKeyExit(0);      //Call fnkeyExit to ensure the correct home screen is brought up, if HOME is selected.
+  #endif
 }
 
 

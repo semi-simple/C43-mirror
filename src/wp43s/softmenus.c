@@ -1411,7 +1411,9 @@ void showSoftkey(const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMod
 //JMTOCHECK: Removed exceptions for underline removal. 
     int16_t x, y, yDotted=0, currentFirstItem, item, numberOfItems, m = softmenuStack[0].softmenuId;
     bool_t dottedTopLine;
-    printf("^^^^* m=%d\n",m);
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^showSoftmenuCurrentPart: Showing Softmenu id=%d\n",m); jm_show_comment(tmp);
+    #endif //PC_BUILD
     if(!(m==0 && jm_NO_BASE_SCREEN) && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && calcMode != CM_REGISTER_BROWSER && calcMode != CM_BUG_ON_SCREEN) {           //JM: Added exclusions, as this procedure is not only called from refreshScreen, but from various places due to underline
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 
@@ -1785,8 +1787,11 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    ***********************************************/
   static void pushSoftmenu(int16_t softmenuId) {
     int i;
+    if(running_program_jm) return;                             //JM
 
-    printf(">>> ###### pushing %d\n",softmenuId);
+    #ifdef PC_BUILD
+      printf(">>> ...... pushing id:%d name:%s\n",softmenuId, indexOfItems[-softmenu[softmenuId].menuItem].itemSoftmenuName);
+    #endif //PC_BUILD
     if(softmenuStack[0].softmenuId == softmenuId) { // The menu to push on the stack is already displayed
       return;
     }
@@ -1821,7 +1826,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
-    printf(">>> ###### popping \n");
+    if(running_program_jm) return;                             //JM
 
     xcopy(softmenuStack, softmenuStack + 1, (SOFTMENU_STACK_SIZE - 1) * sizeof(softmenuStack_t)); // shifting the entire stack
     memset(softmenuStack + SOFTMENU_STACK_SIZE - 1, 0, sizeof(softmenuStack_t)); // Put MyMenu in the last stack element
@@ -1847,10 +1852,10 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     } 
                                                               //JM ^^
 //        softmenuStack[0].firstItem = 0;
-  #ifdef PC_BUILD
-    jm_show_calc_state("popped");
-  #endif
-
+    #ifdef PC_BUILD
+      jm_show_calc_state("popped");
+      printf(">>> ...... popped into [0]: Id:%d Name:%s\n",softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName);
+    #endif //PC_BUILD
   }
   
 
@@ -1866,8 +1871,11 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void showSoftmenu(int16_t id) {
+    if(running_program_jm) return;                             //JM
     int16_t m;
-printf("^^^^Showing Softmenu id=%d\n",id);
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^showSoftmenu: Showing Softmenu id=%d\n",id); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     enterAsmModeIfMenuIsACatalog(id);
 

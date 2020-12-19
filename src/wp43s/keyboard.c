@@ -1207,7 +1207,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           softmenuStack[0].softmenuId = 1;               //JM
         }                                                //JM
 
-        if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
+        if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           popSoftmenu(); //JM
           calcModeNormal();
 

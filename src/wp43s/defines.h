@@ -35,6 +35,7 @@
 #undef PC_BUILD_TELLTALE           //verbose
 
 #define PC_BUILD_VERBOSE2
+#undef PC_BUILD_VERBOSE2
 
 
 //Allow longpress CHS and EEX

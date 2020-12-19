@@ -330,7 +330,9 @@ void kill_ASB_icon(void) {
 
         softmenuStack[0].firstItem = firstItem;
         setCatalogLastPos();
-        alphaSelectionTimer = getUptimeMs();
+//        alphaSelectionTimer = getUptimeMs();     //JM
+        startAlphaSelectionBuffer();               //JM
+
       }
 
       else if(tamMode) {

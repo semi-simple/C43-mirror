@@ -113,13 +113,13 @@
         }
       }
 
-      if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
+      if(currentNumberOfLocalRegisters > 0) {
         // Local registers
-        if(allLocalRegisterPointer->numberOfLocalRegisters == 1) {
+        if(currentNumberOfLocalRegisters == 1) {
           strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
         }
         else {
-          sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", allLocalRegisterPointer->numberOfLocalRegisters);
+          sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
         }
 
         // Local flags

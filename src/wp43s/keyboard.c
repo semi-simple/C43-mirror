@@ -90,7 +90,7 @@
     void btnFnClicked(void *notUsed, void *data) {
   #endif
     
-      executeFunction(data);
+      executeFunction(data, 0);
     }
     
   #ifdef PC_BUILD
@@ -197,18 +197,22 @@
    * \brief Executes one function from a softmenu
    * \return void
    ***********************************************/
-  void executeFunction(const char *data) {
+  void executeFunction(const char *data, int16_t item_) {
+    int16_t item = ITM_NOP;
     if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
   
-      int16_t item = ITM_NOP;
-      item = determineFunctionKeyItem((char *)data);
+      if(data[0] == 0) item = item_;
+      else {
+        item = determineFunctionKeyItem((char *)data);
+      }
+
       resetShiftState();
   
         //printf("%d--\n",calcMode);
       {
-        if(calcMode != CM_CONFIRMATION) {
+        if(calcMode != CM_CONFIRMATION && data[0] != 0) {
           lastErrorCode = 0;
-
+  
           if(item < 0) { // softmenu
             showSoftmenu(item);
             refreshScreen();
@@ -235,9 +239,10 @@
             refreshScreen();
             return;
           }
-
-          }
+  
+        }
            // Broken the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
+      if(calcMode != CM_CONFIRMATION)
           {
             if(item < 0) { // softmenu
               if(item != -MNU_SYSFL || !catalog || transitionSystemState == 0) {

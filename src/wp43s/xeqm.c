@@ -73,6 +73,13 @@ void capture_sequence(char *origin, uint16_t item) {
 void runkey(int16_t item){
   #ifndef TESTSUITE_BUILD
 
+/*
+char tmp[2];
+tmp[0]=0;
+executeFunction(tmp, item);
+*/  
+
+
   if(item < 0) {
     showSoftmenu(item);
   } else {
@@ -243,7 +250,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                    //printf("@@@ %s\n",commandnumber);
                    if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                      //printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);
+                      printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);
                       
                       //DSZ:
                       if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
@@ -297,7 +304,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"CLX" )) {sprintf(commandnumber,"%d", ITM_CLX);} else
                       if (strcompare(commandnumber,"FILL" )) {sprintf(commandnumber,"%d", ITM_FILL);} else
                       if (strcompare(commandnumber,"STO" )) {sprintf(commandnumber,"%d", ITM_STO);} else
-                      if (strcompare(commandnumber,"STO+" )) {sprintf(commandnumber,"%d", ITM_STOADD);} else
                       if (strcompare(commandnumber,"COMB" )) {sprintf(commandnumber,"%d", ITM_COMB);} else
                       if (strcompare(commandnumber,"PERM" )) {sprintf(commandnumber,"%d", ITM_PERM);} else
                       if (strcompare(commandnumber,"RCL" )) {sprintf(commandnumber,"%d", ITM_RCL);} else

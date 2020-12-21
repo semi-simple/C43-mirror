@@ -43,8 +43,6 @@ void         fnXLessThan                     (uint16_t unusedButMandatoryParamet
 int16_t      indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
 void         reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t dataSizeWithoutDataLenBlocks, uint32_t tag);
 void         fnToReal                        (uint16_t unusedButMandatoryParameter);
-void         fnDec                           (uint16_t r);
-void         fnInc                           (uint16_t r);
 #ifndef DMCP_BUILD
   void       printReal34ToConsole            (const real34_t *value, const char *before, const char *after);
   void       printRealToConsole              (const real_t *value, const char *before, const char *after);

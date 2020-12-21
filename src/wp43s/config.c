@@ -8066,6 +8066,174 @@ void addTestPrograms(void) {
     *(currentStep++) = 'a';
     *(currentStep++) = 'r';
 
+    *(currentStep++) = (ITM_BINOMP >> 8) | 0x80;
+    *(currentStep++) =  ITM_BINOMP       & 0xff;
+
+    *(currentStep++) = (ITM_BINOM >> 8) | 0x80;
+    *(currentStep++) =  ITM_BINOM       & 0xff;
+
+    *(currentStep++) = (ITM_BINOMU >> 8) | 0x80;
+    *(currentStep++) =  ITM_BINOMU       & 0xff;
+
+    *(currentStep++) = (ITM_BINOMM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_BINOMM1       & 0xff;
+
+    *(currentStep++) = (ITM_CAUCHP >> 8) | 0x80;
+    *(currentStep++) =  ITM_CAUCHP       & 0xff;
+
+    *(currentStep++) = (ITM_CAUCH >> 8) | 0x80;
+    *(currentStep++) =  ITM_CAUCH       & 0xff;
+
+    *(currentStep++) = (ITM_CAUCHU >> 8) | 0x80;
+    *(currentStep++) =  ITM_CAUCHU       & 0xff;
+
+    *(currentStep++) = (ITM_CAUCHM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_CAUCHM1       & 0xff;
+
+    *(currentStep++) = (ITM_EXPONP >> 8) | 0x80;
+    *(currentStep++) =  ITM_EXPONP       & 0xff;
+
+    *(currentStep++) = (ITM_EXPON >> 8) | 0x80;
+    *(currentStep++) =  ITM_EXPON       & 0xff;
+
+    *(currentStep++) = (ITM_EXPONU >> 8) | 0x80;
+    *(currentStep++) =  ITM_EXPONU       & 0xff;
+
+    *(currentStep++) = (ITM_EXPONM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_EXPONM1       & 0xff;
+
+    *(currentStep++) = (ITM_FPX >> 8) | 0x80;
+    *(currentStep++) =  ITM_FPX       & 0xff;
+
+    *(currentStep++) = (ITM_FX >> 8) | 0x80;
+    *(currentStep++) =  ITM_FX       & 0xff;
+
+    *(currentStep++) = (ITM_FUX >> 8) | 0x80;
+    *(currentStep++) =  ITM_FUX       & 0xff;
+
+    *(currentStep++) = (ITM_FM1P >> 8) | 0x80;
+    *(currentStep++) =  ITM_FM1P       & 0xff;
+
+    *(currentStep++) = (ITM_GEOMP >> 8) | 0x80;
+    *(currentStep++) =  ITM_GEOMP       & 0xff;
+
+    *(currentStep++) = (ITM_GEOM>> 8) | 0x80;
+    *(currentStep++) =  ITM_GEOM       & 0xff;
+
+    *(currentStep++) = (ITM_GEOMU >> 8) | 0x80;
+    *(currentStep++) =  ITM_GEOMU       & 0xff;
+
+    *(currentStep++) = (ITM_GEOMM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_GEOMM1       & 0xff;
+
+    *(currentStep++) = (ITM_HYPERP >> 8) | 0x80;
+    *(currentStep++) =  ITM_HYPERP       & 0xff;
+
+    *(currentStep++) = (ITM_HYPER >> 8) | 0x80;
+    *(currentStep++) =  ITM_HYPER       & 0xff;
+
+    *(currentStep++) = (ITM_HYPERU >> 8) | 0x80;
+    *(currentStep++) =  ITM_HYPERU       & 0xff;
+
+    *(currentStep++) = (ITM_HYPERM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_HYPERM1       & 0xff;
+
+    *(currentStep++) = (ITM_LGNRMP >> 8) | 0x80;
+    *(currentStep++) =  ITM_LGNRMP       & 0xff;
+
+    *(currentStep++) = (ITM_LGNRM>> 8) | 0x80;
+    *(currentStep++) =  ITM_LGNRM       & 0xff;
+
+    *(currentStep++) = (ITM_LGNRMU >> 8) | 0x80;
+    *(currentStep++) =  ITM_LGNRMU       & 0xff;
+
+    *(currentStep++) = (ITM_LGNRMM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_LGNRMM1       & 0xff;
+
+    *(currentStep++) = (ITM_LOGISP >> 8) | 0x80;
+    *(currentStep++) =  ITM_LOGISP       & 0xff;
+
+    *(currentStep++) = (ITM_LOGIS>> 8) | 0x80;
+    *(currentStep++) =  ITM_LOGIS       & 0xff;
+
+    *(currentStep++) = (ITM_LOGISU >> 8) | 0x80;
+    *(currentStep++) =  ITM_LOGISU       & 0xff;
+
+    *(currentStep++) = (ITM_LOGISM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_LOGISM1       & 0xff;
+
+    *(currentStep++) = (ITM_NBINP >> 8) | 0x80;
+    *(currentStep++) =  ITM_NBINP       & 0xff;
+
+    *(currentStep++) = (ITM_NBIN>> 8) | 0x80;
+    *(currentStep++) =  ITM_NBIN       & 0xff;
+
+    *(currentStep++) = (ITM_NBINU >> 8) | 0x80;
+    *(currentStep++) =  ITM_NBINU       & 0xff;
+
+    *(currentStep++) = (ITM_NBINM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_NBINM1       & 0xff;
+
+    *(currentStep++) = (ITM_NORMLP >> 8) | 0x80;
+    *(currentStep++) =  ITM_NORMLP       & 0xff;
+
+    *(currentStep++) = (ITM_NORML>> 8) | 0x80;
+    *(currentStep++) =  ITM_NORML       & 0xff;
+
+    *(currentStep++) = (ITM_NORMLU >> 8) | 0x80;
+    *(currentStep++) =  ITM_NORMLU       & 0xff;
+
+    *(currentStep++) = (ITM_NORMLM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_NORMLM1       & 0xff;
+
+    *(currentStep++) = (ITM_POISSP >> 8) | 0x80;
+    *(currentStep++) =  ITM_POISSP       & 0xff;
+
+    *(currentStep++) = (ITM_POISS>> 8) | 0x80;
+    *(currentStep++) =  ITM_POISS       & 0xff;
+
+    *(currentStep++) = (ITM_POISSU >> 8) | 0x80;
+    *(currentStep++) =  ITM_POISSU       & 0xff;
+
+    *(currentStep++) = (ITM_POISSM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_POISSM1       & 0xff;
+
+    *(currentStep++) = (ITM_TPX >> 8) | 0x80;
+    *(currentStep++) =  ITM_TPX       & 0xff;
+
+    *(currentStep++) = (ITM_TX >> 8) | 0x80;
+    *(currentStep++) =  ITM_TX       & 0xff;
+
+    *(currentStep++) = (ITM_TUX >> 8) | 0x80;
+    *(currentStep++) =  ITM_TUX       & 0xff;
+
+    *(currentStep++) = (ITM_TM1P >> 8) | 0x80;
+    *(currentStep++) =  ITM_TM1P       & 0xff;
+
+    *(currentStep++) = (ITM_WEIBLP >> 8) | 0x80;
+    *(currentStep++) =  ITM_WEIBLP       & 0xff;
+
+    *(currentStep++) = (ITM_WEIBL>> 8) | 0x80;
+    *(currentStep++) =  ITM_WEIBL       & 0xff;
+
+    *(currentStep++) = (ITM_WEIBLU >> 8) | 0x80;
+    *(currentStep++) =  ITM_WEIBLU       & 0xff;
+
+    *(currentStep++) = (ITM_WEIBLM1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_WEIBLM1       & 0xff;
+
+    *(currentStep++) = (ITM_chi2Px >> 8) | 0x80;
+    *(currentStep++) =  ITM_chi2Px       & 0xff;
+
+    *(currentStep++) = (ITM_chi2x>> 8) | 0x80;
+    *(currentStep++) =  ITM_chi2x       & 0xff;
+
+    *(currentStep++) = (ITM_chi2ux >> 8) | 0x80;
+    *(currentStep++) =  ITM_chi2ux       & 0xff;
+
+    *(currentStep++) = (ITM_chi2M1 >> 8) | 0x80;
+    *(currentStep++) =  ITM_chi2M1       & 0xff;
+
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
   }

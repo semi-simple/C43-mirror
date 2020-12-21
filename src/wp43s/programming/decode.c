@@ -857,6 +857,62 @@ void decodeOneStep(uint8_t *step) {
         case ITM_SIGMA1ony2:  //   445
         case ITM_SIGMAx3:     //   446
         case ITM_SIGMAx4:     //   447
+        case ITM_BINOMP:      //  1198
+        case ITM_BINOM:       //  1199
+        case ITM_BINOMU:      //  1200
+        case ITM_BINOMM1:     //  1201
+        case ITM_CAUCHP:      //  1203
+        case ITM_CAUCH:       //  1204
+        case ITM_CAUCHU:      //  1205
+        case ITM_CAUCHM1:     //  1206
+        case ITM_EXPONP:      //  1208
+        case ITM_EXPON:       //  1209
+        case ITM_EXPONU:      //  1210
+        case ITM_EXPONM1:     //  1211
+        case ITM_FPX:         //  1213
+        case ITM_FX:          //  1214
+        case ITM_FUX:         //  1215
+        case ITM_FM1P:        //  1216
+        case ITM_GEOMP:       //  1218
+        case ITM_GEOM:        //  1219
+        case ITM_GEOMU:       //  1220
+        case ITM_GEOMM1:      //  1221
+        case ITM_HYPERP:      //  1223
+        case ITM_HYPER:       //  1224
+        case ITM_HYPERU:      //  1225
+        case ITM_HYPERM1:     //  1226
+        case ITM_LGNRMP:      //  1228
+        case ITM_LGNRM:       //  1229
+        case ITM_LGNRMU:      //  1230
+        case ITM_LGNRMM1:     //  1231
+        case ITM_LOGISP:      //  1233
+        case ITM_LOGIS:       //  1234
+        case ITM_LOGISU:      //  1235
+        case ITM_LOGISM1:     //  1236
+        case ITM_NBINP:       //  1238
+        case ITM_NBIN:        //  1239
+        case ITM_NBINU:       //  1240
+        case ITM_NBINM1:      //  1241
+        case ITM_NORMLP:      //  1243
+        case ITM_NORML:       //  1244
+        case ITM_NORMLU:      //  1245
+        case ITM_NORMLM1:     //  1246
+        case ITM_POISSP:      //  1248
+        case ITM_POISS:       //  1249
+        case ITM_POISSU:      //  1250
+        case ITM_POISSM1:     //  1251
+        case ITM_TPX:         //  1253
+        case ITM_TX:          //  1254
+        case ITM_TUX:         //  1255
+        case ITM_TM1P:        //  1256
+        case ITM_WEIBLP:      //  1258
+        case ITM_WEIBL:       //  1259
+        case ITM_WEIBLU:      //  1260
+        case ITM_WEIBLM1:     //  1261
+        case ITM_chi2Px:      //  1263
+        case ITM_chi2x:       //  1264
+        case ITM_chi2ux:      //  1265
+        case ITM_chi2M1:      //  1266
 
         case ITM_CLREGS:      //  1417
         case ITM_CLSTK:       //  1418

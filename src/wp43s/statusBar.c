@@ -439,7 +439,9 @@ void showHideUserMode(void) {
   if(getSystemFlag(FLAG_USER)) {
     showGlyph(STD_USER_MODE, &standardFont, X_USER_MODE, 0, vmNormal, false, false); // STD_USER_MODE is 0+12+2 pixel wide
   }
-  refreshModeGui(); //JM Added here to force icon update in Gui
+  #ifndef DMCP_BUILD
+    refreshModeGui(); //JM Added here to force icon update in Gui
+  #endif //!TESTSUITE_BUILD
 }
   
 

@@ -232,6 +232,46 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(roundingMode);
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
+
+//    storeToDtConfigDescriptor(Norm_Key_00_VAR);                          //JMCFG
+  storeToDtConfigDescriptor(SigFigMode);
+  storeToDtConfigDescriptor(eRPN);
+  storeToDtConfigDescriptor(HOME3);
+  storeToDtConfigDescriptor(ShiftTimoutMode);
+  storeToDtConfigDescriptor(Home3TimerMode);
+  storeToDtConfigDescriptor(UNITDisplay);
+  storeToDtConfigDescriptor(SH_BASE_HOME);
+  storeToDtConfigDescriptor(SH_BASE_AHOME);
+  storeToDtConfigDescriptor(Norm_Key_00_VAR);
+  storeToDtConfigDescriptor(Input_Default);
+  storeToDtConfigDescriptor(jm_FG_LINE);
+  storeToDtConfigDescriptor(jm_NO_BASE_SCREEN);
+  storeToDtConfigDescriptor(jm_G_DOUBLETAP);
+  storeToDtConfigDescriptor(graph_xmin);
+  storeToDtConfigDescriptor(graph_xmax);
+  storeToDtConfigDescriptor(graph_ymin);
+  storeToDtConfigDescriptor(graph_ymax);
+  storeToDtConfigDescriptor(graph_dx);
+  storeToDtConfigDescriptor(graph_dy);
+  storeToDtConfigDescriptor(extentx);
+  storeToDtConfigDescriptor(extenty);
+  storeToDtConfigDescriptor(jm_VECT);
+  storeToDtConfigDescriptor(jm_NVECT);
+  storeToDtConfigDescriptor(jm_SCALE);
+  storeToDtConfigDescriptor(Aspect_Square);          
+  storeToDtConfigDescriptor(PLOT_LINE);          
+  storeToDtConfigDescriptor(PLOT_CROSS);          
+  storeToDtConfigDescriptor(PLOT_BOX);
+  storeToDtConfigDescriptor(PLOT_INTG);
+  storeToDtConfigDescriptor(PLOT_DIFF);
+  storeToDtConfigDescriptor(PLOT_RMS);
+  storeToDtConfigDescriptor(PLOT_SHADE);
+  storeToDtConfigDescriptor(jm_HOME_SUM);
+  storeToDtConfigDescriptor(jm_HOME_MIR);
+  storeToDtConfigDescriptor(jm_HOME_FIX);
+  storeToDtConfigDescriptor(jm_LARGELI);                                   //JMCFG^^
+  storeToDtConfigDescriptor(displayStackSHOIDISP);                                   //JMCFG^^
+
 }
 
 

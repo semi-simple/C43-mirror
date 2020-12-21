@@ -8309,56 +8309,19 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
       
-//********** JM CHECKQQ Copy from the original wp43s.c configurations JMTOCHECK
-
-        //setSystemFlag(FLAG_TDM24);
-        //setSystemFlag(FLAG_MULTx);
-        //setSystemFlag(FLAG_DECIMP);
-        //setSystemFlag(FLAG_AUTOFF);
-        //setSystemFlag(FLAG_YMD);   // date format
         clearSystemFlag(FLAG_DENANY);                              //JM Default
         fnDenMax(0);                                               //JM Default
         clearSystemFlag(FLAG_ASLIFT);  //JM??
         fnDisplayFormatAll(3);                                     //JM Default
         setSystemFlag(FLAG_SSIZE8);                                //JM Default
         setSystemFlag(FLAG_CPXRES);                                //JM Default
-
-      //fnIntegerMode(SIM_2COMPL);
-      //fnDisplayFormatGap(3);
- //    clearSystemFlag(FLAG_CPXj);
- //    fnAngularMode(AM_DEGREE);
- //    fnDisplayStack(4);
- //    clearSystemFlag(FLAG_LEAD0);
- //    fnRoundingMode(RM_HALF_EVEN);
- //    clearSystemFlag(FLAG_ALLENG);
- //  
- //    fnSetWordSize(64);
- //    clearSystemFlag(FLAG_MDY); // date format
- //    clearSystemFlag(FLAG_DMY); // date format
- //    clearSystemFlag(FLAG_POLAR);
- //    allocateLocalRegisters(0);
- //    
- //    clearSystemFlag(FLAG_FRACT);
- //    clearSystemFlag(FLAG_PROPFR);
- //    clearSystemFlag(FLAG_OVERFLOW);
- //    clearSystemFlag(FLAG_CARRY);
- //    clearSystemFlag(FLAG_USER);
- //    clearSystemFlag(FLAG_LOWBAT);
- //    clearSystemFlag(FLAG_USB);
-      
       
             
 #ifndef TESTSUITE_BUILD
-//      while(softmenuStackPointer > 0) {
-//          popSoftmenu();
-//JMTOCHECK2      }
       calcModeNormal();
       if(SH_BASE_HOME) showSoftmenu(mm_MNU_HOME); //JM Reset to BASE MENU HOME;
-#endif // TESTSUITE_BUILD
-      
-      //    showRealComplexResult();                                   //JM, from wp43s.c
+#endif // TESTSUITE_BUILD      
       reset_jm_defaults(true); 
-
 #ifndef TESTSUITE_BUILD
       mm_MNU_HOME       = mm(-MNU_HOME);                           //JM
       mm_MNU_ALPHA      = mm(-MNU_ALPHA);                          //JM

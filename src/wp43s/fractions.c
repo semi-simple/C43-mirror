@@ -77,27 +77,6 @@ void fnDenMax(uint16_t unusedButMandatoryParameter) {
 }
 
 
-// JMTOCHECK
- /********************************************//**
-                                                * \brief Sets the fraction type
-                                                *
-                                                * \param[in] fractionType uint16_t Fraction type
-                                                * \return void
-                                                ***********************************************/
-/*void fnToggleFractionType(uint16_t unusedButMandatoryParameter) {
-    if(getSystemFlag(FLAG_FRACT)) {
-        flipSystemFlag(FLAG_PROPFR);
-    }
-    else {
-        setSystemFlag(FLAG_FRACT);
-    }
-    
-    //fnRefreshRadioState(RB_FT, fractionType);                                     //dr
-    fnRefreshComboxState(CB_JC, JC_IMPROPER, !getSystemFlag(FLAG_PROPFR)); //fractionType == FT_IMPROPER);        //dr
-    fnRefreshComboxState(CB_JC, JC_PROPER,   getSystemFlag(FLAG_PROPFR)); //fractionType == FT_PROPER);            //dr
-}
-*/
-
 
 void fraction(calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t *numer, uint64_t *denom, int16_t *lessEqualGreater) {
   // temp0 = fractional_part(absolute_value(real number))

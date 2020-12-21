@@ -512,7 +512,7 @@
 
     // Alpha selection timer
   if(AlphaSelectionBufferTimerRunning) {         //JMvv
-    if(catalog)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000*/) { // More than 3 seconds elapsed since last keypress
+    if(catalog)/* && alphaSelectionTimer != 0 && (getUptimeMs() - alphaSelectionTimer) > 3000)*/ { // More than 3 seconds elapsed since last keypress
       timeoutAlphaSelectionBuffer();             //JM^^
     }
   }

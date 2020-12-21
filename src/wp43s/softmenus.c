@@ -1787,7 +1787,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    ***********************************************/
   static void pushSoftmenu(int16_t softmenuId) {
     int i;
-    if(running_program_jm) return;                             //JM
+//    if(running_program_jm) return;                             //JM
 
     #ifdef PC_BUILD
       printf(">>> ...... pushing id:%d name:%s\n",softmenuId, indexOfItems[-softmenu[softmenuId].menuItem].itemSoftmenuName);
@@ -1826,7 +1826,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void popSoftmenu(void) {
-    if(running_program_jm) return;                             //JM
+//    if(running_program_jm) return;                             //JM
 
     xcopy(softmenuStack, softmenuStack + 1, (SOFTMENU_STACK_SIZE - 1) * sizeof(softmenuStack_t)); // shifting the entire stack
     memset(softmenuStack + SOFTMENU_STACK_SIZE - 1, 0, sizeof(softmenuStack_t)); // Put MyMenu in the last stack element
@@ -1871,7 +1871,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
    * \return void
    ***********************************************/
   void showSoftmenu(int16_t id) {
-    if(running_program_jm) return;                             //JM
+//    if(running_program_jm) return;                             //JM
     int16_t m;
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^showSoftmenu: Showing Softmenu id=%d\n",id); jm_show_comment(tmp);
@@ -1924,8 +1924,11 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     }
   }
 
+#endif // !TESTSUITE_BUILD
+
 
 void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM
+#ifdef TESTSUITE_BUILD
   int16_t m,n;
   m = 0;
     while(softmenu[m].menuItem != 0) {
@@ -1939,7 +1942,7 @@ void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //
       }
       m++;
     }
+#endif
 }                                                                            //JM^^
 
 
-#endif // !TESTSUITE_BUILD

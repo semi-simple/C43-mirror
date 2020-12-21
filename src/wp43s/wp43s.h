@@ -56,7 +56,7 @@
     #include <dmcp.h>
     #define TMP_STR_LENGTH       AUX_BUF_SIZE
   #else // !DMCP_BUILD
-      #define TMP_STR_LENGTH       2560 // 3000 //JMMAX ORG:2560  //JMTOCHECK
+      #define TMP_STR_LENGTH     2560 //JMMAX ORG:2560
   #endif // DMCP_BUILD
   #define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
   #define DISPLAY_VALUE_LEN        80
@@ -198,18 +198,18 @@
   #include "store.h"
   #include "stringFuncs.h"
   #include "timer.h"
-#include "jm_graph.h"                   //JM include 
-#include "graphs.h"                     //JM include 
-#include "jm.h"                         //JM include
-#include "addons.h"                     //JM include
-#include "graphText.h"                  //JM include
-#include "textfiles.h"                  //JM include
-#include "xeqm.h"                       //JM include
-#include "keyboardTweak.h"              //dr
-#include "radioButtonCatalog.h"         //dr
-#ifdef INLINE_TEST                      //vv dr
-  #include "inlineTest.h"
-#endif                                  //^^
+  #include "jm_graph.h"                   //JM include 
+  #include "graphs.h"                     //JM include 
+  #include "jm.h"                         //JM include
+  #include "addons.h"                     //JM include
+  #include "graphText.h"                  //JM include
+  #include "textfiles.h"                  //JM include
+  #include "xeqm.h"                       //JM include
+  #include "keyboardTweak.h"              //dr
+  #include "radioButtonCatalog.h"         //dr
+  #ifdef INLINE_TEST                      //vv dr
+    #include "inlineTest.h"
+  #endif                                  //^^
 
 
 #define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))        //dr vv
@@ -415,8 +415,8 @@
   #ifdef BUFFER_CLICK_DETECTION
     extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC
   #endif
-  //extern int                 keyAutoRepeat; // Key repetition //JMTOCHECK Removed the autorepeat stuff
-  //extern int16_t             previousItem;                    //JMTOCHECK Removed the autorepeat stuff
+  //extern int                 keyAutoRepeat; // Key repetition // Removed the autorepeat stuff
+  //extern int16_t             previousItem;                    // Removed the autorepeat stuff
   #endif // DMCP_BUILD
 
   #include "constantPointers.h"

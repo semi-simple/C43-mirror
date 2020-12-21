@@ -507,7 +507,7 @@
     void btnPressed(void *data) {
       int16_t item;
 
-//      if(keyAutoRepeat) {            //JMTOCHECK AUTOREPEAT
+//      if(keyAutoRepeat) {            // AUTOREPEAT
 //        //beep(880, 50);
 //        item = previousItem;
 //      }
@@ -584,7 +584,7 @@
           runFunction(item);
         }
       }
-//      else if(keyAutoRepeat) {         //JMTOCHECK AUTOREPR
+//      else if(keyAutoRepeat) {         // AUTOREPEAT
 //        btnPressed(data);
 //      }
 
@@ -595,6 +595,8 @@
   #endif //DMCP_BUILD
 
 
+
+#endif //!TESTSUITE_BUILD
   void leavePem(void) {
     if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
       uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
@@ -606,6 +608,7 @@
     }
   }
 
+#ifndef TESTSUITE_BUILD
 
 
   /********************************************//**
@@ -1467,13 +1470,13 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
-  int16_t menuId = softmenuStack[0].softmenuId; //JM
-  bool_t activatescroll = (calcMode == CM_NORMAL) &&  (//JM
-          ((menuId == 0) && jm_NO_BASE_SCREEN) ||
-          ((menuId == 0) && (softmenu[menuId].numItems<=18)) ||
-          ((menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS) && (softmenu[menuId].numItems<=18)) );
 
   #ifndef TESTSUITE_BUILD  
+    int16_t menuId = softmenuStack[0].softmenuId; //JM
+    bool_t activatescroll = (calcMode == CM_NORMAL) &&  (//JM
+            ((menuId == 0) && jm_NO_BASE_SCREEN) ||
+            ((menuId == 0) && (softmenu[menuId].numItems<=18)) ||
+            ((menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS) && (softmenu[menuId].numItems<=18)) );
 
     if(activatescroll)  { //JMSHOW vv
       fnShow_SCROLL(1); 
@@ -1582,14 +1585,13 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
-  int16_t menuId = softmenuStack[0].softmenuId; //JM
+
+#ifndef TESTSUITE_BUILD
+    int16_t menuId = softmenuStack[0].softmenuId; //JM
     bool_t activatescroll = (calcMode == CM_NORMAL) &&  (//JM
           ((menuId == 0) && jm_NO_BASE_SCREEN) ||
           ((menuId == 0) && (softmenu[menuId].numItems<=18)) ||
           ((menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS) && (softmenu[menuId].numItems<=18)) );
-
-#ifndef TESTSUITE_BUILD
-
     if(activatescroll) { //JMSHOW vv
       fnShow_SCROLL(2);
       return;

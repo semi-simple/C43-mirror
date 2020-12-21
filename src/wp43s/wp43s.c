@@ -259,8 +259,8 @@ size_t                wp43sMemInBytes;
   uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
 #endif
   bool_t              backToDMCP;
-//  int                 keyAutoRepeat;   //JMTOCHECK removed autorepeat stuff
-//  int16_t             previousItem;    //JMTOCHECK removed autorepeat stuff
+//  int                 keyAutoRepeat;   // removed autorepeat stuff
+//  int16_t             previousItem;    // removed autorepeat stuff
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
@@ -479,7 +479,7 @@ void program_main(void) {
 
   lcd_forced_refresh();                                        //JM 
   nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
-  //runner_key_tout_init(0); // Enables fast auto repeat     //JMTOCHECK Remove all autorepeat stuff
+  //runner_key_tout_init(0); // Enables fast auto repeat     // Remove all autorepeat stuff
 
   fnTimerReset();                                              //vv dr timeouts for kb handling
   fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);

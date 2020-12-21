@@ -161,42 +161,43 @@
 #define INLINE_TEST                     //vv dr
 //#undef INLINE_TEST                    //^^
 
-#include "assign.h"
-#include "bufferize.h"
-#include "browsers/browsers.h"
-#include "config.h"
-#include "conversionAngles.h"
-#include "conversionUnits.h"
-#include "curveFitting.h"
-#include "dateTime.h"
-#include "constants.h"
-#include "debug.h"
-#include "error.h"
-#include "flags.h"
-#include "fractions.h"
-#include "fonts.h"
-#include "charString.h" // must be after font.h
-#include "display.h"    // must be after font.h
-#include "gui.h"
-#include "integers.h"
-#include "items.h"
-#include "keyboard.h"
-#include "logicalOps/logicalOps.h"
-#include "mathematics/mathematics.h"
-#include "memory.h"
-#include "programming/programming.h"
-#include "registers.h"
-#include "registerValueConversions.h"
-#include "screen.h"
-#include "timer.h"
-#include "saveRestoreCalcState.h"
-#include "softmenus.h"
-#include "sort.h"
-#include "stack.h"
-#include "stats.h"
-#include "statusBar.h"
-#include "stringFuncs.h"
-#include "timer.h"
+  #include "assign.h"
+  #include "bufferize.h"
+  #include "browsers/browsers.h"
+  #include "config.h"
+  #include "conversionAngles.h"
+  #include "conversionUnits.h"
+  #include "curveFitting.h"
+  #include "dateTime.h"
+  #include "constants.h"
+  #include "debug.h"
+  #include "error.h"
+  #include "flags.h"
+  #include "fractions.h"
+  #include "fonts.h"
+  #include "charString.h" // must be after font.h
+  #include "display.h"    // must be after font.h
+  #include "gui.h"
+  #include "integers.h"
+  #include "items.h"
+  #include "keyboard.h"
+  #include "logicalOps/logicalOps.h"
+  #include "mathematics/mathematics.h"
+  #include "memory.h"
+  #include "programming/programming.h"
+  #include "recall.h"
+  #include "registers.h"
+  #include "registerValueConversions.h"
+  #include "saveRestoreCalcState.h"
+  #include "screen.h"
+  #include "softmenus.h"
+  #include "sort.h"
+  #include "stack.h"
+  #include "stats.h"
+  #include "statusBar.h"
+  #include "store.h"
+  #include "stringFuncs.h"
+  #include "timer.h"
 #include "jm_graph.h"                   //JM include 
 #include "graphs.h"                     //JM include 
 #include "jm.h"                         //JM include
@@ -280,15 +281,16 @@
   extern realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reduction
   //extern realContext_t         ctxtReal2139; // 2139 digits: used for really big modulo
 
-  extern registerDescriptor_t  reg[112];
-  extern registerDescriptor_t  savedStackRegister[9+1];
+  extern registerHeader_t      globalRegister[NUMBER_OF_GLOBAL_REGISTERS];
+  extern registerHeader_t      savedStackRegister[NUMBER_OF_SAVED_STACK_REGISTERS + 1]; // +1 for the temporary register
   extern dynamicSoftmenu_t     dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS];
 
-  extern dataBlock_t          *allLocalRegisterPointer;
+  extern dataBlock_t           allLocalRegisters;
   extern dataBlock_t          *allNamedVariablePointer;
   extern dataBlock_t          *statisticalSumsPointer;
   extern dataBlock_t          *savedStatisticalSumsPointer;
   extern dataBlock_t          *ram;
+  extern dataBlock_t          *currentLocalRegisters;
 
   extern softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];
   extern calcKey_t             kbd_usr[37];
@@ -327,7 +329,7 @@
   extern uint8_t               displayStackSHOIDISP;        //JM SHOIDISP
   extern bool_t                numLock;                     //JM
   extern uint8_t               alphaCase;
-	  extern uint8_t               numLinesNumericFont;
+  extern uint8_t               numLinesNumericFont;
   extern uint8_t               numLinesStandardFont;
   extern uint8_t               cursorEnabled;
   extern uint8_t               nimNumberPart;
@@ -369,7 +371,7 @@
   extern int16_t               numberOfTamMenusToPop;
 
   extern uint16_t              globalFlags[7];
-  extern int16_t               longpressDelayedkey2;        //JM
+   extern int16_t               longpressDelayedkey2;        //JM
   extern int16_t               longpressDelayedkey3;        //JM
   extern int16_t               T_cursorPos;                 //JMCURSOR
   extern int16_t               SHOWregis;                   //JMSHOW
@@ -377,7 +379,6 @@
   extern int16_t               mm_MNU_HOME;                 //JM
   extern int16_t               mm_MNU_ALPHA;                //JM
   extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
-  extern uint16_t              numberOfLocalFlags;
   extern uint16_t              glyphRow[NUMBER_OF_GLYPH_ROWS];
   extern uint16_t              freeProgramBytes;
   extern uint16_t              firstDisplayedLocalStepNumber;
@@ -386,6 +387,7 @@
   extern uint16_t              tamMode;
   extern uint16_t              currentLocalStepNumber;
   extern uint16_t              currentProgramNumber;
+  extern uint16_t              currentNumberOfLocalRegisters;
 
   extern int32_t               numberOfFreeMemoryRegions;
   extern int32_t               lgCatalogSelection;
@@ -397,6 +399,8 @@
   extern uint32_t              xCursor;
   extern uint32_t              yCursor;
   extern uint32_t              tamOverPemYPos;
+  extern uint32_t             *currentLocalFlags;
+
   extern uint64_t              shortIntegerMask;
   extern uint64_t              shortIntegerSignBit;
   extern uint64_t              systemFlags;

@@ -184,10 +184,10 @@ bool_t getFlag(uint16_t flag) {
     return (globalFlags[flag/16] & (1u << (flag%16))) != 0;
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        return (allLocalRegisterPointer->localFlags & (1u << flag)) != 0;
+        return (*currentLocalFlags & (1u << (uint32_t)flag)) != 0;
       }
       else {
         sprintf(errorMessage, "In function getFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -257,10 +257,10 @@ void fnSetFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags |=  (1u << flag);
+        *currentLocalFlags |=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnSetFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -312,10 +312,10 @@ void fnClearFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags &= ~(1u << flag);
+        *currentLocalFlags &= ~(1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnClearFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -367,10 +367,10 @@ void fnFlipFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags ^=  (1u << flag);
+        *currentLocalFlags ^=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnFlipFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -404,8 +404,8 @@ void fnClFAll(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_TRACE);
   clearSystemFlag(FLAG_POLAR);
 
-  if(numberOfLocalFlags != 0) {
-    allLocalRegisterPointer->localFlags = 0;
+  if(currentLocalFlags != NULL) {
+    *currentLocalFlags = 0;
   }
 }
 

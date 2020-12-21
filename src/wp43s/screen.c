@@ -301,7 +301,7 @@
       copyRegisterToClipboardString(regist, ptr);
     }
 
-    for(int32_t regist=allLocalRegisterPointer->numberOfLocalRegisters-1; regist>=0; --regist) {
+    for(int32_t regist=currentNumberOfLocalRegisters-1; regist>=0; --regist) {
       ptr += strlen(ptr);
       sprintf(ptr, LINEBREAK "R.%02d = ", regist);
       ptr += strlen(ptr);
@@ -407,7 +407,9 @@
     getTimeString(dateTimeString);
     if(strcmp(dateTimeString, oldTime)) {
       strcpy(oldTime, dateTimeString);
-      showDateTime();
+      #if (DEBUG_INSTEAD_STATUS_BAR != 1)
+        showDateTime();
+      #endif // (DEBUG_INSTEAD_STATUS_BAR != 1)
     }
 
     // If LCD has changed: update the GTK screen
@@ -515,7 +517,7 @@
     }
   }
 }
-#endif
+#endif // PC_BUILD DMCP_BUILD
 
 
 
@@ -709,49 +711,42 @@ void Shft_stop() {
   fnTimerStop(TO_FG_TIMR);
   resetShiftState();                        //force into no shift state, i.e. to wait
 }
+  #ifndef DMCP_BUILD
+    /********************************************//**
+     * \brief Sets a black pixel on the screen.
+     *
+     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+     * \return void
+     ***********************************************/
+    void setBlackPixel(uint32_t x, uint32_t y) {
+      if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+        printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
+        return;
+      }
 
-
-
-#ifndef DMCP_BUILD
-
-
-  /********************************************//**
-   * \brief Sets a black pixel on the screen.
-   *
-   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-   * \return void
-   ***********************************************/
-  void setBlackPixel(uint32_t x, uint32_t y) {
-  if(y > 4294967000) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
-    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
-      return;
+      *(screenData + y*screenStride + x) = ON_PIXEL;
+      screenChange = true;
     }
 
-    *(screenData + y*screenStride + x) = ON_PIXEL;
-    screenChange = true;
-  }
 
 
+    /********************************************//**
+     * \brief Sets a white pixel on the screen.
+     *
+     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
+     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
+     * \return void
+     ***********************************************/
+    void setWhitePixel(uint32_t x, uint32_t y) {
+      if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
+        printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
+        return;
+      }
 
-  /********************************************//**
-   * \brief Sets a white pixel on the screen.
-   *
-   * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-   * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-   * \return void
-   ***********************************************/
-  void setWhitePixel(uint32_t x, uint32_t y) {
-  if(y > 4294967000) return;  //JM
-    if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-      printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
-      return;
+      *(screenData + y*screenStride + x) = OFF_PIXEL;
+      screenChange = true;
     }
-
-    *(screenData + y*screenStride + x) = OFF_PIXEL;
-    screenChange = true;
-  }
 
 
   /********************************************//**                       //JM
@@ -783,18 +778,17 @@ void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
       printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
       clear_ul(); //JMUL
     }
-
-    if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-      printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-      return;
-    }
-
-    pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-    for(line=y; line<endY; line++) {
-      for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-        *pixel = pixelColor;
+      if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+        printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+        return;
       }
-    }
+
+      pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+      for(line=y; line<endY; line++) {
+        for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+          *pixel = pixelColor;
+        }
+      }
 
     screenChange = true;
   }
@@ -1432,30 +1426,31 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       w = stringWidth(tmpString + 300, &standardFont, true, true);
       showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
-      if(tmpString[600]) {        w = stringWidth(tmpString + 600, &standardFont, true, true);
-        showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+        if(tmpString[600]) {
+          w = stringWidth(tmpString + 600, &standardFont, true, true);
+          showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*2, vmNormal, true, true);
+        }
       }
-    }
 
       else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
       w = stringWidth(tmpString + 900, &standardFont, true, true);
       showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
 
-      if(tmpString[1200]) {
-        w = stringWidth(tmpString + 1200, &standardFont, true, true);
-        showString(tmpString + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
+        if(tmpString[1200]) {
+          w = stringWidth(tmpString + 1200, &standardFont, true, true);
+          showString(tmpString + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*4, vmNormal, true, true);
+        }
       }
-    }
 
       else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
       w = stringWidth(tmpString + 1500, &standardFont, true, true);
       showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
 
-      if(tmpString[1800]) {
-        w = stringWidth(tmpString + 1800, &standardFont, true, true);
-        showString(tmpString + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
+        if(tmpString[1800]) {
+          w = stringWidth(tmpString + 1800, &standardFont, true, true);
+          showString(tmpString + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*6, vmNormal, true, true);
+        }
       }
-    }
 
                                                                          //JMSHOW vv
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
@@ -2299,8 +2294,8 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
 #endif
       break;
 
-    default: {}
-  }
+      default: {}
+    }
 
   #ifndef DMCP_BUILD
     refreshLcd(NULL);

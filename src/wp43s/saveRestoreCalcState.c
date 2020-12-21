@@ -67,7 +67,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
 
     printf("Begin of calc's backup\n");
 
-
     save(&backupVersion,                      sizeof(backupVersion),                      BACKUP);
     save(&ramSize,                            sizeof(ramSize),                            BACKUP);
     save(ram,                                 TO_BYTES(RAM_SIZE),                         BACKUP);
@@ -82,7 +81,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(oldTime,                             sizeof(oldTime),                            BACKUP);
     save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
     save(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-    save(reg,                                 sizeof(reg),                                BACKUP);
+    save(globalRegister,                      sizeof(globalRegister),                     BACKUP);
     save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
     save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
     save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
@@ -94,9 +93,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
     save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-    save(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-    ramPtr = TO_WP43SMEMPTR(allLocalRegisterPointer);
-    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
@@ -285,7 +281,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(oldTime,                             sizeof(oldTime),                            BACKUP);
       restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
       restore(softmenuStack,                       sizeof(softmenuStack),                      BACKUP);
-      restore(reg,                                 sizeof(reg),                                BACKUP);
+      restore(globalRegister,                      sizeof(globalRegister),                     BACKUP);
       restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
       restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
       restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
@@ -297,9 +293,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
       restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
       restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-      restore(&numberOfLocalFlags,                 sizeof(numberOfLocalFlags),                 BACKUP);
-      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-      allLocalRegisterPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -455,6 +448,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
 
       scanLabelsAndPrograms();
       defineCurrentProgramFromGlobalStepNumber(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);
+      //defineCurrentLocalRegisters();
 
       #if (DEBUG_REGISTER_L == 1)
         refreshRegisterLine(REGISTER_X); // to show L register
@@ -496,6 +490,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         }
 
       refreshScreen();
+      ramDump();
     }
   }
 #endif // PC_BUILD
@@ -631,17 +626,17 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
 
   // Local registers
-  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu16 "\n", allLocalRegisterPointer->numberOfLocalRegisters);
+  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu16 "\n", currentNumberOfLocalRegisters);
   save(tmpString, strlen(tmpString), BACKUP);
-  for(i=0; i<allLocalRegisterPointer->numberOfLocalRegisters; i++) {
+  for(i=0; i<currentNumberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
     sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpString + START_REGISTER_VALUE);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
   // Local flags
-  if(allLocalRegisterPointer->numberOfLocalRegisters) {
-    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu16 "\n", allLocalRegisterPointer->localFlags);
+  if(currentNumberOfLocalRegisters) {
+    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu32 "\n", *currentLocalFlags);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -1014,7 +1009,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString); // LOCAL_FLAGS
       readLine(stream, tmpString); // LOCAL_FLAGS
       if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        allLocalRegisterPointer->localFlags = stringToUint16(tmpString);
+        *currentLocalFlags = stringToUint32(tmpString);
       }
     }
   }

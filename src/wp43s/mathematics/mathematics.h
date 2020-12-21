@@ -33,6 +33,7 @@
 #include "arg.h"
 #include "ceil.h"
 #include "changeSign.h"
+#include "compare.h"
 #include "comparisonReals.h"
 #include "conjugate.h"
 #include "cos.h"

@@ -113,13 +113,13 @@
         }
       }
 
-      if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
+      if(currentNumberOfLocalRegisters > 0) {
         // Local registers
-        if(allLocalRegisterPointer->numberOfLocalRegisters == 1) {
+        if(currentNumberOfLocalRegisters == 1) {
           strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
         }
         else {
-          sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", allLocalRegisterPointer->numberOfLocalRegisters);
+          sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
         }
 
         // Local flags
@@ -360,8 +360,14 @@ void flagBrowser_old(uint16_t unusedButMandatoryParameter) {           //Resurre
 //      showString(tmpString, &standardFont, max(0,16-1+2*40*(f%5) + 19 - stringWidth(tmpString, &standardFont, false, false)/2), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
     }
 
-    if(allLocalRegisterPointer->numberOfLocalRegisters != 0) {
-      sprintf(tmpString, "%" PRIu16 " local register%s allocated.", allLocalRegisterPointer->numberOfLocalRegisters, allLocalRegisterPointer->numberOfLocalRegisters==1 ? " is" : "s are");
+    if(currentNumberOfLocalRegisters > 0) {
+      // Local registers
+      if(currentNumberOfLocalRegisters == 1) {
+        strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
+      }
+      else {
+        sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
+      }
       showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
       showString("Local flag status:", &standardFont, 1, 154-1, vmNormal, true, true);
 

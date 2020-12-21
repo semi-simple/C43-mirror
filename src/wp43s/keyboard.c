@@ -41,11 +41,11 @@
             item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
             break;
 
-        default:
-          sm = &softmenu[menuId];
-          row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;
-          if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
-            item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
+      default:
+        sm = &softmenu[menuId];
+        row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;
+        if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
+          item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
 
             int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
             if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
@@ -212,7 +212,7 @@
       {
         if(calcMode != CM_CONFIRMATION && data[0] != 0 && !running_program_jm) { //JM data is used if operation is from the real keyboard. item is used directly if called from XEQM
           lastErrorCode = 0;
-  
+
           if(item < 0) { // softmenu
             showSoftmenu(item);
             refreshScreen();
@@ -472,7 +472,6 @@
    ***********************************************/
   #ifdef PC_BUILD
     void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -596,7 +595,7 @@
   #endif //DMCP_BUILD
 
 
-  static void exitPEM(void) {
+  void leavePem(void) {
     if(freeProgramBytes >= 4) { // Push the programs to the end of RAM
       uint32_t newProgramSize = (uint32_t)((uint8_t *)(ram + RAM_SIZE) - beginOfProgramMemory) - (freeProgramBytes & 0xfffc);
       currentStep        += (freeProgramBytes & 0xfffc);
@@ -861,69 +860,69 @@
             }                                                                                   //JM^^
             break;
 
-          case CM_REGISTER_BROWSER:
-            if(item == ITM_PERIOD) {
-              rbr1stDigit = true;
-              if(rbrMode == RBR_GLOBAL) {
-                if(allLocalRegisterPointer->numberOfLocalRegisters > 0) {
-                  rbrMode = RBR_LOCAL;
-                  currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+            case CM_REGISTER_BROWSER:
+              if(item == ITM_PERIOD) {
+                rbr1stDigit = true;
+                if(rbrMode == RBR_GLOBAL) {
+                  if(currentNumberOfLocalRegisters > 0) {
+                    rbrMode = RBR_LOCAL;
+                    currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
+                  }
+                  else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    rbrMode = RBR_NAMED;
+                    currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                  }
                 }
-                else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                  rbrMode = RBR_NAMED;
-                  currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                else if(rbrMode == RBR_LOCAL) {
+                  if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    rbrMode = RBR_NAMED;
+                    currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                  }
+                  else {
+                    rbrMode = RBR_GLOBAL;
+                    currentRegisterBrowserScreen = REGISTER_X;
+                  }
                 }
-              }
-              else if(rbrMode == RBR_LOCAL) {
-                if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                  rbrMode = RBR_NAMED;
-                  currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
-                }
-                else {
+                else if(rbrMode == RBR_NAMED) {
                   rbrMode = RBR_GLOBAL;
                   currentRegisterBrowserScreen = REGISTER_X;
                 }
               }
-              else if(rbrMode == RBR_NAMED) {
-                rbrMode = RBR_GLOBAL;
-                currentRegisterBrowserScreen = REGISTER_X;
-              }
-            }
-            else if(item == ITM_RS) {
-              rbr1stDigit = true;
-              showContent = !showContent;
-            }
-            else if(item == ITM_RCL) {
-              rbr1stDigit = true;
-              if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
-                calcMode = previousCalcMode;
-                fnRecall(currentRegisterBrowserScreen);
-                setSystemFlag(FLAG_ASLIFT);
-              }
-              else if(rbrMode == RBR_NAMED) {
-              }
-            }
-            else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
-              if(rbr1stDigit) {
-                rbr1stDigit = false;
-                rbrRegister = item - ITM_0;
-              }
-              else {
+              else if(item == ITM_RS) {
                 rbr1stDigit = true;
-                rbrRegister = rbrRegister*10 + item - ITM_0;
-
-                if(rbrMode == RBR_GLOBAL) {
-                  currentRegisterBrowserScreen = rbrRegister;
+                showContent = !showContent;
+              }
+              else if(item == ITM_RCL) {
+                rbr1stDigit = true;
+                if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
+                  calcMode = previousCalcMode;
+                  fnRecall(currentRegisterBrowserScreen);
+                  setSystemFlag(FLAG_ASLIFT);
+                }
+                else if(rbrMode == RBR_NAMED) {
+                }
+              }
+              else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+                if(rbr1stDigit) {
+                  rbr1stDigit = false;
+                  rbrRegister = item - ITM_0;
                 }
                 else {
-                  rbrRegister = (rbrRegister >= allLocalRegisterPointer->numberOfLocalRegisters ? 0 : rbrRegister);
-                  currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+                  rbr1stDigit = true;
+                  rbrRegister = rbrRegister*10 + item - ITM_0;
+
+                  if(rbrMode == RBR_GLOBAL) {
+                    currentRegisterBrowserScreen = rbrRegister;
+                  }
+                  else {
+                    rbrRegister = (rbrRegister >= currentNumberOfLocalRegisters ? 0 : rbrRegister);
+                    currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
+                  }
                 }
               }
-            }
 
-            keyActionProcessed = true;
-            break;
+              keyActionProcessed = true;
+              break;
 
           case CM_FLAG_BROWSER:
           case CM_FLAG_BROWSER_OLD:           //JM
@@ -954,20 +953,20 @@
               temporaryInformation = TI_NO_INFO;
             }
 
-            keyActionProcessed = true;
-            break;
+              keyActionProcessed = true;
+              break;
 
-          case CM_PEM:
-            if(item == ITM_PR) {
-              exitPEM();
-              calcModeNormal();
-              keyActionProcessed = true;
-            }
-            else if(item == ITM_OFF) {
-              fnOff(NOPARAM);
-              keyActionProcessed = true;
-            }
-            break;
+            case CM_PEM:
+              if(item == ITM_PR) {
+                leavePem();
+                calcModeNormal();
+                keyActionProcessed = true;
+              }
+              else if(item == ITM_OFF) {
+                fnOff(NOPARAM);
+                keyActionProcessed = true;
+              }
+              break;
 
           default:
             sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
@@ -1021,6 +1020,8 @@ static void menuUp(void) {
 
 //      }
 }
+
+
 
   static void menuDown(void) {
       int16_t menuId = softmenuStack[0].softmenuId;
@@ -1162,7 +1163,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }
 
 
@@ -1233,7 +1234,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         else {
           popSoftmenu();
         }
-      break;
+        break;
 
       case CM_NIM:
         addItemToNimBuffer(ITM_EXIT1);
@@ -1245,7 +1246,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           break;
         }
 
-        exitPEM();
+        leavePem();
         calcModeNormal();
         break;
 
@@ -1293,7 +1294,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }
 
 
@@ -1350,7 +1351,7 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
         sprintf(errorMessage, "In function fnKeyCC: unexpected calcMode value (%" PRIu8 ") while processing key CC!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }
 
 
@@ -1381,7 +1382,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         }
         break;
 
-    case CM_AIM:
+      case CM_AIM:
         if(catalog) {
           if(stringByteLength(aimBuffer) > 0) {
             lg = stringLastGlyph(aimBuffer);
@@ -1453,7 +1454,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }
 
 
@@ -1483,6 +1484,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       addItemToBuffer(ITM_Max);
       return;
     }
+
     switch(calcMode) {
       case CM_NORMAL:
       case CM_AIM:
@@ -1522,7 +1524,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
         }
         else if(rbrMode == RBR_LOCAL) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
@@ -1567,7 +1569,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }
 
 
@@ -1636,7 +1638,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
         }
         else if(rbrMode == RBR_LOCAL) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, allLocalRegisterPointer->numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
@@ -1722,5 +1724,5 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyDotD: unexpected calcMode value (%" PRIu8 ") while processing key .d!", calcMode);
         displayBugScreen(errorMessage);
     }
-  #endif // TESTSUITE_BUILD
+  #endif // !TESTSUITE_BUILD
 }

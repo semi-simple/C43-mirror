@@ -8102,6 +8102,8 @@ void addTestPrograms(void) {
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
     scanLabelsAndPrograms();
+    leavePem();
+    printf("freeProgramBytes = %u\n", freeProgramBytes);
     listPrograms();
     listLabelsAndPrograms();
   #endif // !DMCP_BUILD
@@ -8184,8 +8186,8 @@ void fnReset(uint16_t confirmation) {
       real34Zero(memPtr);
     }
 
-    // initialize the 9+1 saved stack registers
-    for(calcRegister_t regist=SAVED_REGISTER_X; regist<=LAST_SAVED_REGISTER; regist++) {
+    // initialize the 9 saved stack registers + 1 temporary register
+    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_SAVED_STACK_REGISTER + 1; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
       memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
       setRegisterDataPointer(regist, memPtr);
@@ -8200,10 +8202,11 @@ void fnReset(uint16_t confirmation) {
     allNamedVariablePointer->numberOfNamedVariables = 0;
 
     // allocate space for the local register list
-    allLocalRegisterPointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of local registers and the local flags
-    numberOfLocalFlags = 0;
-    allLocalRegisterPointer->numberOfLocalRegisters = 0;
-    allLocalRegisterPointer->localFlags = 0;
+    allLocalRegisters.numberOfLocalRegisters = 0;
+    currentNumberOfLocalRegisters = 0;
+    allLocalRegisters.nextAllocationLevel = WP43S_NULL;
+    currentLocalFlags = NULL;
+    currentLocalRegisters = NULL;
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;

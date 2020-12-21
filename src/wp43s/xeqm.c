@@ -295,6 +295,9 @@ void execute_string(const char *inputstring, bool_t exec1) {
 
 
 
+
+
+
                       if (strcompare(commandnumber,"CPX?" )) {sprintf(commandnumber,"%d", ITM_CPX);} else
                       if (strcompare(commandnumber,"REAL?" )) {sprintf(commandnumber,"%d", ITM_REAL);} else
                       if (strcompare(commandnumber,"PRIME?" )) {sprintf(commandnumber,"%d", ITM_PRIME);} else
@@ -450,6 +453,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"SNAP" )) {sprintf(commandnumber,"%d", ITM_SCRDMP);} else
                       if (strcompare(commandnumber,"2COMPL" )) {sprintf(commandnumber,"%d", ITM_2COMPL);} else
                       if (strcompare(commandnumber,"AGM" )) {sprintf(commandnumber,"%d", ITM_AGM);} else
+                      if (strcompare(commandnumber,"ALL" )) {sprintf(commandnumber,"%d", ITM_ALL);} else
                       if (strcompare(commandnumber,"BATT?" )) {sprintf(commandnumber,"%d", ITM_BATT);} else
                       if (strcompare(commandnumber,"CLFALL" )) {sprintf(commandnumber,"%d", ITM_CLFALL);} else
                       if (strcompare(commandnumber,"CLLCD" )) {sprintf(commandnumber,"%d", ITM_CLLCD);} else
@@ -627,8 +631,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"XEQM18" ) && exec) {sprintf(commandnumber,"%d", ITM_X_g6);} else
                       if (strcompare(commandnumber,"X.SAVE" )) {sprintf(commandnumber,"%d", ITM_XSAVE);} else
                       if (strcompare(commandnumber,"X.LOAD" )) {sprintf(commandnumber,"%d", ITM_XLOAD);} else
+                      if (strcompare(commandnumber,"EXITCLR" )) {sprintf(commandnumber,"%d", ITM_CLAIM);} else
                       if (strcompare(commandnumber,"PLOTLS" )) {sprintf(commandnumber,"%d", ITM_PLOTLS);} else
                       if (strcompare(commandnumber,"GRF" )) {sprintf(commandnumber,"%d", ITM_PLOTJM);} else
+
 
 
 // FROM SPREADSHEET ^^^ ****************************************************************************************************

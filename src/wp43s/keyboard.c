@@ -210,7 +210,7 @@
   
         //printf("%d--\n",calcMode);
       {
-        if(calcMode != CM_CONFIRMATION && data[0] != 0) {
+        if(calcMode != CM_CONFIRMATION && data[0] != 0 && !running_program_jm) { //JM data is used if operation is from the real keyboard. item is used directly if called from XEQM
           lastErrorCode = 0;
   
           if(item < 0) { // softmenu

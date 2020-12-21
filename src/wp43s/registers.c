@@ -1018,7 +1018,7 @@ void clearRegister(calcRegister_t regist) {
  ***********************************************/
 void fnClearRegisters(uint16_t confirmation) {
   if(confirmation == NOT_CONFIRMED) {
-    setConfirmationMode(fnClPAll);
+    setConfirmationMode(fnClearRegisters);
   }
   else {
     calcRegister_t regist;

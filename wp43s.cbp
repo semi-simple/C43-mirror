@@ -1592,6 +1592,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/incDec.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/incDec.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/integerPart.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />

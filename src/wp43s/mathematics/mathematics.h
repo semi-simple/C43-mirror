@@ -60,6 +60,7 @@
 #include "idiv.h"
 #include "idivr.h"
 #include "imaginaryPart.h"
+#include "incDec.h"
 #include "integerPart.h"
 #include "invert.h"
 #include "lcm.h"

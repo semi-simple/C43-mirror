@@ -662,6 +662,44 @@ void program_main(void) {
         //key = runner_get_key(&keyAutoRepeat);
 #endif //P0
 
+    uint8_t outKey;
+    keyBuffer_pop();
+
+#ifdef BUFFER_CLICK_DETECTION
+    uint32_t timeSpan_1;
+    uint32_t timeSpan_B;
+#ifdef BUFFER_KEY_COUNT
+    uint8_t outKeyCount;
+    if(outKeyBuffer(&outKey, &outKeyCount, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
+      key = outKey;
+      keyCount = outKeyCount;
+//    if(outKeyCount > 0) {
+//      do someting
+//    }
+    }
+#else
+    if(outKeyBuffer(&outKey, &timeStampKey, &timeSpan_1, &timeSpan_B) == BUFFER_SUCCESS) {
+      key = outKey;
+    }
+#endif
+#else
+#ifdef BUFFER_KEY_COUNT
+    uint8_t outKeyCount;
+    if(outKeyBuffer(&outKey, &outKeyCount) == BUFFER_SUCCESS) {
+      key = outKey;
+      keyCount = outKeyCount;
+    }
+#else
+    if(outKeyBuffer(&outKey) == BUFFER_SUCCESS) {
+      key = outKey;
+    }
+#endif
+#endif
+    else {
+      key = -1;
+    }                                                       //^^
+
+
     //The 3 lines below to see in the top left screen corner the pressed keycode
     //char sysLastKeyCh[5];
     //sprintf(sysLastKeyCh, "%2d", sys_last_key());

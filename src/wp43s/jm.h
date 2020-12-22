@@ -108,8 +108,6 @@ bool_t FN_handle_timed_out_to_EXEC;
 #define ITEM_CONF_Y ITM_2 
 #define ITEM_CONF_N ITM_CHS
 
-// Define the second tagline
-#define WHO2       "C43" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "HP42S" STD_SPACE_3_PER_EM "style" STD_SPACE_3_PER_EM "keys," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
 
 // Define variables that are saved with the config
 extern uint8_t SigFigMode;                                           //JM SIGFIG 

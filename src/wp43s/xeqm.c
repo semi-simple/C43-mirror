@@ -362,8 +362,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"ERPN" )) {sprintf(commandnumber,"%d", ITM_eRPN_ON);} else
                       if (strcompare(commandnumber,"RPN" )) {sprintf(commandnumber,"%d", ITM_eRPN_OFF);} else
                       if (strcompare(commandnumber,"TICKS" )) {sprintf(commandnumber,"%d", ITM_TICKS);} else
-
-
                       if (strcompare(commandnumber,"XEQM12" ) && exec) {sprintf(commandnumber,"%d", ITM_X_f6);} else
  
 /*

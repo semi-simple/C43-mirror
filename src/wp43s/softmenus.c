@@ -657,13 +657,13 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
 
 const int16_t menu_GRAPH[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_GRF_X0,                    ITM_GRF_Y0,                 ITM_GRF_X1,               ITM_SCRDMP,            ITM_GRAPH,                   ITM_GRF_DX,                         //JM GRAPH
+                                     ITM_GRF_X0,                    ITM_GRF_Y0,                 ITM_GRF_X1,               ITM_SNAP,              ITM_GRAPH,                   ITM_GRF_DX,                         //JM GRAPH
                                      ITM_NULL,                      ITM_GRF_Y1,                 ITM_NULL,                 ITM_NULL,              ITM_GRF_HLP,                 ITM_GRF_DY,                         //JM GRAPH
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM GRAPH
 
 const int16_t menu_PLOT[]        = {
           /*-1------*/                                                                                                                                                                                            //JM ALPHA
-                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_SCALE,                ITM_PLINE,             ITM_SIGMAPLUS,               ITM_SCRDMP,                         //JM GRAPH
+                                     ITM_PLOT,                      ITM_PLOTLS,                 ITM_SCALE,                ITM_PLINE,             ITM_SIGMAPLUS,               ITM_SNAP,                           //JM GRAPH
                                      ITM_NVECT,                     ITM_VECT,                   ITM_EXTX,                 ITM_PCROS,             ITM_LISTXY,                  ITM_RMS,                         //JM GRAPH
                                      ITM_DIFF,                      ITM_INTG,                   ITM_EXTY,                 ITM_PBOX,              ITM_CLSIGMA,                 ITM_SHADE,                            //JM GRAPH
 
@@ -671,7 +671,7 @@ const int16_t menu_PLOT[]        = {
                                      ITM_EXTX,                      ITM_PCROS,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_EXTY,                      ITM_PBOX,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
-                                     ITM_SIGMAPLUS,                 ITM_SCRDMP,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_SIGMAPLUS,                 ITM_SNAP,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_LISTXY,                    ITM_RMS,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                      ITM_CLSIGMA,                   ITM_SHADE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 

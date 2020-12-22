@@ -8634,19 +8634,20 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43TEST locks, 2020-12-16, C43-PEM-XEQ-IMPORTED");
+    fnStrtoX("2020-12-22, C43-PEM-XEQ-IMPORTED");
     fnStore(102);
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 LAYOUT1 (Main C43 template)");
+    fnStrtoX("C43 L1 (Main C43 template)");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
-    fnStrtoX("C43 LAYOUT42 (For unmodified DM42)");
+    fnStrtoX("C43 L42 (For unmodified DM42)");
     #endif
     fnStore(103);
     fnDrop(0);
 
+#ifdef NOT_NEEDED
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
@@ -8705,6 +8706,7 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("225251798594466661409915431774713195745814267044878909733007331390393510002687");
     fnStore(27);
     fnDrop(0);
+#endif //NOT_NEEDED
 
     doRefreshSoftMenu = true;     //jm dr
   }

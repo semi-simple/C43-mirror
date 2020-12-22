@@ -687,6 +687,7 @@
       case ITM_EXIT1:
         fnKeyExit(NOPARAM);
         keyActionProcessed = true;
+        if(calcMode == CM_NORMAL || calcMode == CM_NIM) keyActionProcessed = false;    //JM Force NOP text display of backspace 
         break;
 
       case ITM_CC:

@@ -578,8 +578,9 @@
 #define PARAM_LABEL                                2
 #define PARAM_REGISTER                             3
 #define PARAM_FLAG                                 4
-#define PARAM_NUMBER                               5
-#define PARAM_COMPARE                              6
+#define PARAM_NUMBER_8                             5
+#define PARAM_NUMBER_16                            6
+#define PARAM_COMPARE                              7
 
 
 #ifndef DMCP_BUILD

@@ -8234,6 +8234,102 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_chi2M1 >> 8) | 0x80;
     *(currentStep++) =  ITM_chi2M1       & 0xff;
 
+    *(currentStep++) = (ITM_BESTF >> 8) | 0x80;
+    *(currentStep++) =  ITM_BESTF       & 0xff;
+    *(currentStep++) = 20;
+    *(currentStep++) = 01;
+
+    *(currentStep++) = (ITM_EXPF >> 8) | 0x80;
+    *(currentStep++) =  ITM_EXPF       & 0xff;
+
+    *(currentStep++) = (ITM_LINF >> 8) | 0x80;
+    *(currentStep++) =  ITM_LINF       & 0xff;
+
+    *(currentStep++) = (ITM_LOGF >> 8) | 0x80;
+    *(currentStep++) =  ITM_LOGF       & 0xff;
+
+    *(currentStep++) = (ITM_ORTHOF >> 8) | 0x80;
+    *(currentStep++) =  ITM_ORTHOF       & 0xff;
+
+    *(currentStep++) = (ITM_POWERF >> 8) | 0x80;
+    *(currentStep++) =  ITM_POWERF       & 0xff;
+
+    *(currentStep++) = (ITM_GAUSSF >> 8) | 0x80;
+    *(currentStep++) =  ITM_GAUSSF       & 0xff;
+
+    *(currentStep++) = (ITM_CAUCHF >> 8) | 0x80;
+    *(currentStep++) =  ITM_CAUCHF       & 0xff;
+
+    *(currentStep++) = (ITM_PARABF >> 8) | 0x80;
+    *(currentStep++) =  ITM_PARABF       & 0xff;
+
+    *(currentStep++) = (ITM_HYPF >> 8) | 0x80;
+    *(currentStep++) =  ITM_HYPF       & 0xff;
+
+    *(currentStep++) = (ITM_ROOTF >> 8) | 0x80;
+    *(currentStep++) =  ITM_ROOTF       & 0xff;
+
+    *(currentStep++) = (ITM_1COMPL >> 8) | 0x80;
+    *(currentStep++) =  ITM_1COMPL       & 0xff;
+
+    *(currentStep++) = (ITM_SNAP >> 8) | 0x80;
+    *(currentStep++) =  ITM_SNAP       & 0xff;
+
+    *(currentStep++) = (ITM_2COMPL >> 8) | 0x80;
+    *(currentStep++) =  ITM_2COMPL       & 0xff;
+
+    *(currentStep++) = (ITM_ABS >> 8) | 0x80;
+    *(currentStep++) =  ITM_ABS       & 0xff;
+
+    *(currentStep++) = (ITM_AGM >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGM       & 0xff;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = 64;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_AGRAPH >> 8) | 0x80;
+    *(currentStep++) =  ITM_AGRAPH       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
   }

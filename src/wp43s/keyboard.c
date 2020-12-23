@@ -1484,7 +1484,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       return;
     }                              //JMSHOW ^^
 
-    if(tamMode) {
+    if(tamMode && !catalog) {
       addItemToBuffer(ITM_Max);
       return;
     }
@@ -1598,7 +1598,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       return;
     }                             //JMSHOW ^^
 
-    if(tamMode) {
+    if(tamMode && !catalog) {
       addItemToBuffer(ITM_Min);
       return;
     }

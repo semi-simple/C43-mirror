@@ -35,7 +35,6 @@ GtkWidget *lblGKey2;
     GtkWidget *lblBehindScreen;
 
     GtkWidget *btn11,   *btn12,   *btn13,   *btn14,   *btn15,   *btn16;
-
     GtkWidget *btn21,   *btn22,   *btn23,   *btn24,   *btn25,   *btn26;
 GtkWidget *lbl21F,  *lbl22F,  *lbl23F,  *lbl24F,  *lbl25F,  *lbl26F;
 GtkWidget *lbl21G,  *lbl22G,  *lbl23G,  *lbl24G,  *lbl25G,  *lbl26G;
@@ -761,23 +760,23 @@ return FALSE;
       btnClicked(w, "17");
       break;
 
-    case 55:    // 7
-    case 65463: // 7
-      //printf("key pressed: 7\n");
-      btnClicked(w, "18");
-      break;
+      case 55:    // 7
+      case 65463: // 7
+        //printf("key pressed: 7\n");
+        btnClicked(w, "18");
+        break;
 
-    case 56:    // 8
-    case 65464: // 8
-      //printf("key pressed: 8\n");
-      btnClicked(w, "19");
-      break;
+      case 56:    // 8
+      case 65464: // 8
+        //printf("key pressed: 8\n");
+        btnClicked(w, "19");
+        break;
 
-    case 57:    // 9
-    case 65465: // 9
-      //printf("key pressed: 9\n");
-      btnClicked(w, "20");
-      break;
+      case 57:    // 9
+      case 65465: // 9
+        //printf("key pressed: 9\n");
+        btnClicked(w, "20");
+        break;
 
 
     case 47:    // / //JM
@@ -792,23 +791,23 @@ return FALSE;
       btnClicked(w, "22");
       break;
 
-    case 52:    // 4
-    case 65460: // 4
-      //printf("key pressed: 4\n");
-      btnClicked(w, "23");
-      break;
+      case 52:    // 4
+      case 65460: // 4
+        //printf("key pressed: 4\n");
+        btnClicked(w, "23");
+        break;
 
-    case 53:    // 5
-    case 65461: // 5
-      //printf("key pressed: 5\n");
-      btnClicked(w, "24");
-      break;
+      case 53:    // 5
+      case 65461: // 5
+        //printf("key pressed: 5\n");
+        btnClicked(w, "24");
+        break;
 
-    case 54:    // 6
-    case 65462: // 6
-      //printf("key pressed: 6\n");
-      btnClicked(w, "25");
-      break;
+      case 54:    // 6
+      case 65462: // 6
+        //printf("key pressed: 6\n");
+        btnClicked(w, "25");
+        break;
 
 
     case 42:    // * //JM
@@ -824,23 +823,23 @@ return FALSE;
       btnClickedP(w, "27");                         //JM PRESSED FOR KEYBOARD F REPEAT
       break;
 
-    case 49:    // 1
-    case 65457: // 1
-      //printf("key pressed: 1\n");
-      btnClicked(w, "28");
-      break;
+      case 49:    // 1
+      case 65457: // 1
+        //printf("key pressed: 1\n");
+        btnClicked(w, "28");
+        break;
 
-    case 50:    // 2
-    case 65458: // 2
-      //printf("key pressed: 2\n");
-      btnClicked(w, "29");
-      break;
+      case 50:    // 2
+      case 65458: // 2
+        //printf("key pressed: 2\n");
+        btnClicked(w, "29");
+        break;
 
-    case 51:    // 3
-    case 65459: // 3
-      //printf("key pressed: 3\n");
-      btnClicked(w, "30");
-      break;
+      case 51:    // 3
+      case 65459: // 3
+        //printf("key pressed: 3\n");
+        btnClicked(w, "30");
+        break;
 
 
     case 45:    // - //JM
@@ -855,19 +854,18 @@ return FALSE;
       btnClicked(w, "32");
       break;
 
-    case 48:    // 0
-    case 65456: // 0
-      //printf("key pressed: 0\n");
-      btnClicked(w, "33");
-      break;
+      case 48:    // 0
+      case 65456: // 0
+        //printf("key pressed: 0\n");
+        btnClicked(w, "33");
+        break;
 
-
-    case 44:    // ,            Leave both , and . on one for normal calc operation. In=f in AIM, , and . are separated.
-    case 46:    // .
-    case 65454: // .
-      //printf("key pressed: .\n");
-      btnClicked(w, "34");
-      break;
+      case 44:    // ,
+      case 46:    // .
+      case 65454: // .
+        //printf("key pressed: .\n");
+        btnClicked(w, "34");
+        break;
 
     case 92: // \                                //JM R/S changed to \ as on Mac CTRL is something else.
       //printf("key pressed: \\ R/S\n");
@@ -2337,8 +2335,8 @@ void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
 
 
 
-void calcModeAimGui(void) {
-  const calcKey_t *keys;
+    void calcModeAimGui(void) {
+      const calcKey_t *keys;
 
   if(running_program_jm) return;                        //JM faster during program excution
 
@@ -2617,10 +2615,8 @@ void calcModeAimGui(void) {
 
 
 
-
-
-void calcModeTamGui(void) {
-  const calcKey_t *keys;
+    void calcModeTamGui(void) {
+      const calcKey_t *keys;
 
   if(running_program_jm) return;                        //JM faster during program excution
   
@@ -2744,12 +2740,12 @@ void setupUI(void) {
   GdkDisplay     *cssDisplay;
   GdkScreen      *cssScreen;
 
-  prepareCssData();
+      prepareCssData();
 
-  cssProvider = gtk_css_provider_new();
-  cssDisplay  = gdk_display_get_default();
-  cssScreen   = gdk_display_get_default_screen(cssDisplay);
-  gtk_style_context_add_provider_for_screen(cssScreen, GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+      cssProvider = gtk_css_provider_new();
+      cssDisplay  = gdk_display_get_default();
+      cssScreen   = gdk_display_get_default_screen(cssDisplay);
+      gtk_style_context_add_provider_for_screen(cssScreen, GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   error = NULL;
   gtk_css_provider_load_from_data(cssProvider, cssData, -1, &error);
@@ -2760,14 +2756,14 @@ void setupUI(void) {
   g_object_unref(cssProvider);
   free(cssData);
 
-  // Get the monitor geometry to determine whether the calc is portrait or landscape
-  GdkRectangle monitor;
-  gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
-  //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
+      // Get the monitor geometry to determine whether the calc is portrait or landscape
+      GdkRectangle monitor;
+      gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
+      //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
 
-  if(calcAutoLandscapePortrait) {
-    calcLandscape = (monitor.height < 1025);
-  }
+      if(calcAutoLandscapePortrait) {
+        calcLandscape = (monitor.height < 1025);
+      }
 
   // The main window
   frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -2798,11 +2794,11 @@ void setupUI(void) {
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
   g_signal_connect(frmCalc, "key_release_event", G_CALLBACK(keyReleased), NULL);  //JM CTRL
 
-  gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
+      gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
 
-  // Fixed grid to freely put widgets on it
-  grid = gtk_fixed_new();
-  gtk_container_add(GTK_CONTAINER(frmCalc), grid);
+      // Fixed grid to freely put widgets on it
+      grid = gtk_fixed_new();
+      gtk_container_add(GTK_CONTAINER(frmCalc), grid);
 
 
 
@@ -2821,7 +2817,7 @@ void setupUI(void) {
 
   }
 
-  gtk_fixed_put(GTK_FIXED(grid), backgroundImage,  0, 0);
+      gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
 #if defined(JM_LAYOUT_1A)  //JM LAYOUT 1. FINAL. Show colour band next to LCD
 
@@ -2912,7 +2908,7 @@ void setupUI(void) {
     exit(1);
   }
 
-  g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
+      g_signal_connect(screen, "draw", G_CALLBACK(drawScreen), NULL);
 
 
   #if (DEBUG_REGISTER_L == 1)
@@ -2930,73 +2926,73 @@ void setupUI(void) {
     gtk_fixed_put(GTK_FIXED(grid), lblMemoryStatus, 5, 5);
   #endif
 
-  // 1st row: F1 to F6 buttons
-  btn11 = gtk_button_new_with_label("");
-  btn12 = gtk_button_new_with_label("");
-  btn13 = gtk_button_new_with_label("");
-  btn14 = gtk_button_new_with_label("");
-  btn15 = gtk_button_new_with_label("");
-  btn16 = gtk_button_new_with_label("");
+      // 1st row: F1 to F6 buttons
+      btn11 = gtk_button_new_with_label("");
+      btn12 = gtk_button_new_with_label("");
+      btn13 = gtk_button_new_with_label("");
+      btn14 = gtk_button_new_with_label("");
+      btn15 = gtk_button_new_with_label("");
+      btn16 = gtk_button_new_with_label("");
 
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn13), "F3");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn14), "F4");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn15), "F5");
-  gtk_widget_set_tooltip_text(GTK_WIDGET(btn16), "F6");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn11), "F1");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn12), "F2");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn13), "F3");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn14), "F4");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn15), "F5");
+      gtk_widget_set_tooltip_text(GTK_WIDGET(btn16), "F6");
 
-  gtk_widget_set_size_request(btn11, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn12, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn13, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn14, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn15, KEY_WIDTH_1, 0);
-  gtk_widget_set_size_request(btn16, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn11, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn12, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn13, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn14, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn15, KEY_WIDTH_1, 0);
+      gtk_widget_set_size_request(btn16, KEY_WIDTH_1, 0);
 
-  gtk_widget_set_name(btn11, "calcKey");
-  gtk_widget_set_name(btn12, "calcKey");
-  gtk_widget_set_name(btn13, "calcKey");
-  gtk_widget_set_name(btn14, "calcKey");
-  gtk_widget_set_name(btn15, "calcKey");
-  gtk_widget_set_name(btn16, "calcKey");
+      gtk_widget_set_name(btn11, "calcKey");
+      gtk_widget_set_name(btn12, "calcKey");
+      gtk_widget_set_name(btn13, "calcKey");
+      gtk_widget_set_name(btn14, "calcKey");
+      gtk_widget_set_name(btn15, "calcKey");
+      gtk_widget_set_name(btn16, "calcKey");
 
-  g_signal_connect(btn11, "button-press-event", G_CALLBACK(btnFnPressed), "1");
-  g_signal_connect(btn12, "button-press-event", G_CALLBACK(btnFnPressed), "2");
-  g_signal_connect(btn13, "button-press-event", G_CALLBACK(btnFnPressed), "3");
-  g_signal_connect(btn14, "button-press-event", G_CALLBACK(btnFnPressed), "4");
-  g_signal_connect(btn15, "button-press-event", G_CALLBACK(btnFnPressed), "5");
-  g_signal_connect(btn16, "button-press-event", G_CALLBACK(btnFnPressed), "6");
-  g_signal_connect(btn11, "button-release-event", G_CALLBACK(btnFnReleased), "1");
-  g_signal_connect(btn12, "button-release-event", G_CALLBACK(btnFnReleased), "2");
-  g_signal_connect(btn13, "button-release-event", G_CALLBACK(btnFnReleased), "3");
-  g_signal_connect(btn14, "button-release-event", G_CALLBACK(btnFnReleased), "4");
-  g_signal_connect(btn15, "button-release-event", G_CALLBACK(btnFnReleased), "5");
-  g_signal_connect(btn16, "button-release-event", G_CALLBACK(btnFnReleased), "6");
+      g_signal_connect(btn11, "button-press-event", G_CALLBACK(btnFnPressed), "1");
+      g_signal_connect(btn12, "button-press-event", G_CALLBACK(btnFnPressed), "2");
+      g_signal_connect(btn13, "button-press-event", G_CALLBACK(btnFnPressed), "3");
+      g_signal_connect(btn14, "button-press-event", G_CALLBACK(btnFnPressed), "4");
+      g_signal_connect(btn15, "button-press-event", G_CALLBACK(btnFnPressed), "5");
+      g_signal_connect(btn16, "button-press-event", G_CALLBACK(btnFnPressed), "6");
+      g_signal_connect(btn11, "button-release-event", G_CALLBACK(btnFnReleased), "1");
+      g_signal_connect(btn12, "button-release-event", G_CALLBACK(btnFnReleased), "2");
+      g_signal_connect(btn13, "button-release-event", G_CALLBACK(btnFnReleased), "3");
+      g_signal_connect(btn14, "button-release-event", G_CALLBACK(btnFnReleased), "4");
+      g_signal_connect(btn15, "button-release-event", G_CALLBACK(btnFnReleased), "5");
+      g_signal_connect(btn16, "button-release-event", G_CALLBACK(btnFnReleased), "6");
 
-  gtk_widget_set_focus_on_click(btn11, FALSE);
-  gtk_widget_set_focus_on_click(btn12, FALSE);
-  gtk_widget_set_focus_on_click(btn13, FALSE);
-  gtk_widget_set_focus_on_click(btn14, FALSE);
-  gtk_widget_set_focus_on_click(btn15, FALSE);
-  gtk_widget_set_focus_on_click(btn16, FALSE);
+      gtk_widget_set_focus_on_click(btn11, FALSE);
+      gtk_widget_set_focus_on_click(btn12, FALSE);
+      gtk_widget_set_focus_on_click(btn13, FALSE);
+      gtk_widget_set_focus_on_click(btn14, FALSE);
+      gtk_widget_set_focus_on_click(btn15, FALSE);
+      gtk_widget_set_focus_on_click(btn16, FALSE);
 
-  xPos = X_LEFT_PORTRAIT;
-  yPos = Y_TOP_PORTRAIT;
-  gtk_fixed_put(GTK_FIXED(grid), btn11, xPos, yPos);
+      xPos = X_LEFT_PORTRAIT;
+      yPos = Y_TOP_PORTRAIT;
+      gtk_fixed_put(GTK_FIXED(grid), btn11, xPos, yPos);
 
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn12, xPos, yPos);
+      xPos += DELTA_KEYS_X;
+      gtk_fixed_put(GTK_FIXED(grid), btn12, xPos, yPos);
 
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn13, xPos, yPos);
+      xPos += DELTA_KEYS_X;
+      gtk_fixed_put(GTK_FIXED(grid), btn13, xPos, yPos);
 
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn14, xPos, yPos);
+      xPos += DELTA_KEYS_X;
+      gtk_fixed_put(GTK_FIXED(grid), btn14, xPos, yPos);
 
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn15, xPos, yPos);
+      xPos += DELTA_KEYS_X;
+      gtk_fixed_put(GTK_FIXED(grid), btn15, xPos, yPos);
 
-  xPos += DELTA_KEYS_X;
-  gtk_fixed_put(GTK_FIXED(grid), btn16, xPos, yPos);
+      xPos += DELTA_KEYS_X;
+      gtk_fixed_put(GTK_FIXED(grid), btn16, xPos, yPos);
 
 
   // 2nd row
@@ -3278,7 +3274,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl35Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl36Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y;
   gtk_fixed_put(GTK_FIXED(grid), btn31,  xPos,                         yPos);
@@ -3404,7 +3400,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl44Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl45Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y;
   gtk_fixed_put(GTK_FIXED(grid), btn41,  xPos,                          yPos);
@@ -3527,7 +3523,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl54Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl55Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_fixed_put(GTK_FIXED(grid), btn51,  xPos,                         yPos);
@@ -3651,7 +3647,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl64Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl65Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_fixed_put(GTK_FIXED(grid), btn61,  xPos,                         yPos);
@@ -3779,7 +3775,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl74Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl75Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_fixed_put(GTK_FIXED(grid), btn71,  xPos,                         yPos);
@@ -3916,7 +3912,7 @@ void setupUI(void) {
   gtk_fixed_put(GTK_FIXED(grid), lbl84Gr, 0, 0);
   gtk_fixed_put(GTK_FIXED(grid), lbl85Gr, 0, 0);
 
-  xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
+      xPos = calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT;
 
   yPos += DELTA_KEYS_Y + 1;
   gtk_fixed_put(GTK_FIXED(grid), btn81,  xPos,                         yPos);
@@ -4119,13 +4115,13 @@ void setupUI(void) {
     nextChar = NC_NORMAL;
     numLock = false;
 
-      liftStack();
+    liftStack();
 
-      clearRegisterLine(AIM_REGISTER_LINE, true, true);
-      xCursor = 1;
-      yCursor = Y_POSITION_OF_AIM_LINE + 6;
-      cursorFont = &standardFont;
-      cursorEnabled = true;
+    clearRegisterLine(AIM_REGISTER_LINE, true, true);
+    xCursor = 1;
+    yCursor = Y_POSITION_OF_AIM_LINE + 6;
+    cursorFont = &standardFont;
+    cursorEnabled = true;
 
     if(softmenuStack[0].softmenuId == 0) { // MyMenu
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -4141,7 +4137,7 @@ void setupUI(void) {
 
 
   /********************************************//**
-   * \brief Sets the calc mode to alpha selection menu
+   * \brief Sets the calc mode to alpha selection menu if needed
    *
    * \return void
    ***********************************************/
@@ -4190,11 +4186,17 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### leaveAsmMode"); jm_show_comment(tmp);
     #endif //PC_BUILD
-    catalog = CATALOG_NONE;
 
     if(tamMode) {
+      uint16_t savedTamMode = tamMode;
+      leaveTamMode();
+      tamMode = savedTamMode;
+      strcpy(tamBuffer, indexOfItems[tamFunction].itemSoftmenuName);
       enterTamMode();
       return;
+    }
+    else {
+      catalog = CATALOG_NONE;
     }
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)

@@ -208,8 +208,8 @@ bool_t checkindexes(int16_t *com, const char *str) {
     case 0x464C4F4F52000000: *com = ITM_FLOOR; return true; break; //FLOOR
     case 0x4743440000000000: *com = ITM_GCD; return true; break; //GCD
     case 0x4C434D0000000000: *com = ITM_LCM; return true; break; //LCM
-    case 0x4445435200000000: *com = ITM_DEC; return true; break; //DECR
-    case 0x494E435200000000: *com = ITM_INC; return true; break; //INCR
+    case 0x4445435200000000: *com = ITM_DEC; return true; break; //DEC
+    case 0x494E435200000000: *com = ITM_INC; return true; break; //INC
     case 0x4950000000000000: *com = ITM_IP; return true; break; //IP
     case 0x4650000000000000: *com = ITM_FP; return true; break; //FP
     case 0x2B00000000000000: *com = ITM_ADD; return true; break; //+
@@ -672,8 +672,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"FLOOR" )) {sprintf(commandnumber,"%d", ITM_FLOOR);} else
                       if (strcompare(commandnumber,"GCD" )) {sprintf(commandnumber,"%d", ITM_GCD);} else
                       if (strcompare(commandnumber,"LCM" )) {sprintf(commandnumber,"%d", ITM_LCM);} else
-                      if (strcompare(commandnumber,"DECR" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
-                      if (strcompare(commandnumber,"INCR" )) {sprintf(commandnumber,"%d", ITM_INC);} else
+                      if (strcompare(commandnumber,"DEC" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
+                      if (strcompare(commandnumber,"INC" )) {sprintf(commandnumber,"%d", ITM_INC);} else
                       if (strcompare(commandnumber,"IP" )) {sprintf(commandnumber,"%d", ITM_IP);} else
                       if (strcompare(commandnumber,"FP" )) {sprintf(commandnumber,"%d", ITM_FP);} else
                       if (strcompare(commandnumber,"+" )) {sprintf(commandnumber,"%d", ITM_ADD);} else
@@ -1060,8 +1060,8 @@ void execute_string(const char *inputstring, bool_t exec1) {
                       if (strcompare(commandnumber,"TANH" )) {sprintf(commandnumber,"%d", ITM_tanh);} else
                       if (strcompare(commandnumber,"GCD" )) {sprintf(commandnumber,"%d", ITM_GCD);} else
                       if (strcompare(commandnumber,"LCM" )) {sprintf(commandnumber,"%d", ITM_LCM);} else
-                      if (strcompare(commandnumber,"DECR" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
-                      if (strcompare(commandnumber,"INCR" )) {sprintf(commandnumber,"%d", ITM_INC);} else
+                      if (strcompare(commandnumber,"DEC" )) {sprintf(commandnumber,"%d", ITM_DEC);} else
+                      if (strcompare(commandnumber,"INC" )) {sprintf(commandnumber,"%d", ITM_INC);} else
                       if (strcompare(commandnumber,"IP" )) {sprintf(commandnumber,"%d", ITM_IP);} else
                       if (strcompare(commandnumber,"FP" )) {sprintf(commandnumber,"%d", ITM_FP);} else
                       if (strcompare(commandnumber,"+" )) {sprintf(commandnumber,"%d", ITM_ADD);} else

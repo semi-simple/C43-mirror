@@ -58,7 +58,7 @@
   #else // !DMCP_BUILD
       #define TMP_STR_LENGTH     2560 //JMMAX ORG:2560
   #endif // DMCP_BUILD
-  #define ERROR_MESSAGE_LENGTH    325 //JMMAX 512          //JMMAX Temporarily reduced - ORG:512.
+  #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.
   #define DISPLAY_VALUE_LEN        80
 
   #include "typeDefinitions.h"

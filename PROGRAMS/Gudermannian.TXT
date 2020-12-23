@@ -39,7 +39,7 @@ LBL M4                      // CALC SUBROUTINE: START RANGE N IS 0 TO (STARTNO-1
   PI *                      // SCALE [-5PI:5PI]
 
   ENTER                     // ENSURE TWO COPIES OF X
-  GD^MINUS_1                        // CALCULATE FUNCTION
+  GD^-1                        // CALCULATE FUNCTION
 
   X<>Y                      // SHIFT Y TO Y AND X TO X
 RTN                      //RETURN TO MAIN PROGRAM

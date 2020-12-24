@@ -8634,7 +8634,7 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("2020-12-24, C43-PEM-XEQ-IMPORTED");
+    fnStrtoX("C43L2_100, 2020-12-24, C43-PEM-XEQ-IMPORTED");
     fnStore(102);
     fnDrop(0);
   

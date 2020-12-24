@@ -674,7 +674,9 @@ void Shft_handler() {                        //JM SHIFT NEW vv
         fnTimerStop(TO_FG_TIMR);
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
-          jm_show_calc_state("screen.c: Shft_handler: HOME3");
+          #ifdef PC_BUILD          
+            jm_show_calc_state("screen.c: Shft_handler: HOME3");
+          #endif //PC_BUILD
           if((softmenuStack[0].softmenuId == mm_MNU_HOME)) {              //JM shifts    //softmenuStackPointerJM
             popSoftmenu();                                                                                                  //JM shifts
           }

@@ -18,6 +18,12 @@
  * \file defines.h
  ***********************************************/
 
+
+//*********************************
+// JM VARIOUS OPTIONS
+//*********************************
+
+//Key layout options
 #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
 #undef  SWAP_TO_L42_ON_SIM
    #define BLUES_WHEN_SWAPPED        //JM Only applicable if SWAPLAYOUTS is defined. Otherwise ignored
@@ -26,15 +32,13 @@
 #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
 #undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
 
-//*********************************
-// JM VARIOUS OPTIONS
-//*********************************
 
-#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging
-#define PC_BUILD_TELLTALE
-#undef PC_BUILD_TELLTALE           //verbose
+//Verbose options
+#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
+#define PC_BUILD_TELLTALE          //verbose on PC
+#undef PC_BUILD_TELLTALE
 
-#define PC_BUILD_VERBOSE2
+#define PC_BUILD_VERBOSE2          //verbose on PC
 #undef PC_BUILD_VERBOSE2
 
 
@@ -79,13 +83,13 @@
 //*********************************
 //* General configuration defines *
 //*********************************
-#define DEBUG_INSTEAD_STATUS_BAR        0 // Debug data instead of the status bar
+#define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
-#define DEBUG_PANEL                       1 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
-#define DEBUG_REGISTER_L                 1 // Showing register L content on the PC GUI
-#define SHOW_MEMORY_STATUS                0 //JM Showing the memory status on the PC GUI
+#define DEBUG_PANEL                      0 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
+#define DEBUG_REGISTER_L                 0 // Showing register L content on the PC GUI
+#define SHOW_MEMORY_STATUS               0 //JM Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers
-#define MMHG_PA_133_3224                  0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
+#define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
 #define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX

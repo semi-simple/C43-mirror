@@ -25,31 +25,31 @@
 
 
 
+#ifdef PC_BUILD
+  void jm_show_calc_state(char comment[]) {
+  #ifdef PC_BUILD_TELLTALE
+    printf("\n%s-----------------------------------------------------------------------------------------------------------------\n",comment);
+    printf(".  calcMode: %d   last_CM=%d (CM_AIM=%d)  doRefreshSoftMenu=%d    lastErrorCode=%d\n",calcMode, last_CM, CM_AIM,doRefreshSoftMenu,lastErrorCode);
+    printf(".  softmenuStack[0].softmenuId=%d       MY_ALPHA_MENU=%d    softmenu[softmenuStack[0].softmenuId].menuItem=%d -MNU_ALPHA=%d\n",softmenuStack[0].softmenuId,MY_ALPHA_MENU,softmenu[softmenuStack[0].softmenuId].menuItem, -MNU_ALPHA);
+    printf(".  ");int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("(%d)=%5d ", ix, softmenuStack[ix].softmenuId); ix++;} printf("\n");
+    printf(".  ");       ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%9s ", indexOfItems[-softmenu[softmenuStack[ix].softmenuId].menuItem].itemSoftmenuName  ); ix++;} printf("\n");
+    printf(".  (tammode=%d, catalog=%d)\n",tamMode, catalog);
+    printf(".  (mm_MNU_HOME=%d, mm_MNU_ALPHA=%d)\n",mm_MNU_HOME, mm_MNU_ALPHA);
+  #endif  
+  }
 
-void jm_show_calc_state(char comment[]) {
-#ifdef PC_BUILD_TELLTALE
-  printf("\n%s-----------------------------------------------------------------------------------------------------------------\n",comment);
-  printf(".  calcMode: %d   last_CM=%d (CM_AIM=%d)  doRefreshSoftMenu=%d    lastErrorCode=%d\n",calcMode, last_CM, CM_AIM,doRefreshSoftMenu,lastErrorCode);
-  printf(".  softmenuStack[0].softmenuId=%d       MY_ALPHA_MENU=%d    softmenu[softmenuStack[0].softmenuId].menuItem=%d -MNU_ALPHA=%d\n",softmenuStack[0].softmenuId,MY_ALPHA_MENU,softmenu[softmenuStack[0].softmenuId].menuItem, -MNU_ALPHA);
-  printf(".  ");int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("(%d)=%5d ", ix, softmenuStack[ix].softmenuId); ix++;} printf("\n");
-  printf(".  ");       ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%9s ", indexOfItems[-softmenu[softmenuStack[ix].softmenuId].menuItem].itemSoftmenuName  ); ix++;} printf("\n");
-  printf(".  (tammode=%d, catalog=%d)\n",tamMode, catalog);
-  printf(".  (mm_MNU_HOME=%d, mm_MNU_ALPHA=%d)\n",mm_MNU_HOME, mm_MNU_ALPHA);
-#endif  
-}
 
-void jm_show_comment(char comment[]) {
-#ifdef PC_BUILD_VERBOSE2
-
-  char tmp[400];
-  strcpy(tmp,comment);
-  strcat(tmp,"                                                                                                                                                                ");
-  tmp[130]=0;
-  printf("....%130s calcMode=%4d last_CM=%4d tammode=%5d catalog=%5d Id=%4d Name=%8s \n",tmp, calcMode, last_CM, tamMode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName);
-
-//  printf("....%s\n",tmp);  
-#endif  
-}
+  void jm_show_comment(char comment[]) {
+  #ifdef PC_BUILD_VERBOSE2
+    char tmp[400];
+    strcpy(tmp,comment);
+    strcat(tmp,"                                                                                                                                                                ");
+    tmp[130]=0;
+    printf("....%130s calcMode=%4d last_CM=%4d tammode=%5d catalog=%5d Id=%4d Name=%8s \n",tmp, calcMode, last_CM, tamMode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName);
+  //  printf("....%s\n",tmp);  
+  #endif  
+  }
+#endif //PC_BUILD
 
 
 void reset_jm_defaults(int16_t toload) {

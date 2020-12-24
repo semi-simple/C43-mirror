@@ -220,7 +220,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
 //NOTE SETPIXEL OPERANDS NOT CHANGED TO 32b
-
+#ifdef OLDGRAPH
                     void graph_draw(uint8_t nbr, float x_min, float x_max, float y_min, float y_max, float tick_x, float tick_y, uint16_t xzero, uint8_t yzero) {
                       #ifndef TESTSUITE_BUILD
                       uint16_t cnt;
@@ -358,7 +358,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
                     //-----------------------------------------------------//-----------------------------------------------------
 
-
+#endif //OLDGRAPH
 
 
 //-----------------------------------------------------//-----------------------------------------------------
@@ -374,8 +374,12 @@ void fnGraph (uint16_t func){
   fnClSigma(0);
   switch (func) 
   {
+
+#ifdef OLDGRAPH
 	  case 1:   fnGraph_old(3);
               break;
+#endif //OLDGRAPH
+
 	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
 	  case 4:   graph_plotmem();

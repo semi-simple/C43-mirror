@@ -8455,9 +8455,15 @@ void fnReset(uint16_t confirmation) {
     allNamedVariablePointer->numberOfNamedVariables = 0;
 
     // allocate space for the local register list
-    allLocalRegisters.numberOfLocalRegisters = 0;
-    currentNumberOfLocalRegisters = 0;
-    allLocalRegisters.nextAllocationLevel = WP43S_NULL;
+    allSubroutineLevels.numberOfSubroutineLevels = 0;
+    currentSubroutineLevelData = allocWp43s(12);
+    allSubroutineLevels.ptrToSubroutineLevel0Data = TO_WP43SMEMPTR(currentSubroutineLevelData);
+    currentSubroutineLevelData[0].returnProgramNumber = 0;
+    currentSubroutineLevelData[0].returnLocalStep = 0;
+    currentSubroutineLevelData[1].numberOfLocalRegisters = 65535; // No local register and no local flags
+    currentSubroutineLevelData[1].level = 0;
+    currentSubroutineLevelData[2].ptrToNextLevel = WP43S_NULL;
+    currentSubroutineLevelData[2].ptrToPreviousLevel = WP43S_NULL;
     currentLocalFlags = NULL;
     currentLocalRegisters = NULL;
 

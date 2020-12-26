@@ -611,12 +611,6 @@ void debugNIM(void) {
       row = 0;
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "currentNumberOfLocalRegisters             = %6u",        currentNumberOfLocalRegisters);
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
         sprintf(string, "TO_WP43SMEMPTR(statisticalSumsPointer)    = %6d",         TO_WP43SMEMPTR(statisticalSumsPointer));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
@@ -952,7 +946,7 @@ void debugNIM(void) {
       gtk_widget_show(lbl1[row++]);
 
       row++;
-      if(currentNumberOfLocalRegisters != 0) {
+      if(currentLocalRegisters != NULL) {
         gtk_label_set_label(GTK_LABEL(lbl1[row]), "Local flags:");
         gtk_widget_show(lbl1[row++]);
 
@@ -1038,12 +1032,12 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" PRIu16 " local registers", currentNumberOfLocalRegisters);
+      sprintf(string, "Content of the %" PRIu16 " local registers", currentSubroutineLevelData[1].numberOfLocalRegisters);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);
 
-      for(uint16_t i=FIRST_LOCAL_REGISTER; i<FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters; i++) {
+      for(uint16_t i=FIRST_LOCAL_REGISTER; i<FIRST_LOCAL_REGISTER + currentSubroutineLevelData[1].numberOfLocalRegisters; i++) {
         if(row < DEBUG_LINES) {
           sprintf(string, ".%02d   %s %7d %7d", i-FIRST_LOCAL_REGISTER, getRegisterDataTypeName(i, false, true), TO_WP43SMEMPTR(getRegisterDataPointer(i)), TO_BYTES(getRegisterFullSize(i)));
           gtk_label_set_label(GTK_LABEL(lbl1[row]), string);

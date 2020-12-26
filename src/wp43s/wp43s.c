@@ -78,12 +78,14 @@ realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reducti
 registerHeader_t      globalRegister[NUMBER_OF_GLOBAL_REGISTERS];
 registerHeader_t      savedStackRegister[NUMBER_OF_SAVED_STACK_REGISTERS + 1]; // +1 for the temporary register
 
-dataBlock_t           allLocalRegisters;
+dataBlock_t           allSubroutineLevels;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
 dataBlock_t          *savedStatisticalSumsPointer;
 dataBlock_t          *ram = NULL;
 dataBlock_t          *currentLocalRegisters;
+dataBlock_t          *currentLocalFlags;
+dataBlock_t          *currentSubroutineLevelData;
 
 softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];
 calcKey_t             kbd_usr[37];
@@ -170,7 +172,6 @@ uint16_t              numberOfPrograms;
 uint16_t              tamMode;
 uint16_t              currentLocalStepNumber;
 uint16_t              currentProgramNumber;
-uint16_t              currentNumberOfLocalRegisters;
 
 int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
@@ -182,7 +183,6 @@ uint32_t              alphaSelectionTimer;
 uint32_t              xCursor;
 uint32_t              yCursor;
 uint32_t              tamOverPemYPos;
-uint32_t             *currentLocalFlags;
 
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;

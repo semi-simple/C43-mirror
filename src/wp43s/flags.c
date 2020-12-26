@@ -146,7 +146,7 @@ bool_t getFlag(uint16_t flag) {
     if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        return (*currentLocalFlags & (1u << (uint32_t)flag)) != 0;
+        return (currentLocalFlags->localFlags & (1u << (uint32_t)flag)) != 0;
       }
       else {
         sprintf(errorMessage, "In function getFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -219,7 +219,7 @@ void fnSetFlag(uint16_t flag) {
     if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        *currentLocalFlags |=  (1u << (uint32_t)flag);
+        currentLocalFlags->localFlags |=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnSetFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -274,7 +274,7 @@ void fnClearFlag(uint16_t flag) {
     if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        *currentLocalFlags &= ~(1u << (uint32_t)flag);
+        currentLocalFlags->localFlags &= ~(1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnClearFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -329,7 +329,7 @@ void fnFlipFlag(uint16_t flag) {
     if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        *currentLocalFlags ^=  (1u << (uint32_t)flag);
+        currentLocalFlags->localFlags ^=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnFlipFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -357,11 +357,12 @@ void fnClFAll(uint16_t confirmation) {
     setConfirmationMode(fnClAll);
   }
   else {
+    // Leave lettered flags as they are
     memset(globalFlags, 0, sizeof(globalFlags) - sizeof(uint16_t)); // Clear flags from 00 to 95
     globalFlags[6] &= 0xfff0; // Clear flags from 96 to 99
 
     if(currentLocalFlags != NULL) {
-      *currentLocalFlags = 0;
+      currentLocalFlags->localFlags = 0;
     }
   }
 }

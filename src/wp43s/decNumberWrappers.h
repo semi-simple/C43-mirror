@@ -82,7 +82,7 @@ typedef struct {
 #define REAL1071_SIZE                                          TO_BLOCKS(sizeof(real1071_t))
 #define COMPLEX34_SIZE                                         TO_BLOCKS(sizeof(complex34_t))
 
-#define POINTER_TO_LOCAL_REGISTER(a)                           ((registerHeader_t *)(TO_PCMEMPTR(allLocalRegisters.nextAllocationLevel + (a))))
+#define POINTER_TO_LOCAL_REGISTER(a)                           ((registerHeader_t *)(currentLocalRegisters + (a)))
 
 #define POINTER_TO_NAMED_VARIABLE(a)                           ((registerHeader_t *)(allNamedVariablePointer + 1 + 2u*(a)))
 #define POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(a)           ((dataBlock_t *)(allNamedVariablePointer + 2u + 2u*(a)))

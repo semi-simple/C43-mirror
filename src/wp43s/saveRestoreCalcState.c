@@ -626,17 +626,17 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
 
   // Local registers
-  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu16 "\n", currentNumberOfLocalRegisters);
+  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu16 "\n", currentSubroutineLevelData[1].numberOfLocalRegisters);
   save(tmpString, strlen(tmpString), BACKUP);
-  for(i=0; i<currentNumberOfLocalRegisters; i++) {
+  for(i=0; i<currentSubroutineLevelData[1].numberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
     sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpString + START_REGISTER_VALUE);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
   // Local flags
-  if(currentNumberOfLocalRegisters) {
-    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu32 "\n", *currentLocalFlags);
+  if(currentLocalRegisters) {
+    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu32 "\n", currentLocalFlags->localFlags);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -1009,7 +1009,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString); // LOCAL_FLAGS
       readLine(stream, tmpString); // LOCAL_FLAGS
       if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        *currentLocalFlags = stringToUint32(tmpString);
+        currentLocalFlags->localFlags = stringToUint32(tmpString);
       }
     }
   }

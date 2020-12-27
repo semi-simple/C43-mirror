@@ -204,25 +204,32 @@ typedef union {
   uint32_t data;
   uint32_t localFlags;
   struct {
-    uint16_t dataMaxLength;            ///< String max length (includind terminating \0) in blocks or Long integer max length in blocks
-    uint16_t numberOfNamedVariables;   ///< Number of existing named variables
+    uint16_t dataMaxLength;               ///< String max length (includind terminating \0) in blocks or Long integer max length in blocks
+    uint16_t numberOfNamedVariables;      ///< Number of existing named variables
   };
   struct {
-    uint16_t variableNameLen;          ///< Size of the name in blocs: 1 to 4, up to 15 bytes = 7 double byte glyphs + trailing 0
-    uint16_t ptrToVariableName;        ///< Pointer to the name of the variable
+    uint16_t variableNameLen;             ///< Size of the name in blocs: 1 to 4, up to 15 bytes = 7 double byte glyphs + trailing 0
+    uint16_t ptrToVariableName;           ///< Pointer to the name of the variable
   };
   struct {
-    uint16_t matrixLines;              ///< Number of lines in the matrix
-    uint16_t matrixColumns;            ///< Number of columns in the matrix
+    uint16_t matrixLines;                 ///< Number of lines in the matrix
+    uint16_t matrixColumns;               ///< Number of columns in the matrix
   };
   struct {
-    uint16_t numberOfLocalRegisters;   ///< Number of allocated local registers
-    uint16_t nextAllocationLevel;      ///< Pointer to the next local register allocation level
+    uint16_t numberOfSubroutineLevels;    ///< Number of subroutine levels
+    uint16_t ptrToSubroutineLevel0Data;   ///< Number of subroutine levels
   };
   struct {
-    uint16_t hasLocalRegisters   :  1; ///< If set, the subroutine has allocated local registers
-    int16_t  returnProgramNumber : 15; ///< return program number >0 if in RAM and <0 if in FLASH
-    uint16_t returnLocalStep     : 16; ///< Return local step number in program number
+    int16_t  returnProgramNumber;         ///< return program number >0 if in RAM and <0 if in FLASH
+    uint16_t returnLocalStep;             ///< Return local step number in program number
+  };
+  struct {
+    uint16_t numberOfLocalRegisters;      ///< Number of allocated local registers
+    uint16_t level;                       ///< Subroutine level
+  };
+  struct {
+    uint16_t ptrToNextLevel;              ///< Pointer to next level of subroutine data
+    uint16_t ptrToPreviousLevel;          ///< Pointer to previous level of subroutine data
   };
 } dataBlock_t;
 

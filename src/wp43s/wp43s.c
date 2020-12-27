@@ -81,12 +81,14 @@ realContext_t         ctxtReal1071; // 1071 digits: used in radian angle reducti
 registerHeader_t      globalRegister[NUMBER_OF_GLOBAL_REGISTERS];
 registerHeader_t      savedStackRegister[NUMBER_OF_SAVED_STACK_REGISTERS + 1]; // +1 for the temporary register
 
-dataBlock_t           allLocalRegisters;
+dataBlock_t           allSubroutineLevels;
 dataBlock_t          *allNamedVariablePointer;
 dataBlock_t          *statisticalSumsPointer;
 dataBlock_t          *savedStatisticalSumsPointer;
 dataBlock_t          *ram = NULL;
 dataBlock_t          *currentLocalRegisters;
+dataBlock_t          *currentLocalFlags;
+dataBlock_t          *currentSubroutineLevelData;
 
 softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];
 calcKey_t             kbd_usr[37];
@@ -227,7 +229,6 @@ uint16_t              numberOfPrograms;
 uint16_t              tamMode;
 uint16_t              currentLocalStepNumber;
 uint16_t              currentProgramNumber;
-uint16_t              currentNumberOfLocalRegisters;
 
 int32_t               numberOfFreeMemoryRegions;
 int32_t               lgCatalogSelection;
@@ -239,7 +240,6 @@ uint32_t              alphaSelectionTimer;
 uint32_t              xCursor;
 uint32_t              yCursor;
 uint32_t              tamOverPemYPos;
-uint32_t             *currentLocalFlags;
 
 uint64_t              shortIntegerMask;
 uint64_t              shortIntegerSignBit;
@@ -267,6 +267,11 @@ size_t                wp43sMemInBytes;
 
 #ifdef PC_BUILD
   int main(int argc, char* argv[]) {
+    #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no more in the correct directory! Why?
+      (*strstr(argv[0], "/bin/")) = 0;
+      chdir(argv[0]);
+    #endif // CODEBLOCKS_OVER_SCORE
+
     #ifdef __APPLE__
       // we take the directory where the application is as the root for this application.
       // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
@@ -812,22 +817,27 @@ void program_main(void) {
 #ifdef TESTSUITE_BUILD
   #include "testSuite.h"
 
-int main(int argc, char* argv[]) {
-  #ifdef __APPLE__
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if(argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if(s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
+  int main(int argc, char* argv[]) {
+    #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no more in the correct directory! Why?
+      (*strstr(argv[0], "/bin/")) = 0;
+      chdir(argv[0]);
+    #endif // CODEBLOCKS_OVER_SCORE
+
+    #ifdef __APPLE__
+      // we take the directory where the application is as the root for this application.
+      // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
+      if(argc>=1) {
+        char *curdir = malloc(1000);
+        // find last /:
+        char *s = strrchr(argv[0], '/');
+        if(s != 0) {
+          // take the directory before the appname:
+          strncpy(curdir, argv[0], s-argv[0]);
+          chdir(curdir);
+          free(curdir);
+        }
       }
-    }
-  #endif // __APPLE__
+    #endif // __APPLE__
 
     wp43sMemInBytes = 0;
     gmpMemInBytes = 0;

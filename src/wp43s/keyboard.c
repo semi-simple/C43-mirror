@@ -863,66 +863,66 @@
               }                                                                                   //JM^^
               break;
 
-              case CM_REGISTER_BROWSER:
-                if(item == ITM_PERIOD) {
-                  rbr1stDigit = true;
-                  if(rbrMode == RBR_GLOBAL) {
-                    if(currentNumberOfLocalRegisters > 0) {
-                      rbrMode = RBR_LOCAL;
-                      currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
-                    }
-                    else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                      rbrMode = RBR_NAMED;
-                      currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
-                    }
+            case CM_REGISTER_BROWSER:
+              if(item == ITM_PERIOD) {
+                rbr1stDigit = true;
+                if(rbrMode == RBR_GLOBAL) {
+                  if(currentLocalRegisters != NULL) {
+                    rbrMode = RBR_LOCAL;
+                    currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
                   }
-                  else if(rbrMode == RBR_LOCAL) {
-                    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-                      rbrMode = RBR_NAMED;
-                      currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
-                    }
-                    else {
-                      rbrMode = RBR_GLOBAL;
-                      currentRegisterBrowserScreen = REGISTER_X;
-                    }
+                  else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    rbrMode = RBR_NAMED;
+                    currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
                   }
-                  else if(rbrMode == RBR_NAMED) {
+                }
+                else if(rbrMode == RBR_LOCAL) {
+                  if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    rbrMode = RBR_NAMED;
+                    currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
+                  }
+                  else {
                     rbrMode = RBR_GLOBAL;
                     currentRegisterBrowserScreen = REGISTER_X;
                   }
                 }
-                else if(item == ITM_RS) {
-                  rbr1stDigit = true;
-                  showContent = !showContent;
+                else if(rbrMode == RBR_NAMED) {
+                  rbrMode = RBR_GLOBAL;
+                  currentRegisterBrowserScreen = REGISTER_X;
                 }
-                else if(item == ITM_RCL) {
-                  rbr1stDigit = true;
-                  if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
-                    calcMode = previousCalcMode;
-                    fnRecall(currentRegisterBrowserScreen);
-                    setSystemFlag(FLAG_ASLIFT);
-                  }
-                  else if(rbrMode == RBR_NAMED) {
-                  }
+              }
+              else if(item == ITM_RS) {
+                rbr1stDigit = true;
+                showContent = !showContent;
+              }
+              else if(item == ITM_RCL) {
+                rbr1stDigit = true;
+                if(rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL) {
+                  calcMode = previousCalcMode;
+                  fnRecall(currentRegisterBrowserScreen);
+                  setSystemFlag(FLAG_ASLIFT);
                 }
-                else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
-                  if(rbr1stDigit) {
-                    rbr1stDigit = false;
-                    rbrRegister = item - ITM_0;
+                else if(rbrMode == RBR_NAMED) {
+                }
+              }
+              else if(ITM_0 <= item && item <= ITM_9 && (rbrMode == RBR_GLOBAL || rbrMode == RBR_LOCAL)) {
+                if(rbr1stDigit) {
+                  rbr1stDigit = false;
+                  rbrRegister = item - ITM_0;
+                }
+                else {
+                  rbr1stDigit = true;
+                  rbrRegister = rbrRegister*10 + item - ITM_0;
+
+                  if(rbrMode == RBR_GLOBAL) {
+                    currentRegisterBrowserScreen = rbrRegister;
                   }
                   else {
-                    rbr1stDigit = true;
-                    rbrRegister = rbrRegister*10 + item - ITM_0;
-
-                    if(rbrMode == RBR_GLOBAL) {
-                      currentRegisterBrowserScreen = rbrRegister;
-                    }
-                    else {
-                      rbrRegister = (rbrRegister >= currentNumberOfLocalRegisters ? 0 : rbrRegister);
-                      currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
-                    }
+                    rbrRegister = (rbrRegister >= currentSubroutineLevelData[1].numberOfLocalRegisters ? 0 : rbrRegister);
+                    currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER + rbrRegister;
                   }
                 }
+              }
 
                 keyActionProcessed = true;
                 break;
@@ -1536,7 +1536,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen + 1, FIRST_LOCAL_REGISTER);
         }
         else if(rbrMode == RBR_LOCAL) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, currentSubroutineLevelData[1].numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
@@ -1649,7 +1649,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1, FIRST_LOCAL_REGISTER);
         }
         else if(rbrMode == RBR_LOCAL) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, currentSubroutineLevelData[1].numberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;

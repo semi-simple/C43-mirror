@@ -285,12 +285,14 @@
   extern registerHeader_t      savedStackRegister[NUMBER_OF_SAVED_STACK_REGISTERS + 1]; // +1 for the temporary register
   extern dynamicSoftmenu_t     dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS];
 
-  extern dataBlock_t           allLocalRegisters;
+  extern dataBlock_t           allSubroutineLevels;
   extern dataBlock_t          *allNamedVariablePointer;
   extern dataBlock_t          *statisticalSumsPointer;
   extern dataBlock_t          *savedStatisticalSumsPointer;
   extern dataBlock_t          *ram;
   extern dataBlock_t          *currentLocalRegisters;
+  extern dataBlock_t          *currentLocalFlags;
+  extern dataBlock_t          *currentSubroutineLevelData;
 
   extern softmenuStack_t       softmenuStack[SOFTMENU_STACK_SIZE];
   extern calcKey_t             kbd_usr[37];
@@ -387,7 +389,6 @@
   extern uint16_t              tamMode;
   extern uint16_t              currentLocalStepNumber;
   extern uint16_t              currentProgramNumber;
-  extern uint16_t              currentNumberOfLocalRegisters;
 
   extern int32_t               numberOfFreeMemoryRegions;
   extern int32_t               lgCatalogSelection;
@@ -399,7 +400,6 @@
   extern uint32_t              xCursor;
   extern uint32_t              yCursor;
   extern uint32_t              tamOverPemYPos;
-  extern uint32_t             *currentLocalFlags;
 
   extern uint64_t              shortIntegerMask;
   extern uint64_t              shortIntegerSignBit;

@@ -113,13 +113,21 @@
         }
       }
 
-      if(currentNumberOfLocalRegisters > 0) {
-        // Local registers
-        if(currentNumberOfLocalRegisters == 1) {
-          strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
+      if(currentLocalFlags == NULL) {
+        sprintf(tmpString + CHARS_PER_LINE * ++line, "No local flags and registers are allocated.");
+      }
+      else {
+        if(currentLocalRegisters == NULL) {
+          sprintf(tmpString + CHARS_PER_LINE * ++line, "No local registers are allocated.");
         }
         else {
-          sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
+          // Local registers
+          if(currentSubroutineLevelData[1].numberOfLocalRegisters == 1) {
+            strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
+          }
+          else {
+            sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentSubroutineLevelData[1].numberOfLocalRegisters);
+          }
         }
 
         // Local flags
@@ -151,9 +159,6 @@
             }
           }
         }
-      }
-      else {
-        sprintf(tmpString + CHARS_PER_LINE * ++line, "No local registers are allocated.");
       }
 
       // Empty line
@@ -360,6 +365,41 @@ void flagBrowser_old(uint16_t unusedButMandatoryParameter) {           //Resurre
 //      showString(tmpString, &standardFont, max(0,16-1+2*40*(f%5) + 19 - stringWidth(tmpString, &standardFont, false, false)/2), 22*(f/5)-132-1-44-220, getFlag(f) ? vmReverse : vmNormal, true, true);  //JM-44
     }
 
+    if(currentLocalFlags == NULL) {
+      sprintf(tmpString, "No local flags and registers are allocated.");
+      showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
+    }
+    else {
+      if(currentLocalRegisters == NULL) {
+        sprintf(tmpString, "No local registers are allocated.");
+        showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
+      }
+      else {
+         // Local registers
+        if(currentSubroutineLevelData[1].numberOfLocalRegisters == 1) {
+          strcpy(tmpString, "1 local register is allocated.");
+          showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
+        }
+        else {
+          sprintf(tmpString,"%" PRIu16 " local registers are allocated.", currentSubroutineLevelData[1].numberOfLocalRegisters);
+          showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
+        }
+      }
+      showString("Local flag status:", &standardFont, 1, 154-1, vmNormal, true, true);
+
+      for(f=0; f<NUMBER_OF_LOCAL_FLAGS; f++) {
+        if(getFlag(NUMBER_OF_GLOBAL_FLAGS + f)) {
+          lcd_fill_rect(40*(f%10)+1, 22*(f/10)+176-1-44, 40*(f%10)+39-(40*(f%10)+1), 22*(f/10)+176+20-1-44-(22*(f/10)+176-1-44)+1,  0xFF);
+        }
+
+        sprintf(tmpString, "%d", f);
+        showString(tmpString, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1-44, getFlag(NUMBER_OF_GLOBAL_FLAGS + f) ? vmReverse : vmNormal, true, true);     //JM-44
+      }
+
+
+    }
+
+#ifdef OOO
     if(currentNumberOfLocalRegisters > 0) {
       // Local registers
       sprintf(tmpString, "%" PRIu16 " local register%s allocated.", currentNumberOfLocalRegisters, currentNumberOfLocalRegisters==1 ? " is" : "s are");
@@ -375,6 +415,8 @@ void flagBrowser_old(uint16_t unusedButMandatoryParameter) {           //Resurre
         showString(tmpString, &standardFont, f<=9 ? 40*(f%10) + 17 : 40*(f%10) + 12, 22*(f/10)+176-1-44, getFlag(NUMBER_OF_GLOBAL_FLAGS+f) ? vmReverse : vmNormal, true, true);     //JM-44
       }
     }
+#endif
+
   }
   //printf("2: %d %d (OLD:%d NEW:%d) %s \n",currentFlgScr,calcMode, CM_FLAG_BROWSER_OLD, CM_FLAG_BROWSER, tmpString);
 

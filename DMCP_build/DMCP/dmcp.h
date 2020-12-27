@@ -31,7 +31,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-  The software and related material is released as “NOMAS”  (NOt MAnufacturer Supported). 
+  The software and related material is released as “NOMAS”  (NOt MAnufacturer Supported).
 
   1. Info is released to assist customers using, exploring and extending the product
   2. Do NOT contact the manufacturer with questions, seeking support, etc. regarding
@@ -99,7 +99,6 @@ void lcd_refresh_lines(int ln, int cnt);
 
 
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val);
-void lcd_fill_ptrn(int x, int y, int dx, int dy, int ptrn1, int ptrn2);
 
 // Place image into LCD buffer
 void lcd_draw_img(const char* img, uint32_t xo, uint32_t yo, uint32_t x, uint32_t y);
@@ -192,7 +191,7 @@ int lcd_textToWidthR(disp_stat_t * ds, const char* text, int expected_width, int
 void lcd_writeTextWidth(disp_stat_t * ds, const char* text);
 
 // Get text which fits in expected width *without breaking words*
-// - word could be broken in the middle only when is placed single long word on line 
+// - word could be broken in the middle only when is placed single long word on line
 int lcd_textForWidth(disp_stat_t * ds, const char* text, int expected_width, int * plen);
 
 
@@ -320,8 +319,6 @@ typedef struct {
   uint32_t * timer2_counter;
   uint32_t * timer3_counter;
 
-  void_fn_t * msc_end_cb;
-
 } sys_sdb_t;
 
 
@@ -344,8 +341,6 @@ typedef struct {
 #define timer2_counter  (sdb.timer2_counter)
 #define timer3_counter  (sdb.timer3_counter)
 
-#define msc_end_cb      (sdb.msc_end_cb)
-
 
 #define t20             (sdb.pds_t20)
 #define t24             (sdb.pds_t24)
@@ -356,11 +351,11 @@ typedef struct {
 
 // ----------------------------------
 
-#define PLATFORM_VERSION "3.20"
+#define PLATFORM_VERSION "3.18"
 
 // System interface version
 #define PLATFORM_IFC_CNR   3
-#define PLATFORM_IFC_VER  15
+#define PLATFORM_IFC_VER  13
 
 // STATIC_ASSERT ...
 #define ASSERT_CONCAT_(a, b) a##b
@@ -424,12 +419,8 @@ void set_reset_state_file(const char * str);
 
 
 // ==== USB functions
-int switch_usb_powered_freq();
 int usb_powered();
-void usb_acm_on();
-int usb_is_on();
-void usb_turn_off();
-void acm_puts(const char *str);
+
 
 // Aux buf
 #define AUX_BUF_SIZE (5*512)
@@ -462,7 +453,7 @@ int read_key(int *k1, int *k2);
 
 
 /////////////////////////////////
-// Low level diagnostics 
+// Low level diagnostics
 /////////////////////////////////
 
 void suspended_bg_key_read();
@@ -504,18 +495,10 @@ void rtc_cancel_alarm();
 
 
 
-// QSPI User area
-int qspi_user_write(uint8_t *data, int size, int offset, int erase);
-uint8_t * qspi_user_addr();
-int qspi_user_size();
-
-
-
-
 // ----------------------------------
 
 
-// Printer 
+// Printer
 #define PRINT_GRA_LN  1
 #define PRINT_TXT_LN  0
 
@@ -727,9 +710,6 @@ void item_sel_header(item_sel_state_t *st, int update);
 void msg_box(disp_stat_t * ds, const char * txt, int inv);
 
 
-int run_menu_item_sys(uint8_t line_id);
-
-
 // ----------------------------------
 
 
@@ -743,50 +723,50 @@ int run_menu_item_sys(uint8_t line_id);
 //  Key codes
 // -------------
 
-#define WP43S_KEY_INV     1 // SIGMA
-#define WP43S_KEY_POW     2 // INV
-#define WP43S_KEY_TRI     3 // SQRT
-#define WP43S_KEY_LN      4 // LOG
-#define WP43S_KEY_EXP     5 // LN
-#define WP43S_KEY_SQRT    6 // XEQ
-#define WP43S_KEY_STO     7 // STO
-#define WP43S_KEY_RCL     8 // RCL
-#define WP43S_KEY_RDN     9 // RDN
-#define WP43S_KEY_UM     10 // SIN
-#define WP43S_KEY_SHIFTF 11 // COS
-#define WP43S_KEY_SHIFTG 12 // TAN
-#define WP43S_KEY_ENTER  13 // ENTER
-#define WP43S_KEY_SWAP   14 // SWAP
-#define WP43S_KEY_CHS    15 // CHS
-#define WP43S_KEY_E      16 // E
-#define WP43S_KEY_BSP    17 // BSP
-#define WP43S_KEY_DIV    18 // UP
-#define WP43S_KEY_7      19 // 7
-#define WP43S_KEY_8      20 // 8
-#define WP43S_KEY_9      21 // 9
-#define WP43S_KEY_XEQ    22 // DIV
-#define WP43S_KEY_MUL    23 // DOWN
-#define WP43S_KEY_4      24 // 4
-#define WP43S_KEY_5      25 // 5
-#define WP43S_KEY_6      26 // 6
-#define WP43S_KEY_UP     27 // MUL
-#define WP43S_KEY_SUB    28 // SHIFT
-#define WP43S_KEY_1      29 // 1
-#define WP43S_KEY_2      30 // 2
-#define WP43S_KEY_3      31 // 3
-#define WP43S_KEY_DOWN   32 // SUB
-#define WP43S_KEY_ADD    33 // EXIT
-#define WP43S_KEY_0      34 // 0
-#define WP43S_KEY_DOT    35 // DOT
-#define WP43S_KEY_RUN    36 // RS
-#define WP43S_KEY_EXIT   37 // ADD
+#define KEY_SIGMA  1
+#define KEY_INV    2
+#define KEY_SQRT   3
+#define KEY_LOG    4
+#define KEY_LN     5
+#define KEY_XEQ    6
+#define KEY_STO    7
+#define KEY_RCL    8
+#define KEY_RDN    9
+#define KEY_SIN   10
+#define KEY_COS   11
+#define KEY_TAN   12
+#define KEY_ENTER 13
+#define KEY_SWAP  14
+#define KEY_CHS   15
+#define KEY_E     16
+#define KEY_BSP   17
+#define KEY_UP    18
+#define KEY_7     19
+#define KEY_8     20
+#define KEY_9     21
+#define KEY_DIV   22
+#define KEY_DOWN  23
+#define KEY_4     24
+#define KEY_5     25
+#define KEY_6     26
+#define KEY_MUL   27
+#define KEY_SHIFT 28
+#define KEY_1     29
+#define KEY_2     30
+#define KEY_3     31
+#define KEY_SUB   32
+#define KEY_EXIT  33
+#define KEY_0     34
+#define KEY_DOT   35
+#define KEY_RUN   36
+#define KEY_ADD   37
 
-#define WP43S_KEY_F1     38 // F1
-#define WP43S_KEY_F2     39 // F2
-#define WP43S_KEY_F3     40 // F3
-#define WP43S_KEY_F4     41 // F4
-#define WP43S_KEY_F5     42 // F5
-#define WP43S_KEY_F6     43 // F6
+#define KEY_F1    38
+#define KEY_F2    39
+#define KEY_F3    40
+#define KEY_F4    41
+#define KEY_F5    42
+#define KEY_F6    43
 
 #define KEY_SCREENSHOT 44
 #define KEY_SH_UP      45
@@ -815,7 +795,7 @@ int run_menu_item_sys(uint8_t line_id);
 #define VAL_ST(x)       VAL(x,calc_state)
 #define CLR_ST(x)       CLR(x,calc_state)
 #define SET_ST(x)       SET(x,calc_state)
-#define SETMSK_ST(x,m)  SETMSK(x,m,calc_state) 
+#define SETMSK_ST(x,m)  SETMSK(x,m,calc_state)
 #define SETBY_ST(c,x)   SETBY(c,x,calc_state)
 
 
@@ -854,9 +834,8 @@ int run_menu_item_sys(uint8_t line_id);
 #define OFFIMG_DIR     "/OFFIMG"
 
 // Help
-#define HELP_INDEX     "/HELP/index.htm"
-#define HELP_DIR       "/HELP"
-#define HELP_EXT_MASK  "*.htm*"
+#define HELP_INDEX "/HELP/index.htm"
+
 
 // Screenshot
 int create_screenshot(int report_error);
@@ -933,7 +912,7 @@ int sys_timer_active(int timer_ix);
 int sys_timer_timeout(int timer_ix);
 
 // Millisecond delay
-void sys_delay(uint32_t ms_delay); 
+void sys_delay(uint32_t ms_delay);
 
 // Current systick count
 uint32_t sys_tick_count();

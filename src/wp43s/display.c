@@ -2129,7 +2129,10 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       //Check if REAL + IMAG fits into two lines
       if(stringWidth(tmpString, &numericFont, true, true) + stringWidth(tmpString + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
       //  if it fits, copy all into +0
-        strncat(tmpString, tmpString +  300, 299);
+        int xx = stringByteLength(tmpString) + stringByteLength(tmpString + 300);
+//        strncat(tmpString, tmpString +  300, 299);
+        xcopy(tmpString + stringByteLength(tmpString), tmpString + 300,stringByteLength(tmpString + 300));
+        tmpString[xx] = 0;
         tmpString[300] = 0;
       }
   

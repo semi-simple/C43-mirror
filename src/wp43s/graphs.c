@@ -27,6 +27,19 @@
 //#define STATDEBUG
 
 
+
+//*******************************
+// float/*double*/*)
+//
+// For normal 32-bit floating-point values, this corresponds to values in the range from 1.175494351 * 10^-38 to 3.40282347 * 10^+38.
+//
+// Array: 400 x 2 * 4 byte = 3200 bytes required for STATS Graph array
+//
+//*******************************
+
+
+
+
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
 float    tick_int_x;
 float    tick_int_y;

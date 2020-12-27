@@ -283,6 +283,7 @@
 
   extern registerHeader_t      globalRegister[NUMBER_OF_GLOBAL_REGISTERS];
   extern registerHeader_t      savedStackRegister[NUMBER_OF_SAVED_STACK_REGISTERS + 1]; // +1 for the temporary register
+  extern registerHeader_t     *currentLocalRegisters;
   extern dynamicSoftmenu_t     dynamicSoftmenu[NUMBER_OF_DYNAMIC_SOFTMENUS];
 
   extern dataBlock_t           allSubroutineLevels;
@@ -290,7 +291,6 @@
   extern dataBlock_t          *statisticalSumsPointer;
   extern dataBlock_t          *savedStatisticalSumsPointer;
   extern dataBlock_t          *ram;
-  extern dataBlock_t          *currentLocalRegisters;
   extern dataBlock_t          *currentLocalFlags;
   extern dataBlock_t          *currentSubroutineLevelData;
 

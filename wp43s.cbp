@@ -36,7 +36,6 @@
 			</Target>
 			<Target title="generateConstants">
 				<Option output="bin/Debug/generateConstants" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -46,7 +45,6 @@
 			</Target>
 			<Target title="generateCatalogs">
 				<Option output="bin/Debug/generateCatalogs" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -61,7 +59,6 @@
 			</Target>
 			<Target title="ttf2RasterFonts">
 				<Option output="bin/Debug/ttf2RasterFonts" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -75,7 +72,6 @@
 			</Target>
 			<Target title="testTtf2RasterFonts">
 				<Option output="bin/Debug/testTtf2RasterFonts" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -118,6 +114,7 @@
 			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 			<Add option="-DPC_BUILD" />
 			<Add option="-DOS64BIT" />
+			<Add option="-DCODEBLOCKS_OVER_SCORE" />
 			<Add directory="decNumberICU" />
 			<Add directory="DMCP" />
 			<Add directory="src/wp43s" />

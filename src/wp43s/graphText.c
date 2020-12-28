@@ -403,7 +403,7 @@ void make_TSV_dir_name(void){ //DMCP_BUILD
 }
 
 
-int16_t export_xy_to_file(float/*double*/ x, float/*double*/ y){
+int16_t export_xy_to_file(graphtype x, graphtype y){
   char line[100];               /* Line buffer */
   make_TSV_dir_name();
   sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
@@ -654,7 +654,7 @@ void make_TSV_dir_name(void){  //PC_BUILD
 }
 
 
-int16_t export_xy_to_file(float/*double*/ x, float/*double*/ y){ //PC_BUILD
+int16_t export_xy_to_file(graphtype x, graphtype y){ //PC_BUILD
   char line[100];               /* Line buffer */
   make_TSV_dir_name();
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);

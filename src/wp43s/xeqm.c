@@ -168,6 +168,7 @@ uint32_t indic_y = SCREEN_HEIGHT-1;
 bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
 
                       *com = 0;
+                      if (strcompare(str,"EEX" )) { *com = ITM_EXPONENT; } else
                       if (strcompare(str,"PRIME?" )) { *com = ITM_PRIME; } else
                       if (strcompare(str,"ENTER" )) { *com = ITM_ENTER; } else
                       if (strcompare(str,"X<>Y" )) { *com = ITM_XexY; } else

@@ -957,8 +957,8 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
   if(JM_OPCODE == 45) {                                         //PRIME stats
-    #ifndef TESTSUITE_BUILD
-
+    #ifdef PC_BUILD
+      ramDump();
     #endif
   }
   

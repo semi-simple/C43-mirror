@@ -1928,21 +1928,19 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
 
 void fnDumpMenus(uint16_t unusedButMandatoryParameter) {                      //JM
-#ifdef TESTSUITE_BUILD
+#ifdef PC_BUILD
   int16_t m,n;
   m = 0;
     while(softmenu[m].menuItem != 0) {
       n=0;
       while(n <= softmenu[m].numItems) {
         printf("m=%d n=%d\n",m,n );
-        #ifndef TESTSUITE_BUILD
-          fnMenuDump(m, n);
-        #endif //TESTSUITE_BUILD
+        fnMenuDump(m, n);
         n += 18;
       }
       m++;
     }
-#endif
+#endif //PC_BUILD
 }                                                                            //JM^^
 
 

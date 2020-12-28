@@ -680,7 +680,7 @@
 #define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #endif
 
-#define RAM_SIZE                                2048 // Martin made 1024 on 2020-12-27. But for a FLOAT array 1024 is too small: 2x400x4byte = 3200 bytes = 800 additional blocks required for this. Add 1024.
+#define RAM_SIZE                                2048 // Martin made 1024 on 2020-12-27. Doubling to 2048 for working test memory for C43
                                                      // Original: 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))

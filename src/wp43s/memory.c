@@ -359,6 +359,51 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
 
 
 #ifdef PC_BUILD
+  static void findBlockUsage(uint16_t block) {
+    tmpString[0] = 0;
+
+    for(int i=0; i<=LAST_GLOBAL_REGISTER; i++) {
+      if(globalRegister[i].pointerToRegisterData == block) {
+        sprintf(tmpString, "Global register %02d: %s", i, getDataTypeName(globalRegister[i].dataType, false, false));
+        return;
+      }
+    }
+
+    for(int i=0; i<NUMBER_OF_SAVED_STACK_REGISTERS + 1; i++) {
+      if(savedStackRegister[i].pointerToRegisterData == block) {
+        sprintf(tmpString, "Saved stack register %d: %s", i + FIRST_SAVED_STACK_REGISTER, getDataTypeName(savedStackRegister[i].dataType, false, false));
+        return;
+      }
+    }
+
+    if(allSubroutineLevels.ptrToSubroutineLevel0Data == block) {
+      sprintf(tmpString, "Subroutine level 0 data");
+      return;
+    }
+
+    if(TO_WP43SMEMPTR(beginOfProgramMemory) == block) {
+      sprintf(tmpString, "Begin of program memory");
+      return;
+    }
+
+    for(int i=0; i<numberOfFreeMemoryRegions; i++) {
+      if(freeMemoryRegions[i].address == block && freeMemoryRegions[i].sizeInBlocks == 1) {
+        sprintf(tmpString, "Free memory block %d: 1 block", i);
+        return;
+      }
+
+      if(freeMemoryRegions[i].address == block) {
+        sprintf(tmpString, "Free memory block %d begin: %u blocks", i, freeMemoryRegions[i].sizeInBlocks);
+        return;
+      }
+
+      if(freeMemoryRegions[i].address + freeMemoryRegions[i].sizeInBlocks - 1 == block) {
+        sprintf(tmpString, "Free memory block %d end: %u blocks", i, freeMemoryRegions[i].sizeInBlocks);
+        return;
+      }
+    }
+  }
+
   void ramDump(void) {
     for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
       printf("Global register    %3u: dataPointer=(block %5u)     dataType=%2u=%s       tag=%2u=%s\n",
@@ -383,7 +428,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
     printf("  Level rtnPgm rtnStep nbrLocalFlags nbrLocRegs level     next previous\n");
     currentSubroutineLevelData = TO_PCMEMPTR(allSubroutineLevels.ptrToSubroutineLevel0Data);
     currentLocalFlags = (currentSubroutineLevelData[1].numberOfLocalFlags == 0 ? NULL : currentSubroutineLevelData + 2);
-    currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData[1].numberOfLocalRegisters == 0 ? NULL : (dataBlock_t *)(currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4)));
+    currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData[1].numberOfLocalRegisters == 0 ? NULL : currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4));
     for(int level=0; level<allSubroutineLevels.numberOfSubroutineLevels; level++) {
       printf("  %5d %6d %7u %13u %10u %5u %8u %8u\n",
                 level,
@@ -408,14 +453,16 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
       if(currentSubroutineLevelData[2].ptrToNextLevel != WP43S_NULL) {
         currentSubroutineLevelData = TO_PCMEMPTR(currentSubroutineLevelData[2].ptrToNextLevel);
         currentLocalFlags = (currentSubroutineLevelData[1].numberOfLocalFlags == 0 ? NULL : currentSubroutineLevelData + 2);
-        currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData[1].numberOfLocalRegisters == 0 ? NULL : (dataBlock_t *)(currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4)));
+        currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData[1].numberOfLocalRegisters == 0 ? NULL : currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4));
       }
     }
 
     fprintf(stdout, "\n| block | hex               dec | hec      dec | hex  dec |\n");
     for(uint16_t block=0; block<RAM_SIZE; block++) {
       fprintf(stdout, "+-------+-----------------------+--------------+----------+\n");
-      fprintf(stdout, "| %5u | %08x = %10u | %04x = %5u | %02x = %3u |\n", block, *(uint32_t *)(ram + block), *(uint32_t *)(ram + block), *(uint16_t *)(ram + block), *(uint16_t *)(ram + block), *(uint8_t *)(ram + block), *(uint8_t *)(ram + block));
+      fprintf(stdout, "| %5u | %08x = %10u | %04x = %5u | %02x = %3u |  ", block, *(uint32_t *)(ram + block), *(uint32_t *)(ram + block), *(uint16_t *)(ram + block), *(uint16_t *)(ram + block), *(uint8_t *)(ram + block), *(uint8_t *)(ram + block));
+      findBlockUsage(block);
+      fprintf(stdout, "%s\n", tmpString);
       //fprintf(stdout, "|       |                       |              +----------+\n");
       fprintf(stdout, "|       |                       |              | %02x = %3u |\n", *((uint8_t *)(ram + block) + 1), *((uint8_t *)(ram + block) + 1));
       //fprintf(stdout, "|       |                       +--------------+----------+\n");

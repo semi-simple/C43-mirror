@@ -1,9 +1,9 @@
 //PROGRAM TO PLOT SINC Program Rev. 6
-//SUPPORTS NORMALIZED SINCPI AND STANDARD SINC 
+//NORMALIZED SINC (SINCPI)
 
-XEQLBL FF SINCPI        // BINDS THE PROGRAM NAME TO THE SOFTMENU BUTTON ON SCREEN
+XEQLBL FF SINC_PI        // BINDS THE PROGRAM NAME TO THE SOFTMENU BUTTON ON SCREEN
 
-  MULPI          // SET ADM for display. ADM does not matter as SINCPI assumed MULPI if operand is not a declared angle.
+  MULPI                  // SET ADM for display. ADM does not matter as SINCPI assumed MULPI if operand is not a declared angle.
 
   ERPN                   // ENSURE IN ERPN
   DOTD                   // ENSURE IN REAL MODE

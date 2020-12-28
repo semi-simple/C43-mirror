@@ -1,2 +1,61 @@
-XEQC43 XEQLBL 14 LIST_XY
-LISTXY
+//PROGRAM TO PLOT FORMULA based on SINCPI Program Rev. 6
+
+ 
+
+XEQLBL FF FORM        // BINDS THE PROGRAM NAME TO THE SOFTMENU BUTTON ON SCREEN
+
+3. EXIT CHS STO 10     // REG10: Lower X
+CHS STO 11             // REG11: Higher X
+400 STO 12             // REG12: Number of steps
+// REG13: actual X for use in formula
+
+
+  MULPI                  // SET ADM for display. ADM does not matter as SINCPI assumed MULPI if operand is not a declared angle.
+
+  ERPN                   // PROGRAM IN ERPN
+  DOTD                   // ENSURE IN REAL MODE
+  CLSUM                  // CLEAR STATS DATA. CLΣ.
+  TICKS STO 01           // GET CURRENT TIME IN 0.1 SECOND UNITS           
+  RCL 12 //N=400
+  1 +
+  STO 00                 // 100 LOOPS, COUNTER REG00, 101 (STARTNO) DECREMENTS TO 1, AT 0 IT SKIPS
+  STO 02                 // LOOP START VALUE STORED FOR LATER USE
+  DROP DROP
+
+  LBL M1                 // CREATE LOOPING LABEL. FOUR LABELS AVAILABLE M1, M2, M3, M4   
+  RCL 02                 // GET THE START VALUE OF THE LOOP COUNTER
+  RCL 00 -               // REVERSE THE RANGE TO: 0 TO STARTNO-1
+
+                         // CALC SUBROUTINE: START RANGE N IS 0 TO (STARTNO-1)
+  RCL 02 DECR X 2 IDIV / // SCALE THE RANGE TO: ([0:100]/ ((101-1)/2)); i.e. 0-2
+  2 /                    // 0-1
+  RCL 11 RCL 10 - *      // RANGE
+  RCL 10 +               // RANGE OFFSET
+  STO 13                 // FOR USE IN FORMULA
+  ENTER                  // ENSURE TWO COPIES OF X ON STACK, EXPECTS OLD X in Y-REG and Y in X-REG
+
+    GSB M4               // CALL SUBROUTINE TO PRODUCE Y AND X. NO NESTING POSSIBLE.
+
+  X<>Y                   // SHIFT Y TO Y AND X TO X
+
+  SUM+                   // USE SUM+ TO SEND X&Y TO STATS BUFFER. Σ+.   
+  DROP DROP              // CLEAN UP STACK
+  DSZ 00                 // DECREMENT AND SKIP NEXT COMMAND IF RESULT ZERO
+  GTO M1                 // THE GTO IS SKIPPED IF RESULT 0
+
+  TICKS                  // GET CLOCK STATUS
+  RCL 01 -               // GET STORED CLOCK STATUS. SUBTRACT TO GET EXPIRED TIME
+  10 /                   // DIVIDE BY 10 TO GET SECONDS
+  ALPHA " SEC" EXIT +    // ADD TEXT
+  PLOT                   // PLOTS THE STATS DATA
+
+RETURN                   // STOPS PROCESSING
+
+
+//---SUBROUTINE----------------------------------------------------------------------
+LBL M4                   // CALC FUNCTION SUBROUTINE: X is in X;
+  SINCPI                 // CALCULATE FUNCTION 
+RTN                      // RETURN TO MAIN PROGRAM
+
+
+END                      //OPTIONAL END OF PROCESSING MARKER. NOTHING AFTER THIS GETS PARSED.

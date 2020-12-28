@@ -44,7 +44,7 @@ bool_t invalid_rms = true;
   
 
 
-void graph_reset(){
+void graph_reset(void){
   graph_dx      = 0;
   graph_dy      = 0;
   extentx       = false;
@@ -60,6 +60,13 @@ void graph_reset(){
   PLOT_DIFF     = false;
   PLOT_RMS      = false;
   PLOT_SHADE    = false;
+}
+
+
+void fnClGrf(uint16_t unusedButMandatoryParameter) {
+  graph_reset();
+  fnClSigma(0);
+  fnRefreshComboxState(CB_JC, JC_PLINE, PLOT_LINE);                //jm
 }
 
 

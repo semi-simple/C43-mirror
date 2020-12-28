@@ -553,6 +553,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnPshade                   (uint16_t unusedButMandatoryParameter) {}
   void fnCla                      (uint16_t unusedButMandatoryParameter) {}
   void fnCln                      (uint16_t unusedButMandatoryParameter) {}
+  void fnClGrf                    (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
@@ -2799,6 +2800,7 @@ const item_t indexOfItems[] = {
 /* 2190 */  { itemToBeCoded,               NOPARAM,                     "NLock",                                       "NLock",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2191 */  { itemToBeCoded,               NOPARAM,                     "Nulock",                                      "Nulock",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2192 */  { addItemToBuffer,             ITM_EEXCHR,                  STD_SUB_E_OUTLINE,                             STD_SUB_E_OUTLINE,                             0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2193 */  { fnClGrf,                     NOPARAM,                     "CLGRF",                                       "CLGRF",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 
-/* 2193 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2194 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

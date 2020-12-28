@@ -81,7 +81,8 @@ extern bool_t PLOT_SHADE;
 
 int8_t plotmode;                            //      _SCAT
 
-void graph_reset      ();
+void graph_reset      (void);
+void fnClGrf          (uint16_t unusedButMandatoryParameter);
 void fnPline          (uint16_t unusedButMandatoryParameter);
 void fnPcros          (uint16_t unusedButMandatoryParameter);
 void fnPbox           (uint16_t unusedButMandatoryParameter);

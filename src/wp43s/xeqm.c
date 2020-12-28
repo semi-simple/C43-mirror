@@ -165,8 +165,7 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
                       *com = 0;
 //FROM SPREADSHEET vvv ****************************************************************************************************
 
-//selection: not updated in spreadsheet
-
+//XEQM TYPE1 ORIGINAL FULL SELECTED LIST
 
                       if (strcompare(str,"CPX?" )) { *com = ITM_CPX;} else
                       if (strcompare(str,"REAL?" )) { *com = ITM_REAL;} else
@@ -506,7 +505,7 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
                       if (strcompare(str,"EXITCLR" )) { *com = ITM_CLAIM;} else
                       if (strcompare(str,"PLOTLS" )) { *com = ITM_PLOTLS;} else
                       if (strcompare(str,"GRF" )) { *com = ITM_PLOTJM;} else
-                      if (strcompare(str,"CLGRF" )) { *com = ITM_CLGRF;} else                      
+                      if (strcompare(str,"CLGRF" )) { *com = ITM_CLGRF;} else
 
 
 #ifdef TTT //Manually selected shortened list
@@ -738,21 +737,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           gotoinprogress = 1;                      //As per GTO_SZ
                           commandnumber[0]=0;                      //As per GTO_SZ
                       } else
-
-
-
-  //----vvv spreadsheet vvv-------  Not supported anymore
-#ifdef XEQM_TYPE1
-                      if (strcompare(commandnumber,"CPX?" )) {sprintf(commandnumber,"%d", ITM_CPX);} else
-                      if (strcompare(commandnumber,"REAL?" )) {sprintf(commandnumber,"%d", ITM_REAL);} else
-                      ...
-                      ...
-#endif //XEQM_TYPE1
-  //----^^^ spreadsheet ^^^-------
-
-
-
-
 
 
 // Unlimited GTO                                      GTO M1

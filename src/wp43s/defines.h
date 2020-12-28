@@ -38,7 +38,7 @@
 #define PC_BUILD_TELLTALE            //JM verbose on PC
 #undef PC_BUILD_TELLTALE
 
-#define PC_BUILD_VERBOSE2            //JM verbose on PC, via central jm_show_comment function
+#define PC_BUILD_VERBOSE2            //JM verbose XEQM detailed operation on PC, via central jm_show_comment1 function
 #undef PC_BUILD_VERBOSE2
 
 

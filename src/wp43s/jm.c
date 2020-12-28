@@ -41,7 +41,7 @@
 
   void jm_show_comment(char comment[]) {
   #ifdef PC_BUILD_VERBOSE2
-    char tmp[400];
+    char tmp[600];
     strcpy(tmp,comment);
     strcat(tmp,"                                                                                                                                                                ");
     tmp[130]=0;
@@ -856,105 +856,6 @@ void fnJM(uint16_t JM_OPCODE) {
     fnMultiply(0);
   }
   else
-
-  if(JM_OPCODE == 21) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_xmin = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_xmin);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 22) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_xmax = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_xmax);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 23) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_ymin = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_ymin);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 24) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_ymax = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_ymax);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 25) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_dx = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_dx);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 26) {                                         //Graph
-    saveForUndo();
-    //Convert from X register to float
-    real_t tmpy;
-    fnToReal(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tmpy);
-    realToString(&tmpy, tmpString);
-    graph_dy = strtof(tmpString, NULL);
-    //printf("%s %f\n",tmpString,graph_dy);
-    fnDrop(0);
-  }
-  else
-  if(JM_OPCODE == 27) {                                         //Graph
-    saveForUndo();
-    fnStrtoX("Type limits into X Register and press");
-    fnStrtoX("[Xmin], [Xmax], [Ymin], [Ymax], [dX], [dY]");
-    tmpString[0]=0;
-    char tmp[12];
-    snprintf(tmp, 12, "%.5f, ", graph_xmin);
-    strcat(tmpString,tmp);
-    snprintf(tmp, 12, "%.5f, ", graph_xmax);
-    strcat(tmpString,tmp);
-    snprintf(tmp, 12, "%.5f, ", graph_ymin);
-    strcat(tmpString,tmp);
-    snprintf(tmp, 12, "%.5f, ", graph_ymax);
-    strcat(tmpString,tmp);
-    snprintf(tmp, 12, "%.3f, ", graph_dx);
-    strcat(tmpString,tmp);
-    snprintf(tmp, 12, "%.3f", graph_dy);
-    strcat(tmpString,tmp);
-    fnStrtoX(tmpString);
-    fnStrtoX("[PLOT] graphs, [SNAP] saves screen");
-  }
-
-
-  else
-
-
 
   if(JM_OPCODE == 45) {                                         //PRIME stats
     #ifdef PC_BUILD

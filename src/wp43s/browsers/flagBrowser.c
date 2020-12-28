@@ -122,11 +122,11 @@
         }
         else {
           // Local registers
-          if(currentSubroutineLevelData[1].numberOfLocalRegisters == 1) {
+          if(currentNumberOfLocalRegisters == 1) {
             strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
           }
           else {
-            sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentSubroutineLevelData[1].numberOfLocalRegisters);
+            sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
           }
         }
 
@@ -376,12 +376,12 @@ void flagBrowser_old(uint16_t unusedButMandatoryParameter) {           //Resurre
       }
       else {
          // Local registers
-        if(currentSubroutineLevelData[1].numberOfLocalRegisters == 1) {
+        if(currentNumberOfLocalRegisters == 1) {
           strcpy(tmpString, "1 local register is allocated.");
           showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
         }
         else {
-          sprintf(tmpString,"%" PRIu16 " local registers are allocated.", currentSubroutineLevelData[1].numberOfLocalRegisters);
+          sprintf(tmpString,"%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
           showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
         }
       }

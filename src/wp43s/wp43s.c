@@ -322,17 +322,19 @@ size_t                wp43sMemInBytes;
 
     restoreCalc();
 
-// Without the following 8 lines of code
-  // the f- and g-shifted labels are
-  // miss aligned! I dont know why!
-  calcModeAimGui();
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
-  calcModeNormalGui();
-  while(gtk_events_pending()) {
-    gtk_main_iteration();
-  }
+    // Without the following 8 lines of code
+      // the f- and g-shifted labels are
+      // miss aligned! I dont know why!
+      calcModeAimGui();
+      while(gtk_events_pending()) {
+        gtk_main_iteration();
+      }
+      calcModeNormalGui();
+      while(gtk_events_pending()) {
+        gtk_main_iteration();
+      }
+
+ramDump();
 
   refreshScreen();
 

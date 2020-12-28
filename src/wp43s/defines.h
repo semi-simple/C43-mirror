@@ -85,11 +85,11 @@
 //*********************************
 #define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
-#define DEBUG_PANEL                      0 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
-#define DEBUG_REGISTER_L                 0 // Showing register L content on the PC GUI
-#define SHOW_MEMORY_STATUS               0 //JM Showing the memory status on the PC GUI
+#define DEBUG_PANEL                      0 //1 JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
+#define DEBUG_REGISTER_L                 0 //1 JM Showing register L content on the PC GUI
+#define SHOW_MEMORY_STATUS               0 //1 JM Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers
-#define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
+#define MMHG_PA_133_3224                 0 //1 JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
 #define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX
@@ -512,7 +512,7 @@
 #define RM_CEIL                                    5
 #define RM_FLOOR                                   6
 
-// Calc mode 5 bits
+// Calc mode 4 bits
 #define CM_NORMAL                                  0 // Normal operation
 #define CM_AIM                                     1 // Alpha input mode
 #define CM_NIM                                     2 // Numeric input mode
@@ -680,8 +680,7 @@
 #define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #endif
 
-#define RAM_SIZE                                2048 // Martin made 1024 on 2020-12-27. Doubling to 2048 for working test memory for C43
-                                                     // Original: 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
+#define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
@@ -758,6 +757,13 @@
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
 #define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
+#define currentReturnProgramNumber           (currentSubroutineLevelData[0].returnProgramNumber)
+#define currentReturnLocalStep               (currentSubroutineLevelData[0].returnLocalStep)
+#define currentNumberOfLocalFlags            (currentSubroutineLevelData[1].numberOfLocalFlags)
+#define currentNumberOfLocalRegisters        (currentSubroutineLevelData[1].numberOfLocalRegisters)
+#define currentSubroutineLevel               (currentSubroutineLevelData[1].subroutineLevel)
+#define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
+#define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
 
 #ifdef DMCP_BUILD
   #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)

@@ -34,11 +34,11 @@
 
 
 //Verbose options
-#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
-#define PC_BUILD_TELLTALE          //verbose on PC
+#define verbose_default 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
+#define PC_BUILD_TELLTALE            //JM verbose on PC
 #undef PC_BUILD_TELLTALE
 
-#define PC_BUILD_VERBOSE2          //verbose on PC
+#define PC_BUILD_VERBOSE2            //JM verbose on PC, via central jm_show_comment function
 #undef PC_BUILD_VERBOSE2
 
 

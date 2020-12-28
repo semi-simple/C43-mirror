@@ -238,7 +238,7 @@ void  Check_Assign_in_progress(int16_t * result, int16_t tempkey) {
     *result = ITM_EXIT1;                     // EXIT key to exit when done and cancel shifts
   }
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
-  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( tempkey == 0) )) {
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( tempkey == 0) && ((kbd_std + 0)->primary == *result) )) {
     *result = Norm_Key_00_VAR;
   }
 }

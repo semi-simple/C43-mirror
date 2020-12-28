@@ -291,12 +291,21 @@
 //    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   int8_t key_no = stringToKeyNumber(data);
+
+  #ifdef PC_BUILD
+    char tmp[200]; sprintf(tmp,"^^^^^^^key_no: %d:",key_no); jm_show_comment(tmp);
+  #endif //PC_BUILD
+
   if (kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
+
+  #ifdef PC_BUILD
+    sprintf(tmp,"^^^^^^^key->primary1: %d:",key->primary); jm_show_comment(tmp);
+  #endif //PC_BUILD
 
   switch(key->primary) {                              //JMSHOW vv
     case      ITM_UP1:
@@ -308,6 +317,9 @@
   Setup_MultiPresses( key->primary );
 
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^key->primary2: %d:",key->primary); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     // Shift f pressed and JM REMOVED shift g not active
     if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
@@ -360,6 +372,9 @@
       return ITM_NOP;
     }  
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^key->primary3: %d:",key->primary); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
                                                                                                                          //JM shifts
     if((calcMode == CM_NIM || calcMode == CM_NORMAL) && lastIntegerBase >= 11 && (key_no >= 0 && key_no <= 5 )) {               //JMNIM vv Added direct A-F for hex entry
@@ -389,9 +404,21 @@
       result = 0;
     }
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^result1: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
+
     Check_Assign_in_progress(&result, key_no);  //JM
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^result2: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
+
     Check_MultiPresses(&result, key_no);        //JM
+
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^result3: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     if(result == ITM_PROD_SIGN) {
       result = (getSystemFlag(FLAG_MULTx) ? ITM_CROSS : ITM_DOT);
@@ -491,7 +518,6 @@
 
       if(item != ITM_NOP && item != ITM_NULL) {
         #ifdef PC_BUILD
-          char tmp[200];
           sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s\n",item,(char *)data);
           jm_show_calc_state(tmp);
         #endif
@@ -500,6 +526,9 @@
           showFunctionName(item, 1000); // 1000ms = 1s
         }
       }
+      #ifdef PC_BUILD
+        sprintf(tmp,"^^^^btnPressed End %d:\'%s\' showFunctionNameItem:%d\n",item,(char *)data,showFunctionNameItem); jm_show_comment(tmp);
+      #endif //PC_BUILD
     }
   #endif // PC_BUILD
 

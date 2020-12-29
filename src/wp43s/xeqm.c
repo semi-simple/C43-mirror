@@ -117,21 +117,22 @@ void sendkeys(const char aa[]) {
     if(aa[ix]>=97 && aa[ix]<=122){runkey(ITM_A+aa[ix]-65-32);} else //a..z converted to A..Z
     if(aa[ix]>=48 && aa[ix]<= 57){runkey(ITM_0+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-      case 46:  runkey(ITM_PERIOD); break; //.
-      case 69:  runkey(ITM_EXPONENT); break; //E
-      case 101: runkey(ITM_EXPONENT); break; //e
-      case 45:  runkey(ITM_SUB); break; //-
-      case 43:  runkey(ITM_ADD); break; //+
-      case 32:  runkey(ITM_SPACE); break; //space
-      case 35:  runkey(ITM_toINT); break; //#
+      case '.':  runkey(ITM_PERIOD); break; //.
+      case 'E':  runkey(ITM_EXPONENT); break; //E
+      case 'e': runkey(ITM_EXPONENT); break; //e
+      case '-':  runkey(ITM_SUB); break; //-
+      case '+':  runkey(ITM_ADD); break; //+
+      case ' ':  runkey(ITM_SPACE); break; //space
+      case '#':  runkey(ITM_toINT); break; //#
+      case ':':  runkey(ITM_COLON        ); break; //#
+      case ';':  runkey(ITM_SEMICOLON    ); break; //#
+      case '\'': runkey(ITM_QUOTE        ); break; //#
+      case '?':  runkey(ITM_QUESTION_MARK); break; //#
       default:;
     }
   ix++;
   }
 }
-
-
-
 
 
 bool_t strcompare( char *in1, char *in2) {
@@ -166,7 +167,6 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
 //FROM SPREADSHEET vvv ****************************************************************************************************
 
 //XEQM TYPE1 ORIGINAL FULL SELECTED LIST
-
                       if (strcompare(str,"CPX?" )) { *com = ITM_CPX;} else
                       if (strcompare(str,"REAL?" )) { *com = ITM_REAL;} else
                       if (strcompare(str,"PRIME?" )) { *com = ITM_PRIME;} else
@@ -322,9 +322,11 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
                       if (strcompare(str,"1COMPL" )) { *com = ITM_1COMPL;} else
                       if (strcompare(str,"SNAP" )) { *com = ITM_SNAP;} else
                       if (strcompare(str,"2COMPL" )) { *com = ITM_2COMPL;} else
+                      if (strcompare(str,"ABS" )) { *com = ITM_ABS;} else
                       if (strcompare(str,"AGM" )) { *com = ITM_AGM;} else
                       if (strcompare(str,"ALL" )) { *com = ITM_ALL;} else
                       if (strcompare(str,"BATT?" )) { *com = ITM_BATT;} else
+                      if (strcompare(str,"CASE" )) { *com = CHR_case;} else
                       if (strcompare(str,"CLFALL" )) { *com = ITM_CLFALL;} else
                       if (strcompare(str,"CLLCD" )) { *com = ITM_CLLCD;} else
                       if (strcompare(str,"CLREGS" )) { *com = ITM_CLREGS;} else
@@ -505,6 +507,10 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
                       if (strcompare(str,"EXITCLR" )) { *com = ITM_CLAIM;} else
                       if (strcompare(str,"PLOTLS" )) { *com = ITM_PLOTLS;} else
                       if (strcompare(str,"GRF" )) { *com = ITM_PLOTJM;} else
+                      if (strcompare(str,"P_INT" )) { *com = ITM_INTG;} else
+                      if (strcompare(str,"P_DIFF" )) { *com = ITM_DIFF;} else
+                      if (strcompare(str,"P_RMS" )) { *com = ITM_RMS;} else
+                      if (strcompare(str,"P_SHADE" )) { *com = ITM_SHADE;} else
                       if (strcompare(str,"CLGRF" )) { *com = ITM_CLGRF;} else
 
 
@@ -1016,7 +1022,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
 
   //printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
   if(selection==1) {
-    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT ");
+    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASEDN \" create \" CASEUP \"XEQM\" CASEDN \"NN\" CASEUP \".TXT\" EXIT ");
   } 
   else {
     sprintf(fallback,"XEQLBL %s X%s ",nn,nn);

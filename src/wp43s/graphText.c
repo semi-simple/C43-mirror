@@ -607,8 +607,6 @@ return 0;
 int16_t export_append_line(char *inputstring){  //PC_BUILD
 
   FILE *outfile;
-  uint16_t fr = 0;
-  char line[100];               /* Line buffer */
 
 //  strcpy(dirfile,"PROGRAMS/C43_LOG.TXT");
 
@@ -618,9 +616,11 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
     return 1;
   }
 
-  fr = fputs(inputstring, outfile);
 
   #if !defined(__MINGW64__)
+    uint16_t fr = 0;
+    char line[100];               /* Line buffer */
+    fr = fputs(inputstring, outfile);
     if (fr == 0) {
       sprintf(line,"export_string_to_file: Write error--> %d %s\n",fr,inputstring);            
       //print_linestr(line,false);

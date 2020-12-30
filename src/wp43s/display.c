@@ -1876,6 +1876,7 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
 
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
+#ifndef TESTSUITE_BUILD
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   bool_t thereIsANextLine;
@@ -1955,17 +1956,17 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   }
 
   #ifndef TESTSUITE_BUILD
-#ifdef PC_BUILD
-printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
-#endif
-  clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
+    #ifdef PC_BUILD
+    printf(">>> ---- clearScreen_old from display.c fnShow_SCROLL\n");
+    #endif
+    clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
   #endif
   SHOW_reset();
   
   switch(getRegisterDataType(SHOWregis)) {
     case dtLongInteger:
 
-      #ifdef PC_BUILD_TELLTALE
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
         printf("SHOW:Longint\n");
       #endif
 
@@ -2020,7 +2021,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
       //printf("### %d %d %d\n",(uint8_t) tmpString[1200],(uint8_t)  tmpString[1201],(uint8_t) tmpString[1202]);
       if(tmpString[1200] != 0) {
 
-        #ifdef PC_BUILD_TELLTALE
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
           printf("SHOW:Longint too long\n");
         #endif
           
@@ -2063,7 +2064,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtReal34:
-      #ifdef PC_BUILD_TELLTALE
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
         printf("SHOW:Real\n");
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
@@ -2086,7 +2087,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtComplex34:
-      #ifdef PC_BUILD_TELLTALE
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
         printf("SHOW:Complex\n");
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
@@ -2206,7 +2207,7 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtShortInteger:
-      #ifdef PC_BUILD_TELLTALE
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
         printf("SHOW:Shortint\n");
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
@@ -2261,23 +2262,68 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
 
 
     case dtString:
-      #ifdef PC_BUILD_TELLTALE
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
         printf("SHOW:String\n");
-      #endif
+      #endif //VERBOSE_SCREEN
       SHOW_reset();
+      temporaryInformation = TI_SHOW_REGISTER_BIG; //First try one line of big font.
       offset = 0;
       thereIsANextLine = true;
       bytesProcessed = 2100;
       strcat(tmpString + 2100, "'");
       strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
       strcat(tmpString + 2100, "'");
+        xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
+        thereIsANextLine = false;
+        maxiC = 1;
+        #if defined VERBOSE_SCREEN && defined PC_BUILD
+          uint32_t tmp = 0;
+          printf("^^^0 %4u",tmp);
+          printf("^^^^$$ %s %d\n",tmpString + 2100,stringWidth(tmpString + 2100, &numericFont, false, true));
+        #endif //VERBOSE_SCREEN
+        while(!thereIsANextLine && (stringWidth(tmpString + offset, &numericFont, false, true) >= SCREEN_WIDTH)) {
+          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
+          thereIsANextLine = true;
+          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+            printf("^^^A %4u",tmp++);
+            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidth(tmpString + offset, &numericFont, false, true));
+          #endif //VERBOSE_SCREEN
+        }
+        maxiC = 0;
+        offset += 300;
+        tmpString[offset] = 0;
+        if(!thereIsANextLine) break; //else continue on the small font
+
+
+
+      SHOW_reset();
+      temporaryInformation = TI_SHOW_REGISTER_SMALL;
+      offset = 0;
+      thereIsANextLine = true;
+      bytesProcessed = 2100;
+      strcat(tmpString + 2100, "'");
+      strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+      strcat(tmpString + 2100, "'");
+      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+        uint32_t tmp2 = 0;
+      #endif //VERBOSE_SCREEN
       while(thereIsANextLine) {
         xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
         thereIsANextLine = false;
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+          tmp =0;
+        #endif //VERBOSE_SCREEN
         while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
           tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
+          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+            printf("^^^B %4u %4u",tmp2, tmp++);
+            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidth(tmpString + offset, &standardFont, false, true));
+          #endif //VERBOSE_SCREEN
         }
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+          tmp2++;
+        #endif //VERBOSE_SCREEN
         bytesProcessed += stringByteLength(tmpString + offset);
         offset += 300;
         tmpString[offset] = 0;
@@ -2372,8 +2418,10 @@ printf(">>>clearScreen_old from display.c fnShow_SCROLL\n");
   displayFormatDigits = savedDisplayFormatDigits;
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
-  #ifdef PC_BUILD_TELLTALE
-    printf("SHOW:Done\n");
+  #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+    printf("SHOW:Done |%s|\n",tmpString);
   #endif
+
+#endif //TESTSUITE_BUILD
 
 }

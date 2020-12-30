@@ -36,10 +36,14 @@
 //Verbose options
 #define verbose_default 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
 #define PC_BUILD_TELLTALE            //JM verbose on PC
-#undef PC_BUILD_TELLTALE
+#undef  PC_BUILD_TELLTALE
 
 #define PC_BUILD_VERBOSE2            //JM verbose XEQM detailed operation on PC, via central jm_show_comment1 function
-#undef PC_BUILD_VERBOSE2
+#undef  PC_BUILD_VERBOSE2
+
+#define VERBOSE_SCREEN               //JM Used at new SHOW. Needs PC_BUILD.
+#undef  VERBOSE_SCREEN
+
 
 
 //Allow longpress CHS and EEX
@@ -73,7 +77,7 @@
 #undef JMSHOWCODES_KB3
 
 //wrapping editor
-#define  combinationFontsDefault 2; //JM 0 = no large font; 1 = enlarged standardfont; 2 = combination font enlargement
+#define  combinationFontsDefault 2  //JM 0 = no large font; 1 = enlarged standardfont; 2 = combination font enlargement
                                     //JM for text wrapping editor. 
                                     //JM Combintionfonts uses large numericfont characters, and if glyph not available then takes standardfont and enlarges it
                                     //JM Otherwise, full enlarged standardfont is used.

@@ -445,6 +445,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       printf("End of calc's restoration\n");
 
       if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM
+      if(temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) 
+        temporaryInformation = TI_NO_INFO;                                                                  //JM
 
       scanLabelsAndPrograms();
       defineCurrentProgramFromGlobalStepNumber(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);

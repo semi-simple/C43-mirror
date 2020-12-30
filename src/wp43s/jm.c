@@ -117,6 +117,8 @@ void reset_jm_defaults(int16_t toload) {
       ix++;    
     }
 
+
+    fnClAIM(0);
     verbose_jm = 0;
     if(toload) XEQMENU_loadAllfromdisk();
     verbose_jm = verbose_default;

@@ -91,6 +91,7 @@ void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
   #ifdef PC_BUILD
   jm_show_comment("^^^^fnClAIMa");
   #endif //PC_BUILD
+  temporaryInformation = TI_NO_INFO;
   if(calcMode == CM_NIM) {
     strcpy(aimBuffer,"+");
     fnKeyBackspace(0);

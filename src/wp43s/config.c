@@ -490,7 +490,7 @@ void fnClAll(uint16_t confirmation) {
     }
 
     // Clear saved stack registers
-    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=TEMP_REGISTER; regist++) {
+    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
       clearRegister(regist);
     }
     thereIsSomethingToUndo = false;
@@ -8355,7 +8355,9 @@ void addTestPrograms(void) {
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
     scanLabelsAndPrograms();
-    leavePem();
+    #ifndef TESTSUITE_BUILD
+      leavePem();
+    #endif // TESTSUITE_BUILD
     printf("freeProgramBytes = %u\n", freeProgramBytes);
     listPrograms();
     listLabelsAndPrograms();
@@ -8432,6 +8434,7 @@ void fnReset(uint16_t confirmation) {
     //kbd_usr[20].gShifted    = ITM_LYtoM;
 
     // initialize the global registers
+    memset(globalRegister, 0, sizeof(globalRegister));
     for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
       memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
@@ -8440,6 +8443,7 @@ void fnReset(uint16_t confirmation) {
     }
 
     // initialize the 9 saved stack registers + 1 temporary register
+    memset(savedStackRegister, 0, sizeof(savedStackRegister));
     for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_SAVED_STACK_REGISTER + 1; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
       memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
@@ -8449,10 +8453,6 @@ void fnReset(uint16_t confirmation) {
 
     // Clear global flags
     memset(globalFlags, 0, sizeof(globalFlags));
-
-    // allocating space for the named variable list
-    allNamedVariablePointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of named variables
-    allNamedVariablePointer->numberOfNamedVariables = 0;
 
     // allocate space for the local register list
     allSubroutineLevels.numberOfSubroutineLevels = 1;
@@ -8467,6 +8467,10 @@ void fnReset(uint16_t confirmation) {
     currentPtrToPreviousLevel = WP43S_NULL;
     currentLocalFlags = NULL;
     currentLocalRegisters = NULL;
+
+    // allocate space for the named variable list
+    numberOfNamedVariables = 0;
+    allNamedVariables = NULL;
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;

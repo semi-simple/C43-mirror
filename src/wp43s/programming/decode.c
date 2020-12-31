@@ -126,7 +126,7 @@ void getIndirectRegister(uint8_t *paramAddress, const char *op) {
     sprintf(tmpString, "%s " STD_RIGHT_ARROW "%02u", op, opParam);
   }
   else if(opParam <= REGISTER_K) { // Lettered register from X to K
-    sprintf(tmpString, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_STACK_X + opParam - REGISTER_X].itemSoftmenuName);
+    sprintf(tmpString, "%s " STD_RIGHT_ARROW "%s", op, indexOfItems[ITM_REG_X + opParam - REGISTER_X].itemSoftmenuName);
   }
   else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
     sprintf(tmpString, "%s " STD_RIGHT_ARROW ".%02d", op, opParam - FIRST_LOCAL_REGISTER);
@@ -199,7 +199,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
         sprintf(tmpString, "%s %02u", op, opParam);
       }
       else if(opParam <= REGISTER_K) { // Lettered register from X to K
-        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_STACK_X + opParam - REGISTER_X].itemSoftmenuName);
+        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_REG_X + opParam - REGISTER_X].itemSoftmenuName);
       }
       else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
         sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_REGISTER);
@@ -227,7 +227,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
         sprintf(tmpString, "%s %02u", op, opParam);
       }
       else if(opParam <= REGISTER_K) { // Lettered flag from X to K
-        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_STACK_X + opParam - REGISTER_X].itemSoftmenuName);
+        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_REG_X + opParam - REGISTER_X].itemSoftmenuName);
       }
       else if(opParam <= LAST_LOCAL_FLAG) { // Local flag from .00 to .15 (or .31)
         sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_FLAG);
@@ -270,7 +270,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
         sprintf(tmpString, "%s %02u", op, opParam);
       }
       else if(opParam <= REGISTER_K) { // Lettered register from X to K
-        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_STACK_X + opParam - REGISTER_X].itemSoftmenuName);
+        sprintf(tmpString, "%s %s", op, indexOfItems[ITM_REG_X + opParam - REGISTER_X].itemSoftmenuName);
       }
       else if(opParam <= LAST_LOCAL_REGISTER) { // Local register from .00 to .98
         sprintf(tmpString, "%s .%02d", op, opParam - FIRST_LOCAL_REGISTER);
@@ -308,9 +308,9 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
 static void decodeLiteral(uint8_t *literalAddress) {
   switch(*(uint8_t *)(literalAddress++)) {
     case BINARY_SHORT_INTEGER:
-      reallocateRegister(TEMP_REGISTER, dtShortInteger, SHORT_INTEGER_SIZE, *(uint8_t *)(literalAddress++));
-      xcopy(REGISTER_DATA(TEMP_REGISTER), literalAddress, TO_BYTES(SHORT_INTEGER_SIZE));
-      shortIntegerToDisplayString(TEMP_REGISTER, tmpString, false);
+      reallocateRegister(TEMP_REGISTER_1, dtShortInteger, SHORT_INTEGER_SIZE, *(uint8_t *)(literalAddress++));
+      xcopy(REGISTER_DATA(TEMP_REGISTER_1), literalAddress, TO_BYTES(SHORT_INTEGER_SIZE));
+      shortIntegerToDisplayString(TEMP_REGISTER_1, tmpString, false);
       break;
 
     //case BINARY_LONG_INTEGER:

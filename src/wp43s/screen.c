@@ -69,9 +69,9 @@
     switch(angularMode) {
       case AM_DEGREE: strcpy(string, STD_DEGREE); break;
       case AM_DMS:    strcpy(string, "d.ms");     break;
-      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_RADIAN: strcpy(string, "r");        break;
       case AM_MULTPI: strcpy(string, STD_pi);     break;
+      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_NONE:   break;
       default:        strcpy(string, "?");
     }

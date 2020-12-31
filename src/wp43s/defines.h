@@ -45,7 +45,7 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2020.12"
+#define YEARMONTH                                 "2021.01"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
@@ -396,9 +396,9 @@
 
 // Angular mode 3 bits
 #define AM_DEGREE                                  0 // degree must be 0  |
-#define AM_GRAD                                    1 // grad   must be 1  | This is because of the tables
-#define AM_RADIAN                                  2 // radian must be 2  | angle45, angle90, and angle180
-#define AM_MULTPI                                  3 // multpi must be 3  |
+#define AM_RADIAN                                  1 // radian must be 1  | This is because of the tables
+#define AM_MULTPI                                  2 // multpi must be 2  | angle45, angle90, and angle180
+#define AM_GRAD                                    3 // grad   must be 3  |
 #define AM_DMS                                     4
 #define AM_NONE                                    5
 

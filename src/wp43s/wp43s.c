@@ -199,6 +199,11 @@ size_t                wp43sMemInBytes;
 
 #ifdef PC_BUILD
   int main(int argc, char* argv[]) {
+    #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no more in the correct directory! Why?
+      (*strstr(argv[0], "/bin/")) = 0;
+      chdir(argv[0]);
+    #endif // CODEBLOCKS_OVER_SCORE
+
     #ifdef __APPLE__
       // we take the directory where the application is as the root for this application.
       // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
@@ -614,6 +619,11 @@ size_t                wp43sMemInBytes;
   #include "testSuite.h"
 
   int main(int argc, char* argv[]) {
+    #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no more in the correct directory! Why?
+      (*strstr(argv[0], "/bin/")) = 0;
+      chdir(argv[0]);
+    #endif // CODEBLOCKS_OVER_SCORE
+
     #ifdef __APPLE__
       // we take the directory where the application is as the root for this application.
       // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':

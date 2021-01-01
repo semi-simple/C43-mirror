@@ -1683,7 +1683,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   }
 
   if(strLen < stringLen) {
-    sprintf(errorMessage, "In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!\n", strLen, stringLen);
+    sprintf(errorMessage, "In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!", strLen, stringLen);
     displayBugScreen(errorMessage);
     return;
   }

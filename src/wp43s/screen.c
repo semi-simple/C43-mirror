@@ -90,7 +90,7 @@
     switch(getRegisterDataType(regist)) {
       case dtLongInteger:
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
-        longIntegerToAllocatedString(lgInt, tmpString, sizeof(tmpString));
+        longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
         longIntegerFree(lgInt);
         tmp2[0]=0;                                         //JMCSV add apostrophies
         strcat(tmp2,"\"");                                 //JMCSV

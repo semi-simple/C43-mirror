@@ -22,14 +22,10 @@
 uint32_t     getRegisterDataType             (calcRegister_t regist);
 dataBlock_t *getRegisterDataPointer          (calcRegister_t regist);
 uint32_t     getRegisterTag                  (calcRegister_t regist);
-uint16_t     getVariableNameLength           (calcRegister_t regist);
-char        *getVariableNamePointer          (calcRegister_t regist);
 uint16_t     getRegisterMaxDataLength        (calcRegister_t regist);
 void         setRegisterDataType             (calcRegister_t regist, uint16_t dataType, uint32_t tag);
 void         setRegisterDataPointer          (calcRegister_t regist, void *memPtr);
 void         setRegisterTag                  (calcRegister_t regist, uint32_t tag);
-void         setVariableNameLength           (calcRegister_t regist, uint16_t length);
-void         setVariableNamePointer          (calcRegister_t regist, void *namePointer);
 void         setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
 void         allocateLocalRegisters          (uint16_t n);
 void         allocateNamedVariable           (const char *variableName);

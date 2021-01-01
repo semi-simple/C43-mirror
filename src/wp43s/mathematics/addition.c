@@ -76,7 +76,7 @@ void fnAdd(uint16_t unusedButMandatoryParameter) {
 
 
 void addRegYStri(void) {                                                       //JM vv Add number + string
-  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
   copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
   
   char tmp[2];
@@ -88,7 +88,7 @@ void addRegYStri(void) {                                                       /
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
-  copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_X);
+  copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_X);
 
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 

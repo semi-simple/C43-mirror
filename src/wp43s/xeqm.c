@@ -233,8 +233,8 @@ bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
                       if (strcompare(str,"NSUM" )) { *com = ITM_NSIGMA;} else
                       if (strcompare(str,"SUMX" )) { *com = ITM_SIGMAx;} else
                       if (strcompare(str,"SUMY" )) { *com = ITM_SIGMAy;} else
-                      if (strcompare(str,"X" )) { *com = ITM_STACK_X;} else
-                      if (strcompare(str,"Y" )) { *com = ITM_STACK_Y;} else
+                      if (strcompare(str,"X" )) { *com = ITM_REG_X;} else
+                      if (strcompare(str,"Y" )) { *com = ITM_REG_Y;} else
                       if (strcompare(str,"IND>" )) { *com = ITM_INDIRECTION;} else
                       if (strcompare(str,"EEX" )) { *com = ITM_EXPONENT;} else
                       if (strcompare(str,"SNAP" )) { *com = ITM_SNAP;} else

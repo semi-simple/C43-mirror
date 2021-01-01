@@ -71,9 +71,9 @@
     switch(angularMode) {
       case AM_DEGREE: strcpy(string, STD_DEGREE); break;
       case AM_DMS:    strcpy(string, "d.ms");     break;
-      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_RADIAN: strcpy(string, "r");        break;
       case AM_MULTPI: strcpy(string, STD_pi);     break;
+      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_NONE:   break;
       default:        strcpy(string, "?");
     }
@@ -2144,7 +2144,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
         if(displayStack == 4-displayStackSHOIDISP && lastIntegerBase != 0) {
           if(displayStack == 1){
-            copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
             setRegisterTag(REGISTER_Y, 2);
             shortIntegerToDisplayString(REGISTER_Y, tmpString, true);
@@ -2152,10 +2152,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_Y);
           }
           if(displayStack == 1 || displayStack == 2){
-            copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
             if(displayStack == 2) setRegisterTag(REGISTER_Z, 2); else 
               if(displayStack == 1) setRegisterTag(REGISTER_Z, 8);
@@ -2164,10 +2164,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_Z);
           }
           if(displayStack == 1 || displayStack == 2 || displayStack ==3){
-            copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
             setRegisterTag(REGISTER_T, 16);
             shortIntegerToDisplayString(REGISTER_T, tmpString, true);
@@ -2175,7 +2175,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_T);
           }
             if(displayStack == 3)
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Z_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else

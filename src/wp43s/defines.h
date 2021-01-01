@@ -341,9 +341,11 @@
 ///////////////////////////////////////////////////////
 // Register numbering:
 //    0 to  111 global resisters
-//  112 to  211 local registers (from .00 to .99) this are 100 local registers but TAM allows only a parameter from 0 to 99 (without indirection)
-// 1000 to 1999 named variables
-// 2000 to 2009 saved stack registers (UNDO item)
+//  112 to  210 local registers (from .00 to .98) this are 99 local registers
+//  212 to  219 saved stack registers (UNDO feature)
+//  220 to  220 temporary registers
+//  221 to 1999 named variables
+// 2000 to 2029 reserved variables
 #define REGISTER_X                               100
 #define REGISTER_Y                               101
 #define REGISTER_Z                               102
@@ -360,20 +362,58 @@
 #define NUMBER_OF_GLOBAL_REGISTERS               112 // There are 112 global registers from 0 to 111
 #define FIRST_LOCAL_REGISTER                     112 // There are 112 global registers from 0 to 111
 #define LAST_LOCAL_REGISTER                      210 // There are maximum 99 local registers from 112 to 210 (.00 to .98)
-#define FIRST_NAMED_VARIABLE                    1000
-#define FIRST_SAVED_STACK_REGISTER              2000
-#define SAVED_REGISTER_X                        2000
-#define SAVED_REGISTER_Y                        2001
-#define SAVED_REGISTER_Z                        2002
-#define SAVED_REGISTER_T                        2003
-#define SAVED_REGISTER_A                        2004
-#define SAVED_REGISTER_B                        2005
-#define SAVED_REGISTER_C                        2006
-#define SAVED_REGISTER_D                        2007
-#define SAVED_REGISTER_L                        2008
-#define LAST_SAVED_STACK_REGISTER               2008
-#define NUMBER_OF_SAVED_STACK_REGISTERS            9 // 2000 to 2008
-#define TEMP_REGISTER                           2009
+#define NUMBER_OF_SAVED_STACK_REGISTERS            9 // 211 to 219
+#define FIRST_SAVED_STACK_REGISTER               211
+#define SAVED_REGISTER_X                         211
+#define SAVED_REGISTER_Y                         212
+#define SAVED_REGISTER_Z                         213
+#define SAVED_REGISTER_T                         214
+#define SAVED_REGISTER_A                         215
+#define SAVED_REGISTER_B                         216
+#define SAVED_REGISTER_C                         217
+#define SAVED_REGISTER_D                         218
+#define SAVED_REGISTER_L                         219
+#define LAST_SAVED_STACK_REGISTER                219
+#define NUMBER_OF_TEMP_REGISTERS                   1 // 220
+#define FIRST_TEMP_REGISTER                      220
+#define TEMP_REGISTER_1                          220
+#define LAST_TEMP_REGISTER                       220
+#define FIRST_NAMED_VARIABLE                     221
+#define LAST_NAMED_VARIABLE                     1999
+#define FIRST_RESERVED_VARIABLE                 2000
+#define RESERVED_VARIABLE_X                     2000
+#define RESERVED_VARIABLE_Y                     2001
+#define RESERVED_VARIABLE_Z                     2002
+#define RESERVED_VARIABLE_T                     2003
+#define RESERVED_VARIABLE_A                     2004
+#define RESERVED_VARIABLE_B                     2005
+#define RESERVED_VARIABLE_C                     2006
+#define RESERVED_VARIABLE_D                     2007
+#define RESERVED_VARIABLE_L                     2008
+#define RESERVED_VARIABLE_I                     2009
+#define RESERVED_VARIABLE_J                     2010
+#define RESERVED_VARIABLE_K                     2011
+#define RESERVED_VARIABLE_GRAMOD                2012
+#define RESERVED_VARIABLE_ADM                   2013
+#define RESERVED_VARIABLE_DENMAX                2014
+#define RESERVED_VARIABLE_ISM                   2015
+#define RESERVED_VARIABLE_REALDF                2016
+#define RESERVED_VARIABLE_NDEC                  2017
+#define RESERVED_VARIABLE_ACC                   2018
+#define RESERVED_VARIABLE_ULIM                  2019
+#define RESERVED_VARIABLE_LLIM                  2020
+#define RESERVED_VARIABLE_FV                    2021
+#define RESERVED_VARIABLE_IPONA                 2022
+#define RESERVED_VARIABLE_NPER                  2023
+#define RESERVED_VARIABLE_PERONA                2024
+#define RESERVED_VARIABLE_PMT                   2025
+#define RESERVED_VARIABLE_PV                    2026
+#define RESERVED_VARIABLE_MAT_A                 2027
+#define RESERVED_VARIABLE_MAT_B                 2028
+#define RESERVED_VARIABLE_MAT_X                 2029
+#define LAST_RESERVED_VARIABLE                  2029
+
+#define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
 
 // If one of the 4 next defines is changed: change also Y_POSITION_OF_???_LINE below
@@ -482,11 +522,11 @@
 #define DF_UN                                      5   //JM
 
 // Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0
-#define AM_GRAD                                    1 // grad   must be 1
-#define AM_RADIAN                                  2 // radian must be 2
-#define AM_MULTPI                                  3 // multpi must be 3
-#define AM_DMS                                     4 // dms    must be 4
+#define AM_DEGREE                                  0 // degree must be 0  |
+#define AM_RADIAN                                  1 // radian must be 1  | This is because of the tables
+#define AM_MULTPI                                  2 // multpi must be 2  | angle45, angle90, and angle180
+#define AM_GRAD                                    3 // grad   must be 3  |
+#define AM_DMS                                     4
 #define AM_NONE                                    5
 #define AM_HMS                                     6   //JM
 
@@ -643,11 +683,11 @@
 #define LM_SUMS                                    4
 #define LM_SYSTEM_STATE                            5
 
-// Statistical sums
+// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2×(7×60 - 4 - 6×16) = 640 bytes
 #define NUMBER_OF_STATISTICAL_SUMS                27
-#define SIGMA_N      ((real_t *)(statisticalSumsPointer))
-#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE))
-#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2))
+#define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
+#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE)) // could be a real34
+#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2)) // could be a real34
 #define SIGMA_X2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  3))
 #define SIGMA_X2Y    ((real_t *)(statisticalSumsPointer + REAL_SIZE *  4))
 #define SIGMA_Y2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  5))
@@ -668,10 +708,10 @@
 #define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
 #define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
 #define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
-#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
-#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24))
-#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
-#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23)) // could be a real34
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100+6  //JM 100-->106 // Used in the font browser application

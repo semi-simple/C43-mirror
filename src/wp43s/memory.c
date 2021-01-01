@@ -369,7 +369,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
       }
     }
 
-    for(int i=0; i<NUMBER_OF_SAVED_STACK_REGISTERS + 1; i++) {
+    for(int i=0; i<NUMBER_OF_SAVED_STACK_REGISTERS + NUMBER_OF_TEMP_REGISTERS; i++) {
       if(savedStackRegister[i].pointerToRegisterData == block) {
         sprintf(tmpString, "Saved stack register %d data: %s", i + FIRST_SAVED_STACK_REGISTER, getDataTypeName(savedStackRegister[i].dataType, false, false));
         return;
@@ -416,7 +416,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
       return;
     }
 
-    if(TO_WP43SMEMPTR(allNamedVariablePointer) == block) {
+    if(TO_WP43SMEMPTR(allNamedVariables) == block) {
       sprintf(tmpString, "All named variables");
       return;
     }
@@ -734,7 +734,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
                                                                                                 getRegisterTagName(regist, true));
     }
 
-    for(calcRegister_t regist=0; regist<NUMBER_OF_SAVED_STACK_REGISTERS + 1; regist++) {
+    for(calcRegister_t regist=0; regist<NUMBER_OF_SAVED_STACK_REGISTERS + NUMBER_OF_TEMP_REGISTERS; regist++) {
       printf("SavStk register   %4u: dataPointer=(block %5u)     dataType=%2u=%s       tag=%2u=%s\n",
                                 regist + FIRST_SAVED_STACK_REGISTER,
                                                         savedStackRegister[regist].pointerToRegisterData,

@@ -171,9 +171,9 @@ void fnShoiXRepeats(uint16_t numberOfRepeats) {           //JM SHOIDISP
  ***********************************************/
 void fnSwapX(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -194,9 +194,9 @@ void fnSwapX(uint16_t regist) {
  ***********************************************/
 void fnSwapY(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -216,9 +216,9 @@ void fnSwapY(uint16_t regist) {
  ***********************************************/
 void fnSwapZ(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Z);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -238,9 +238,9 @@ void fnSwapZ(uint16_t regist) {
  ***********************************************/
 void fnSwapT(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER);
+    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_T);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD

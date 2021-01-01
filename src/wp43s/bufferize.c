@@ -340,7 +340,7 @@ void kill_ASB_icon(void) {
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_STACK_D) {
+        else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {

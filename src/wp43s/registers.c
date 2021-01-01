@@ -20,6 +20,40 @@
 
 #include "wp43s.h"
 
+const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same order as the reserved variables in item.c item 1165 and upwards
+/*  0 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'X',  0,   0,   0,   0,   0,   0} },
+/*  1 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'Y',  0,   0,   0,   0,   0,   0} },
+/*  2 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'Z',  0,   0,   0,   0,   0,   0} },
+/*  3 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'T',  0,   0,   0,   0,   0,   0} },
+/*  4 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'A',  0,   0,   0,   0,   0,   0} },
+/*  5 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'B',  0,   0,   0,   0,   0,   0} },
+/*  6 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'C',  0,   0,   0,   0,   0,   0} },
+/*  7 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'D',  0,   0,   0,   0,   0,   0} },
+/*  8 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'L',  0,   0,   0,   0,   0,   0} },
+/*  9 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'I',  0,   0,   0,   0,   0,   0} },
+/* 10 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'J',  0,   0,   0,   0,   0,   0} },
+/* 11 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'K',  0,   0,   0,   0,   0,   0} },
+/* 12 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'G', 'R', 'A', 'M', 'O', 'D',  0} },
+/* 13 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {3, 'A', 'D', 'M',  0,   0,   0,   0} },
+/* 14 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {6, 'D', 'E', 'N', 'M', 'A', 'X',  0} },
+/* 15 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'I', 'S', 'M',  0,   0,   0,   0} },
+/* 16 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'R', 'E', 'A', 'L', 'D', 'F',  0} },
+/* 17 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, '#', 'D', 'E', 'C',  0,   0,   0} },
+/* 18 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'A', 'C', 'C',  0,   0,   0,   0} },
+/* 19 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6,  33, 145, 'L', 'i', 'm',  0,   0} },
+/* 20 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6,  33, 147, 'L', 'i', 'm',  0,   0} },
+/* 21 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'F', 'V',  0,   0,   0,   0,   0} },
+/* 22 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'i', '%', '/', 'a',  0,   0,   0} },
+/* 23 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'N', 'P', 'E', 'R',  0,   0,   0} },
+/* 24 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'P', 'E', 'R', '/', 'a',  0,   0} },
+/* 25 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'P', 'M', 'T',  0,   0,   0,   0} },
+/* 26 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'P', 'V',  0,   0,   0,   0,   0} },
+/* 27 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'A',  0,   0} },
+/* 28 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'B',  0,   0} },
+/* 29 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'X',  0,   0} },
+};
+
+
 
 /********************************************//**
  * \brief returns the data type of a register
@@ -28,10 +62,11 @@
  * \return uint32_t      Data type
  ***********************************************/
 uint32_t getRegisterDataType(calcRegister_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     return globalRegister[regist].dataType;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -51,16 +86,21 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    return savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].dataType;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        return POINTER_TO_NAMED_VARIABLE(regist)->dataType;
+      if(regist < numberOfNamedVariables) {
+        return allNamedVariables[regist].header.dataType;
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -69,22 +109,19 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
       displayBugScreen("In function getRegisterDataType: no named variables defined!");
     }
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      return savedStackRegister[regist - SAVED_REGISTER_X].dataType;
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
+    if(regist < 12) { // Lettered register
+      return globalRegister[regist + REGISTER_X].dataType;
     }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function getRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
   }
+
   else {
-    sprintf(errorMessage, "In function getRegisterDataType: register=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function getRegisterDataType: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
   }
+
   return 31u;
 }
 
@@ -97,10 +134,11 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
  * \return dataBlock_t *       Data pointer
  ***********************************************/
 dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     return TO_PCMEMPTR(globalRegister[regist].pointerToRegisterData);
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -120,16 +158,21 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    return TO_PCMEMPTR(savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].pointerToRegisterData);
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        return TO_PCMEMPTR(POINTER_TO_NAMED_VARIABLE(regist)->pointerToRegisterData);
+      if(regist < numberOfNamedVariables) {
+        return TO_PCMEMPTR(allNamedVariables[regist].header.pointerToRegisterData);
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -138,20 +181,13 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
       displayBugScreen("In function getRegisterDataPointer: no named variables defined!");
     }
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      return TO_PCMEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].pointerToRegisterData);
-    }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function getRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
   else {
-    sprintf(errorMessage, "In function getRegisterDataPointer: r=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function getRegisterDataPointer: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
   }
   return 0;
@@ -167,10 +203,11 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
  * \return uint32_t      Angular mode
  ***********************************************/
 uint32_t getRegisterTag(calcRegister_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     return globalRegister[regist].tag;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -190,16 +227,21 @@ uint32_t getRegisterTag(calcRegister_t regist) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    return savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].tag;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        return POINTER_TO_NAMED_VARIABLE(regist)->tag;
+      if(regist < numberOfNamedVariables) {
+        return allNamedVariables[regist].header.tag;
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -208,87 +250,14 @@ uint32_t getRegisterTag(calcRegister_t regist) {
       displayBugScreen("In function getRegisterTag: no named variables defined!");
     }
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      return savedStackRegister[regist - SAVED_REGISTER_X].tag;
-    }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function getRegisterTag:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
   else {
-    sprintf(errorMessage, "In function getRegisterTag: r=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function getRegisterTag: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
-  }
-  return 0;
-}
-
-
-
-/********************************************//**
- * \brief returns the length of the memory area of the name of the named variable
- *
- * \param[in] r calcRegister_t Register number
- * \return uint16_t            Length in blocks
- ***********************************************/
-uint16_t getVariableNameLength(calcRegister_t regist) {
-  if(FIRST_NAMED_VARIABLE <= regist && regist <= FIRST_NAMED_VARIABLE + 999) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-      regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        return POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->variableNameLen;
-      }
-      #ifdef PC_BUILD
-        else {
-          sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-          moreInfoOnError("In function getVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-        }
-     #endif // PC_BUILD
-    }
-    else {
-      displayBugScreen("In function getVariableNameLength: no named variables defined!");
-    }
-  }
-  else {
-    displayBugScreen("In function getVariableNameLength: this function can be called only for a named variable!");
-  }
-  return 0;
-}
-
-
-
-/********************************************//**
- * \brief returns the pointer to the memory area of the name of the named variable
- *
- * \param[in] r calcRegister_t Register number
- * \return char*               Pointer to the name
- ***********************************************/
-char *getVariableNamePointer(calcRegister_t regist) {
-  if(FIRST_NAMED_VARIABLE <= regist && regist <= FIRST_NAMED_VARIABLE + 999) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-      regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        return TO_PCMEMPTR(POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->ptrToVariableName);
-      }
-      #ifdef PC_BUILD
-        else {
-          sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-          moreInfoOnError("In function getVariableNamePointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-        }
-      #endif // PC_BUILD
-    }
-    else {
-      displayBugScreen("In function getVariableNamePointer: no named variables defined!");
-    }
-   }
-  else {
-    displayBugScreen("In function getVariableNamePointer: this function can be called only for a named variable!");
   }
   return 0;
 }
@@ -304,11 +273,12 @@ char *getVariableNamePointer(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     globalRegister[regist].dataType = dataType;
     globalRegister[regist].tag = tag;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -329,17 +299,23 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].dataType = dataType;
+    savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].tag = tag;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        POINTER_TO_NAMED_VARIABLE(regist)->dataType = dataType;
-        POINTER_TO_NAMED_VARIABLE(regist)->tag = tag;
+      if(regist < numberOfNamedVariables) {
+        allNamedVariables[regist].header.dataType = dataType;
+        allNamedVariables[regist].header.tag = tag;
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -348,21 +324,13 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
       displayBugScreen("In function setRegisterDataType: no named variables defined!");
     }
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      savedStackRegister[regist - SAVED_REGISTER_X].dataType = dataType;
-      savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
-    }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function setRegisterDataType:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
   else {
-    sprintf(errorMessage, "In function setRegisterDataType: r=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function setRegisterDataType: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
   }
 }
@@ -379,10 +347,11 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
 void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
   uint32_t dataPointer = TO_WP43SMEMPTR(memPtr);
 
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     globalRegister[regist].pointerToRegisterData = dataPointer;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -402,16 +371,21 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].pointerToRegisterData = dataPointer;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        POINTER_TO_NAMED_VARIABLE(regist)->pointerToRegisterData = dataPointer;
+      if(regist < numberOfNamedVariables) {
+        allNamedVariables[regist].header.pointerToRegisterData = dataPointer;
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -422,20 +396,13 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      savedStackRegister[regist - SAVED_REGISTER_X].pointerToRegisterData = dataPointer;
-    }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function setRegisterDataPointer:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
   else {
-    sprintf(errorMessage, "In function setRegisterDataPointer: r=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function setRegisterDataPointer: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
   }
 }
@@ -451,10 +418,11 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
  * \return void
  ***********************************************/
 void setRegisterTag(calcRegister_t regist, uint32_t tag) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     globalRegister[regist].tag = tag;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       regist -= FIRST_LOCAL_REGISTER;
       if(regist < currentNumberOfLocalRegisters) {
@@ -474,16 +442,21 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].tag = tag;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
       regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        POINTER_TO_NAMED_VARIABLE(regist)->tag = tag;
+      if(regist < numberOfNamedVariables) {
+        allNamedVariables[regist].header.tag = tag;
       }
       #ifdef PC_BUILD
         else {
           sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
+          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, numberOfNamedVariables - 1);
           moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
         }
       #endif // PC_BUILD
@@ -491,85 +464,15 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
     else {
       displayBugScreen("In function setRegisterDataInfo: no named variables defined!");
     }
-   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      savedStackRegister[regist - SAVED_REGISTER_X].tag = tag;
-    }
-    #ifdef PC_BUILD
-      else {
-        sprintf(errorMessage, "saved stack register %" PRId16, regist - SAVED_REGISTER_X);
-        sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to 7");
-        moreInfoOnError("In function setRegisterDataInfo:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-      }
-    #endif // PC_BUILD
   }
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
+  }
+
   else {
-    sprintf(errorMessage, "In function setRegisterDataInfo: r=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function setRegisterDataInfo: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
-  }
-}
-
-
-
-/********************************************//**
- * \brief Sets the length of the memory area of the name of the named variable
- *
- * \param[in] r calcRegister_t  Register number
- * \param[in] dataType uint16_t Length in blocks
- * \return void
- ***********************************************/
-void setVariableNameLength(calcRegister_t regist, uint16_t length) {
-  if(FIRST_NAMED_VARIABLE <= regist && regist <= FIRST_NAMED_VARIABLE + 999) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-      regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->variableNameLen = length;
-      }
-      #ifdef PC_BUILD
-        else {
-          sprintf(errorMessage, "named variable %" PRId16, regist);
-          sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "Must be from 0 to %" PRIu16, allNamedVariablePointer->numberOfNamedVariables - 1);
-          moreInfoOnError("In function setVariableNameLength:", errorMessage, "is not defined!", errorMessage + ERROR_MESSAGE_LENGTH/2);
-        }
-      #endif // PC_BUILD
-    }
-    else {
-      displayBugScreen("In function setVariableNameLength: no named variables defined!");
-    }
-  }
-  else {
-    displayBugScreen("In function setVariableNameLength: this function can be called only for a named variable!");
-  }
-}
-
-
-
-/********************************************//**
- * \brief Sets the pointer to the memory area of the name of the named variable
- *
- * \param[in] r calcRegister_t        Register number
- * \param[in] dataType uint16_t Pointer
- * \return void
- ***********************************************/
-void setVariableNamePointer(calcRegister_t regist, void *namePointer) {
-  if(FIRST_NAMED_VARIABLE <= regist && regist <= FIRST_NAMED_VARIABLE + 999) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-      regist -= FIRST_NAMED_VARIABLE;
-      if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-        POINTER_TO_POINTER_TO_NAMED_VARIABLE_NAME(regist)->ptrToVariableName = TO_WP43SMEMPTR(namePointer);
-      }
-      else {
-        sprintf(errorMessage, "In function setVariableNamePointer: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist, allNamedVariablePointer->numberOfNamedVariables - 1);
-        displayBugScreen(errorMessage);
-      }
-    }
-    else {
-      displayBugScreen("In function setVariableNamePointer: no named variables defined!");
-    }
-  }
-  else {
-    displayBugScreen("In function setVariableNamePointer: this function can be called only for a named variable!");
   }
 }
 
@@ -710,9 +613,8 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
  * \return void
  ***********************************************/
 void allocateNamedVariable(const char *variableName) {
-  uint32_t len;
-  char *namePtr;
   calcRegister_t regist;
+  uint8_t len;
 
   if(stringGlyphLength(variableName) < 1 || stringGlyphLength(variableName) > 7) {
     #ifdef PC_BUILD
@@ -722,61 +624,49 @@ void allocateNamedVariable(const char *variableName) {
     return;
   }
 
-  if(allNamedVariablePointer->numberOfNamedVariables == 0) { // First named variable
-    allNamedVariablePointer = reallocWp43s(allNamedVariablePointer, TO_BYTES(1), TO_BYTES(3)); // 3 blocks: 1 for the number of named variables, 1 for the register descriptor, and 1 for the pointer to the variable name
-    allNamedVariablePointer->numberOfNamedVariables = 1;
+  if(numberOfNamedVariables == 0) { // First named variable
+    allNamedVariables = allocWp43s(sizeof(namedVariableHeader_t));
+    numberOfNamedVariables = 1;
 
-    regist = FIRST_NAMED_VARIABLE;
+    regist = 0;
   }
   else {
-    regist = allNamedVariablePointer->numberOfNamedVariables;
-    if(regist == 999) {
+    regist = numberOfNamedVariables;
+    if(regist == LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1) {
       #ifdef PC_BUILD
-        moreInfoOnError("In function allocateNamedVariable:", "you can allocate up to", "999 named variables!", NULL);
+        sprintf(errorMessage, "%d named variables!", LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1);
+        moreInfoOnError("In function allocateNamedVariable:", "you can allocate up to", errorMessage, NULL);
       #endif // PC_BUILD
       return;
     }
 
-    reallocWp43s(allNamedVariablePointer, TO_BYTES(1u + 2u*allNamedVariablePointer->numberOfNamedVariables), TO_BYTES(1u + 2u*(allNamedVariablePointer->numberOfNamedVariables + 1)));
-    (allNamedVariablePointer->numberOfNamedVariables)++;
-
-    regist += FIRST_NAMED_VARIABLE;
+    allNamedVariables = reallocWp43s(allNamedVariables, sizeof(namedVariableHeader_t) * numberOfNamedVariables, sizeof(namedVariableHeader_t) * (numberOfNamedVariables + 1));
+    numberOfNamedVariables++;
   }
 
-  // The new named variable is a real34 initialized to 0.0
-  setRegisterDataType(regist, dtReal34, AM_NONE);
+  len = stringByteLength(variableName);
+  allNamedVariables[regist].variableName[0] = len;
+  xcopy(allNamedVariables[regist].variableName + 1, variableName, len);
 
   if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                       //JM defaults JMZERO
     setRegisterDataType(regist, dtReal34, AM_NONE);
 
-  len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
+  regist += FIRST_NAMED_VARIABLE;
 
-  namePtr = allocWp43s(len);
-  setVariableNamePointer(regist, namePtr);
-  setVariableNameLength(regist, TO_BLOCKS(len));
-  xcopy(namePtr, variableName, len);
+  // The new named variable is a real34 initialized to 0.0
+  setRegisterDataType(regist, dtReal34, AM_NONE);
 
   setRegisterDataPointer(regist, allocWp43s(TO_BYTES(REAL34_SIZE)));
   real34Zero(REGISTER_REAL34_DATA(regist));
   }                                                         //JM defaults
   else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                      //JM defaults vv
     setRegisterDataType(regist, dtComplex34, AM_NONE);
-    len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    namePtr = allocWp43s(len);
-    setVariableNamePointer(regist, namePtr);
-    setVariableNameLength(regist, TO_BLOCKS(len));
-    xcopy(namePtr, variableName, len);
     setRegisterDataPointer(regist, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
     real34Zero(REGISTER_REAL34_DATA(regist));
     real34Zero(REGISTER_IMAG34_DATA(regist));
   }                                                         //JM defaults ^^
   else if(lastIntegerBase != 0 || Input_Default == ID_SI) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
-    len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    namePtr = allocWp43s(len);
-    setVariableNamePointer(regist, namePtr);
-    setVariableNameLength(regist, TO_BLOCKS(len));
-    xcopy(namePtr, variableName, len);
     setRegisterDataPointer(regist, allocWp43s(TO_BYTES(SHORT_INTEGER_SIZE)));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
@@ -787,11 +677,6 @@ void allocateNamedVariable(const char *variableName) {
   }                                                         //JM defaults ^^
   else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                         //JM defaults vv
     setRegisterDataType(regist, dtShortInteger, AM_NONE);
-    len = TO_BYTES(TO_BLOCKS(stringByteLength(variableName) + 1)); // +1 for the trailing zero
-    namePtr = allocWp43s(len);
-    setVariableNamePointer(regist, namePtr);
-    setVariableNameLength(regist, TO_BLOCKS(len));
-    xcopy(namePtr, variableName, len);
     setRegisterDataPointer(regist, allocWp43s(TO_BYTES(SHORT_INTEGER_SIZE)));
     longInteger_t lgInt;
     longIntegerInit(lgInt);
@@ -812,10 +697,11 @@ void allocateNamedVariable(const char *variableName) {
  * \return void
  ***********************************************/
 void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     ((dataBlock_t *)TO_PCMEMPTR(globalRegister[regist].pointerToRegisterData))->dataMaxLength = maxDataLen;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       if(regist-FIRST_LOCAL_REGISTER < currentNumberOfLocalRegisters) {
         getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
@@ -834,13 +720,18 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
-      if(regist - FIRST_NAMED_VARIABLE < allNamedVariablePointer->numberOfNamedVariables) {
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables > 0) {
+      if(regist - FIRST_NAMED_VARIABLE < numberOfNamedVariables) {
         getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
       }
       else {
-        sprintf(errorMessage, "In function setRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist - FIRST_NAMED_VARIABLE, allNamedVariablePointer->numberOfNamedVariables - 1);
+        sprintf(errorMessage, "In function setRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist - FIRST_NAMED_VARIABLE, numberOfNamedVariables - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -850,17 +741,13 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
-    }
-    else {
-      sprintf(errorMessage, "In function setRegisterMaxDataLength: saved stack register %" PRId16 " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
-      displayBugScreen(errorMessage);
-    }
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
   else {
-    sprintf(errorMessage, "In function setRegisterMaxDataLength: regist=%" PRId16 " must be less then 4000!", regist);
+    sprintf(errorMessage, "In function setRegisterMaxDataLength: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
     displayBugScreen(errorMessage);
   }
 }
@@ -877,10 +764,11 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
  *
  ***********************************************/
 uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER) { // Global register
+  if(regist <= LAST_GLOBAL_REGISTER) { // Global register
     return ((dataBlock_t *)TO_PCMEMPTR(globalRegister[regist].pointerToRegisterData))->dataMaxLength;
   }
-  else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+  else if(regist <= LAST_LOCAL_REGISTER) { // Local register
     if(currentLocalRegisters != NULL) {
       if(regist-FIRST_LOCAL_REGISTER < currentNumberOfLocalRegisters) {
         return ((dataBlock_t *)TO_PCMEMPTR(POINTER_TO_LOCAL_REGISTER(regist)->pointerToRegisterData))->dataMaxLength;
@@ -896,13 +784,18 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < SAVED_REGISTER_X) { // Named variable
-    if(allNamedVariablePointer->numberOfNamedVariables != 0) {
-      if(regist - FIRST_NAMED_VARIABLE < allNamedVariablePointer->numberOfNamedVariables) {
-        return ((dataBlock_t *)TO_PCMEMPTR(POINTER_TO_NAMED_VARIABLE(regist)->pointerToRegisterData))->dataMaxLength;
+
+  else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+    return ((dataBlock_t *)TO_PCMEMPTR(savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER].pointerToRegisterData))->dataMaxLength;
+  }
+
+  else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+    if(numberOfNamedVariables != 0) {
+      if(regist - FIRST_NAMED_VARIABLE < numberOfNamedVariables) {
+        return ((dataBlock_t *)TO_PCMEMPTR(allNamedVariables[regist - FIRST_NAMED_VARIABLE].header.pointerToRegisterData))->dataMaxLength;
       }
       else {
-        sprintf(errorMessage, "In function getRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist - FIRST_NAMED_VARIABLE, allNamedVariablePointer->numberOfNamedVariables - 1);
+        sprintf(errorMessage, "In function getRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist - FIRST_NAMED_VARIABLE, numberOfNamedVariables - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -912,15 +805,16 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
       }
     #endif // PC_BUILD
   }
-  else if(regist < 3000) { // Saved stack register or temporary register
-    if(regist <= LAST_SAVED_STACK_REGISTER + 1) {
-      return ((dataBlock_t *)TO_PCMEMPTR(savedStackRegister[regist - SAVED_REGISTER_X].pointerToRegisterData))->dataMaxLength;
-    }
-    else {
-      sprintf(errorMessage, "In function getRegisterMaxDataLength: saved stack register %" PRId16 " is not defined! Must be from 0 to 7!", regist - SAVED_REGISTER_X);
-      displayBugScreen(errorMessage);
-    }
+
+  else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
+    regist -= FIRST_RESERVED_VARIABLE;
   }
+
+  else {
+    sprintf(errorMessage, "In function getRegisterMaxDataLength: regist=%" PRId16 " must be less than %d!", regist, LAST_RESERVED_VARIABLE + 1);
+    displayBugScreen(errorMessage);
+  }
+
   return 0;
 }
 
@@ -1521,10 +1415,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
 
     registerHeader.descriptor = 0xFFFFFFFF;
 
-    if(regist < FIRST_LOCAL_REGISTER) { // Global register
+    if(regist <= LAST_GLOBAL_REGISTER) { // Global register
       registerHeader = globalRegister[regist];
     }
-    else if(regist < FIRST_NAMED_VARIABLE) { // Local register
+
+    else if(regist <= LAST_LOCAL_REGISTER) { // Local register
       if(currentNumberOfLocalRegisters > 0) {
         regist -= FIRST_LOCAL_REGISTER;
         if(regist < currentNumberOfLocalRegisters) {
@@ -1532,16 +1427,18 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
         }
       }
     }
-    else if(regist < FIRST_SAVED_STACK_REGISTER) { // Named variable
-      if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+
+    else if(regist <= LAST_TEMP_REGISTER) { // Saved stack register or temporary register
+      registerHeader = savedStackRegister[regist - FIRST_SAVED_STACK_REGISTER];
+    }
+
+    else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
+      if(numberOfNamedVariables > 0) {
         regist -= FIRST_NAMED_VARIABLE;
-        if(regist < allNamedVariablePointer->numberOfNamedVariables) {
-          registerHeader = *POINTER_TO_NAMED_VARIABLE(regist);
+        if(regist < numberOfNamedVariables) {
+          registerHeader = allNamedVariables[regist].header;
         }
       }
-    }
-    else if(regist <= LAST_SAVED_STACK_REGISTER + 1) { // Saved stack register or temporary register
-      registerHeader = savedStackRegister[regist - SAVED_REGISTER_X];
     }
 
     printf("Header informations of register %d\n", regist);

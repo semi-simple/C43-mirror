@@ -186,7 +186,7 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 
 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
+    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
     if(getRegisterDataType(REGISTER_X) == dtLongInteger)  {convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);}
@@ -217,7 +217,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       #endif
       }
     }
-    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
   }
 
 
@@ -226,7 +226,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
 
 
 void fnMultiplySI(uint16_t multiplier) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
+    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 	char mult[20];
 	char divi[20];
 	mult[0]=0;
@@ -267,7 +267,7 @@ void fnMultiplySI(uint16_t multiplier) {
     }
 
     adjustResult(REGISTER_X, false, false, REGISTER_X, REGISTER_Y, -1);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
 
 }
 

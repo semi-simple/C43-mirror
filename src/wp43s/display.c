@@ -1245,9 +1245,9 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     realToDisplayString2(angle34, displayString, displayHasNDigits, limitExponent, separator);
 
          if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
-    else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);
-    else if(mode == AM_MULTPI) strcat(displayString, STD_pi);
     else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
+    else if(mode == AM_MULTPI) strcat(displayString, STD_pi);
+    else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);
     else {
       strcat(displayString, "?");
       sprintf(errorMessage, "In function angle34ToDisplayString2: %" PRIu8 " is an unexpected value for mode!", mode);

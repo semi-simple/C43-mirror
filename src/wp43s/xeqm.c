@@ -641,7 +641,10 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   char fallback[130];     //Fallback text
   char fn_long[200];      //Long file name
   char fn_short[16];      //standard file name
-  char tmp[400];          //Messages
+
+  #if (VERBOSE_LEVEL >= 2) 
+    char tmp[400];          //Messages
+  #endif
 
 
   #define pgmpath "PROGRAMS"
@@ -649,20 +652,25 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   strcpy(fn_long, "");
   strcpy(fallback,"XEQM01:HELP;");
 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     strcpy(tmp,fn_short); strcat(tmp," A: Loading XEQMENU mapping"); print_linestr(tmp,false);
-  }
+  #endif
 
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback);
-  if(verbose_jm>=1) {print_inlinestr(" B: Loaded. ",false);}
-  if(verbose_jm>=2) {
+
+  #if (VERBOSE_LEVEL >= 1) 
+   print_inlinestr(" B: Loaded. ",false);
+  #endif
+
+  #if (VERBOSE_LEVEL >= 2)
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   int16_t ix = 0;
   int16_t iy = 0;
@@ -688,10 +696,10 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   strcat(fn_short,".TXT");                        //Add .TXT
   strcat(fn_long,".TXT");                         //Add .TXT
 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     sprintf(tmp,"C: Trying %s then %s.",fn_short,fn_long);
     print_linestr(tmp,true);
-  }
+  #endif
 
   line1[0]=0;                                     //Clear incoming/outgoing string data
 
@@ -703,44 +711,47 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
     sprintf(fallback,"XEQLBL %s X%s ",nn,nn);
   }
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     sprintf(tmp,"  Fallback:%s",fallback); print_inlinestr(tmp,false);
-  }
+  #endif
 
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback); 
   replaceFF(nn,line1); 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     print_inlinestr(line1,true);
-  }
+  #endif
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   displaywords(line1);
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   execute_string(line1,exec);
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
       clearScreen_old(false, true, true);
     #endif
-  }
+  #endif
 
 #endif
 }
@@ -765,7 +776,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 void XEQMENU_loadAllfromdisk(void) {
 #ifndef TESTSUITE_BUILD
       clearScreen_old(false, true, true);
-      print_inlinestr("Loading all XEQM program files:",true);
+      print_inlinestr("Loading XEQM:",true);
 
       char line[TMP_STR_LENGTH];
       

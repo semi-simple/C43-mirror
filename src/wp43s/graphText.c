@@ -214,7 +214,7 @@ char line[100];               /* Line buffer */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write access error ID001--> %d    \n",fr);    print_linestr(line,true);
+      sprintf(line,"Write error ID001--> %d    \n",fr);    print_linestr(line,true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -252,7 +252,7 @@ char line[100];               /* Line buffer */
     /* close the file */
     fr = f_close(&fil);
     if (fr) {
-      sprintf(line,"File close error ID005--> %d    \n",fr);     print_linestr(line,false);
+      sprintf(line,"Close error ID005--> %d    \n",fr);     print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -284,13 +284,16 @@ char dirfile[40];
 
 int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename_short,  char *filename,  char *fallback) { //DMCP_BUILD 
     
-    if(verbose_jm>=2) {
+    #if (VERBOSE_LEVEL >= 2) 
       print_inlinestr("From dir:",false);
       print_inlinestr(dirname,false);
       print_inlinestr(", ",true);
-    }
+    #endif
   
-    char line[300];               /* Line buffer */
+    #if (VERBOSE_LEVEL >= 2) 
+      char line[300];               /* Line buffer */
+    #endif
+      
     char dirfile[200];
     dirfile[0]=0;
     FIL fil;                      /* File object */
@@ -303,85 +306,85 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
     strcat(dirfile,"\\");
     strcat(dirfile,filename_short);
 
-    if(verbose_jm>=1) {
+    #if (VERBOSE_LEVEL >= 1) 
       print_inlinestr("1: reading:",false);
       print_inlinestr(dirfile,false);
       print_inlinestr(" ",true);
-    }
+    #endif
 
     /* Opens an existing file. */
     fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
     if (fr != FR_OK) {
-      if(verbose_jm>=1) {
+      #if (VERBOSE_LEVEL >= 1) 
         print_inlinestr("Not open. ",false);
-        if(verbose_jm>=2) {
+        #if (VERBOSE_LEVEL >= 2) 
           if(fr == 4) {
             sprintf(line,"Not found ID006 --> %d ",fr); print_inlinestr(line,false);
             sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
           } else {
             sprintf(line,"File open error --> %d ",fr); print_inlinestr(line,false);
           }
-        }
-      }
-      if(verbose_jm>=2) {
+        #endif
+      #endif
+      #if (VERBOSE_LEVEL >= 2) 
         print_inlinestr(".",true);
-      }
+      #endif
       f_close(&fil);
       
       if(filename[0]!=0) {
         strcpy(dirfile,dirname);
         strcat(dirfile,"\\");
         strcat(dirfile,filename);
-
-        if(verbose_jm>=1) {
+        #if (VERBOSE_LEVEL >= 1) 
           print_inlinestr("2: reading:",false);
           print_inlinestr(dirfile,false);
           print_inlinestr(" ",true);
-        }
+        #endif
 
         /* Opens an existing file. */
         fr = f_open(&fil, dirfile, FA_READ );   //| FA_OPEN_EXISTING
         if (fr != FR_OK) {
-          if(verbose_jm>=1) {
+          #if (VERBOSE_LEVEL >= 1) 
             print_inlinestr("Not open. ",false);
-            if(verbose_jm>=2) {
+            #if (VERBOSE_LEVEL >= 2) 
               if(fr == 4) {
                 sprintf(line,"Not found ID007 --> %d ",fr); print_inlinestr(line,false);
                 sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
               } else {
                 sprintf(line,"File open error --> %d ",fr); print_inlinestr(line,false);
               }
-            }
-          }
-
-          if(verbose_jm>=1) {
+            #endif
+          #endif
+          #if (VERBOSE_LEVEL >= 1) 
             print_inlinestr(". Using fallback.",true);
-          }
+          #endif
           f_close(&fil);
           strcpy(line1, fallback);
           return 1;
         }
       }
       else {
-        if(verbose_jm>=1) {
+        #if (VERBOSE_LEVEL >= 1) 
           print_inlinestr("Using fallback.",true);
-        }
+        #endif
         strcpy(line1, fallback);
         return 1;        
       }
     }
 
-    if(verbose_jm>=1) {print_inlinestr("Open and reading...",false);}
+    #if (VERBOSE_LEVEL >= 1)
+      print_inlinestr("reading...",false);
+    #endif
 
     /* Read if open */
     line1[0]=0;
     f_getsline(line1, TMP_STR_LENGTH, &fil);
     f_close(&fil);
 
-    if(verbose_jm>=1) {
+    #if (VERBOSE_LEVEL >= 1) 
       print_inlinestr("read:",true);
       print_inlinestr(line1,true);
-    }
+    #endif
 
     return 0;
   }
@@ -425,7 +428,7 @@ char line[100];               /* Line buffer */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write access error--> %d    \n",fr);     print_linestr(line,true);
+      sprintf(line,"Write error--> %d    \n",fr);     print_linestr(line,true);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -485,7 +488,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
     
   if(mode == append) outfile = fopen(dirfile, "ab"); else outfile = fopen(dirfile, "wb"); 
   if (outfile == NULL) {
-    printf("export_string_to_filename: Cannot open to append: %s %s\n",dirfile,line1);
+    printf("Cannot open ID008: %s %s\n",dirfile,line1);
     return 1;
   }
 
@@ -493,7 +496,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   fr = fputs(tmpString, outfile);
   //printf(">>> %d\n",fr);
   if (fr == 0) {
-    sprintf(line,"export_string_to_file: Write error--> %d    \n",fr);            
+    sprintf(line,"Write error ID009 --> %d    \n",fr);            
     //print_linestr(line,false);
     printf(line1);
     fclose(outfile);
@@ -508,11 +511,11 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
 
 int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback) { //PC_BUILD
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     print_inlinestr("From dir:",false);
     print_inlinestr(dirname,false);
     print_inlinestr(", ",true);
-  }
+  #endif
   
   char dirfile[200];
   dirfile[0]=0;
@@ -522,60 +525,61 @@ int16_t import_string_from_filename(char *line1,  char *dirname,   char *filenam
   strcpy(dirfile,dirname);
   strcat(dirfile,"/");
   strcat(dirfile,filename_short);
-    
-  if(verbose_jm>=1) {
+
+  #if (VERBOSE_LEVEL >= 1)  
     print_inlinestr("1: reading:",false);
     print_inlinestr(dirfile,false);
     print_inlinestr(" ",true);
-  }
+  #endif
 
   /* Opens an existing file. */
   infile = fopen(dirfile, "rb");
   if (infile == NULL) {
-    if(verbose_jm>=1) {
+    #if (VERBOSE_LEVEL >= 1) 
       #ifdef PC_BUILD
-        printf("Cannot load %s\n",dirfile);
+        printf("Cannot load ID010 %s\n",dirfile);
       #endif
       print_inlinestr("Not open. ",true);
-    }
+    #endif
 
     if(filename[0]!=0) {
       strcpy(dirfile,dirname);
       strcat(dirfile,"/");
       strcat(dirfile,filename);
-        
-      if(verbose_jm>=1) {
+      #if (VERBOSE_LEVEL >= 1) 
         print_inlinestr("2: reading:",false);
         print_inlinestr(dirfile,false);
         print_inlinestr(" ",true);
-      }
+      #endif
 
       /* Opens an existing file. */
       infile = fopen(dirfile, "rb");
       if (infile == NULL) {
-        if(verbose_jm>=1) {
+        #if (VERBOSE_LEVEL >= 1) 
           #ifdef PC_BUILD
             printf("Cannot load %s\n",dirfile);
           #endif
-          print_inlinestr("Not open. Using fallback.",true);
-        }
+          print_inlinestr("Fallback.",true);
+        #endif
         strcpy(line1, fallback);
         return 1;
       }
     }
     else {
-      if(verbose_jm>=1) {
+      #if (VERBOSE_LEVEL >= 1) 
         #ifdef PC_BUILD
           printf("Cannot load %s\n",dirfile);
         #endif
-        print_inlinestr("Using fallback.",true);
-      }
+        print_inlinestr("Fallback.",true);
+      #endif
       strcpy(line1, fallback);
       return 1;
     }
   }
 
-  if(verbose_jm>=1) {print_inlinestr("Open and reading...",false);}
+  #if (VERBOSE_LEVEL >= 1) 
+    print_inlinestr("reading...",false);
+  #endif
 
   /* Read if open */
   line1[0]=0;
@@ -584,19 +588,19 @@ int16_t import_string_from_filename(char *line1,  char *dirname,   char *filenam
     strcat(line1,onechar);
   }
   fclose(infile);
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     #ifdef PC_BUILD
       printf("Loaded >>> %s\n",dirfile);
     #endif
     print_inlinestr("read:",true);
     print_inlinestr(line1,true);
-  }
+  #endif
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef PC_BUILD
       printf("Loaded %s |%s|\n",dirfile,line1);
     #endif
-    }
+  #endif
 
 return 0;
 }
@@ -612,7 +616,7 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
 
   outfile = fopen(filename_csv, "ab");
   if (outfile == NULL) {
-    printf("export_string_to_file: Cannot open to append: %s %s\n",filename_csv,inputstring);
+    printf("Cannot open to append ID011: %s %s\n",filename_csv,inputstring);
     return 1;
   }
 
@@ -622,7 +626,7 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
     char line[100];               /* Line buffer */
     fr = fputs(inputstring, outfile);
     if (fr == 0) {
-      sprintf(line,"export_string_to_file: Write error--> %d %s\n",fr,inputstring);            
+      sprintf(line,"Write error ID012 --> %d %s\n",fr,inputstring);            
       //print_linestr(line,false);
       printf(line);
       fclose(outfile);

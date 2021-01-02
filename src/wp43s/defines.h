@@ -30,11 +30,12 @@
    #undef  BLUES_WHEN_SWAPPED
 
 #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
-#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
+//#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
 
 
 //Verbose options
-#define verbose_default 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
+#define VERBOSE_LEVEL 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
+
 #define PC_BUILD_TELLTALE            //JM verbose on PC
 #undef  PC_BUILD_TELLTALE
 

@@ -33,8 +33,6 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
-uint8_t verbose_jm;
-
 
 // Radix Mark 1 bit
 #define RX_PERIOD               103

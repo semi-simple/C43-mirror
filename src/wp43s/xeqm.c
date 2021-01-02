@@ -28,7 +28,7 @@
 
 void press_key(void) {
     #ifdef DMCP_BUILD
-      print_inlinestr("Press a key to continue.",true);
+      print_inlinestr("Press key",true);
       wait_for_key_press();
     #endif
 }

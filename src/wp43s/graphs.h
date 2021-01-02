@@ -47,8 +47,8 @@
 
 
 //Memory structure
-graphtype*   gr_x;
-graphtype*   gr_y;
+extern graphtype *gr_x;
+extern graphtype *gr_y;
 graphtype    telltale;
 uint16_t ix_count;
 #define  LIM               400 //Number of points; MUST be multiple of 4

@@ -237,6 +237,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
     save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
     save(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
+    save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+    save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+    save(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
+    save(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -441,6 +445,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
       restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
       restore(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
+      restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+      restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+      restore(&telltale,                            sizeof(telltale),                          BACKUP);   //JM ^^
+      restore(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
       fclose(BACKUP);
       printf("End of calc's restoration\n");
 
@@ -731,6 +739,24 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);   //JM
   save(tmpString, strlen(tmpString), BACKUP);
+
+
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%u\n",ix_count);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%E\n",telltale);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<LIM; i++) {
+    sprintf(tmpString, "%E\n",gr_x[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+    sprintf(tmpString, "%E\n",gr_y[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+
+
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);
@@ -1197,6 +1223,28 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       }
     }
   }
+
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
+    char* end;
+    readLine(stream, tmpString); // Number of params
+
+    readLine(stream, tmpString); // ix_count
+    ix_count = stringToInt16(tmpString);
+    readLine(stream, tmpString); // telltale
+    telltale = strtod(tmpString, &end);
+    graph_setupmemory();
+    for(i=0; i<LIM; i++) {
+      readLine(stream, tmpString);
+      gr_x[i] = strtod(tmpString, &end);
+      readLine(stream, tmpString);
+      gr_y[i] = strtod(tmpString, &end);
+      //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
+    }
+  }
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+
+
 }
 
 
@@ -1231,6 +1279,7 @@ void fnLoad(uint16_t loadMode) {
   restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
   restoreOneSection(BACKUP, loadMode); // PROGRAMS
   restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
+  restoreOneSection(BACKUP, loadMode); // Graph memory //JM
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);

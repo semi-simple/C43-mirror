@@ -29,6 +29,9 @@
 #define Y_non_square_min 0 //SCREEN_MIN_GRAPH
 
 
+graphtype *gr_x;
+graphtype *gr_y;
+
 //Note: graph_xmin, graph_xmax set from X.FN GRAPH
 float    tick_int_x;
 float    tick_int_y;

@@ -695,7 +695,9 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
       btnFnClicked(unused, charKey);                                             //Execute
     }
 
-    if(FN_timed_out_to_NOP) showSoftmenuCurrentPart();                           //Clear any possible underline residues
+   if (!(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY)) {
+     if(FN_timed_out_to_NOP) showSoftmenuCurrentPart();                           //Clear any possible underline residues
+   }
 
 
     resetShiftState();

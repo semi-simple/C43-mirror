@@ -8411,6 +8411,8 @@ void fnReset(uint16_t confirmation) {
     memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
     memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
 
+    graph_setupmemory();                                      //JM
+
     // Empty program initialization
     beginOfProgramMemory          = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
     currentStep                   = beginOfProgramMemory;

@@ -694,6 +694,10 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
       btnFnClicked(unused, charKey);                                             //Execute
     }
+
+    if(FN_timed_out_to_NOP) showSoftmenuCurrentPart();                           //Clear any possible underline residues
+
+
     resetShiftState();
     FN_cancel();
   }

@@ -524,7 +524,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           longIntegerInit(lgInt);
           uint16_t val =0;
           uIntToLongInteger(val,lgInt);
-          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
+          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase == 0 ? 10:lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
         else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                   //JM defaults vv
@@ -567,7 +567,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           longIntegerInit(lgInt);
           uint16_t val =0;
           uIntToLongInteger(val,lgInt);
-          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, r);
+          convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase == 0 ? 10:lastIntegerBase, r);
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
         else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                   //JM defaults vv
@@ -672,7 +672,7 @@ void allocateNamedVariable(const char *variableName) {
     longIntegerInit(lgInt);
     uint16_t val =0;
     uIntToLongInteger(val,lgInt);
-    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
+    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase == 0 ? 10:lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                         //JM defaults ^^
   else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                         //JM defaults vv
@@ -887,7 +887,7 @@ void clearRegister(calcRegister_t regist) {
     longIntegerInit(lgInt);
     uint16_t val =0;
     uIntToLongInteger(val,lgInt);
-    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase, regist);
+    convertLongIntegerToShortIntegerRegister(lgInt, lastIntegerBase == 0 ? 10:lastIntegerBase, regist);
     longIntegerFree(lgInt);
   }                                                                             //JM defaults ^^
   else if((lastIntegerBase == 0) && (Input_Default == ID_LI)) {                                             //JM defaults vv

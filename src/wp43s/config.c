@@ -8720,6 +8720,8 @@ void fnReset(uint16_t confirmation) {
 #endif //NOT_NEEDED
 
     doRefreshSoftMenu = true;     //jm dr
+    last_CM = 253;
+    refreshScreen();
   }
 }
 

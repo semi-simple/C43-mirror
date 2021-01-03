@@ -1485,8 +1485,8 @@
 #define ITM_DATEto                    1429
 #define ITM_DAY                       1430
 #define ITM_DBLR                      1431
-#define ITM_DBLCROSS                  1432
-#define ITM_DBLSLASH                  1433
+#define ITM_DBLMULT                   1432
+#define ITM_DBLDIV                    1433
 #define ITM_DECOMP                    1434
 #define ITM_DEG                       1435
 #define ITM_DEGto                     1436
@@ -1538,7 +1538,7 @@
 #define ITM_JYX                       1482
 #define ITM_JPLUS                     1483
 #define ITM_JMINUS                    1484
-#define ITM_JonG                      1485
+#define ITM_JUL_GREG                  1485
 #define ITM_JtoD                      1486
 #define ITM_KEY                       1487
 #define ITM_KEYG                      1488
@@ -1548,8 +1548,8 @@
 #define ITM_LASTX                     1492
 #define ITM_LBLQ                      1493
 #define ITM_LEAP                      1494
-#define ITM_Ln                        1495
-#define ITM_LNALPHA                   1496
+#define ITM_Lm                        1495
+#define ITM_LmALPHA                   1496
 #define ITM_LNBETA                    1497
 #define ITM_LNGAMMA                   1498
 #define ITM_LOAD                      1499
@@ -1593,7 +1593,7 @@
 #define ITM_PGMSLV                    1537
 #define ITM_PIXEL                     1538
 #define ITM_PLOT                      1539
-#define ITM_PN                        1540
+#define ITM_Pn                        1540
 #define ITM_POINT                     1541
 #define ITM_LOADV                     1542
 #define ITM_POPLR                     1543
@@ -1666,11 +1666,11 @@
 #define ITM_TICKS                     1610
 #define ITM_TIME                      1611
 #define ITM_TIMER                     1612
-#define ITM_TN                        1613
+#define ITM_Tn                        1613
 #define ITM_TONE                      1614
 #define ITM_Tex                       1615
 #define ITM_ULP                       1616
-#define ITM_UN                        1617
+#define ITM_Un                        1617
 #define ITM_UNITV                     1618
 #define ITM_UNSIGN                    1619
 #define ITM_VARMNU                    1620

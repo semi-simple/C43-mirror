@@ -715,7 +715,12 @@
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
-#define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
+#ifdef DMCP_BUILD
+#define SCREEN_REFRESH_PERIOD                    160 // 500 // in milliseconds //JM timeout for lcd refresh in ms 125
+#else
+#define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
+#endif
+
 #define RAM_SIZE                               2048 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))

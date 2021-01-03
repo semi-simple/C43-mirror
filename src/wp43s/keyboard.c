@@ -130,7 +130,7 @@
         shiftF = false;
         shiftG = true;
       }
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
@@ -153,7 +153,7 @@
 
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
@@ -188,7 +188,7 @@
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
-    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
     }
   }
@@ -199,7 +199,7 @@
    ***********************************************/
   void executeFunction(const char *data, int16_t item_) {
     int16_t item = ITM_NOP;
-    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
   
       if(data[0] == 0) item = item_;
       else {
@@ -394,7 +394,7 @@
     else if(tamMode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -721,7 +721,7 @@
       case ITM_CC:
       case ITM_ENTER:
       case ITM_dotD:
-        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
+        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
           keyActionProcessed = true;
         }
         break;
@@ -957,7 +957,6 @@
                 break;
 
             case CM_FLAG_BROWSER:
-            case CM_FLAG_BROWSER_OLD:           //JM
             case CM_FONT_BROWSER:
             case CM_ERROR_MESSAGE:
             case CM_BUG_ON_SCREEN:
@@ -1186,7 +1185,6 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_FONT_BROWSER:
       case CM_ERROR_MESSAGE:
       case CM_BUG_ON_SCREEN:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
         break;
@@ -1306,7 +1304,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
       calcMode = previousCalcMode;
@@ -1383,7 +1380,6 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
         break;
@@ -1464,7 +1460,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       calcMode = previousCalcMode;
       break;
@@ -1580,10 +1575,6 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       currentFlgScr--;                          //JM removed the 3-x part
      break;
 
-    case CM_FLAG_BROWSER_OLD:                   //JMvv
-      currentFlgScr--;
-      break;                                    //JM^^
-
     case CM_FONT_BROWSER:
       if(currentFntScr >= 2) {
         currentFntScr--;
@@ -1693,10 +1684,6 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       currentFlgScr++;                          //JM removed the 3-x part
       break;
 
-    case CM_FLAG_BROWSER_OLD:                   //JMvv
-      currentFlgScr++;
-      break;                                    //JM^^
-
     case CM_FONT_BROWSER:
       if(currentFntScr < numScreensNumericFont + numScreensStandardFont) {
         currentFntScr++;
@@ -1754,7 +1741,6 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
 
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_FONT_BROWSER:
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM

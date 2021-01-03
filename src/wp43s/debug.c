@@ -330,7 +330,6 @@ void debugNIM(void) {
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
     if(cm == CM_CONFIRMATION)          return "confirm";
-    if(cm == CM_FLAG_BROWSER_OLD)      return "flg.old";    //JM
     if(cm == CM_GRAPH)                 return "graph  ";    //JM
     if(cm == CM_LISTXY)                return "listxy ";    //JM
 

@@ -2297,13 +2297,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       refreshStatusBar();
       break;
 
-    case CM_FLAG_BROWSER_OLD:        //JM vv
-      last_CM = calcMode;
-      clearScreen();
-      flagBrowser_old(NOPARAM);
-      refreshStatusBar();
-      break;                
-
     case CM_FONT_BROWSER:
       last_CM = calcMode;
       clearScreen();

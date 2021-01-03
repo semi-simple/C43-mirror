@@ -559,8 +559,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
 const item_t indexOfItems[] = {
 
-//            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1750,36 +1748,36 @@ const item_t indexOfItems[] = {
 
 
 // Reserved variables
-/* 1165 */  { addItemToBuffer,             REGISTER_I,                  "I",                                           "I",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1166 */  { addItemToBuffer,             REGISTER_J,                  "J",                                           "J",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1167 */  { addItemToBuffer,             REGISTER_K,                  "K",                                           "K",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1168 */  { addItemToBuffer,             REGISTER_L,                  "L",                                           "L",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1169 */  { itemToBeCoded,               NOPARAM,                     "A",                                           "A",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1170 */  { itemToBeCoded,               NOPARAM,                     "ACC",                                         "ACC",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1171 */  { itemToBeCoded,               NOPARAM,                     "B",                                           "B",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1172 */  { itemToBeCoded,               NOPARAM,                     "C",                                           "C",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1173 */  { itemToBeCoded,               NOPARAM,                     "D",                                           "D",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1174 */  { itemToBeCoded,               NOPARAM,                     "FV",                                          "FV",                                          0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1175 */  { itemToBeCoded,               NOPARAM,                     "i%/a",                                        "i%/a",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1176 */  { itemToBeCoded,               NOPARAM,                     "Mat_A",                                       "Mat A",                                       0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1177 */  { itemToBeCoded,               NOPARAM,                     "Mat_B",                                       "Mat B",                                       0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1178 */  { itemToBeCoded,               NOPARAM,                     "NPER",                                        "n" STD_SUB_P STD_SUB_E STD_SUB_R,             0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1179 */  { itemToBeCoded,               NOPARAM,                     "PER/a",                                       "per/a",                                       0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1180 */  { itemToBeCoded,               NOPARAM,                     "PMT",                                         "PMT",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1181 */  { itemToBeCoded,               NOPARAM,                     "PV",                                          "PV",                                          0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1182 */  { itemToBeCoded,               NOPARAM,                     "REGS",                                        "REGS",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1183 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW STD_UP_ARROW "Lim",               STD_UP_ARROW STD_UP_ARROW "Lim",               0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1184 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW STD_DOWN_ARROW "Lim",           STD_DOWN_ARROW STD_DOWN_ARROW "Lim",           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
-/* 1185 */  { itemToBeCoded,               NOPARAM,                     "1185",                                        "1185",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1186 */  { itemToBeCoded,               NOPARAM,                     "1186",                                        "1186",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1187 */  { itemToBeCoded,               NOPARAM,                     "1187",                                        "1187",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1188 */  { itemToBeCoded,               NOPARAM,                     "1188",                                        "1188",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1189 */  { itemToBeCoded,               NOPARAM,                     "1189",                                        "1189",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1190 */  { itemToBeCoded,               NOPARAM,                     "1190",                                        "1190",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1191 */  { itemToBeCoded,               NOPARAM,                     "1191",                                        "1191",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1192 */  { itemToBeCoded,               NOPARAM,                     "1192",                                        "1192",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1193 */  { itemToBeCoded,               NOPARAM,                     "1193",                                        "1193",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1194 */  { itemToBeCoded,               NOPARAM,                     "1194",                                        "1194",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1165 */  { addItemToBuffer,             REGISTER_X,                  "X",                                           "X",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// Do
+/* 1166 */  { addItemToBuffer,             REGISTER_Y,                  "Y",                                           "Y",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// not
+/* 1167 */  { addItemToBuffer,             REGISTER_Z,                  "Z",                                           "Z",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// change
+/* 1168 */  { addItemToBuffer,             REGISTER_T,                  "T",                                           "T",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// the
+/* 1169 */  { itemToBeCoded,               REGISTER_A,                  "A",                                           "A",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// order
+/* 1170 */  { itemToBeCoded,               REGISTER_B,                  "B",                                           "B",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// of
+/* 1171 */  { itemToBeCoded,               REGISTER_C,                  "C",                                           "C",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// this
+/* 1172 */  { itemToBeCoded,               REGISTER_D,                  "D",                                           "D",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// 3
+/* 1173 */  { itemToBeCoded,               REGISTER_L,                  "L",                                           "L",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// 0
+/* 1174 */  { itemToBeCoded,               REGISTER_I,                  "I",                                           "I",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// reserved
+/* 1175 */  { itemToBeCoded,               REGISTER_J,                  "J",                                           "J",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// variables
+/* 1176 */  { itemToBeCoded,               REGISTER_K,                  "K",                                           "K",                                           0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},// !
+/* 1177 */  { itemToBeCoded,               NOPARAM,                     "ADM",                                         "ADM",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1178 */  { itemToBeCoded,               NOPARAM,                     "DENMAX",                                      "DENMAX",                                      0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1179 */  { itemToBeCoded,               NOPARAM,                     "ISM",                                         "ISM",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1180 */  { itemToBeCoded,               NOPARAM,                     "REALDF",                                      "REALDF",                                      0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1181 */  { itemToBeCoded,               NOPARAM,                     "#DEC",                                        "#DEC",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1182 */  { itemToBeCoded,               NOPARAM,                     "ACC",                                         "ACC",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1183 */  { itemToBeCoded,               NOPARAM,                     STD_UP_ARROW "Lim",                            STD_UP_ARROW "Lim",                            0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1184 */  { itemToBeCoded,               NOPARAM,                     STD_DOWN_ARROW "Lim",                          STD_DOWN_ARROW "Lim",                          0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1185 */  { itemToBeCoded,               NOPARAM,                     "FV",                                          "FV",                                          0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1186 */  { itemToBeCoded,               NOPARAM,                     "i%/a",                                        "i%/a",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1187 */  { itemToBeCoded,               NOPARAM,                     "NPER",                                        "n" STD_SUB_P STD_SUB_E STD_SUB_R,             0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1188 */  { itemToBeCoded,               NOPARAM,                     "PER/a",                                       "per/a",                                       0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1189 */  { itemToBeCoded,               NOPARAM,                     "PMT",                                         "PMT",                                         0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1190 */  { itemToBeCoded,               NOPARAM,                     "PV",                                          "PV",                                          0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1191 */  { itemToBeCoded,               NOPARAM,                     "GRAMOD",                                      "GRAMOD",                                      0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1192 */  { itemToBeCoded,               NOPARAM,                     "Mat_A",                                       "MatA",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1193 */  { itemToBeCoded,               NOPARAM,                     "Mat_B",                                       "MatB",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
+/* 1194 */  { itemToBeCoded,               NOPARAM,                     "Mat_X",                                       "MatX",                                        0,       0,       CAT_RVAR, SLS_UNCHANGED, US_UNCHANGED},
 /* 1195 */  { itemToBeCoded,               NOPARAM,                     "1195",                                        "1195",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1196 */  { itemToBeCoded,               NOPARAM,                     "1196",                                        "1196",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 
@@ -2104,7 +2102,7 @@ const item_t indexOfItems[] = {
 /* 1505 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1506 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1507 */  { fnMant,                      NOPARAM,                     "MANT",                                        "MANT",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1508 */  { itemToBeCoded,               NOPARAM,                     "Mat_X",                                       "Mat X",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1508 */  { itemToBeCoded,               NOPARAM,                     "1508",                                        "1508",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1509 */  { fnFreeMemory,                NOPARAM,                     "MEM?",                                        "MEM?",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1510 */  { itemToBeCoded,               NOPARAM,                     "MENU",                                        "MENU",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1511 */  { itemToBeCoded,               NOPARAM,                     "MONTH",                                       "MONTH",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -2196,7 +2194,7 @@ const item_t indexOfItems[] = {
 /* 1597 */  { fnWeightedStandardError,     NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1598 */  { itemToBeCoded,               NOPARAM,                     "SOLVE",                                       "SOLVE",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1599 */  { fnGetStackSize,              NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1600 */  { flagBrowser,                       5,                     "STATUS",                                      "STATUS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1600 */  { flagBrowser,                 5,                           "STATUS",                                      "STATUS",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1601 */  { fnStoreConfig,               NOPARAM,                     "STOCFG",                                      "Config",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1602 */  { fnStoreElement,              NOPARAM,                     "STOEL",                                       "STOEL",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1603 */  { fnStoreIJ,                   NOPARAM,                     "STOIJ",                                       "STOIJ",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

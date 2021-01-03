@@ -487,7 +487,7 @@ void fnClAll(uint16_t confirmation) {
     fnClPAll(CONFIRMED);  // Clears all the programs
     fnClSigma(CONFIRMED); // Clears and releases the memory of all statistical sums
     if(savedStatisticalSumsPointer != NULL) {
-      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
 
     // Clear local registers
@@ -516,7 +516,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
+  uint32_t numberOfBytesForTheTestPrograms = 5700; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -8444,20 +8444,34 @@ void fnReset(uint16_t confirmation) {
     //kbd_usr[19].gShifted    = ITM_SXY;
     //kbd_usr[20].gShifted    = ITM_LYtoM;
 
+    // initialize 9 real34 reserved variables: ACC, ↑Lim, ↓Lim, FV, i%/a, NPER, PER/a, PMT, and PV
+    for(int i=0; i<9; i++) {
+      real34Zero(allocWp43s(REAL34_SIZE));
+    }
+
+    // initialize 1 long integer reserved variables: GRAMOD
+    #ifdef OS64BIT
+      memPtr = allocWp43s(3);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 2;
+    #else // !OS64BIT
+      memPtr = allocWp43s(2);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 1;
+    #endif // OS64BIT
+
     // initialize the global registers
     memset(globalRegister, 0, sizeof(globalRegister));
-    for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
+    for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
-      memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
+      memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
     }
 
-    // initialize the 9 saved stack registers + 1 temporary register
+    // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
     memset(savedStackRegister, 0, sizeof(savedStackRegister));
-    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_SAVED_STACK_REGISTER + 1; regist++) {
+    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
-      memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
+      memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
     }
@@ -8467,7 +8481,7 @@ void fnReset(uint16_t confirmation) {
 
     // allocate space for the local register list
     allSubroutineLevels.numberOfSubroutineLevels = 1;
-    currentSubroutineLevelData = allocWp43s(12);
+    currentSubroutineLevelData = allocWp43s(3);
     allSubroutineLevels.ptrToSubroutineLevel0Data = TO_WP43SMEMPTR(currentSubroutineLevelData);
     currentReturnProgramNumber = 0;
     currentReturnLocalStep = 0;
@@ -8482,6 +8496,26 @@ void fnReset(uint16_t confirmation) {
     // allocate space for the named variable list
     numberOfNamedVariables = 0;
     allNamedVariables = NULL;
+
+
+    allocateNamedVariable("Mat_A", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_B", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 1);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_X", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 2);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
@@ -8613,7 +8647,7 @@ void fnReset(uint16_t confirmation) {
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 
     // The following lines are test data
-    addTestPrograms();
+    //addTestPrograms();
     //fnSetFlag(  3);
     //fnSetFlag( 11);
     //fnSetFlag( 33);

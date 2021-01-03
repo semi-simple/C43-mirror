@@ -24,7 +24,6 @@
   #include "defines.h"
 
   #pragma GCC diagnostic ignored "-Wunused-parameter"
-  #pragma GCC diagnostic ignored "-Wunused-result"
 
 
   #include <stdlib.h>
@@ -238,23 +237,24 @@
   #endif //PC_BUILD
 
   // Variables stored in FLASH
-  extern const item_t           indexOfItems[];
-  extern const char            *errorMessages[NUMBER_OF_ERROR_CODES];
-  extern const calcKey_t        kbd_std[37];
-  extern const font_t           standardFont, numericFont;
-  extern const font_t          *fontForShortInteger;
-  extern const font_t          *cursorFont;
-  extern const char             digits[17];
-  extern void                   (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
-  extern void                   (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
-  extern void                   (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
-  extern void                   (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
-  extern void                   (*confirmedFunction)(uint16_t);
-  extern const softmenu_t       softmenu[];
-  extern real51_t        const *gammaLanczosCoefficients;
-  extern real39_t        const *angle180;
-  extern real39_t        const *angle90;
-  extern real39_t        const *angle45;
+  extern const item_t                    indexOfItems[];
+  extern const reservedVariableHeader_t  allReservedVariables[];
+  extern const char                     *errorMessages[NUMBER_OF_ERROR_CODES];
+  extern const calcKey_t                 kbd_std[37];
+  extern const font_t                    standardFont, numericFont;
+  extern const font_t                   *fontForShortInteger;
+  extern const font_t                   *cursorFont;
+  extern const char                      digits[17];
+  extern void                            (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+  extern void                            (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+  extern void                            (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+  extern void                            (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
+  extern void                            (*confirmedFunction)(uint16_t);
+  extern const softmenu_t                softmenu[];
+  extern real51_t                 const *gammaLanczosCoefficients;
+  extern real39_t                 const *angle180;
+  extern real39_t                 const *angle90;
+  extern real39_t                 const *angle45;
 
   // Variables stored in RAM
   extern bool_t                 funcOK;
@@ -409,7 +409,7 @@
   extern uint64_t               savedSystemFlags;
 
   extern size_t                 gmpMemInBytes;
-  extern size_t                 wp43sMemInBytes;
+  extern size_t                 wp43sMemInBlocks;
 
   #ifdef DMCP_BUILD
     extern bool_t              backToDMCP;

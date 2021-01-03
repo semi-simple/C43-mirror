@@ -1767,15 +1767,15 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
       if(stringWidth(tmpString + 300, &standardFont, true, true) + stringWidth(tmpString + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 300;
         while(tmpString[last]) last++;
-        xcopy(tmpString + last, tmpString + 600,  strlen(tmpString + 600) + 1);
+        xcopy(tmpString + last, tmpString + 600, strlen(tmpString + 600) + 1);
         tmpString[600] = 0;
       }
 
       if(stringWidth(tmpString, &standardFont, true, true) + stringWidth(tmpString + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 0;
         while(tmpString[last]) last++;
-        xcopy(tmpString + last, tmpString +  300, strlen(tmpString + 300) + 1);
-        xcopy(tmpString + 300, tmpString + 600, strlen(tmpString + 600) + 1);
+        xcopy(tmpString + last, tmpString + 300, strlen(tmpString + 300) + 1);
+        xcopy(tmpString + 300,  tmpString + 600, strlen(tmpString + 600) + 1);
         tmpString[600] = 0;
       }
       break;

@@ -296,10 +296,7 @@
 #define RESERVED_VARIABLE_PERONA                2024
 #define RESERVED_VARIABLE_PMT                   2025
 #define RESERVED_VARIABLE_PV                    2026
-#define RESERVED_VARIABLE_MAT_A                 2027
-#define RESERVED_VARIABLE_MAT_B                 2028
-#define RESERVED_VARIABLE_MAT_X                 2029
-#define LAST_RESERVED_VARIABLE                  2029
+#define LAST_RESERVED_VARIABLE                  2026
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
@@ -395,10 +392,10 @@
 #define DF_ENG                                     3
 
 // Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0  |
-#define AM_RADIAN                                  1 // radian must be 1  | This is because of the tables
-#define AM_MULTPI                                  2 // multpi must be 2  | angle45, angle90, and angle180
-#define AM_GRAD                                    3 // grad   must be 3  |
+#define AM_DEGREE                                  0 // degree must be 0  | This is because of the tables
+#define AM_RADIAN                                  1 // radian must be 1  | angle45, angle90, and angle180
+#define AM_MULTPI                                  2 // multpi must be 2  | for angle reduction before
+#define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
 #define AM_DMS                                     4
 #define AM_NONE                                    5
 
@@ -588,7 +585,7 @@
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
-#define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
+#define RAM_SIZE                                1024 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
@@ -645,7 +642,7 @@
 #define flipSystemFlag(sf)                   { systemFlags ^=  ((uint64_t)1 << (sf & 0x3fff)); systemFlagAction(sf, 2); }
 #define shortIntegerIsZero(op)               (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
 #define getStackTop()                        (getSystemFlag(FLAG_SSIZE8) ? REGISTER_D : REGISTER_T)
-#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
+#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), getRegisterFullSize(regist))
 #define storeToDtConfigDescriptor(config)    (configToStore->config = config)
 #define recallFromDtConfigDescriptor(config) (config = configToRecall->config)
 #define getRecalledSystemFlag(sf)            ((configToRecall->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)

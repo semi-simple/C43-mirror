@@ -33,24 +33,21 @@ const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same
 /*  9 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'I',  0,   0,   0,   0,   0,   0} },
 /* 10 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'J',  0,   0,   0,   0,   0,   0} },
 /* 11 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0,             .tag = 0,           .readOnly = 0, .notUsed = 0}, .reservedVariableName = {1, 'K',  0,   0,   0,   0,   0,   0} },
-/* 12 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'G', 'R', 'A', 'M', 'O', 'D',  0} },
-/* 13 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {3, 'A', 'D', 'M',  0,   0,   0,   0} },
-/* 14 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {6, 'D', 'E', 'N', 'M', 'A', 'X',  0} },
-/* 15 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'I', 'S', 'M',  0,   0,   0,   0} },
-/* 16 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'R', 'E', 'A', 'L', 'D', 'F',  0} },
-/* 17 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, '#', 'D', 'E', 'C',  0,   0,   0} },
-/* 18 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'A', 'C', 'C',  0,   0,   0,   0} },
-/* 19 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6,  33, 145, 'L', 'i', 'm',  0,   0} },
-/* 20 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6,  33, 147, 'L', 'i', 'm',  0,   0} },
-/* 21 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'F', 'V',  0,   0,   0,   0,   0} },
-/* 22 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'i', '%', '/', 'a',  0,   0,   0} },
-/* 23 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'N', 'P', 'E', 'R',  0,   0,   0} },
-/* 24 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'P', 'E', 'R', '/', 'a',  0,   0} },
-/* 25 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'P', 'M', 'T',  0,   0,   0,   0} },
-/* 26 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'P', 'V',  0,   0,   0,   0,   0} },
-/* 27 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'A',  0,   0} },
-/* 28 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'B',  0,   0} },
-/* 29 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = 0, .tag = 0, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'M', 'a', 't', '_', 'X',  0,   0} },
+/* 12 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {3, 'A', 'D', 'M',  0,   0,   0,   0} },
+/* 13 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {6, 'D', 'E', 'N', 'M', 'A', 'X',  0} },
+/* 14 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {3, 'I', 'S', 'M',  0,   0,   0,   0} },
+/* 15 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {6, 'R', 'E', 'A', 'L', 'D', 'F',  0} },
+/* 16 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {4, '#', 'D', 'E', 'C',  0,   0,   0} },
+/* 17 */  { .header = {.pointerToRegisterData = 0,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'A', 'C', 'C',  0,   0,   0,   0} },
+/* 18 */  { .header = {.pointerToRegisterData = 4,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 145, 'L', 'i', 'm',  0,   0} },
+/* 19 */  { .header = {.pointerToRegisterData = 8,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 147, 'L', 'i', 'm',  0,   0} },
+/* 20 */  { .header = {.pointerToRegisterData = 12,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'F', 'V',  0,   0,   0,   0,   0} },
+/* 21 */  { .header = {.pointerToRegisterData = 16,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'i', '%', '/', 'a',  0,   0,   0} },
+/* 22 */  { .header = {.pointerToRegisterData = 20,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'N', 'P', 'E', 'R',  0,   0,   0} },
+/* 23 */  { .header = {.pointerToRegisterData = 24,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'P', 'E', 'R', '/', 'a',  0,   0} },
+/* 24 */  { .header = {.pointerToRegisterData = 28,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'P', 'M', 'T',  0,   0,   0,   0} },
+/* 25 */  { .header = {.pointerToRegisterData = 32,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'P', 'V',  0,   0,   0,   0,   0} },
+/* 26 */  { .header = {.pointerToRegisterData = 36,         .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'G', 'R', 'A', 'M', 'O', 'D',  0} },
 };
 
 
@@ -115,6 +112,9 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
     if(regist < 12) { // Lettered register
       return globalRegister[regist + REGISTER_X].dataType;
     }
+    else {
+      return allReservedVariables[regist].header.dataType;
+    }
   }
 
   else {
@@ -154,7 +154,7 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
     }
     #ifdef PC_BUILD
       else {
-        moreInfoOnError("In function getRegisterDataPointer:", "no local registers defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+        moreInfoOnError("In function getRegisterDataPointer:", "no local registers defined!", "To do so, use LocR", NULL);
       }
     #endif // PC_BUILD
   }
@@ -184,6 +184,7 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
     regist -= FIRST_RESERVED_VARIABLE;
+    return TO_PCMEMPTR(allReservedVariables[regist].header.pointerToRegisterData);
   }
 
   else {
@@ -253,6 +254,7 @@ uint32_t getRegisterTag(calcRegister_t regist) {
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
     regist -= FIRST_RESERVED_VARIABLE;
+    return allReservedVariables[regist].header.tag;
   }
 
   else {
@@ -327,6 +329,10 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
     regist -= FIRST_RESERVED_VARIABLE;
+    if(allReservedVariables[regist].header.pointerToRegisterData != WP43S_NULL && allReservedVariables[regist].header.readOnly == 0) {
+      allNamedVariables[regist].header.dataType = dataType;
+      allNamedVariables[regist].header.tag = tag;
+    }
   }
 
   else {
@@ -398,7 +404,6 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
   }
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
-    regist -= FIRST_RESERVED_VARIABLE;
   }
 
   else {
@@ -467,7 +472,6 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
   }
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
-    regist -= FIRST_RESERVED_VARIABLE;
   }
 
   else {
@@ -498,7 +502,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
   uint16_t r;
   if(currentLocalFlags == NULL) {
     // 1st allocation of local registers in this level of subroutine
-    currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 12, 16 + 4*numberOfRegistersToAllocate);
+    currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 3, 4 + numberOfRegistersToAllocate);
     currentLocalFlags = currentSubroutineLevelData + 3;
     currentLocalFlags->localFlags = 0;
     currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
@@ -508,7 +512,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
     // All the new local registers are real34s initialized to 0.0
     for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
       setRegisterDataType(r, dtReal34, AM_NONE);
-      setRegisterDataPointer(r, allocWp43s(TO_BYTES(REAL34_SIZE)));
+      setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
       real34Zero(REGISTER_REAL34_DATA(r));
     }
   }
@@ -516,7 +520,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
     // The number of allocated local registers changes
     if(numberOfRegistersToAllocate > currentNumberOfLocalRegisters) {
       uint8_t oldNumberOfLocalRegisters = currentNumberOfLocalRegisters;
-      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 16 + 4*currentNumberOfLocalRegisters, 16 + 4*numberOfRegistersToAllocate);
+      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate);
       currentLocalFlags = currentSubroutineLevelData + 3;
       currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
       currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
@@ -524,7 +528,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
         setRegisterDataType(r, dtReal34, AM_NONE);
-        setRegisterDataPointer(r, allocWp43s(TO_BYTES(REAL34_SIZE)));
+        setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
         real34Zero(REGISTER_REAL34_DATA(r));
       }
     }
@@ -534,7 +538,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
         freeRegisterData(FIRST_LOCAL_REGISTER + r);
       }
 
-      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 16 + 4*currentNumberOfLocalRegisters, 16 + 4*numberOfRegistersToAllocate);
+      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate);
       currentLocalFlags = currentSubroutineLevelData + 3;
       currentLocalRegisters = (numberOfRegistersToAllocate == 0 ? NULL : (registerHeader_t *)(currentSubroutineLevelData + 4));
       currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
@@ -560,7 +564,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
  * \param[in] variableName const char* Register name
  * \return void
  ***********************************************/
-void allocateNamedVariable(const char *variableName) {
+void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16_t fullDataSizeInBlocks) {
   calcRegister_t regist;
   uint8_t len;
 
@@ -573,7 +577,7 @@ void allocateNamedVariable(const char *variableName) {
   }
 
   if(numberOfNamedVariables == 0) { // First named variable
-    allNamedVariables = allocWp43s(sizeof(namedVariableHeader_t));
+    allNamedVariables = allocWp43s(TO_BLOCKS(sizeof(namedVariableHeader_t)));
     numberOfNamedVariables = 1;
 
     regist = 0;
@@ -588,7 +592,7 @@ void allocateNamedVariable(const char *variableName) {
       return;
     }
 
-    allNamedVariables = reallocWp43s(allNamedVariables, sizeof(namedVariableHeader_t) * numberOfNamedVariables, sizeof(namedVariableHeader_t) * (numberOfNamedVariables + 1));
+    allNamedVariables = reallocWp43s(allNamedVariables, TO_BLOCKS(sizeof(namedVariableHeader_t) * numberOfNamedVariables), TO_BLOCKS(sizeof(namedVariableHeader_t) * (numberOfNamedVariables + 1)));
     numberOfNamedVariables++;
   }
 
@@ -597,12 +601,8 @@ void allocateNamedVariable(const char *variableName) {
   xcopy(allNamedVariables[regist].variableName + 1, variableName, len);
 
   regist += FIRST_NAMED_VARIABLE;
-
-  // The new named variable is a real34 initialized to 0.0
-  setRegisterDataType(regist, dtReal34, AM_NONE);
-
-  setRegisterDataPointer(regist, allocWp43s(TO_BYTES(REAL34_SIZE)));
-  real34Zero(REGISTER_REAL34_DATA(regist));
+  setRegisterDataType(regist, dataType, AM_NONE);
+  setRegisterDataPointer(regist, allocWp43s(fullDataSizeInBlocks));
 }
 
 
@@ -662,6 +662,7 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
     regist -= FIRST_RESERVED_VARIABLE;
+    getRegisterDataPointer(regist)->dataMaxLength = maxDataLen;
   }
 
   else {
@@ -709,11 +710,12 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
 
   else if(regist <= LAST_NAMED_VARIABLE) { // Named variable
     if(numberOfNamedVariables != 0) {
-      if(regist - FIRST_NAMED_VARIABLE < numberOfNamedVariables) {
-        return ((dataBlock_t *)TO_PCMEMPTR(allNamedVariables[regist - FIRST_NAMED_VARIABLE].header.pointerToRegisterData))->dataMaxLength;
+      regist -= FIRST_NAMED_VARIABLE;
+      if(regist < numberOfNamedVariables) {
+        return ((dataBlock_t *)TO_PCMEMPTR(allNamedVariables[regist].header.pointerToRegisterData))->dataMaxLength;
       }
       else {
-        sprintf(errorMessage, "In function getRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist - FIRST_NAMED_VARIABLE, numberOfNamedVariables - 1);
+        sprintf(errorMessage, "In function getRegisterMaxDataLength: named variable %" PRId16 " is not defined! Must be from 0 to %" PRIu16, regist, numberOfNamedVariables - 1);
         displayBugScreen(errorMessage);
       }
     }
@@ -726,6 +728,7 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
 
   else if(regist <= LAST_RESERVED_VARIABLE) { // System named variable
     regist -= FIRST_RESERVED_VARIABLE;
+    return ((dataBlock_t *)TO_PCMEMPTR(allReservedVariables[regist].header.pointerToRegisterData))->dataMaxLength;
   }
 
   else {
@@ -750,16 +753,16 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
  ***********************************************/
 uint16_t getRegisterFullSize(calcRegister_t regist) {
   switch(getRegisterDataType(regist)) {
-    case dtLongInteger:  return getRegisterDataPointer(regist)->dataMaxLength + 1;
+    case dtLongInteger:     return getRegisterDataPointer(regist)->dataMaxLength + 1;
     //case dtTime:
     //case dtDate:
-    case dtString:       return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    //case dtReal16Matrix:
-    //case dtComplex16Matrix:
-    case dtShortInteger: return SHORT_INTEGER_SIZE;
-    case dtReal34:       return REAL34_SIZE;
-    case dtComplex34:    return COMPLEX34_SIZE;
-    case dtConfig:       return CONFIG_SIZE;
+    case dtString:          return getRegisterDataPointer(regist)->dataMaxLength + 1;
+    case dtReal34Matrix:    return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * REAL34_SIZE + 1;
+    case dtComplex34Matrix: return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * COMPLEX34_SIZE + 1;
+    case dtShortInteger:    return SHORT_INTEGER_SIZE;
+    case dtReal34:          return REAL34_SIZE;
+    case dtComplex34:       return COMPLEX34_SIZE;
+    case dtConfig:          return CONFIG_SIZE;
 
     default:
       sprintf(errorMessage, "In function getRegisterFullSize: data type %s is unknown!", getDataTypeName(getRegisterDataType(regist), false, false));
@@ -955,16 +958,16 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
     uint32_t sizeInBlocks;
 
     switch(getRegisterDataType(sourceRegister)) {
-      case dtLongInteger:  sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
+      case dtLongInteger:     sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       //case dtTime:
       //case dtDate:
-      case dtString:       sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
+      case dtString:          sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       //case dtReal16Matrix:
       //case dtComplex16Matrix:
-      case dtShortInteger: sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
-      case dtReal34:       sizeInBlocks = REAL34_SIZE;                                           break;
-      case dtComplex34:    sizeInBlocks = COMPLEX34_SIZE;                                        break;
-      case dtConfig:       sizeInBlocks = CONFIG_SIZE;                                           break;
+      case dtShortInteger:    sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
+      case dtReal34:          sizeInBlocks = REAL34_SIZE;                                           break;
+      case dtComplex34:       sizeInBlocks = COMPLEX34_SIZE;                                        break;
+      case dtConfig:          sizeInBlocks = CONFIG_SIZE;                                           break;
 
       default:
         sprintf(errorMessage, "In function copySourceRegisterToDestRegister: data type %s is unknown!", getDataTypeName(getRegisterDataType(sourceRegister), false, false));
@@ -1384,7 +1387,7 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
 
   if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtLongInteger) && getRegisterMaxDataLength(regist) != dataSizeWithoutDataLenBlocks)) {
     freeRegisterData(regist);
-    setRegisterDataPointer(regist, allocWp43s(TO_BYTES(dataSizeWithDataLenBlocks)));
+    setRegisterDataPointer(regist, allocWp43s(dataSizeWithDataLenBlocks));
     setRegisterDataType(regist, dataType, tag);
     setRegisterMaxDataLength(regist, dataSizeWithDataLenBlocks - (dataType == dtString || dataType == dtLongInteger ? 1 : 0));
   }

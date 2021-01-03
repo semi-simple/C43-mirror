@@ -191,7 +191,7 @@ uint64_t               systemFlags;
 uint64_t               savedSystemFlags;
 
 size_t                 gmpMemInBytes;
-size_t                 wp43sMemInBytes;
+size_t                 wp43sMemInBlocks;
 
 #ifdef DMCP_BUILD
   bool_t               backToDMCP;
@@ -224,7 +224,7 @@ size_t                 wp43sMemInBytes;
       }
     #endif // __APPLE__
 
-    wp43sMemInBytes = 0;
+    wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
@@ -275,7 +275,7 @@ ramDump();
     bool_t wp43sKbdLayout;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
 
-    wp43sMemInBytes = 0;
+    wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
@@ -645,7 +645,7 @@ ramDump();
       }
     #endif // __APPLE__
 
-    wp43sMemInBytes = 0;
+    wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 

@@ -28,7 +28,7 @@ void         setRegisterDataPointer          (calcRegister_t regist, void *memPt
 void         setRegisterTag                  (calcRegister_t regist, uint32_t tag);
 void         setRegisterMaxDataLength        (calcRegister_t regist, uint16_t maxDataLen);
 void         allocateLocalRegisters          (uint16_t n);
-void         allocateNamedVariable           (const char *variableName);
+void         allocateNamedVariable           (const char *variableName, dataType_t dataType, uint16_t fullDataSizeInBlocks);
 uint16_t     getRegisterFullSize             (calcRegister_t regist);
 void         clearRegister                   (calcRegister_t regist);
 void         fnClearRegisters                (uint16_t confirmation);

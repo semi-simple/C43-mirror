@@ -152,7 +152,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
     save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
     save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-    save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+    save(&wp43sMemInBlocks,                   sizeof(wp43sMemInBlocks),                   BACKUP);
     save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
     save(&catalog,                            sizeof(catalog),                            BACKUP);
     save(&lastCatalogPosition,                sizeof(lastCatalogPosition),                BACKUP);
@@ -307,7 +307,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
       restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
       restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-      restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+      restore(&wp43sMemInBlocks,                   sizeof(wp43sMemInBlocks),                   BACKUP);
       restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
       restore(&catalog,                            sizeof(catalog),                            BACKUP);
       restore(&lastCatalogPosition,                sizeof(lastCatalogPosition),                BACKUP);

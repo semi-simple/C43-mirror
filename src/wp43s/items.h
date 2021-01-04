@@ -399,20 +399,20 @@
 #define ITM_PAtoATMb                   369
 #define ITM_HECTAREtoM2                370
 #define ITM_M2toHECTARE                371
-#define ITM_0372                       372
-#define ITM_0373                       373
-#define ITM_0374                       374
-#define ITM_0375                       375
-#define ITM_0376                       376
-#define ITM_0377                       377
-#define ITM_0378                       378
-#define ITM_0379                       379
-#define ITM_0380                       380
-#define ITM_0381                       381
-#define ITM_0382                       382
-#define ITM_0383                       383
-#define ITM_0384                       384
-#define ITM_0385                       385
+#define ITM_MUtoM2                     372
+#define ITM_M2toMU                     373
+#define ITM_LItoM                      374
+#define ITM_MtoLI                      375
+#define ITM_CHItoM                     376
+#define ITM_MtoCHI                     377
+#define ITM_YINtoM                     378
+#define ITM_MtoYIN                     379
+#define ITM_CUNtoM                     380
+#define ITM_MtoCUN                     381
+#define ITM_ZHAtoM                     382
+#define ITM_MtoZHA                     383
+#define ITM_FENtoM                     384
+#define ITM_MtoFEN                     385
 
 
 // Flag, bit, rotation, and logical OPs

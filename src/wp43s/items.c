@@ -375,6 +375,13 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnCvtBarrelM3              (uint16_t unusedButMandatoryParameter) {}
   void fnCvtHectareM2             (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDegToDms              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMuM2                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLiM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtChiM                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtYinM                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCunM                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtZhangM                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFenM                  (uint16_t unusedButMandatoryParameter) {}
   void addItemToBuffer            (uint16_t unusedButMandatoryParameter) {}
   void fnOff                      (uint16_t unusedButMandatoryParameter) {}
   void fnAim                      (uint16_t unusedButMandatoryParameter) {}
@@ -851,20 +858,44 @@ const item_t indexOfItems[] = {
 /*  369 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    STD_SPACE_HAIR,                                0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
 /*  370 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  371 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  372 */  { itemToBeCoded,               NOPARAM,                     "0372",                                        "0372",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  373 */  { itemToBeCoded,               NOPARAM,                     "0373",                                        "0373",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  374 */  { itemToBeCoded,               NOPARAM,                     "0374",                                        "0374",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  375 */  { itemToBeCoded,               NOPARAM,                     "0375",                                        "0375",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  376 */  { itemToBeCoded,               NOPARAM,                     "0376",                                        "0376",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  377 */  { itemToBeCoded,               NOPARAM,                     "0377",                                        "0377",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  378 */  { itemToBeCoded,               NOPARAM,                     "0378",                                        "0378",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  379 */  { itemToBeCoded,               NOPARAM,                     "0379",                                        "0379",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  380 */  { itemToBeCoded,               NOPARAM,                     "0380",                                        "0380",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  381 */  { itemToBeCoded,               NOPARAM,                     "0381",                                        "0381",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  382 */  { itemToBeCoded,               NOPARAM,                     "0382",                                        "0382",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  383 */  { itemToBeCoded,               NOPARAM,                     "0383",                                        "0383",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  384 */  { itemToBeCoded,               NOPARAM,                     "0384",                                        "0384",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/*  385 */  { itemToBeCoded,               NOPARAM,                     "0385",                                        "0385",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/*  372 */  { fnCvtMuM2,                   divide,                      "m" STD_u_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_SUP_2,
+                                                                                                                       "m" STD_u_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_SUP_2,
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  373 */  { fnCvtMuM2,                   multiply,                    "m" STD_SUP_2 STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_u_BREVE,
+                                                                                                                       "m" STD_SUP_2 STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_u_BREVE,
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  374 */  { fnCvtLiM,                    divide,                      "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "l" STD_i_BREVE,
+                                                                                                                       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "l" STD_i_BREVE,
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  375 */  { fnCvtLiM,                    multiply,                    "l" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                       "l" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  376 */  { fnCvtChiM,                   multiply,                    "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "ch" STD_i_BREVE,
+                                                                                                                       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "ch" STD_i_BREVE,
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  377 */  { fnCvtChiM,                   divide,                      "ch" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                       "ch" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  378 */  { fnCvtYinM,                   multiply,                    "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "y" STD_i_BREVE "n",
+                                                                                                                       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "y" STD_i_BREVE "n",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  379 */  { fnCvtYinM,                   divide,                      "y" STD_i_BREVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                       "y" STD_i_BREVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  380 */  { fnCvtCunM,                   multiply,                    "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "c" STD_u_GRAVE "n",
+                                                                                                                       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "c" STD_u_GRAVE "n",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  381 */  { fnCvtCunM,                   divide,                      "c" STD_u_GRAVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                       "c" STD_u_GRAVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  382 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE ".",      "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE ".",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  383 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "." STD_RIGHT_ARROW "m",      "zh" STD_a_GRAVE "." STD_RIGHT_ARROW "m",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  384 */  { fnCvtFenM,                   multiply,                    "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "f" STD_e_MACRON "n",
+                                                                                                                       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "f" STD_e_MACRON "n",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  385 */  { fnCvtFenM,                   divide,                      "f" STD_e_MACRON "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                       "f" STD_e_MACRON "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",
+                                                                                                                                                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 
 
 // Flag, bit, rotation, and logical OPs

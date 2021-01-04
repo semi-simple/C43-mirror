@@ -38,7 +38,7 @@
 
   #ifdef __APPLE__
     // needed by chdir
-    #include<unistd.h>
+    #include <unistd.h>
   #endif // __APPLE__
 
   #ifdef PC_BUILD

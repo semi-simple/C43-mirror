@@ -32,178 +32,177 @@ char                 filename_csv[40]; //JMMAX                //JM_CSV Changed f
 uint32_t             mem__32;                                 //JM_CSV
 
 
-//###################################################################################
 #ifdef DMCP_BUILD
-
-TCHAR* f_gets ( //DMCP_BUILD ONLY
-  TCHAR* buff,  /* Pointer to the buffer to store read string */
-  int len,    /* Size of string buffer (items) */
-  FIL* fp     /* Pointer to the file object */
-)
-{
-  int nc = 0;
-  TCHAR *p = buff;
-  BYTE s[4];
-  UINT rc;
-  DWORD dc;
-
-      /* Byte-by-byte read without any conversion (ANSI/OEM API) */
-  len -= 1; /* Make a room for the terminator */
-  while (nc < len) {
-    f_read(fp, s, 1, &rc);  /* Get a byte */
-    if (rc != 1) break;   /* EOF? */
-    dc = s[0];
-    if (dc == '\r') continue;
-    *p++ = (TCHAR)dc; nc++;
-    if (dc == '\n') break;
-  }
-
-  *p = 0;   /* Terminate the string */
-  return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
-}
-
-
-
-TCHAR* f_getsline ( //DMCP_BUILD ONLY
-  TCHAR* buff,  /* Pointer to the buffer to store read string */
-  int len,    /* Size of string buffer (items) */
-  FIL* fp     /* Pointer to the file object */
-)
-{
-  int nc = 0;
-  TCHAR *p = buff;
-  BYTE s[2];
-  UINT rc;
-  BYTE sc;
-  s[1]=0;
-      /* Byte-by-byte read without any conversion (ANSI/OEM API) */
-  len -= 1; /* Make a room for the terminator */
-  while (nc < len) {
-    f_read(fp, s, 1, &rc);  /* Get a byte */
-    if (rc != 1) break;   /* EOF? */
-    sc = s[0];
-    *p++ = (TCHAR)sc; nc++;
-  }
-
-  *p = 0;   /* Terminate the string */
-  return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
-}
-
-
-/*-----------------------------------------------------------------------*/
-/* Put a Character to the File (sub-functions)                           */
-/*-----------------------------------------------------------------------*/
-
-/* Putchar output buffer and work area */
-
-typedef struct { //DMCP_BUILD ONLY
-  FIL *fp;    /* Ptr to the writing file */
-  int idx, nchr;  /* Write index of buf[] (-1:error), number of encoding units written */
-  BYTE buf[64]; /* Write buffer */
-} putbuff;
-
-
-/* Buffered write with code conversion */
-static void putc_bfd (putbuff* pb, TCHAR c) //DMCP_BUILD ONLY
-{
-  UINT n;
-  int i, nc;
-
-
-  if (c == '\n') {    /* LF -> CRLF conversion */
-    putc_bfd(pb, '\r');
-  }
-
-  i = pb->idx;        /* Write index of pb->buf[] */
-  if (i < 0) return;
-  nc = pb->nchr;      /* Write unit counter */
-
-
-  /* ANSI/OEM input (without re-encoding) */
-  pb->buf[i++] = (BYTE)c;
-
-
-  if (i >= (int)(sizeof pb->buf) - 4) { /* Write buffered characters to the file */
-    f_write(pb->fp, pb->buf, (UINT)i, &n);
-    i = (n == (UINT)i) ? 0 : -1;
-  }
-  pb->idx = i;
-  pb->nchr = nc + 1;
-}
-
-
-/* Flush remaining characters in the buffer */
-static int putc_flush (putbuff* pb) //DMCP_BUILD ONLY
-{
-  UINT nw;
-
-  if (   pb->idx >= 0 /* Flush buffered characters to the file */
-    && f_write(pb->fp, pb->buf, (UINT)pb->idx, &nw) == FR_OK
-    && (UINT)pb->idx == nw) return pb->nchr;
-  return EOF;
-}
-
-
-/* Initialize write buffer */
-
-/* Fill memory block */
-static void mem_set (void* dst, int val, UINT cnt) //DMCP_BUILD ONLY
-{
-  BYTE *d = (BYTE*)dst;
-
-  do {
-    *d++ = (BYTE)val;
-  } while (--cnt);
-}
-
-
-static void putc_init (putbuff* pb, FIL* fp) //DMCP_BUILD ONLY
-{
-  mem_set(pb, 0, sizeof (putbuff));
-  pb->fp = fp;
-}
-
-
-
-int f_putc ( //DMCP_BUILD ONLY
-  TCHAR c,  /* A character to be output */
-  FIL* fp   /* Pointer to the file object */
-)
-{
-  putbuff pb;
-
-
-  putc_init(&pb, fp);
-  putc_bfd(&pb, c); /* Put the character */
-  return putc_flush(&pb);
-}
-
-
-
-
-/*-----------------------------------------------------------------------*/
-/* Put a String to the File                                              */
-/*-----------------------------------------------------------------------*/
-
-int f_puts ( //DMCP_BUILD ONLY
-  const TCHAR* str, /* Pointer to the string to be output */
-  FIL* fp       /* Pointer to the file object */
-)
-{
-  putbuff pb;
-
-
-  putc_init(&pb, fp);
-  while (*str) putc_bfd(&pb, *str++);   /* Put the string */
-  return putc_flush(&pb);
-}
-
-#endif
+//###################################################################################
+/*-DMCP-*/ 
+/*-DMCP-*/ TCHAR* f_gets ( //DMCP_BUILD ONLY
+/*-DMCP-*/   TCHAR* buff,  /* Pointer to the buffer to store read string */
+/*-DMCP-*/   int len,    /* Size of string buffer (items) */
+/*-DMCP-*/   FIL* fp     /* Pointer to the file object */
+/*-DMCP-*/ )
+/*-DMCP-*/ {
+/*-DMCP-*/   int nc = 0;
+/*-DMCP-*/   TCHAR *p = buff;
+/*-DMCP-*/   BYTE s[4];
+/*-DMCP-*/   UINT rc;
+/*-DMCP-*/   DWORD dc;
+/*-DMCP-*/ 
+/*-DMCP-*/       /* Byte-by-byte read without any conversion (ANSI/OEM API) */
+/*-DMCP-*/   len -= 1; /* Make a room for the terminator */
+/*-DMCP-*/   while (nc < len) {
+/*-DMCP-*/     f_read(fp, s, 1, &rc);  /* Get a byte */
+/*-DMCP-*/     if (rc != 1) break;   /* EOF? */
+/*-DMCP-*/     dc = s[0];
+/*-DMCP-*/     if (dc == '\r') continue;
+/*-DMCP-*/     *p++ = (TCHAR)dc; nc++;
+/*-DMCP-*/     if (dc == '\n') break;
+/*-DMCP-*/   }
+/*-DMCP-*/ 
+/*-DMCP-*/   *p = 0;   /* Terminate the string */
+/*-DMCP-*/   return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ TCHAR* f_getsline ( //DMCP_BUILD ONLY
+/*-DMCP-*/   TCHAR* buff,  /* Pointer to the buffer to store read string */
+/*-DMCP-*/   int len,    /* Size of string buffer (items) */
+/*-DMCP-*/   FIL* fp     /* Pointer to the file object */
+/*-DMCP-*/ )
+/*-DMCP-*/ {
+/*-DMCP-*/   int nc = 0;
+/*-DMCP-*/   TCHAR *p = buff;
+/*-DMCP-*/   BYTE s[2];
+/*-DMCP-*/   UINT rc;
+/*-DMCP-*/   BYTE sc;
+/*-DMCP-*/   s[1]=0;
+/*-DMCP-*/       /* Byte-by-byte read without any conversion (ANSI/OEM API) */
+/*-DMCP-*/   len -= 1; /* Make a room for the terminator */
+/*-DMCP-*/   while (nc < len) {
+/*-DMCP-*/     f_read(fp, s, 1, &rc);  /* Get a byte */
+/*-DMCP-*/     if (rc != 1) break;   /* EOF? */
+/*-DMCP-*/     sc = s[0];
+/*-DMCP-*/     *p++ = (TCHAR)sc; nc++;
+/*-DMCP-*/   }
+/*-DMCP-*/ 
+/*-DMCP-*/   *p = 0;   /* Terminate the string */
+/*-DMCP-*/   return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ /*-----------------------------------------------------------------------*/
+/*-DMCP-*/ /* Put a Character to the File (sub-functions)                           */
+/*-DMCP-*/ /*-----------------------------------------------------------------------*/
+/*-DMCP-*/ 
+/*-DMCP-*/ /* Putchar output buffer and work area */
+/*-DMCP-*/ 
+/*-DMCP-*/ typedef struct { //DMCP_BUILD ONLY
+/*-DMCP-*/   FIL *fp;    /* Ptr to the writing file */
+/*-DMCP-*/   int idx, nchr;  /* Write index of buf[] (-1:error), number of encoding units written */
+/*-DMCP-*/   BYTE buf[64]; /* Write buffer */
+/*-DMCP-*/ } putbuff;
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ /* Buffered write with code conversion */
+/*-DMCP-*/ static void putc_bfd (putbuff* pb, TCHAR c) //DMCP_BUILD ONLY
+/*-DMCP-*/ {
+/*-DMCP-*/   UINT n;
+/*-DMCP-*/   int i, nc;
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/   if (c == '\n') {    /* LF -> CRLF conversion */
+/*-DMCP-*/     putc_bfd(pb, '\r');
+/*-DMCP-*/   }
+/*-DMCP-*/ 
+/*-DMCP-*/   i = pb->idx;        /* Write index of pb->buf[] */
+/*-DMCP-*/   if (i < 0) return;
+/*-DMCP-*/   nc = pb->nchr;      /* Write unit counter */
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/   /* ANSI/OEM input (without re-encoding) */
+/*-DMCP-*/   pb->buf[i++] = (BYTE)c;
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/   if (i >= (int)(sizeof pb->buf) - 4) { /* Write buffered characters to the file */
+/*-DMCP-*/     f_write(pb->fp, pb->buf, (UINT)i, &n);
+/*-DMCP-*/     i = (n == (UINT)i) ? 0 : -1;
+/*-DMCP-*/   }
+/*-DMCP-*/   pb->idx = i;
+/*-DMCP-*/   pb->nchr = nc + 1;
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ /* Flush remaining characters in the buffer */
+/*-DMCP-*/ static int putc_flush (putbuff* pb) //DMCP_BUILD ONLY
+/*-DMCP-*/ {
+/*-DMCP-*/   UINT nw;
+/*-DMCP-*/ 
+/*-DMCP-*/   if (   pb->idx >= 0 /* Flush buffered characters to the file */
+/*-DMCP-*/     && f_write(pb->fp, pb->buf, (UINT)pb->idx, &nw) == FR_OK
+/*-DMCP-*/     && (UINT)pb->idx == nw) return pb->nchr;
+/*-DMCP-*/   return EOF;
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ /* Initialize write buffer */
+/*-DMCP-*/ 
+/*-DMCP-*/ /* Fill memory block */
+/*-DMCP-*/ static void mem_set (void* dst, int val, UINT cnt) //DMCP_BUILD ONLY
+/*-DMCP-*/ {
+/*-DMCP-*/   BYTE *d = (BYTE*)dst;
+/*-DMCP-*/ 
+/*-DMCP-*/   do {
+/*-DMCP-*/     *d++ = (BYTE)val;
+/*-DMCP-*/   } while (--cnt);
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ static void putc_init (putbuff* pb, FIL* fp) //DMCP_BUILD ONLY
+/*-DMCP-*/ {
+/*-DMCP-*/   mem_set(pb, 0, sizeof (putbuff));
+/*-DMCP-*/   pb->fp = fp;
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ int f_putc ( //DMCP_BUILD ONLY
+/*-DMCP-*/   TCHAR c,  /* A character to be output */
+/*-DMCP-*/   FIL* fp   /* Pointer to the file object */
+/*-DMCP-*/ )
+/*-DMCP-*/ {
+/*-DMCP-*/   putbuff pb;
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/   putc_init(&pb, fp);
+/*-DMCP-*/   putc_bfd(&pb, c); /* Put the character */
+/*-DMCP-*/   return putc_flush(&pb);
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/ /*-----------------------------------------------------------------------*/
+/*-DMCP-*/ /* Put a String to the File                                              */
+/*-DMCP-*/ /*-----------------------------------------------------------------------*/
+/*-DMCP-*/ 
+/*-DMCP-*/ int f_puts ( //DMCP_BUILD ONLY
+/*-DMCP-*/   const TCHAR* str, /* Pointer to the string to be output */
+/*-DMCP-*/   FIL* fp       /* Pointer to the file object */
+/*-DMCP-*/ )
+/*-DMCP-*/ {
+/*-DMCP-*/   putbuff pb;
+/*-DMCP-*/ 
+/*-DMCP-*/ 
+/*-DMCP-*/   putc_init(&pb, fp);
+/*-DMCP-*/   while (*str) putc_bfd(&pb, *str++);   /* Put the string */
+/*-DMCP-*/   return putc_flush(&pb);
+/*-DMCP-*/ }
+/*-DMCP-*/ 
+/*-DMCP-*/ 
 //###################################################################################
 
 
-
-#ifdef DMCP_BUILD
+//DMCP_BUILD
 int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], uint8_t mode, const char filedir[40]) { //DMCP_BUILD 
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
@@ -264,6 +263,7 @@ char line[100];               /* Line buffer */
   }
 
 
+//DMCP_BUILD
 int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename) { //DMCP_BUILD 
 char dirfile[40];
     //Create file name
@@ -282,6 +282,7 @@ char dirfile[40];
 
 
 
+//DMCP_BUILD
 int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename_short,  char *filename,  char *fallback) { //DMCP_BUILD 
     
     #if (VERBOSE_LEVEL >= 2) 
@@ -391,24 +392,25 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
 
 
 
-
-void make_TSV_dir_name(void){ //DMCP_BUILD 
+//DMCP_BUILD
+void create_filename(char *fn){ //DMCP_BUILD //fn must be in format ".STAT.TSV"
     uint32_t tmp__32;                                                 //JM_CSV
 
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000) || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),".STAT.TSV"  ) ) ) {
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000) || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
       //Create file name
       check_create_dir("DATA");  
-      make_date_filename(filename_csv,"DATA\\",".STAT.TSV");
+      make_date_filename(filename_csv,"DATA\\",fn);
       check_create_dir("DATA");  
     }
     mem__32 = tmp__32;
 }
 
 
+//DMCP_BUILD
 int16_t export_xy_to_file(graphtype x, graphtype y){
   char line[100];               /* Line buffer */
-  make_TSV_dir_name();
+  create_filename(".STAT.TSV");
   sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
   if(export_append_string_to_file(line, append, filename_csv) != 0) {
     //ERROR ALREADY ANNOUNCED
@@ -418,7 +420,7 @@ int16_t export_xy_to_file(graphtype x, graphtype y){
 }
 
 
-
+// /DMCP_BUILD
 int16_t export_append_line(char *inputstring){ //DMCP_BUILD 
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
@@ -428,7 +430,7 @@ char line[100];               /* Line buffer */
     sys_disk_write_enable(1);
     fr = sys_is_disk_write_enable();
     if (fr==0) {
-      sprintf(line,"Write error--> %d    \n",fr);     print_linestr(line,true);
+      sprintf(line,"Write error--> %d    \n",fr);     print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
       return (int)fr;
@@ -453,7 +455,11 @@ char line[100];               /* Line buffer */
       return (int)fr;
     }
 
+
     fr = f_puts(inputstring, &fil);
+    #if (VERBOSE_LEVEL >= 1) 
+      sprintf(line,"wrote %d, %s\n",fr,inputstring);        print_linestr(line,false);
+    #endif
 
 
     /* close the file */
@@ -471,10 +477,10 @@ char line[100];               /* Line buffer */
   }
 
 
-
+//ENDIF DMCP_BUILD
 
 //**********************************************************************************************************
-#elif PC_BUILD
+#elif PC_BUILD //PC_BUILD
 int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename) { //PC_BUILD
 
   FILE *outfile;
@@ -508,7 +514,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   return 0;  
 }
 
-
+// PC_BUILD
 int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback) { //PC_BUILD
 
   #if (VERBOSE_LEVEL >= 2) 
@@ -607,7 +613,7 @@ return 0;
 
 
 
-
+// PC_BUILD
 int16_t export_append_line(char *inputstring){  //PC_BUILD
 
   FILE *outfile;
@@ -642,17 +648,19 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
 }
 
 
-void make_TSV_dir_name(void){  //PC_BUILD
+// PC_BUILD
+void create_filename(char *fn){  //PC_BUILD //fn must be in format ".STAT.TSV"
     uint32_t tmp__32;                                                 //JM_CSV
     time_t rawTime;
     struct tm *timeInfo;
     
     tmp__32 = getUptimeMs();                                          //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)  || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),".STAT.TSV"  ) ) ) {
+    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)  || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
       //Create file name
       time(&rawTime);
       timeInfo = localtime(&rawTime);
-      strftime(filename_csv, filenamelen, "%Y%m%d-%H%M%S00.STAT.TSV", timeInfo);
+      strftime(filename_csv, filenamelen, "%Y%m%d-%H%M%S00", timeInfo);
+      strcat(filename_csv, fn);
     }
     mem__32 = tmp__32;
 }
@@ -660,7 +668,7 @@ void make_TSV_dir_name(void){  //PC_BUILD
 
 int16_t export_xy_to_file(graphtype x, graphtype y){ //PC_BUILD
   char line[100];               /* Line buffer */
-  make_TSV_dir_name();
+  create_filename(".STAT.TSV");
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
   export_append_line(line);
   return 0;
@@ -685,18 +693,26 @@ void print_linestr(const char *line1, bool_t line_init) {
     l1[0]=0;
     int16_t ix = 0;
     int16_t ixx;
+
+    if(line_init) {
+      line_y = 20;
+      line_x = 0;
+    }
     ixx = stringByteLength(line1);
-    while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
+    while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-line_x) {
        xcopy(l1, line1, ix+1);
        l1[ix+1]=0;
        ix = stringNextGlyph(line1, ix);
     }
-    if(line_init) {line_y = 20;}
+
     if(line_y < SCREEN_HEIGHT) { 
-        line_x = showString(l1, &standardFont, 0, line_y, vmNormal, true, true);
+        ixx = showString(l1, &standardFont, line_x, line_y, vmNormal, true, true);
     }
     line_y += 20;
-    line_x = 0;
+    if(line_y > SCREEN_HEIGHT - 20) {
+      line_y = 40;
+      line_x += 4;
+    }
     force_refresh();
 #endif
 }

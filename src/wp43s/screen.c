@@ -102,11 +102,11 @@
         break;
 
       case dtTime:
-        strcpy(tmpString, "Copying a time to the clipboard is to be coded!");
+        strcpy(tmpString, "time to clipboard to be coded");
         break;
 
       case dtDate:
-        strcpy(tmpString, "Copying a date to the clipboard is to be coded!");
+        strcpy(tmpString, "date to clipboard to be coded");
         break;
 
       case dtString:
@@ -120,11 +120,11 @@
         break;
 
       case dtReal34Matrix:
-        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
+        strcpy(tmpString, "real matrix to clipboard is to be coded");
         break;
 
       case dtComplex34Matrix:
-        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
+        strcpy(tmpString, "complex matrix to clipboard is to be coded");
         break;
 
       case dtShortInteger:
@@ -175,11 +175,11 @@
         break;
 
       case dtConfig:
-        xcopy(tmpString, "Configuration data", 19);
+        xcopy(tmpString, "Config data", 19);
         break;
 
       default:
-        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown.", getRegisterDataType(regist));
     }
 
     strcpy(clipboardString, tmpString);

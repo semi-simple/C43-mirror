@@ -671,3 +671,53 @@ void fnByte(uint16_t command) {
 
 
 
+
+void fnP_All_Regs(uint16_t option){
+
+  create_filename(".REGS.TSV");
+
+  #if (VERBOSE_LEVEL >= 1) 
+    clearScreen();
+    print_linestr("Output regs to drive:",true);
+    print_linestr(filename_csv,false);          
+  #endif
+
+  switch (option)
+  {
+  case 0:           //All registers
+    {
+       stackregister_csv_out(REGISTER_X,REGISTER_D);
+       stackregister_csv_out(REGISTER_L,REGISTER_K);
+       stackregister_csv_out(0,99);
+       //stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
+    }
+    break;
+
+  case 1:           //Stack only
+    {
+       stackregister_csv_out(REGISTER_X,REGISTER_D);
+    }
+    break;
+
+  case 2:           //Global Registers
+    {
+       stackregister_csv_out(0,99);
+    }
+    break;
+
+  case 3:           //USER Registers
+    {
+       stackregister_csv_out(FIRST_LOCAL_REGISTER,LAST_LOCAL_REGISTER);
+    }
+    break;
+
+  default:
+    break;
+  }
+}
+
+
+
+
+
+

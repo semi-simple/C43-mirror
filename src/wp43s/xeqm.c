@@ -642,7 +642,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   char fn_long[200];      //Long file name
   char fn_short[16];      //standard file name
 
-  #if (VERBOSE_LEVEL >= 2) 
+  #if (VERBOSE_LEVEL >= 1) 
     char tmp[400];          //Messages
   #endif
 

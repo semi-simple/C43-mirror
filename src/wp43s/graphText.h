@@ -33,6 +33,8 @@
 #define      append  0
 #define      overwrite 1
 
+void         create_filename(char *fn);
+
 int16_t      export_append_line(char *inputstring);
 int16_t      export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename);
 
@@ -43,3 +45,4 @@ void         print_numberstr(const char *line1, bool_t line_init);
 void         print_linestr  (const char *line1, bool_t line_init);
 int16_t      export_xy_to_file(graphtype x, graphtype y);
 int16_t      import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback);
+

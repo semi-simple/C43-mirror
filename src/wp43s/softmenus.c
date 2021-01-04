@@ -193,7 +193,7 @@ const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_KEYG,   
 
 const int16_t menu_STAT[]        = { ITM_SIGMAMINUS,                ITM_XBAR,                   ITM_STDDEVWEIGHTED,       ITM_STDDEV,            ITM_SM,                      ITM_SUM,
                                      ITM_SIGMAPLUS,                 ITM_XW,                     ITM_SW,                   ITM_STDDEVPOP,         ITM_SMW,                     ITM_NSIGMA,                         //JM added ITM_NSIGMA
-                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,              ITM_SCATTFACTp,      ITM_SCATTFACTm,              ITM_PLOT,
+                                     ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_PLOT,
                                      ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
                                      ITM_SA,                        ITM_XH,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      ITM_NULL,                      ITM_XRMS,                   ITM_XMAX,                 ITM_XMIN,              ITM_NULL,                    ITM_ORTHOF,
@@ -219,7 +219,7 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
                                      ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
                                      ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_WM,                        ITM_WP,                     ITM_WM1,                  ITM_BETAXY,            ITM_gammaXY,                 ITM_GAMMAXY,
@@ -349,7 +349,7 @@ const int16_t menu_IO[]          = { ITM_LOAD,                      ITM_LOADP,  
                                      ITM_BEEP,                      ITM_TONE,                   ITM_SAVE,                 -MNU_PRINT,            ITM_RECV,                    ITM_SEND                      };
 const int16_t menu_PRINT[]       = { ITM_PRINTERX,                  ITM_PRINTERR,               ITM_PRINTERSIGMA,         ITM_PRINTERADV,        ITM_PRINTERLCD,              ITM_PRINTERPROG,
                                      ITM_PRINTERSTK,                ITM_PRINTERREGS,            ITM_PRINTERUSER,          ITM_PRINTERTAB,        ITM_PRINTERHASH,             ITM_PRINTERCHAR,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };
+                                     ITM_NULL,                      ITM_P_ALLREGS,              ITM_NULL,                 ITM_PRINTERWIDTH,      ITM_PRINTERDLAY,             ITM_PRINTERMODE               };
 const int16_t menu_Tam[]         = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T                     };
 const int16_t menu_TamCmp[]      = { ITM_INDIRECTION,               -MNU_VAR,                   ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T,
                                      ITM_0P,                        ITM_1P,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };

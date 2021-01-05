@@ -4235,6 +4235,7 @@ void setupUI(void) {
     clearRegisterLine(NIM_REGISTER_LINE, true, true);
     xCursor = 1;
     cursorEnabled = true;
+    cursorFont = &numericFont;
   }
 
 

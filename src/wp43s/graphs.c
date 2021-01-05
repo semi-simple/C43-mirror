@@ -207,7 +207,7 @@ void graph_setupmemory(void) {
   } else
   {
   #ifdef PC_BUILD
-    printf("^^@@ Two arrays of %llu bytes each created, i.e. %llu blocks total\n",(long long unsigned int) (LIM * sizeof(graphtype)), (long long unsigned int)(2 * LIM * sizeof(graphtype) / 4));
+    printf("^^@@ Two arrays of %u bytes each created, i.e. %u blocks total\n",(uint32_t) (LIM * sizeof(graphtype)), (uint32_t)(2 * LIM * sizeof(graphtype) / 4));
   #endif
   }
   

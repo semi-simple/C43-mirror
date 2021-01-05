@@ -1,8 +1,8 @@
 *.o
 *.d
 *.bin
-#*.exe
-#wp*.exe
+*.exe
+wp*.exe
 *.layout
 *.depend
 202*bmp

@@ -84,7 +84,7 @@
                                     //JM Otherwise, full enlarged standardfont is used.
 
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
-#undef WP43S_ON_C43_USER_MODE
+#undef WP43S_ON_C43_USER_MODE       //Default setting
 
 //*********************************
 //* General configuration defines *

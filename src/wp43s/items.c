@@ -2435,7 +2435,7 @@ const item_t indexOfItems[] = {
 /* 1816 */  { fnSetSetJM,                  JC_SHFT_4s,                  "SH_4s",                                       "SH_4s",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM SHIFT CANCEL
 /* 1817 */  { fnSetSetJM,                  JC_BCR,                      "CPXRES",                                      "CPXRES",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//dr
 /* 1818 */  { fnSetSetJM,                  JC_BLZ,                      "LEAD0",                                       "LEAD0",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//dr
-/* 1819 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
+/* 1819 */  { fnSetSetJM,                  JC_UC,                       "",                                            STD_case,                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
 /* 1820 */  { fnSetSetJM,                  JC_BASE_HOME,                "_HOME",                                       "HOME",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM eRPN
 /* 1821 */  { fnSetSetJM,                  JC_BASE_AHOME,               "_" STD_alpha "HOME",                          STD_alpha "HOME",                              0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM eRPN
 /* 1822 */  { fnSetSetJM,                  JC_H_SUM,                    "H-SUMMARY",                                   "SUMRY",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JMHOME
@@ -2490,8 +2490,8 @@ const item_t indexOfItems[] = {
 /* 1870 */  { fnCln,                       NOPARAM,                     "CLN",                                         "CLN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 1871 */  { itemToBeCoded,               NOPARAM,                     "1871",                                        "1871",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1872 */  { itemToBeCoded,               NOPARAM,                     "1872",                                        "1872",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1873 */  { itemToBeCoded,               NOPARAM,                     "CASE UP",                                     "^^",                                          0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
-/* 1874 */  { itemToBeCoded,               NOPARAM,                     "CASE DN",                                     "vv",                                          0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
+/* 1873 */  { itemToBeCoded,               NOPARAM,                     "CASE UP",                                     "CASE UP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
+/* 1874 */  { itemToBeCoded,               NOPARAM,                     "CASE DN",                                     "CASE DN",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
 /* 1875 */  { fnListXY,                    NOPARAM,                     "LISTXY",                                      "LISTXY",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 
 
@@ -2818,7 +2818,7 @@ const item_t indexOfItems[] = {
 /* 2196 */  { fnPrms,                      NOPARAM,                     "RMS",                                         "RMS",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2197 */  { fnPshade,                    NOPARAM,                     "SHADE",                                       "SHADE",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2198 */  { itemToBeCoded,               NOPARAM,                     "PLOTMNU",                                     "PLOTMNU",                                     0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 2199 */  { itemToBeCoded,               NOPARAM,                     "",                                            STD_num,                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2199 */  { fnSetSetJM,                  JC_NL,                       "",                                            STD_num,                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2200 */  { itemToBeCoded,               NOPARAM,                     "NLock",                                       "NLock",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2201 */  { itemToBeCoded,               NOPARAM,                     "Nulock",                                      "Nulock",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2202 */  { addItemToBuffer,             ITM_EEXCHR,                  STD_SUB_E_OUTLINE,                             STD_SUB_E_OUTLINE,                             0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},

@@ -276,6 +276,20 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
      break;
 
 
+   case JC_NL:                                              //JM call numlock
+     numLock = !numLock;
+     showAlphaModeonGui(); //dr JM, see keyboardtweaks
+     break;
+
+   case JC_UC:                                              //JM call flip case
+     if(alphaCase == AC_LOWER) 
+       alphaCase = AC_UPPER; 
+     else
+       alphaCase = AC_LOWER;
+     showAlphaModeonGui(); //dr JM, see keyboardtweaks
+     break;
+
+
   default:
     break;
   }

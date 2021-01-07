@@ -244,6 +244,9 @@ char* itoa(int value, char* result, int base);
 #define JC_RMS                 49    // graph setup
 #define JC_SHADE               50    // graph setup
 
+#define JC_NL                  51
+#define JC_UC                  52
+
 
 
 #ifdef PC_BUILD

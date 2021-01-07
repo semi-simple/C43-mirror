@@ -569,6 +569,10 @@ const item_t indexOfItems[] = {
 
 
 
+
+
+
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -798,8 +802,8 @@ const item_t indexOfItems[] = {
 
 
 // Conversions
-/*  220 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  221 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  220 */  { fnCvtCToF,                   NOPARAM,                     STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", STD_DEGREE "C" STD_RIGHT_ARROW STD_DEGREE "F", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  221 */  { fnCvtFToC,                   NOPARAM,                     STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", STD_DEGREE "F" STD_RIGHT_ARROW STD_DEGREE "C", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  222 */  { fnCvtDbRatio,                10,                          "dB" STD_RIGHT_ARROW "pr",                     "dB " STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  223 */  { fnCvtDbRatio,                10,                          "dB" STD_RIGHT_ARROW "pr",                     "power",                                       0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
 /*  224 */  { fnCvtDbRatio,                10,                          "dB" STD_RIGHT_ARROW "pr",                     "ratio",                                       0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
@@ -950,22 +954,22 @@ const item_t indexOfItems[] = {
 /*  369 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    STD_SPACE_HAIR,                                0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
 /*  370 */  { fnCvtHectareM2,              multiply,                    "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            "ha" STD_RIGHT_ARROW "m" STD_SUP_2,            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  371 */  { fnCvtHectareM2,              divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            "m" STD_SUP_2 STD_RIGHT_ARROW "ha",            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  372 */  { fnCvtMuM2,                   divide,                      "m" STD_u_BREVE STD_RIGHT_ARROW "m" STD_SUP_2, "m" STD_u_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_SUP_2,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  373 */  { fnCvtMuM2,                   multiply,                    "m" STD_SUP_2 STD_RIGHT_ARROW "m" STD_u_BREVE, "m" STD_SUP_2 STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m" STD_u_BREVE,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  374 */  { fnCvtLiM,                    multiply,                    "l" STD_i_BREVE STD_RIGHT_ARROW "m",           "l" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  375 */  { fnCvtLiM,                    divide,                      "m" STD_RIGHT_ARROW "l" STD_i_BREVE,           "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "l" STD_i_BREVE,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  376 */  { fnCvtChiM,                   divide,                      "ch" STD_i_BREVE STD_RIGHT_ARROW "m",          "ch" STD_i_BREVE STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  377 */  { fnCvtChiM,                   multiply,                    "m" STD_RIGHT_ARROW "ch" STD_i_BREVE,          "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "ch" STD_i_BREVE,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  378 */  { fnCvtYinM,                   divide,                      "y" STD_i_BREVE "n" STD_RIGHT_ARROW "m",       "y" STD_i_BREVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  379 */  { fnCvtYinM,                   multiply,                    "m" STD_RIGHT_ARROW "y" STD_i_BREVE "n",       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "y" STD_i_BREVE "n",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  380 */  { fnCvtCunM,                   divide,                      "c" STD_u_GRAVE "n" STD_RIGHT_ARROW "m",       "c" STD_u_GRAVE "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  381 */  { fnCvtCunM,                   multiply,                    "m" STD_RIGHT_ARROW "c" STD_u_GRAVE "n",       "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "c" STD_u_GRAVE "n",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  372 */  { fnCvtMuM2,                   divide,                      "m" STD_u_BREVE STD_RIGHT_ARROW "m" STD_SUP_2, "m" STD_u_BREVE STD_RIGHT_ARROW "m" STD_SUP_2, 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  373 */  { fnCvtMuM2,                   multiply,                    "m" STD_SUP_2 STD_RIGHT_ARROW "m" STD_u_BREVE, "m" STD_SUP_2 STD_RIGHT_ARROW "m" STD_u_BREVE, 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  374 */  { fnCvtLiM,                    multiply,                    "l" STD_i_BREVE STD_RIGHT_ARROW "m",           "l" STD_i_BREVE STD_RIGHT_ARROW "m",           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  375 */  { fnCvtLiM,                    divide,                      "m" STD_RIGHT_ARROW "l" STD_i_BREVE,           "m" STD_RIGHT_ARROW "l" STD_i_BREVE,           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  376 */  { fnCvtChiM,                   divide,                      "ch" STD_i_BREVE STD_RIGHT_ARROW "m",          "ch" STD_i_BREVE STD_RIGHT_ARROW "m",          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  377 */  { fnCvtChiM,                   multiply,                    "m" STD_RIGHT_ARROW "ch" STD_i_BREVE,          "m" STD_RIGHT_ARROW "ch" STD_i_BREVE,          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  378 */  { fnCvtYinM,                   divide,                      "y" STD_i_BREVE "n" STD_RIGHT_ARROW "m",       "y" STD_i_BREVE "n" STD_RIGHT_ARROW "m",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  379 */  { fnCvtYinM,                   multiply,                    "m" STD_RIGHT_ARROW "y" STD_i_BREVE "n",       "m" STD_RIGHT_ARROW "y" STD_i_BREVE "n",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  380 */  { fnCvtCunM,                   divide,                      "c" STD_u_GRAVE "n" STD_RIGHT_ARROW "m",       "c" STD_u_GRAVE "n" STD_RIGHT_ARROW "m",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  381 */  { fnCvtCunM,                   multiply,                    "m" STD_RIGHT_ARROW "c" STD_u_GRAVE "n",       "m" STD_RIGHT_ARROW "c" STD_u_GRAVE "n",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  382 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "ng" STD_RIGHT_ARROW "m",     "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  383 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "ng" STD_RIGHT_ARROW "m",     STD_RIGHT_ARROW " m",                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  384 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "ng",     "m " STD_RIGHT_ARROW,                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  385 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "ng",     "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  386 */  { fnCvtFenM,                   divide,                      "f" STD_e_MACRON "n" STD_RIGHT_ARROW "m",      "f" STD_e_MACRON "n" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "m",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  387 */  { fnCvtFenM,                   multiply,                    "m" STD_RIGHT_ARROW "f" STD_e_MACRON "n",      "m" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "f" STD_e_MACRON "n",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  386 */  { fnCvtFenM,                   divide,                      "f" STD_e_MACRON "n" STD_RIGHT_ARROW "m",      "f" STD_e_MACRON "n" STD_RIGHT_ARROW "m",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  387 */  { fnCvtFenM,                   multiply,                    "m" STD_RIGHT_ARROW "f" STD_e_MACRON "n",      "m" STD_RIGHT_ARROW "f" STD_e_MACRON "n",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  388 */  { itemToBeCoded,               NOPARAM,                     "0388",                                        "0388",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  389 */  { itemToBeCoded,               NOPARAM,                     "0389",                                        "0389",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /*  390 */  { itemToBeCoded,               NOPARAM,                     "0390",                                        "0390",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -1820,8 +1824,8 @@ const item_t indexOfItems[] = {
 /* 1221 */  { itemToBeCoded,               NOPARAM,                     "Expon" STD_SUP_MINUS_1,                       "Expon" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1222 */  { itemToBeCoded,               NOPARAM,                     "F:",                                          "F:",                                          0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1223 */  { itemToBeCoded,               NOPARAM,                     "F" STD_SUB_p "(x)",                           "F" STD_SUB_p "(x)",                           0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1224 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1225 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1224 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1225 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1226 */  { itemToBeCoded,               NOPARAM,                     "F" STD_SUP_MINUS_1 "(p)",                     "F" STD_SUP_MINUS_1 "(p)",                     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1227 */  { itemToBeCoded,               NOPARAM,                     "Geom:",                                       "Geom:",                                       0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1228 */  { itemToBeCoded,               NOPARAM,                     "Geom" STD_SUB_p,                              "Geom" STD_SUB_p,                              0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -1860,8 +1864,8 @@ const item_t indexOfItems[] = {
 /* 1261 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_SUP_MINUS_1,                       "Poiss" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1262 */  { itemToBeCoded,               NOPARAM,                     "t:",                                          "t:",                                          0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1263 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUB_p "(x)",                           "t" STD_SUB_p "(x)",                           0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1264 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1265 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1264 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1265 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1266 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUP_MINUS_1 "(p)",                     "t" STD_SUP_MINUS_1 "(p)",                     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1267 */  { itemToBeCoded,               NOPARAM,                     "Weibl:",                                      "Weibl:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1268 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUB_p,                             "Weibl" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -1870,8 +1874,8 @@ const item_t indexOfItems[] = {
 /* 1271 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUP_MINUS_1,                       "Weibl" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1272 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 ":",                         STD_chi STD_SUP_2 ":",                         0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1273 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1274 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1275 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1274 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1275 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1276 */  { itemToBeCoded,               NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1277 */  { itemToBeCoded,               NOPARAM,                     "1277",                                        "1277",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1278 */  { itemToBeCoded,               NOPARAM,                     "1278",                                        "1278",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2448,8 +2452,8 @@ const item_t indexOfItems[] = {
 /* 1832 */  { fn_cnst_op_a,                NOPARAM,                     "op_a",                                        "a",                                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM Operator a
 /* 1833 */  { fn_cnst_op_aa,               NOPARAM,                     "op_a" STD_SUP_2,                              "a" STD_SUP_2,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM Operator a.a
 /* 1834 */  { fn_cnst_op_j,                NOPARAM,                     "op_j",                                        "j",                                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM Operator j
-/* 1835 */  { fnJM,                        7,                           "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA, "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},//JM EE
-/* 1836 */  { fnJM,                        6,                           STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y", STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
+/* 1835 */  { fnJM,                        7,                           "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA, "Y" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM STD_DELTA, 0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},//JM EE
+/* 1836 */  { fnJM,                        6,                           STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y", STD_DELTA STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "Y", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1837 */  { fnJM,                        9,                           "AtoSYM",                                      STD_RIGHT_ARROW STD_SPACE_3_PER_EM "012",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1838 */  { fnJM,                        8,                           "SYMtoA",                                      STD_RIGHT_ARROW STD_SPACE_3_PER_EM "abc",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1839 */  { fnJM,                        10,                          "e^" STD_THETA "j",                            "e^" STD_THETA "j",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
@@ -2462,7 +2466,7 @@ const item_t indexOfItems[] = {
 /* 1846 */  { fnJM,                        17,                          "3V" STD_DIVIDE "3I",                          "V" STD_DIVIDE "I",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1847 */  { fnJM,                        18,                          "3I" STD_CROSS "3Z",                           "I" STD_CROSS "Z",                             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1848 */  { fnJM,                        19,                          "3V" STD_DIVIDE "3Z",                          "V" STD_DIVIDE "Z",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
-/* 1849 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL",   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
+/* 1849 */  { fnJM,                        20,                          "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", "X" STD_SPACE_3_PER_EM STD_RIGHT_ARROW STD_SPACE_3_PER_EM "BAL", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM EE
 /* 1850 */  { fnDumpMenus,                 NOPARAM,                     "DUMPMNU",                                     "DUMPMNU",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1851 */  { fnLongInt,                   NOPARAM,                     "LNGINT",                                      "LNGINT",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1852 */  { fnChangeBaseJM,              2,                           "BIN",                                         "BIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM HEX

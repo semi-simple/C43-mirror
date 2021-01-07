@@ -20,6 +20,8 @@
 
 
 #define ITM_NULL                         0
+
+// Items from 1 to 127 are 1 byte OP codes
 #define ITM_LBL                          1
 #define ITM_GTO                          2
 #define ITM_XEQ                          3
@@ -147,6 +149,10 @@
 #define ITM_LOGICALOR                  125
 #define ITM_LOGICALXOR                 126
 #define ITM_Xex                        127
+
+
+// Items from 128 to ... are 2 byte OP codes
+// Constants
 #define CST_01                         128
 #define CST_02                         129
 #define CST_03                         130
@@ -239,6 +245,9 @@
 #define ITM_0217                       217
 #define ITM_0218                       218
 #define ITM_0219                       219
+
+
+// Conversions
 #define ITM_CtoF                       220
 #define ITM_FtoC                       221
 #define ITM_DBtoPR                     222
@@ -415,6 +424,9 @@
 #define ITM_0393                       393
 #define ITM_0394                       394
 #define ITM_0395                       395
+
+
+// Flag, bit, rotation, and logical OPs
 #define ITM_FCC                        396
 #define ITM_FCS                        397
 #define ITM_FCF                        398
@@ -452,6 +464,9 @@
 #define ITM_0430                       430
 #define ITM_0431                       431
 #define ITM_0432                       432
+
+
+
 #define ITM_SIGMAPLUS                  433
 #define ITM_SIGMAMINUS                 434
 #define ITM_NSIGMA                     435
@@ -482,6 +497,9 @@
 #define ITM_0460                       460
 #define ITM_0461                       461
 #define ITM_0462                       462
+
+
+
 #define SFL_TDM24                      463
 #define SFL_YMD                        464
 #define SFL_DMY                        465
@@ -546,6 +564,9 @@
 #define ITM_0524                       524
 #define ITM_0525                       525
 #define ITM_0526                       526
+
+
+// Bufferized items
 #define ITM_REG_X                      527
 #define ITM_REG_Y                      528
 #define ITM_REG_Z                      529
@@ -1194,6 +1215,9 @@
 #define ITM_1172                      1172
 #define ITM_1173                      1173
 #define ITM_1174                      1174
+
+
+// Reserved variables
 #define VAR_REGX                      1175
 #define VAR_REGY                      1176
 #define VAR_REGZ                      1177
@@ -1226,6 +1250,9 @@
 #define VAR_MATX                      1204
 #define VAR_1205                      1205
 #define VAR_1206                      1206
+
+
+// Probability distributions
 #define MNU_BINOM                     1207
 #define ITM_BINOMP                    1208
 #define ITM_BINOM                     1209
@@ -1316,6 +1343,9 @@
 #define ITM_1294                      1294
 #define ITM_1295                      1295
 #define ITM_1296                      1296
+
+
+// Curve fitting
 #define ITM_BESTF                     1297
 #define ITM_EXPF                      1298
 #define ITM_LINF                      1299
@@ -1332,6 +1362,9 @@
 #define ITM_1310                      1310
 #define ITM_1311                      1311
 #define ITM_1312                      1312
+
+
+// Menus
 #define MNU_ADV                       1313
 #define MNU_ANGLES                    1314
 #define MNU_PRINT                     1315
@@ -1423,6 +1456,8 @@
 #define ITM_1401                      1401
 #define ITM_1402                      1402
 #define ITM_1403                      1403
+
+
 #define ITM_1COMPL                    1404
 #define ITM_SNAP                      1405
 #define ITM_2COMPL                    1406
@@ -1741,7 +1776,9 @@
 #define ITM_PRINTERWIDTH              1719
 #define ITM_PRINTERSIGMA              1720
 #define ITM_PRINTERHASH               1721
+
 #define ITM_FBR                       1722
+
 #define ITM_UNDO                      1723
 #define ITM_PR                        1724
 #define ITM_RS                        1725
@@ -1775,6 +1812,12 @@
 #define ITM_TRANS                     1753
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
+
+
+
+
+
+//Jaymos C43 extensions
 #define ITM_FG_LINE                   1756
 #define ITM_NO_BASE_SCREEN            1757
 #define ITM_G_DOUBLETAP               1758
@@ -1845,6 +1888,7 @@
 #define ITM_H_REPLCA                  1823
 #define ITM_H_FIXED                   1824
 #define ITM_HOMEx3T                   1825
+
 #define ITM_LARGELI                   1826
 #define ITM_PGMTST                    1827
 #define ITM_SIGFIG                    1828
@@ -1895,6 +1939,8 @@
 #define CHR_caseUP                    1873
 #define CHR_caseDN                    1874
 #define ITM_LISTXY                    1875
+
+
 #define ITM_SH_ERPN                   1876
 #define ITM_SYS_FREE_RAM              1877
 #define MNU_INL_TST                   1878

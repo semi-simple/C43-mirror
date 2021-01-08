@@ -1597,6 +1597,19 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
               else {
                 showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }
+
+              if(jm_G_DOUBLETAP && softmenu[m].menuItem == -MNU_ALPHA && y == 0 ){
+                // Strike out non coded functions
+                int16_t xStrokeA;
+                int16_t yStrokeA = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
+                for(xStrokeA=x*67 + 66 -12 ; xStrokeA<x*67 + 66 -10; xStrokeA++) {      //JM mod Show double press which does not work anymore
+                  if(xStrokeA%3 == 0) yStrokeA--;
+                  showString("d", &standardFont, xStrokeA, yStrokeA -15, vmNormal, false, false);
+                }
+                showString("\\", &standardFont, xStrokeA - 2, yStrokeA -15, vmNormal, false, false);
+              }
+
+
               if(indexOfItems[item%10000].func == itemToBeCoded) {
                 // Strike out non coded functions
                 int16_t yStroke = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;

@@ -608,10 +608,9 @@ Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
     FN_key_pressed_last = FN_key_pressed;
   }
 
-
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   double_click_detected = false;                                            //JM FN-DOUBLE - Dip detection flag
-  if((jm_G_DOUBLETAP && calcMode != CM_AIM)) {
+  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA )) {
     if(exexute_double_g) {
       if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
         shiftF = false;                                                     //JM

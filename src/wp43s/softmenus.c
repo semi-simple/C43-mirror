@@ -1599,14 +1599,10 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
               }
 
               if(jm_G_DOUBLETAP && softmenu[m].menuItem == -MNU_ALPHA && y == 0 ){
-                // Strike out non coded functions
-                int16_t xStrokeA;
+                // Strike out disabled double tap
                 int16_t yStrokeA = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
-                for(xStrokeA=x*67 + 66 -12 ; xStrokeA<x*67 + 66 -10; xStrokeA++) {      //JM mod Show double press which does not work anymore
-                  if(xStrokeA%3 == 0) yStrokeA--;
-                  showString("d", &standardFont, xStrokeA, yStrokeA -15, vmNormal, false, false);
-                }
-                showString("\\", &standardFont, xStrokeA - 2, yStrokeA -15, vmNormal, false, false);
+                int16_t xStrokeA=x*67 + 66 -12;                                     //JM mod Show double press which does not work anymore
+                showString(STD_EMPTY_SET , &standardFont, xStrokeA +2, yStrokeA -16-3, vmNormal, false, false);
               }
 
 

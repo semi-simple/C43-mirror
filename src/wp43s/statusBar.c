@@ -271,44 +271,30 @@ void showFracMode(void) {
   void showHideAlphaMode(void) {
     int status=0;
     if(calcMode == CM_AIM || catalog) {
-      if(numLock && !shiftF && !shiftG) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 1;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 2;
-                   else                                status = 3;
-      }
-      if(!numLock && shiftF) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 4;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 5;
-                   else                                status = 6;      
-      }
-      if(alphaCase == AC_UPPER) {
-        setSystemFlag(FLAG_alphaCAP);
-      
-        if(shiftG) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 7;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 8;
-                   else                                status = 9;
-        }
-        if(!shiftG && !shiftF && !numLock) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 10;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 11;
-                   else                                status = 12;
-        }
-      }
-      else {
-        clearSystemFlag(FLAG_alphaCAP);
 
-        if(shiftG) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 13;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 14;
-                   else                                status = 15;
-        }
-        if(!shiftG && !shiftF && !numLock) {
-                   if     (nextChar == NC_SUBSCRIPT)   status = 16;
-                   else if(nextChar == NC_SUPERSCRIPT) status = 17;
-                   else                                status = 18;
-        }
-      }
+      if(numLock && !shiftF && !shiftG) {
+          if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+          if(alphaCase == AC_LOWER)              { status = 6 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+        } else
+
+      if(alphaCase == AC_LOWER && shiftF){
+        setSystemFlag(FLAG_alphaCAP);              status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); //A	
+      } else
+		    if(alphaCase == AC_UPPER && shiftF){
+		      clearSystemFlag(FLAG_alphaCAP);          status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0);   //a	
+		    } else
+		      if(alphaCase == AC_UPPER)  { //UPPER
+		        setSystemFlag(FLAG_alphaCAP);
+		        if(shiftF)                           { status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+		        if(shiftG)                           { status =  9 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+		        if(!shiftG && !shiftF && !numLock)   { status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+		      } else
+		        if(alphaCase == AC_LOWER)  { //LOWER
+				      clearSystemFlag(FLAG_alphaCAP);
+              if(shiftF)                         { status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+				      if(shiftG)                         { status = 15 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+				      if(!shiftG && !shiftF && !numLock) { status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+				    }
 
       if(status >0 && status <=18) {
         showGlyphCode(' ',    &standardFont, X_ALPHA_MODE, 0, vmNormal, true, true); // is 0+0+10 pixel wide

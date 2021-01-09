@@ -35,6 +35,7 @@
     printf(".  ");       ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%9s ", indexOfItems[-softmenu[softmenuStack[ix].softmenuId].menuItem].itemSoftmenuName  ); ix++;} printf("\n");
     printf(".  (tammode=%d, catalog=%d)\n",tamMode, catalog);
     printf(".  (mm_MNU_HOME=%d, mm_MNU_ALPHA=%d)\n",mm_MNU_HOME, mm_MNU_ALPHA);
+    jm_show_comment("calcstate END:");
   #endif  
   }
 
@@ -45,7 +46,7 @@
     strcpy(tmp,comment);
     strcat(tmp,"                                                                                                                                                                ");
     tmp[130]=0;
-    printf("....%130s calcMode=%4d last_CM=%4d tammode=%5d catalog=%5d Id=%4d Name=%8s \n",tmp, calcMode, last_CM, tamMode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName);
+    printf("....%130s calcMode=%4d last_CM=%4d tammode=%5d catalog=%5d Id=%4d Name=%8s F=%d G=%d \n",tmp, calcMode, last_CM, tamMode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName,shiftF,shiftG);
   //  printf("....%s\n",tmp);  
   #endif  
   }

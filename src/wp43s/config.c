@@ -8774,7 +8774,24 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43L2_100+++, 2021-01-03, C43-PEM-XEQ-WIP");
+
+
+
+
+#define VERSION1 "_100_KB_POC"
+
+    #ifdef JM_LAYOUT_1A
+      #define L1L2    "L1"
+    #endif
+    #ifdef JM_LAYOUT_2_DM42_STRICT
+      #define L1L2    "L42"
+    #endif
+
+    char *build_str = "C43" L1L2 VERSION1 ", " __DATE__;
+
+
+//    fnStrtoX("C43L2_100+++, 2021-01-03, C43-PEM-XEQ-WIP");
+    fnStrtoX(build_str);
     fnStore(102);
     fnDrop(0);
   

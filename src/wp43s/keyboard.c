@@ -157,6 +157,8 @@ bool_t lastshiftG = false;
 
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
@@ -552,6 +554,8 @@ bool_t lastshiftG = false;
 //        item = previousItem;
 //      }
 //      else {
+        lastshiftF = shiftF;
+        lastshiftG = shiftG;
         item = determineItem((char *)data);
 //      previousItem = item;
 //      }

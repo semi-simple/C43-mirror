@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         50  // Changed menu management
+#define BACKUP_VERSION         51  // Changed local register management
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -93,7 +93,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
     save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
-    ramPtr = TO_WP43SMEMPTR(allNamedVariablePointer);
+    ramPtr = TO_WP43SMEMPTR(allNamedVariables);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -152,7 +152,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
     save(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
     save(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-    save(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+    save(&wp43sMemInBlocks,                   sizeof(wp43sMemInBlocks),                   BACKUP);
     save(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
     save(&catalog,                            sizeof(catalog),                            BACKUP);
     save(&lastCatalogPosition,                sizeof(lastCatalogPosition),                BACKUP);
@@ -237,6 +237,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
     save(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
     save(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
+    save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+    save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+    save(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
+    save(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -294,7 +298,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
       restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
-      allNamedVariablePointer = TO_PCMEMPTR(ramPtr);
+      allNamedVariables = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -356,7 +360,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&imaginaryMantissaSignLocation,      sizeof(imaginaryMantissaSignLocation),      BACKUP);
       restore(&lineTWidth,                         sizeof(lineTWidth),                         BACKUP);
       restore(&lastIntegerBase,                    sizeof(lastIntegerBase),                    BACKUP);
-      restore(&wp43sMemInBytes,                    sizeof(wp43sMemInBytes),                    BACKUP);
+      restore(&wp43sMemInBlocks,                   sizeof(wp43sMemInBlocks),                   BACKUP);
       restore(&gmpMemInBytes,                      sizeof(gmpMemInBytes),                      BACKUP);
       restore(&catalog,                            sizeof(catalog),                            BACKUP);
       restore(&lastCatalogPosition,                sizeof(lastCatalogPosition),                BACKUP);
@@ -441,10 +445,16 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&displayStackSHOIDISP,               sizeof(displayStackSHOIDISP),               BACKUP);   //JM ^^
       restore(&ListXYposition,                     sizeof(ListXYposition),                     BACKUP);   //JM ^^
       restore(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
+      restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+      restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
+      restore(&telltale,                            sizeof(telltale),                          BACKUP);   //JM ^^
+      restore(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
       fclose(BACKUP);
       printf("End of calc's restoration\n");
 
       if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA; else MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;              //JM
+      if(temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) 
+        temporaryInformation = TI_NO_INFO;                                                                  //JM
 
       scanLabelsAndPrograms();
       defineCurrentProgramFromGlobalStepNumber(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);
@@ -462,7 +472,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)          {}
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
-        else if(calcMode == CM_FLAG_BROWSER_OLD)      {}             //JM
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
@@ -477,7 +486,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
-        else if(calcMode == CM_FLAG_BROWSER_OLD)       calcModeNormalGui();             //JM
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {
@@ -490,7 +498,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         }
 
       refreshScreen();
-      ramDump();
     }
   }
 #endif // PC_BUILD
@@ -528,8 +535,8 @@ static void registerToSaveString(calcRegister_t regist) {
           strcpy(aimBuffer, "Real:DEG");
           break;
 
-        case AM_GRAD:
-          strcpy(aimBuffer, "Real:GRAD");
+        case AM_DMS:
+          strcpy(aimBuffer, "Real:DMS");
           break;
 
         case AM_RADIAN:
@@ -540,8 +547,8 @@ static void registerToSaveString(calcRegister_t regist) {
           strcpy(aimBuffer, "Real:MULTPI");
           break;
 
-        case AM_DMS:
-          strcpy(aimBuffer, "Real:DMS");
+        case AM_GRAD:
+          strcpy(aimBuffer, "Real:GRAD");
           break;
 
         case AM_NONE:
@@ -635,15 +642,15 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   }
 
   // Local flags
-  if(currentNumberOfLocalRegisters) {
-    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu32 "\n", *currentLocalFlags);
+  if(currentLocalRegisters) {
+    sprintf(tmpString, "LOCAL_FLAGS\n%" PRIu32 "\n", currentLocalFlags->localFlags);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
   // Named variables
-  sprintf(tmpString, "NAMED_VARIABLES\n%" PRIu16 "\n", allNamedVariablePointer->numberOfNamedVariables);
+  sprintf(tmpString, "NAMED_VARIABLES\n%" PRIu16 "\n", numberOfNamedVariables);
   save(tmpString, strlen(tmpString), BACKUP);
-  for(i=0; i<allNamedVariablePointer->numberOfNamedVariables; i++) {
+  for(i=0; i<numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
     sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpString + START_REGISTER_VALUE);
     save(tmpString, strlen(tmpString), BACKUP);
@@ -730,6 +737,24 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);   //JM
   save(tmpString, strlen(tmpString), BACKUP);
+
+
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%u\n",ix_count);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%E\n",telltale);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<LIM; i++) {
+    sprintf(tmpString, "%E\n",gr_x[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+    sprintf(tmpString, "%E\n",gr_y[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+
+
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);
@@ -862,9 +887,9 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
   if(type[4] == ':') {
          if(type[5] == 'D' && type[6] == 'E') tag = AM_DEGREE;
     else if(type[5] == 'D' && type[6] == 'M') tag = AM_DMS;
-    else if(type[5] == 'G')                   tag = AM_GRAD;
     else if(type[5] == 'R')                   tag = AM_RADIAN;
     else if(type[5] == 'M')                   tag = AM_MULTPI;
+    else if(type[5] == 'G')                   tag = AM_GRAD;
     else                                      tag = AM_NONE;
 
     reallocateRegister(regist, dtReal34, REAL34_SIZE, tag);
@@ -1009,7 +1034,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString); // LOCAL_FLAGS
       readLine(stream, tmpString); // LOCAL_FLAGS
       if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        *currentLocalFlags = stringToUint32(tmpString);
+        currentLocalFlags->localFlags = stringToUint32(tmpString);
       }
     }
   }
@@ -1196,6 +1221,28 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       }
     }
   }
+
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
+    char* end;
+    readLine(stream, tmpString); // Number of params
+
+    readLine(stream, tmpString); // ix_count
+    ix_count = stringToInt16(tmpString);
+    readLine(stream, tmpString); // telltale
+    telltale = strtod(tmpString, &end);
+    graph_setupmemory();
+    for(i=0; i<LIM; i++) {
+      readLine(stream, tmpString);
+      gr_x[i] = strtod(tmpString, &end);
+      readLine(stream, tmpString);
+      gr_y[i] = strtod(tmpString, &end);
+      //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
+    }
+  }
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+
+
 }
 
 
@@ -1230,6 +1277,7 @@ void fnLoad(uint16_t loadMode) {
   restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
   restoreOneSection(BACKUP, loadMode); // PROGRAMS
   restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
+  restoreOneSection(BACKUP, loadMode); // Graph memory //JM
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);

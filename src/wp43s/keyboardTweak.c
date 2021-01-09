@@ -58,7 +58,7 @@ void showShiftState(void) {
 #ifdef PC_BUILD_TELLTALE
   printf("    >>> showShiftState: calcMode=%d\n",calcMode );
 #endif //PC_BUILD_TELLTALE
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER && temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
     if(shiftF) {          //SEE screen.c:refreshScreen
       showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
       show_f_jm();
@@ -238,7 +238,7 @@ void  Check_Assign_in_progress(int16_t * result, int16_t tempkey) {
     *result = ITM_EXIT1;                     // EXIT key to exit when done and cancel shifts
   }
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
-  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( tempkey == 0) )) {
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( tempkey == 0) && ((kbd_std + 0)->primary == *result) )) {
     *result = Norm_Key_00_VAR;
   }
 }
@@ -608,10 +608,10 @@ Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
     FN_key_pressed_last = FN_key_pressed;
   }
 
-
+  //printf("^^^^ softmenu=%d -MNU_ALPHA=%d currentFirstItem=%d\n", softmenu[softmenuStack[0].softmenuId].menuItem, -MNU_ALPHA, softmenuStack[0].firstItem);
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   double_click_detected = false;                                            //JM FN-DOUBLE - Dip detection flag
-  if((jm_G_DOUBLETAP && calcMode != CM_AIM)) {
+  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA )) {
     if(exexute_double_g) {
       if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
         shiftF = false;                                                     //JM
@@ -673,7 +673,7 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
     FN_state =  ST_2_REL1;
   }
 
-  if((jm_G_DOUBLETAP && calcMode != CM_AIM) && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
+  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA) && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
     uint8_t                      offset =  0;
     if(shiftF && !shiftG)      { offset =  6; }
     else if(!shiftF && shiftG) { offset = 12; }
@@ -694,6 +694,12 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
     if(!FN_timed_out_to_NOP && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {
       btnFnClicked(unused, charKey);                                             //Execute
     }
+
+   if (!(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY)) {
+     if(FN_timed_out_to_NOP) showSoftmenuCurrentPart();                           //Clear any possible underline residues
+   }
+
+
     resetShiftState();
     FN_cancel();
   }

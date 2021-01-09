@@ -62,6 +62,7 @@ uint8_t  last_CM;
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
 uint8_t  compressString;                                                                                        //JM global flags for character control: compressString
+bool_t   noShow;         
 uint8_t  combinationFonts;
 uint8_t  miniC;                                                                                                 //JM global flags for character control:  miniature letters
 uint8_t  maxiC;                                                                                                 //JM global flags for character control:  enlarged letters

@@ -487,7 +487,7 @@ void fnClAll(uint16_t confirmation) {
     fnClPAll(CONFIRMED);  // Clears all the programs
     fnClSigma(CONFIRMED); // Clears and releases the memory of all statistical sums
     if(savedStatisticalSumsPointer != NULL) {
-      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
 
     // Clear local registers
@@ -499,7 +499,7 @@ void fnClAll(uint16_t confirmation) {
     }
 
     // Clear saved stack registers
-    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=TEMP_REGISTER; regist++) {
+    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
       clearRegister(regist);
     }
     thereIsSomethingToUndo = false;
@@ -516,7 +516,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 2048 * 4; // Multiple of 4
+  uint32_t numberOfBytesForTheTestPrograms = 5700; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -6571,6 +6571,54 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_M2toHECTARE >> 8) | 0x80;
     *(currentStep++) =  ITM_M2toHECTARE       & 0xff;
 
+    *(currentStep++) = (ITM_MUtoM2 >> 8) | 0x80;
+    *(currentStep++) =  ITM_MUtoM2       & 0xff;
+
+    *(currentStep++) = (ITM_M2toMU >> 8) | 0x80;
+    *(currentStep++) =  ITM_M2toMU       & 0xff;
+
+    *(currentStep++) = (ITM_LItoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_LItoM       & 0xff;
+
+    *(currentStep++) = (ITM_MtoLI >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoLI       & 0xff;
+
+    *(currentStep++) = (ITM_CHItoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_CHItoM       & 0xff;
+
+    *(currentStep++) = (ITM_MtoCHI >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoCHI       & 0xff;
+
+    *(currentStep++) = (ITM_YINtoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_YINtoM       & 0xff;
+
+    *(currentStep++) = (ITM_MtoYIN >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoYIN       & 0xff;
+
+    *(currentStep++) = (ITM_CUNtoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_CUNtoM       & 0xff;
+
+    *(currentStep++) = (ITM_MtoCUN >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoCUN       & 0xff;
+
+    *(currentStep++) = (ITM_ZHANGtoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_ZHANGtoM       & 0xff;
+
+    *(currentStep++) = (ITM_ZHANGtoMb >> 8) | 0x80;
+    *(currentStep++) =  ITM_ZHANGtoMb       & 0xff;
+
+    *(currentStep++) = (ITM_MtoZHANG >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoZHANG       & 0xff;
+
+    *(currentStep++) = (ITM_MtoZHANGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoZHANGb       & 0xff;
+
+    *(currentStep++) = (ITM_FENtoM >> 8) | 0x80;
+    *(currentStep++) =  ITM_FENtoM       & 0xff;
+
+    *(currentStep++) = (ITM_MtoFEN >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoFEN       & 0xff;
+
     *(currentStep++) = (ITM_FCC >> 8) | 0x80;
     *(currentStep++) =  ITM_FCC       & 0xff;
     *(currentStep++) = 0;
@@ -8364,7 +8412,9 @@ void addTestPrograms(void) {
     printf("freeProgramBytes = %u\n", freeProgramBytes);
 
     scanLabelsAndPrograms();
-    leavePem();
+    #ifndef TESTSUITE_BUILD
+      leavePem();
+    #endif // TESTSUITE_BUILD
     printf("freeProgramBytes = %u\n", freeProgramBytes);
     listPrograms();
     listLabelsAndPrograms();
@@ -8409,6 +8459,8 @@ void fnReset(uint16_t confirmation) {
     memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
     memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
 
+    graph_setupmemory();                                      //JM
+
     // Empty program initialization
     beginOfProgramMemory          = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
     currentStep                   = beginOfProgramMemory;
@@ -8440,18 +8492,34 @@ void fnReset(uint16_t confirmation) {
     //kbd_usr[19].gShifted    = ITM_SXY;
     //kbd_usr[20].gShifted    = ITM_LYtoM;
 
+    // initialize 9 real34 reserved variables: ACC, ↑Lim, ↓Lim, FV, i%/a, NPER, PER/a, PMT, and PV
+    for(int i=0; i<9; i++) {
+      real34Zero(allocWp43s(REAL34_SIZE));
+    }
+
+    // initialize 1 long integer reserved variables: GRAMOD
+    #ifdef OS64BIT
+      memPtr = allocWp43s(3);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 2;
+    #else // !OS64BIT
+      memPtr = allocWp43s(2);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 1;
+    #endif // OS64BIT
+
     // initialize the global registers
-    for(calcRegister_t regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
+    memset(globalRegister, 0, sizeof(globalRegister));
+    for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
-      memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
+      memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
     }
 
-    // initialize the 9 saved stack registers + 1 temporary register
-    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_SAVED_STACK_REGISTER + 1; regist++) {
+    // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
+    memset(savedStackRegister, 0, sizeof(savedStackRegister));
+    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
       setRegisterDataType(regist, dtReal34, AM_NONE);
-      memPtr = allocWp43s(TO_BYTES(REAL34_SIZE));
+      memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
     }
@@ -8459,16 +8527,43 @@ void fnReset(uint16_t confirmation) {
     // Clear global flags
     memset(globalFlags, 0, sizeof(globalFlags));
 
-    // allocating space for the named variable list
-    allNamedVariablePointer = allocWp43s(TO_BYTES(1)); //  1 block for the number of named variables
-    allNamedVariablePointer->numberOfNamedVariables = 0;
-
     // allocate space for the local register list
-    allLocalRegisters.numberOfLocalRegisters = 0;
-    currentNumberOfLocalRegisters = 0;
-    allLocalRegisters.nextAllocationLevel = WP43S_NULL;
+    allSubroutineLevels.numberOfSubroutineLevels = 1;
+    currentSubroutineLevelData = allocWp43s(3);
+    allSubroutineLevels.ptrToSubroutineLevel0Data = TO_WP43SMEMPTR(currentSubroutineLevelData);
+    currentReturnProgramNumber = 0;
+    currentReturnLocalStep = 0;
+    currentNumberOfLocalRegisters = 0; // No local register
+    currentNumberOfLocalFlags = 0; // No local flags
+    currentSubroutineLevel = 0;
+    currentPtrToNextLevel = WP43S_NULL;
+    currentPtrToPreviousLevel = WP43S_NULL;
     currentLocalFlags = NULL;
     currentLocalRegisters = NULL;
+
+    // allocate space for the named variable list
+    numberOfNamedVariables = 0;
+    allNamedVariables = NULL;
+
+
+    allocateNamedVariable("Mat_A", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_B", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 1);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_X", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 2);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
@@ -8599,8 +8694,53 @@ void fnReset(uint16_t confirmation) {
 //    kbd_usr[0].gShifted    = KEY_TYPCON_UP;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 //    kbd_usr[0].fShifted    = KEY_TYPCON_DN;                  //JM TEMP DEFAULT            //JM note. over-writing the content of setupdefaults
 
+
+    #ifdef WP43S_ON_C43_USER_MODE
+      fnSetFlag(FLAG_USER);
+      kbd_usr[0].primary=ITM_SIGMAPLUS;                 kbd_usr[0].fShifted=ITM_NULL;                     kbd_usr[0].gShifted=ITM_TGLFRT;                   kbd_usr[0].keyLblAim=ITM_NULL;                    kbd_usr[0].primaryAim=ITM_A;                      kbd_usr[0].fShiftedAim=-MNU_ALPHAINTL;            kbd_usr[0].gShiftedAim=ITM_ALPHA;                 kbd_usr[0].primaryTam=ITM_REG_A;                  
+      kbd_usr[1].primary=ITM_1ONX;                      kbd_usr[1].fShifted=ITM_YX;                       kbd_usr[1].gShifted=ITM_toINT;                    kbd_usr[1].keyLblAim=ITM_NUMBER_SIGN;             kbd_usr[1].primaryAim=ITM_B;                      kbd_usr[1].fShiftedAim=ITM_NUMBER_SIGN;           kbd_usr[1].gShiftedAim=ITM_BETA;                  kbd_usr[1].primaryTam=ITM_REG_B;                  
+      kbd_usr[2].primary=ITM_SQUAREROOTX;               kbd_usr[2].fShifted=ITM_SQUARE;                   kbd_usr[2].gShifted=ITM_DMS;                      kbd_usr[2].keyLblAim=ITM_CHECK_MARK;              kbd_usr[2].primaryAim=ITM_C;                      kbd_usr[2].fShiftedAim=ITM_CHECK_MARK;            kbd_usr[2].gShiftedAim=ITM_CHI;                   kbd_usr[2].primaryTam=ITM_REG_C;                  
+      kbd_usr[3].primary=ITM_LOG10;                     kbd_usr[3].fShifted=ITM_10x;                      kbd_usr[3].gShifted=ITM_dotD;                     kbd_usr[3].keyLblAim=ITM_NULL;                    kbd_usr[3].primaryAim=ITM_D;                      kbd_usr[3].fShiftedAim=ITM_NULL;                  kbd_usr[3].gShiftedAim=ITM_DELTA;                 kbd_usr[3].primaryTam=ITM_REG_D;                  
+      kbd_usr[4].primary=ITM_LN;                        kbd_usr[4].fShifted=ITM_EXP;                      kbd_usr[4].gShifted=ITM_toREC2;                   kbd_usr[4].keyLblAim=ITM_NULL;                    kbd_usr[4].primaryAim=ITM_E;                      kbd_usr[4].fShiftedAim=ITM_NULL;                  kbd_usr[4].gShiftedAim=ITM_EPSILON;               kbd_usr[4].primaryTam=ITM_NULL;                   
+      kbd_usr[5].primary=ITM_XEQ;                       kbd_usr[5].fShifted=ITM_AIM;                      kbd_usr[5].gShifted=ITM_toPOL2;                   kbd_usr[5].keyLblAim=ITM_NULL;                    kbd_usr[5].primaryAim=ITM_F;                      kbd_usr[5].fShiftedAim=ITM_NULL;                  kbd_usr[5].gShiftedAim=ITM_NULL;                  kbd_usr[5].primaryTam=ITM_alpha;                  
+      kbd_usr[6].primary=ITM_STO;                       kbd_usr[6].fShifted=ITM_MAGNITUDE;                kbd_usr[6].gShifted=ITM_ANGLE;                    kbd_usr[6].keyLblAim=ITM_NULL;                    kbd_usr[6].primaryAim=ITM_G;                      kbd_usr[6].fShiftedAim=ITM_NULL;                  kbd_usr[6].gShiftedAim=ITM_GAMMA;                 kbd_usr[6].primaryTam=ITM_NULL;                   
+      kbd_usr[7].primary=ITM_RCL;                       kbd_usr[7].fShifted=ITM_PC;                       kbd_usr[7].gShifted=ITM_DELTAPC;                  kbd_usr[7].keyLblAim=ITM_NULL;                    kbd_usr[7].primaryAim=ITM_H;                      kbd_usr[7].fShiftedAim=ITM_NULL;                  kbd_usr[7].gShiftedAim=ITM_ETA;                   kbd_usr[7].primaryTam=ITM_HEX;                    
+      kbd_usr[8].primary=ITM_Rdown;                     kbd_usr[8].fShifted=ITM_CONSTpi;                  kbd_usr[8].gShifted=ITM_XTHROOT;                  kbd_usr[8].keyLblAim=ITM_NULL;                    kbd_usr[8].primaryAim=ITM_I;                      kbd_usr[8].fShiftedAim=ITM_NULL;                  kbd_usr[8].gShiftedAim=ITM_IOTA;                  kbd_usr[8].primaryTam=ITM_REG_I;                  
+      kbd_usr[9].primary=-MNU_TRI;                      kbd_usr[9].fShifted=ITM_DROP;                     kbd_usr[9].gShifted=ITM_FILL;                     kbd_usr[9].keyLblAim=ITM_NULL;                    kbd_usr[9].primaryAim=ITM_J;                      kbd_usr[9].fShiftedAim=ITM_NULL;                  kbd_usr[9].gShiftedAim=ITM_THETA;                 kbd_usr[9].primaryTam=ITM_REG_J;                  
+      kbd_usr[10].primary=ITM_SHIFTf;                   kbd_usr[10].fShifted=ITM_NULL;                    kbd_usr[10].gShifted=ITM_NULL;                    kbd_usr[10].keyLblAim=ITM_NULL;                   kbd_usr[10].primaryAim=ITM_K;                     kbd_usr[10].fShiftedAim=ITM_NULL;                 kbd_usr[10].gShiftedAim=ITM_KAPPA;                kbd_usr[10].primaryTam=ITM_REG_K;                 
+      kbd_usr[11].primary=ITM_SHIFTg;                   kbd_usr[11].fShifted=ITM_NULL;                    kbd_usr[11].gShifted=ITM_NULL;                    kbd_usr[11].keyLblAim=ITM_NULL;                   kbd_usr[11].primaryAim=ITM_L;                     kbd_usr[11].fShiftedAim=ITM_NULL;                 kbd_usr[11].gShiftedAim=ITM_LAMBDA;               kbd_usr[11].primaryTam=ITM_REG_L;                 
+      kbd_usr[12].primary=ITM_ENTER;                    kbd_usr[12].fShifted=ITM_CC;                      kbd_usr[12].gShifted=-MNU_CPX;                    kbd_usr[12].keyLblAim=ITM_ENTER;                  kbd_usr[12].primaryAim=ITM_ENTER;                 kbd_usr[12].fShiftedAim=ITM_NULL;                 kbd_usr[12].gShiftedAim=ITM_NULL;                 kbd_usr[12].primaryTam=ITM_ENTER;                 
+      kbd_usr[13].primary=ITM_XexY;                     kbd_usr[13].fShifted=ITM_LASTX;                   kbd_usr[13].gShifted=ITM_Rup;                     kbd_usr[13].keyLblAim=ITM_ex;                     kbd_usr[13].primaryAim=ITM_M;                     kbd_usr[13].fShiftedAim=ITM_ex;                   kbd_usr[13].gShiftedAim=ITM_MU;                   kbd_usr[13].primaryTam=ITM_NULL;                  
+      kbd_usr[14].primary=ITM_CHS;                      kbd_usr[14].fShifted=-MNU_MODE;                   kbd_usr[14].gShifted=-MNU_STK;                    kbd_usr[14].keyLblAim=ITM_PLUS_MINUS;             kbd_usr[14].primaryAim=ITM_N;                     kbd_usr[14].fShiftedAim=ITM_PLUS_MINUS;           kbd_usr[14].gShiftedAim=ITM_NU;                   kbd_usr[14].primaryTam=ITM_NULL;                  
+      kbd_usr[15].primary=ITM_EXPONENT;                 kbd_usr[15].fShifted=-MNU_DSP;                    kbd_usr[15].gShifted=-MNU_EXP;                    kbd_usr[15].keyLblAim=ITM_NULL;                   kbd_usr[15].primaryAim=ITM_O;                     kbd_usr[15].fShiftedAim=ITM_UP_ARROW;             kbd_usr[15].gShiftedAim=ITM_OMICRON;              kbd_usr[15].primaryTam=ITM_NULL;                  
+      kbd_usr[16].primary=ITM_BACKSPACE;                kbd_usr[16].fShifted=ITM_UNDO;                    kbd_usr[16].gShifted=-MNU_CLR;                    kbd_usr[16].keyLblAim=ITM_BACKSPACE;              kbd_usr[16].primaryAim=ITM_BACKSPACE;             kbd_usr[16].fShiftedAim=ITM_UNDO;                 kbd_usr[16].gShiftedAim=-MNU_CLR;                 kbd_usr[16].primaryTam=ITM_BACKSPACE;             
+      kbd_usr[17].primary=ITM_UP1;                      kbd_usr[17].fShifted=ITM_BST;                     kbd_usr[17].gShifted=ITM_RBR;                     kbd_usr[17].keyLblAim=ITM_UP1;                    kbd_usr[17].primaryAim=ITM_UP1;                   kbd_usr[17].fShiftedAim=ITM_NULL;                 kbd_usr[17].gShiftedAim=ITM_UP_ARROW;             kbd_usr[17].primaryTam=ITM_UP1;                   
+      kbd_usr[18].primary=ITM_7;                        kbd_usr[18].fShifted=-MNU_EQN;                    kbd_usr[18].gShifted=ITM_NULL;                    kbd_usr[18].keyLblAim=ITM_7;                      kbd_usr[18].primaryAim=ITM_P;                     kbd_usr[18].fShiftedAim=ITM_7;                    kbd_usr[18].gShiftedAim=ITM_PI;                   kbd_usr[18].primaryTam=ITM_7;                     
+      kbd_usr[19].primary=ITM_8;                        kbd_usr[19].fShifted=-MNU_ADV;                    kbd_usr[19].gShifted=-MNU_CONST;                  kbd_usr[19].keyLblAim=ITM_8;                      kbd_usr[19].primaryAim=ITM_Q;                     kbd_usr[19].fShiftedAim=ITM_8;                    kbd_usr[19].gShiftedAim=ITM_NULL;                 kbd_usr[19].primaryTam=ITM_8;                     
+      kbd_usr[20].primary=ITM_9;                        kbd_usr[20].fShifted=-MNU_MATX;                   kbd_usr[20].gShifted=-MNU_XFN;                    kbd_usr[20].keyLblAim=ITM_9;                      kbd_usr[20].primaryAim=ITM_R;                     kbd_usr[20].fShiftedAim=ITM_9;                    kbd_usr[20].gShiftedAim=ITM_RHO;                  kbd_usr[20].primaryTam=ITM_9;                     
+      kbd_usr[21].primary=ITM_DIV;                      kbd_usr[21].fShifted=-MNU_STAT;                   kbd_usr[21].gShifted=-MNU_SUMS;                   kbd_usr[21].keyLblAim=ITM_OBELUS;                 kbd_usr[21].primaryAim=ITM_S;                     kbd_usr[21].fShiftedAim=ITM_OBELUS;               kbd_usr[21].gShiftedAim=ITM_SIGMA;                kbd_usr[21].primaryTam=ITM_DIV;                   
+      kbd_usr[22].primary=ITM_DOWN1;                    kbd_usr[22].fShifted=ITM_SST;                     kbd_usr[22].gShifted=ITM_STATUS;                  kbd_usr[22].keyLblAim=ITM_DOWN1;                  kbd_usr[22].primaryAim=ITM_DOWN1;                 kbd_usr[22].fShiftedAim=ITM_NULL;                 kbd_usr[22].gShiftedAim=ITM_DOWN_ARROW;           kbd_usr[22].primaryTam=ITM_DOWN1;                 
+      kbd_usr[23].primary=ITM_4;                        kbd_usr[23].fShifted=ITM_NULL;                    kbd_usr[23].gShifted=-MNU_CLK;                    kbd_usr[23].keyLblAim=ITM_4;                      kbd_usr[23].primaryAim=ITM_T;                     kbd_usr[23].fShiftedAim=ITM_4;                    kbd_usr[23].gShiftedAim=ITM_TAU;                  kbd_usr[23].primaryTam=ITM_4;                     
+      kbd_usr[24].primary=ITM_5;                        kbd_usr[24].fShifted=-MNU_ANGLECONV;              kbd_usr[24].gShifted=-MNU_UNITCONV;               kbd_usr[24].keyLblAim=ITM_5;                      kbd_usr[24].primaryAim=ITM_U;                     kbd_usr[24].fShiftedAim=ITM_5;                    kbd_usr[24].gShiftedAim=ITM_PHI;                  kbd_usr[24].primaryTam=ITM_5;                     
+      kbd_usr[25].primary=ITM_6;                        kbd_usr[25].fShifted=-MNU_FLAGS;                  kbd_usr[25].gShifted=-MNU_BITS;                   kbd_usr[25].keyLblAim=ITM_6;                      kbd_usr[25].primaryAim=ITM_V;                     kbd_usr[25].fShiftedAim=ITM_6;                    kbd_usr[25].gShiftedAim=ITM_PSI;                  kbd_usr[25].primaryTam=ITM_6;                     
+      kbd_usr[26].primary=ITM_MULT;                     kbd_usr[26].fShifted=-MNU_PROB;                   kbd_usr[26].gShifted=-MNU_INTS;                   kbd_usr[26].keyLblAim=ITM_CROSS;                  kbd_usr[26].primaryAim=ITM_W;                     kbd_usr[26].fShiftedAim=ITM_CROSS;                kbd_usr[26].gShiftedAim=ITM_OMEGA;                kbd_usr[26].primaryTam=ITM_MULT;                  
+      kbd_usr[27].primary=ITM_SHIFTf;                   kbd_usr[27].fShifted=ITM_NULL;                    kbd_usr[27].gShifted=ITM_NULL;                    kbd_usr[27].keyLblAim=ITM_SHIFTf;                 kbd_usr[27].primaryAim=ITM_SHIFTf;                kbd_usr[27].fShiftedAim=ITM_NULL;                 kbd_usr[27].gShiftedAim=ITM_NULL;                 kbd_usr[27].primaryTam=ITM_SHIFTf;                
+      kbd_usr[28].primary=ITM_1;                        kbd_usr[28].fShifted=ITM_ASSIGN;                  kbd_usr[28].gShifted=ITM_NULL;                    kbd_usr[28].keyLblAim=ITM_1;                      kbd_usr[28].primaryAim=ITM_X;                     kbd_usr[28].fShiftedAim=ITM_1;                    kbd_usr[28].gShiftedAim=ITM_XI;                   kbd_usr[28].primaryTam=ITM_1;                     
+      kbd_usr[29].primary=ITM_2;                        kbd_usr[29].fShifted=ITM_USERMODE;                kbd_usr[29].gShifted=-MNU_LOOP;                   kbd_usr[29].keyLblAim=ITM_2;                      kbd_usr[29].primaryAim=ITM_Y;                     kbd_usr[29].fShiftedAim=ITM_2;                    kbd_usr[29].gShiftedAim=ITM_UPSILON;              kbd_usr[29].primaryTam=ITM_2;                     
+      kbd_usr[30].primary=ITM_3;                        kbd_usr[30].fShifted=-MNU_PARTS;                  kbd_usr[30].gShifted=-MNU_TEST;                   kbd_usr[30].keyLblAim=ITM_3;                      kbd_usr[30].primaryAim=ITM_Z;                     kbd_usr[30].fShiftedAim=ITM_3;                    kbd_usr[30].gShiftedAim=ITM_ZETA;                 kbd_usr[30].primaryTam=ITM_3;                     
+      kbd_usr[31].primary=ITM_SUB;                      kbd_usr[31].fShifted=-MNU_FIN;                    kbd_usr[31].gShifted=-MNU_ALPHAFN;                kbd_usr[31].keyLblAim=ITM_MINUS;                  kbd_usr[31].primaryAim=ITM_UNDERSCORE;            kbd_usr[31].fShiftedAim=ITM_MINUS;                kbd_usr[31].gShiftedAim=ITM_NULL;                 kbd_usr[31].primaryTam=ITM_SUB;                   
+      kbd_usr[32].primary=ITM_EXIT1;                    kbd_usr[32].fShifted=ITM_OFF;                     kbd_usr[32].gShifted=-MNU_PRINT;                  kbd_usr[32].keyLblAim=ITM_EXIT1;                  kbd_usr[32].primaryAim=ITM_EXIT1;                 kbd_usr[32].fShiftedAim=ITM_OFF;                  kbd_usr[32].gShiftedAim=ITM_PRINTER;              kbd_usr[32].primaryTam=ITM_EXIT1;                 
+      kbd_usr[33].primary=ITM_0;                        kbd_usr[33].fShifted=ITM_VIEW;                    kbd_usr[33].gShifted=ITM_TIMER;                   kbd_usr[33].keyLblAim=ITM_0;                      kbd_usr[33].primaryAim=ITM_COLON;                 kbd_usr[33].fShiftedAim=ITM_0;                    kbd_usr[33].gShiftedAim=ITM_NULL;                 kbd_usr[33].primaryTam=ITM_0;                     
+      kbd_usr[34].primary=ITM_PERIOD;                   kbd_usr[34].fShifted=ITM_SHOW;                    kbd_usr[34].gShifted=-MNU_INFO;                   kbd_usr[34].keyLblAim=ITM_PERIOD;                 kbd_usr[34].primaryAim=ITM_COMMA;                 kbd_usr[34].fShiftedAim=ITM_PERIOD;               kbd_usr[34].gShiftedAim=-MNU_ALPHADOT;            kbd_usr[34].primaryTam=ITM_PERIOD;                
+      kbd_usr[35].primary=ITM_RS;                       kbd_usr[35].fShifted=ITM_PR;                      kbd_usr[35].gShifted=-MNU_PFN;                    kbd_usr[35].keyLblAim=ITM_NULL;                   kbd_usr[35].primaryAim=ITM_QUESTION_MARK;         kbd_usr[35].fShiftedAim=ITM_SLASH;                kbd_usr[35].gShiftedAim=-MNU_ALPHAMATH;           kbd_usr[35].primaryTam=ITM_NULL;                  
+      kbd_usr[36].primary=ITM_ADD;                      kbd_usr[36].fShifted=-MNU_CATALOG;                kbd_usr[36].gShifted=-MNU_IO;                     kbd_usr[36].keyLblAim=ITM_PLUS;                   kbd_usr[36].primaryAim=ITM_SPACE;                 kbd_usr[36].fShiftedAim=ITM_PLUS;                 kbd_usr[36].gShiftedAim=-MNU_ALPHAINTL;           kbd_usr[36].primaryTam=ITM_ADD;                   
+    #endif //WP43S_ON_C43_USER_MODE
+
+
+
+
     // The following lines are test data
-    addTestPrograms();
+    //addTestPrograms();
     //fnSetFlag(  3);
     //fnSetFlag( 11);
     //fnSetFlag( 33);
@@ -8612,7 +8752,7 @@ void fnReset(uint16_t confirmation) {
     //setSystemFlag(FLAG_CARRY);
     //setSystemFlag(FLAG_SPCRES);
 
-    //allocateLocalRegisters(2);
+    //allocateLocalRegisters(3);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
     //fnSetFlag(NUMBER_OF_GLOBAL_FLAGS+2);
     //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
@@ -8634,15 +8774,32 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43L2_100, 2020-12-24, C43-PEM-XEQ-IMPORTED");
+
+
+
+
+#define VERSION1 "_101_KB_POC"
+
+    #ifdef JM_LAYOUT_1A
+      #define L1L2    "L1"
+    #endif
+    #ifdef JM_LAYOUT_2_DM42_STRICT
+      #define L1L2    "L42"
+    #endif
+
+    char *build_str = "C43" L1L2 VERSION1 ", " __DATE__;
+
+
+//    fnStrtoX("C43L2_100+++, 2021-01-03, C43-PEM-XEQ-WIP");
+    fnStrtoX(build_str);
     fnStore(102);
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 L1 (Main C43 template)");
+    fnStrtoX("C43 L1 layout for main C43 template");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
-    fnStrtoX("C43 L42 (For unmodified DM42)");
+    fnStrtoX("C43 L42 layout for unmodified DM42");
     #endif
     fnStore(103);
     fnDrop(0);
@@ -8709,6 +8866,8 @@ void fnReset(uint16_t confirmation) {
 #endif //NOT_NEEDED
 
     doRefreshSoftMenu = true;     //jm dr
+    last_CM = 253;
+    refreshScreen();
   }
 }
 

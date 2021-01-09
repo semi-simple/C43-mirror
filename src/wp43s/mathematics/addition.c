@@ -76,7 +76,7 @@ void fnAdd(uint16_t unusedButMandatoryParameter) {
 
 
 void addRegYStri(void) {                                                       //JM vv Add number + string
-  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
   copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
   
   char tmp[2];
@@ -88,7 +88,7 @@ void addRegYStri(void) {                                                       /
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
-  copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_X);
+  copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_X);
 
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -432,7 +432,7 @@ void addStriLonI(void) {
     reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -466,7 +466,7 @@ void addStriTime(void) {
     reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -500,7 +500,7 @@ void addStriDate(void) {
     reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -534,7 +534,7 @@ void addStriStri(void) {
     reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 

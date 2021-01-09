@@ -31,92 +31,69 @@
 
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
+  uint8_t reg_Name(uint16_t no) {
+    switch(no) {
+      case 100:   return 'X'; break;
+      case 101:   return 'Y'; break;
+      case 102:   return 'Z'; break;
+      case 103:   return 'T'; break;
+      case 104:   return 'A'; break;
+      case 105:   return 'B'; break;
+      case 106:   return 'C'; break;
+      case 107:   return 'D'; break;
+      case 108:   return 'L'; break;
+      case 109:   return 'I'; break;
+      case 110:   return 'J'; break;
+      case 111:   return 'K'; break;
+      default:return 0;break;
+    }
+  }
+
   char csv[TMP_STR_LENGTH];
-  char csvp[TMP_STR_LENGTH];
-  csvp[0] = 0;
+  tmpString[0] = 0;
 
   int16_t ix;
   ix = reg_b;
   while (ix <= reg_e) {
     if((ix>=100)&&(ix<=111)) {
-       switch (ix)
-       {
-        case 100:   strcpy(csv, "X");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_X, csvp); break;
-        case 101:   strcpy(csv, "Y");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_Y, csvp); break;
-        case 102:   strcpy(csv, "Z");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_Z, csvp); break;
-        case 103:   strcpy(csv, "T");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_T, csvp); break;
-        case 104:   strcpy(csv, "A");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_A, csvp); break;
-        case 105:   strcpy(csv, "B");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_B, csvp); break;
-        case 106:   strcpy(csv, "C");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_C, csvp); break;
-        case 107:   strcpy(csv, "D");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_D, csvp); break;
-        case 108:   strcpy(csv, "L");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_L, csvp); break;
-        case 109:   strcpy(csv, "I");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_I, csvp); break;
-        case 110:   strcpy(csv, "J");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_J, csvp); break;
-        case 111:   strcpy(csv, "K");strcat(csv, CSV_TAB);copyRegisterToClipboardString(REGISTER_K, csvp); break;
-        default:break;
-        }
-      strcat(csv, csvp);
+      csv[1]=0;
+      csv[0]=reg_Name(ix);
+      strcat(csv, CSV_TAB);
+      #if (VERBOSE_LEVEL >= 1) 
+        print_linestr("-2b",false);
+      #endif
+      copyRegisterToClipboardString(ix, tmpString);
+      #if (VERBOSE_LEVEL >= 1) 
+        print_linestr("-2c",false);
+      #endif
+      strcat(csv, tmpString);
       strcat(csv, CSV_NEWLINE);
       } else
     if((ix>=0)&&(ix<=99)) {
       sprintf(csv, "%sR%02d%s%s", CSV_STR, ix, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, csvp);
-      strcat(csv, csvp);
+      copyRegisterToClipboardString(ix, tmpString);
+      strcat(csv, tmpString);
       strcat(csv, CSV_NEWLINE);
     } else
     if((ix>=112)&&(ix<=112+100)) {
       sprintf(csv, "%sU%02d%s%s", CSV_STR, ix-100, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, csvp);
-      strcat(csv, csvp);
+      copyRegisterToClipboardString(ix, tmpString);
+      strcat(csv, tmpString);
       strcat(csv, CSV_NEWLINE);
     }
 
     export_append_line(csv);                    //Output append to CSV file
+
+    #if (VERBOSE_LEVEL >= 1) 
+      strcat(csv,"------------------>");
+      print_linestr(csv,false);
+    #endif
 
     ++ix;
   }
 
 #endif
 }
-
-
-void fnP_All_Regs(uint16_t unusedButMandatoryParameter){
-  #if defined (DMCP_BUILD)
-  check_create_dir("DATA");  
-  make_date_filename(filename_csv,"DATA\\",".REGS.TSV");
-  #endif
-
-
-  switch (unusedButMandatoryParameter)
-  {
-  case 0:           //All registers
-    {
-       stackregister_csv_out(REGISTER_X,REGISTER_D);
-       stackregister_csv_out(REGISTER_D,REGISTER_K);
-       stackregister_csv_out(0,99);
-       //stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
-    }
-    break;
-  case 1:           //Stack only
-    {
-       stackregister_csv_out(REGISTER_X,REGISTER_D);
-    }
-    break;
-  case 2:           //Global Registers
-    {
-       stackregister_csv_out(0,99);
-    }
-    break;
-  case 3:           //USER Registers
-    {
-       stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
-    }
-    break;
-  default:
-    break;
-  }
-}
-
 
 
 
@@ -139,7 +116,9 @@ void displaywords(char *line1) {  //Preprocessor and display
   aa[1]=0;
   bb[1]=0;
   bb[0]=0;
-  if(verbose_jm >=2) {print_linestr("Code:",true);}
+  #if (VERBOSE_LEVEL >= 2) 
+    print_linestr("Code:",true);
+  #endif
   //printf("4:%s\n",line1);
 
   if(line1[stringByteLength(line1)-1] != 32) {
@@ -197,7 +176,9 @@ void displaywords(char *line1) {  //Preprocessor and display
       #ifdef DISPLOADING
       strcat(ll,aa);
       if(strlen(ll)>30 && aa[0] == 32) {
-        if(verbose_jm>=2) {print_linestr(ll,false);}
+        #if (VERBOSE_LEVEL >= 2) 
+          print_linestr(ll,false);
+        #endif
         ll[0]=0;
       }
       #endif
@@ -207,7 +188,9 @@ void displaywords(char *line1) {  //Preprocessor and display
         #ifdef DISPLOADING
         strcat(ll,aa);          
         if(strlen(ll)>36) {
-         if(verbose_jm>=2){print_linestr(ll,false);}
+         #if (VERBOSE_LEVEL >= 2) 
+           print_linestr(ll,false);
+         #endif
           ll[0]=0;
         }
         #endif
@@ -217,7 +200,9 @@ void displaywords(char *line1) {  //Preprocessor and display
   }
   #ifdef DISPLOADING
   if(ll[0]!=0) {
-    if(verbose_jm>=2) {print_linestr(ll,false);}
+    #if (VERBOSE_LEVEL >= 2) 
+      print_linestr(ll,false);
+    #endif
   }
   #endif
 //printf("6:%s\n",line1);

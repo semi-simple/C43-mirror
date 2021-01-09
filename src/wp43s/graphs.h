@@ -22,16 +22,37 @@
 
 //graphs.h
 
-//Memory structure
-float/*double*/*   gr_x;
-float/*double*/*   gr_y;
-float/*double*/    telltale;
-uint16_t ix_count;
-#define  LIM               400                 //Number of points
-#define  MEM_INITIALIZED   199
 
-#define FLoatingMax 1e38
-#define FLoatingMin -1e38
+//*******************************
+//#define graphtype float/*double*/      //Define the type of floating point used in the STATS memory. float uses 4 bytes per number
+// graphtype:
+//
+// For normal 32-bit floating-point values, this corresponds to values in the range from 1.175494351 * 10^-38 to 3.40282347 * 10^+38.
+//
+// Array: 400 x 2 * 4 byte = 3200 bytes required for STATS Graph array, which corresponds to 800 blocks.
+//
+//*******************************
+#define graphtypeno 1 //1=float & 2=double
+
+
+#if   (graphtypeno == 1)
+  #define graphtype float  
+  #define FLoatingMax 1e38     //convenient round figures used for maxima and minima determination
+  #define FLoatingMin -1e38
+#elif (graphtypeno == 2)
+  #define graphtype double
+  #define FLoatingMax 1e308
+  #define FLoatingMin -1e308
+#endif
+
+
+//Memory structure
+extern graphtype *gr_x;
+extern graphtype *gr_y;
+graphtype    telltale;
+uint16_t ix_count;
+#define  LIM               400 //Number of points; MUST be multiple of 4
+#define  MEM_INITIALIZED   199
 
 
 extern float graph_dx;                                               //JM Graph
@@ -60,7 +81,8 @@ extern bool_t PLOT_SHADE;
 
 int8_t plotmode;                            //      _SCAT
 
-void graph_reset      ();
+void graph_reset      (void);
+void fnClGrf          (uint16_t unusedButMandatoryParameter);
 void fnPline          (uint16_t unusedButMandatoryParameter);
 void fnPcros          (uint16_t unusedButMandatoryParameter);
 void fnPbox           (uint16_t unusedButMandatoryParameter);
@@ -85,7 +107,7 @@ void fnPlot           (uint16_t unusedButMandatoryParameter);
 void fnPlotLS         (uint16_t unusedButMandatoryParameter);
 
 #ifndef TESTSUITE_BUILD
-int16_t screen_window_x(float/*double*/ x_min, float/*double*/ x, float/*double*/ x_max);
-int16_t screen_window_y(float/*double*/ y_min, float/*double*/ y, float/*double*/ y_max);
+int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max);
+int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 #endif
 float auto_tick(float tick_int_f);

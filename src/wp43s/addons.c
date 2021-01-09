@@ -91,6 +91,7 @@ void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
   #ifdef PC_BUILD
   jm_show_comment("^^^^fnClAIMa");
   #endif //PC_BUILD
+  temporaryInformation = TI_NO_INFO;
   if(calcMode == CM_NIM) {
     strcpy(aimBuffer,"+");
     fnKeyBackspace(0);
@@ -185,7 +186,7 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 
 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
+    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
     if(getRegisterDataType(REGISTER_X) == dtLongInteger)  {convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);}
@@ -216,7 +217,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       #endif
       }
     }
-    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
   }
 
 
@@ -225,7 +226,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
 
 
 void fnMultiplySI(uint16_t multiplier) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER);   // STO TMP
+    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 	char mult[20];
 	char divi[20];
 	mult[0]=0;
@@ -266,7 +267,7 @@ void fnMultiplySI(uint16_t multiplier) {
     }
 
     adjustResult(REGISTER_X, false, false, REGISTER_X, REGISTER_Y, -1);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, REGISTER_L);   // STO TMP
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
 
 }
 
@@ -664,6 +665,58 @@ void fnByte(uint16_t command) {
     default: break;
   }
 }                                                      //JM POC BASE2 ^^
+
+
+
+
+
+
+
+void fnP_All_Regs(uint16_t option){
+
+  #ifndef TESTSUITE_BUILD
+    create_filename(".REGS.TSV");
+
+    #if (VERBOSE_LEVEL >= 1) 
+      clearScreen();
+      print_linestr("Output regs to drive:",true);
+      print_linestr(filename_csv,false);          
+    #endif
+
+    switch (option)
+    {
+    case 0:           //All registers
+      {
+         stackregister_csv_out(REGISTER_X,REGISTER_D);
+         stackregister_csv_out(REGISTER_L,REGISTER_K);
+         stackregister_csv_out(0,99);
+         //stackregister_csv_out(FIRST_LOCAL_REGISTER,FIRST_LOCAL_REGISTER+100);
+      }
+      break;
+
+    case 1:           //Stack only
+      {
+         stackregister_csv_out(REGISTER_X,REGISTER_D);
+      }
+      break;
+
+    case 2:           //Global Registers
+      {
+         stackregister_csv_out(0,99);
+      }
+      break;
+
+    case 3:           //USER Registers
+      {
+         stackregister_csv_out(FIRST_LOCAL_REGISTER,LAST_LOCAL_REGISTER);
+      }
+      break;
+
+    default:
+      break;
+    }
+  #endif //TESTSUITE_BUILD
+}
 
 
 

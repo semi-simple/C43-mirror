@@ -33,8 +33,6 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
-uint8_t verbose_jm;
-
 
 // Radix Mark 1 bit
 #define RX_PERIOD               103
@@ -245,6 +243,9 @@ char* itoa(int value, char* result, int base);
 #define JC_DIFF                48    // graph setup
 #define JC_RMS                 49    // graph setup
 #define JC_SHADE               50    // graph setup
+
+#define JC_NL                  51
+#define JC_UC                  52
 
 
 

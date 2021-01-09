@@ -21,8 +21,7 @@
 #include "wp43s.h"
 
 
-
-uint8_t  compressWidth = 0;                                 //JM compressWidth
+//JM The state of maxiC influences the width, depending on the auto selected font. JM
 /********************************************//**
  * \brief Calculates a string width in pixel using a certain font
  *
@@ -32,10 +31,11 @@ uint8_t  compressWidth = 0;                                 //JM compressWidth
  * \param[in] withEndingEmptyRows bool_t  With the ending empty rows
  * \return int16_t                        Width in pixel of the string
  ***********************************************/
-int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows) {
+int16_t stringWidth(const char *str, const font_t *font1, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows) {
   int16_t ch, numPixels, charCode, glyphId;
   const glyph_t *glyph;
   bool_t  firstChar;
+  const font_t  *font;  //JM
 
   glyph = NULL;
   firstChar = true;
@@ -46,6 +46,20 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
     if(charCode & 0x80) { // MSB set
       charCode = (charCode<<8) | (uint8_t)str[ch++];
     }
+
+    font = font1;                                 //JM auto font change for enlarged alpha fonts vv
+#ifndef TESTSUITE_BUILD
+    if(combinationFonts == 2) {
+      if(maxiC == 1 && font == &numericFont) {
+#endif //TESTSUITE_BUILD
+        glyphId = findGlyph(font, charCode);
+        if(glyphId < 0) {                         //JM if there is not a large glyph, width of the small letter
+          font = &standardFont;
+        }
+#ifndef TESTSUITE_BUILD
+      }
+    }                                             //JM ^^
+#endif //TESTSUITE_BUILD
 
     glyphId = findGlyph(font, charCode);
     if(glyphId >= 0) {
@@ -76,7 +90,6 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
     }
 
     numPixels += glyph->colsGlyph + glyph->colsAfterGlyph;
-    if(compressWidth > 0) { numPixels--; }                  //JM
     if(firstChar) {
       firstChar = false;
       if(withLeadingEmptyRows) {

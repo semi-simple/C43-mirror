@@ -34,12 +34,17 @@
 
 
 //Verbose options
-#define verbose_default 0               //0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
-#define PC_BUILD_TELLTALE          //verbose on PC
-#undef PC_BUILD_TELLTALE
+#define VERBOSE_LEVEL 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
 
-#define PC_BUILD_VERBOSE2          //verbose on PC
-#undef PC_BUILD_VERBOSE2
+#define PC_BUILD_TELLTALE            //JM verbose on PC
+#undef  PC_BUILD_TELLTALE
+
+#define PC_BUILD_VERBOSE2            //JM verbose XEQM detailed operation on PC, via central jm_show_comment1 function
+#undef  PC_BUILD_VERBOSE2
+
+#define VERBOSE_SCREEN               //JM Used at new SHOW. Needs PC_BUILD.
+#undef  VERBOSE_SCREEN
+
 
 
 //Allow longpress CHS and EEX
@@ -73,10 +78,17 @@
 #undef JMSHOWCODES_KB3
 
 //wrapping editor
-#define  combinationFontsDefault 2; //JM 0 = no large font; 1 = enlarged standardfont; 2 = combination font enlargement
+#define  combinationFontsDefault 2  //JM 0 = no large font; 1 = enlarged standardfont; 2 = combination font enlargement
                                     //JM for text wrapping editor. 
                                     //JM Combintionfonts uses large numericfont characters, and if glyph not available then takes standardfont and enlarges it
                                     //JM Otherwise, full enlarged standardfont is used.
+
+//Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
+#undef WP43S_ON_C43_USER_MODE       //Default setting
+
+
+#define INIT_RAMDUMP
+#undef INIT_RAMDUMP
 
 
 
@@ -85,11 +97,11 @@
 //*********************************
 #define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
-#define DEBUG_PANEL                      0 //JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
-#define DEBUG_REGISTER_L                 0 // Showing register L content on the PC GUI
-#define SHOW_MEMORY_STATUS               0 //JM Showing the memory status on the PC GUI
+#define DEBUG_PANEL                      0 //1 JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
+#define DEBUG_REGISTER_L                 0 //1 JM Showing register L content on the PC GUI
+#define SHOW_MEMORY_STATUS               0 //1 JM Showing the memory status on the PC GUI
 #define LIBGMP                           1 // Use GMP for the big integers
-#define MMHG_PA_133_3224                 0 //JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
+#define MMHG_PA_133_3224                 0 //1 JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
 #define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX
@@ -118,7 +130,7 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2020.12"
+#define YEARMONTH                                 "2021.01"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
@@ -337,9 +349,11 @@
 ///////////////////////////////////////////////////////
 // Register numbering:
 //    0 to  111 global resisters
-//  112 to  211 local registers (from .00 to .99) this are 100 local registers but TAM allows only a parameter from 0 to 99 (without indirection)
-// 1000 to 1999 named variables
-// 2000 to 2009 saved stack registers (UNDO item)
+//  112 to  210 local registers (from .00 to .98) this are 99 local registers
+//  212 to  219 saved stack registers (UNDO feature)
+//  220 to  220 temporary registers
+//  221 to 1999 named variables
+// 2000 to 2029 reserved variables
 #define REGISTER_X                               100
 #define REGISTER_Y                               101
 #define REGISTER_Z                               102
@@ -356,20 +370,55 @@
 #define NUMBER_OF_GLOBAL_REGISTERS               112 // There are 112 global registers from 0 to 111
 #define FIRST_LOCAL_REGISTER                     112 // There are 112 global registers from 0 to 111
 #define LAST_LOCAL_REGISTER                      210 // There are maximum 99 local registers from 112 to 210 (.00 to .98)
-#define FIRST_NAMED_VARIABLE                    1000
-#define FIRST_SAVED_STACK_REGISTER              2000
-#define SAVED_REGISTER_X                        2000
-#define SAVED_REGISTER_Y                        2001
-#define SAVED_REGISTER_Z                        2002
-#define SAVED_REGISTER_T                        2003
-#define SAVED_REGISTER_A                        2004
-#define SAVED_REGISTER_B                        2005
-#define SAVED_REGISTER_C                        2006
-#define SAVED_REGISTER_D                        2007
-#define SAVED_REGISTER_L                        2008
-#define LAST_SAVED_STACK_REGISTER               2008
-#define NUMBER_OF_SAVED_STACK_REGISTERS            9 // 2000 to 2008
-#define TEMP_REGISTER                           2009
+#define NUMBER_OF_SAVED_STACK_REGISTERS            9 // 211 to 219
+#define FIRST_SAVED_STACK_REGISTER               211
+#define SAVED_REGISTER_X                         211
+#define SAVED_REGISTER_Y                         212
+#define SAVED_REGISTER_Z                         213
+#define SAVED_REGISTER_T                         214
+#define SAVED_REGISTER_A                         215
+#define SAVED_REGISTER_B                         216
+#define SAVED_REGISTER_C                         217
+#define SAVED_REGISTER_D                         218
+#define SAVED_REGISTER_L                         219
+#define LAST_SAVED_STACK_REGISTER                219
+#define NUMBER_OF_TEMP_REGISTERS                   1 // 220
+#define FIRST_TEMP_REGISTER                      220
+#define TEMP_REGISTER_1                          220
+#define LAST_TEMP_REGISTER                       220
+#define FIRST_NAMED_VARIABLE                     221
+#define LAST_NAMED_VARIABLE                     1999
+#define FIRST_RESERVED_VARIABLE                 2000
+#define RESERVED_VARIABLE_X                     2000
+#define RESERVED_VARIABLE_Y                     2001
+#define RESERVED_VARIABLE_Z                     2002
+#define RESERVED_VARIABLE_T                     2003
+#define RESERVED_VARIABLE_A                     2004
+#define RESERVED_VARIABLE_B                     2005
+#define RESERVED_VARIABLE_C                     2006
+#define RESERVED_VARIABLE_D                     2007
+#define RESERVED_VARIABLE_L                     2008
+#define RESERVED_VARIABLE_I                     2009
+#define RESERVED_VARIABLE_J                     2010
+#define RESERVED_VARIABLE_K                     2011
+#define RESERVED_VARIABLE_GRAMOD                2012
+#define RESERVED_VARIABLE_ADM                   2013
+#define RESERVED_VARIABLE_DENMAX                2014
+#define RESERVED_VARIABLE_ISM                   2015
+#define RESERVED_VARIABLE_REALDF                2016
+#define RESERVED_VARIABLE_NDEC                  2017
+#define RESERVED_VARIABLE_ACC                   2018
+#define RESERVED_VARIABLE_ULIM                  2019
+#define RESERVED_VARIABLE_LLIM                  2020
+#define RESERVED_VARIABLE_FV                    2021
+#define RESERVED_VARIABLE_IPONA                 2022
+#define RESERVED_VARIABLE_NPER                  2023
+#define RESERVED_VARIABLE_PERONA                2024
+#define RESERVED_VARIABLE_PMT                   2025
+#define RESERVED_VARIABLE_PV                    2026
+#define LAST_RESERVED_VARIABLE                  2026
+
+#define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
 
 // If one of the 4 next defines is changed: change also Y_POSITION_OF_???_LINE below
@@ -452,7 +501,7 @@
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
 
 // Number of constants
-#define NUMBER_OF_CONSTANTS_39                   177+2   //JM 2 additionalconstants
+#define NUMBER_OF_CONSTANTS_39                   183+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
 #define NUMBER_OF_CONSTANTS_34                     8
@@ -478,11 +527,11 @@
 #define DF_UN                                      5   //JM
 
 // Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0
-#define AM_GRAD                                    1 // grad   must be 1
-#define AM_RADIAN                                  2 // radian must be 2
-#define AM_MULTPI                                  3 // multpi must be 3
-#define AM_DMS                                     4 // dms    must be 4
+#define AM_DEGREE                                  0 // degree must be 0  | This is because of the tables
+#define AM_RADIAN                                  1 // radian must be 1  | angle45, angle90, and angle180
+#define AM_MULTPI                                  2 // multpi must be 2  | for angle reduction before
+#define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
+#define AM_DMS                                     4
 #define AM_NONE                                    5
 #define AM_HMS                                     6   //JM
 
@@ -512,7 +561,7 @@
 #define RM_CEIL                                    5
 #define RM_FLOOR                                   6
 
-// Calc mode 5 bits
+// Calc mode 4 bits
 #define CM_NORMAL                                  0 // Normal operation
 #define CM_AIM                                     1 // Alpha input mode
 #define CM_NIM                                     2 // Numeric input mode
@@ -526,7 +575,6 @@
 #define CM_CONFIRMATION                           10 // Waiting for confirmation or canceling
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
-#define CM_FLAG_BROWSER_OLD                       99 //JM Flag browser old    //JM
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -639,11 +687,11 @@
 #define LM_SUMS                                    4
 #define LM_SYSTEM_STATE                            5
 
-// Statistical sums
+// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2×(7×60 - 4 - 6×16) = 640 bytes
 #define NUMBER_OF_STATISTICAL_SUMS                27
-#define SIGMA_N      ((real_t *)(statisticalSumsPointer))
-#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE))
-#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2))
+#define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
+#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE)) // could be a real34
+#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2)) // could be a real34
 #define SIGMA_X2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  3))
 #define SIGMA_X2Y    ((real_t *)(statisticalSumsPointer + REAL_SIZE *  4))
 #define SIGMA_Y2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  5))
@@ -664,10 +712,10 @@
 #define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
 #define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
 #define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
-#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
-#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24))
-#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
-#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23)) // could be a real34
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100+6  //JM 100-->106 // Used in the font browser application
@@ -680,7 +728,7 @@
 #define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #endif
 
-#define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
+#define RAM_SIZE                               2048 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
@@ -737,7 +785,7 @@
 #define flipSystemFlag(sf)                   { systemFlags ^=  ((uint64_t)1 << (sf & 0x3fff)); systemFlagAction(sf, 2); }
 #define shortIntegerIsZero(op)               (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
 #define getStackTop()                        (getSystemFlag(FLAG_SSIZE8) ? REGISTER_D : REGISTER_T)
-#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
+#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), getRegisterFullSize(regist))
 #define storeToDtConfigDescriptor(config)    (configToStore->config = config)
 #define recallFromDtConfigDescriptor(config) (config = configToRecall->config)
 #define getRecalledSystemFlag(sf)            ((configToRecall->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
@@ -757,6 +805,13 @@
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
 #define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
+#define currentReturnProgramNumber           (currentSubroutineLevelData[0].returnProgramNumber)
+#define currentReturnLocalStep               (currentSubroutineLevelData[0].returnLocalStep)
+#define currentNumberOfLocalFlags            (currentSubroutineLevelData[1].numberOfLocalFlags)
+#define currentNumberOfLocalRegisters        (currentSubroutineLevelData[1].numberOfLocalRegisters)
+#define currentSubroutineLevel               (currentSubroutineLevelData[1].subroutineLevel)
+#define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
+#define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
 
 #ifdef DMCP_BUILD
   #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)

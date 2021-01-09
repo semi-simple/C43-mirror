@@ -340,7 +340,7 @@ void kill_ASB_icon(void) {
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_STACK_D) {
+        else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {
@@ -1376,7 +1376,7 @@ void kill_ASB_icon(void) {
 
           case TT_DOT :
             if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-              if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && currentLocalFlags != NULL) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && currentNumberOfLocalRegisters != 0)) {
+              if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && currentLocalFlags != NULL) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && currentLocalRegisters != NULL)) {
                 sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
                 transitionSystemState = 3;
               }
@@ -1443,7 +1443,7 @@ void kill_ASB_icon(void) {
             return;
 
           case TT_DOT :
-            if(currentNumberOfLocalRegisters != 0) {
+            if(currentLocalRegisters != NULL) {
               sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
               transitionSystemState = 10;
             }
@@ -1519,8 +1519,8 @@ void kill_ASB_icon(void) {
       // OP .d_
       case 4 :
         // Here we are sure that:
-        // 0 <= tamNumber < NUMBER_OF_LOCAL_FLAGS          in the case of a flag parameter
-        // 0 <= tamNumber < currentNumberOfLocalRegisters  in the case of a register parameter
+        // 0 <= tamNumber < NUMBER_OF_LOCAL_FLAGS         in the case of a flag parameter
+        // 0 <= tamNumber < currentNumberOfLocalRegisters in the case of a register parameter
         switch(tamEvent) {
           case TT_DIGIT :
             if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 + tamDigit < NUMBER_OF_LOCAL_FLAGS) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 + tamDigit < currentNumberOfLocalRegisters)) {
@@ -1566,7 +1566,7 @@ void kill_ASB_icon(void) {
             return;
 
           case TT_DOT :
-            if(currentNumberOfLocalRegisters != 0) {
+            if(currentLocalRegisters != NULL) {
               sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
               transitionSystemState = 7;
             }
@@ -1649,7 +1649,7 @@ void kill_ASB_icon(void) {
       // OP -->.d_
       case 8 :
         // Here we are sure that:
-        // 0 <= tamNumber < numberOfLocalRegisters
+        // 0 <= tamNumber < currentNumberOfLocalRegisters
         switch(tamEvent) {
           case TT_DIGIT :
             if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && tamNumber*10 + tamDigit < NUMBER_OF_LOCAL_FLAGS) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && tamNumber*10 + tamDigit < currentNumberOfLocalRegisters)) {
@@ -1784,7 +1784,7 @@ void kill_ASB_icon(void) {
             return;
 
           case TT_DOT :
-            if(currentNumberOfLocalRegisters != 0) {
+            if(currentLocalRegisters != NULL) {
               sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
               transitionSystemState = 14;
             }

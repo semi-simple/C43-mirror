@@ -71,9 +71,9 @@
     switch(angularMode) {
       case AM_DEGREE: strcpy(string, STD_DEGREE); break;
       case AM_DMS:    strcpy(string, "d.ms");     break;
-      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_RADIAN: strcpy(string, "r");        break;
       case AM_MULTPI: strcpy(string, STD_pi);     break;
+      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_NONE:   break;
       default:        strcpy(string, "?");
     }
@@ -90,7 +90,7 @@
     switch(getRegisterDataType(regist)) {
       case dtLongInteger:
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
-        longIntegerToAllocatedString(lgInt, tmpString, sizeof(tmpString));
+        longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
         longIntegerFree(lgInt);
         tmp2[0]=0;                                         //JMCSV add apostrophies
         strcat(tmp2,"\"");                                 //JMCSV
@@ -102,15 +102,15 @@
         break;
 
       case dtTime:
-        strcpy(tmpString, "Copying a time to the clipboard is to be coded!");
+        strcpy(tmpString, "time to clipboard to be coded");
         break;
 
       case dtDate:
-        strcpy(tmpString, "Copying a date to the clipboard is to be coded!");
+        strcpy(tmpString, "date to clipboard to be coded");
         break;
 
       case dtString:
-        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
+        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
         stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
         tmp2[0]=0;                                         //JMCSV add apostrophies
         strcat(tmp2,"\"");                                 //JMCSV
@@ -120,11 +120,11 @@
         break;
 
       case dtReal34Matrix:
-        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
+        strcpy(tmpString, "real matrix to clipboard is to be coded");
         break;
 
       case dtComplex34Matrix:
-        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
+        strcpy(tmpString, "complex matrix to clipboard is to be coded");
         break;
 
       case dtShortInteger:
@@ -175,11 +175,11 @@
         break;
 
       case dtConfig:
-        xcopy(tmpString, "Configuration data", 19);
+        xcopy(tmpString, "Config data", 19);
         break;
 
       default:
-        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown.", getRegisterDataType(regist));
     }
 
     strcpy(clipboardString, tmpString);
@@ -722,8 +722,10 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setBlackPixel(uint32_t x, uint32_t y) {
+      if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
+    
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-        printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
+        printf("In function setBlackPixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
         return;
       }
 
@@ -741,8 +743,9 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setWhitePixel(uint32_t x, uint32_t y) {
+      if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-        printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
+        printf("In function setWhitePixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
         return;
       }
 
@@ -774,7 +777,7 @@ int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
     uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
 
-    if(y > 4294967000) return; //JM
+    if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
 
     if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {  //JMTOCHECK is this needed?
       printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
@@ -802,7 +805,7 @@ void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
 
 uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
-uint8_t  maxiC = 0;                                                              //JM ENLARGE letters
+uint8_t  maxiC = 0;                                                              //JM ENLARGE letters. Use Numericfont & combinationFontsDefault=2;
 
 
 /********************************************//**
@@ -937,6 +940,7 @@ uint8_t  maxiC = 0;                                                             
 
 
   uint8_t  compressString = 0;                                                              //JM compressString
+  bool_t   noShow = false;         //JM
 
   /********************************************//**
    * \brief Displays a 0 terminated string
@@ -980,11 +984,17 @@ uint8_t  maxiC = 0;                                                             
         charCode = (charCode<<8) | (uint8_t)string[ch++];
       }
 
+    if(!noShow) 
       x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+    else 
+      x = showGlyphCode(charCode, font, x, -100, videoMode, slc, sec) - compressString;        //JM compressString      
     }
     compressString = 0;        //JM compressString
     return x;
   }
+
+
+
 
 
 uint8_t lines    = 2;      //lines   0
@@ -1002,7 +1012,7 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
   uint32_t  numPixels, orglastlines, tmpxy;
   const    glyph_t *glyph;
   uint8_t  editlines     = 5 ; 
-  uint8_t  maxbeforejump = 30; 
+//  uint8_t  maxbeforejump = 30; 
   uint8_t  yincr         = 21; 
 
 
@@ -1011,11 +1021,11 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
   //printf("##>> %d x:%d y:%d \n",edcursor, x,y);
   if(combinationFonts !=0) {
     editlines     = 3 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
-    maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+//    maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
     yincr         = 35;       //JM ENLARGE 21   distasnce between editing wrapped lines
     x_offset      = 0;    //pixels 40
-    if(lg > maxbeforejump) {  //jump from large letters to small letters
-      if(lg > 3*maxbeforejump) combinationFonts = 0;  //Auto change to small font after some characters
+    if(/*lg>maxbeforejump*/ stringWidth(string + offset, &numericFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH - 50 ) {  //jump from large letters to small letters
+      if(/*lg > 3*maxbeforejump*/ stringWidth(string + offset, &numericFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH * 3 - 70 ) combinationFonts = 0;  //Auto change to small font after some characters
       lines = editlines;
       y_offset = 1;
     } else {
@@ -1025,10 +1035,10 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
     }
   } else {
     editlines     = 5 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
-    maxbeforejump = 30;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+//    maxbeforejump = 30;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
     yincr         = 21;       //JM ENLARGE 21   distasnce between editing wrapped lines
     x_offset      = 0;    //pixels 40
-    if(lg>maxbeforejump) {
+    if(/*lg>maxbeforejump*/ stringWidth(string + offset, &standardFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH - 50 ) {
       lines = editlines;
       y_offset = 2;
     } else {
@@ -1374,12 +1384,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         #if (SHOW_MEMORY_STATUS == 1)
           char string[1000];
 
-          sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), C43 %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
+          sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), C43 %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", TO_BYTES((uint64_t)wp43sMemInBlocks), (uint64_t)gmpMemInBytes);
           stringToUtf8(string, (uint8_t *)tmpStr);
           gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
           gtk_widget_show(lblMemoryStatus);
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
+
+      #if defined VERBOSE_SCREEN && defined PC_BUILD
+        printf("^^^^Display Register: %d temporaryInformation: %d\n",regist, temporaryInformation);
+      #endif //VERBOSE_SCREEN
+
+
 
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
@@ -1419,12 +1435,15 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_T) { // L1
+
+//Original SHOW
+
+      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_T) { // L1
       w = stringWidth(tmpString, &standardFont, true, true);
       showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
     }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
+      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
       w = stringWidth(tmpString + 300, &standardFont, true, true);
       showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
@@ -1434,7 +1453,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
+      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
       w = stringWidth(tmpString + 900, &standardFont, true, true);
       showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
 
@@ -1444,7 +1463,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
+      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
       w = stringWidth(tmpString + 1500, &standardFont, true, true);
       showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
 
@@ -1454,32 +1473,104 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
+
+// NEW SHOW
                                                                          //JMSHOW vv
+
+        else if(temporaryInformation == TI_SHOW_REGISTER_SMALL) {
+          #define line_h0 21
+          switch(regist) {
+            // L1
+            case REGISTER_T: w = stringWidth(tmpString, &standardFont, true, true);
+                             showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW A: Display Register T: %s\n",tmpString);
+                             #endif //VERBOSE_SCREEN
+                             break;
+            // L2 & L3
+            case REGISTER_Z: w = stringWidth(tmpString + 300, &standardFont, true, true);
+                             showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW A: Display Register Z: %s\n",tmpString + 300);
+                             #endif //VERBOSE_SCREEN
+                             if(tmpString[600]) {
+                               w = stringWidth(tmpString + 600, &standardFont, true, true);
+                               showString(tmpString + 600, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0*2, vmNormal, true, true);
+                               #if defined VERBOSE_SCREEN && defined PC_BUILD
+                                 printf("^^^^NEW SHOW A: Display Register Z2: %s\n",tmpString + 600);
+                               #endif //VERBOSE_SCREEN
+                             }
+                             break;
+            // L4 & L5
+            case REGISTER_Y: w = stringWidth(tmpString + 900, &standardFont, true, true);
+                             showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0*3, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW A: Display Register Y: %s\n",tmpString + 900);
+                             #endif //VERBOSE_SCREEN
+                             if(tmpString[1200]) {
+                               w = stringWidth(tmpString + 1200, &standardFont, true, true);
+                               showString(tmpString + 1200, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0*4, vmNormal, true, true);
+                               #if defined VERBOSE_SCREEN && defined PC_BUILD
+                                 printf("^^^^NEW SHOW A: Display Register Y2: %s\n",tmpString + 1200);
+                               #endif //VERBOSE_SCREEN
+                             }
+                             break;
+            // L6 & L7
+            case REGISTER_X: w = stringWidth(tmpString + 1500, &standardFont, true, true);
+                             showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0*5, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW A: Display Register X: %s\n",tmpString + 1500);
+                             #endif //VERBOSE_SCREEN
+                             if(tmpString[1800]) {
+                               w = stringWidth(tmpString + 1800, &standardFont, true, true);
+                               showString(tmpString + 1800, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h0*6, vmNormal, true, true);
+                               #if defined VERBOSE_SCREEN && defined PC_BUILD
+                                 printf("^^^^NEW SHOW A: Display Register X2: %s\n",tmpString + 1800);
+                               #endif //VERBOSE_SCREEN
+                             }
+                             break;
+            default: {}
+          }
+        }
+                                                                         //JMSHOW ^^
+
+
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
-          #define line_h 38
+          #define line_h1 38
+          if(combinationFontsDefault != 0) maxiC = 1;
           switch(regist) {
             // L1
             case REGISTER_T: w = stringWidth(tmpString, &numericFont, true, true);
                              showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW: Display Register T: %s\n",tmpString);
+                             #endif //VERBOSE_SCREEN
                              break;
-
             // L2 & L3
             case REGISTER_Z: w = stringWidth(tmpString + 300, &numericFont, true, true);
-                             showString(tmpString + 300, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h, vmNormal, true, true);
+                             showString(tmpString + 300, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW: Display Register Z: %s\n",tmpString + 300);
+                             #endif //VERBOSE_SCREEN
                              break;
-
             // L4 & L5
             case REGISTER_Y: w = stringWidth(tmpString + 600, &numericFont, true, true);
-                             showString(tmpString + 600, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*2, vmNormal, true, true);
+                             showString(tmpString + 600, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*2, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW: Display Register Y: %s\n",tmpString + 600);
+                             #endif //VERBOSE_SCREEN
                              break;
-
             // L6 & L7
             case REGISTER_X: w = stringWidth(tmpString + 900, &numericFont, true, true);
-                             showString(tmpString + 900, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h*3, vmNormal, true, true);
+                             showString(tmpString + 900, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*3, vmNormal, true, true);
+                             #if defined VERBOSE_SCREEN && defined PC_BUILD
+                               printf("^^^^NEW SHOW: Display Register X: %s\n",tmpString + 900);
+                             #endif //VERBOSE_SCREEN
                              break;
-
             default: {}
           }
+          if(combinationFontsDefault != 0) maxiC = 0;
+
 
 //          if(getRegisterDataType(REGISTER_X) == dtReal34) {
 //            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
@@ -2053,7 +2144,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         //JM SHOIDISP // use the top part of the screen for HEX and BIN    //JM vv SHOIDISP
         if(displayStack == 4-displayStackSHOIDISP && lastIntegerBase != 0) {
           if(displayStack == 1){
-            copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_Y,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Y);
             setRegisterTag(REGISTER_Y, 2);
             shortIntegerToDisplayString(REGISTER_Y, tmpString, true);
@@ -2061,10 +2152,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Y);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_Y);
           }
           if(displayStack == 1 || displayStack == 2){
-            copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_Z,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_Z);
             if(displayStack == 2) setRegisterTag(REGISTER_Z, 2); else 
               if(displayStack == 1) setRegisterTag(REGISTER_Z, 8);
@@ -2073,10 +2164,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Z - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_Z);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_Z);
           }
           if(displayStack == 1 || displayStack == 2 || displayStack ==3){
-            copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER);
+            copySourceRegisterToDestRegister(REGISTER_T,TEMP_REGISTER_1);
             copySourceRegisterToDestRegister(REGISTER_X,REGISTER_T);
             setRegisterTag(REGISTER_T, 16);
             shortIntegerToDisplayString(REGISTER_T, tmpString, true);
@@ -2084,7 +2175,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString("  X: ", &standardFont, 0, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
             }
             showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_T - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
-            copySourceRegisterToDestRegister(TEMP_REGISTER,REGISTER_T);
+            copySourceRegisterToDestRegister(TEMP_REGISTER_1,REGISTER_T);
           }
             if(displayStack == 3)
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Z_LINE - 2, SCREEN_WIDTH, 1, 0xFF); else
@@ -2205,13 +2296,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
-
-    case CM_FLAG_BROWSER_OLD:        //JM vv
-      last_CM = calcMode;
-      clearScreen();
-      flagBrowser_old(NOPARAM);
-      refreshStatusBar();
-      break;                
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;

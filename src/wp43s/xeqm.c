@@ -28,7 +28,7 @@
 
 void press_key(void) {
     #ifdef DMCP_BUILD
-      print_inlinestr("Press a key to continue.",true);
+      print_inlinestr("Press key",true);
       wait_for_key_press();
     #endif
 }
@@ -117,21 +117,22 @@ void sendkeys(const char aa[]) {
     if(aa[ix]>=97 && aa[ix]<=122){runkey(ITM_A+aa[ix]-65-32);} else //a..z converted to A..Z
     if(aa[ix]>=48 && aa[ix]<= 57){runkey(ITM_0+aa[ix]-48);} else //0..9
     switch (aa[ix]) {
-      case 46:  runkey(ITM_PERIOD); break; //.
-      case 69:  runkey(ITM_EXPONENT); break; //E
-      case 101: runkey(ITM_EXPONENT); break; //e
-      case 45:  runkey(ITM_SUB); break; //-
-      case 43:  runkey(ITM_ADD); break; //+
-      case 32:  runkey(ITM_SPACE); break; //space
-      case 35:  runkey(ITM_toINT); break; //#
+      case '.':  runkey(ITM_PERIOD); break; //.
+      case 'E':  runkey(ITM_EXPONENT); break; //E
+      case 'e': runkey(ITM_EXPONENT); break; //e
+      case '-':  runkey(ITM_SUB); break; //-
+      case '+':  runkey(ITM_ADD); break; //+
+      case ' ':  runkey(ITM_SPACE); break; //space
+      case '#':  runkey(ITM_toINT); break; //#
+      case ':':  runkey(ITM_COLON        ); break; //#
+      case ';':  runkey(ITM_SEMICOLON    ); break; //#
+      case '\'': runkey(ITM_QUOTE        ); break; //#
+      case '?':  runkey(ITM_QUESTION_MARK); break; //#
       default:;
     }
   ix++;
   }
 }
-
-
-
 
 
 bool_t strcompare( char *in1, char *in2) {
@@ -160,118 +161,143 @@ uint32_t indic_y = SCREEN_HEIGHT-1;
 
 
 
-//FROM SPREADSHEET vvv ****************************************************************************************************
-
-//selection: not updated in spreadsheet
-
 //                     ****************************************************************************************************
 bool_t checkindexes(int16_t *com,  char *str, bool_t exec) {
-
                       *com = 0;
-                      if (strcompare(str,"PRIME?" )) { *com = ITM_PRIME; } else
-                      if (strcompare(str,"ENTER" )) { *com = ITM_ENTER; } else
-                      if (strcompare(str,"X<>Y" )) { *com = ITM_XexY; } else
-                      if (strcompare(str,"DROP" )) { *com = ITM_DROP; } else
-                      if (strcompare(str,"CLX" )) { *com = ITM_CLX; } else
+//FROM SPREADSHEET vvv ****************************************************************************************************
+
+//XEQM TYPE1 REDUCED SELECTED LIST
+                      if (strcompare(str,"PRIME?" )) { *com = ITM_PRIME;} else
+                      if (strcompare(str,"ENTER" )) { *com = ITM_ENTER;} else
+                      if (strcompare(str,"X<>Y" )) { *com = ITM_XexY;} else
+                      if (strcompare(str,"DROP" )) { *com = ITM_DROP;} else
+                      if (strcompare(str,"CLX" )) { *com = ITM_CLX;} else
                       if (strcompare(str,"FILL" )) { *com = ITM_FILL; } else
-                      if (strcompare(str,"STO" )) { *com = ITM_STO; } else
-                      if (strcompare(str,"COMB" )) { *com = ITM_COMB; } else
-                      if (strcompare(str,"PERM" )) { *com = ITM_PERM; } else
-                      if (strcompare(str,"RCL" )) { *com = ITM_RCL; } else
-                      if (strcompare(str,"X^2" )) { *com = ITM_SQUARE; } else
-                      if (strcompare(str,"X^3" )) { *com = ITM_CUBE; } else
-                      if (strcompare(str,"Y^X" )) { *com = ITM_YX; } else
-                      if (strcompare(str,"SQRT" )) { *com = ITM_SQUAREROOTX; } else
-                      if (strcompare(str,"CUBRT" )) { *com = ITM_CUBEROOT; } else
-                      if (strcompare(str,"XRTY" )) { *com = ITM_XTHROOT; } else
-                      if (strcompare(str,"2^X" )) { *com = ITM_2X; } else
-                      if (strcompare(str,"E^X" )) { *com = ITM_EXP; } else
-                      if (strcompare(str,"10^X" )) { *com = ITM_10x; } else
-                      if (strcompare(str,"LOG2" )) { *com = ITM_LOG2; } else
-                      if (strcompare(str,"LN" )) { *com = ITM_LN; } else
-                      if (strcompare(str,"LOG10" )) { *com = ITM_LOG10; } else
-                      if (strcompare(str,"LOGXY" )) { *com = ITM_LOGXY; } else
-                      if (strcompare(str,"1/X" )) { *com = ITM_1ONX; } else
-                      if (strcompare(str,"COS" )) { *com = ITM_cos; } else
-                      if (strcompare(str,"SIN" )) { *com = ITM_sin; } else
-                      if (strcompare(str,"TAN" )) { *com = ITM_tan; } else
-                      if (strcompare(str,"ARCCOS" )) { *com = ITM_arccos; } else
-                      if (strcompare(str,"ARCSIN" )) { *com = ITM_arcsin; } else
-                      if (strcompare(str,"ARCTAN" )) { *com = ITM_arctan; } else
-                      if (strcompare(str,"ARCCOSH" )) { *com = ITM_arcosh; } else
-                      if (strcompare(str,"ARCSINH" )) { *com = ITM_arsinh; } else
-                      if (strcompare(str,"ARCTANH" )) { *com = ITM_artanh; } else
-                      if (strcompare(str,"COSH" )) { *com = ITM_cosh; } else
-                      if (strcompare(str,"SINH" )) { *com = ITM_sinh; } else
-                      if (strcompare(str,"TANH" )) { *com = ITM_tanh; } else
-                      if (strcompare(str,"GCD" )) { *com = ITM_GCD; } else
-                      if (strcompare(str,"LCM" )) { *com = ITM_LCM; } else
-                      if (strcompare(str,"DEC" )) { *com = ITM_DEC; } else
-                      if (strcompare(str,"INC" )) { *com = ITM_INC; } else
-                      if (strcompare(str,"IP" )) { *com = ITM_IP; } else
-                      if (strcompare(str,"FP" )) { *com = ITM_FP; } else
-                      if (strcompare(str,"+" )) { *com = ITM_ADD; } else
-                      if (strcompare(str,"-" )) { *com = ITM_SUB; } else
-                      if (strcompare(str,"CHS" )) { *com = ITM_CHS; } else
-                      if (strcompare(str,"*" )) { *com = ITM_MULT; } else
-                      if (strcompare(str,"/" )) { *com = ITM_DIV; } else
-                      if (strcompare(str,"IDIV" )) { *com = ITM_IDIV; } else
-                      if (strcompare(str,"ABS" )) { *com = ITM_MAGNITUDE; } else
-                      if (strcompare(str,"NEXTP" )) { *com = ITM_NEXTP; } else
-                      if (strcompare(str,"X!" )) { *com = ITM_XFACT; } else
-                      if (strcompare(str,"PI" )) { *com = ITM_CONSTpi; } else
-                      if (strcompare(str,">DEG" )) { *com = ITM_toDEG; } else
-                      if (strcompare(str,">MULPI" )) { *com = ITM_toMULpi; } else
-                      if (strcompare(str,">RAD" )) { *com = ITM_toRAD; } else
-                      if (strcompare(str,"D>R" )) { *com = ITM_DtoR; } else
-                      if (strcompare(str,"R>D" )) { *com = ITM_RtoD; } else
-                      if (strcompare(str,"RMD" )) { *com = ITM_RMD; } else
-                      if (strcompare(str,"PHI" )) { *com = CST_74; } else
-                      if (strcompare(str,"EXPT" )) { *com = ITM_EXPT; } else
-                      if (strcompare(str,"DEG" )) { *com = ITM_DEG; } else
-                      if (strcompare(str,"SUM+" )) { *com = ITM_SIGMAPLUS; } else
-                      if (strcompare(str,"NSUM" )) { *com = ITM_NSIGMA; } else
-                      if (strcompare(str,"SUMX" )) { *com = ITM_SIGMAx; } else
-                      if (strcompare(str,"SUMY" )) { *com = ITM_SIGMAy; } else
-                      if (strcompare(str,"X" )) { *com = ITM_STACK_X; } else
-                      if (strcompare(str,"IND>" )) { *com = ITM_INDIRECTION; } else
-                      if (strcompare(str,"ALL" )) { *com = ITM_ALL; } else
-                      if (strcompare(str,"BATT?" )) { *com = ITM_BATT; } else
-                      if (strcompare(str,"CLREGS" )) { *com = ITM_CLREGS; } else
-                      if (strcompare(str,"CLSTK" )) { *com = ITM_CLSTK; } else
-                      if (strcompare(str,"CLSUM" )) { *com = ITM_CLSIGMA; } else
-                      if (strcompare(str,"FIX" )) { *com = ITM_FIX; } else
-                      if (strcompare(str,"FIB" )) { *com = ITM_FIB; } else
-                      if (strcompare(str,"GD" )) { *com = ITM_GD; } else
-                      if (strcompare(str,"GD^-1" )) { *com = ITM_GDM1; } else
+                      if (strcompare(str,"STO" )) { *com = ITM_STO;} else
+                      if (strcompare(str,"COMB" )) { *com = ITM_COMB;} else
+                      if (strcompare(str,"PERM" )) { *com = ITM_PERM;} else
+                      if (strcompare(str,"RCL" )) { *com = ITM_RCL;} else
+                      if (strcompare(str,"X^2" )) { *com = ITM_SQUARE;} else
+                      if (strcompare(str,"X^3" )) { *com = ITM_CUBE;} else
+                      if (strcompare(str,"Y^X" )) { *com = ITM_YX;} else
+                      if (strcompare(str,"SQRT" )) { *com = ITM_SQUAREROOTX;} else
+                      if (strcompare(str,"CUBRT" )) { *com = ITM_CUBEROOT;} else
+                      if (strcompare(str,"XRTY" )) { *com = ITM_XTHROOT;} else
+                      if (strcompare(str,"2^X" )) { *com = ITM_2X;} else
+                      if (strcompare(str,"E^X" )) { *com = ITM_EXP;} else
+                      if (strcompare(str,"10^X" )) { *com = ITM_10x;} else
+                      if (strcompare(str,"LOG2" )) { *com = ITM_LOG2;} else
+                      if (strcompare(str,"LN" )) { *com = ITM_LN;} else
+                      if (strcompare(str,"LOG10" )) { *com = ITM_LOG10;} else
+                      if (strcompare(str,"LOGXY" )) { *com = ITM_LOGXY;} else
+                      if (strcompare(str,"1/X" )) { *com = ITM_1ONX;} else
+                      if (strcompare(str,"COS" )) { *com = ITM_cos;} else
+                      if (strcompare(str,"COSH" )) { *com = ITM_cosh;} else
+                      if (strcompare(str,"SIN" )) { *com = ITM_sin;} else
+                      if (strcompare(str,"SINH" )) { *com = ITM_sinh;} else
+                      if (strcompare(str,"TAN" )) { *com = ITM_tan;} else
+                      if (strcompare(str,"TANH" )) { *com = ITM_tanh;} else
+                      if (strcompare(str,"ARCCOS" )) { *com = ITM_arccos;} else
+                      if (strcompare(str,"ARCCOSH" )) { *com = ITM_arcosh;} else
+                      if (strcompare(str,"ARCSIN" )) { *com = ITM_arcsin;} else
+                      if (strcompare(str,"ARCSINH" )) { *com = ITM_arsinh;} else
+                      if (strcompare(str,"ARCTAN" )) { *com = ITM_arctan;} else
+                      if (strcompare(str,"ARCTANH" )) { *com = ITM_artanh;} else
+                      if (strcompare(str,"GCD" )) { *com = ITM_GCD;} else
+                      if (strcompare(str,"LCM" )) { *com = ITM_LCM;} else
+                      if (strcompare(str,"DEC" )) { *com = ITM_DEC;} else
+                      if (strcompare(str,"INC" )) { *com = ITM_INC;} else
+                      if (strcompare(str,"IP" )) { *com = ITM_IP;} else
+                      if (strcompare(str,"FP" )) { *com = ITM_FP;} else
+                      if (strcompare(str,"+" )) { *com = ITM_ADD;} else
+                      if (strcompare(str,"-" )) { *com = ITM_SUB;} else
+                      if (strcompare(str,"CHS" )) { *com = ITM_CHS;} else
+                      if (strcompare(str,"*" )) { *com = ITM_MULT;} else
+                      if (strcompare(str,"/" )) { *com = ITM_DIV;} else
+                      if (strcompare(str,"IDIV" )) { *com = ITM_IDIV;} else
+//                      if (strcompare(str,"MOD" )) { *com = ITM_MOD;} else
+                      if (strcompare(str,"ABS" )) { *com = ITM_MAGNITUDE;} else
+                      if (strcompare(str,"NEXTP" )) { *com = ITM_NEXTP;} else
+//                      if (strcompare(str,"X!" )) { *com = ITM_XFACT;} else
+                      if (strcompare(str,"PI" )) { *com = ITM_CONSTpi;} else
+//                      if (strcompare(str,">DEG" )) { *com = ITM_toDEG;} else
+//                      if (strcompare(str,">RAD" )) { *com = ITM_toRAD;} else
+                      if (strcompare(str,"D>R" )) { *com = ITM_DtoR;} else
+                      if (strcompare(str,"R>D" )) { *com = ITM_RtoD;} else
+//                      if (strcompare(str,"RMD" )) { *com = ITM_RMD;} else
+                      if (strcompare(str,"c" )) { *com = CST_05;} else
+                      if (strcompare(str,"PHI" )) { *com = CST_74;} else
+ //                     if (strcompare(str,"-INF" )) { *com = CST_77;} else
+ //                     if (strcompare(str,"INF" )) { *com = CST_78;} else
+                      if (strcompare(str,"SUM+" )) { *com = ITM_SIGMAPLUS;} else
+                      if (strcompare(str,"NSUM" )) { *com = ITM_NSIGMA;} else
+                      if (strcompare(str,"SUMX" )) { *com = ITM_SIGMAx;} else
+                      if (strcompare(str,"SUMY" )) { *com = ITM_SIGMAy;} else
+                      if (strcompare(str,"X" )) { *com = ITM_REG_X;} else
+                      if (strcompare(str,"Y" )) { *com = ITM_REG_Y;} else
+                      if (strcompare(str,"IND>" )) { *com = ITM_INDIRECTION;} else
+                      if (strcompare(str,"EEX" )) { *com = ITM_EXPONENT;} else
+                      if (strcompare(str,"SNAP" )) { *com = ITM_SNAP;} else
+                      if (strcompare(str,"ABS" )) { *com = ITM_ABS;} else
+                      if (strcompare(str,"ALL" )) { *com = ITM_ALL;} else
+                      if (strcompare(str,"BATT?" )) { *com = ITM_BATT;} else
+                      if (strcompare(str,"CASE" )) { *com = CHR_case;} else
+//                      if (strcompare(str,"CLREGS" )) { *com = ITM_CLREGS;} else
+                      if (strcompare(str,"CLSTK" )) { *com = ITM_CLSTK;} else
+                      if (strcompare(str,"CLSUM" )) { *com = ITM_CLSIGMA;} else
+                      if (strcompare(str,"DEG" )) { *com = ITM_DEG;} else
+                      if (strcompare(str,"ENG" )) { *com = ITM_ENG;} else
+                      if (strcompare(str,"EXPT" )) { *com = ITM_EXPT;} else
+                      if (strcompare(str,"FIB" )) { *com = ITM_FIB;} else
+                      if (strcompare(str,"FIX" )) { *com = ITM_FIX;} else
+                      if (strcompare(str,"GD" )) { *com = ITM_GD;} else
+                      if (strcompare(str,"GD^-1" )) { *com = ITM_GDM1;} else
                       if (strcompare(str,"IM" )) { *com = ITM_IM; } else
                       if (strcompare(str,"RE" )) { *com = ITM_RE; } else
-                      if (strcompare(str,"SINC" )) { *com = ITM_sinc; } else
-                      if (strcompare(str,"SINCPI" )) { *com = ITM_sincpi; } else
-                      if (strcompare(str,"LN(1+X)" )) { *com = ITM_LN1X; } else
-                      if (strcompare(str,"CPXI" )) { *com = ITM_CPXI; } else
-                      if (strcompare(str,"PLOTLS" )) { *com = ITM_PLOTLS; } else 
-                      if (strcompare(str,"CASEUP" )) { *com = CHR_caseUP; } else
-                      if (strcompare(str,"CASEDN" )) { *com = CHR_caseDN; } else
-                      if (strcompare(str,"ROUND" )) { *com = ITM_ROUND2; } else
-                      if (strcompare(str,"ROUNDI" )) { *com = ITM_ROUNDI2; } else
-                      if (strcompare(str,"EXIT" )) { *com = ITM_EXIT1; } else
-                      if (strcompare(str,"ALPHA" )) { *com = ITM_AIM; } else
-                      if (strcompare(str,"DOTD" )) { *com = ITM_dotD; } else
-                      if (strcompare(str,"COMPLEX" )) { *com = KEY_COMPLEX; } else
-                      if (strcompare(str,"PLOT" )) { *com = ITM_PLOT; } else
-                      if (strcompare(str,"RAN#" )) { *com = ITM_RAN; } else
-                      if (strcompare(str,"TICKS" )) { *com = ITM_TICKS; } else
-                      if (strcompare(str,"IDIVR" )) { *com = ITM_IDIVR; } else
-                      if (strcompare(str,"(-1)^X" )) { *com = ITM_M1X; } else
-                      if (strcompare(str,"RANI#" )) { *com = ITM_RANI; } else
-                      if (strcompare(str,"ERPN" )) { *com = ITM_eRPN_ON; } else
-                      if (strcompare(str,"RPN" )) { *com = ITM_eRPN_OFF; } else
-                      if (strcompare(str,"TICKS" )) { *com = ITM_TICKS; } else
-                      if (strcompare(str,"XEQM12" ) && exec) { *com = ITM_X_f6; }
+                      if (strcompare(str,"SINC" )) { *com = ITM_sinc;} else
+//                      if (strcompare(str,"LASTX" )) { *com = ITM_LASTX;} else
+                      if (strcompare(str,"MULPI" )) { *com = ITM_MULPI;} else
+                      if (strcompare(str,"SINCPI" )) { *com = ITM_sincpi;} else
+                      if (strcompare(str,"PLOT" )) { *com = ITM_PLOT;} else
+                      if (strcompare(str,"RAD" )) { *com = ITM_RAD;} else
+                      if (strcompare(str,"RAN#" )) { *com = ITM_RAN;} else
+                      if (strcompare(str,"E^X-1" )) { *com = ITM_EX1;} else
+                      if (strcompare(str,"SCI" )) { *com = ITM_SCI;} else
+                      if (strcompare(str,"LN(1+X)" )) { *com = ITM_LN1X;} else
+//                      if (strcompare(str,"SUM" )) { *com = ITM_SUM;} else
+                      if (strcompare(str,"TICKS" )) { *com = ITM_TICKS;} else
+                      if (strcompare(str,"(-1)^X" )) { *com = ITM_M1X;} else
+                      if (strcompare(str,"ARG" )) { *com = ITM_ANGLE;} else
+                      if (strcompare(str,"EXIT" )) { *com = ITM_EXIT1;} else
+                      if (strcompare(str,"ALPHA" )) { *com = ITM_AIM;} else
+                      if (strcompare(str,"DOTD" )) { *com = ITM_dotD;} else
+                      if (strcompare(str,"COMPLEX" )) { *com = KEY_COMPLEX;} else
+                      if (strcompare(str,">POLAR" )) { *com = ITM_toPOL2;} else
+                      if (strcompare(str,">RECT" )) { *com = ITM_toREC2;} else
+                      if (strcompare(str,"ERPN" )) { *com = ITM_eRPN_ON;} else
+                      if (strcompare(str,"RPN" )) { *com = ITM_eRPN_OFF;} else
+                      if (strcompare(str,"TEST_45" )) { *com = ITM_PGMTST;} else
+                      if (strcompare(str,"SIG" )) { *com = ITM_SIGFIG;} else
+                      if (strcompare(str,"ROUND" )) { *com = ITM_ROUND2;} else
+                      if (strcompare(str,"ROUNDI" )) { *com = ITM_ROUNDI2;} else
+//                      if (strcompare(str,"OP_A" )) { *com = ITM_op_a;} else
+//                      if (strcompare(str,"OP_J" )) { *com = ITM_op_j;} else
+//                      if (strcompare(str,"LNGINT" )) { *com = ITM_LI;} else
+                      if (strcompare(str,"CASEUP" )) { *com = CHR_caseUP;} else
+                      if (strcompare(str,"CASEDN" )) { *com = CHR_caseDN;} else
+                      if (strcompare(str,"LISTXY" )) { *com = ITM_LISTXY;} else
+                      if (strcompare(str,"PLOTLS" )) { *com = ITM_PLOTLS;} else
+                      if (strcompare(str,"P_INT" )) { *com = ITM_INTG;} else
+                      if (strcompare(str,"P_DIFF" )) { *com = ITM_DIFF;} else
+                      if (strcompare(str,"P_RMS" )) { *com = ITM_RMS;} else
+                      if (strcompare(str,"P_SHADE" )) { *com = ITM_SHADE;} else
+                      if (strcompare(str,"CLGRF" )) { *com = ITM_CLGRF;} else
 
+
+//FROM SPREADSHEET ^^^ ****************************************************************************************************
+                        {*com = 0;}
                       if(*com != 0) return true;
-                        return false;
+                      else          return false;
                     }
 
 
@@ -392,21 +418,6 @@ void execute_string(const char *inputstring, bool_t exec1) {
                           gotoinprogress = 1;                      //As per GTO_SZ
                           commandnumber[0]=0;                      //As per GTO_SZ
                       } else
-
-
-
-  //----vvv spreadsheet vvv-------  Not supported anymore
-#ifdef XEQM_TYPE1
-                      if (strcompare(commandnumber,"CPX?" )) {sprintf(commandnumber,"%d", ITM_CPX);} else
-                      if (strcompare(commandnumber,"REAL?" )) {sprintf(commandnumber,"%d", ITM_REAL);} else
-                      ...
-                      ...
-#endif //XEQM_TYPE1
-  //----^^^ spreadsheet ^^^-------
-
-
-
-
 
 
 // Unlimited GTO                                      GTO M1
@@ -630,7 +641,10 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   char fallback[130];     //Fallback text
   char fn_long[200];      //Long file name
   char fn_short[16];      //standard file name
-  char tmp[400];          //Messages
+
+  #if (VERBOSE_LEVEL >= 1) 
+    char tmp[400];          //Messages
+  #endif
 
 
   #define pgmpath "PROGRAMS"
@@ -638,20 +652,25 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   strcpy(fn_long, "");
   strcpy(fallback,"XEQM01:HELP;");
 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     strcpy(tmp,fn_short); strcat(tmp," A: Loading XEQMENU mapping"); print_linestr(tmp,false);
-  }
+  #endif
 
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback);
-  if(verbose_jm>=1) {print_inlinestr(" B: Loaded. ",false);}
-  if(verbose_jm>=2) {
+
+  #if (VERBOSE_LEVEL >= 1) 
+   print_inlinestr(" B: Loaded. ",false);
+  #endif
+
+  #if (VERBOSE_LEVEL >= 2)
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   int16_t ix = 0;
   int16_t iy = 0;
@@ -677,59 +696,62 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec) {
   strcat(fn_short,".TXT");                        //Add .TXT
   strcat(fn_long,".TXT");                         //Add .TXT
 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     sprintf(tmp,"C: Trying %s then %s.",fn_short,fn_long);
     print_linestr(tmp,true);
-  }
+  #endif
 
   line1[0]=0;                                     //Clear incoming/outgoing string data
 
   //printf(">>> original name:|%s|, replacement file name:|%s|\n",fn_short,fn_long);           
   if(selection==1) {
-    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASE \" create \" CASE \"XEQM\" CASE \"NN\" CASE \".TXT\" EXIT ");
+    sprintf(fallback,"XEQLBL 01 HELP ALPHA \"I\" CASE \"n directory \" CASE \"PROGRAMS\" CASEDN \" create \" CASEUP \"XEQM\" CASEDN \"NN\" CASEUP \".TXT\" EXIT ");
   } 
   else {
     sprintf(fallback,"XEQLBL %s X%s ",nn,nn);
   }
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     sprintf(tmp,"  Fallback:%s",fallback); print_inlinestr(tmp,false);
-  }
+  #endif
 
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback); 
   replaceFF(nn,line1); 
-  if(verbose_jm>=1) {
+  #if (VERBOSE_LEVEL >= 1) 
     print_inlinestr(line1,true);
-  }
+  #endif
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   displaywords(line1);
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
     #endif
-  }
-  if(verbose_jm>=1) {
+  #endif
+
+  #if (VERBOSE_LEVEL >= 1) 
     clearScreen_old(false, true, true);
-  }
+  #endif
 
   execute_string(line1,exec);
 
-  if(verbose_jm>=2) {
+  #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
       clearScreen_old(false, true, true);
     #endif
-  }
+  #endif
 
 #endif
 }
@@ -754,7 +776,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 void XEQMENU_loadAllfromdisk(void) {
 #ifndef TESTSUITE_BUILD
       clearScreen_old(false, true, true);
-      print_inlinestr("Loading all XEQM program files:",true);
+      print_inlinestr("Loading XEQM:",true);
 
       char line[TMP_STR_LENGTH];
       

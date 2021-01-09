@@ -109,6 +109,8 @@
   #endif // PC_BUILD
 
 
+bool_t lastshiftF = false;
+bool_t lastshiftG = false;
 
   /********************************************//**
    * \brief A calc function key was pressed
@@ -130,7 +132,9 @@
         shiftF = false;
         shiftG = true;
       }
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
@@ -153,7 +157,9 @@
 
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
+      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
@@ -188,7 +194,7 @@
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
-    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
     btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
     }
   }
@@ -199,7 +205,7 @@
    ***********************************************/
   void executeFunction(const char *data, int16_t item_) {
     int16_t item = ITM_NOP;
-    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FLAG_BROWSER_OLD && calcMode != CM_FONT_BROWSER) {
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
   
       if(data[0] == 0) item = item_;
       else {
@@ -291,12 +297,21 @@
 //    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   int8_t key_no = stringToKeyNumber(data);
+
+  #ifdef PC_BUILD
+    char tmp[200]; sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key_no: %d:",key_no); jm_show_comment(tmp);
+  #endif //PC_BUILD
+
   if (kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
   else
     key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
   fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
+
+  #ifdef PC_BUILD
+    sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key->primary1: %d:",key->primary); jm_show_comment(tmp);
+  #endif //PC_BUILD
 
   switch(key->primary) {                              //JMSHOW vv
     case      ITM_UP1:
@@ -308,6 +323,9 @@
   Setup_MultiPresses( key->primary );
 
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key->primary2: %d:",key->primary); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     // Shift f pressed and JM REMOVED shift g not active
     if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_GRAPH)) {    //JM Mode added
@@ -319,6 +337,8 @@
   
       shiftF = !shiftF;
       shiftG = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
       showShiftState();
 
       return ITM_NOP;
@@ -334,6 +354,8 @@
 
       shiftG = !shiftG;
       shiftF = false;                                         //JM no shifted menu on g-shift-key as in WP43S
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
       showShiftState();
 
       return ITM_NOP;
@@ -355,11 +377,16 @@
 
       fg_processing_jm();
 
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
       showShiftState();                                                                                                         //JM shifts
 
       return ITM_NOP;
     }  
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key->primary3: %d:",key->primary); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
                                                                                                                          //JM shifts
     if((calcMode == CM_NIM || calcMode == CM_NORMAL) && lastIntegerBase >= 11 && (key_no >= 0 && key_no <= 5 )) {               //JMNIM vv Added direct A-F for hex entry
@@ -379,7 +406,7 @@
     else if(tamMode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -389,9 +416,21 @@
       result = 0;
     }
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^keyboard.c: determineitem: result1: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
+
     Check_Assign_in_progress(&result, key_no);  //JM
 
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^keyboard.c: determineitem: result2: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
+
     Check_MultiPresses(&result, key_no);        //JM
+
+    #ifdef PC_BUILD
+      sprintf(tmp,"^^^^^^^keyboard.c: determineitem: result3: %d:",result); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     if(result == ITM_PROD_SIGN) {
       result = (getSystemFlag(FLAG_MULTx) ? ITM_CROSS : ITM_DOT);
@@ -483,23 +522,26 @@
         shiftF = false;
         shiftG = true;
       }
+      lastshiftF = shiftF;
+      lastshiftG = shiftG;
       showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
       #ifdef PC_BUILD
-        char tmp[200]; sprintf(tmp,"^^^^btnPressed %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
+        char tmp[200]; sprintf(tmp,"^^^^btnPressed START item=%d data=\'%s\'",item,(char *)data); jm_show_comment(tmp);
       #endif //PC_BUILD
 
       if(item != ITM_NOP && item != ITM_NULL) {
         #ifdef PC_BUILD
-          char tmp[200];
-          sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s\n",item,(char *)data);
-          jm_show_calc_state(tmp);
+          sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s\n",item,(char *)data); jm_show_calc_state(tmp);
         #endif
         processKeyAction(item);
         if(!keyActionProcessed) {
           showFunctionName(item, 1000); // 1000ms = 1s
         }
       }
+      #ifdef PC_BUILD
+        sprintf(tmp,"^^^^btnPressed End item=%d:\'%s\' showFunctionNameItem=%d\n",item,(char *)data,showFunctionNameItem); jm_show_comment(tmp);
+      #endif //PC_BUILD
     }
   #endif // PC_BUILD
 
@@ -512,6 +554,8 @@
 //        item = previousItem;
 //      }
 //      else {
+        lastshiftF = shiftF;
+        lastshiftG = shiftG;
         item = determineItem((char *)data);
 //      previousItem = item;
 //      }
@@ -692,7 +736,7 @@
       case ITM_CC:
       case ITM_ENTER:
       case ITM_dotD:
-        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FLAG_BROWSER_OLD || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
+        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
           keyActionProcessed = true;
         }
         break;
@@ -751,133 +795,152 @@
         break;                                                                                                               //JM^^
 
       default:
-        if(catalog) {
-          if(ITM_A <= item && item <= ITM_Z && alphaCase == AC_LOWER) {
-            addItemToBuffer(item + 26);
-            keyActionProcessed = true;
-          }
+        {
+          bool_t lowercaseselected = ((alphaCase == AC_LOWER && !lastshiftF) || (alphaCase == AC_UPPER && lastshiftF /*&& !numLock*/)); //JM remove last !numlock if you want the shift, during numlock, to produce lower case
+          if(catalog) {
+            if(ITM_A <= item && item <= ITM_Z && lowercaseselected) {
+              addItemToBuffer(item + 26);
+              keyActionProcessed = true;
+            }
 
-          else if(((ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI)) && alphaCase == AC_LOWER) {  //JM GREEK
-            addItemToBuffer(item + 36);
-            keyActionProcessed = true;
-          }
+            else if(((ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI)) && lowercaseselected) {  //JM GREEK
+              addItemToBuffer(item + 36);
+              keyActionProcessed = true;
+            }
 
-          else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
+            else if(item == ITM_DOWN_ARROW || item == ITM_UP_ARROW) {
+              addItemToBuffer(item);
+              keyActionProcessed = true;
+            }
+            break;
+          }
+          else if(tamMode) {
             addItemToBuffer(item);
             keyActionProcessed = true;
-          }
-          break;
-        }
-        else if(tamMode) {
-          addItemToBuffer(item);
-          keyActionProcessed = true;
-          break;
-        }
-        else {
-          switch(calcMode) {
-            case CM_NORMAL:
-              if(item == ITM_EXPONENT || item == ITM_PERIOD || ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
-                addItemToNimBuffer(item);
-                keyActionProcessed = true;
-                refreshRegisterLine(REGISTER_X);           //JM to force direct display
-              }
-              // Following commands do not timeout to NOP
-              else if(/*item == ITM_UNDO ||JM*/ item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
-                runFunction(item);
-                keyActionProcessed = true;
-              }
-              break;
-
-            case CM_AIM:
-              if(numLock) {                           //JMvv Numlock translation
-                int16_t item1;
-                switch(item) {
-                  case ITM_P          : item1 = ITM_7;      break;
-                  case ITM_Q          : item1 = ITM_8;      break;
-                  case ITM_R          : item1 = ITM_9;      break;
-                  case ITM_T          : item1 = ITM_4;      break;
-                  case ITM_U          : item1 = ITM_5;      break;
-                  case ITM_V          : item1 = ITM_6;      break;
-                  case ITM_X          : item1 = ITM_1;      break;
-                  case ITM_Y          : item1 = ITM_2;      break;
-                  case ITM_Z          : item1 = ITM_3;      break;
-                  case ITM_COLON      : item1 = ITM_0;      break;
-                  case ITM_COMMA      : item1 = ITM_PERIOD; break;
-                  case ITM_DOWN_ARROW : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
-                  case ITM_UP_ARROW   : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
-                  case CHR_num        : item1 = 0;          break;
-                  case CHR_case       : item1 = 0;          break;
-                  case ITM_O          : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
-
-                  case ITM_S          : item1 = ITM_OBELUS; break;
-                  case ITM_W          : item1 = ITM_MULT;   break;
-                  case ITM_UNDERSCORE : item1 = ITM_SUB;    break;
-                  case ITM_SPACE      : item1 = ITM_ADD;    break;
-
-                  default: 
-                       #ifdef PC_BUILD
-                         jm_show_comment("^^^^processKeyAction:CM_AIM: In AIM, not handled");
-                       #endif //PC_BUILD
-                       item1 = item;
-                       break;
-                }
-                if(item1>0) {
-                  addItemToBuffer(item1);
-                }
-                keyActionProcessed = true;
-              }                                       //JM^^
-
-              else if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
-                addItemToBuffer(item + 26);
-                keyActionProcessed = true;
-              }
-
-              else if((ITM_A <= item && item <= ITM_Z) || item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
-                addItemToBuffer(item);
-                keyActionProcessed = true;
-              }                                           //JM ^^
-
-              else if(alphaCase == AC_LOWER && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
-                addItemToBuffer(item + 36);
-                keyActionProcessed = true;
-              }
-
-            else if(item == ITM_DOWN_ARROW) {
-              if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; 
-              keyActionProcessed = true;
-            }
-
-            else if(item == ITM_UP_ARROW) {
-              if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;
-              keyActionProcessed = true;
-            }
-            refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
             break;
+          }
+          else {
+            switch(calcMode) {
+              case CM_NORMAL:
+                if(item == ITM_EXPONENT || item == ITM_PERIOD || ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) ) { //JMNIM Added direct A-F for hex entry
+                  addItemToNimBuffer(item);
+                  keyActionProcessed = true;
+                  refreshRegisterLine(REGISTER_X);           //JM to force direct display
+                }
+                // Following commands do not timeout to NOP
+                else if(/*item == ITM_UNDO ||JM*/ item == ITM_BST || item == ITM_SST || item == ITM_PR || item == ITM_AIM) {     //UNDO removed from if as it should time out
+                  runFunction(item);
+                  keyActionProcessed = true;
+                }
+                break;
 
-            case CM_NIM:
-              keyActionProcessed = true;
-              addItemToNimBuffer(item);
+              case CM_AIM: {
+                int16_t item1 = 0;
+                #ifdef PC_BUILD
+                  char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d",item); jm_show_comment(tmp);
+                #endif //PC_BUILD
+                if(numLock && !lastshiftF) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+                  switch(item) {
+                    case ITM_P          : item1 = ITM_7;      break;
+                    case ITM_Q          : item1 = ITM_8;      break;
+                    case ITM_R          : item1 = ITM_9;      break;
+                    case ITM_T          : item1 = ITM_4;      break;
+                    case ITM_U          : item1 = ITM_5;      break;
+                    case ITM_V          : item1 = ITM_6;      break;
+                    case ITM_X          : item1 = ITM_1;      break;
+                    case ITM_Y          : item1 = ITM_2;      break;
+                    case ITM_Z          : item1 = ITM_3;      break;
+                    case ITM_COLON      : item1 = ITM_0;      break;
+                    case ITM_COMMA      : item1 = ITM_PERIOD; break;
+                    case ITM_DOWN_ARROW : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
+                    case ITM_UP_ARROW   : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
+                    case CHR_num        : item1 = 0;          break;
+                    case CHR_case       : item1 = 0;          break;
+                    case ITM_O          : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
+                    case ITM_S          : item1 = ITM_OBELUS; break;
+                    case ITM_W          : item1 = ITM_MULT;   break;
+                    case ITM_UNDERSCORE : item1 = ITM_SUB;    break;
+                    case ITM_SPACE      : item1 = ITM_ADD;    break;
 
-              if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
-                refreshRegisterLine(REGISTER_X);
-              }                                                                                   //JM^^
+                    default: 
+                         #ifdef PC_BUILD
+                           jm_show_comment("^^^^processKeyAction:CM_AIM: Numlock active but number not handled");
+                         #endif //PC_BUILD
+//                         item1 = item;     //this is the non-number character which is now handled below.
+                         break;
+                  }
+                }                                       //JM^^
+
+                if(item1 > 0) {
+                  addItemToBuffer(item1);
+                  keyActionProcessed = true;
+                }
+
+                else if( lowercaseselected && (ITM_A <= item && item <= ITM_Z)) {
+                  addItemToBuffer(item + 26);
+                  keyActionProcessed = true;
+                }
+
+                else if( !lowercaseselected && (ITM_a <= item && item <= ITM_z)) { //JM
+                  addItemToBuffer(item - 26);
+                  keyActionProcessed = true;
+                }
+
+
+                else if( !lowercaseselected && (ITM_A <= item && item <= ITM_Z)) { //JM
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }
+
+                else if(item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }                                           //JM ^^
+
+                else if( lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
+                  addItemToBuffer(item + 36);
+                  keyActionProcessed = true;
+                }
+
+              else if(item == ITM_DOWN_ARROW) {
+                if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; 
+                keyActionProcessed = true;
+              }
+
+              else if(item == ITM_UP_ARROW) {
+                if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;
+                keyActionProcessed = true;
+              }
+              #ifdef PC_BUILD
+                sprintf(tmp,"^^^^processKeyAction:AIM:end %d",item); jm_show_comment(tmp);
+              #endif //PC_BUILD
+              refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
               break;
+
+              case CM_NIM:
+                keyActionProcessed = true;
+                addItemToNimBuffer(item);
+
+                if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
+                  refreshRegisterLine(REGISTER_X);
+                }                                                                                   //JM^^
+                break;
 
               case CM_REGISTER_BROWSER:
                 if(item == ITM_PERIOD) {
                   rbr1stDigit = true;
                   if(rbrMode == RBR_GLOBAL) {
-                    if(currentNumberOfLocalRegisters > 0) {
+                    if(currentLocalRegisters != NULL) {
                       rbrMode = RBR_LOCAL;
                       currentRegisterBrowserScreen = FIRST_LOCAL_REGISTER;
                     }
-                    else if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    else if(numberOfNamedVariables > 0) {
                       rbrMode = RBR_NAMED;
                       currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
                     }
                   }
                   else if(rbrMode == RBR_LOCAL) {
-                    if(allNamedVariablePointer->numberOfNamedVariables > 0) {
+                    if(numberOfNamedVariables > 0) {
                       rbrMode = RBR_NAMED;
                       currentRegisterBrowserScreen = FIRST_NAMED_VARIABLE;
                     }
@@ -924,63 +987,64 @@
                   }
                 }
 
+                  keyActionProcessed = true;
+                  break;
+                }
+
+              case CM_FLAG_BROWSER:
+              case CM_FONT_BROWSER:
+              case CM_ERROR_MESSAGE:
+              case CM_BUG_ON_SCREEN:
                 keyActionProcessed = true;
                 break;
 
-            case CM_FLAG_BROWSER:
-            case CM_FLAG_BROWSER_OLD:           //JM
-            case CM_FONT_BROWSER:
-            case CM_ERROR_MESSAGE:
-            case CM_BUG_ON_SCREEN:
-              keyActionProcessed = true;
-              break;
-
-            case CM_LISTXY:                     //JM VV
-            case CM_GRAPH:
-              if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
-                calcMode = previousCalcMode;
-              }
-              keyActionProcessed = true;
-              break;                            //JM ^^
-
-
-            case CM_CONFIRMATION:
-              if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
-                calcMode = previousCalcMode;
-                temporaryInformation = TI_NO_INFO;
-                confirmedFunction(CONFIRMED);
-              }
-
-              else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
-                calcMode = previousCalcMode;
-                temporaryInformation = TI_NO_INFO;
-              }
-
+              case CM_LISTXY:                     //JM VV
+              case CM_GRAPH:
+                if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
+                  calcMode = previousCalcMode;
+                }
                 keyActionProcessed = true;
+                break;                            //JM ^^
+
+
+              case CM_CONFIRMATION:
+                if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
+                  calcMode = previousCalcMode;
+                  temporaryInformation = TI_NO_INFO;
+                  confirmedFunction(CONFIRMED);
+                }
+
+                else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
+                  calcMode = previousCalcMode;
+                  temporaryInformation = TI_NO_INFO;
+                }
+
+                  keyActionProcessed = true;
+                  break;
+
+              case CM_PEM:
+                if(item == ITM_PR) {
+                  leavePem();
+                  calcModeNormal();
+                  keyActionProcessed = true;
+                }
+                else if(item == ITM_OFF) {
+                  fnOff(NOPARAM);
+                  keyActionProcessed = true;
+                }
                 break;
 
-            case CM_PEM:
-              if(item == ITM_PR) {
-                leavePem();
-                calcModeNormal();
-                keyActionProcessed = true;
-              }
-              else if(item == ITM_OFF) {
-                fnOff(NOPARAM);
-                keyActionProcessed = true;
-              }
-              break;
-
-            default:
-              sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
-              displayBugScreen(errorMessage);
+              default:
+                sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
+                displayBugScreen(errorMessage);
+            }
           }
+          #ifdef RECORDLOG
+            if(keyActionProcessed) {                         //JMEXEC
+              capture_sequence("keyActionProcessed:", item);  //JMEXEC
+            }                                                //JMEXEC
+          #endif
         }
-        #ifdef RECORDLOG
-          if(keyActionProcessed) {                         //JMEXEC
-            capture_sequence("keyActionProcessed:", item);  //JMEXEC
-          }                                                //JMEXEC
-        #endif
       }
   }
 
@@ -1157,7 +1221,6 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_FONT_BROWSER:
       case CM_ERROR_MESSAGE:
       case CM_BUG_ON_SCREEN:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
         break;
@@ -1277,7 +1340,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       rbr1stDigit = true;
       calcMode = previousCalcMode;
@@ -1354,7 +1416,6 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
         break;
@@ -1435,7 +1496,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
-    case CM_FLAG_BROWSER_OLD:           //JM
     case CM_FONT_BROWSER:
       calcMode = previousCalcMode;
       break;
@@ -1539,7 +1599,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER + 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, allNamedVariablePointer->numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_NAMED_VARIABLE + 1, numberOfNamedVariables) + FIRST_NAMED_VARIABLE;
         }
         else {
           sprintf(errorMessage, "In function fnKeyUp: unexpected case while processing key UP! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
@@ -1550,10 +1610,6 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
     case CM_FLAG_BROWSER:
       currentFlgScr--;                          //JM removed the 3-x part
      break;
-
-    case CM_FLAG_BROWSER_OLD:                   //JMvv
-      currentFlgScr--;
-      break;                                    //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr >= 2) {
@@ -1652,7 +1708,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - FIRST_LOCAL_REGISTER - 1, currentNumberOfLocalRegisters) + FIRST_LOCAL_REGISTER;
         }
         else if(rbrMode == RBR_NAMED) {
-          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, allNamedVariablePointer->numberOfNamedVariables) + 1000;
+          currentRegisterBrowserScreen = modulo(currentRegisterBrowserScreen - 1000 - 1, numberOfNamedVariables) + 1000;
         }
         else {
           sprintf(errorMessage, "In function fnKeyDown: unexpected case while processing key DOWN! %" PRIu8 " is an unexpected value for rbrMode.", rbrMode);
@@ -1663,10 +1719,6 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
     case CM_FLAG_BROWSER:
       currentFlgScr++;                          //JM removed the 3-x part
       break;
-
-    case CM_FLAG_BROWSER_OLD:                   //JMvv
-      currentFlgScr++;
-      break;                                    //JM^^
 
     case CM_FONT_BROWSER:
       if(currentFntScr < numScreensNumericFont + numScreensStandardFont) {
@@ -1725,7 +1777,6 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
 
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
-      case CM_FLAG_BROWSER_OLD:           //JM
       case CM_FONT_BROWSER:
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM

@@ -8778,7 +8778,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_100_KB_POC"
+#define VERSION1 "_101_KB_POC"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"
@@ -8796,10 +8796,10 @@ void fnReset(uint16_t confirmation) {
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 L1 (Main C43 template)");
+    fnStrtoX("C43 L1 layout for main C43 template");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
-    fnStrtoX("C43 L42 (For unmodified DM42)");
+    fnStrtoX("C43 L42 layout for unmodified DM42");
     #endif
     fnStore(103);
     fnDrop(0);

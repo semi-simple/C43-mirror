@@ -86,6 +86,12 @@
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
 #undef WP43S_ON_C43_USER_MODE       //Default setting
 
+
+#define INIT_RAMDUMP
+#undef INIT_RAMDUMP
+
+
+
 //*********************************
 //* General configuration defines *
 //*********************************

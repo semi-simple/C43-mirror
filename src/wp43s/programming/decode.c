@@ -555,13 +555,19 @@ void decodeOneStep(uint8_t *step) {
 
       item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(step++);
       switch(item16) {
-        case ITM_LBLQ:           //  1493
+        case ITM_FQX:            //  1475
+        case ITM_FDQX:           //  1476
+        case ITM_INDEX:          //  1486
+        case ITM_LBLQ:           //  1503
+        case ITM_MVAR:           //  1524
+        case ITM_PGMINT:         //  1546
+        case ITM_PGMSLV:         //  1547
         case ITM_SOLVE:          //  1608
         case ITM_VARMNU:         //  1630
         case ITM_PIn:            //  1671
         case ITM_SIGMAn:         //  1672
         case ITM_INTEGRAL:       //  1700
-          decodeOp(step, indexOfItems[item8].itemCatalogName, PARAM_LABEL);
+          decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_LABEL);
           break;
 
         case ITM_CNST:           //   207
@@ -598,7 +604,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_SHUFFLE:        //  1694
         case ITM_PRINTERCHAR:    //  1709
         case ITM_PRINTERDLAY:    //  1710
-        case ITM_PRINTERMODE:    //  1711
+        case ITM_PRINTERMODE:    //  1712
         case ITM_PRINTERTAB:     //  1717
           decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_NUMBER_8);
           break;
@@ -620,7 +626,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_STOCFG:         //  1611
         case ITM_STOS:           //  1615
         case ITM_Tex:            //  1625
-        case ITM_VIEW:           //  1632
         case ITM_Yex:            //  1650
         case ITM_Zex:            //  1651
         case ITM_ALPHALENG:      //  1652
@@ -791,11 +796,11 @@ void decodeOneStep(uint8_t *step) {
         case ITM_WtoHPM:         //   281
         case ITM_HPUKtoW:        //   282
         case ITM_WtoHPUK:        //   283
-        case ITM_IHGtoPA:        //   284
-        case ITM_IHGtoPAb:       //   285
-        case ITM_PAtoIHG:        //   286
-        case ITM_PAtoIHGb:       //   287
-        case ITM_INtoM:          //   288
+        case ITM_INCHHGtoPA:     //   284
+        case ITM_INCHHGtoPAb:    //   285
+        case ITM_PAtoINCHHG:     //   286
+        case ITM_PAtoINCHHGb:    //   287
+        case ITM_INCHtoM:        //   288
         case ITM_MtoINCH:        //   289
         case ITM_WHtoJ:          //   290
         case ITM_JtoWH:          //   291
@@ -1005,6 +1010,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_BNS:            //  1417
         case ITM_CLCVAR:         //  1420
         case ITM_CLFALL:         //  1421
+        case ITM_TGLFRT:         //  1422
         case ITM_CLLCD:          //  1423
         case ITM_CLMENU:         //  1424
         case ITM_CLREGS:         //  1427
@@ -1014,6 +1020,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_CORR:           //  1433
         case ITM_COV:            //  1434
         case ITM_BESTFQ:         //  1435
+        case ITM_CROSS_PROD:     //  1436
         case ITM_CXtoRE:         //  1437
         case ITM_DATE:           //  1438
         case ITM_DATEto:         //  1439
@@ -1036,14 +1043,12 @@ void decodeOneStep(uint8_t *step) {
         case ITM_END:            //  1458
         case ITM_ENDP:           //  1459
         case ITM_ENORM:          //  1461
-        case ITM_EQ_DEL:         //  1463
-        case ITM_EQ_EDI:         //  1464
-        case ITM_EQ_NEW:         //  1465
         case ITM_ERF:            //  1466
         case ITM_ERFC:           //  1467
         case ITM_EXITALL:        //  1469
         case ITM_EXPT:           //  1470
         case ITM_FIB:            //  1472
+        case ITM_FLASH:          //  1474
         case ITM_GD:             //  1478
         case ITM_GDM1:           //  1479
         case ITM_GRAD:           //  1480
@@ -1054,7 +1059,11 @@ void decodeOneStep(uint8_t *step) {
         case ITM_IXYZ:           //  1487
         case ITM_IGAMMAP:        //  1488
         case ITM_IGAMMAQ:        //  1489
+        case ITM_IPLUS:          //  1490
+        case ITM_IMINUS:         //  1491
         case ITM_JYX:            //  1492
+        case ITM_JPLUS:          //  1493
+        case ITM_JMINUS:         //  1494
         case ITM_JUL_GREG:       //  1495
         case ITM_JtoD:           //  1496
         case ITM_sinc:           //  1500
@@ -1064,9 +1073,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_LmALPHA:        //  1506
         case ITM_LNBETA:         //  1507
         case ITM_LNGAMMA:        //  1508
-        case ITM_LOADR:          //  1511
-        case ITM_LOADSS:         //  1512
-        case ITM_LOADSIGMA:      //  1513
         case ITM_LocRQ:          //  1515
         case ITM_LR:             //  1516
         case ITM_MANT:           //  1517
@@ -1075,10 +1081,14 @@ void decodeOneStep(uint8_t *step) {
         case ITM_MONTH:          //  1521
         case ITM_MSG:            //  1522
         case ITM_MULPI:          //  1523
-        case ITM_M_DELR:         //  1525
+        case ITM_M_DIM:          //  1526
         case ITM_M_DIMQ:         //  1527
         case ITM_MDY:            //  1528
         case ITM_M_GET:          //  1531
+        case ITM_M_LU:           //  1535
+        case ITM_M_NEW:          //  1536
+        case ITM_M_PUT:          //  1538
+        case ITM_M_RR:           //  1539
         case ITM_sincpi:         //  1540
         case ITM_NOP:            //  1542
         case ITM_OFF:            //  1543
@@ -1087,10 +1097,8 @@ void decodeOneStep(uint8_t *step) {
         case ITM_PLOT:           //  1549
         case ITM_Pn:             //  1550
         case ITM_POINT:          //  1551
-        case ITM_LOADV:          //  1552
         case ITM_POPLR:          //  1553
         case ITM_PRCL:           //  1554
-        case ITM_PSTO:           //  1555
         case ITM_RAD:            //  1557
         case ITM_RADto:          //  1558
         case ITM_RAN:            //  1559

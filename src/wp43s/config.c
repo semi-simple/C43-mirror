@@ -6604,8 +6604,14 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_ZHANGtoM >> 8) | 0x80;
     *(currentStep++) =  ITM_ZHANGtoM       & 0xff;
 
+    *(currentStep++) = (ITM_ZHANGtoMb >> 8) | 0x80;
+    *(currentStep++) =  ITM_ZHANGtoMb       & 0xff;
+
     *(currentStep++) = (ITM_MtoZHANG >> 8) | 0x80;
     *(currentStep++) =  ITM_MtoZHANG       & 0xff;
+
+    *(currentStep++) = (ITM_MtoZHANGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_MtoZHANGb       & 0xff;
 
     *(currentStep++) = (ITM_FENtoM >> 8) | 0x80;
     *(currentStep++) =  ITM_FENtoM       & 0xff;
@@ -8768,15 +8774,32 @@ void fnReset(uint16_t confirmation) {
     #endif //  (DEBUG_PANEL == 1)
 
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
-    fnStrtoX("C43L2_100+++, 2021-01-03, C43-PEM-XEQ-WIP");
+
+
+
+
+#define VERSION1 "_101_KB_POC"
+
+    #ifdef JM_LAYOUT_1A
+      #define L1L2    "L1"
+    #endif
+    #ifdef JM_LAYOUT_2_DM42_STRICT
+      #define L1L2    "L42"
+    #endif
+
+    char *build_str = "C43" L1L2 VERSION1 ", " __DATE__;
+
+
+//    fnStrtoX("C43L2_100+++, 2021-01-03, C43-PEM-XEQ-WIP");
+    fnStrtoX(build_str);
     fnStore(102);
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 L1 (Main C43 template)");
+    fnStrtoX("C43 L1 layout for main C43 template");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
-    fnStrtoX("C43 L42 (For unmodified DM42)");
+    fnStrtoX("C43 L42 layout for unmodified DM42");
     #endif
     fnStore(103);
     fnDrop(0);

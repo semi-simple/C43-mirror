@@ -30,7 +30,7 @@
    #undef  BLUES_WHEN_SWAPPED
 
 #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
-//#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
+#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
 
 
 //Verbose options
@@ -85,6 +85,12 @@
 
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
 #undef WP43S_ON_C43_USER_MODE       //Default setting
+
+
+#define INIT_RAMDUMP
+#undef INIT_RAMDUMP
+
+
 
 //*********************************
 //* General configuration defines *

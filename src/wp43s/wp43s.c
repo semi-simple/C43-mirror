@@ -336,7 +336,9 @@ size_t                 wp43sMemInBlocks;
         gtk_main_iteration();
       }
 
+#ifdef INIT_RAMDUMP
 ramDump();
+#endif
 
   refreshScreen();
 

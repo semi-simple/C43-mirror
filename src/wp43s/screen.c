@@ -1012,7 +1012,7 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
   uint32_t  numPixels, orglastlines, tmpxy;
   const    glyph_t *glyph;
   uint8_t  editlines     = 5 ; 
-  uint8_t  maxbeforejump = 30; 
+//  uint8_t  maxbeforejump = 30; 
   uint8_t  yincr         = 21; 
 
 
@@ -1021,11 +1021,11 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
   //printf("##>> %d x:%d y:%d \n",edcursor, x,y);
   if(combinationFonts !=0) {
     editlines     = 3 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
-    maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+//    maxbeforejump = 21;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
     yincr         = 35;       //JM ENLARGE 21   distasnce between editing wrapped lines
     x_offset      = 0;    //pixels 40
-    if(lg > maxbeforejump) {  //jump from large letters to small letters
-      if(lg > 3*maxbeforejump) combinationFonts = 0;  //Auto change to small font after some characters
+    if(/*lg>maxbeforejump*/ stringWidth(string + offset, &numericFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH - 50 ) {  //jump from large letters to small letters
+      if(/*lg > 3*maxbeforejump*/ stringWidth(string + offset, &numericFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH * 3 - 70 ) combinationFonts = 0;  //Auto change to small font after some characters
       lines = editlines;
       y_offset = 1;
     } else {
@@ -1035,10 +1035,10 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
     }
   } else {
     editlines     = 5 ;       //JM ENLARGE 5    number of editing lines                                        //JMCURSOR vv
-    maxbeforejump = 30;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
+//    maxbeforejump = 30;       //JM ENLARGE 30   number of bytes in string before jumpuing to multi line 
     yincr         = 21;       //JM ENLARGE 21   distasnce between editing wrapped lines
     x_offset      = 0;    //pixels 40
-    if(lg>maxbeforejump) {
+    if(/*lg>maxbeforejump*/ stringWidth(string + offset, &standardFont, showLeadingCols, showEndingCols) > SCREEN_WIDTH - 50 ) {
       lines = editlines;
       y_offset = 2;
     } else {

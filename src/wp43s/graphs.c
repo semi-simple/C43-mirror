@@ -904,7 +904,7 @@ void graph_plotmem(void) {
 
   if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
-  if(telltale == MEM_INITIALIZED) {
+  if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
 
     runFunction(ITM_NSIGMA);
 
@@ -1160,7 +1160,7 @@ void graph_plotmem(void) {
 /**/      yo = yN;
 /**/      xN = screen_window_x(x_min,x,x_max);
 /**/      yN = screen_window_y(y_min,y,y_max);
-
+/**/
 /**/      #ifdef STATDEBUG
 /**/      printf("plotting graph table[%d] = x:%f y:%f dydx:%f inty:%f xN:%d yN:%d ",ix,x,y,dydx,inty,  xN,yN);
 /**/      printf(" ... x-ddx/2=%d dydx=%d inty=%d\n",screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, dydx, y_max), screen_window_y( y_min, inty, y_max) );

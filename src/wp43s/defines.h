@@ -23,14 +23,20 @@
 // JM VARIOUS OPTIONS
 //*********************************
 
-//Key layout options
-#define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
-#undef  SWAP_TO_L42_ON_SIM
-   #define BLUES_WHEN_SWAPPED        //JM Only applicable if SWAPLAYOUTS is defined. Otherwise ignored
-   #undef  BLUES_WHEN_SWAPPED
+#ifdef PC_BUILD
+  //Key layout options
+  #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
+  #undef  SWAP_TO_L42_ON_SIM
+     #define BLUES_WHEN_SWAPPED        //JM Only applicable if SWAPLAYOUTS is defined. Otherwise ignored
+     //#undef  BLUES_WHEN_SWAPPED
+#endif //PC_BUILD
 
-#define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
-#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
+
+#if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+  //Key layout options
+  #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
+  //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
+#endif
 
 
 //Verbose options

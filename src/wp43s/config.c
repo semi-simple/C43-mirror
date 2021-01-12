@@ -8778,7 +8778,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_101_KB_POC"
+#define VERSION1 "_101a_KB_POC"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"

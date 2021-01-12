@@ -841,26 +841,27 @@ bool_t lastshiftG = false;
                 #endif //PC_BUILD
                 if(numLock && !lastshiftF) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
                   switch(item) {
-                    case ITM_P          : item1 = ITM_7;      break;
-                    case ITM_Q          : item1 = ITM_8;      break;
-                    case ITM_R          : item1 = ITM_9;      break;
-                    case ITM_T          : item1 = ITM_4;      break;
-                    case ITM_U          : item1 = ITM_5;      break;
-                    case ITM_V          : item1 = ITM_6;      break;
-                    case ITM_X          : item1 = ITM_1;      break;
-                    case ITM_Y          : item1 = ITM_2;      break;
-                    case ITM_Z          : item1 = ITM_3;      break;
-                    case ITM_COLON      : item1 = ITM_0;      break;
-                    case ITM_COMMA      : item1 = ITM_PERIOD; break;
-                    case ITM_DOWN_ARROW : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
-                    case ITM_UP_ARROW   : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
-                    case CHR_num        : item1 = 0;          break;
-                    case CHR_case       : item1 = 0;          break;
-                    case ITM_O          : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
-                    case ITM_S          : item1 = ITM_OBELUS; break;
-                    case ITM_W          : item1 = ITM_MULT;   break;
-                    case ITM_UNDERSCORE : item1 = ITM_SUB;    break;
-                    case ITM_SPACE      : item1 = ITM_ADD;    break;
+                    case ITM_P             : item1 = ITM_7;      break;
+                    case ITM_Q             : item1 = ITM_8;      break;
+                    case ITM_R             : item1 = ITM_9;      break;
+                    case ITM_T             : item1 = ITM_4;      break;
+                    case ITM_U             : item1 = ITM_5;      break;
+                    case ITM_V             : item1 = ITM_6;      break;
+                    case ITM_X             : item1 = ITM_1;      break;
+                    case ITM_Y             : item1 = ITM_2;      break;
+                    case ITM_Z             : item1 = ITM_3;      break;
+                    case ITM_COLON         : item1 = ITM_0;      break;
+                    case ITM_COMMA         : item1 = ITM_PERIOD; break;
+                    case ITM_DOWN_ARROW    : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
+                    case ITM_UP_ARROW      : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
+                    case CHR_num           : item1 = 0;          break;
+                    case CHR_case          : item1 = 0;          break;
+                    case ITM_O             : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
+                    case ITM_S             : item1 = ITM_OBELUS; break;
+                    case ITM_W             : item1 = ITM_MULT;   break;
+                    case ITM_UNDERSCORE    : item1 = ITM_SUB;    break;
+                    case ITM_SPACE         : item1 = ITM_ADD;    break;
+                    case ITM_QUESTION_MARK : item1 = ITM_SLASH;  break;
 
                     default: 
                          #ifdef PC_BUILD

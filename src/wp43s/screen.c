@@ -802,6 +802,7 @@ void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
 
 
 
+//JM: If maxiC is set, then, if a glyph is not found in numericfont, it will be fetched and enlarged from standardfont
 
 uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
@@ -1300,7 +1301,7 @@ uint8_t   displayStack_m = 255;                                                 
  * \return void
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
-  int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
+  int16_t v, w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
@@ -2096,6 +2097,35 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
 
         else if(getRegisterDataType(regist) == dtString) {
+                                                                                  //JMvv
+          int combinationFontsM = combinationFonts;
+
+          maxiC = 1; combinationFonts = 1; v = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
+          maxiC = 1; combinationFonts = 2; w = stringWidth(REGISTER_STRING_DATA(regist), &numericFont, false, true);
+          maxiC = 0; combinationFonts = combinationFontsM;
+          if(regist == REGISTER_X && w<SCREEN_WIDTH) {
+            lineWidth = w; //slighly incorrect if special characters are there as well.
+            maxiC = 1; combinationFonts = 2; showString(REGISTER_STRING_DATA(regist), &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+            maxiC = 0; combinationFonts = combinationFontsM;
+          } else                                                                   //JM
+
+            if(regist == REGISTER_X && v<SCREEN_WIDTH) {
+              lineWidth = v;
+              maxiC = 1; combinationFonts = 1; showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+              maxiC = 0; combinationFonts = combinationFontsM;
+            } else                                                                   //JM
+       
+              //This is for Y, Z & T, but better fonts must still be made for these as the large font is too large.
+              if(regist != REGISTER_X && stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true) < SCREEN_WIDTH) {
+                maxiC = 1; combinationFonts = 1; w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
+                lineWidth = w;
+                maxiC = 1; combinationFonts = 1; showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+                maxiC = 0; combinationFonts = combinationFontsM;
+              } else                                                                   //JM
+
+
+
+        {
           w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
 
           if(w >= SCREEN_WIDTH) {
@@ -2137,6 +2167,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           }
         }
+      }
 
       else if(getRegisterDataType(regist) == dtShortInteger) {
         shortIntegerToDisplayString(regist, tmpString, true);

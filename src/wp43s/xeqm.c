@@ -914,6 +914,22 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 
 
 void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
+
+          if(aimBuffer[0] != 0) {          //JM if something already in the AIMB|UFFER when X-EDIT is called, store this in the stack first
+            setSystemFlag(FLAG_ASLIFT);
+            liftStack();
+            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+            copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_Y);
+
+            int16_t len = stringByteLength(aimBuffer) + 1;
+            reallocateRegister(REGISTER_Z, dtString, TO_BLOCKS(len), AM_NONE);
+            xcopy(REGISTER_STRING_DATA(REGISTER_Z), aimBuffer, len);
+            aimBuffer[0] = 0;
+
+            setSystemFlag(FLAG_ASLIFT);
+          }
+
+
   if(calcMode == CM_AIM && getRegisterDataType(REGISTER_Y) == dtString) {
     //printf(">>> !@# stringByteLength(REGISTER_STRING_DATA(REGISTER_Y))=%d; AIM_BUFFER_LENGTH=%d\n",stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)),AIM_BUFFER_LENGTH);
     if(stringByteLength(REGISTER_STRING_DATA(REGISTER_Y)) < AIM_BUFFER_LENGTH) {

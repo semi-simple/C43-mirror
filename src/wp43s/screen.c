@@ -997,6 +997,25 @@ uint8_t  maxiC = 0;                                                             
 
 
 
+  uint32_t showStringC43(const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols ) {
+    int combinationFontsM = combinationFonts;
+    compressString = comp;
+    if(mode == stdfontNoEnlarge) { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
+    if(mode == stdfontEnlarge)   { miniC = 0 ; maxiC = 1; combinationFonts = stdfontEnlarge;          showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
+    if(mode == stdfontEnlarge)   { miniC = 0 ; maxiC = 1; combinationFonts = stdnumEnlarge;           showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } 
+    miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false;
+    return x;
+  }
+
+
+
+  int16_t  stringWidthC43(const char *str, int mode, int comp, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows){
+     noShow = true;
+     return showStringC43(str, mode, comp, 0, 0, vmNormal, withLeadingEmptyRows, withEndingEmptyRows );
+     noShow = false;
+  }
+
+
 
 uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;

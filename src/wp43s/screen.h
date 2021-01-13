@@ -73,6 +73,18 @@ int16_t  displayAIMbufferoffset;
 
 uint32_t showStringEd                         (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
 
+  #define stdfontNoEnlarge 0
+  #define stdfontEnlarge   1
+  #define stdnumEnlarge    2
+  #define numsmall         3
+
+  #define stdcompress      1
+  #define nocompress       0
+  uint32_t showStringC43(const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols );
+  int16_t  stringWidthC43(const char *str, int mode, int comp, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);
+
+
+
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT
 void     refresh_gui                          (void);                                                           //JM

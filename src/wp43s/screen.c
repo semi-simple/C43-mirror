@@ -826,7 +826,6 @@ uint8_t  maxiC = 0;                                                             
   int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
-  //printf("^^^ %d %d %d %d\n",charCode, combinationFonts, miniC, maxiC);
   int8_t rep_enlarge;
 
   bool_t enlarge = false;                                   //JM ENLARGE vv
@@ -999,17 +998,21 @@ uint8_t  maxiC = 0;                                                             
 
   uint32_t showStringC43(const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols ) {
     int combinationFontsM = combinationFonts;
+    if(combinationFontsDefault == 0) mode = stdNoEnlarge;
     compressString = comp;
-    if(mode == stdfontNoEnlarge) { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
-    if(mode == stdfontEnlarge)   { miniC = 0 ; maxiC = 1; combinationFonts = stdfontEnlarge;          showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
-    if(mode == stdfontEnlarge)   { miniC = 0 ; maxiC = 1; combinationFonts = stdnumEnlarge;           showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } 
+    if(mode == stdNoEnlarge)         { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
+      if(mode == stdEnlarge)         { miniC = 0 ; maxiC = 1; combinationFonts = 1;                       x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
+        if(mode == stdnumEnlarge)    { miniC = 0 ; maxiC = 1; combinationFonts = 2;                       x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+           if(mode == numsmall)      { miniC = 1 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+
+          x = 0;
     miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false;
     return x;
   }
 
 
 
-  int16_t  stringWidthC43(const char *str, int mode, int comp, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows){
+  uint32_t  stringWidthC43(const char *str, int mode, int comp, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows){
      noShow = true;
      return showStringC43(str, mode, comp, 0, 0, vmNormal, withLeadingEmptyRows, withEndingEmptyRows );
      noShow = false;
@@ -1025,7 +1028,7 @@ uint16_t current_cursor_y = 0;
 int16_t  displayAIMbufferoffset;
 //#define lines 5                                                          //JMCURSOR vv
 //#define y_offset 2    //lines   0
-uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
+uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow) {
   uint16_t ch, charCode, lg;
   int16_t  glyphId;
   bool_t   slc, sec;
@@ -1034,6 +1037,14 @@ uint32_t showStringEd(uint32_t lastline, int16_t offset, int16_t edcursor, const
   uint8_t  editlines     = 5 ; 
   uint8_t  maxbeforejump = 30; 
   uint8_t  yincr         = 21; 
+  const    font_t *font;
+
+
+  if(combinationFonts == 2) {
+    font = &numericFont;                             //JM ENLARGE
+  } else {
+    font = &standardFont;                            //JM ENLARGE
+  }
 
 
   lg = stringByteLength(string + offset);
@@ -1320,7 +1331,8 @@ uint8_t   displayStack_m = 255;                                                 
  * \return void
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
-  int16_t v, w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
+  int32_t v, w;
+  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
@@ -1557,41 +1569,37 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
           #define line_h1 38
-          if(combinationFontsDefault != 0) maxiC = 1;
           switch(regist) {
             // L1
-            case REGISTER_T: w = stringWidth(tmpString, &numericFont, true, true);
-                             showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
+            case REGISTER_T: w = stringWidthC43(tmpString, stdnumEnlarge, nocompress, true, true);
+                             showStringC43(tmpString, stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
                              #if defined VERBOSE_SCREEN && defined PC_BUILD
                                printf("^^^^NEW SHOW: Display Register T: %s\n",tmpString);
                              #endif //VERBOSE_SCREEN
                              break;
             // L2 & L3
-            case REGISTER_Z: w = stringWidth(tmpString + 300, &numericFont, true, true);
-                             showString(tmpString + 300, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1, vmNormal, true, true);
+            case REGISTER_Z: w = stringWidthC43(tmpString + 300, stdnumEnlarge, nocompress, true, true);
+                             showStringC43(tmpString + 300, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1, vmNormal, true, true);
                              #if defined VERBOSE_SCREEN && defined PC_BUILD
                                printf("^^^^NEW SHOW: Display Register Z: %s\n",tmpString + 300);
                              #endif //VERBOSE_SCREEN
                              break;
             // L4 & L5
-            case REGISTER_Y: w = stringWidth(tmpString + 600, &numericFont, true, true);
-                             showString(tmpString + 600, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*2, vmNormal, true, true);
+            case REGISTER_Y: w = stringWidthC43(tmpString + 600, stdnumEnlarge, nocompress, true, true);
+                             showStringC43(tmpString + 600, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*2, vmNormal, true, true);
                              #if defined VERBOSE_SCREEN && defined PC_BUILD
                                printf("^^^^NEW SHOW: Display Register Y: %s\n",tmpString + 600);
                              #endif //VERBOSE_SCREEN
                              break;
             // L6 & L7
-            case REGISTER_X: w = stringWidth(tmpString + 900, &numericFont, true, true);
-                             showString(tmpString + 900, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*3, vmNormal, true, true);
+            case REGISTER_X: w = stringWidthC43(tmpString + 900, stdnumEnlarge, nocompress, true, true);
+                             showStringC43(tmpString + 900, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*3, vmNormal, true, true);
                              #if defined VERBOSE_SCREEN && defined PC_BUILD
                                printf("^^^^NEW SHOW: Display Register X: %s\n",tmpString + 900);
                              #endif //VERBOSE_SCREEN
                              break;
             default: {}
           }
-          if(combinationFontsDefault != 0) maxiC = 0;
-
-
 //          if(getRegisterDataType(REGISTER_X) == dtReal34) {
 //            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
 //          }
@@ -1687,13 +1695,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
   //JMCURSOR vv
-        const font_t *font;
-        if(combinationFonts == 2) {
-          font = &numericFont;                             //JM ENLARGE
-        } else {
-          font = &standardFont;                             //JM ENLARGE
-        }
-
         int16_t tmplen = stringByteLength(aimBuffer);
         if(T_cursorPos > tmplen) {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
         if(T_cursorPos < 0)      {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
@@ -1708,7 +1709,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         do {
           //printf(">>>a %d %d >? %d\n", stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true), - stringWidth(aimBuffer + T_cursorPos, font, true, true), sw);
           while(/*cnt++ < 100 && */
-               (stringWidth(aimBuffer + displayAIMbufferoffset, font, true, true) - stringWidth(aimBuffer + T_cursorPos, font, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
+               ((int32_t)stringWidthC43(aimBuffer + displayAIMbufferoffset, combinationFonts ,nocompress, true, true) - (int32_t)stringWidthC43(aimBuffer + T_cursorPos, combinationFonts ,nocompress, true, true) +lines*15 > sw) &&     //assume max of 15 pixels lost at the end of each line 
           	   (displayAIMbufferoffset <= tmplen) && 
           	   (displayAIMbufferoffset + 10 < T_cursorPos)
           	   ) 
@@ -1717,7 +1718,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               displayAIMbufferoffset = stringNextGlyph(aimBuffer, displayAIMbufferoffset);
             }
 
-          showStringEd(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, font, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true, false);  //display up to the cursor
+          showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true, false);  //display up to the cursor
 
           if(xCursor > SCREEN_WIDTH-1) displayAIMbufferoffset = stringNextGlyph(aimBuffer, displayAIMbufferoffset);
           //printf(">>>c length:%d T_cursorPos:%d displayAIMbufferoffset:%d x:%d y:%d\n",tmplen, T_cursorPos, displayAIMbufferoffset, xCursor, yCursor);
@@ -1725,7 +1726,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
         if(T_cursorPos == tmplen) cursorEnabled = true; else cursorEnabled = false; 
-        cursorFont = font;
+        if(combinationFonts == 2) {
+          cursorFont = &numericFont;                             //JM ENLARGE
+        } else {
+          cursorFont = &standardFont;                            //JM ENLARGE
+        }
       }
   //JMCURSOR  ^^
 
@@ -2117,31 +2122,27 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
         else if(getRegisterDataType(regist) == dtString) {
                                                                                   //JMvv
-          int combinationFontsM = combinationFonts;
 
-          maxiC = 1; combinationFonts = 1; v = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
-          maxiC = 1; combinationFonts = 2; w = stringWidth(REGISTER_STRING_DATA(regist), &numericFont, false, true);
-          maxiC = 0; combinationFonts = combinationFontsM;
+       //JM REGISTER STRING LARGE FONTS
+          v = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge,    nocompress, false, true);
+          w = stringWidthC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, false, true);
           if(regist == REGISTER_X && w<SCREEN_WIDTH) {
             lineWidth = w; //slighly incorrect if special characters are there as well.
-            maxiC = 1; combinationFonts = 2; showString(REGISTER_STRING_DATA(regist), &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
-            maxiC = 0; combinationFonts = combinationFontsM;
+            showStringC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           } else                                                                   //JM
 
             if(regist == REGISTER_X && v<SCREEN_WIDTH) {
               lineWidth = v;
-              maxiC = 1; combinationFonts = 1; showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
-              maxiC = 0; combinationFonts = combinationFontsM;
+              showStringC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
             } else                                                                   //JM
        
               //This is for Y, Z & T, but better fonts must still be made for these as the large font is too large.
-              if(regist != REGISTER_X && stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true) < SCREEN_WIDTH) {
-                maxiC = 1; combinationFonts = 1; w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
+              if(regist != REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, false, true) < SCREEN_WIDTH) {
+                w = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, false, true);
                 lineWidth = w;
-                maxiC = 1; combinationFonts = 1; showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
-                maxiC = 0; combinationFonts = combinationFontsM;
+                showStringC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
               } else                                                                   //JM
-
+          //JM ^^ large fonts
 
 
         {

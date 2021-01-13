@@ -62,16 +62,27 @@ uint8_t  last_CM;
 #ifndef TESTSUITE_BUILD
 void     refreshFn                            (uint16_t timerType);                                             //dr - general timeout handler 
 uint8_t  compressString;                                                                                        //JM global flags for character control: compressString
-bool_t   noShow;         
 uint8_t  combinationFonts;
-uint8_t  miniC;                                                                                                 //JM global flags for character control:  miniature letters
 uint8_t  maxiC;                                                                                                 //JM global flags for character control:  enlarged letters
 uint8_t  lines;
 uint16_t current_cursor_x;
 uint16_t current_cursor_y;
 int16_t  displayAIMbufferoffset;
 
-uint32_t showStringEd                         (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+  uint32_t showStringEdC43                     (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+  //mode
+  #define stdNoEnlarge     0        //JM vv compress, enlarge, small fonts
+  #define stdEnlarge       1
+  #define stdnumEnlarge    2
+  #define numsmall         3
+  //comp
+  #define nocompress       0
+  #define stdcompress      1
+  uint32_t showStringC43                      (const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols );
+  uint32_t stringWidthC43                     (const char *str,    int mode, int comp,                                                bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);
+  //                                  JM ^^
+
+
 
 void     underline_softkey                    (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);           //JM LONGPRESS
 void     JM_DOT                               (int16_t xx, int16_t yy);                                         //JMDOT

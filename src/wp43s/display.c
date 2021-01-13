@@ -2275,21 +2275,19 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       strcat(tmpString + 2100, "'");
         xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
         thereIsANextLine = false;
-        maxiC = 1;
         #if defined VERBOSE_SCREEN && defined PC_BUILD
           uint32_t tmp = 0;
           printf("^^^0 %4u",tmp);
-          printf("^^^^$$ %s %d\n",tmpString + 2100,stringWidth(tmpString + 2100, &numericFont, false, true));
+          printf("^^^^$$ %s %d\n",tmpString + 2100,stringWidthC43(tmpString + 2100, stdnumEnlarge, nocompress, false, true));
         #endif //VERBOSE_SCREEN
-        while(!thereIsANextLine && (stringWidth(tmpString + offset, &numericFont, false, true) >= SCREEN_WIDTH)) {
+        while(!thereIsANextLine && (stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true) >= SCREEN_WIDTH)) {
           tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
           #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
             printf("^^^A %4u",tmp++);
-            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidth(tmpString + offset, &numericFont, false, true));
+            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true));
           #endif //VERBOSE_SCREEN
         }
-        maxiC = 0;
         offset += 300;
         tmpString[offset] = 0;
         if(!thereIsANextLine) break; //else continue on the small font

@@ -830,7 +830,7 @@ bool_t   noShow = false;                                                        
   int8_t rep_enlarge;
 
   bool_t enlarge = false;                                   //JM ENLARGE vv
-  if(combinationFonts == 2) {
+  if(combinationFonts == 2 || combinationFonts == numHalf) {
     if(maxiC == 1 && font == &numericFont) {                //JM allow enlargements
       glyphId = findGlyph(font, charCode);
       if(glyphId < 0) {           //JM if there is not a large glyph, enlarge the small letter
@@ -875,11 +875,12 @@ bool_t   noShow = false;                                                        
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
   if(!noShow) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
-  y += glyph->rowsAboveGlyph;
+  if(combinationFonts == numHalf) {y += (glyph->rowsAboveGlyph >> 1);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
   //x += xGlyph; //JM
 
   // Drawing the glyph
-  for(row=0; row<glyph->rowsGlyph; row++, y++) {
+  for(row=0; row<glyph->rowsGlyph; row++/*, y++*/) {
+    if(combinationFonts == numHalf) {if(row % 2 == 0) y++;} else {y++;}                         //JM REDUCE
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
@@ -1000,10 +1001,11 @@ bool_t   noShow = false;                                                        
     compressString = comp;
     
     if(mode == stdNoEnlarge)         { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
-      if(mode == stdEnlarge)         { miniC = 0 ; maxiC = 1; combinationFonts = 1;                       x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
-        if(mode == stdnumEnlarge)    { miniC = 0 ; maxiC = 1; combinationFonts = 2;                       x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
-           if(mode == numsmall)      { miniC = 1 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
-             x = 0;
+      if(mode == stdEnlarge)         { miniC = 0 ; maxiC = 1; combinationFonts = stdEnlarge;              x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
+        if(mode == stdnumEnlarge)    { miniC = 0 ; maxiC = 1; combinationFonts = stdnumEnlarge;           x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+           if(mode == numSmall)      { miniC = 1 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+             if(mode == numHalf)     { miniC = 0 ; maxiC = 1; combinationFonts = numHalf;                 x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+               x = 0;
     
     miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false;
     return x;
@@ -1327,7 +1329,7 @@ uint8_t   displayStack_m = 255;                                                 
  * \return void
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
-  int32_t v, w;
+  int32_t w;
   int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
   char prefix[18], lastBase[4];
 
@@ -2120,24 +2122,28 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                                                                                   //JMvv
 
        //JM REGISTER STRING LARGE FONTS
-          v = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge,    nocompress, false, true);
+        #ifdef STACK_STR_MED_FONT
+            int32_t v = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge,    nocompress, false, true);
+        #endif
           w = stringWidthC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, false, true);
           if(regist == REGISTER_X && w<SCREEN_WIDTH) {
             lineWidth = w; //slighly incorrect if special characters are there as well.
             showStringC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           } else                                                                   //JM
 
+        #ifdef STACK_STR_MED_FONT            
             if(regist == REGISTER_X && v<SCREEN_WIDTH) {
               lineWidth = v;
-              showStringC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+              showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
             } else                                                                   //JM
        
               //This is for Y, Z & T, but better fonts must still be made for these as the large font is too large.
-              if(regist != REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, false, true) < SCREEN_WIDTH) {
-                w = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, false, true);
+              if(regist != REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
+                w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true);
                 lineWidth = w;
-                showStringC43(REGISTER_STRING_DATA(regist), stdEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+                showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
               } else                                                                   //JM
+        #endif
           //JM ^^ large fonts
 
 

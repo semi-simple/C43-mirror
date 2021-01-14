@@ -23,10 +23,8 @@
                                                   //JMSHOIDISP  displayStackSHOIDISP=3: 1 lines of X-repeats
                                                   //JMSHOIDISP  displayStackSHOIDISP=4: 0 lines of X-repeats
 
-  extern bool_t   doRefreshSoftMenu;                             //dr
-  
-  void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
-  
+//JMvv
+  extern bool_t   doRefreshSoftMenu;                                                                              //dr  
   void     FN_handler();                                                                                          //JM LONGPRESS
   void     Shft_handler();                                                                                        //JM LONGPRESS f/g
   void     LongpressKey_handler();                                                                                //JM LONGPRESS CLX
@@ -34,7 +32,10 @@
   void     underline(int16_t y);                                                                                  //JM SHIFT LINE
   void     clear_ul(void);                                                                                        //JMUL
   void     clearScreen_old(bool_t clearStatusBar, bool_t clearRegisterLines, bool_t clearSoftkeys);               //JMOLD
-  extern uint8_t last_CM;
+  uint8_t  last_CM;  //Do extern !!
+//JM^^
+
+  void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
 
 
 
@@ -60,35 +61,38 @@
 #endif // DMCP_BUILD
 
 #ifndef TESTSUITE_BUILD
-
+//JM vv
   void     refreshFn                            (uint16_t timerType);                                           //dr - general timeout handler 
+  uint8_t  combinationFonts;    //TO REMOVE from .h
+  uint8_t  maxiC;               //TO REMOVE from .h                                                                                            //JM global flags for character control:  enlarged letters
   extern uint8_t  compressString;                                                                               //JM global flags for character control: compressString
-  extern uint8_t  combinationFonts;
-  extern uint8_t  maxiC;               //TO REMOVE                                                                                             //JM global flags for character control:  enlarged letters
   extern uint8_t  lines;
   extern uint16_t current_cursor_x;
   extern uint16_t current_cursor_y;
   extern int16_t  displayAIMbufferoffset;
 
 
-  uint32_t showStringEdC43                     (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+  #define STACK_STR_MED_FONT
+  //#undef  STACK_STR_MED_FONT
   //mode
   #define stdNoEnlarge     0                                                                                    //JM vv compress, enlarge, small fonts
   #define stdEnlarge       1
   #define stdnumEnlarge    2
-  #define numsmall         3
+  #define numSmall         3
+  #define numHalf          4
+
   //comp
   #define nocompress       0
   #define stdcompress      1
+
   uint32_t showStringC43                      (const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols );
   uint32_t stringWidthC43                     (const char *str,    int mode, int comp,                                                bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);
+  uint32_t showStringEdC43                    (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
                                                                                                                //JM ^^
-
   void     underline_softkey                  (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);          //JM LONGPRESS
-  void     JM_DOT                             (int16_t xx, int16_t yy);                                        //JMDOT
   void     refresh_gui                        (void);                                                          //JM
   void     force_refresh                      (void);                                                          //JM SCREEN
-
+//JM^^
 
 void     refreshScreen                        (void);
   //int      getPixel                           (uint32_t x, uint32_t y);

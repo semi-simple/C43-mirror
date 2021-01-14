@@ -397,6 +397,7 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
 		    switch(*result) {
           case ITM_BACKSPACE:                                          longpressDelayedkey1 = ITM_CLA;   break;     //BACKSPACE longpress clears input buffer
           case ITM_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
+          case ITM_ENTER    :                                          longpressDelayedkey1 = ITM_XEDIT; break;
 		      default:;
 		    }
 		  }

@@ -722,7 +722,7 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setBlackPixel(uint32_t x, uint32_t y) {
-      if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
+      //if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
     
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
         printf("In function setBlackPixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
@@ -743,7 +743,8 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setWhitePixel(uint32_t x, uint32_t y) {
-      if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
+      //if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
+      
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
         printf("In function setWhitePixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
         return;
@@ -777,9 +778,9 @@ int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
 void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
     uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
 
-    if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
+    //if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
 
-    if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==240) {  //JMTOCHECK is this needed?
+    if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==SCREEN_HEIGHT) {  //JMTOCHECK is this needed?
       printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
       clear_ul(); //JMUL
     }
@@ -808,7 +809,7 @@ uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
 uint8_t  maxiC = 0;                                                              //JM ENLARGE letters. Use Numericfont & combinationFontsDefault=2;
 bool_t   noShow = false;                                                         //JM
-
+uint8_t  displaymode = stdNoEnlarge;
 
 /********************************************//**
  * \brief Displays a glyph using it's Unicode code point
@@ -823,14 +824,14 @@ bool_t   noShow = false;                                                        
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
   uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint32_t  col, row, xGlyph, endingCols;
+  uint32_t  yy, col, row, xGlyph, endingCols;
   int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
   int8_t rep_enlarge;
 
   bool_t enlarge = false;                                   //JM ENLARGE vv
-  if(combinationFonts == 2 || combinationFonts == numHalf) {
+  if(combinationFonts == stdnumEnlarge || combinationFonts == numHalf) {
     if(maxiC == 1 && font == &numericFont) {                //JM allow enlargements
       glyphId = findGlyph(font, charCode);
       if(glyphId < 0) {           //JM if there is not a large glyph, enlarge the small letter
@@ -875,12 +876,12 @@ bool_t   noShow = false;                                                        
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
   if(!noShow) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
-  if(combinationFonts == numHalf) {y += (glyph->rowsAboveGlyph*3/4);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
+  if(displaymode == numHalf) {y += (glyph->rowsAboveGlyph*3/4);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
   //x += xGlyph; //JM
 
   // Drawing the glyph
-  for(row=0; row<glyph->rowsGlyph; row++/*, y++*/) {
-    if(combinationFonts == numHalf) {if((int)((3*row+2)) % 4 != 0) y++;} else {y++;}                         //JM REDUCE
+  for(row=0; row<glyph->rowsGlyph; row++, y++) {
+    if(displaymode == numHalf) {if((int)((3*row+2)) % 4 == 0) y--;}                           //JM REDUCE
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
@@ -999,15 +1000,15 @@ bool_t   noShow = false;                                                        
     if(combinationFontsDefault == 0) mode = stdNoEnlarge;
     
     compressString = comp;
-    
+    displaymode = mode;             // miniC and maxiC to be depreciated in favour of displaymode
     if(mode == stdNoEnlarge)         { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
       if(mode == stdEnlarge)         { miniC = 0 ; maxiC = 1; combinationFonts = stdEnlarge;              x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
         if(mode == stdnumEnlarge)    { miniC = 0 ; maxiC = 1; combinationFonts = stdnumEnlarge;           x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
            if(mode == numSmall)      { miniC = 1 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
-             if(mode == numHalf)     { miniC = 0 ; maxiC = 1; combinationFonts = numHalf;                 x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
+             if(mode == numHalf)     { miniC = 0 ; maxiC = 0; combinationFonts = numHalf;                 x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
                x = 0;
     
-    miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false;
+    miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false; displaymode = stdNoEnlarge;
     return x;
   }
 
@@ -1016,7 +1017,7 @@ bool_t   noShow = false;                                                        
   uint32_t  stringWidthC43(const char *str, int mode, int comp, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows){
      noShow = true;
      return showStringC43(str, mode, comp, 0, 0, vmNormal, withLeadingEmptyRows, withEndingEmptyRows );
-     noShow = false;
+     //noShow = false; //no need to redo
   }
 
 
@@ -2122,11 +2123,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                                                                                   //JMvv
 
        //JM REGISTER STRING LARGE FONTS
-        #if defined (STACK_STR_MED_FONT) || defined (STACK_X_STR_MED_FONT)
-            int32_t v = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf,    nocompress, false, true);
-        #endif
-
         #ifdef STACK_X_STR_LRG_FONT
+          //This is for X
           w = stringWidthC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, false, true);
           if(regist == REGISTER_X && w<SCREEN_WIDTH) {
             lineWidth = w; //slighly incorrect if special characters are there as well.
@@ -2134,25 +2132,27 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           } else                                                                   //JM
         #endif
 
-        #ifdef STACK_X_STR_MED_FONT            
-            if(regist == REGISTER_X && v<SCREEN_WIDTH) {
-              lineWidth = v;
-              showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+          #ifdef STACK_X_STR_MED_FONT
+            //This is for X
+            if(regist == REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
+              w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf,    nocompress, false, true);
+              lineWidth = w;
+              showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
             } else                                                                   //JM
-        #endif
+          #endif
 
-        #ifdef STACK_STR_MED_FONT            
-              //This is for Y, Z & T, but better fonts must still be made for these as the large font is too large.
-              if(regist != REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
+            #ifdef STACK_STR_MED_FONT
+              //This is for Y, Z & T
+              if(regist >= REGISTER_Y && regist <= REGISTER_T && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
                 w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true);
                 lineWidth = w;
                 showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
               } else                                                                   //JM
-        #endif
+            #endif
           //JM ^^ large fonts
 
 
-        {
+        { //printf("^^^^#### combinationFonts=%d maxiC=%d miniC=%d displaymode=%d\n",combinationFonts, maxiC, miniC, displaymode);
           w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
 
           if(w >= SCREEN_WIDTH) {

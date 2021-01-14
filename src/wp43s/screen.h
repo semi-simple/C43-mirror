@@ -63,8 +63,8 @@
 #ifndef TESTSUITE_BUILD
 //JM vv
   void     refreshFn                            (uint16_t timerType);                                           //dr - general timeout handler 
-  uint8_t  combinationFonts;    //TO REMOVE from .h
-  uint8_t  maxiC;               //TO REMOVE from .h                                                                                            //JM global flags for character control:  enlarged letters
+//  uint8_t  combinationFonts;    //TO REMOVE from .h
+//  uint8_t  maxiC;               //TO REMOVE from .h                                                                                            //JM global flags for character control:  enlarged letters
   extern uint8_t  compressString;                                                                               //JM global flags for character control: compressString
   extern uint8_t  lines;
   extern uint16_t current_cursor_x;
@@ -75,8 +75,8 @@
   //Stack string large font display
   #define STACK_X_STR_LRG_FONT
   #define STACK_STR_MED_FONT
-  //#undef  STACK_STR_MED_FONT //not needed as the full and half fonts are the same width
   #define STACK_X_STR_MED_FONT
+  #undef  STACK_X_STR_MED_FONT //not needed as the full and half fonts are the same width
 
   //mode
   #define stdNoEnlarge     0                                                                                    //JM vv compress, enlarge, small fonts

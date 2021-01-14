@@ -823,7 +823,7 @@ uint8_t  displaymode = stdNoEnlarge;
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
   uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint32_t  col, row, xGlyph, endingCols;
+  uint32_t  yy, col, row, xGlyph, endingCols;
   int32_t glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
@@ -879,9 +879,8 @@ uint8_t  displaymode = stdNoEnlarge;
   //x += xGlyph; //JM
 
   // Drawing the glyph
-  for(row=0; row<glyph->rowsGlyph; row++/*, y++*/) {
-    if(displaymode == numHalf) {if((int)((3*row+2)) % 4 != 0) y++; else {} } 
-      else {y++;}                         //JM REDUCE
+  for(row=0; row<glyph->rowsGlyph; row++, y++) {
+    if(displaymode == numHalf) {if((int)((3*row+2)) % 4 == 0) y--;}                           //JM REDUCE
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
@@ -2132,7 +2131,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           } else                                                                   //JM
         #endif
 
-          #ifdef STACK_X_STR_MED_FONT            
+          #ifdef STACK_X_STR_MED_FONT
             //This is for X
             if(regist == REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
               w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf,    nocompress, false, true);
@@ -2141,7 +2140,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             } else                                                                   //JM
           #endif
 
-            #ifdef STACK_STR_MED_FONT            
+            #ifdef STACK_STR_MED_FONT
               //This is for Y, Z & T
               if(regist >= REGISTER_Y && regist <= REGISTER_T && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
                 w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true);

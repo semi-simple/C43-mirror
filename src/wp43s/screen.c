@@ -722,7 +722,7 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setBlackPixel(uint32_t x, uint32_t y) {
-      if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
+      if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
     
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
         printf("In function setBlackPixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
@@ -743,7 +743,7 @@ void Shft_stop() {
      * \return void
      ***********************************************/
     void setWhitePixel(uint32_t x, uint32_t y) {
-      if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
+      if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
         printf("In function setWhitePixel: x=%u or %d, y=%u or %d outside the screen!\n", x, (int32_t)(x), y, (int32_t)(y) );
         return;
@@ -807,6 +807,7 @@ void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
 uint8_t  combinationFonts = combinationFontsDefault;
 uint8_t  miniC = 0;                                                              //JM miniature letters
 uint8_t  maxiC = 0;                                                              //JM ENLARGE letters. Use Numericfont & combinationFontsDefault=2;
+bool_t   noShow = false;                                                         //JM
 
 
 /********************************************//**
@@ -873,7 +874,7 @@ uint8_t  maxiC = 0;                                                             
 
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
-  lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
+  if(!noShow) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
   y += glyph->rowsAboveGlyph;
   //x += xGlyph; //JM
 
@@ -894,10 +895,10 @@ uint8_t  maxiC = 0;                                                             
 
         if(byte & 0x80) {// MSB set
           if(videoMode == vmNormal) { // Black pixel for white background
-            setBlackPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+            if(!noShow) setBlackPixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
           }
           else { // White pixel for black background
-            setWhitePixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
+            if(!noShow) setWhitePixel(x+((xGlyph+col) >> miniC), y0+((y-y0) >> miniC));       //JMmini
           }
         }
 
@@ -940,7 +941,6 @@ uint8_t  maxiC = 0;                                                             
 
 
   uint8_t  compressString = 0;                                                              //JM compressString
-  bool_t   noShow = false;         //JM
 
   /********************************************//**
    * \brief Displays a 0 terminated string
@@ -984,10 +984,7 @@ uint8_t  maxiC = 0;                                                             
         charCode = (charCode<<8) | (uint8_t)string[ch++];
       }
 
-    if(!noShow) 
       x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
-    else 
-      x = showGlyphCode(charCode, font, x, -100, videoMode, slc, sec) - compressString;        //JM compressString      
     }
     compressString = 0;        //JM compressString
     return x;
@@ -999,13 +996,15 @@ uint8_t  maxiC = 0;                                                             
   uint32_t showStringC43(const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols ) {
     int combinationFontsM = combinationFonts;
     if(combinationFontsDefault == 0) mode = stdNoEnlarge;
+    
     compressString = comp;
+    
     if(mode == stdNoEnlarge)         { miniC = 0 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
       if(mode == stdEnlarge)         { miniC = 0 ; maxiC = 1; combinationFonts = 1;                       x = showString(string, &standardFont, x, y, videoMode, showLeadingCols, showEndingCols );    } else
         if(mode == stdnumEnlarge)    { miniC = 0 ; maxiC = 1; combinationFonts = 2;                       x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
            if(mode == numsmall)      { miniC = 1 ; maxiC = 0; combinationFonts = combinationFontsDefault; x = showString(string, &numericFont , x, y, videoMode, showLeadingCols, showEndingCols );    } else
-
-          x = 0;
+             x = 0;
+    
     miniC = 0; maxiC = 0; combinationFonts = combinationFontsM; compressString = 0; noShow = false;
     return x;
   }
@@ -1172,10 +1171,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
     }
 
     maxiC = 1;                                                                            //JM
-    if(!noshow) 
       x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
-    else 
-      x = showGlyphCode(charCode, font, x, -100, videoMode, slc, sec) - compressString;        //JM compressString      
     maxiC = 0;                                                                            //JM
 
   }
@@ -1975,7 +1971,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         else if(temporaryInformation == TI_STATISTIC_SUMS) {
           if(regist == REGISTER_Y) {
             realToInt32(SIGMA_N, w);
-            sprintf(prefix, "Data point %03" PRId16, w);
+            sprintf(prefix, "Data point %03" PRId32, w);
             prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
           }

@@ -2151,7 +2151,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           //JM ^^ large fonts
 
 
-        { printf("^^^^#### combinationFonts=%d maxiC=%d miniC=%d displaymode=%d\n",combinationFonts, maxiC, miniC, displaymode);
+        { //printf("^^^^#### combinationFonts=%d maxiC=%d miniC=%d displaymode=%d\n",combinationFonts, maxiC, miniC, displaymode);
           w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
 
           if(w >= SCREEN_WIDTH) {

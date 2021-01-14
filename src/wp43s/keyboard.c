@@ -834,10 +834,11 @@ bool_t lastshiftG = false;
                 }
                 break;
 
+
               case CM_AIM: {
                 int16_t item1 = 0;
                 #ifdef PC_BUILD
-                  char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d",item); jm_show_comment(tmp);
+                  char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
                 #endif //PC_BUILD
                 if(numLock && !lastshiftF) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
                   switch(item) {
@@ -852,8 +853,14 @@ bool_t lastshiftG = false;
                     case ITM_Z             : item1 = ITM_3;      break;
                     case ITM_COLON         : item1 = ITM_0;      break;
                     case ITM_COMMA         : item1 = ITM_PERIOD; break;
-                    case ITM_DOWN_ARROW    : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; break;
-                    case ITM_UP_ARROW      : item1 = 0; if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL; break;
+/*                    case ITM_DOWN_ARROW    : item1 = 0; 
+                                                  if(nextChar == NC_NORMAL)      nextChar = NC_SUBSCRIPT; 
+                                             else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; 
+                                             break;
+                    case ITM_UP_ARROW      : item1 = 0; 
+                                                  if(nextChar == NC_NORMAL)      nextChar = NC_SUPERSCRIPT; 
+                                             else if(nextChar == NC_SUBSCRIPT)   nextChar = NC_NORMAL; 
+                                             break;*/
                     case CHR_num           : item1 = 0;          break;
                     case CHR_case          : item1 = 0;          break;
                     case ITM_O             : item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE

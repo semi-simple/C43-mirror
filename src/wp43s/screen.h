@@ -72,8 +72,12 @@
   extern int16_t  displayAIMbufferoffset;
 
 
+  //Stack string large font display
+  #define STACK_X_STR_LRG_FONT
   #define STACK_STR_MED_FONT
-  //#undef  STACK_STR_MED_FONT
+  //#undef  STACK_STR_MED_FONT //not needed as the full and half fonts are the same width
+  #define STACK_X_STR_MED_FONT
+
   //mode
   #define stdNoEnlarge     0                                                                                    //JM vv compress, enlarge, small fonts
   #define stdEnlarge       1

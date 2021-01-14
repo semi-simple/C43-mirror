@@ -875,12 +875,12 @@ bool_t   noShow = false;                                                        
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
   if(!noShow) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
-  if(combinationFonts == numHalf) {y += (glyph->rowsAboveGlyph >> 1);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
+  if(combinationFonts == numHalf) {y += (glyph->rowsAboveGlyph*3/4);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
   //x += xGlyph; //JM
 
   // Drawing the glyph
   for(row=0; row<glyph->rowsGlyph; row++/*, y++*/) {
-    if(combinationFonts == numHalf) {if(row % 2 == 0) y++;} else {y++;}                         //JM REDUCE
+    if(combinationFonts == numHalf) {if((int)((3*row+2)) % 4 != 0) y++;} else {y++;}                         //JM REDUCE
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 
@@ -2122,21 +2122,26 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                                                                                   //JMvv
 
        //JM REGISTER STRING LARGE FONTS
-        #ifdef STACK_STR_MED_FONT
-            int32_t v = stringWidthC43(REGISTER_STRING_DATA(regist), stdEnlarge,    nocompress, false, true);
+        #if defined (STACK_STR_MED_FONT) || defined (STACK_X_STR_MED_FONT)
+            int32_t v = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf,    nocompress, false, true);
         #endif
+
+        #ifdef STACK_X_STR_LRG_FONT
           w = stringWidthC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, false, true);
           if(regist == REGISTER_X && w<SCREEN_WIDTH) {
             lineWidth = w; //slighly incorrect if special characters are there as well.
             showStringC43(REGISTER_STRING_DATA(regist), stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           } else                                                                   //JM
+        #endif
 
-        #ifdef STACK_STR_MED_FONT            
+        #ifdef STACK_X_STR_MED_FONT            
             if(regist == REGISTER_X && v<SCREEN_WIDTH) {
               lineWidth = v;
               showStringC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, SCREEN_WIDTH - v, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
             } else                                                                   //JM
-       
+        #endif
+
+        #ifdef STACK_STR_MED_FONT            
               //This is for Y, Z & T, but better fonts must still be made for these as the large font is too large.
               if(regist != REGISTER_X && stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true) < SCREEN_WIDTH) {
                 w = stringWidthC43(REGISTER_STRING_DATA(regist), numHalf, nocompress, false, true);

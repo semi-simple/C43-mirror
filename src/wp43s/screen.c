@@ -824,8 +824,8 @@ uint8_t  displaymode = stdNoEnlarge;
  * \return uint32_t                  x coordinate for the next glyph
  ***********************************************/
   uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-  uint32_t  yy, col, row, xGlyph, endingCols;
-  int32_t glyphId;
+  uint32_t col, row, xGlyph, endingCols;
+  int32_t  glyphId;
   int8_t   byte, *data;
   const glyph_t  *glyph;
   int8_t rep_enlarge;

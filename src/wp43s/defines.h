@@ -42,7 +42,7 @@
 //Verbose options
 #define VERBOSE_LEVEL 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
 
-#define PC_BUILD_TELLTALE            //JM verbose on PC
+#define PC_BUILD_TELLTALE            //JM verbose on PC: jm_show_comment
 #undef  PC_BUILD_TELLTALE
 
 #define PC_BUILD_VERBOSE2            //JM verbose XEQM detailed operation on PC, via central jm_show_comment1 function

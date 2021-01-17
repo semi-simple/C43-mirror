@@ -1598,11 +1598,11 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
                 showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }
 
-              if(jm_G_DOUBLETAP && softmenu[m].menuItem == -MNU_ALPHA && y == 0 ){
-                // Strike out disabled double tap
+              if(jm_G_DOUBLETAP && softmenu[m].menuItem == -MNU_ALPHA && y == 0 ){  // Indicate disabled double tap
                 int16_t yStrokeA = SCREEN_HEIGHT - (y-currentFirstItem/6)*23 - 1;
                 int16_t xStrokeA=x*67 + 66 -12;                                     //JM mod Show double press which does not work anymore
-                showString(STD_EMPTY_SET , &standardFont, xStrokeA +2, yStrokeA -16-3, vmNormal, false, false);
+//                showString(STD_EMPTY_SET, &standardFont, xStrokeA +2, yStrokeA -16-3, vmNormal, false, false);
+                plotline(xStrokeA +2+4, yStrokeA -16-3, xStrokeA +2+4+5, yStrokeA -16-3+5);
               }
 
 

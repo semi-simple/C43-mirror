@@ -8778,7 +8778,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_101b_KB_POC"
+#define VERSION1 "_101c_KB_POC"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"
@@ -8803,6 +8803,8 @@ void fnReset(uint16_t confirmation) {
     #endif
     fnStore(103);
     fnDrop(0);
+    fnDrop(0);
+    fnStrtoX("C43");
 
 #ifdef NOT_NEEDED
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS

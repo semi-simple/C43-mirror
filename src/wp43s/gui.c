@@ -1905,6 +1905,11 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
       lbl[3]=0xc2;          //JM SPACE
       lbl[4]=0xb7;          //JM SPACE
       lbl[5]=0;             //JM SPACE
+  } else
+
+  //JM Exception, to change 0 to ";", when !NL & SHFT-0
+  if(numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true) != max(key->fShiftedAim, -key->fShiftedAim)) { 
+    stringToUtf8(indexOfItems[numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true)].itemSoftmenuName, lbl);
   }
 
 //  if(key->primary == ITM_RS) {    //JM R/S change to /

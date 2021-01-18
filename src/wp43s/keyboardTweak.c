@@ -792,7 +792,20 @@ bool_t keyReplacements(uint16_t item, uint16_t * item1, bool_t NL, bool_t SHFT) 
 //                       item1 = item;     //this is the non-number character which is now handled below.
                          break;
                   }
+                } else//JM Exception, to change 0 to ";", when !NL & SHFT-0
+
+                if(!NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+                  switch(item) {
+                    case ITM_0      : * item1 = ITM_SEMICOLON        ;  break;
+                    default: 
+                         #ifdef PC_BUILD
+                           jm_show_comment("^^^^processKeyAction3/keyReplacements:CM_AIM: Numlock active but number not handled");
+                         #endif //PC_BUILD
+//                       item1 = item;     //this is the non-number character which is now handled below.
+                         break;
+                  }
                 }
+
 
                 return *item1 != 0;
 }

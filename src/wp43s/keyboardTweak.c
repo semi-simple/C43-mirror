@@ -736,8 +736,10 @@ void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shi
 
 uint16_t numlockReplacements(uint16_t item, bool_t NL, bool_t SHFT) {
   uint16_t item1 = 0;
-  if(keyReplacements(item, &item1, NL, SHFT)) return item1;
-  else return item;
+  if(ITM_A +26 <= item && item <= ITM_Z +26) 
+    {if(keyReplacements(item-26, &item1, NL, SHFT)) return item1;else return item;}
+  else
+    {if(keyReplacements(item, &item1, NL, SHFT)) return item1;else return item;}
 }
 
 

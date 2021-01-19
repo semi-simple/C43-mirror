@@ -12175,7 +12175,7 @@ void fnReset(uint16_t confirmation) {
 
 
     // The following lines are test data
-    addTestPrograms();
+    //addTestPrograms();
     //fnSetFlag(  3);
     //fnSetFlag( 11);
     //fnSetFlag( 33);

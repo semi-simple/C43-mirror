@@ -329,9 +329,12 @@ void execute_string(const char *inputstring, bool_t exec1) {
       #endif
                                                  //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
-      #ifdef PC_BUILD
-        printf("------Starting parse ------- Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
-        printf("|%s|\n",inputstring);
+    
+      #ifdef PC_BUILD_VERBOSE1
+        #ifdef PC_BUILD
+          printf("------Starting parse ------- Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+          printf("|%s|\n",inputstring);
+        #endif
       #endif
       xeqlblinprogress = 0;
       gotoinprogress   = 0;
@@ -406,8 +409,10 @@ void execute_string(const char *inputstring, bool_t exec1) {
                    //printf("@@@ %s\n",commandnumber);
                    if(state_commands){
                       state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                      #ifdef PC_BUILD
-                        printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);
+                      #ifdef PC_BUILD_VERBOSE1
+                        #ifdef PC_BUILD
+                          printf("Command/number detected:(tempjm=%d)(gotoinprogress=%d) %45s \n",temporaryInformation,gotoinprogress,commandnumber);
+                        #endif
                       #endif
                       
                       //DSZ:

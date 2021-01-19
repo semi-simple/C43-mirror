@@ -873,15 +873,19 @@ uint8_t  displaymode = stdNoEnlarge;
   xGlyph      = showLeadingCols ? glyph->colsBeforeGlyph : 0;
   endingCols  = showEndingCols ? glyph->colsAfterGlyph : 0;
 
+#define REDUCT_A 3
+#define REDUCT_B 4
+#define REDUCT_OFF 3
+
   // Clearing the space needed by the glyph
   if(enlarge && combinationFonts !=0) rep_enlarge = 2; else rep_enlarge = 1;                //JM ENLARGE
   if(!noShow) lcd_fill_rect(x, y, ((xGlyph + glyph->colsGlyph + endingCols) >> miniC), rep_enlarge*((glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph) >> miniC)-(rep_enlarge-1)*4, (videoMode == vmNormal ? LCD_SET_VALUE : LCD_EMPTY_VALUE));  //JMmini
-  if(displaymode == numHalf) {y += (glyph->rowsAboveGlyph*3/4);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
+  if(displaymode == numHalf) {y += (glyph->rowsAboveGlyph*REDUCT_A/REDUCT_B);} else {y += glyph->rowsAboveGlyph;}        //JM REDUCE
   //x += xGlyph; //JM
 
   // Drawing the glyph
   for(row=0; row<glyph->rowsGlyph; row++, y++) {
-    if(displaymode == numHalf) {if((int)((3*row+2)) % 4 == 0) y--;}                           //JM REDUCE
+    if(displaymode == numHalf) {if((int)((REDUCT_A*row+REDUCT_OFF)) % REDUCT_B == 0) y--;}                           //JM REDUCE
     if(enlarge && combinationFonts !=0) rep_enlarge = 1; else rep_enlarge = 0;                //JM ENLARGE
     while (rep_enlarge >= 0) {                                             //JM ENLARGE ^^
 

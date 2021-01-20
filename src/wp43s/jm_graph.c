@@ -226,6 +226,16 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
 
 void fnGraph (uint16_t func){
+
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+  #else // !DMCP_BUILD
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
+
+
   Aspect_Square = false;
   PLOT_INTG = false;
   PLOT_DIFF = false;

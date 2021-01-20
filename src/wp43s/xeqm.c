@@ -327,6 +327,16 @@ void execute_string(const char *inputstring, bool_t exec1) {
       #ifdef PC_BUILD
         uint16_t loopnumber = 0;
       #endif
+
+
+      hourGlassIconEnabled = true;
+      showHideHourGlass();
+      #ifdef DMCP_BUILD
+        lcd_refresh();
+      #else // !DMCP_BUILD
+        refreshLcd(NULL);
+      #endif // DMCP_BUILD
+
                                                  //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
     while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
     

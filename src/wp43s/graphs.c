@@ -154,6 +154,15 @@ void fnPy (uint16_t unusedButMandatoryParameter) {
 }
 
 void fnPlot(uint16_t unusedButMandatoryParameter) {
+  
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+  #else // !DMCP_BUILD
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
+
   Aspect_Square = true;
   if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
   if(previousCalcMode == CM_GRAPH) {

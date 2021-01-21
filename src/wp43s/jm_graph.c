@@ -255,9 +255,6 @@ void fnGraph (uint16_t func){
 
 	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
-	  case 4:   graph_plotmem();
-	            break;
-
     case 11:
     case 12:
     case 13:

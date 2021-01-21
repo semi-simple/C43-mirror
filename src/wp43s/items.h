@@ -21,6 +21,8 @@
 
 
 
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2253,7 +2255,7 @@
 #define ITM_NVECT                     2183
 #define ITM_EXTX                      2184
 #define ITM_EXTY                      2185
-#define ITM_PLOTJM                    2186
+#define ITM_2186                      2186
 #define ITM_2187                      2187
 #define ITM_DEMO1                     2188
 #define ITM_DEMO2                     2189

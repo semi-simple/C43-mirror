@@ -330,6 +330,7 @@ void execute_string(const char *inputstring, bool_t exec1) {
 
 
       hourGlassIconEnabled = true;
+      cancelFilename = true;
       showHideHourGlass();
       #ifdef DMCP_BUILD
         lcd_refresh();

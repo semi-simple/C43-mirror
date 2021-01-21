@@ -30,7 +30,7 @@
 
 char                 filename_csv[40]; //JMMAX                //JM_CSV Changed from 60 to 40 to save 20 bytes.
 uint32_t             mem__32;                                 //JM_CSV
-
+bool_t               cancelFilename = false;
 
 #ifdef DMCP_BUILD
 //###################################################################################
@@ -397,13 +397,14 @@ void create_filename(char *fn){ //DMCP_BUILD //fn must be in format ".STAT.TSV"
     uint32_t tmp__32;                                                 //JM_CSV
 
     tmp__32 = getUptimeMs();                                      //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000) || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
+    if ( cancelFilename || (mem__32 == 0) || (tmp__32 > mem__32 + 120000) || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
       //Create file name
       check_create_dir("DATA");  
       make_date_filename(filename_csv,"DATA\\",fn);
       check_create_dir("DATA");  
     }
     mem__32 = tmp__32;
+    cancelFilename = false;
 }
 
 
@@ -655,7 +656,7 @@ void create_filename(char *fn){  //PC_BUILD //fn must be in format ".STAT.TSV"
     struct tm *timeInfo;
     
     tmp__32 = getUptimeMs();                                          //KEEP PERSISTENT FILE NAME FOR A PERIOD
-    if ((mem__32 == 0) || (tmp__32 > mem__32 + 120000)  || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
+    if (cancelFilename || (mem__32 == 0) || (tmp__32 > mem__32 + 120000)  || (stringByteLength(filename_csv) > 10 && !strcompare(filename_csv + (stringByteLength(filename_csv) - 9),fn  ) ) ) {
       //Create file name
       time(&rawTime);
       timeInfo = localtime(&rawTime);
@@ -663,6 +664,7 @@ void create_filename(char *fn){  //PC_BUILD //fn must be in format ".STAT.TSV"
       strcat(filename_csv, fn);
     }
     mem__32 = tmp__32;
+    cancelFilename = false;
 }
 
 

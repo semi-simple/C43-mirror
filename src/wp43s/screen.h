@@ -70,7 +70,7 @@
   extern uint16_t current_cursor_x;
   extern uint16_t current_cursor_y;
   extern int16_t  displayAIMbufferoffset;
-
+  extern uint8_t  displayStack_m;
 
   //Stack string large font display
   #define STACK_X_STR_LRG_FONT
@@ -98,7 +98,7 @@
   void     force_refresh                      (void);                                                          //JM SCREEN
 //JM^^
 
-void     refreshScreen                        (void);
+  void     refreshScreen                      (void);
   //int      getPixel                           (uint32_t x, uint32_t y);
   uint32_t showString                         (const char *str,   const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);
   uint32_t showGlyph                          (const char *ch,    const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols);

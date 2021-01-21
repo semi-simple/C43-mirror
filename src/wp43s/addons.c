@@ -106,6 +106,14 @@ void fnClAIM(uint16_t unusedButMandatoryParameter) {  //clear input buffe
       popSoftmenu();
       ix++;
     }
+
+    if(displayStack_m >=1 && displayStack_m <= 4 /*&& displayStack_m != 255*/) {                                                   //JMSHOI
+      fnDisplayStack(displayStack_m);                                             //JMSHOI
+      displayStack_m = 255;                                                       //JMSHOI
+    } else {
+      fnDisplayStack(4);  //removed because it clamps DSTACK to 4
+    }                                                                             //JMSHOI
+
     calcModeNormal();
     refreshScreen();
     fnKeyExit(0);      //Call fnkeyExit to ensure the correct home screen is brought up, if HOME is selected.

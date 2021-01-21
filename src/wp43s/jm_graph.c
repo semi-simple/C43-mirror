@@ -31,7 +31,15 @@
 
 void Fn_Lbl_A(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
+
     fnStore(99);             // STO 99
+    fnStoreMin(98);
+    fnRCL(99);
+    fnRCL(98);
+    fnSubtract(0);
+    fnStrInputReal34("0.3");
+    fnAdd(0);
+    fnStore(99);
 
     // (sin(x)/x + sin(10x)/5) / 2 + 2/x 
     fnSin(0);                // SIN
@@ -188,6 +196,7 @@ void execute_rpn_function(int16_t nbr){
 void graph_demo(uint8_t nbr, float x_min, float x_max) {
   #ifndef TESTSUITE_BUILD
   double x; 
+  cancelFilename = true;
   fnClearStack(0);
 
   if(telltale != MEM_INITIALIZED) {
@@ -246,9 +255,6 @@ void fnGraph (uint16_t func){
 
 	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
-	  case 4:   graph_plotmem();
-	            break;
-
     case 11:
     case 12:
     case 13:

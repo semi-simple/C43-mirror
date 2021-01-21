@@ -39,8 +39,9 @@ int16_t      export_append_line(char *inputstring);
 int16_t      export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode, char *dirname, char *filename);
 
 #define      filenamelen 40
-char         filename_csv[filenamelen]; //JMMAX                //JM_CSV
-uint32_t     mem__32;                                          //JM_CSV
+extern char         filename_csv[filenamelen]; //JMMAX                //JM_CSV
+extern uint32_t     mem__32;                                          //JM_CSV
+extern bool_t       cancelFilename;
 void         print_numberstr(const char *line1, bool_t line_init);
 void         print_linestr  (const char *line1, bool_t line_init);
 int16_t      export_xy_to_file(graphtype x, graphtype y);

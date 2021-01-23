@@ -568,7 +568,6 @@ const item_t indexOfItems[] = {
 
 
 
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2801,7 +2800,7 @@ const item_t indexOfItems[] = {
 /* 2183 */  { fnPNvect,                    NOPARAM,                     "N.VECT",                                      "N.VECT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
 /* 2184 */  { fnPx,                        NOPARAM,                     "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2185 */  { fnPy,                        NOPARAM,                     "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 2186 */  { itemToBeCoded,               NOPARAM,                     "2186",                                        "2186",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2186 */  { fnGraph,                     10,                          "SOLV2",                                       "SOLV2",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2187 */  { itemToBeCoded,               NOPARAM,                     "2187",                                        "2187",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2188 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 /* 2189 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},

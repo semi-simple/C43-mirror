@@ -77,6 +77,8 @@ void ipRema(void) {
 
 
 void ipShoI(void) {
+  convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
+  lastIntegerBase = 0;
 }
 
 

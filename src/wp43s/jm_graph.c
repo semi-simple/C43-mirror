@@ -70,12 +70,24 @@ void Fn_Lbl_A(void) {                                   //Temporary RPN function
 
 void Fn_Lbl_B(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
-    fnStore(99);             // STO 99
+    fnStore(99);             // STO 99   //sin(x) + sin(x^2) = 0
     fnSin(0);                // SIN    
     fnRCL(99);
     fnSquare(0);             // square
     fnSin(0);                // SIN
     fnAdd(0);                // +    
+
+//fnSquare(0);                   //x^2 + 1 = 0
+//fnStrInputReal34("-1");
+//fnSubtract(0);
+//
+//fnStrInputReal34("1");         //cube root
+//fnStrInputReal34("3");
+//fnDivide(0);
+//fnPower(0);
+//
+//
+
     fnRCL(99);               //leaving y in Y and x in X
 #endif
 }
@@ -225,6 +237,284 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 }
 
 
+void doubleToRegisterReal34(double x) {
+    setSystemFlag(FLAG_ASLIFT);   // 5
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
+    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+void printf_cpx(calcRegister_t regist) {
+  if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("Reg(%d) REAL = %s ",regist, tmpString);
+  }
+  if(getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_IMAG34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("IMAG = %s ",tmpString);
+  }
+  if(getRegisterDataType(regist) != dtReal34 && getRegisterDataType(regist) != dtComplex34) printf("Neither real nor complex");
+}
+
+
+double convert_to_double(calcRegister_t regist) {
+  double y;
+  real_t tmpy; //Convert from X register to double
+    real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
+    realToString(&tmpy, tmpString);
+    y = strtof (tmpString, NULL);
+    return y;
+  }
+
+
+//#define VERBOSE_SOLVER1  // PLOT the actual converging values and a lot less text
+//#define VERBOSE_SOLVER2  // PLOT dthe differences, verbose a lot
+
+
+
+//###################################################################################
+//GRAPH  // Build test data 
+void graph_solver(uint8_t nbr, float x_min, float x_max) {
+  #ifndef TESTSUITE_BUILD
+  int16_t ix;
+  int16_t oscillations = 0; 
+  int16_t convergent = 0; 
+  bool_t checkend = false;
+  cancelFilename = true;
+  fnClearStack(0);
+
+  if(telltale != MEM_INITIALIZED) {
+    graph_setupmemory();
+    runFunction(ITM_CLSIGMA);
+  }
+
+  fnAngularMode(AM_RADIAN);
+
+    doubleToRegisterReal34(1.0);
+    fnStore(97);   // factor
+    fnStore(95);   //initial value for difference comparison must be larger than tolerance
+    fnStore(96);   //initial value for difference comparison must be larger than tolerance
+    doubleToRegisterReal34(1E-30); 
+    fnStore(98);   //tolerance
+
+
+    doubleToRegisterReal34(x_min); //leftmost graph value
+    fnStore(90); //x1   
+
+    execute_rpn_function(nbr); //leaving y in y
+    fnSwapXY(0); // moving y to x
+    fnStore(92); // initial y1
+
+    doubleToRegisterReal34(x_min + (x_max-x_min)/SCREEN_WIDTH_GRAPH);  //first increment
+    fnStore(91); // initial x2
+
+
+  ix = 0;
+  while(ix<400 && !checkend && !((real34CompareAbsLessThan(REGISTER_REAL34_DATA(95), REGISTER_REAL34_DATA(98))) && (real34CompareAbsLessThan(REGISTER_REAL34_DATA(96), REGISTER_REAL34_DATA(98)))) ) {
+
+//assumes X2 is in R91
+
+    if(real34IsNegative(REGISTER_REAL34_DATA(95))) {                 //  If x increment is oscilating 5 times, in the first 10 cycles, 
+      if(real34IsPositive(REGISTER_REAL34_DATA(85)))                 //  it is assumed that it is unstable and needs to have a 
+        oscillations++;                                              //  complex starting value
+      else
+        oscillations = max(0,oscillations-1);
+    }
+    if(real34IsPositive(REGISTER_REAL34_DATA(96))) {                 //
+      if(real34IsNegative(REGISTER_REAL34_DATA(86)))                 //
+        oscillations++;                                              //
+      else
+        oscillations = max(0,oscillations-1);
+    }
+
+    if(real34CompareAbsLessThan(REGISTER_REAL34_DATA(95), REGISTER_REAL34_DATA(85)) && real34CompareAbsLessThan(REGISTER_REAL34_DATA(96), REGISTER_REAL34_DATA(86)) ) {
+        convergent++;
+    } else {
+      convergent = max(0,convergent-1);
+    }
+
+    #ifdef VERBOSE_SOLVER1
+      printf("################################### ix= %d osc= %d  conv= %d ###########################################\n",ix, oscillations, convergent);
+    #endif //VERBOSE_SOLVER1
+
+//assumes X2 is in R91
+    if((oscillations > 6) && (ix > 10) && (convergent < 5) ) {                                  //
+      oscillations = 0;
+      convergent = 0;
+      #ifdef VERBOSE_SOLVER2
+        printf("\n>>>>>>>>>>A ");printf_cpx(91);
+      #endif
+      fnRCL(91);
+      doubleToRegisterReal34(-0.01);                           //
+      fnSquareRoot(0);                                               //
+      doubleToRegisterReal34(1.0);                           //
+      fnAdd(0);
+      fnMultiply(0);              //add i/10000 just to force it complex  //
+      fnStore(91); //replace X2 value                                //
+      #ifdef VERBOSE_SOLVER2
+        printf(">>>>>>>>>>H x 1+i0.1 = ");printf_cpx(91); printf("\n");
+      #endif
+    }
+
+/*
+  if(convergent < 3) {
+    if(ix > 300) {doubleToRegisterReal34(0.2); fnStore(97);} else //divide factor by 10
+      if(ix > 60) {doubleToRegisterReal34(0.45); fnStore(97);} else//divide factor by 10
+        if(ix > 30) {doubleToRegisterReal34(0.9); fnStore(97);} //divide factor by 10
+  } else {
+    if(convergent < 1) {
+      if(ix >50) {doubleToRegisterReal34(0.15); fnStore(97);} else //divide factor by 10
+        if(ix >10) {doubleToRegisterReal34(0.5); fnStore(97);} //divide factor by 10
+    }
+  }
+*/
+
+
+
+
+    //85: x old difference
+    //86: y old difference
+    //87: y0
+    //88: x0
+    //90: x1
+    //91: x2
+    //92: y1
+    //93: y2
+    //94: temporary new x2
+    //95: x difference
+    //96: y difference
+    //97: faxctor
+    //98: tolerance
+
+    fnRCL(91);
+    //leaving y in Y and x in X
+    execute_rpn_function(nbr);
+
+    checkend = ix == 400 || (real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y))) ||
+                (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) ||  
+                real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y));
+
+    #ifdef VERBOSE_SOLVER2
+      printf("   ix=%d checkend=%d X2=",ix, checkend); printf_cpx(REGISTER_X);
+      printf(" Y2="); printf_cpx(REGISTER_Y); printf("\n");
+    #else
+      if(!checkend) fnSigma(1);
+    #endif //VERBOSE_SOLVER2
+
+    copySourceRegisterToDestRegister(REGISTER_Y,93); //y2
+
+
+    copySourceRegisterToDestRegister(95,85);  //store old values
+    copySourceRegisterToDestRegister(96,86);  //store old values
+    fnRCL(91);     fnRCL(90); fnSubtract(0);  //dx
+    fnStore(95);  //store difference for later
+    fnRCL(93);     fnRCL(92); fnSubtract(0);  //dy
+    fnStore(96);  //store difference for later
+
+
+//Therefore, the second order accurate one-sided finite difference formula for the first derivative
+//formule 32
+//ChE 205 — Formulas for Numerical Differentiation
+//Handout 5 05/08/02
+if(ix>2) {
+fnRCL(91); fnRCL(90); fnSubtract(0); //x2-x1
+fnStore(95);  //store difference for later
+fnRCL(90);
+fnSwapXY(0);
+fnSubtract(0);
+fnStore(88); //make x0
+execute_rpn_function(nbr);
+copySourceRegisterToDestRegister(REGISTER_Y,87); //make y0
+fnRCL(95); //x2-x1
+doubleToRegisterReal34(2);
+fnMultiply(0); //2 delta x
+
+fnRCL(87); //y0
+fnRCL(92); //y1
+doubleToRegisterReal34(4);
+fnMultiply(0);
+fnSubtract(0);
+fnRCL(93); //y2
+doubleToRegisterReal34(3);
+fnMultiply(0);
+fnAdd(0); //fi−2 − 4fi−1 + 3fi
+}
+
+
+
+    fnDivide(0);  //get the inverse of the slope
+
+    #ifdef VERBOSE_SOLVER2
+      fnInvert(0); printf(" SLOPE="); printf_cpx(REGISTER_X); printf("\n"); fnInvert(0); 
+    #endif
+
+    fnRCL(92);      //y1
+    fnMultiply(0);  //increment to x
+    fnRCL(97);      //factor to stabilize Newton method. factor=1 is straight. factor=0.1 converges 10x slower.
+    fnMultiply(0);  //increment to x
+
+
+
+    fnRCL(90);
+    fnSwapXY(0);
+    fnSubtract(0);  //subtract as per Newton, x1 - f/f'
+    fnStore(94);    //to new x2
+
+
+    copySourceRegisterToDestRegister(93,92); //old y2 copied to y1
+    copySourceRegisterToDestRegister(91,90); //old x2 copied to x1
+
+    fnRCL(95);    fnMagnitude(0); //difference dx
+    fnRCL(96);    fnMagnitude(0); //difference dy
+    checkend = checkend || 
+               ((real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X))) &&
+               (real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y)))) || 
+                real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X)) ||
+                real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y)); 
+    ix++;
+
+
+    #ifdef VERBOSE_SOLVER2
+      if(!checkend) {
+        printf("   oldX2: ");printf_cpx(91); printf("\n");
+        printf("   Y2   : ");printf_cpx(93); printf("\n");
+        printf("   Difference X: ix=%d %d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(95), REGISTER_REAL34_DATA(98)));printf_cpx(95); printf("\n");
+        printf("   Difference Y: ix=%d %d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(96), REGISTER_REAL34_DATA(98)));printf_cpx(96);
+        printf("   Difference ABS: ");printf_cpx(REGISTER_X); printf("\n");
+      }
+    #endif //VERBOSE_SOLVER2
+
+    copySourceRegisterToDestRegister(94,91);  //new x2    
+
+    #ifdef VERBOSE_SOLVER1
+      printf("   newX2: ");printf_cpx(91); printf("\n");
+    #endif //VERBOSE_SOLVER1
+    #ifdef VERBOSE_SOLVER2      //plots the ix vs abs.difference under Verbose2
+    if(!checkend) {
+       //difference magnitude in Y
+      doubleToRegisterReal34((double)ix);
+      if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  fnSigma(1);
+    }
+    #endif //VERBOSE_SOLVER2
+
+
+  }
+  fnClearStack(0);
+  runFunction(ITM_NSIGMA);
+  fnRCL(93);
+  fnRCL(91);
+  runFunction(ITM_PLOT);
+  #endif
+}
+
+
 
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
@@ -255,6 +545,10 @@ void fnGraph (uint16_t func){
 
 	  case 3:   graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
+    
+    case 10:  graph_solver(2, graph_xmin, graph_xmax);
+              break;
+
     case 11:
     case 12:
     case 13:

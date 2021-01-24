@@ -22,8 +22,6 @@
 
 
 
-
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2257,7 +2255,7 @@
 #define ITM_EXTX                      2184
 #define ITM_EXTY                      2185
 #define ITM_SLV2                      2186
-#define ITM_2187                      2187
+#define ITM_SLV3                      2187
 #define ITM_DEMO1                     2188
 #define ITM_DEMO2                     2189
 #define ITM_DEMO3                     2190
@@ -2274,8 +2272,10 @@
 #define CHR_numU                      2201
 #define ITM_EEXCHR                    2202
 #define ITM_CLGRF                     2203
+#define ITM_PZOOMX                    2204
+#define ITM_PZOOMY                    2205
 
-#define LAST_ITEM                     2204   //JM
+#define LAST_ITEM                     2206   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

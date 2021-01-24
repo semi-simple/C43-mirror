@@ -63,6 +63,8 @@ void graph_reset(void){
   PLOT_DIFF     = false;
   PLOT_RMS      = false;
   PLOT_SHADE    = false;
+  PLOT_ZMX      = 0;
+  PLOT_ZMY      = 0;
 }
 
 
@@ -112,6 +114,19 @@ void fnPrms (uint16_t unusedButMandatoryParameter) {
   PLOT_RMS = !PLOT_RMS;
   fnRefreshComboxState(CB_JC, JC_RMS, PLOT_RMS);                //jm
   fnPlot(0);
+}
+
+void fnPzoom (uint16_t param) {
+  if(param == 1) {
+    if(PLOT_ZMX < 0+3) PLOT_ZMX++; else PLOT_ZMX = 0-1;
+    fnRefreshRadioState(JC_PZOOMX, RB_ZM);
+    fnPlot(0);
+  } else
+  if(param == 2) {
+    if(PLOT_ZMY < 0+3) PLOT_ZMY++; else PLOT_ZMY = 0-1;
+    fnRefreshRadioState(JC_PZOOMY, RB_ZM);
+    fnPlot(0);
+  }
 }
 
 void fnPvect (uint16_t unusedButMandatoryParameter) {
@@ -747,31 +762,50 @@ void graph_axis (void){
 
    force_refresh();
 
-   for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
-      cnt = screen_window_x(x_min,x,x_max);
-        setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-1,minny)); //tick
+   if(0<x_max && 0>x_min) {
+     for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+        //printf(">>>>>A %f %d ",x,cnt);
+          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-1,minny)); //tick
+       }
+      for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+        //printf(">>>>>B %f %d ",x,cnt);
+          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-1,minny)); //tick
+       }
+      for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-2,minny)); //tick
+          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-3,minny)); //tick
+       }
+      for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-2,minny)); //tick
+          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-3,minny)); //tick
+       }
+   } else {
+     for(x=x_min; x<=x_max; x+=tick_int_x) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+        //printf(">>>>>A %f %d ",x,cnt);
+          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-1,minny)); //tick
+       }
+      for(x=x_min; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
+        cnt = screen_window_x(x_min,x,x_max);
+          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-2,minny)); //tick
+          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
+          setBlackPixel(cnt,max(yzero-3,minny)); //tick
+       }
+
      }
-    for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
-      cnt = screen_window_x(x_min,x,x_max);
-        setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-1,minny)); //tick
-     }
-    for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
-      cnt = screen_window_x(x_min,x,x_max);
-        setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-2,minny)); //tick
-        setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-3,minny)); //tick
-     }
-    for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
-      cnt = screen_window_x(x_min,x,x_max);
-        setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-2,minny)); //tick
-        setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-        setBlackPixel(cnt,max(yzero-3,minny)); //tick
-     }
-  }
+   }
 
 
 
@@ -790,31 +824,45 @@ void graph_axis (void){
     lcd_fill_rect(xzero,minny,1,SCREEN_HEIGHT_GRAPH-minny,0xFF);
 
     force_refresh();
-
-    for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
-      cnt = screen_window_y(y_min,y,y_max);
-      setBlackPixel(max(xzero-1,0),cnt); //tick
-      setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    }  
-    for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
-      cnt = screen_window_y(y_min,y,y_max);
-      setBlackPixel(max(xzero-1,0),cnt); //tick
-      setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    }  
-    for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
-      cnt = screen_window_y(y_min,y,y_max);
-      setBlackPixel(max(xzero-2,0),cnt); //tick
-      setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      setBlackPixel(max(xzero-3,0),cnt); //tick
-      setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    }  
-    for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
-      cnt = screen_window_y(y_min,y,y_max);
-      setBlackPixel(max(xzero-2,0),cnt); //tick
-      setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      setBlackPixel(max(xzero-3,0),cnt); //tick
-      setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-    }  
+    if(0<y_max && 0>y_min) {
+      for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-1,0),cnt); //tick
+        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+      for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-1,0),cnt); //tick
+        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+      for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-2,0),cnt); //tick
+        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+        setBlackPixel(max(xzero-3,0),cnt); //tick
+        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+      for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-2,0),cnt); //tick
+        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+        setBlackPixel(max(xzero-3,0),cnt); //tick
+        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+    } else {
+      for(y=y_min; y<=y_max; y+=tick_int_y) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-1,0),cnt); //tick
+        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+      for(y=y_min; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
+        cnt = screen_window_y(y_min,y,y_max);
+        setBlackPixel(max(xzero-2,0),cnt); //tick
+        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+        setBlackPixel(max(xzero-3,0),cnt); //tick
+        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
+      }  
+    }
   }
 
   force_refresh();
@@ -1063,6 +1111,16 @@ void graph_plotmem(void) {
       x_max = max(x_max,y_max);
       y_min = x_min;
       y_max = x_max;
+    }
+
+    if(PLOT_ZMX != 0) {
+      x_min = pow(2.0,-PLOT_ZMX) * x_min;
+      x_max = pow(2.0,-PLOT_ZMX) * x_max;
+    }
+
+    if(PLOT_ZMY != 0) {
+      y_min = pow(2.0,-PLOT_ZMY) * y_min;
+      y_max = pow(2.0,-PLOT_ZMY) * y_max;      
     }
 
     #ifdef STATDEBUG
@@ -1334,12 +1392,12 @@ void fnStatList() {
       if(((fabs(grf_x(ixx)) > 0.000999 || grf_x(ixx) == 0) && fabs(grf_x(ixx)) < 1000000)) 
         sprintf(tmpstr1,"[%3d] x%19.7f, ",ixx+1, grf_x(ixx));
       else
-        sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, round(grf_x(ixx)*1e10)/1e10);
+        sprintf(tmpstr1,"[%3d] x%19.7e, ",ixx+1, grf_x(ixx)); //round(grf_x(ixx)*1e10)/1e10);
 
       if(((fabs(grf_y(ixx)) > 0.000999 || grf_y(ixx) == 0) && fabs(grf_y(ixx)) < 1000000))
         sprintf(tmpstr2,"y%19.7f", grf_y(ixx));
       else
-        sprintf(tmpstr2,"y%19.7e", round(grf_y(ixx)*1e10)/1e10);
+        sprintf(tmpstr2,"y%19.7e", grf_y(ixx)); //round(grf_y(ixx)*1e10)/1e10);
 
       strcat(tmpstr1,tmpstr2);
 

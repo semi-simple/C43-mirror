@@ -266,6 +266,8 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(PLOT_DIFF);
   storeToDtConfigDescriptor(PLOT_RMS);
   storeToDtConfigDescriptor(PLOT_SHADE);
+  storeToDtConfigDescriptor(PLOT_ZMX);
+  storeToDtConfigDescriptor(PLOT_ZMY);
   storeToDtConfigDescriptor(jm_HOME_SUM);
   storeToDtConfigDescriptor(jm_HOME_MIR);
   storeToDtConfigDescriptor(jm_HOME_FIX);

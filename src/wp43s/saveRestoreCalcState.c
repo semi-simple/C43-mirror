@@ -223,6 +223,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
     save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
     save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
+    save(&PLOT_ZMX       ,                    sizeof(PLOT_ZMX     ),                      BACKUP);
+    save(&PLOT_ZMY       ,                    sizeof(PLOT_ZMY     ),                      BACKUP);
     save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
     save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
     save(&indic_x,                            sizeof(indic_x),                            BACKUP);
@@ -431,6 +433,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
       restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
       restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
+      restore(&PLOT_ZMX     ,                      sizeof(PLOT_ZMX     ),                      BACKUP);
+      restore(&PLOT_ZMY     ,                      sizeof(PLOT_ZMY     ),                      BACKUP);
       restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
       restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
       restore(&indic_x,                            sizeof(indic_x),                            BACKUP);

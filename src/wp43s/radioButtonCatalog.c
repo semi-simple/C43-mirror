@@ -99,7 +99,7 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1748 */  { ITM_CB_SPCRES,        JC_BSR,                 CB_JC },  //fnSetSetJM
 /* 1696 */  { ITM_CB_LEADING_ZERO,  JC_BLZ,                 CB_JC },  //fnSetSetJM
 /* 1678 */  { ITM_ERPN,             JC_ERPN,                CB_JC },  //fnSetSetJM
-/* 1909 */  { ITM_NO_BASE_SCREEN,          JC_NO_BASE_SCREEN,             CB_JC },  //fnSetSetJM
+/* 1909 */  { ITM_NO_BASE_SCREEN,   JC_NO_BASE_SCREEN,      CB_JC },  //fnSetSetJM
 /* 1906 */  { ITM_FG_LINE,          JC_FG_LINE,             CB_JC },  //fnSetSetJM
 /* 1911 */  { ITM_G_DOUBLETAP,      JC_G_DOUBLETAP,         CB_JC },  //fnSetSetJM
 /* 1679 */  { ITM_HOMEx3,           JC_HOME_TRIPLE,         CB_JC },  //fnSetSetJM
@@ -144,14 +144,14 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 
 
 int8_t fnCbIsSet(int16_t item) {
-  int8_t result = -1;
-  uint16_t itemNr = max(item, -item);
+  int8_t result = NOVAL;
+  int16_t itemNr = max(item, -item);
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);
   for(uint8_t i=0; i < n; i++) {
     if(indexOfRadioCbEepromItems[i].itemNr == itemNr) {
       //printf("^^^^**** item found %d\n",itemNr);
       bool_t is_cb = false;
-      uint16_t rb_param = 0;
+      int32_t rb_param = 0;
       bool_t cb_param =  false;
 
       switch (indexOfRadioCbEepromItems[i].radioButton)
@@ -501,7 +501,7 @@ void fnRefreshComboxState(char rb, uint16_t param, bool_t state) {
 
 
 int16_t fnItemShowValue(int16_t item) {
-  int16_t result = -1;
+  int16_t result = NOVAL;
   uint16_t itemNr = max(item, -item);
 
   switch(itemNr)
@@ -552,6 +552,14 @@ int16_t fnItemShowValue(int16_t item) {
     if(displayFormat == DF_ALL) {
       result = displayFormatDigits;
     }
+    break;
+
+  case ITM_PZOOMX:
+      result = PLOT_ZMX;
+    break;
+
+  case ITM_PZOOMY:
+      result = PLOT_ZMY;
     break;
 
   case ITM_WSIZE:   //  664
@@ -648,7 +656,13 @@ char* figlabel(const char* label, int16_t showValue) {      //JM
   if(strlen(label) <= 12) {
     strcpy(tmp, label);
   }
-  if(showValue >= 0 && strlen(label) <= 8) {
+
+  if(showValue != NOVAL && showValue < 0) {
+    strcat(tmp,STD_SUB_MINUS);
+  }
+
+  if(showValue != NOVAL && strlen(label) <= 8) {
+    showValue = max(showValue, -showValue);
     use_base_glyphs(tmp1, showValue);
     strcat(tmp, tmp1);
   }

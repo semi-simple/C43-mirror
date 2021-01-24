@@ -171,6 +171,8 @@ typedef struct {
   bool_t PLOT_DIFF;
   bool_t PLOT_RMS;
   bool_t PLOT_SHADE;
+  int8_t PLOT_ZMX;
+  int8_t PLOT_ZMY;
   bool_t jm_HOME_SUM;
   bool_t jm_HOME_MIR;
   bool_t jm_HOME_FIX;     

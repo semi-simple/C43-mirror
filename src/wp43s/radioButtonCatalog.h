@@ -27,6 +27,7 @@
 #define CB_FALSE    2
 #define CB_TRUE     3
 
+#define NOVAL              -126
 #define ITEM_NOT_CODED     -127
 
 
@@ -66,6 +67,7 @@ char*    figlabel              (const char* label, int16_t showValue);
 #define CB_JC   'A' // CheckBox 
 #define RB_HX   'B' // BASE
 #define RB_AM2  'C' // AngularMode
+#define RB_ZM   'D' // AngularMode
 
 
 

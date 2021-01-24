@@ -682,8 +682,8 @@ const int16_t menu_PLOT[]        = {
                                      ITM_DEMO3,                     ITM_P_ALLREGS,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
                                      ITM_DEMO2,                     ITM_SLV2,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
+                                     ITM_DEMO3,                     ITM_SLV3,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                     ITM_PZOOMX,                    ITM_PZOOMY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                          };    //JM GRAPH
 
 
 const int16_t menu_ALPHA[]        = {
@@ -1470,7 +1470,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
       if(numberOfItems == 0) {
         for(x=0; x<6; x++) {
-          showSoftkey("", x, 0, vmNormal, true, true, -1, -1);
+          showSoftkey("", x, 0, vmNormal, true, true, NOVAL, NOVAL);
         }
       }
       else {
@@ -1478,7 +1478,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
         for(y=0; y<3; y++) {
           for(x=0; x<6; x++) {
             if(x + 6*y + currentFirstItem < numberOfItems) {
-              showSoftkey((char *)ptr, x, y, vmNormal, true, true, -1, -1);
+              showSoftkey((char *)ptr, x, y, vmNormal, true, true, NOVAL, NOVAL);
               ptr += stringByteLength((char *)ptr) + 1;
             }
           }
@@ -1533,22 +1533,22 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
             }
 //                showSoftkey(indexOfItems[-softmenu[menu].menuId].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true);
             else if(softmenu[menu].menuItem == -MNU_ALPHA_OMEGA && alphaCase == AC_UPPER) { //JMvv
-                showSoftkey(indexOfItems[MNU_ALPHA_OMEGA].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+                showSoftkey(indexOfItems[MNU_ALPHA_OMEGA].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, NOVAL, NOVAL);
             }     //JM ^^
             else if(softmenu[menu].menuItem == -MNU_ALPHA_OMEGA && alphaCase == AC_LOWER) { //JMvv
-                showSoftkey(indexOfItems[MNU_alpha_omega].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+                showSoftkey(indexOfItems[MNU_alpha_omega].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, NOVAL, NOVAL);
             }
             else {
                   //JMCHECKvv
 #ifdef INLINE_TEST                                                              //vv dr
               if(softmenu[menu].menuItem == -MNU_INL_TST) {
-                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, -1, -1);
+                showSoftkey(/*STD_omicron*/STD_SPACE_3_PER_EM, x, y-currentFirstItem/6, vmNormal, false, false, NOVAL, NOVAL);
               }
               else {
                   //JMCHECKvv
 
 #endif                                                                          //^^
-              showSoftkey(indexOfItems[-softmenu[menu].menuItem].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, -1, -1);
+              showSoftkey(indexOfItems[-softmenu[menu].menuItem].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, true, true, NOVAL, NOVAL);
 #ifdef INLINE_TEST                                                              //vv dr
               }
 #endif                                                                          //^^
@@ -1571,13 +1571,13 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
               showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, getSystemFlag(indexOfItems[item%10000].param) ?  1 : 0);
             }
             else {
-              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, getSystemFlag(indexOfItems[item%10000].param) ?  CB_TRUE : CB_FALSE, -1);
+              showSoftkey(indexOfItems[item%10000].itemCatalogName,  x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, getSystemFlag(indexOfItems[item%10000].param) ?  CB_TRUE : CB_FALSE, NOVAL);
             }
           }
         }                                                                      //JM^^
 
             else if(item == 9999) {
-              showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, -1, -1);
+              showSoftkey(indexOfItems[getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS].itemSoftmenuName, x, y-currentFirstItem/6, vmNormal, true, true, NOVAL, NOVAL);
             }
             else if(item > 0 && indexOfItems[item%10000].itemSoftmenuName[0] != 0) { // softkey
               // item : +10000 -> no top line

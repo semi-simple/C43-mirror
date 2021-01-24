@@ -558,6 +558,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnPx                       (uint16_t unusedButMandatoryParameter) {}
   void fnPy                       (uint16_t unusedButMandatoryParameter) {}
   void fnPshade                   (uint16_t unusedButMandatoryParameter) {}
+  void fnPzoom                    (uint16_t unusedButMandatoryParameter) {}
   void fnCla                      (uint16_t unusedButMandatoryParameter) {}
   void fnCln                      (uint16_t unusedButMandatoryParameter) {}
   void fnClGrf                    (uint16_t unusedButMandatoryParameter) {}
@@ -565,6 +566,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
+
 
 
 
@@ -2800,8 +2802,8 @@ const item_t indexOfItems[] = {
 /* 2183 */  { fnPNvect,                    NOPARAM,                     "N.VECT",                                      "N.VECT",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM VECTOR MODE
 /* 2184 */  { fnPx,                        NOPARAM,                     "MAGN.X",                                      "MAGN.X",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2185 */  { fnPy,                        NOPARAM,                     "MAGN.Y",                                      "MAGN.Y",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 2186 */  { fnGraph,                     10,                          "SOLV2",                                       "SOLV2",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
-/* 2187 */  { itemToBeCoded,               NOPARAM,                     "2187",                                        "2187",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2186 */  { fnGraph,                     9,                           "SOLV2",                                       "SOLV2",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2187 */  { fnGraph,                     10,                          "SOLV3",                                       "SOLV3",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2188 */  { fnGraph,                     11,                          "DEMO1",                                       "DEMO1",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 /* 2189 */  { fnGraph,                     12,                          "DEMO2",                                       "DEMO2",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
 /* 2190 */  { fnGraph,                     13,                          "DEMO3",                                       "DEMO3",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_UNCHANGED},
@@ -2818,6 +2820,8 @@ const item_t indexOfItems[] = {
 /* 2201 */  { itemToBeCoded,               NOPARAM,                     "Nulock",                                      "Nulock",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2202 */  { addItemToBuffer,             ITM_EEXCHR,                  STD_SUB_E_OUTLINE,                             STD_SUB_E_OUTLINE,                             0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 2203 */  { fnClGrf,                     NOPARAM,                     "CLGRF",                                       "CLGRF",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 2204 */  { fnPzoom,                     1,                           "ZOOMx",                                       "ZOOMx",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
+/* 2205 */  { fnPzoom,                     2,                           "ZOOMy",                                       "ZOOMy",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 
-/* 2204 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2206 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

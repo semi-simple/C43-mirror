@@ -934,7 +934,13 @@ void graph_plotmem(void) {
 //printf("TEST %d %d\n",screen_window_x(0,1,1), screen_window_y(0,1,1));
 
   void plotDiff(void) {
-    if(ddx != 0) dydx = (grf_y(ix) - grf_y(ix-1)) / ddx; else dydx = FLoatingMax;  //Differential
+    if(ddx != 0) {
+      if(ix == 1)                                 // only two samples available
+        dydx = (grf_y(ix) - grf_y(ix-1)) / ddx;   // Differential
+      else if(ix >= 2)                            // ix >= 2 three samples available 0 1 2
+        dydx = ( grf_y(ix-2) - 4.0 * grf_y(ix-1) + 3.0 * grf_y(ix) ) / 2.0 / ddx; //ChE 205 — Formulas for Numerical Differentiation, formule 32
+    } 
+    else dydx = FLoatingMax;
   }
 
   void plotInt(void) {

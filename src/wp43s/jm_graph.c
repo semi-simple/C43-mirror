@@ -294,8 +294,8 @@ double convert_to_double(calcRegister_t regist) {
   }
 
 
-#define VERBOSE_SOLVER1  // PLOT the actual converging values and a lot less text
-#define VERBOSE_SOLVER2  // PLOT dthe differences, verbose a lot
+#define VERBOSE_SOLVER1  // a lot less text
+//#define VERBOSE_SOLVER2  // verbose a lot
 
 
 
@@ -307,14 +307,17 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
   int16_t oscillations = 0; 
   int16_t convergent = 0; 
   bool_t checkend = false;
+  bool_t checkzero = false;
   cancelFilename = true;
-  fnClearStack(0);
 
+  double startval = 1;
+  startval = convert_to_double(REGISTER_X);    //********** X REGISTER IS STARTING POINT
+
+  fnClearStack(0);
   if(telltale != MEM_INITIALIZED) {
     graph_setupmemory();
     runFunction(ITM_CLSIGMA);
   }
-
   fnAngularMode(AM_RADIAN);
 
 
@@ -340,8 +343,6 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     fnStore(98);   //tolerance
 
 
-    double startval = 1;
-
     doubleToXRegisterReal34(startval); //leftmost graph value
     fnStore(90); //x1   
 
@@ -352,11 +353,22 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     doubleToXRegisterReal34(startval + (x_max-x_min) / SCREEN_WIDTH_GRAPH);  //first increment
     fnStore(91); // initial x2
 
+
+
   ix = 0;
   int16_t kicker = 0;
 
+  #ifdef VERBOSE_SOLVER2
+    printf("INIT:   ix=%d X2=",ix); printf_cpx(91); printf(" Y2="); printf("\n");
+  #endif //VERBOSE_SOLVER2
+
 //#################################################### Iteration start ##########################################
-  while(ix<400 && !checkend && !((real34CompareAbsLessThan(REGISTER_REAL34_DATA(95), REGISTER_REAL34_DATA(98))) && (real34CompareAbsLessThan(REGISTER_REAL34_DATA(96), REGISTER_REAL34_DATA(98)))) ) {
+  while(ix<400 && !checkend && !( (real34CompareAbsLessThan(REGISTER_REAL34_DATA(95), REGISTER_REAL34_DATA(98))) && 
+                                  (real34CompareAbsLessThan(REGISTER_REAL34_DATA(96), REGISTER_REAL34_DATA(98)))) &&
+                                  (getRegisterDataType(95) == dtComplex34 ? real34CompareAbsLessThan(REGISTER_IMAG34_DATA(95), REGISTER_REAL34_DATA(98)) : 1 ) &&
+                                  (getRegisterDataType(96) == dtComplex34 ? real34CompareAbsLessThan(REGISTER_IMAG34_DATA(96), REGISTER_REAL34_DATA(98)) : 1 ) &&
+
+                                   ) {
 
 //assumes X2 is in R91
 
@@ -441,17 +453,19 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     //leaving y in Y and x in X
     execute_rpn_function(nbr);
 
+    checkzero = checkzero || 
+                ( real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) : 1 )  &&
+                  real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y)) : 1 ) );
 
     checkend = checkend || ix==400 ||
-               ( real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) : 1 )  &&
-                 real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y)) : 1 ) )
-                || 
+                checkzero || 
                 real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X)) : 0 ) ||
                 real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y)) : 0 ) 
                 ; 
 
+    #ifdef VERBOSE_SOLVER1
     if(checkend) {
-       printf("-->A %d %d %d %d %d %d %d %d \n",
+       printf("-->A %lu %lu %lu %lu %lu %lu %lu %lu \n",
         real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)),
         real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)),
         real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)),
@@ -462,16 +476,18 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
         real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))
         );
     }
+    #endif
 
 
 
 
     #ifdef VERBOSE_SOLVER2
       printf("   ix=%d checkend=%d X2=",ix, checkend); printf_cpx(REGISTER_X); printf(" Y2="); printf_cpx(REGISTER_Y); printf("\n");
-    #else
-    if(!checkend)
-      if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  fnSigma(1);
     #endif //VERBOSE_SOLVER2
+
+
+    //if(!checkend) //THIS PLOTS (x2,y2)
+    //  if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  fnSigma(1);
 
     copySourceRegisterToDestRegister(REGISTER_Y,93); //y2
 
@@ -542,18 +558,20 @@ fnAdd(0); //fi−2 − 4fi−1 + 3fi
     fnRCL(96);    fnMagnitude(0); //difference dy
 
 
-    checkend = checkend || 
-               ( real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) : 1 )  &&
-                 real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y)) : 1 ) )
-                || 
+    checkzero = checkzero || 
+                ( real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) : 1 )  &&
+                  real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_Y)) : 1 ) );
+
+    checkend = checkend || checkzero || 
                 real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X)) : 0 ) ||
                 real34IsNaN(REGISTER_REAL34_DATA(REGISTER_Y)) || (getRegisterDataType(REGISTER_Y) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y)) : 0 ) 
                 ; 
 
 
 
+    #ifdef VERBOSE_SOLVER1
     if(checkend) {
-       printf("-->B %d %d %d %d %d %d %d %d \n",
+       printf("-->B %lu %lu %lu %lu %lu %lu %lu %lu \n",
         real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)),
         real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)),
         real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)),
@@ -564,6 +582,7 @@ fnAdd(0); //fi−2 − 4fi−1 + 3fi
         real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_Y))
         );
     }
+    #endif
 
 
     ix++;
@@ -585,13 +604,12 @@ fnAdd(0); //fi−2 − 4fi−1 + 3fi
       printf("   -------> newX2: ");printf_cpx(91); printf("\n");
     #endif //VERBOSE_SOLVER1
 
-    #ifdef VERBOSE_SOLVER2      //plots the ix vs abs.difference under Verbose2
-    if(!checkend) {
-       //difference magnitude in Y
+
+    //plots the ix vs abs.difference
+    if(!checkend || checkzero) {
       doubleToXRegisterReal34((double)ix);
       if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  fnSigma(1);
     }
-    #endif //VERBOSE_SOLVER2
 
 
   }
@@ -599,7 +617,7 @@ fnAdd(0); //fi−2 − 4fi−1 + 3fi
   runFunction(ITM_NSIGMA);
   fnRCL(93); //y2
   fnRCL(91); //x2
-  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_T), const34_1 )) runFunction(ITM_PLOT);
+  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_1 )) runFunction(ITM_PLOT);
   #endif
 }
 

@@ -1762,10 +1762,10 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpString + 2100, TMP_STR_LENGTH, 3200, 400, separator, false);//JM added last parameter: Allow LARGELI
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, WRITE_BUFFER_LEN, 3200, 400, separator, false);//JM added last parameter: Allow LARGELI
 
-      last = 2100 + stringByteLength(tmpString + 2100);
-      source = 2100;
+      last = stringByteLength(errorMessage);
+      source = 0;
       dest = 0;
 
       if(groupingGap == 0) {
@@ -1779,13 +1779,13 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
         dest = d;
         while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
           do {
-            tmpString[dest] = tmpString[source];
+            tmpString[dest] = errorMessage[source];
             if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = tmpString[++source];
+              tmpString[++dest] = errorMessage[++source];
             }
             source++;
             tmpString[++dest] = 0;
-          } while(source < last && groupingGap > 0 && (tmpString[source] != *separator || tmpString[source + 1] != *(separator + 1)));
+          } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
         }
       }
 
@@ -1970,11 +1970,12 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         printf("SHOW:Longint\n");
       #endif
 
+      strcpy(errorMessage,tmpString + 2100);
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(SHOWregis, tmpString + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+      longIntegerRegisterToDisplayString(SHOWregis, errorMessage, WRITE_BUFFER_LEN, 4*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
-      last = 2100 + stringByteLength(tmpString + 2100);
-      source = 2100;
+      last = stringByteLength(errorMessage);
+      source = 0;
       dest = 0;
 
  
@@ -1994,9 +1995,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
                                                                                           //   fill all lines, and check if the 5th line  contains any characters.
           dest = d;
           while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <=  maxWidth) {
-            tmpString[dest] = tmpString[source];
+            tmpString[dest] = errorMessage[source];
             if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = tmpString[++source];
+              tmpString[++dest] = errorMessage[++source];
             }
             source++;
             tmpString[++dest] = 0;
@@ -2026,10 +2027,11 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         #endif
           
         SHOW_reset();
-        longIntegerRegisterToDisplayString(SHOWregis, tmpString + 2103, TMP_STR_LENGTH, 7*400 - 8, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+        strcpy(errorMessage,tmpString + 2100);
+        longIntegerRegisterToDisplayString(SHOWregis, errorMessage, WRITE_BUFFER_LEN, 7*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
-        last = 2100 + stringByteLength(tmpString + 2100);
-        source = 2100;
+        last = stringByteLength(errorMessage);
+        source = 0;
         dest = 0;
 
         //printf("1: %d\n",stringGlyphLength(tmpString + 2100));
@@ -2045,13 +2047,13 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           dest = d;
           while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
             do {
-              tmpString[dest] = tmpString[source];
+              tmpString[dest] = errorMessage[source];
               if(tmpString[dest] & 0x80) {
-                tmpString[++dest] = tmpString[++source];
+                tmpString[++dest] = errorMessage[++source];
               }
               source++;
               tmpString[++dest] = 0;
-            } while(source < last && groupingGap > 0 && (tmpString[source] != *separator || tmpString[source + 1] != *(separator + 1)));
+            } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
           }
         }
         if(source < last) { // The long integer is too long

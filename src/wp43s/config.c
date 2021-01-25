@@ -11877,16 +11877,14 @@ void fnReset(uint16_t confirmation) {
       #ifdef DMCP_BUILD
          tmpString        = aux_buf_ptr();   // 2560 byte buffer provided by DMCP
          errorMessage     = write_buf_ptr(); // 4096 byte buffer provided by DMCP
-         aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
-         nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
-         tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
        #else // !DMCP_BUILD
          tmpString        = (char *)malloc(TMP_STR_LENGTH);
-         errorMessage     = (char *)malloc(ERROR_MESSAGE_LENGTH);
-         aimBuffer        = (char *)malloc(AIM_BUFFER_LENGTH);
-         nimBufferDisplay = (char *)malloc(NIM_BUFFER_LENGTH);
-         tamBuffer        = (char *)malloc(TAM_BUFFER_LENGTH);
-      #endif // DMCP_BUILD
+         errorMessage     = (char *)malloc(WRITE_BUFFER_LEN);
+       #endif // DMCP_BUILD
+
+      aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
+      nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
+      tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
     }
     memset(tmpString,        0, TMP_STR_LENGTH);
     memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);

@@ -26,20 +26,20 @@
 
     dynamicMenuItem = -1;
 
-      int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
-      int16_t fn = *(data) - '0';
-      const softmenu_t *sm;
-      int16_t row, menuId = softmenuStack[0].softmenuId;
-      int16_t firstItem = softmenuStack[0].firstItem;
-      #ifdef PC_BUILD
-        char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp);
-      #endif //PC_BUILD
-      if(!(menuId==0 && jm_NO_BASE_SCREEN) ) {
-        	switch(-softmenu[menuId].menuItem) {
-          case MNU_PROG:
-            dynamicMenuItem = firstItem + itemShift + (fn - 1);
-            item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
-            break;
+    int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
+    int16_t fn = *(data) - '0';
+    const softmenu_t *sm;
+    int16_t row, menuId = softmenuStack[0].softmenuId;
+    int16_t firstItem = softmenuStack[0].firstItem;
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp); //JM
+    #endif //PC_BUILD
+    if(!(menuId==0 && jm_NO_BASE_SCREEN) ) { //JM
+    switch(-softmenu[menuId].menuItem) {
+      case MNU_PROG:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
+        break;
 
       default:
         sm = &softmenu[menuId];
@@ -47,30 +47,30 @@
         if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
           item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
 
-            int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
-            if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
+          int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
+          if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
                                                              /*JMEXEC XXX ^^*/
 
-            if(item == ITM_PROD_SIGN) {
-              item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
-            }
+          if(item == ITM_PROD_SIGN) {
+            item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
           }
         }
       }
+    }
 
-      else {              //if there is no SoftMenu showing
-        if(fn>=1 && fn<=6) {
-          if (itemShift ==0) {
-          //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-            temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
-          } else {
-          //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
-            temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
-          }
+    else {              //if there is no SoftMenu showing  //JMvv
+      if(fn>=1 && fn<=6) {
+        if (itemShift ==0) {
+        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
         } else {
-          item = 0;
+        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
         }
+      } else {
+        item = 0;
       }
+    }  //JM^^
     return item;
   }
 
@@ -732,65 +732,21 @@ bool_t lastshiftG = false;
         break;
 
       case ITM_CC:
-      case ITM_ENTER:
       case ITM_dotD:
         if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added mode
           keyActionProcessed = true;
         }
         break;
 
-
-      case CHR_numL:   //JMvv
-        if(!numLock)  { processKeyAction(CHR_num); } 
-        keyActionProcessed = true;
-        break;
-
-      case CHR_numU:
-        if(numLock)  { processKeyAction(CHR_num); } 
-        keyActionProcessed = true;
-        break;
-
-      case CHR_num:
-        alphaCase = AC_UPPER;
-        numLock = !numLock;
-        if(!numLock) { nextChar = NC_NORMAL;}
-        showAlphaModeonGui(); //dr JM, see keyboardtweaks
-        keyActionProcessed = true;
-        break;
-
-      case CHR_caseUP:
-        if(numLock)  { } else
-        if(alphaCase == AC_LOWER)  { processKeyAction(CHR_case); } else
-        if(alphaCase == AC_UPPER)  { processKeyAction(CHR_numL); }
-        nextChar = NC_NORMAL;
-        keyActionProcessed = true;
-        break;
-
-      case CHR_caseDN:
-        if(numLock)  { alphaCase = AC_UPPER; processKeyAction(CHR_numU); } else
-        if(alphaCase == AC_UPPER)  { processKeyAction(CHR_case); } 
-        nextChar = NC_NORMAL;
-        keyActionProcessed = true;
-        break;
-
-      case CHR_case:
-        numLock = false;
-        int16_t sm = softmenu[softmenuStack[0].softmenuId].menuItem;                                      //JMvv
-        nextChar = NC_NORMAL;
-        if(alphaCase == AC_LOWER) {
-          alphaCase = AC_UPPER;
-          if(sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) {
-            softmenuStack[0].softmenuId--; // Switch case menu
-          }
-        } else {
-          alphaCase = AC_LOWER;
-          if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) {
-            softmenuStack[0].softmenuId++; // Switch case menu
-          }
+      case ITM_ENTER:
+        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+          keyActionProcessed = true;
         }
-        showAlphaModeonGui(); //dr JM, see keyboardtweaks
-        keyActionProcessed = true;
-        break;                                                                                                               //JM^^
+        else if(tamMode) {
+          tamTransitionSystem(TT_ENTER);
+          keyActionProcessed = true;
+        }
+        break;
 
       default:
         {
@@ -1112,13 +1068,9 @@ static void menuUp(void) {
 void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
-    if(tamMode) {
-      tamTransitionSystem(TT_ENTER);
-      return;
-    }
-  switch(calcMode) {
-    case CM_NORMAL:
-      if( !eRPN ) {                                    //JM NEWERPN
+    switch(calcMode) {
+      case CM_NORMAL:
+        if( !eRPN ) {                                    //JM NEWERPN
         setSystemFlag(FLAG_ASLIFT);
 
         liftStack();

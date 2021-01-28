@@ -57,6 +57,7 @@
   #else // !DMCP_BUILD
     #define TMP_STR_LENGTH       2560
   #endif // DMCP_BUILD
+  #define WRITE_BUFFER_LEN       4096
   #define ERROR_MESSAGE_LENGTH    512
   #define DISPLAY_VALUE_LEN        80
 

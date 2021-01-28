@@ -276,6 +276,9 @@
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
+        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
+          tamTransitionSystem(TT_INT);
+        }
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
@@ -1260,6 +1263,11 @@
             return;
 
           case TT_BACKSPACE :
+            leaveTamMode();
+            return;
+
+          case TT_INT :
+            fnIp(NOPARAM);
             leaveTamMode();
             return;
 

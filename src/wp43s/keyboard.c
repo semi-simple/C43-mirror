@@ -451,9 +451,18 @@
         break;
 
       case ITM_CC:
-      case ITM_ENTER:
       case ITM_dotD:
         if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+          keyActionProcessed = true;
+        }
+        break;
+
+      case ITM_ENTER:
+        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+          keyActionProcessed = true;
+        }
+        else if(tamMode) {
+          tamTransitionSystem(TT_ENTER);
           keyActionProcessed = true;
         }
         break;
@@ -699,11 +708,6 @@
  ***********************************************/
 void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(tamMode) {
-      tamTransitionSystem(TT_ENTER);
-      return;
-    }
-
     switch(calcMode) {
       case CM_NORMAL:
         setSystemFlag(FLAG_ASLIFT);

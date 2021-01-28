@@ -1709,10 +1709,10 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpString + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, WRITE_BUFFER_LEN, 3200, 400, separator);
 
-      last = 2100 + stringByteLength(tmpString + 2100);
-      source = 2100;
+      last = stringByteLength(errorMessage);
+      source = 0;
       dest = 0;
 
       if(groupingGap == 0) {
@@ -1726,13 +1726,13 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
         dest = d;
         while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
           do {
-            tmpString[dest] = tmpString[source];
+            tmpString[dest] = errorMessage[source];
             if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = tmpString[++source];
+              tmpString[++dest] = errorMessage[++source];
             }
             source++;
             tmpString[++dest] = 0;
-          } while(source < last && groupingGap > 0 && (tmpString[source] != *separator || tmpString[source + 1] != *(separator + 1)));
+          } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
         }
       }
 

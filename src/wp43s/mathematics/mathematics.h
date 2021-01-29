@@ -61,6 +61,7 @@
 #include "idivr.h"
 #include "imaginaryPart.h"
 #include "incDec.h"
+#include "int.h"
 #include "integerPart.h"
 #include "invert.h"
 #include "lcm.h"
@@ -115,4 +116,3 @@
 #include "xthRoot.h"
 #include "variance.h"
 #include "wp34s.h"
-

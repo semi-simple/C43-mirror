@@ -621,6 +621,9 @@
 #define PARAM_NUMBER_16                            6
 #define PARAM_COMPARE                              7
 
+#define CHECK_INTEGER                              0
+#define CHECK_INTEGER_EVEN                         1
+#define CHECK_INTEGER_ODD                          2
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

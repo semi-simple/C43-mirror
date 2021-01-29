@@ -471,6 +471,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGoto                     (uint16_t unusedButMandatoryParameter) {}
   void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
   void fnDynamicMenu              (uint16_t unusedButMandatoryParameter) {}
+  void fnCheckInteger             (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
@@ -501,10 +502,10 @@ const item_t indexOfItems[] = {
 /*   19 */  { itemToBeCoded,               NOPARAM,                     "x> ?",                                        "x> ?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   20 */  { fnIsFlagClear,               TM_FLAGR,                    "FC?",                                         "FC?",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   21 */  { fnIsFlagSet,                 TM_FLAGR,                    "FS?",                                         "FS?",                                         0,      99,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*   22 */  { itemToBeCoded,               NOPARAM,                     "EVEN?",                                       "EVEN?",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*   23 */  { itemToBeCoded,               NOPARAM,                     "ODD?",                                        "ODD?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*   22 */  { fnCheckInteger,              CHECK_INTEGER_EVEN,          "EVEN?",                                       "EVEN?",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*   23 */  { fnCheckInteger,              CHECK_INTEGER_ODD,           "ODD?",                                        "ODD?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   24 */  { itemToBeCoded,               NOPARAM,                     "FP?",                                         "FP?",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/*   25 */  { itemToBeCoded,               NOPARAM,                     "INT?",                                        "INT?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/*   25 */  { fnCheckInteger,              CHECK_INTEGER,               "INT?",                                        "INT?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   26 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   27 */  { itemToBeCoded,               NOPARAM,                     "MATR?",                                       "MATR?",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /*   28 */  { itemToBeCoded,               NOPARAM,                     "NaN?",                                        "NaN?",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

@@ -568,8 +568,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   if(displayFormat == DF_FIX) {
     if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
-      digitsToDisplay = displayFormatDigits;
-      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
+//*JM SIGFIGNEW     digitsToDisplay = displayFormatDigits;
+//*JM SIGFIGNEW      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
       ovrENG = getSystemFlag(FLAG_ALLENG);
     }
@@ -579,15 +579,19 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       int displayFormatDigits_active;                                    //JM SIGFIGNEW vv
       if(SigFigMode >= 1) {
         displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);    //Convert SIG to FIX.
-        digitToRound = firstDigit + SigFigMode;
       } else {
         displayFormatDigits_active = displayFormatDigits;
-        digitToRound = lastDigit;
       }                                                                  //JM SIGFIGNEW ^^
 
       digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
+
+      if(SigFigMode >= 1) {                                             //JM SIGFIGNEW vv
+        digitToRound = firstDigit + SigFigMode;
+      } else {
+        digitToRound = lastDigit;
+      }                                                                  //JM SIGFIGNEW ^^
 
       // Round the displayed number
       if(bcd[digitToRound+1] >= 5) {
@@ -608,7 +612,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         numDigits = 1;
         exponent++;
       }
-
 
       //JM SIGFIG - blank out non-sig digits to the right                                 //JM SIGFIGNEW vv
       if(SigFigMode>=1) {

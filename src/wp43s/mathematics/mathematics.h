@@ -46,6 +46,7 @@
 #include "deltaPercent.h"
 #include "division.h"
 #include "dot.h"
+#include "even.h"
 #include "exp.h"
 #include "expMOne.h"
 #include "expt.h"
@@ -59,6 +60,7 @@
 #include "idiv.h"
 #include "idivr.h"
 #include "imaginaryPart.h"
+#include "int.h"
 #include "integerPart.h"
 #include "invert.h"
 #include "lcm.h"
@@ -78,6 +80,7 @@
 #include "modulo.h"
 #include "multiplication.h"
 #include "neighb.h"
+#include "odd.h"
 #include "parallel.h"
 #include "pcg_basic.h"
 #include "percent.h"
@@ -113,4 +116,3 @@
 #include "xthRoot.h"
 #include "variance.h"
 #include "wp34s.h"
-

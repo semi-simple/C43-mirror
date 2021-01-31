@@ -70,20 +70,20 @@ void Fn_Lbl_A(void) {                                   //Temporary RPN function
 
 void Fn_Lbl_B(void) {                                   //Temporary RPN function
 #ifndef TESTSUITE_BUILD
-    fnStore(99);             // STO 99   //sin(x) + sin(x^2) = 0
-    fnSin(0);                // SIN    
-    fnRCL(99);
-    fnSquare(0);             // square
-    fnSin(0);                // SIN
-    fnAdd(0);                // +    
+//    fnStore(99);             // STO 99   //sin(x) + sin(x^2) = 0
+//    fnSin(0);                // SIN    
+//    fnRCL(99);
+//    fnSquare(0);             // square
+//    fnSin(0);                // SIN
+//    fnAdd(0);                // +    
 
 
-//fnStrInputReal34("1");         //cube root
-//fnStrInputReal34("3");
-//fnDivide(0);
-//fnPower(0);
-//
-//
+fnStrInputReal34("1");         //cube root
+fnStrInputReal34("3");
+fnDivide(0);
+fnPower(0);
+
+
 
     fnRCL(99);               //leaving y in Y and x in X
 #endif
@@ -285,6 +285,8 @@ void doubleToXRegisterReal34(double x) {             //Convert from double to X 
 double convert_to_double(calcRegister_t regist) {    //Convert from X register to double
   double y;
   real_t tmpy;
+    doubleToXRegisterReal34(1.0);
+    fnMultiply(0);
     real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
     realToString(&tmpy, tmpString);
     y = strtof (tmpString, NULL);
@@ -309,11 +311,12 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
   bool_t checkzero = false;
   cancelFilename = true;
 
-  double startval = 1; startval = convert_to_double(REGISTER_X);    //********** X REGISTER IS STARTING POINT
+  double startval = 1; 
+  startval = convert_to_double(REGISTER_X);    //********** X REGISTER IS STARTING POINT
+  #ifdef VERBOSE_SOLVER1
+    printf("XREG:   X="); printf_cpx(REGISTER_X); printf("\n");
+  #endif //VERBOSE_SOLVER2
 
-  calcRegister_t SREG_XB1 = 83; fnStore(SREG_XB1);   //83: Bisecting method
-  calcRegister_t SREG_XB2 = 84; fnStore(SREG_XB2);   //84: Bisecting method
-  fnStore(SREG_XB1);
 
   fnClearStack(0);
   if(telltale != MEM_INITIALIZED) {
@@ -357,7 +360,8 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
   int16_t kicker = 0;
 
   #ifdef VERBOSE_SOLVER2
-    printf("INIT:   ix=%d X2=",ix); printf_cpx(SREG_X2); printf(" Y2="); printf("\n");
+    printf("INIT:   ix=%d X1=",ix); printf_cpx(SREG_X1); printf("\n");
+    printf("INIT:   ix=%d X2=",ix); printf_cpx(SREG_X2); printf("\n");
   #endif //VERBOSE_SOLVER2
 
 
@@ -365,6 +369,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 //#################################################### Iteration start ##########################################
   while(ix<400 && !checkend) 
   {
+
     //assumes X2 is in R91
     //Identify oscillations in real or imag: increment osc flag
     int16_t osc = 0;
@@ -433,7 +438,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 
 
 
-  // If convergent, reduce the step sife using the f factor
+  //reduce the step sife using the f factor
   /*
     if(convergent < 2) {
       if(ix > 300) {doubleToXRegisterReal34(0.2); fnStore(SREG_F);} else //divide factor by 10
@@ -452,6 +457,11 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     fnRCL(SREG_X2);                                       // get (X2,Y2)
     execute_rpn_function(nbr);                            // leaving y2 in Y and x2 in X
     copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y2); // y2
+
+    #ifdef VERBOSE_SOLVER1
+      printf("    :   ix=%d X1=",ix); printf_cpx(SREG_X1); printf(" Y1="); printf_cpx(SREG_Y1); printf("\n");
+      printf("    :   ix=%d X2=",ix); printf_cpx(SREG_X2); printf(" Y2="); printf_cpx(SREG_Y2); printf("\n");
+    #endif //VERBOSE_SOLVER2
 
 
     // y2 in Y and x2 in X
@@ -489,102 +499,135 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 
     //DETERMINE DX and DY, to calculate the slope (or the inverse of the slope in this case)
 
-#define AAA 1
-if(AAA == 1) {
 
-    if( !(ix>2 && convergent >= 2 && oscillations < 2) )
+//Experimental bisection method to kick
+    bool_t bisect = false;
+    if( ((getRegisterDataType(SREG_Y1) == dtComplex34) || (getRegisterDataType(SREG_Y2) == dtComplex34)) ) {
+      doubleToXRegisterReal34(-180+20);  //Z -90
+      doubleToXRegisterReal34( 180-20);  //Y 180
+      fnRCL(SREG_Y2);
+      fnRCL(SREG_Y1);
+      fnMultiply(0);
+//          #ifdef VERBOSE_SOLVER2
+            printf(" Bisection complex product evaluated:");printf_cpx(REGISTER_X);printf("\n");
+  //        #endif
+      fnAngularMode(AM_DEGREE);
+      fnArg_all(0);
+      if(  real34CompareLessThan(REGISTER_REAL34_DATA(REGISTER_X),REGISTER_REAL34_DATA(REGISTER_Z)) || 
+           real34CompareGreaterThan(REGISTER_REAL34_DATA(REGISTER_X),REGISTER_REAL34_DATA(REGISTER_Y))
+        ) 
       {
-    /*-2-sample slope-*/  fnRCL  (SREG_X2); fnRCL(SREG_X1); fnSubtract(0);      // dx
-    /*-2-sample slope-*/  fnStore(SREG_DX);                                     // store difference for later
-    /*-2-sample slope-*/  fnRCL  (SREG_Y2); fnRCL(SREG_Y1); fnSubtract(0);      // dy
-    /*-2-sample slope-*/  fnStore(SREG_DY);                                     // store difference for later
-    /*-2-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
-    /*-2-sample slope-*/
+        bisect = true;
+        #ifdef VERBOSE_SOLVER1
+            printf(" Bisection complex product complies=");printf_cpx(REGISTER_X);printf("\n");
+        #endif
       }
-
-
-    //**** Up to here the standard SECANT type slope is computed. If the following part is executed, a better slope is computed using 3 y values.
-    else 
-      {
-    /*-3-sample slope-*/  //The second order accurate one-sided finite difference formula for the first derivative, formule 32, of
-    /*-3-sample slope-*/  //  ChE 205 — Formulas for Numerical Differentiation
-    /*-3-sample slope-*/  //  Handout 5 05/08/02:
-    /*-3-sample slope-*/
-      #ifdef VERBOSE_SOLVER1
-        fnInvert(0); printf(" Using 3 sample dydx\n");
-      #endif
-    /*-3-sample slope-*/  fnRCL  (SREG_X2); fnRCL(SREG_X1); fnSubtract(0); //Determine x2-x1
-    /*-3-sample slope-*/  fnStore(SREG_DX);  //store difference DX for later
-    /*-3-sample slope-*/  fnRCL  (SREG_X1);
-    /*-3-sample slope-*/  fnSwapXY(0);
-    /*-3-sample slope-*/  fnSubtract(0);
-    /*-3-sample slope-*/  fnStore(SREG_X0);          //determine the new x0 by subtracting DX
-    /*-3-sample slope-*/  execute_rpn_function(nbr); //determine the new f(x0)
-    /*-3-sample slope-*/  copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y0); //set y0 to the result f(x0)
-    /*-3-sample slope-*/  //do DX = 2 (x2-x1)
-    /*-3-sample slope-*/  fnRCL(SREG_DX);
-    /*-3-sample slope-*/  doubleToXRegisterReal34(2);//calculate 2(x2-x1)
-    /*-3-sample slope-*/  fnMultiply(0);             // DX = 2 delta x
-    /*-3-sample slope-*/  //do DY = (fi−2 − 4fi−1 + 3fi)
-    /*-3-sample slope-*/  fnRCL(SREG_Y0);              //y0
-    /*-3-sample slope-*/  fnRCL(SREG_Y1);
-    /*-3-sample slope-*/  doubleToXRegisterReal34(4); 
-    /*-3-sample slope-*/  fnMultiply(0);
-    /*-3-sample slope-*/  fnSubtract(0);               //-4.y1
-    /*-3-sample slope-*/  fnRCL(SREG_Y2);
-    /*-3-sample slope-*/  doubleToXRegisterReal34(3);
-    /*-3-sample slope-*/  fnMultiply(0); 
-    /*-3-sample slope-*/  fnAdd(0);                    //+3.y2
-    /*-3-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
-    /*-3-sample slope-*/
-       }
-
-
-    fnDivide(0);  //get the inverse of the slope dx/dy
-
-    #ifdef VERBOSE_SOLVER2
-      fnInvert(0); printf(" SLOPE="); printf_cpx(REGISTER_X); printf("\n"); fnInvert(0); 
-    #endif
-
-    fnRCL(SREG_Y1);      // determine increment in x
-    fnMultiply(0);       // increment to x is: y1 . DX/DY
-    fnRCL(SREG_F);       // factor to stabilize Newton method. factor=1 is straight. factor=0.1 converges 10x slower.
-    fnMultiply(0);       // increment to x
-} 
-else
-{
-//Experimental bisection method
-    fnRCL(SREG_Y2);
-    fnRCL(SREG_Y1);
-    fnMultiply(0);
-
-
-    if(
-      (real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) && getRegisterDataType(REGISTER_X) == dtReal34) ||  
-      (
-        (getRegisterDataType(REGISTER_X) == dtComplex34) &&
-        (
-          (real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsNegative(REGISTER_IMAG34_DATA(REGISTER_X)) )
-           ||
-          (real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsPositive(REGISTER_IMAG34_DATA(REGISTER_X)) )
+    }
+    if( bisect ||
+       ( (getRegisterDataType(SREG_Y1) == dtReal34) && 
+         (getRegisterDataType(SREG_Y2) == dtReal34) && 
+         (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y1),const34_1e_6)) && 
+         (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y2),const34_1e_6)) &&
+          (
+            ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y1))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y2))) ) ||
+            ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y2))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y1))) )
+          )
+        ) 
         )
-      )
-    ) {}
+      {
+        #ifdef VERBOSE_SOLVER1
+          printf(" Using Bisection method: Angle=");printf_cpx(REGISTER_X);printf("\n");
+        #endif
+        fnRCL(SREG_X1);
+        fnRCL(SREG_X2);
+        fnAdd(0);
+        doubleToXRegisterReal34(2);
+        fnDivide(0); //Leaving (x1+x2)/2
+        fnStore(SREG_X2N);   // store temporarily to new x2n
+      }
+      else {
+//if(convergent >= 0 && oscillations > 2) {
+
+  
+
+//} else
 
 
 
-}
+    //Secant and Newton approximation methods
+        if( !(ix>2 && convergent >= 2 && oscillations < 2) )
+          {
+        /*-2-sample slope-*/  fnRCL  (SREG_X2); fnRCL(SREG_X1); fnSubtract(0);      // dx
+        /*-2-sample slope-*/  fnStore(SREG_DX);                                     // store difference for later
+        /*-2-sample slope-*/  fnRCL  (SREG_Y2); fnRCL(SREG_Y1); fnSubtract(0);      // dy
+        /*-2-sample slope-*/  fnStore(SREG_DY);                                     // store difference for later
+        /*-2-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
+        /*-2-sample slope-*/
+          }
 
-    #ifdef VERBOSE_SOLVER1
-      printf("    New X =        "); printf_cpx(SREG_X1); printf(" - ("); printf_cpx(REGISTER_X); printf(")\n"); 
-    #endif
+
+        //**** Up to here the standard SECANT type slope is computed. If the following part is executed, a better slope is computed using 3 y values.
+        else 
+          {
+        /*-3-sample slope-*/  //The second order accurate one-sided finite difference formula for the first derivative, formule 32, of
+        /*-3-sample slope-*/  //  ChE 205 — Formulas for Numerical Differentiation
+        /*-3-sample slope-*/  //  Handout 5 05/08/02:
+        /*-3-sample slope-*/
+          #ifdef VERBOSE_SOLVER1
+            printf(" Using 3 sample dydx\n");
+          #endif
+        /*-3-sample slope-*/  fnRCL  (SREG_X2); fnRCL(SREG_X1); fnSubtract(0); //Determine x2-x1
+        /*-3-sample slope-*/  fnStore(SREG_DX);  //store difference DX for later
+        /*-3-sample slope-*/  fnRCL  (SREG_X1);
+        /*-3-sample slope-*/  fnSwapXY(0);
+        /*-3-sample slope-*/  fnSubtract(0);
+        /*-3-sample slope-*/  fnStore(SREG_X0);          //determine the new x0 by subtracting DX
+        /*-3-sample slope-*/  execute_rpn_function(nbr); //determine the new f(x0)
+        /*-3-sample slope-*/  copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y0); //set y0 to the result f(x0)
+        /*-3-sample slope-*/  //do DX = 2 (x2-x1)
+        /*-3-sample slope-*/  fnRCL(SREG_DX);
+        /*-3-sample slope-*/  doubleToXRegisterReal34(2);//calculate 2(x2-x1)
+        /*-3-sample slope-*/  fnMultiply(0);             // DX = 2 delta x
+        /*-3-sample slope-*/  //do DY = (fi−2 − 4fi−1 + 3fi)
+        /*-3-sample slope-*/  fnRCL(SREG_Y0);              //y0
+        /*-3-sample slope-*/  fnRCL(SREG_Y1);
+        /*-3-sample slope-*/  doubleToXRegisterReal34(4); 
+        /*-3-sample slope-*/  fnMultiply(0);
+        /*-3-sample slope-*/  fnSubtract(0);               //-4.y1
+        /*-3-sample slope-*/  fnRCL(SREG_Y2);
+        /*-3-sample slope-*/  doubleToXRegisterReal34(3);
+        /*-3-sample slope-*/  fnMultiply(0); 
+        /*-3-sample slope-*/  fnAdd(0);                    //+3.y2
+        /*-3-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
+        /*-3-sample slope-*/
+           }
 
 
+        fnDivide(0);  //get the inverse of the slope dx/dy
+        if(real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_IMAG34_DATA(REGISTER_X)) ) 
+          doubleToXRegisterReal34(0);
 
-    fnRCL(SREG_X1);
-    fnSwapXY(0);
-    fnSubtract(0);       // subtract as per Newton, x1 - f/f'
-    fnStore(SREG_X2N);   // store temporarily to new x2n
+
+        #ifdef VERBOSE_SOLVER2
+          fnInvert(0); printf(" SLOPE="); printf_cpx(REGISTER_X); printf("\n"); fnInvert(0); 
+        #endif
+
+        fnRCL(SREG_Y1);      // determine increment in x
+        fnMultiply(0);       // increment to x is: y1 . DX/DY
+        fnRCL(SREG_F);       // factor to stabilize Newton method. factor=1 is straight. factor=0.1 converges 10x slower.
+        fnMultiply(0);       // increment to x
+
+        #ifdef VERBOSE_SOLVER1
+          printf("    New X =        "); printf_cpx(SREG_X1); printf(" - ("); printf_cpx(REGISTER_X); printf(")\n"); 
+        #endif
+
+        fnRCL(SREG_X1);
+        fnSwapXY(0);
+        fnSubtract(0);       // subtract as per Newton, x1 - f/f'
+        fnStore(SREG_X2N);   // store temporarily to new x2n
+      } 
+
+
 
     copySourceRegisterToDestRegister(SREG_Y2,SREG_Y1); //old y2 copied to y1
     copySourceRegisterToDestRegister(SREG_X2,SREG_X1); //old x2 copied to x1
@@ -629,11 +672,9 @@ else
 
     #ifdef VERBOSE_SOLVER2
       if(!checkend) {
-        printf("   oldX2: ");printf_cpx(SREG_X2); printf("\n");
-        printf("   Y2   : ");printf_cpx(SREG_Y2); printf("\n");
-        printf("   ix=%d |DX|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DX), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DX); printf("\n");
-        printf("   ix=%d |DY|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DY), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DY);
-        printf("   DY: ");printf_cpx(REGISTER_Y); printf("\n");
+        printf("END     ix=%d |DX|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DX), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DX); printf("\n");
+        printf("END     ix=%d |DY|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DY), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DY); printf("\n");
+        printf("END     DY=");printf_cpx(REGISTER_Y); printf("\n");
       }
     #endif //VERBOSE_SOLVER2
 

@@ -70,9 +70,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
   void reallyRunFunction(int16_t func, uint16_t param) {
-    #ifdef PC_BUILD
-      char tmp[200]; sprintf(tmp,"^^^^reallyRunFunction func=%d param=%d\n",func, param); jm_show_comment(tmp);
-    #endif //PC_BUILD
     if(indexOfItems[func].undoStatus == US_ENABLED) {
       saveForUndo();
     }
@@ -80,7 +77,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       thereIsSomethingToUndo = false;
     }
 
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^reallyRunFunction func=%d param=%d\n",func, param); jm_show_comment(tmp);
+      //printf("---#### Before function %s\n",tmp);
+    #endif //PC_BUILD
     indexOfItems[func].func(param);
+    #ifdef PC_BUILD
+      //print_stck();
+      //printf("####--- After end of function call\n");
+    #endif //PC_BUILD
 
     if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
       clearSystemFlag(FLAG_ASLIFT);
@@ -138,6 +143,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       insertStepInProgram(func);
       return;
     }
+
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^RunFunction func=%d\n",func); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
     reallyRunFunction(func, indexOfItems[func].param);
 

@@ -729,5 +729,114 @@ void fnP_All_Regs(uint16_t option){
 
 
 
+void printf_cpx(calcRegister_t regist) {
+  #ifdef PC_BUILD
+  if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("Reg(%d) REAL = %s ",regist, tmpString);
+  }
+  if(getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_IMAG34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("IMAG = %s ",tmpString);
+  }
+  if(getRegisterDataType(regist) != dtReal34 && getRegisterDataType(regist) != dtComplex34) printf("Neither real nor complex");
+  #endif //PC_BUILD
+}
+
+
+void print_stck(){
+  #ifdef PC_BUILD
+  printf("Lasterrorcode=%d\n",lastErrorCode);
+  printf("REGISTER T: ");printf_cpx(REGISTER_T);printf("\n");
+  printf("REGISTER Z: ");printf_cpx(REGISTER_Z);printf("\n");
+  printf("REGISTER Y: ");printf_cpx(REGISTER_Y);printf("\n");
+  printf("REGISTER X: ");printf_cpx(REGISTER_X);printf("\n");
+  #endif //PC_BUILD
+}
+
+
+void doubleToXRegisterReal34(double x) {             //Convert from double to X register REAL34
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
+    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+    //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrtoX(char aimBuffer[]) {      //DONE
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+  int16_t mem = stringByteLength(aimBuffer);
+  reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
+  tmpString[0] = 0;
+  strcat(tmpString, inp1);
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
+  tmpString[0]=0;
+  strcat(tmpString, inp1);
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+
+  longInteger_t lgInt;
+  longIntegerInit(lgInt);
+  stringToLongInteger(tmpString + (tmpString[0] == '+' ? 1 : 0), 10, lgInt);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  longIntegerFree(lgInt);
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+
+void fnRCL(int16_t inp) {      //DONE
+  setSystemFlag(FLAG_ASLIFT);
+  if(inp == TEMP_REGISTER_1) {
+    liftStack();
+    copySourceRegisterToDestRegister(inp, REGISTER_X);
+  } else {
+  fnRecall(inp);
+  }
+}
+
+
+
+double convert_to_double(calcRegister_t regist) {    //Convert from X register to double
+  double y;
+  real_t tmpy;
+    doubleToXRegisterReal34(1.0);
+    fnMultiply(0);
+    real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
+    realToString(&tmpy, tmpString);
+    y = strtof (tmpString, NULL);
+    return y;
+  }
+
+
+
 
 

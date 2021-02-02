@@ -509,54 +509,6 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {      //DONE
 //---------------------------------------------
 
 
-void fnStrtoX(char aimBuffer[]) {      //DONE
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-  int16_t mem = stringByteLength(aimBuffer);
-  reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
-}
-
-
-
-void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
-  tmpString[0] = 0;
-  strcat(tmpString, inp1);
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
-  tmpString[0]=0;
-  strcat(tmpString, inp1);
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-
-  longInteger_t lgInt;
-  longIntegerInit(lgInt);
-  stringToLongInteger(tmpString + (tmpString[0] == '+' ? 1 : 0), 10, lgInt);
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
-}
-
-
-
-
-void fnRCL(int16_t inp) {      //DONE
-  setSystemFlag(FLAG_ASLIFT);
-  if(inp == TEMP_REGISTER_1) {
-    liftStack();
-    copySourceRegisterToDestRegister(inp, REGISTER_X);
-  } else {
-  fnRecall(inp);
-  }
-}
-
-
 
 
 

@@ -22,6 +22,11 @@ Func: fnSubtract
 ;=======================================
 ; Time - Time
 ;=======================================
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Time:"123456.789" RX=Time:"45247.54264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Time:"45247.54264" RX=Time:"78209.24636"
+
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Time:"12:34:56.789" RX=Time:"4:52:47.54264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Time:"4:52:47.54264" RX=Time:"7:42:09.24636"
 
 
 
@@ -78,10 +83,20 @@ Func: fnSubtract
 ;=======================================
 ; Time - Real34
 ;=======================================
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Time:"123456.789" RX=Real:"4.524754264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"4.524754264" RX=Time:"107167.6736496"
+
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Time:"12:34:56.789" RX=Real:"4.524754264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"4.524754264" RX=Time:"8:03:27.6736496"
 
 ;=======================================
 ; Real34 - Time
 ;=======================================
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"12.3456789" RX=Time:"4524.754264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Time:"4524.754264" RX=Time:"39919.689776"
+
+In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"12.3456789" RX=Time:"4:52:47.54264"
+Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Time:"4:52:47.54264" RX=Time:"7:27:56.9014"
 
 
 

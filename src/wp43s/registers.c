@@ -846,7 +846,7 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
 uint16_t getRegisterFullSize(calcRegister_t regist) {
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:  return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    //case dtTime:
+    case dtTime:         return REAL34_SIZE;
     //case dtDate:
     case dtString:       return getRegisterDataPointer(regist)->dataMaxLength + 1;
     //case dtReal16Matrix:
@@ -1051,7 +1051,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
 
     switch(getRegisterDataType(sourceRegister)) {
       case dtLongInteger:  sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-      //case dtTime:
+      case dtTime:         sizeInBlocks = REAL34_SIZE;                                           break;
       //case dtDate:
       case dtString:       sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       //case dtReal16Matrix:
@@ -1283,6 +1283,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(displayStack);
   storeToDtConfigDescriptor(firstGregorianDay);
   storeToDtConfigDescriptor(roundingMode);
+  storeToDtConfigDescriptor(timeDisplayFormatDigits);
   storeToDtConfigDescriptor(systemFlags);
   xcopy(configToStore->kbd_usr, kbd_usr, sizeof(kbd_usr));
 }
@@ -1576,6 +1577,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(displayStack);
     recallFromDtConfigDescriptor(firstGregorianDay);
     recallFromDtConfigDescriptor(roundingMode);
+    recallFromDtConfigDescriptor(timeDisplayFormatDigits);
     recallFromDtConfigDescriptor(systemFlags);
     synchronizeLetteredFlags();
   }
@@ -1827,6 +1829,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       sprintf(registerContent, "long integer (%" PRIu32 " bytes) %s", TO_BYTES(getRegisterMaxDataLength(regist)), lgIntStr);
     }
 
+    else if(getRegisterDataType(regist) == dtTime) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      sprintf(registerContent, "time %s", str);
+    }
+
     else {
       sprintf(registerContent, "In printRegisterToString: data type %s not supported", getRegisterDataTypeName(regist ,false, false));
     }
@@ -1887,6 +1894,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       longIntegerToAllocatedString(lgInt, str, sizeof(str));
       longIntegerFree(lgInt);
       printf("long integer (%" PRIu64 " + %" PRIu32 " bytes) %s", (uint64_t)sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
+    }
+
+    else if(getRegisterDataType(regist) == dtTime) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      printf("time %s", str);
     }
 
     else {
@@ -2052,6 +2064,10 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
     sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a configuration! It should be CONFIG_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)CONFIG_SIZE);
     displayBugScreen(errorMessage);
   }
+  else if(dataType == dtTime && dataSizeWithoutDataLenBlocks != REAL34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a time! It should be REAL34_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)REAL34_SIZE);
+    displayBugScreen(errorMessage);
+  }
   else if(dataType == dtString) {
     dataSizeWithDataLenBlocks = dataSizeWithoutDataLenBlocks + 1; // +1 for the max length of the string
   }
@@ -2094,6 +2110,10 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
         }
         setRegisterAngularMode(REGISTER_X, AM_NONE);
       }
+      break;
+
+    case dtTime:
+      convertTimeRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     default :
@@ -2259,7 +2279,15 @@ static void registerCmpLonIReal(calcRegister_t regist1, calcRegister_t regist2, 
 }
 
 static void registerCmpTimeTime(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {
-  fnToBeCoded();
+  real_t r1, r2;
+
+  real34ToReal(REGISTER_REAL34_DATA(regist1), &r1);
+  real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
+
+  if(realCompareEqual(&r1, &r2))
+    *result = 0;
+  else
+    *result = realCompareGreaterThan(&r1, &r2) ? 1 : -1;
 }
 
 static void registerCmpDateDate(calcRegister_t regist1, calcRegister_t regist2, int8_t *result) {

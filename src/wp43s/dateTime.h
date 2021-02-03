@@ -18,7 +18,13 @@
  * \file dateTime.h
  ***********************************************/
 
-void fnSetDateFormat(uint16_t dateFormat);
-void getDateString  (char *dateString);
-void getTimeString  (char *timeString);
-void _gettimeofday  (void);
+void fnSetDateFormat         (uint16_t dateFormat);
+void hmmssToSeconds          (const real34_t *src, real34_t *dest);
+void hmmssInRegisterToSeconds(calcRegister_t regist);
+void fnToHr                  (uint16_t unusedButMandatoryParameter);
+void fnToHms                 (uint16_t unusedButMandatoryParameter);
+void fnTime                  (uint16_t unusedButMandatoryParameter);
+void fnSetTime               (uint16_t unusedButMandatoryParameter);
+void getDateString           (char *dateString);
+void getTimeString           (char *timeString);
+void _gettimeofday           (void);

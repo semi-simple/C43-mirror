@@ -160,7 +160,13 @@ void mulLonILonI(void) {
  * \return void
  ***********************************************/
 void mulLonITime(void) {
-  fnToBeCoded();
+  real_t y, x;
+
+  convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+  realMultiply(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -172,7 +178,14 @@ void mulLonITime(void) {
  * \return void
  ***********************************************/
 void mulTimeLonI(void) {
-  fnToBeCoded();
+  real_t y, x;
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+
+  realMultiply(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -402,7 +415,16 @@ void mulCplxLonI(void) {
  * \return void
  ***********************************************/
 void mulTimeShoI(void) {
-  fnToBeCoded();
+  real_t y, x;
+  uint32_t yAngularMode;
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+
+  realMultiply(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -414,7 +436,15 @@ void mulTimeShoI(void) {
  * \return void
  ***********************************************/
 void mulShoITime(void) {
-  fnToBeCoded();
+  real_t y, x;
+  uint32_t xAngularMode;
+
+  convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  realMultiply(&y, &x, &x, &ctxtReal39);
+  realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -426,7 +456,19 @@ void mulShoITime(void) {
  * \return void
  ***********************************************/
 void mulTimeReal(void) {
-  fnToBeCoded();
+  real34_t b;
+  uint32_t xAngularMode;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &b);
+    reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), &b, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    mulError();
+  }
 }
 
 
@@ -438,7 +480,16 @@ void mulTimeReal(void) {
  * \return void
  ***********************************************/
 void mulRealTime(void) {
-  fnToBeCoded();
+  uint32_t yAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == AM_NONE) {
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    mulError();
+  }
 }
 
 

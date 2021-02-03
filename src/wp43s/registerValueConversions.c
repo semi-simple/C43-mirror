@@ -376,3 +376,30 @@ void realToUInt32(const real_t *re, enum rounding mode, uint32_t *value32, bool_
 
   longIntegerFree(lgInt);
 }
+
+
+
+void convertTimeRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
+  real34_t real34, value34;
+  real34Copy(REGISTER_REAL34_DATA(source), &real34);
+  int32ToReal34(3600, &value34);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  real34Divide(&real34, &value34, REGISTER_REAL34_DATA(destination));
+}
+
+
+
+void convertReal34RegisterToTimeRegister(calcRegister_t source, calcRegister_t destination) {
+  real34_t real34, value34;
+  real34Copy(REGISTER_REAL34_DATA(source), &real34);
+  int32ToReal34(3600, &value34);
+  reallocateRegister(destination, dtTime, REAL34_SIZE, AM_NONE);
+  real34Multiply(&real34, &value34, REGISTER_REAL34_DATA(destination));
+}
+
+
+
+void convertLongIntegerRegisterToTimeRegister(calcRegister_t source, calcRegister_t destination) {
+  convertLongIntegerRegisterToReal34Register(source, destination);
+  convertReal34RegisterToTimeRegister(destination, destination);
+}

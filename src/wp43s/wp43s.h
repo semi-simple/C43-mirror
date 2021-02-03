@@ -285,6 +285,7 @@
   extern uint8_t               currentFlgScr;
   extern uint8_t               displayFormat;
   extern uint8_t               displayFormatDigits;
+  extern uint8_t               timeDisplayFormatDigits;
   extern uint8_t               shortIntegerWordSize;
   extern uint8_t               significantDigits;
   extern uint8_t               shortIntegerMode;

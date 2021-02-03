@@ -92,7 +92,8 @@
         break;
 
       case dtTime:
-        strcpy(tmpString, "Copying a time to the clipboard is to be coded!");
+        timeToDisplayString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2, false);
+        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
         break;
 
       case dtDate:
@@ -847,6 +848,11 @@
             longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtTime) {
+            strcat(string1, "time = ");
+            formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -1388,6 +1394,12 @@
             lineWidth = w;
             showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           }
+        }
+
+        else if(getRegisterDataType(regist) == dtTime) {
+          timeToDisplayString(regist, tmpString, false);
+          w = stringWidth(tmpString, &numericFont, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtConfig) {

@@ -44,6 +44,163 @@ void fnSetDateFormat(uint16_t dateFormat) {
   }
 }
 
+/********************************************//**
+ * \brief Convert H.MMSS into seconds
+ *
+ * \param[in] src real34_t* H.MMSS-formatted time value (for input)
+ * \param[out] dest real34_t* time value in seconds (internal representation)
+ * \return void
+ ***********************************************/
+void hmmssToSeconds(const real34_t *src, real34_t *dest) {
+  real34_t time34, real34, value34;
+  int32_t sign;
+
+  sign = real34IsNegative(src);
+
+  // Hours
+  real34CopyAbs(src, &time34);
+  real34ToIntegralValue(&time34, &real34, DEC_ROUND_DOWN);
+  int32ToReal34(3600, &value34);
+  real34Multiply(&real34, &value34, dest);
+
+  // Minutes
+  real34Subtract(&time34, &real34, &time34);
+  int32ToReal34(100, &value34);
+  real34Multiply(&time34, &value34, &time34);
+  real34ToIntegralValue(&time34, &real34, DEC_ROUND_DOWN);
+  int32ToReal34(60, &value34);
+  real34Multiply(&value34, &real34, &value34);
+  real34Add(dest, &value34, dest);
+
+  // Seconds
+  real34Subtract(&time34, &real34, &time34);
+  int32ToReal34(100, &value34);
+  real34Multiply(&time34, &value34, &time34);
+  real34Add(dest, &time34, dest);
+
+  // Sign
+  if(sign) {
+    real34SetNegativeSign(dest);
+  }
+}
+
+/********************************************//**
+ * \brief Convert H.MMSS in given register into time
+ *
+ * \param[in] regist calcRegister_t register
+ * \return void
+ ***********************************************/
+void hmmssInRegisterToSeconds(calcRegister_t regist) {
+  real34_t real34;
+  real34Copy(REGISTER_REAL34_DATA(regist), &real34);
+  reallocateRegister(regist, dtTime, REAL34_SIZE, AM_NONE);
+  hmmssToSeconds(&real34, REGISTER_REAL34_DATA(regist));
+}
+
+
+void fnToHr(uint16_t unusedButMandatoryParameter) {
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtTime:
+      convertTimeRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      break;
+
+    default :
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "data type %s cannot be converted to a real34!", getRegisterDataTypeName(REGISTER_X, false, false));
+        moreInfoOnError("In function fnToReal:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+}
+
+void fnToHms(uint16_t unusedButMandatoryParameter) {
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger :
+      convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+      break;
+
+    case dtReal34:
+      convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+      break;
+
+    case dtTime:
+      /* already in hours: do nothing */
+      break;
+
+    default :
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "data type %s cannot be converted to time!", getRegisterDataTypeName(REGISTER_X, false, false));
+        moreInfoOnError("In function fnToReal:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+}
+
+
+void fnTime(uint16_t unusedButMandatoryParameter) {
+  real34_t time34;
+#ifdef PC_BUILD
+  time_t epoch = time(NULL);
+  struct tm *timeInfo = localtime(&epoch);
+
+  uInt32ToReal34((uint32_t)timeInfo->tm_hour * 3600u + (uint32_t)timeInfo->tm_min * 60u + (uint32_t)timeInfo->tm_sec,
+    &time34);
+#endif // PC_BUILD
+
+#ifdef DMCP_BUILD
+  tm_t timeInfo;
+  dt_t dateInfo;
+
+  rtc_read(&timeInfo, &dateInfo);
+  uInt32ToReal34((uint32_t)timeInfo.hour * 3600u + (uint32_t)timeInfo.min * 60u + (uint32_t)timeInfo.sec,
+    &time34);
+#endif // DMCP_BUILD
+  liftStack();
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  real34Copy(&time34, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+void fnSetTime(uint16_t unusedButMandatoryParameter) {
+#ifdef PC_BUILD
+  displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+  sprintf(errorMessage, "SETTIM is unavailable on the emulator!");
+  moreInfoOnError("In function fnSetTime:", errorMessage, NULL, NULL);
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#endif // PC_BUILD
+
+#ifdef DMCP_BUILD
+  tm_t timeInfo;
+  dt_t dateInfo;
+  real34_t time34, value34;
+  int32_t timeVal;
+
+  if(getRegisterDataType(REGISTER_X) == dtTime) {
+    int32ToReal34(86400, &value34);
+    if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), &value34)) {
+      displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
+    }
+    else {
+      rtc_read(&timeInfo, &dateInfo);
+      int32ToReal34(100, &value34);
+      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &value34, &time34);
+      real34ToIntegralValue(&time34, &time34, DEC_ROUND_DOWN);
+      timeVal = real34ToInt32(&time34);
+      timeInfo.csec =  timeVal         % 100;
+      timeInfo.sec  = (timeVal /= 100) %  60;
+      timeInfo.min  = (timeVal /=  60) %  60;
+      timeInfo.hour = (timeVal /=  60);
+      rtc_write(&timeInfo, &dateInfo);
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  }
+#endif // DMCP_BUILD
+}
 
 
 /********************************************//**

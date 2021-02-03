@@ -12024,6 +12024,7 @@ void fnReset(uint16_t confirmation) {
     systemFlags = 0;
     displayFormat = DF_ALL;
     displayFormatDigits = 0;
+    timeDisplayFormatDigits = 0;
     currentAngularMode = AM_DEGREE;
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);

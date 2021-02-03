@@ -5,9 +5,18 @@ h=${2:-src/qspi_crc.h}
 
 q=build/${pgm}_qspi.bin
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+        # Host is Mac: use gstat for GNU version
+        STAT=gstat
+else
+        # Assume host is Linux: stat is GNU version
+        STAT=stat
+fi
+
+
 
 filesize() {
-	stat -Lc%s "$1"
+	$STAT -Lc%s "$1"
 }
 
 

@@ -133,6 +133,8 @@ typedef struct {
   uint8_t   currentAngularMode;
   uint8_t   displayStack;
   uint8_t   roundingMode;
+  uint8_t   timeDisplayFormatDigits;
+  uint8_t   reservedForPossibleFutureUse[3];
   uint32_t  denMax;
   uint32_t  firstGregorianDay;
   uint64_t  systemFlags;

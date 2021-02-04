@@ -178,6 +178,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDisplayFormatSci         (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatEng         (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatGap         (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatTime        (uint16_t unusedButMandatoryParameter) {}
   void fnArccos                   (uint16_t unusedButMandatoryParameter) {}
   void fnArccosh                  (uint16_t unusedButMandatoryParameter) {}
   void fnArcsin                   (uint16_t unusedButMandatoryParameter) {}
@@ -279,6 +280,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnConfigEurope             (uint16_t unusedButMandatoryParameter) {}
   void fnConfigIndia              (uint16_t unusedButMandatoryParameter) {}
   void fnConfigJapan              (uint16_t unusedButMandatoryParameter) {}
+  void fnSetTime                  (uint16_t unusedButMandatoryParameter) {}
   void fnConfigUk                 (uint16_t unusedButMandatoryParameter) {}
   void fnConfigUsa                (uint16_t unusedButMandatoryParameter) {}
   void fnLcm                      (uint16_t unusedButMandatoryParameter) {}
@@ -417,6 +419,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnLastX                    (uint16_t unusedButMandatoryParameter) {}
   void fnCyx                      (uint16_t unusedButMandatoryParameter) {}
   void fnPyx                      (uint16_t unusedButMandatoryParameter) {}
+  void fnToHr                     (uint16_t unusedButMandatoryParameter) {}
+  void fnToHms                    (uint16_t unusedButMandatoryParameter) {}
   void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
   void fnDec                      (uint16_t unusedButMandatoryParameter) {}
   void fnInc                      (uint16_t unusedButMandatoryParameter) {}
@@ -486,6 +490,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnXToAlpha                 (uint16_t unusedButMandatoryParameter) {}
   void fnAlphaToX                 (uint16_t unusedButMandatoryParameter) {}
   void fnTicks                    (uint16_t unusedButMandatoryParameter) {}
+  void fnTime                     (uint16_t unusedButMandatoryParameter) {}
   void fnSave                     (uint16_t unusedButMandatoryParameter) {}
   void fnLoad                     (uint16_t unusedButMandatoryParameter) {}
   void fnUndo                     (uint16_t unusedButMandatoryParameter) {}
@@ -576,6 +581,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
+
 
 
 
@@ -2214,7 +2220,7 @@ const item_t indexOfItems[] = {
 /* 1594 */  { fnConfigIndia,               NOPARAM,                     "SETIND",                                      "INDIA",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1595 */  { fnConfigJapan,               NOPARAM,                     "SETJPN",                                      "JAPAN",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1596 */  { itemToBeCoded,               NOPARAM,                     "SETSIG",                                      "SETSIG",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1597 */  { itemToBeCoded,               NOPARAM,                     "SETTIM",                                      "SETTIM",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1597 */  { fnSetTime,                   NOPARAM,                     "SETTIM",                                      "SETTIM",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1598 */  { fnConfigUk,                  NOPARAM,                     "SETUK",                                       "UK",                                          0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1599 */  { fnConfigUsa,                 NOPARAM,                     "SETUSA",                                      "USA",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1600 */  { fnSign,                      NOPARAM,                     "SIGN",                                        "sign",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2236,9 +2242,9 @@ const item_t indexOfItems[] = {
 /* 1616 */  { fnSumXY,                     NOPARAM,                     "SUM",                                         "SUM",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1617 */  { fnWeightedSampleStdDev,      NOPARAM,                     "s" STD_SUB_w,                                 "s" STD_SUB_w,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1618 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_x STD_SUB_y,                       "s" STD_SUB_x STD_SUB_y,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1619 */  { itemToBeCoded,               NOPARAM,                     "TDISP",                                       "TDISP",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1619 */  { fnDisplayFormatTime,         NOPARAM,                     "TDISP",                                       "TDISP",                                       0,      18,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1620 */  { fnTicks,                     NOPARAM,                     "TICKS",                                       "TICKS",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1621 */  { itemToBeCoded,               NOPARAM,                     "TIME",                                        "TIME",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1621 */  { fnTime,                      NOPARAM,                     "TIME",                                        "TIME",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1622 */  { itemToBeCoded,               NOPARAM,                     "TIMER",                                       "TIMER",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1623 */  { itemToBeCoded,               NOPARAM,                     "T" STD_SUB_n,                                 "T" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1624 */  { itemToBeCoded,               NOPARAM,                     "TONE",                                        "TONE",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -2302,8 +2308,8 @@ const item_t indexOfItems[] = {
 /* 1682 */  { itemToBeCoded,               NOPARAM,                     "1682",                                        "1682",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "1683",                                        "1683",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
 /* 1684 */  { itemToBeCoded,               NOPARAM,                     "1684",                                        "1684",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
-/* 1685 */  { itemToBeCoded,               NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1686 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },//JM mod
+/* 1685 */  { fnToHr,                      NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1686 */  { fnToHms,                     NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },//JM mod
 /* 1687 */  { fnChangeBase,                TM_VALUE_CHB,                STD_RIGHT_ARROW "INT",                         "#",                                           2,      16,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1688 */  { itemToBeCoded,               NOPARAM,                     "1688",                                        "1688",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
 /* 1689 */  { fnToPolar,                   NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "POL" STD_SUB_o,               STD_RIGHT_ARROW "P" STD_SUB_o,                 0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM TEXT & point to function to add POLAR/RECT

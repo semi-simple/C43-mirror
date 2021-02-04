@@ -108,7 +108,8 @@ void subLonILonI(void) {
  * \return void
  ***********************************************/
 void subLonITime(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -120,7 +121,8 @@ void subLonITime(void) {
  * \return void
  ***********************************************/
 void subTimeLonI(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -338,7 +340,7 @@ void subCplxLonI(void) {
  * \return void
  ***********************************************/
 void subTimeTime(void) {
-  fnToBeCoded();
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -350,7 +352,17 @@ void subTimeTime(void) {
  * \return void
  ***********************************************/
 void subTimeReal(void) {
-  fnToBeCoded();
+  uint32_t xAngularMode;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    subError();
+  }
 }
 
 
@@ -362,7 +374,17 @@ void subTimeReal(void) {
  * \return void
  ***********************************************/
 void subRealTime(void) {
-  fnToBeCoded();
+  uint32_t yAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    subError();
+  }
 }
 
 

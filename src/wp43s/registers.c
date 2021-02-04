@@ -806,7 +806,7 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
 uint16_t getRegisterFullSize(calcRegister_t regist) {
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:     return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    //case dtTime:
+    case dtTime:            return REAL34_SIZE;
     //case dtDate:
     case dtString:          return getRegisterDataPointer(regist)->dataMaxLength + 1;
     case dtReal34Matrix:    return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * REAL34_SIZE + 1;
@@ -1046,7 +1046,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
 
     switch(getRegisterDataType(sourceRegister)) {
       case dtLongInteger:     sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-      //case dtTime:
+      case dtTime:            sizeInBlocks = REAL34_SIZE;                                           break;
       //case dtDate:
       case dtString:          sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       //case dtReal16Matrix:
@@ -1236,6 +1236,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       sprintf(registerContent, "long integer (%" PRIu32 " bytes) %s", TO_BYTES(getRegisterMaxDataLength(regist)), lgIntStr);
     }
 
+    else if(getRegisterDataType(regist) == dtTime) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      sprintf(registerContent, "time %s", str);
+    }
+
     else {
       sprintf(registerContent, "In printRegisterToString: data type %s not supported", getRegisterDataTypeName(regist ,false, false));
     }
@@ -1296,6 +1301,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       longIntegerToAllocatedString(lgInt, str, sizeof(str));
       longIntegerFree(lgInt);
       printf("long integer (%" PRIu64 " + %" PRIu32 " bytes) %s", (uint64_t)sizeof(dataBlock_t), TO_BYTES(getRegisterMaxDataLength(regist)), str);
+    }
+
+    else if(getRegisterDataType(regist) == dtTime) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      printf("time %s", str);
     }
 
     else {
@@ -1462,6 +1472,10 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
     sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a configuration! It should be CONFIG_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)CONFIG_SIZE);
     displayBugScreen(errorMessage);
   }
+  else if(dataType == dtTime && dataSizeWithoutDataLenBlocks != REAL34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a time! It should be REAL34_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)REAL34_SIZE);
+    displayBugScreen(errorMessage);
+  }
   else if(dataType == dtString) {
     dataSizeWithDataLenBlocks = dataSizeWithoutDataLenBlocks + 1; // +1 for the max length of the string
   }
@@ -1506,6 +1520,10 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
         }
         setRegisterAngularMode(REGISTER_X, AM_NONE);
       }
+      break;
+
+    case dtTime:
+      convertTimeRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     default :

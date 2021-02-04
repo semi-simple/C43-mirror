@@ -131,6 +131,17 @@ void fnDisplayFormatGap(uint16_t gap) {
 }
 
 
+/********************************************//**
+ * \brief Sets the display format for time and refreshes the stack
+ *
+ * \param[in] displayFormatN uint16_t Display format
+ * \return void
+ ***********************************************/
+void fnDisplayFormatTime(uint16_t displayFormatN) {
+  timeDisplayFormatDigits = (uint8_t)displayFormatN;
+}
+
+
 
 /********************************************//**
  * \brief Adds the power of 10 using numeric font to displayString
@@ -1731,8 +1742,142 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 
-void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
+  real34_t real34, value34, h34, m34, s34;
+  int32_t sign;
+  uint32_t digits, tDigits = 0u;
+  char digitBuf[16], digitBuf2[48];
+  char* bufPtr;
+  bool_t isValid12hTime = false, isAfternoon = false;
+
+  real34Copy(REGISTER_REAL34_DATA(regist), &real34);
+  sign = real34IsNegative(&real34);
+  real34SetPositiveSign(&real34);
+
+  // Pre-rounding
+  if(!ignoreTDisp) {
+    switch(timeDisplayFormatDigits) {
+      case 0: // no rounding
+        break;
+      case 1: case 2: // round to minutes
+        int32ToReal34(60, &value34);
+        real34Divide(&real34, &value34, &real34);
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+        real34Multiply(&real34, &value34, &real34);
+        break;
+      default: // round to seconds, milliseconds, microseconds, ...
+        int32ToReal34(10, &value34);
+        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+          real34Multiply(&real34, &value34, &real34);
+        }
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+          real34Divide(&real34, &value34, &real34);
+        }
+    }
+  }
+
+  // Seconds
+  real34ToIntegralValue(&real34, &s34, DEC_ROUND_DOWN);
+  real34Subtract(&real34, &s34, &real34); // Fractional part
+  int32ToReal34(60, &value34);
+  // Minutes
+  real34Divide(&s34, &value34, &m34);
+  real34ToIntegralValue(&m34, &m34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&s34, &value34, &s34);
+  // Hours
+  real34Divide(&m34, &value34, &h34);
+  real34ToIntegralValue(&h34, &h34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&m34, &value34, &m34);
+  // 12-hour time
+  if((!getSystemFlag(FLAG_TDM24)) && (!sign)) {
+    int32ToReal34(24, &value34);
+    if(real34CompareLessThan(&h34, &value34)) {
+      isValid12hTime = true;
+      int32ToReal34(12, &value34);
+      if(real34CompareGreaterEqual(&h34, &value34)) {
+        isAfternoon = true;
+        if(!real34CompareLessEqual(&h34, &value34)) {
+          real34Subtract(&h34, &value34, &h34);
+        }
+      }
+      else if(real34CompareEqual(&h34, const34_0)) {
+        real34Add(&h34, &value34, &h34);
+      }
+    }
+  }
+
+
+  // Display Hours
+  strcpy(displayString, sign ? "-" : "");
+  real34ToString(&h34, digitBuf2);
+
+  bufPtr = digitBuf2;
+  digitBuf[1] = '\0';
+  for(digits = strlen(digitBuf2); digits > 0; --digits){
+    digitBuf[0] = *bufPtr++;
+    strcat(displayString, digitBuf);
+    if((digits % 3u == 1) && (digits > 1)) {
+      strcat(displayString, STD_SPACE_4_PER_EM);
+    }
+    ++tDigits;
+  }
+
+  if((!ignoreTDisp) && (timeDisplayFormatDigits == 1 || timeDisplayFormatDigits == 2 || (++tDigits) > (isValid12hTime ? 16 : 18))) {
+    // Display Minutes
+    sprintf(digitBuf, ":%02" PRIu32, real34ToUInt32(&m34));
+    strcat(displayString, digitBuf);
+  }
+
+  else {
+    // Display MM:SS
+    sprintf(digitBuf, ":%02" PRIu32 ":%02" PRIu32,
+      real34ToUInt32(&m34),
+      real34ToUInt32(&s34));
+    strcat(displayString, digitBuf);
+
+    // Display fractional part of seconds
+    digits = 0u;
+    int32ToReal34(0, &value34);
+    while(1) {
+      real34Subtract(&real34, &value34, &real34);
+      if(ignoreTDisp || (timeDisplayFormatDigits == 0)) {
+        if(real34IsZero(&real34)) {
+          break;
+        }
+      }
+      else {
+        if(digits + 4 > timeDisplayFormatDigits) {
+          break;
+        }
+      }
+      if((!ignoreTDisp) && ((++tDigits) > (isValid12hTime ? 16 : 18))) {
+        break;
+      }
+      int32ToReal34(10, &value34);
+      real34Multiply(&real34, &value34, &real34);
+      real34ToIntegralValue(&real34, &value34, DEC_ROUND_DOWN);
+
+      if(digits == 0u) {
+        strcat(displayString, RADIX34_MARK_STRING);
+      }
+      else if(digits % 3 == 0u) {
+        strcat(displayString, STD_SPACE_4_PER_EM);
+      }
+
+      sprintf(digitBuf, "%" PRIu32, real34ToUInt32(&value34));
+      strcat(displayString, digitBuf);
+      ++digits;
+    }
+  }
+
+  // for 12-hour time
+  if(isAfternoon) {
+    strcat(displayString, "p.m.");
+  }
+  else if(isValid12hTime) {
+    strcat(displayString, "a.m.");
+  }
 }
 
 
@@ -1834,6 +1979,10 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
         xcopy(tmpString + 300,  tmpString + 600, strlen(tmpString + 600) + 1);
         tmpString[600] = 0;
       }
+      break;
+
+    case dtTime:
+      timeToDisplayString(REGISTER_X, tmpString, true);
       break;
 
     case dtString:

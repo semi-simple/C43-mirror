@@ -1018,6 +1018,24 @@ void kill_ASB_icon(void) {
         }
         break;
 
+      case ITM_toHMS :
+        if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
+          done = true;
+
+          closeNim();
+          if(calcMode != CM_NIM && lastErrorCode == 0) {
+            if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+              convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+            }
+
+            hmmssInRegisterToSeconds(REGISTER_X);
+
+            setSystemFlag(FLAG_ASLIFT);
+            return;
+          }
+        }
+        break;
+
       default : keyActionProcessed = false;
     }
 

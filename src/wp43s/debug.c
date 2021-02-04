@@ -575,6 +575,10 @@ void debugNIM(void) {
       longIntegerRegisterToDisplayString(regist, string + n, sizeof(string) - n, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, false);   //JM added last parameter: Allow LARGELI
     }
 
+    else if(getRegisterDataType(regist) == dtTime) {
+      formatReal34Debug(string + n, (real34_t *)getRegisterDataPointer(regist));
+    }
+
     else if(getRegisterDataType(regist) == dtConfig) {
       sprintf(string + n, "Configuration data");
     }
@@ -681,6 +685,12 @@ void debugNIM(void) {
 
       if(row < DEBUG_LINES) {
         sprintf(string, "displatFormatDigits                       = %6u",         displayFormatDigits);
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "timeDisplayFormatDigits                   = %6u",         timeDisplayFormatDigits);
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

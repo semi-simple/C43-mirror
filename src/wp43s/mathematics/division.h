@@ -34,6 +34,7 @@ void divLonICplx(void);
 void divTimeLonI(void);
 void divTimeShoI(void);
 void divTimeReal(void);
+void divTimeTime(void);
 
 //      RegYRegX
 void divRemaLonI(void);

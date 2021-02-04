@@ -102,7 +102,13 @@
         break;
 
       case dtTime:
-        strcpy(tmpString, "time to clipboard to be coded");
+        timeToDisplayString(regist, tmpString + TMP_STR_LENGTH/2, false);
+        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        tmp2[0]=0;                                         //JMCSV add apostrophies
+        strcat(tmp2,"\"");                                 //JMCSV
+        strcat(tmp2,tmpString);                           //JMCSV
+        strcpy(tmpString,tmp2);                           //JMCSV
+        strcat(tmpString,"\"");                           //JMCSV
         break;
 
       case dtDate:
@@ -1399,6 +1405,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             longIntegerRegisterToDisplayString(REGISTER_L, string2, sizeof(string2), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION, true);
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtTime) {
+            strcat(string1, "time = ");
+            formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -2284,6 +2295,12 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             lineWidth = w;
             showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
           }
+        }
+
+        else if(getRegisterDataType(regist) == dtTime) {
+          timeToDisplayString(regist, tmpString, false);
+          w = stringWidth(tmpString, &numericFont, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtConfig) {

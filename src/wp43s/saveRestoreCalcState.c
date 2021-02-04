@@ -109,6 +109,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
     save(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
     save(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+    save(&timeDisplayFormatDigits,            sizeof(timeDisplayFormatDigits),            BACKUP);
     save(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
     save(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
     save(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
@@ -315,6 +316,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
       restore(&displayFormat,                      sizeof(displayFormat),                      BACKUP);
       restore(&displayFormatDigits,                sizeof(displayFormatDigits),                BACKUP);
+      restore(&timeDisplayFormatDigits,            sizeof(timeDisplayFormatDigits),            BACKUP);
       restore(&shortIntegerWordSize,               sizeof(shortIntegerWordSize),               BACKUP);
       restore(&significantDigits,                  sizeof(significantDigits),                  BACKUP);
       restore(&shortIntegerMode,                   sizeof(shortIntegerMode),                   BACKUP);
@@ -720,6 +722,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   sprintf(tmpString, "displayFormat\n%" PRIu8 "\n", displayFormat);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayFormatDigits\n%" PRIu8 "\n", displayFormatDigits);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "timeDisplayFormatDigits\n%" PRIu8 "\n", timeDisplayFormatDigits);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "shortIntegerWordSize\n%" PRIu8 "\n", shortIntegerWordSize);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1187,6 +1191,9 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         }
         else if(strcmp(aimBuffer, "displayFormatDigits") == 0) {
           displayFormatDigits = stringToUint8(tmpString);
+        }
+        else if(strcmp(aimBuffer, "timeDisplayFormatDigits") == 0) {
+          timeDisplayFormatDigits = stringToUint8(tmpString);
         }
         else if(strcmp(aimBuffer, "shortIntegerWordSize") == 0) {
           shortIntegerWordSize = stringToUint8(tmpString);

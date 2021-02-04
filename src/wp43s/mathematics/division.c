@@ -28,7 +28,7 @@ void (* const division[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYP
 /*  1 Long integer  */ {divLonILonI, divRealLonI, divCplxLonI, divTimeLonI, divError, divError, divRemaLonI, divCxmaLonI, divShoILonI,  divError},
 /*  2 Real34        */ {divLonIReal, divRealReal, divCplxReal, divTimeReal, divError, divError, divRemaReal, divCxmaReal, divShoIReal,  divError},
 /*  3 Complex34     */ {divLonICplx, divRealCplx, divCplxCplx, divError,    divError, divError, divRemaCplx, divCxmaCplx, divShoICplx,  divError},
-/*  4 Time          */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError,     divError},
+/*  4 Time          */ {divError,    divError,    divError,    divTimeTime, divError, divError, divError,    divError,    divError,     divError},
 /*  5 Date          */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError,     divError},
 /*  6 String        */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError,     divError},
 /*  7 Real34 mat    */ {divError,    divError,    divError,    divError,    divError, divError, divError,    divError,    divError,     divError},
@@ -441,7 +441,42 @@ void divCplxLonI(void) {
  * \return void
  ***********************************************/
 void divTimeLonI(void) {
-  fnToBeCoded();
+  real_t y, x;
+
+  convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+
+  if(realIsZero(&x)) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      if(getSystemFlag(FLAG_SPCRES)) {
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function divTimeLonI:", "cannot divide 0 by 0", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
+    else {
+      if(getSystemFlag(FLAG_SPCRES)) {
+        realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function divTimeLonI:", "cannot divide time by 0", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
+  }
+
+  else {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+
+    realDivide(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }
 
 
@@ -453,7 +488,42 @@ void divTimeLonI(void) {
  * \return void
  ***********************************************/
 void divTimeShoI(void) {
-  fnToBeCoded();
+  real_t y, x;
+
+  convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+
+  if(realIsZero(&x)) {
+    if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
+      if(getSystemFlag(FLAG_SPCRES)) {
+        realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function divTimeShoI:", "cannot divide 0 by 0", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
+    else {
+      if(getSystemFlag(FLAG_SPCRES)) {
+        realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else {
+        displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function divTimeShoI:", "cannot divide time by 0", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
+  }
+
+  else {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+
+    realDivide(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+  }
 }
 
 
@@ -465,7 +535,88 @@ void divTimeShoI(void) {
  * \return void
  ***********************************************/
 void divTimeReal(void) {
-  fnToBeCoded();
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(getSystemFlag(FLAG_SPCRES)) {
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function divTimeReal:", "cannot divide 0 by 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+
+  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(getSystemFlag(FLAG_SPCRES)) {
+      realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function divTimeReal:", "cannot divide a real34 by 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+
+  else {
+    real34_t x;
+    uint32_t xAngularMode;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+    if(xAngularMode == AM_NONE) { // time / real
+      reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+      real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), &x, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else { // time / angle
+      divError();
+    }
+  }
+}
+
+
+
+/********************************************//**
+ * \brief Y(time) ÷ X(time) ==> X(real34)
+ *
+ * \param void
+ * \return void
+ ***********************************************/
+void divTimeTime(void) {
+  if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y)) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(getSystemFlag(FLAG_SPCRES)) {
+      realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function divTimeTime:", "cannot divide 0 by 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+
+  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
+    if(getSystemFlag(FLAG_SPCRES)) {
+      realToReal34((real34IsPositive(REGISTER_REAL34_DATA(REGISTER_Y)) ? const_plusInfinity : const_minusInfinity), REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function divTimeTime:", "cannot divide time by 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+
+  else {
+    real34_t b;
+
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &b);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), &b, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, AM_NONE);
+  }
 }
 
 

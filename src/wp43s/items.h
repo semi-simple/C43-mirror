@@ -24,6 +24,8 @@
 
 
 
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2276,7 +2278,6 @@
 #define ITM_CLGRF                     2203
 #define ITM_PZOOMX                    2204
 #define ITM_PZOOMY                    2205
-
 #define LAST_ITEM                     2206   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item

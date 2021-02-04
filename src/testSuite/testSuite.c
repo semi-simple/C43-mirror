@@ -879,6 +879,42 @@ void setParameter(char *p) {
       stringToReal34(real, REGISTER_REAL34_DATA(regist));
       stringToReal34(imag, REGISTER_IMAG34_DATA(regist));
     }
+    else if(strcmp(l, "TIME") == 0) {
+      int32_t k = 0;
+      bool_t isHms = false;
+
+      // find the : separating hours and minutes
+      i = 0;
+      while(r[i] != ':' && r[i] != 0) i++;
+      if(r[i] == ':') { // Input by HMS
+        isHms = true;
+        k = i;
+        r[i] = '.';
+        do {
+          ++k;
+          if((r[k] != ':') && (r[k] != '.') && (r[k] != ',')) {
+            r[++i] = r[k];
+          }
+        } while(r[k] != 0);
+      }
+      am = AM_NONE;
+
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      reallocateRegister(regist, dtTime, REAL34_SIZE, AM_NONE);
+      stringToReal34(r, REGISTER_REAL34_DATA(regist));
+      if(isHms) {
+        hmmssInRegisterToSeconds(regist);
+      }
+    }
     else {
       printf("\nMissformed register value. Unknown data type %s for register %s\n", l, p+1);
       abortTest();
@@ -1661,6 +1697,48 @@ void checkExpectedOutParameter(char *p) {
         strcat(r, imag);
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
         if(relativeErrorReal34(&expectedImag34, REGISTER_IMAG34_DATA(regist), "imaginary", regist, letter) == RE_INACCURATE) {
+          wrongRegisterValue(regist, letter, r);
+        }
+      }
+    }
+    else if(strcmp(l, "TIME") == 0) {
+      int32_t k = 0;
+      bool_t isHms = false;
+
+      // find the : separating hours and minutes
+      i = 0;
+      while(r[i] != ':' && r[i] != 0) i++;
+      if(r[i] == ':') { // Input by HMS
+        isHms = true;
+        k = i;
+        r[i] = '.';
+        do {
+          ++k;
+          if((r[k] != ':') && (r[k] != '.') && (r[k] != ',')) {
+            r[++i] = r[k];
+          }
+        } while(r[k] != 0);
+      }
+      am = AM_NONE;
+
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      checkRegisterType(regist, letter, dtTime, AM_NONE);
+      stringToReal34(r, &expectedReal34);
+      if(isHms) {
+        hmmssToSeconds(&expectedReal34, &expectedReal34);
+      }
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
+        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "time", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }

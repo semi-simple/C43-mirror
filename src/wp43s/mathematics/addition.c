@@ -130,7 +130,8 @@ void addLonILonI(void) {
  * \return void
  ***********************************************/
 void addLonITime(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -142,7 +143,8 @@ void addLonITime(void) {
  * \return void
  ***********************************************/
 void addTimeLonI(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -343,7 +345,7 @@ void addCplxLonI(void) {
  * \return void
  ***********************************************/
 void addTimeTime(void) {
-  fnToBeCoded();
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -355,7 +357,17 @@ void addTimeTime(void) {
  * \return void
  ***********************************************/
 void addTimeReal(void) {
-  fnToBeCoded();
+  uint32_t xAngularMode;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -367,7 +379,17 @@ void addTimeReal(void) {
  * \return void
  ***********************************************/
 void addRealTime(void) {
-  fnToBeCoded();
+  uint32_t yAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -447,7 +469,7 @@ void addStriLonI(void) {
 void addStriTime(void) {
   int16_t len1, len2;
 
-  timeToDisplayString(REGISTER_X, tmpString);
+  timeToDisplayString(REGISTER_X, tmpString, false);
 
   if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);

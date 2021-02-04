@@ -416,10 +416,8 @@ void mulCplxLonI(void) {
  ***********************************************/
 void mulTimeShoI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  yAngularMode = getRegisterAngularMode(REGISTER_Y);
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
 
@@ -437,11 +435,9 @@ void mulTimeShoI(void) {
  ***********************************************/
 void mulShoITime(void) {
   real_t y, x;
-  uint32_t xAngularMode;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   realMultiply(&y, &x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));

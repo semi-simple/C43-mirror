@@ -92,7 +92,7 @@
         break;
 
       case dtTime:
-        timeToDisplayString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2, false);
+        timeToDisplayString(regist, tmpString + TMP_STR_LENGTH/2, false);
         stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
         break;
 

@@ -218,7 +218,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
         #endif */
       } else { // is in AM_DMS
 
-        #ifndef TESTSUITE_BUILD
+/*        #ifndef TESTSUITE_BUILD
           switch (getRegisterAngularMode(REGISTER_X)) {
             case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
             case AM_DMS   : {runFunction(ITM_DMSto);  } break;
@@ -227,7 +227,8 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
             case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
             default: break;
           }
-        #endif
+        #endif */
+        fnKeyDotD(0);
         fnToHms(0);
       }
     } else
@@ -535,10 +536,16 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 
 
 void fnAngularModeJM(uint16_t AMODE) {
-  if (AMODE == AM_HMS) AMODE = AM_DMS;
-  fnCvtFromCurrentAngularMode(AMODE);
-  fnAngularMode(AMODE);
-  fnRefreshRadioState(0, 0);
+  if (AMODE == AM_HMS) {
+    fnCvtFromCurrentAngularMode(AM_DEGREE);
+    fnToHms(0);    
+    
+    fnRefreshRadioState(0, 0);    
+  } else {
+    fnCvtFromCurrentAngularMode(AMODE);
+    fnAngularMode(AMODE);
+    fnRefreshRadioState(0, 0);
+  }
 
 }
 

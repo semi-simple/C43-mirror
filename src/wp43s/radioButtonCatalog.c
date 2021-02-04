@@ -657,11 +657,11 @@ char* figlabel(const char* label, int16_t showValue) {      //JM
     strcpy(tmp, label);
   }
 
-  if(showValue != NOVAL && showValue < 0) {
+  if(showValue != NOVAL && showValue != ITEM_NOT_CODED && showValue < 0) {
     strcat(tmp,STD_SUB_MINUS);
   }
 
-  if(showValue != NOVAL && strlen(label) <= 8) {
+  if(showValue != NOVAL && showValue != ITEM_NOT_CODED && strlen(label) <= 8) {
     showValue = max(showValue, -showValue);
     use_base_glyphs(tmp1, showValue);
     strcat(tmp, tmp1);

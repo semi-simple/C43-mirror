@@ -192,39 +192,51 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 
 
 
-
+//SHOI, LONI >> REAL
+//REAL >> CAM
+//AM >> DMS
+// 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
-    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger)  {convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);}
+    switch(getRegisterDataType(REGISTER_X)) {
+      case dtShortInteger :
+        convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+        break;
+      case dtLongInteger :
+        convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+        break;
+      default : break;
+    }
+
     if(getRegisterDataType(REGISTER_X) == dtReal34) {
       if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
-
-      if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
-        #ifndef TESTSUITE_BUILD
+      if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
+        fnCvtFromCurrentAngularMode(AM_DMS);
+/*        #ifndef TESTSUITE_BUILD
           runFunction(ITM_toDMS);
+        #endif */
+      } else { // is in AM_DMS
+
+        #ifndef TESTSUITE_BUILD
+          switch (getRegisterAngularMode(REGISTER_X)) {
+            case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
+            case AM_DMS   : {runFunction(ITM_DMSto);  } break;
+            case AM_GRAD  : {runFunction(ITM_GRADto); } break;
+            case AM_RADIAN: {runFunction(ITM_RADto);  } break;
+            case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
+            default: break;
+          }
         #endif
+        fnToHms(0);
       }
-      else 
-      {
-/*    if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {   //JM wait for future HMS
-        runFunction(ITM_toHMS); break;
-      }
-      else { */
-      #ifndef TESTSUITE_BUILD
-        switch (getRegisterAngularMode(REGISTER_X)) {
-          case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
-          case AM_DMS   : {runFunction(ITM_DMSto);  } break;
-          case AM_GRAD  : {runFunction(ITM_GRADto); } break;
-          case AM_RADIAN: {runFunction(ITM_RADto);  } break;
-          case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-          default: break;
-        }
-      #endif
-      }
+    } else
+    
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
+      fnToHr(0);
     }
+
+
     copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
   }
 

@@ -811,7 +811,7 @@ void fnGraph (uint16_t func){
   PLOT_RMS  = false;
   PLOT_ZMX  = 0;
   PLOT_ZMY  = 0;
-  runFunction(ITM_CLSIGMA);
+  fnClSigma(0);   //For some strange reason runFunction(ITM_CLSIGMA); does not work in this position !!! Cannot solve the riddle, rarther just call the function directly
 
   running_program_jm = true;
 

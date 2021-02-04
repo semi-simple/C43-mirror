@@ -25,6 +25,9 @@ bool_t  funcOK;
 glyph_t glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
 
 #define MAX_NUMBER_OF_ITEMS 1000
+#define GENERATION_FOR_DMCP    1
+#define GENERATION_FOR_PC      2
+#define GENERATION_FOR_BOTH    3
 FILE *catalogFile;
 int32_t numberOfItems, item, itemList[MAX_NUMBER_OF_ITEMS];
 
@@ -40,27 +43,39 @@ static int sortItems(void const *a, void const *b)
 
 
 
-void sortOneCatalog(const char *menuName, char catalogType) {
+void sortOneCatalog(const char *menuName, char catalogType, int16_t generationType) {
   printf("Generating catalog %s\n", menuName);
   fprintf(catalogFile, "const int16_t menu_%s[] = {\n", menuName);
 
   numberOfItems = 0;
   for(item=1; item<LAST_ITEM; item++) {
     if(indexOfItems[item].catalog == catalogType && strcmp(indexOfItems[item].itemCatalogName, "CATALOG") && strcmp(indexOfItems[item].itemCatalogName, "MENUS")) { // CATALOG and MENUS are not in another catalog
-      itemList[numberOfItems++] = item;
-      if(numberOfItems == MAX_NUMBER_OF_ITEMS) {
-        printf("Array itemList is too small: increase the value of MAX_NUMBER_OF_ITEMS\n");
-        exit(-1);
+      if(   generationType == GENERATION_FOR_DMCP
+         || generationType == GENERATION_FOR_BOTH
+         || (generationType == GENERATION_FOR_PC && strcmp(indexOfItems[item].itemCatalogName, "SYSTEM")
+                                                 && strcmp(indexOfItems[item].itemCatalogName, "SETTIM")
+                                                 && strcmp(indexOfItems[item].itemCatalogName, "SETDAT"))) { // (not SYSTEM) and (not SETTIM) and (not SETDAT) when generating program for PC
+        itemList[numberOfItems++] = item;
+        if(numberOfItems == MAX_NUMBER_OF_ITEMS) {
+          printf("Array itemList is too small: increase the value of MAX_NUMBER_OF_ITEMS\n");
+          exit(-1);
+        }
       }
     }
   }
 
   qsort(itemList, numberOfItems, sizeof(*itemList), sortItems);
 
+  if(generationType == GENERATION_FOR_PC || generationType == GENERATION_FOR_DMCP) {
+    fprintf(catalogFile, "  ");
+  }
   for(item=0; item<numberOfItems; item++) {
     fprintf(catalogFile, "%5d,", itemList[item] * (catalogType == CAT_MENU ? -1 : 1)); // Menus are negative
     if((item + 1) % 6 == 0) {
       fprintf(catalogFile, "\n");
+      if(generationType == GENERATION_FOR_PC || generationType == GENERATION_FOR_DMCP) {
+        fprintf(catalogFile, "  ");
+      }
     }
   }
 
@@ -68,7 +83,12 @@ void sortOneCatalog(const char *menuName, char catalogType) {
   //  fprintf(catalogFile, "%5d,", 0);
   //}
 
-  fprintf(catalogFile, "\n};\n");
+  if(generationType == GENERATION_FOR_PC || generationType == GENERATION_FOR_DMCP) {
+    fprintf(catalogFile, "\n  };\n");
+  }
+  else {
+    fprintf(catalogFile, "\n};\n");
+  }
 }
 
 
@@ -97,7 +117,7 @@ int main(int argc, char* argv[]) {
 
   catalogFile = fopen("src/wp43s/softmenuCatalogs.h", "wb");
   if(catalogFile == NULL) {
-    fprintf(stderr, "Cannot create file src/wp43s/softmenuCatalogs.c\n");
+    fprintf(stderr, "Cannot create file src/wp43s/softmenuCatalogs.h\n");
     exit(1);
   }
 
@@ -129,13 +149,18 @@ int main(int argc, char* argv[]) {
   fprintf(catalogFile, "/*<---- 6 f shifted functions ---->*/\n");
   fprintf(catalogFile, "/*<---- 6 g shifted functions ---->*/\n");
 
-  sortOneCatalog("FCNS",       CAT_FNCT);
-  sortOneCatalog("CONST",      CAT_CNST);
-  sortOneCatalog("MENUS",      CAT_MENU);
-  sortOneCatalog("SYSFL",      CAT_SYFL);
-  sortOneCatalog("alpha_INTL", CAT_AINT);
-  sortOneCatalog("alpha_intl", CAT_aint);
-  sortOneCatalog("REGIST",     CAT_REGS);
+  fprintf(catalogFile, "#if DMCP_BUILD\n");
+  sortOneCatalog("FCNS",       CAT_FNCT, GENERATION_FOR_DMCP);
+  fprintf(catalogFile, "#else // !DMCP_BUILD\n");
+  sortOneCatalog("FCNS",       CAT_FNCT, GENERATION_FOR_PC);
+  fprintf(catalogFile, "#endif // DMCP_BUILD\n");
+
+  sortOneCatalog("CONST",      CAT_CNST, GENERATION_FOR_BOTH);
+  sortOneCatalog("MENUS",      CAT_MENU, GENERATION_FOR_BOTH);
+  sortOneCatalog("SYSFL",      CAT_SYFL, GENERATION_FOR_BOTH);
+  sortOneCatalog("alpha_INTL", CAT_AINT, GENERATION_FOR_BOTH);
+  sortOneCatalog("alpha_intl", CAT_aint, GENERATION_FOR_BOTH);
+  sortOneCatalog("REGIST",     CAT_REGS, GENERATION_FOR_BOTH);
 
   fclose(catalogFile);
 

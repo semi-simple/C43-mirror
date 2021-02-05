@@ -197,48 +197,56 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 //AM >> DMS
 // 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
+  #ifndef TESTSUITE_BUILD
+  switch(calcMode) {                     //JM
+    case CM_NIM:
+      addItemToNimBuffer(ITM_ms);
+      break;
 
-    switch(getRegisterDataType(REGISTER_X)) {
-      case dtShortInteger :
-        convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-        break;
-      case dtLongInteger :
-        convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
-        break;
-      default : break;
-    }
+    case CM_NORMAL:
+      copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
-      if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
-        fnCvtFromCurrentAngularMode(AM_DMS);
-/*        #ifndef TESTSUITE_BUILD
-          runFunction(ITM_toDMS);
-        #endif */
-      } else { // is in AM_DMS
-
-/*        #ifndef TESTSUITE_BUILD
-          switch (getRegisterAngularMode(REGISTER_X)) {
-            case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
-            case AM_DMS   : {runFunction(ITM_DMSto);  } break;
-            case AM_GRAD  : {runFunction(ITM_GRADto); } break;
-            case AM_RADIAN: {runFunction(ITM_RADto);  } break;
-            case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-            default: break;
-          }
-        #endif */
-        fnKeyDotD(0);
-        fnToHms(0);
+      switch(getRegisterDataType(REGISTER_X)) {
+        case dtShortInteger :
+          convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+          break;
+        case dtLongInteger :
+          convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+          break;
+        default : break;
       }
-    } else
-    
-    if(getRegisterDataType(REGISTER_X) == dtTime) {
-      fnToHr(0);
+
+      if(getRegisterDataType(REGISTER_X) == dtReal34) {
+        if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
+        if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
+          fnCvtFromCurrentAngularMode(AM_DMS);
+        } else { // is in AM_DMS
+          fnKeyDotD(0);
+          fnToHms(0);
+        }
+      } else
+      
+      if(getRegisterDataType(REGISTER_X) == dtTime) {
+        fnToHr(0);
+      }
+
+      copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
+      break;
+
+
+
+    case CM_REGISTER_BROWSER:
+    case CM_FLAG_BROWSER:
+    case CM_FONT_BROWSER:
+    case CM_LISTXY:                     //JM
+    case CM_GRAPH:                      //JM
+      break;
+
+      default:
+        sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
+        displayBugScreen(errorMessage);
     }
-
-
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
+  #endif // !TESTSUITE_BUILD
   }
 
 

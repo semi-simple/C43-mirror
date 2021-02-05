@@ -593,6 +593,8 @@ bool_t lastshiftG = false;
           char tmp[200]; sprintf(tmp,"^^^^btnReleased %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
         #endif //PC_BUILD
 
+        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here
+
 
         hideFunctionName();
         if(item < 0) {
@@ -620,6 +622,9 @@ bool_t lastshiftG = false;
       JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
       if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
+
+        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here
+
         hideFunctionName();
         if(item < 0) {
           showSoftmenu(item);

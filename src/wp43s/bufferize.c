@@ -1180,7 +1180,7 @@ void kill_ASB_icon(void) {
     }
 
     else {
-      closeNim();
+      if(item != ITM_SQUAREROOTX) closeNim();    //moved to btnkeyrelease, as .ms is on longpress underneath sqrt
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);

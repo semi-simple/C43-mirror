@@ -572,7 +572,7 @@ int16_t fnItemShowValue(int16_t item) {
 
   case ITM_HASH_JM:   //  
     if(lastIntegerBase!=0) result = lastIntegerBase; 
-    else result = -99;
+    else result = NOVAL;
     break;
 
   default:

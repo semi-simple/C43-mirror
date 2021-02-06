@@ -400,6 +400,7 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
+  oldAngularMode = currentAngularMode;                         //JM
 
   fnRefreshRadioState(RB_AM, am);                              //dr
 
@@ -12038,6 +12039,7 @@ void fnReset(uint16_t confirmation) {
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
     currentAngularMode = AM_DEGREE;
+    oldAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
     setSystemFlag(FLAG_MULTx);
@@ -12212,7 +12214,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_102_KB_POC"
+#define VERSION1 "_103RC_KB_POC"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"

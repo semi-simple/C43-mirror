@@ -198,6 +198,7 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 // 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
+  uint8_t oldAngularMode1 = oldAngularMode;
   switch(calcMode) {                     //JM
     case CM_NIM:
       addItemToNimBuffer(ITM_ms);
@@ -217,17 +218,23 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       }
 
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
-        if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
         if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
-          fnCvtFromCurrentAngularMode(AM_DMS);
-        } else { // is in AM_DMS
-          fnKeyDotD(0);
-          fnToHms(0);
+          oldAngularMode1 = currentAngularMode;
+          fnAngularModeJM(AM_DMS);
+          oldAngularMode = oldAngularMode1;
         }
-      } else
-      
+        else {                  //REGISTER_X) == AM_DMS
+          fnAngularModeJM(AM_HMS);
+          fnAngularMode(oldAngularMode);
+          fnRefreshRadioState(0, 0);
+          refreshStatusBar();
+        }
+      }
+      else
       if(getRegisterDataType(REGISTER_X) == dtTime) {
-        fnToHr(0);
+        oldAngularMode1 = currentAngularMode;
+        fnAngularModeJM(AM_DMS);
+        oldAngularMode = oldAngularMode1;
       }
 
       copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
@@ -541,20 +548,27 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 }                                                                                                       //JM UNIT
 
 
-
+//change the current state from the old state?
 
 void fnAngularModeJM(uint16_t AMODE) {
   if (AMODE == AM_HMS) {
-    fnCvtFromCurrentAngularMode(AM_DEGREE);
-    fnToHms(0);    
-    
-    fnRefreshRadioState(0, 0);    
+    if(getRegisterDataType(REGISTER_X) == dtTime) return;
+    fnCvtFromCurrentAngularMode(AM_DEGREE);   //Setting to HMS does not change AM
+    fnToHms(0);
   } else {
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
+      fnToHr(0);
+      setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      fnCvtFromCurrentAngularMode(AMODE);
+      fnAngularMode(AMODE);
+    }
     fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
-    fnRefreshRadioState(0, 0);
   }
-
+  #ifndef TESTSUITE_BUILD
+    fnRefreshRadioState(0, 0);
+    refreshStatusBar();
+  #endif //!TESTSUITE_BUILD
 }
 
 
@@ -620,14 +634,8 @@ void fnChangeBaseMNU(uint16_t BASE) {
       return;
     }
 
-    if(lastIntegerBase == 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
+    if(calcMode == CM_NORMAL && BASE == NOPARAM) {
       //printf(">>> §§§fnChangeBaseMNd CM_NORMAL: convert non-shortint-mode to TAM\n");
-      runFunction(ITM_toINT);
-      return;
-    }
-
-    if(lastIntegerBase != 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
-      //printf(">>> §§§fnChangeBaseMNc CM_NORMAL: convert non-shortint-mode to %d & return\n",BASE);
       runFunction(ITM_toINT);
       return;
     }

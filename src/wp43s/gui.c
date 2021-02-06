@@ -122,7 +122,7 @@ GtkWidget *lblOn; //JM
 
  void btn_Clicked_Gen(bool_t shF, bool_t shG, char *st) {
     GtkWidget *w;
-    printf("####B\n");
+    w = NULL;
     shiftF = shF;
     shiftG = shG;
     uint8_t alphaCase_MEM = alphaCase;

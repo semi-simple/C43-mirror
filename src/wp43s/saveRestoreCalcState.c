@@ -243,7 +243,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
     save(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
-    save(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
+    save(&ix_count,                           sizeof(ix_count),                           BACKUP);   //JM ^^
+    save(&oldAngularMode,                     sizeof(oldAngularMode),                     BACKUP);   //JM
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -453,8 +454,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&numLock,                            sizeof(numLock),                            BACKUP);   //JM ^^
       restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
-      restore(&telltale,                            sizeof(telltale),                          BACKUP);   //JM ^^
-      restore(&ix_count,                            sizeof(ix_count),                          BACKUP);   //JM ^^
+      restore(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
+      restore(&ix_count,                           sizeof(ix_count),                           BACKUP);   //JM ^^
+      restore(&oldAngularMode,                     sizeof(oldAngularMode),                     BACKUP);   //JM
       fclose(BACKUP);
       printf("End of calc's restoration\n");
 
@@ -744,6 +746,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   sprintf(tmpString, "exponentLimit\n%" PRId16 "\n", exponentLimit);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);   //JM
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "oldAngularMode\n%" PRIu8 "\n", oldAngularMode);               //JM
   save(tmpString, strlen(tmpString), BACKUP);
 
 
@@ -1206,6 +1210,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         }
         else if(strcmp(aimBuffer, "currentAngularMode") == 0) {
           currentAngularMode = stringToUint8(tmpString);
+          oldAngularMode = currentAngularMode;                       //JM, oldAngularmode will overwrite when it loads later. Initialisez for if it does not load
         }
         else if(strcmp(aimBuffer, "groupingGap") == 0) {
           groupingGap = stringToUint8(tmpString);
@@ -1228,6 +1233,9 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         }
         else if(strcmp(aimBuffer, "displayStackSHOIDISP") == 0) {         //JM SHOIDISP
           displayStackSHOIDISP = stringToUint8(tmpString);
+        }
+        else if(strcmp(aimBuffer, "oldAngularMode") == 0) {               //JM
+          oldAngularMode = stringToUint8(tmpString);
         }
       }
     }

@@ -56,7 +56,6 @@ void subShoICplx(void);
 //      RegYRegX
 void subRealLonI(void);
 void subRealTime(void);
-void subRealDate(void);
 void subRealShoI(void);
 void subRealReal(void);
 void subRealCplx(void);

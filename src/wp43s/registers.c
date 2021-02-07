@@ -2096,14 +2096,17 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
 void fnToReal(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger :
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     case dtShortInteger :
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     case dtReal34:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
         if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
           convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
@@ -2113,6 +2116,7 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       break;
 
     case dtTime:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertTimeRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 

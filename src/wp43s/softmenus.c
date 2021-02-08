@@ -1,4 +1,4 @@
-/* This file is part of 43S.
+      /* This file is part of 43S.
  *
  * 43S is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
 #if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #else // !DMCP_BUILD
-                                     ITM_NULL,                      ITM_TDISP,                  ITM_NULL,                 ITM_DMY,               ITM_YMD,                     ITM_MDY,
+                                     ITM_1631,                      ITM_TDISP,                  ITM_1631,                 ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #endif // DMCP_BUILD
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JUL_GREG                  };
 
@@ -133,26 +133,27 @@ const int16_t menu_M_SIM_Q[]     = { VAR_MATA,                      VAR_MATB,   
 const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            ITM_DOWN_ARROW,              ITM_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,
-                                     ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    ITM_HMS2,                     //JM sequence change
+const int16_t menu_MODE[]        = { ITM_CFG,                       ITM_DEG,                    ITM_RAD,                  ITM_GRAD,              ITM_MULPI,                   ITM_DMS,      
+                                     -MNU_TRI,                      ITM_DEG2,                   ITM_RAD2,                 ITM_GRAD2,             ITM_MULPI2,                  ITM_DMS2,                          //JM sequence change
+                                     ITM_NULL,                      ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM modifoed
+
+
+                                     ITM_CFG,                       ITM_SSIZE4,                 ITM_SSIZE8,               ITM_CB_CPXRES,         ITM_CB_SPCRES,               ITM_NULL,                      //JM sequence change
+                                     -MNU_TRI,                      ITM_ERPN,                   ITM_RNG,                  ITM_SETSIG,            ITM_RM,                      ITM_DENMAX,                           //JM sequence change
 #ifndef DMCP_BUILD
-                                     -MNU_TRI,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                         //JM modifoed
+                                     ITM_1631,                      ITM_INP_DEF_43S,            ITM_INP_DEF_DP,           ITM_INP_DEF_CPXDP,     ITM_INP_DEF_LI,              ITM_INP_DEF_SI,                       //JM
 #endif
 #ifdef DMCP_BUILD
-                                     ITM_SYSTEM,                    -MNU_TRI,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                     
+                                     ITM_SYSTEM,                    ITM_INP_DEF_43S,            ITM_INP_DEF_DP,           ITM_INP_DEF_CPXDP,     ITM_INP_DEF_LI,              ITM_INP_DEF_SI,                       //JM
 #endif
-
-                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_NULL,                    ITM_CFG,                       //JM sequence change
-                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENMAX,                  ITM_NULL,                      //JM sequence change
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                      //JM
 
 
 #if defined (INLINE_TEST)                                                       //vv dr
                                      ITM_BASE_AHOME,                ITM_BASE_HOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
 #else                                                                           //^^
-                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
+                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             ITM_1631,                 ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
 #endif                                                                          //dr
-                                     -MNU_ASN,                      ITM_NO_BASE_SCREEN,                ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
+                                     -MNU_ASN,                      ITM_NO_BASE_SCREEN,        ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
 
 
 

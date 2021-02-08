@@ -465,6 +465,7 @@
 #define TI_BACKUP_RESTORED                        30
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
+#define TI_DAY_OF_WEEK                            33
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

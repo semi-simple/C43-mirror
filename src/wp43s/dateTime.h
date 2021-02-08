@@ -19,11 +19,34 @@
  ***********************************************/
 
 void fnSetDateFormat         (uint16_t dateFormat);
+void internalDateToJulianDay (const real34_t *source, real34_t *destination);
+void julianDayToInternalDate (const real34_t *source, real34_t *destination);
+bool_t checkDateArgument     (calcRegister_t regist, real34_t *jd);
+bool_t isLeapYear            (const real34_t *year);
+bool_t isValidDay            (const real34_t *year, const real34_t *month, const real34_t *day);
+void composeJulianDay        (const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd);
+void composeJulianDay_g      (const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd);
+void composeJulianDay_j      (const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd);
+void decomposeJulianDay      (const real34_t *jd, real34_t *year, real34_t *month, real34_t *day);
+uint32_t getDayOfWeek        (calcRegister_t regist);
 void hmmssToSeconds          (const real34_t *src, real34_t *dest);
 void hmmssInRegisterToSeconds(calcRegister_t regist);
+void fnJulianToDate          (uint16_t unusedButMandatoryParameter);
+void fnDateToJulian          (uint16_t unusedButMandatoryParameter);
+void fnIsLeap                (uint16_t unusedButMandatoryParameter);
+void fnSetFirstGregorianDay  (uint16_t unusedButMandatoryParameter);
+void fnXToDate               (uint16_t unusedButMandatoryParameter);
+void fnYear                  (uint16_t unusedButMandatoryParameter);
+void fnMonth                 (uint16_t unusedButMandatoryParameter);
+void fnDay                   (uint16_t unusedButMandatoryParameter);
+void fnWday                  (uint16_t unusedButMandatoryParameter);
+void fnDateTo                (uint16_t unusedButMandatoryParameter);
+void fnToDate                (uint16_t unusedButMandatoryParameter);
 void fnToHr                  (uint16_t unusedButMandatoryParameter);
 void fnToHms                 (uint16_t unusedButMandatoryParameter);
+void fnDate                  (uint16_t unusedButMandatoryParameter);
 void fnTime                  (uint16_t unusedButMandatoryParameter);
+void fnSetDate               (uint16_t unusedButMandatoryParameter);
 void fnSetTime               (uint16_t unusedButMandatoryParameter);
 void getDateString           (char *dateString);
 void getTimeString           (char *timeString);

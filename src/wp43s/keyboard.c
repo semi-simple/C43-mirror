@@ -1184,9 +1184,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_NIM:
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          moreInfoOnError("In function fnKeyDotD:", "the data type date is to be coded!", NULL, NULL);
-        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        addItemToNimBuffer(ITM_dotD);
         break;
 
       case CM_REGISTER_BROWSER:

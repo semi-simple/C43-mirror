@@ -48,7 +48,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
 #if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #else // !DMCP_BUILD
-                                     ITM_NULL,                      ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
+                                     ITM_NULL,                      ITM_TDISP,                  ITM_NULL,                 ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #endif // DMCP_BUILD
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JonG                      };
 

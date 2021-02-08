@@ -59,7 +59,6 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
 }
 
 
-/* never used
 void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destination) {
   longInteger_t lgInt;
 
@@ -68,7 +67,6 @@ void convertLongIntegerRegisterToReal34(calcRegister_t source, real34_t *destina
   longIntegerFree(lgInt);
   stringToReal34(tmpString, destination);
 }
-*/
 
 
 void convertLongIntegerRegisterToReal(calcRegister_t source, real_t *destination, realContext_t *ctxt) {
@@ -402,4 +400,76 @@ void convertReal34RegisterToTimeRegister(calcRegister_t source, calcRegister_t d
 void convertLongIntegerRegisterToTimeRegister(calcRegister_t source, calcRegister_t destination) {
   convertLongIntegerRegisterToReal34Register(source, destination);
   convertReal34RegisterToTimeRegister(destination, destination);
+}
+
+
+
+void convertDateRegisterToReal34Register(calcRegister_t source, calcRegister_t destination) {
+  real34_t y, m, d, j, val;
+  bool_t isNegative;
+
+  internalDateToJulianDay(REGISTER_REAL34_DATA(source), &j);
+  decomposeJulianDay(&j, &y, &m, &d);
+  isNegative = real34IsNegative(&y);
+  real34SetPositiveSign(&y);
+
+  if(getSystemFlag(FLAG_YMD)) {
+    int32ToReal34(100, &val), real34Divide(&m, &val, &m);
+    int32ToReal34(10000, &val), real34Divide(&d, &val, &d);
+  }
+  else if(getSystemFlag(FLAG_MDY)) {
+    int32ToReal34(100, &val), real34Divide(&d, &val, &d);
+    int32ToReal34(1000000, &val), real34Divide(&y, &val, &y);
+  }
+  else if(getSystemFlag(FLAG_DMY)) {
+    int32ToReal34(100, &val), real34Divide(&m, &val, &m);
+    int32ToReal34(1000000, &val), real34Divide(&y, &val, &y);
+  }
+
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  real34Add(&y, &m, REGISTER_REAL34_DATA(destination));
+  real34Add(REGISTER_REAL34_DATA(destination), &d, REGISTER_REAL34_DATA(destination));
+  if(isNegative) real34SetNegativeSign(REGISTER_REAL34_DATA(destination));
+}
+
+
+
+void convertReal34RegisterToDateRegister(calcRegister_t source, calcRegister_t destination) {
+  real34_t part1, part2, part3, val;
+  bool_t isNegative;
+
+  isNegative = real34IsNegative(REGISTER_REAL34_DATA(source));
+  real34CopyAbs(REGISTER_REAL34_DATA(source), &part2);
+  real34ToIntegralValue(&part2, &part1, DEC_ROUND_DOWN);
+  real34Subtract(&part2, &part1, &part2);
+  int32ToReal34(100, &val), real34Multiply(&part2, &val, &part2);
+
+  real34Copy(&part2, &part3);
+  real34ToIntegralValue(&part2, &part2, DEC_ROUND_DOWN);
+  real34Subtract(&part3, &part2, &part3);
+  int32ToReal34(getSystemFlag(FLAG_YMD) ? 100 : 10000, &val), real34Multiply(&part3, &val, &part3);
+  real34ToIntegralValue(&part3, &part3, DEC_ROUND_DOWN);
+
+  if(isNegative) {
+    if(getSystemFlag(FLAG_YMD)) real34SetNegativeSign(&part1);
+    else real34SetNegativeSign(&part3);
+  }
+
+  if((getSystemFlag(FLAG_YMD) && !isValidDay(&part1, &part2, &part3)) ||
+    ( getSystemFlag(FLAG_MDY) && !isValidDay(&part3, &part1, &part2)) ||
+    ( getSystemFlag(FLAG_DMY) && !isValidDay(&part3, &part2, &part1))) {
+      displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function convertReal34RegisterToDateRegister:", "Invalid date input like 30 Feb.", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+
+  reallocateRegister(destination, dtDate, REAL34_SIZE, AM_NONE);
+  if     (getSystemFlag(FLAG_YMD)) composeJulianDay(&part1, &part2, &part3, REGISTER_REAL34_DATA(destination));
+  else if(getSystemFlag(FLAG_MDY)) composeJulianDay(&part3, &part1, &part2, REGISTER_REAL34_DATA(destination));
+  else if(getSystemFlag(FLAG_DMY)) composeJulianDay(&part3, &part2, &part1, REGISTER_REAL34_DATA(destination));
+
+  int32ToReal34(86400, &val), real34Multiply(REGISTER_REAL34_DATA(destination), &val, REGISTER_REAL34_DATA(destination));
+  int32ToReal34(43200, &val), real34Add(REGISTER_REAL34_DATA(destination), &val, REGISTER_REAL34_DATA(destination));
 }

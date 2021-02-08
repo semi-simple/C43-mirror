@@ -20,6 +20,30 @@
 
 #include "wp43s.h"
 
+
+/* Names of day of week */
+static const char *nameOfWday_en[8] = {
+  "invalid day of week", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+};
+/*
+static const char *nameOfWday_de[8] = {
+  "ung" STD_u_DIARESIS "ltiger Wochentag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+};
+static const char *nameOfWday_fr[8] = {
+  "jour de la semaine invalide", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"
+};
+static const char *nameOfWday_es[8] = {
+  "d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes", "martes", "mi" STD_e_ACUTE "rcoles", "jueves", "viernes", "s" STD_a_ACUTE "bado", "domingo"
+};
+static const char *nameOfWday_it[8] = {
+  "giorno della settimana non valido", "luned" STD_i_GRAVE, "marted" STD_i_GRAVE, "mercoled" STD_i_GRAVE, "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato", "domenica"
+};
+static const char *nameOfWday_pt[8] = {
+  "dia inv" STD_a_ACUTE "lido da semana", "segunda-feira", "ter" STD_c_CEDILLA "a-feira", "quarta-feira", "quinta-feira", "sexta-feira", "s" STD_a_ACUTE "bado", "domingo"
+};
+*/
+
+
 #ifdef PC_BUILD
   /********************************************//**
    * \brief Draws the calc's screen on the PC window widget
@@ -97,7 +121,8 @@
         break;
 
       case dtDate:
-        strcpy(tmpString, "Copying a date to the clipboard is to be coded!");
+        dateToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
+        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
         break;
 
       case dtString:
@@ -853,6 +878,11 @@
             formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtDate) {
+            strcat(string1, "date = ");
+            formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -1376,6 +1406,20 @@
         else if(getRegisterDataType(regist) == dtLongInteger) {
           longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
 
+          if(temporaryInformation == TI_DAY_OF_WEEK) {
+            if(regist == REGISTER_X) {
+              if(strcmp(tmpString, "1") == 0) strcpy(prefix, nameOfWday_en[1]);
+              else if(strcmp(tmpString, "2") == 0) strcpy(prefix, nameOfWday_en[2]);
+              else if(strcmp(tmpString, "3") == 0) strcpy(prefix, nameOfWday_en[3]);
+              else if(strcmp(tmpString, "4") == 0) strcpy(prefix, nameOfWday_en[4]);
+              else if(strcmp(tmpString, "5") == 0) strcpy(prefix, nameOfWday_en[5]);
+              else if(strcmp(tmpString, "6") == 0) strcpy(prefix, nameOfWday_en[6]);
+              else if(strcmp(tmpString, "7") == 0) strcpy(prefix, nameOfWday_en[7]);
+              else strcpy(prefix, nameOfWday_en[0]);
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+            }
+          }
+
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
 
@@ -1398,6 +1442,19 @@
 
         else if(getRegisterDataType(regist) == dtTime) {
           timeToDisplayString(regist, tmpString, false);
+          w = stringWidth(tmpString, &numericFont, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+        }
+
+        else if(getRegisterDataType(regist) == dtDate) {
+          if(temporaryInformation == TI_DAY_OF_WEEK) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, nameOfWday_en[getDayOfWeek(regist)]);
+              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+            }
+          }
+
+          dateToDisplayString(regist, tmpString);
           w = stringWidth(tmpString, &numericFont, false, true);
           showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }

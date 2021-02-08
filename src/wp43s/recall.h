@@ -15,12 +15,20 @@
  */
 
 /********************************************//**
- * \file even.c
+ * \file recall.h
  ***********************************************/
 
-#include "wp43s.h"
 
+void         fnRecall       (uint16_t r);
+void         fnLastX        (uint16_t unusedButMandatoryParameter);
+void         fnRecallAdd    (uint16_t r);
+void         fnRecallSub    (uint16_t r);
+void         fnRecallMult   (uint16_t r);
+void         fnRecallDiv    (uint16_t r);
+void         fnRecallMin    (uint16_t r);
+void         fnRecallMax    (uint16_t r);
+void         fnRecallConfig (uint16_t r);
+void         fnRecallStack  (uint16_t r);
+void         fnRecallElement(uint16_t unusedButMandatoryParameter);
+void         fnRecallIJ     (uint16_t unusedButMandatoryParameter);
 
-void fnIsEven(uint16_t unusedButMandatoryParameter) {
-  checkInteger(CHECK_INTEGER_EVEN);
-}

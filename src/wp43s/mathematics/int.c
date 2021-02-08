@@ -21,35 +21,34 @@
 #include "wp43s.h"
 
 
-void checkInteger(enum checkIntegerMode mode) {
+void fnCheckInteger(uint16_t mode) {
   longInteger_t x, x2;
 
-  if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-    convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
-    convertShortIntegerRegisterToLongInteger(REGISTER_X, x2);
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtShortInteger:
+      convertShortIntegerRegisterToLongInteger(REGISTER_X, x);
+      convertShortIntegerRegisterToLongInteger(REGISTER_X, x2);
+      break;
+
+    case dtLongInteger:
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, x2);
+      break;
+
+    case dtReal34:
+      // if ceil(x) != floor(x), then x is not an integer
+      convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), x, DEC_ROUND_CEILING);
+      convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), x2, DEC_ROUND_FLOOR);
+      break;
+
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "the input type %s cannot convert to integer", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
+        moreInfoOnError("In function fnIsOdd:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 
-  else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, x2);
-  }
-
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    // if ceil(x) != floor(x), then x is not an integer
-    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), x, DEC_ROUND_CEILING);
-    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), x2, DEC_ROUND_FLOOR);
-  }
-
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "the input type %s cannot convert to integer", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-      moreInfoOnError("In function fnIsOdd:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
-
-  hourGlassIconEnabled = true;
-  showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
   #else // !DMCP_BUILD
@@ -75,8 +74,4 @@ void checkInteger(enum checkIntegerMode mode) {
   }
   longIntegerFree(x);
   longIntegerFree(x2);
-}
-
-void fnIsInt(uint16_t unusedButMandatoryParameter) {
-  checkInteger(CHECK_INTEGER);
 }

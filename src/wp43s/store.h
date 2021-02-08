@@ -15,9 +15,19 @@
  */
 
 /********************************************//**
- * \file odd.h
+ * \file store.h
  ***********************************************/
 
-#include "wp43s.h"
 
-void fnIsOdd(uint16_t unusedButMandatoryParameter);
+void         fnStore       (uint16_t r);
+void         fnStoreAdd    (uint16_t r);
+void         fnStoreSub    (uint16_t r);
+void         fnStoreMult   (uint16_t r);
+void         fnStoreDiv    (uint16_t r);
+void         fnStoreMin    (uint16_t r);
+void         fnStoreMax    (uint16_t r);
+void         fnStoreConfig (uint16_t r);
+void         fnStoreStack  (uint16_t r);
+void         fnStoreElement(uint16_t unusedButMandatoryParameter);
+void         fnStoreIJ     (uint16_t unusedButMandatoryParameter);
+

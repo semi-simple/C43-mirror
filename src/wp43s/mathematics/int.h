@@ -20,11 +20,4 @@
 
 #include "wp43s.h"
 
-enum checkIntegerMode {
-  CHECK_INTEGER,
-  CHECK_INTEGER_EVEN,
-  CHECK_INTEGER_ODD,
-  };
-
-void checkInteger(enum checkIntegerMode mode);
-void fnIsInt     (uint16_t unusedButMandatoryParameter);
+void fnCheckInteger(uint16_t mode);

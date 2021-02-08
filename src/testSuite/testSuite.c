@@ -118,9 +118,6 @@ const funcTest_t funcTestNoParam[] = {
   {"fnInvert",               fnInvert              },
   {"fnInvGd",                fnInvGd               },
   {"fnIp",                   fnIp                  },
-  {"fnIsInt",                fnIsInt               },
-  {"fnIsEven",               fnIsEven              },
-  {"fnIsOdd",                fnIsOdd               },
   {"fnIsPrime",              fnIsPrime             },
   {"fnJulianToDate",         fnJulianToDate        },
   {"fnLcm",                  fnLcm                 },
@@ -607,10 +604,6 @@ void setParameter(char *p) {
       currentAngularMode = AM_DMS;
       //printf("  Set angular mode to DMS\n");
     }
-    else if(strcmp(r, "GRAD") == 0) {
-      currentAngularMode = AM_GRAD;
-      //printf("  Set angular mode to GRAD\n");
-    }
     else if(strcmp(r, "RAD") == 0) {
       currentAngularMode = AM_RADIAN;
       //printf("  Set angular mode to RAD\n");
@@ -618,6 +611,10 @@ void setParameter(char *p) {
     else if(strcmp(r, "MULTPI") == 0) {
       currentAngularMode = AM_MULTPI;
       //printf("  Set angular mode to MULTPI\n");
+    }
+    else if(strcmp(r, "GRAD") == 0) {
+      currentAngularMode = AM_GRAD;
+      //printf("  Set angular mode to GRAD\n");
     }
     else {
       printf("\nMissformed angular mode setting. The rvalue must be DEG, DMS, GRAD, RAD or MULTPI.\n");
@@ -825,9 +822,9 @@ void setParameter(char *p) {
 
            if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
       else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
       else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
       else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
       else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
@@ -1409,12 +1406,6 @@ void checkExpectedOutParameter(char *p) {
         abortTest();
       }
     }
-    else if(strcmp(r, "GRAD") == 0) {
-      if(currentAngularMode != AM_GRAD) {
-        printf("\nAngular mode should be GRAD but it is not!\n");
-        abortTest();
-      }
-    }
     else if(strcmp(r, "RAD") == 0) {
       if(currentAngularMode != AM_RADIAN) {
         printf("\nAngular mode should be RAD but it is not!\n");
@@ -1424,6 +1415,12 @@ void checkExpectedOutParameter(char *p) {
     else if(strcmp(r, "MULTPI") == 0) {
       if(currentAngularMode != AM_MULTPI) {
         printf("\nAngular mode should be MULTPI but it is not!\n");
+        abortTest();
+      }
+    }
+    else if(strcmp(r, "GRAD") == 0) {
+      if(currentAngularMode != AM_GRAD) {
+        printf("\nAngular mode should be GRAD but it is not!\n");
         abortTest();
       }
     }
@@ -1655,9 +1652,9 @@ void checkExpectedOutParameter(char *p) {
 
            if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
       else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
       else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
       else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
       else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
@@ -1744,9 +1741,9 @@ void checkExpectedOutParameter(char *p) {
         }
       }
 
-      strToShortInteger(r, TEMP_REGISTER);
-      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(TEMP_REGISTER));
-      if(*REGISTER_SHORT_INTEGER_DATA(TEMP_REGISTER) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
+      strToShortInteger(r, TEMP_REGISTER_1);
+      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(TEMP_REGISTER_1));
+      if(*REGISTER_SHORT_INTEGER_DATA(TEMP_REGISTER_1) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
         wrongRegisterValue(regist, letter, r);
       }
     }
@@ -1863,10 +1860,10 @@ void checkExpectedOutParameter(char *p) {
       }
 
       checkRegisterType(regist, letter, dtDate, AM_NONE);
-      reallocateRegister(TEMP_REGISTER, dtReal34, REAL34_SIZE, AM_NONE);
-      stringToReal34(r, REGISTER_REAL34_DATA(TEMP_REGISTER));
-      convertReal34RegisterToDateRegister(TEMP_REGISTER, TEMP_REGISTER);
-      real34Copy(REGISTER_REAL34_DATA(TEMP_REGISTER), &expectedReal34)
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+      stringToReal34(r, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+      convertReal34RegisterToDateRegister(TEMP_REGISTER_1, TEMP_REGISTER_1);
+      real34Copy(REGISTER_REAL34_DATA(TEMP_REGISTER_1), &expectedReal34)
       if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
         if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "date", regist, letter) == RE_INACCURATE) {

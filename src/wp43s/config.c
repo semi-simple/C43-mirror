@@ -35,7 +35,7 @@ void fnConfigChina(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_DMY); // date format
   clearSystemFlag(FLAG_MDY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1949;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2433191 /* 1 Oct 1949 */;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -53,7 +53,7 @@ void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1582;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2299161 /* 15 Oct 1582 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -71,7 +71,7 @@ void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1752;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -89,7 +89,7 @@ void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_DMY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1873;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2405160 /* 1 Jan 1873 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -107,7 +107,7 @@ void fnConfigUk(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY);   // date format
   clearSystemFlag(FLAG_YMD);   // date format
   setSystemFlag(FLAG_DMY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -125,7 +125,7 @@ void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_YMD);   // date format
   clearSystemFlag(FLAG_DMY);   // date format
   setSystemFlag(FLAG_MDY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -12096,7 +12096,7 @@ void fnReset(uint16_t confirmation) {
     tamMode = 0;
     catalog = CATALOG_NONE;
     memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
-    firstGregorianDay = 1752;
+    firstGregorianDay = 2361222 /* 14 Sept 1752 */;
     exponentLimit = 6145;
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;

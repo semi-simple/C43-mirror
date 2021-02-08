@@ -156,7 +156,11 @@ void addTimeLonI(void) {
  * \return void
  ***********************************************/
 void addLonIDate(void) {
-  fnToBeCoded();
+  real34_t val;
+  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  int32ToReal34(86400, &val);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), &val, &val);
+  real34Add(&val, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -168,7 +172,12 @@ void addLonIDate(void) {
  * \return void
  ***********************************************/
 void addDateLonI(void) {
-  fnToBeCoded();
+  real34_t val;
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  int32ToReal34(86400, &val);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -405,7 +414,21 @@ void addRealTime(void) {
  * \return void
  ***********************************************/
 void addDateReal(void) {
-  fnToBeCoded();
+  uint32_t xAngularMode;
+  real34_t val;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    int32ToReal34(86400, &val);
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), roundingMode);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+    reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -417,7 +440,20 @@ void addDateReal(void) {
  * \return void
  ***********************************************/
 void addRealDate(void) {
-  fnToBeCoded();
+  uint32_t yAngularMode;
+  real34_t val;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == AM_NONE) {
+    int32ToReal34(86400, &val);
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), roundingMode);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), &val, &val);
+    real34Add(&val, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 

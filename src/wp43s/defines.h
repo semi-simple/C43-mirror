@@ -140,7 +140,7 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2021.01"
+#define YEARMONTH                                 "2021.02"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
@@ -653,6 +653,7 @@
 #define TI_BACKUP_RESTORED                        30
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
+#define TI_DAY_OF_WEEK                            33
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

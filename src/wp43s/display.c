@@ -1737,7 +1737,23 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+  real34_t j, y, m, d;
+  char sign[] = {0, 0};
+
+  internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
+  decomposeJulianDay(&j, &y, &m, &d);
+  if(real34IsNegative(&y)) sign[0] = '-';
+  real34CopyAbs(&y, &y);
+
+  if(getSystemFlag(FLAG_DMY)) {
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, real34ToUInt32(&y));
+  }
+  else if(getSystemFlag(FLAG_MDY)) {
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, real34ToUInt32(&y));
+  }
+  else { // YMD
+    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, real34ToUInt32(&y), real34ToUInt32(&m), real34ToUInt32(&d));
+  }
 }
 
 
@@ -1983,6 +1999,10 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
     case dtTime:
       timeToDisplayString(REGISTER_X, tmpString, true);
+      break;
+
+    case dtDate:
+      dateToDisplayString(REGISTER_X, tmpString);
       break;
 
     case dtString:

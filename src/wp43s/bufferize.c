@@ -2316,7 +2316,7 @@
             longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
             longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-            if(shortIntegerMode != SIM_UNSIGN) {
+            if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
               longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
             }
 

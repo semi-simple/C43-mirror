@@ -577,6 +577,10 @@ void debugNIM(void) {
       formatReal34Debug(string + n, (real34_t *)getRegisterDataPointer(regist));
     }
 
+    else if(getRegisterDataType(regist) == dtDate) {
+      formatReal34Debug(string + n, (real34_t *)getRegisterDataPointer(regist));
+    }
+
     else if(getRegisterDataType(regist) == dtConfig) {
       sprintf(string + n, "Configuration data");
     }

@@ -303,6 +303,12 @@
 		<Unit filename="src/testSuite/cyx.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/dateTo.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/day.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -340,6 +346,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/dot.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dToJ.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/exp.txt">
@@ -390,6 +399,9 @@
 		<Unit filename="src/testSuite/invert.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/jToD.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/lcm.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -433,6 +445,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/modulo.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/month.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_complex.txt">
@@ -634,6 +649,15 @@
 		<Unit filename="src/testSuite/testSuiteList.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/toDate.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/toHms.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/toReal.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/trig.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -646,7 +670,16 @@
 		<Unit filename="src/testSuite/unitVector.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/wday.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/xthRoot.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/xToDate.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/year.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">

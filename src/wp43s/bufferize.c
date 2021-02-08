@@ -923,6 +923,20 @@
         }
         break;
 
+      case ITM_dotD :
+        if(nimNumberPart == NP_REAL_FLOAT_PART) {
+          done = true;
+
+          closeNim();
+          if(calcMode != CM_NIM && lastErrorCode == 0) {
+            convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
+
+            setSystemFlag(FLAG_ASLIFT);
+            return;
+          }
+        }
+        break;
+
       case ITM_toHMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
@@ -2316,7 +2330,7 @@
             longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
             longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-            if(shortIntegerMode != SIM_UNSIGN) {
+            if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
               longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
             }
 

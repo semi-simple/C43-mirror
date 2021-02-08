@@ -82,6 +82,9 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCvtFToC",              fnCvtFToC             },
   {"fnCvtRadToDeg",          fnCvtRadToDeg         },
   {"fnCyx",                  fnCyx                 },
+  {"fnDateTo",               fnDateTo              },
+  {"fnDateToJulian",         fnDateToJulian        },
+  {"fnDay",                  fnDay                 },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
   {"fnDeltaPercent",         fnDeltaPercent        },
@@ -116,6 +119,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnInvGd",                fnInvGd               },
   {"fnIp",                   fnIp                  },
   {"fnIsPrime",              fnIsPrime             },
+  {"fnJulianToDate",         fnJulianToDate        },
   {"fnLcm",                  fnLcm                 },
   {"fnLn",                   fnLn                  },
   {"fnLnP1",                 fnLnP1                },
@@ -141,6 +145,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
+  {"fnMonth",                fnMonth               },
   {"fnMultiply",             fnMultiply            },
   {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
@@ -176,11 +181,17 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },
   {"fnTanh",                 fnTanh                },
+  {"fnToDate",               fnToDate              },
+  {"fnToHms",                fnToHms               },
   {"fnToPolar",              fnToPolar             },
+  {"fnToReal",               fnToReal              },
   {"fnToRect",               fnToRect              },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
+  {"fnWday",                 fnWday                },
   {"fnXthRoot",              fnXthRoot             },
+  {"fnXToDate",              fnXToDate             },
+  {"fnYear",                 fnYear                },
   {"",                       NULL                  }
 };
 
@@ -528,6 +539,15 @@ void setParameter(char *p) {
       else if(!strcmp(l+3, "ASLIFT")) {
         if(r[0] == '0') {clearSystemFlag(FLAG_ASLIFT);}   else {setSystemFlag(FLAG_ASLIFT);}
       }
+      else if(!strcmp(l+3, "YMD")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_YMD);}   else {setSystemFlag(FLAG_YMD);}
+      }
+      else if(!strcmp(l+3, "MDY")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_MDY);}   else {setSystemFlag(FLAG_MDY);}
+      }
+      else if(!strcmp(l+3, "DMY")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_DMY);}   else {setSystemFlag(FLAG_DMY);}
+      }
       else {
         printf("\nMissformed numbered flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
@@ -659,6 +679,26 @@ void setParameter(char *p) {
     }
     else {
       printf("\nMissformed grouping gap setting. The rvalue must be a number from 0 to 15.\n");
+      abortTest();
+    }
+  }
+
+  //Setting J/G
+  else if(strcmp(l, "JG") == 0) {
+    if(                 (r[0] >= '0' && r[0] <= '9' &&
+        ((r[1] == 0) || (r[1] >= '0' && r[1] <= '9' &&
+        ((r[2] == 0) || (r[2] >= '0' && r[2] <= '9' &&
+        ((r[3] == 0) || (r[3] >= '0' && r[3] <= '9' &&
+        ((r[4] == 0) || (r[4] >= '0' && r[4] <= '9' &&
+        ((r[5] == 0) || (r[5] >= '0' && r[5] <= '9' &&
+        ((r[6] == 0) || (r[6] >= '0' && r[6] <= '9' &&
+        ((r[7] == 0) || (r[7] >= '0' && r[7] <= '9' &&
+        ((r[8] == 0) || (r[8] >= '0' && r[8] <= '9' &&
+        ((r[9] == 0) ))))))))))))))))))) {
+      firstGregorianDay = atoi(r);
+    }
+    else {
+      printf("\nMissformed J/G setting. The rvalue must be a number.\n");
       abortTest();
     }
   }
@@ -909,6 +949,21 @@ void setParameter(char *p) {
       if(isHms) {
         hmmssInRegisterToSeconds(regist);
       }
+    }
+    else if(strcmp(l, "DATE") == 0) {
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      stringToReal34(r, REGISTER_REAL34_DATA(regist));
+      convertReal34RegisterToDateRegister(regist, regist);
     }
     else {
       printf("\nMissformed register value. Unknown data type %s for register %s\n", l, p+1);
@@ -1248,6 +1303,36 @@ void checkExpectedOutParameter(char *p) {
           abortTest();
         }
       }
+      else if(!strcmp(l+3, "YMD")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_YMD)) {
+          printf("\nSystem flag YMD should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_YMD)) {
+          printf("\nSystem flag YMD should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "MDY")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_MDY)) {
+          printf("\nSystem flag MDY should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_MDY)) {
+          printf("\nSystem flag MDY should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "DMY")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_DMY)) {
+          printf("\nSystem flag DMY should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_DMY)) {
+          printf("\nSystem flag DMY should be clear but it is set!\n");
+          abortTest();
+        }
+      }
       else {
         printf("\nMissformed numbered flag checking. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
@@ -1387,6 +1472,31 @@ void checkExpectedOutParameter(char *p) {
     }
     else {
       printf("\nMissformed word size checking. The rvalue must be a number from 0 to 64 (0 is the same as 64).\n");
+      abortTest();
+    }
+  }
+
+  //Checking J/G
+  else if(strcmp(l, "JG") == 0) {
+    if(                 (r[0] >= '0' && r[0] <= '9' &&
+        ((r[1] == 0) || (r[1] >= '0' && r[1] <= '9' &&
+        ((r[2] == 0) || (r[2] >= '0' && r[2] <= '9' &&
+        ((r[3] == 0) || (r[3] >= '0' && r[3] <= '9' &&
+        ((r[4] == 0) || (r[4] >= '0' && r[4] <= '9' &&
+        ((r[5] == 0) || (r[5] >= '0' && r[5] <= '9' &&
+        ((r[6] == 0) || (r[6] >= '0' && r[6] <= '9' &&
+        ((r[7] == 0) || (r[7] >= '0' && r[7] <= '9' &&
+        ((r[8] == 0) || (r[8] >= '0' && r[8] <= '9' &&
+        ((r[9] == 0) ))))))))))))))))))) {
+      uint32_t jg = atoi(r);
+      if(firstGregorianDay != jg) {
+        printf("\nJ/G should be %u but it is %u!\n", jg, firstGregorianDay);
+        abortTest();
+      }
+      firstGregorianDay = atoi(r);
+    }
+    else {
+      printf("\nMissformed J/G setting. The rvalue must be a number.\n");
       abortTest();
     }
   }
@@ -1734,6 +1844,29 @@ void checkExpectedOutParameter(char *p) {
       if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
         expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
         if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "time", regist, letter) == RE_INACCURATE) {
+          wrongRegisterValue(regist, letter, r);
+        }
+      }
+    }
+    else if(strcmp(l, "DATE") == 0) {
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      checkRegisterType(regist, letter, dtDate, AM_NONE);
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+      stringToReal34(r, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+      convertReal34RegisterToDateRegister(TEMP_REGISTER_1, TEMP_REGISTER_1);
+      real34Copy(REGISTER_REAL34_DATA(TEMP_REGISTER_1), &expectedReal34)
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
+        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "date", regist, letter) == RE_INACCURATE) {
           wrongRegisterValue(regist, letter, r);
         }
       }

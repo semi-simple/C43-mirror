@@ -597,7 +597,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   // Other configuration stuff
   sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n14\n");
   save(tmpString, strlen(tmpString), BACKUP);
-  sprintf(tmpString, "firstGregorianDay\n1582 10 15\n");
+  sprintf(tmpString, "firstGregorianDay\n%" PRIu32 "\n", firstGregorianDay);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "denMax\n%" PRIu32 "\n", denMax);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1041,6 +1041,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString); // value
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         if(strcmp(aimBuffer, "firstGregorianDay") == 0) {
+          firstGregorianDay = stringToUint32(tmpString);
         }
         else if(strcmp(aimBuffer, "denMax") == 0) {
           denMax = stringToUint32(tmpString);

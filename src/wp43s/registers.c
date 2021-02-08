@@ -755,7 +755,7 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:     return getRegisterDataPointer(regist)->dataMaxLength + 1;
     case dtTime:            return REAL34_SIZE;
-    //case dtDate:
+    case dtDate:            return REAL34_SIZE;
     case dtString:          return getRegisterDataPointer(regist)->dataMaxLength + 1;
     case dtReal34Matrix:    return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * REAL34_SIZE + 1;
     case dtComplex34Matrix: return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * COMPLEX34_SIZE + 1;
@@ -960,7 +960,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
     switch(getRegisterDataType(sourceRegister)) {
       case dtLongInteger:     sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       case dtTime:            sizeInBlocks = REAL34_SIZE;                                           break;
-      //case dtDate:
+      case dtDate:            sizeInBlocks = REAL34_SIZE;                                           break;
       case dtString:          sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
       //case dtReal16Matrix:
       //case dtComplex16Matrix:
@@ -1154,6 +1154,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       sprintf(registerContent, "time %s", str);
     }
 
+    else if(getRegisterDataType(regist) == dtDate) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      sprintf(registerContent, "date %s", str);
+    }
+
     else {
       sprintf(registerContent, "In printRegisterToString: data type %s not supported", getRegisterDataTypeName(regist ,false, false));
     }
@@ -1219,6 +1224,11 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     else if(getRegisterDataType(regist) == dtTime) {
       real34ToString(REGISTER_REAL34_DATA(regist), str);
       printf("time %s", str);
+    }
+
+    else if(getRegisterDataType(regist) == dtDate) {
+      real34ToString(REGISTER_REAL34_DATA(regist), str);
+      printf("date %s", str);
     }
 
     else {
@@ -1389,6 +1399,10 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
     sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a time! It should be REAL34_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)REAL34_SIZE);
     displayBugScreen(errorMessage);
   }
+  else if(dataType == dtDate && dataSizeWithoutDataLenBlocks != REAL34_SIZE) {
+    sprintf(errorMessage, "In function reallocateRegister: %" PRIu16 " is an unexpected numByte value for a date! It should be REAL34_SIZE=%" PRIu16 "!", dataSizeWithoutDataLenBlocks, (uint16_t)REAL34_SIZE);
+    displayBugScreen(errorMessage);
+  }
   else if(dataType == dtString) {
     dataSizeWithDataLenBlocks = dataSizeWithoutDataLenBlocks + 1; // +1 for the max length of the string
   }
@@ -1417,14 +1431,17 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
 void fnToReal(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger :
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     case dtShortInteger :
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     case dtReal34:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
         if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
           convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
@@ -1434,7 +1451,13 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       break;
 
     case dtTime:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertTimeRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      break;
+
+    case dtDate:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+      convertDateRegisterToReal34Register(REGISTER_X, REGISTER_X);
       break;
 
     default :

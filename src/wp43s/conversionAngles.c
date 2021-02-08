@@ -27,9 +27,19 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
-      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
-      setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      if(fromAngularMode == currentAngularMode) {
+        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+        setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle (longint) default must be ADM = %s!", getAngularModeName(currentAngularMode));
+          moreInfoOnError("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        undo();
+        return;
+      }
       break;
 
     case dtReal34:
@@ -52,7 +62,7 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 or an angle34", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real34 or an angle34", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       undo();
       return;
@@ -72,7 +82,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtReal34:
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), toAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X) == AM_NONE ? currentAngularMode : getRegisterAngularMode(REGISTER_X), toAngularMode);
       setRegisterAngularMode(REGISTER_X, toAngularMode);
       break;
 

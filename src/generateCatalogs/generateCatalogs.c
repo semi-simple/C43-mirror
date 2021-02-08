@@ -19,14 +19,10 @@
  ***********************************************/
 
 #include "wp43s.h"
+#include <unistd.h>
 
 bool_t  funcOK;
 glyph_t glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
-
-#ifdef __APPLE__
-  // needed for chdir:
-  #include<unistd.h>
-#endif // __APPLE__
 
 #define MAX_NUMBER_OF_ITEMS 1000
 #define GENERATION_FOR_DMCP    1

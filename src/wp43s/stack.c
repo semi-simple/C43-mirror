@@ -54,16 +54,14 @@ void fnClearStack(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnDrop(uint16_t unusedButMandatoryParameter) {
-  uint16_t sizeInBytes;
-
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
-    reg[regist] = reg[regist + 1];
+    globalRegister[regist] = globalRegister[regist + 1];
   }
 
-  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
-  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), sizeInBytes);
+  uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
+  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
 }
 
 
@@ -80,14 +78,14 @@ void liftStack(void) {
   if(getSystemFlag(FLAG_ASLIFT)) {
     freeRegisterData(getStackTop());
     for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
-      reg[i] = reg[i-1];
+      globalRegister[i] = globalRegister[i-1];
     }
   }
   else {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataPointer(REGISTER_X, allocWp43s(TO_BYTES(REAL34_SIZE)));
+  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL34_SIZE));
   setRegisterDataType(REGISTER_X, dtReal34, AM_NONE);
 }
 
@@ -100,16 +98,14 @@ void liftStack(void) {
  * \return void
  ***********************************************/
 void fnDropY(uint16_t unusedButMandatoryParameter) {
-  uint16_t sizeInBytes;
-
   freeRegisterData(REGISTER_Y);
   for(uint16_t i=REGISTER_Y; i<getStackTop(); i++) {
-    reg[i] = reg[i+1];
+    globalRegister[i] = globalRegister[i+1];
   }
 
-  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
-  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), sizeInBytes);
+  uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
+  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
 }
 
 
@@ -121,12 +117,12 @@ void fnDropY(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnRollUp(uint16_t unusedButMandatoryParameter) {
-  registerDescriptor_t savedRegister = reg[getStackTop()];
+  registerHeader_t savedRegisterHeader = globalRegister[getStackTop()];
 
   for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
-    reg[i] = reg[i-1];
+    globalRegister[i] = globalRegister[i-1];
   }
-  reg[REGISTER_X] = savedRegister;
+  globalRegister[REGISTER_X] = savedRegisterHeader;
 }
 
 
@@ -138,12 +134,12 @@ void fnRollUp(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnRollDown(uint16_t unusedButMandatoryParameter) {
-  registerDescriptor_t savedRegister = reg[REGISTER_X];
+  registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
   for(uint16_t i=REGISTER_X; i<getStackTop(); i++) {
-    reg[i] = reg[i+1];
+    globalRegister[i] = globalRegister[i+1];
   }
-  reg[getStackTop()] = savedRegister;
+  globalRegister[getStackTop()] = savedRegisterHeader;
 }
 
 
@@ -167,10 +163,10 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
  * \return void
  ***********************************************/
 void fnSwapX(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -190,10 +186,10 @@ void fnSwapX(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapY(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -212,10 +208,10 @@ void fnSwapY(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapZ(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Z);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -234,10 +230,10 @@ void fnSwapZ(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapT(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_T);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
@@ -256,10 +252,10 @@ void fnSwapT(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapXY(uint16_t unusedButMandatoryParameter) {
-  registerDescriptor_t savedRegister = reg[REGISTER_X];
+  registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
-  reg[REGISTER_X] = reg[REGISTER_Y];
-  reg[REGISTER_Y] = savedRegister;
+  globalRegister[REGISTER_X] = globalRegister[REGISTER_Y];
+  globalRegister[REGISTER_Y] = savedRegisterHeader;
 }
 
 /********************************************//**
@@ -295,16 +291,16 @@ void fnShuffle(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnFillStack(uint16_t unusedButMandatoryParameter) {
-  uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
-  uint16_t dataSizeXinBytes = TO_BYTES(getRegisterFullSize(REGISTER_X));
-  uint16_t tag       = getRegisterTag(REGISTER_X);
+  uint16_t dataTypeX         = getRegisterDataType(REGISTER_X);
+  uint16_t dataSizeXinBlocks = getRegisterFullSize(REGISTER_X);
+  uint16_t tag               = getRegisterTag(REGISTER_X);
 
   for(uint16_t i=REGISTER_Y; i<=getStackTop(); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
-    void *newDataPointer = allocWp43s(dataSizeXinBytes);
+    void *newDataPointer = allocWp43s(dataSizeXinBlocks);
     setRegisterDataPointer(i, newDataPointer);
-    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeXinBytes);
+    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
   }
 }
 
@@ -340,13 +336,13 @@ void saveForUndo(void) {
 
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
-      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
       savedStatisticalSumsPointer = NULL;
     }
   }
   else { // There are statistical sums to save for undo
     if(savedStatisticalSumsPointer == NULL) {
-      savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(savedStatisticalSumsPointer, statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
   }
@@ -376,13 +372,13 @@ void undo(void) {
 
   if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
     if(statisticalSumsPointer != NULL) {
-      freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
       statisticalSumsPointer = NULL;
     }
   }
   else { // There are statistical sums to restore
     if(statisticalSumsPointer == NULL) {
-      statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(statisticalSumsPointer, savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
   }

@@ -88,10 +88,10 @@ bool_t checkDateArgument(calcRegister_t regist, real34_t *jd) {
 
     case dtReal34:
       if(getRegisterAngularMode(regist) == AM_NONE) {
-        reallocateRegister(TEMP_REGISTER, dtReal34, REAL34_SIZE, AM_NONE); // make sure TEMP_REGISTER is not of dtDate type here
-        convertReal34RegisterToDateRegister(regist, TEMP_REGISTER);
-        if(getRegisterDataType(TEMP_REGISTER) != dtDate) return false; // invalid date
-        internalDateToJulianDay(REGISTER_REAL34_DATA(TEMP_REGISTER), jd);
+        reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE); // make sure TEMP_REGISTER_1 is not of dtDate type here
+        convertReal34RegisterToDateRegister(regist, TEMP_REGISTER_1);
+        if(getRegisterDataType(TEMP_REGISTER_1) != dtDate) return false; // invalid date
+        internalDateToJulianDay(REGISTER_REAL34_DATA(TEMP_REGISTER_1), jd);
         return true;
       }
       /* fallthrough */

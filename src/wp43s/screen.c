@@ -21,27 +21,29 @@
 #include "wp43s.h"
 
 
-/* Names of day of week */
-static const char *nameOfWday_en[8] = {
-  "invalid day of week", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-};
-/*
-static const char *nameOfWday_de[8] = {
-  "ung" STD_u_DIARESIS "ltiger Wochentag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-};
-static const char *nameOfWday_fr[8] = {
-  "jour de la semaine invalide", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"
-};
-static const char *nameOfWday_es[8] = {
-  "d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes", "martes", "mi" STD_e_ACUTE "rcoles", "jueves", "viernes", "s" STD_a_ACUTE "bado", "domingo"
-};
-static const char *nameOfWday_it[8] = {
-  "giorno della settimana non valido", "luned" STD_i_GRAVE, "marted" STD_i_GRAVE, "mercoled" STD_i_GRAVE, "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato", "domenica"
-};
-static const char *nameOfWday_pt[8] = {
-  "dia inv" STD_a_ACUTE "lido da semana", "segunda-feira", "ter" STD_c_CEDILLA "a-feira", "quarta-feira", "quinta-feira", "sexta-feira", "s" STD_a_ACUTE "bado", "domingo"
-};
-*/
+#ifndef TESTSUITE_BUILD
+  /* Names of day of week */
+  static const char *nameOfWday_en[8] = {
+    "invalid day of week", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  };
+  /*
+  static const char *nameOfWday_de[8] = {
+    "ung" STD_u_DIARESIS "ltiger Wochentag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+  };
+  static const char *nameOfWday_fr[8] = {
+    "jour de la semaine invalide", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"
+  };
+  static const char *nameOfWday_es[8] = {
+    "d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes", "martes", "mi" STD_e_ACUTE "rcoles", "jueves", "viernes", "s" STD_a_ACUTE "bado", "domingo"
+  };
+  static const char *nameOfWday_it[8] = {
+    "giorno della settimana non valido", "luned" STD_i_GRAVE, "marted" STD_i_GRAVE, "mercoled" STD_i_GRAVE, "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato", "domenica"
+  };
+  static const char *nameOfWday_pt[8] = {
+    "dia inv" STD_a_ACUTE "lido da semana", "segunda-feira", "ter" STD_c_CEDILLA "a-feira", "quarta-feira", "quinta-feira", "sexta-feira", "s" STD_a_ACUTE "bado", "domingo"
+  };
+  */
+#endif // TESTSUITE_BUILD
 
 
 #ifdef PC_BUILD
@@ -93,9 +95,9 @@ static const char *nameOfWday_pt[8] = {
     switch(angularMode) {
       case AM_DEGREE: strcpy(string, STD_DEGREE); break;
       case AM_DMS:    strcpy(string, "d.ms");     break;
-      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_RADIAN: strcpy(string, "r");        break;
       case AM_MULTPI: strcpy(string, STD_pi);     break;
+      case AM_GRAD:   strcpy(string, "g");        break;
       case AM_NONE:   break;
       default:        strcpy(string, "?");
     }
@@ -126,7 +128,7 @@ static const char *nameOfWday_pt[8] = {
         break;
 
       case dtString:
-        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist))+1);
+        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
         stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
         break;
 
@@ -310,7 +312,7 @@ static const char *nameOfWday_pt[8] = {
       copyRegisterToClipboardString(regist, ptr);
     }
 
-    for(int32_t regist=allLocalRegisterPointer->numberOfLocalRegisters-1; regist>=0; --regist) {
+    for(int32_t regist=currentNumberOfLocalRegisters-1; regist>=0; --regist) {
       ptr += strlen(ptr);
       sprintf(ptr, LINEBREAK "R.%02d = ", regist);
       ptr += strlen(ptr);
@@ -527,7 +529,7 @@ static const char *nameOfWday_pt[8] = {
      ***********************************************/
     void setBlackPixel(uint32_t x, uint32_t y) {
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-        //printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
+        printf("In function setBlackPixel: x=%u, y=%u outside the screen!\n", x, y);
         return;
       }
 
@@ -546,7 +548,7 @@ static const char *nameOfWday_pt[8] = {
      ***********************************************/
     void setWhitePixel(uint32_t x, uint32_t y) {
       if(x>=SCREEN_WIDTH || y>=SCREEN_HEIGHT) {
-        //printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
+        printf("In function setWhitePixel: x=%u, y=%u outside the screen!\n", x, y);
         return;
       }
 
@@ -560,7 +562,7 @@ static const char *nameOfWday_pt[8] = {
       uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
 
       if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-        //printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+        printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
         return;
       }
 
@@ -823,7 +825,7 @@ static const char *nameOfWday_pt[8] = {
    ***********************************************/
   void refreshRegisterLine(calcRegister_t regist) {
     int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
-    char prefix[18], lastBase[4];
+    char prefix[20], lastBase[4];
 
     #if (DEBUG_PANEL == 1)
       refreshDebugPanel();
@@ -903,7 +905,7 @@ static const char *nameOfWday_pt[8] = {
         #if (SHOW_MEMORY_STATUS == 1)
           char string[1000];
 
-          sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", (uint64_t)wp43sMemInBytes, (uint64_t)gmpMemInBytes);
+          sprintf(string, "%" PRId32 " bytes free (%" PRId32 " region%s), 43S %" PRIu64 " bytes, GMP %" PRIu64 " bytes -> should always be 0", getFreeRamMemory(), numberOfFreeMemoryRegions, numberOfFreeMemoryRegions==1 ? "" : "s", TO_BYTES((uint64_t)wp43sMemInBlocks), (uint64_t)gmpMemInBytes);
           stringToUtf8(string, (uint8_t *)tmpStr);
           gtk_label_set_label(GTK_LABEL(lblMemoryStatus), tmpStr);
           gtk_widget_show(lblMemoryStatus);

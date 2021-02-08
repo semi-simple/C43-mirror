@@ -47,19 +47,15 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
         setRegisterAngularMode(REGISTER_X, currentAngularMode);
       }
-      else
-        if(fromAngularMode == currentAngularMode) {
-          setRegisterAngularMode(REGISTER_X, currentAngularMode);
-        }
-        else {
-          displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "input angle34 must be tagged %s!", getAngularModeName(fromAngularMode));
-            moreInfoOnError("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
-          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-          undo();
-          return;
-        }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle34 must be tagged %s!", getAngularModeName(fromAngularMode));
+          moreInfoOnError("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        undo();
+        return;
+      }
       break;
 
     default:

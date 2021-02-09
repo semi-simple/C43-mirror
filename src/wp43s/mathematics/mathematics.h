@@ -43,6 +43,8 @@
 #include "cubeRoot.h"
 #include "cxToRe.h"
 #include "cpyx.h"
+#include "dblDivision.h"
+#include "dblMultiplication.h"
 #include "decomp.h"
 #include "deltaPercent.h"
 #include "division.h"

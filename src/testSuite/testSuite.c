@@ -85,6 +85,9 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDateTo",               fnDateTo              },
   {"fnDateToJulian",         fnDateToJulian        },
   {"fnDay",                  fnDay                 },
+  {"fnDblDivide",            fnDblDivide           },
+  {"fnDblDivideRemainder",   fnDblDivideRemainder  },
+  {"fnDblMultiply",          fnDblMultiply         },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
   {"fnDeltaPercent",         fnDeltaPercent        },
@@ -322,7 +325,7 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
   longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-  if(shortIntegerMode != SIM_UNSIGN) {
+  if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
     longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
   }
 

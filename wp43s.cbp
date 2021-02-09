@@ -309,6 +309,15 @@
 		<Unit filename="src/testSuite/day.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/dblDivision.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblDivisionRemainder.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblMultiplication.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1362,6 +1371,17 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/decomp.c">

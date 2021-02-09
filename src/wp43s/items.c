@@ -284,6 +284,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnM1Pow                    (uint16_t unusedButMandatoryParameter) {}
   void backToSystem               (uint16_t unusedButMandatoryParameter) {}
   void fnMultiply                 (uint16_t unusedButMandatoryParameter) {}
+  void fnDblDivide                (uint16_t unusedButMandatoryParameter) {}
+  void fnDblDivideRemainder       (uint16_t unusedButMandatoryParameter) {}
+  void fnDblMultiply              (uint16_t unusedButMandatoryParameter) {}
   void fnChangeBase               (uint16_t unusedButMandatoryParameter) {}
   void fnToPolar                  (uint16_t unusedButMandatoryParameter) {}
   void fnToRect                   (uint16_t unusedButMandatoryParameter) {}
@@ -1976,9 +1979,9 @@ const item_t indexOfItems[] = {
 /* 1438 */  { fnDate,                      NOPARAM,                     "DATE",                                        "DATE",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1439 */  { fnDateTo,                    NOPARAM,                     "DATE" STD_RIGHT_ARROW,                        "DATE" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1440 */  { fnDay,                       NOPARAM,                     "DAY",                                         "DAY",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1441 */  { itemToBeCoded,               NOPARAM,                     "DBLR",                                        "DBLR",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1442 */  { itemToBeCoded,               NOPARAM,                     "DBL" STD_CROSS,                               "DBL" STD_CROSS,                               0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1443 */  { itemToBeCoded,               NOPARAM,                     "DBL/",                                        "DBL/",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1441 */  { fnDblDivideRemainder,        NOPARAM,                     "DBLR",                                        "DBLR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1442 */  { fnDblMultiply,               NOPARAM,                     "DBL" STD_CROSS,                               "DBL" STD_CROSS,                               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1443 */  { fnDblDivide,                 NOPARAM,                     "DBL/",                                        "DBL/",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1444 */  { fnDecomp,                    NOPARAM,                     "DECOMP",                                      "DECOMP",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1445 */  { fnAngularMode,               AM_DEGREE,                   "DEG",                                         "DEG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1446 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

@@ -99,7 +99,7 @@ void fnSdr(uint16_t numberOfShifts) {
 
       for (exponent = numberOfShifts; exponent > 0; exponent--) {
         longIntegerDivide(x, y, x);
-        if(longIntegerCompareUInt(x, 0) <= 0) {
+        if(longIntegerCompareUInt(x, 0) == 0) {
           //printf("Exit: x/10 resulted in zero\n");
           break;
         }

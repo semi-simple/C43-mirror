@@ -218,9 +218,11 @@ char* itoa(int value, char* result, int base);
 #define JC_IMPROPER            12    // CB FractionType
 #define JC_BSR                 13    // CB SpecialResult
 #define JM_INP_DFLT            15    // Input_Default
+#define DM_ANY                 16    // DENANY
+#define DM_FIX                 17    // DENFIX
 
 #define JC_FG_LINE             20    // screen setup
-#define JC_NO_BASE_SCREEN             21    // screen setup
+#define JC_NO_BASE_SCREEN      21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup
 
 #define JC_H_SUM               24    //JMHOME

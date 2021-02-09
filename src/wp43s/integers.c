@@ -25,7 +25,7 @@ void fnChangeBase(uint16_t base) {
     if(2 <= base && base <= 16) {
       setRegisterTag(REGISTER_X, base);
       lastIntegerBase = base;                //JMNIM
-      fnRefreshRadioState(0, 0);             //JM
+      fnRefreshState();             //JM
     }
     else {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);
@@ -41,7 +41,7 @@ void fnChangeBase(uint16_t base) {
       convertLongIntegerRegisterToShortIntegerRegister(REGISTER_X, REGISTER_X);
       setRegisterShortIntegerBase(REGISTER_X, base);
       lastIntegerBase = base;                //JMNIM
-      fnRefreshRadioState(0, 0);             //JM
+      fnRefreshState();             //JM
     }
     else {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_T);

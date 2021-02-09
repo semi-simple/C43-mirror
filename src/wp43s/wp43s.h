@@ -159,7 +159,7 @@
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 #define INLINE_TEST                     //vv dr
-//#undef INLINE_TEST                    //^^
+#undef INLINE_TEST                    //^^
 
   #include "assign.h"
   #include "bufferize.h"

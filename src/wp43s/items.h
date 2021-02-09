@@ -1941,8 +1941,8 @@
 #define ITM_1868                      1868
 #define ITM_CLA                       1869
 #define ITM_CLN                       1870
-#define ITM_1871                      1871
-#define ITM_1872                      1872
+#define ITM_DENANY                    1871
+#define ITM_DENFIX                    1872
 #define CHR_caseUP                    1873
 #define CHR_caseDN                    1874
 #define ITM_LISTXY                    1875

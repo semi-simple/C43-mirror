@@ -432,7 +432,7 @@ void kill_ASB_icon(void) {
           aimBuffer[3] = 0;
           nimNumberPart = NP_REAL_FLOAT_PART;
           lastIntegerBase = 0;
-          fnRefreshRadioState(0, 0);                                                //JMNIM
+          fnRefreshState();                                                //JMNIM
           break;
 
         case ITM_PERIOD :
@@ -646,7 +646,7 @@ void kill_ASB_icon(void) {
         }
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
           case NP_INT_10 :
@@ -693,7 +693,7 @@ void kill_ASB_icon(void) {
         }
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
           case NP_INT_10 :
@@ -730,7 +730,7 @@ void kill_ASB_icon(void) {
         done = true;
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
           strcat(aimBuffer, "#");
@@ -801,7 +801,7 @@ void kill_ASB_icon(void) {
         done = true;
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
          case NP_REAL_EXPONENT :
@@ -1204,7 +1204,7 @@ void kill_ASB_icon(void) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);
           lastIntegerBase = 0;                                                      //JMNIM
-          fnRefreshRadioState(0, 0);                                                //JMNIM
+          fnRefreshState();                                                //JMNIM
         }
 
         if(lastErrorCode == 0) {
@@ -2376,7 +2376,7 @@ void kill_ASB_icon(void) {
     }
     else {
       lastIntegerBase = 0;
-      fnRefreshRadioState(0, 0);                                                //JMNIM
+      fnRefreshState();                                                //JMNIM
     }
 
     int16_t lastChar = strlen(aimBuffer) - 1;
@@ -2542,7 +2542,7 @@ void kill_ASB_icon(void) {
 
             *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
             lastIntegerBase = base;
-            fnRefreshRadioState(0, 0);                                                //JMNIM
+            fnRefreshState();                                                //JMNIM
             aimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
 
             longIntegerFree(maxVal);
@@ -2684,7 +2684,7 @@ void kill_ASB_icon(void) {
               }
             }
             fnSetFlag(FLAG_CPXRES);
-            fnRefreshComboxState(CB_JC, JC_BCR, true);                            //dr
+            fnRefreshState();                                 //drJM
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

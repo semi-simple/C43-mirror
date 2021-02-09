@@ -85,7 +85,7 @@ void fnSetInlineTest(uint16_t drConfig) {
   switch(drConfig) {
   case JC_ITM_TST:
     testEnabled = !testEnabled;
-    fnRefreshComboxState(CB_JC, JC_ITM_TST, testEnabled);
+    fnRefreshState();                //jm
     break;
 
   default:

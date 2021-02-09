@@ -139,7 +139,7 @@ void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
   
-  fnRefreshRadioState(RB_IM, mode);                            //dr
+  fnRefreshState();                            //dr
 
 }
 
@@ -286,7 +286,7 @@ void fnSetWordSize(uint16_t WS) {
     }
   }
 
-  fnRefreshRadioState(RB_WS, WS);                              //dr
+  fnRefreshState();                              //dr
 
 }
 
@@ -402,7 +402,7 @@ void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
   oldAngularMode = currentAngularMode;                         //JM
 
-  fnRefreshRadioState(RB_AM, am);                              //dr
+  fnRefreshState();                              //drJM
 
 }
 

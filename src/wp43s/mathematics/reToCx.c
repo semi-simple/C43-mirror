@@ -38,9 +38,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     fnSetFlag(FLAG_CPXRES);
-
-//  fnRefreshRadioState(RB_BCR, true);                                          //dr
-    fnRefreshComboxState(CB_JC, JC_BCR, true);                                  //dr
+    fnRefreshState();                                 //drJM
 
     xIsAReal = true;
     if(getSystemFlag(FLAG_POLAR)) { // polar mode

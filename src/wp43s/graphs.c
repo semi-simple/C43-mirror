@@ -71,13 +71,13 @@ void graph_reset(void){
 void fnClGrf(uint16_t unusedButMandatoryParameter) {
   graph_reset();
   fnClSigma(0);
-  fnRefreshComboxState(CB_JC, JC_PLINE, PLOT_LINE);                //jm
+  fnRefreshState();                //jm
 }
 
 
 void fnPline(uint16_t unusedButMandatoryParameter) {
   PLOT_LINE = !PLOT_LINE;
-  fnRefreshComboxState(CB_JC, JC_PLINE, PLOT_LINE);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
@@ -85,7 +85,7 @@ void fnPline(uint16_t unusedButMandatoryParameter) {
 void fnPcros(uint16_t unusedButMandatoryParameter) {
   PLOT_CROSS = !PLOT_CROSS;
   if(PLOT_CROSS) PLOT_BOX = false;
-  fnRefreshComboxState(CB_JC, JC_PCROS, PLOT_CROSS);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
@@ -93,38 +93,38 @@ void fnPcros(uint16_t unusedButMandatoryParameter) {
 void fnPbox (uint16_t unusedButMandatoryParameter) {
   PLOT_BOX = !PLOT_BOX;
   if(PLOT_BOX) PLOT_CROSS = false;
-  fnRefreshComboxState(CB_JC, JC_PBOX, PLOT_BOX);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
 void fnPintg (uint16_t unusedButMandatoryParameter) {
   PLOT_INTG = !PLOT_INTG;
   if(!PLOT_INTG) PLOT_SHADE = false;
-  fnRefreshComboxState(CB_JC, JC_INTG, PLOT_INTG);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
 void fnPdiff (uint16_t unusedButMandatoryParameter) {
   PLOT_DIFF = !PLOT_DIFF;
-  fnRefreshComboxState(CB_JC, JC_DIFF, PLOT_DIFF);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
 void fnPrms (uint16_t unusedButMandatoryParameter) {
   PLOT_RMS = !PLOT_RMS;
-  fnRefreshComboxState(CB_JC, JC_RMS, PLOT_RMS);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
 void fnPzoom (uint16_t param) {
   if(param == 1) {
     if(PLOT_ZMX < 0+3) PLOT_ZMX++; else PLOT_ZMX = 0-1;
-    fnRefreshRadioState(JC_PZOOMX, RB_ZM);
+    fnRefreshState();                //jm
     fnPlot(0);
   } else
   if(param == 2) {
     if(PLOT_ZMY < 0+3) PLOT_ZMY++; else PLOT_ZMY = 0-1;
-    fnRefreshRadioState(JC_PZOOMY, RB_ZM);
+    fnRefreshState();
     fnPlot(0);
   }
 }
@@ -132,39 +132,39 @@ void fnPzoom (uint16_t param) {
 void fnPvect (uint16_t unusedButMandatoryParameter) {
   jm_VECT = !jm_VECT;
   if(jm_VECT) {jm_NVECT = false;}
-  fnRefreshComboxState(CB_JC, JC_VECT, jm_VECT);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnPNvect (uint16_t unusedButMandatoryParameter) {
   jm_NVECT = !jm_NVECT;
   if(jm_NVECT) {jm_VECT = false;}
-  fnRefreshComboxState(CB_JC, JC_NVECT, jm_NVECT);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnScale (uint16_t unusedButMandatoryParameter) {
   jm_SCALE = !jm_SCALE;
-  fnRefreshComboxState(CB_JC, JC_SCALE, jm_SCALE);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnPshade (uint16_t unusedButMandatoryParameter) {
   PLOT_SHADE = !PLOT_SHADE;
   if(PLOT_SHADE) PLOT_INTG = true;
-  fnRefreshComboxState(CB_JC, JC_SHADE, PLOT_SHADE);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnPx (uint16_t unusedButMandatoryParameter) {
   extentx = !extentx;
-  fnRefreshComboxState(CB_JC, JC_EXTENTX, extentx);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 
 void fnPy (uint16_t unusedButMandatoryParameter) {
   extenty = !extenty;
-  fnRefreshComboxState(CB_JC, JC_EXTENTY, extenty);                //jm
+  fnRefreshState();                //jm
   fnPlot(0);
 }
 

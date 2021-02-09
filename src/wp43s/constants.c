@@ -52,7 +52,7 @@ void fnConstant(const uint16_t constant) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
   lastIntegerBase = 0;                                                      //JMNIM
-  fnRefreshRadioState(0, 0);                                                //JMNIM
+  fnRefreshState();                              //drJM
 }
 
 
@@ -72,5 +72,5 @@ void fnPi(uint16_t unusedButMandatoryParameter) {
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
   lastIntegerBase = 0;                                                      //JMNIM
-  fnRefreshRadioState(0, 0);                                                //JMNIM
+  fnRefreshState();                              //drJM
 }

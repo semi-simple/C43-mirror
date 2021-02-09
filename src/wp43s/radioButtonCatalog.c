@@ -53,9 +53,6 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /*  136 */  { ITM_DMY,              DF_DMY,                 RB_DF },  //fnSetDateFormat
 /*  383 */  { ITM_MDY,              DF_MDY,                 RB_DF },  //fnSetDateFormat
 /*  700 */  { ITM_YMD,              DF_YMD,                 RB_DF },  //fnSetDateFormat
-/*  119 */ // { ITM_DENANY,           DM_ANY,                 RB_DM },  //  --fnDenMode
-/*  120 */ // { ITM_DENFAC,           DM_FAC,                 RB_DM },  //  --fnDenMode
-/*  121 */ // { ITM_DENFIX,           DM_FIX,                 RB_DM },  //  --fnDenMode
 /*   20 */  { ITM_ALL,              DF_ALL,                 RB_DI },  //fnDisplayFormatAll
 /*  145 */  { ITM_ENG,              DF_ENG,                 RB_DI },  //fnDisplayFormatEng
 /*  185 */  { ITM_FIX,              DF_FIX,                 RB_DI },  //fnDisplayFormatFix
@@ -93,6 +90,8 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /* 1891 */  { ITM_U_KEY_CC,         ITM_CC,                 RB_SA },  //fnSigmaAssign
 /* 1889 */  { ITM_U_KEY_USER,       ITM_USERMODE,           RB_SA },  //fnSigmaAssign
 /* 1893 */  { ITM_U_KEY_MM,         -MNU_MyMenu,            RB_SA },  //fnSigmaAssign
+/*      */  { ITM_DENANY,           DM_ANY,                 CB_JC },  //  --fnDenMode
+/*      */  { ITM_DENFIX,           DM_FIX,                 CB_JC },  //  --fnDenMode
 /* 1744 */  { ITM_BASE_AHOME,       JC_BASE_AHOME,          CB_JC },  //fnSetSetJM
 /* 1742 */  { ITM_BASE_HOME,        JC_BASE_HOME,           CB_JC },  //fnSetSetJM
 /* 1695 */  { ITM_CB_CPXRES,        JC_BCR,                 CB_JC },  //fnSetSetJM
@@ -301,6 +300,18 @@ int8_t fnCbIsSet(int16_t item) {
             }
             break;
 
+          case DM_ANY:
+            {
+              cb_param = getSystemFlag(FLAG_DENANY);
+            }
+            break;
+
+          case DM_FIX:
+            {
+              cb_param = getSystemFlag(FLAG_DENFIX);
+            }
+            break;
+
           case JC_ERPN:
             {
               cb_param = eRPN;
@@ -484,20 +495,11 @@ int8_t fnCbIsSet(int16_t item) {
 
 
 
-void fnRefreshRadioState(char rb, uint16_t mode) {
+void fnRefreshState(void) {
 #ifndef TESTSUITE_BUILD
   doRefreshSoftMenu = true;
 #endif
 }
-
-
-
-void fnRefreshComboxState(char rb, uint16_t param, bool_t state) {
-#ifndef TESTSUITE_BUILD
-  doRefreshSoftMenu = true;
-#endif
-}
-
 
 
 int16_t fnItemShowValue(int16_t item) {

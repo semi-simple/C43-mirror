@@ -2401,7 +2401,7 @@ const item_t indexOfItems[] = {
 
 //Jaymos C43 extensions
 /* 1756 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM UNDERLINING
-/* 1757 */  { fnSetSetJM,                  JC_NO_BASE_SCREEN,           "NO" STD_SPACE_3_PER_EM "BASE",                "NO" STD_SPACE_3_PER_EM "BASE",                0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM NOBASE MENU SETTING
+/* 1757 */  { fnSetSetJM,                  JC_NO_BASE_SCREEN,           "No" STD_SPACE_6_PER_EM "MyM",                 "No" STD_SPACE_6_PER_EM "MyM",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM NOBASE MENU SETTING
 /* 1758 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM KEY TAP DOUBLE SETTING
 /* 1759 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1760 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
@@ -2516,8 +2516,8 @@ const item_t indexOfItems[] = {
 /* 1868 */  { itemToBeCoded,               NOPARAM,                     "1868",                                        "1868",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1869 */  { fnCla,                       NOPARAM,                     "CLA",                                         "CLA",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 1870 */  { fnCln,                       NOPARAM,                     "CLN",                                         "CLN",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
-/* 1871 */  { itemToBeCoded,               NOPARAM,                     "1871",                                        "1871",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1872 */  { itemToBeCoded,               NOPARAM,                     "1872",                                        "1872",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1871 */  { fnSetSetJM,                  DM_ANY,                      "DENANY",                                      "DENANY",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM DEN
+/* 1872 */  { fnSetSetJM,                  DM_FIX,                      "DENFIX",                                      "DENFIX",                                      0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM DEN
 /* 1873 */  { itemToBeCoded,               NOPARAM,                     "CASE UP",                                     "CASE UP",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
 /* 1874 */  { itemToBeCoded,               NOPARAM,                     "CASE DN",                                     "CASE DN",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM CASE
 /* 1875 */  { fnListXY,                    NOPARAM,                     "LISTXY",                                      "LISTXY",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},

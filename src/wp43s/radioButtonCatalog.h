@@ -32,8 +32,7 @@
 
 
 int8_t   fnCbIsSet             (int16_t item);
-void     fnRefreshRadioState   (char rb, uint16_t mode);
-void     fnRefreshComboxState  (char rb, uint16_t param, bool_t state);
+void     fnRefreshState        (void);
 int16_t  fnItemShowValue       (int16_t item);
 //void   fnRebuildRadioState   (void);
 char*    figlabel              (const char* label, int16_t showValue);
@@ -49,7 +48,6 @@ char*    figlabel              (const char* label, int16_t showValue);
 #define RB_CU   '#' // ComplexUnit
 #define RB_CF   '$' // CurveFitting
 #define RB_DF   '%' // DateFormat
-#define RB_DM   '&' // DenominatorMode
 #define RB_DI   '\''// DisplayFormat
 #define RB_DO   '(' // DisplayModeOverride
 #define RB_FT   ')' // FractionType
@@ -63,7 +61,6 @@ char*    figlabel              (const char* label, int16_t showValue);
 //#define RB_BLZ  '1' // LeadingZeros
 #define RB_SA   '>' // SigmaAssign
 #define RB_ID   '?' // InputDefault
-#define CB_NO   '@'
 #define CB_JC   'A' // CheckBox 
 #define RB_HX   'B' // BASE
 #define RB_AM2  'C' // AngularMode

@@ -226,7 +226,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
         else {                  //REGISTER_X) == AM_DMS
           fnAngularModeJM(AM_HMS);
           fnAngularMode(oldAngularMode);
-          fnRefreshRadioState(0, 0);
+          fnRefreshState();
           refreshStatusBar();
         }
       }
@@ -401,7 +401,7 @@ void fnLongInt (uint16_t unusedButMandatoryParameter) {
     JM_convertReal34ToLongInteger(CONFIRMED);
   }  
   lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-  fnRefreshRadioState(0, 0);                                                //JMNIM
+  fnRefreshState();                                                //JMNIM
 }
 
 
@@ -463,7 +463,7 @@ void fnJM_2SI(uint16_t unusedButMandatoryParameter) {       //Convert Real to Lo
     case dtShortInteger:
       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
       lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-      fnRefreshRadioState(0, 0);                                                //JMNIM
+      fnRefreshState();                                                //JMNIM
       break;
     default:
       break;
@@ -487,7 +487,7 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {   //DONE          //JM SIG
   SigFigMode = displayFormatN;                                    //JM SIGFIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
 
-  fnRefreshRadioState(RB_DI, DF_SF);
+  fnRefreshState();
 }                                                                 //JM SIGFIG
 
 
@@ -504,7 +504,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {    //DONE           //JM UNI
   SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true;                                             //JM UNIT display
 
-  fnRefreshRadioState(RB_DI, DF_UN);
+  fnRefreshState();
 // Convert longint to real, to force UNIT to work. 
 //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
 //    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
@@ -566,7 +566,7 @@ void fnAngularModeJM(uint16_t AMODE) {
     fnAngularMode(AMODE);
   }
   #ifndef TESTSUITE_BUILD
-    fnRefreshRadioState(0, 0);
+    fnRefreshState();
     refreshStatusBar();
   #endif //!TESTSUITE_BUILD
 }
@@ -608,7 +608,7 @@ void fnChangeBaseJM (uint16_t BASE) {
 
   if(BASE == lastIntegerBase) {
     lastIntegerBase = 0;
-    fnRefreshRadioState(0, 0);
+    fnRefreshState();
   }
   else {
     fnChangeBase(BASE);
@@ -681,7 +681,7 @@ void fnInDefault(uint16_t inputDefault) {              //DONE
     lastIntegerBase = 0;
   }
 
-  fnRefreshRadioState(RB_ID, inputDefault);
+  fnRefreshState();
 }
 
 

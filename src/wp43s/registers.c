@@ -987,10 +987,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   }
 
   if(setCpxRes && oneArgumentIsComplex && resultDataType != dtString) {
-    fnSetFlag(FLAG_CPXRES);
-    
-//  fnRefreshRadioState(RB_BCR, true);                                          //dr
-    fnRefreshComboxState(CB_JC, JC_BCR, true);                                  //dr
+    fnSetFlag(FLAG_CPXRES);    
+    fnRefreshState();                                 //drJM
   }
 
   // Round the register value
@@ -1526,7 +1524,7 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       lastIntegerBase = 0;                                                       //JM
-      fnRefreshRadioState(0, 0);                                                 //JM
+      fnRefreshState();                                 //drJM
       break;
 
     case dtReal34:

@@ -38,13 +38,33 @@ void fnSdl(uint16_t numberOfShifts) {
     real.exponent += numberOfShifts;
     realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
   }
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot SDL %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      moreInfoOnError("In function fnSdl:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
+
+  else
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      longInteger_t y, x;
+      uint16_t exponent;
+
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+      longIntegerInit(y);
+      uIntToLongInteger(10, y);
+
+      for (exponent = numberOfShifts; exponent > 0; exponent--) {
+        longIntegerMultiply(y, x, x);
+      }
+
+      convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
+      longIntegerFree(y);
+      longIntegerFree(x);
+    }
+
+    else {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot SDL %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnSdl:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
 }
 
 
@@ -67,13 +87,36 @@ void fnSdr(uint16_t numberOfShifts) {
     realToReal34(&real, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot SDR %s", getRegisterDataTypeName(REGISTER_X, true, false));
-      moreInfoOnError("In function fnSdr:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
+  else
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      longInteger_t y, x;
+      uint16_t exponent;
+
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+      convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+      longIntegerInit(y);
+      uIntToLongInteger(10, y);
+
+      for (exponent = numberOfShifts; exponent > 0; exponent--) {
+        longIntegerDivide(x, y, x);
+        if(longIntegerCompareUInt(x, 0) <= 0) {
+          //printf("Exit: x/10 resulted in zero\n");
+          break;
+        }
+      }
+
+      convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
+      longIntegerFree(y);
+      longIntegerFree(x);
+    }
+
+    else {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot SDR %s", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnSdr:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
 }
 
 

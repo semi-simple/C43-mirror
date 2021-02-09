@@ -34,6 +34,9 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   clearSystemFlag(FLAG_FRACT);
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
+  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {
+    fnDisplayFormatTime(displayFormatN);
+  }
 
   fnRefreshState();                              //drJM
 }

@@ -48,7 +48,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
 #if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #else // !DMCP_BUILD
-                                     ITM_1631,                      ITM_TDISP,                  ITM_1631,                 ITM_DMY,               ITM_YMD,                     ITM_MDY,
+                                     ITM_RESERVE,                   ITM_TDISP,                  ITM_RESERVE,              ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #endif // DMCP_BUILD
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JUL_GREG                  };
 
@@ -136,7 +136,7 @@ const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,                       
                                      ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    -MNU_TRI,                         //JM
 #ifndef DMCP_BUILD
-                                     ITM_1631,                      ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                        //JM
+                                     ITM_RESERVE,                   ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                        //JM
 #endif
 #ifdef DMCP_BUILD
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM
@@ -1903,6 +1903,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     m = 0;
     while(softmenu[m].menuItem != 0) {
       if(softmenu[m].menuItem == id) {
+       softmenuStack[0].firstItem = lastCatalogPosition[catalog];
        break;
       }
       m++;

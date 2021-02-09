@@ -938,7 +938,7 @@ bool_t lastshiftG = false;
 
 
               case CM_CONFIRMATION:
-                if(item == ITEM_CONF_Y || item == ITM_XEQ) { // Yes or XEQ
+                if(item == ITEM_CONF_Y || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ
                   calcMode = previousCalcMode;
                   temporaryInformation = TI_NO_INFO;
                   confirmedFunction(CONFIRMED);

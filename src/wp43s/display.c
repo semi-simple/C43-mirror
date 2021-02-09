@@ -2434,6 +2434,16 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       }
       break;
 
+    case dtTime:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
+      timeToDisplayString(SHOWregis, tmpString, true);
+      break;
+
+    case dtDate:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
+      dateToDisplayString(SHOWregis, tmpString);
+      break;
+
 
     case dtString:
       #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
@@ -2507,6 +2517,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
 
     case dtConfig:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
       xcopy(tmpString, "Configuration data", 19);
       break;
 

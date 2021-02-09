@@ -48,7 +48,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
 #if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #else // !DMCP_BUILD
-                                     ITM_NULL,                      ITM_TDISP,                  ITM_NULL,                 ITM_DMY,               ITM_YMD,                     ITM_MDY,
+                                     ITM_RESERVE,                   ITM_TDISP,                  ITM_RESERVE,              ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #endif // DMCP_BUILD
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JUL_GREG                  };
 
@@ -123,6 +123,8 @@ const int16_t menu_MODE[]        = { ITM_SF,                        ITM_DEG,    
                                      ITM_NULL,                      ITM_NULL,                   ITM_RM,                   ITM_NULL,              ITM_SETSIG,                  ITM_DENMAX,
 #if DMCP_BUILD
                                      ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+#else  // DMCP_BUILD
+                                     ITM_RESERVE,                   ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
 #endif // DMCP_BUILD
                                                                                                                                                                                                             };
 
@@ -896,6 +898,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     m = 0;
     while(softmenu[m].menuItem != 0) {
       if(softmenu[m].menuItem == id) {
+       softmenuStack[0].firstItem = lastCatalogPosition[catalog];
        break;
       }
       m++;

@@ -1802,7 +1802,7 @@
 #define ITM_SST                       1736
 #define ITM_EXIT1                     1737
 #define ITM_BACKSPACE                 1738
-#define ITM_RESERVE                   1739
+#define ITM_1739                      1739
 #define ITM_AIM                       1740
 #define ITM_dotD                      1741
 #define ITM_SHOW                      1742
@@ -1990,7 +1990,7 @@
 #define ITM_USER_DM42                 1915
 #define ITM_USER_C43                  1916
 #define ITM_GET_NORM_E                1917
-#define ITM_1918                      1918
+#define ITM_RESERVE                   1918
 #define MNU_ASN_N                     1919
 #define MNU_HOME                      1920
 #define MNU_ALPHA                     1921
@@ -2278,6 +2278,7 @@
 #define ITM_CLGRF                     2203
 #define ITM_PZOOMX                    2204
 #define ITM_PZOOMY                    2205
+
 #define LAST_ITEM                     2206   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item

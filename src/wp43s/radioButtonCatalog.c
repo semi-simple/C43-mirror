@@ -512,6 +512,10 @@ int16_t fnItemShowValue(int16_t item) {
     result = displayStack;
     break;
 
+  case ITM_TDISP:
+    result = timeDisplayFormatDigits;
+    break;
+
   case ITM_SHOIREP:
     result = displayStackSHOIDISP;
     break;

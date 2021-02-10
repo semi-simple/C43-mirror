@@ -133,28 +133,30 @@ const int16_t menu_M_SIM_Q[]     = { VAR_MATA,                      VAR_MATB,   
 const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            ITM_DOWN_ARROW,              ITM_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
+
+#if defined (INLINE_TEST)
+  #define ITM_TST -MNU_INL_TST
+#else
+  #define ITM_TST ITM_RESERVE
+#endif
+
+#ifdef DMCP_BUILD
+  #define ITM_SYS ITM_SYSTEM
+#else
+  #define ITM_SYS ITM_RESERVE
+#endif
+
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,                       
                                      ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    -MNU_TRI,                         //JM
-#ifndef DMCP_BUILD
-                                     ITM_RESERVE,                   ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                        //JM
-#endif
-#ifdef DMCP_BUILD
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM
-#endif
+                                     ITM_SYS,                       ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM
 
-                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_DENANY,                  ITM_CFG,                           //JM
-                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENFIX,                  -MNU_TRI,                          //JM
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_DENMAX,                          //JM
+                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_DENMAX,                  ITM_CFG,                           //JM
+                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENANY,                  ITM_DENFIX,                          //JM
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                          //JM
 
-
-#if defined (INLINE_TEST)                                                       //vv dr
-                                     ITM_BASE_AHOME,                ITM_NULL,                  -MNU_INL_TST,             ITM_HOMEx3T,            ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
-#else                                                                           //^^
-                                     ITM_BASE_AHOME,                ITM_NULL,                  ITM_1631,                 ITM_HOMEx3T,            ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
-#endif                                                                          //dr
-                                     ITM_BASE_HOME,                 ITM_NULL,                  ITM_NULL,                 ITM_HOMEx3,             ITM_NULL,                    ITM_NULL,                        //JM
-                                     ITM_NO_BASE_SCREEN,            ITM_NULL,                  ITM_NULL,                 ITM_SHTIM,              ITM_NULL,                    ITM_FG_LINE                        };
-
+                                     ITM_NO_BASE_SCREEN,            ITM_BASE_HOME,             ITM_BASE_AHOME,             ITM_HOMEx3T,           ITM_SHTIM,                   ITM_HOMEx3,                    //JM
+                                     ITM_G_DOUBLETAP,               ITM_TST,                   ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_FG_LINE,                        //JM
+                                     ITM_NULL,                      ITM_NULL,                  ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                        };
 
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_DECOMP,
@@ -1903,7 +1905,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     m = 0;
     while(softmenu[m].menuItem != 0) {
       if(softmenu[m].menuItem == id) {
-       softmenuStack[0].firstItem = lastCatalogPosition[catalog];
+       if(!tamMode) softmenuStack[0].firstItem = lastCatalogPosition[catalog];
        break;
       }
       m++;

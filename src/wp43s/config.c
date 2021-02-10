@@ -12311,12 +12311,17 @@ void fnReset(uint16_t confirmation) {
 
 
 
-void backToSystem(uint16_t unusedButMandatoryParameter) {
-  #ifdef PC_BUILD
-    fnOff(NOPARAM);
-  #endif // PC_BUILD
+void backToSystem(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(backToSystem);
+  }
+  else {
+    #ifdef PC_BUILD
+      fnOff(NOPARAM);
+    #endif // PC_BUILD
 
-  #ifdef DMCP_BUILD
-    backToDMCP = true;
-  #endif // DMCP_BUILD
+    #ifdef DMCP_BUILD
+      backToDMCP = true;
+    #endif // DMCP_BUILD
+  }
 }

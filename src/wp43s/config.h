@@ -43,6 +43,6 @@ void     fnFractionType        (uint16_t unusedButMandatoryParameter);
 void     fnReset               (uint16_t confirmation);
 void     setConfirmationMode   (void (*func)(uint16_t));
 void     fnClAll               (uint16_t confirmation);
-void     backToSystem          (uint16_t unusedButMandatoryParameter);
+void     backToSystem          (uint16_t confirmation);
 void     fnRange               (uint16_t unusedButMandatoryParameter);
 void     fnGetRange            (uint16_t unusedButMandatoryParameter);

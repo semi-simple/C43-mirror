@@ -601,6 +601,7 @@ const item_t indexOfItems[] = {
 
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2381,7 +2382,7 @@ const item_t indexOfItems[] = {
 /* 1740 */  { fnAim,                       NOPARAM/*#JM#*/,             "AIM",                                         "ALPHA",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },//JM
 /* 1741 */  { fnKeyDotD,                   NOPARAM,                     ".d",                                          ".d",                                          0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1742 */  { fnShow_SCROLL,               NOPARAM/*#JM#*/,             "SHOW",                                        "SHOW",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1743 */  { backToSystem,                NOPARAM,                     "SYSTEM",                                      "SYSTEM",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 1743 */  { backToSystem,                NOT_CONFIRMED,               "SYSTEM",                                      "SYSTEM",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 /* 1744 */  { fnCvtDmsToDeg,               NOPARAM,                     "D.MS" STD_RIGHT_ARROW "D",                    "D.MS" STD_RIGHT_ARROW "D",                    0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1745 */  { itemToBeCoded,               NOPARAM,                     "V" STD_MEASURED_ANGLE,                        STD_MEASURED_ANGLE,                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1746 */  { fnHarmonicMeanXY,            NOPARAM,                     STD_x_BAR STD_SUB_H,                           STD_x_BAR STD_SUB_H,                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2565,7 +2566,7 @@ const item_t indexOfItems[] = {
 /* 1915 */  { fnUserJM,                    USER_DM42,                   "DM42",                                        "DM42",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//J=V43
 /* 1916 */  { fnUserJM,                    USER_C43,                    "C43",                                         "C43",                                         0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//J=C43
 /* 1917 */  { fnJM_GetXToNORMmode,         NOPARAM,                     "X to" STD_SIGMA "+",                          "X to" STD_SIGMA "+",                          0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM USER NORMAL
-/* 1918 */  { itemToBeCoded,               NOPARAM,                     "1918",                                        "1918",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1918 */  { itemToBeCoded,               NOPARAM,                     "reserve",                                     "reserve",                                     0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//placeholder
 /* 1919 */  { itemToBeCoded,               NOPARAM,                     "I",                                           STD_SIGMA "+NRM",                              0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1920 */  { itemToBeCoded,               NOPARAM,                     "HOME",                                        "HOME",                                        0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},//JM HOME
 /* 1921 */  { itemToBeCoded,               NOPARAM,                     "ALPHA",                                       "ALPHA",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM ALPHA

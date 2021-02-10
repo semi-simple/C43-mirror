@@ -340,6 +340,9 @@ void kill_ASB_icon(void) {
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
+        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
+          tamTransitionSystem(TT_INT);
+        }
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
@@ -429,7 +432,7 @@ void kill_ASB_icon(void) {
           aimBuffer[3] = 0;
           nimNumberPart = NP_REAL_FLOAT_PART;
           lastIntegerBase = 0;
-          fnRefreshRadioState(0, 0);                                                //JMNIM
+          fnRefreshState();                                                //JMNIM
           break;
 
         case ITM_PERIOD :
@@ -643,7 +646,7 @@ void kill_ASB_icon(void) {
         }
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
           case NP_INT_10 :
@@ -690,7 +693,7 @@ void kill_ASB_icon(void) {
         }
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
           case NP_INT_10 :
@@ -727,7 +730,7 @@ void kill_ASB_icon(void) {
         done = true;
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) {
           strcat(aimBuffer, "#");
@@ -798,7 +801,7 @@ void kill_ASB_icon(void) {
         done = true;
 
         lastIntegerBase = 0;
-        fnRefreshRadioState(0, 0);                                                //JMNIM
+        fnRefreshState();                                                //JMNIM
 
         switch(nimNumberPart) {
          case NP_REAL_EXPONENT :
@@ -996,6 +999,7 @@ void kill_ASB_icon(void) {
         }
         break;
 
+      case ITM_ms :
       case ITM_DMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
@@ -1008,6 +1012,38 @@ void kill_ASB_icon(void) {
 
             checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
             setRegisterAngularMode(REGISTER_X, AM_DMS);
+
+            setSystemFlag(FLAG_ASLIFT);
+            return;
+          }
+        }
+        break;
+
+      case ITM_dotD :
+        if(nimNumberPart == NP_REAL_FLOAT_PART) {
+          done = true;
+
+          closeNim();
+          if(calcMode != CM_NIM && lastErrorCode == 0) {
+            convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
+
+            setSystemFlag(FLAG_ASLIFT);
+            return;
+          }
+        }
+        break;
+
+      case ITM_toHMS :
+        if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
+          done = true;
+
+          closeNim();
+          if(calcMode != CM_NIM && lastErrorCode == 0) {
+            if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+              convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+            }
+
+            hmmssInRegisterToSeconds(REGISTER_X);
 
             setSystemFlag(FLAG_ASLIFT);
             return;
@@ -1158,12 +1194,17 @@ void kill_ASB_icon(void) {
     }
 
     else {
-      closeNim();
+      switch (item) {
+        case ITM_SQUAREROOTX :  //closeNim moved to btnkeyrelease, as .ms is on longpress underneath sqrt
+        case ITM_HASH_JM :      //closeNim simply not needed
+          break;
+        default : closeNim();
+      }
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);
           lastIntegerBase = 0;                                                      //JMNIM
-          fnRefreshRadioState(0, 0);                                                //JMNIM
+          fnRefreshState();                                                //JMNIM
         }
 
         if(lastErrorCode == 0) {
@@ -1389,6 +1430,11 @@ void kill_ASB_icon(void) {
             return;
 
           case TT_BACKSPACE :
+            leaveTamMode();
+            return;
+
+          case TT_INT :
+            fnIp(NOPARAM);
             leaveTamMode();
             return;
 
@@ -2330,7 +2376,7 @@ void kill_ASB_icon(void) {
     }
     else {
       lastIntegerBase = 0;
-      fnRefreshRadioState(0, 0);                                                //JMNIM
+      fnRefreshState();                                                //JMNIM
     }
 
     int16_t lastChar = strlen(aimBuffer) - 1;
@@ -2434,7 +2480,7 @@ void kill_ASB_icon(void) {
             longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
             longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-            if(shortIntegerMode != SIM_UNSIGN) {
+            if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
               longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
             }
 
@@ -2496,7 +2542,7 @@ void kill_ASB_icon(void) {
 
             *(REGISTER_SHORT_INTEGER_DATA(REGISTER_X)) = val;
             lastIntegerBase = base;
-            fnRefreshRadioState(0, 0);                                                //JMNIM
+            fnRefreshState();                                                //JMNIM
             aimBuffer[0]=0;                                      //JMNIM Clear the NIM input buffer once written to register successfully.
 
             longIntegerFree(maxVal);
@@ -2638,7 +2684,7 @@ void kill_ASB_icon(void) {
               }
             }
             fnSetFlag(FLAG_CPXRES);
-            fnRefreshComboxState(CB_JC, JC_BCR, true);                            //dr
+            fnRefreshState();                                 //drJM
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

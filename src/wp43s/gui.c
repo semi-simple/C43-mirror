@@ -120,6 +120,20 @@ GtkWidget *lblOn; //JM
   }
 
 
+ void btn_Clicked_Gen(bool_t shF, bool_t shG, char *st) {
+    GtkWidget *w;
+    w = NULL;
+    shiftF = shF;
+    shiftG = shG;
+    uint8_t alphaCase_MEM = alphaCase;
+    bool_t numLock_MEM;  numLock_MEM = numLock;  numLock = false;
+    bool_t u_mem = getSystemFlag(FLAG_USER); clearSystemFlag(FLAG_USER);
+    btnClicked(w, st);
+    if(u_mem) setSystemFlag(FLAG_USER);
+    numLock = numLock_MEM;
+    alphaCase = alphaCase_MEM;
+    refreshStatusBar();
+  }
 
 
 

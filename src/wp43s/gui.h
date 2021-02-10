@@ -19,6 +19,7 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
+  void btn_Clicked_Gen(bool_t shF, bool_t shG, char *st);
   void fnOff                       (uint16_t unsuedParamButMandatory);
   void calcModeNormal              (void);
   void calcModeAim                 (uint16_t unusedButMandatoryParameter);

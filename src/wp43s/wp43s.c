@@ -115,6 +115,7 @@ uint8_t                currentFntScr;
 uint8_t                currentFlgScr;
 uint8_t                displayFormat;
 uint8_t                displayFormatDigits;
+uint8_t                timeDisplayFormatDigits;
 uint8_t                shortIntegerWordSize;
 uint8_t                significantDigits;
 uint8_t                shortIntegerMode;
@@ -198,6 +199,7 @@ bool_t                PLOT_RMS;                                //JM GRAPH
 bool_t                PLOT_SHADE;                              //JM GRAPH
 int8_t                PLOT_ZMX;                                //JM GRAPH
 int8_t                PLOT_ZMY;                                //JM GRAPH
+uint8_t               oldAngularMode;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //

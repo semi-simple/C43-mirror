@@ -136,74 +136,69 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
     //fnInfo(eRPN);
-    fnRefreshComboxState(CB_JC, JC_ERPN, eRPN);                                 //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_FG_LINE:                                          //JM
     jm_FG_LINE = !jm_FG_LINE;
-    fnRefreshComboxState(CB_JC, JC_FG_LINE, jm_FG_LINE);                        //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_NO_BASE_SCREEN:                                          //JM
     jm_NO_BASE_SCREEN = !jm_NO_BASE_SCREEN;
-    fnRefreshComboxState(CB_JC, JC_NO_BASE_SCREEN, jm_NO_BASE_SCREEN);                        //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_G_DOUBLETAP:                                      //JM
     jm_G_DOUBLETAP = !jm_G_DOUBLETAP;
-    fnRefreshComboxState(CB_JC, JC_G_DOUBLETAP, jm_G_DOUBLETAP);                //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_HOME_TRIPLE:                                      //JM HOME.3
     HOME3 = !HOME3;
-    //fnInfo(HOME3);
-    fnRefreshComboxState(CB_JC, JC_HOME_TRIPLE, HOME3);                         //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_SHFT_4s:                                          //JM SH_4s
     ShiftTimoutMode = !ShiftTimoutMode;
-    //fnInfo(ShiftTimoutMode);
-    fnRefreshComboxState(CB_JC, JC_SHFT_4s, ShiftTimoutMode);                   //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_BASE_HOME:                                        //JM HOME
     SH_BASE_HOME = !SH_BASE_HOME;
-    //fnInfo(SH_BASE_HOME);
-    fnRefreshComboxState(CB_JC, JC_BASE_HOME, SH_BASE_HOME);                    //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_BASE_AHOME:                                       //JM aHOME
     SH_BASE_AHOME = !SH_BASE_AHOME;
-    //fnInfo(SH_BASE_AHOME);
     if(SH_BASE_AHOME) MY_ALPHA_MENU = mm_MNU_ALPHA;
     else              MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;
-    fnRefreshComboxState(CB_JC, JC_BASE_AHOME, SH_BASE_AHOME);                  //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_SH_3T:                                            //JM SH.3T
     Home3TimerMode = !Home3TimerMode;
-    //fnInfo(Home3TimerMode);
-    fnRefreshComboxState(CB_JC, JC_SH_3T, Home3TimerMode);                      //dr
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_H_SUM:                                      //JM
     jm_HOME_SUM = !jm_HOME_SUM;
-    fnRefreshComboxState(CB_JC, JC_H_SUM, jm_HOME_SUM);                //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_H_MIR:                                      //JM
     jm_HOME_MIR = !jm_HOME_MIR;
-    fnRefreshComboxState(CB_JC, JC_H_MIR, jm_HOME_MIR);                //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_H_FIX:                                      //JM
     jm_HOME_FIX = !jm_HOME_FIX;
-    fnRefreshComboxState(CB_JC, JC_H_FIX, jm_HOME_FIX);                //jm
+    fnRefreshState();                                 //drJM
     break;
 
   case JC_LARGELI:                                      //JM
     jm_LARGELI = !jm_LARGELI;
-    fnRefreshComboxState(CB_JC, JC_LARGELI, jm_LARGELI);                //jm
+    fnRefreshState();                                 //drJM
     break;
 
    case RX_COMMA:               //DONR
@@ -262,6 +257,13 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
      fnSetFlag(FLAG_ALLENG);
      break;
 
+   case DM_ANY:                                              //JM 
+     fnFlipFlag(FLAG_DENANY);
+     break;
+
+   case DM_FIX:                                              //JM 
+     fnFlipFlag(FLAG_DENFIX);
+     break;
 
 
    case JC_BLZ:                                              //JM bit LeadingZeros
@@ -307,7 +309,7 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
  ***********************************************/
 void fnSigmaAssign(uint16_t sigmaAssign) {             //DONE
   Norm_Key_00_VAR = sigmaAssign;
-  fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+  fnRefreshState();                                 //drJM
   fnClearFlag(FLAG_USER);
 }
 
@@ -507,54 +509,6 @@ void fnJMUSERmode_g(uint16_t JM_KEY) {      //DONE
 
 
 //---------------------------------------------
-
-
-void fnStrtoX(char aimBuffer[]) {      //DONE
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-  int16_t mem = stringByteLength(aimBuffer);
-  reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
-  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
-}
-
-
-
-void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
-  tmpString[0] = 0;
-  strcat(tmpString, inp1);
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
-  tmpString[0]=0;
-  strcat(tmpString, inp1);
-  setSystemFlag(FLAG_ASLIFT);   // 5
-  liftStack();
-
-  longInteger_t lgInt;
-  longIntegerInit(lgInt);
-  stringToLongInteger(tmpString + (tmpString[0] == '+' ? 1 : 0), 10, lgInt);
-  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
-  longIntegerFree(lgInt);
-}
-
-
-
-
-void fnRCL(int16_t inp) {      //DONE
-  setSystemFlag(FLAG_ASLIFT);
-  if(inp == TEMP_REGISTER_1) {
-    liftStack();
-    copySourceRegisterToDestRegister(inp, REGISTER_X);
-  } else {
-  fnRecall(inp);
-  }
-}
 
 
 
@@ -906,7 +860,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = ITM_RI;
     kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = ITM_CC;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -918,14 +872,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = ITM_RI;
     kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[0].primary     = ITM_CC;
     Norm_Key_00_VAR        = ITM_CC;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 #endif
@@ -937,14 +891,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = ITM_RI;
     kbd_usr[0].gShifted    = ITM_LI;
     Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[0].primary     = ITM_CC;
     Norm_Key_00_VAR        = ITM_CC;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 #endif
@@ -984,7 +938,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[5].primaryAim     = ITM_F;
 
     Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -1112,7 +1066,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[36].primaryTam     = ITM_EXIT1;
 
     Norm_Key_00_VAR         = ITM_1ONX;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -1266,7 +1220,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[11].fShifted   = ITM_NULL;
     kbd_usr[11].gShifted   = ITM_NULL;
     Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -1290,7 +1244,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[7].fShifted   = ITM_NULL;
     kbd_usr[7].gShifted   = ITM_NULL;
     Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -1299,42 +1253,42 @@ void fnUserJM(uint16_t jmUser) {
   case USER_SIGMAPLUS:                                              //USER_DEFAULTS FOR USER: E+ E+
     kbd_usr[0].primary     = ITM_SIGMAPLUS;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_PRGM:                                              //USER_DEFAULTS FOR USER: E+ PRGM
     kbd_usr[0].primary     = ITM_PR;
     Norm_Key_00_VAR        = ITM_PR;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_USER:                                              //USER_DEFAULTS FOR USER: E+ USER
     kbd_usr[0].primary     = ITM_USERMODE;
     Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_HOME:                                              //USER_DEFAULTS FOR USER: E+ USER
     kbd_usr[0].primary     = -MNU_HOME;
     Norm_Key_00_VAR        = -MNU_HOME;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
     kbd_usr[0].primary     = ITM_AIM;
     Norm_Key_00_VAR        = ITM_AIM;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
     kbd_usr[0].primary     = -MNU_MyMenu;
     Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
@@ -1343,14 +1297,14 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].gShifted    = ITM_NULL;
     kbd_usr[0].fShifted    = ITM_NULL;
     Norm_Key_00_VAR        = ITM_SHIFTg;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
 
   case USER_RESET:                                              //USER_RESET 26
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;
-    fnRefreshRadioState(RB_SA, Norm_Key_00_VAR);
+    fnRefreshState();                                 //drJM
     fnClearFlag(FLAG_USER); //userModeEnabled = false;
     break;
 

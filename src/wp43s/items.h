@@ -22,6 +22,10 @@
 
 
 
+
+
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1937,8 +1941,8 @@
 #define ITM_1868                      1868
 #define ITM_CLA                       1869
 #define ITM_CLN                       1870
-#define ITM_1871                      1871
-#define ITM_1872                      1872
+#define ITM_DENANY                    1871
+#define ITM_DENFIX                    1872
 #define CHR_caseUP                    1873
 #define CHR_caseDN                    1874
 #define ITM_LISTXY                    1875
@@ -1986,7 +1990,7 @@
 #define ITM_USER_DM42                 1915
 #define ITM_USER_C43                  1916
 #define ITM_GET_NORM_E                1917
-#define ITM_1918                      1918
+#define ITM_RESERVE                   1918
 #define MNU_ASN_N                     1919
 #define MNU_HOME                      1920
 #define MNU_ALPHA                     1921

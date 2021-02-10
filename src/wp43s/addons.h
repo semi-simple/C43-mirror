@@ -54,3 +54,16 @@ void fnDisplayFormatSigFig      (uint16_t displayFormatN);
 void fnDisplayFormatUnit        (uint16_t displayFormatN);
 void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *displayValueString, bool_t nimMode, const char *separator);
 
+
+
+void   printf_cpx               (calcRegister_t regist);
+void   print_stck               ();
+void   doubleToXRegisterReal34  (double x);             //Convert from double to X register REAL34
+double convert_to_double        (calcRegister_t regist);    //Convert from X register to double
+
+
+void   fnStrtoX                 (char aimBuffer[]);      //DONE
+void   fnStrInputReal34         (char inp1[]);  // CONVERT STRING to REAL IN X      //DONE
+void   fnStrInputLongint        (char inp1[]);  // CONVERT STRING to Longint X      //DONE
+void   fnRCL                    (int16_t inp);      //DONE
+

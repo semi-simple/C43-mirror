@@ -34,8 +34,11 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   clearSystemFlag(FLAG_FRACT);
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
+  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {
+    fnDisplayFormatTime(displayFormatN);
+  }
 
-  fnRefreshRadioState(RB_DI, DF_FIX);                                           //dr
+  fnRefreshState();                              //drJM
 }
 
 
@@ -53,7 +56,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_SCI);                                           //dr
+  fnRefreshState();                              //drJM
 }
 
 
@@ -71,7 +74,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_ENG);                                           //dr
+  fnRefreshState();                              //drJM
 }
 
 
@@ -90,7 +93,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
-  fnRefreshRadioState(RB_DI, DF_ALL);                                         //dr
+  fnRefreshState();                              //drJM
 }
 
 
@@ -128,6 +131,17 @@ void fnDisplayFormatGap(uint16_t gap) {
    gap = 0;
  }
   groupingGap = gap;
+}
+
+
+/********************************************//**
+ * \brief Sets the display format for time and refreshes the stack
+ *
+ * \param[in] displayFormatN uint16_t Display format
+ * \return void
+ ***********************************************/
+void fnDisplayFormatTime(uint16_t displayFormatN) {
+  timeDisplayFormatDigits = (uint8_t)displayFormatN;
 }
 
 
@@ -568,8 +582,8 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   //////////////
   if(displayFormat == DF_FIX) {
     if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
-      digitsToDisplay = displayFormatDigits;
-      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
+//*JM SIGFIGNEW     digitsToDisplay = displayFormatDigits;
+//*JM SIGFIGNEW      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
       ovrENG = getSystemFlag(FLAG_ALLENG);
     }
@@ -579,15 +593,19 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
       int displayFormatDigits_active;                                    //JM SIGFIGNEW vv
       if(SigFigMode >= 1) {
         displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);    //Convert SIG to FIX.
-        digitToRound = firstDigit + SigFigMode;
       } else {
         displayFormatDigits_active = displayFormatDigits;
-        digitToRound = lastDigit;
       }                                                                  //JM SIGFIGNEW ^^
 
       digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
+
+      if(SigFigMode >= 1) {                                             //JM SIGFIGNEW vv
+        digitToRound = firstDigit + SigFigMode;
+      } else {
+        digitToRound = lastDigit;
+      }                                                                  //JM SIGFIGNEW ^^
 
       // Round the displayed number
       if(bcd[digitToRound+1] >= 5) {
@@ -608,7 +626,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
         numDigits = 1;
         exponent++;
       }
-
 
       //JM SIGFIG - blank out non-sig digits to the right                                 //JM SIGFIGNEW vv
       if(SigFigMode>=1) {
@@ -1723,13 +1740,163 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+  real34_t j, y, m, d;
+  char sign[] = {0, 0};
+
+  internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
+  decomposeJulianDay(&j, &y, &m, &d);
+  if(real34IsNegative(&y)) sign[0] = '-';
+  real34CopyAbs(&y, &y);
+
+  if(getSystemFlag(FLAG_DMY)) {
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, real34ToUInt32(&y));
+  }
+  else if(getSystemFlag(FLAG_MDY)) {
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, real34ToUInt32(&y));
+  }
+  else { // YMD
+    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, real34ToUInt32(&y), real34ToUInt32(&m), real34ToUInt32(&d));
+  }
 }
 
 
 
-void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
+  real34_t real34, value34, h34, m34, s34;
+  int32_t sign;
+  uint32_t digits, tDigits = 0u;
+  char digitBuf[16], digitBuf2[48];
+  char* bufPtr;
+  bool_t isValid12hTime = false, isAfternoon = false;
+
+  real34Copy(REGISTER_REAL34_DATA(regist), &real34);
+  sign = real34IsNegative(&real34);
+  real34SetPositiveSign(&real34);
+
+  // Pre-rounding
+  if(!ignoreTDisp) {
+    switch(timeDisplayFormatDigits) {
+      case 0: // no rounding
+        break;
+      case 1: case 2: // round to minutes
+        int32ToReal34(60, &value34);
+        real34Divide(&real34, &value34, &real34);
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+        real34Multiply(&real34, &value34, &real34);
+        break;
+      default: // round to seconds, milliseconds, microseconds, ...
+        int32ToReal34(10, &value34);
+        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+          real34Multiply(&real34, &value34, &real34);
+        }
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+          real34Divide(&real34, &value34, &real34);
+        }
+    }
+  }
+
+  // Seconds
+  real34ToIntegralValue(&real34, &s34, DEC_ROUND_DOWN);
+  real34Subtract(&real34, &s34, &real34); // Fractional part
+  int32ToReal34(60, &value34);
+  // Minutes
+  real34Divide(&s34, &value34, &m34);
+  real34ToIntegralValue(&m34, &m34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&s34, &value34, &s34);
+  // Hours
+  real34Divide(&m34, &value34, &h34);
+  real34ToIntegralValue(&h34, &h34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&m34, &value34, &m34);
+  // 12-hour time
+  if((!getSystemFlag(FLAG_TDM24)) && (!sign)) {
+    int32ToReal34(24, &value34);
+    if(real34CompareLessThan(&h34, &value34)) {
+      isValid12hTime = true;
+      int32ToReal34(12, &value34);
+      if(real34CompareGreaterEqual(&h34, &value34)) {
+        isAfternoon = true;
+        if(!real34CompareLessEqual(&h34, &value34)) {
+          real34Subtract(&h34, &value34, &h34);
+        }
+      }
+      else if(real34CompareEqual(&h34, const34_0)) {
+        real34Add(&h34, &value34, &h34);
+      }
+    }
+  }
+
+
+  // Display Hours
+  strcpy(displayString, sign ? "-" : "");
+  real34ToString(&h34, digitBuf2);
+
+  bufPtr = digitBuf2;
+  digitBuf[1] = '\0';
+  for(digits = strlen(digitBuf2); digits > 0; --digits){
+    digitBuf[0] = *bufPtr++;
+    strcat(displayString, digitBuf);
+    if((digits % 3u == 1) && (digits > 1)) {
+      strcat(displayString, STD_SPACE_4_PER_EM);
+    }
+    ++tDigits;
+  }
+
+  if((!ignoreTDisp) && (timeDisplayFormatDigits == 1 || timeDisplayFormatDigits == 2 || (++tDigits) > (isValid12hTime ? 16 : 18))) {
+    // Display Minutes
+    sprintf(digitBuf, ":%02" PRIu32, real34ToUInt32(&m34));
+    strcat(displayString, digitBuf);
+  }
+
+  else {
+    // Display MM:SS
+    sprintf(digitBuf, ":%02" PRIu32 ":%02" PRIu32,
+      real34ToUInt32(&m34),
+      real34ToUInt32(&s34));
+    strcat(displayString, digitBuf);
+
+    // Display fractional part of seconds
+    digits = 0u;
+    int32ToReal34(0, &value34);
+    while(1) {
+      real34Subtract(&real34, &value34, &real34);
+      if(ignoreTDisp || (timeDisplayFormatDigits == 0)) {
+        if(real34IsZero(&real34)) {
+          break;
+        }
+      }
+      else {
+        if(digits + 4 > timeDisplayFormatDigits) {
+          break;
+        }
+      }
+      if((!ignoreTDisp) && ((++tDigits) > (isValid12hTime ? 16 : 18))) {
+        break;
+      }
+      int32ToReal34(10, &value34);
+      real34Multiply(&real34, &value34, &real34);
+      real34ToIntegralValue(&real34, &value34, DEC_ROUND_DOWN);
+
+      if(digits == 0u) {
+        strcat(displayString, RADIX34_MARK_STRING);
+      }
+      else if(digits % 3 == 0u) {
+        strcat(displayString, STD_SPACE_4_PER_EM);
+      }
+
+      sprintf(digitBuf, "%" PRIu32, real34ToUInt32(&value34));
+      strcat(displayString, digitBuf);
+      ++digits;
+    }
+  }
+
+  // for 12-hour time
+  if(isAfternoon) {
+    strcat(displayString, "p.m.");
+  }
+  else if(isValid12hTime) {
+    strcat(displayString, "a.m.");
+  }
 }
 
 
@@ -1831,6 +1998,14 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
         xcopy(tmpString + 300,  tmpString + 600, strlen(tmpString + 600) + 1);
         tmpString[600] = 0;
       }
+      break;
+
+    case dtTime:
+      timeToDisplayString(REGISTER_X, tmpString, true);
+      break;
+
+    case dtDate:
+      dateToDisplayString(REGISTER_X, tmpString);
       break;
 
     case dtString:
@@ -2262,6 +2437,16 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       }
       break;
 
+    case dtTime:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
+      timeToDisplayString(SHOWregis, tmpString, true);
+      break;
+
+    case dtDate:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
+      dateToDisplayString(SHOWregis, tmpString);
+      break;
+
 
     case dtString:
       #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
@@ -2335,6 +2520,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
 
     case dtConfig:
+      temporaryInformation = TI_SHOW_REGISTER_BIG;
       xcopy(tmpString, "Configuration data", 19);
       break;
 

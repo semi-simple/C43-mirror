@@ -159,7 +159,7 @@
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 #define INLINE_TEST                     //vv dr
-//#undef INLINE_TEST                    //^^
+#undef INLINE_TEST                    //^^
 
   #include "assign.h"
   #include "bufferize.h"
@@ -321,6 +321,7 @@
   extern uint8_t                currentFlgScr;
   extern uint8_t                displayFormat;
   extern uint8_t                displayFormatDigits;
+  extern uint8_t                timeDisplayFormatDigits;
   extern uint8_t                shortIntegerWordSize;
   extern uint8_t                significantDigits;
   extern uint8_t                shortIntegerMode;
@@ -383,6 +384,7 @@
   extern int16_t               mm_MNU_HOME;                 //JM
   extern int16_t               mm_MNU_ALPHA;                //JM
   extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
+  extern uint8_t                oldAngularMode;        //JM
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];
   extern uint16_t               freeProgramBytes;
   extern uint16_t               firstDisplayedLocalStepNumber;

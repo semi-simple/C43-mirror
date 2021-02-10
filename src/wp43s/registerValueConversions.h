@@ -24,7 +24,7 @@
 
 void convertLongIntegerRegisterToReal34Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination);
-//void convertLongIntegerRegisterToReal34              (calcRegister_t source, real34_t *destination); never used
+void convertLongIntegerRegisterToReal34              (calcRegister_t source, real34_t *destination);
 void convertLongIntegerRegisterToReal                (calcRegister_t source, real_t *destination, realContext_t *ctxt);
 void convertLongIntegerRegisterToLongInteger         (calcRegister_t regist, longInteger_t longInteger);
 
@@ -46,3 +46,10 @@ void convertRealToLongInteger                        (const real_t *real, longIn
 void convertRealToLongIntegerRegister                (const real_t *real, calcRegister_t dest, enum rounding mode);
 void realToIntegralValue                             (const real_t *source, real_t *destination, enum rounding mode, realContext_t *realContext);
 void realToUInt32                                    (const real_t *re, enum rounding mode, uint32_t *value32, bool_t *overflow);
+
+void convertTimeRegisterToReal34Register             (calcRegister_t source, calcRegister_t destination);
+void convertReal34RegisterToTimeRegister             (calcRegister_t source, calcRegister_t destination);
+void convertLongIntegerRegisterToTimeRegister        (calcRegister_t source, calcRegister_t destination);
+
+void convertDateRegisterToReal34Register             (calcRegister_t source, calcRegister_t destination);
+void convertReal34RegisterToDateRegister             (calcRegister_t source, calcRegister_t destination);

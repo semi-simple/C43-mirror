@@ -115,42 +115,65 @@ void systemFlagAction(uint16_t systemFlag, uint16_t action) {
 
 
 
+    switch (systemFlag) {                                      //JM vv
+      case FLAG_YMD:     fnRefreshState (); break;
+      case FLAG_DMY:     fnRefreshState (); break;
+      case FLAG_MDY:     fnRefreshState (); break;
+      case FLAG_TDM24:   fnRefreshState (); break;
+      case FLAG_CPXRES:  fnRefreshState (); break;
+      case FLAG_SPCRES:  fnRefreshState (); break;
+      case FLAG_CPXj:    fnRefreshState (); break;
+      case FLAG_POLAR:   fnRefreshState (); break;
+      case FLAG_LEAD0:   fnRefreshState (); break;
+      case FLAG_DENANY:  fnRefreshState (); break;
+      case FLAG_DENFIX:  fnRefreshState (); break;
+      case FLAG_SSIZE8:  fnRefreshState (); break;
+      case FLAG_DECIMP:  fnRefreshState (); break;
+      case FLAG_MULTx:   fnRefreshState (); break;
+      case FLAG_ALLENG:  fnRefreshState (); break;
+      default:;
+    }                                                         //JM ^^
 
+
+/*
   if(getSystemFlag(systemFlag)) {                                     //JM vv
     switch (systemFlag) {              //SET
-      case FLAG_YMD:     fnRefreshRadioState (RB_DF, DF_YMD); break;
-      case FLAG_DMY:     fnRefreshRadioState (RB_DF, DF_DMY); break;
-      case FLAG_MDY:     fnRefreshRadioState (RB_DF, DF_MDY); break;
-
-      case FLAG_TDM24:   fnRefreshRadioState (RB_TF, TF_H24); break;
-      case FLAG_CPXRES:  fnRefreshComboxState(CB_JC, JC_BCR, true); /*showRealComplexResult(); */break;
-      case FLAG_SPCRES:  fnRefreshComboxState(CB_JC, JC_BSR, true); break;
-      case FLAG_CPXj:    fnRefreshRadioState (RB_CU, CU_J);  break;
-      case FLAG_POLAR:   fnRefreshRadioState (RB_CM, CM_POLAR); /*showComplexMode();*/  break;
-      case FLAG_LEAD0:   fnRefreshComboxState(CB_JC, JC_BLZ, true);  break;
-      case FLAG_SSIZE8:  fnRefreshRadioState (RB_SS, SS_8); break;
-      case FLAG_DECIMP:  fnRefreshRadioState (RB_RX, RX_PERIOD);  break;
-      case FLAG_MULTx:   fnRefreshRadioState (RB_PS, PS_CROSS); break;
-      case FLAG_ALLENG:  fnRefreshRadioState (RB_DO, DO_ENG); break;
+      case FLAG_YMD:     fnRefreshState (); break;
+      case FLAG_DMY:     fnRefreshState (); break;
+      case FLAG_MDY:     fnRefreshState (); break;
+      case FLAG_TDM24:   fnRefreshState (); break;
+      case FLAG_CPXRES:  fnRefreshState (); break;
+      case FLAG_SPCRES:  fnRefreshState (); break;
+      case FLAG_CPXj:    fnRefreshState (); break;
+      case FLAG_POLAR:   fnRefreshState (); break;
+      case FLAG_LEAD0:   fnRefreshState (); break;
+      case FLAG_DENANY:  fnRefreshState (); break;
+      case FLAG_DENFIX:  fnRefreshState (); break;
+      case FLAG_SSIZE8:  fnRefreshState (); break;
+      case FLAG_DECIMP:  fnRefreshState (); break;
+      case FLAG_MULTx:   fnRefreshState (); break;
+      case FLAG_ALLENG:  fnRefreshState (); break;
       default:;
     }
   }
   else {
     switch (systemFlag) {          //RESET
-      case FLAG_TDM24:   fnRefreshRadioState (RB_TF, TF_H12); break;
-      case FLAG_CPXRES:  fnRefreshComboxState(CB_JC, JC_BCR, false); /*showRealComplexResult();*/ break;
-      case FLAG_SPCRES:  fnRefreshComboxState(CB_JC, JC_BSR, false); break;
-      case FLAG_CPXj:    fnRefreshRadioState (RB_CU, CU_I);  break;
-      case FLAG_POLAR:   fnRefreshRadioState (RB_CM, CM_RECTANGULAR); /*showComplexMode(); */ break;
-      case FLAG_LEAD0:   fnRefreshComboxState(CB_JC, JC_BLZ, false);  break;
-      case FLAG_SSIZE8:  fnRefreshRadioState (RB_SS, SS_4); break;
-      case FLAG_DECIMP:  fnRefreshRadioState (RB_RX, RX_COMMA);  break;
-      case FLAG_MULTx:   fnRefreshRadioState (RB_PS, PS_DOT); break;
-      case FLAG_ALLENG:  fnRefreshRadioState (RB_DO, DO_SCI); break;
+      case FLAG_TDM24:   fnRefreshState (); break;
+      case FLAG_CPXRES:  fnRefreshState (); break;
+      case FLAG_SPCRES:  fnRefreshState (); break;
+      case FLAG_CPXj:    fnRefreshState (); break;
+      case FLAG_POLAR:   fnRefreshState (); break;
+      case FLAG_LEAD0:   fnRefreshState (); break;
+      case FLAG_DENANY:  fnRefreshState (); break;
+      case FLAG_DENFIX:  fnRefreshState (); break;
+      case FLAG_SSIZE8:  fnRefreshState (); break;
+      case FLAG_DECIMP:  fnRefreshState (); break;
+      case FLAG_MULTx:   fnRefreshState (); break;
+      case FLAG_ALLENG:  fnRefreshState (); break;
       default:;
     }                                                            //JM vv
   }
-
+*/
 
 
 }

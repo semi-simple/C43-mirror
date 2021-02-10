@@ -29,7 +29,7 @@ void (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_
 /*  2 Real34        */ {subLonIReal, subRealReal, subCplxReal, subTimeReal, subDateReal, subError, subError,    subError,    subShoIReal,  subError},
 /*  3 Complex34     */ {subLonICplx, subRealCplx, subCplxCplx, subError,    subError,    subError, subError,    subError,    subShoICplx,  subError},
 /*  4 Time          */ {subLonITime, subRealTime, subError,    subTimeTime, subError,    subError, subError,    subError,    subError,     subError},
-/*  5 Date          */ {subLonIDate, subRealDate, subError,    subError,    subDateDate, subError, subError,    subError,    subError,     subError},
+/*  5 Date          */ {subLonIDate, subError,    subError,    subError,    subDateDate, subError, subError,    subError,    subError,     subError},
 /*  6 String        */ {subError,    subError,    subError,    subError,    subError,    subError, subError,    subError,    subError,     subError},
 /*  7 Real34 mat    */ {subError,    subError,    subError,    subError,    subError,    subError, subRemaRema, subCxmaRema, subError,     subError},
 /*  8 Complex34 mat */ {subError,    subError,    subError,    subError,    subError,    subError, subRemaCxma, subCxmaCxma, subError,     subError},
@@ -108,7 +108,8 @@ void subLonILonI(void) {
  * \return void
  ***********************************************/
 void subLonITime(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -120,7 +121,8 @@ void subLonITime(void) {
  * \return void
  ***********************************************/
 void subTimeLonI(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -144,7 +146,12 @@ void subLonIDate(void) {
  * \return void
  ***********************************************/
 void subDateLonI(void) {
-  fnToBeCoded();
+  real34_t val;
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  int32ToReal34(86400, &val);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -338,7 +345,7 @@ void subCplxLonI(void) {
  * \return void
  ***********************************************/
 void subTimeTime(void) {
-  fnToBeCoded();
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -350,7 +357,17 @@ void subTimeTime(void) {
  * \return void
  ***********************************************/
 void subTimeReal(void) {
-  fnToBeCoded();
+  uint32_t xAngularMode;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    subError();
+  }
 }
 
 
@@ -362,7 +379,17 @@ void subTimeReal(void) {
  * \return void
  ***********************************************/
 void subRealTime(void) {
-  fnToBeCoded();
+  uint32_t yAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == AM_NONE) {
+    convertReal34RegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    subError();
+  }
 }
 
 
@@ -378,7 +405,12 @@ void subRealTime(void) {
  * \return void
  ***********************************************/
 void subDateDate(void) {
-  fnToBeCoded();
+  real34_t val;
+
+  real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y));
+  int32ToReal34(86400, &val);
+  real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), &val, &val);
+  convertReal34ToLongIntegerRegister(&val, REGISTER_X, DEC_ROUND_DOWN);
 }
 
 
@@ -390,19 +422,21 @@ void subDateDate(void) {
  * \return void
  ***********************************************/
 void subDateReal(void) {
-  fnToBeCoded();
-}
+  uint32_t xAngularMode;
+  real34_t val;
 
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-
-/********************************************//**
- * \brief Y(real34) - X(date) ==> X(date)
- *
- * \param void
- * \return void
- ***********************************************/
-void subRealDate(void) {
-  fnToBeCoded();
+  if(xAngularMode == AM_NONE) {
+    int32ToReal34(86400, &val);
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), roundingMode);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+    reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+    real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 

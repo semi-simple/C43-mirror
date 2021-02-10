@@ -192,40 +192,68 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 
 
 
-
+//SHOI, LONI >> REAL
+//REAL >> CAM
+//AM >> DMS
+// 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
-    copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
+  #ifndef TESTSUITE_BUILD
+  uint8_t oldAngularMode1 = oldAngularMode;
+  switch(calcMode) {                     //JM
+    case CM_NIM:
+      addItemToNimBuffer(ITM_ms);
+      break;
 
-    if(getRegisterDataType(REGISTER_X) == dtShortInteger) {convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);}
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger)  {convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);}
-    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {setRegisterAngularMode(REGISTER_X, currentAngularMode);}
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {printf("Still ADM AM_NONE. Something is wrong\n");}
+    case CM_NORMAL:
+      copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
-      if(getRegisterAngularMode(REGISTER_X) != AM_DMS /*&& getRegisterAngularMode(REGISTER_X) != AM_HMS*/) {
-        #ifndef TESTSUITE_BUILD
-          runFunction(ITM_toDMS);
-        #endif
+      switch(getRegisterDataType(REGISTER_X)) {
+        case dtShortInteger :
+          convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+          break;
+        case dtLongInteger :
+          convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+          break;
+        default : break;
       }
-      else 
-      {
-/*    if(getRegisterAngularMode(REGISTER_X) == AM_DMS ) {   //JM wait for future HMS
-        runFunction(ITM_toHMS); break;
-      }
-      else { */
-      #ifndef TESTSUITE_BUILD
-        switch (getRegisterAngularMode(REGISTER_X)) {
-          case AM_DEGREE: {runFunction(ITM_DEGto);  } break;
-          case AM_DMS   : {runFunction(ITM_DMSto);  } break;
-          case AM_GRAD  : {runFunction(ITM_GRADto); } break;
-          case AM_RADIAN: {runFunction(ITM_RADto);  } break;
-          case AM_MULTPI: {runFunction(ITM_MULPIto);} break;
-          default: break;
+
+      if(getRegisterDataType(REGISTER_X) == dtReal34) {
+        if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
+          oldAngularMode1 = currentAngularMode;
+          fnAngularModeJM(AM_DMS);
+          oldAngularMode = oldAngularMode1;
         }
-      #endif
+        else {                  //REGISTER_X) == AM_DMS
+          fnAngularModeJM(AM_HMS);
+          fnAngularMode(oldAngularMode);
+          fnRefreshState();
+          refreshStatusBar();
+        }
       }
+      else
+      if(getRegisterDataType(REGISTER_X) == dtTime) {
+        oldAngularMode1 = currentAngularMode;
+        fnAngularModeJM(AM_DMS);
+        oldAngularMode = oldAngularMode1;
+      }
+
+      copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
+      break;
+
+
+
+    case CM_REGISTER_BROWSER:
+    case CM_FLAG_BROWSER:
+    case CM_FONT_BROWSER:
+    case CM_LISTXY:                     //JM
+    case CM_GRAPH:                      //JM
+      break;
+
+      default:
+        sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
+        displayBugScreen(errorMessage);
     }
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
+  #endif // !TESTSUITE_BUILD
   }
 
 
@@ -373,7 +401,7 @@ void fnLongInt (uint16_t unusedButMandatoryParameter) {
     JM_convertReal34ToLongInteger(CONFIRMED);
   }  
   lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-  fnRefreshRadioState(0, 0);                                                //JMNIM
+  fnRefreshState();                                                //JMNIM
 }
 
 
@@ -435,7 +463,7 @@ void fnJM_2SI(uint16_t unusedButMandatoryParameter) {       //Convert Real to Lo
     case dtShortInteger:
       convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X); //This shortint to longint!
       lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-      fnRefreshRadioState(0, 0);                                                //JMNIM
+      fnRefreshState();                                                //JMNIM
       break;
     default:
       break;
@@ -459,7 +487,7 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) {   //DONE          //JM SIG
   SigFigMode = displayFormatN;                                    //JM SIGFIG
   UNITDisplay = false;                                            //JM SIGFIG display Reset
 
-  fnRefreshRadioState(RB_DI, DF_SF);
+  fnRefreshState();
 }                                                                 //JM SIGFIG
 
 
@@ -476,7 +504,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) {    //DONE           //JM UNI
   SigFigMode = 0;                                                 //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true;                                             //JM UNIT display
 
-  fnRefreshRadioState(RB_DI, DF_UN);
+  fnRefreshState();
 // Convert longint to real, to force UNIT to work. 
 //  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
 //    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
@@ -520,14 +548,27 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 }                                                                                                       //JM UNIT
 
 
-
+//change the current state from the old state?
 
 void fnAngularModeJM(uint16_t AMODE) {
-  if (AMODE == AM_HMS) AMODE = AM_DMS;
-  fnCvtFromCurrentAngularMode(AMODE);
-  fnAngularMode(AMODE);
-  fnRefreshRadioState(0, 0);
-
+  if (AMODE == AM_HMS) {
+    if(getRegisterDataType(REGISTER_X) == dtTime) return;
+    fnCvtFromCurrentAngularMode(AM_DEGREE);   //Setting to HMS does not change AM
+    fnToHms(0);
+  } else {
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
+      fnToHr(0);
+      setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      fnCvtFromCurrentAngularMode(AMODE);
+      fnAngularMode(AMODE);
+    }
+    fnCvtFromCurrentAngularMode(AMODE);
+    fnAngularMode(AMODE);
+  }
+  #ifndef TESTSUITE_BUILD
+    fnRefreshState();
+    refreshStatusBar();
+  #endif //!TESTSUITE_BUILD
 }
 
 
@@ -567,7 +608,7 @@ void fnChangeBaseJM (uint16_t BASE) {
 
   if(BASE == lastIntegerBase) {
     lastIntegerBase = 0;
-    fnRefreshRadioState(0, 0);
+    fnRefreshState();
   }
   else {
     fnChangeBase(BASE);
@@ -593,14 +634,8 @@ void fnChangeBaseMNU(uint16_t BASE) {
       return;
     }
 
-    if(lastIntegerBase == 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
+    if(calcMode == CM_NORMAL && BASE == NOPARAM) {
       //printf(">>> §§§fnChangeBaseMNd CM_NORMAL: convert non-shortint-mode to TAM\n");
-      runFunction(ITM_toINT);
-      return;
-    }
-
-    if(lastIntegerBase != 0 && calcMode == CM_NORMAL && BASE == NOPARAM) {
-      //printf(">>> §§§fnChangeBaseMNc CM_NORMAL: convert non-shortint-mode to %d & return\n",BASE);
       runFunction(ITM_toINT);
       return;
     }
@@ -646,7 +681,7 @@ void fnInDefault(uint16_t inputDefault) {              //DONE
     lastIntegerBase = 0;
   }
 
-  fnRefreshRadioState(RB_ID, inputDefault);
+  fnRefreshState();
 }
 
 
@@ -726,6 +761,115 @@ void fnP_All_Regs(uint16_t option){
   #endif //TESTSUITE_BUILD
 }
 
+
+
+
+void printf_cpx(calcRegister_t regist) {
+  #ifdef PC_BUILD
+  if(getRegisterDataType(regist) == dtReal34 || getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("Reg(%d) REAL = %s ",regist, tmpString);
+  }
+  if(getRegisterDataType(regist) == dtComplex34) {
+    real34ToString(REGISTER_IMAG34_DATA(regist), tmpString);
+    if(strchr(tmpString, '.') == NULL && strchr(tmpString, 'E') == NULL) {
+      strcat(tmpString, ".");
+    }
+    printf("IMAG = %s ",tmpString);
+  }
+  if(getRegisterDataType(regist) != dtReal34 && getRegisterDataType(regist) != dtComplex34) printf("Neither real nor complex");
+  #endif //PC_BUILD
+}
+
+
+void print_stck(){
+  #ifdef PC_BUILD
+  printf("Lasterrorcode=%d\n",lastErrorCode);
+  printf("REGISTER T: ");printf_cpx(REGISTER_T);printf("\n");
+  printf("REGISTER Z: ");printf_cpx(REGISTER_Z);printf("\n");
+  printf("REGISTER Y: ");printf_cpx(REGISTER_Y);printf("\n");
+  printf("REGISTER X: ");printf_cpx(REGISTER_X);printf("\n");
+  #endif //PC_BUILD
+}
+
+
+void doubleToXRegisterReal34(double x) {             //Convert from double to X register REAL34
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
+    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+    //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrtoX(char aimBuffer[]) {      //DONE
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+  int16_t mem = stringByteLength(aimBuffer);
+  reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
+  tmpString[0] = 0;
+  strcat(tmpString, inp1);
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+void fnStrInputLongint(char inp1[]) {  // CONVERT STRING to Longint X      //DONE
+  tmpString[0]=0;
+  strcat(tmpString, inp1);
+  setSystemFlag(FLAG_ASLIFT);   // 5
+  liftStack();
+
+  longInteger_t lgInt;
+  longIntegerInit(lgInt);
+  stringToLongInteger(tmpString + (tmpString[0] == '+' ? 1 : 0), 10, lgInt);
+  convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_X);
+  longIntegerFree(lgInt);
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+
+
+
+void fnRCL(int16_t inp) {      //DONE
+  setSystemFlag(FLAG_ASLIFT);
+  if(inp == TEMP_REGISTER_1) {
+    liftStack();
+    copySourceRegisterToDestRegister(inp, REGISTER_X);
+  } else {
+  fnRecall(inp);
+  }
+}
+
+
+
+double convert_to_double(calcRegister_t regist) {    //Convert from X register to double
+  double y;
+  real_t tmpy;
+    doubleToXRegisterReal34(1.0);
+    fnMultiply(0);
+    real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
+    realToString(&tmpy, tmpString);
+    y = strtof (tmpString, NULL);
+    return y;
+  }
 
 
 

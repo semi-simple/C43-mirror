@@ -3,6 +3,14 @@
 bin=$1
 pgm=$2
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# Host is Mac: use gfind for GNU version
+	FIND=gfind
+else
+	# Assume host is Linux: find is GNU version
+	FIND=find
+fi
+
 # -- Functions ------------
 
 
@@ -48,10 +56,10 @@ dumppgm() {
 
 # -- MAIN ------------------
 
-checkutils sha1sum sed gtac dd printf gfind type
+checkutils sha1sum sed gtac dd printf $FIND type
 
 if [ ! -f "$bin" ]; then
-	echo "ERROR: Cannot find program binary '$bin'"
+	echo "ERROR: Cannot $FIND program binary '$bin'"
 	exit 1
 fi
 
@@ -60,7 +68,7 @@ if [ -z "$pgm" ]; then
 	exit 1
 fi
 
-pgmsz=`gfind "$bin" -printf "%s"`
+pgmsz=`$FIND "$bin" -printf "%s"`
 hexsz=`printf "%08x" $pgmsz`
 
 sha=`dumppgm | sha1sum | tr -d ' -'`

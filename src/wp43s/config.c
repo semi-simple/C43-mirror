@@ -35,7 +35,7 @@ void fnConfigChina(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_DMY); // date format
   clearSystemFlag(FLAG_MDY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1949;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2433191 /* 1 Oct 1949 */;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -53,7 +53,7 @@ void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1582;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2299161 /* 15 Oct 1582 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -71,7 +71,7 @@ void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1752;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -89,7 +89,7 @@ void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_DMY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1873;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2405160 /* 1 Jan 1873 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -107,7 +107,7 @@ void fnConfigUk(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_MDY);   // date format
   clearSystemFlag(FLAG_YMD);   // date format
   setSystemFlag(FLAG_DMY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -125,7 +125,7 @@ void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_YMD);   // date format
   clearSystemFlag(FLAG_DMY);   // date format
   setSystemFlag(FLAG_MDY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -139,7 +139,7 @@ void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
   
-  fnRefreshRadioState(RB_IM, mode);                            //dr
+  fnRefreshState();                            //dr
 
 }
 
@@ -286,7 +286,7 @@ void fnSetWordSize(uint16_t WS) {
     }
   }
 
-  fnRefreshRadioState(RB_WS, WS);                              //dr
+  fnRefreshState();                              //dr
 
 }
 
@@ -400,8 +400,9 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
+  oldAngularMode = currentAngularMode;                         //JM
 
-  fnRefreshRadioState(RB_AM, am);                              //dr
+  fnRefreshState();                              //drJM
 
 }
 
@@ -11882,9 +11883,9 @@ void fnReset(uint16_t confirmation) {
          errorMessage     = (char *)malloc(WRITE_BUFFER_LEN);
        #endif // DMCP_BUILD
 
-      aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
-      nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
-      tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+       aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
+       nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
+       tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
     }
     memset(tmpString,        0, TMP_STR_LENGTH);
     memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);
@@ -12036,7 +12037,9 @@ void fnReset(uint16_t confirmation) {
     systemFlags = 0;
     displayFormat = DF_ALL;
     displayFormatDigits = 0;
+    timeDisplayFormatDigits = 0;
     currentAngularMode = AM_DEGREE;
+    oldAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
     setSystemFlag(FLAG_MULTx);
@@ -12093,7 +12096,7 @@ void fnReset(uint16_t confirmation) {
     tamMode = 0;
     catalog = CATALOG_NONE;
     memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
-    firstGregorianDay = 1752;
+    firstGregorianDay = 2361222 /* 14 Sept 1752 */;
     exponentLimit = 6145;
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
@@ -12211,7 +12214,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_102_KB_POC"
+#define VERSION1 "_103RC_KB_POC"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"
@@ -12308,12 +12311,17 @@ void fnReset(uint16_t confirmation) {
 
 
 
-void backToSystem(uint16_t unusedButMandatoryParameter) {
-  #ifdef PC_BUILD
-    fnOff(NOPARAM);
-  #endif // PC_BUILD
+void backToSystem(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(backToSystem);
+  }
+  else {
+    #ifdef PC_BUILD
+      fnOff(NOPARAM);
+    #endif // PC_BUILD
 
-  #ifdef DMCP_BUILD
-    backToDMCP = true;
-  #endif // DMCP_BUILD
+    #ifdef DMCP_BUILD
+      backToDMCP = true;
+    #endif // DMCP_BUILD
+  }
 }

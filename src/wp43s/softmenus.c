@@ -1,4 +1,4 @@
-/* This file is part of 43S.
+      /* This file is part of 43S.
  *
  * 43S is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,8 +44,12 @@ const int16_t menu_BITS[]        = { ITM_LOGICALAND,                ITM_LOGICALO
 
 const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE,                 ITM_DATEto,               ITM_WDAY,              ITM_TIME,                    ITM_XtoDATE,
                                      ITM_JtoD,                      ITM_DtoJ,                   ITM_NULL,                 ITM_DAY,               ITM_MONTH,                   ITM_YEAR,
-                                     ITM_YEARtoS,                   ITM_StoYEAR,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+#if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
+#else // !DMCP_BUILD
+                                     ITM_RESERVE,                   ITM_TDISP,                  ITM_RESERVE,              ITM_DMY,               ITM_YMD,                     ITM_MDY,
+#endif // DMCP_BUILD
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_JUL_GREG                  };
 
 const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLCVAR,                  ITM_CLX,
@@ -129,27 +133,30 @@ const int16_t menu_M_SIM_Q[]     = { VAR_MATA,                      VAR_MATB,   
 const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            ITM_DOWN_ARROW,              ITM_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
 
-const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,
-                                     ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    ITM_HMS2,                     //JM sequence change
-#ifndef DMCP_BUILD
-                                     ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                         //JM modifoed
+
+#if defined (INLINE_TEST)
+  #define ITM_TST -MNU_INL_TST
+#else
+  #define ITM_TST ITM_RESERVE
 #endif
+
 #ifdef DMCP_BUILD
-                                     ITM_SYSTEM,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                     
+  #define ITM_SYS ITM_SYSTEM
+#else
+  #define ITM_SYS ITM_RESERVE
 #endif
 
-                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_NULL,                    ITM_CFG,                       //JM sequence change
-                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENMAX,                  ITM_NULL,                      //JM sequence change
-                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                      //JM
+const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,                       
+                                     ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    -MNU_TRI,                         //JM
+                                     ITM_SYS,                       ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM
 
+                                     ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_DENMAX,                  ITM_CFG,                           //JM
+                                     ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENANY,                  ITM_DENFIX,                          //JM
+                                     ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                          //JM
 
-#if defined (INLINE_TEST)                                                       //vv dr
-                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             -MNU_INL_TST,             ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
-#else                                                                           //^^
-                                     ITM_BASE_AHOME,                ITM_BASE_HOME,             ITM_NULL,                 ITM_FG_LINE,           ITM_NULL,                    ITM_G_DOUBLETAP,                    //JM
-#endif                                                                          //dr
-                                     -MNU_ASN,                      ITM_NO_BASE_SCREEN,                ITM_NULL,                 ITM_HOMEx3,            ITM_HOMEx3T,                 ITM_SHTIM                      };   //JM
-
+                                     ITM_NO_BASE_SCREEN,            ITM_BASE_HOME,             ITM_BASE_AHOME,             ITM_HOMEx3T,           ITM_SHTIM,                   ITM_HOMEx3,                    //JM
+                                     ITM_G_DOUBLETAP,               ITM_TST,                   ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_FG_LINE,                        //JM
+                                     ITM_NULL,                      ITM_NULL,                  ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                        };
 
 
 const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_DECOMP,
@@ -273,8 +280,8 @@ const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,  
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-const int16_t menu_UnitConv[]    = { -MNU_CONVE,                    -MNU_CONVP,                 ITM_NULL,                 -MNU_CONVFP,           -MNU_CONVM,                  -MNU_CONVX,
-                                     ITM_CtoF,                      ITM_FtoC,                   ITM_NULL,                 ITM_NULL,              -MNU_CONVV,                  -MNU_CONVA,
+const int16_t menu_UnitConv[]    = { -MNU_CONVE,                    -MNU_CONVP,                 ITM_YEARtoS,              -MNU_CONVFP,           -MNU_CONVM,                  -MNU_CONVX,
+                                     ITM_CtoF,                      ITM_FtoC,                   ITM_StoYEAR,              ITM_NULL,              -MNU_CONVV,                  -MNU_CONVA,
                                      ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                      10000+ITM_PRtoDBc,             10000+ITM_DBtoPRc,          10000+ITM_NMtoLBFFTb,     10000+ITM_LBFFTtoNMb,  10000+ITM_FRtoDBc,           10000+ITM_DBtoFRc,
                                      30000+ITM_PRtoDBb,             30000+ITM_DBtoPRb,          20000+ITM_NMtoLBFFT,      20000+ITM_LBFFTtoNM,   30000+ITM_FRtoDBb,           30000+ITM_DBtoFRb,
@@ -1352,12 +1359,10 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
 //continue with trimmed label
   w = stringWidth(figlabel(l, showValue), &standardFont, false, false);                      //JM & dr vv
   if((showCb >= 0) || (w >= 50)) {
-    compressWidth = 1;         //JM compressWidth
     w = stringWidth(figlabel(l, showValue), &standardFont, false, false);
-    compressWidth = 0;         //JM compressWidth
     if(showCb >= 0) { w = w + 8; }
     compressString = 1;       //JM compressString
-    showString(figlabel(l, showValue), &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
+    showString(figlabel(l, showValue), &standardFont, compressString + x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
 //  showString(l, &standardFont, x1 + (xSoftkey == 5 ? 33 : 34) - w/2, y1 + 2, videoMode, false, false);
     compressString = 0;       //JM compressString
   }
@@ -1900,6 +1905,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     m = 0;
     while(softmenu[m].menuItem != 0) {
       if(softmenu[m].menuItem == id) {
+       if(!tamMode) softmenuStack[0].firstItem = lastCatalogPosition[catalog];
        break;
       }
       m++;

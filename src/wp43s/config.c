@@ -11842,8 +11842,8 @@ void addTestPrograms(void) {
       leavePem();
     #endif // TESTSUITE_BUILD
     printf("freeProgramBytes = %u\n", freeProgramBytes);
-    listPrograms();
-    listLabelsAndPrograms();
+    //listPrograms();
+    //listLabelsAndPrograms();
   #endif // !DMCP_BUILD
 }
 

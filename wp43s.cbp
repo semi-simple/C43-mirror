@@ -303,6 +303,9 @@
 		<Unit filename="src/testSuite/cyx.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/dToJ.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/dateTo.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -355,9 +358,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/dot.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/dToJ.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/exp.txt">
@@ -682,10 +682,10 @@
 		<Unit filename="src/testSuite/wday.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/xthRoot.txt">
+		<Unit filename="src/testSuite/xToDate.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/xToDate.txt">
+		<Unit filename="src/testSuite/xthRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/year.txt">
@@ -1371,6 +1371,17 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="generateMenuFCNS" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/dblMultiplication.c">

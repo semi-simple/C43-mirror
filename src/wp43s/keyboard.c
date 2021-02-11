@@ -743,11 +743,12 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
         closeNim();
 
-        setSystemFlag(FLAG_ASLIFT);
-        liftStack();
-        clearSystemFlag(FLAG_ASLIFT);
-
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        if(lastErrorCode == 0) {
+          setSystemFlag(FLAG_ASLIFT);
+          liftStack();
+          clearSystemFlag(FLAG_ASLIFT);
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        }
         break;
 
       case CM_REGISTER_BROWSER:

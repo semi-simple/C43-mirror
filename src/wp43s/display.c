@@ -1717,7 +1717,6 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
 
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   sign = real34IsNegative(&real34);
-  real34SetPositiveSign(&real34);
 
   // Pre-rounding
   if(!ignoreTDisp) {
@@ -1735,12 +1734,13 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
         for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
           real34Multiply(&real34, &value34, &real34);
         }
-        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+        real34ToIntegralValue(&real34, &real34, roundingMode);
         for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
           real34Divide(&real34, &value34, &real34);
         }
     }
   }
+  real34SetPositiveSign(&real34);
 
   // Seconds
   real34ToIntegralValue(&real34, &s34, DEC_ROUND_DOWN);

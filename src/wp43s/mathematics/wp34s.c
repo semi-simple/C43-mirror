@@ -1123,3 +1123,201 @@ void WP34S_Mod(const real_t *x, const real_t *y, real_t *res, realContext_t *rea
 // realDivideRemainder(x, y, &out, &ctxtReal2139);
 // realPlus((real_t *)&out, res, realContext);
 //}
+
+
+static void gser(const real_t *a, const real_t *x, const real_t *gln, real_t *res, realContext_t *realContext) {
+	real_t ap, del, sum, t, u;
+	int32_t i;
+
+	if(realCompareLessEqual(x, const_0)) {
+    realZero(res);
+		return;
+  }
+	realCopy(a, &ap);
+	realDivide(const_1, a, &sum, realContext);
+	realCopy(&sum, &del);
+	for(i=0; i<1000; i++) {
+		realAdd(&ap, const_1, &ap, realContext);
+		realDivide(x, &ap, &t, realContext);
+		realMultiply(&del, &t, &del, realContext);
+		realAdd(&sum, &del, &t, realContext);
+		if(realCompareEqual(&sum, &t))
+			break;
+		realCopy(&t, &sum);
+	}
+	WP34S_Ln(x, &t, realContext);
+	realMultiply(&t, a, &u, realContext);
+	realSubtract(&u, x, &t, realContext);
+	realSubtract(&t, gln, &u, realContext);
+	realExp(&u, &t, realContext);
+  realMultiply(&sum, &t, res, realContext);
+	return;
+}
+
+static void gcheckSmall(real_t *v, realContext_t *realContext) {
+  real_t threshold;
+  stringToReal("1e-10000", &threshold, realContext);
+
+	if(realCompareAbsLessThan(v, &threshold))
+		realCopy(&threshold, v);
+}
+
+static void gcf(const real_t *a, const real_t *x, const real_t *gln, real_t *res, realContext_t *realContext) {
+	real_t an, b, c, d, h, t, u, v, i;
+	int32_t n;
+
+	realAdd(x, const_1, &t, realContext);
+	realSubtract(&t, a, &b, realContext);		// b = (x+1) - a
+  gcheckSmall(&b, realContext);
+	realCopy(const_plusInfinity, &c);
+	realDivide(const_1, &b, &d, realContext);
+	realCopy(&d, &h);
+	realZero(&i);
+	for(n=0; n<1000; n++) {
+		realAdd(&i, const_1, &i, realContext);
+		realSubtract(a, &i, &t, realContext);		// t = a-i
+		realMultiply(&i, &t, &an, realContext);		// an = -i (i-a)
+		realAdd(&b, const_2, &b, realContext);
+		realMultiply(&an, &d, &t, realContext);
+		realAdd(&t, &b, &v, realContext);
+		gcheckSmall(&v, realContext);
+		realDivide(const_1, &v, &d, realContext);
+		realDivide(&an, &c, &t, realContext);
+		realAdd(&b, &t, &c, realContext);
+		gcheckSmall(&c, realContext);
+		realMultiply(&d, &c, &t, realContext);
+		realMultiply(&h, &t, &u, realContext);
+		if (realCompareEqual(&u, &h))
+			break;
+		realCopy(&u, &h);
+	}
+	WP34S_Ln(x, &t, realContext);
+	realMultiply(&t, a, &u, realContext);
+	realSubtract(&u, x, &t, realContext);
+	realSubtract(&t, gln, &u, realContext);
+	realExp(&u, &t, realContext);
+  realMultiply(&t, &h, res, realContext);
+	return;
+}
+
+void WP34S_GammaP(const real_t *x, const real_t *a, real_t *res, realContext_t *realContext, bool_t upper, bool_t regularised) {
+  real_t z, lga;
+
+	if(realIsNegative(x) || realCompareLessEqual(a, const_0) || realIsNaN(x) || realIsNaN(a) || realIsInfinite(a)) {
+		realCopy(const_NaN, res);
+    return;
+	}
+	if(realIsInfinite(x)) {
+		if(upper) {
+			if(regularised) {
+				realCopy(const_1, res);
+        return;
+      }
+      WP34S_Gamma(a, res, realContext);
+			return;
+		}
+    realZero(res);
+		return;
+	}
+
+	realAdd(a, const_1, &lga, realContext);
+  realCompare(x, &lga, &z, realContext);
+	if(regularised)
+    WP34S_LnGamma(a, &lga, realContext);
+	else
+    realZero(&lga);
+	if(realIsNegative(&z)) {
+		/* Deal with a difficult case by using the other expansion */
+    int32ToReal(9000, &z);
+		if(realCompareGreaterThan(a, &z)) {
+      stringToReal("0.995", &z, realContext);
+      realMultiply(a, &z, &z, realContext);
+      if(realCompareGreaterThan(x, &z)) {
+  			goto use_cf;
+      }
+    }
+		gser(a, x, &lga, res, realContext);
+		if(upper)
+			goto invert;
+	} else {
+use_cf:
+		gcf(a, x, &lga, res, realContext);
+		if(!upper)
+			goto invert;
+	}
+	return;
+
+invert:
+	if(regularised) {
+    realSubtract(const_1, res, res, realContext);
+    return;
+  }
+  WP34S_Gamma(a, &z, realContext);
+  realSubtract(&z, res, res, realContext);
+	return;
+}
+
+// erf and erfc were embedded library functions on WP 34S
+void WP34S_Erf(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p, q;
+
+  if(realIsInfinite(x)) {
+    int32ToReal(realIsNegative(x) ? -1 : 1, res);
+    return;
+  }
+
+  realPower(x, const_2, &p, realContext);
+  WP34S_GammaP(&p, const_1on2, &p, realContext, false, false);
+  realSquareRoot(const_pi, &q, realContext);
+  realDivide(&p, &q, &p, realContext);
+  if(realIsNegative(x))
+    realChangeSign(&p);
+  realCopy(&p, res);
+  return;
+}
+
+void WP34S_Erfc(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p;
+
+  realSquareRoot(const_2, &p, realContext);
+  realMultiply(x, &p, &p, realContext);
+  realChangeSign(&p);
+  WP34S_Cdf_Q(&p, &p, realContext);
+  realMultiply(&p, const_2, res, realContext);
+}
+
+static void cdf_q(const real_t *x, real_t *res, realContext_t *realContext, bool_t upper) {
+  real_t p;
+
+  if(upper) {
+    if(realIsNegative(x)) goto cdfu_q_flip;
+cdf_q_flip:
+    realPower(x, const_2, res, realContext);
+    realDivide(res, const_2, res, realContext);
+    WP34S_GammaP(res, const_1on2, res, realContext, true, false);
+    realDivide(res, const_2, res, realContext);
+    realSquareRoot(const_pi, &p, realContext);
+    realDivide(res, &p, res, realContext);
+    return;
+  }
+  else {
+    if(realIsNegative(x)) goto cdf_q_flip;
+cdfu_q_flip:
+    realPower(x, const_2, res, realContext);
+    realDivide(res, const_2, res, realContext);
+    WP34S_GammaP(res, const_1on2, res, realContext, false, false);
+    realSquareRoot(const_pi, &p, realContext);
+    realDivide(res, &p, res, realContext);
+    realAdd(res, const_1, res, realContext);
+    realDivide(res, const_2, res, realContext);
+    return;
+  }
+}
+
+void WP34S_Cdfu_Q(const real_t *x, real_t *res, realContext_t *realContext) {
+  cdf_q(x, res, realContext, true);
+}
+
+void WP34S_Cdf_Q(const real_t *x, real_t *res, realContext_t *realContext) {
+  cdf_q(x, res, realContext, false);
+}

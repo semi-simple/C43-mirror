@@ -454,6 +454,15 @@ void fnSetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
   }
 }
 
+void fnGetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
+  real34_t j;
+
+  uInt32ToReal34(firstGregorianDay, &j);
+  liftStack();
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
 void fnXToDate(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 

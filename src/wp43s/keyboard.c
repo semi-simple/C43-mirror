@@ -1128,16 +1128,19 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         closeNim();
 
       if( !eRPN ) {                                    //JM NEWERPN
-        setSystemFlag(FLAG_ASLIFT);
-        liftStack();
-        clearSystemFlag(FLAG_ASLIFT);
-
-        copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-      } else {
-        if(getSystemFlag(FLAG_ASLIFT)) {
+        if(lastErrorCode == 0) {
+          setSystemFlag(FLAG_ASLIFT);
           liftStack();
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        }
+      } else {
+        if(getSystemFlag(FLAG_ASLIFT)) {
+        if(lastErrorCode == 0) {
+            liftStack();
+            clearSystemFlag(FLAG_ASLIFT);
+            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          }
         }
       }
       break;

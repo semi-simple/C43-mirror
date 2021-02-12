@@ -288,7 +288,7 @@ void decomposeJulianDay(const real34_t *jd, real34_t *year, real34_t *month, rea
   AddInt(jd, 1401, &e);
   uInt32ToReal34(firstGregorianDay, &tmp);
   // proleptic Gregorian calendar is used if firstGregorianDay == 0: for special purpose only!
-  if((firstGregorianDay > 0u) && real34CompareGreaterEqual(jd, &tmp)) { // Gregorian
+  if((firstGregorianDay == 0u) || real34CompareGreaterEqual(jd, &tmp)) { // Gregorian
     MulInt(jd, 4, &tmp1);
     AddInt(&tmp1, 274277, &tmp1);
     DivInt(&tmp1, 146097, &tmp1);
@@ -445,12 +445,22 @@ void fnSetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
   real34_t jd34;
   const uint32_t fgd = firstGregorianDay;
 
+  firstGregorianDay = 0u; // proleptic Gregorian mode
   if(checkDateArgument(REGISTER_X, &jd34)) {
     firstGregorianDay = real34ToUInt32(&jd34);
   }
   else {
     firstGregorianDay = fgd;
   }
+}
+
+void fnGetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
+  real34_t j;
+
+  uInt32ToReal34(firstGregorianDay, &j);
+  liftStack();
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 void fnXToDate(uint16_t unusedButMandatoryParameter) {

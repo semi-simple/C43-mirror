@@ -303,10 +303,22 @@
 		<Unit filename="src/testSuite/cyx.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/dToJ.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/dateTo.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/day.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblDivision.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblDivisionRemainder.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblMultiplication.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
@@ -351,6 +363,12 @@
 		<Unit filename="src/testSuite/dToJ.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/erf.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/erfc.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/exp.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -370,6 +388,18 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/gamma.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaP.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaQ.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaXyLower.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaXyUpper.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/gcd.txt">
@@ -673,10 +703,10 @@
 		<Unit filename="src/testSuite/wday.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/xthRoot.txt">
+		<Unit filename="src/testSuite/xToDate.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/xToDate.txt">
+		<Unit filename="src/testSuite/xthRoot.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/year.txt">
@@ -1435,6 +1465,28 @@
 			<Option target="generateMenuFCNS" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/decomp.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1475,6 +1527,28 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/dot.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erf.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erf.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erfc.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erfc.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1563,6 +1637,50 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/gamma.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaP.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaP.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaQ.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaQ.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyLower.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyLower.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyUpper.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyUpper.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -35,6 +35,7 @@ void fnJulianToDate          (uint16_t unusedButMandatoryParameter);
 void fnDateToJulian          (uint16_t unusedButMandatoryParameter);
 void fnIsLeap                (uint16_t unusedButMandatoryParameter);
 void fnSetFirstGregorianDay  (uint16_t unusedButMandatoryParameter);
+void fnGetFirstGregorianDay  (uint16_t unusedButMandatoryParameter);
 void fnXToDate               (uint16_t unusedButMandatoryParameter);
 void fnYear                  (uint16_t unusedButMandatoryParameter);
 void fnMonth                 (uint16_t unusedButMandatoryParameter);

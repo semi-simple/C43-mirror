@@ -144,6 +144,10 @@ idivr
 modulo
 remainder
 
+dblDivision
+dblDivisionRemainder
+dblMultiplication
+
 mant
 expt
 
@@ -178,6 +182,9 @@ tanh
 ;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
 trig
 
+erf
+erfc
+
 conjugate
 reToCx
 cxToRe
@@ -191,6 +198,10 @@ xthRoot
 lnGamma
 gamma
 factorial
+gammaP
+gammaQ
+gammaXyLower
+gammaXyUpper
 
 cyx
 pyx

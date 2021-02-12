@@ -262,7 +262,7 @@ size_t                 wp43sMemInBlocks;
     setupUI();
 
     restoreCalc();
-ramDump();
+    //ramDump();
     refreshScreen();
 
     gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms

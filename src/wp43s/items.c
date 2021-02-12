@@ -190,6 +190,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnAngularMode              (uint16_t unusedButMandatoryParameter) {}
   void fnDenMode                  (uint16_t unusedButMandatoryParameter) {}
   void fnDenMax                   (uint16_t unusedButMandatoryParameter) {}
+  void fnErf                      (uint16_t unusedButMandatoryParameter) {}
+  void fnErfc                     (uint16_t unusedButMandatoryParameter) {}
   void fnExp                      (uint16_t unusedButMandatoryParameter) {}
   void fnExpM1                    (uint16_t unusedButMandatoryParameter) {}
   void fnExpt                     (uint16_t unusedButMandatoryParameter) {}
@@ -270,6 +272,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnLnBeta                   (uint16_t unusedButMandatoryParameter) {}
   void fnBeta                     (uint16_t unusedButMandatoryParameter) {}
   void fnGamma                    (uint16_t unusedButMandatoryParameter) {}
+  void fnGammaP                   (uint16_t unusedButMandatoryParameter) {}
+  void fnGammaQ                   (uint16_t unusedButMandatoryParameter) {}
+  void fnGammaXyLower             (uint16_t unusedButMandatoryParameter) {}
+  void fnGammaXyUpper             (uint16_t unusedButMandatoryParameter) {}
   void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
   void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
   void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
@@ -284,6 +290,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnM1Pow                    (uint16_t unusedButMandatoryParameter) {}
   void backToSystem               (uint16_t unusedButMandatoryParameter) {}
   void fnMultiply                 (uint16_t unusedButMandatoryParameter) {}
+  void fnDblDivide                (uint16_t unusedButMandatoryParameter) {}
+  void fnDblDivideRemainder       (uint16_t unusedButMandatoryParameter) {}
+  void fnDblMultiply              (uint16_t unusedButMandatoryParameter) {}
   void fnChangeBase               (uint16_t unusedButMandatoryParameter) {}
   void fnToPolar                  (uint16_t unusedButMandatoryParameter) {}
   void fnToRect                   (uint16_t unusedButMandatoryParameter) {}
@@ -474,6 +483,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnAlphaToX                 (uint16_t unusedButMandatoryParameter) {}
   void fnTicks                    (uint16_t unusedButMandatoryParameter) {}
   void fnSetFirstGregorianDay     (uint16_t unusedButMandatoryParameter) {}
+  void fnGetFirstGregorianDay     (uint16_t unusedButMandatoryParameter) {}
   void fnDate                     (uint16_t unusedButMandatoryParameter) {}
   void fnTime                     (uint16_t unusedButMandatoryParameter) {}
   void fnSave                     (uint16_t unusedButMandatoryParameter) {}
@@ -887,10 +897,10 @@ const item_t indexOfItems[] = {
 /*  379 */  { fnCvtYinM,                   multiply,                    "m" STD_RIGHT_ARROW "y" STD_i_BREVE "n",       "m" STD_RIGHT_ARROW "y" STD_i_BREVE "n",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  380 */  { fnCvtCunM,                   divide,                      "c" STD_u_GRAVE "n" STD_RIGHT_ARROW "m",       "c" STD_u_GRAVE "n" STD_RIGHT_ARROW "m",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  381 */  { fnCvtCunM,                   multiply,                    "m" STD_RIGHT_ARROW "c" STD_u_GRAVE "n",       "m" STD_RIGHT_ARROW "c" STD_u_GRAVE "n",       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  382 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "ng" STD_RIGHT_ARROW "m",     "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  383 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "ng" STD_RIGHT_ARROW "m",     STD_RIGHT_ARROW " m",                          0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
-/*  384 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "ng",     "m " STD_RIGHT_ARROW,                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/*  385 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "ng",     "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
+/*  382 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "n" STD_RIGHT_ARROW "m",      "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  383 */  { fnCvtZhangM,                 divide,                      "zh" STD_a_GRAVE "n" STD_RIGHT_ARROW "m",      STD_RIGHT_ARROW " m",                          0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
+/*  384 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "n",      "m " STD_RIGHT_ARROW,                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/*  385 */  { fnCvtZhangM,                 multiply,                    "m" STD_RIGHT_ARROW "zh" STD_a_GRAVE "n",      "zh" STD_a_GRAVE "ng",                         0,       0,       CAT_DUPL, SLS_ENABLED  , US_ENABLED  },
 /*  386 */  { fnCvtFenM,                   divide,                      "f" STD_e_MACRON "n" STD_RIGHT_ARROW "m",      "f" STD_e_MACRON "n" STD_RIGHT_ARROW "m",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  387 */  { fnCvtFenM,                   multiply,                    "m" STD_RIGHT_ARROW "f" STD_e_MACRON "n",      "m" STD_RIGHT_ARROW "f" STD_e_MACRON "n",      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /*  388 */  { itemToBeCoded,               NOPARAM,                     "0388",                                        "0388",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -1976,9 +1986,9 @@ const item_t indexOfItems[] = {
 /* 1438 */  { fnDate,                      NOPARAM,                     "DATE",                                        "DATE",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1439 */  { fnDateTo,                    NOPARAM,                     "DATE" STD_RIGHT_ARROW,                        "DATE" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1440 */  { fnDay,                       NOPARAM,                     "DAY",                                         "DAY",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1441 */  { itemToBeCoded,               NOPARAM,                     "DBLR",                                        "DBLR",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1442 */  { itemToBeCoded,               NOPARAM,                     "DBL" STD_CROSS,                               "DBL" STD_CROSS,                               0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1443 */  { itemToBeCoded,               NOPARAM,                     "DBL/",                                        "DBL/",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1441 */  { fnDblDivideRemainder,        NOPARAM,                     "DBLR",                                        "DBLR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1442 */  { fnDblMultiply,               NOPARAM,                     "DBL" STD_CROSS,                               "DBL" STD_CROSS,                               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1443 */  { fnDblDivide,                 NOPARAM,                     "DBL/",                                        "DBL/",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1444 */  { fnDecomp,                    NOPARAM,                     "DECOMP",                                      "DECOMP",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1445 */  { fnAngularMode,               AM_DEGREE,                   "DEG",                                         "DEG",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1446 */  { fnCvtToCurrentAngularMode,   AM_DEGREE,                   "DEG" STD_RIGHT_ARROW,                         "DEG" STD_RIGHT_ARROW,                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2001,8 +2011,8 @@ const item_t indexOfItems[] = {
 /* 1463 */  { itemToBeCoded,               NOPARAM,                     "EQ.DEL",                                      "DELETE",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1464 */  { itemToBeCoded,               NOPARAM,                     "EQ.EDI",                                      "EDIT",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1465 */  { itemToBeCoded,               NOPARAM,                     "EQ.NEW",                                      "NEW",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1466 */  { itemToBeCoded,               NOPARAM,                     "erf",                                         "erf",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1467 */  { itemToBeCoded,               NOPARAM,                     "erfc",                                        "erfc",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1466 */  { fnErf,                       NOPARAM,                     "erf",                                         "erf",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1467 */  { fnErfc,                      NOPARAM,                     "erfc",                                        "erfc",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1468 */  { itemToBeCoded,               NOPARAM,                     "ERR",                                         "ERR",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1469 */  { itemToBeCoded,               NOPARAM,                     "EXITALL",                                     "EXITall",                                     0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1470 */  { fnExpt,                      NOPARAM,                     "EXPT",                                        "EXPT",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2023,8 +2033,8 @@ const item_t indexOfItems[] = {
 /* 1485 */  { fnImaginaryPart,             NOPARAM,                     "Im",                                          "Im",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1486 */  { itemToBeCoded,               NOPARAM,                     "INDEX",                                       "INDEX",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1487 */  { itemToBeCoded,               NOPARAM,                     "I" STD_SUB_x STD_SUB_y STD_SUB_z,             "I" STD_SUB_x STD_SUB_y STD_SUB_z,             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1488 */  { itemToBeCoded,               NOPARAM,                     "I" STD_GAMMA STD_SUB_p,                       "I" STD_GAMMA STD_SUB_p,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1489 */  { itemToBeCoded,               NOPARAM,                     "I" STD_GAMMA STD_SUB_q,                       "I" STD_GAMMA STD_SUB_q,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1488 */  { fnGammaP,                    NOPARAM,                     "I" STD_GAMMA STD_SUB_p,                       "I" STD_GAMMA STD_SUB_p,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1489 */  { fnGammaQ,                    NOPARAM,                     "I" STD_GAMMA STD_SUB_q,                       "I" STD_GAMMA STD_SUB_q,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1490 */  { itemToBeCoded,               NOPARAM,                     "I+",                                          "I+",                                          0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1491 */  { itemToBeCoded,               NOPARAM,                     "I-",                                          "I-",                                          0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1492 */  { itemToBeCoded,               NOPARAM,                     "J" STD_SUB_y "(x)",                           "J" STD_SUB_y "(x)",                           0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -2196,9 +2206,9 @@ const item_t indexOfItems[] = {
 /* 1658 */  { fnAlphaSL,                   TM_REGISTER,                 STD_alpha "SL",                                STD_alpha "SL",                                0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1659 */  { fnAlphaSR,                   TM_REGISTER,                 STD_alpha "SR",                                STD_alpha "SR",                                0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1660 */  { fnAlphaToX,                  TM_REGISTER,                 STD_alpha STD_RIGHT_ARROW "x",                 STD_alpha STD_RIGHT_ARROW "x",                 0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1661 */  { fnBeta,                      NOPARAM,                     STD_beta "(x,y)",                              STD_beta "(x,y)",                              0,       0,       CAT_FNCT, SLS_ENABLED,   US_ENABLED  },
-/* 1662 */  { itemToBeCoded,               NOPARAM,                     STD_gamma STD_SUB_x STD_SUB_y,                 STD_gamma STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1663 */  { itemToBeCoded,               NOPARAM,                     STD_GAMMA STD_SUB_x STD_SUB_y,                 STD_GAMMA STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1661 */  { fnBeta,                      NOPARAM,                     STD_beta "(x,y)",                              STD_beta "(x,y)",                              0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1662 */  { fnGammaXyLower,              NOPARAM,                     STD_gamma STD_SUB_x STD_SUB_y,                 STD_gamma STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1663 */  { fnGammaXyUpper,              NOPARAM,                     STD_GAMMA STD_SUB_x STD_SUB_y,                 STD_GAMMA STD_SUB_x STD_SUB_y,                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1664 */  { fnGamma,                     NOPARAM,                     STD_GAMMA "(x)",                               STD_GAMMA "(x)",                               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1665 */  { itemToBeCoded,               NOPARAM,                     STD_delta "x",                                 STD_delta "x",                                 0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1666 */  { fnDeltaPercent,              NOPARAM,                     STD_DELTA "%",                                 STD_DELTA "%",                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
@@ -2293,6 +2303,7 @@ const item_t indexOfItems[] = {
 /* 1753 */  { itemToBeCoded,               NOPARAM,                     "TRANS",                                       "TRANS",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1754 */  { itemToBeCoded,               NOPARAM,                     "xIN",                                         "xIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1755 */  { itemToBeCoded,               NOPARAM,                     "xOUT",                                        "xOUT",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1756 */  { fnGetFirstGregorianDay,      NOPARAM,                     "J/G?",                                        "J/G?",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 
-/* 1756 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1757 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

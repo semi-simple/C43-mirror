@@ -131,7 +131,7 @@ typedef struct {
   uint8_t   displayFormatDigits;
   uint8_t   groupingGap;
   uint8_t   currentAngularMode;
-  uint8_t   oldAngularMode;
+  uint8_t   lastSetAngularMode;
   uint8_t   displayStack;
   uint8_t   roundingMode;
   uint8_t   timeDisplayFormatDigits;

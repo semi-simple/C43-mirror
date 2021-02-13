@@ -191,14 +191,16 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 }
 
 
-
-//SHOI, LONI >> REAL
-//REAL >> CAM
-//AM >> DMS
+/*
+* If in direct entry, accept h.ms, example 1.23 [.ms] would be 1:23:00. Do not change the ADM.
+* If closed in X: and X is REAL/integer, then convert this to h.ms. Do not change the ADM.
+* If closed in X: and X is already a Time in visible hms like 1:23:45, then change the time to REAL, then tag the REAL with d.ms (‘’) in the form 1°23’45.00’’. Do not change the ADM.
+* if closed in X: and X is already d.ms, then convert X to time in h:ms.Do not change the ADM.
+*/
 // 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-  uint8_t oldAngularMode1 = oldAngularMode;
+//  uint8_t oldAngularMode1 = lastSetAngularMode;
   switch(calcMode) {                     //JM
     case CM_NIM:
       addItemToNimBuffer(ITM_ms);
@@ -207,7 +209,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_NORMAL:
       copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
-      switch(getRegisterDataType(REGISTER_X)) {
+      switch(getRegisterDataType(REGISTER_X)) {                        //if integer, make a real
         case dtShortInteger :
           convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
           break;
@@ -218,23 +220,19 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       }
 
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
-        if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
-          oldAngularMode1 = currentAngularMode;
-          fnAngularModeJM(AM_DMS);
-          oldAngularMode = oldAngularMode1;
+        if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_DEGREE) {
+          fnKeyDotD(0);
+        } 
+        if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+          fnToHms(0);                   
         }
-        else {                  //REGISTER_X) == AM_DMS
-          fnAngularModeJM(AM_HMS);
-          fnAngularMode(oldAngularMode);
-          fnRefreshState();
-          refreshStatusBar();
-        }
+
       }
       else
       if(getRegisterDataType(REGISTER_X) == dtTime) {
-        oldAngularMode1 = currentAngularMode;
-        fnAngularModeJM(AM_DMS);
-        oldAngularMode = oldAngularMode1;
+        fnToHr(0);
+        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+        fnCvtFromCurrentAngularMode(AM_DMS);
       }
 
       copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
@@ -477,7 +475,7 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 //change the current state from the old state?
 
 void fnAngularModeJM(uint16_t AMODE) {
-  if (AMODE == AM_HMS) {
+  if (AMODE == TM_HMS) {
     if(getRegisterDataType(REGISTER_X) == dtTime) return;
     fnCvtFromCurrentAngularMode(AM_DEGREE);   //Setting to HMS does not change AM
     fnToHms(0);

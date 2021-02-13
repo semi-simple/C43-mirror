@@ -384,7 +384,7 @@
   extern int16_t               mm_MNU_HOME;                 //JM
   extern int16_t               mm_MNU_ALPHA;                //JM
   extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
-  extern uint8_t                oldAngularMode;        //JM
+  extern uint8_t                lastSetAngularMode;        //JM
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];
   extern uint16_t               freeProgramBytes;
   extern uint16_t               firstDisplayedLocalStepNumber;

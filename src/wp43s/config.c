@@ -400,7 +400,7 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
-  oldAngularMode = currentAngularMode;                         //JM
+  lastSetAngularMode = currentAngularMode;                         //JM
 
   fnRefreshState();                              //drJM
 
@@ -12039,7 +12039,7 @@ void fnReset(uint16_t confirmation) {
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
     currentAngularMode = AM_DEGREE;
-    oldAngularMode = currentAngularMode;             //JM
+    lastSetAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
     setSystemFlag(FLAG_MULTx);

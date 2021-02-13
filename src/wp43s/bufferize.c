@@ -999,7 +999,6 @@ void kill_ASB_icon(void) {
         }
         break;
 
-      case ITM_ms :
       case ITM_DMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
@@ -1033,6 +1032,7 @@ void kill_ASB_icon(void) {
         }
         break;
 
+      case ITM_ms :
       case ITM_toHMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;

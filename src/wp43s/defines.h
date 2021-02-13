@@ -544,7 +544,7 @@
 #define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
 #define AM_DMS                                     4
 #define AM_NONE                                    5
-#define AM_HMS                                     6   //JM
+#define TM_HMS                                     6   //JM
 
 // Date format 2 bits
 #define DF_DMY                                     0

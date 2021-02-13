@@ -898,7 +898,9 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
   }
 
   if(lastErrorCode != 0) {
-    undo();
+    #ifdef TESTSUITE_BUILD
+      undo();
+    #endif //TESTSUITE_BUILD
     return;
   }
 

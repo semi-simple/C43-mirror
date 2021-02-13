@@ -70,11 +70,16 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
     indexOfItems[func].func(param);
 
-    if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
-      clearSystemFlag(FLAG_ASLIFT);
+    if(lastErrorCode != 0) {
+      undo();
     }
-    else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
-      setSystemFlag(FLAG_ASLIFT);
+    else {
+      if(indexOfItems[func].stackLiftStatus == SLS_DISABLED) {
+        clearSystemFlag(FLAG_ASLIFT);
+      }
+      else if(indexOfItems[func].stackLiftStatus == SLS_ENABLED) {
+        setSystemFlag(FLAG_ASLIFT);
+      }
     }
 
     #ifdef PC_BUILD

@@ -77,15 +77,8 @@ void xorError31(void) {
  ***********************************************/
 void fnLogicalXor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   logicalXor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
-  else {
-    fnDropY(NOPARAM);
-  }
+  fnDropY(NOPARAM);
 }
 
 

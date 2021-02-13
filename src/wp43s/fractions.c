@@ -41,7 +41,6 @@ void fnDenMax(uint16_t unusedButMandatoryParameter) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnDenMax:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    undo();
     return;
   }
 
@@ -50,7 +49,6 @@ void fnDenMax(uint16_t unusedButMandatoryParameter) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnDenMax:", "cannot use NaN as X input of fnDenMax", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    undo();
     return;
   }
 

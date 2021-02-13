@@ -858,7 +858,7 @@ void fnUserJM(uint16_t jmUser) {
   case USER_DEFAULTS:                                           //USER_DEFAULTS FOR USER: E+ CC
     kbd_usr[0].primary     = ITM_CC;
     kbd_usr[0].fShifted    = ITM_RI;
-    kbd_usr[0].gShifted    = ITM_LI;
+    kbd_usr[0].gShifted    = ITM_IP;
     Norm_Key_00_VAR        = ITM_CC;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
@@ -870,7 +870,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[12].fShifted   = ITM_CC;                            //JM Changed CPX menu therefore USER MODE changes
     kbd_usr[0].primary     = -MNU_MyMenu;
     kbd_usr[0].fShifted    = ITM_RI;
-    kbd_usr[0].gShifted    = ITM_LI;
+    kbd_usr[0].gShifted    = ITM_IP;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
@@ -889,7 +889,7 @@ void fnUserJM(uint16_t jmUser) {
     //kbd_usr[12].gShifted   = ITM_CC;
     kbd_usr[0].primary     = -MNU_MyMenu;
     kbd_usr[0].fShifted    = ITM_RI;
-    kbd_usr[0].gShifted    = ITM_LI;
+    kbd_usr[0].gShifted    = ITM_IP;
     Norm_Key_00_VAR        = -MNU_MyMenu;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);

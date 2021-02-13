@@ -57,10 +57,6 @@ void fnChangeSign(uint16_t unusedButMandatoryParameter) {
   //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   chs[getRegisterDataType(REGISTER_X)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
 }
 
 

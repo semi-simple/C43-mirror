@@ -55,12 +55,7 @@ void imagPartError(void) {
  ***********************************************/
 void fnImaginaryPart(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   imagPart[getRegisterDataType(REGISTER_X)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
 }
 
 

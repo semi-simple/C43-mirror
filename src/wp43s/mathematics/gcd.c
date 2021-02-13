@@ -64,15 +64,8 @@ void gcdError(void) {
  ***********************************************/
 void fnGcd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   gcd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-
-  if(lastErrorCode == 0) {
-    fnDropY(NOPARAM);
-  }
-  else {
-    undo();
-  }
+  fnDropY(NOPARAM);
 }
 
 

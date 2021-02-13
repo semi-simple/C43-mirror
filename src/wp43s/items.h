@@ -28,6 +28,12 @@
 
 
 
+
+
+
+
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1518,7 +1524,7 @@
 #define ITM_DMSto                     1452
 #define ITM_DMY                       1453
 #define ITM_DtoJ                      1454
-#define ITM_1455                      1455
+#define ITM_DELITM                    1455
 #define ITM_EIGVAL                    1456
 #define ITM_EIGVEC                    1457
 #define ITM_END                       1458
@@ -1534,7 +1540,7 @@
 #define ITM_ERR                       1468
 #define ITM_EXITALL                   1469
 #define ITM_EXPT                      1470
-#define ITM_1471                      1471
+#define ITM_GET_JUL_GREG              1471
 #define ITM_FIB                       1472
 #define ITM_FIX                       1473
 #define ITM_FLASH                     1474
@@ -1821,7 +1827,7 @@
 #define ITM_TRANS                     1753
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
-#define ITM_GET_JUL_GREG              1756
+#define ITM_1756                      1756
 
 
 
@@ -1923,7 +1929,7 @@
 #define ITM_EE_STO_V_Z                1849
 #define ITM_EE_X2BAL                  1850
 #define ITM_DMPMNU                    1851
-#define ITM_LI                        1852
+#define ITM_1852                      1852
 #define ITM_2BIN                      1853
 #define ITM_2OCT                      1854
 #define ITM_2DEC                      1855

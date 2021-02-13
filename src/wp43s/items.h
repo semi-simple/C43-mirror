@@ -1524,7 +1524,7 @@
 #define ITM_ERR                       1468
 #define ITM_EXITALL                   1469
 #define ITM_EXPT                      1470
-#define ITM_GET_JUL_GREG              1756
+#define ITM_GET_JUL_GREG              1471
 #define ITM_FIB                       1472
 #define ITM_FIX                       1473
 #define ITM_FLASH                     1474

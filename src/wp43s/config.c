@@ -507,7 +507,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 8356; // Multiple of 4
+  uint32_t numberOfBytesForTheTestPrograms = 8364; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -8814,6 +8814,14 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_DtoJ >> 8) | 0x80;
     *(currentStep++) =  ITM_DtoJ       & 0xff;
 
+    *(currentStep++) = (ITM_DELITM >> 8) | 0x80;
+    *(currentStep++) =  ITM_DELITM       & 0xff;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 3; // String length
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
     *(currentStep++) = (ITM_EIGVAL >> 8) | 0x80;
     *(currentStep++) =  ITM_EIGVAL       & 0xff;
 
@@ -8999,6 +9007,9 @@ void addTestPrograms(void) {
 
     *(currentStep++) = (ITM_EXPT >> 8) | 0x80;
     *(currentStep++) =  ITM_EXPT       & 0xff;
+
+    *(currentStep++) = (ITM_GET_JUL_GREG >> 8) | 0x80;
+    *(currentStep++) =  ITM_GET_JUL_GREG       & 0xff;
 
     *(currentStep++) = (ITM_FIB >> 8) | 0x80;
     *(currentStep++) =  ITM_FIB       & 0xff;
@@ -11842,8 +11853,8 @@ void addTestPrograms(void) {
       leavePem();
     #endif // TESTSUITE_BUILD
     printf("freeProgramBytes = %u\n", freeProgramBytes);
-    //listPrograms();
-    //listLabelsAndPrograms();
+    listPrograms();
+    listLabelsAndPrograms();
   #endif // !DMCP_BUILD
 }
 

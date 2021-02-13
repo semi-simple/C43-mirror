@@ -555,6 +555,7 @@ void decodeOneStep(uint8_t *step) {
 
       item16 = ((uint16_t)(item8 & 0x7F) << 8) | *(uint8_t *)(step++);
       switch(item16) {
+        case ITM_DELITM:         //  1455
         case ITM_FQX:            //  1475
         case ITM_FDQX:           //  1476
         case ITM_INDEX:          //  1486
@@ -1047,6 +1048,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_ERFC:           //  1467
         case ITM_EXITALL:        //  1469
         case ITM_EXPT:           //  1470
+        case ITM_GET_JUL_GREG:   //  1471
         case ITM_FIB:            //  1472
         case ITM_FLASH:          //  1474
         case ITM_GD:             //  1478

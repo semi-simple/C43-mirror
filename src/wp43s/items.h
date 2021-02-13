@@ -1508,7 +1508,7 @@
 #define ITM_DMSto                     1452
 #define ITM_DMY                       1453
 #define ITM_DtoJ                      1454
-#define ITM_1455                      1455
+#define ITM_DELITM                    1455
 #define ITM_EIGVAL                    1456
 #define ITM_EIGVEC                    1457
 #define ITM_END                       1458
@@ -1524,7 +1524,7 @@
 #define ITM_ERR                       1468
 #define ITM_EXITALL                   1469
 #define ITM_EXPT                      1470
-#define ITM_1471                      1471
+#define ITM_GET_JUL_GREG              1756
 #define ITM_FIB                       1472
 #define ITM_FIX                       1473
 #define ITM_FLASH                     1474
@@ -1812,9 +1812,7 @@
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
 
-#define ITM_GET_JUL_GREG              1756
-
-#define LAST_ITEM                     1757
+#define LAST_ITEM                     1756
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

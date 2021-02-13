@@ -77,15 +77,8 @@ void andError31(void) {
  ***********************************************/
 void fnLogicalAnd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   logicalAnd[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
-  else {
-    fnDropY(NOPARAM);
-  }
+  fnDropY(NOPARAM);
 }
 
 

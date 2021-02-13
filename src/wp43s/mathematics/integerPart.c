@@ -55,12 +55,7 @@ void ipError(void) {
  ***********************************************/
 void fnIp(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   ip[getRegisterDataType(REGISTER_X)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
 }
 
 

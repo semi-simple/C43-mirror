@@ -57,10 +57,6 @@ void fnConjugate(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   conjugate[getRegisterDataType(REGISTER_X)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
 }
 
 

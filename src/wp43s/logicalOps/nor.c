@@ -77,15 +77,8 @@ void norError31(void) {
  ***********************************************/
 void fnLogicalNor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   logicalNor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
-  else {
-    fnDropY(NOPARAM);
-  }
+  fnDropY(NOPARAM);
 }
 
 

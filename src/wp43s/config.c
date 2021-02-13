@@ -206,6 +206,26 @@ void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
 
 
 /********************************************//**
+ * \brief Sets the rounding mode
+ *
+ * \param[in] RM uint16_t
+ * \return void
+ ***********************************************/
+void fnSetRoundingMode(uint16_t RM) {
+  roundingMode = RM;
+}
+
+// "enum rounding" does not match with the specification of WP 43s rounding mode.
+// So you need roundingModeTable[roundingMode] rather than roundingMode
+// to specify rounding mode in the real number functions.
+const enum rounding roundingModeTable[7] = {
+  DEC_ROUND_HALF_EVEN, DEC_ROUND_HALF_UP, DEC_ROUND_HALF_DOWN,
+  DEC_ROUND_UP, DEC_ROUND_DOWN, DEC_ROUND_CEILING, DEC_ROUND_FLOOR
+};
+
+
+
+/********************************************//**
  * \brief Sets X to the value of the integer mode
  *
  * \return void

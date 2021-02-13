@@ -248,6 +248,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnRmd                      (uint16_t unusedButMandatoryParameter) {}
   void fnRound                    (uint16_t unusedButMandatoryParameter) {}
   void fnRoundi                   (uint16_t unusedButMandatoryParameter) {}
+  void fnRsd                      (uint16_t unusedButMandatoryParameter) {}
+  void fnRdp                      (uint16_t unusedButMandatoryParameter) {}
   void fnRollDown                 (uint16_t unusedButMandatoryParameter) {}
   void fnRollUp                   (uint16_t unusedButMandatoryParameter) {}
   void fnSeed                     (uint16_t unusedButMandatoryParameter) {}
@@ -302,6 +304,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnXLessThan                (uint16_t unusedButMandatoryParameter) {}
   void fnGetLocR                  (uint16_t unusedButMandatoryParameter) {}
   void fnSwapRealImaginary        (uint16_t unusedButMandatoryParameter) {}
+  void fnSetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
   void fnGetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
   void fnSetWordSize              (uint16_t unusedButMandatoryParameter) {}
   void fnGetWordSize              (uint16_t unusedButMandatoryParameter) {}
@@ -2110,19 +2113,19 @@ const item_t indexOfItems[] = {
 /* 1562 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1563 */  { fnRecallIJ,                  NOPARAM,                     "RCLIJ",                                       "RCLIJ",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1564 */  { fnRecallStack,               TM_REGISTER,                 "RCLS",                                        "RCLS",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1565 */  { itemToBeCoded,               NOPARAM,                     "RDP",                                         "RDP",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1565 */  { fnRdp,                       TM_VALUE,                    "RDP",                                         "RDP",                                         0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1566 */  { fnRealPart,                  NOPARAM,                     "Re",                                          "Re",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1567 */  { itemToBeCoded,               NOPARAM,                     "RECV",                                        "RECV",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1568 */  { fnReset,                     NOT_CONFIRMED,               "RESET",                                       "RESET",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1569 */  { fnReToCx,                    NOPARAM,                     "RE" STD_RIGHT_ARROW "CX",                     "RE" STD_RIGHT_ARROW "CX",                     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1570 */  { fnSwapRealImaginary,         NOPARAM,                     "Re" STD_LEFT_RIGHT_ARROWS "Im",               "Re" STD_LEFT_RIGHT_ARROWS "Im",               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1571 */  { itemToBeCoded,               NOPARAM,                     "RM",                                          "RM",                                          0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1571 */  { fnSetRoundingMode,           TM_VALUE,                    "RM",                                          "RM",                                          0,       6,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1572 */  { fnGetRoundingMode,           NOPARAM,                     "RM?",                                         "RM?",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1573 */  { itemToBeCoded,               NOPARAM,                     "1573",                                        "1573",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
 /* 1574 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1575 */  { fnExpM1,                     NOPARAM,                     "e" STD_SUP_x "-1",                            "e" STD_SUP_x "-1",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1576 */  { fnRoundi,                    NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1577 */  { itemToBeCoded,               NOPARAM,                     "RSD",                                         "RSD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1577 */  { fnRsd,                       TM_VALUE,                    "RSD",                                         "RSD",                                         1,      34,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1578 */  { itemToBeCoded,               NOPARAM,                     "RSUM",                                        "RSUM",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1579 */  { itemToBeCoded,               NOPARAM,                     "RTN+1",                                       "RTN+1",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1580 */  { itemToBeCoded,               NOPARAM,                     "R-CLR",                                       "R-CLR",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

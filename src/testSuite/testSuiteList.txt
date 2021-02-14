@@ -254,3 +254,8 @@ xToDate
 
 toHms
 toReal
+
+normal_p
+normal_l
+normal_r
+normal_i

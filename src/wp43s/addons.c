@@ -474,11 +474,12 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 
 //change the current state from the old state?
 
-void fnAngularModeJM(uint16_t AMODE) {
+void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
   if (AMODE == TM_HMS) {
     if(getRegisterDataType(REGISTER_X) == dtTime) return;
-    fnCvtFromCurrentAngularMode(AM_DEGREE);   //Setting to HMS does not change AM
-    fnToHms(0);
+    if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) fnCvtFromCurrentAngularMode(AM_DEGREE); 
+    fnKeyDotD(0);
+    fnToHms(0); //covers longint & real
   } else {
     if(getRegisterDataType(REGISTER_X) == dtTime) {
       fnToHr(0);
@@ -486,6 +487,7 @@ void fnAngularModeJM(uint16_t AMODE) {
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
+    fnKeyDotD(0);
     fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
   }

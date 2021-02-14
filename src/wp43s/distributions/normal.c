@@ -241,7 +241,7 @@ void WP34S_Qf_Q(const real_t *x, real_t *res, realContext_t *realContext) {
       goto qf_q_calc;
   }
   else {
-qf_q_calc:
+    qf_q_calc:
     do { // qf_q_refine
       if(realCompareGreaterEqual(&p, const_1)) {
         WP34S_Cdfu_Q(&p, &q, realContext);

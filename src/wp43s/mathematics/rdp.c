@@ -120,19 +120,14 @@ void rdpCxma(uint16_t digits) {
 void rdpReal(uint16_t digits) {
   real_t val;
 
-  if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    rdpError(NOPARAM);
-  }
-  else {
-    updateDisplayValueX = true;
-    displayValueX[0] = 0;
-    refreshRegisterLine(REGISTER_X);
-    updateDisplayValueX = false;
+  updateDisplayValueX = true;
+  displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
+  updateDisplayValueX = false;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
-    realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
-  }
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+  roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 

@@ -1297,39 +1297,3 @@ void WP34S_Erfc(const real_t *x, real_t *res, realContext_t *realContext) {
   WP34S_Cdf_Q(&p, &p, realContext);
   realMultiply(&p, const_2, res, realContext);
 }
-
-static void cdf_q(const real_t *x, real_t *res, realContext_t *realContext, bool_t upper) {
-  real_t p;
-
-  if(upper) {
-    if(realIsNegative(x)) goto cdfu_q_flip;
-    cdf_q_flip:
-    realPower(x, const_2, res, realContext);
-    realDivide(res, const_2, res, realContext);
-    WP34S_GammaP(res, const_1on2, res, realContext, true, false);
-    realDivide(res, const_2, res, realContext);
-    realSquareRoot(const_pi, &p, realContext);
-    realDivide(res, &p, res, realContext);
-    return;
-  }
-  else {
-    if(realIsNegative(x)) goto cdf_q_flip;
-    cdfu_q_flip:
-    realPower(x, const_2, res, realContext);
-    realDivide(res, const_2, res, realContext);
-    WP34S_GammaP(res, const_1on2, res, realContext, false, false);
-    realSquareRoot(const_pi, &p, realContext);
-    realDivide(res, &p, res, realContext);
-    realAdd(res, const_1, res, realContext);
-    realDivide(res, const_2, res, realContext);
-    return;
-  }
-}
-
-void WP34S_Cdfu_Q(const real_t *x, real_t *res, realContext_t *realContext) {
-  cdf_q(x, res, realContext, true);
-}
-
-void WP34S_Cdf_Q(const real_t *x, real_t *res, realContext_t *realContext) {
-  cdf_q(x, res, realContext, false);
-}

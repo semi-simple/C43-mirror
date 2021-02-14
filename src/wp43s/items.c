@@ -508,6 +508,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
   void fnDynamicMenu              (uint16_t unusedButMandatoryParameter) {}
   void fnCheckInteger             (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalP                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalL                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalR                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalI                  (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
@@ -1794,10 +1798,10 @@ const item_t indexOfItems[] = {
 /* 1250 */  { itemToBeCoded,               NOPARAM,                     "NBin" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,    "NBin" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,    0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1251 */  { itemToBeCoded,               NOPARAM,                     "NBin" STD_SUP_MINUS_1,                        "NBin" STD_SUP_MINUS_1,                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1252 */  { itemToBeCoded,               NOPARAM,                     "Norml:",                                      "Norml:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1253 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_SUB_p,                             "Norml" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1254 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1255 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1256 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_SUP_MINUS_1,                       "Norml" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1253 */  { fnNormalP,                   NOPARAM,                     "Norml" STD_SUB_p,                             "Norml" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1254 */  { fnNormalL,                   NOPARAM,                     "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1255 */  { fnNormalR,                   NOPARAM,                     "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1256 */  { fnNormalI,                   NOPARAM,                     "Norml" STD_SUP_MINUS_1,                       "Norml" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1257 */  { itemToBeCoded,               NOPARAM,                     "Poiss:",                                      "Poiss:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1258 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_SUB_p,                             "Poiss" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1259 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Poiss" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

@@ -262,8 +262,8 @@ bool_t lastshiftG = false;
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
-              if(calcMode == CM_NIM && item != ITM_CC) {
-                if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+              if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+                closeNim();     
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
                     setSystemFlag(FLAG_ASLIFT);

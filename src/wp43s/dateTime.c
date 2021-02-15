@@ -629,31 +629,39 @@ void fnToHr(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnToHms(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  switch(getRegisterDataType(REGISTER_X)) {
-    case dtLongInteger :
-      convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+  switch(calcMode) {                     //JM
+    case CM_NIM:
+      addItemToNimBuffer(ITM_toHMS);
       break;
+    case CM_NORMAL:
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    case dtTime:
-      /* already in hours: do nothing */
-      break;
+      switch(getRegisterDataType(REGISTER_X)) {
+        case dtLongInteger :
+          convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+          break;
 
-    case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+        case dtTime:
+          /* already in hours: do nothing */
+          break;
+
+        case dtReal34:
+          if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+            convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+            break;
+          }
+          /* fallthrough */
+
+        default :
+          displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(errorMessage, "data type %s cannot be converted to time!", getRegisterDataTypeName(REGISTER_X, false, false));
+            moreInfoOnError("In function fnToReal:", errorMessage, NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          return;
         break;
       }
-      /* fallthrough */
-
-    default :
-      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "data type %s cannot be converted to time!", getRegisterDataTypeName(REGISTER_X, false, false));
-        moreInfoOnError("In function fnToReal:", errorMessage, NULL, NULL);
-      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-      return;
+      default:break;
   }
 }
 

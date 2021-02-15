@@ -222,6 +222,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
         if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_DEGREE) {
           fnKeyDotD(0);
+          fnKeyDotD(0);  //2nd time to make sure it goes to REAL, not DEGREES as per           fnToReal(0); mod.
         } 
         if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
           fnToHms(0);                   

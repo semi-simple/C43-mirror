@@ -569,6 +569,10 @@ int16_t fnItemShowValue(int16_t item) {
     result = exponentLimit;
     break;
 
+  case ITM_RM:   //  
+    result = roundingMode;
+    break;
+
   case ITM_HASH_JM:   //  
     if(lastIntegerBase!=0) result = lastIntegerBase; 
     else result = NOVAL;

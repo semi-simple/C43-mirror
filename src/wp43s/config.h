@@ -19,6 +19,8 @@
  ***********************************************/
 void     showSoftmenu          (int16_t id);  //JM repeat here to make DMCP compile
 
+extern const enum rounding roundingModeTable[7];
+
 void     fnConfigChina         (uint16_t unusedButMandatoryParameter);
 void     fnConfigEurope        (uint16_t unusedButMandatoryParameter);
 void     fnConfigIndia         (uint16_t unusedButMandatoryParameter);
@@ -30,6 +32,7 @@ void     fnWho                 (uint16_t unusedButMandatoryParameter);
 void     fnVersion             (uint16_t unusedButMandatoryParameter);
 void     fnFreeMemory          (uint16_t unusedButMandatoryParameter);
 void     fnGetRoundingMode     (uint16_t unusedButMandatoryParameter);
+void     fnSetRoundingMode     (uint16_t RM);
 void     fnGetIntegerSignMode  (uint16_t unusedButMandatoryParameter);
 void     fnGetWordSize         (uint16_t unusedButMandatoryParameter);
 void     fnSetWordSize         (uint16_t WS);

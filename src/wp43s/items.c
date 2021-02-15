@@ -281,6 +281,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnRmd                      (uint16_t unusedButMandatoryParameter) {}
   void fnRound                    (uint16_t unusedButMandatoryParameter) {}
   void fnRoundi                   (uint16_t unusedButMandatoryParameter) {}
+  void fnRsd                      (uint16_t unusedButMandatoryParameter) {}
+  void fnRdp                      (uint16_t unusedButMandatoryParameter) {}
   void fnRollDown                 (uint16_t unusedButMandatoryParameter) {}
   void fnRollUp                   (uint16_t unusedButMandatoryParameter) {}
   void fnSeed                     (uint16_t unusedButMandatoryParameter) {}
@@ -336,6 +338,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGetLocR                  (uint16_t unusedButMandatoryParameter) {}
   void fnSwapRealImaginary        (uint16_t unusedButMandatoryParameter) {}
   void fnGetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
+  void fnSetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
   void fnSetWordSize              (uint16_t unusedButMandatoryParameter) {}
   void fnGetWordSize              (uint16_t unusedButMandatoryParameter) {}
   void fnGetStackSize             (uint16_t unusedButMandatoryParameter) {}
@@ -533,6 +536,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
   void fnDynamicMenu              (uint16_t unusedButMandatoryParameter) {}
   void fnCheckInteger             (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalP                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalL                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalR                  (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalI                  (uint16_t unusedButMandatoryParameter) {}
   void fnJM                       (uint16_t unusedButMandatoryParameter) {}           //vv JM
   void fnSetSetJM                 (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatSigFig      (uint16_t unusedButMandatoryParameter) {}
@@ -616,6 +623,7 @@ const item_t indexOfItems[] = {
 
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
+
 
 
 
@@ -1900,10 +1908,10 @@ const item_t indexOfItems[] = {
 /* 1250 */  { itemToBeCoded,               NOPARAM,                     "NBin" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,    "NBin" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,    0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1251 */  { itemToBeCoded,               NOPARAM,                     "NBin" STD_SUP_MINUS_1,                        "NBin" STD_SUP_MINUS_1,                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1252 */  { itemToBeCoded,               NOPARAM,                     "Norml:",                                      "Norml:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1253 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_SUB_p,                             "Norml" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1254 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1255 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
-/* 1256 */  { itemToBeCoded,               NOPARAM,                     "Norml" STD_SUP_MINUS_1,                       "Norml" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1253 */  { fnNormalP,                   NOPARAM,                     "Norml" STD_SUB_p,                             "Norml" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1254 */  { fnNormalL,                   NOPARAM,                     "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Norml" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1255 */  { fnNormalR,                   NOPARAM,                     "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Norml" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1256 */  { fnNormalI,                   NOPARAM,                     "Norml" STD_SUP_MINUS_1,                       "Norml" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1257 */  { itemToBeCoded,               NOPARAM,                     "Poiss:",                                      "Poiss:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1258 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_SUB_p,                             "Poiss" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1259 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Poiss" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
@@ -2220,19 +2228,19 @@ const item_t indexOfItems[] = {
 /* 1562 */  { fnRecallElement,             NOPARAM,                     "RCLEL",                                       "RCLEL",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1563 */  { fnRecallIJ,                  NOPARAM,                     "RCLIJ",                                       "RCLIJ",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1564 */  { fnRecallStack,               TM_REGISTER,                 "RCLS",                                        "RCLS",                                        0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1565 */  { itemToBeCoded,               NOPARAM,                     "RDP",                                         "RDP",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1565 */  { fnRdp,                       TM_VALUE,                    "RDP",                                         "RDP",                                         0,      99,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1566 */  { fnRealPart,                  NOPARAM,                     "Re",                                          "Re",                                          0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1567 */  { itemToBeCoded,               NOPARAM,                     "RECV",                                        "RECV",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1568 */  { fnReset,                     NOT_CONFIRMED,               "RESET",                                       "RESET",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1569 */  { fnReToCx,                    NOPARAM,                     "RE" STD_RIGHT_ARROW "CX",                     "RE" STD_RIGHT_ARROW "CX",                     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1570 */  { fnSwapRealImaginary,         NOPARAM,                     "Re" STD_LEFT_RIGHT_ARROWS "Im",               "Re" STD_LEFT_RIGHT_ARROWS "Im",               0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1571 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "RMODE",                                       "RMODE",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1571 */  { fnSetRoundingMode,           TM_VALUE/*#JM#*/,            "RMODE",                                       "RMODE",                                       0,       6,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1572 */  { fnGetRoundingMode,           NOPARAM/*#JM#*/,             "RMODE?",                                      "RMODE?",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1573 */  { itemToBeCoded,               NOPARAM,                     "1573",                                        "1573",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_ENABLED  },
 /* 1574 */  { itemToBeCoded,               NOPARAM,                     "RNORM",                                       "RNORM",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1575 */  { fnExpM1,                     NOPARAM,                     "e" STD_SUP_x "-1",                            "e" STD_SUP_x "-1",                            0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1576 */  { fnRoundi,                    NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1577 */  { itemToBeCoded,               NOPARAM,                     "RSD",                                         "RSD",                                         0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
+/* 1577 */  { fnRsd,                       TM_VALUE,                    "RSD",                                         "RSD",                                         0,      34,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1578 */  { itemToBeCoded,               NOPARAM,                     "RSUM",                                        "RSUM",                                        0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1579 */  { itemToBeCoded,               NOPARAM,                     "RTN+1",                                       "RTN+1",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 1580 */  { itemToBeCoded,               NOPARAM,                     "R-CLR",                                       "R-CLR",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },

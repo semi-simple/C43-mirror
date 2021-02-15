@@ -177,6 +177,7 @@
   #include "fonts.h"
   #include "charString.h" // must be after font.h
   #include "display.h"    // must be after font.h
+  #include "distributions/distributions.h"
   #include "gui.h"
   #include "integers.h"
   #include "items.h"

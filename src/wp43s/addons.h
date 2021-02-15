@@ -41,6 +41,9 @@ void fnChangeBaseJM (uint16_t unusedButMandatoryParameter);
 void fnChangeBaseMNU(uint16_t unusedButMandatoryParameter);
 void fnInDefault    (uint16_t inputDefault);
 void fnP_All_Regs   (uint16_t option);
+void fnMinute       (uint16_t unusedButMandatoryParameter); //JM
+void fnSecond       (uint16_t unusedButMandatoryParameter); //JM
+void fnHrDeg        (uint16_t unusedButMandatoryParameter); //JM
 
 
 void fnByteShortcutsS(uint16_t size);     //JM POC BASE2 vv

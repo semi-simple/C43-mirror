@@ -612,6 +612,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnCla                      (uint16_t unusedButMandatoryParameter) {}
   void fnCln                      (uint16_t unusedButMandatoryParameter) {}
   void fnClGrf                    (uint16_t unusedButMandatoryParameter) {}
+  void fnMinute                   (uint16_t unusedButMandatoryParameter) {}
+  void fnSecond                   (uint16_t unusedButMandatoryParameter) {}
+  void fnHrDeg                    (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
@@ -623,6 +626,8 @@ const item_t indexOfItems[] = {
 
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
+
+
 
 
 
@@ -2534,9 +2539,9 @@ const item_t indexOfItems[] = {
 /* 1860 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM HEX
 /* 1861 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "I",                           STD_RIGHT_ARROW "I",                           0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM Copy of 1925
 /* 1862 */  { fnChangeBaseMNU,             NOPARAM,                     "MODE#",                                       "MODE#",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_ENABLED  },
-/* 1863 */  { itemToBeCoded,               NOPARAM,                     "1863",                                        "1863",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1864 */  { itemToBeCoded,               NOPARAM,                     "1864",                                        "1864",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1865 */  { itemToBeCoded,               NOPARAM,                     "1865",                                        "1865",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1863 */  { fnHrDeg,                     NOPARAM,                     "HR/DEG",                                      "HR/DEG",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1864 */  { fnMinute,                    NOPARAM,                     "MIN",                                         "MIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1865 */  { fnSecond,                    NOPARAM,                     "SEC",                                         "SEC",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1866 */  { itemToBeCoded,               NOPARAM,                     "1866",                                        "1866",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1867 */  { itemToBeCoded,               NOPARAM,                     "1867",                                        "1867",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1868 */  { itemToBeCoded,               NOPARAM,                     "1868",                                        "1868",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},

@@ -125,13 +125,6 @@ const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 /*      */  { CHR_num,              JC_NL,                  CB_JC },  //
 /*      */  { CHR_case,             JC_UC,                  CB_JC },  //
 
-/*        { ITM_DEG2,             AM_DEGREE,              RB_AM2 },  //fnAngularModeJM  */
-/*        { ITM_DMS2,             AM_DMS,                 RB_AM2 },  //fnAngularModeJM  */
-/*        { ITM_GRAD2,            AM_GRAD,                RB_AM2 },  //fnAngularModeJM  */
-/*        { ITM_MULPI2,           AM_MULTPI,              RB_AM2 },  //fnAngularModeJM  */
-/*        { ITM_RAD2,             AM_RADIAN,              RB_AM2 },  //fnAngularModeJM  */
-/*        { ITM_HMS2,             AM_HMS,                 RB_AM2 },  //fnAngularModeJM  */
-
 /* 1685 */  { ITM_2BIN,               2,                     RB_HX  },  //fnChangeBaseJM
 /* 1686 */  { ITM_2OCT,               8,                     RB_HX  },  //fnChangeBaseJM
 /* 1687 */  { ITM_2DEC,              10,                     RB_HX  },  //fnChangeBaseJM
@@ -574,6 +567,10 @@ int16_t fnItemShowValue(int16_t item) {
 
   case ITM_RNG:   //  
     result = exponentLimit;
+    break;
+
+  case ITM_RM:   //  
+    result = roundingMode;
     break;
 
   case ITM_HASH_JM:   //  

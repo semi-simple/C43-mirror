@@ -185,9 +185,6 @@ void fnStrInputLongint(char inp1[]);
 void fnRCL          (int16_t inp);
 void fnKEYSELECT    (void);
 void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
-//void JM_convertReal34ToShortInteger(uint16_t confirmation);
-//void JM_convertReal34ToLongInteger(uint16_t confirmation);
-//void JM_convertIntegerToShortIntegerRegister(int16_t inp, uint32_t base, calcRegister_t destination);
 char* itoa(int value, char* result, int base);
 
 #define TI_ABC                  96    //JM EE

@@ -199,7 +199,7 @@ bool_t                PLOT_RMS;                                //JM GRAPH
 bool_t                PLOT_SHADE;                              //JM GRAPH
 int8_t                PLOT_ZMX;                                //JM GRAPH
 int8_t                PLOT_ZMY;                                //JM GRAPH
-uint8_t               oldAngularMode;
+uint8_t               lastSetAngularMode;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 #ifdef INLINE_TEST                                             //vv dr
 bool_t                testEnabled;                             //

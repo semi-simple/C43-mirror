@@ -244,7 +244,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
     save(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);   //JM ^^
-    save(&oldAngularMode,                     sizeof(oldAngularMode),                     BACKUP);   //JM
+    save(&lastSetAngularMode,                 sizeof(lastSetAngularMode),                 BACKUP);   //JM
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -456,7 +456,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);   //JM ^^
       restore(&telltale,                           sizeof(telltale),                           BACKUP);   //JM ^^
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);   //JM ^^
-      restore(&oldAngularMode,                     sizeof(oldAngularMode),                     BACKUP);   //JM
+      restore(&lastSetAngularMode,                 sizeof(lastSetAngularMode),                     BACKUP);   //JM
       fclose(BACKUP);
       printf("End of calc's restoration\n");
 
@@ -747,7 +747,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);   //JM
   save(tmpString, strlen(tmpString), BACKUP);
-  sprintf(tmpString, "oldAngularMode\n%" PRIu8 "\n", oldAngularMode);               //JM
+  sprintf(tmpString, "lastSetAngularMode\n%" PRIu8 "\n", lastSetAngularMode);               //JM
   save(tmpString, strlen(tmpString), BACKUP);
 
 
@@ -1211,7 +1211,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         }
         else if(strcmp(aimBuffer, "currentAngularMode") == 0) {
           currentAngularMode = stringToUint8(tmpString);
-          oldAngularMode = currentAngularMode;                       //JM, oldAngularmode will overwrite when it loads later. Initialisez for if it does not load
+          lastSetAngularMode = currentAngularMode;                       //JM, lastSetAngularMode will overwrite when it loads later. Initialisez for if it does not load
         }
         else if(strcmp(aimBuffer, "groupingGap") == 0) {
           groupingGap = stringToUint8(tmpString);
@@ -1235,8 +1235,8 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         else if(strcmp(aimBuffer, "displayStackSHOIDISP") == 0) {         //JM SHOIDISP
           displayStackSHOIDISP = stringToUint8(tmpString);
         }
-        else if(strcmp(aimBuffer, "oldAngularMode") == 0) {               //JM
-          oldAngularMode = stringToUint8(tmpString);
+        else if(strcmp(aimBuffer, "lastSetAngularMode") == 0) {               //JM
+          lastSetAngularMode = stringToUint8(tmpString);
         }
       }
     }

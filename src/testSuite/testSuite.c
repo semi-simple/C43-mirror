@@ -86,6 +86,9 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDateTo",               fnDateTo              },
   {"fnDateToJulian",         fnDateToJulian        },
   {"fnDay",                  fnDay                 },
+  {"fnDblDivide",            fnDblDivide           },
+  {"fnDblDivideRemainder",   fnDblDivideRemainder  },
+  {"fnDblMultiply",          fnDblMultiply         },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
   {"fnDeltaPercent",         fnDeltaPercent        },
@@ -94,6 +97,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDot",                  fnDot                 },
   {"fnDrop",                 fnDrop                },
   {"fnDropY",                fnDropY               },
+  {"fnErf",                  fnErf                 },
+  {"fnErfc",                 fnErfc                },
   {"fnExp",                  fnExp                 },
   {"fnExpM1",                fnExpM1               },
   {"fnExpt",                 fnExpt                },
@@ -105,6 +110,10 @@ const funcTest_t funcTestNoParam[] = {
   {"fnFreeFlashMemory",      fnFreeFlashMemory     },
   {"fnFreeMemory",           fnFreeMemory          },
   {"fnGamma",                fnGamma               },
+  {"fnGammaP",               fnGammaP              },
+  {"fnGammaQ",               fnGammaQ              },
+  {"fnGammaXyLower",         fnGammaXyLower        },
+  {"fnGammaXyUpper",         fnGammaXyUpper        },
   {"fnGcd",                  fnGcd                 },
   {"fnGd",                   fnGd                  },
   {"fnGetIntegerSignMode",   fnGetIntegerSignMode  },
@@ -150,6 +159,10 @@ const funcTest_t funcTestNoParam[] = {
   {"fnMultiply",             fnMultiply            },
   {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
+  {"fnNormalI",              fnNormalI             },
+  {"fnNormalL",              fnNormalL             },
+  {"fnNormalP",              fnNormalP             },
+  {"fnNormalR",              fnNormalR             },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
   {"fnPercent",              fnPercent             },
@@ -327,7 +340,7 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
   longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-  if(shortIntegerMode != SIM_UNSIGN) {
+  if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
     longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
   }
 

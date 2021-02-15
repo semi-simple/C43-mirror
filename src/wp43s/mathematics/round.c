@@ -64,13 +64,54 @@ void fnRound(uint16_t unusedButMandatoryParameter) {
 
 
 void roundTime(void) {
-  fnToBeCoded();
+  real34_t real34, value34;
+  uint32_t digits;
+
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &real34);
+
+  switch(timeDisplayFormatDigits) {
+    case 0: // no rounding
+      break;
+    case 1: case 2: // round to minutes
+      int32ToReal34(60, &value34);
+      real34Divide(&real34, &value34, &real34);
+      real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
+      real34Multiply(&real34, &value34, &real34);
+      break;
+    default: // round to seconds, milliseconds, microseconds, ...
+      int32ToReal34(10, &value34);
+      for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+        real34Multiply(&real34, &value34, &real34);
+      }
+      real34ToIntegralValue(&real34, &real34, roundingMode);
+      for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+        real34Divide(&real34, &value34, &real34);
+      }
+  }
+
+  real34Copy(&real34, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 
 void roundDate(void) {
-  fnToBeCoded();
+  // For the case accidentally added fractions of a day. It should not occur.
+  real34_t real34, value34;
+
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &real34);
+
+  int32ToReal34(43200, &value34);
+  real34Subtract(&real34, &value34, &real34);
+  int32ToReal34(86400, &value34);
+  real34Divide(&real34, &value34, &real34);
+
+  real34ToIntegralValue(&real34, &real34, roundingMode);
+
+  real34Multiply(&real34, &value34, &real34);
+  int32ToReal34(43200, &value34);
+  real34Add(&real34, &value34, &real34);
+
+  real34Copy(&real34, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 

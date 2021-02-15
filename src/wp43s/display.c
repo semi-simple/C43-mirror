@@ -1762,22 +1762,33 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
-  real34_t real34, value34, h34, m34, s34;
+  real34_t real34, value34, tmp34, h34, m34, s34;
   int32_t sign;
-  uint32_t digits, tDigits = 0u;
+  uint32_t digits, tDigits = 0u, bDigits;
   char digitBuf[16], digitBuf2[48];
   char* bufPtr;
   bool_t isValid12hTime = false, isAfternoon = false;
 
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   sign = real34IsNegative(&real34);
-  real34SetPositiveSign(&real34);
 
   // Pre-rounding
   if(!ignoreTDisp) {
     switch(timeDisplayFormatDigits) {
-      case 0: // no rounding
-        break;
+      case 0:
+        int32ToReal34(86400, &value34);
+        if((!sign) && real34CompareLessThan(&real34, &value34)) {
+          isValid12hTime = true;
+        }
+        int32ToReal34(10, &value34);
+        int32ToReal34(10, &tmp34);
+        for(bDigits = 0; bDigits < (isValid12hTime ? 14 : 16); ++bDigits) {
+          if(real34CompareAbsLessThan(&h34, &value34)) break;
+          real34Multiply(&value34, &tmp34, &value34);
+        }
+        tDigits = isValid12hTime ? 14 : 16;
+        isValid12hTime = false;
+        goto do_rounding;
       case 1: case 2: // round to minutes
         int32ToReal34(60, &value34);
         real34Divide(&real34, &value34, &real34);
@@ -1786,15 +1797,20 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
         break;
       default: // round to seconds, milliseconds, microseconds, ...
         int32ToReal34(10, &value34);
-        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+        tDigits = timeDisplayFormatDigits + 1;
+        bDigits = 4u;
+      do_rounding:
+        for(digits = bDigits; digits < tDigits; ++digits) {
           real34Multiply(&real34, &value34, &real34);
         }
-        real34ToIntegralValue(&real34, &real34, DEC_ROUND_DOWN);
-        for(digits = 4; digits <= timeDisplayFormatDigits; ++digits) {
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_HALF_UP);
+        for(digits = bDigits; digits < tDigits; ++digits) {
           real34Divide(&real34, &value34, &real34);
         }
+        tDigits = 0u;
     }
   }
+  real34SetPositiveSign(&real34);
 
   // Seconds
   real34ToIntegralValue(&real34, &s34, DEC_ROUND_DOWN);
@@ -1825,7 +1841,6 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
       }
     }
   }
-
 
   // Display Hours
   strcpy(displayString, sign ? "-" : "");

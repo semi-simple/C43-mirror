@@ -191,14 +191,16 @@ void fnRound2(uint16_t unusedButMandatoryParameter) {
 }
 
 
-
-//SHOI, LONI >> REAL
-//REAL >> CAM
-//AM >> DMS
+/*
+* If in direct entry, accept h.ms, example 1.23 [.ms] would be 1:23:00. Do not change the ADM.
+* If closed in X: and X is REAL/integer, then convert this to h.ms. Do not change the ADM.
+* If closed in X: and X is already a Time in visible hms like 1:23:45, then change the time to REAL, then tag the REAL with d.ms (‘’) in the form 1°23’45.00’’. Do not change the ADM.
+* if closed in X: and X is already d.ms, then convert X to time in h:ms.Do not change the ADM.
+*/
 // 
 void fnTo_ms(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-  uint8_t oldAngularMode1 = oldAngularMode;
+//  uint8_t oldAngularMode1 = lastSetAngularMode;
   switch(calcMode) {                     //JM
     case CM_NIM:
       addItemToNimBuffer(ITM_ms);
@@ -207,7 +209,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_NORMAL:
       copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
 
-      switch(getRegisterDataType(REGISTER_X)) {
+      switch(getRegisterDataType(REGISTER_X)) {                        //if integer, make a real
         case dtShortInteger :
           convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
           break;
@@ -218,23 +220,19 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       }
 
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
-        if(getRegisterAngularMode(REGISTER_X) != AM_DMS) {
-          oldAngularMode1 = currentAngularMode;
-          fnAngularModeJM(AM_DMS);
-          oldAngularMode = oldAngularMode1;
+        if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_DEGREE) {
+          fnKeyDotD(0);
+        } 
+        if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+          fnToHms(0);                   
         }
-        else {                  //REGISTER_X) == AM_DMS
-          fnAngularModeJM(AM_HMS);
-          fnAngularMode(oldAngularMode);
-          fnRefreshState();
-          refreshStatusBar();
-        }
+
       }
       else
       if(getRegisterDataType(REGISTER_X) == dtTime) {
-        oldAngularMode1 = currentAngularMode;
-        fnAngularModeJM(AM_DMS);
-        oldAngularMode = oldAngularMode1;
+        fnToHr(0);
+        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+        fnCvtFromCurrentAngularMode(AM_DMS);
       }
 
       copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
@@ -362,80 +360,6 @@ void fn_cnst_1_cpx(uint16_t unusedButMandatoryParameter) {
 
 
 
-void JM_convertReal34ToLongInteger(uint16_t confirmation) {
-  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34_t x;
-    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
-    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
-    if(confirmation == NOT_CONFIRMED) {
-      setConfirmationMode(JM_convertReal34ToLongInteger);
-    }
-    else {
-//      convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      ipReal();                                        //This converts real to longint!
-    }
-  }
-}
-
-
-
-
-void fnLongInt (uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
-  int32_t dataTypeX = getRegisterDataType(REGISTER_X);
-
-  if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    fnToReal(0);  
-    JM_convertReal34ToLongInteger(CONFIRMED);
-  }
-  else
-
-  if(dataTypeX == dtShortInteger) {
-    convertShortIntegerRegisterToLongIntegerRegister(REGISTER_X, REGISTER_X);
-  }
-  else
-
-  if(dataTypeX == dtReal34) {
-    JM_convertReal34ToLongInteger(CONFIRMED);
-  }  
-  lastIntegerBase = 0;                                                      //JMNIM clear lastintegerbase, to switch off hex mode
-  fnRefreshState();                                                //JMNIM
-}
-
-
-
-
-
-
-
-
-//Integral Part
-void JM_convertReal34ToShortInteger(uint16_t confirmation) {
-  if(!real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) {
-    real34_t x;
-    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), &x, DEC_ROUND_DOWN);
-    real34Subtract(REGISTER_REAL34_DATA(REGISTER_X), &x , &x);
-    if(real34IsZero(&x)) { confirmation = CONFIRMED; }
-    if(confirmation == NOT_CONFIRMED) {
-      setConfirmationMode(JM_convertReal34ToShortInteger);
-    }
-    else {
-      //convertReal34ToLongIntegerRegister(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_X, DEC_ROUND_DOWN);
-      ipReal();                                        //This converts real to longint!
-
-      if(lastIntegerBase != 0) {
-        fnChangeBase(lastIntegerBase);                 //This converts shortint, longint and real to shortint!
-      }
-      else {
-        fnChangeBase(10);                              //This converts shortint, longint and real to shortint!
-      }
-
-    }
-  }
-}
-
 
 
 
@@ -550,11 +474,12 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 
 //change the current state from the old state?
 
-void fnAngularModeJM(uint16_t AMODE) {
-  if (AMODE == AM_HMS) {
+void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
+  if (AMODE == TM_HMS) {
     if(getRegisterDataType(REGISTER_X) == dtTime) return;
-    fnCvtFromCurrentAngularMode(AM_DEGREE);   //Setting to HMS does not change AM
-    fnToHms(0);
+    if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) fnCvtFromCurrentAngularMode(AM_DEGREE); 
+    fnKeyDotD(0);
+    fnToHms(0); //covers longint & real
   } else {
     if(getRegisterDataType(REGISTER_X) == dtTime) {
       fnToHr(0);
@@ -562,6 +487,7 @@ void fnAngularModeJM(uint16_t AMODE) {
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
+    fnKeyDotD(0);
     fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
   }

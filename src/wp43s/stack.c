@@ -331,6 +331,10 @@ void fnGetStackSize(uint16_t unusedButMandatoryParameter) {
 void saveForUndo(void) {
   savedSystemFlags = systemFlags;
 
+  if(calcMode == CM_NIM && thereIsSomethingToUndo) {
+    return;
+  }
+
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
   }

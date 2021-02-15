@@ -33,7 +33,6 @@ void fn_cnst_op_aa  (uint16_t unusedButMandatoryParameter);
 void fn_cnst_op_a   (uint16_t unusedButMandatoryParameter);
 void fn_cnst_0_cpx  (uint16_t unusedButMandatoryParameter);
 void fn_cnst_1_cpx  (uint16_t unusedButMandatoryParameter);
-void fnLongInt      (uint16_t unusedButMandatoryParameter);
 void fnJM_2SI       (uint16_t unusedButMandatoryParameter);
 void fnRoundi2      (uint16_t unusedButMandatoryParameter);
 void fnRound2       (uint16_t unusedButMandatoryParameter);

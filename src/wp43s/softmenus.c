@@ -54,7 +54,7 @@ const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_toDATE, 
 
 const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLCVAR,                  ITM_CLX,
                                      ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLGRF,             ITM_CLLCD,                   ITM_CLSTK,
-                                     ITM_CLALL,                     ITM_NULL,                   ITM_NULL,                 ITM_CLAIM,             ITM_CLA,                     ITM_RESET                     };
+                                     ITM_CLALL,                     ITM_NULL,                   ITM_CLAIM,                ITM_DELITM,            ITM_CLA,                     ITM_RESET                     };
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
@@ -106,14 +106,13 @@ const int16_t menu_FLAGS[]       = { ITM_SF,                        ITM_FS,     
 const int16_t menu_INFO[]        = { ITM_SSIZE,                     ITM_MEM,                    ITM_RMQ,                  ITM_ISM,               ITM_WSIZEQ,                  ITM_KTYP,
                                      ITM_LocRQ,                     ITM_FLASH,                  ITM_ULP,                  ITM_NEIGHB,            ITM_SDIGS,                   ITM_BATT,
                                      ITM_WHO,                       ITM_VERS,                   ITM_M_DIMQ,               ITM_PMINFINITY,        ITM_ALPHAPOS,                ITM_ALPHALENG,                 
-                                     ITM_GETRANGE,                  ITM_SH_INP_DEF,             ITM_SH_ERPN,              ITM_NULL,              ITM_NULL,                    ITM_BESTFQ                      };    //JM INFO
+                                     ITM_GETRANGE,                  ITM_GET_JUL_GREG,           ITM_SH_INP_DEF,           ITM_SH_ERPN,           ITM_NULL,                    ITM_BESTFQ                      };    //JM INFO
               
 
 const int16_t menu_INTS[]        = { ITM_A,                         ITM_B,                      ITM_C,                    ITM_D,                 ITM_E,                       ITM_F,
                                      ITM_IDIV,                      ITM_RMD,                    ITM_MOD,                  ITM_XMOD,              ITM_FLOOR,                   ITM_LCM,
                                      ITM_DBLDIV,                    ITM_DBLR,                   ITM_DBLMULT,              ITM_PMOD,              ITM_CEIL,                    ITM_GCD,
-                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE,
-                                     ITM_NULL,                      ITM_dotD,                   ITM_LI,                   ITM_RI,                ITM_NULL,                    ITM_NULL                      };    //JM
+                                     ITM_1COMPL,                    ITM_2COMPL,                 ITM_UNSIGN,               ITM_SIGNMT,            ITM_NULL,                    ITM_WSIZE                     };    //JM
 
 const int16_t menu_LOOP[]        = { ITM_DSE,                       ITM_DSZ,                    ITM_DSL,                  ITM_ISE,               ITM_ISZ,                     ITM_ISG,
                                      ITM_DEC,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_INC                       };
@@ -372,7 +371,7 @@ const int16_t menu_TamShuffle[]  = { ITM_REG_X,                     ITM_REG_Y,  
 const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T                     };
 
 const int16_t menu_BASE[]        = { 
-                                     ITM_LI,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
+                                     ITM_IP,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
                                      -MNU_BITS,                     -MNU_INTS,                  ITM_LOGICALAND,                  ITM_LOGICALOR,                ITM_LOGICALXOR,                     ITM_LOGICALNOT,    
                                      ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
 
@@ -503,7 +502,7 @@ const int16_t menu_HOME[360]        = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE 
                                      ITM_DEG,             ITM_RAD,         ITM_DMS,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
 /*HOME-1*/                                                                                                                                                             //JM HOME
 /*1*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,           ITM_XFACT,                        //JM HOME
-                                     ITM_RI,              ITM_LI,          ITM_NULL,          ITM_NULL,         -MNU_BASE,        -MNU_INTS,                          //JM HOME
+                                     ITM_RI,              ITM_IP,          ITM_NULL,          ITM_NULL,         -MNU_BASE,        -MNU_INTS,                          //JM HOME
                                      ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
 /*HOME-2*/                                                                                                                                                             //JM HOME
 /*2*18*/                             ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,           ITM_XFACT,                        //JM HOME

@@ -288,7 +288,7 @@ void decomposeJulianDay(const real34_t *jd, real34_t *year, real34_t *month, rea
   AddInt(jd, 1401, &e);
   uInt32ToReal34(firstGregorianDay, &tmp);
   // proleptic Gregorian calendar is used if firstGregorianDay == 0: for special purpose only!
-  if((firstGregorianDay > 0u) && real34CompareGreaterEqual(jd, &tmp)) { // Gregorian
+  if((firstGregorianDay == 0u) || real34CompareGreaterEqual(jd, &tmp)) { // Gregorian
     MulInt(jd, 4, &tmp1);
     AddInt(&tmp1, 274277, &tmp1);
     DivInt(&tmp1, 146097, &tmp1);
@@ -445,12 +445,22 @@ void fnSetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
   real34_t jd34;
   const uint32_t fgd = firstGregorianDay;
 
+  firstGregorianDay = 0u; // proleptic Gregorian mode
   if(checkDateArgument(REGISTER_X, &jd34)) {
     firstGregorianDay = real34ToUInt32(&jd34);
   }
   else {
     firstGregorianDay = fgd;
   }
+}
+
+void fnGetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
+  real34_t j;
+
+  uInt32ToReal34(firstGregorianDay, &j);
+  liftStack();
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 void fnXToDate(uint16_t unusedButMandatoryParameter) {
@@ -651,24 +661,22 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
 void fnDate(uint16_t unusedButMandatoryParameter) {
   real34_t y, m, d, j;
 
-#ifdef PC_BUILD
-  time_t epoch = time(NULL);
-  struct tm *timeInfo = localtime(&epoch);
+  #ifdef DMCP_BUILD
+    tm_t timeInfo;
+    dt_t dateInfo;
 
-  int32ToReal34(timeInfo->tm_year + 1900, &y);
-  int32ToReal34(timeInfo->tm_mon  + 1,    &m);
-  int32ToReal34(timeInfo->tm_mday,        &d);
-#endif // PC_BUILD
+    rtc_read(&timeInfo, &dateInfo);
+    uInt32ToReal34(dateInfo.year,  &y);
+    uInt32ToReal34(dateInfo.month, &m);
+    uInt32ToReal34(dateInfo.day,   &d);
+  #else // !DMCP_BUILD
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
 
-#ifdef DMCP_BUILD
-  tm_t timeInfo;
-  dt_t dateInfo;
-
-  rtc_read(&timeInfo, &dateInfo);
-  uInt32ToReal34(dateInfo.year,  &y);
-  uInt32ToReal34(dateInfo.month, &m);
-  uInt32ToReal34(dateInfo.day,   &d);
-#endif // DMCP_BUILD
+    int32ToReal34(timeInfo->tm_year + 1900, &y);
+    int32ToReal34(timeInfo->tm_mon  + 1,    &m);
+    int32ToReal34(timeInfo->tm_mday,        &d);
+  #endif // DMCP_BUILD
 
   composeJulianDay(&y, &m, &d, &j);
   liftStack();
@@ -679,22 +687,20 @@ void fnDate(uint16_t unusedButMandatoryParameter) {
 
 void fnTime(uint16_t unusedButMandatoryParameter) {
   real34_t time34;
-#ifdef PC_BUILD
-  time_t epoch = time(NULL);
-  struct tm *timeInfo = localtime(&epoch);
 
-  uInt32ToReal34((uint32_t)timeInfo->tm_hour * 3600u + (uint32_t)timeInfo->tm_min * 60u + (uint32_t)timeInfo->tm_sec,
-    &time34);
-#endif // PC_BUILD
+  #ifdef DMCP_BUILD
+    tm_t timeInfo;
+    dt_t dateInfo;
 
-#ifdef DMCP_BUILD
-  tm_t timeInfo;
-  dt_t dateInfo;
+    rtc_read(&timeInfo, &dateInfo);
+    uInt32ToReal34((uint32_t)timeInfo.hour * 3600u + (uint32_t)timeInfo.min * 60u + (uint32_t)timeInfo.sec, &time34);
+  #else // !DMCP_BUILD
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
 
-  rtc_read(&timeInfo, &dateInfo);
-  uInt32ToReal34((uint32_t)timeInfo.hour * 3600u + (uint32_t)timeInfo.min * 60u + (uint32_t)timeInfo.sec,
-    &time34);
-#endif // DMCP_BUILD
+    uInt32ToReal34((uint32_t)timeInfo->tm_hour * 3600u + (uint32_t)timeInfo->tm_min * 60u + (uint32_t)timeInfo->tm_sec, &time34);
+  #endif // DMCP_BUILD
+
   liftStack();
   reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
   real34Copy(&time34, REGISTER_REAL34_DATA(REGISTER_X));
@@ -702,67 +708,63 @@ void fnTime(uint16_t unusedButMandatoryParameter) {
 
 
 void fnSetDate(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-  displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-  sprintf(errorMessage, "real calculator only!");
-  moreInfoOnError("In function fnSetDate:", errorMessage, NULL, NULL);
-#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-#endif // PC_BUILD
+  #ifdef DMCP_BUILD
+    tm_t timeInfo;
+    dt_t dateInfo;
+    real34_t j, y, m, d;
 
-#ifdef DMCP_BUILD
-  tm_t timeInfo;
-  dt_t dateInfo;
-  real34_t j, y, m, d;
-
-  if(checkDateArgument(REGISTER_X, &j)) {
-    rtc_read(&timeInfo, &dateInfo);
-    decomposeJulianDay(&j, &y, &m, &d);
-    dateInfo.year  = real34ToUInt32(&y);
-    dateInfo.month = real34ToUInt32(&m);
-    dateInfo.day   = real34ToUInt32(&d);
-    rtc_write(&timeInfo, &dateInfo);
-  }
-#endif // DMCP_BUILD
+    if(checkDateArgument(REGISTER_X, &j)) {
+      rtc_read(&timeInfo, &dateInfo);
+      decomposeJulianDay(&j, &y, &m, &d);
+      dateInfo.year  = real34ToUInt32(&y);
+      dateInfo.month = real34ToUInt32(&m);
+      dateInfo.day   = real34ToUInt32(&d);
+      rtc_write(&timeInfo, &dateInfo);
+    }
+  #else // !DMCP_BUILD
+    displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "real calculator only!");
+      moreInfoOnError("In function fnSetDate:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #endif // DMCP_BUILD
 }
 
 void fnSetTime(uint16_t unusedButMandatoryParameter) {
-#ifdef PC_BUILD
-  displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-  sprintf(errorMessage, "real calculator only!");
-  moreInfoOnError("In function fnSetTime:", errorMessage, NULL, NULL);
-#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-#endif // PC_BUILD
+  #ifdef DMCP_BUILD
+    tm_t timeInfo;
+    dt_t dateInfo;
+    real34_t time34, value34;
+    int32_t timeVal;
 
-#ifdef DMCP_BUILD
-  tm_t timeInfo;
-  dt_t dateInfo;
-  real34_t time34, value34;
-  int32_t timeVal;
-
-  if(getRegisterDataType(REGISTER_X) == dtTime) {
-    int32ToReal34(86400, &value34);
-    if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), &value34)) {
-      displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
+      int32ToReal34(86400, &value34);
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), &value34)) {
+        displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
+      }
+      else {
+        rtc_read(&timeInfo, &dateInfo);
+        int32ToReal34(100, &value34);
+        real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &value34, &time34);
+        real34ToIntegralValue(&time34, &time34, DEC_ROUND_DOWN);
+        timeVal = real34ToInt32(&time34);
+        timeInfo.csec =  timeVal         % 100;
+        timeInfo.sec  = (timeVal /= 100) %  60;
+        timeInfo.min  = (timeVal /=  60) %  60;
+        timeInfo.hour = (timeVal /=  60);
+        rtc_write(&timeInfo, &dateInfo);
+      }
     }
     else {
-      rtc_read(&timeInfo, &dateInfo);
-      int32ToReal34(100, &value34);
-      real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &value34, &time34);
-      real34ToIntegralValue(&time34, &time34, DEC_ROUND_DOWN);
-      timeVal = real34ToInt32(&time34);
-      timeInfo.csec =  timeVal         % 100;
-      timeInfo.sec  = (timeVal /= 100) %  60;
-      timeInfo.min  = (timeVal /=  60) %  60;
-      timeInfo.hour = (timeVal /=  60);
-      rtc_write(&timeInfo, &dateInfo);
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     }
-  }
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  }
-#endif // DMCP_BUILD
+  #else // !DMCP_BUILD
+    displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "real calculator only!");
+      moreInfoOnError("In function fnSetTime:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  #endif // DMCP_BUILD
 }
 
 
@@ -773,41 +775,6 @@ void fnSetTime(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void getDateString(char *dateString) {
-  #ifdef PC_BUILD
-    time_t epoch = time(NULL);
-    struct tm *timeInfo = localtime(&epoch);
-
-    // For the format string : man strftime
-    if(!getSystemFlag(FLAG_TDM24)) { // time format = 12H ==> 2 digit year
-      if(getSystemFlag(FLAG_DMY)) {
-        strftime(dateString, 11, "%d.%m.%y", timeInfo);
-      }
-      else if(getSystemFlag(FLAG_YMD)) {
-        strftime(dateString, 11, "%y-%m-%d", timeInfo);
-      }
-      else if(getSystemFlag(FLAG_MDY)) {
-        strftime(dateString, 11, "%m/%d/%y", timeInfo);
-      }
-      else {
-        strcpy(dateString, "?? ?? ????");
-      }
-    }
-    else {// 4 digit year
-      if(getSystemFlag(FLAG_DMY)) {
-        strftime(dateString, 11, "%d.%m.%Y", timeInfo);
-      }
-      else if(getSystemFlag(FLAG_YMD)) {
-        strftime(dateString, 11, "%Y-%m-%d", timeInfo);
-      }
-      else if(getSystemFlag(FLAG_MDY)) {
-        strftime(dateString, 11, "%m/%d/%Y", timeInfo);
-      }
-      else {
-        strcpy(dateString, "?? ?? ????");
-      }
-    }
-  #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     tm_t timeInfo;
     dt_t dateInfo;
@@ -841,6 +808,39 @@ void getDateString(char *dateString) {
         strcpy(dateString, "?? ?? ????");
       }
     }
+  #else // !DMCP_BUILD
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
+
+    // For the format string : man strftime
+    if(!getSystemFlag(FLAG_TDM24)) { // time format = 12H ==> 2 digit year
+      if(getSystemFlag(FLAG_DMY)) {
+        strftime(dateString, 11, "%d.%m.%y", timeInfo);
+      }
+      else if(getSystemFlag(FLAG_YMD)) {
+        strftime(dateString, 11, "%y-%m-%d", timeInfo);
+      }
+      else if(getSystemFlag(FLAG_MDY)) {
+        strftime(dateString, 11, "%m/%d/%y", timeInfo);
+      }
+      else {
+        strcpy(dateString, "?? ?? ????");
+      }
+    }
+    else {// 4 digit year
+      if(getSystemFlag(FLAG_DMY)) {
+        strftime(dateString, 11, "%d.%m.%Y", timeInfo);
+      }
+      else if(getSystemFlag(FLAG_YMD)) {
+        strftime(dateString, 11, "%Y-%m-%d", timeInfo);
+      }
+      else if(getSystemFlag(FLAG_MDY)) {
+        strftime(dateString, 11, "%m/%d/%Y", timeInfo);
+      }
+      else {
+        strcpy(dateString, "?? ?? ????");
+      }
+    }
   #endif // DMCP_BUILD
 }
 
@@ -853,25 +853,6 @@ void getDateString(char *dateString) {
  * \return void
  ***********************************************/
 void getTimeString(char *timeString) {
-  #ifdef PC_BUILD
-    time_t epoch = time(NULL);
-    struct tm *timeInfo = localtime(&epoch);
-
-    // For the format string : man strftime
-    if(getSystemFlag(FLAG_TDM24)) { // time format = 24H
-      strftime(timeString, 8, "%H:%M", timeInfo); // %R don't work on Windows
-    }
-    else {
-      strftime(timeString, 8, "%I:%M", timeInfo); // I could use %p but in many locals the AM and PM string are empty
-      if(timeInfo->tm_hour >= 12) {
-        strcat(timeString, "pm");
-      }
-      else {
-        strcat(timeString, "am");
-      }
-    }
-  #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     tm_t timeInfo;
     dt_t dateInfo;
@@ -888,6 +869,23 @@ void getTimeString(char *timeString) {
     }
     else {
       sprintf(timeString, "%02d:%02d", timeInfo.hour, timeInfo.min);
+    }
+  #else // !DMCP_BUILD
+    time_t epoch = time(NULL);
+    struct tm *timeInfo = localtime(&epoch);
+
+    // For the format string : man strftime
+    if(getSystemFlag(FLAG_TDM24)) { // time format = 24H
+      strftime(timeString, 8, "%H:%M", timeInfo); // %R don't work on Windows
+    }
+    else {
+      strftime(timeString, 8, "%I:%M", timeInfo); // I could use %p but in many locals the AM and PM string are empty
+      if(timeInfo->tm_hour >= 12) {
+        strcat(timeString, "pm");
+      }
+      else {
+        strcat(timeString, "am");
+      }
     }
   #endif // DMCP_BUILD
 }

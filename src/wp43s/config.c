@@ -209,6 +209,26 @@ void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
 
 
 /********************************************//**
+ * \brief Sets the rounding mode
+ *
+ * \param[in] RM uint16_t
+ * \return void
+ ***********************************************/
+void fnSetRoundingMode(uint16_t RM) {
+  roundingMode = RM;
+}
+
+// "enum rounding" does not match with the specification of WP 43s rounding mode.
+// So you need roundingModeTable[roundingMode] rather than roundingMode
+// to specify rounding mode in the real number functions.
+const enum rounding roundingModeTable[7] = {
+  DEC_ROUND_HALF_EVEN, DEC_ROUND_HALF_UP, DEC_ROUND_HALF_DOWN,
+  DEC_ROUND_UP, DEC_ROUND_DOWN, DEC_ROUND_CEILING, DEC_ROUND_FLOOR
+};
+
+
+
+/********************************************//**
  * \brief Sets X to the value of the integer mode
  *
  * \return void
@@ -400,7 +420,7 @@ void fnRoundingMode(uint16_t RM) {
  ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
-  oldAngularMode = currentAngularMode;                         //JM
+  lastSetAngularMode = currentAngularMode;                         //JM
 
   fnRefreshState();                              //drJM
 
@@ -517,7 +537,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesForTheTestPrograms = 8356; // Multiple of 4
+  uint32_t numberOfBytesForTheTestPrograms = 8364; // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -8824,6 +8844,14 @@ void addTestPrograms(void) {
     *(currentStep++) = (ITM_DtoJ >> 8) | 0x80;
     *(currentStep++) =  ITM_DtoJ       & 0xff;
 
+    *(currentStep++) = (ITM_DELITM >> 8) | 0x80;
+    *(currentStep++) =  ITM_DELITM       & 0xff;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 3; // String length
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
     *(currentStep++) = (ITM_EIGVAL >> 8) | 0x80;
     *(currentStep++) =  ITM_EIGVAL       & 0xff;
 
@@ -9009,6 +9037,9 @@ void addTestPrograms(void) {
 
     *(currentStep++) = (ITM_EXPT >> 8) | 0x80;
     *(currentStep++) =  ITM_EXPT       & 0xff;
+
+    *(currentStep++) = (ITM_GET_JUL_GREG >> 8) | 0x80;
+    *(currentStep++) =  ITM_GET_JUL_GREG       & 0xff;
 
     *(currentStep++) = (ITM_FIB >> 8) | 0x80;
     *(currentStep++) =  ITM_FIB       & 0xff;
@@ -11852,8 +11883,8 @@ void addTestPrograms(void) {
       leavePem();
     #endif // TESTSUITE_BUILD
     printf("freeProgramBytes = %u\n", freeProgramBytes);
-    listPrograms();
-    listLabelsAndPrograms();
+    //listPrograms();
+    //listLabelsAndPrograms();
   #endif // !DMCP_BUILD
 }
 
@@ -12039,7 +12070,7 @@ void fnReset(uint16_t confirmation) {
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
     currentAngularMode = AM_DEGREE;
-    oldAngularMode = currentAngularMode;             //JM
+    lastSetAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
     setSystemFlag(FLAG_MULTx);

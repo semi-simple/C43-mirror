@@ -1534,7 +1534,8 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
         if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
           convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-        }
+          setRegisterAngularMode(REGISTER_X, AM_DEGREE);                        //JM added AM_DEGREE: prevent stripping the tag if it was AM_DMS, to force an interim step to decimal degrees.
+        } else                                                                  //JM added else: prevent stripping the tag if it was AM_DMS, to force an interim step to decimal degrees.
         setRegisterAngularMode(REGISTER_X, AM_NONE);
       }
       break;

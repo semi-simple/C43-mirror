@@ -800,4 +800,178 @@ double convert_to_double(calcRegister_t regist) {    //Convert from X register t
 
 
 
+void timeToReal34(uint16_t hms) {                     //always 24 hour time; 
+  calcRegister_t regist = REGISTER_X;
+  real34_t real34, value34, tmp34, h34, m34, s34;
+  int32_t sign;
+  uint32_t digits, tDigits = 0u, bDigits;
+  bool_t isValid12hTime = false; //, isAfternoon = false;
+
+  real34Copy(REGISTER_REAL34_DATA(regist), &real34);
+  sign = real34IsNegative(&real34);
+
+  // Pre-rounding
+        int32ToReal34(10, &value34);
+        int32ToReal34(10, &tmp34);
+        for(bDigits = 0; bDigits < (isValid12hTime ? 14 : 16); ++bDigits) {
+          if(real34CompareAbsLessThan(&h34, &value34)) break;
+          real34Multiply(&value34, &tmp34, &value34);
+        }
+        tDigits = isValid12hTime ? 14 : 16;
+        isValid12hTime = false;
+
+        for(digits = bDigits; digits < tDigits; ++digits) {
+          real34Multiply(&real34, &value34, &real34);
+        }
+        real34ToIntegralValue(&real34, &real34, DEC_ROUND_HALF_UP);
+        for(digits = bDigits; digits < tDigits; ++digits) {
+          real34Divide(&real34, &value34, &real34);
+        }
+        tDigits = 0u;
+  real34SetPositiveSign(&real34);
+
+  // Seconds
+  //real34ToIntegralValue(&real34, &s34, DEC_ROUND_DOWN);
+  real34Copy(&real34, &s34);
+  real34Subtract(&real34, &s34, &real34); // Fractional part
+  int32ToReal34(60, &value34);
+  // Minutes
+  real34Divide(&s34, &value34, &m34);
+  real34ToIntegralValue(&m34, &m34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&s34, &value34, &s34);
+  // Hours
+  real34Divide(&m34, &value34, &h34);
+  real34ToIntegralValue(&h34, &h34, DEC_ROUND_DOWN);
+  real34DivideRemainder(&m34, &value34, &m34);
+
+  switch(hms) {
+    case 0:     //h
+      int32ToReal34(sign ? -1 : +1, &value34);
+      real34Multiply(&h34, &value34, &h34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&h34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    case 1:     //m
+      int32ToReal34(sign ? -1 : +1, &value34);
+      real34Multiply(&m34, &value34, &m34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&m34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    case 2:     //s
+      int32ToReal34(sign ? -1 : +1, &value34);
+      real34Multiply(&s34, &value34, &s34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&s34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    default:break;
+  }
+}
+
+
+void dms34ToReal34(uint16_t dms) {
+  real34_t angle34;
+  calcRegister_t regist = REGISTER_X;
+  real34_t value34, d34, m34, s34, fs34;
+  real34Copy(REGISTER_REAL34_DATA(regist), &angle34);
+
+//    char degStr[27];
+    uint32_t m, s, fs;
+    int16_t sign;
+    bool_t overflow;
+
+    real_t temp, degrees, minutes, seconds;
+
+    real34ToReal(&angle34, &temp);
+
+    sign = realIsNegative(&temp) ? -1 : 1;
+    realSetPositiveSign(&temp);
+
+    // Get the degrees
+    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+
+    // Get the minutes
+    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+
+    // Get the seconds
+    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
+
+    // Get the fractional seconds
+    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
+    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+
+    realToUInt32(&temp, DEC_ROUND_DOWN, &fs, &overflow);
+    realToUInt32(&seconds, DEC_ROUND_DOWN, &s, &overflow);
+    realToUInt32(&minutes, DEC_ROUND_DOWN, &m, &overflow);
+
+    if(fs >= 100) {
+      fs -= 100;
+      s++;
+    }
+
+    if(s >= 60) {
+      s -= 60;
+      m++;
+    }
+
+    if(m >= 60) {
+      m -= 60;
+      realAdd(&degrees, const_1, &degrees, &ctxtReal39);
+    }
+
+  switch(dms) {
+    case 0:     //d
+      int32ToReal34(sign, &value34);
+      realToReal34(&degrees, &d34);
+      real34Multiply(&d34, &value34, &d34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&d34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    case 1:     //m
+      int32ToReal34(m, &m34);
+      int32ToReal34(sign, &value34);
+      real34Multiply(&m34, &value34, &m34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&m34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    case 2:     //s
+      int32ToReal34(fs, &fs34);
+      int32ToReal34(100, &value34);
+      real34Divide(&fs34, &value34, &fs34);
+
+      int32ToReal34(s, &s34);
+      real34Add(&s34, &fs34, &s34);
+
+      int32ToReal34(sign, &value34);
+      real34Multiply(&s34, &value34, &s34);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(&s34, REGISTER_REAL34_DATA(regist));
+      break;
+
+    default:break;
+  }
+
+}
+
+void fnHrDeg (uint16_t unusedButMandatoryParameter) {
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(0);
+  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(0);
+}
+void fnMinute (uint16_t unusedButMandatoryParameter) {
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(1);
+  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(1);
+}
+void fnSecond (uint16_t unusedButMandatoryParameter) {
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(2);
+  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(2);
+}
+
 

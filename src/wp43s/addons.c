@@ -248,9 +248,9 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_GRAPH:                      //JM
       break;
 
-      default:
-        sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
-        displayBugScreen(errorMessage);
+    default:
+      sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
+      displayBugScreen(errorMessage);
     }
   #endif // !TESTSUITE_BUILD
   }

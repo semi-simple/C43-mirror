@@ -629,11 +629,14 @@ void fnToHr(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnToHms(uint16_t unusedButMandatoryParameter) {
-  switch(calcMode) {                     //JM
+  switch(calcMode) {                     //JM vv
     case CM_NIM:
-      addItemToNimBuffer(ITM_toHMS);
+      #ifndef TESTSUITE_BUILD
+        addItemToNimBuffer(ITM_toHMS);
+      #endif //TESTSUITE_BUILD
       break;
-    case CM_NORMAL:
+
+    default:                             //JM ^^
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
       switch(getRegisterDataType(REGISTER_X)) {
@@ -661,7 +664,7 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
           return;
         break;
       }
-      default:break;
+    break;
   }
 }
 

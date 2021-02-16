@@ -243,7 +243,7 @@ const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_SYSFL, 
 
 const int16_t menu_DIGITS[]      = { ITM_A,                         ITM_B,                      ITM_C,                    ITM_D,                 ITM_E,                       ITM_F,
                                      ITM_5,                         ITM_6,                      ITM_7,                    ITM_8,                 ITM_9,                       ITM_i,
-                                     ITM_0,                         ITM_1,                      ITM_2,                    ITM_3,                 ITM_4,                       ITM_NULL                      };
+                                     ITM_0,                         ITM_1,                      ITM_2,                    ITM_3,                 ITM_4,                       ITM_HASH_JM                   };
 
 const int16_t menu_CHARS[]       = { ITM_NULL,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT,
                                      ITM_NULL,                      -MNU_alpha_omega,           ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM

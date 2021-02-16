@@ -586,7 +586,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnAngularModeJM            (uint16_t unusedButMandatoryParameter) {}
   void fnChangeBaseJM             (uint16_t unusedButMandatoryParameter) {}
   void fnChangeBaseMNU            (uint16_t unusedButMandatoryParameter) {}
-  void fnLongInt                  (uint16_t unusedButMandatoryParameter) {}
   void fnByteShortcutsS           (uint16_t unusedButMandatoryParameter) {}  //JM POC BASE2
   void fnByteShortcutsU           (uint16_t unusedButMandatoryParameter) {}  //JM POC BASE2
   void fnByte                     (uint16_t unusedButMandatoryParameter) {}  //JM POC BASE2

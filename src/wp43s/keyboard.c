@@ -258,6 +258,11 @@ bool_t lastshiftG = false;
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
+            else if(calcMode == CM_NIM && item == ITM_i) {    //JMvv To make DIGITS menu's i work like HP35S' i
+              item = ITM_CC;
+              addItemToNimBuffer(item);              
+            }                                                 //JM^^
+
             else if(tamMode) {
               addItemToBuffer(item);
             }

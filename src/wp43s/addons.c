@@ -551,6 +551,13 @@ void fnChangeBaseJM (uint16_t BASE) {
 
 void fnChangeBaseMNU(uint16_t BASE) {
 #ifndef TESTSUITE_BUILD
+
+    if(calcMode == CM_AIM) {
+      addItemToBuffer(ITM_toINT);
+      return;
+    }
+
+
     //printf(">>> §§§ fnChangeBaseMNUa Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
     shrinkNimBuffer();
     //printf(">>> §§§ fnChangeBaseMNUb Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);

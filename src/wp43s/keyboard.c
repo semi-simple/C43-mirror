@@ -258,12 +258,17 @@ bool_t lastshiftG = false;
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
               addItemToNimBuffer(item);
             }
+            else if(calcMode == CM_NIM && item == ITM_i) {    //JMvv To make DIGITS menu's i work like HP35S' i
+              item = ITM_CC;
+              addItemToNimBuffer(item);              
+            }                                                 //JM^^
+
             else if(tamMode) {
               addItemToBuffer(item);
             }
             else if(item > 0) { // function
-              if(calcMode == CM_NIM && item != ITM_CC) {
-                if(item!=ITM_HASH_JM ) {closeNim();}                     //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+              if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+                closeNim();     
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
                     setSystemFlag(FLAG_ASLIFT);

@@ -222,6 +222,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
         if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_DEGREE) {
           fnKeyDotD(0);
+          fnKeyDotD(0);  //2nd time to make sure it goes to REAL, not DEGREES as per           fnToReal(0); mod.
         } 
         if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
           fnToHms(0);                   
@@ -247,9 +248,9 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_GRAPH:                      //JM
       break;
 
-      default:
-        sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
-        displayBugScreen(errorMessage);
+    default:
+      sprintf(errorMessage, "In function fnTo_ms: unexpected calcMode value (%" PRIu8 ") while processing key .ms!", calcMode);
+      displayBugScreen(errorMessage);
     }
   #endif // !TESTSUITE_BUILD
   }
@@ -550,6 +551,13 @@ void fnChangeBaseJM (uint16_t BASE) {
 
 void fnChangeBaseMNU(uint16_t BASE) {
 #ifndef TESTSUITE_BUILD
+
+    if(calcMode == CM_AIM) {
+      addItemToBuffer(ITM_toINT);
+      return;
+    }
+
+
     //printf(">>> §§§ fnChangeBaseMNUa Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);
     shrinkNimBuffer();
     //printf(">>> §§§ fnChangeBaseMNUb Calmode:%d, nimbuffer:%s, lastbase:%d, nimnumberpart:%d\n",calcMode,nimBuffer,lastIntegerBase, nimNumberPart);

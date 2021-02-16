@@ -147,7 +147,7 @@ const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW
 
 const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,                    ITM_GRAD,                 ITM_MULPI,             ITM_DMS,                     ITM_CFG,                       
                                      ITM_DEG2,                      ITM_RAD2,                   ITM_GRAD2,                ITM_MULPI2,            ITM_DMS2,                    -MNU_TRI,                         //JM
-                                     ITM_SYS,                       ITM_NULL,                   ITM_HMS2,                 ITM_dotD,              ITM_RECT,                    ITM_POLAR,                         //JM
+                                     ITM_SYS,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RECT,                    ITM_POLAR,                         //JM
 
                                      ITM_SSIZE4,                    ITM_SSIZE8,                 ITM_CB_CPXRES,            ITM_CB_SPCRES,         ITM_DENMAX,                  ITM_CFG,                           //JM
                                      ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENANY,                  ITM_DENFIX,                          //JM
@@ -243,7 +243,7 @@ const int16_t menu_CATALOG[]     = { -MNU_FCNS,                     -MNU_SYSFL, 
 
 const int16_t menu_DIGITS[]      = { ITM_A,                         ITM_B,                      ITM_C,                    ITM_D,                 ITM_E,                       ITM_F,
                                      ITM_5,                         ITM_6,                      ITM_7,                    ITM_8,                 ITM_9,                       ITM_i,
-                                     ITM_0,                         ITM_1,                      ITM_2,                    ITM_3,                 ITM_4,                       ITM_NULL                      };
+                                     ITM_0,                         ITM_1,                      ITM_2,                    ITM_3,                 ITM_4,                       ITM_HASH_JM                   };
 
 const int16_t menu_CHARS[]       = { ITM_NULL,                      -MNU_ALPHA_OMEGA,           -MNU_ALPHAINTL,           -MNU_ALPHAMATH,        -MNU_MyAlpha,                -MNU_ALPHADOT,
                                      ITM_NULL,                      -MNU_alpha_omega,           ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };    //JM
@@ -274,7 +274,7 @@ const int16_t menu_alpha_omega[] = { ITM_alpha,                     ITM_beta,   
 
 const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_toDMS,                   ITM_toHMS,                      //JM mod
                                      ITM_DEGto,                     ITM_RADto,                  ITM_GRADto,               ITM_MULPIto,           ITM_DMSto,                   ITM_ms,
-                                     ITM_DtoR,                      ITM_RtoD,                   ITM_DtoDMS,               ITM_DMStoD,            ITM_NULL,                    -MNU_UNITCONV                 };    //JM Added H.MS
+                                     ITM_DtoR,                      ITM_RtoD,                   ITM_DtoDMS,               ITM_DMStoD,            ITM_dotD,                    -MNU_UNITCONV                 };    //JM Added H.MS
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */

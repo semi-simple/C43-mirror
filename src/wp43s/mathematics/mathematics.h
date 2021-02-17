@@ -72,6 +72,7 @@
 #include "int.h"
 #include "integerPart.h"
 #include "invert.h"
+#include "ixyz.h"
 #include "lcm.h"
 #include "ln.h"
 #include "lnPOne.h"

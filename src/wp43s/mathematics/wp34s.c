@@ -1297,3 +1297,123 @@ void WP34S_Erfc(const real_t *x, real_t *res, realContext_t *realContext) {
   WP34S_Cdf_Q(&p, &p, realContext);
   realMultiply(&p, const_2, res, realContext);
 }
+
+
+
+static void check_low(real_t *d) {
+  real_t real_1e_32;
+
+  realCopy(const_1, &real_1e_32); real_1e_32.exponent -= 32;
+	if(realCompareAbsLessThan(d, &real_1e_32))
+		realCopy(d, &real_1e_32);
+}
+
+static void ib_step(const real_t *aa, real_t *d, real_t *c, realContext_t *realContext) {
+	real_t t, u;
+
+	realMultiply(aa, d, &t, realContext);
+	realAdd(&t, const_1, &u, realContext);		// d = 1+aa*d
+	check_low(&u);
+	realDivide(const_1, &u, d, realContext);
+	realDivide(aa, c, &t, realContext);
+	realAdd(&t, const_1, c, realContext);		// c = 1+aa/c
+	check_low(c);
+}
+
+static void betacf(const real_t *a, const real_t *b, const real_t *x, real_t *r, realContext_t *realContext) {
+	real_t aa, c, d, apb, am1, ap1, m, m2, oldr;
+	int i;
+	real_t t, u, v, w;
+
+  hourGlassIconEnabled = true;
+  realAdd(a, const_1, &ap1, realContext);				// ap1 = 1+a
+  realSubtract(a, const_1, &am1, realContext);				// am1 = a-1
+  realAdd(a, b, &apb, realContext);			// apb = a+b
+  realCopy(const_1, &c);				// c = 1
+  realDivide(x, &ap1, &t, realContext);
+  realMultiply(&t, &apb, &u, realContext);
+  realSubtract(const_1, &u, &t, realContext);				// t = 1-apb*x/ap1
+	check_low(&t);
+  realDivide(const_1, &t, &d, realContext);			// d = 1/t
+  realCopy(&d, r);				// res = d
+  realZero(&m);
+	for (i=0; i<500; i++) {
+    realCopy(r, &oldr);
+    realAdd(&m, const_1, &m, realContext);			// m = i+1
+    realMultiply(&m, const_2, &m2, realContext);
+    realSubtract(b, &m, &t, realContext);
+    realMultiply(&t, &m, &u, realContext);
+    realMultiply(&u, x, &t, realContext);	// t = m*(b-m)*x
+    realAdd(&am1, &m2, &u, realContext);
+    realAdd(a, &m2, &v, realContext);
+    realMultiply(&u, &v, &w, realContext);	// w = (am1+m2)*(a+m2)
+    realDivide(&t, &w, &aa, realContext);	// aa = t/w
+		ib_step(&aa, &d, &c, realContext);
+    realMultiply(r, &d, &t, realContext);
+    realMultiply(&t, &c, r, realContext);	// r = r*d*c
+    realAdd(a, &m, &t, realContext);
+    realAdd(&apb, &m, &u, realContext);
+    realMultiply(&t, &u, &w, realContext);
+    realMultiply(&w, x, &t, realContext);
+    realMultiply(&t, const__1, &w, realContext);		// w = -(a+m)*(apb+m)*x
+    realAdd(a, &m2, &t, realContext);
+    realAdd(&ap1, &m2, &u, realContext);
+    realMultiply(&t, &u, &v, realContext);	// v = (a+m2)*(ap1+m2)
+    realDivide(&w, &v, &aa, realContext);	// aa = w/v
+		ib_step(&aa, &d, &c, realContext);
+    realMultiply(&d, &c, &v, realContext);
+    realMultiply(r, &v, r, realContext);	// r *= d*c
+		if (realCompareEqual(&oldr, r))
+			break;
+	}
+}
+
+/* Regularised incomplete beta function Ix(a, b)
+ */
+void WP34S_betai(const real_t *b, const real_t *a, const real_t *x, real_t *res, realContext_t *realContext) {
+	real_t t, u, v, w, y;
+	int32_t limit = 0;
+
+	realCompare(const_1, x, &t, realContext);
+	if(realIsNegative(x) || realIsNegative(&t)) {
+    realCopy(const_NaN, res);
+		return;
+	}
+	if(realIsZero(x) || realIsZero(&t))
+		limit = 1;
+	else {
+    LnBeta(a, b, &u, realContext);
+    WP34S_Ln(x, &v, realContext);			// v = ln(x)
+    realMultiply(a, &v, &t, realContext);
+		realSubtract(&t, &u, &v, realContext);	// v = lng(...)+a.ln(x)
+    realSubtract(const_1, x, &y, realContext);			// y = 1-x
+    WP34S_Ln(&y, &u, realContext);			// u = ln(1-x)
+    realMultiply(&u, b, &t, realContext);
+    realAdd(&t, &v, &u, realContext);		// u = lng(...)+a.ln(x)+b.ln(1-x)
+    realExp(&u, &w, realContext);
+	}
+  realAdd(a, b, &v, realContext);
+  realAdd(&v, const_2, &u, realContext);				// u = a+b+2
+  realAdd(a, const_1, &t, realContext);				// t = a+1
+  realDivide(&t, &u, &v, realContext);			// u = (a+1)/(a+b+2)
+	if(realCompareLessThan(x, &v)) {
+		if(limit) {
+      realCopy(const_0, res);
+    }
+    else {
+  		betacf(a, b, x, &t, realContext);
+      realDivide(&t, a, &u, realContext);
+      realMultiply(&w, &u, res, realContext);
+    }
+	} else {
+		if(limit) {
+      realCopy(const_1, res);
+    }
+    else {
+  		betacf(b, a, &y, &t, realContext);
+      realDivide(&t, b, &u, realContext);
+  		realMultiply(&w, &u, &t, realContext);
+      realSubtract(const_1, &t, res, realContext);
+    }
+	}
+}

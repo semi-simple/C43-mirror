@@ -15,23 +15,7 @@
  */
 
 /********************************************//**
- * \file lnbeta.h
+ * \file ixyz.h
  ***********************************************/
 
-void fnLnBeta      (uint16_t unusedButMandatoryParameter);
-
-void lnbetaError   (void);
-
-void lnbetaLonILonI(void);
-void lnbetaRealLonI(void);
-void lnbetaCplxLonI(void);
-
-void lnbetaLonIReal(void);
-void lnbetaRealReal(void);
-void lnbetaCplxReal(void);
-
-void lnbetaLonICplx(void);
-void lnbetaRealCplx(void);
-void lnbetaCplxCplx(void);
-
-void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext);
+void fnIxyz(uint16_t unusedButMandatoryParameter);

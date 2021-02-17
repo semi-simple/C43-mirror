@@ -278,6 +278,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnLnGamma                  (uint16_t unusedButMandatoryParameter) {}
   void fnLnBeta                   (uint16_t unusedButMandatoryParameter) {}
   void fnBeta                     (uint16_t unusedButMandatoryParameter) {}
+  void fnIxyz                     (uint16_t unusedButMandatoryParameter) {}
   void fnGamma                    (uint16_t unusedButMandatoryParameter) {}
   void fnGammaP                   (uint16_t unusedButMandatoryParameter) {}
   void fnGammaQ                   (uint16_t unusedButMandatoryParameter) {}

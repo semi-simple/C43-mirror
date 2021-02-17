@@ -243,6 +243,7 @@ deltaPercent
 logxy
 lnbeta
 beta
+ixyz
 fib
 gd
 invGd

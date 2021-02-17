@@ -50,3 +50,4 @@ bool_t WP34S_RelativeError   (const real_t *x, const real_t *y, const real_t *to
 void   WP34S_GammaP          (const real_t *x, const real_t *a, real_t *res, realContext_t *realContext, bool_t upper, bool_t regularised);
 void   WP34S_Erf             (const real_t *x, real_t *res, realContext_t *realContext);
 void   WP34S_Erfc            (const real_t *x, real_t *res, realContext_t *realContext);
+void   WP34S_betai           (const real_t *b, const real_t *a, const real_t *x, real_t *res, realContext_t *realContext);

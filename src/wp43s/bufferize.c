@@ -2210,6 +2210,7 @@
   }
 
   void closeNim(void) {
+    setSystemFlag(FLAG_ASLIFT);
     if((nimNumberPart == NP_INT_10 || nimNumberPart == NP_INT_16) && lastIntegerBase != 0) {
       strcat(aimBuffer, "#0");
       int16_t basePos = strlen(aimBuffer) - 1;

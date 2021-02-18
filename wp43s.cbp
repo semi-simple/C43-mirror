@@ -706,6 +706,18 @@
 		<Unit filename="src/testSuite/trig.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/t_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/ulp.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -932,6 +944,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/normal.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/t.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/t.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

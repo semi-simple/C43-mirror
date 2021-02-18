@@ -183,7 +183,7 @@ void WP34S_Cdf_Q(const real_t *x, real_t *res, realContext_t *realContext) {
  * GNQ takes any 0 < p < 1 and returns a positive or negative estimate
  * for the Normal quantile.
  */
-static void qf_q_est(const real_t *x, real_t *res, real_t* resY, realContext_t *realContext) {
+void WP34S_qf_q_est(const real_t *x, real_t *res, real_t* resY, realContext_t *realContext) {
   real_t p, q, r, s;
   bool_t isSmall = false;
 
@@ -235,7 +235,7 @@ void WP34S_Qf_Q(const real_t *x, real_t *res, realContext_t *realContext) {
   real_t p, q, r, s, reg0;
   bool_t half = false;
   int32_t loops;
-  qf_q_est(x, &p, &reg0, realContext);
+  WP34S_qf_q_est(x, &p, &reg0, realContext);
   if(realIsNegative(&p)) half = true;
   loops = 2;
   realSetPositiveSign(&p);

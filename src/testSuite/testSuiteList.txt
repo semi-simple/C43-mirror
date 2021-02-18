@@ -265,3 +265,13 @@ normal_p
 normal_l
 normal_r
 normal_i
+
+t_p
+t_l
+t_r
+t_i
+
+chi2_p
+chi2_l
+chi2_r
+chi2_i

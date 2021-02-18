@@ -541,6 +541,14 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnNormalL                  (uint16_t unusedButMandatoryParameter) {}
   void fnNormalR                  (uint16_t unusedButMandatoryParameter) {}
   void fnNormalI                  (uint16_t unusedButMandatoryParameter) {}
+  void fnT_P                      (uint16_t unusedButMandatoryParameter) {}
+  void fnT_L                      (uint16_t unusedButMandatoryParameter) {}
+  void fnT_R                      (uint16_t unusedButMandatoryParameter) {}
+  void fnT_I                      (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2P                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2L                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2R                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2I                    (uint16_t unusedButMandatoryParameter) {}
   void fnJM                       (uint16_t unusedButMandatoryParameter) {}           //vv JM
   void fnSetSetJM                 (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatSigFig      (uint16_t unusedButMandatoryParameter) {}
@@ -628,6 +636,7 @@ const item_t indexOfItems[] = {
 
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
+
 
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
@@ -1919,20 +1928,20 @@ const item_t indexOfItems[] = {
 /* 1260 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Poiss" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1261 */  { itemToBeCoded,               NOPARAM,                     "Poiss" STD_SUP_MINUS_1,                       "Poiss" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1262 */  { itemToBeCoded,               NOPARAM,                     "t:",                                          "t:",                                          0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1263 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUB_p "(x)",                           "t" STD_SUB_p "(x)",                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1264 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1265 */  { itemToBeCoded,               NOPARAM,                     "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1266 */  { itemToBeCoded,               NOPARAM,                     "t" STD_SUP_MINUS_1 "(p)",                     "t" STD_SUP_MINUS_1 "(p)",                     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1263 */  { fnT_P,                       NOPARAM,                     "t" STD_SUB_p "(x)",                           "t" STD_SUB_p "(x)",                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1264 */  { fnT_L,                       NOPARAM,                     "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "t" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1265 */  { fnT_R,                       NOPARAM,                     "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "t" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1266 */  { fnT_I,                       NOPARAM,                     "t" STD_SUP_MINUS_1 "(p)",                     "t" STD_SUP_MINUS_1 "(p)",                     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1267 */  { itemToBeCoded,               NOPARAM,                     "Weibl:",                                      "Weibl:",                                      0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
 /* 1268 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUB_p,                             "Weibl" STD_SUB_p,                             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1269 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Weibl" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1270 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Weibl" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1271 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUP_MINUS_1,                       "Weibl" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1272 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 ":",                         STD_chi STD_SUP_2 ":",                         0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1273 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1274 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1275 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1276 */  { itemToBeCoded,               NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1273 */  { fnChi2P,                     NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1274 */  { fnChi2L,                     NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1275 */  { fnChi2R,                     NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1276 */  { fnChi2I,                     NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1277 */  { itemToBeCoded,               NOPARAM,                     "1277",                                        "1277",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1278 */  { itemToBeCoded,               NOPARAM,                     "1278",                                        "1278",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1279 */  { itemToBeCoded,               NOPARAM,                     "1279",                                        "1279",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
@@ -2535,7 +2544,7 @@ const item_t indexOfItems[] = {
 /* 1860 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM HEX
 /* 1861 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "I",                           STD_RIGHT_ARROW "I",                           0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM Copy of 1925
 /* 1862 */  { fnChangeBaseMNU,             NOPARAM,                     "MODE#",                                       "MODE#",                                       0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },
-/* 1863 */  { fnHrDeg,                     NOPARAM,                     "HOUR",                                        "HOUR",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1863 */  { fnHrDeg,                     NOPARAM,                     "HOUR",                                        "HOUR",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1864 */  { fnMinute,                    NOPARAM,                     "MIN",                                         "MIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1865 */  { fnSecond,                    NOPARAM,                     "SEC",                                         "SEC",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1866 */  { fnToTime,                    NOPARAM,                     STD_RIGHT_ARROW "TIME",                        STD_RIGHT_ARROW "TIME",                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

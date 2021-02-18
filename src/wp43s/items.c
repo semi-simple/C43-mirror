@@ -517,6 +517,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnT_L                      (uint16_t unusedButMandatoryParameter) {}
   void fnT_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnT_I                      (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2P                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2L                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2R                    (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2I                    (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
@@ -1823,14 +1827,14 @@ const item_t indexOfItems[] = {
 /* 1270 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Weibl" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1271 */  { itemToBeCoded,               NOPARAM,                     "Weibl" STD_SUP_MINUS_1,                       "Weibl" STD_SUP_MINUS_1,                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1272 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 ":",                         STD_chi STD_SUP_2 ":",                         0,       0,       CAT_MENU, SLS_UNCHANGED, US_UNCHANGED},
-/* 1273 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1274 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",
+/* 1273 */  { fnChi2P,                     NOPARAM,                     STD_chi STD_SUP_2 STD_SUB_p "(x)",             STD_chi STD_SUP_2 STD_SUB_p "(x)",             0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1274 */  { fnChi2L,                     NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",
                                                                                                                        STD_chi STD_SUP_2 STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)",
                                                                                                                                                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1275 */  { itemToBeCoded,               NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",
+/* 1275 */  { fnChi2R,                     NOPARAM,                     STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",
                                                                                                                        STD_chi STD_SUP_2 STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)",
                                                                                                                                                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1276 */  { itemToBeCoded,               NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1276 */  { fnChi2I,                     NOPARAM,                     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     "(" STD_chi STD_SUP_2 ")" STD_SUP_MINUS_1,     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1277 */  { itemToBeCoded,               NOPARAM,                     "1277",                                        "1277",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1278 */  { itemToBeCoded,               NOPARAM,                     "1278",                                        "1278",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1279 */  { itemToBeCoded,               NOPARAM,                     "1279",                                        "1279",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},

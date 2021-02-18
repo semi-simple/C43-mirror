@@ -21,17 +21,19 @@
 #include "wp43s.h"
 
 
-static bool_t checkParamNormal(void) {
-  if((getRegisterDataType(REGISTER_X) != dtReal34) || (getRegisterDataType(REGISTER_I) != dtReal34) || (getRegisterDataType(REGISTER_J) != dtReal34)) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Values in register X, I and J must be of the real type");
-      moreInfoOnError("In function checkParamNormal:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
+static bool_t checkParamNormal(real_t *x, real_t *i, real_t *j) {
+  if(((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger)) ||
+    ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger)) ||
+    ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Values in register X, I and J must be of the real or long integer type");
+        moreInfoOnError("In function checkParamNormal:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return false;
   }
   else if(getSystemFlag(FLAG_SPCRES)) {
-    return true;
+    goto getParam;
   }
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_J)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_J))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -40,23 +42,33 @@ static bool_t checkParamNormal(void) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
+getParam:
+  if(getRegisterDataType(REGISTER_X) == dtReal34)
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
+  else // long integer
+    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
+  if(getRegisterDataType(REGISTER_I) == dtReal34)
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), i);
+  else // long integer
+    convertLongIntegerRegisterToReal(REGISTER_I, i, &ctxtReal39);
+  if(getRegisterDataType(REGISTER_J) == dtReal34)
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
+  else // long integer
+    convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
   return true;
 }
 
 
 void fnNormalP(uint16_t unusedButMandatoryParameter) {
-  real_t val, tmp;
+  real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamNormal()) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), &tmp);
-    realSubtract(&val, &tmp, &val, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &tmp);
-    realDivide(&val, &tmp, &val, &ctxtReal39);
-    WP34S_Pdf_Q(&val, &tmp, &ctxtReal39);
-    realToReal34(&tmp, REGISTER_REAL34_DATA(REGISTER_X));
+  if(checkParamNormal(&val, &mu, &sigma)) {
+    realSubtract(&val, &mu, &val, &ctxtReal39);
+    realDivide(&val, &sigma, &val, &ctxtReal39);
+    WP34S_Pdf_Q(&val, &ans, &ctxtReal39);
+    realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -64,18 +76,15 @@ void fnNormalP(uint16_t unusedButMandatoryParameter) {
 
 
 void fnNormalL(uint16_t unusedButMandatoryParameter) {
-  real_t val, tmp;
+  real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamNormal()) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), &tmp);
-    realSubtract(&val, &tmp, &val, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &tmp);
-    realDivide(&val, &tmp, &val, &ctxtReal39);
-    WP34S_Cdf_Q(&val, &tmp, &ctxtReal39);
-    realToReal34(&tmp, REGISTER_REAL34_DATA(REGISTER_X));
+  if(checkParamNormal(&val, &mu, &sigma)) {
+    realSubtract(&val, &mu, &val, &ctxtReal39);
+    realDivide(&val, &sigma, &val, &ctxtReal39);
+    WP34S_Cdf_Q(&val, &ans, &ctxtReal39);
+    realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -83,18 +92,15 @@ void fnNormalL(uint16_t unusedButMandatoryParameter) {
 
 
 void fnNormalR(uint16_t unusedButMandatoryParameter) {
-  real_t val, tmp;
+  real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamNormal()) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), &tmp);
-    realSubtract(&val, &tmp, &val, &ctxtReal39);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &tmp);
-    realDivide(&val, &tmp, &val, &ctxtReal39);
-    WP34S_Cdfu_Q(&val, &tmp, &ctxtReal39);
-    realToReal34(&tmp, REGISTER_REAL34_DATA(REGISTER_X));
+  if(checkParamNormal(&val, &mu, &sigma)) {
+    realSubtract(&val, &mu, &val, &ctxtReal39);
+    realDivide(&val, &sigma, &val, &ctxtReal39);
+    WP34S_Cdfu_Q(&val, &ans, &ctxtReal39);
+    realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -102,12 +108,11 @@ void fnNormalR(uint16_t unusedButMandatoryParameter) {
 
 
 void fnNormalI(uint16_t unusedButMandatoryParameter) {
-  real_t val, tmp;
+  real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamNormal()) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+  if(checkParamNormal(&val, &mu, &sigma)) {
     if((!getSystemFlag(FLAG_SPCRES)) && (realCompareLessEqual(&val, const_0) || realCompareGreaterEqual(&val, const_1))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -115,12 +120,10 @@ void fnNormalI(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      WP34S_Qf_Q(&val, &tmp, &ctxtReal39);
-      real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &val);
-      realMultiply(&tmp, &val, &tmp, &ctxtReal39);
-      real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), &val);
-      realAdd(&tmp, &val, &tmp, &ctxtReal39);
-      realToReal34(&tmp, REGISTER_REAL34_DATA(REGISTER_X));
+      WP34S_Qf_Q(&val, &ans, &ctxtReal39);
+      realMultiply(&ans, &sigma, &ans, &ctxtReal39);
+      realAdd(&ans, &mu, &ans, &ctxtReal39);
+      realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 

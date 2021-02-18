@@ -21,17 +21,18 @@
 #include "wp43s.h"
 
 
-static bool_t checkParamT(void) {
-  if((getRegisterDataType(REGISTER_X) != dtReal34) || (getRegisterDataType(REGISTER_J) != dtReal34)) {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "Values in register X and J must be of the real type");
-      moreInfoOnError("In function checkParamT:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
+static bool_t checkParamT(real_t *x, real_t *j) {
+  if(((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger)) ||
+    ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Values in register X and J must be of the real or long integer type");
+        moreInfoOnError("In function checkParamT:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return false;
   }
   else if(getSystemFlag(FLAG_SPCRES)) {
-    return true;
+    goto getParam;
   }
   else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_J)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_J))) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -40,6 +41,15 @@ static bool_t checkParamT(void) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
+getParam:
+  if(getRegisterDataType(REGISTER_X) == dtReal34)
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
+  else // long integer
+    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
+  if(getRegisterDataType(REGISTER_J) == dtReal34)
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
+  else // long integer
+    convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
   return true;
 }
 
@@ -49,7 +59,7 @@ void fnT_P(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamT()) {
+  if(checkParamT(&val, &dof)) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Pdf_T(&val, &dof, &ans, &ctxtReal39);
@@ -65,7 +75,7 @@ void fnT_L(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamT()) {
+  if(checkParamT(&val, &dof)) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdf_T(&val, &dof, &ans, &ctxtReal39);
@@ -81,7 +91,7 @@ void fnT_R(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamT()) {
+  if(checkParamT(&val, &dof)) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdfu_T(&val, &dof, &ans, &ctxtReal39);
@@ -97,9 +107,7 @@ void fnT_I(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamT()) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
+  if(checkParamT(&val, &dof)) {
     if((!getSystemFlag(FLAG_SPCRES)) && (realCompareLessEqual(&val, const_0) || realCompareGreaterEqual(&val, const_1))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)

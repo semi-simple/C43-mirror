@@ -615,6 +615,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnMinute                   (uint16_t unusedButMandatoryParameter) {}
   void fnSecond                   (uint16_t unusedButMandatoryParameter) {}
   void fnHrDeg                    (uint16_t unusedButMandatoryParameter) {}
+  void fnToTime                   (uint16_t unusedButMandatoryParameter) {}
+  void fnTimeTo                   (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
@@ -626,7 +628,6 @@ const item_t indexOfItems[] = {
 
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
-
 
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
@@ -2534,11 +2535,11 @@ const item_t indexOfItems[] = {
 /* 1860 */  { fnSetWordSize,               64,                          "64-BIT",                                      "64-BIT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM HEX
 /* 1861 */  { fnJM_2SI,                    NOPARAM,                     STD_RIGHT_ARROW "I",                           STD_RIGHT_ARROW "I",                           0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },//JM Copy of 1925
 /* 1862 */  { fnChangeBaseMNU,             NOPARAM,                     "MODE#",                                       "MODE#",                                       0,       0,       CAT_NONE, SLS_ENABLED  , US_ENABLED  },
-/* 1863 */  { fnHrDeg,                     NOPARAM,                     "HR/DEG",                                      "HR/DEG",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1863 */  { fnHrDeg,                     NOPARAM,                     "HOUR",                                        "HOUR",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1864 */  { fnMinute,                    NOPARAM,                     "MIN",                                         "MIN",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1865 */  { fnSecond,                    NOPARAM,                     "SEC",                                         "SEC",                                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1866 */  { itemToBeCoded,               NOPARAM,                     "1866",                                        "1866",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
-/* 1867 */  { itemToBeCoded,               NOPARAM,                     "1867",                                        "1867",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
+/* 1866 */  { fnToTime,                    NOPARAM,                     STD_RIGHT_ARROW "TIME",                        STD_RIGHT_ARROW "TIME",                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1867 */  { fnTimeTo,                    NOPARAM,                     "TIME" STD_RIGHT_ARROW,                        "TIME" STD_RIGHT_ARROW,                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1868 */  { itemToBeCoded,               NOPARAM,                     "1868",                                        "1868",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1869 */  { itemToBeCoded,               NOPARAM,                     "1869",                                        "1869",                                        0,       0,       CAT_FREE, SLS_UNCHANGED, US_UNCHANGED},
 /* 1870 */  { fnCla,                       NOPARAM,                     "CLA",                                         "CLA",                                         0,       0,       CAT_NONE, SLS_DISABLED , US_UNCHANGED},//GRAPH
@@ -2557,7 +2558,7 @@ const item_t indexOfItems[] = {
 /* 1881 */  { fnGetInlineTestBsToX,        NOPARAM,                     "",                                            "Get BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  , US_UNCHANGED},//INLINE_TEST
 /* 1882 */  { fnSetInlineTestXToBs,        NOPARAM,                     "",                                            "Set BS",                                      0,       0,       CAT_NONE, SLS_ENABLED  , US_UNCHANGED},//INLINE_TEST
 /* 1883 */  { fnInDefault,                 ID_DP,                       "i" STD_SPACE_3_PER_EM "REAL",                 "i" STD_SPACE_3_PER_EM "REAL",                 0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT
-/* 1884 */  { fnShowJM,                    JM_INP_DFLT,                 "i" STD_SPACE_3_PER_EM "Dflt?",                "i" STD_SPACE_3_PER_EM "Dflt?",                0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT
+/* 1884 */  { fnShowJM,                    JM_INP_DFLT,                 "in" STD_SPACE_3_PER_EM "Dflt?",               "in" STD_SPACE_3_PER_EM "Dflt?",               0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT
 /* 1885 */  { fnInDefault,                 ID_CPXDP,                    "i" STD_SPACE_3_PER_EM "CPX",                  "i" STD_SPACE_3_PER_EM "CPX",                  0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT
 /* 1886 */  { fnInDefault,                 ID_SI,                       "i" STD_SPACE_3_PER_EM "SI",                   "i" STD_SPACE_3_PER_EM "SI",                   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT
 /* 1887 */  { fnInDefault,                 ID_LI,                       "i" STD_SPACE_3_PER_EM "LI",                   "i" STD_SPACE_3_PER_EM "LI",                   0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},//JM INPUT DEFAULT

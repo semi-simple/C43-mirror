@@ -969,17 +969,158 @@ void dms34ToReal34(uint16_t dms) {
 
 }
 
-void fnHrDeg (uint16_t unusedButMandatoryParameter) {
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(0);
-  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(0);
-}
-void fnMinute (uint16_t unusedButMandatoryParameter) {
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(1);
-  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(1);
-}
-void fnSecond (uint16_t unusedButMandatoryParameter) {
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(2);
-  if(getRegisterDataType(REGISTER_X) == dtTime)                                               timeToReal34(2);
+
+void notSexa(void) {
+  copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+    sprintf(errorMessage, "data type %s cannot be converted!", getRegisterDataTypeName(REGISTER_X, false, false));
+    moreInfoOnError("In function notSexagecimal:", errorMessage, NULL, NULL);
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
+
+void fnHrDeg (uint16_t unusedButMandatoryParameter) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(0); else
+    if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(0); else {notSexa(); return;}
+}
+void fnMinute (uint16_t unusedButMandatoryParameter) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(1); else
+    if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(1); else {notSexa(); return;}
+}
+void fnSecond (uint16_t unusedButMandatoryParameter) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(2); else
+    if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(2); else {notSexa(); return;}
+}
+
+
+void fnTimeTo(uint16_t unusedButMandatoryParameter) {
+
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) {
+    dms34ToReal34(0); 
+    liftStack();
+    copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+    dms34ToReal34(1);
+    liftStack();
+    copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+    dms34ToReal34(2);
+  }
+  else
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
+      timeToReal34(0); 
+      liftStack();
+      copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+      timeToReal34(1); 
+      liftStack();
+      copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
+      timeToReal34(2); 
+    }
+    else {
+      notSexa(); 
+      return;
+    }
+}
+
+
+/********************************************//**
+ * \brief Check if time is valid (e.g. 10:61:61 is invalid)
+ *
+ * \param[in] hour real34_t*
+ * \param[in] minute real34_t*
+ * \param[in] second real34_t*
+ * \return bool_t true if valid
+ ***********************************************/
+bool_t isValidTime(const real34_t *hour, const real34_t *minute, const real34_t *second) {
+  real34_t val;
+
+  // second
+  real34ToIntegralValue(second, &val, DEC_ROUND_FLOOR), real34Subtract(second, &val, &val);
+  if(!real34IsZero(&val)) return false;
+  int32ToReal34(0, &val), real34Compare(second, &val, &val);
+  if(real34ToInt32(&val) < 0) return false;
+  int32ToReal34(59, &val), real34Compare(second, &val, &val);
+  if(real34ToInt32(&val) > 0) return false;
+
+  // minute
+  real34ToIntegralValue(minute, &val, DEC_ROUND_FLOOR), real34Subtract(minute, &val, &val);
+  if(!real34IsZero(&val)) return false;
+  int32ToReal34(0, &val), real34Compare(minute, &val, &val);
+  if(real34ToInt32(&val) < 0) return false;
+  int32ToReal34(59, &val), real34Compare(minute, &val, &val);
+  if(real34ToInt32(&val) > 0) return false;
+
+  // hour
+  real34ToIntegralValue(hour, &val, DEC_ROUND_FLOOR), real34Subtract(hour, &val, &val);
+  if(!real34IsZero(&val)) return false;
+  int32ToReal34(0, &val), real34Compare(hour, &val, &val);
+  if(real34ToInt32(&val) < 0) return false;
+  int32ToReal34(23, &val), real34Compare(hour, &val, &val);
+  if(real34ToInt32(&val) > 0) return false;
+
+  // Valid time
+  return true;
+}
+
+
+
+void fnToTime(uint16_t unusedButMandatoryParameter) {
+  real34_t hr, m, s, tmp;
+  real34_t *part[3];
+  calcRegister_t r[3] = {REGISTER_Z, REGISTER_Y, REGISTER_X};
+  int32_t i;
+
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  part[0] = &hr; part[1] = &m; part[2] = &s;  //hrMs
+
+  for(i = 0; i < 3; ++i) {
+    switch(getRegisterDataType(r[i])) {
+      case dtLongInteger:
+        convertLongIntegerRegisterToReal34(r[i], part[i]);
+        break;
+
+      case dtReal34:
+        if(getRegisterAngularMode(r[i])) {
+          real34ToIntegralValue(REGISTER_REAL34_DATA(r[i]), part[i], DEC_ROUND_DOWN);
+          break;
+        }
+        /* fallthrough */
+
+      default :
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "data type %s cannot be converted to a time!", getRegisterDataTypeName(r[i], false, false));
+          moreInfoOnError("In function fnToTime:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+    }
+  }
+
+  if(!isValidTime(&hr, &m, &s)) {
+      displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnToTime:", "Invalid time input!", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+
+  // valid date
+  fnDropY(NOPARAM);
+  fnDropY(NOPARAM);
+
+  int32ToReal34(3600, &tmp);
+  real34Multiply(&tmp, &hr, &hr);  //hr is now seconds
+  int32ToReal34(60, &tmp);
+  real34Multiply(&tmp, &m, &m);    //m is now seconds
+  real34Add(&hr, &m, &hr);
+  real34Add(&hr, &s, &hr);
+
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  real34Copy(&hr, REGISTER_REAL34_DATA(REGISTER_X));
+}
 

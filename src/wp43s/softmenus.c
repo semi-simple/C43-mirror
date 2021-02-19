@@ -44,7 +44,7 @@ const int16_t menu_BITS[]        = { ITM_LOGICALAND,                ITM_LOGICALO
 
 const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_DATEto,                 ITM_toDATE,               ITM_DAY,               ITM_MONTH,                   ITM_YEAR,
                                      ITM_TIME,                      ITM_TIMEto,                 ITM_toTIME,               ITM_SECOND,            ITM_MINUTE,                  ITM_HR_DEG,
-                                     ITM_NULL,                      ITM_NULL,                   ITM_XtoDATE,              ITM_WDAY,              ITM_JtoD,                    ITM_DtoJ,                 
+                                     ITM_toHMS,                     ITM_NULL,                   ITM_XtoDATE,              ITM_WDAY,              ITM_JtoD,                    ITM_DtoJ,                 
 #if DMCP_BUILD
                                      ITM_SETTIM,                    ITM_TDISP,                  ITM_SETDAT,               ITM_DMY,               ITM_YMD,                     ITM_MDY,
 #else // !DMCP_BUILD

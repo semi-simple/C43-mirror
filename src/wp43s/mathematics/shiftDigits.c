@@ -49,7 +49,7 @@ void fnSdl(uint16_t numberOfShifts) {
       longIntegerInit(y);
       uIntToLongInteger(10, y);
 
-      for (exponent = numberOfShifts; exponent > 0; exponent--) {
+      for(exponent = numberOfShifts; exponent > 0; exponent--) {
         longIntegerMultiply(y, x, x);
       }
 
@@ -97,7 +97,7 @@ void fnSdr(uint16_t numberOfShifts) {
       longIntegerInit(y);
       uIntToLongInteger(10, y);
 
-      for (exponent = numberOfShifts; exponent > 0; exponent--) {
+      for(exponent = numberOfShifts; exponent > 0; exponent--) {
         longIntegerDivide(x, y, x);
         if(longIntegerCompareUInt(x, 0) == 0) {
           //printf("Exit: x/10 resulted in zero\n");

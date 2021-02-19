@@ -22,8 +22,8 @@
 
 
 static bool_t checkParamT(real_t *x, real_t *j) {
-  if(((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger)) ||
-    ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
+  if(   ((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger))
+     || ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "Values in register X and J must be of the real or long integer type");
@@ -32,14 +32,19 @@ static bool_t checkParamT(real_t *x, real_t *j) {
       return false;
   }
 
-  if(getRegisterDataType(REGISTER_X) == dtReal34)
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
-  else // long integer
+  }
+  else { // long integer
     convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
-  if(getRegisterDataType(REGISTER_J) == dtReal34)
+  }
+
+  if(getRegisterDataType(REGISTER_J) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
-  else // long integer
+  }
+  else {// long integer
     convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
+  }
 
   if(getSystemFlag(FLAG_SPCRES)) {
     return true;
@@ -294,7 +299,8 @@ void WP34S_Qf_T(const real_t *x, const real_t *nu, real_t *res, realContext_t *r
 
   realCopy(const_NaN, res); // ERR 20
 
-qf_t_exit:
-  if(neg)
+  qf_t_exit:
+  if(neg) {
     realChangeSign(res);
+  }
 }

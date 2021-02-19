@@ -33,3 +33,5 @@ void lnbetaCplxReal(void);
 void lnbetaLonICplx(void);
 void lnbetaRealCplx(void);
 void lnbetaCplxCplx(void);
+
+void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext);

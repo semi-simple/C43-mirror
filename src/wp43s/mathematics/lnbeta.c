@@ -370,3 +370,18 @@ void lnbetaCplxCplx(void)  {
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
+
+
+
+void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext) {
+  real_t rReal, rImag;
+  real_t xx, yy;
+
+  realCopy(x, &xx); realCopy(y, &yy);
+  if(_lnBetaReal(&xx, &yy, &rReal, &rImag, realContext) && realIsZero(&rImag)) {
+    realCopy(&rReal, res);
+  }
+  else {
+    realCopy(const_NaN, res);
+  }
+}

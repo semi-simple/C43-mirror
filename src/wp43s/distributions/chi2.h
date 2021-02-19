@@ -15,11 +15,15 @@
  */
 
 /********************************************//**
- * \file distributions.h
+ * \file chi2.h
  ***********************************************/
 
+void fnChi2P(uint16_t unusedButMandatoryParameter);
+void fnChi2L(uint16_t unusedButMandatoryParameter);
+void fnChi2R(uint16_t unusedButMandatoryParameter);
+void fnChi2I(uint16_t unusedButMandatoryParameter);
 
-
-#include "chi2.h"
-#include "normal.h"
-#include "t.h"
+void WP34S_Pdf_Chi2 (const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
+void WP34S_Cdfu_Chi2(const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
+void WP34S_Cdf_Chi2 (const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
+void WP34S_Qf_Chi2  (const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);

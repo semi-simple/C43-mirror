@@ -15,11 +15,7 @@
  */
 
 /********************************************//**
- * \file distributions.h
+ * \file ixyz.h
  ***********************************************/
 
-
-
-#include "chi2.h"
-#include "normal.h"
-#include "t.h"
+void fnIxyz(uint16_t unusedButMandatoryParameter);

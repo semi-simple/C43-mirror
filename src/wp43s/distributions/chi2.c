@@ -24,10 +24,10 @@
 static bool_t checkRegisterNoFP(void) {
   real34_t flooredI;
 
-  if(getRegisterDataType(REGISTER_I) != dtLongInteger) {
+  if(getRegisterDataType(REGISTER_I) == dtLongInteger) {
     return true;
   }
-  else if(getRegisterDataType(REGISTER_I) != dtReal34) {
+  else if(getRegisterDataType(REGISTER_I) == dtReal34) {
     real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_I), &flooredI, DEC_ROUND_FLOOR);
     return real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_I), &flooredI);
   }
@@ -36,8 +36,8 @@ static bool_t checkRegisterNoFP(void) {
   }
 }
 static bool_t checkParamChi2(real_t *x, real_t *i) {
-  if(((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger)) ||
-    ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger))) {
+  if(   ((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger))
+     || ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "Values in register X and I must be of the real or long integer type");
@@ -45,7 +45,22 @@ static bool_t checkParamChi2(real_t *x, real_t *i) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
-  else if(!checkRegisterNoFP()) {
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
+  }
+  else { // long integer
+    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
+  }
+
+  if(getRegisterDataType(REGISTER_I) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), i);
+  }
+  else { // long integer
+    convertLongIntegerRegisterToReal(REGISTER_I, i, &ctxtReal39);
+  }
+
+  if(!checkRegisterNoFP()) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamChi2:", "k is not an integer", NULL, NULL);
@@ -53,24 +68,15 @@ static bool_t checkParamChi2(real_t *x, real_t *i) {
     return false;
   }
   else if(getSystemFlag(FLAG_SPCRES)) {
-    goto getParam;
+    return true;
   }
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_I)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_I))) {
+  else if(realIsZero(i) || realIsNegative(i)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamChi2:", "cannot calculate for k " STD_LESS_EQUAL " 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
-getParam:
-  if(getRegisterDataType(REGISTER_X) == dtReal34)
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
-  else // long integer
-    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
-  if(getRegisterDataType(REGISTER_I) == dtReal34)
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), i);
-  else // long integer
-    convertLongIntegerRegisterToReal(REGISTER_I, i, &ctxtReal39);
   return true;
 }
 
@@ -82,6 +88,7 @@ void fnChi2P(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Pdf_Chi2(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -96,6 +103,7 @@ void fnChi2L(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Cdf_Chi2(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -110,6 +118,7 @@ void fnChi2R(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Cdfu_Chi2(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -138,6 +147,7 @@ void fnChi2I(uint16_t unusedButMandatoryParameter) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       else {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
         realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }

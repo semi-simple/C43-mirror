@@ -22,8 +22,8 @@
 
 
 static bool_t checkParamT(real_t *x, real_t *j) {
-  if(((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger)) ||
-    ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
+  if(   ((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger))
+     || ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "Values in register X and J must be of the real or long integer type");
@@ -31,25 +31,31 @@ static bool_t checkParamT(real_t *x, real_t *j) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
-  else if(getSystemFlag(FLAG_SPCRES)) {
-    goto getParam;
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
   }
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_J)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_J))) {
+  else { // long integer
+    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
+  }
+
+  if(getRegisterDataType(REGISTER_J) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
+  }
+  else {// long integer
+    convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
+  }
+
+  if(getSystemFlag(FLAG_SPCRES)) {
+    return true;
+  }
+  else if(realIsZero(j) || realIsNegative(j)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamT:", "cannot calculate for " STD_nu " " STD_LESS_EQUAL " 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
-getParam:
-  if(getRegisterDataType(REGISTER_X) == dtReal34)
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
-  else // long integer
-    convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
-  if(getRegisterDataType(REGISTER_J) == dtReal34)
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
-  else // long integer
-    convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
   return true;
 }
 
@@ -60,9 +66,8 @@ void fnT_P(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Pdf_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -76,9 +81,8 @@ void fnT_L(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdf_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -92,9 +96,8 @@ void fnT_R(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdfu_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -123,6 +126,7 @@ void fnT_I(uint16_t unusedButMandatoryParameter) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       else {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
         realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }
@@ -295,7 +299,8 @@ void WP34S_Qf_T(const real_t *x, const real_t *nu, real_t *res, realContext_t *r
 
   realCopy(const_NaN, res); // ERR 20
 
-qf_t_exit:
-  if(neg)
+  qf_t_exit:
+  if(neg) {
     realChangeSign(res);
+  }
 }

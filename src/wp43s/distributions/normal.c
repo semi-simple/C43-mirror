@@ -32,17 +32,7 @@ static bool_t checkParamNormal(real_t *x, real_t *i, real_t *j) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
-  else if(getSystemFlag(FLAG_SPCRES)) {
-    goto getParam;
-  }
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_J)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_J))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamNormal:", "cannot calculate for " STD_sigma " " STD_LESS_EQUAL " 0", NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
-  }
-getParam:
+
   if(getRegisterDataType(REGISTER_X) == dtReal34)
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
   else // long integer
@@ -55,6 +45,17 @@ getParam:
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
   else // long integer
     convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
+
+  if(getSystemFlag(FLAG_SPCRES)) {
+    return true;
+  }
+  else if(realIsZero(j) || realIsNegative(j)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function checkParamNormal:", "cannot calculate for " STD_sigma " " STD_LESS_EQUAL " 0", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
   return true;
 }
 
@@ -68,6 +69,7 @@ void fnNormalP(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Pdf_Q(&val, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -84,6 +86,7 @@ void fnNormalL(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Cdf_Q(&val, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -100,6 +103,7 @@ void fnNormalR(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Cdfu_Q(&val, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -123,6 +127,7 @@ void fnNormalI(uint16_t unusedButMandatoryParameter) {
       WP34S_Qf_Q(&val, &ans, &ctxtReal39);
       realMultiply(&ans, &sigma, &ans, &ctxtReal39);
       realAdd(&ans, &mu, &ans, &ctxtReal39);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
       realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }

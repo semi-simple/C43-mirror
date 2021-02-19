@@ -812,31 +812,31 @@ void invert_Pixel(uint32_t x, uint32_t y) {           //JM
 
 
 
-int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
-void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
-    uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
+    int16_t clearScreenCounter = 0;                       //JM ClearScreen Test
+    void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val) {
+      uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
 
-    //if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
+      //if(y >= (uint32_t)(-100)) return;  //JM allowing -100 to measure the size in pixels; allowing -1..-5 for top row text
 
-    if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==SCREEN_HEIGHT) {  //JMTOCHECK is this needed?
-      printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
-      clear_ul(); //JMUL
-    }
-      if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
-        printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
-        return;
+      if(x==0 && y==0 && dx==SCREEN_WIDTH && dy==SCREEN_HEIGHT) {  //JMTOCHECK is this needed?
+        printf(">>> screen.c: clearScreen: clearScreenCounter=%d\n",clearScreenCounter++);    //JMYY ClearScreen Test  #endif
+        clear_ul(); //JMUL
       }
-
-      pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-      for(line=y; line<endY; line++) {
-        for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-          *pixel = pixelColor;
+        if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {
+          printf("In function lcd_fill_rect: x=%u, y=%u, dx=%u, dy=%u, val=%d outside the screen!\n", x, y, dx, dy, val);
+          return;
         }
-      }
 
-    screenChange = true;
-  }
-#endif //DMCP_BUILD
+        pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+        for(line=y; line<endY; line++) {
+          for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+            *pixel = pixelColor;
+          }
+        }
+
+      screenChange = true;
+    }
+  #endif //DMCP_BUILD
 
 
 

@@ -589,10 +589,12 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
 
-
   if(calcMode == CM_GRAPH && xSoftkey >= 2) {
       return;
   }
+
+  if(xSoftkey < 0 || xSoftkey > 5) return;
+
 
   if(jm_FG_LINE) {
 

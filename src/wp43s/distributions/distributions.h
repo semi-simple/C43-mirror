@@ -20,4 +20,6 @@
 
 
 
+#include "chi2.h"
 #include "normal.h"
+#include "t.h"

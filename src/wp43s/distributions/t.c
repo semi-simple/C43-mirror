@@ -31,17 +31,7 @@ static bool_t checkParamT(real_t *x, real_t *j) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
-  else if(getSystemFlag(FLAG_SPCRES)) {
-    goto getParam;
-  }
-  else if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_J)) || real34IsNegative(REGISTER_REAL34_DATA(REGISTER_J))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamT:", "cannot calculate for " STD_nu " " STD_LESS_EQUAL " 0", NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
-  }
-getParam:
+
   if(getRegisterDataType(REGISTER_X) == dtReal34)
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), x);
   else // long integer
@@ -50,6 +40,17 @@ getParam:
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
   else // long integer
     convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
+
+  if(getSystemFlag(FLAG_SPCRES)) {
+    return true;
+  }
+  else if(realIsZero(j) || realIsNegative(j)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function checkParamT:", "cannot calculate for " STD_nu " " STD_LESS_EQUAL " 0", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
   return true;
 }
 
@@ -60,9 +61,8 @@ void fnT_P(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Pdf_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -76,9 +76,8 @@ void fnT_L(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdf_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -92,9 +91,8 @@ void fnT_R(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamT(&val, &dof)) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), &dof);
     WP34S_Cdfu_T(&val, &dof, &ans, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -123,6 +121,7 @@ void fnT_I(uint16_t unusedButMandatoryParameter) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       else {
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
         realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }

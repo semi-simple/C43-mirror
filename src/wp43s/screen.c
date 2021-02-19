@@ -558,7 +558,7 @@
 
 
 
-    void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t 	dy, int val) {
+    void lcd_fill_rect(uint32_t x, uint32_t y, uint32_t dx, uint32_t dy, int val) {
       uint32_t line, col, pixelColor, *pixel, endX = x + dx, endY = y + dy;
 
       if(endX > SCREEN_WIDTH || endY > SCREEN_HEIGHT) {

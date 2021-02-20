@@ -25,7 +25,7 @@
 void (* const Rsd[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX ==> 1            2        3         4        5         6         7          8           9             10
 //          Long integer Real34   Complex34 Time     Date      String    Real34 mat Complex34 m Short integer Config data
-            rsdError,    rsdReal, rsdCplx,  rsdReal, rsdError, rsdError, rsdRema,   rsdCxma,    rsdError,     rsdError
+            rsdError,    rsdReal, rsdCplx,  rsdTime, rsdError, rsdError, rsdRema,   rsdCxma,    rsdError,     rsdError
 };
 
 
@@ -104,6 +104,65 @@ void fnRsd(uint16_t digits) {
 
 
 
+void senaryDigitToDecimal(bool_t pre_grouped, real_t *val, realContext_t *realContext) {
+  real_t sixtieths, st;
+  realDivide(const_100, const_60, &st, realContext);
+  if(pre_grouped)
+    realDivideRemainder(val, const_10, &sixtieths, realContext);
+  else
+    realCopy(val, &sixtieths);
+  realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_DOWN, realContext);
+  realSubtract(val, &sixtieths, val, realContext);
+  realMultiply(&sixtieths, &st, &sixtieths, realContext);
+  realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_DOWN, realContext);
+  realAdd(val, &sixtieths, val, realContext);
+}
+
+void decimalDigitToSenary(bool_t pre_grouped, real_t *val, realContext_t *realContext) {
+  real_t sixtieths, st;
+  realDivide(const_60, const_100, &st, realContext);
+  if(pre_grouped)
+    realDivideRemainder(val, const_10, &sixtieths, realContext);
+  else
+    realCopy(val, &sixtieths);
+  realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_DOWN, realContext);
+  realSubtract(val, &sixtieths, val, realContext);
+  realMultiply(&sixtieths, &st, &sixtieths, realContext);
+  realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_UP, realContext);
+  realAdd(val, &sixtieths, val, realContext);
+}
+
+
+
+void rsdTime(uint16_t digits) {
+  real_t val;
+  int32_t i;
+
+  updateDisplayValueX = true;
+  displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
+  updateDisplayValueX = false;
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+
+  for(i = 0; i < 2; ++i){
+    val.exponent -= 1;
+    senaryDigitToDecimal(false, &val, &ctxtReal39);
+    val.exponent -= 1;
+  }
+  roundToSignificantDigits(&val, &val, digits, &ctxtReal39);
+  for(i = 0; i < 2; ++i){
+    val.exponent += 1;
+    decimalDigitToSenary(false, &val, &ctxtReal39);
+    val.exponent += 1;
+  }
+
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+
+}
+
+
+
 void rsdRema(uint16_t digits) {
   fnToBeCoded();
 }
@@ -118,6 +177,7 @@ void rsdCxma(uint16_t digits) {
 
 void rsdReal(uint16_t digits) {
   real_t val;
+  int32_t i;
 
   updateDisplayValueX = true;
   displayValueX[0] = 0;
@@ -125,7 +185,24 @@ void rsdReal(uint16_t digits) {
   updateDisplayValueX = false;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+    for(i = 0; i < 2; ++i){
+      val.exponent += 1;
+      senaryDigitToDecimal(true, &val, &ctxtReal39);
+      val.exponent += 1;
+    }
+    val.exponent -= 4;
+  }
   roundToSignificantDigits(&val, &val, digits, &ctxtReal39);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+    for(i = 0; i < 2; ++i){
+      val.exponent += 1;
+      decimalDigitToSenary(true, &val, &ctxtReal39);
+      val.exponent += 1;
+    }
+    val.exponent -= 4;
+    convertAngleFromTo(&val, AM_DMS, AM_DMS, &ctxtReal39);
+  }
   realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 

@@ -25,7 +25,7 @@
 void (* const Rdp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX ==> 1            2        3         4        5         6         7          8           9             10
 //          Long integer Real34   Complex34 Time     Date      String    Real34 mat Complex34 m Short integer Config data
-            rdpError,    rdpReal, rdpCplx,  rdpReal, rdpError, rdpError, rdpRema,   rdpCxma,    rdpError,     rdpError
+            rdpError,    rdpReal, rdpCplx,  rdpTime, rdpError, rdpError, rdpRema,   rdpCxma,    rdpError,     rdpError
 };
 
 
@@ -105,6 +105,34 @@ void fnRdp(uint16_t digits) {
 
 
 
+void rdpTime(uint16_t digits) {
+  real_t val;
+  int32_t i;
+
+  updateDisplayValueX = true;
+  displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
+  updateDisplayValueX = false;
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+
+  for(i = 0; i < 2; ++i){
+    val.exponent -= 1;
+    senaryDigitToDecimal(false, &val, &ctxtReal39);
+    val.exponent -= 1;
+  }
+  roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
+  for(i = 0; i < 2; ++i){
+    val.exponent += 1;
+    decimalDigitToSenary(false, &val, &ctxtReal39);
+    val.exponent += 1;
+  }
+
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+}
+
+
+
 void rdpRema(uint16_t digits) {
   fnToBeCoded();
 }
@@ -119,20 +147,35 @@ void rdpCxma(uint16_t digits) {
 
 void rdpReal(uint16_t digits) {
   real_t val;
+  int32_t i;
 
-  if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-    rdpError(NOPARAM);
-  }
-  else {
-    updateDisplayValueX = true;
-    displayValueX[0] = 0;
-    refreshRegisterLine(REGISTER_X);
-    updateDisplayValueX = false;
+  updateDisplayValueX = true;
+  displayValueX[0] = 0;
+  refreshRegisterLine(REGISTER_X);
+  updateDisplayValueX = false;
 
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-    roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
-    realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+    for(i = 0; i < 2; ++i){
+      val.exponent += 1;
+      senaryDigitToDecimal(true, &val, &ctxtReal39);
+      val.exponent += 1;
+    }
+    val.exponent -= 4;
   }
+  roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
+  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+    for(i = 0; i < 2; ++i){
+      val.exponent += 1;
+      decimalDigitToSenary(true, &val, &ctxtReal39);
+      val.exponent += 1;
+    }
+    val.exponent -= 4;
+    convertAngleFromTo(&val, AM_DMS, AM_DMS, &ctxtReal39);
+  }
+
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 

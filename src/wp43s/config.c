@@ -424,6 +424,7 @@ void fnFractionType(uint16_t unusedButMandatoryParameter) {
   }
   else {
     setSystemFlag(FLAG_FRACT);
+    setSystemFlag(FLAG_PROPFR);
   }
 }
 
@@ -12065,6 +12066,7 @@ void fnReset(uint16_t confirmation) {
     setSystemFlag(FLAG_TDM24); // time format = 24H
     setSystemFlag(FLAG_YMD);   // date format = yyyy-mm-dd
     setSystemFlag(FLAG_ASLIFT);
+    setSystemFlag(FLAG_PROPFR);
 
     hourGlassIconEnabled = false;
     watchIconEnabled = false;

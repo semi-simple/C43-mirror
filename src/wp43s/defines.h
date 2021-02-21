@@ -201,6 +201,9 @@
 #define Y_TOP_PORTRAIT                           376 // Vertical offset for a portrait calculator
 #define Y_TOP_LANDSCAPE                           30 // vertical offset for a landscape calculator
 
+#define TAM_MAX_BITS                              14
+#define TAM_MAX_MASK                          0x3fff
+
 // Stack Lift Status (2 bits)
 #define SLS_STATUS                            0x0003
 #define SLS_ENABLED                        ( 0 << 0) // Stack lift enabled after item execution

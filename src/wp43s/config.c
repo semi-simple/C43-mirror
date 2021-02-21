@@ -12247,7 +12247,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_103RC_KB_POC"
+#define VERSION1 "_103"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"
@@ -12272,8 +12272,8 @@ void fnReset(uint16_t confirmation) {
     #endif
     fnStore(103);
     fnDrop(0);
-    fnDrop(0);
-    fnStrtoX("C43 LARGE TEXT");
+//    fnDrop(0);
+//    fnStrtoX("C43 LARGE TEXT");
 
 #ifdef NOT_NEEDED
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS

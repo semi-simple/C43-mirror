@@ -758,6 +758,64 @@ bool_t lastshiftG = false;
         }
         break;
 
+
+
+      case CHR_numL:   //JMvv
+        if(!numLock)  { processKeyAction(CHR_num); } 
+        keyActionProcessed = true;
+        break;
+
+      case CHR_numU:
+        if(numLock)  { processKeyAction(CHR_num); } 
+        keyActionProcessed = true;
+        break;
+
+      case CHR_num:
+        alphaCase = AC_UPPER;
+        numLock = !numLock;
+        if(!numLock) { nextChar = NC_NORMAL;}
+        showAlphaModeonGui(); //dr JM, see keyboardtweaks
+        keyActionProcessed = true;
+        break;
+
+      case CHR_caseUP:
+        if(numLock)  { } else
+        if(alphaCase == AC_LOWER)  { processKeyAction(CHR_case); } else
+        if(alphaCase == AC_UPPER)  { processKeyAction(CHR_numL); }
+        nextChar = NC_NORMAL;
+        keyActionProcessed = true;
+        break;
+
+      case CHR_caseDN:
+        if(numLock)  { alphaCase = AC_UPPER; processKeyAction(CHR_numU); } else
+        if(alphaCase == AC_UPPER)  { processKeyAction(CHR_case); } 
+        nextChar = NC_NORMAL;
+        keyActionProcessed = true;
+        break;
+
+      case CHR_case:
+        numLock = false;
+        int16_t sm = softmenu[softmenuStack[0].softmenuId].menuItem;                                      //JMvv
+        nextChar = NC_NORMAL;
+        if(alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+          if(sm == -MNU_alpha_omega || sm == -MNU_ALPHAintl) {
+            softmenuStack[0].softmenuId--; // Switch case menu
+          }
+        } else {
+          alphaCase = AC_LOWER;
+          if(sm == -MNU_ALPHA_OMEGA || sm == -MNU_ALPHAINTL) {
+            softmenuStack[0].softmenuId++; // Switch case menu
+          }
+        }
+        showAlphaModeonGui(); //dr JM, see keyboardtweaks
+        keyActionProcessed = true;
+        break;                                                                                                               //JM^^
+ 
+
+
+
+
       default:
         {
           bool_t lowercaseselected = ((alphaCase == AC_LOWER && !lastshiftF) || (alphaCase == AC_UPPER && lastshiftF /*&& !numLock*/)); //JM remove last !numlock if you want the shift, during numlock, to produce lower case

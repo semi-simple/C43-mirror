@@ -91,7 +91,7 @@ void subLonILonI(void) {
 
   longIntegerSubtract(y, x, x);
 
-    temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+  if(running_program_jm) temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
   
   convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
@@ -170,7 +170,7 @@ void subLonIShoI(void) {
 
   longIntegerSubtract(y, x, x);
 
-    temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+  if(running_program_jm)   temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
   convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
@@ -194,7 +194,7 @@ void subShoILonI(void) {
 
   longIntegerSubtract(y, x, x);
 
-    temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+  if(running_program_jm)   temporaryInformation = longIntegerIsZero(x) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
   convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
 
@@ -238,7 +238,7 @@ void subLonIReal(void) {
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
-temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+if(running_program_jm) temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
 }
 
@@ -279,7 +279,7 @@ void subRealLonI(void) {
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
-temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+if(running_program_jm) temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
 }
 
@@ -302,7 +302,7 @@ void subLonICplx(void) {
   realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
 
-  temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
+  if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
 
 }
 
@@ -328,7 +328,7 @@ void subCplxLonI(void) {
   realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   real34Copy(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 
-  temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
+  if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
 
 }
 
@@ -552,7 +552,7 @@ void subShoIReal(void) {
    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
-temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+if(running_program_jm) temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
 }
 
@@ -593,7 +593,7 @@ void subRealShoI(void) {
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
-temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+if(running_program_jm) temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
 }
 
@@ -609,7 +609,7 @@ void subShoICplx(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X)); // real part
   real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
-  temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
+  if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
 }
 
 
@@ -626,7 +626,7 @@ void subCplxShoI(void) {
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
-  temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
+  if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
 }
 
 
@@ -683,7 +683,7 @@ void subRealReal(void) {
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
-temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
+if(running_program_jm) temporaryInformation = real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE;    //JM Temporary hack to do DSZ
 
 }
 

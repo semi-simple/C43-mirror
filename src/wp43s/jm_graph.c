@@ -244,6 +244,13 @@ void Fn_Lbl_F(void) {                                   //Temporary RPN function
 }
 
 
+void Fn_XXEQ(void) {
+  #ifndef TESTSUITE_BUILD
+    fnRCL(81);
+    fnXEQMXXEQ(0);
+  #endif  
+}
+
 
 void execute_rpn_function(int16_t nbr){
   #ifdef STATDEBUG
@@ -267,6 +274,9 @@ void execute_rpn_function(int16_t nbr){
   } else
   if(nbr == 6) {
     Fn_Lbl_F();
+  } else
+  if(nbr == 20) {
+    Fn_XXEQ();
   }
 }
 
@@ -497,7 +507,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     checkzero = checkzero || ( real34IsZero(REGISTER_REAL34_DATA(SREG_Y2)) && (getRegisterDataType(SREG_Y2) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(SREG_Y2)) : 1 ) );
     checkNaN  = checkNaN  ||   real34IsNaN(REGISTER_REAL34_DATA(SREG_X2)) || (getRegisterDataType(SREG_X2) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(SREG_X2)) : 0 ) ||
                                real34IsNaN(REGISTER_REAL34_DATA(SREG_Y2)) || (getRegisterDataType(SREG_Y2) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(SREG_Y2)) : 0 ) ; 
-    #ifdef VERBOSE_SOLVER2
+    #ifdef VERBOSE_SOLVER1
     if(checkNaN || ix==400 || checkzero) {
        printf("-->A Endflags zero: Y2r:%u Y2i:%u NaN: X2r:%u X2i:%u Y2r:%u Y2i%u \n",
         (uint16_t)real34IsZero(REGISTER_REAL34_DATA(SREG_Y2)),(uint16_t)real34IsZero(REGISTER_IMAG34_DATA(SREG_Y2)),
@@ -505,7 +515,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
         (uint16_t)real34IsNaN (REGISTER_REAL34_DATA(SREG_Y2)),(uint16_t)real34IsNaN (REGISTER_IMAG34_DATA(SREG_Y2))
         );
     }
-    #endif //VERBOSE_SOLVER2
+    #endif //VERBOSE_SOLVER1
     #ifdef VERBOSE_SOLVER2
       printf("   ix=%d checkend=%d X2=",ix, checkNaN || ix==400 || checkzero); printf_cpx(SREG_X2); printf(" Y2="); printf_cpx(SREG_Y2); printf("\n");
     #endif //VERBOSE_SOLVER2
@@ -515,8 +525,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     //  if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  runFunction(ITM_SIGMAPLUS);
 
 
-
-
+    if(checkzero || checkNaN) goto EndIteration;
 //*************** DETERMINE DX and DY, to calculate the slope (or the inverse of the slope in this case) *******************
 
 
@@ -701,22 +710,23 @@ copySourceRegisterToDestRegister(SREG_X1,SREG_X0); //old x1 copied to x0
     }
   }
 */
-  if(( (getRegisterDataType(SREG_Y0) == dtReal34) && 
-       (getRegisterDataType(SREG_Y2) == dtReal34) && 
-       (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y0),const34_1e_6)) && 
-       (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y2),const34_1e_6)) &&
-        (
-          ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y0))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y2))) ) ||
-          ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y2))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y0))) )
-        ) &&
+   if( //real34IsNaN(REGISTER_REAL34_DATA(SREG_DX)) || real34IsInfinite(REGISTER_REAL34_DATA(SREG_DX)) ||
 
-	   !((real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
-		 real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) ||
-		 (real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
-		 real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) )
+         ( (getRegisterDataType(SREG_Y0) == dtReal34) && 
+           (getRegisterDataType(SREG_Y2) == dtReal34) && 
+           (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y0),const34_1e_6)) && 
+           (real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(SREG_Y2),const34_1e_6)) &&
+            (
+              ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y0))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y2))) ) ||
+              ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y2))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y0))) )
+            ) &&
 
+    	   !((real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
+    		 real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) ||
+    		 (real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
+    		 real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) )
 
-      ) 
+        ) 
       )
     {
       bisect = true;
@@ -746,6 +756,9 @@ copySourceRegisterToDestRegister(SREG_X1,SREG_X0); //old x1 copied to x0
 
     fnRCL(SREG_DY);   runFunction(ITM_ABS); //difference dy
     fnRCL(SREG_DX);   runFunction(ITM_ABS); //difference dx
+
+
+EndIteration:
 
     checkzero = checkzero || 
                 ( real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && (getRegisterDataType(REGISTER_X) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) : 1 )  &&
@@ -822,7 +835,7 @@ copySourceRegisterToDestRegister(SREG_X1,SREG_X0); //old x1 copied to x0
   runFunction(ITM_CLSTK);
 
   fnRCL(80);
-  fnStrtoX(" Xo= ");
+  fnStrtoX("; Xo= ");
   fnRCL(SREG_STARTX);
   runFunction(ITM_ADD);
   runFunction(ITM_ADD);
@@ -903,6 +916,36 @@ void fnGraph (uint16_t func){
     case 14:
     case 15:
     case 16:  graph_demo(func-10, graph_xmin, graph_xmax);
+              break;
+    case 20:  
+              //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
+              fnStore(82);
+              fnDrop(0);
+              fnStore(81);
+              fnDrop(0);
+              fnStore(80);
+              fnDrop(0);
+
+              fnRCL(82);
+              graph_solver(20, graph_xmin, graph_xmax);
+              break;
+
+    case 21:
+              fnStore(82);
+              fnDrop(0);
+              fnStore(81);
+              fnDrop(0);
+              fnStore(80);
+              fnDrop(0);
+
+              graph_demo(20, graph_xmin, graph_xmax);
+              break;
+
+    case 22:
+              fnStrtoX("DEMO:");
+              fnStrtoX("2X^2 + 3X + 1 = 0");
+              fnStrtoX("XEQC43 STO 99   X^2 2 * RCL 99 3 * + 1 +   RCL 99");
+              fnStrInputReal34("1.0");
               break;
 
 	  default:;

@@ -637,7 +637,6 @@ const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min  TAM max  CATALOG   stackLift      UNDO status
 
-
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2890,6 +2889,9 @@ const item_t indexOfItems[] = {
 /* 2204 */  { fnClGrf,                     NOPARAM,                     "CLGRF",                                       "CLGRF",                                       0,       0,       CAT_FNCT, SLS_UNCHANGED, US_ENABLED  },
 /* 2205 */  { fnPzoom,                     1,                           "ZOOMx",                                       "ZOOMx",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
 /* 2206 */  { fnPzoom,                     2,                           "ZOOMy",                                       "ZOOMy",                                       0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},//GRAPH
+/* 2207 */  { fnGraph,                     20,                          "X.SOLV",                                      "X.SOLV",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 2208 */  { fnGraph,                     21,                          "X.PLOT",                                      "X.PLOT",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
+/* 2209 */  { fnGraph,                     22,                          "X.DEMO",                                      "X.DEMO",                                      0,       0,       CAT_FNCT, SLS_UNCHANGED, US_UNCHANGED},
 
-/* 2207 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
+/* 2210 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   0,       0,       CAT_NONE, SLS_UNCHANGED, US_UNCHANGED},
 };

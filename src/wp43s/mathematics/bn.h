@@ -15,16 +15,8 @@
  */
 
 /********************************************//**
- * \file rsd.h
+ * \file bn.h
  ***********************************************/
 
-void roundToSignificantDigits(real_t *source, real_t *destination, uint16_t digits, realContext_t *realContext);
-void senaryDigitToDecimal    (bool_t pre_grouped, real_t *val, realContext_t *realContext);
-void decimalDigitToSenary    (bool_t pre_grouped, real_t *val, realContext_t *realContext);
-void fnRsd                   (uint16_t digits);
-void rsdError                (uint16_t unusedButMandatoryParameter);
-void rsdTime                 (uint16_t digits);
-void rsdRema                 (uint16_t digits);
-void rsdCxma                 (uint16_t digits);
-void rsdReal                 (uint16_t digits);
-void rsdCplx                 (uint16_t digits);
+ void fnBn    (uint16_t unusedButMandatoryParameter);
+ void fnBnStar(uint16_t unusedButMandatoryParameter);

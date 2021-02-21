@@ -864,7 +864,7 @@ EndIteration:
   
   fnRCL(SREG_X2);
   
-  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_1 )) runFunction(ITM_PLOT);
+  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT);
   #endif
 }
 
@@ -942,9 +942,9 @@ void fnGraph (uint16_t func){
               break;
 
     case 22:
-              fnStrtoX("DEMO:");
-              fnStrtoX("2X^2 + 3X + 1 = 0");
-              fnStrtoX("XEQC43 STO 99   X^2 2 * RCL 99 3 * + 1 +   RCL 99");
+              fnStrtoX("DEMO: TEXT, RPN, Start value");
+              fnStrtoX("X^3 + 20X^2 + 3X - 300 = 0");
+              fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
               fnStrInputReal34("1.0");
               break;
 

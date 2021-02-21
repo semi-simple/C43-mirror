@@ -1,12 +1,12 @@
-20 Jan 2021 release pre-alpha REL102.
+22 Feb 2021 release pre-alpha REL102.
 
 This is the pre-alpha version of the C43 modifications made on top of the WP43S prelim alpha emulator. Do not expect it to work. It probably does not.
 
 Current releases, pre-programming:
-Rel49 : Upcoming final release as soon as the shift lock keys on L1 are settled.
+Rel48b : final release of previous version
 
 Current release, programming model, based on WP43S in progress:
-Rel101POC: 2021-01-10. 
+Rel103: 2021-02-22. 
 
 
 The basic C43 write-up is on the first page of https://forum.swissmicros.com/viewtopic.php?f=2&t=2216. The source code is on https://gitlab.com/Jaymos/wp43c.
@@ -40,8 +40,9 @@ Notes:
 11d. Longpress backspace clear alpha buffer
 11e. STAT / PLOT. DEMO data is availble. Scroll down using Dn.
 11f. Alpha entry.
+11g. dms hms
+11h. solver poc
 
-7. Specifically, the numlock and capslock shifts have been modified.
 
 ---
 

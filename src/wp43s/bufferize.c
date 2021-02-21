@@ -1841,8 +1841,8 @@
 
           case TT_BACKSPACE :
             tamFunction = ITM_GTO;
-            tamNumberMin = indexOfItems[ITM_GTO].tamMin;
-            tamNumberMax = indexOfItems[ITM_GTO].tamMax;
+            tamNumberMin = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
+            tamNumberMax = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
             strcpy(tamBuffer, indexOfItems[ITM_GTO].itemSoftmenuName);
             strcat(tamBuffer, " __");
             transitionSystemState = 0;

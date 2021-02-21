@@ -21,9 +21,9 @@
 #include "wp43s.h"
 
 
-static bool_t checkParamT(real_t *x, real_t *j) {
+static bool_t checkParamT(real_t *x, real_t *i) {
   if(   ((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger))
-     || ((getRegisterDataType(REGISTER_J) != dtReal34) && (getRegisterDataType(REGISTER_J) != dtLongInteger))) {
+     || ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "Values in register X and J must be of the real or long integer type");
@@ -39,17 +39,17 @@ static bool_t checkParamT(real_t *x, real_t *j) {
     convertLongIntegerRegisterToReal(REGISTER_X, x, &ctxtReal39);
   }
 
-  if(getRegisterDataType(REGISTER_J) == dtReal34) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_J), j);
+  if(getRegisterDataType(REGISTER_I) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_I), i);
   }
   else {// long integer
-    convertLongIntegerRegisterToReal(REGISTER_J, j, &ctxtReal39);
+    convertLongIntegerRegisterToReal(REGISTER_I, i, &ctxtReal39);
   }
 
   if(getSystemFlag(FLAG_SPCRES)) {
     return true;
   }
-  else if(realIsZero(j) || realIsNegative(j)) {
+  else if(realIsZero(i) || realIsNegative(i)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamT:", "cannot calculate for " STD_nu " " STD_LESS_EQUAL " 0", NULL, NULL);

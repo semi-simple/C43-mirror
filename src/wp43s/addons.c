@@ -797,9 +797,17 @@ void fnRCL(int16_t inp) {      //DONE
 double convert_to_double(calcRegister_t regist) {    //Convert from X register to double
   double y;
   real_t tmpy;
-    doubleToXRegisterReal34(1.0);
-    fnMultiply(0);
-    real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
+    switch(getRegisterDataType(regist)) {
+      case dtLongInteger:
+        convertLongIntegerRegisterToReal(regist, &tmpy, &ctxtReal39);
+        break;
+      case dtReal34:
+        real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
+        break;
+      default:
+        return 0;
+        break;
+    }
     realToString(&tmpy, tmpString);
     y = strtof (tmpString, NULL);
     return y;

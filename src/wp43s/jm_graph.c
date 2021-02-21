@@ -322,7 +322,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
 
 
-#define VERBOSE_SOLVER1  // a lot less text
+//#define VERBOSE_SOLVER1  // a lot less text
 //#define VERBOSE_SOLVER2  // verbose a lot
 
 
@@ -339,7 +339,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
   cancelFilename = true;
 
   fnStrInputReal34("1.0");
-  runFunction(ITM_MULT);
+  runFunction(ITM_MULT);     //Convert to REAL
   #ifdef VERBOSE_SOLVER1
     printf("XREG START: "); printf_cpx(REGISTER_X); printf("\n");
   #endif //VERBOSE_SOLVER1
@@ -831,9 +831,16 @@ EndIteration:
       }
     }
 
+      #ifdef DMCP_BUILD
+        lcd_refresh();
+      #else // !DMCP_BUILD
+        refreshLcd(NULL);
+      #endif // DMCP_BUILD
+
   }
   runFunction(ITM_CLSTK);
-
+  bool_t running_temp = running_program_jm; //prevent temporary info on subtracts
+  running_program_jm = false;
   fnRCL(80);
   fnStrtoX("; Xo= ");
   fnRCL(SREG_STARTX);
@@ -865,6 +872,7 @@ EndIteration:
   fnRCL(SREG_X2);
   
   if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT);
+  running_program_jm =  running_temp;
   #endif
 }
 
@@ -898,7 +906,7 @@ void fnGraph (uint16_t func){
   fnClSigma(0);   //For some strange reason runFunction(ITM_CLSIGMA); does not work in this position !!! Cannot solve the riddle, rarther just call the function directly
 
   running_program_jm = true;
-
+  double ix, ix0, ix1;  
   switch (func) 
   {
 
@@ -917,35 +925,90 @@ void fnGraph (uint16_t func){
     case 15:
     case 16:  graph_demo(func-10, graph_xmin, graph_xmax);
               break;
-    case 20:  
+    case 20:  //SOLVE
+
               //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
+
               fnStore(82);
               fnDrop(0);
-              fnStore(81);
+
+              ix = convert_to_double(REGISTER_X);
+              //printf("#### Recalling register %u\n",(int)(ix));
               fnDrop(0);
+              fnRCL((int)(ix+1));
               fnStore(80);
-              fnDrop(0);
+              fnRCL((int)(ix));
+              fnStore(81);
 
               fnRCL(82);
               graph_solver(20, graph_xmin, graph_xmax);
               break;
 
-    case 21:
-              fnStore(82);
+    case 21: //PLOT
+
+              ix1 = convert_to_double(REGISTER_X);
+              ix0 = convert_to_double(REGISTER_Y);
+              printf("#### ix0=%f ix1=%f\n",ix0,ix1);
+              if(ix1>ix0 && !(ix1==ix0)) {
+                graph_xmin = ix0;
+                graph_xmax = ix1;
+              }
+
+              ix = convert_to_double(REGISTER_Z);
+              printf("#### Recalling register %u\n",(int)(ix));
+
               fnDrop(0);
-              fnStore(81);
               fnDrop(0);
+              fnDrop(0);
+              fnRCL((int)(ix+1));
               fnStore(80);
-              fnDrop(0);
+              fnRCL((int)(ix));
+              fnStore(81);
 
               graph_demo(20, graph_xmin, graph_xmax);
+              fnRCL(80);
               break;
 
     case 22:
-              fnStrtoX("DEMO: TEXT, RPN, Start value");
-              fnStrtoX("X^3 + 20X^2 + 3X - 300 = 0");
+              fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
+              fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
+              fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
+
               fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
-              fnStrInputReal34("1.0");
+              fnStore(10);
+              fnDrop(0);
+              fnStrtoX("X^3 + 20X^2 + 3X - 300 = 0");
+              fnStore(11);
+              fnDrop(0);
+
+              fnStrtoX("XEQC43 STO 99 SIN RCL 99 X^2 + RCL 99");
+              fnStore(12);
+              fnDrop(0);
+              fnStrtoX("sin(x) + sin(x^2) = 0");
+              fnStore(13);
+              fnDrop(0);
+
+              fnStrtoX("XEQC43 STO 99 1 ENTER 3 / Y^X 1 + RCL 99");
+              fnStore(14);
+              fnDrop(0);
+              fnStrtoX("x^(1/3) + 1 = 0");
+              fnStore(15);
+              fnDrop(0);
+
+              fnStrtoX("XEQC43 STO 99 5 Y^X RCL 99 - 1 + RCL 99");
+              fnStore(16);
+              fnDrop(0);
+              fnStrtoX("x^5 - x + 1 = 0");
+              fnStore(17);
+              fnDrop(0);
+
+              fnStrtoX("XEQC43 STO 99 X^2 1 + RCL 99");
+              fnStore(18);
+              fnDrop(0);
+              fnStrtoX("x^2 + 1 = 0");
+              fnStore(19);
+              fnDrop(0);
+
               break;
 
 	  default:;

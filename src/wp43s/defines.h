@@ -213,7 +213,7 @@
 #define US_CANCEL                          ( 1 << 2) // The command cancels the last UNDO data
 #define US_UNCHANGED                       ( 2 << 2) // The command leaves the existing UNDO data as is
 
-// Item category (2 bits)
+// Item category (4 bits)
 #define CAT_STATUS                            0x00f0
 #define CAT_NONE                           ( 0 << 4) // None of the others
 #define CAT_FNCT                           ( 1 << 4) // Function

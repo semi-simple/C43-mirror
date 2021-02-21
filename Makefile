@@ -97,7 +97,7 @@ SRC_WP43S                = \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
 		random.c rdp.c realPart.c remainder.c reToCx.c round.c roundi.c rsd.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
-		variance.c wp34s.c) \
+		variance.c wp34s.c zeta.c) \
 	$(addprefix src/wp43s/programming/, \
 		decode.c lblGtoXeq.c manage.c nextStep.c) \
 	$(addprefix src/wp43s/logicalOps/, \

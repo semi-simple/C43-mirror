@@ -214,6 +214,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnXthRoot",              fnXthRoot             },
   {"fnXToDate",              fnXToDate             },
   {"fnYear",                 fnYear                },
+  {"fnZeta",                 fnZeta                },
   {"",                       NULL                  }
 };
 

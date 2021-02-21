@@ -751,6 +751,9 @@
 		<Unit filename="src/testSuite/year.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/zeta.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">
 			<Option compilerVar="CC" />
 			<Option target="testTtf2RasterFonts" />
@@ -2388,6 +2391,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/xthRoot.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/zeta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/zeta.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

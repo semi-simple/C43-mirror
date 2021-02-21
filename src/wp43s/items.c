@@ -284,6 +284,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGammaQ                   (uint16_t unusedButMandatoryParameter) {}
   void fnGammaXyLower             (uint16_t unusedButMandatoryParameter) {}
   void fnGammaXyUpper             (uint16_t unusedButMandatoryParameter) {}
+  void fnZeta                     (uint16_t unusedButMandatoryParameter) {}
   void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
   void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
   void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
@@ -2236,7 +2237,7 @@ const item_t indexOfItems[] = {
 /* 1667 */  { fnGeometricSampleStdDev,     NOPARAM,                     STD_epsilon,                                   STD_epsilon,                                   0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1668 */  { fnGeometricStandardError,    NOPARAM,                     STD_epsilon STD_SUB_m,                         STD_epsilon STD_SUB_m,                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1669 */  { fnGeometricPopulationStdDev, NOPARAM,                     STD_epsilon STD_SUB_p,                         STD_epsilon STD_SUB_p,                         0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1670 */  { itemToBeCoded,               NOPARAM,                     STD_zeta "(x)",                                STD_zeta "(x)",                                0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1670 */  { fnZeta,                      NOPARAM,                     STD_zeta "(x)",                                STD_zeta "(x)",                                0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1671 */  { itemToBeCoded,               NOPARAM,                     STD_PI STD_SUB_n,                              STD_PI STD_SUB_n,                              0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1672 */  { itemToBeCoded,               NOPARAM,                     STD_SIGMA STD_SUB_n,                           STD_SIGMA STD_SUB_n,                           0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1673 */  { fnPopulationStdDev,          NOPARAM,                     STD_sigma,                                     STD_sigma,                                     0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

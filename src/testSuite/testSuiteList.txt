@@ -243,6 +243,8 @@ fib
 gd
 invGd
 
+zeta
+
 jToD
 dToJ
 year

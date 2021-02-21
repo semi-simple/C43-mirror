@@ -127,3 +127,4 @@
 #include "xthRoot.h"
 #include "variance.h"
 #include "wp34s.h"
+#include "zeta.h"

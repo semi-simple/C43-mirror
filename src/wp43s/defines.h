@@ -201,28 +201,31 @@
 #define Y_TOP_PORTRAIT                           376 // Vertical offset for a portrait calculator
 #define Y_TOP_LANDSCAPE                           30 // vertical offset for a landscape calculator
 
-// Stack Lift Status
-#define SLS_ENABLED                                0 // Stack lift enabled after item execution
-#define SLS_DISABLED                               1 // Stack lift disabled after item execution
-#define SLS_UNCHANGED                              2 // Stack lift unchanged after item execution
+// Stack Lift Status (2 bits)
+#define SLS_STATUS                            0x0003
+#define SLS_ENABLED                        ( 0 << 0) // Stack lift enabled after item execution
+#define SLS_DISABLED                       ( 1 << 0) // Stack lift disabled after item execution
+#define SLS_UNCHANGED                      ( 2 << 0) // Stack lift unchanged after item execution
 
-// Undo Status
-#define US_ENABLED                                 0 // The command saves the stack, the statistical sums, and the system flags for later UNDO
-#define US_CANCEL                                  1 // The command cancels the last UNDO data
-#define US_UNCHANGED                               2 // The command leaves the existing UNDO data as is
+// Undo Status (2 bits)
+#define US_STATUS                             0x000c
+#define US_ENABLED                         ( 0 << 2) // The command saves the stack, the statistical sums, and the system flags for later UNDO
+#define US_CANCEL                          ( 1 << 2) // The command cancels the last UNDO data
+#define US_UNCHANGED                       ( 2 << 2) // The command leaves the existing UNDO data as is
 
-// Item category
-#define CAT_NONE                                   0 // None of the others
-#define CAT_FNCT                                   1 // Function
-#define CAT_MENU                                   2 // Menu
-#define CAT_CNST                                   3 // Constant
-#define CAT_FREE                                   4 // To identify and find the free items
-#define CAT_REGS                                   5 // Registers
-#define CAT_RVAR                                   6 // Reserved variable
-#define CAT_DUPL                                   7 // Duplicate of another item e.g. acus->m^2
-#define CAT_SYFL                                   8 // System flags
-#define CAT_AINT                                   9 // Upper case alpha_INTL
-#define CAT_aint                                  10 // Lower case alpha_intl
+// Item category (4 bits)
+#define CAT_STATUS                            0x00f0
+#define CAT_NONE                           ( 0 << 4) // None of the others
+#define CAT_FNCT                           ( 1 << 4) // Function
+#define CAT_MENU                           ( 2 << 4) // Menu
+#define CAT_CNST                           ( 3 << 4) // Constant
+#define CAT_FREE                           ( 4 << 4) // To identify and find the free items
+#define CAT_REGS                           ( 5 << 4) // Registers
+#define CAT_RVAR                           ( 6 << 4) // Reserved variable
+#define CAT_DUPL                           ( 7 << 4) // Duplicate of another item e.g. acus->m^2
+#define CAT_SYFL                           ( 8 << 4) // System flags
+#define CAT_AINT                           ( 9 << 4) // Upper case alpha_INTL
+#define CAT_aint                           (10 << 4) // Lower case alpha_intl
 
 #define INC_FLAG                                   0
 #define DEC_FLAG                                   1

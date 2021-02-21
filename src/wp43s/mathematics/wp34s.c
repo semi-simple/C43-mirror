@@ -1428,6 +1428,48 @@ void WP34S_betai(const real_t *b, const real_t *a, const real_t *x, real_t *res,
 
 
 
+void WP34S_Bernoulli(const real_t *x, real_t *res, bool_t bn_star, realContext_t *realContext) {
+  real_t p;
+
+  if((!realIsAnInteger(x)) || realCompareLessThan(x, const_0)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  if(realIsZero(x)) {// Bn_0
+    realCopy(bn_star ? const_NaN : const_1, res);
+    return;
+  }
+  if(!bn_star) {
+    if(realCompareEqual(x, const_1)) { // zeta_0
+      realCopy(const_1on2, res);
+      realChangeSign(res);
+      return;
+    }
+    else if(realDivide(x, const_2, &p, realContext), (!realIsAnInteger(&p))) { // Bn_odd
+      realZero(res);
+      return;
+    }
+    realCopy(x, &p);
+  }
+  else {
+    realMultiply(x, const_2, &p, realContext);
+  }
+
+  // bernoulli
+  realSubtract(&p, const_1, &p, realContext);
+	realChangeSign(&p);
+  WP34S_Zeta(&p, &p, realContext);
+  realMultiply(&p, x, &p, realContext);
+  realChangeSign(&p);
+
+  if(bn_star) {
+    realMultiply(&p, const_2, &p, realContext);
+    realSetPositiveSign(&p);
+  }
+  realCopy(&p, res);
+}
+
+
 /**************************************************************************/
 /* Zeta function implementation based on Jean-Marc Baillard's from:
  *	http://hp41programs.yolasite.com/zeta.php
@@ -1442,8 +1484,8 @@ static void zeta_calc(const real_t *x, real_t *reg1, real_t *reg7, real_t *res, 
   showHideHourGlass();
 
   // zeta_calc
-  int32ToReal(44, &reg0);
-  int32ToReal(44, &reg3);
+  int32ToReal(60/*44*/, &reg0);
+  int32ToReal(60/*44*/, &reg3);
   int32ToReal(1, &reg4);
   int32ToReal(1, &reg5);
   int32ToReal(-1, &reg6);

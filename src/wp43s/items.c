@@ -285,6 +285,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGammaXyLower             (uint16_t unusedButMandatoryParameter) {}
   void fnGammaXyUpper             (uint16_t unusedButMandatoryParameter) {}
   void fnZeta                     (uint16_t unusedButMandatoryParameter) {}
+  void fnBn                       (uint16_t unusedButMandatoryParameter) {}
+  void fnBnStar                   (uint16_t unusedButMandatoryParameter) {}
   void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
   void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
   void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
@@ -1983,8 +1985,8 @@ const item_t indexOfItems[] = {
 /* 1413 */  { fnBatteryVoltage,            NOPARAM,                     "BATT?",                                       "BATT?",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1414 */  { itemToBeCoded,               NOPARAM,                     "BEEP",                                        "BEEP",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1415 */  { itemToBeCoded,               NOPARAM,                     "BeginP",                                      "Begin",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1416 */  { itemToBeCoded,               NOPARAM,                     "B" STD_SUB_n,                                 "B" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
-/* 1417 */  { itemToBeCoded,               NOPARAM,                     "B" STD_SUB_n STD_SUP_ASTERISK,                "B" STD_SUB_n STD_SUP_ASTERISK,                0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1416 */  { fnBn,                        NOPARAM,                     "B" STD_SUB_n,                                 "B" STD_SUB_n,                                 0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
+/* 1417 */  { fnBnStar,                    NOPARAM,                     "B" STD_SUB_n STD_SUP_ASTERISK,                "B" STD_SUB_n STD_SUP_ASTERISK,                0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1418 */  { itemToBeCoded,               NOPARAM,                     "CASE",                                        "CASE",                                        0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1419 */  { fnClAll,                     NOT_CONFIRMED,               "CLALL",                                       "CLall",                                       0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },
 /* 1420 */  { itemToBeCoded,               NOPARAM,                     "CLCVAR",                                      "CLCVAR",                                      0,       0,       CAT_FNCT, SLS_ENABLED  , US_ENABLED  },

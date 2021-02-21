@@ -31,6 +31,7 @@
 #include "arctan.h"
 #include "arctanh.h"
 #include "arg.h"
+#include "bn.h"
 #include "ceil.h"
 #include "changeSign.h"
 #include "compare.h"

@@ -53,6 +53,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArg",                  fnArg                 },
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
+  {"fnBn",                   fnBn                  },
+  {"fnBnStar",               fnBnStar              },
   {"fnCb",                   fnCb                  },
   {"fnCeil",                 fnCeil                },
   {"fnChangeSign",           fnChangeSign          },

@@ -248,6 +248,10 @@ fib
 gd
 invGd
 
+zeta
+bn
+bn_star
+
 jToD
 dToJ
 year

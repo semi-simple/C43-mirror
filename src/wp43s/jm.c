@@ -68,6 +68,7 @@ void reset_jm_defaults(int16_t toload) {
     SH_BASE_AHOME  = true;                                       //JM
     Norm_Key_00_VAR  = ITM_SIGMAPLUS;                            //JM
     Input_Default =  ID_43S;                                     //JM Input Default
+    jm_GGREEK = false;
     jm_FG_LINE = true;                                           //JM Screen / keyboard operation setup
     jm_NO_BASE_SCREEN = true;                                           //JM Menu system default
     jm_G_DOUBLETAP = true;                                       //JM Screen / keyboard operation setup
@@ -136,6 +137,11 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
   case JC_ERPN:                                             //JM eRPN
     eRPN = !eRPN;
     //fnInfo(eRPN);
+    fnRefreshState();                                 //drJM
+    break;
+
+  case JC_GGREEK:                                          //JM
+    jm_GGREEK = !jm_GGREEK;
     fnRefreshState();                                 //drJM
     break;
 

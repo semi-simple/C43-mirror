@@ -734,81 +734,114 @@ void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shi
 
 
 
-uint16_t numlockReplacements(uint16_t item, bool_t NL, bool_t SHFT) {
+uint16_t numlockReplacements(uint16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT) {
   uint16_t item1 = 0;
   if(ITM_A +26 <= item && item <= ITM_Z +26) 
-    {if(keyReplacements(item-26, &item1, NL, SHFT)) return item1;else return item;}
+    {if(keyReplacements(item-26, &item1, NL, SHFT, GSHFT)) return item1;else return item;}
   else
-    {if(keyReplacements(item, &item1, NL, SHFT)) return item1;else return item;}
+    {if(keyReplacements(item, &item1, NL, SHFT, GSHFT)) return item1;else return item;}
 }
 
 
-//Note item1 MUST be set to 0 prior to calling.
-bool_t keyReplacements(uint16_t item, uint16_t * item1, bool_t NL, bool_t SHFT) {
-
-                if(NL && !SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
-                  switch(item) {
-                    case ITM_P             : * item1 = ITM_7;      break;
-                    case ITM_Q             : * item1 = ITM_8;      break;
-                    case ITM_R             : * item1 = ITM_9;      break;
-                    case ITM_T             : * item1 = ITM_4;      break;
-                    case ITM_U             : * item1 = ITM_5;      break;
-                    case ITM_V             : * item1 = ITM_6;      break;
-                    case ITM_X             : * item1 = ITM_1;      break;
-                    case ITM_Y             : * item1 = ITM_2;      break;
-                    case ITM_Z             : * item1 = ITM_3;      break;
-                    case CHR_num           : * item1 = 0;          break;
-                    case CHR_case          : * item1 = 0;          break;
-                    case ITM_O             : * item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
-                    case ITM_S             : * item1 = ITM_OBELUS; break;
-                    case ITM_W             : * item1 = ITM_MULT;   break;
-                    case ITM_UNDERSCORE    : * item1 = ITM_MINUS;  break;
-                    case ITM_SPACE         : * item1 = ITM_PLUS;   break;
-                    case ITM_QUESTION_MARK : * item1 = ITM_SLASH;  break;
-                    case ITM_COMMA         : * item1 = ITM_PERIOD; break;
-                    case ITM_COLON         : * item1 = ITM_0;      break;
-
-                    default: 
-                         #ifdef PC_BUILD
-                           jm_show_comment("^^^^processKeyAction1/keyReplacements:CM_AIM: Numlock active but number not handled");
-                         #endif //PC_BUILD
-//                       item1 = item;     //this is the non-number character which is now handled below.
-                         break;
-                  }
-                } else
-
-                if(NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
-                  switch(item) {
-                    case ITM_MINUS  : * item1 = ITM_UNDERSCORE   ;  break;
-                    case ITM_PLUS   : * item1 = ITM_SPACE        ;  break;
-                    case ITM_SLASH  : * item1 = ITM_QUESTION_MARK;  break;
-                    case ITM_PERIOD : * item1 = ITM_COMMA        ;  break;
-                    case ITM_0      : * item1 = ITM_COLON        ;  break;
-
-                    default: 
-                         #ifdef PC_BUILD
-                           jm_show_comment("^^^^processKeyAction2/keyReplacements:CM_AIM: Numlock active but number not handled");
-                         #endif //PC_BUILD
-//                       item1 = item;     //this is the non-number character which is now handled below.
-                         break;
-                  }
-                } else//JM Exception, to change 0 to ";", when !NL & SHFT-0
-
-                if(!NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
-                  switch(item) {
-                    case ITM_0      : * item1 = ITM_SEMICOLON        ;  break;
-                    default: 
-                         #ifdef PC_BUILD
-                           jm_show_comment("^^^^processKeyAction3/keyReplacements:CM_AIM: Numlock active but number not handled");
-                         #endif //PC_BUILD
-//                       item1 = item;     //this is the non-number character which is now handled below.
-                         break;
-                  }
-                }
 
 
-                return *item1 != 0;
-}
+
+uint16_t convertItemToNumOrGrk(int16_t item, int16_t Greek) {
+//  printf("##### %d \n",item);
+    if(!Greek) {
+      switch(item) {
+//        case ITM_UP_ARROW          : return ITM_UP1    ;
+        case ITM_PI                : return ITM_7      ;
+        case ITM_QOPPA             : return ITM_8      ;
+        case ITM_RHO               : return ITM_9      ;
+        case ITM_SIGMA             : return ITM_SLASH;   //ITM_OBELUS ;
+//        case ITM_DOWN_ARROW        : return ITM_DOWN1  ;
+        case ITM_TAU               : return ITM_4      ;
+        case ITM_PHI               : return ITM_5      ;
+        case ITM_PSI               : return ITM_6      ;
+        case ITM_OMEGA             : return ITM_ASTERISK; //ITM_CROSS  ;
+//        case ITM_NULL              : return KEY_fg     ;
+        case ITM_XI                : return ITM_1      ;
+        case ITM_UPSILON           : return ITM_2      ;
+        case ITM_ZETA              : return ITM_3      ;
+        case ITM_SAMPI             : return ITM_MINUS  ;
+//        case ITM_PRINTER           : return ITM_EXIT1  ;
+        case -MNU_ALPHA            : return ITM_0      ;
+        case -MNU_ALPHADOT         : return ITM_PERIOD ;
+        case -MNU_ALPHAMATH        : return ITM_SLASH;   //ITM_NULL   ;
+        case -MNU_ALPHAINTL        : return ITM_PLUS   ;
+        default                    : return item;
+      }
+    }
+    return item;
+  }
+
+
+ //Note item1 MUST be set to 0 prior to calling.
+ bool_t keyReplacements(uint16_t item, uint16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT) {
+   if((calcMode == CM_AIM) && GSHFT) {
+     * item1 = convertItemToNumOrGrk(item, jm_GGREEK);
+   }
+   if(NL && !SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+     switch(item) {
+       case ITM_P             : * item1 = ITM_7;      break;
+       case ITM_Q             : * item1 = ITM_8;      break;
+       case ITM_R             : * item1 = ITM_9;      break;
+       case ITM_T             : * item1 = ITM_4;      break;
+       case ITM_U             : * item1 = ITM_5;      break;
+       case ITM_V             : * item1 = ITM_6;      break;
+       case ITM_X             : * item1 = ITM_1;      break;
+       case ITM_Y             : * item1 = ITM_2;      break;
+       case ITM_Z             : * item1 = ITM_3;      break;
+       case CHR_num           : * item1 = 0;          break;
+       case CHR_case          : * item1 = 0;          break;
+       case ITM_O             : * item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
+       case ITM_S             : * item1 = ITM_OBELUS; break;
+       case ITM_W             : * item1 = ITM_MULT;   break;
+       case ITM_UNDERSCORE    : * item1 = ITM_MINUS;  break;
+       case ITM_SPACE         : * item1 = ITM_PLUS;   break;
+       case ITM_QUESTION_MARK : * item1 = ITM_SLASH;  break;
+       case ITM_COMMA         : * item1 = ITM_PERIOD; break;
+       case ITM_COLON         : * item1 = ITM_0;      break;
+
+       default: 
+           #ifdef PC_BUILD
+             jm_show_comment("^^^^processKeyAction1/keyReplacements:CM_AIM: Numlock active but number not handled");
+           #endif //PC_BUILD
+           //item1 = item;     //this is the non-number character which is now handled below.
+           break;
+     }
+   } else
+
+     if(NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+       switch(item) {
+         case ITM_MINUS  : * item1 = ITM_UNDERSCORE   ;  break;
+         case ITM_PLUS   : * item1 = ITM_SPACE        ;  break;
+         case ITM_SLASH  : * item1 = ITM_QUESTION_MARK;  break;
+         case ITM_PERIOD : * item1 = ITM_COMMA        ;  break;
+         case ITM_0      : * item1 = ITM_COLON        ;  break;
+         default: 
+              #ifdef PC_BUILD
+                jm_show_comment("^^^^processKeyAction2/keyReplacements:CM_AIM: Numlock active but number not handled");
+              #endif //PC_BUILD
+              //item1 = item;     //this is the non-number character which is now handled below.
+              break;
+       }
+     } else//JM Exception, to change 0 to ";", when !NL & SHFT-0
+
+     if(!NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+       switch(item) {
+         case ITM_0      : * item1 = ITM_SEMICOLON        ;  break;
+         default: 
+              #ifdef PC_BUILD
+                jm_show_comment("^^^^processKeyAction3/keyReplacements:CM_AIM: Numlock active but number not handled");
+              #endif //PC_BUILD
+              //item1 = item;     //this is the non-number character which is now handled below.
+              break;
+       }
+     }
+   return *item1 != 0;
+ }
 
 
 

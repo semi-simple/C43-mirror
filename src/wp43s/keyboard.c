@@ -863,7 +863,7 @@ bool_t lastshiftG = false;
                   char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
                 #endif //PC_BUILD
 
-                if(keyReplacements(item, &item1, numLock, lastshiftF) > 0) {
+                if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
                   addItemToBuffer(item1);
                   keyActionProcessed = true;
                 }

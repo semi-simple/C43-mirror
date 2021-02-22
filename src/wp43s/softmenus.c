@@ -153,8 +153,8 @@ const int16_t menu_MODE[]        = { ITM_DEG,                       ITM_RAD,    
                                      ITM_ERPN,                      ITM_RNG,                    ITM_SETSIG,               ITM_RM,                ITM_DENANY,                  ITM_DENFIX,                          //JM
                                      ITM_INP_DEF_43S,               ITM_INP_DEF_DP,             ITM_INP_DEF_CPXDP,        ITM_INP_DEF_LI,        ITM_INP_DEF_SI,              ITM_NULL,                          //JM
 
-                                     ITM_NO_BASE_SCREEN,            ITM_BASE_HOME,             ITM_BASE_AHOME,             ITM_HOMEx3T,           ITM_SHTIM,                   ITM_HOMEx3,                    //JM
-                                     ITM_G_DOUBLETAP,               ITM_TST,                   ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_FG_LINE,                        //JM
+                                     ITM_NO_BASE_SCREEN,            ITM_BASE_HOME,             ITM_BASE_AHOME,            ITM_HOMEx3T,           ITM_SHTIM,                   ITM_HOMEx3,                    //JM
+                                     ITM_G_DOUBLETAP,               ITM_TST,                   ITM_NULL,                  ITM_NULL,              ITM_GGREEK,                  ITM_FG_LINE,                        //JM
                                      ITM_NULL,                      ITM_NULL,                  ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_NULL                        };
 
 

@@ -199,8 +199,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
     save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
     save(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+    save(&jm_GGREEK,                          sizeof(jm_GGREEK),                          BACKUP);
     save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
-    save(&jm_NO_BASE_SCREEN,                         sizeof(jm_NO_BASE_SCREEN),                         BACKUP);
+    save(&jm_NO_BASE_SCREEN,                  sizeof(jm_NO_BASE_SCREEN),                  BACKUP);
     save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
     save(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
     save(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);
@@ -411,8 +412,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
       restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
       restore(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
+      restore(&jm_GGREEK,                          sizeof(jm_GGREEK),                          BACKUP);
       restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
-      restore(&jm_NO_BASE_SCREEN,                         sizeof(jm_NO_BASE_SCREEN),                         BACKUP);
+      restore(&jm_NO_BASE_SCREEN,                  sizeof(jm_NO_BASE_SCREEN),                  BACKUP);
       restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
       restore(&jm_HOME_SUM,                        sizeof(jm_HOME_SUM),                        BACKUP);
       restore(&jm_HOME_MIR,                        sizeof(jm_HOME_MIR),                        BACKUP);

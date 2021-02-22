@@ -1912,12 +1912,12 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
       //printf(" 1 %s \n",lbl);
     }
     else {                                                                                               //
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false,false)].itemSoftmenuName, lbl);
       //printf(" 2 %s \n",lbl);
     }
   }
 
-  if(numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false) == ITM_SPACE) {
+  if(numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false,false) == ITM_SPACE) {
       lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
       lbl[1]=0xB7;          //JM SPACE
       lbl[2]='_';           //JM SPACE
@@ -1927,8 +1927,8 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
   } else
 
   //JM Exception, to change 0 to ";", when !NL & SHFT-0
-  if(numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true) != max(key->fShiftedAim, -key->fShiftedAim)) { 
-    stringToUtf8(indexOfItems[numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true)].itemSoftmenuName, lbl);
+  if(numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false) != max(key->fShiftedAim, -key->fShiftedAim)) { 
+    stringToUtf8(indexOfItems[numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false)].itemSoftmenuName, lbl);
   }
 
 //  if(key->primary == ITM_RS) {    //JM R/S change to /
@@ -1965,14 +1965,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   } 
   else {
     if(alphaCase == AC_LOWER && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim) + 26, numLock, false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim) + 26, numLock, false, false)].itemSoftmenuName, lbl);
     }
     else {
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false, false)].itemSoftmenuName, lbl);
     }
   }
 
-  if(numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false) == ITM_SPACE) {
+  if(numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false, false) == ITM_SPACE) {
       lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
       lbl[1]=0xB7;          //JM SPACE
       lbl[2]='_';           //JM SPACE

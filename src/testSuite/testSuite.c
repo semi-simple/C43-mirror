@@ -54,6 +54,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArg_all",              fnArg_all             },    //JM
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
+  {"fnBn",                   fnBn                  },
+  {"fnBnStar",               fnBnStar              },
   {"fnCb",                   fnCb                  },
   {"fnCeil",                 fnCeil                },
   {"fnChangeSign",           fnChangeSign          },
@@ -219,6 +221,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnXthRoot",              fnXthRoot             },
   {"fnXToDate",              fnXToDate             },
   {"fnYear",                 fnYear                },
+  {"fnZeta",                 fnZeta                },
   {"",                       NULL                  }
 };
 

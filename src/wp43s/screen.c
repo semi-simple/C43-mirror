@@ -1218,7 +1218,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
     }
 
     maxiC = 1;                                                                            //JM
-      x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+      if(y!=-100) x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
     maxiC = 0;                                                                            //JM
 
   }

@@ -1328,6 +1328,7 @@ static void betacf(const real_t *a, const real_t *b, const real_t *x, real_t *r,
   real_t t, u, v, w;
 
   hourGlassIconEnabled = true;
+  showHideHourGlass();
   realAdd(a, const_1, &ap1, realContext);        // ap1 = 1+a
   realSubtract(a, const_1, &am1, realContext);   // am1 = a-1
   realAdd(a, b, &apb, realContext);              // apb = a+b
@@ -1422,5 +1423,129 @@ void WP34S_betai(const real_t *b, const real_t *a, const real_t *x, real_t *res,
       realMultiply(&w, &u, &t, realContext);
       realSubtract(const_1, &t, res, realContext);
     }
+  }
+}
+
+
+
+void WP34S_Bernoulli(const real_t *x, real_t *res, bool_t bn_star, realContext_t *realContext) {
+  real_t p;
+
+  if((!realIsAnInteger(x)) || realCompareLessThan(x, const_0)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  if(realIsZero(x)) {// Bn_0
+    realCopy(bn_star ? const_NaN : const_1, res);
+    return;
+  }
+  if(!bn_star) {
+    if(realCompareEqual(x, const_1)) { // zeta_0
+      realCopy(const_1on2, res);
+      realChangeSign(res);
+      return;
+    }
+    else if(realDivide(x, const_2, &p, realContext), (!realIsAnInteger(&p))) { // Bn_odd
+      realZero(res);
+      return;
+    }
+    realCopy(x, &p);
+  }
+  else {
+    realMultiply(x, const_2, &p, realContext);
+  }
+
+  // bernoulli
+  realSubtract(&p, const_1, &p, realContext);
+	realChangeSign(&p);
+  WP34S_Zeta(&p, &p, realContext);
+  realMultiply(&p, x, &p, realContext);
+  realChangeSign(&p);
+
+  if(bn_star) {
+    realMultiply(&p, const_2, &p, realContext);
+    realSetPositiveSign(&p);
+  }
+  realCopy(&p, res);
+}
+
+
+/**************************************************************************/
+/* Zeta function implementation based on Jean-Marc Baillard's from:
+ *	http://hp41programs.yolasite.com/zeta.php
+ * This is the same algorithm as the C version uses, just with fewer terms and
+ * with the constants computed on the fly.
+ */
+
+static void zeta_calc(const real_t *x, real_t *reg1, real_t *reg7, real_t *res, realContext_t *realContext) {
+  real_t p, q, r, s, reg0, reg3, reg4, reg5, reg6;
+
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
+
+  // zeta_calc
+  int32ToReal(60/*44*/, &reg0);
+  int32ToReal(60/*44*/, &reg3);
+  int32ToReal(1, &reg4);
+  int32ToReal(1, &reg5);
+  int32ToReal(-1, &reg6);
+  realZero(&p);
+  do { // zeta_loop
+    realMultiply(reg1, const__1, &q, realContext);
+    realPower(&reg0, &q, &q, realContext);
+    realMultiply(&reg5, &q, &q, realContext);
+    realChangeSign(&reg6);
+    realMultiply(&q, &reg6, &q, realContext);
+    realAdd(&p, &q, &p, realContext);
+    realMultiply(&reg0, const_2, &q, realContext);
+    realMultiply(&q, &reg0, &q, realContext);
+    realSubtract(&q, &reg0, &q, realContext);
+    realMultiply(&q, &reg4, &q, realContext);
+    realPower(&reg3, const_2, &r, realContext);
+    realSubtract(&reg0, const_1, &s, realContext);
+    realPower(&s, const_2, &s, realContext);
+    realSubtract(&r, &s, &r, realContext);
+    realMultiply(&r, const_2, &r, realContext);
+    realDivide(&q, &r, &q, realContext);
+    realCopy(&q, &reg4);
+    realAdd(&q, &reg5, &reg5, realContext);
+    realSubtract(&reg0, const_1, &reg0, realContext);
+  } while(realCompareGreaterThan(&reg0, const_0));
+  realDivide(&p, &reg5, &p, realContext);
+  realSubtract(const_1, reg1, &r, realContext);
+  realMultiply(const_ln2, &r, &r, realContext);
+  WP34S_ExpM1(&r, &q, realContext);
+  realDivide(&p, &q, res, realContext);
+}
+
+void WP34S_Zeta(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p, q, r, reg1, reg7;
+
+  if(realIsZero(x)) {
+    realCopy(const_1on2, res);
+    realChangeSign(res);
+    return;
+  }
+
+  // zeta_int
+  realCopy(x, &reg1);
+  realCopy(x, &reg7);
+  if(realCompareGreaterThan(x, const_1on2)) {
+    zeta_calc(x, &reg1, &reg7, res, realContext);
+  }
+  else { // zeta_neg
+    realSubtract(const_1, x, &q, realContext);
+    realCopy(&q, &reg1);
+    zeta_calc(&q, &reg1, &reg7, &p, realContext);
+    WP34S_Asin(const_1, &q, realContext);
+    realMultiply(&q, &reg7, &q, realContext);
+    WP34S_Cvt2RadSinCosTan(&q, AM_RADIAN, &r, NULL, NULL, realContext);
+    realMultiply(&p, &r, &p, realContext);
+    realDivide(&p, const_pi, &p, realContext);
+    realPower(const_2pi, &reg7, &q, realContext);
+    realMultiply(&p, &q, &p, realContext);
+    realCopy(&reg1, &q);
+    WP34S_Gamma(&q, &r, realContext);
+    realMultiply(&r, &p, res, realContext);
   }
 }

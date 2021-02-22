@@ -863,7 +863,7 @@ bool_t lastshiftG = false;
                   char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
                 #endif //PC_BUILD
 
-                if(keyReplacements(item, &item1, numLock, lastshiftF) > 0) {
+                if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
                   addItemToBuffer(item1);
                   keyActionProcessed = true;
                 }
@@ -1001,19 +1001,21 @@ bool_t lastshiftG = false;
 
 
               case CM_CONFIRMATION:
-                if(item == ITEM_CONF_Y || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ
+                if(item == ITEM_CONF_Y || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ or ENTER
                   calcMode = previousCalcMode;
-                  temporaryInformation = TI_NO_INFO;
                   confirmedFunction(CONFIRMED);
                 }
 
-                else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
-                  calcMode = previousCalcMode;
-                  temporaryInformation = TI_NO_INFO;
+                  else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
+                    calcMode = previousCalcMode;
                 }
 
-                  keyActionProcessed = true;
-                  break;
+                else {
+                  temporaryInformation = TI_ARE_YOU_SURE;
+                }
+
+                keyActionProcessed = true;
+                break;
 
               case CM_PEM:
                 if(item == ITM_PR) {

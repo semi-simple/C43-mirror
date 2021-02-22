@@ -23,6 +23,8 @@
 
 
 
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1918,7 +1920,7 @@
 #define ITM_EE_STO_V_Z                1849
 #define ITM_EE_X2BAL                  1850
 #define ITM_DMPMNU                    1851
-#define ITM_1852                      1852
+#define ITM_GGREEK                    1852
 #define ITM_2BIN                      1853
 #define ITM_2OCT                      1854
 #define ITM_2DEC                      1855
@@ -2278,7 +2280,7 @@
 #define ITM_XSOLV                     2207
 #define ITM_XPLOT                     2208
 #define ITM_XDEMO                     2209
-#
+
 #define LAST_ITEM                     2210   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item

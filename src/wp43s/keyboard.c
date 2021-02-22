@@ -614,6 +614,10 @@
                 temporaryInformation = TI_NO_INFO;
               }
 
+              else {
+                temporaryInformation = TI_ARE_YOU_SURE;
+              }
+
               keyActionProcessed = true;
               break;
 

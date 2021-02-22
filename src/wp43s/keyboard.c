@@ -605,13 +605,19 @@
             case CM_CONFIRMATION:
               if(item == ITM_3 || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ or ENTER
                 calcMode = previousCalcMode;
-                temporaryInformation = TI_NO_INFO;
                 confirmedFunction(CONFIRMED);
               }
 
-              else if(item == ITM_7 || item == ITM_EXIT) { // No or EXIT
+              else if(item == ITM_DIV || item == ITM_EXIT) { // No or EXIT
                 calcMode = previousCalcMode;
-                temporaryInformation = TI_NO_INFO;
+              }
+
+              else {
+                temporaryInformation = TI_ARE_YOU_SURE;
+              }
+
+              else {
+                temporaryInformation = TI_ARE_YOU_SURE;
               }
 
               keyActionProcessed = true;

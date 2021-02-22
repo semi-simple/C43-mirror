@@ -609,7 +609,7 @@
                 confirmedFunction(CONFIRMED);
               }
 
-              else if(item == ITM_7 || item == ITM_EXIT) { // No or EXIT
+              else if(item == ITM_DIV || item == ITM_EXIT) { // No or EXIT
                 calcMode = previousCalcMode;
                 temporaryInformation = TI_NO_INFO;
               }

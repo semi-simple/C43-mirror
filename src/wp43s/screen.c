@@ -1483,11 +1483,13 @@
 
 
   static void displayShiftAndTamBuffer(void) {
-    if(shiftF) {
-      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-    }
-    else if(shiftG) {
-      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+    if(showFunctionNameCounter<=0) {
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
     }
 
     if(tamMode) {

@@ -1006,20 +1006,16 @@ bool_t lastshiftG = false;
                   confirmedFunction(CONFIRMED);
                 }
 
-                else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
-                  calcMode = previousCalcMode;
-              }
+                  else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
+                    calcMode = previousCalcMode;
+                }
 
-              else {
-                temporaryInformation = TI_ARE_YOU_SURE;
-              }
+                else {
+                  temporaryInformation = TI_ARE_YOU_SURE;
+                }
 
-              else {
-                temporaryInformation = TI_ARE_YOU_SURE;
-              }
-
-                  keyActionProcessed = true;
-                  break;
+                keyActionProcessed = true;
+                break;
 
               case CM_PEM:
                 if(item == ITM_PR) {

@@ -1001,16 +1001,22 @@ bool_t lastshiftG = false;
 
 
               case CM_CONFIRMATION:
-                if(item == ITEM_CONF_Y || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ
+                if(item == ITEM_CONF_Y || item == ITM_XEQ || item == ITM_ENTER) { // Yes or XEQ or ENTER
                   calcMode = previousCalcMode;
-                  temporaryInformation = TI_NO_INFO;
                   confirmedFunction(CONFIRMED);
                 }
 
                 else if(item == ITEM_CONF_N || item == ITM_EXIT1) { // No
                   calcMode = previousCalcMode;
-                  temporaryInformation = TI_NO_INFO;
-                }
+              }
+
+              else {
+                temporaryInformation = TI_ARE_YOU_SURE;
+              }
+
+              else {
+                temporaryInformation = TI_ARE_YOU_SURE;
+              }
 
                   keyActionProcessed = true;
                   break;

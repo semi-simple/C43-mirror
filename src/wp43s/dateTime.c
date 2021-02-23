@@ -445,12 +445,24 @@ void fnSetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
   real34_t jd34;
   const uint32_t fgd = firstGregorianDay;
 
-  firstGregorianDay = 0u; // proleptic Gregorian mode
-  if(checkDateArgument(REGISTER_X, &jd34)) {
-    firstGregorianDay = real34ToUInt32(&jd34);
+  if((getRegisterDataType(REGISTER_X) == dtReal34) && (getRegisterAngularMode(REGISTER_X) == AM_NONE)) {
+    firstGregorianDay = 0u; // proleptic Gregorian mode
+    if(checkDateArgument(REGISTER_X, &jd34)) {
+      firstGregorianDay = real34ToUInt32(&jd34);
+    }
+    else {
+      firstGregorianDay = fgd;
+    }
   }
   else {
-    firstGregorianDay = fgd;
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      if(getRegisterDataType(REGISTER_X) == dtDate)
+        sprintf(errorMessage, "data type %s is disabled as input because of complicated Julian-Gregorian issue!", getRegisterDataTypeName(REGISTER_X, false, false));
+      else
+        sprintf(errorMessage, "data type %s cannot be interpreted as a date!", getRegisterDataTypeName(REGISTER_X, false, false));
+      moreInfoOnError("In function fnSetFirstGregorianDay:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 

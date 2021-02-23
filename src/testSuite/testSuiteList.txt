@@ -247,6 +247,10 @@ zeta
 bn
 bn_star
 
+w_positive
+w_negative
+w_inverse
+
 jToD
 dToJ
 year

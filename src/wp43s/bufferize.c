@@ -351,6 +351,7 @@
     int16_t lastChar, index;
     uint8_t savedNimNumberPart;
     bool_t done;
+    char *strBase;
 
     if(calcMode == CM_NORMAL) {
       switch(item) {
@@ -521,6 +522,17 @@
               if(stringToInt16(aimBuffer + imaginaryExponentSignLocation) > exponentLimit || stringToInt16(aimBuffer + imaginaryExponentSignLocation) < -exponentLimit) {
                 aimBuffer[strlen(aimBuffer) - 1] = 0;
               }
+            }
+            break;
+
+          case NP_INT_BASE :
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
+            strBase = strchr(aimBuffer, '#') + 1;
+            if(atoi(strBase) > 16) {
+              strBase[1] = 0;
+            }
+            else if(atoi(strBase) >= 2) {
+              goto addItemToNimBuffer_exit;
             }
             break;
 
@@ -880,6 +892,7 @@
         break;
 
       case ITM_EXIT :
+        addItemToNimBuffer_exit:
         done = true;
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {
@@ -888,19 +901,24 @@
         }
         break;
 
-      case ITM_LN :
-        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // D for decimal base
-          done = true;
-
-          strcat(aimBuffer, "10");
+      case ITM_YX : // B for binary base
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
+          strcat(aimBuffer, "2");
+          goto addItemToNimBuffer_exit;
         }
         break;
 
-      case ITM_RCL :
-        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // H for hexadecimal base
-          done = true;
+      case ITM_LN : // D for decimal base
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
+          strcat(aimBuffer, "10");
+          goto addItemToNimBuffer_exit;
+        }
+        break;
 
+      case ITM_RCL : // H for hexadecimal base
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
           strcat(aimBuffer, "16");
+          goto addItemToNimBuffer_exit;
         }
         break;
 

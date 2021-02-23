@@ -1944,10 +1944,10 @@ void callFunction(void) {
 
   switch(funcType) {
     case FUNC_NOPARAM:
-      if(indexOfItems[functionIndex].undoStatus == US_ENABLED) {
+      if((indexOfItems[functionIndex].status & US_STATUS) == US_ENABLED) {
         saveForUndo();
       }
-      else if(indexOfItems[functionIndex].undoStatus == US_CANCEL) {
+      else if((indexOfItems[functionIndex].status & US_STATUS) == US_CANCEL) {
         thereIsSomethingToUndo = false;
       }
 
@@ -1963,10 +1963,10 @@ void callFunction(void) {
 
   if(lastErrorCode == 0) {
     if(functionIndex < LAST_ITEM) {
-      if(indexOfItems[functionIndex].stackLiftStatus == SLS_DISABLED) {
+      if((indexOfItems[functionIndex].status & SLS_STATUS) == SLS_DISABLED) {
         clearSystemFlag(FLAG_ASLIFT);
       }
-      else if(indexOfItems[functionIndex].stackLiftStatus == SLS_ENABLED) {
+      else if((indexOfItems[functionIndex].status & SLS_STATUS) == SLS_ENABLED) {
         setSystemFlag(FLAG_ASLIFT);
       }
     }

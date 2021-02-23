@@ -745,6 +745,15 @@
 		<Unit filename="src/testSuite/unitVector.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/w_inverse.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/w_negative.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/w_positive.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/wday.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -2386,6 +2395,39 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/variance.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_inverse.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_inverse.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_negative.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_negative.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_positive.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_positive.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

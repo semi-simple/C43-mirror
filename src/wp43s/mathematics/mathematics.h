@@ -127,5 +127,8 @@
 #include "unitVector.h"
 #include "xthRoot.h"
 #include "variance.h"
+#include "w_inverse.h"
+#include "w_negative.h"
+#include "w_positive.h"
 #include "wp34s.h"
 #include "zeta.h"

@@ -661,6 +661,24 @@
 
 
   /********************************************//**
+   * \brief Returns the character code from the first glyph of a string
+   *
+   * \param[in] ch const char*         String whose first glyph is to extract
+   * \return uint16_t                  Character code for that glyph
+   ***********************************************/
+  static uint16_t charCodeFromString(const char *ch) {
+    uint16_t charCode;
+
+    charCode = (uint8_t)*ch;
+    if(charCode &0x0080) {
+      charCode = (charCode << 8) | (uint8_t)*(ch+1);
+    }
+    return charCode;
+  }
+
+
+
+  /********************************************//**
    * \brief Displays the first glyph of a string
    *
    * \param[in] ch const char*         String whose first glyph is to display
@@ -670,16 +688,10 @@
    * \param[in] videoMode videoMode_t  Video mode normal or reverse
    * \param[in] showLeadingCols bool_t Display the leading empty columns
    * \param[in] showEndingCols bool_t  Display the ending empty columns
-   * \return int16_t                   x coordinate for the next glyph
+   * \return uint32_t                  x coordinate for the next glyph
    ***********************************************/
   uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-    uint16_t charCode;
-
-    charCode = (uint8_t)*ch;
-    if(charCode &0x0080) {
-      charCode = (charCode << 8) | (uint8_t)*(ch+1);
-    }
-    return showGlyphCode(charCode, font, x, y, videoMode, showLeadingCols, showEndingCols);
+    return showGlyphCode(charCodeFromString(ch), font, x, y, videoMode, showLeadingCols, showEndingCols);
   }
 
 
@@ -752,6 +764,31 @@
 
 
 
+  /********************************************//**
+   * \brief Finds the cols and rows for a glyph
+   *
+   * \param[in]  ch   const char*   String whose first glyph is to find the bounds for
+   * \param[in]  font const font_t* Font to use
+   * \param[out] col  uint32_t*     Number of columns for the glyph
+   * \param[out] row  uint32_t*     Number of rows for the glyph
+   * \return void
+   ***********************************************/
+  static void getGlyphBounds(const char *ch, const font_t *font, uint32_t *col, uint32_t *row) {
+    int32_t        glyphId;
+    const glyph_t *glyph;
+
+    glyphId = findGlyph(font, charCodeFromString(ch));
+    if (glyphId < 0) {
+      sprintf(errorMessage, "In function getGlyphBounds: %" PRIi32 " is an unexpected value returned by findGlyph!", glyphId);
+      displayBugScreen(errorMessage);
+      return;
+    }
+    glyph = (font->glyphs) + glyphId;
+    *col = glyph->colsBeforeGlyph + glyph->colsGlyph + glyph->colsAfterGlyph;
+    *row = glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph;
+  }
+
+
 
   /********************************************//**
    * \brief Displays the function of the
@@ -763,11 +800,19 @@
    * \return void
    ***********************************************/
   void showFunctionName(int16_t item, int16_t delayInMs) {
+    uint32_t fcol, frow, gcol, grow;
+
     showFunctionNameItem = item;
     showFunctionNameCounter = delayInMs;
     if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
       clearRegisterLine(REGISTER_T, true, false);
     }
+
+    // Draw over SHIFT f and SHIFT g in case they were present (otherwise they will be obscured by the function name)
+    getGlyphBounds(STD_SUP_f, &numericFont, &fcol, &frow);
+    getGlyphBounds(STD_SUP_g, &numericFont, &gcol, &grow);
+    lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, (fcol > gcol ? fcol : gcol), (frow > grow ? frow : grow), LCD_SET_VALUE);
+
     showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
   }
 

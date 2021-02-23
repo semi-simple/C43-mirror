@@ -805,6 +805,23 @@ bool_t WP34S_RelativeError(const real_t *x, const real_t *y, const real_t *tol, 
 }
 
 
+bool_t WP34S_AbsoluteError(const real_t *x, const real_t *y, const real_t *tol, realContext_t *realContext) {
+	real_t a;
+  realSubtract(x, y, &a, realContext);
+	return realCompareAbsLessThan(&a, tol);
+}
+
+
+bool_t WP34S_ComplexAbsError(const real_t *xReal, const real_t *xImag, const real_t *yReal, const real_t *yImag, const real_t *tol, realContext_t *realContext) {
+	real_t a, b, r, t;
+
+  realSubtract(xReal, yReal, &a, realContext), realSubtract(xImag, yImag, &b, realContext);
+  realRectangularToPolar(&a, &b, &r, &t, realContext);
+	return realCompareAbsLessThan(&r, tol);
+}
+
+
+
 /* Hyperbolic functions.
  * We start with a utility routine that calculates sinh and cosh.
  * We do the sihn as (e^x - 1) (e^x + 1) / (2 e^x) for numerical stability
@@ -1548,4 +1565,164 @@ void WP34S_Zeta(const real_t *x, real_t *res, realContext_t *realContext) {
     WP34S_Gamma(&q, &r, realContext);
     realMultiply(&r, &p, res, realContext);
   }
+}
+
+
+
+/**************************************************************************/
+/* A rough guess is made and then Newton's method is used to attain
+ * convergence.  The C version (in ../trunk/unused/lambertW.c) works
+ * similarily but uses Halley's method which converges a cubically
+ * instead of quadratically.
+ *
+ * This code is based on a discussion on the MoHPC.  Search the archives
+ * for "Lambert W (HP-41)" starting on the 2 Sept 2012.  The actual code
+ * is Dieter's from a message posted on the 23rd of Sept 2012.
+ */
+void WP34S_LambertW(const real_t *x, real_t *res, bool_t negativeBranch, realContext_t *realContext) {
+  real_t p, q, r, reg0, reg1, reg2;
+  bool_t converged = false;
+
+  if(realIsSpecial(x)) {
+   realCopy(const_NaN, res);
+   return;
+  }
+  if(realIsZero(x)) {
+   realCopy(negativeBranch ? const_minusInfinity : const_0, res);
+   return;
+  }
+  if(negativeBranch && realIsPositive(x)) {
+   realCopy(const_NaN, res);
+   return;
+  }
+
+  // LamW0_common
+  realCopy(x, &reg0);
+  int32ToReal(7, &reg1);
+  int32ToReal(negativeBranch ? 25 : 35, &p), p.exponent -= 2, realChangeSign(&p);
+  if(realCompareLessEqual(&reg0, &p)) {
+    realDivide(const_1, const_eE, &q, realContext);
+    realAdd(&reg0, &q, &q, realContext);
+    realMultiply(&q, const_eE, &q, realContext);
+    realCopy(&q, &reg2);
+    realMultiply(&q, const_2, &q, realContext);
+    realSquareRoot(&q, &r, realContext);
+    if(negativeBranch) realChangeSign(&r);
+    realDivide(&q, const_3, &q, realContext);
+    realSubtract(&r, &q, &q, realContext);
+
+    // Newton iteration for W+1
+    do { //LamW0_wp1_newton
+      // FILL and x close to -1/e
+      realMultiply(&q, const__1, &p, realContext);
+      WP34S_ExpM1(&p, &p, realContext);
+      realMultiply(&p, &reg0, &p, realContext);
+      realMultiply(&p, const_eE, &p, realContext);
+      realSubtract(&p, &q, &p, realContext);
+      realAdd(&p, &reg2, &p, realContext);
+      realDivide(&p, &q, &p, realContext);
+      realAdd(&p, &q, &p, realContext);
+      if(converged) break;
+      if(WP34S_AbsoluteError(&p, &q, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) // test if absolute error
+        converged = true;
+      realSubtract(&reg1, const_1, &reg1, realContext);
+      realCopy(&p, &q);
+    } while(realCompareGreaterThan(&reg1, const_0));
+    // LamW0_converged
+    realSubtract(&p, const_1, res, realContext);
+  }
+  else {// LamW0_normal
+    if(negativeBranch) {// LamW0_smallx
+      realMultiply(&reg0, const__1, &q, realContext);
+      WP34S_Ln(&q, &q, realContext);
+      realMultiply(&q, const__1, &r, realContext);
+      WP34S_Ln(&r, &r, realContext);
+      realSubtract(&q, &r, &q, realContext);
+    }
+    else {
+      WP34S_Ln1P(&reg0, &q, realContext);
+      if(realCompareGreaterThan(&q, const_1)) {
+        WP34S_Ln(&q, &r, realContext);
+        realSubtract(&q, &r, &q, realContext);
+      }
+    }
+    // Newton-Halley iteration for W
+    // x not close to -1/e
+    do { // LamW0_halley
+      realExp(&q, &r, realContext);
+      realDivide(&reg0, &r, &r, realContext);
+      realSubtract(&q, &r, &r, realContext);
+      realAdd(&q, const_1, &p, realContext);
+      realDivide(&r, &p, &r, realContext);
+      realDivide(const_1, &p, &p, realContext);
+      realAdd(&p, const_1, &p, realContext);
+      realMultiply(&p, &r, &p, realContext);
+      realDivide(&p, const_2, &p, realContext);
+      realChangeSign(&p);
+      realAdd(&p, const_1, &p, realContext);
+      realDivide(&r, &p, &r, realContext);
+      realSubtract(&q, &r, &r, realContext);
+      // R Q Q
+      if(converged) break;
+      if(WP34S_RelativeError(&r, &q, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) // test if relative error
+        converged = true;
+      realSubtract(&reg1, const_1, &reg1, realContext);
+      realCopy(&r, &q);
+    } while(realCompareGreaterThan(&reg1, const_0));
+    // LamW0_finish
+    realCopy(&r, res);
+  }
+}
+
+/**************************************************************************/
+/* The positive branch of the complex W function.
+ *
+ * This code is based on Jean-Marc Baillard's HP-41 version from:
+ *	http://hp41programs.yolasite.com/lambertw.php
+ *
+ * Register use:
+ *	.00/.01	z
+ *	.02/.03	w
+ *	.04/.05	temporary
+ */
+void WP34S_ComplexLambertW(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
+  real_t pr, pi, qr, qi, zr, zi, wr, wi, tr, ti;
+
+  realCopy(xReal, &zr), realCopy(xImag, &zi);
+  realCopy(const_1, &wr), realCopy(const_1, &wi);
+  realAdd(xReal, const_1, &pr, realContext), realCopy(xImag, &pi);
+  if((!realIsZero(&pr)) || (!realIsZero(&pi))) {
+    lnComplex(&pr, &pi, &pr, &pi, realContext);
+    realCopy(&pr, &wr), realCopy(&pi, &wi);
+  }
+  while(1) { // LamW_cloop
+    expComplex(&pr, &pi, &qr, &qi, realContext);
+    realCopy(&qr, &tr), realCopy(&qi, &ti);
+    mulComplexComplex(&qr, &qi, &wr, &wi, &qr, &qi, realContext);
+    realAdd(&tr, &qr, &tr, realContext), realAdd(&ti, &qi, &ti, realContext);
+    realSubtract(&qr, &zr, &qr, realContext), realSubtract(&qi, &zi, &qi, realContext);
+    divComplexComplex(&qr, &qi, &tr, &ti, &qr, &qi, realContext);
+    realSubtract(&wr, &qr, &wr, realContext), realSubtract(&wi, &qi, &wi, realContext);
+    if(WP34S_ComplexAbsError(&wr, &wi, &pr, &pi, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) break;
+    realCopy(&wr, &pr), realCopy(&wi, &pi);
+  }
+  realCopy(&wr, resReal), realCopy(&wi, resImag);
+}
+
+/**************************************************************************/
+/* The inverse W function in both real and complex domains.
+ */
+
+void WP34S_InverseW(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p;
+
+  realExp(x, &p, realContext);
+  realMultiply(&p, x, res, realContext);
+}
+
+void WP34S_InverseComplexW(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
+  real_t p, q;
+
+  expComplex(xReal, xImag, &p, &q, realContext);
+  mulComplexComplex(&p, &q, xReal, xImag, resReal, resImag, realContext);
 }

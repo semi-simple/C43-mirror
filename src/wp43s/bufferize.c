@@ -415,6 +415,7 @@ void kill_ASB_icon(void) {
     int16_t lastChar, index;
     uint8_t savedNimNumberPart;
     bool_t done;
+    char *strBase;
 
     if(calcMode == CM_NORMAL) {
       switch(item) {
@@ -607,7 +608,18 @@ void kill_ASB_icon(void) {
             }
             break;
 
-          default :
+          case NP_INT_BASE :
+            strcat(aimBuffer, indexOfItems[item].itemSoftmenuName);
+            strBase = strchr(aimBuffer, '#') + 1;
+            if(atoi(strBase) > 16) {
+              strBase[1] = 0;
+            }
+            else if(atoi(strBase) >= 2) {
+              goto addItemToNimBuffer_exit;
+            }
+            break;
+
+           default :
             if(nimNumberPart == NP_EMPTY) {
               nimNumberPart = NP_INT_10;
               //debugNIM();
@@ -967,6 +979,7 @@ void kill_ASB_icon(void) {
         break;
 
       case ITM_EXIT1 :
+        addItemToNimBuffer_exit:
         done = true;
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {
@@ -975,27 +988,24 @@ void kill_ASB_icon(void) {
         }
         break;
 
-      case ITM_LOG10 :                                                                //JM layout different
-        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // D for decimal base
-          done = true;
-
-          strcat(aimBuffer, "10");
-        }
-        break;
-
-      case ITM_RCL :
-        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // H for hexadecimal base
-          done = true;
-
-          strcat(aimBuffer, "16");
-        }
-        break;
-
-      case ITM_1ONX :                                                                 //JM layout different Added B for binary
-        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') { // Binary. Only works in direct NIM
-          done = true;
-
+      case ITM_1ONX : // B for binary base    Only works in direct NIM
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
           strcat(aimBuffer, "2");
+          goto addItemToNimBuffer_exit;
+        }
+        break;
+
+      case ITM_LOG10 : // D for decimal base
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
+          strcat(aimBuffer, "10");
+          goto addItemToNimBuffer_exit;
+        }
+        break;
+
+      case ITM_RCL : // H for hexadecimal base
+        if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
+          strcat(aimBuffer, "16");
+          goto addItemToNimBuffer_exit;
         }
         break;
 

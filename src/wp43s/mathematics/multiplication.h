@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnMultiply (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void mulError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define mulError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 void mulComplexComplex(const real_t *factor1Real, const real_t *factor1Imag, const real_t *factor2Real, const real_t *factor2Imag, real_t *productReal, real_t *productImag, realContext_t *realContext);
 

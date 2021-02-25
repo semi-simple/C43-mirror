@@ -114,7 +114,7 @@
 #define MMHG_PA_133_3224                 0 //1 JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
-#define MAX_FACTORIAL                    449  //JMMAX 1142   // 43S: 450 //JMMAX
+#define MAX_FACTORIAL                    450  //JMMAX 1142   // 43S: 450 //JMMAX
 
                                // bits  digits  43S     x digits   x! digits
                                //                         69!            98
@@ -784,6 +784,7 @@
 #define CHECK_INTEGER                              0
 #define CHECK_INTEGER_EVEN                         1
 #define CHECK_INTEGER_ODD                          2
+#define CHECK_INTEGER_FP                           3
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

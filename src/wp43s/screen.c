@@ -158,11 +158,11 @@
         break;
 
       case dtReal34Matrix:
-        strcpy(tmpString, "real matrix to clipboard is to be coded");
+        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
         break;
 
       case dtComplex34Matrix:
-        strcpy(tmpString, "complex matrix to clipboard is to be coded");
+        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
         break;
 
       case dtShortInteger:
@@ -213,11 +213,11 @@
         break;
 
       case dtConfig:
-        xcopy(tmpString, "Config data", 19);
+        xcopy(tmpString, "Configuration data", 19);
         break;
 
       default:
-        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown.", getRegisterDataType(regist));
+        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
     }
 
     strcpy(clipboardString, tmpString);
@@ -966,15 +966,20 @@ uint8_t  displaymode = stdNoEnlarge;
   /********************************************//**
    * \brief Returns the character code from the first glyph of a string
    *
-   * \param[in] ch const char*         String whose first glyph is to extract
-   * \return uint16_t                  Character code for that glyph
+   * \param[in]     ch     const char* String whose first glyph is to extract
+   * \param[in,out] offset uint16_t*   Offset which is updated, or null if zero and no update
+   * \return               uint16_t    Character code for that glyph
    ***********************************************/
-  static uint16_t charCodeFromString(const char *ch) {
+  static uint16_t charCodeFromString(const char *ch, uint16_t *offset) {
     uint16_t charCode;
+    uint16_t loffset = (offset != 0) ? *offset : 0;
 
-    charCode = (uint8_t)*ch;
+    charCode = (uint8_t)ch[loffset++];
     if(charCode &0x0080) {
-      charCode = (charCode << 8) | (uint8_t)*(ch+1);
+      charCode = (charCode << 8) | (uint8_t)ch[loffset++];
+    }
+    if(offset != 0) {
+      *offset = loffset;
     }
     return charCode;
   }
@@ -994,7 +999,33 @@ uint8_t  displaymode = stdNoEnlarge;
    * \return int32_t                   x coordinate for the next glyph
    ***********************************************/
   uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
-    return showGlyphCode(charCodeFromString(ch), font, x, y, videoMode, showLeadingCols, showEndingCols);
+    return showGlyphCode(charCodeFromString(ch, 0), font, x, y, videoMode, showLeadingCols, showEndingCols);
+  }
+
+
+  /********************************************//**
+   * \brief Finds the cols and rows for a glyph
+   *
+   * \param[in]     ch     const char*   String whose first glyph is to find the bounds for
+   * \param[in,out] offset uint16_t*     Offset for string or null if zero should be used
+   * \param[in]     font   const font_t* Font to use
+   * \param[out]    col    uint32_t*     Number of columns for the glyph
+   * \param[out]    row    uint32_t*     Number of rows for the glyph
+   * \return               void
+   ***********************************************/
+  static void getGlyphBounds(const char *ch, uint16_t *offset, const font_t *font, uint32_t *col, uint32_t *row) {
+    int32_t        glyphId;
+    const glyph_t *glyph;
+
+    glyphId = findGlyph(font, charCodeFromString(ch, offset));
+    if (glyphId < 0) {
+      sprintf(errorMessage, "In function getGlyphBounds: %" PRIi32 " is an unexpected value returned by findGlyph!", glyphId);
+      displayBugScreen(errorMessage);
+      return;
+    }
+    glyph = (font->glyphs) + glyphId;
+    *col = glyph->colsBeforeGlyph + glyph->colsGlyph + glyph->colsAfterGlyph;
+    *row = glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph;
   }
 
 
@@ -1037,12 +1068,8 @@ uint8_t  displaymode = stdNoEnlarge;
         sec = true;
       }
 
-      uint16_t charCode = (uint8_t)string[ch++];
-      if(charCode & 0x80) {// MSB set?
-        charCode = (charCode<<8) | (uint8_t)string[ch++];
-      }
 
-      x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec);
     }
     compressString = 0;        //JM compressString
     return x;
@@ -1050,6 +1077,32 @@ uint8_t  displaymode = stdNoEnlarge;
 
 
 
+#ifdef CLEARNAME
+  /********************************************//**
+   * \brief Finds the cols and rows for a string if showing leading and ending columns
+   *
+   * \param[in]  ch   const char*   String to find the bounds of
+   * \param[in]  font const font_t* Font to use
+   * \param[out] col  uint32_t*     Number of columns for the string
+   * \param[out] row  uint32_t*     Number of rows for the string
+   * \return void
+   ***********************************************/
+  static void getStringBounds(const char *string, const font_t *font, uint32_t *col, uint32_t *row) {
+    uint16_t ch = 0;
+    uint32_t lcol, lrow;
+    *col = 0;
+    *row = 0;
+
+    while(string[ch] != 0) {
+      getGlyphBounds(string, &ch, font, &lcol, &lrow);
+      *col += lcol;
+      if(lrow > *row) {
+        *row = lrow;
+      }
+    }
+  }
+#endif //CLEARNAME
+  
 
   uint32_t showStringC43(const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols ) {
     int combinationFontsM = combinationFonts;
@@ -1295,32 +1348,6 @@ void force_refresh(void) {
   }
 
 
-  /********************************************//**
-   * \brief Finds the cols and rows for a glyph
-   *
-   * \param[in]  ch   const char*   String whose first glyph is to find the bounds for
-   * \param[in]  font const font_t* Font to use
-   * \param[out] col  uint32_t*     Number of columns for the glyph
-   * \param[out] row  uint32_t*     Number of rows for the glyph
-   * \return void
-   ***********************************************/
-  static void getGlyphBounds(const char *ch, const font_t *font, uint32_t *col, uint32_t *row) {
-    int32_t        glyphId;
-    const glyph_t *glyph;
-
-    glyphId = findGlyph(font, charCodeFromString(ch));
-    if (glyphId < 0) {
-      sprintf(errorMessage, "In function getGlyphBounds: %" PRIi32 " is an unexpected value returned by findGlyph!", glyphId);
-      displayBugScreen(errorMessage);
-      return;
-    }
-    glyph = (font->glyphs) + glyphId;
-    *col = glyph->colsBeforeGlyph + glyph->colsGlyph + glyph->colsAfterGlyph;
-    *row = glyph->rowsAboveGlyph + glyph->rowsGlyph + glyph->rowsBelowGlyph;
-  }
-
-
-
 
 /********************************************//**
  * \brief Displays the function of the
@@ -1356,10 +1383,10 @@ void showFunctionName(int16_t item, int16_t delayInMs) {
     clearRegisterLine(REGISTER_T, true, false);
   }
 
-  // Draw over SHIFT f and SHIFT g in case they were present (otherwise they will be obscured by the function name)
-  getGlyphBounds(STD_SUP_f, &numericFont, &fcol, &frow);
-  getGlyphBounds(STD_SUP_g, &numericFont, &gcol, &grow);
-  lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, (fcol > gcol ? fcol : gcol), (frow > grow ? frow : grow), LCD_SET_VALUE);
+    // Draw over SHIFT f and SHIFT g in case they were present (otherwise they will be obscured by the function name)
+    getGlyphBounds(STD_SUP_f, 0, &numericFont, &fcol, &frow);
+    getGlyphBounds(STD_SUP_g, 0, &numericFont, &gcol, &grow);
+    lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, (fcol > gcol ? fcol : gcol), (frow > grow ? frow : grow), LCD_SET_VALUE);
 
   showString(padding, &standardFont, /*1*/ 20, Y_POSITION_OF_REGISTER_T_LINE /*+ 6*/, vmNormal, true, true);      //JM
 }
@@ -1375,10 +1402,17 @@ void showFunctionName(int16_t item, int16_t delayInMs) {
  * \return void
  ***********************************************/
 void hideFunctionName(void) {
+#ifdef CLEARNAME
+  uint32_t col, row;
+  getStringBounds(indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+  lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
   showFunctionNameItem = 0;
+#endif //CLEARNAME
+
   showFunctionNameCounter = 0;
+
   if(running_program_jm) return;                             //JM
-  if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);                           //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
+  if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);      //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
 }
 
 

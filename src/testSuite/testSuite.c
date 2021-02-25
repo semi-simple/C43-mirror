@@ -202,10 +202,6 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSumXY",                fnSumXY               },
   {"fnSwapRealImaginary",    fnSwapRealImaginary   },
   {"fnSwapXY",               fnSwapXY              },
-  {"fnT_I",                  fnT_I                 },
-  {"fnT_L",                  fnT_L                 },
-  {"fnT_P",                  fnT_P                 },
-  {"fnT_R",                  fnT_R                 },
   {"fnTan",                  fnTan                 },
   {"fnTanh",                 fnTanh                },
   {"fnToDate",               fnToDate              },
@@ -215,6 +211,10 @@ const funcTest_t funcTestNoParam[] = {
   {"fnToRect",               fnToRect              },
   {"fnToPolar2",             fnToPolar2            },     //JM
   {"fnToRect2",              fnToRect2             },     //JM
+  {"fnT_I",                  fnT_I                 },
+  {"fnT_L",                  fnT_L                 },
+  {"fnT_P",                  fnT_P                 },
+  {"fnT_R",                  fnT_R                 },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
   {"fnWday",                 fnWday                },

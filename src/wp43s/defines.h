@@ -631,6 +631,7 @@
 #define CHECK_INTEGER                              0
 #define CHECK_INTEGER_EVEN                         1
 #define CHECK_INTEGER_ODD                          2
+#define CHECK_INTEGER_FP                           3
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

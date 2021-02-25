@@ -277,8 +277,9 @@ size_t                 wp43sMemInBlocks;
   void program_main(void) {
     int key = 0;
     char charKey[3];
-    bool_t wp43sKbdLayout;
+    bool_t wp43sKbdLayout, inFastRefresh;;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
+    uint32_t previousRefresh;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
@@ -390,7 +391,9 @@ size_t                 wp43sMemInBlocks;
     backToDMCP = false;
 
     lcd_refresh();
-    nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
+    previousRefresh = sys_current_ms();
+    inFastRefresh = 0;
+    nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
     //runner_key_tout_init(0); // Enables fast auto repeat
 
     // Status flags:
@@ -615,9 +618,17 @@ size_t                 wp43sMemInBlocks;
         lcd_refresh();
       }
 
+      if(showFunctionNameCounter > 0 && !inFastRefresh) {
+        inFastRefresh = 1;
+        nextScreenRefresh = previousRefresh + FAST_SCREEN_REFRESH_PERIOD;
+      } else if(showFunctionNameCounter == 0 && inFastRefresh) {
+        inFastRefresh = 0;
+      }
+
       uint32_t now = sys_current_ms();
       if(nextScreenRefresh <= now) {
-        nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;
+        previousRefresh = now;
+        nextScreenRefresh = previousRefresh + (inFastRefresh ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
         refreshLcd();
         lcd_refresh();
       }

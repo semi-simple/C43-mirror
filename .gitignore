@@ -25,6 +25,7 @@ DMCP_build/decNumberICU/
 
 !windows\ binaries/wp43.exe
 !DM42\ binary/keymap.bin
+!DM42\ binary/testPgms.bin
 !DMCP_build/bin
 
 # / before the executable files else directories under src/ are ignored

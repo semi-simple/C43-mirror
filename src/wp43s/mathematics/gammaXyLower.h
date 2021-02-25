@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnGammaXyLower      (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void gammaXyLowerError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define gammaXyLowerError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void gammaXyLowerLonILonI(void);
 void gammaXyLowerLonIReal(void);
 void gammaXyLowerRealLonI(void);

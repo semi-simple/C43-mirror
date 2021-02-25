@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnPower    (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void powError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define powError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 uint8_t PowerComplex(const real_t *yReal, const real_t *yImag, const real_t *xReal, const real_t *xImag,
                      real_t *rReal, real_t *rImag, realContext_t *realContext);

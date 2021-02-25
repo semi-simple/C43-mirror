@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnMagnitude   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void magnitudeError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define magnitudeError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void magnitudeLonI (void);
 void magnitudeRema (void);
 void magnitudeCxma (void);

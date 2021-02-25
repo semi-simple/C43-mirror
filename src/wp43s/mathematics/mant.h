@@ -19,6 +19,10 @@
  ***********************************************/
 
 void fnMant   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void mantError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define mantError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void mantLonI (void);
 void mantReal (void);

@@ -7,6 +7,7 @@
 
 GENERATECONSTANTS_APP = generateConstants$(EXE)
 GENERATECATALOGS_APP = generateCatalogs$(EXE)
+GENERATETESTPGMS_APP = generateTestPgms$(EXE)
 TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
 TESTSUITE_APP = testSuite$(EXE)
@@ -124,6 +125,10 @@ SRC_GENERATECATALOGS2    = $(addprefix src/wp43s/, charString.c fonts.c items.c 
 OBJ_GENERATECATALOGS     = $(SRC_GENERATECATALOGS:.c=.o) $(SRC_GENERATECATALOGS2:.c=.gc.o)
 DEPS_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.d) $(SRC_GENERATECATALOGS2:.c=.d)
 
+SRC_GENERATETESTPGMS    = $(addprefix src/generateTestPgms/, generateTestPgms.c)
+OBJ_GENERATETESTPGMS    = $(SRC_GENERATETESTPGMS:.c=.o)
+DEPS_GENERATETESTPGMS   = $(SRC_GENERATETESTPGMS:.c=.d)
+
 SRC_TTF2RASTERFONTS      = $(addprefix src/ttf2RasterFonts/, ttf2RasterFonts.c)
 OBJ_TTF2RASTERFONTS      = $(SRC_TTF2RASTERFONTS:.c=.o)
 DEPS_TTF2RASTERFONTS     = $(SRC_TTF2RASTERFONTS:.c=.d)
@@ -135,10 +140,11 @@ DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
+GEN_BIN_TESTPGMS         = $(addprefix DM42 binary/, testPgms.bin)
 
-GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS)
+GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
-STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCatalog
+STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCatalog .stamp-testPgms
 
 all: 	wp43c
 ifeq '$(detected_OS)' 'Darwin'
@@ -151,28 +157,30 @@ rebuild:
 	$(MAKE) mrproper
 	$(MAKE) all
 
-.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
+.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)
 generateCatalogs: $(GENERATECATALOGS_APP)
+generateTestPgms: $(GENERATETESTPGMS_APP)
 ttf2RasterFonts: $(TTF2RASTERFONTS_APP)
 testTtf2RasterFonts: $(TESTTTF2RASTERFONTS_APP)
 testSuite: $(TESTSUITE_APP)
 wp43c: $(WP43S_APP)
 
-.PHONY: generateConstants generateCatalogs ttf2RasterFonts testTtf2RasterFonts testSuite wp43s
+.PHONY: generateConstants generateCatalogs generateTestPgms ttf2RasterFonts testTtf2RasterFonts testSuite wp43s
 endif
 
 sources: $(STAMP_FILES)
 
-clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_generateCatalogs clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
+clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
 
 mrproper: clean_all
 	#rm -f $(GENERATED_SOURCES)
 	rm -f $(STAMP_FILES)
 	rm -f $(GENERATECONSTANTS_APP)
 	rm -f $(GENERATECATALOGS_APP)
+	rm -f $(GENERATETESTPGMS_APP)
 	rm -f $(TTF2RASTERFONTS_APP)
 	rm -f $(TESTTTF2RASTERFONTS_APP)
 	rm -f $(WP43S_APP)
@@ -239,7 +247,31 @@ src/wp43s/%.gc.o: src/wp43s/%.c .stamp-constantPointers
 	./$(GENERATECATALOGS_APP)
 	touch $@
 
-$(GEN_SRC_CONSTANTPOINTERS): .stamp-softmenuCatalog
+$(GEN_SRC_SOFTMENUCATALOGS): .stamp-softmenuCatalog
+
+
+
+clean_generateTestPgms:
+	rm -f $(OBJ_GENERATETESTPGMS)
+	rm -f $(DEPS_GENERATETESTPGMS)
+
+-include $(DEPS_GENERATETESTPGMS)
+
+$(GENERATETESTPGMS_APP): $(OBJ_GENERATETESTPGMS)
+	@echo -e "\n====> $(GENERATETESTPGMS_APP): binary/exe $@ <===="
+	$(CC) $(CFLAGS) $(OBJ_GENERATETESTPGMS) -o $@ $(LDFLAGS)
+
+src/generateTestPgms/%.o: src/generateTestPgms/%.c
+	@echo -e "\n====> src/generateTestPgms/%.o: $@ <===="
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+.stamp-testPgms: $(GENERATETESTPGMS_APP)
+	@echo -e "\n====> running $(GENERATETESTPGMS_APP) <===="
+	./$(GENERATETESTPGMS_APP)
+	touch $@
+
+$(GEN_BIN_TESTPGMS): .stamp-testPgms
+
 
 
 clean_ttf2RasterFonts:
@@ -315,6 +347,6 @@ $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_WP43S) -o $(WP43S_APP) $(LDFLAGS)
 
-src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers
+src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers .stamp-softmenuCatalog .stamp-testPgms
 	@echo -e "\n====> src/wp43s/%.o: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<

@@ -20,7 +20,11 @@
 
 void fnLogXY   (uint16_t unusedButMandatoryParameter);
 
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void logxyError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define logxyError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 void logxyLonILonI(void);
 void logxyRealLonI(void);

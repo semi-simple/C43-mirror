@@ -41,13 +41,13 @@ static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DAT
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void betaError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Beta of (%s, %s)", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnBeta:", errorMessage, NULL, NULL);
-  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 

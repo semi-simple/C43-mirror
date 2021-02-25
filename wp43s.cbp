@@ -34,14 +34,23 @@
 					<Add library="gmp" />
 				</Linker>
 			</Target>
-			<Target title="generateConstants">
-				<Option output="bin/Debug/generateConstants" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+			<Target title="testSuite">
+				<Option output="bin/Release/testSuite" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-pg" />
 					<Add option="-g" />
+					<Add option="-ggdb" />
+					<Add option="-Warray-bounds=2" />
+					<Add option="-DTESTSUITE_BUILD" />
+					<Add directory="src/testSuite" />
 				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+					<Add library="gmp" />
+				</Linker>
 			</Target>
 			<Target title="generateCatalogs">
 				<Option output="bin/Debug/generateCatalogs" prefix_auto="1" extension_auto="1" />
@@ -56,6 +65,21 @@
 				<Linker>
 					<Add library="gmp" />
 				</Linker>
+			</Target>
+			<Target title="generateConstants">
+				<Option output="bin/Debug/generateConstants" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="generateTestPgms">
+				<Option output="bin/Debug/generateTestPgms" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
 			</Target>
 			<Target title="ttf2RasterFonts">
 				<Option output="bin/Debug/ttf2RasterFonts" prefix_auto="1" extension_auto="1" />
@@ -78,24 +102,6 @@
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
-			</Target>
-			<Target title="testSuite">
-				<Option output="bin/Release/testSuite" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-pg" />
-					<Add option="-g" />
-					<Add option="-ggdb" />
-					<Add option="-Warray-bounds=2" />
-					<Add option="-DTESTSUITE_BUILD" />
-					<Add directory="src/testSuite" />
-				</Compiler>
-				<Linker>
-					<Add option="-pg" />
-					<Add library="gmp" />
-				</Linker>
 			</Target>
 		</Build>
 		<VirtualTargets>
@@ -212,6 +218,10 @@
 		<Unit filename="src/generateConstants/generateConstants.c">
 			<Option compilerVar="CC" />
 			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="src/generateTestPgms/generateTestPgms.c">
+			<Option compilerVar="CC" />
+			<Option target="generateTestPgms" />
 		</Unit>
 		<Unit filename="src/testSuite/10pow.txt">
 			<Option target="testSuite" />
@@ -376,9 +386,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/dot.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/dToJ.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/erf.txt">
@@ -696,6 +703,18 @@
 		<Unit filename="src/testSuite/swapRealImaginary.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/t_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/tan.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -722,18 +741,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/trig.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/t_i.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/t_l.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/t_p.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/t_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ulp.txt">
@@ -962,11 +969,6 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/distributions/distributions.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/wp43s/distributions/chi2.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -974,6 +976,11 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/chi2.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/distributions.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1085,6 +1092,7 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+			<Option target="generateTestPgms" />
 		</Unit>
 		<Unit filename="src/wp43s/keyboard.c">
 			<Option compilerVar="CC" />

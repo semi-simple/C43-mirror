@@ -538,6 +538,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
+#ifdef NOTWORKING
   uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8364)); // Multiple of 4
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
@@ -600,6 +601,7 @@ void addTestPrograms(void) {
     //listPrograms();
     //listLabelsAndPrograms();
   #endif // !DMCP_BUILD
+#endif //NOTWORKING
 }
 
 

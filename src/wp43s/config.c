@@ -547,7 +547,7 @@ void addTestPrograms(void) {
       UINT bytesRead;
       f_read(ppgm_fp, &numberOfBytesUsed,   sizeof(numberOfBytesUsed), &bytesRead);
       f_read(ppgm_fp, beginOfProgramMemory, numberOfBytesUsed,         &bytesRead);
-      fclose(ppgm_fp);
+      f_close(ppgm_fp);
 
       firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);
       freeProgramBytes = numberOfBytesForTheTestPrograms - numberOfBytesUsed;

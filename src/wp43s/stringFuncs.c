@@ -526,3 +526,14 @@ void fnAlphaSL(uint16_t regist) {
    xcopy(ptr, ptr + glyphPointer, stringByteLength(ptr + glyphPointer) + 1);
   }
 }
+
+
+
+void fnIsString(uint16_t unusedButMandatoryParameter) {
+  if(getRegisterDataType(REGISTER_X) == dtString) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+}

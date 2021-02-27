@@ -633,6 +633,14 @@
 #define CHECK_INTEGER_ODD                          2
 #define CHECK_INTEGER_FP                           3
 
+#define CHECK_VALUE_COMPLEX                        0
+#define CHECK_VALUE_REAL                           1
+#define CHECK_VALUE_POSITIVE_ZERO                  2
+#define CHECK_VALUE_NEGATIVE_ZERO                  3
+#define CHECK_VALUE_SPECIAL                        4
+#define CHECK_VALUE_NAN                            5
+#define CHECK_VALUE_INFINITY                       6
+
 #define QF_NEWTON_F                                0
 #define QF_NEWTON_POISSON                          1
 #define QF_NEWTON_BINOMIAL                         2

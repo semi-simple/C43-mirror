@@ -986,24 +986,6 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
 
 
 /********************************************//**
- * \brief Tests if X is less than an other register
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
-void fnXLessThan(uint16_t unusedButMandatoryParameter) {
-  #ifdef PC_BUILD
-    printf("fnXLessThan\n");
-  #endif // PC_BUILD
-
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    moreInfoOnError("In function fnXLessThan:", "To be coded", NULL, NULL);
-  #endif // PC_BUILD
-}
-
-
-/********************************************//**
  * \brief returns the integer part of the value of a register
  *
  * \param regist calcRegister_t Register

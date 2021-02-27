@@ -324,6 +324,12 @@
           #endif // PC_BUILD
           tamTransitionSystem(TT_NOTHING);
         }
+        else if(item == ITM_0P || item == ITM_1P) {
+          reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+          real34Copy(item == ITM_1P ? const34_1 : const34_0, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+          tamLetteredRegister = TEMP_REGISTER_1;
+          tamTransitionSystem(TT_LETTER);
+        }
         else if((tamMode == TM_FLAGR || tamMode == TM_FLAGW)) {
           tamTransitionSystem(TT_NOTHING);
         }

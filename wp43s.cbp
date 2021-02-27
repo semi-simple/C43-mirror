@@ -400,6 +400,18 @@
 		<Unit filename="src/testSuite/expt.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/f_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/factorial.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -981,6 +993,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/distributions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/f.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/f.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

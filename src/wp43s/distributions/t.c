@@ -246,7 +246,7 @@ void WP34S_Qf_T(const real_t *x, const real_t *nu, real_t *res, realContext_t *r
     realDivide(&r, &q, &p, realContext);
   }
   else { // qf_t_tail
-    WP34S_qf_q_est(&reg0, &p, &q, realContext);
+    WP34S_qf_q_est(&reg0, &p, NULL, realContext);
     realPower(&p, const_2, &p, realContext);
     realMultiply(const_eE, nu, &r, realContext);
     realDivide(const_1, &r, &r, realContext);

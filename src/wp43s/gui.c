@@ -171,25 +171,36 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
+  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
+  jm_GGREEK_MEM = jm_GGREEK;
+
   numLock = false;
-  shiftF = true;       //JM
-  shiftG = false;      //JM
+  shiftF = false;       //JM
+  shiftG = true;      //JM
   btnClicked(w, data);
+
   numLock = numLock_MEM;
+  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
+  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
+  jm_GGREEK_MEM = jm_GGREEK;
+
   numLock = false;
-  shiftF = false;       //JM
-  shiftG = true;        //JM
-  btnClicked(NULL, "34");     //Alphadot
+  shiftF = true;       //JM
+  shiftG = false;        //JM
+//  btnClicked(NULL, "34");     //Alphadot
+  btnClicked(w, data);
+
   //Only : is working at this point
   numLock = numLock_MEM;
+  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
@@ -584,13 +595,6 @@ switch (event_keyval) {
 
 
 
-//JM  CHARACTERS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD -                //*****. USE MENUS TO GET DEEP DOWN CHARACTERS *******//
-//Only colon is working
-// The issue is that the international letters are not working as yet.
-//   Once working, all letters available on the PC keyboard must be mapped here
-    case 158:                   //JM changed from 58 to 158, to avoid duplicasting the Colon. Colon exists above.
-      btnClicked_SNU(w, "2");   //Switch to ALphadot; press FN2
-      break;
 
 
 
@@ -605,6 +609,10 @@ switch (event_keyval) {
 
     case 58:                 // COLON.        //JM
       btnClicked(w, "33");
+      break;
+
+    case 59:                 // semicolon.    //JM
+      btnClicked_SNU(w, "33");
       break;
 
     case 44:                 // ,             //JM

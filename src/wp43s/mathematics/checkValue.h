@@ -15,15 +15,14 @@
  */
 
 /********************************************//**
- * \file stringFuncs.h
+ * \file checkValue.h
  ***********************************************/
 
-void fnAlphaLeng(uint16_t regist);
-void fnAlphaToX (uint16_t regist);
-void fnAlphaRR  (uint16_t regist);
-void fnAlphaRL  (uint16_t regist);
-void fnAlphaSR  (uint16_t regist);
-void fnAlphaSL  (uint16_t regist);
-void fnAlphaPos (uint16_t regist);
-void fnXToAlpha (uint16_t unusedButMandatoryParameter);
-void fnIsString (uint16_t unusedButMandatoryParameter);
+void fnCheckValue   (uint16_t mode);
+void checkValueError(uint16_t unusedButMandatoryParameter);
+void checkValueLonI (uint16_t mode);
+void checkValueRema (uint16_t mode);
+void checkValueCxma (uint16_t mode);
+void checkValueShoI (uint16_t mode);
+void checkValueReal (uint16_t mode);
+void checkValueCplx (uint16_t mode);

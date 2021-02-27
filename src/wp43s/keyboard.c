@@ -864,9 +864,9 @@ bool_t lastshiftG = false;
                 #endif //PC_BUILD
 
                 if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
-                if(item1 > 0) {
-                  addItemToBuffer(item1);
-                  keyActionProcessed = true;
+                  if(item1 > 0) {
+                    addItemToBuffer(item1);
+                    keyActionProcessed = true;
                   }
                 }
                                                        //JM^^

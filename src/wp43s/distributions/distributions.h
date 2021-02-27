@@ -21,5 +21,6 @@
 
 
 #include "chi2.h"
+#include "f.h"
 #include "normal.h"
 #include "t.h"

@@ -633,6 +633,11 @@
 #define CHECK_INTEGER_ODD                          2
 #define CHECK_INTEGER_FP                           3
 
+#define QF_NEWTON_F                                0
+#define QF_NEWTON_POISSON                          1
+#define QF_NEWTON_BINOMIAL                         2
+#define QF_NEWTON_GEOMETRIC                        3
+
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel
   #define LCD_EMPTY_VALUE                        255 // White (or empty) pixel

@@ -104,7 +104,7 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/distributions/, \
-		chi2.c normal.c t.c) \
+		chi2.c f.c normal.c t.c) \
 	$(addprefix src/wp43s/browsers/, \
 		flagBrowser.c fontBrowser.c registerBrowser.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)

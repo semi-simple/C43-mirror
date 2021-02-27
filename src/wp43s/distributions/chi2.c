@@ -21,15 +21,15 @@
 #include "wp43s.h"
 
 
-static bool_t checkRegisterNoFP(void) {
+bool_t checkRegisterNoFP(calcRegister_t reg) {
   real34_t flooredI;
 
-  if(getRegisterDataType(REGISTER_I) == dtLongInteger) {
+  if(getRegisterDataType(reg) == dtLongInteger) {
     return true;
   }
-  else if(getRegisterDataType(REGISTER_I) == dtReal34) {
-    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_I), &flooredI, DEC_ROUND_FLOOR);
-    return real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_I), &flooredI);
+  else if(getRegisterDataType(reg) == dtReal34) {
+    real34ToIntegralValue(REGISTER_REAL34_DATA(reg), &flooredI, DEC_ROUND_FLOOR);
+    return real34CompareEqual(REGISTER_REAL34_DATA(reg), &flooredI);
   }
   else {
     return false;
@@ -60,7 +60,7 @@ static bool_t checkParamChi2(real_t *x, real_t *i) {
     convertLongIntegerRegisterToReal(REGISTER_I, i, &ctxtReal39);
   }
 
-  if(!checkRegisterNoFP()) {
+  if(!checkRegisterNoFP(REGISTER_I)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamChi2:", "k is not an integer", NULL, NULL);
@@ -234,7 +234,7 @@ void WP34S_Qf_Chi2(const real_t *x, const real_t *k, real_t *res, realContext_t 
   realPower(&p, &q, &p, realContext);
   realDivide(&p, const_pi, &p, realContext);
   if(realCompareGreaterEqual(&reg0, &p)) {
-    WP34S_qf_q_est(&reg0, &q, &r, realContext);
+    WP34S_qf_q_est(&reg0, &q, NULL, realContext);
     int32ToReal(222, &s); s.exponent -= 3;
     realDivide(&s, k, &s, realContext);
     realSquareRoot(&s, &r, realContext);

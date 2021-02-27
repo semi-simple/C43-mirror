@@ -45,8 +45,9 @@ void fnCheckInteger(uint16_t mode) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if(EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "the input type %s cannot convert to integer", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
-        moreInfoOnError("In function fnIsOdd:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnCheckInteger:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
   }
 
   #ifdef DMCP_BUILD
@@ -67,7 +68,14 @@ void fnCheckInteger(uint16_t mode) {
       case CHECK_INTEGER_ODD:
         temporaryInformation = (longIntegerIsOdd(x) ? TI_TRUE : TI_FALSE);
         break;
+
+      case CHECK_INTEGER_FP:
+        temporaryInformation = TI_FALSE;
+        break;
     }
+  }
+  else if(lastErrorCode == 0 && mode == CHECK_INTEGER_FP) {
+    temporaryInformation = TI_TRUE;
   }
   else {
     temporaryInformation = TI_FALSE;

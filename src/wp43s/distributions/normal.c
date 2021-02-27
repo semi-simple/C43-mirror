@@ -241,7 +241,7 @@ void WP34S_qf_q_est(const real_t *x, real_t *res, real_t* resY, realContext_t *r
   }
 
   realCopy(&q, res);
-  realCopy(&p, resY);
+  if(resY) realCopy(&p, resY);
   // qf_q_signfix
   if(isSmall)
     realChangeSign(res);

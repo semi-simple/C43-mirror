@@ -133,6 +133,7 @@ ultimateQuestionOfLife
 
 rectangularToPolar
 polarToRectangular
+;jm
 rectangularToPolarB
 polarToRectangularB
 
@@ -283,3 +284,8 @@ chi2_p
 chi2_l
 chi2_r
 chi2_i
+
+f_p
+f_l
+f_r
+f_i

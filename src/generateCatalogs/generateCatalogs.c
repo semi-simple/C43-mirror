@@ -19,14 +19,10 @@
  ***********************************************/
 
 #include "wp43s.h"
+#include <unistd.h>
 
 bool_t  funcOK;
 glyph_t glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
-
-#ifdef __APPLE__
-  // needed for chdir:
-  #include<unistd.h>
-#endif // __APPLE__
 
 #define MAX_NUMBER_OF_ITEMS 1000
 #define GENERATION_FOR_DMCP    1
@@ -98,7 +94,7 @@ void sortOneCatalog(const char *menuName, int catalogType, int16_t generationTyp
 
 
 int main(int argc, char* argv[]) {
-  #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no more in the correct directory! Why?
+  #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no longer in the correct directory! Why?
     (*strstr(argv[0], "/bin/")) = 0;
     chdir(argv[0]);
   #endif // CODEBLOCKS_OVER_SCORE

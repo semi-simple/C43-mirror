@@ -20,7 +20,11 @@
 
 void fnTan                    (uint16_t unusedButMandatoryParameter);
 void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, real_t *reducedAngle);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void tanError                 (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define tanError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void tanLonI                  (void);
 void tanRema                  (void);
 void tanCxma                  (void);

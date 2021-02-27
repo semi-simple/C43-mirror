@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnCos   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void cosError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define cosError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void cosLonI (void);
 void cosRema (void);
 void cosCxma (void);

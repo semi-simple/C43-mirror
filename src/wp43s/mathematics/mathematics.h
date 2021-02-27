@@ -34,6 +34,7 @@
 #include "bn.h"
 #include "ceil.h"
 #include "changeSign.h"
+#include "checkValue.h"
 #include "compare.h"
 #include "comparisonReals.h"
 #include "conjugate.h"

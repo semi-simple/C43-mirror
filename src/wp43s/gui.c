@@ -171,25 +171,36 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
+  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
+  jm_GGREEK_MEM = jm_GGREEK;
+
   numLock = false;
-  shiftF = true;       //JM
-  shiftG = false;      //JM
+  shiftF = false;       //JM
+  shiftG = true;      //JM
   btnClicked(w, data);
+
   numLock = numLock_MEM;
+  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
+  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
+  jm_GGREEK_MEM = jm_GGREEK;
+
   numLock = false;
-  shiftF = false;       //JM
-  shiftG = true;        //JM
-  btnClicked(NULL, "34");     //Alphadot
+  shiftF = true;       //JM
+  shiftG = false;        //JM
+//  btnClicked(NULL, "34");     //Alphadot
+  btnClicked(w, data);
+
   //Only : is working at this point
   numLock = numLock_MEM;
+  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
@@ -584,13 +595,6 @@ switch (event_keyval) {
 
 
 
-//JM  CHARACTERS FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD -                //*****. USE MENUS TO GET DEEP DOWN CHARACTERS *******//
-//Only colon is working
-// The issue is that the international letters are not working as yet.
-//   Once working, all letters available on the PC keyboard must be mapped here
-    case 158:                   //JM changed from 58 to 158, to avoid duplicasting the Colon. Colon exists above.
-      btnClicked_SNU(w, "2");   //Switch to ALphadot; press FN2
-      break;
 
 
 
@@ -605,6 +609,10 @@ switch (event_keyval) {
 
     case 58:                 // COLON.        //JM
       btnClicked(w, "33");
+      break;
+
+    case 59:                 // semicolon.    //JM
+      btnClicked_SNU(w, "33");
       break;
 
     case 44:                 // ,             //JM
@@ -1912,12 +1920,12 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
       //printf(" 1 %s \n",lbl);
     }
     else {                                                                                               //
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false,false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(1,max(key->primaryAim, -key->primaryAim),!numLock,false,false)].itemSoftmenuName, lbl);
       //printf(" 2 %s \n",lbl);
     }
   }
 
-  if(numlockReplacements(max(key->primaryAim, -key->primaryAim),!numLock,false,false) == ITM_SPACE) {
+  if(numlockReplacements(2,max(key->primaryAim, -key->primaryAim),!numLock,false,false) == ITM_SPACE) {
       lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
       lbl[1]=0xB7;          //JM SPACE
       lbl[2]='_';           //JM SPACE
@@ -1927,8 +1935,8 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
   } else
 
   //JM Exception, to change 0 to ";", when !NL & SHFT-0
-  if(numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false) != max(key->fShiftedAim, -key->fShiftedAim)) { 
-    stringToUtf8(indexOfItems[numlockReplacements(max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false)].itemSoftmenuName, lbl);
+  if(numlockReplacements(3,max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false) != max(key->fShiftedAim, -key->fShiftedAim)) { 
+    stringToUtf8(indexOfItems[numlockReplacements(4,max(key->fShiftedAim, -key->fShiftedAim),numLock,true,false)].itemSoftmenuName, lbl);
   }
 
 //  if(key->primary == ITM_RS) {    //JM R/S change to /
@@ -1965,14 +1973,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   } 
   else {
     if(alphaCase == AC_LOWER && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim) + 26, numLock, false, false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(5,max(key->primaryAim, -key->primaryAim) + 26, numLock, shiftF, shiftG)].itemSoftmenuName, lbl);
     }
     else {
-      stringToUtf8(indexOfItems[numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false, false)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(6,max(key->primaryAim, -key->primaryAim), numLock, shiftF, shiftG)].itemSoftmenuName, lbl);
     }
   }
-
-  if(numlockReplacements(max(key->primaryAim, -key->primaryAim), numLock, false, false) == ITM_SPACE) {
+  //printf("####B^^ %d %d %d %d\n", numLock, shiftF,shiftG,calcMode==CM_AIM);
+  if(numlockReplacements(7,max(key->primaryAim, -key->primaryAim), numLock, false, false) == ITM_SPACE) {
       lbl[0]=0xC2;          //JM SPACE the space character is not in the font. \rather use . . for space.
       lbl[1]=0xB7;          //JM SPACE
       lbl[2]='_';           //JM SPACE
@@ -2018,14 +2026,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[3] = 0;
     stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemSoftmenuName, lbl + 3);*/
     if(alphaCase == AC_LOWER) {
-      stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(8,key->gShiftedAim + 36, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
     }
     else {
-      stringToUtf8(indexOfItems[key->gShiftedAim].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(9,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
     }                                                               //^^
   }
   else {
-    stringToUtf8(indexOfItems[max(key->gShiftedAim, -key->gShiftedAim)].itemSoftmenuName, lbl);
+    stringToUtf8(indexOfItems[numlockReplacements(10,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
   }
 
 //GShift set label
@@ -2053,7 +2061,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
 //GShift colours
-  if(key->gShiftedAim < 0) {
+  if(key->gShiftedAim < 0 && jm_GGREEK) {
     gtk_widget_set_name(lblGreek, "gShiftedUnderline");     //dr - new AIM
   }
   else {

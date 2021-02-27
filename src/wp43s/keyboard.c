@@ -858,14 +858,16 @@ bool_t lastshiftG = false;
 
 
               case CM_AIM: {
-                uint16_t item1 = 0;
+                int16_t item1 = 0;
                 #ifdef PC_BUILD
                   char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
                 #endif //PC_BUILD
 
                 if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
-                  addItemToBuffer(item1);
-                  keyActionProcessed = true;
+                  if(item1 > 0) {
+                    addItemToBuffer(item1);
+                    keyActionProcessed = true;
+                  }
                 }
                                                        //JM^^
 
@@ -1242,6 +1244,8 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   int16_t tmp1 = softmenu[softmenuStack[0].softmenuId].menuItem;            //JM
+  int16_t tmp2 = softmenu[softmenuStack[1].softmenuId].menuItem;            //JM
+  int16_t tmp3 = softmenu[softmenuStack[2].softmenuId].menuItem;            //JM
   doRefreshSoftMenu = true;     //dr
   
   #ifdef PC_BUILD
@@ -1274,7 +1278,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_AIM:
         if(tmp1 == -MNU_ALPHA || tmp1 == -MNU_T_EDIT) {  //JM
-          if(tmp1 == -MNU_T_EDIT) {popSoftmenu();}       //JM
+          if(tmp1 == -MNU_T_EDIT && tmp2 == -MNU_ALPHA && tmp3 == -MNU_XXEQ) {popSoftmenu();}       //JM auto double pop
           softmenuStack[0].softmenuId = 1;               //JM
         }                                                //JM
 

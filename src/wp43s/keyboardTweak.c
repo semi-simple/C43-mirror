@@ -55,6 +55,7 @@ doRefreshSoftMenu = true;     //jm
 
 void showShiftState(void) {
 #ifndef TESTSUITE_BUILD
+//showAlphaModeonGui(); 
 #ifdef PC_BUILD_TELLTALE
   printf("    >>> showShiftState: calcMode=%d\n",calcMode );
 #endif //PC_BUILD_TELLTALE
@@ -734,54 +735,73 @@ void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shi
 
 
 
-uint16_t numlockReplacements(uint16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT) {
-  uint16_t item1 = 0;
-  if(ITM_A +26 <= item && item <= ITM_Z +26) 
-    {if(keyReplacements(item-26, &item1, NL, SHFT, GSHFT)) return item1;else return item;}
-  else
-    {if(keyReplacements(item, &item1, NL, SHFT, GSHFT)) return item1;else return item;}
+uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT) {
+  int16_t item1 = 0;
+  //printf("####A>>%u %u %u\n",id,item,item1);
+  if(ITM_A +26 <= item && item <= ITM_Z +26) {
+    if(keyReplacements(item-26, &item1, NL, SHFT, GSHFT)) {
+      return max(item1,-item1);
+    }
+    else {
+      return max(item,-item);
+    }
+  }
+  else {
+    if(keyReplacements(item, &item1, NL, SHFT, GSHFT)) {
+      return max(item1,-item1);
+    }
+    else {
+      return max(item,-item);
+    }
+  }
 }
 
 
 
-
-
-uint16_t convertItemToNumOrGrk(int16_t item, int16_t Greek) {
-//  printf("##### %d \n",item);
-    if(!Greek) {
-      switch(item) {
-//        case ITM_UP_ARROW          : return ITM_UP1    ;
-        case ITM_PI                : return ITM_7      ;
-        case ITM_QOPPA             : return ITM_8      ;
-        case ITM_RHO               : return ITM_9      ;
-        case ITM_SIGMA             : return ITM_SLASH;   //ITM_OBELUS ;
-//        case ITM_DOWN_ARROW        : return ITM_DOWN1  ;
-        case ITM_TAU               : return ITM_4      ;
-        case ITM_PHI               : return ITM_5      ;
-        case ITM_PSI               : return ITM_6      ;
-        case ITM_OMEGA             : return ITM_ASTERISK; //ITM_CROSS  ;
-//        case ITM_NULL              : return KEY_fg     ;
-        case ITM_XI                : return ITM_1      ;
-        case ITM_UPSILON           : return ITM_2      ;
-        case ITM_ZETA              : return ITM_3      ;
-        case ITM_SAMPI             : return ITM_MINUS  ;
-//        case ITM_PRINTER           : return ITM_EXIT1  ;
-        case -MNU_ALPHA            : return ITM_0      ;
-        case -MNU_ALPHADOT         : return ITM_PERIOD ;
-        case -MNU_ALPHAMATH        : return ITM_SLASH;   //ITM_NULL   ;
-        case -MNU_ALPHAINTL        : return ITM_PLUS   ;
-        default                    : return item;
-      }
-    }
-    return item;
-  }
-
-
  //Note item1 MUST be set to 0 prior to calling.
- bool_t keyReplacements(uint16_t item, uint16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT) {
-   if((calcMode == CM_AIM) && GSHFT) {
-     * item1 = convertItemToNumOrGrk(item, jm_GGREEK);
-   }
+ bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT) {
+ //printf("####B>> %d %d\n",item,* item1);
+ if(calcMode == CM_AIM) {
+   if(!NL && GSHFT) {
+      switch(item) {
+        case ITM_PI                : * item1 = ITM_7      ; break;
+        case ITM_pi                : * item1 = ITM_7      ; break;
+        case ITM_QOPPA             : * item1 = ITM_8      ; break;
+        case ITM_qoppa             : * item1 = ITM_8      ; break;
+        case ITM_RHO               : * item1 = ITM_9      ; break;
+        case ITM_rho               : * item1 = ITM_9      ; break;
+        case ITM_SIGMA             : * item1 = ITM_SLASH  ; break;//ITM_OBELUS ;
+        case ITM_sigma             : * item1 = ITM_SLASH  ; break; //ITM_OBELUS ;
+        case ITM_TAU               : * item1 = ITM_4      ; break;
+        case ITM_tau               : * item1 = ITM_4      ; break;
+        case ITM_PHI               : * item1 = ITM_5      ; break;
+        case ITM_phi               : * item1 = ITM_5      ; break;
+        case ITM_PSI               : * item1 = ITM_6      ; break;
+        case ITM_psi               : * item1 = ITM_6      ; break;
+        case ITM_OMEGA             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
+        case ITM_omega             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
+        case ITM_XI                : * item1 = ITM_1      ; break;
+        case ITM_xi                : * item1 = ITM_1      ; break;
+        case ITM_UPSILON           : * item1 = ITM_2      ; break;
+        case ITM_upsilon           : * item1 = ITM_2      ; break;
+        case ITM_ZETA              : * item1 = ITM_3      ; break;
+        case ITM_zeta              : * item1 = ITM_3      ; break;
+        case ITM_SAMPI             : * item1 = ITM_MINUS  ; break;
+        case ITM_sampi             : * item1 = ITM_MINUS  ; break;
+        case -MNU_ALPHA            : * item1 = ITM_0      ; break;
+        case -MNU_ALPHADOT         : * item1 = ITM_PERIOD ; break;
+        case -MNU_ALPHAMATH        : * item1 = ITM_SLASH  ; break; //ITM_NULL   ;
+        case -MNU_ALPHAINTL        : * item1 = ITM_PLUS   ; break;
+
+        default:
+           #ifdef PC_BUILD
+             jm_show_comment("^^^^processKeyAction0/keyReplacements:CM_AIM: Numlock not active but number not handled");
+           #endif //PC_BUILD
+           //item1 = item;     //this is the non-number character which is now handled below.
+           break;
+      }
+
+   } else
    if(NL && !SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
      switch(item) {
        case ITM_P             : * item1 = ITM_7;      break;
@@ -840,8 +860,9 @@ uint16_t convertItemToNumOrGrk(int16_t item, int16_t Greek) {
               break;
        }
      }
-   return *item1 != 0;
- }
+   }
+ return *item1 != 0;
+}
 
 
 

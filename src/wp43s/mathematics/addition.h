@@ -19,7 +19,11 @@
  ***********************************************/
 
 void fnAdd      (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void addError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define addError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 //      RegYRegX
 void addLonILonI(void);

@@ -20,7 +20,11 @@
 // Coded by JM, based on sin.h
 
 void fnSinc  (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void sincError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define sincError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void sincLonI (void);
 void sincRema (void);
 void sincCxma (void);

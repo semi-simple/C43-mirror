@@ -858,14 +858,16 @@ bool_t lastshiftG = false;
 
 
               case CM_AIM: {
-                uint16_t item1 = 0;
+                int16_t item1 = 0;
                 #ifdef PC_BUILD
                   char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
                 #endif //PC_BUILD
 
                 if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
+                if(item1 > 0) {
                   addItemToBuffer(item1);
                   keyActionProcessed = true;
+                  }
                 }
                                                        //JM^^
 

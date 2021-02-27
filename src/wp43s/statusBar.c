@@ -307,17 +307,17 @@ void showFracMode(void) {
           case  5: showString(STD_SUB_n, &standardFont, X_ALPHA_MODE,-11, vmNormal, true, false); break; //sup   
           case  6: showString(STD_n,     &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
-          case  7: showString(jm_GGREEK ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
-          case  8: showString(jm_GGREEK ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
-          case  9: showString(jm_GGREEK ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
+          case  7: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
+          case  8: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
+          case  9: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
           case 10: showString(STD_SUB_A, &standardFont, X_ALPHA_MODE, -2, vmNormal, true, false); break; //sub   
           case 11: showString(STD_SUB_A, &standardFont, X_ALPHA_MODE, -11, vmNormal, true, false); break; //sup   //not possible
           case 12: showString(STD_A    , &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
     
-          case 13: showString(jm_GGREEK ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
-          case 14: showString(jm_GGREEK ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
-          case 15: showString(jm_GGREEK ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
+          case 13: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
+          case 14: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
+          case 15: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
           case 16: showString(STD_SUB_a, &standardFont, X_ALPHA_MODE, -2, vmNormal, true, false); break; //sub   
           case 17: showString(STD_SUB_a, &standardFont, X_ALPHA_MODE, -11, vmNormal, true, false); break; //sup    //not possible 

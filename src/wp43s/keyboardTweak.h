@@ -38,7 +38,7 @@ void     show_f_jm           (void);
 void     show_g_jm           (void);
 void     clear_fg_jm         (void);
 void     fg_processing_jm    (void);
-void Check_Assign_in_progress(int16_t  * result, int16_t tempkey);
+void     Check_Assign_in_progress(int16_t  * result, int16_t tempkey);
 
 bool_t   func_lookup         (int16_t  fn, int16_t itemShift, int16_t *funk);
 void     execFnTimeout       (uint16_t key                    );                         //dr - delayed call of the primary function key
@@ -49,8 +49,8 @@ int16_t  nameFunction        (int16_t  fn, int16_t itemShift  );   //JM LONGPRES
 
 #endif
 
-uint16_t numlockReplacements(uint16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT);
-bool_t keyReplacements(uint16_t item, uint16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT);
+uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT);
+bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT);
 
 #ifdef PC_BUILD
 gboolean refreshTimer         (gpointer data);

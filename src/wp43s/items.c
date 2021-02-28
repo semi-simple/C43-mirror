@@ -2007,7 +2007,7 @@ const item_t indexOfItems[] = {
 // Menus
 /* 1313 */  { itemToBeCoded,               NOPARAM,                     "ADV",                                         "ADV",                                         (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1314 */  { itemToBeCoded,               NOPARAM,                     "ANGLES",                                      "ANGLES",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
-/* 1315 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "PRINT",                                       STD_PRINTER,                                   (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
+/* 1315 */  { itemToBeCoded,               NOPARAM,                     "PRINT",                                       "PRINT",                                       (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1316 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "Area:",                                       "Area:",                                       (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1317 */  { itemToBeCoded,               NOPARAM,                     "BITS",                                        "BITS",                                        (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1318 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "CATALOG",                                     "CAT",                                         (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},// JM
@@ -2914,6 +2914,7 @@ const item_t indexOfItems[] = {
 /* 2207 */  { fnGraph,                     20,                          "X.SOLV",                                      "X.SOLV",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2208 */  { fnGraph,                     21,                          "X.PLOT",                                      "X.PLOT",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2209 */  { fnGraph,                     22,                          "X.DEMO",                                      "X.DEMO",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
+/* 2210 */  { fnP_All_Regs,                1,                           "PRN",                                         "PRN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 
-/* 2210 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 2211 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

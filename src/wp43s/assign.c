@@ -112,7 +112,7 @@ const calcKey_t kbd_std[37] = {
       {74,   ITM_3,             -MNU_PARTS,        -MNU_TEST,         ITM_3,             ITM_Z,             ITM_z,             ITM_ZETA,          ITM_3              },
       {75,   ITM_SUB,           -MNU_FIN,          -MNU_ALPHAFN,      ITM_MINUS,         ITM_UNDERSCORE,    ITM_MINUS,         ITM_SAMPI,         ITM_SUB            },
 
-      {81,   ITM_EXIT1,         ITM_OFF,           -MNU_PRINT,        ITM_EXIT1,         ITM_EXIT1,         ITM_OFF,           ITM_PRINTER,       ITM_EXIT1          },
+      {81,   ITM_EXIT1,         ITM_OFF,           ITM_PRN,           ITM_EXIT1,         ITM_EXIT1,         ITM_OFF,           ITM_PRINTER,       ITM_EXIT1          },
       {82,   ITM_0,             ITM_VIEW,          ITM_TIMER,         ITM_0,             ITM_COLON,         ITM_0,             -MNU_ALPHA,        ITM_0              },
       {83,   ITM_PERIOD,        ITM_SHOW,          -MNU_INFO,         ITM_PERIOD,        ITM_COMMA,         ITM_PERIOD,        -MNU_ALPHADOT,     ITM_PERIOD         },
       {84,   ITM_RS,            ITM_PR,            -MNU_PFN,          ITM_NULL,          ITM_QUESTION_MARK, ITM_SLASH,         -MNU_ALPHAMATH,    ITM_NULL           },
@@ -162,7 +162,7 @@ const calcKey_t kbd_std[37] = {
       {74,   ITM_3,             -MNU_PFN,          -MNU_TEST,         ITM_3,             ITM_Z,             ITM_z,             ITM_ZETA,          ITM_3              },
       {75,   ITM_SUB,           -MNU_IO,           -MNU_ALPHAFN,      ITM_MINUS,         ITM_UNDERSCORE,    ITM_MINUS,         ITM_SAMPI,         ITM_SUB            },
 
-      {81,   ITM_EXIT1,         ITM_OFF,           -MNU_PRINT,        ITM_EXIT1,         ITM_EXIT1,         ITM_OFF,           ITM_PRINTER,       ITM_EXIT1          },
+      {81,   ITM_EXIT1,         ITM_OFF,           ITM_PRN,           ITM_EXIT1,         ITM_EXIT1,         ITM_OFF,           ITM_PRINTER,       ITM_EXIT1          },
       {82,   ITM_0,             -MNU_HOME,         ITM_TIMER,         ITM_0,             ITM_COLON,         ITM_0,             -MNU_ALPHA,        ITM_0              },
       {83,   ITM_PERIOD,        ITM_SHOW,          ITM_VIEW,          ITM_PERIOD,        ITM_COMMA,         ITM_PERIOD,        -MNU_ALPHADOT,     ITM_PERIOD         },
       {84,   ITM_RS,            ITM_PR,            -MNU_CLK,          ITM_NULL,          ITM_QUESTION_MARK, ITM_SLASH,         -MNU_ALPHAMATH,    ITM_NULL           },

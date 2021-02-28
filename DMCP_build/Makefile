@@ -64,7 +64,7 @@ C_SOURCES += $(wildcard src/wp43s/*.c) \
 #  -DDECIMAL_GLOBAL_EXCEPTION_FLAGS_ACCESS_FUNCTIONS=1
 
 # WP43S related defines
-C_DEFS += -DDMCP_BUILD -DOS32BIT
+C_DEFS += -DDMCP_BUILD -DOS32BIT -DUSE_HAL_DRIVER -DSTM32L476xx -DARM
 
 # Libraries
 #LIBS += lib/gcc111libbid_hard.a
@@ -99,8 +99,8 @@ CPUFLAGS += -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=n
 ASFLAGS = $(CPUFLAGS) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS  = $(CPUFLAGS) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS += -Wno-misleading-indentation
-#DBGFLAGS = -g 
-DBGFLAGS = 
+#DBGFLAGS = -g
+DBGFLAGS =
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -O0 -DDEBUG
@@ -124,7 +124,7 @@ LDFLAGS = $(CPUFLAGS) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TA
 
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf 
+all: $(BUILD_DIR)/$(TARGET).elf
 
 #######################################
 # build the application
@@ -141,10 +141,10 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
 	$(CXX) -c $(CXXFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cc=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
@@ -158,14 +158,16 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)check_qspi_crc $(TARGET) src/qspi_crc.h || ( $(MAKE) clean && false )
 	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
+	mv build/$(TARGET)_qspi.bin build/$(TARGET)_qspi.lib
+	ls -al build/$(TARGET).pgm build/$(TARGET)_qspi.lib
 	$(SIZE) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
-	
+
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@
-	
+
 $(BUILD_DIR):
 	mkdir -p $@
 

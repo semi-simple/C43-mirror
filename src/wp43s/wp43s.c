@@ -274,19 +274,85 @@ size_t                 wp43sMemInBlocks;
 #endif // PC_BUILD
 
 #ifdef DMCP_BUILD
+  static void testAndFlashQSPI2Mb(void) {
+    uint64_t *qspi, fileContent;
+    UINT bytesRead;
+    int res;
+
+    backToDMCP = false;
+
+    lcd_clear_buf();
+    lcd_putsAt(t24, 3, "Checking QSPI flash memory."); lcd_refresh();
+
+    if(!file_exists("WP43S_qspi.lib")) {
+      lcd_clear_buf();
+      lcd_putsAt(t24, 3, "File WP43S_qspi.lib is missing!"); lcd_refresh();
+      backToDMCP = true;
+      sys_delay(3000); // wait 3 seconds
+      return;
+    }
+
+    f_open(ppgm_fp, "WP43S_qspi.lib", FA_READ);
+
+    qspi = (uint64_t *)0x90100000;
+    for(int i=0; i<((f_size(ppgm_fp) + 7) >> 3); i++, qspi++) {
+      fileContent = 0;
+      f_read(ppgm_fp, &fileContent, 8, &bytesRead);
+      if(*qspi != fileContent) {
+        lcd_clear_buf();
+        lcd_putsAt(t24, 3, "We need to flash QSPI!"); lcd_refresh();
+
+        qspi = (uint64_t *)0x90100000;
+
+        lcd_putsAt(t24, 4, "Erasing QSPI"); lcd_refresh();
+        sys_flashing_init();
+        res = sys_flash_erase_block(qspi, ((f_size(ppgm_fp) + 7) >> 3) << 3);
+        if(res != 0) {
+          sprintf(dateTimeString, "e %d", res);
+          lcd_putsAt(t24, 5, dateTimeString); lcd_refresh();
+        }
+        //sys_flashing_finish();
+
+        lcd_putsAt(t24, 6, "Flashing QSPI"); lcd_refresh();
+
+        //sys_flashing_init();
+        f_lseek(ppgm_fp, 0);
+        for(int j=0; j<((f_size(ppgm_fp) + 7) >> 3); j++) {
+          fileContent = 0;
+          f_read(ppgm_fp, &fileContent, 8, &bytesRead);
+          res = sys_flash_write_block(qspi++, (uint8_t *)&fileContent, 8);
+          if(res != 0) {
+            sprintf(dateTimeString, "w %d", res);
+            lcd_putsAt(t24, 7, dateTimeString); lcd_refresh();
+          }
+        }
+
+        sys_flashing_finish();
+        break;
+      }
+    }
+
+    f_close(ppgm_fp);
+  }
+
+
   void program_main(void) {
     int key = 0;
     char charKey[3];
     bool_t wp43sKbdLayout;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
 
+    testAndFlashQSPI2Mb();
+    if(backToDMCP) {
+      return;
+    }
+
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
     lcd_clear_buf();
-    lcd_putsAt(t24, 4, "Press the bottom left key.");
-    lcd_refresh();
+    lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();
     while(key != 33 && key != 37) {
       key = key_pop();
       while(key == -1) {
@@ -302,7 +368,7 @@ size_t                 wp43sMemInBlocks;
     fnReset(CONFIRMED);
     refreshScreen();
 
-    #if 0
+    #if 1
       longInteger_t li;
       uint32_t addr, min, max, *ptr;
 
@@ -384,10 +450,13 @@ size_t                 wp43sMemInBlocks;
       uIntToLongInteger(addr, li);
       convertLongIntegerToShortIntegerRegister(li, 10, 63);
 
+      ptr = (uint32_t *)resizeProgramMemory;
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 64);
+
       longIntegerFree(li);
     #endif // 1
-
-    backToDMCP = false;
 
     lcd_refresh();
     nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;

@@ -1578,7 +1578,7 @@
 #define ITM_LocRQ                     1515
 #define ITM_LR                        1516
 #define ITM_MANT                      1517
-#define ITM_1518                      1518
+#define ITM_MATX                      1518
 #define ITM_MEM                       1519
 #define ITM_MENU                      1520
 #define ITM_MONTH                     1521

@@ -378,6 +378,9 @@ static void almostEqualMatrix(uint16_t regist) {
 static void almostEqualScalar(uint16_t regist) {
   real34_t val1r, val1i, val2r, val2i;
 
+  real34Copy(const34_0, &val1i);
+  real34Copy(const34_0, &val2i);
+  
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &val1i);
   }

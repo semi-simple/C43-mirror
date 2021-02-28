@@ -233,7 +233,7 @@ bool_t lastshiftG = false;
             }
           }                                                                                     //JM ^
           else if(calcMode == CM_NORMAL && catalog) {
-            leaveAsmMode();
+            //leaveAsmMode();
           }
           else if(calcMode == CM_AIM && catalog) {
             addItemToBuffer(item);
@@ -1260,6 +1260,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
     if(catalog) {
       leaveAsmMode();
+      popSoftmenu();
       return;
     }
 

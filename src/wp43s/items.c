@@ -471,6 +471,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
   void fnDec                      (uint16_t unusedButMandatoryParameter) {}
   void fnInc                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsg                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsz                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsl                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsz                      (uint16_t unusedButMandatoryParameter) {}
   void fncountBits                (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
@@ -666,12 +672,12 @@ const item_t indexOfItems[] = {
 /*    2 */  { fnGoto,                      TM_LABEL,                    "GTO",                                         "GTO",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    3 */  { itemToBeCoded,               TM_LABEL,                    "XEQ",                                         "XEQ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    4 */  { itemToBeCoded,               NOPARAM,                     "RTN",                                         "RTN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    5 */  { itemToBeCoded,               NOPARAM,                     "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    6 */  { itemToBeCoded,               NOPARAM,                     "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    7 */  { itemToBeCoded,               NOPARAM,                     "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    8 */  { itemToBeCoded,               NOPARAM,                     "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    9 */  { itemToBeCoded,               NOPARAM,                     "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   10 */  { itemToBeCoded,               NOPARAM,                     "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    5 */  { fnIse,                       TM_REGISTER,                 "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    6 */  { fnIsg,                       TM_REGISTER,                 "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    7 */  { fnIsz,                       TM_REGISTER,                 "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    8 */  { fnDse,                       TM_REGISTER,                 "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    9 */  { fnDsl,                       TM_REGISTER,                 "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   10 */  { fnDsz,                       TM_REGISTER,                 "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   11 */  { fnXEqualsTo,                 TM_CMP,                      "x= ?",                                        "x= ?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   12 */  { fnXNotEqual,                 TM_CMP,                      "x" STD_NOT_EQUAL " ?",                        "x" STD_NOT_EQUAL " ?",                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   13 */  { fnCheckValue,                CHECK_VALUE_POSITIVE_ZERO,   "x=+0?",                                       "x=+0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

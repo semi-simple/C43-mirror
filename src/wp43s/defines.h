@@ -174,7 +174,8 @@
 #define TT_BASE10                                  8
 #define TT_BASE16                                  9
 #define TT_INT                                    10
-#define TT_NOTHING                                11
+#define TT_FP                                     11
+#define TT_NOTHING                                12
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 

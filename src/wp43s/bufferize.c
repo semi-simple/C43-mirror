@@ -343,6 +343,9 @@ void kill_ASB_icon(void) {
         else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
           tamTransitionSystem(TT_INT);
         }
+        else if(tamFunction == ITM_toINT && item == ITM_alpha) {
+          tamTransitionSystem(TT_FP);
+        }
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
@@ -1451,6 +1454,11 @@ void kill_ASB_icon(void) {
 
           case TT_INT :
             fnIp(NOPARAM);
+            leaveTamMode();
+            return;
+
+          case TT_FP :
+            fnFp(NOPARAM);
             leaveTamMode();
             return;
 

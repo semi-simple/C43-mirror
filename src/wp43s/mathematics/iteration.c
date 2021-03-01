@@ -87,9 +87,9 @@ static void incDecAndCompare(uint16_t regist, uint16_t mode) {
     default:
       goto invalidType;
   }
-  if     (compared < 0) temporaryInformation = ((mode & 6) == (INC_FLAG << 2)) ? TI_TRUE : TI_FALSE;
-  else if(compared > 0) temporaryInformation = ((mode & 6) == (DEC_FLAG << 2)) ? TI_TRUE : TI_FALSE;
-  else  /*compared==0*/ temporaryInformation = ((mode & 1) ==              1 ) ? TI_TRUE : TI_FALSE;
+  if     (compared > 0) temporaryInformation = ((mode & 6) == (INC_FLAG << 2)) ? TI_FALSE : TI_TRUE;
+  else if(compared < 0) temporaryInformation = ((mode & 6) == (DEC_FLAG << 2)) ? TI_FALSE : TI_TRUE;
+  else  /*compared==0*/ temporaryInformation = ((mode & 1) ==              0 ) ? TI_FALSE : TI_TRUE;
   return;
 
 invalidType:

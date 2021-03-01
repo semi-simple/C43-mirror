@@ -74,6 +74,7 @@
 #include "int.h"
 #include "integerPart.h"
 #include "invert.h"
+#include "iteration.h"
 #include "ixyz.h"
 #include "lcm.h"
 #include "ln.h"

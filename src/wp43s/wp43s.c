@@ -380,17 +380,18 @@ size_t                 wp43sMemInBlocks;
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 #endif
   int count_refreshes = 0;                                                      //dr clock down refresh after 1 minute of no keystroke
-//bool_t wp43sKbdLayout, inFastRefresh;;            // removed autorepeat stuff //dr - no keymap is used
+  //bool_t wp43sKbdLayout, inFastRefresh;;            // removed autorepeat stuff //dr - no keymap is used
 
 
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
-    //uint32_t previousRefresh;                     // removed autorepeat stuff
+    uint32_t previousRefresh;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   lcd_clear_buf();
+
 #ifdef NOKEYMAP
   lcd_putsAt(t24, 4, "Press the bottom left key.");            //vv dr - no keymap is used
   lcd_refresh();
@@ -407,6 +408,8 @@ size_t                 wp43sMemInBlocks;
 
   lcd_clear_buf();                                             //^^
 #endif //NOKEYMAP
+
+
   fnReset(CONFIRMED);
   refreshScreen();
 
@@ -504,7 +507,7 @@ size_t                 wp43sMemInBlocks;
 
     lcd_forced_refresh();                                        //JM 
     previousRefresh = sys_current_ms();
-    inFastRefresh = 0;
+    //inFastRefresh = 0;                                       // removed autorepeat stuff
     nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
     //runner_key_tout_init(0); // Enables fast auto repeat     // Remove all autorepeat stuff
 

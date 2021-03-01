@@ -592,6 +592,7 @@
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
+#define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)

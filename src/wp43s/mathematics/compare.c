@@ -105,7 +105,7 @@ void registerCmpLonIReal(calcRegister_t regist1, calcRegister_t regist2, int8_t 
   real_t r1, r2;
 
   convertLongIntegerRegisterToReal(regist1, &r1, &ctxtReal39);
-  real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &r2);
+  real34ToReal(REGISTER_REAL34_DATA(regist2), &r2);
 
   if(realCompareEqual(&r1, &r2))
     *result = 0;
@@ -380,7 +380,7 @@ static void almostEqualScalar(uint16_t regist) {
 
   real34Copy(const34_0, &val1i);
   real34Copy(const34_0, &val2i);
-  
+
   if(getRegisterDataType(REGISTER_X) == dtComplex34) {
     real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &val1i);
   }

@@ -1578,7 +1578,7 @@
 #define ITM_LocRQ                     1515
 #define ITM_LR                        1516
 #define ITM_MANT                      1517
-#define ITM_1518                      1518
+#define ITM_MATX                      1518
 #define ITM_MEM                       1519
 #define ITM_MENU                      1520
 #define ITM_MONTH                     1521
@@ -2280,8 +2280,9 @@
 #define ITM_XSOLV                     2207
 #define ITM_XPLOT                     2208
 #define ITM_XDEMO                     2209
+#define ITM_PRN                       2210
 
-#define LAST_ITEM                     2210   //JM
+#define LAST_ITEM                     2211   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

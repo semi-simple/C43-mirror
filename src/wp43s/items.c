@@ -471,6 +471,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
   void fnDec                      (uint16_t unusedButMandatoryParameter) {}
   void fnInc                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsg                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsz                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsl                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsz                      (uint16_t unusedButMandatoryParameter) {}
   void fncountBits                (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
@@ -666,12 +672,12 @@ const item_t indexOfItems[] = {
 /*    2 */  { fnGoto,                      TM_LABEL,                    "GTO",                                         "GTO",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    3 */  { itemToBeCoded,               TM_LABEL,                    "XEQ",                                         "XEQ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    4 */  { itemToBeCoded,               NOPARAM,                     "RTN",                                         "RTN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    5 */  { itemToBeCoded,               NOPARAM,                     "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    6 */  { itemToBeCoded,               NOPARAM,                     "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    7 */  { itemToBeCoded,               NOPARAM,                     "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    8 */  { itemToBeCoded,               NOPARAM,                     "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    9 */  { itemToBeCoded,               NOPARAM,                     "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   10 */  { itemToBeCoded,               NOPARAM,                     "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    5 */  { fnIse,                       TM_REGISTER,                 "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    6 */  { fnIsg,                       TM_REGISTER,                 "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    7 */  { fnIsz,                       TM_REGISTER,                 "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    8 */  { fnDse,                       TM_REGISTER,                 "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    9 */  { fnDsl,                       TM_REGISTER,                 "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   10 */  { fnDsz,                       TM_REGISTER,                 "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   11 */  { fnXEqualsTo,                 TM_CMP,                      "x= ?",                                        "x= ?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   12 */  { fnXNotEqual,                 TM_CMP,                      "x" STD_NOT_EQUAL " ?",                        "x" STD_NOT_EQUAL " ?",                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   13 */  { fnCheckValue,                CHECK_VALUE_POSITIVE_ZERO,   "x=+0?",                                       "x=+0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2007,7 +2013,7 @@ const item_t indexOfItems[] = {
 // Menus
 /* 1313 */  { itemToBeCoded,               NOPARAM,                     "ADV",                                         "ADV",                                         (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1314 */  { itemToBeCoded,               NOPARAM,                     "ANGLES",                                      "ANGLES",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
-/* 1315 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "PRINT",                                       STD_PRINTER,                                   (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
+/* 1315 */  { itemToBeCoded,               NOPARAM,                     "PRINT",                                       "PRINT",                                       (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1316 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "Area:",                                       "Area:",                                       (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1317 */  { itemToBeCoded,               NOPARAM,                     "BITS",                                        "BITS",                                        (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1318 */  { itemToBeCoded,               NOPARAM/*#JM#*/,             "CATALOG",                                     "CAT",                                         (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},// JM
@@ -2196,7 +2202,7 @@ const item_t indexOfItems[] = {
 /* 1499 */  { itemToBeCoded,               NOPARAM,                     "KEYX",                                        "KEYX",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1500 */  { fnSinc,                      NOPARAM,                     "sinc",                                        "sinc",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1501 */  { itemToBeCoded,               NOPARAM,                     "KTYP?",                                       "KTYP?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1502 */  { fnLastX,                     NOPARAM/*#JM#*/,             "LASTx",                                       "LSTx",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1502 */  { fnLastX,                     NOPARAM/*#JM#*/,             "LASTx",                                       "LASTx",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1503 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1504 */  { fnIsLeap,                    NOPARAM,                     "LEAP?",                                       "LEAP?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1505 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2212,7 +2218,7 @@ const item_t indexOfItems[] = {
 /* 1515 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1516 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1517 */  { fnMant,                      NOPARAM,                     "MANT",                                        "MANT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1518 */  { itemToBeCoded,               NOPARAM,                     "1518",                                        "1518",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
+/* 1518 */  { itemToBeCoded,               NOPARAM,                     "Mat_X",                                       "Mat_X",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1519 */  { fnFreeMemory,                NOPARAM,                     "MEM?",                                        "MEM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "MENU",                                        "MENU",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1521 */  { fnMonth,                     NOPARAM,                     "MONTH",                                       "MONTH",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2914,6 +2920,7 @@ const item_t indexOfItems[] = {
 /* 2207 */  { fnGraph,                     20,                          "X.SOLV",                                      "X.SOLV",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2208 */  { fnGraph,                     21,                          "X.PLOT",                                      "X.PLOT",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2209 */  { fnGraph,                     22,                          "X.DEMO",                                      "X.DEMO",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
+/* 2210 */  { fnP_All_Regs,                1,                           "PRN",                                         "PRN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 
-/* 2210 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 2211 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

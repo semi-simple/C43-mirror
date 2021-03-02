@@ -326,7 +326,7 @@
         else if(item == ITM_BACKSPACE) {
           tamTransitionSystem(TT_BACKSPACE);
         }
-        else if(item == ITM_AIM) {
+        else if(item == ITM_alpha) {
           inputNamedVariable = true;
           aimBuffer[0] = 0;
           calcModeAim(NOPARAM);
@@ -1290,34 +1290,8 @@
             return;
 
           case TT_VARIABLE :
-            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-              if(aimBuffer[0] == 0) {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
-              }
-              else {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
-              }
-            }
-            return;
-
-          case TT_ENTER:
-            if(inputNamedVariable) {
-              calcRegister_t regist;
-              if(tamFunction == ITM_STO) {
-                regist = findOrAllocateNamedVariable(aimBuffer);
-              }
-              else {
-                regist = findNamedVariable(aimBuffer);
-                if(regist == INVALID_VARIABLE) {
-                  temporaryInformation = TI_UNDEF_SOURCE_VAR;
-                }
-              }
-              aimBuffer[0] = 0;
-              if(regist != INVALID_VARIABLE) {
-                reallyRunFunction(getOperation(), regist);
-              }
-              leaveTamMode();
-            }
+            sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            transitionSystemState = 29;
             return;
 
           case TT_DIGIT :
@@ -1408,32 +1382,8 @@
             return;
 
           case TT_VARIABLE :
-            if(aimBuffer[0] == 0) {
-              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
-            }
-            else {
-              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
-            }
-            return;
-
-          case TT_ENTER:
-            if(inputNamedVariable) {
-              calcRegister_t regist;
-              if(tamFunction == ITM_STO) {
-                regist = findOrAllocateNamedVariable(aimBuffer);
-              }
-              else {
-                regist = findNamedVariable(aimBuffer);
-                if(regist == INVALID_VARIABLE) {
-                  temporaryInformation = TI_UNDEF_SOURCE_VAR;
-                }
-              }
-              aimBuffer[0] = 0;
-              if(regist != INVALID_VARIABLE) {
-                reallyRunFunction(getOperation(), regist);
-              }
-              leaveTamMode();
-            }
+            sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            transitionSystemState = 30;
             return;
 
           case TT_DIGIT :
@@ -2288,6 +2238,90 @@
         }
         return;
 
+
+      //////////////////////////////
+      // OP '_
+      case 29 : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_VARIABLE :
+            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              if(aimBuffer[0] == 0) {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+              }
+              else {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+              }
+            }
+            return;
+
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
+            inputNamedVariable = 0;
+            transitionSystemState = 0;
+            return;
+
+          default : {}
+        }
+        return;
+
+      //////////////////////////////
+      // OPo '_
+      case 30 : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_VARIABLE :
+            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              if(aimBuffer[0] == 0) {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+              }
+              else {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+              }
+            }
+            return;
+
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
+            inputNamedVariable = 0;
+            transitionSystemState = 1;
+            return;
+
+          default : {}
+        }
+        return;
 
       //////////////////////////////
       // This should never happen

@@ -1291,8 +1291,10 @@
             return;
 
           case TT_VARIABLE :
-            sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 29;
+            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+              transitionSystemState = 29;
+            }
             return;
 
           case TT_DIGIT :
@@ -2245,13 +2247,11 @@
       case 29 : // inputNamedVariable = 1
         switch(tamEvent) {
           case TT_VARIABLE :
-            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-              if(aimBuffer[0] == 0) {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
-              }
-              else {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
-              }
+            if(aimBuffer[0] == 0) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            }
+            else {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
             }
             return;
 
@@ -2287,13 +2287,11 @@
       case 30 : // inputNamedVariable = 1
         switch(tamEvent) {
           case TT_VARIABLE :
-            if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
-              if(aimBuffer[0] == 0) {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
-              }
-              else {
-                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
-              }
+            if(aimBuffer[0] == 0) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            }
+            else {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
             }
             return;
 

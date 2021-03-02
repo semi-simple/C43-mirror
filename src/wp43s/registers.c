@@ -598,11 +598,63 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
 
   len = stringByteLength(variableName);
   allNamedVariables[regist].variableName[0] = len;
+  // Ensure that we terminate with \0 in the string to make in place comparisons easier
+  memset(allNamedVariables[regist].variableName + 1, 0, 15);
   xcopy(allNamedVariables[regist].variableName + 1, variableName, len);
 
   regist += FIRST_NAMED_VARIABLE;
   setRegisterDataType(regist, dataType, AM_NONE);
   setRegisterDataPointer(regist, allocWp43s(fullDataSizeInBlocks));
+}
+
+
+
+/********************************************//**
+ * \brief Retrieves the register number for the named variable
+ *
+ * \param[in] variableName const char* Register name
+ * \return calcRegister_t register number to be used by other functions, or INVALID_VARIABLE
+ *         if not found
+ ***********************************************/
+calcRegister_t findNamedVariable(const char *variableName) {
+  calcRegister_t regist = INVALID_VARIABLE;
+  uint8_t len = stringGlyphLength(variableName);
+  if(len < 1 || len > 7) {
+    return regist;
+  }
+  for(int i = 0; i < numberOfNamedVariables; i++) {
+    if (compareString((char *)(allNamedVariables[i].variableName + 1), variableName, CMP_EXTENSIVE) == 0) {
+      regist = i + FIRST_NAMED_VARIABLE;
+      break;
+    }
+  }
+  return regist;
+}
+
+
+
+/********************************************//**
+ * \brief Retrieves the register number for the named variable, allocating it if it doesn't exist
+ *
+ * \param[in] variableName const char* Register name
+ * \return calcRegister_t register number to be used by other functions, or INVALID_VARIABLE
+ *         if not possible to allocate (all named variables defined)
+ ***********************************************/
+calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
+  calcRegister_t regist = INVALID_VARIABLE;
+  uint8_t len = stringGlyphLength(variableName);
+  if(len < 1 || len > 7) {
+    return regist;
+  }
+  regist = findNamedVariable(variableName);
+  if(regist == INVALID_VARIABLE && numberOfNamedVariables <= (LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE)) {
+    allocateNamedVariable(variableName, dtReal34, REAL34_SIZE);
+    // New variables are zero by default - although this might be immediately overridden, it might require an
+    // initial value, such as when STO+
+    regist = FIRST_NAMED_VARIABLE + numberOfNamedVariables - 1;
+    real34Zero(REGISTER_REAL34_DATA(regist));
+  }
+  return regist;
 }
 
 

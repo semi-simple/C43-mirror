@@ -238,7 +238,7 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || catalog) {
+    if(calcMode == CM_AIM || catalog || inputNamedVariable) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -413,6 +413,30 @@
 
 
 
+  static void processAimInput(int16_t item) {
+    if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
+      addItemToBuffer(item + 26);
+      keyActionProcessed = true;
+    }
+
+    else if(alphaCase == AC_LOWER && (ITM_ALPHA <= item && item <= ITM_OMEGA)) {
+      addItemToBuffer(item + 36);
+      keyActionProcessed = true;
+    }
+
+    else if(item == ITM_DOWN_ARROW) {
+      nextChar = NC_SUBSCRIPT;
+      keyActionProcessed = true;
+    }
+
+    else if(item == ITM_UP_ARROW) {
+      nextChar = NC_SUPERSCRIPT;
+      keyActionProcessed = true;
+    }
+  }
+
+
+
   /********************************************//**
    * \brief A calc button was pressed
    *
@@ -486,8 +510,12 @@
           break;
         }
         else if(tamMode) {
-          addItemToBuffer(item);
-          keyActionProcessed = true;
+          if(inputNamedVariable) {
+            processAimInput(item);
+          } else {
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }
           break;
         }
         else {
@@ -505,25 +533,7 @@
               break;
 
             case CM_AIM:
-              if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
-                addItemToBuffer(item + 26);
-                keyActionProcessed = true;
-              }
-
-              else if(alphaCase == AC_LOWER && (ITM_ALPHA <= item && item <= ITM_OMEGA)) {
-                addItemToBuffer(item + 36);
-                keyActionProcessed = true;
-              }
-
-              else if(item == ITM_DOWN_ARROW) {
-                nextChar = NC_SUBSCRIPT;
-                keyActionProcessed = true;
-              }
-
-              else if(item == ITM_UP_ARROW) {
-                nextChar = NC_SUPERSCRIPT;
-                keyActionProcessed = true;
-              }
+              processAimInput(item);
               break;
 
             case CM_NIM:
@@ -942,7 +952,15 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     uint8_t *nextStep;
 
     if(tamMode) {
-      tamTransitionSystem(TT_BACKSPACE);
+      if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
+        // If we're in AIM, then only transition if the AIM buffer is empty
+        tamTransitionSystem(TT_BACKSPACE);
+      } else if(inputNamedVariable) {
+        // Delete the last character and then 'transition' to get a redraw
+        lg = stringLastGlyph(aimBuffer);
+        aimBuffer[lg] = 0;
+        tamTransitionSystem(TT_VARIABLE);
+      }
       return;
     }
 
@@ -1020,7 +1038,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
     int16_t menuId;
 
     if(tamMode && !catalog) {
-      addItemToBuffer(ITM_Max);
+      if(inputNamedVariable) {
+        alphaCase = AC_UPPER;
+      }
+      else {
+        addItemToBuffer(ITM_Max);
+      }
       return;
     }
 
@@ -1100,7 +1123,12 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
     int16_t menuId;
 
     if(tamMode && !catalog) {
-      addItemToBuffer(ITM_Min);
+      if(inputNamedVariable) {
+        alphaCase = AC_LOWER;
+      }
+      else {
+        addItemToBuffer(ITM_Min);
+      }
       return;
     }
 

@@ -231,6 +231,7 @@
   // Variables stored in RAM
   extern bool_t                 funcOK;
   extern bool_t                 keyActionProcessed;
+  extern bool_t                 inputNamedVariable;
   extern bool_t                 hourGlassIconEnabled;
   extern bool_t                 watchIconEnabled;
   extern bool_t                 printerIconEnabled;

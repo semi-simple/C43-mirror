@@ -54,6 +54,7 @@ void                   (*confirmedFunction)(uint16_t);
 // Variables stored in RAM
 bool_t                 funcOK;
 bool_t                 keyActionProcessed;
+bool_t                 inputNamedVariable;
 bool_t                 hourGlassIconEnabled;
 bool_t                 watchIconEnabled;
 bool_t                 printerIconEnabled;

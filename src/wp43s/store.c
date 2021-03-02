@@ -22,6 +22,28 @@
 
 
 
+bool_t regInRange(uint16_t regist) {
+  bool_t inRange = (
+    (regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) ||
+    (regist >= FIRST_NAMED_VARIABLE && regist - FIRST_NAMED_VARIABLE < numberOfNamedVariables));
+#ifdef PC_BUILD
+  if(!inRange) {
+    if(regist >= FIRST_LOCAL_REGIST && regist <= LAST_LOCAL_REGISTER) {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+    }
+    else if(regist >= FIRST_NAMED_VARIABLE && regist <= LAST_NAMED_VARIABLE) {
+      // This error message is not massively useful because it doesn't have the original name
+      // But it shouldn't have even got this far if the name doesn't exist
+      sprintf(errorMessage, "named register .%02d", regist - FIRST_NAMED_VARIABLE);
+    }
+    moreInfoOnError("In function regInRange:", errorMessage, " is not defined!", NULL);
+  }
+#endif
+  return inRange;
+}
+
+
+
 /********************************************//**
  * \brief Stores X in an other register
  *
@@ -29,15 +51,9 @@
  * \return void
  ***********************************************/
 void fnStore(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, regist);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStore:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -49,7 +65,7 @@ void fnStore(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreAdd(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
     if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
@@ -64,12 +80,6 @@ void fnStoreAdd(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStorePlus:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -81,7 +91,7 @@ void fnStoreAdd(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreSub(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
     if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
@@ -96,12 +106,6 @@ void fnStoreSub(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStoreSub:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -113,7 +117,7 @@ void fnStoreSub(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreMult(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
     if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
@@ -128,12 +132,6 @@ void fnStoreMult(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStoreMult:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -145,7 +143,7 @@ void fnStoreMult(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreDiv(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
     if(getRegisterDataType(REGISTER_Y) == dtShortInteger) {
@@ -160,12 +158,6 @@ void fnStoreDiv(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStoreDiv:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -177,15 +169,9 @@ void fnStoreDiv(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreMin(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     registerMin(REGISTER_X, regist, regist);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStoreMin:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -197,15 +183,9 @@ void fnStoreMin(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreMax(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     registerMax(REGISTER_X, regist, regist);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnStoreMax:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 

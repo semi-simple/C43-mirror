@@ -229,9 +229,8 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
-      if(calcMode == CM_AIM) {
+      if(calcMode == CM_AIM || inputNamedVariable) {
         item = convertItemToSubOrSup(item, nextChar);
-
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
@@ -241,7 +240,7 @@
         }
       }
 
-      else if(catalog) {
+      if(calcMode != CM_AIM && catalog) {
         int32_t firstItem = 0, pos;
 
         if(item == ITM_BACKSPACE) {
@@ -272,7 +271,19 @@
       }
 
       else if(tamMode) {
-        if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
+        if(item == ITM_ENTER) {
+          tamTransitionSystem(TT_ENTER);
+        }
+        else if(inputNamedVariable) {
+          // Text added above, just transition to variable to get the text
+          if(stringGlyphLength(aimBuffer) > 6) {
+            tamTransitionSystem(TT_ENTER);
+          }
+          else {
+            tamTransitionSystem(TT_VARIABLE);
+          }
+        }
+        else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
@@ -289,15 +300,9 @@
           tamLetteredRegister = indexOfItems[item].param;
           tamTransitionSystem(TT_LETTER);
         }
-        /*else if(namedVariable) {
-          tamTransitionSystem(TT_VARIABLE);
-        }*/
         else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
           tamDigit = item - ITM_0;
           tamTransitionSystem(TT_DIGIT);
-        }
-        else if(item == ITM_ENTER) {
-          tamTransitionSystem(TT_ENTER);
         }
         else if(item == ITM_PERIOD) { // .
           if(tamFunction == ITM_GTO && transitionSystemState == 0) {
@@ -318,11 +323,11 @@
         else if(item == ITM_BACKSPACE) {
           tamTransitionSystem(TT_BACKSPACE);
         }
-        else if(item == ITM_alpha) {
-          #ifdef PC_BUILD
-            moreInfoOnError("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
-          #endif // PC_BUILD
-          tamTransitionSystem(TT_NOTHING);
+        else if(item == ITM_AIM) {
+          inputNamedVariable = true;
+          aimBuffer[0] = 0;
+          calcModeAim(NOPARAM);
+          tamTransitionSystem(TT_VARIABLE);
         }
         else if(item == ITM_0P || item == ITM_1P) {
           reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
@@ -342,7 +347,7 @@
         addItemToNimBuffer(item);
       }
 
-      else {
+      else if(calcMode != CM_AIM) {
         funcOK = false;
         return;
       }
@@ -1283,6 +1288,32 @@
 
           case TT_VARIABLE :
             if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              if(aimBuffer[0] == 0) {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+              }
+              else {
+                sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+              }
+            }
+            return;
+
+          case TT_ENTER:
+            if(inputNamedVariable) {
+              calcRegister_t regist;
+              if(tamFunction == ITM_STO) {
+                regist = findOrAllocateNamedVariable(aimBuffer);
+              }
+              else {
+                regist = findNamedVariable(aimBuffer);
+                if(regist == INVALID_VARIABLE) {
+                  temporaryInformation = TI_UNDEF_SOURCE_VAR;
+                }
+              }
+              aimBuffer[0] = 0;
+              if(regist != INVALID_VARIABLE) {
+                reallyRunFunction(getOperation(), regist);
+              }
+              leaveTamMode();
             }
             return;
 
@@ -1369,6 +1400,32 @@
             return;
 
           case TT_VARIABLE :
+            if(aimBuffer[0] == 0) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            }
+            else {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+            }
+            return;
+
+          case TT_ENTER:
+            if(inputNamedVariable) {
+              calcRegister_t regist;
+              if(tamFunction == ITM_STO) {
+                regist = findOrAllocateNamedVariable(aimBuffer);
+              }
+              else {
+                regist = findNamedVariable(aimBuffer);
+                if(regist == INVALID_VARIABLE) {
+                  temporaryInformation = TI_UNDEF_SOURCE_VAR;
+                }
+              }
+              aimBuffer[0] = 0;
+              if(regist != INVALID_VARIABLE) {
+                reallyRunFunction(getOperation(), regist);
+              }
+              leaveTamMode();
+            }
             return;
 
           case TT_DIGIT :

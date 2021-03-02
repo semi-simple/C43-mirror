@@ -791,6 +791,8 @@ void fnReset(uint16_t confirmation) {
     serialIOIconEnabled = false;
     printerIconEnabled = false;
     thereIsSomethingToUndo = false;
+    inputNamedVariable = false;
+    tamFnKeyInCatalog = false;
     shiftF = false;
     shiftG = false;
 

@@ -28,7 +28,7 @@ bool_t regInRange(uint16_t regist) {
     (regist >= FIRST_NAMED_VARIABLE && regist - FIRST_NAMED_VARIABLE < numberOfNamedVariables));
 #ifdef PC_BUILD
   if(!inRange) {
-    if(regist >= FIRST_LOCAL_REGIST && regist <= LAST_LOCAL_REGISTER) {
+    if(regist >= FIRST_LOCAL_REGISTER && regist <= LAST_LOCAL_REGISTER) {
       sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
     }
     else if(regist >= FIRST_NAMED_VARIABLE && regist <= LAST_NAMED_VARIABLE) {

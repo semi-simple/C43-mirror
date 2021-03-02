@@ -214,6 +214,7 @@
     lgCatalogSelection = 0;
     alphaSelectionTimer = 0;
     asmBuffer[0] = 0;
+    tamFnKeyInCatalog = 0;
   }
 
 
@@ -229,7 +230,7 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
-      if(calcMode == CM_AIM || inputNamedVariable) {
+      if(calcMode == CM_AIM || (inputNamedVariable && (tamFnKeyInCatalog || !catalog))) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
@@ -240,7 +241,7 @@
         }
       }
 
-      if(calcMode != CM_AIM && catalog) {
+      if(calcMode != CM_AIM && catalog && !tamFnKeyInCatalog) {
         int32_t firstItem = 0, pos;
 
         if(item == ITM_BACKSPACE) {

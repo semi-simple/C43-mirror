@@ -925,4 +925,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       lastCatalogPosition[CATALOG_AINT] = softmenuStack[0].firstItem;
     }
   }
+
+  bool_t currentSoftmenuScrolls(void) {
+    int16_t menuId = softmenuStack[0].softmenuId;
+    return (menuId > 1 &&
+      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
+  }
 #endif // !TESTSUITE_BUILD

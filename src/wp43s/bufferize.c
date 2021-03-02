@@ -285,6 +285,12 @@
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
         }
+        else if(tamFunction == ITM_toINT && item == ITM_REG_B) {
+          tamTransitionSystem(TT_CHB02);
+        }
+        else if(tamFunction == ITM_toINT && item == ITM_ENTER) {
+          tamTransitionSystem(TT_CHB10);
+        }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {
           tamTransitionSystem(TT_BASE16);
         }
@@ -917,6 +923,7 @@
         }
         break;
 
+      case ITM_ENTER:
       case ITM_LN : // D for decimal base
         if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
           strcat(aimBuffer, "10");
@@ -1332,6 +1339,16 @@
 
           case TT_FP :
             fnFp(NOPARAM);
+            leaveTamMode();
+            return;
+
+          case TT_CHB02 :
+            fnChangeBase(2);
+            leaveTamMode();
+            return;
+
+          case TT_CHB10 :
+            fnChangeBase(10);
             leaveTamMode();
             return;
 

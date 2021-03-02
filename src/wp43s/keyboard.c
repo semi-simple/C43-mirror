@@ -458,19 +458,19 @@
         break;
 
       case ITM_ENTER:
-        printf("0000 tammode=%d\n",tamMode);
         if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
           keyActionProcessed = true;
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
-          printf("1111\n");
           if(tamFunction == ITM_toINT && item == ITM_ENTER) {
             addItemToBuffer(item);
-            printf("2222\n");
           }
           keyActionProcessed = true;
-        }
+        } else if(calcMode == CM_NIM) {
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }
         break;
 
       default:

@@ -276,7 +276,7 @@
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
+        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {
           tamTransitionSystem(TT_INT);
         }
         else if(tamFunction == ITM_toINT && item == ITM_alpha) {

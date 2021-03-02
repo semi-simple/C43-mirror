@@ -463,8 +463,14 @@
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          if(tamFunction == ITM_toINT && item == ITM_ENTER) {
+            addItemToBuffer(item);
+          }
           keyActionProcessed = true;
-        }
+        } else if(calcMode == CM_NIM) {
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }
         break;
 
       default:

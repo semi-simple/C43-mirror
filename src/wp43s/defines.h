@@ -73,7 +73,8 @@
 #define TT_BASE10                                  8
 #define TT_BASE16                                  9
 #define TT_INT                                    10
-#define TT_NOTHING                                11
+#define TT_FP                                     11
+#define TT_NOTHING                                12
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
@@ -594,6 +595,7 @@
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
+#define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)

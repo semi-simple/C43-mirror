@@ -278,8 +278,9 @@ size_t                 wp43sMemInBlocks;
   void program_main(void) {
     int key = 0;
     char charKey[3];
-    bool_t wp43sKbdLayout;
+    bool_t wp43sKbdLayout, inFastRefresh, seenKeyPress = 0;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
+    uint32_t previousRefresh;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
@@ -391,7 +392,9 @@ size_t                 wp43sMemInBlocks;
     backToDMCP = false;
 
     lcd_refresh();
-    nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
+    previousRefresh = sys_current_ms();
+    inFastRefresh = 0;
+    nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
     //runner_key_tout_init(0); // Enables fast auto repeat
 
     // Status flags:
@@ -449,6 +452,13 @@ size_t                 wp43sMemInBlocks;
         reset_auto_off();
       }
 
+      // Fetch the key
+      //  < 0 -> No key event
+      //  > 0 -> Key pressed
+      // == 0 -> Key released
+      //key = key_pop();
+      key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100);
+      //key = runner_get_key(&keyAutoRepeat);
       if(wp43sKbdLayout) {
         /////////////////////////////////////////////////
         // For key reassignment see:
@@ -481,14 +491,6 @@ size_t                 wp43sMemInBlocks;
         // 8: |  ADD |   0  |  DOT |  RUN | EXIT  |
         //    | 33:37| 34:34| 35:35| 36:36| 37:33 |
         //    +------+------+------+------+-------+
-        //
-        // Fetch the key
-        //  < 0 -> No key event
-        //  > 0 -> Key pressed
-        // == 0 -> Key released
-        //key = key_pop();
-        key = runner_get_key_delay(&keyAutoRepeat, 10, 50, 50, 100); // TODO: make the autorepeat faster
-        //key = runner_get_key(&keyAutoRepeat);
 
         //The switch instruction below is implemented as follows e.g. for the up arrow key on the WP43S layout:
         //  the output of keymap2layout for this key is UP 27:18 so we need the line:
@@ -533,29 +535,16 @@ size_t                 wp43sMemInBlocks;
           case 37: key = 33; break; // +
           default: {}
         }
-
-        //The 3 lines below to see in the top left screen corner the pressed keycode
-        //char sysLastKeyCh[5];
-        //sprintf(sysLastKeyCh, "c%02d", key);
-        //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
-
-        //The line below to emit a beep
-        //while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(220000); sys_delay(200); stop_buzzer();
       }
-      else {
-        // Fetch the key
-        //  < 0 -> No key event
-        //  > 0 -> Key pressed
-        // == 0 -> Key released
-        //key = key_pop();
-        key = runner_get_key_delay(&keyAutoRepeat, 10, 50, 50, 100); // TODO: make the autorepeat faster
-        //key = runner_get_key(&keyAutoRepeat);
+      //The 3 lines below to see in the top left screen corner the pressed keycode
+      //char sysLastKeyCh[5];
+      //sprintf(sysLastKeyCh, " %02d", key);
+      //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
+      //The line below to emit a beep
+      //while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(220000); sys_delay(200); stop_buzzer();
 
-        //The 3 lines below to see in the top left screen corner the pressed keycode
-        //char sysLastKeyCh[5];
-        //sprintf(sysLastKeyCh, " %02d", key);
-        //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
-      }
+      // If we have seen a key press, increase the refresh to pick up auto key repeats
+      seenKeyPress = (key > 0);
 
       if(keyAutoRepeat) {
         if(key == 27 || key == 32) { // UP or DOWN keys
@@ -616,9 +605,18 @@ size_t                 wp43sMemInBlocks;
         lcd_refresh();
       }
 
+      // Compute refresh period
+      if(showFunctionNameCounter > 0 || seenKeyPress) {
+        inFastRefresh = 1;
+        nextScreenRefresh = previousRefresh + FAST_SCREEN_REFRESH_PERIOD;
+      } else {
+        inFastRefresh = 0;
+      }
+
       uint32_t now = sys_current_ms();
       if(nextScreenRefresh <= now) {
-        nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;
+        previousRefresh = now;
+        nextScreenRefresh = previousRefresh + (inFastRefresh ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
         refreshLcd();
         lcd_refresh();
       }

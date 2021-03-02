@@ -454,7 +454,7 @@
 
     // Function name display
     if(showFunctionNameCounter>0) {
-      showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
+      showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
         showFunctionName(ITM_NOP, 0);

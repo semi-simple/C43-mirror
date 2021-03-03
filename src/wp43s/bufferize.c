@@ -288,7 +288,7 @@
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
+        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {
           tamTransitionSystem(TT_INT);
         }
         else if(tamFunction == ITM_toINT && item == ITM_alpha) {
@@ -296,6 +296,9 @@
         }
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
+        }
+        else if(tamFunction == ITM_toINT && item == ITM_REG_B) {
+          tamTransitionSystem(TT_CHB02);
         }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {
           tamTransitionSystem(TT_BASE16);
@@ -1340,6 +1343,11 @@
 
           case TT_FP :
             fnFp(NOPARAM);
+            leaveTamMode();
+            return;
+
+          case TT_CHB02 :
+            fnChangeBase(2);
             leaveTamMode();
             return;
 

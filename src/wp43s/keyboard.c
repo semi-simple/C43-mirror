@@ -468,11 +468,13 @@
 
       case ITM_UP:
         fnKeyUp(NOPARAM);
+        refreshScreen();
         keyActionProcessed = true;
         break;
 
       case ITM_DOWN:
         fnKeyDown(NOPARAM);
+        refreshScreen();
         keyActionProcessed = true;
         break;
 

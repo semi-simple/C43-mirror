@@ -305,6 +305,7 @@
 #define RESERVED_VARIABLE_PMT                   2025
 #define RESERVED_VARIABLE_PV                    2026
 #define LAST_RESERVED_VARIABLE                  2026
+#define INVALID_VARIABLE                        2027
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
@@ -513,6 +514,7 @@
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
 #define TI_DAY_OF_WEEK                            33
+#define TI_UNDEF_SOURCE_VAR                       34
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

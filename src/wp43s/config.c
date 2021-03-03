@@ -731,6 +731,11 @@ void fnReset(uint16_t confirmation) {
     ((dataBlock_t *)memPtr)->matrixColumns = 1;
     real34Zero(memPtr + 4);
 
+    allocateNamedVariable(STD_A, dtReal34, REAL34_SIZE);
+    uInt32ToReal34(100, REGISTER_REAL34_DATA(FIRST_NAMED_VARIABLE + 3));
+
+    allocateNamedVariable(STD_B, dtReal34, REAL34_SIZE);
+    uInt32ToReal34(222, REGISTER_REAL34_DATA(FIRST_NAMED_VARIABLE + 4));
 
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
@@ -786,6 +791,8 @@ void fnReset(uint16_t confirmation) {
     serialIOIconEnabled = false;
     printerIconEnabled = false;
     thereIsSomethingToUndo = false;
+    inputNamedVariable = false;
+    tamFnKeyInCatalog = false;
     shiftF = false;
     shiftG = false;
 

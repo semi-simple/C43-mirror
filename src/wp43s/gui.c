@@ -1427,16 +1427,18 @@
    ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
     alphaCase = AC_UPPER;
-    calcMode = CM_AIM;
     nextChar = NC_NORMAL;
 
-    liftStack();
+    if(!tamMode) {
+      calcMode = CM_AIM;
+      liftStack();
 
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
-    xCursor = 1;
-    yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = &standardFont;
-    cursorEnabled = true;
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_AIM_LINE + 6;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+    }
 
     if(softmenuStack[0].softmenuId == 0) { // MyMenu
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -1623,6 +1625,7 @@
    * \return void
    ***********************************************/
   void leaveTamMode(void) {
+    inputNamedVariable = false;
     tamMode = 0;
     catalog = CATALOG_NONE;
 

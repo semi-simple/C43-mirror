@@ -214,6 +214,7 @@
     lgCatalogSelection = 0;
     alphaSelectionTimer = 0;
     asmBuffer[0] = 0;
+    tamFnKeyInCatalog = 0;
   }
 
 
@@ -229,9 +230,8 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
-      if(calcMode == CM_AIM) {
+      if(calcMode == CM_AIM || (inputNamedVariable && (tamFnKeyInCatalog || !catalog))) {
         item = convertItemToSubOrSup(item, nextChar);
-
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
@@ -241,7 +241,7 @@
         }
       }
 
-      else if(catalog) {
+      if(calcMode != CM_AIM && catalog && !tamFnKeyInCatalog) {
         int32_t firstItem = 0, pos;
 
         if(item == ITM_BACKSPACE) {
@@ -272,7 +272,19 @@
       }
 
       else if(tamMode) {
-        if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
+        if(item == ITM_ENTER) {
+          tamTransitionSystem(TT_ENTER);
+        }
+        else if(inputNamedVariable) {
+          // Text added above, just transition to variable to get the text
+          if(stringGlyphLength(aimBuffer) > 6) {
+            tamTransitionSystem(TT_ENTER);
+          }
+          else {
+            tamTransitionSystem(TT_VARIABLE);
+          }
+        }
+        else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
@@ -292,15 +304,9 @@
           tamLetteredRegister = indexOfItems[item].param;
           tamTransitionSystem(TT_LETTER);
         }
-        /*else if(namedVariable) {
-          tamTransitionSystem(TT_VARIABLE);
-        }*/
         else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
           tamDigit = item - ITM_0;
           tamTransitionSystem(TT_DIGIT);
-        }
-        else if(item == ITM_ENTER) {
-          tamTransitionSystem(TT_ENTER);
         }
         else if(item == ITM_PERIOD) { // .
           if(tamFunction == ITM_GTO && transitionSystemState == 0) {
@@ -322,10 +328,10 @@
           tamTransitionSystem(TT_BACKSPACE);
         }
         else if(item == ITM_alpha) {
-          #ifdef PC_BUILD
-            moreInfoOnError("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
-          #endif // PC_BUILD
-          tamTransitionSystem(TT_NOTHING);
+          inputNamedVariable = true;
+          aimBuffer[0] = 0;
+          calcModeAim(NOPARAM);
+          tamTransitionSystem(TT_VARIABLE);
         }
         else if(item == ITM_0P || item == ITM_1P) {
           reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
@@ -345,7 +351,7 @@
         addItemToNimBuffer(item);
       }
 
-      else {
+      else if(calcMode != CM_AIM) {
         funcOK = false;
         return;
       }
@@ -1286,6 +1292,8 @@
 
           case TT_VARIABLE :
             if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+              transitionSystemState = 29;
             }
             return;
 
@@ -1377,6 +1385,8 @@
             return;
 
           case TT_VARIABLE :
+            sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            transitionSystemState = 30;
             return;
 
           case TT_DIGIT :
@@ -2231,6 +2241,86 @@
         }
         return;
 
+
+      //////////////////////////////
+      // OP '_
+      case 29 : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_VARIABLE :
+            if(aimBuffer[0] == 0) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            }
+            else {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+            }
+            return;
+
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
+            inputNamedVariable = 0;
+            transitionSystemState = 0;
+            return;
+
+          default : {}
+        }
+        return;
+
+      //////////////////////////////
+      // OPo '_
+      case 30 : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_VARIABLE :
+            if(aimBuffer[0] == 0) {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+            }
+            else {
+              sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+            }
+            return;
+
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
+            inputNamedVariable = 0;
+            transitionSystemState = 1;
+            return;
+
+          default : {}
+        }
+        return;
 
       //////////////////////////////
       // This should never happen

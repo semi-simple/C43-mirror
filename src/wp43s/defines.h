@@ -645,6 +645,14 @@
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
 
+#define ORTHOPOLY_HERMITE_H                        0
+#define ORTHOPOLY_HERMITE_HE                       1
+#define ORTHOPOLY_LAGUERRE_L                       2
+#define ORTHOPOLY_LAGUERRE_L_ALPHA                 3
+#define ORTHOPOLY_LEGENDRE_P                       4
+#define ORTHOPOLY_CHEBYSHEV_T                      5
+#define ORTHOPOLY_CHEBYSHEV_U                      6
+
 #define QF_NEWTON_F                                0
 #define QF_NEWTON_POISSON                          1
 #define QF_NEWTON_BINOMIAL                         2

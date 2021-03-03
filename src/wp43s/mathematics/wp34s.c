@@ -1726,3 +1726,125 @@ void WP34S_InverseComplexW(const real_t *xReal, const real_t *xImag, real_t *res
   expComplex(xReal, xImag, &p, &q, realContext);
   mulComplexComplex(&p, &q, xReal, xImag, resReal, resImag, realContext);
 }
+
+// Orthogonal Polynomials, common function
+void WP34S_OrthoPoly(uint16_t kind, const real_t *rX, const real_t *rN, const real_t *rParam, real_t *res, realContext_t *realContext) {
+  real_t a, b, c, d, i;
+  real_t rT0, rT1, incB;
+  real_t p, q;
+  bool_t incA = false, incC = false;
+
+  // ortho_default
+  if(realIsSpecial(rX) || (!realIsAnInteger(rN)) || realIsNegative(rN)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  if(realIsZero(rN)) {
+    realCopy(const_1, res);
+    return;
+  }
+  // Here we are free from the limitation of ISG since the code is ported to C.
+  //if(realCompareGreaterEqual(rN, const_1000)) {
+  //  realCopy(const_NaN, res);
+  //  return;
+  //}
+  realCopy(const_1, &rT0);
+	/* Now initialise everything else */
+  realCopy(const_2, &i);
+  realCopy(const_2, &d);
+  realCopy(const_1, &c);
+  realCopy(const_1, &b);
+  realCopy(rX, &rT1);
+  realMultiply(rX, const_2, &a, realContext);
+
+  // We must initialise this too
+  realCopy(const_0, &incB);
+
+  switch(kind) {
+  /**************************************************************************/
+  /* Legendre's Pn
+   */
+    case ORTHOPOLY_LEGENDRE_P:
+      realAdd(&a, rX, &a, realContext);
+      realMultiply(rX, const_2, &d, realContext);
+    	goto ortho_allinc;
+
+  /**************************************************************************/
+  /* Chebychev's Tn
+   */
+    case ORTHOPOLY_CHEBYSHEV_T:
+      break;
+
+  /**************************************************************************/
+  /* Chebychev's Un
+   */
+    case ORTHOPOLY_CHEBYSHEV_U:
+      realAdd(&rT1, rX, &rT1, realContext);
+      break;
+
+  /**************************************************************************/
+  /* Laguerre's Ln
+   */
+    case ORTHOPOLY_LAGUERRE_L:
+
+  /**************************************************************************/
+  /* Laguerre's Ln with parameter alpha
+   */
+    case ORTHOPOLY_LAGUERRE_L_ALPHA:
+      // laguerre_common
+      if(realIsSpecial(rParam) || realCompareLessEqual(rParam, const__1)) {
+        realCopy(const_NaN, res);
+        return;
+      }
+      realAdd(&b, rParam, &b, realContext);
+      realAdd(rParam, const_3, &a, realContext);
+      realSubtract(&a, rX, &a, realContext);
+      realAdd(rParam, const_1, &rT1, realContext);
+      realSubtract(&rT1, rX, &rT1, realContext);
+    ortho_allinc:
+      incA = true;
+      realCopy(const_1, &incB);
+      incC = true;
+      break;
+
+  /**************************************************************************/
+  /* Hermite's He (Hn)
+   */
+    case ORTHOPOLY_HERMITE_HE:
+      realCopy(rX, &a);
+      realCopy(const_1, &incB);
+      break;
+
+  /**************************************************************************/
+  /* Hermite's H  (Hnp)
+   */
+    case ORTHOPOLY_HERMITE_H:
+      realAdd(&rT1, rX, &rT1, realContext);
+      realCopy(const_2, &b);
+      realCopy(const_2, &incB);
+      break;
+  }
+
+  /**************************************************************************/
+  /* Common evaluation code
+   * Everything is assumed properly set up at this point.
+   */
+  // ortho_common
+  while(realCompareLessEqual(&i, rN)) { // ortho_loop
+    realMultiply(&rT1, &a, &p, realContext);
+    realMultiply(&rT0, &b, &q, realContext);
+    realCopy(&rT1, &rT0);
+    realSubtract(&p, &q, &rT1, realContext);
+
+    if(incC) {
+      realAdd(&c, const_1, &c, realContext);
+      realDivide(&rT1, &c, &rT1, realContext);
+    } // ortho_noC
+    if(incA) {
+      realAdd(&a, &d, &a, realContext);
+    } // ortho_noA
+    realAdd(&b, &incB, &b, realContext);
+    realAdd(&i, const_1, &i, realContext);
+  }
+  realCopy(&rT1, res);
+}

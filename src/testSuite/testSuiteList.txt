@@ -247,6 +247,14 @@ zeta
 bn
 bn_star
 
+hermite
+hermite_p
+laguerre
+laguerre_alpha
+legendre
+chebyshev_t
+chebyshev_u
+
 w_positive
 w_negative
 w_inverse

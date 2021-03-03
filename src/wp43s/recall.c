@@ -29,7 +29,7 @@
  * \return void
  ***********************************************/
 void fnRecall(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     if(REGISTER_X <= regist && regist <= getStackTop()) {
       copySourceRegisterToDestRegister(regist, TEMP_REGISTER_1);
       liftStack();
@@ -43,12 +43,6 @@ void fnRecall(uint16_t regist) {
       }
     }
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecall:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -72,7 +66,7 @@ void fnLastX(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnRecallAdd(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -86,12 +80,6 @@ void fnRecallAdd(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecallPlus:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -103,7 +91,7 @@ void fnRecallAdd(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallSub(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -117,12 +105,6 @@ void fnRecallSub(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecallSub:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -134,7 +116,7 @@ void fnRecallSub(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallMult(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -148,12 +130,6 @@ void fnRecallMult(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecallMult:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -165,7 +141,7 @@ void fnRecallMult(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallDiv(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
@@ -179,12 +155,6 @@ void fnRecallDiv(uint16_t regist) {
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecallDiv:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -196,16 +166,10 @@ void fnRecallDiv(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallMin(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     registerMin(REGISTER_X, regist, REGISTER_X);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnRecallMin:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 
@@ -217,16 +181,10 @@ void fnRecallMin(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallMax(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
     registerMax(REGISTER_X, regist, REGISTER_X);
   }
-  #ifdef PC_BUILD
-    else {
-      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
-      moreInfoOnError("In function fnReallMax:", errorMessage, "is not defined!", NULL);
-    }
-  #endif // PC_BUILD
 }
 
 

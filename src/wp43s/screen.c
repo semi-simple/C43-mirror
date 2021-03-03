@@ -829,16 +829,16 @@ void invert_Pixel(uint32_t x, uint32_t y) {           //JM
           return;
         }
 
-        pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
-        for(line=y; line<endY; line++) {
-          for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
-            *pixel = pixelColor;
-          }
+      pixelColor = (val == LCD_SET_VALUE ? OFF_PIXEL : ON_PIXEL);
+      for(line=y; line<endY; line++) {
+        for(col=x, pixel=screenData + line*screenStride + x; col<endX; col++, pixel++) {
+          *pixel = pixelColor;
         }
+      }
 
       screenChange = true;
     }
-  #endif //DMCP_BUILD
+  #endif // !DMCP_BUILD
 
 
 
@@ -996,11 +996,12 @@ uint8_t  displaymode = stdNoEnlarge;
    * \param[in] videoMode videoMode_t  Video mode normal or reverse
    * \param[in] showLeadingCols bool_t Display the leading empty columns
    * \param[in] showEndingCols bool_t  Display the ending empty columns
-   * \return int32_t                   x coordinate for the next glyph
+   * \return uint32_t                  x coordinate for the next glyph
    ***********************************************/
   uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
     return showGlyphCode(charCodeFromString(ch, 0), font, x, y, videoMode, showLeadingCols, showEndingCols);
   }
+
 
 
   /********************************************//**
@@ -1067,7 +1068,6 @@ uint8_t  displaymode = stdNoEnlarge;
         slc = true;
         sec = true;
       }
-
 
       x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec);
     }
@@ -1349,16 +1349,16 @@ void force_refresh(void) {
 
 
 
-/********************************************//**
- * \brief Displays the function of the
- * currently pressed button in the
- * upper left corner of the T register line
- *
- * \param[in] item     int16_t  Item ID to show
- * \param[in] counter  int8_t   number of 1/10 seconds until NOP
- * \return void
- ***********************************************/
-void showFunctionName(int16_t item, int16_t delayInMs) {
+  /********************************************//**
+   * \brief Displays the function of the
+   * currently pressed button in the
+   * upper left corner of the T register line
+   *
+   * \param[in] item     int16_t  Item ID to show
+   * \param[in] counter  int8_t   number of 1/10 seconds until NOP
+   * \return void
+   ***********************************************/
+  void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
 
   char padding[20];                                          //JM
@@ -1637,6 +1637,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
+      else if(temporaryInformation == TI_UNDEF_SOURCE_VAR && regist == REGISTER_X) {
+        showString("Undefined source variable", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
 
 // NEW SHOW
                                                                          //JMSHOW vv
@@ -1821,9 +1825,36 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
-      else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM) {
+        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tamMode) {
 
+#ifdef WWW
+          if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+            xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+            yCursor = Y_POSITION_OF_NIM_LINE + 6;
+            cursorFont = &standardFont;
+          }
+          else {
+            w = stringByteLength(aimBuffer) + 1;
+            xcopy(tmpString,        aimBuffer, w);
+            xcopy(tmpString + 1500, aimBuffer, w);
+            while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH - 1) {
+              w = stringLastGlyph(tmpString);
+              tmpString[w] = 0;
+            }
 
+            if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) >= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+              btnClicked(NULL, "16"); // back space
+            }
+            else {
+              showString(tmpString, &standardFont, 1, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
+
+              xCursor = showString(tmpString + 1500 + w, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+              yCursor = Y_POSITION_OF_NIM_LINE + 18;
+              cursorFont = &standardFont;
+            }
+          }
+        }
+#endif //WWW
 
 
   //JMCURSOR vv

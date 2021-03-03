@@ -4241,17 +4241,19 @@ void setupUI(void) {
     }
 
     alphaCase = AC_UPPER;
-    calcMode = CM_AIM;
     nextChar = NC_NORMAL;
     numLock = false;
 
-    liftStack();
+    if(!tamMode) {
+      calcMode = CM_AIM;
+      liftStack();
 
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
-    xCursor = 1;
-    yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = &standardFont;
-    cursorEnabled = true;
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_AIM_LINE + 6;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+    }
 
     if(softmenuStack[0].softmenuId == 0) { // MyMenu
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -4456,6 +4458,7 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### leaveTamMode"); jm_show_comment(tmp);
     #endif //PC_BUILD
+    inputNamedVariable = false;
     tamMode = 0;
     catalog = CATALOG_NONE;
 

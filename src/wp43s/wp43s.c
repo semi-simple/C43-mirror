@@ -281,7 +281,7 @@ size_t                 wp43sMemInBlocks;
     char charKey[3];
     bool_t wp43sKbdLayout, inFastRefresh = 0, inDownUpPress = 0, repeatDownUpPress = 0;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
-    uint32_t previousRefresh, nextAutoRepeat = 0;
+    uint32_t now, previousRefresh, nextAutoRepeat = 0;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
@@ -395,6 +395,7 @@ size_t                 wp43sMemInBlocks;
     lcd_refresh();
     previousRefresh = sys_current_ms();
     nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
+    now = sys_current_ms();
     //runner_key_tout_init(0); // Enables fast auto repeat
 
     // Status flags:
@@ -409,17 +410,19 @@ size_t                 wp43sMemInBlocks;
       }
       else if((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
         CLR_ST(STAT_RUNNING);
-        sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - sys_current_ms()));  // wake up for screen refresh
+        sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - now));  // wake up for screen refresh
         if(inDownUpPress) {
-          sys_timer_start(TIMER_IDX_AUTO_REPEAT, max(1, nextAutoRepeat - sys_current_ms())); // wake up for key auto-repeat
+          sys_timer_start(TIMER_IDX_AUTO_REPEAT, max(1, nextAutoRepeat - now)); // wake up for key auto-repeat
         }
         sys_sleep();
         sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
         if(inDownUpPress) {
-          repeatDownUpPress = sys_timer_timeout(TIMER_IDX_AUTO_REPEAT);
+          repeatDownUpPress = (sys_current_ms() > nextAutoRepeat);
           sys_timer_disable(TIMER_IDX_AUTO_REPEAT);
         }
       }
+
+      now = sys_current_ms();
 
       // Wakeup in off state or going to sleep
       if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
@@ -453,8 +456,6 @@ size_t                 wp43sMemInBlocks;
           lcd_forced_refresh(); // Just redraw from LCD buffer
         }
       }
-
-      uint32_t now = sys_current_ms();
 
       // Key is ready -> clear auto off timer
       if(!key_empty()) {
@@ -565,6 +566,7 @@ size_t                 wp43sMemInBlocks;
       }
       else if(key == 0) {
         inDownUpPress = 0;
+        repeatDownUpPress = 0;
         nextAutoRepeat = 0;
       }
       else if(repeatDownUpPress) {
@@ -634,7 +636,7 @@ size_t                 wp43sMemInBlocks;
       }
 
       // Compute refresh period
-      if(showFunctionNameCounter > 0 || inDownUpPress) {
+      if(showFunctionNameCounter > 0) {
         inFastRefresh = 1;
         nextScreenRefresh = previousRefresh + FAST_SCREEN_REFRESH_PERIOD;
       } else {

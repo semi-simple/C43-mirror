@@ -292,6 +292,12 @@
 		<Unit filename="src/testSuite/changeSign.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/chebyshev_t.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chebyshev_u.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/chi2_i.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -445,6 +451,12 @@
 		<Unit filename="src/testSuite/gd.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/hermite.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hermite_p.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/idiv.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -472,7 +484,16 @@
 		<Unit filename="src/testSuite/jToD.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/laguerre.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/laguerre_alpha.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/lcm.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/legendre.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ln.txt">
@@ -2061,6 +2082,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/neighb.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ortho_polynom.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ortho_polynom.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

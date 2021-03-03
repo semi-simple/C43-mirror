@@ -93,6 +93,7 @@
 #include "modulo.h"
 #include "multiplication.h"
 #include "neighb.h"
+#include "ortho_polynom.h"
 #include "parallel.h"
 #include "pcg_basic.h"
 #include "percent.h"

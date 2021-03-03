@@ -173,14 +173,6 @@
               return;
             }
           }
-          else if(calcMode == CM_NORMAL && catalog) {
-            //leaveAsmMode();
-          }
-          else if(calcMode == CM_AIM && catalog) {
-            addItemToBuffer(item);
-            refreshScreen();
-            return;
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
@@ -195,8 +187,14 @@
             addItemToBuffer(item);
             tamFnKeyInCatalog = 0;
           }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+            if(calcMode == CM_NORMAL) {
+              fnAim(NOPARAM);
+            }
+            addItemToBuffer(item);
           }
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != ITM_CC) {

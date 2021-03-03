@@ -934,4 +934,21 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
        || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
   }
+
+  bool_t isAlphabeticSoftmenu(void) {
+    int16_t menuItem = softmenu[softmenuStack[0].softmenuId].menuItem;
+    switch(menuItem) {
+      case -MNU_ALPHAINTL:
+      case -MNU_ALPHAintl:
+      case -MNU_ALPHA_OMEGA:
+      case -MNU_alpha_omega:
+      case -MNU_ALPHAMATH:
+      case -MNU_MyAlpha:
+      case -MNU_ALPHADOT:
+        return true;
+      default:
+        return false;
+    }
+  }
+
 #endif // !TESTSUITE_BUILD

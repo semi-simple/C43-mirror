@@ -866,6 +866,8 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     else if(softmenuStack[0].softmenuId == 1 && calcMode != CM_AIM) { // MyAlpha displayed and not in AIM
       softmenuStack[0].softmenuId = 0; // MyMenu
     }
+
+    enterAsmModeIfMenuIsACatalog(softmenu[softmenuStack[0].softmenuId].menuItem);
   }
 
 

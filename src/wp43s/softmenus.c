@@ -1861,6 +1861,9 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     } 
                                                               //JM ^^
 //        softmenuStack[0].firstItem = 0;
+
+    enterAsmModeIfMenuIsACatalog(softmenu[softmenuStack[0].softmenuId].menuItem);
+
     #ifdef PC_BUILD
       jm_show_calc_state("popped");
       char tmp[300]; sprintf(tmp,">>> ...... popped into [0]: Id:%d Name:%s\n",softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName); jm_show_comment(tmp);

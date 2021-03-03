@@ -4233,13 +4233,15 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
     #endif //PC_BUILD
+
+if(!tamMode) {
     if(!SH_BASE_AHOME) {
         showSoftmenu(-MNU_MyAlpha);
     } else
     if(SH_BASE_AHOME) {
         showSoftmenu(-MNU_ALPHA);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     }
-
+}
     alphaCase = AC_UPPER;
     nextChar = NC_NORMAL;
     numLock = false;

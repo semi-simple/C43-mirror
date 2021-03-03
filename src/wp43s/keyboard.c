@@ -672,6 +672,7 @@ bool_t lastshiftG = false;
 
 #ifndef TESTSUITE_BUILD
 
+/*
 //TOFIX TOCHECK 2021-03-03 JM
   static void processAimInput1(int16_t item) {
     if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
@@ -694,7 +695,7 @@ bool_t lastshiftG = false;
       keyActionProcessed = true;
     }
   }
-
+*/
 
 
 bool_t lowercaseselected;
@@ -953,9 +954,9 @@ bool_t lowercaseselected;
                 break;
 
 
-              case CM_AIM: {
-              processAimInput(item); //TOFIX TOCHECK
-              break;
+              case CM_AIM:
+                processAimInput(item);
+                break;
 
               case CM_NIM:
                 keyActionProcessed = true;
@@ -1029,7 +1030,6 @@ bool_t lowercaseselected;
 
                   keyActionProcessed = true;
                   break;
-                }
 
             case CM_FLAG_BROWSER:
             case CM_FONT_BROWSER:
@@ -1605,7 +1605,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
             ((menuId == 0) && (softmenu[menuId].numItems<=18)) ||
             ((menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS) && (softmenu[menuId].numItems<=18)) );
 
-    if(activatescroll)  { //JMSHOW vv
+    if(activatescroll && !tamMode)  { //JMSHOW vv
       fnShow_SCROLL(1); 
       return;
     }                              //JMSHOW ^^
@@ -1720,7 +1720,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           ((menuId == 0) && jm_NO_BASE_SCREEN) ||
           ((menuId == 0) && (softmenu[menuId].numItems<=18)) ||
           ((menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS) && (softmenu[menuId].numItems<=18)) );
-    if(activatescroll) { //JMSHOW vv
+    if(activatescroll && !tamMode) { //JMSHOW vv
       fnShow_SCROLL(2);
       return;
     }                             //JMSHOW ^^

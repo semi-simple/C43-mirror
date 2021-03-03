@@ -275,25 +275,25 @@ void kill_ASB_icon(void) {
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
-      }
-      else {
-        //JMCURSOR vv ADD THE CHARACTER MID-STRING =======================================================
-        uint16_t ix = 0; 
-        uint16_t in = 0;
-        while (ix<T_cursorPos && in<T_cursorPos) {              //search the ix position in aimBuffer before the cursor
-          in = stringNextGlyph(aimBuffer, in);                  //find the in position in aimBuffer which is then the cursor position
-          ix++;  
         }
-        T_cursorPos = in;
-        char ixaa[AIM_BUFFER_LENGTH];                           //prepare temporary aimBuffer
-        xcopy(ixaa, aimBuffer,in);                              //copy everything up to the cursor position
-        ixaa[in]=0;                                             //stop new buffer at cursor position to be able to insert new character 
-        strcat(ixaa,indexOfItems[item].itemSoftmenuName);       //add new character
-        strcat(ixaa,aimBuffer + in);                            //copy rest of the aimbuffer
-        strcpy(aimBuffer,ixaa);                                 //return temporary string to aimBuffer
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
-        //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
-        // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+        else {
+          //JMCURSOR vv ADD THE CHARACTER MID-STRING =======================================================
+          uint16_t ix = 0; 
+          uint16_t in = 0;
+          while (ix<T_cursorPos && in<T_cursorPos) {              //search the ix position in aimBuffer before the cursor
+            in = stringNextGlyph(aimBuffer, in);                  //find the in position in aimBuffer which is then the cursor position
+            ix++;  
+          }
+          T_cursorPos = in;
+          char ixaa[AIM_BUFFER_LENGTH];                           //prepare temporary aimBuffer
+          xcopy(ixaa, aimBuffer,in);                              //copy everything up to the cursor position
+          ixaa[in]=0;                                             //stop new buffer at cursor position to be able to insert new character 
+          strcat(ixaa,indexOfItems[item].itemSoftmenuName);       //add new character
+          strcat(ixaa,aimBuffer + in);                            //copy rest of the aimbuffer
+          strcpy(aimBuffer,ixaa);                                 //return temporary string to aimBuffer
+          T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
+          //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
+          // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
         }
       }
 
@@ -1225,7 +1225,7 @@ void kill_ASB_icon(void) {
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);
-          lastIntegerBase = 0;                                                      //JMNIM
+          lastIntegerBase = 0;                                             //JMNIM
           fnRefreshState();                                                //JMNIM
         }
 

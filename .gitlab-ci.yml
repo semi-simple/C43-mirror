@@ -5,6 +5,8 @@ build:
   artifacts:
     paths:
       - wp43s
+  tags:
+    - macos
 
 # run tests using the binary built before
 #test:

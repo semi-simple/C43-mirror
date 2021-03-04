@@ -173,14 +173,6 @@
               return;
             }
           }
-          else if(calcMode == CM_NORMAL && catalog) {
-            //leaveAsmMode();
-          }
-          else if(calcMode == CM_AIM && catalog) {
-            addItemToBuffer(item);
-            refreshScreen();
-            return;
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
@@ -195,8 +187,14 @@
             addItemToBuffer(item);
             tamFnKeyInCatalog = 0;
           }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+            if(calcMode == CM_NORMAL) {
+              fnAim(NOPARAM);
+            }
+            addItemToBuffer(item);
           }
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != ITM_CC) {
@@ -206,6 +204,9 @@
                   setSystemFlag(FLAG_ASLIFT);
                 }
               }
+            }
+            if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
+              closeAim();
             }
 
             if(lastErrorCode == 0) {
@@ -826,21 +827,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_AIM:
         if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
-          calcModeNormal();
-
-          if(aimBuffer[0] == 0) {
-            undo();
-          }
-          else {
-            int16_t len = stringByteLength(aimBuffer) + 1;
-
-            reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-
-            xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
-            aimBuffer[0] = 0;
-
-            setSystemFlag(FLAG_ASLIFT);
-          }
+          closeAim();
         }
         else {
           popSoftmenu();

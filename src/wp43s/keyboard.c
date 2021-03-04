@@ -179,13 +179,12 @@
             return;
           }
 
+          // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+          // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+          // Use this variable to distinguish between the two
+          fnKeyInCatalog = 1;
           if(tamMode) {
-            // If we are in the catalog in TAM then a normal key press should affect the Alpha Selection Buffer to choose
-            // an item from the catalog, but a function key press should put the item in the TAM buffer
-            // Use this variable to distinguish between the two
-            tamFnKeyInCatalog = 1;
             addItemToBuffer(item);
-            tamFnKeyInCatalog = 0;
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
@@ -214,6 +213,7 @@
               runFunction(item);
             }
           }
+          fnKeyInCatalog = 0;
         }
       }
 

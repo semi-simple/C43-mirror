@@ -792,7 +792,7 @@ void fnReset(uint16_t confirmation) {
     printerIconEnabled = false;
     thereIsSomethingToUndo = false;
     inputNamedVariable = false;
-    tamFnKeyInCatalog = false;
+    fnKeyInCatalog = false;
     shiftF = false;
     shiftG = false;
 

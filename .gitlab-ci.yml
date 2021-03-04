@@ -1,1 +1,15 @@
+image: gcc
 
+build:
+  stage: build
+  script:
+    - make
+  artifacts:
+    paths:
+      - wp43s
+
+# run tests using the binary built before
+#test:
+#  stage: test
+#  script:
+#    - ./runmytests.sh

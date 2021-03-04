@@ -1,6 +1,7 @@
 macOS:
   stage: build
   script:
+    - make mrproper
     - make
   artifacts:
     paths:
@@ -23,6 +24,8 @@ dm42:
 testSuite:
   stage: test
   script:
+    - make mrproper
     - make testSuite
+    - ./testSuite
   tags:
     - testSuite

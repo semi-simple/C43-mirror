@@ -251,7 +251,7 @@
         // NOP if not a single character input for search
         // or if we already have two characters in the search buffer
         else if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1 &&
-                ((asmBuffer[0] & 0x80) ? lgCatalogSelection < 2: lgCatalogSelection < 1)) {
+                (lgCatalogSelection < ((asmBuffer[0] & 0x80) ? 3 : 2))) {
           int32_t pos = lgCatalogSelection++;
           if(asmBuffer[pos] != 0) {
             pos++;

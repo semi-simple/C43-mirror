@@ -214,7 +214,7 @@
     lgCatalogSelection = 0;
     alphaSelectionTimer = 0;
     asmBuffer[0] = 0;
-    tamFnKeyInCatalog = 0;
+    fnKeyInCatalog = 0;
   }
 
 
@@ -230,7 +230,7 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
-      if(calcMode == CM_AIM || (inputNamedVariable && (tamFnKeyInCatalog || !catalog))) {
+      if((fnKeyInCatalog || !catalog) && (calcMode == CM_AIM || inputNamedVariable)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
@@ -241,34 +241,32 @@
         }
       }
 
-      if(calcMode != CM_AIM && catalog && !tamFnKeyInCatalog) {
-        int32_t firstItem = 0, pos;
+      if(catalog && !fnKeyInCatalog) {
 
         if(item == ITM_BACKSPACE) {
           calcModeNormal();
           return;
         }
 
-        else {
-          if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1) {
-            pos = lgCatalogSelection++;
-            if(asmBuffer[pos] != 0) {
-              pos++;
-            }
-
-            asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
-            if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
-              asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
-            }
-            asmBuffer[pos] = 0;
-
-            firstItem = findFirstItem(asmBuffer);
+        // NOP if not a single character input for search
+        // or if we already have two characters in the search buffer
+        else if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1 &&
+                ((asmBuffer[0] & 0x80) ? lgCatalogSelection < 2: lgCatalogSelection < 1)) {
+          int32_t pos = lgCatalogSelection++;
+          if(asmBuffer[pos] != 0) {
+            pos++;
           }
-        }
 
-        softmenuStack[0].firstItem = firstItem;
-        setCatalogLastPos();
-        alphaSelectionTimer = getUptimeMs();
+          asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
+          if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
+            asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
+          }
+          asmBuffer[pos] = 0;
+
+          softmenuStack[0].firstItem = findFirstItem(asmBuffer);
+          setCatalogLastPos();
+          alphaSelectionTimer = getUptimeMs();
+        }
       }
 
       else if(tamMode) {

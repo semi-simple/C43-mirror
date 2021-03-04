@@ -25,6 +25,4 @@ testSuite:
   script:
     - make testSuite
   tags:
-    - macos
-    - linux
-    - windows
+    - testSuite

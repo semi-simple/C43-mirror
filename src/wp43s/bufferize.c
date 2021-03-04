@@ -2811,4 +2811,23 @@ if(!eRPN)    setSystemFlag(FLAG_ASLIFT);
       }
     }
   }
+
+  void closeAim(void) {
+    calcModeNormal();
+    popSoftmenu();
+
+    if(aimBuffer[0] == 0) {
+      undo();
+    }
+    else {
+      int16_t len = stringByteLength(aimBuffer) + 1;
+
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+
+      xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
+      aimBuffer[0] = 0;
+
+      setSystemFlag(FLAG_ASLIFT);
+    }
+  }
 #endif // TESTSUITE_BUILD

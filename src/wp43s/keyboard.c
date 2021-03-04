@@ -234,14 +234,6 @@ bool_t lastshiftG = false;
               }
             }
           }
-          else if(calcMode == CM_NORMAL && catalog) {
-            //leaveAsmMode();
-          }
-          else if(calcMode == CM_AIM && catalog) {
-            addItemToBuffer(item);
-            refreshScreen();
-            return;
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
@@ -266,7 +258,7 @@ bool_t lastshiftG = false;
               addItemToBuffer(item);
               tamFnKeyInCatalog = 0;
             }
-            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
               addItemToNimBuffer(item);
             }
             else if(calcMode == CM_NIM && item == ITM_i) {    //JMvv To make DIGITS menu's i work like HP35S' i
@@ -274,15 +266,24 @@ bool_t lastshiftG = false;
               addItemToNimBuffer(item);              
             }                                                 //JM^^
 
+            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+              if(calcMode == CM_NORMAL) {
+                fnAim(NOPARAM);
+              }
+              addItemToBuffer(item);
+            }
             else if(item > 0) { // function
               if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
                 closeNim();     
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
                     setSystemFlag(FLAG_ASLIFT);
-                  }
                 }
               }
+            }
+            if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
+              closeAim();
+            }
 
               if(lastErrorCode == 0) {
                 temporaryInformation = TI_NO_INFO;
@@ -953,10 +954,9 @@ bool_t lowercaseselected;
                 }
                 break;
 
-
-              case CM_AIM:
-                processAimInput(item);
-                break;
+            case CM_AIM:
+              processAimInput(item);
+              break;
 
               case CM_NIM:
                 keyActionProcessed = true;
@@ -1028,8 +1028,8 @@ bool_t lowercaseselected;
                 }
               }
 
-                  keyActionProcessed = true;
-                  break;
+              keyActionProcessed = true;
+              break;
 
             case CM_FLAG_BROWSER:
             case CM_FONT_BROWSER:
@@ -1329,28 +1329,14 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_AIM:
+//TOFIX
         if(tmp1 == -MNU_ALPHA || tmp1 == -MNU_T_EDIT) {  //JM
           if(tmp1 == -MNU_T_EDIT && tmp2 == -MNU_ALPHA && tmp3 == -MNU_XXEQ) {popSoftmenu();}       //JM auto double pop
           softmenuStack[0].softmenuId = 1;               //JM
         }                                                //JM
 
         if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
-          popSoftmenu(); //JM
-          calcModeNormal();
-
-          if(aimBuffer[0] == 0) {
-            undo();
-          }
-          else {
-            int16_t len = stringByteLength(aimBuffer) + 1;
-
-            reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-
-            xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
-            aimBuffer[0] = 0;
-
-            setSystemFlag(FLAG_ASLIFT);
-          }
+          closeAim();
         }
         else {
           popSoftmenu();

@@ -279,9 +279,9 @@ size_t                 wp43sMemInBlocks;
   void program_main(void) {
     int key = 0;
     char charKey[3];
-    bool_t wp43sKbdLayout, inFastRefresh, seenKeyPress = 0;
+    bool_t wp43sKbdLayout, inFastRefresh = 0, inDownUpPress = 0, repeatDownUpPress = 0;
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
-    uint32_t previousRefresh;
+    uint32_t now, previousRefresh, nextAutoRepeat = 0;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
@@ -394,8 +394,8 @@ size_t                 wp43sMemInBlocks;
 
     lcd_refresh();
     previousRefresh = sys_current_ms();
-    inFastRefresh = 0;
     nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
+    now = sys_current_ms();
     //runner_key_tout_init(0); // Enables fast auto repeat
 
     // Status flags:
@@ -410,10 +410,19 @@ size_t                 wp43sMemInBlocks;
       }
       else if((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
         CLR_ST(STAT_RUNNING);
-        sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - sys_current_ms()));  // wake up for screen refresh
+        sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - now));  // wake up for screen refresh
+        if(inDownUpPress) {
+          sys_timer_start(TIMER_IDX_AUTO_REPEAT, max(1, nextAutoRepeat - now)); // wake up for key auto-repeat
+        }
         sys_sleep();
         sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
+        if(inDownUpPress) {
+          repeatDownUpPress = (sys_current_ms() > nextAutoRepeat);
+          sys_timer_disable(TIMER_IDX_AUTO_REPEAT);
+        }
       }
+
+      now = sys_current_ms();
 
       // Wakeup in off state or going to sleep
       if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
@@ -457,9 +466,15 @@ size_t                 wp43sMemInBlocks;
       //  < 0 -> No key event
       //  > 0 -> Key pressed
       // == 0 -> Key released
-      //key = key_pop();
-      key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100);
+      key = key_pop();
+
+      //key = runner_get_key_delay(&keyAutoRepeat,
+      //                           50,                            // timeout - this should be the fastest period between loops
+      //                           KEY_AUTOREPEAT_FIRST_PERIOD,  // time before the first autorepeat
+      //                           KEY_AUTOREPEAT_PERIOD,        // time between subsequent autorepeats
+      //                           KEY_AUTOREPEAT_FIRST_PERIOD); // should be the same as time before first autorepeat
       //key = runner_get_key(&keyAutoRepeat);
+
       if(wp43sKbdLayout) {
         /////////////////////////////////////////////////
         // For key reassignment see:
@@ -544,18 +559,32 @@ size_t                 wp43sMemInBlocks;
       //The line below to emit a beep
       //while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(220000); sys_delay(200); stop_buzzer();
 
-      // If we have seen a key press, increase the refresh to pick up auto key repeats
-      seenKeyPress = (key > 0);
-
-      if(keyAutoRepeat) {
-        if(key == 27 || key == 32) { // UP or DOWN keys
-          //beep(2200, 50);
-          key = 0; // to trigger btnReleased
-        }
-        else {
-          key = -1;
-        }
+      // Increase the refresh rate if we are in an UP/DOWN key press so we pick up auto key repeats
+      if(key == 27 || key == 32) {
+        inDownUpPress = 1;
+        nextAutoRepeat = now + KEY_AUTOREPEAT_FIRST_PERIOD;
       }
+      else if(key == 0) {
+        inDownUpPress = 0;
+        repeatDownUpPress = 0;
+        nextAutoRepeat = 0;
+      }
+      else if(repeatDownUpPress) {
+        keyAutoRepeat = 1;
+        key = 0;
+        nextAutoRepeat = now + KEY_AUTOREPEAT_PERIOD;
+        repeatDownUpPress = 0;
+      }
+
+      //if(keyAutoRepeat) {
+      //  if(key == 27 || key == 32) { // UP or DOWN keys
+      //    //beep(2200, 50);
+      //    key = 0; // to trigger btnReleased
+      //  }
+      //  else {
+      //    key = -1;
+      //  }
+      //}
 
       if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
         shiftF = false;
@@ -594,7 +623,7 @@ size_t                 wp43sMemInBlocks;
         btnPressed(charKey);
         lcd_refresh();
       }
-      else if(key == 0) { // Autorepeat
+      else if(key == 0) { // Autorepeat of UP/DOWN or key released
         if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
           btnFnReleased(charKey);
         }
@@ -607,14 +636,13 @@ size_t                 wp43sMemInBlocks;
       }
 
       // Compute refresh period
-      if(showFunctionNameCounter > 0 || seenKeyPress) {
+      if(showFunctionNameCounter > 0) {
         inFastRefresh = 1;
         nextScreenRefresh = previousRefresh + FAST_SCREEN_REFRESH_PERIOD;
       } else {
         inFastRefresh = 0;
       }
 
-      uint32_t now = sys_current_ms();
       if(nextScreenRefresh <= now) {
         previousRefresh = now;
         nextScreenRefresh = previousRefresh + (inFastRefresh ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);

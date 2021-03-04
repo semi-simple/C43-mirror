@@ -289,6 +289,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGammaQ                   (uint16_t unusedButMandatoryParameter) {}
   void fnGammaXyLower             (uint16_t unusedButMandatoryParameter) {}
   void fnGammaXyUpper             (uint16_t unusedButMandatoryParameter) {}
+  void fnBessel                   (uint16_t unusedButMandatoryParameter) {}
   void fnZeta                     (uint16_t unusedButMandatoryParameter) {}
   void fnBn                       (uint16_t unusedButMandatoryParameter) {}
   void fnBnStar                   (uint16_t unusedButMandatoryParameter) {}
@@ -2092,7 +2093,7 @@ const item_t indexOfItems[] = {
 /* 1489 */  { fnGammaQ,                    NOPARAM,                     "I" STD_GAMMA STD_SUB_q,                       "I" STD_GAMMA STD_SUB_q,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1490 */  { itemToBeCoded,               NOPARAM,                     "I+",                                          "I+",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1491 */  { itemToBeCoded,               NOPARAM,                     "I-",                                          "I-",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1492 */  { itemToBeCoded,               NOPARAM,                     "J" STD_SUB_y "(x)",                           "J" STD_SUB_y "(x)",                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1492 */  { fnBessel,                    NOPARAM,                     "J" STD_SUB_y "(x)",                           "J" STD_SUB_y "(x)",                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1493 */  { itemToBeCoded,               NOPARAM,                     "J+",                                          "J+",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1494 */  { itemToBeCoded,               NOPARAM,                     "J-",                                          "J-",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1495 */  { fnSetFirstGregorianDay,      NOPARAM,                     "J/G",                                         "J/G",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

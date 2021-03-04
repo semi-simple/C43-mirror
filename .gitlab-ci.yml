@@ -1,4 +1,4 @@
-build:
+macOS:
   stage: build
   script:
     - make
@@ -8,8 +8,23 @@ build:
   tags:
     - macos
 
-# run tests using the binary built before
-#test:
-#  stage: test
-#  script:
-#    - ./runmytests.sh
+dm42:
+  stage: build
+  script:
+    - cd DMCP_build
+    - ./build_GMP_static_ARM_library
+    - ./build_WP43S.pgm_for_DM42_hardware
+  artifacts:
+    paths:
+      - DMCP_build/build/WP43S.pgm
+  tags:
+    - dm42
+
+testSuite:
+  stage: test
+  script:
+    - make testSuite
+  tags:
+    - macos
+    - linux
+    - windows

@@ -23,51 +23,109 @@
 
 
 static bool_t besselGetParam(calcRegister_t regist, real_t *r, real_t *i, realContext_t *realContext) {
-  switch(getRegisterDataType(regist)) {
-    case dtComplex34:
-      real34ToReal(REGISTER_REAL34_DATA(regist), r);
-      real34ToReal(REGISTER_IMAG34_DATA(regist), i);
-      return true;
-    case dtReal34:
-      if(getRegisterAngularMode(regist) == AM_NONE) {
-        real34ToReal(REGISTER_REAL34_DATA(regist), r);
-        realCopy(const_0, i);
-        return true;
-      }
-      break;
-    case dtLongInteger:
-      convertLongIntegerRegisterToReal(regist, r, realContext);
-      realCopy(const_0, i);
-      return true;
-  }
-  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-    sprintf(errorMessage, "cannot calculate Bessel function for %s and %s", getRegisterDataTypeName(REGISTER_X, true, false), getRegisterDataTypeName(REGISTER_Y, true, false));
-    moreInfoOnError("In function fnBessel:", errorMessage, NULL, NULL);
-  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  return false;
+	switch(getRegisterDataType(regist)) {
+		case dtComplex34:
+			real34ToReal(REGISTER_REAL34_DATA(regist), r);
+			real34ToReal(REGISTER_IMAG34_DATA(regist), i);
+			return true;
+		case dtReal34:
+			if(getRegisterAngularMode(regist) == AM_NONE) {
+				real34ToReal(REGISTER_REAL34_DATA(regist), r);
+				realCopy(const_0, i);
+				return true;
+			}
+			break;
+		case dtLongInteger:
+			convertLongIntegerRegisterToReal(regist, r, realContext);
+			realCopy(const_0, i);
+			return true;
+	}
+	displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+	#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+		sprintf(errorMessage, "cannot calculate Bessel function for %s and %s", getRegisterDataTypeName(REGISTER_X, true, false), getRegisterDataTypeName(REGISTER_Y, true, false));
+		moreInfoOnError("In function fnBessel:", errorMessage, NULL, NULL);
+	#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+	return false;
 }
 
 void fnBessel(uint16_t unusedButMandatoryParameter) {
-  real_t xr, xi, nr, ni, rr, ri;
+	real_t xr, xi, nr, ni, rr, ri;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+	copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(besselGetParam(REGISTER_X, &xr, &xi, &ctxtReal39) && besselGetParam(REGISTER_Y, &nr, &ni, &ctxtReal39)) {
-    if(realIsZero(&xi) && realIsZero(&ni)) { // Real
-      WP34S_BesselJ(&nr, &xr, &rr, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-      realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else { // Complex
-      WP34S_ComplexBesselJ(&nr, &ni, &xr, &xi, &rr, &ri, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
-      realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
-      realToReal34(&ri, REGISTER_IMAG34_DATA(REGISTER_X));
-    }
-  }
+	if(besselGetParam(REGISTER_X, &xr, &xi, &ctxtReal75) && besselGetParam(REGISTER_Y, &nr, &ni, &ctxtReal75)) {
+		if(realIsZero(&xi) && realIsZero(&ni)) { // Real
+			WP34S_BesselJ(&nr, &xr, &rr, &ctxtReal75);
+			reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+			realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+		}
+		else { // Complex
+			WP34S_ComplexBesselJ(&nr, &ni, &xr, &xi, &rr, &ri, &ctxtReal75);
+			reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+			realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+			realToReal34(&ri, REGISTER_IMAG34_DATA(REGISTER_X));
+		}
+	}
 
-  adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+	adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+}
+
+
+// Hankel's asymptotic expansion (based on Abramowitz and Steven, p.364)
+static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
+	real_t p, q, pp, qq, chi, sChi, cChi, mu, z8, k21, k21sq, nm, tmp;
+	int32_t k;
+
+	realMultiply(alpha, const_2, &chi, realContext);
+	realAdd(&chi, const_1, &chi, realContext);
+	realMultiply(&chi, const_piOn4, &chi, realContext);
+	WP34S_Mod(x, const1071_2pi, &tmp, realContext);
+	realSubtract(&tmp, &chi, &tmp, realContext);
+	WP34S_Mod(&tmp, const1071_2pi, &chi, realContext);
+
+	WP34S_SinCosTanTaylor(&chi, false, &sChi, &cChi, NULL, realContext);
+
+	int32ToReal(4, &tmp);
+	realMultiply(alpha, alpha, &mu, realContext);
+	realMultiply(&mu, &tmp, &mu, realContext);
+
+	realCopy(const_1, &p);
+	realSubtract(&mu, const_1, &q, realContext);
+	int32ToReal(8, &tmp);
+	realMultiply(x, &tmp, &z8, realContext);
+	realDivide(&q, &z8, &q, realContext);
+	realCopy(const_1, &k21);
+	realCopy(&q, &nm), realCopy(const_1, &qq);;
+	for(k = 2; k < 1000; ++k) {
+		if(k % 2 == 0) realCopy(&p, &pp);
+		else           realCopy(&q, &qq);
+
+		realAdd(&k21, const_2, &k21, realContext);
+		realMultiply(&k21, &k21, &k21sq, realContext);
+		realSubtract(&mu, &k21sq, &k21sq, realContext);
+		realMultiply(&nm, &k21sq, &nm, realContext);
+		realDivide(&nm, &z8, &nm, realContext);
+		int32ToReal(k, &tmp);
+		realDivide(&nm, &tmp, &nm, realContext);
+
+		if(k % 4 < 2)
+			realAdd(     k % 2 ? &q : &p, &nm, k % 2 ? &q : &p, realContext);
+		else
+			realSubtract(k % 2 ? &q : &p, &nm, k % 2 ? &q : &p, realContext);
+
+			if(WP34S_RelativeError(&p, &pp, const_1e_37, realContext) && WP34S_RelativeError(&q, &qq, const_1e_37, realContext)) {
+				break;
+			}
+	}
+
+	realMultiply(&p, &cChi, &p, realContext);
+	realMultiply(&q, &sChi, &q, realContext);
+	realSubtract(&p, &q, &p, realContext);
+
+	realDivide(const_2, const_pi, &q, realContext);
+	realDivide(&q, x, &q, realContext);
+	realSquareRoot(&q, &q, realContext);
+	realMultiply(&p, &q, res, realContext);
 }
 
 
@@ -80,30 +138,30 @@ static void bessel(const real_t *alpha, const real_t *x, bool_t neg, real_t *res
 	int16_t n;
 
 	realDivide(x, const_2, &q, realContext);				// q = x/2
-  realPower(&q, const_2, &x2on4, realContext);		// factor each time around
-  realPower(&q, alpha, &r, realContext);		// (x/2)^(2m+alpha)
+	realPower(&q, const_2, &x2on4, realContext);		// factor each time around
+	realPower(&q, alpha, &r, realContext);		// (x/2)^(2m+alpha)
 
-  realAdd(alpha, const_1, &gfac, realContext);
-  WP34S_Gamma(&gfac, &q, realContext);
-  realDivide(&r, &q, &term, realContext);
-  realCopy(&term, res);			// first term in series
+	realAdd(alpha, const_1, &gfac, realContext);
+	WP34S_Gamma(&gfac, &q, realContext);
+	realDivide(&r, &q, &term, realContext);
+	realCopy(&term, res);			// first term in series
 
-  realZero(&m);
+	realZero(&m);
 
 	for(n=0; n<1000; n++) {
-    realMultiply(&term, &x2on4, &q, realContext);
-    realAdd(&m, const_1, &m, realContext);			// m = m+1
-    realDivide(&q, &m, &r, realContext);
-    realDivide(&r, &gfac, &term, realContext);
-    realAdd(&gfac, const_1, &gfac, realContext);
+		realMultiply(&term, &x2on4, &q, realContext);
+		realAdd(&m, const_1, &m, realContext);			// m = m+1
+		realDivide(&q, &m, &r, realContext);
+		realDivide(&r, &gfac, &term, realContext);
+		realAdd(&gfac, const_1, &gfac, realContext);
 		if(neg)
-      realChangeSign(&term);
-    realAdd(&term, res, &q, realContext);
+			realChangeSign(&term);
+		realAdd(&term, res, &q, realContext);
 		if(realCompareEqual(res, &q))
 			return;
-    realCopy(&q, res);
+		realCopy(&q, res);
 	}
-  realCopy(const_NaN, res);
+	realCopy(const_NaN, res);
 	return;
 }
 
@@ -111,22 +169,25 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
 	real_t a;
 
 	if(realIsNaN(alpha) || realIsSpecial(x)) {
-    realCopy(const_NaN, res);
-		return;
-  }
-	if(realIsZero(x)) {
-		if(realIsZero(alpha)) {
-      realCopy(const_1, res);
-			return;
-    }
-    realZero(res);
+		realCopy(const_NaN, res);
 		return;
 	}
-  realCopy(alpha, &a);
+	if(realIsZero(x)) {
+		if(realIsZero(alpha)) {
+			realCopy(const_1, res);
+			return;
+		}
+		realZero(res);
+		return;
+	}
+	realCopy(alpha, &a);
 	if(realIsNegative(alpha) && realIsAnInteger(alpha)) {
 		realSetPositiveSign(&a);
 	}
-	bessel(&a, x, true, res, realContext);
+	if(realCompareAbsGreaterThan(x, const_90))
+		bessel_asymptotic_large_x(&a, x, res, realContext);
+	else
+		bessel(&a, x, true, res, realContext);
 }
 
 static void cmplx_bessel(const real_t *nx, const real_t *ny, const real_t *xx, const real_t *xy, bool_t neg, real_t *rx, real_t *ry, realContext_t *realContext) {
@@ -134,35 +195,35 @@ static void cmplx_bessel(const real_t *nx, const real_t *ny, const real_t *xx, c
 	real_t t1, t2, a1, a2, b, dummy;
 	int16_t i;
 
-  divComplexComplex(xx, xy, const_2, const_0, &t1, &t2, realContext);
-  PowerComplex(&t1, &t2, const_2, const_0, &x2on4x, &x2on4y, realContext);
+	divComplexComplex(xx, xy, const_2, const_0, &t1, &t2, realContext);
+	PowerComplex(&t1, &t2, const_2, const_0, &x2on4x, &x2on4y, realContext);
 
-  PowerComplex(&t1, &t2, nx, ny, &t1, &t2, realContext);
-  realAdd(nx, const_1, &b, realContext);
-  WP34S_ComplexGamma(&b, ny, &a1, &a2, realContext);
-  divComplexComplex(&t1, &t2, &a1, &a2, &ux, &uy, realContext);
+	PowerComplex(&t1, &t2, nx, ny, &t1, &t2, realContext);
+	realAdd(nx, const_1, &b, realContext);
+	WP34S_ComplexGamma(&b, ny, &a1, &a2, realContext);
+	divComplexComplex(&t1, &t2, &a1, &a2, &ux, &uy, realContext);
 
-  realCopy(const_1, &k);
-  realCopy(&ux, rx), realCopy(&uy, ry);
+	realCopy(const_1, &k);
+	realCopy(&ux, rx), realCopy(&uy, ry);
 
 	for(i=0;i<1000;i++) {
-    mulComplexComplex(&x2on4x, &x2on4y, &ux, &uy, &t1, &t2, realContext);
+		mulComplexComplex(&x2on4x, &x2on4y, &ux, &uy, &t1, &t2, realContext);
 		if(neg) {
-      realChangeSign(&t1), realChangeSign(&t2);
-    }
-    realAdd(nx, &k, &b, realContext);
-    mulComplexComplex(&b, ny, &k, const_0, &a1, &a2, realContext);
-    divComplexComplex(&t1, &t2, &a1, &a2, &ux, &uy, realContext);
+			realChangeSign(&t1), realChangeSign(&t2);
+		}
+		realAdd(nx, &k, &b, realContext);
+		mulComplexComplex(&b, ny, &k, const_0, &a1, &a2, realContext);
+		divComplexComplex(&t1, &t2, &a1, &a2, &ux, &uy, realContext);
 
-    realAdd(&ux, rx, &a1, realContext), realAdd(&uy, ry, &a2, realContext);
-    realSubtract(&a1, rx, &t1, realContext), realSubtract(&a2, ry, &t2, realContext);
-    realRectangularToPolar(&t1, &t2, &b, &dummy, &ctxtReal39);
+		realAdd(&ux, rx, &a1, realContext), realAdd(&uy, ry, &a2, realContext);
+		realSubtract(&a1, rx, &t1, realContext), realSubtract(&a2, ry, &t2, realContext);
+		realRectangularToPolar(&t1, &t2, &b, &dummy, &ctxtReal39);
 		if(realIsZero(&b))
 			return;
-    realCopy(&a1, rx), realCopy(&a2, ry);
-    realAdd(&k, const_1, &k, realContext);
+		realCopy(&a1, rx), realCopy(&a2, ry);
+		realAdd(&k, const_1, &k, realContext);
 	}
-  realCopy(const_NaN, rx), realCopy(const_NaN, ry);
+	realCopy(const_NaN, rx), realCopy(const_NaN, ry);
 }
 
 void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real_t *xx, const real_t *xy, real_t *rx, real_t *ry, realContext_t *realContext) {
@@ -174,7 +235,7 @@ void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real
 	} else if(realIsSpecial(alphax) || realIsSpecial(alphay) ||
 			realIsSpecial(xx) || realIsSpecial(xy)) {
 		realCopy(const_NaN, rx), realCopy(const_NaN, ry);
-  }
+	}
 	else
 		cmplx_bessel(alphax, alphay, xx, xy, true, rx, ry, realContext);
 }

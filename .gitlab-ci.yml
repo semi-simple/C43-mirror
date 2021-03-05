@@ -21,6 +21,13 @@ dm42:
   tags:
     - dm42
 
+windows:
+  stage: build
+  script:
+    - make
+  tags:
+    - windows
+
 testSuite:
   stage: test
   script:

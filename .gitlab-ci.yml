@@ -1,8 +1,7 @@
 macOS:
   stage: build
   script:
-    - make mrproper
-    - make
+    - make rebuild
   artifacts:
     paths:
       - wp43s
@@ -20,6 +19,16 @@ dm42:
       - DMCP_build/build/WP43S.pgm
   tags:
     - dm42
+
+windows:
+  stage: build
+  script:
+    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make detected_OS=Windows rebuild"
+  artifacts:
+    paths:
+      - wp43s.exe
+  tags:
+    - windows
 
 testSuite:
   stage: test

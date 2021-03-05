@@ -24,7 +24,8 @@ dm42:
 windows:
   stage: build
   script:
-    - C:/tools/msys64/msys2_shell.cmd -defterm -mingw64 -no-start -c make
+    - export shell="cmd.exe //C RefreshEnv.cmd & C:/tools/msys64/msys2_shell.cmd -defterm -mingw64 -no-start -full-path -here -c \$\* --"
+    - $shell make
   tags:
     - windows
 

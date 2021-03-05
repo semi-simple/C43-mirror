@@ -215,7 +215,7 @@ bool_t lastshiftG = false;
       resetShiftState();
   
         //printf("%d--\n",calcMode);
-      {
+      
         if(calcMode != CM_CONFIRMATION && data[0] != 0 && !running_program_jm) { //JM data is used if operation is from the real keyboard. item is used directly if called from XEQM
           lastErrorCode = 0;
 
@@ -240,9 +240,7 @@ bool_t lastshiftG = false;
             return;
           }
   
-        }
-           // Broken the IF STATEMENT, because I want the FN keys to be active if there are no softmenus
-      if(calcMode != CM_CONFIRMATION)
+        if(calcMode != CM_CONFIRMATION)
           {
             if(item < 0) { // softmenu
               if(item != -MNU_SYSFL || !catalog || transitionSystemState == 0) {
@@ -265,21 +263,22 @@ bool_t lastshiftG = false;
               addItemToNimBuffer(item);              
             }                                                 //JM^^
 
-            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
-              if(calcMode == CM_NORMAL) {
-                fnAim(NOPARAM);
-              }
-              addItemToBuffer(item);
-            }
+//            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+//              if(calcMode == CM_NORMAL) {
+//                fnAim(NOPARAM);
+//              }
+//              addItemToBuffer(item);  //DIS HIERDIE EEN WAT DIE MENU LAAT TEXT IPV COMMANDS UITGOOI. 
+KYK HIER
+//            }
             else if(item > 0) { // function
               if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
                 closeNim();     
                 if(calcMode != CM_NIM) {
                   if(indexOfItems[item].func == fnConstant) {
                     setSystemFlag(FLAG_ASLIFT);
+                  }
                 }
               }
-            }
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
             }
@@ -865,7 +864,7 @@ bool_t lowercaseselected;
         keyActionProcessed = true;
         break;
 
-      case CHR_num:
+      case CHR_num:                           
         alphaCase = AC_UPPER;
         numLock = !numLock;
         if(!numLock) { nextChar = NC_NORMAL;}
@@ -1621,10 +1620,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         resetAlphaSelectionBuffer();
       
         //JM Arrow up and down if no menu other than AHOME of MyA       //JMvv
-        if(!arrowCasechange && calcMode == CM_AIM && (
-          softmenu[menuId].menuItem == -MNU_MyAlpha ||
-          softmenu[menuId].menuItem == -MNU_ALPHA   ||
-          softmenu[menuId].menuItem == -MNU_T_EDIT)) {
+        if(!arrowCasechange && calcMode == CM_AIM && isJMAlphaSoftmenu(menuId)) {
           fnT_ARROW(ITM_UP1);
         }
               //ignoring the base menu, MY_ALPHA_MENU below
@@ -1735,10 +1731,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       resetAlphaSelectionBuffer();
 
         //JM Arrow up and down if AHOME of MyA       //JMvv
-        if(!arrowCasechange && calcMode == CM_AIM && (
-          softmenu[menuId].menuItem == -MNU_MyAlpha ||
-          softmenu[menuId].menuItem == -MNU_ALPHA   ||
-          softmenu[menuId].menuItem == -MNU_T_EDIT)) {
+        if(!arrowCasechange && calcMode == CM_AIM && isJMAlphaSoftmenu(menuId)) {
           fnT_ARROW(ITM_DOWN1);
         }
               //ignoring the base menu, MY_ALPHA_MENU below

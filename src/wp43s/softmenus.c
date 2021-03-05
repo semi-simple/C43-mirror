@@ -1958,6 +1958,19 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     }
   }
 
+  bool_t isJMAlphaSoftmenu(int16_t menuId) {
+    int16_t menuItem = softmenu[menuId].menuItem;
+    switch(menuItem) {
+      case -MNU_MyAlpha:
+      case -MNU_T_EDIT:  //JM
+      case -MNU_ALPHA:   //JM
+        return true;
+      default:
+        return false;
+    }
+  }
+
+
 #endif // !TESTSUITE_BUILD
 
 

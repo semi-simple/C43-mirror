@@ -1,8 +1,7 @@
 macOS:
   stage: build
   script:
-    - make mrproper
-    - make
+    - make rebuild
   artifacts:
     paths:
       - wp43s
@@ -24,7 +23,7 @@ dm42:
 windows:
   stage: build
   script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c make
+    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make detected_OS=Windows rebuild"
   tags:
     - windows
 

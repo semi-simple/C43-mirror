@@ -510,6 +510,7 @@
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          updateTamBuffer();
           keyActionProcessed = true;
         }
         break;
@@ -874,10 +875,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       //case CM_ASM_OVER_TAM:
       //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  transitionSystemState = 0;
+      //  transitionSystemState = TS_OP_DIGIT_0;
       //  calcModeTam();
       //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       //  tamTransitionSystem(TT_NOTHING);
+      //  updateTamBuffer();
       //  break;
 
       //case CM_ASM_OVER_AIM:
@@ -979,11 +981,13 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
         tamTransitionSystem(TT_BACKSPACE);
+        updateTamBuffer();
       } else if(inputNamedVariable) {
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         tamTransitionSystem(TT_VARIABLE);
+        updateTamBuffer();
       }
       return;
     }

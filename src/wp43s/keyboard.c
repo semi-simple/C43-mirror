@@ -250,7 +250,20 @@
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
-
+      if(inputNamedVariable) {
+        // In most TAM modes the f and g shifts have no effect, but in TAM named variable mode they are needed
+        // for entering certain characters
+        // We should ensure that only keys that add to the buffer and a few other special keys are processed
+        // in processKeyAction(), and that other keys behave like TAM - shifted or unshifted they do the same
+        switch(key->primaryAim) {
+          case ITM_ENTER:
+          case ITM_BACKSPACE:
+          case ITM_UP:
+          case ITM_DOWN:
+          case ITM_EXIT:
+            result = key->primaryAim;
+        }
+      }
     }
     else if(tamMode) {
       result = key->primaryTam; // No shifted function in TAM
@@ -522,6 +535,15 @@
         else if(tamMode) {
           if(inputNamedVariable) {
             processAimInput(item);
+            if(!keyActionProcessed) {
+              // Only allow certain operations from named variable input in TAM
+              if(item < 0) {
+                keyActionProcessed = (item != -MNU_ALPHAINTL && item != -MNU_ALPHAMATH && item != -MNU_ALPHADOT);
+              }
+              else if(indexOfItems[item].func != addItemToBuffer) {
+                keyActionProcessed = true;
+              }
+            }
           } else {
             addItemToBuffer(item);
             keyActionProcessed = true;
@@ -802,7 +824,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(catalog) {
+    if(!tamMode && catalog) {
       leaveAsmMode();
       popSoftmenu();
       return;

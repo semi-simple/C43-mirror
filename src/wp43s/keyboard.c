@@ -165,14 +165,6 @@
             refreshScreen();
             return;
           }
-          else if(catalog && tamMode) {
-            if (!inputNamedVariable || (catalog != CATALOG_AINT && catalog != CATALOG_aint)) {
-              reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-              leaveTamMode();
-              refreshScreen();
-              return;
-            }
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
@@ -183,7 +175,7 @@
           // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
           // Use this variable to distinguish between the two
           fnKeyInCatalog = 1;
-          if(tamMode) {
+          if(tamMode && (!inputNamedVariable || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
@@ -206,6 +198,9 @@
             }
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
+            }
+            if(inputNamedVariable) {
+              leaveTamMode();
             }
 
             if(lastErrorCode == 0) {
@@ -324,8 +319,8 @@
         shiftF = false;
         shiftG = true;
       }
-      showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
+      showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
         processKeyAction(item);
         if(!keyActionProcessed) {
@@ -369,24 +364,10 @@
    ***********************************************/
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      int16_t item;
-
-      if(showFunctionNameItem != 0) {
-        item = showFunctionNameItem;
-        hideFunctionName();
-        if(item < 0) {
-          showSoftmenu(item);
-        }
-        else {
-          runFunction(item);
-        }
-      }
-      refreshScreen();
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnReleased(void *data) {
+  #endif // DMCP_BUILD
       int16_t item;
 
       if(showFunctionNameItem != 0) {
@@ -396,16 +377,21 @@
           showSoftmenu(item);
         }
         else {
+          if(item != ITM_NOP && inputNamedVariable && indexOfItems[item].func != addItemToBuffer) {
+            // We are in TAM mode so need to cancel first (equivalent to EXIT)
+            leaveTamMode();
+          }
           runFunction(item);
         }
       }
+  #ifdef DMCP_BUILD
       else if(keyAutoRepeat) {
         btnPressed(data);
       }
-
+  #endif // DMCP_BUILD
       refreshScreen();
     }
-  #endif // DMCP_BUILD
+
 
 
   void leavePem(void) {

@@ -1551,7 +1551,7 @@
    * \return void
    ***********************************************/
   void enterTamMode(void) {
-    transitionSystemState = 0;
+    transitionSystemState = TS_OP_DIGIT_0;
     tamCurrentOperation = 0;
 
     if(calcMode == CM_NIM) {
@@ -1595,20 +1595,17 @@
     numberOfTamMenusToPop = 1;
 
     if(tamMode == TM_SHUFFLE) {
+      strcpy(tamBuffer, indexOfItems[ITM_SHUFFLE].itemSoftmenuName);
       strcat(tamBuffer, " ____");
-      transitionSystemState = 16;
+      transitionSystemState = TS_OP_DIGIT_0_4;
     }
     else if(tamFunction == ITM_CNST) {
-      strcat(tamBuffer, " ___");
-      transitionSystemState = 22;
+      transitionSystemState = TS_CNST_0;
     }
     else if(tamFunction == ITM_BESTF) {
-      strcat(tamBuffer, " ____");
-      transitionSystemState = 25;
+      transitionSystemState = TS_BESTF_0;
     }
-    else {
-      strcat(tamBuffer, " __");
-    }
+    updateTamBuffer();
 
     clearSystemFlag(FLAG_ALPHA);
 

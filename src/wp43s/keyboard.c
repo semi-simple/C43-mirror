@@ -91,29 +91,10 @@
         shiftF = false;
         shiftG = true;
       }
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        int16_t item = determineFunctionKeyItem((char *)data);
-
-        shiftF = false;
-        shiftG = false;
-        if(item != ITM_NOP && item != ITM_NULL) {
-          lastErrorCode = 0;
-
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
-        }
-        else {
-          showFunctionNameItem = ITM_NOP;
-        }
-      }
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
+  #endif // DMCP_BUILD
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
@@ -122,18 +103,29 @@
         if(item != ITM_NOP && item != ITM_NULL) {
           lastErrorCode = 0;
 
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          if(indexOfItems[item].func == addItemToBuffer) {
+            // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+            // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+            // Use this variable to distinguish between the two
+            fnKeyInCatalog = 1;
+            addItemToBuffer(item);
+            fnKeyInCatalog = 0;
+            refreshScreen();
+          }
+
+          else {
+            #if (FN_KEY_TIMEOUT_TO_NOP == 1)
+              showFunctionName(item, 1000); // 1000ms = 1s
+            #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+              showFunctionNameItem = item;
+            #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          }
         }
         else {
           showFunctionNameItem = ITM_NOP;
         }
       }
     }
-  #endif // DMCP_BUILD
 
 
 
@@ -165,14 +157,6 @@
             refreshScreen();
             return;
           }
-          else if(catalog && tamMode) {
-            if (!inputNamedVariable || (catalog != CATALOG_AINT && catalog != CATALOG_aint)) {
-              reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-              leaveTamMode();
-              refreshScreen();
-              return;
-            }
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
@@ -183,7 +167,7 @@
           // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
           // Use this variable to distinguish between the two
           fnKeyInCatalog = 1;
-          if(tamMode) {
+          if(tamMode && (!inputNamedVariable || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
@@ -206,6 +190,9 @@
             }
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
+            }
+            if(inputNamedVariable) {
+              leaveTamMode();
             }
 
             if(lastErrorCode == 0) {
@@ -324,8 +311,8 @@
         shiftF = false;
         shiftG = true;
       }
-      showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
+      showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
         processKeyAction(item);
         if(!keyActionProcessed) {
@@ -369,24 +356,10 @@
    ***********************************************/
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      int16_t item;
-
-      if(showFunctionNameItem != 0) {
-        item = showFunctionNameItem;
-        hideFunctionName();
-        if(item < 0) {
-          showSoftmenu(item);
-        }
-        else {
-          runFunction(item);
-        }
-      }
-      refreshScreen();
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnReleased(void *data) {
+  #endif // DMCP_BUILD
       int16_t item;
 
       if(showFunctionNameItem != 0) {
@@ -396,16 +369,21 @@
           showSoftmenu(item);
         }
         else {
+          if(item != ITM_NOP && inputNamedVariable && indexOfItems[item].func != addItemToBuffer) {
+            // We are in TAM mode so need to cancel first (equivalent to EXIT)
+            leaveTamMode();
+          }
           runFunction(item);
         }
       }
+  #ifdef DMCP_BUILD
       else if(keyAutoRepeat) {
         btnPressed(data);
       }
-
+  #endif // DMCP_BUILD
       refreshScreen();
     }
-  #endif // DMCP_BUILD
+
 
 
   void leavePem(void) {
@@ -440,6 +418,15 @@
     else if(item == ITM_UP_ARROW) {
       nextChar = NC_SUPERSCRIPT;
       keyActionProcessed = true;
+    }
+
+    else if(indexOfItems[item].func == addItemToBuffer) {
+      addItemToBuffer(item);
+      keyActionProcessed = true;
+    }
+
+    if(keyActionProcessed) {
+      refreshScreen();
     }
   }
 
@@ -497,6 +484,7 @@
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          updateTamBuffer();
           keyActionProcessed = true;
         }
         break;
@@ -852,10 +840,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       //case CM_ASM_OVER_TAM:
       //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  transitionSystemState = 0;
+      //  transitionSystemState = TS_OP_DIGIT_0;
       //  calcModeTam();
       //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       //  tamTransitionSystem(TT_NOTHING);
+      //  updateTamBuffer();
       //  break;
 
       //case CM_ASM_OVER_AIM:
@@ -957,11 +946,13 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
         tamTransitionSystem(TT_BACKSPACE);
+        updateTamBuffer();
       } else if(inputNamedVariable) {
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         tamTransitionSystem(TT_VARIABLE);
+        updateTamBuffer();
       }
       return;
     }

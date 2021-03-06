@@ -108,7 +108,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     if(tamMode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
       tamMode = indexOfItems[func].param;
       tamFunction = func;
-      strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
       tamNumberMin = indexOfItems[func].tamMinMax >> TAM_MAX_BITS;
       tamNumberMax = indexOfItems[func].tamMinMax & TAM_MAX_MASK;
       if(tamNumberMax == 16383) { // Only case featuring more than TAM_MAX_BITS bits is GTO.

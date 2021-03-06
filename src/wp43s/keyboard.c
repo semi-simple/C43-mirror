@@ -91,29 +91,10 @@
         shiftF = false;
         shiftG = true;
       }
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        int16_t item = determineFunctionKeyItem((char *)data);
-
-        shiftF = false;
-        shiftG = false;
-        if(item != ITM_NOP && item != ITM_NULL) {
-          lastErrorCode = 0;
-
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
-        }
-        else {
-          showFunctionNameItem = ITM_NOP;
-        }
-      }
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
+  #endif // DMCP_BUILD
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
@@ -122,18 +103,29 @@
         if(item != ITM_NOP && item != ITM_NULL) {
           lastErrorCode = 0;
 
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          if(indexOfItems[item].func == addItemToBuffer) {
+            // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+            // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+            // Use this variable to distinguish between the two
+            fnKeyInCatalog = 1;
+            addItemToBuffer(item);
+            fnKeyInCatalog = 0;
+            refreshScreen();
+          }
+
+          else {
+            #if (FN_KEY_TIMEOUT_TO_NOP == 1)
+              showFunctionName(item, 1000); // 1000ms = 1s
+            #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+              showFunctionNameItem = item;
+            #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          }
         }
         else {
           showFunctionNameItem = ITM_NOP;
         }
       }
     }
-  #endif // DMCP_BUILD
 
 
 
@@ -426,6 +418,15 @@
     else if(item == ITM_UP_ARROW) {
       nextChar = NC_SUPERSCRIPT;
       keyActionProcessed = true;
+    }
+
+    else if(indexOfItems[item].func == addItemToBuffer) {
+      addItemToBuffer(item);
+      keyActionProcessed = true;
+    }
+
+    if(keyActionProcessed) {
+      refreshScreen();
     }
   }
 

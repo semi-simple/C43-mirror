@@ -147,6 +147,8 @@
         int16_t item = showFunctionNameItem;
         #if (FN_KEY_TIMEOUT_TO_NOP == 1)
           hideFunctionName();
+        #else
+          showFunctionNameItem = 0;
         #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
 
         if(calcMode != CM_CONFIRMATION) {

@@ -1290,6 +1290,9 @@
         sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
         break;
       case TS_OP_DIGIT_0_4:
+        // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+        // consecutively, with the 'valid' bit eight above that number
+        // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
         regists[4] = 0;
         for(int i=0;i<4;i++) {
           if((tamNumber >> (i*2 + 8)) & 1) {
@@ -1912,6 +1915,9 @@
       // OP ____
       case TS_OP_DIGIT_0_4:
         switch(tamEvent) {
+          // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+          // consecutively, with the 'valid' bit eight above that number
+          // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
           case TT_LETTER :
             for(int i=0; i<4; i++) {
               if(!((tamNumber >> (2*i + 8)) & 1)) {

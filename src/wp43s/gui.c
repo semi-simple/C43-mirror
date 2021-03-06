@@ -1594,9 +1594,8 @@
 
     numberOfTamMenusToPop = 1;
 
+    tamNumber = 0;
     if(tamMode == TM_SHUFFLE) {
-      strcpy(tamBuffer, indexOfItems[ITM_SHUFFLE].itemSoftmenuName);
-      strcat(tamBuffer, " ____");
       transitionSystemState = TS_OP_DIGIT_0_4;
     }
     else if(tamFunction == ITM_CNST) {

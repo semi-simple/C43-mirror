@@ -1252,6 +1252,7 @@
   }
 
   void updateTamBuffer() {
+    char regists[5];
     if(tamMode == 0) {
       return;
     }
@@ -1289,7 +1290,20 @@
         sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
         break;
       case TS_OP_DIGIT_0_4:
-        // Leave alone the buffer for shuffle - it is managed by the transition function
+        // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+        // consecutively, with the 'valid' bit eight above that number
+        // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
+        regists[4] = 0;
+        for(int i=0;i<4;i++) {
+          if((tamNumber >> (i*2 + 8)) & 1) {
+            uint8_t regNum = (tamNumber >> (i*2)) & 3;
+            regists[i] = (regNum == 3 ? 't' : 'x' + regNum);
+          }
+          else {
+            regists[i] = '_';
+          }
+        }
+        sprintf(tamBuffer, "%s %s", indexOfItems[getOperation()].itemCatalogName, regists);
         break;
       case TS_GOTO_0:
         sprintf(tamBuffer, "GTO. _____");
@@ -1901,28 +1915,34 @@
       // OP ____
       case TS_OP_DIGIT_0_4:
         switch(tamEvent) {
+          // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+          // consecutively, with the 'valid' bit eight above that number
+          // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
           case TT_LETTER :
-            if(tamLetteredRegister >= REGISTER_X && tamLetteredRegister <= REGISTER_T) {
-              for(int i = 4; i > 0; i--) {
-                if(tamBuffer[strlen(tamBuffer)-i] == '_') {
-                  tamBuffer[strlen(tamBuffer)-i] = "xyzt"[tamLetteredRegister-REGISTER_X];
-                  if(i == 1) {
-                    reallyRunFunction(getOperation(), NOPARAM);
-                    leaveTamMode();
-                  }
+            for(int i=0; i<4; i++) {
+              if(!((tamNumber >> (2*i + 8)) & 1)) {
+                uint16_t mask = 3 << (2*i);
+                tamNumber |= 1 << (2*i + 8);
+                tamNumber = (tamNumber & ~mask) | (((tamLetteredRegister-REGISTER_X) << (2*i)) & mask);
+                if(i == 3) {
+                  reallyRunFunction(getOperation(), tamNumber);
+                  leaveTamMode();
                 }
+                return;
               }
             }
             return;
 
           case TT_BACKSPACE :
-            for(int i = 1; i <= 5; i++) {
-              if(i == 5) {
-                  leaveTamMode();
-                  return;
-                }
-              if(tamBuffer[strlen(tamBuffer)-i] != '_') {
-                tamBuffer[strlen(tamBuffer)-i] = '_';
+            // We won't have all four registers at this point as otherwise TAM would already be closed
+            for(int i=3; i>=0; i--) {
+              if((tamNumber >> (2*i + 8)) & 1) {
+                tamNumber &= ~(1 << (2*i + 8));
+                return;
+              }
+              else if(i == 0) {
+                leaveTamMode();
+                return;
               }
             }
             return;

@@ -88,6 +88,12 @@ complex_result:
 }
 
 
+static void debugShowReal(const char *label, const real_t *val) {
+	char valtxt[256];
+	realToString(val, valtxt);
+	printf("%s %s\n", label, valtxt);
+}
+
 // Hankel's asymptotic expansion (based on Abramowitz and Steven, p.364)
 static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
 	real_t p, q, pp, qq, chi, sChi, cChi, mu, z8, k21, k21sq, nm, tmp;
@@ -144,6 +150,77 @@ static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real
 	realDivide(&q, x, &q, realContext);
 	realSquareRoot(&q, &q, realContext);
 	realMultiply(&p, &q, res, realContext);
+}
+
+static void bessel_complex_asymptotic_large_x(const real_t *alpha_r, const real_t *alpha_i, const real_t *x_r, const real_t *x_i, real_t *res_r, real_t *res_i, realContext_t *realContext) {
+	real_t pr, qr, ppr, qqr, chiR, sr, cr, muR, z8r, nmR;
+	real_t pi, qi, ppi, qqi, chiI, si, ci, muI, z8i, nmI;
+	real_t k21, k21sq, tmp;
+	int32_t k;
+
+	mulComplexComplex(alpha_r, alpha_i, const_2, const_0, &chiR, &chiI, realContext);
+	realAdd(&chiR, const_1, &chiR, realContext);
+	mulComplexComplex(&chiR, &chiI, const_piOn4, const_0, &chiR, &chiI, realContext);
+	realSubtract(x_r, &chiR, &chiR, realContext), realSubtract(x_i, &chiI, &chiI, realContext);
+
+	sinComplex(&chiR, &chiI, &sr, &si, realContext);
+	cosComplex(&chiR, &chiI, &cr, &ci, realContext);
+
+	int32ToReal(4, &tmp);
+	mulComplexComplex(alpha_r, alpha_i, alpha_r, alpha_i, &muR, &muI, realContext);
+	mulComplexComplex(&muR, &muI, &tmp, const_0, &muR, &muI, realContext);
+
+	realCopy(const_1, &pr), realCopy(const_0, &pi);
+	realSubtract(&muR, const_1, &qr, realContext), realCopy(&muI, &qi);
+	int32ToReal(8, &tmp);
+	mulComplexComplex(x_r, x_i, &tmp, const_0, &z8r, &z8i, realContext);
+	divComplexComplex(&qr, &qi, &z8r, &z8i, &qr, &qi, realContext);
+	realCopy(const_1, &k21);
+	realCopy(&qr, &nmR), realCopy(&qi, &nmI);
+	realCopy(const_1, &qqr), realZero(&qqi);
+	for(k = 2; k < 1000; ++k) {
+		if(k % 2 == 0) {
+			realCopy(&pr, &ppr), realCopy(&pi, &ppi);
+		}
+		else {
+			realCopy(&qr, &qqr), realCopy(&qi, &qqi);
+		}
+
+		realAdd(&k21, const_2, &k21, realContext);
+		realMultiply(&k21, &k21, &k21sq, realContext);
+		realSubtract(&muR, &k21sq, &k21sq, realContext);
+		mulComplexComplex(&nmR, &nmI, &k21sq, &muI, &nmR, &nmI, realContext);
+		divComplexComplex(&nmR, &nmI, &z8r, &z8i, &nmR, &nmI, realContext);
+		int32ToReal(k, &tmp);
+		divComplexComplex(&nmR, &nmI, &tmp, const_0, &nmR, &nmI, realContext);
+
+		if(k % 4 < 2){
+			realAdd(k % 2 ? &qr : &pr, &nmR, k % 2 ? &qr : &pr, realContext);
+			realAdd(k % 2 ? &qi : &pi, &nmI, k % 2 ? &qi : &pi, realContext);
+		}
+		else {
+			realSubtract(k % 2 ? &qr : &pr, &nmR, k % 2 ? &qr : &pr, realContext);
+			realSubtract(k % 2 ? &qi : &pi, &nmI, k % 2 ? &qi : &pi, realContext);
+		}
+
+		realCopy(const_1, &tmp), tmp.exponent -= 73;
+		if(WP34S_RelativeError(&pr, &ppr, &tmp, realContext) &&
+			WP34S_RelativeError( &pi, &ppi, &tmp, realContext) &&
+			WP34S_RelativeError( &qr, &qqr, &tmp, realContext) &&
+			WP34S_RelativeError( &qi, &qqi, &tmp, realContext)) {
+				break;
+		}
+	}
+
+	mulComplexComplex(&pr, &pi, &cr, &ci, &pr, &pi, realContext);
+	mulComplexComplex(&qr, &qi, &sr, &si, &qr, &qi, realContext);
+	realSubtract(&pr, &qr, &pr, realContext), realSubtract(&pi, &qi, &pi, realContext);
+
+	realDivide(const_2, const_pi, &qr, realContext);
+	divRealComplex(&qr, x_r, x_i, &qr, &qi, realContext);
+	PowerComplex(&qr, &qi, const_1on2, const_0, &qr, &qi, realContext);
+	mulComplexComplex(&pr, &pi, &qr, &qi, res_r, res_i, realContext);
+	if(realIsZero(x_r)) realZero(res_r); // purely imaginary argument
 }
 
 
@@ -245,6 +322,8 @@ static void cmplx_bessel(const real_t *nx, const real_t *ny, const real_t *xx, c
 }
 
 void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real_t *xx, const real_t *xy, real_t *rx, real_t *ry, realContext_t *realContext) {
+	real_t r, theta;
+	realRectangularToPolar(xx, xy, &r, &theta, realContext);
 	if(realIsZero(xy) && realIsZero(alphay)) {
 		WP34S_BesselJ(alphax, xx, rx, realContext);
 		if(realIsNaN(rx))
@@ -254,6 +333,8 @@ void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real
 			realIsSpecial(xx) || realIsSpecial(xy)) {
 		realCopy(const_NaN, rx), realCopy(const_NaN, ry);
 	}
+	else if(realCompareAbsGreaterThan(r, const_90))
+		bessel_complex_asymptotic_large_x(alphax, alphay, xx, xy, rx, ry, realContext);
 	else
 		cmplx_bessel(alphax, alphay, xx, xy, true, rx, ry, realContext);
 }

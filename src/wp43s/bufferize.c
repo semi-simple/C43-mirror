@@ -1307,6 +1307,8 @@
         sprintf(tamBuffer, "GTO. %04d_", tamNumber);
         break;
       case TS_CNST_0:
+        sprintf(tamBuffer, "CNST ___");
+        break;
       case TS_CNST_1:
         sprintf(tamBuffer, "CNST %d__", tamNumber);
         break;
@@ -1314,6 +1316,8 @@
         sprintf(tamBuffer, "CNST %02d_", tamNumber);
         break;
       case TS_BESTF_0:
+        sprintf(tamBuffer, "BestF ____");
+        break;
       case TS_BESTF_1:
         sprintf(tamBuffer, "BestF %d___", tamNumber);
         break;

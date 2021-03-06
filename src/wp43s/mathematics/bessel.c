@@ -55,12 +55,29 @@ void fnBessel(uint16_t unusedButMandatoryParameter) {
 
 	if(besselGetParam(REGISTER_X, &xr, &xi, &ctxtReal75) && besselGetParam(REGISTER_Y, &nr, &ni, &ctxtReal75)) {
 		if(realIsZero(&xi) && realIsZero(&ni)) { // Real
-			WP34S_BesselJ(&nr, &xr, &rr, &ctxtReal75);
-			reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-			realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+			if(realIsAnInteger(&nr) || (!realIsNegative(&xr))) {
+				WP34S_BesselJ(&nr, &xr, &rr, &ctxtReal75);
+				reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+				realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+			}
+			else if(getSystemFlag(FLAG_CPXRES)) { // Real -> Complex
+				realSetPositiveSign(&xr);
+				WP34S_BesselJ(&nr, &xr, &rr, &ctxtReal75);
+				WP34S_Mod(&nr, const_2, &ri, &ctxtReal75);
+				realMultiply(&ri, const_pi, &ri, &ctxtReal75);
+				realPolarToRectangular(&rr, &ri, &rr, &ri, &ctxtReal75);
+				goto complex_result;
+			}
+			else {
+				displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+				#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+					moreInfoOnError("In function fnBessel:", "negative argument for Bessel function of non-integer degree", NULL, NULL);
+				#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+			}
 		}
 		else { // Complex
 			WP34S_ComplexBesselJ(&nr, &ni, &xr, &xi, &rr, &ri, &ctxtReal75);
+complex_result:
 			reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
 			realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
 			realToReal34(&ri, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -95,7 +112,7 @@ static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real
 	realMultiply(x, &tmp, &z8, realContext);
 	realDivide(&q, &z8, &q, realContext);
 	realCopy(const_1, &k21);
-	realCopy(&q, &nm), realCopy(const_1, &qq);;
+	realCopy(&q, &nm), realCopy(const_1, &qq);
 	for(k = 2; k < 1000; ++k) {
 		if(k % 2 == 0) realCopy(&p, &pp);
 		else           realCopy(&q, &qq);
@@ -113,9 +130,10 @@ static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real
 		else
 			realSubtract(k % 2 ? &q : &p, &nm, k % 2 ? &q : &p, realContext);
 
-			if(WP34S_RelativeError(&p, &pp, const_1e_37, realContext) && WP34S_RelativeError(&q, &qq, const_1e_37, realContext)) {
-				break;
-			}
+		realCopy(const_1, &tmp), tmp.exponent -= 73;
+		if(WP34S_RelativeError(&p, &pp, &tmp, realContext) && WP34S_RelativeError(&q, &qq, &tmp, realContext)) {
+			break;
+		}
 	}
 
 	realMultiply(&p, &cChi, &p, realContext);

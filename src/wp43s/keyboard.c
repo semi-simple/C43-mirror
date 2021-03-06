@@ -268,7 +268,9 @@ bool_t lastshiftG = false;
 //                fnAim(NOPARAM);
 //              }
 //              addItemToBuffer(item);  //DIS HIERDIE EEN WAT DIE MENU LAAT TEXT IPV COMMANDS UITGOOI. 
-KYK HIER
+//KYK HIER. TOFIX
+//CLASH WITH ARROWS !!
+//
 //            }
             else if(item > 0) { // function
               if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
@@ -672,9 +674,67 @@ KYK HIER
 
 #ifndef TESTSUITE_BUILD
 
+
+
+
+
+
+bool_t lowercaseselected;
+
+  static void processAimInput(int16_t item) {
+                int16_t item1 = 0;
+                #ifdef PC_BUILD
+                  char tmp[200]; sprintf(tmp,"^^^^processAimInput:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
+                #endif //PC_BUILD
+
+                if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
+                  if(item1 > 0) {
+                    addItemToBuffer(item1);
+                    keyActionProcessed = true;
+                  }
+                }
+                                                       //JM^^
+
+/*1*/           else if( lowercaseselected && (ITM_A <= item && item <= ITM_Z)) {
+                  addItemToBuffer(item + 26);
+                  keyActionProcessed = true;
+                }
+
+                else if( !lowercaseselected && (ITM_A <= item && item <= ITM_Z)) { //JM
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }
+
+
+                else if( !lowercaseselected && (ITM_a <= item && item <= ITM_z)) { //JM
+                  addItemToBuffer(item - 26);
+                  keyActionProcessed = true;
+                }
+
+                else if( lowercaseselected && (ITM_a <= item && item <= ITM_z)) { //JM
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }
+
+
+                else if(item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }                                           //JM ^^
+
+
+/*1*/           else if( lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
+                  addItemToBuffer(item + 36);
+                  keyActionProcessed = true;
+                }
+
+                else if( !lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
+                  addItemToBuffer(item);
+                  keyActionProcessed = true;
+                }
+
+
 /*
-//TOFIX TOCHECK 2021-03-03 JM
-  static void processAimInput1(int16_t item) {
     if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
       addItemToBuffer(item + 26);
       keyActionProcessed = true;
@@ -694,65 +754,32 @@ KYK HIER
       nextChar = NC_SUPERSCRIPT;
       keyActionProcessed = true;
     }
-  }
 */
 
 
-bool_t lowercaseselected;
-
-  static void processAimInput(int16_t item) {
-                int16_t item1 = 0;
-                #ifdef PC_BUILD
-                  char tmp[200]; sprintf(tmp,"^^^^processKeyAction:AIM %d nextChar=%d",item,nextChar); jm_show_comment(tmp);
-                #endif //PC_BUILD
-
-                if(keyReplacements(item, &item1, numLock, lastshiftF, lastshiftG) > 0) {    //JMvv
-                  if(item1 > 0) {
-                    addItemToBuffer(item1);
-                    keyActionProcessed = true;
-                  }
-                }
-                                                       //JM^^
-
-/*1*/           else if( lowercaseselected && (ITM_A <= item && item <= ITM_Z)) {
-                  addItemToBuffer(item + 26);
-                  keyActionProcessed = true;
-                }
-
-                else if( !lowercaseselected && (ITM_a <= item && item <= ITM_z)) { //JM
-                  addItemToBuffer(item - 26);
-                  keyActionProcessed = true;
-                }
-
-
-                else if( !lowercaseselected && (ITM_A <= item && item <= ITM_Z)) { //JM
-                  addItemToBuffer(item);
-                  keyActionProcessed = true;
-                }
-
-                else if(item == ITM_COLON || item == ITM_COMMA || item == ITM_QUESTION_MARK || item == ITM_SPACE || item == ITM_UNDERSCORE )  {  //JM vv DIRECT LETTERS
-                  addItemToBuffer(item);
-                  keyActionProcessed = true;
-                }                                           //JM ^^
-
-/*1*/            else if( lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
-                  addItemToBuffer(item + 36);
-                  keyActionProcessed = true;
-                }
-
 /*1*/          else if(item == ITM_DOWN_ARROW) {
-                if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL; 
+                if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
                 keyActionProcessed = true;
               }
 
 /*1*/          else if(item == ITM_UP_ARROW) {
-                if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;
+                if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
                 keyActionProcessed = true;
               }
+
+
+    else if(indexOfItems[item].func == addItemToBuffer) {
+      addItemToBuffer(item);
+      keyActionProcessed = true;
+    }
+
+    if(keyActionProcessed) {
+      refreshScreen();
+    }
+
               #ifdef PC_BUILD
-                sprintf(tmp,"^^^^processKeyAction:AIM:end %d",item); jm_show_comment(tmp);
+                sprintf(tmp,"^^^^processAimInput:AIM:end %d",item); jm_show_comment(tmp);
               #endif //PC_BUILD
-              refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
 }
 
 
@@ -767,7 +794,7 @@ bool_t lowercaseselected;
    ***********************************************/
   void processKeyAction(int16_t item) {
     keyActionProcessed = false;
-    bool_t lowercaseselected = ((alphaCase == AC_LOWER && !lastshiftF) || (alphaCase == AC_UPPER && lastshiftF /*&& !numLock*/)); //JM remove last !numlock if you want the shift, during numlock, to produce lower case
+    lowercaseselected = ((alphaCase == AC_LOWER && !lastshiftF) || (alphaCase == AC_UPPER && lastshiftF /*&& !numLock*/)); //JM remove last !numlock if you want the shift, during numlock, to produce lower case
 
     if(lastErrorCode != 0 && item != ITM_EXIT1 && item != ITM_BACKSPACE) {
       lastErrorCode = 0;
@@ -853,7 +880,7 @@ bool_t lowercaseselected;
         break;
 
 
-
+//TOFIX: Is this still required? vv
       case CHR_numL:   //JMvv
         if(!numLock)  { processKeyAction(CHR_num); } 
         keyActionProcessed = true;
@@ -905,7 +932,7 @@ bool_t lowercaseselected;
         showAlphaModeonGui(); //dr JM, see keyboardtweaks
         keyActionProcessed = true;
         break;                                                                                                               //JM^^
- 
+ //TOFIX ^^
 
 
 
@@ -955,6 +982,7 @@ bool_t lowercaseselected;
 
             case CM_AIM:
               processAimInput(item);
+              refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
               break;
 
               case CM_NIM:
@@ -1328,12 +1356,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_AIM:
-//TOFIX
+//TOFIX vv
         if(tmp1 == -MNU_ALPHA || tmp1 == -MNU_T_EDIT) {  //JM
           if(tmp1 == -MNU_T_EDIT && tmp2 == -MNU_ALPHA && tmp3 == -MNU_XXEQ) {popSoftmenu();}       //JM auto double pop
           softmenuStack[0].softmenuId = 1;               //JM
         }                                                //JM
-
+//TOFIX ^^
         if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
         }

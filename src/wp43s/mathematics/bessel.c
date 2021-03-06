@@ -333,7 +333,7 @@ void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real
 			realIsSpecial(xx) || realIsSpecial(xy)) {
 		realCopy(const_NaN, rx), realCopy(const_NaN, ry);
 	}
-	else if(realCompareAbsGreaterThan(r, const_90))
+	else if(realCompareAbsGreaterThan(&r, const_90))
 		bessel_complex_asymptotic_large_x(alphax, alphay, xx, xy, rx, ry, realContext);
 	else
 		cmplx_bessel(alphax, alphay, xx, xy, true, rx, ry, realContext);

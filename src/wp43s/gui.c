@@ -270,7 +270,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("#######%d\n",event_keyval);
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
-if (calcMode == CM_AIM) {
+if (calcMode == CM_AIM || tamMode) {
 switch (event_keyval) {
 
     case 65507: // left Ctrl
@@ -4233,25 +4233,29 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
     #endif //PC_BUILD
+
+if(!tamMode) {
     if(!SH_BASE_AHOME) {
         showSoftmenu(-MNU_MyAlpha);
     } else
     if(SH_BASE_AHOME) {
         showSoftmenu(-MNU_ALPHA);        //JM ALPHA-HOME  Change to initialize the menu stack. it was true.
     }
-
+}
     alphaCase = AC_UPPER;
-    calcMode = CM_AIM;
     nextChar = NC_NORMAL;
     numLock = false;
 
-    liftStack();
+    if(!tamMode) {
+      calcMode = CM_AIM;
+      liftStack();
 
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
-    xCursor = 1;
-    yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = &standardFont;
-    cursorEnabled = true;
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_AIM_LINE + 6;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+    }
 
     if(softmenuStack[0].softmenuId == 0) { // MyMenu
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -4379,7 +4383,7 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### enterTamMode"); jm_show_comment(tmp);
     #endif //PC_BUILD
-    transitionSystemState = 0;
+    transitionSystemState = TS_OP_DIGIT_0;
     tamCurrentOperation = 0;
 
     if(calcMode == CM_NIM) {
@@ -4422,21 +4426,17 @@ void setupUI(void) {
 
     numberOfTamMenusToPop = 1;
 
+    tamNumber = 0;
     if(tamMode == TM_SHUFFLE) {
-      strcat(tamBuffer, " ____");
-      transitionSystemState = 16;
+      transitionSystemState = TS_OP_DIGIT_0_4;
     }
     else if(tamFunction == ITM_CNST) {
-      strcat(tamBuffer, " ___");
-      transitionSystemState = 22;
+      transitionSystemState = TS_CNST_0;
     }
     else if(tamFunction == ITM_BESTF) {
-      strcat(tamBuffer, " ____");
-      transitionSystemState = 25;
+      transitionSystemState = TS_BESTF_0;
     }
-    else {
-      strcat(tamBuffer, " __");
-    }
+    updateTamBuffer();
 
     clearSystemFlag(FLAG_ALPHA);
 
@@ -4456,6 +4456,7 @@ void setupUI(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### leaveTamMode"); jm_show_comment(tmp);
     #endif //PC_BUILD
+    inputNamedVariable = false;
     tamMode = 0;
     catalog = CATALOG_NONE;
 

@@ -623,7 +623,7 @@ Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
   //printf("^^^^ softmenu=%d -MNU_ALPHA=%d currentFirstItem=%d\n", softmenu[softmenuStack[0].softmenuId].menuItem, -MNU_ALPHA, softmenuStack[0].firstItem);
   //**************JM DOUBLE CLICK DETECTION ******************************* // JM FN-DOUBLE
   double_click_detected = false;                                            //JM FN-DOUBLE - Dip detection flag
-  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA )) {
+  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_T_EDIT)) {
     if(exexute_double_g) {
       if(FN_key_pressed !=0 && FN_key_pressed == FN_key_pressed_last) {     //Identified valid double press dip, the same key in rapid succession
         shiftF = false;                                                     //JM
@@ -685,7 +685,7 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
     FN_state =  ST_2_REL1;
   }
 
-  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA) && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
+  if((jm_G_DOUBLETAP && /*calcMode != CM_AIM*/ softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_ALPHA && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_T_EDIT ) && FN_state == ST_2_REL1 && FN_handle_timed_out_to_EXEC) {
     uint8_t                      offset =  0;
     if(shiftF && !shiftG)      { offset =  6; }
     else if(!shiftF && shiftG) { offset = 12; }
@@ -745,11 +745,11 @@ void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shi
 
 
 
-uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT) {
+uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
   int16_t item1 = 0;
   //printf("####A>>%u %u %u\n",id,item,item1);
   if(ITM_A +26 <= item && item <= ITM_Z +26) {
-    if(keyReplacements(item-26, &item1, NL, SHFT, GSHFT)) {
+    if(keyReplacements(item-26, &item1, NL, FSHIFT, GSHIFT)) {
       return max(item1,-item1);
     }
     else {
@@ -757,7 +757,7 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
     }
   }
   else {
-    if(keyReplacements(item, &item1, NL, SHFT, GSHFT)) {
+    if(keyReplacements(item, &item1, NL, FSHIFT, GSHIFT)) {
       return max(item1,-item1);
     }
     else {
@@ -769,10 +769,10 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
 
 
  //Note item1 MUST be set to 0 prior to calling.
- bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT) {
+ bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
  //printf("####B>> %d %d\n",item,* item1);
- if(calcMode == CM_AIM) {
-   if(!NL && GSHFT) {
+ if(calcMode == CM_AIM || (tamMode && inputNamedVariable) ) {
+   if(!NL && GSHIFT) {
       switch(item) {
         case ITM_PI                : * item1 = ITM_7      ; break;
         case ITM_pi                : * item1 = ITM_7      ; break;
@@ -812,7 +812,7 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
       }
 
    } else
-   if(NL && !SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+   if(NL && !FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
      switch(item) {
        case ITM_P             : * item1 = ITM_7;      break;
        case ITM_Q             : * item1 = ITM_8;      break;
@@ -843,7 +843,7 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
      }
    } else
 
-     if(NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+     if(NL && FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
        switch(item) {
          case ITM_MINUS  : * item1 = ITM_UNDERSCORE   ;  break;
          case ITM_PLUS   : * item1 = ITM_SPACE        ;  break;
@@ -857,9 +857,9 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
               //item1 = item;     //this is the non-number character which is now handled below.
               break;
        }
-     } else//JM Exception, to change 0 to ";", when !NL & SHFT-0
+     } else//JM Exception, to change 0 to ";", when !NL & FSHIFT-0
 
-     if(!NL && SHFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
+     if(!NL && FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
        switch(item) {
          case ITM_0      : * item1 = ITM_SEMICOLON        ;  break;
          default: 

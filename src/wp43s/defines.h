@@ -43,7 +43,7 @@
 #define VERBOSE_LEVEL 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
 
 #define PC_BUILD_TELLTALE            //JM verbose on PC: jm_show_comment
-#undef  PC_BUILD_TELLTALE
+//#undef  PC_BUILD_TELLTALE
 
 
 #define PC_BUILD_VERBOSE1            //JM verbose XEQM basic operation on PC
@@ -175,7 +175,9 @@
 #define TT_BASE16                                  9
 #define TT_INT                                    10
 #define TT_FP                                     11
-#define TT_NOTHING                                12
+#define TT_CHB02                                  12
+#define TT_CHB10                                  13 //JM
+#define TT_NOTHING                                14
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
@@ -435,6 +437,7 @@
 #define RESERVED_VARIABLE_PMT                   2025
 #define RESERVED_VARIABLE_PV                    2026
 #define LAST_RESERVED_VARIABLE                  2026
+#define INVALID_VARIABLE                        2027
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
@@ -661,6 +664,7 @@
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
 #define TI_DAY_OF_WEEK                            33
+#define TI_UNDEF_SOURCE_VAR                       34
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -796,6 +800,14 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+
+#define ORTHOPOLY_HERMITE_H                        0
+#define ORTHOPOLY_HERMITE_HE                       1
+#define ORTHOPOLY_LAGUERRE_L                       2
+#define ORTHOPOLY_LAGUERRE_L_ALPHA                 3
+#define ORTHOPOLY_LEGENDRE_P                       4
+#define ORTHOPOLY_CHEBYSHEV_T                      5
+#define ORTHOPOLY_CHEBYSHEV_U                      6
 
 #define QF_NEWTON_F                                0
 #define QF_NEWTON_POISSON                          1

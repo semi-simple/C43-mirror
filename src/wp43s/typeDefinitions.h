@@ -366,3 +366,43 @@ typedef struct {
   int32_t  step;                ///< (Step number + 1) of the program begin: <0 for a FLASH program and >0 for a RAM program
   uint8_t  *instructionPointer; ///< Pointer to the program begin
 } programList_t;
+
+
+/********************************************//**
+ * \typedef tamState_t
+ * \brief Enumeration of states for the TAM buffer
+ ***********************************************/
+typedef enum {
+  TS_OP_DIGIT_0         = 0,  //-> OPO_DIGIT_0, OP_ALPHA, OP_DIGIT_1, OP_DOT_0, OP_INDIRECT_0
+  TS_OPO_DIGIT_0        = 1,  //-> OP_DIGIT_0, OPO_ALPHA, OPO_DIGIT_1, OPO_DOT_0, OPO_INDIRECT_0
+  TS_OP_DIGIT_1         = 2,  //-> OP_DIGIT_0
+  TS_OP_DOT_0           = 3,  //-> OP_DOT_1, OP_DIGIT_0
+  TS_OP_DOT_1           = 4,  //-> OP_DOT_0
+  TS_OP_INDIRECT_0      = 5,  //-> OP_INDIRECT_1, OP_INDIRECT_DOT_0, OP_DIGIT_0
+  TS_OP_INDIRECT_1      = 6,  //-> OP_INDIRECT_0
+  TS_OP_INDIRECT_DOT_0  = 7,  //-> OP_INDIRECT_DOT_1, OP_INDIRECT_0
+  TS_OP_INDIRECT_DOT_1  = 8,  //-> OP_INDIRECT_DOT_0
+  TS_OPO_DIGIT_1        = 9,  //-> OPO_DIGIT_0
+  TS_OPO_DOT_0          = 10, //-> OPO_DOT_1, OPO_DIGIT_0
+  TS_OPO_DOT_1          = 11, //-> OPO_DOT_0
+  TS_OPO_INDIRECT_0     = 12, //-> OPO_INDIRECT_1, OPO_INDIRECT_DOT_0, OPO_DIGIT_0
+  TS_OPO_INDIRECT_1     = 13, //-> OPO_INDIRECT_0
+  TS_OPO_INDIRECT_DOT_0 = 14, //-> OPO_INDIRECT_DOT_1, OPO_INDIRECT_0
+  TS_OPO_INDIRECT_DOT_1 = 15, //-> OPO_INDIRECT_DOT_0
+  TS_OP_DIGIT_0_4       = 16, //->
+  TS_GOTO_0             = 17, //-> GOTO_1, OP_DIGIT_0
+  TS_GOTO_1             = 18, //-> GOTO_2, GOTO_0
+  TS_GOTO_2             = 19, //-> GOTO_3, GOTO_1
+  TS_GOTO_3             = 20, //-> GOTO_4, GOTO_2
+  TS_GOTO_4             = 21, //-> GOTO_3
+  TS_CNST_0             = 22, //-> CNST_1
+  TS_CNST_1             = 23, //-> CNST_2, CNST_0
+  TS_CNST_2             = 24, //-> CNST_1
+  TS_BESTF_0            = 25, //-> BESTF_1
+  TS_BESTF_1            = 26, //-> BESTF_2, BESTF_0
+  TS_BESTF_2            = 27, //-> BESTF_3, BESTF_1
+  TS_BESTF_3            = 28, //-> BESTF_2
+  TS_OP_ALPHA           = 29, //-> OP_DIGIT_0
+  TS_OPO_ALPHA          = 30  //-> OPO_DIGIT_0
+} tamState_t;
+

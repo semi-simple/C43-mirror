@@ -57,6 +57,8 @@ void                   (*confirmedFunction)(uint16_t);
 // Variables stored in RAM
 bool_t                 funcOK;
 bool_t                 keyActionProcessed;
+bool_t                 inputNamedVariable;
+bool_t                 fnKeyInCatalog;
 bool_t                 hourGlassIconEnabled;
 bool_t                 watchIconEnabled;
 bool_t                 printerIconEnabled;
@@ -109,7 +111,7 @@ char                   oldTime[8];
 char                   dateTimeString[12];
 char                   displayValueX[DISPLAY_VALUE_LEN];
 
-uint8_t                transitionSystemState;
+tamState_t             transitionSystemState;
 uint8_t                numScreensStandardFont;
 uint8_t                currentFntScr;
 uint8_t                currentFlgScr;

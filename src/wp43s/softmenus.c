@@ -1,4 +1,4 @@
-      /* This file is part of 43S.
+/* This file is part of 43S.
  *
  * 43S is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -225,7 +225,7 @@ const int16_t menu_TEST[]        = { ITM_XLT,                       ITM_XLE,    
                                      ITM_XEQUP0,                    ITM_XEQUM0,                 ITM_XAEQU,                ITM_MATR,              ITM_CPX,                     ITM_REAL,
                                      ITM_SPEC,                      ITM_NAN,                    ITM_NULL,                 ITM_M_SQR,             ITM_NULL,                    ITM_NULL                      };
 
-const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                    -MNU_ORTHOG,
+const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_BN,                     ITM_BNS,                  ITM_ERF,               ITM_ERFC,                   -MNU_ORTHOG,
                                      ITM_FIB,                       ITM_GD,                     ITM_GDM1,                 ITM_IXYZ,              ITM_IGAMMAP,                 ITM_IGAMMAQ,
                                      ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                      ITM_WM,                        ITM_WP,                     ITM_WM1,                  ITM_BETAXY,            ITM_gammaXY,                 ITM_GAMMAXY,
@@ -1493,7 +1493,6 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
       const int16_t *softkeyItem = softmenu[m].softkeyItem + currentFirstItem;
       for(y=currentFirstItem/6; y<=min(currentFirstItem/6+2, numberOfItems/6); y++, softkeyItem+=6) {
         for(x=0; x<6; x++) {
-
           if(softkeyItem + x >= softmenu[m].softkeyItem + numberOfItems) {
             item = ITM_NULL;
           }
@@ -1794,7 +1793,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
   /********************************************//**
    * \brief Pushes a new softmenu on the softmenu stack
-   * and displays it's first part
    *
    * \param[in] softmenuId int16_t Softmenu ID
    * \return void
@@ -1832,9 +1830,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
   /********************************************//**
    * \brief Pops a softmenu from the softmenu stack
-   * and display it's current part or clear the
-   * softmenu area of the screen if there's nothing
-   * to pop.
    *
    * \param[in] softmenu int16_t Softmenu number
    * \return void
@@ -1866,12 +1861,15 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     } 
                                                               //JM ^^
 //        softmenuStack[0].firstItem = 0;
+
+    enterAsmModeIfMenuIsACatalog(softmenu[softmenuStack[0].softmenuId].menuItem);
+
     #ifdef PC_BUILD
       jm_show_calc_state("popped");
       char tmp[300]; sprintf(tmp,">>> ...... popped into [0]: Id:%d Name:%s\n",softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName); jm_show_comment(tmp);
     #endif //PC_BUILD
   }
-  
+
 
 
   /********************************************//**
@@ -1934,6 +1932,44 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
       lastCatalogPosition[CATALOG_AINT] = softmenuStack[0].firstItem;
     }
   }
+
+  bool_t currentSoftmenuScrolls(void) {
+    int16_t menuId = softmenuStack[0].softmenuId;
+    return (menuId > 1 &&
+      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
+  }
+
+  bool_t isAlphabeticSoftmenu(void) {
+    int16_t menuItem = softmenu[softmenuStack[0].softmenuId].menuItem;
+    switch(menuItem) {
+      case -MNU_ALPHAINTL:
+      case -MNU_ALPHAintl:
+      case -MNU_ALPHA_OMEGA:
+      case -MNU_alpha_omega:
+      case -MNU_ALPHAMATH:
+      case -MNU_MyAlpha:
+      case -MNU_ALPHADOT:
+      case -MNU_T_EDIT:  //JM
+      case -MNU_ALPHA:   //JM
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  bool_t isJMAlphaSoftmenu(int16_t menuId) {
+    int16_t menuItem = softmenu[menuId].menuItem;
+    switch(menuItem) {
+      case -MNU_MyAlpha:
+      case -MNU_T_EDIT:  //JM
+      case -MNU_ALPHA:   //JM
+        return true;
+      default:
+        return false;
+    }
+  }
+
 
 #endif // !TESTSUITE_BUILD
 

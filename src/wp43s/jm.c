@@ -30,6 +30,7 @@
   #ifdef PC_BUILD_TELLTALE
     printf("\n%s-----------------------------------------------------------------------------------------------------------------\n",comment);
     printf(".  calcMode: %d   last_CM=%d (CM_AIM=%d)  doRefreshSoftMenu=%d    lastErrorCode=%d\n",calcMode, last_CM, CM_AIM,doRefreshSoftMenu,lastErrorCode);
+    printf(".  AlphaCaseL:%d  AlphaCaseU:%d \n",alphaCase == AC_LOWER, alphaCase == AC_UPPER);
     printf(".  softmenuStack[0].softmenuId=%d       MY_ALPHA_MENU=%d    softmenu[softmenuStack[0].softmenuId].menuItem=%d -MNU_ALPHA=%d\n",softmenuStack[0].softmenuId,MY_ALPHA_MENU,softmenu[softmenuStack[0].softmenuId].menuItem, -MNU_ALPHA);
     printf(".  ");int8_t ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("(%d)=%5d ", ix, softmenuStack[ix].softmenuId); ix++;} printf("\n");
     printf(".  ");       ix=0; while(ix<SOFTMENU_STACK_SIZE) {printf("%9s ", indexOfItems[-softmenu[softmenuStack[ix].softmenuId].menuItem].itemSoftmenuName  ); ix++;} printf("\n");

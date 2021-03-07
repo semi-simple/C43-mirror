@@ -72,7 +72,10 @@ static void incDecAndCompare(uint16_t regist, uint16_t mode) {
       break;
     case dtReal34:
       if((mode & 2) == 2) {
-        goto invalidType;
+        real34Copy(const34_1, &step);
+        incDecReal(regist, mode >> 2);
+        compared = real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1) ? 0 : 1;
+        break;
       }
       else if(getRegisterAngularMode(regist) == AM_NONE) {
         real34ToIntegralValue(REGISTER_REAL34_DATA(regist), REGISTER_REAL34_DATA(regist), DEC_ROUND_DOWN);

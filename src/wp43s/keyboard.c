@@ -547,9 +547,12 @@ bool_t lastshiftG = false;
 
       if(item != ITM_NOP && item != ITM_NULL) {
         #ifdef PC_BUILD
-          sprintf(tmp,"keyboard.c: btnPressed --> processKeyAction(%d) which is str:%s\n",item,(char *)data); jm_show_calc_state(tmp);
+          sprintf(tmp,"keyboard.c: btnPressed 1--> processKeyAction(%d) which is str:%s\n",item,(char *)data); jm_show_calc_state(tmp);
         #endif
         processKeyAction(item);
+        #ifdef PC_BUILD
+          sprintf(tmp,"keyboard.c: btnPressed 2--> processKeyAction(%d) which is str:%s\n",item,(char *)data); jm_show_calc_state(tmp);
+        #endif
         if(!keyActionProcessed) {
           showFunctionName(item, 1000); // 1000ms = 1s
         }
@@ -608,8 +611,7 @@ bool_t lastshiftG = false;
           char tmp[200]; sprintf(tmp,"^^^^btnReleased %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
         #endif //PC_BUILD
 
-        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here
-
+        if(item == ITM_SQUAREROOTX) closeNim();      //JM moved here, from bufferize see JMCLOSE
 
         hideFunctionName();
         if(item < 0) {
@@ -638,7 +640,7 @@ bool_t lastshiftG = false;
       if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
 
-        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here
+        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here, from bufferize see JMCLOSE
 
         hideFunctionName();
         if(item < 0) {

@@ -265,6 +265,12 @@ void kill_ASB_icon(void) {
    * \return void
    ***********************************************/
   void addItemToBuffer(uint16_t item) {
+
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"bufferize.c: addItemToBuffer item=%d tammode=%d\n",item,tamMode); jm_show_calc_state(tmp);
+    #endif
+
+
     if(item == NOPARAM) {
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
@@ -1213,8 +1219,8 @@ void kill_ASB_icon(void) {
     }
 
     else {
-      switch (item) {
-        case ITM_SQUAREROOTX :  //closeNim moved to btnkeyrelease, as .ms is on longpress underneath sqrt
+      switch (item) {           //JMCLOSE remove auto closenim for these functions only.
+        case ITM_SQUAREROOTX :  //closeNim moved to keyboard.c / btnkeyrelease, as .ms is on longpress underneath sqrt
         case ITM_HASH_JM :      //closeNim simply not needed
           break;
         default : closeNim();

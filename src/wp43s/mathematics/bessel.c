@@ -225,6 +225,132 @@ static void bessel_complex_asymptotic_large_x(const real_t *alpha_r, const real_
 
 
 
+// Polynomial U[k] (based on Abramowitz and Steven, p.366)
+#define NUMBER_OF_COEFF   100
+#define COEFF_BUFFER_SIZE (REAL34_SIZE * NUMBER_OF_COEFF)
+static void u_k(uint32_t k, const real_t *coeff/*array*/, const real_t *t, real_t *res, realContext_t *realContext) {
+	real_t t_n, tmp;
+	uint32_t i;
+
+	realCopy(t, &t_n); realCopy(const_0, res);
+	for(i = 1; i < k; ++i) realMultiply(&t_n, t, &t_n, realContext);
+	for(i = 0; i < NUMBER_OF_COEFF; ++i) {
+		if(realIsZero(&coeff[i])) break;
+		realMultiply(&coeff[i], &t_n, &tmp, realContext);
+		realAdd(res, &tmp, res, realContext);
+		realMultiply(&t_n, t, &t_n, realContext);
+		realMultiply(&t_n, t, &t_n, realContext);
+	}
+}
+static void Sigma_u_k(const real_t *nu, const real_t *t, real_t *res, realContext_t *realContext) {
+	real_t _coeff_current[NUMBER_OF_COEFF], _coeff_next[NUMBER_OF_COEFF];
+	real_t coeff_deriv[NUMBER_OF_COEFF];
+	real_t *coeff_current = _coeff_current, *coeff_next = _coeff_next, *coeff_tmpptr = NULL;
+	real_t nu_k, tmp, tmp2, prev;
+	uint32_t i, j;
+
+	realCopy(const_0, &prev);
+	realCopy(const_1, res);
+	realCopy(nu, &nu_k);
+
+	int32ToReal(24, &tmp);
+	realDivide(const_3, &tmp, &coeff_current[0], realContext);
+	realDivide(const_5, &tmp, &coeff_current[1], realContext);
+	realChangeSign(&coeff_current[1]);
+	for(i = 2; i < NUMBER_OF_COEFF; ++i) realZero(&coeff_current[i]);
+
+	for(i = 0; i < NUMBER_OF_COEFF; ++i) realZero(&coeff_deriv[i]);
+	for(i = 0; i < NUMBER_OF_COEFF; ++i) realZero(&coeff_next[i]);
+
+	for(i = 1; i < NUMBER_OF_COEFF; ++i) {
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) {
+			if(realIsZero(&coeff_current[j])) break;
+		}
+		u_k(i, coeff_current, t, &tmp, realContext);
+		realDivide(&tmp, &nu_k, &tmp, realContext);
+		if(!realIsSpecial(&tmp))
+			realAdd(res, &tmp, res, realContext);
+		realCopy(const_1, &tmp), tmp.exponent -= 73;
+		if(WP34S_RelativeError(res, &prev, &tmp, realContext)) break;
+		realCopy(res, &prev);
+
+		// for the next iteration
+		realMultiply(&nu_k, nu, &nu_k, realContext);
+
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // coefficients of the derivative
+			int32ToReal(i + j * 2, &tmp);
+			realMultiply(&coeff_current[j], &tmp, &coeff_deriv[j], realContext);
+			if(realIsZero(&coeff_deriv[j])) break;
+		}
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // x^2
+			realCopy(&coeff_deriv[j], &coeff_next[j]);
+			if(realIsZero(&coeff_deriv[j])) break;
+		}
+		for(j = 1; j < NUMBER_OF_COEFF; ++j) { // -x^4
+			realSubtract(&coeff_next[j], &coeff_deriv[j - 1], &coeff_next[j], realContext);
+			if(realIsZero(&coeff_deriv[j - 1])) break;
+		}
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // /2
+			realMultiply(&coeff_next[j], const_1on2, &coeff_next[j], realContext);
+			if(realIsZero(&coeff_next[j])) break;
+		}
+
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // 5x
+			realMultiply(&coeff_current[j], const_5, &coeff_deriv[j], realContext);
+			if(realIsZero(&coeff_deriv[j])) break;
+		}
+		for(j = 1; j < NUMBER_OF_COEFF; ++j) { // (1-5t^2)x
+			realSubtract(&coeff_current[j], &coeff_deriv[j - 1], &coeff_current[j], realContext);
+			if(realIsZero(&coeff_deriv[j - 1])) break;
+		}
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // integrate
+			int32ToReal(i + j * 2 + 1, &tmp);
+			realDivide(&coeff_current[j], &tmp, &coeff_deriv[j], realContext);
+			if(realIsZero(&coeff_deriv[j])) break;
+		}
+		int32ToReal(8, &tmp);
+		for(j = 0; j < NUMBER_OF_COEFF; ++j) { // 1/8
+			realDivide(&coeff_deriv[j], &tmp, &tmp2, realContext);
+			realAdd(&coeff_next[j], &tmp2, &coeff_next[j], realContext);
+			if(realIsZero(&coeff_deriv[j])) break;
+		}
+
+		coeff_tmpptr = coeff_current;
+		coeff_current = coeff_next;
+		coeff_next = coeff_tmpptr;
+		coeff_tmpptr = NULL;
+	}
+}
+#undef COEFF_BUFFER_SIZE
+#undef NUMBER_OF_COEFF
+
+// Debye's asymptotic expansion (based on Abramowitz and Steven, p.366)
+static void bessel_asymptotic_large_order_hyp(const real_t *nu, const real_t *x, real_t *res, realContext_t *realContext) {
+	real_t alpha, tanh_alpha, coefficient, itrval, t, tmp;
+
+	// nu * sech(alpha) = nu / cosh(alpha) = x
+	realDivide(nu, x, &alpha, realContext);
+	realArcosh(&alpha, &alpha, realContext);
+
+	// coefficient numerator
+	WP34S_Tanh(&alpha, &tanh_alpha, realContext);
+	realSubtract(&tanh_alpha, &alpha, &coefficient, realContext);
+	realMultiply(nu, &coefficient, &coefficient, realContext);
+	realExp(&coefficient, &coefficient, realContext);
+
+	// coefficient denominator
+	realMultiply(const_2pi, nu, &tmp, realContext);
+	realMultiply(&tmp, &tanh_alpha, &tmp, realContext);
+	realSquareRoot(&tmp, &tmp, realContext);
+	realDivide(&coefficient, &tmp, &coefficient, realContext);
+
+	realDivide(const_1, &tanh_alpha, &t, realContext);
+	Sigma_u_k(nu, &t, &itrval, realContext);
+	realMultiply(&coefficient, &itrval, res, realContext);
+}
+
+
+
 /* The code below is ported from the WP 34s repository,
  * but never implemented in it. */
 static void bessel(const real_t *alpha, const real_t *x, bool_t neg, real_t *res, realContext_t *realContext) {
@@ -279,7 +405,9 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
 	if(realIsNegative(alpha) && realIsAnInteger(alpha)) {
 		realSetPositiveSign(&a);
 	}
-	if(realCompareAbsGreaterThan(x, const_90))
+	if(realCompareGreaterThan(&a, const_90) && realCompareAbsLessThan(x, &a))
+		bessel_asymptotic_large_order_hyp(&a, x, res, realContext);
+	else if(realCompareLessThan(&a, const_45) && realCompareAbsGreaterThan(x, const_90))
 		bessel_asymptotic_large_x(&a, x, res, realContext);
 	else
 		bessel(&a, x, true, res, realContext);

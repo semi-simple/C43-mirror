@@ -91,29 +91,10 @@
         shiftF = false;
         shiftG = true;
       }
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        int16_t item = determineFunctionKeyItem((char *)data);
-
-        shiftF = false;
-        shiftG = false;
-        if(item != ITM_NOP && item != ITM_NULL) {
-          lastErrorCode = 0;
-
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
-        }
-        else {
-          showFunctionNameItem = ITM_NOP;
-        }
-      }
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
+  #endif // DMCP_BUILD
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
@@ -122,18 +103,29 @@
         if(item != ITM_NOP && item != ITM_NULL) {
           lastErrorCode = 0;
 
-          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
-            showFunctionName(item, 1000); // 1000ms = 1s
-          #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-            showFunctionNameItem = item;
-          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          if(indexOfItems[item].func == addItemToBuffer) {
+            // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+            // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+            // Use this variable to distinguish between the two
+            fnKeyInCatalog = 1;
+            addItemToBuffer(item);
+            fnKeyInCatalog = 0;
+            refreshScreen();
+          }
+
+          else {
+            #if (FN_KEY_TIMEOUT_TO_NOP == 1)
+              showFunctionName(item, 1000); // 1000ms = 1s
+            #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+              showFunctionNameItem = item;
+            #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          }
         }
         else {
           showFunctionNameItem = ITM_NOP;
         }
       }
     }
-  #endif // DMCP_BUILD
 
 
 
@@ -165,30 +157,26 @@
             refreshScreen();
             return;
           }
-          else if(catalog && tamMode) {
-            reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-            leaveTamMode();
-            refreshScreen();
-            return;
-          }
-          else if(calcMode == CM_NORMAL && catalog) {
-            leaveAsmMode();
-          }
-          else if(calcMode == CM_AIM && catalog) {
-            addItemToBuffer(item);
-            refreshScreen();
-            return;
-          }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
             return;
           }
 
-          if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F)) {
+          // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+          // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+          // Use this variable to distinguish between the two
+          fnKeyInCatalog = 1;
+          if(tamMode && (!inputNamedVariable || isAlphabeticSoftmenu())) {
+            addItemToBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
           }
-          else if(tamMode) {
+          else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+            if(calcMode == CM_NORMAL) {
+              fnAim(NOPARAM);
+            }
             addItemToBuffer(item);
           }
           else if(item > 0) { // function
@@ -200,12 +188,19 @@
                 }
               }
             }
+            if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
+              closeAim();
+            }
+            if(inputNamedVariable) {
+              leaveTamMode();
+            }
 
             if(lastErrorCode == 0) {
               temporaryInformation = TI_NO_INFO;
               runFunction(item);
             }
           }
+          fnKeyInCatalog = 0;
         }
       }
 
@@ -238,7 +233,7 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || catalog) {
+    if(calcMode == CM_AIM || (catalog && calcMode != CM_NIM) || inputNamedVariable) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -316,8 +311,8 @@
         shiftF = false;
         shiftG = true;
       }
-      showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
+      showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
         processKeyAction(item);
         if(!keyActionProcessed) {
@@ -361,24 +356,10 @@
    ***********************************************/
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      int16_t item;
-
-      if(showFunctionNameItem != 0) {
-        item = showFunctionNameItem;
-        hideFunctionName();
-        if(item < 0) {
-          showSoftmenu(item);
-        }
-        else {
-          runFunction(item);
-        }
-      }
-      refreshScreen();
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnReleased(void *data) {
+  #endif // DMCP_BUILD
       int16_t item;
 
       if(showFunctionNameItem != 0) {
@@ -388,16 +369,21 @@
           showSoftmenu(item);
         }
         else {
+          if(item != ITM_NOP && inputNamedVariable && indexOfItems[item].func != addItemToBuffer) {
+            // We are in TAM mode so need to cancel first (equivalent to EXIT)
+            leaveTamMode();
+          }
           runFunction(item);
         }
       }
+  #ifdef DMCP_BUILD
       else if(keyAutoRepeat) {
         btnPressed(data);
       }
-
+  #endif // DMCP_BUILD
       refreshScreen();
     }
-  #endif // DMCP_BUILD
+
 
 
   void leavePem(void) {
@@ -408,6 +394,39 @@
       freeProgramBytes &= 0x03;
       resizeProgramMemory(TO_BLOCKS(newProgramSize));
       scanLabelsAndPrograms();
+    }
+  }
+
+
+
+  static void processAimInput(int16_t item) {
+    if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
+      addItemToBuffer(item + 26);
+      keyActionProcessed = true;
+    }
+
+    else if(alphaCase == AC_LOWER && (ITM_ALPHA <= item && item <= ITM_OMEGA)) {
+      addItemToBuffer(item + 36);
+      keyActionProcessed = true;
+    }
+
+    else if(item == ITM_DOWN_ARROW) {
+      nextChar = NC_SUBSCRIPT;
+      keyActionProcessed = true;
+    }
+
+    else if(item == ITM_UP_ARROW) {
+      nextChar = NC_SUPERSCRIPT;
+      keyActionProcessed = true;
+    }
+
+    else if(indexOfItems[item].func == addItemToBuffer) {
+      addItemToBuffer(item);
+      keyActionProcessed = true;
+    }
+
+    if(keyActionProcessed) {
+      refreshScreen();
     }
   }
 
@@ -437,11 +456,13 @@
 
       case ITM_UP:
         fnKeyUp(NOPARAM);
+        refreshScreen();
         keyActionProcessed = true;
         break;
 
       case ITM_DOWN:
         fnKeyDown(NOPARAM);
+        refreshScreen();
         keyActionProcessed = true;
         break;
 
@@ -463,6 +484,7 @@
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          updateTamBuffer();
           keyActionProcessed = true;
         }
         break;
@@ -486,8 +508,12 @@
           break;
         }
         else if(tamMode) {
-          addItemToBuffer(item);
-          keyActionProcessed = true;
+          if(inputNamedVariable) {
+            processAimInput(item);
+          } else {
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }
           break;
         }
         else {
@@ -505,25 +531,7 @@
               break;
 
             case CM_AIM:
-              if(alphaCase == AC_LOWER && (ITM_A <= item && item <= ITM_Z)) {
-                addItemToBuffer(item + 26);
-                keyActionProcessed = true;
-              }
-
-              else if(alphaCase == AC_LOWER && (ITM_ALPHA <= item && item <= ITM_OMEGA)) {
-                addItemToBuffer(item + 36);
-                keyActionProcessed = true;
-              }
-
-              else if(item == ITM_DOWN_ARROW) {
-                nextChar = NC_SUBSCRIPT;
-                keyActionProcessed = true;
-              }
-
-              else if(item == ITM_UP_ARROW) {
-                nextChar = NC_SUPERSCRIPT;
-                keyActionProcessed = true;
-              }
+              processAimInput(item);
               break;
 
             case CM_NIM:
@@ -784,11 +792,18 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     if(catalog) {
       leaveAsmMode();
+      popSoftmenu();
       return;
     }
 
     if(tamMode) {
-      leaveTamMode();
+      if(numberOfTamMenusToPop > 1) {
+        popSoftmenu();
+        numberOfTamMenusToPop--;
+      }
+      else {
+        leaveTamMode();
+      }
       return;
     }
 
@@ -802,21 +817,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_AIM:
         if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
-          calcModeNormal();
-
-          if(aimBuffer[0] == 0) {
-            undo();
-          }
-          else {
-            int16_t len = stringByteLength(aimBuffer) + 1;
-
-            reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
-
-            xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
-            aimBuffer[0] = 0;
-
-            setSystemFlag(FLAG_ASLIFT);
-          }
+          closeAim();
         }
         else {
           popSoftmenu();
@@ -839,10 +840,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       //case CM_ASM_OVER_TAM:
       //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  transitionSystemState = 0;
+      //  transitionSystemState = TS_OP_DIGIT_0;
       //  calcModeTam();
       //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       //  tamTransitionSystem(TT_NOTHING);
+      //  updateTamBuffer();
       //  break;
 
       //case CM_ASM_OVER_AIM:
@@ -941,7 +943,17 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     uint8_t *nextStep;
 
     if(tamMode) {
-      tamTransitionSystem(TT_BACKSPACE);
+      if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
+        // If we're in AIM, then only transition if the AIM buffer is empty
+        tamTransitionSystem(TT_BACKSPACE);
+        updateTamBuffer();
+      } else if(inputNamedVariable) {
+        // Delete the last character and then 'transition' to get a redraw
+        lg = stringLastGlyph(aimBuffer);
+        aimBuffer[lg] = 0;
+        tamTransitionSystem(TT_VARIABLE);
+        updateTamBuffer();
+      }
       return;
     }
 
@@ -1016,10 +1028,19 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    int16_t menuId;
-
     if(tamMode && !catalog) {
-      addItemToBuffer(ITM_Max);
+      if(inputNamedVariable) {
+        resetAlphaSelectionBuffer();
+        if(currentSoftmenuScrolls()) {
+          menuUp();
+        }
+        else {
+          alphaCase = AC_UPPER;
+        }
+      }
+      else {
+        addItemToBuffer(ITM_Max);
+      }
       return;
     }
 
@@ -1028,15 +1049,11 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       case CM_AIM:
       case CM_NIM:
         resetAlphaSelectionBuffer();
-        menuId = softmenuStack[0].softmenuId;
-        if(menuId > 1 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
-                          || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
+        if(currentSoftmenuScrolls()) {
           menuUp();
         }
         else {
-          if(alphaCase != AC_UPPER) {
-            alphaCase = AC_UPPER;
-          }
+          alphaCase = AC_UPPER;
         }
         break;
 
@@ -1069,9 +1086,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        menuId = softmenuStack[0].softmenuId;
-        if(menuId > 1 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
-                          || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
+        if(currentSoftmenuScrolls()) {
           menuUp();
         }
         else {
@@ -1096,10 +1111,19 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    int16_t menuId;
-
     if(tamMode && !catalog) {
-      addItemToBuffer(ITM_Min);
+      if(inputNamedVariable) {
+        resetAlphaSelectionBuffer();
+        if(currentSoftmenuScrolls()) {
+          menuDown();
+        }
+        else {
+          alphaCase = AC_LOWER;
+        }
+      }
+      else {
+        addItemToBuffer(ITM_Min);
+      }
       return;
     }
 
@@ -1108,15 +1132,11 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       case CM_AIM:
       case CM_NIM:
         resetAlphaSelectionBuffer();
-        menuId = softmenuStack[0].softmenuId;
-        if(menuId > 1 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
-                          || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
+        if(currentSoftmenuScrolls()) {
           menuDown();
         }
         else {
-          if(alphaCase != AC_LOWER) {
-            alphaCase = AC_LOWER;
-          }
+          alphaCase = AC_LOWER;
         }
         break;
 
@@ -1149,9 +1169,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        menuId = softmenuStack[0].softmenuId;
-        if(menuId > 1 && (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
-                          || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18))) {
+        if(currentSoftmenuScrolls()) {
           menuDown();
         }
         else {

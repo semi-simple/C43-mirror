@@ -214,6 +214,7 @@
     lgCatalogSelection = 0;
     alphaSelectionTimer = 0;
     asmBuffer[0] = 0;
+    fnKeyInCatalog = 0;
   }
 
 
@@ -229,9 +230,8 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
-      if(calcMode == CM_AIM) {
+      if((fnKeyInCatalog || !catalog) && (calcMode == CM_AIM || inputNamedVariable)) {
         item = convertItemToSubOrSup(item, nextChar);
-
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
@@ -241,46 +241,62 @@
         }
       }
 
-      else if(catalog) {
-        int32_t firstItem = 0, pos;
+      if(catalog && !fnKeyInCatalog) {
 
         if(item == ITM_BACKSPACE) {
           calcModeNormal();
           return;
         }
 
-        else {
-          if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1) {
-            pos = lgCatalogSelection++;
-            if(asmBuffer[pos] != 0) {
-              pos++;
-            }
-
-            asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
-            if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
-              asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
-            }
-            asmBuffer[pos] = 0;
-
-            firstItem = findFirstItem(asmBuffer);
+        // NOP if not a single character input for search
+        // or if we already have two characters in the search buffer
+        else if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1 &&
+                (lgCatalogSelection < ((asmBuffer[0] & 0x80) ? 3 : 2))) {
+          int32_t pos = lgCatalogSelection++;
+          if(asmBuffer[pos] != 0) {
+            pos++;
           }
-        }
 
-        softmenuStack[0].firstItem = firstItem;
-        setCatalogLastPos();
-        alphaSelectionTimer = getUptimeMs();
+          asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[0];
+          if(indexOfItems[item].itemSoftmenuName[0] & 0x80) { // 2 bytes
+            asmBuffer[pos++] = indexOfItems[item].itemSoftmenuName[1];
+          }
+          asmBuffer[pos] = 0;
+
+          softmenuStack[0].firstItem = findFirstItem(asmBuffer);
+          setCatalogLastPos();
+          alphaSelectionTimer = getUptimeMs();
+        }
       }
 
       else if(tamMode) {
-        if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
+        if(item == ITM_ENTER) {
+          tamTransitionSystem(TT_ENTER);
+        }
+        else if(inputNamedVariable) {
+          // Text added above, just transition to variable to get the text
+          if(stringGlyphLength(aimBuffer) > 6) {
+            tamTransitionSystem(TT_ENTER);
+          }
+          else {
+            tamTransitionSystem(TT_VARIABLE);
+          }
+        }
+        else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
           tamOperation = item;
           tamTransitionSystem(TT_OPERATION);
         }
-        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {   //JM TO INT
+        else if(tamFunction == ITM_toINT && item == ITM_REG_I) {
           tamTransitionSystem(TT_INT);
+        }
+        else if(tamFunction == ITM_toINT && item == ITM_alpha) {
+          tamTransitionSystem(TT_FP);
         }
         else if(tamFunction == ITM_toINT && item == ITM_REG_D) {
           tamTransitionSystem(TT_BASE10);
+        }
+        else if(tamFunction == ITM_toINT && item == ITM_REG_B) {
+          tamTransitionSystem(TT_CHB02);
         }
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {
           tamTransitionSystem(TT_BASE16);
@@ -289,24 +305,18 @@
           tamLetteredRegister = indexOfItems[item].param;
           tamTransitionSystem(TT_LETTER);
         }
-        /*else if(namedVariable) {
-          tamTransitionSystem(TT_VARIABLE);
-        }*/
         else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
           tamDigit = item - ITM_0;
           tamTransitionSystem(TT_DIGIT);
         }
-        else if(item == ITM_ENTER) {
-          tamTransitionSystem(TT_ENTER);
-        }
         else if(item == ITM_PERIOD) { // .
-          if(tamFunction == ITM_GTO && transitionSystemState == 0) {
+          if(tamFunction == ITM_GTO && transitionSystemState == TS_OP_DIGIT_0) {
             tamFunction = ITM_GTOP;
             tamNumberMin = 1;
             tamNumberMax = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
             strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
             strcat(tamBuffer, " _____");
-            transitionSystemState = 17;
+            transitionSystemState = TS_GOTO_0;
           }
           else {
             tamTransitionSystem(TT_DOT);
@@ -319,10 +329,16 @@
           tamTransitionSystem(TT_BACKSPACE);
         }
         else if(item == ITM_alpha) {
-          #ifdef PC_BUILD
-            moreInfoOnError("In function addItemToBuffer:", STD_alpha " to be coded!", NULL, NULL);
-          #endif // PC_BUILD
-          tamTransitionSystem(TT_NOTHING);
+          inputNamedVariable = true;
+          aimBuffer[0] = 0;
+          calcModeAim(NOPARAM);
+          tamTransitionSystem(TT_VARIABLE);
+        }
+        else if(item == ITM_0P || item == ITM_1P) {
+          reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+          real34Copy(item == ITM_1P ? const34_1 : const34_0, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+          tamLetteredRegister = TEMP_REGISTER_1;
+          tamTransitionSystem(TT_LETTER);
         }
         else if((tamMode == TM_FLAGR || tamMode == TM_FLAGW)) {
           tamTransitionSystem(TT_NOTHING);
@@ -330,13 +346,14 @@
         else {
           tamTransitionSystem(TT_NOTHING);
         }
+        updateTamBuffer();
       }
 
       else if(calcMode == CM_NIM) {
         addItemToNimBuffer(item);
       }
 
-      else {
+      else if(calcMode != CM_AIM) {
         funcOK = false;
         return;
       }
@@ -1234,7 +1251,93 @@
     }
   }
 
-
+  void updateTamBuffer() {
+    if(tamMode == 0) {
+      return;
+    }
+    switch(transitionSystemState) {
+      case TS_OP_DIGIT_0:
+      case TS_OPO_DIGIT_0:
+        sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
+        break;
+      case TS_OP_DIGIT_1:
+      case TS_OPO_DIGIT_1:
+        sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
+        break;
+      case TS_OP_DOT_0:
+      case TS_OPO_DOT_0:
+        sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
+        break;
+      case TS_OP_DOT_1:
+      case TS_OPO_DOT_1:
+        sprintf(tamBuffer, "%s .%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
+        break;
+      case TS_OP_INDIRECT_0:
+      case TS_OPO_INDIRECT_0:
+        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
+        break;
+      case TS_OP_INDIRECT_1:
+      case TS_OPO_INDIRECT_1:
+        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
+        break;
+      case TS_OP_INDIRECT_DOT_0:
+      case TS_OPO_INDIRECT_DOT_0:
+        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
+        break;
+      case TS_OP_INDIRECT_DOT_1:
+      case TS_OPO_INDIRECT_DOT_1:
+        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
+        break;
+      case TS_OP_DIGIT_0_4:
+        // Leave alone the buffer for shuffle - it is managed by the transition function
+        break;
+      case TS_GOTO_0:
+        sprintf(tamBuffer, "GTO. _____");
+        break;
+      case TS_GOTO_1:
+        sprintf(tamBuffer, "GTO. %d____", tamNumber);
+        break;
+      case TS_GOTO_2:
+        sprintf(tamBuffer, "GTO. %02d___", tamNumber);
+        break;
+      case TS_GOTO_3:
+        sprintf(tamBuffer, "GTO. %03d__", tamNumber);
+        break;
+      case TS_GOTO_4:
+        sprintf(tamBuffer, "GTO. %04d_", tamNumber);
+        break;
+      case TS_CNST_0:
+        sprintf(tamBuffer, "CNST ___");
+        break;
+      case TS_CNST_1:
+        sprintf(tamBuffer, "CNST %d__", tamNumber);
+        break;
+      case TS_CNST_2:
+        sprintf(tamBuffer, "CNST %02d_", tamNumber);
+        break;
+      case TS_BESTF_0:
+        sprintf(tamBuffer, "BestF ____");
+        break;
+      case TS_BESTF_1:
+        sprintf(tamBuffer, "BestF %d___", tamNumber);
+        break;
+      case TS_BESTF_2:
+        sprintf(tamBuffer, "BestF %02d__", tamNumber);
+        break;
+      case TS_BESTF_3:
+        sprintf(tamBuffer, "BestF %03d_", tamNumber);
+        break;
+      case TS_OP_ALPHA:
+      case TS_OPO_ALPHA:
+        if(aimBuffer[0] == 0) {
+          sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+        }
+        else {
+          sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+        }
+        break;
+    }
+  }
 
   void tamTransitionSystem(uint16_t tamEvent) {
     calcRegister_t value, regist;
@@ -1242,7 +1345,7 @@
     switch(transitionSystemState) {
       //////////////////////////////
       // OP __
-      case 0 :
+      case TS_OP_DIGIT_0 :
         switch(tamEvent) {
           case TT_OPERATION :
             if(tamMode == TM_STORCL) {
@@ -1258,13 +1361,12 @@
               }
 
               tamCurrentOperation = tamOperation;
-              sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
 
               if(tamCurrentOperation == ITM_Config || tamCurrentOperation == ITM_Stack) {
                 return;
               }
 
-              transitionSystemState = 1;
+              transitionSystemState = TS_OPO_DIGIT_0;
             }
             return;
 
@@ -1277,14 +1379,14 @@
 
           case TT_VARIABLE :
             if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
+              transitionSystemState = TS_OP_ALPHA;
             }
             return;
 
           case TT_DIGIT :
             tamNumber = tamDigit;
             if(tamNumber < tamNumberMin) {
-              sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-              transitionSystemState = 2;
+              transitionSystemState = TS_OP_DIGIT_1;
             }
             else if(tamNumber > tamNumberMax) {
             }
@@ -1293,23 +1395,20 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-              transitionSystemState = 2;
+              transitionSystemState = TS_OP_DIGIT_1;
             }
             return;
 
           case TT_DOT :
             if(tamMode != TM_VALUE && tamMode != TM_VALUE_CHB) {
               if(((tamMode == TM_FLAGR || tamMode == TM_FLAGW) && currentLocalFlags != NULL) || ((tamMode != TM_FLAGR && tamMode != TM_FLAGW) && currentLocalRegisters != NULL)) {
-                sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
-                transitionSystemState = 3;
+                transitionSystemState = TS_OP_DOT_0;
               }
             }
             return;
 
           case TT_INDIRECT :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 5;
+            transitionSystemState = TS_OP_INDIRECT_0;
             return;
 
           case TT_BACKSPACE :
@@ -1318,6 +1417,16 @@
 
           case TT_INT :
             fnIp(NOPARAM);
+            leaveTamMode();
+            return;
+
+          case TT_FP :
+            fnFp(NOPARAM);
+            leaveTamMode();
+            return;
+
+          case TT_CHB02 :
+            fnChangeBase(2);
             leaveTamMode();
             return;
 
@@ -1337,23 +1446,20 @@
 
       //////////////////////////////
       // OPo __
-      case 1 : // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
+      case TS_OPO_DIGIT_0 : // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
         switch(tamEvent) {
           case TT_BACKSPACE :
             tamCurrentOperation = tamFunction;
-            sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
             return;
 
           case TT_OPERATION :
             if(tamOperation==tamCurrentOperation) {
               tamCurrentOperation = tamFunction;
-              sprintf(tamBuffer, "%s __   ", indexOfItems[getOperation()].itemCatalogName);
-              transitionSystemState = 0;
+              transitionSystemState = TS_OP_DIGIT_0;
             }
             else {
               tamCurrentOperation = tamOperation;
-              sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
             }
             return;
 
@@ -1363,24 +1469,22 @@
             return;
 
           case TT_VARIABLE :
+            transitionSystemState = TS_OPO_ALPHA;
             return;
 
           case TT_DIGIT :
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-            transitionSystemState = 9;
+            transitionSystemState = TS_OPO_DIGIT_1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
-              sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
-              transitionSystemState = 10;
+              transitionSystemState = TS_OPO_DOT_0;
             }
             return;
 
           case TT_INDIRECT :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 12;
+            transitionSystemState = TS_OPO_INDIRECT_0;
             return;
 
           default : {}
@@ -1389,7 +1493,7 @@
 
       //////////////////////////////
       // OP d_
-      case 2 :
+      case TS_OP_DIGIT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             if(tamNumberMin <= (tamNumber*10 + tamDigit) && (tamNumber*10 + tamDigit) <= tamNumberMax) {
@@ -1406,8 +1510,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
             return;
 
           default : {}
@@ -1416,7 +1519,7 @@
 
       //////////////////////////////
       // OP .__
-      case 3 :
+      case TS_OP_DOT_0 :
         // Here we are sure that:
         // currentLocalFlags != NULL         in the case of a flag parameter
         // currentNumberOfLocalRegisters > 0 in the case of a register parameter
@@ -1429,15 +1532,13 @@
                 leaveTamMode();
               }
               else {
-                sprintf(tamBuffer, "%s .%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-                transitionSystemState = 4;
+                transitionSystemState = TS_OP_DOT_1;
               }
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
             return;
 
           default : {}
@@ -1446,7 +1547,7 @@
 
       //////////////////////////////
       // OP .d_
-      case 4 :
+      case TS_OP_DOT_1 :
         // Here we are sure that:
         // 0 <= tamNumber < NUMBER_OF_LOCAL_FLAGS         in the case of a flag parameter
         // 0 <= tamNumber < currentNumberOfLocalRegisters in the case of a register parameter
@@ -1464,8 +1565,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 3;
+            transitionSystemState = TS_OP_DOT_0;
             return;
 
           default : {}
@@ -1474,7 +1574,7 @@
 
       //////////////////////////////
       // OP -->__
-      case 5 :
+      case TS_OP_INDIRECT_0 :
         switch(tamEvent) {
           case TT_LETTER :
             value = indirectAddressing(tamLetteredRegister, tamNumberMin, tamNumberMax);
@@ -1490,20 +1590,17 @@
 
           case TT_DIGIT :
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-            transitionSystemState = 6;
+            transitionSystemState = TS_OP_INDIRECT_1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
-              sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
-              transitionSystemState = 7;
+              transitionSystemState = TS_OP_INDIRECT_DOT_0;
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
             return;
 
           default : {}
@@ -1512,7 +1609,7 @@
 
       //////////////////////////////
       // OP -->d_
-      case 6 :
+      case TS_OP_INDIRECT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             value = indirectAddressing(tamNumber*10 + tamDigit, tamNumberMin, tamNumberMax);
@@ -1533,8 +1630,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 5;
+            transitionSystemState = TS_OP_INDIRECT_0;
             return;
 
           default : {}
@@ -1543,7 +1639,7 @@
 
       //////////////////////////////
       // OP -->.__
-      case 7 :
+      case TS_OP_INDIRECT_DOT_0 :
         // Here we are sure that:
         // currentNumberOfLocalRegisters > 0
         switch(tamEvent) {
@@ -1559,15 +1655,13 @@
                 leaveTamMode();
               }
               else {
-                sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-                transitionSystemState = 8;
+                transitionSystemState = TS_OP_INDIRECT_DOT_1;
               }
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 5;
+            transitionSystemState = TS_OP_INDIRECT_0;
             return;
 
           default : {}
@@ -1576,7 +1670,7 @@
 
       //////////////////////////////
       // OP -->.d_
-      case 8 :
+      case TS_OP_INDIRECT_DOT_1 :
         // Here we are sure that:
         // 0 <= tamNumber < currentNumberOfLocalRegisters
         switch(tamEvent) {
@@ -1601,8 +1695,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 7;
+            transitionSystemState = TS_OP_INDIRECT_DOT_0;
             return;
 
           default : {}
@@ -1611,7 +1704,7 @@
 
       //////////////////////////////
       // OPo d_
-      case 9 :
+      case TS_OPO_DIGIT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             reallyRunFunction(getOperation(), tamNumber*10 + tamDigit);
@@ -1624,8 +1717,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 1;
+            transitionSystemState = TS_OPO_DIGIT_0;
             return;
 
           default : {}
@@ -1634,7 +1726,7 @@
 
       //////////////////////////////
       // OPo .__
-      case 10 :
+      case TS_OPO_DOT_0 :
         // Here we are sure that:
         // currentNumberOfLocalRegisters > 0
         switch(tamEvent) {
@@ -1648,15 +1740,13 @@
                 leaveTamMode();
               }
               else {
-                sprintf(tamBuffer, "%s .%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-                transitionSystemState = 11;
+                transitionSystemState = TS_OPO_DOT_1;
               }
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 1;
+            transitionSystemState = TS_OPO_DIGIT_0;
             return;
 
           default : {}
@@ -1665,7 +1755,7 @@
 
       //////////////////////////////
       // OPo .d_
-      case 11 :
+      case TS_OPO_DOT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             if(tamNumber*10 + tamDigit < currentNumberOfLocalRegisters) {
@@ -1682,8 +1772,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 10;
+            transitionSystemState = TS_OPO_DOT_0;
             return;
 
           default : {}
@@ -1692,7 +1781,7 @@
 
       //////////////////////////////
       // OPo -->__
-      case 12 :
+      case TS_OPO_INDIRECT_0 :
         switch(tamEvent) {
           case TT_LETTER :
             regist = indirectAddressing(tamLetteredRegister, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
@@ -1708,20 +1797,17 @@
 
           case TT_DIGIT :
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-            transitionSystemState = 13;
+            transitionSystemState = TS_OPO_INDIRECT_1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
-              sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
-              transitionSystemState = 14;
+              transitionSystemState = TS_OPO_INDIRECT_DOT_0;
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s __ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 1;
+            transitionSystemState = TS_OPO_DIGIT_0;
             return;
 
           default : {}
@@ -1730,7 +1816,7 @@
 
       //////////////////////////////
       // OPo -->d_
-      case 13 :
+      case TS_OPO_INDIRECT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             regist = indirectAddressing(tamNumber*10 + tamDigit, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
@@ -1751,8 +1837,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 12;
+            transitionSystemState = TS_OPO_INDIRECT_0;
             return;
 
           default : {}
@@ -1761,21 +1846,19 @@
 
       //////////////////////////////
       // OPo -->.__
-      case 14 :
+      case TS_OPO_INDIRECT_DOT_0 :
         // Here we are sure that:
         // numberOfLocalRegisters > 0
         switch(tamEvent) {
           case TT_DIGIT :
             if(tamDigit < currentNumberOfLocalRegisters) {
               tamNumber = tamDigit;
-              sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tamNumber);
-              transitionSystemState = 15;
+              transitionSystemState = TS_OPO_INDIRECT_DOT_1;
             }
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__ ", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 12;
+            transitionSystemState = TS_OPO_INDIRECT_0;
             return;
 
           default : {}
@@ -1784,7 +1867,7 @@
 
       //////////////////////////////
       // OPo -->.d_
-      case 15 :
+      case TS_OPO_INDIRECT_DOT_1 :
         switch(tamEvent) {
           case TT_DIGIT :
             if(tamNumber*10 + tamDigit < currentNumberOfLocalRegisters) {
@@ -1807,8 +1890,7 @@
             return;
 
           case TT_BACKSPACE :
-            sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
-            transitionSystemState = 14;
+            transitionSystemState = TS_OPO_INDIRECT_DOT_0;
             return;
 
           default : {}
@@ -1817,7 +1899,7 @@
 
       //////////////////////////////
       // OP ____
-      case 16:
+      case TS_OP_DIGIT_0_4:
         switch(tamEvent) {
           case TT_LETTER :
             if(tamLetteredRegister >= REGISTER_X && tamLetteredRegister <= REGISTER_T) {
@@ -1849,21 +1931,18 @@
 
       //////////////////////////////
       // GTO. _____
-      case 17:
+      case TS_GOTO_0:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamDigit;
-            sprintf(tamBuffer, "GTO. %d____", tamNumber);
-            transitionSystemState = 18;
+            transitionSystemState = TS_GOTO_1;
             return;
 
           case TT_BACKSPACE :
             tamFunction = ITM_GTO;
             tamNumberMin = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
             tamNumberMax = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
-            strcpy(tamBuffer, indexOfItems[ITM_GTO].itemSoftmenuName);
-            strcat(tamBuffer, " __");
-            transitionSystemState = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
             return;
 
           case TT_DOT:
@@ -1909,12 +1988,11 @@
 
       //////////////////////////////
       // GTO. d____
-      case 18:
+      case TS_GOTO_1:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
-            sprintf(tamBuffer, "GTO. %02d___", tamNumber);
-            transitionSystemState = 19;
+            transitionSystemState = TS_GOTO_2;
             return;
 
           case TT_ENTER : // GTO local label tamNumber
@@ -1924,14 +2002,13 @@
 
           case TT_BACKSPACE :
             tamNumber = 0;
-            xcopy(tamBuffer, "GTO. _____", 11);
-            transitionSystemState = 17;
+            transitionSystemState = TS_GOTO_0;
         }
         return;
 
       //////////////////////////////
       // GTO. dd___
-      case 19:
+      case TS_GOTO_2:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -1943,8 +2020,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "GTO. %03d__", tamNumber);
-              transitionSystemState = 20;
+              transitionSystemState = TS_GOTO_3;
             }
             return;
 
@@ -1955,14 +2031,13 @@
 
           case TT_BACKSPACE :
             tamNumber /= 10;
-            sprintf(tamBuffer, "GTO. %01d____", tamNumber);
-            transitionSystemState = 18;
+            transitionSystemState = TS_GOTO_1;
         }
         return;
 
       //////////////////////////////
       // GTO. ddd__
-      case 20:
+      case TS_GOTO_3:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -1974,8 +2049,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "GTO. %04d_", tamNumber);
-              transitionSystemState = 21;
+              transitionSystemState = TS_GOTO_4;
             }
             return;
 
@@ -1988,14 +2062,13 @@
 
           case TT_BACKSPACE :
             tamNumber /= 10;
-            sprintf(tamBuffer, "GTO. %02d___", tamNumber);
-            transitionSystemState = 19;
+            transitionSystemState = TS_GOTO_2;
         }
         return;
 
       //////////////////////////////
       // GTO. dddd_
-      case 21:
+      case TS_GOTO_4:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2017,14 +2090,13 @@
 
           case TT_BACKSPACE :
             tamNumber /= 10;
-            sprintf(tamBuffer, "GTO. %03d__", tamNumber);
-            transitionSystemState = 20;
+            transitionSystemState = TS_GOTO_3;
         }
         return;
 
       //////////////////////////////
       // CNST ___
-      case 22:
+      case TS_CNST_0:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamDigit;
@@ -2035,8 +2107,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "CNST %d__", tamNumber);
-              transitionSystemState = 23;
+              transitionSystemState = TS_CNST_1;
             }
             return;
 
@@ -2048,7 +2119,7 @@
 
       //////////////////////////////
       // CNST d__
-      case 23:
+      case TS_CNST_1:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2060,8 +2131,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "CNST %02d_", tamNumber);
-              transitionSystemState = 24;
+              transitionSystemState = TS_CNST_2;
             }
             return;
 
@@ -2072,14 +2142,13 @@
 
           case TT_BACKSPACE :
             tamNumber = 0;
-            xcopy(tamBuffer, "CNST ___", 11);
-            transitionSystemState = 22;
+            transitionSystemState = TS_CNST_0;
         }
         return;
 
       //////////////////////////////
       // CNST dd_
-      case 24:
+      case TS_CNST_2:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2099,14 +2168,13 @@
 
           case TT_BACKSPACE :
             tamNumber /= 10;
-            sprintf(tamBuffer, "CNST %d__", tamNumber);
-            transitionSystemState = 23;
+            transitionSystemState = TS_CNST_1;
         }
         return;
 
       //////////////////////////////
       // BestF ____
-      case 25:
+      case TS_BESTF_0:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamDigit;
@@ -2117,8 +2185,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "BestF %d___", tamNumber);
-              transitionSystemState = 26;
+              transitionSystemState = TS_BESTF_1;
             }
             return;
 
@@ -2130,7 +2197,7 @@
 
       //////////////////////////////
       // BestF d___
-      case 26:
+      case TS_BESTF_1:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2142,8 +2209,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "BestF %02d__", tamNumber);
-              transitionSystemState = 27;
+              transitionSystemState = TS_BESTF_2;
             }
             return;
 
@@ -2154,14 +2220,13 @@
 
           case TT_BACKSPACE :
             tamNumber = 0;
-            xcopy(tamBuffer, "BestF ____", 11);
-            transitionSystemState = 25;
+            transitionSystemState = TS_BESTF_0;
         }
         return;
 
       //////////////////////////////
       // BestF dd__
-      case 27:
+      case TS_BESTF_2:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2173,8 +2238,7 @@
               leaveTamMode();
             }
             else {
-              sprintf(tamBuffer, "BestF %03d_", tamNumber);
-              transitionSystemState = 28;
+              transitionSystemState = TS_BESTF_3;
             }
             return;
 
@@ -2185,14 +2249,13 @@
 
           case TT_BACKSPACE :
             tamNumber = 0;
-            sprintf(tamBuffer, "BestF %d___", tamNumber);
-            transitionSystemState = 26;
+            transitionSystemState = TS_BESTF_1;
         }
         return;
 
       //////////////////////////////
       // BestF ddd_
-      case 28:
+      case TS_BESTF_3:
         switch(tamEvent) {
           case TT_DIGIT :
             tamNumber = tamNumber*10 + tamDigit;
@@ -2212,11 +2275,70 @@
 
           case TT_BACKSPACE :
             tamNumber /= 10;
-            sprintf(tamBuffer, "BestF %02d__", tamNumber);
-            transitionSystemState = 27;
+            transitionSystemState = TS_BESTF_2;
         }
         return;
 
+
+      //////////////////////////////
+      // OP '_
+      case TS_OP_ALPHA : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            inputNamedVariable = 0;
+            transitionSystemState = TS_OP_DIGIT_0;
+            return;
+
+          default : {}
+        }
+        return;
+
+      //////////////////////////////
+      // OPo '_
+      case TS_OPO_ALPHA : // inputNamedVariable = 1
+        switch(tamEvent) {
+          case TT_ENTER:
+            if(tamFunction == ITM_STO) {
+              regist = findOrAllocateNamedVariable(aimBuffer);
+            }
+            else {
+              regist = findNamedVariable(aimBuffer);
+              if(regist == INVALID_VARIABLE) {
+                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+              }
+            }
+            aimBuffer[0] = 0;
+            if(regist != INVALID_VARIABLE) {
+              reallyRunFunction(getOperation(), regist);
+            }
+            leaveTamMode();
+            return;
+
+          case TT_BACKSPACE :
+            inputNamedVariable = 0;
+            transitionSystemState = TS_OPO_DIGIT_0;
+            return;
+
+          default : {}
+        }
+        return;
 
       //////////////////////////////
       // This should never happen
@@ -2549,6 +2671,25 @@
           }
         }
       }
+    }
+  }
+
+  void closeAim(void) {
+    calcModeNormal();
+    popSoftmenu();
+
+    if(aimBuffer[0] == 0) {
+      undo();
+    }
+    else {
+      int16_t len = stringByteLength(aimBuffer) + 1;
+
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+
+      xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
+      aimBuffer[0] = 0;
+
+      setSystemFlag(FLAG_ASLIFT);
     }
   }
 #endif // TESTSUITE_BUILD

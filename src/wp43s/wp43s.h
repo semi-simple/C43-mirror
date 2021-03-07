@@ -231,6 +231,8 @@
   // Variables stored in RAM
   extern bool_t                 funcOK;
   extern bool_t                 keyActionProcessed;
+  extern bool_t                 inputNamedVariable;
+  extern bool_t                 fnKeyInCatalog;
   extern bool_t                 hourGlassIconEnabled;
   extern bool_t                 watchIconEnabled;
   extern bool_t                 printerIconEnabled;
@@ -284,7 +286,7 @@
   extern char                   dateTimeString[12];
   extern char                   displayValueX[DISPLAY_VALUE_LEN];
 
-  extern uint8_t                transitionSystemState;
+  extern tamState_t             transitionSystemState;
   extern uint8_t                numScreensStandardFont;
   extern uint8_t                currentFntScr;
   extern uint8_t                currentFlgScr;

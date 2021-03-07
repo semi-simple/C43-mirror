@@ -114,7 +114,7 @@ const int16_t menu_MATX[]        = { ITM_M_NEW,                     ITM_M_INV,  
                                      ITM_RSUM,                      ITM_RNORM,                  ITM_M_LU,                 ITM_M_DIMQ,            ITM_NULL,                    ITM_M_RR,
                                      ITM_EIGVAL,                    ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_EIGVEC                    };
 
-const int16_t menu_M_SIM_Q[]     = { VAR_MATA,                      VAR_MATB,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    VAR_MATX                      };
+const int16_t menu_M_SIM_Q[]     = { VAR_MATA,                      VAR_MATB,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_MATX                      }; // Should VAR_MATA and VAR_MATB be reclaced by ITM_MATA (to be created) and ITM_MATB (to be created) here?
 
 const int16_t menu_M_EDIT[]      = { ITM_LEFT_ARROW,                ITM_UP_ARROW,               ITM_M_OLD,                ITM_M_GOTO,            ITM_DOWN_ARROW,              ITM_RIGHT_ARROW,
                                      ITM_M_INSR,                    ITM_NULL,                   ITM_M_DELR,               ITM_NULL,              ITM_M_WRAP,                  ITM_M_GROW                    };
@@ -866,6 +866,8 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     else if(softmenuStack[0].softmenuId == 1 && calcMode != CM_AIM) { // MyAlpha displayed and not in AIM
       softmenuStack[0].softmenuId = 0; // MyMenu
     }
+
+    enterAsmModeIfMenuIsACatalog(softmenu[softmenuStack[0].softmenuId].menuItem);
   }
 
 
@@ -925,4 +927,28 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       lastCatalogPosition[CATALOG_AINT] = softmenuStack[0].firstItem;
     }
   }
+
+  bool_t currentSoftmenuScrolls(void) {
+    int16_t menuId = softmenuStack[0].softmenuId;
+    return (menuId > 1 &&
+      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
+  }
+
+  bool_t isAlphabeticSoftmenu(void) {
+    int16_t menuItem = softmenu[softmenuStack[0].softmenuId].menuItem;
+    switch(menuItem) {
+      case -MNU_ALPHAINTL:
+      case -MNU_ALPHAintl:
+      case -MNU_ALPHA_OMEGA:
+      case -MNU_alpha_omega:
+      case -MNU_ALPHAMATH:
+      case -MNU_MyAlpha:
+      case -MNU_ALPHADOT:
+        return true;
+      default:
+        return false;
+    }
+  }
+
 #endif // !TESTSUITE_BUILD

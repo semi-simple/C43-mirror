@@ -247,6 +247,14 @@ zeta
 bn
 bn_star
 
+hermite
+hermite_p
+laguerre
+laguerre_alpha
+legendre
+chebyshev_t
+chebyshev_u
+
 w_positive
 w_negative
 w_inverse
@@ -278,3 +286,8 @@ chi2_p
 chi2_l
 chi2_r
 chi2_i
+
+f_p
+f_l
+f_r
+f_i

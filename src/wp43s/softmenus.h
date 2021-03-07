@@ -26,4 +26,6 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   void   showSoftmenu           (int16_t id);
   void   popSoftmenu            (void);
   void   setCatalogLastPos      (void);
+  bool_t currentSoftmenuScrolls (void);
+  bool_t isAlphabeticSoftmenu   (void);
 #endif // !TESTSUITE_BUILD

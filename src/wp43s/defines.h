@@ -75,7 +75,9 @@
 #define TT_BASE10                                  8
 #define TT_BASE16                                  9
 #define TT_INT                                    10
-#define TT_NOTHING                                11
+#define TT_FP                                     11
+#define TT_CHB02                                  12
+#define TT_NOTHING                                13
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
@@ -306,6 +308,7 @@
 #define RESERVED_VARIABLE_PMT                   2025
 #define RESERVED_VARIABLE_PV                    2026
 #define LAST_RESERVED_VARIABLE                  2026
+#define INVALID_VARIABLE                        2027
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
@@ -360,6 +363,7 @@
 #define X_BATTERY                                389
 
 #define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
+#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)
@@ -514,6 +518,7 @@
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
 #define TI_DAY_OF_WEEK                            33
+#define TI_UNDEF_SOURCE_VAR                       34
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -594,7 +599,10 @@
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
+#define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
+#define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
+#define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
@@ -634,6 +642,27 @@
 #define CHECK_INTEGER_EVEN                         1
 #define CHECK_INTEGER_ODD                          2
 #define CHECK_INTEGER_FP                           3
+
+#define CHECK_VALUE_COMPLEX                        0
+#define CHECK_VALUE_REAL                           1
+#define CHECK_VALUE_POSITIVE_ZERO                  2
+#define CHECK_VALUE_NEGATIVE_ZERO                  3
+#define CHECK_VALUE_SPECIAL                        4
+#define CHECK_VALUE_NAN                            5
+#define CHECK_VALUE_INFINITY                       6
+
+#define ORTHOPOLY_HERMITE_H                        0
+#define ORTHOPOLY_HERMITE_HE                       1
+#define ORTHOPOLY_LAGUERRE_L                       2
+#define ORTHOPOLY_LAGUERRE_L_ALPHA                 3
+#define ORTHOPOLY_LEGENDRE_P                       4
+#define ORTHOPOLY_CHEBYSHEV_T                      5
+#define ORTHOPOLY_CHEBYSHEV_U                      6
+
+#define QF_NEWTON_F                                0
+#define QF_NEWTON_POISSON                          1
+#define QF_NEWTON_BINOMIAL                         2
+#define QF_NEWTON_GEOMETRIC                        3
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

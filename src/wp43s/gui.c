@@ -1427,16 +1427,18 @@
    ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
     alphaCase = AC_UPPER;
-    calcMode = CM_AIM;
     nextChar = NC_NORMAL;
 
-    liftStack();
+    if(!tamMode) {
+      calcMode = CM_AIM;
+      liftStack();
 
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
-    xCursor = 1;
-    yCursor = Y_POSITION_OF_AIM_LINE + 6;
-    cursorFont = &standardFont;
-    cursorEnabled = true;
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_AIM_LINE + 6;
+      cursorFont = &standardFont;
+      cursorEnabled = true;
+    }
 
     if(softmenuStack[0].softmenuId == 0) { // MyMenu
       softmenuStack[0].softmenuId = 1; // MyAlpha
@@ -1549,7 +1551,7 @@
    * \return void
    ***********************************************/
   void enterTamMode(void) {
-    transitionSystemState = 0;
+    transitionSystemState = TS_OP_DIGIT_0;
     tamCurrentOperation = 0;
 
     if(calcMode == CM_NIM) {
@@ -1593,20 +1595,17 @@
     numberOfTamMenusToPop = 1;
 
     if(tamMode == TM_SHUFFLE) {
+      strcpy(tamBuffer, indexOfItems[ITM_SHUFFLE].itemSoftmenuName);
       strcat(tamBuffer, " ____");
-      transitionSystemState = 16;
+      transitionSystemState = TS_OP_DIGIT_0_4;
     }
     else if(tamFunction == ITM_CNST) {
-      strcat(tamBuffer, " ___");
-      transitionSystemState = 22;
+      transitionSystemState = TS_CNST_0;
     }
     else if(tamFunction == ITM_BESTF) {
-      strcat(tamBuffer, " ____");
-      transitionSystemState = 25;
+      transitionSystemState = TS_BESTF_0;
     }
-    else {
-      strcat(tamBuffer, " __");
-    }
+    updateTamBuffer();
 
     clearSystemFlag(FLAG_ALPHA);
 
@@ -1623,6 +1622,7 @@
    * \return void
    ***********************************************/
   void leaveTamMode(void) {
+    inputNamedVariable = false;
     tamMode = 0;
     catalog = CATALOG_NONE;
 

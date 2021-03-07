@@ -19,6 +19,7 @@
  ***********************************************/
 
 
+bool_t       regInRange    (uint16_t r);
 void         fnStore       (uint16_t r);
 void         fnStoreAdd    (uint16_t r);
 void         fnStoreSub    (uint16_t r);

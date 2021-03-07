@@ -454,7 +454,7 @@
 
     // Function name display
     if(showFunctionNameCounter>0) {
-      showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
+      showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
         showFunctionName(ITM_NOP, 0);
@@ -1058,6 +1058,10 @@
         }
       }
 
+      else if(temporaryInformation == TI_UNDEF_SOURCE_VAR && regist == REGISTER_X) {
+        showString("Undefined source variable", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
 
@@ -1140,7 +1144,7 @@
           }
         }
 
-        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM) {
+        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tamMode) {
           if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
             xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
             yCursor = Y_POSITION_OF_NIM_LINE + 6;

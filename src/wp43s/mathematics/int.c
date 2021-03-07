@@ -47,6 +47,7 @@ void fnCheckInteger(uint16_t mode) {
         sprintf(errorMessage, "the input type %s cannot convert to integer", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
         moreInfoOnError("In function fnCheckInteger:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
   }
 
   #ifdef DMCP_BUILD

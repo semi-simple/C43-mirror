@@ -108,7 +108,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     if(tamMode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
       tamMode = indexOfItems[func].param;
       tamFunction = func;
-      strcpy(tamBuffer, indexOfItems[func].itemSoftmenuName);
       tamNumberMin = indexOfItems[func].tamMinMax >> TAM_MAX_BITS;
       tamNumberMax = indexOfItems[func].tamMinMax & TAM_MAX_MASK;
       if(tamNumberMax == 16383) { // Only case featuring more than TAM_MAX_BITS bits is GTO.
@@ -236,6 +235,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnStatSum                  (uint16_t unusedButMandatoryParameter) {}
   void fnIsPrime                  (uint16_t unusedButMandatoryParameter) {}
   void fnIsLeap                   (uint16_t unusedButMandatoryParameter) {}
+  void fnIsString                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCheckValue               (uint16_t unusedButMandatoryParameter) {}
   void fnRandom                   (uint16_t unusedButMandatoryParameter) {}
   void fnRandomI                  (uint16_t unusedButMandatoryParameter) {}
   void fnImaginaryPart            (uint16_t unusedButMandatoryParameter) {}
@@ -293,6 +294,13 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnWnegative                (uint16_t unusedButMandatoryParameter) {}
   void fnWpositive                (uint16_t unusedButMandatoryParameter) {}
   void fnWinverse                 (uint16_t unusedButMandatoryParameter) {}
+  void fnHermite                  (uint16_t unusedButMandatoryParameter) {}
+  void fnHermiteP                 (uint16_t unusedButMandatoryParameter) {}
+  void fnLaguerre                 (uint16_t unusedButMandatoryParameter) {}
+  void fnLaguerreAlpha            (uint16_t unusedButMandatoryParameter) {}
+  void fnLegendre                 (uint16_t unusedButMandatoryParameter) {}
+  void fnChebyshevT               (uint16_t unusedButMandatoryParameter) {}
+  void fnChebyshevU               (uint16_t unusedButMandatoryParameter) {}
   void fnIDiv                     (uint16_t unusedButMandatoryParameter) {}
   void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
   void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
@@ -316,7 +324,14 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDivide                   (uint16_t unusedButMandatoryParameter) {}
   void fnAdd                      (uint16_t unusedButMandatoryParameter) {}
   void fnSigma                    (uint16_t unusedButMandatoryParameter) {}
+  void fnXEqualsTo                (uint16_t unusedButMandatoryParameter) {}
+  void fnXNotEqual                (uint16_t unusedButMandatoryParameter) {}
+  void fnXAlmostEqual             (uint16_t unusedButMandatoryParameter) {}
   void fnXLessThan                (uint16_t unusedButMandatoryParameter) {}
+  void fnXLessEqual               (uint16_t unusedButMandatoryParameter) {}
+  void fnXGreaterThan             (uint16_t unusedButMandatoryParameter) {}
+  void fnXGreaterEqual            (uint16_t unusedButMandatoryParameter) {}
+  void fnIsConverged              (uint16_t unusedButMandatoryParameter) {}
   void fnGetLocR                  (uint16_t unusedButMandatoryParameter) {}
   void fnSwapRealImaginary        (uint16_t unusedButMandatoryParameter) {}
   void fnSetRoundingMode          (uint16_t unusedButMandatoryParameter) {}
@@ -434,6 +449,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
   void fnDec                      (uint16_t unusedButMandatoryParameter) {}
   void fnInc                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsg                      (uint16_t unusedButMandatoryParameter) {}
+  void fnIsz                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDse                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsl                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDsz                      (uint16_t unusedButMandatoryParameter) {}
   void fncountBits                (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
   void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
@@ -530,6 +551,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnChi2L                    (uint16_t unusedButMandatoryParameter) {}
   void fnChi2R                    (uint16_t unusedButMandatoryParameter) {}
   void fnChi2I                    (uint16_t unusedButMandatoryParameter) {}
+  void fnF_P                      (uint16_t unusedButMandatoryParameter) {}
+  void fnF_L                      (uint16_t unusedButMandatoryParameter) {}
+  void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
+  void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 const item_t indexOfItems[] = {
@@ -542,35 +567,34 @@ const item_t indexOfItems[] = {
 /*    2 */  { fnGoto,                      TM_LABEL,                    "GTO",                                         "GTO",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    3 */  { itemToBeCoded,               TM_LABEL,                    "XEQ",                                         "XEQ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*    4 */  { itemToBeCoded,               NOPARAM,                     "RTN",                                         "RTN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    5 */  { itemToBeCoded,               NOPARAM,                     "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    6 */  { itemToBeCoded,               NOPARAM,                     "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    7 */  { itemToBeCoded,               NOPARAM,                     "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    8 */  { itemToBeCoded,               NOPARAM,                     "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*    9 */  { itemToBeCoded,               NOPARAM,                     "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   10 */  { itemToBeCoded,               NOPARAM,                     "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   11 */  { itemToBeCoded,               NOPARAM,                     "x= ?",                                        "x= ?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   12 */  { itemToBeCoded,               NOPARAM,                     "x" STD_NOT_EQUAL " ?",                        "x" STD_NOT_EQUAL " ?",                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   13 */  { itemToBeCoded,               NOPARAM,                     "x=+0?",                                       "x=+0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   14 */  { itemToBeCoded,               NOPARAM,                     "x=-0?",                                       "x=-0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   15 */  { itemToBeCoded,               NOPARAM,                     "x" STD_ALMOST_EQUAL " ?",                     "x" STD_ALMOST_EQUAL " ?",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   16 */  { itemToBeCoded,               NOPARAM,                     "x< ?",                                        "x< ?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   16 *///{ fnXLessThan,                 NOPARAM,                     "x< ?",                                        "x< ?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   17 */  { itemToBeCoded,               NOPARAM,                     "x" STD_LESS_EQUAL " ?",                       "x" STD_LESS_EQUAL " ?",                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   18 */  { itemToBeCoded,               NOPARAM,                     "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   19 */  { itemToBeCoded,               NOPARAM,                     "x> ?",                                        "x> ?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    5 */  { fnIse,                       TM_REGISTER,                 "ISE",                                         "ISE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    6 */  { fnIsg,                       TM_REGISTER,                 "ISG",                                         "ISG",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    7 */  { fnIsz,                       TM_REGISTER,                 "ISZ",                                         "ISZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    8 */  { fnDse,                       TM_REGISTER,                 "DSE",                                         "DSE",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*    9 */  { fnDsl,                       TM_REGISTER,                 "DSL",                                         "DSL",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   10 */  { fnDsz,                       TM_REGISTER,                 "DSZ",                                         "DSZ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   11 */  { fnXEqualsTo,                 TM_CMP,                      "x= ?",                                        "x= ?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   12 */  { fnXNotEqual,                 TM_CMP,                      "x" STD_NOT_EQUAL " ?",                        "x" STD_NOT_EQUAL " ?",                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   13 */  { fnCheckValue,                CHECK_VALUE_POSITIVE_ZERO,   "x=+0?",                                       "x=+0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   14 */  { fnCheckValue,                CHECK_VALUE_NEGATIVE_ZERO,   "x=-0?",                                       "x=-0?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   15 */  { fnXAlmostEqual,              TM_CMP,                      "x" STD_ALMOST_EQUAL " ?",                     "x" STD_ALMOST_EQUAL " ?",                     (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   16 */  { fnXLessThan,                 TM_CMP,                      "x< ?",                                        "x< ?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   17 */  { fnXLessEqual,                TM_CMP,                      "x" STD_LESS_EQUAL " ?",                       "x" STD_LESS_EQUAL " ?",                       (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   18 */  { fnXGreaterEqual,             TM_CMP,                      "x" STD_GREATER_EQUAL " ?",                    "x" STD_GREATER_EQUAL " ?",                    (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   19 */  { fnXGreaterThan,              TM_CMP,                      "x> ?",                                        "x> ?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   20 */  { fnIsFlagClear,               TM_FLAGR,                    "FC?",                                         "FC?",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   21 */  { fnIsFlagSet,                 TM_FLAGR,                    "FS?",                                         "FS?",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   22 */  { fnCheckInteger,              CHECK_INTEGER_EVEN,          "EVEN?",                                       "EVEN?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   23 */  { fnCheckInteger,              CHECK_INTEGER_ODD,           "ODD?",                                        "ODD?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   24 */  { fnCheckInteger,              CHECK_INTEGER_FP,            "FP?",                                         "FP?",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   25 */  { fnCheckInteger,              CHECK_INTEGER,               "INT?",                                        "INT?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   26 */  { itemToBeCoded,               NOPARAM,                     "CPX?",                                        "CPX?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   26 */  { fnCheckValue,                CHECK_VALUE_COMPLEX,         "CPX?",                                        "CPX?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   27 */  { itemToBeCoded,               NOPARAM,                     "MATR?",                                       "MATR?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   28 */  { itemToBeCoded,               NOPARAM,                     "NaN?",                                        "NaN?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   29 */  { itemToBeCoded,               NOPARAM,                     "REAL?",                                       "REAL?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   30 */  { itemToBeCoded,               NOPARAM,                     "SPEC?",                                       "SPEC?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   31 */  { itemToBeCoded,               NOPARAM,                     "STRI?",                                       "STRI?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   32 */  { itemToBeCoded,               NOPARAM,                     STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   28 */  { fnCheckValue,                CHECK_VALUE_NAN,             "NaN?",                                        "NaN?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   29 */  { fnCheckValue,                CHECK_VALUE_REAL,            "REAL?",                                       "REAL?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   30 */  { fnCheckValue,                CHECK_VALUE_SPECIAL,         "SPEC?",                                       "SPEC?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   31 */  { fnIsString,                  NOPARAM,                     "STRI?",                                       "STRI?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   32 */  { fnCheckValue,                CHECK_VALUE_INFINITY,        STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   33 */  { fnIsPrime,                   NOPARAM,                     "PRIME?",                                      "PRIME?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   34 */  { itemToBeCoded,               NOPARAM,                     "TOP?",                                        "TOP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   35 */  { fnKeyEnter,                  NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_DISABLED  | US_ENABLED  },
@@ -594,7 +618,7 @@ const item_t indexOfItems[] = {
 /*   53 */  { fnRecallSub,                 NOPARAM,                     "RCL-",                                        "RCL-",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   54 */  { fnRecallMult,                NOPARAM,                     "RCL" STD_CROSS,                               "RCL" STD_CROSS,                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   55 */  { fnRecallDiv,                 NOPARAM,                     "RCL/",                                        "RCL/",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*   56 */  { itemToBeCoded,               NOPARAM,                     "CONVG?",                                      "CONVG?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*   56 */  { fnIsConverged,               TM_VALUE,                    "CONVG?",                                      "CONVG?",                                      (0 << TAM_MAX_BITS) |    31, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   57 */  { itemToBeCoded,               NOPARAM,                     "ENTRY?",                                      "ENTRY?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   58 */  { fnSquare,                    NOPARAM,                     "x" STD_SUP_2,                                 "x" STD_SUP_2,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   59 */  { fnCube,                      NOPARAM,                     "x" STD_SUP_3,                                 "x" STD_SUP_3,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -1700,8 +1724,8 @@ const item_t indexOfItems[] = {
 /* 1140 */  { addItemToBuffer,             ITM_Stack,                   "",                                            "Stack",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1141 */  { addItemToBuffer,             ITM_dddEL,                   "",                                            STD_ELLIPSIS "EL",                             (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1142 */  { addItemToBuffer,             ITM_dddIJ,                   "",                                            STD_ELLIPSIS "IJ",                             (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
-/* 1143 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0.",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
-/* 1144 */  { itemToBeCoded,               NOPARAM,                     "",                                            "1.",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1143 */  { addItemToBuffer,             ITM_0P,                      "",                                            "0.",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1144 */  { addItemToBuffer,             ITM_1P,                      "",                                            "1.",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1145 */  { addItemToBuffer,             ITM_EXPONENT,                "",                                            "E",                                           (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1146 */  { addItemToBuffer,             NOPARAM,                     "HEX",                                         "H",                                           (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1147 */  { itemToBeCoded,               NOPARAM,                     "1147",                                        "1147",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
@@ -1786,10 +1810,10 @@ const item_t indexOfItems[] = {
 /* 1220 */  { itemToBeCoded,               NOPARAM,                     "Expon" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Expon" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1221 */  { itemToBeCoded,               NOPARAM,                     "Expon" STD_SUP_MINUS_1,                       "Expon" STD_SUP_MINUS_1,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1222 */  { itemToBeCoded,               NOPARAM,                     "F:",                                          "F:",                                          (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
-/* 1223 */  { itemToBeCoded,               NOPARAM,                     "F" STD_SUB_p "(x)",                           "F" STD_SUB_p "(x)",                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1224 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1225 */  { itemToBeCoded,               NOPARAM,                     "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1226 */  { itemToBeCoded,               NOPARAM,                     "F" STD_SUP_MINUS_1 "(p)",                     "F" STD_SUP_MINUS_1 "(p)",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1223 */  { fnF_P,                       NOPARAM,                     "F" STD_SUB_p "(x)",                           "F" STD_SUB_p "(x)",                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1224 */  { fnF_L,                       NOPARAM,                     "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", "F" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R "(x)", (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1225 */  { fnF_R,                       NOPARAM,                     "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", "F" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R "(x)", (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1226 */  { fnF_I,                       NOPARAM,                     "F" STD_SUP_MINUS_1 "(p)",                     "F" STD_SUP_MINUS_1 "(p)",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1227 */  { itemToBeCoded,               NOPARAM,                     "Geom:",                                       "Geom:",                                       (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1228 */  { itemToBeCoded,               NOPARAM,                     "Geom" STD_SUB_p,                              "Geom" STD_SUB_p,                              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1229 */  { itemToBeCoded,               NOPARAM,                     "Geom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,    "Geom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2058,8 +2082,8 @@ const item_t indexOfItems[] = {
 /* 1480 */  { fnAngularMode,               AM_GRAD,                     "GRAD",                                        "GRAD",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1481 */  { fnCvtToCurrentAngularMode,   AM_GRAD,                     "GRAD" STD_RIGHT_ARROW,                        "GRAD" STD_RIGHT_ARROW,                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1482 */  { fnGotoDot,                   NOPARAM,                     "GTO.",                                        "GTO.",                                        (0 << TAM_MAX_BITS) | 16383, CAT_FNCT | SLS_ENABLED   | US_CANCEL   },
-/* 1483 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n,                                 "H" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1484 */  { itemToBeCoded,               NOPARAM,                     "H" STD_SUB_n STD_SUB_P,                       "H" STD_SUB_n STD_SUB_P,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1483 */  { fnHermite,                   NOPARAM,                     "H" STD_SUB_n,                                 "H" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1484 */  { fnHermiteP,                  NOPARAM,                     "H" STD_SUB_n STD_SUB_P,                       "H" STD_SUB_n STD_SUB_P,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1485 */  { fnImaginaryPart,             NOPARAM,                     "Im",                                          "Im",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1486 */  { itemToBeCoded,               NOPARAM,                     "INDEX",                                       "INDEX",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1487 */  { fnIxyz,                      NOPARAM,                     "I" STD_SUB_x STD_SUB_y STD_SUB_z,             "I" STD_SUB_x STD_SUB_y STD_SUB_z,             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2080,8 +2104,8 @@ const item_t indexOfItems[] = {
 /* 1502 */  { fnLastX,                     NOPARAM,                     "LASTx",                                       "LASTx",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1503 */  { itemToBeCoded,               NOPARAM,                     "LBL?",                                        "LBL?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1504 */  { fnIsLeap,                    NOPARAM,                     "LEAP?",                                       "LEAP?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1505 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1506 */  { itemToBeCoded,               NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1505 */  { fnLaguerre,                  NOPARAM,                     "L" STD_SUB_m ,                                "L" STD_SUB_m ,                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1506 */  { fnLaguerreAlpha,             NOPARAM,                     "L" STD_SUB_m STD_SUB_alpha,                   "L" STD_SUB_m STD_SUB_alpha,                   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1507 */  { fnLnBeta,                    NOPARAM,                     "LN" STD_beta,                                 "ln" STD_beta,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1508 */  { fnLnGamma,                   NOPARAM,                     "LN" STD_GAMMA,                                "ln" STD_GAMMA,                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1509 */  { fnLoad,                      LM_ALL,                      "LOAD",                                        "LOAD",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_CANCEL   },
@@ -2093,7 +2117,7 @@ const item_t indexOfItems[] = {
 /* 1515 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1516 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1517 */  { fnMant,                      NOPARAM,                     "MANT",                                        "MANT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1518 */  { itemToBeCoded,               NOPARAM,                     "1518",                                        "1518",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
+/* 1518 */  { itemToBeCoded,               NOPARAM,                     "Mat_X",                                       "Mat_X",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1519 */  { fnFreeMemory,                NOPARAM,                     "MEM?",                                        "MEM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1520 */  { itemToBeCoded,               NOPARAM,                     "MENU",                                        "MENU",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1521 */  { fnMonth,                     NOPARAM,                     "MONTH",                                       "MONTH",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2125,7 +2149,7 @@ const item_t indexOfItems[] = {
 /* 1547 */  { itemToBeCoded,               NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1548 */  { itemToBeCoded,               NOPARAM,                     "PIXEL",                                       "PIXEL",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1549 */  { itemToBeCoded,               NOPARAM,                     "PLOT",                                        "PLOT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1550 */  { itemToBeCoded,               NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1550 */  { fnLegendre,                  NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1551 */  { itemToBeCoded,               NOPARAM,                     "POINT",                                       "POINT",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1552 */  { fnLoad,                      LM_NAMED_VARIABLES,          "LOADV",                                       "LOADV",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1553 */  { itemToBeCoded,               NOPARAM,                     "PopLR",                                       "PopLR",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2198,11 +2222,11 @@ const item_t indexOfItems[] = {
 /* 1620 */  { fnTicks,                     NOPARAM,                     "TICKS",                                       "TICKS",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1621 */  { fnTime,                      NOPARAM,                     "TIME",                                        "TIME",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1622 */  { itemToBeCoded,               NOPARAM,                     "TIMER",                                       "TIMER",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1623 */  { itemToBeCoded,               NOPARAM,                     "T" STD_SUB_n,                                 "T" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1623 */  { fnChebyshevT,                NOPARAM,                     "T" STD_SUB_n,                                 "T" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1624 */  { itemToBeCoded,               NOPARAM,                     "TONE",                                        "TONE",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1625 */  { fnSwapT,                     TM_REGISTER,                 "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                     (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1626 */  { fnUlp,                       NOPARAM,                     "ULP?",                                        "ULP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1627 */  { itemToBeCoded,               NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1627 */  { fnChebyshevU,                NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1628 */  { fnUnitVector,                NOPARAM,                     "UNITV",                                       "UNITV",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1629 */  { fnIntegerMode,               SIM_UNSIGN,                  "UNSIGN",                                      "UNSIGN",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1630 */  { itemToBeCoded,               NOPARAM,                     "VARMNU",                                      "VARMNU",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

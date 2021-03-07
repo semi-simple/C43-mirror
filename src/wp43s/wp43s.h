@@ -318,7 +318,7 @@
   extern char                   dateTimeString[12];
   extern char                   displayValueX[DISPLAY_VALUE_LEN];
 
-  extern uint8_t                transitionSystemState;
+  extern tamState_t             transitionSystemState;
   extern uint8_t                numScreensStandardFont;
   extern uint8_t                currentFntScr;
   extern uint8_t                currentFlgScr;

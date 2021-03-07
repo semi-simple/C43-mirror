@@ -158,8 +158,6 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)check_qspi_crc $(TARGET) src/qspi_crc.h || ( $(MAKE) clean && false )
 	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
-	mv build/$(TARGET)_qspi.bin build/$(TARGET)_qspi.lib
-	ls -al build/$(TARGET).pgm build/$(TARGET)_qspi.lib
 	$(SIZE) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)

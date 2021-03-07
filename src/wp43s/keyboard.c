@@ -877,8 +877,15 @@ bool_t lowercaseselected;
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          if(tamFunction == ITM_toINT && item == ITM_ENTER) {     //JMvv
+            //addItemToBuffer(item);
+            tamTransitionSystem(TT_CHB10);
+          }                                                       //JM^^
           keyActionProcessed = true;
-        }
+        } else if(calcMode == CM_NIM) {                           //JMvv
+            addItemToBuffer(item);
+            keyActionProcessed = true;
+          }                                                       //JM^^
         break;
 
 

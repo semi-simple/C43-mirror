@@ -361,6 +361,9 @@ void kill_ASB_icon(void) {
         else if(tamFunction == ITM_toINT && item == ITM_REG_B) {
           tamTransitionSystem(TT_CHB02);
         }
+        else if(tamFunction == ITM_toINT && item == ITM_ENTER) {       //JMvv
+          tamTransitionSystem(TT_CHB10);
+        }                                                              //JM^^
         else if(tamFunction == ITM_toINT && item == ITM_HEX) {
           tamTransitionSystem(TT_BASE16);
         }
@@ -1010,7 +1013,8 @@ void kill_ASB_icon(void) {
         }
         break;
 
-      case ITM_LOG10 : // D for decimal base
+      case ITM_ENTER:                                 //JM
+      case ITM_LOG10 : // D for decimal base          //JM
         if(nimNumberPart == NP_INT_BASE && aimBuffer[strlen(aimBuffer) - 1] == '#') {
           strcat(aimBuffer, "10");
           goto addItemToNimBuffer_exit;
@@ -1474,6 +1478,11 @@ void kill_ASB_icon(void) {
             fnChangeBase(2);
             leaveTamMode();
             return;
+
+          case TT_CHB10 :      //JMvv
+            fnChangeBase(10);
+            leaveTamMode();
+            return;            //JM^^
 
           case TT_BASE10 :
             reallyRunFunction(getOperation(), 10);

@@ -132,31 +132,10 @@ bool_t lastshiftG = false;
         shiftF = false;
         shiftG = true;
       }
-      lastshiftF = shiftF;
-      lastshiftG = shiftG;
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        int16_t item = determineFunctionKeyItem((char *)data);
-
-    //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
-        if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
-          lastErrorCode = 0;
-
-    //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
-    //      showFunctionName(item, 1000); // 1000ms = 1s
-    //    #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
-    //    showFunctionNameItem = item;
-            btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
-    //    #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
-        }
-        else {
-          showFunctionNameItem = ITM_NOP;
-        }
-      }
-    }
   #endif // PC_BUILD
-
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
+  #endif // DMCP_BUILD
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
@@ -165,19 +144,29 @@ bool_t lastshiftG = false;
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
         if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
           lastErrorCode = 0;
+          if(indexOfItems[item].func == addItemToBuffer) {
+            // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+            // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+            // Use this variable to distinguish between the two
+            fnKeyInCatalog = 1;
+            addItemToBuffer(item);
+            fnKeyInCatalog = 0;
+            refreshScreen();
+          }
+          else {
     //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
     //      showFunctionName(item, 1000); // 1000ms = 1s
     //    #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
     //    showFunctionNameItem = item;
             btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
     //    #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+          }
         }
         else {
           showFunctionNameItem = ITM_NOP;
         }
       }
     }
-  #endif // DMCP_BUILD
 
 
 
@@ -212,7 +201,7 @@ bool_t lastshiftG = false;
         item = determineFunctionKeyItem((char *)data);
       }
 
-      resetShiftState();
+      resetShiftState();                               //shift cancelling delayed to this point after state machine
   
         //printf("%d--\n",calcMode);
       
@@ -223,16 +212,6 @@ bool_t lastshiftG = false;
             showSoftmenu(item);
             refreshScreen();
             return;
-          }
-          else if(catalog && tamMode) {
-            if (!inputNamedVariable || (catalog != CATALOG_AINT && catalog != CATALOG_aint)) {
-              reallyRunFunction(getOperation(), indexOfItems[item].param); // TODO: check why the param is taken from item and not from getOperation
-              if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_SYSFL) { //JM V JM MENU Prevent resetting the softmenu to the default no 1 page position
-                leaveTamMode();
-                refreshScreen();
-                return;
-              }
-            }
           }
           else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
             runFunction(item);
@@ -252,7 +231,7 @@ bool_t lastshiftG = false;
             // an item from the catalog, but a function key press should put the item in the TAM buffer
             // Use this variable to distinguish between the two
             fnKeyInCatalog = 1;
-            if(tamMode) {
+            if(tamMode && (!inputNamedVariable || isAlphabeticSoftmenu())) {
               addItemToBuffer(item);
             }
             else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
@@ -283,6 +262,9 @@ bool_t lastshiftG = false;
               }
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
+            }
+            if(inputNamedVariable) {
+              leaveTamMode();
             }
 
               if(lastErrorCode == 0) {
@@ -539,8 +521,8 @@ bool_t lastshiftG = false;
       }
       lastshiftF = shiftF;
       lastshiftG = shiftG;
-      showFunctionNameItem = 0;
       int16_t item = determineItem((char *)data);
+      showFunctionNameItem = 0;
       #ifdef PC_BUILD
         char tmp[200]; sprintf(tmp,"^^^^btnPressed START item=%d data=\'%s\'",item,(char *)data); jm_show_comment(tmp);
       #endif //PC_BUILD
@@ -600,6 +582,12 @@ bool_t lastshiftG = false;
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
       jm_show_calc_state("##### keyboard.c: btnReleased begin");
+  #endif // PC_BUILD
+
+  #ifdef DMCP_BUILD
+    void btnReleased(void *data) {
+  #endif //DMCP_BUILD
+
 
       int16_t item;
       Shft_timeouts = false;                         //JM SHIFT NEW
@@ -618,9 +606,19 @@ bool_t lastshiftG = false;
           showSoftmenu(item);
         }
         else {
+          if(item != ITM_NOP && inputNamedVariable && indexOfItems[item].func != addItemToBuffer) {
+            // We are in TAM mode so need to cancel first (equivalent to EXIT)
+            leaveTamMode();
+          }
           runFunction(item);
         }
       }
+
+  #ifdef DMCP_BUILD
+//      else if(keyAutoRepeat) {         // AUTOREPEAT
+//        btnPressed(data);
+//      }
+  #endif // DMCP_BUILD
 
       if(!checkShifts((char *)data)) {
         #ifdef PC_BUILD
@@ -629,36 +627,10 @@ bool_t lastshiftG = false;
         #endif //PC_BUILD
         refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
       }
+
+
     }
-  #endif // PC_BUILD
 
-  #ifdef DMCP_BUILD
-    void btnReleased(void *data) {
-      int16_t item;
-      Shft_timeouts = false;                         //JM SHIFT NEW
-      JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
-      if(showFunctionNameItem != 0) {
-        item = showFunctionNameItem;
-
-        if(item == ITM_SQUAREROOTX) closeNim();    //JM moved here, from bufferize see JMCLOSE
-
-        hideFunctionName();
-        if(item < 0) {
-          showSoftmenu(item);
-        }
-        else {
-          runFunction(item);
-        }
-      }
-//      else if(keyAutoRepeat) {         // AUTOREPEAT
-//        btnPressed(data);
-//      }
-
-  if(!checkShifts((char *)data)) {
-    refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
-    }
-  }
-  #endif //DMCP_BUILD
 
 
 
@@ -725,7 +697,7 @@ bool_t lowercaseselected;
                 }                                           //JM ^^
 
 
-/*1*/           else if( lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
+/*2*/           else if( lowercaseselected && ( (ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI) ))  {  //JM GREEK
                   addItemToBuffer(item + 36);
                   keyActionProcessed = true;
                 }
@@ -756,19 +728,6 @@ bool_t lowercaseselected;
       nextChar = NC_SUPERSCRIPT;
       keyActionProcessed = true;
     }
-*/
-
-
-/*1*/          else if(item == ITM_DOWN_ARROW) {
-                if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
-                keyActionProcessed = true;
-              }
-
-/*1*/          else if(item == ITM_UP_ARROW) {
-                if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
-                keyActionProcessed = true;
-              }
-
 
     else if(indexOfItems[item].func == addItemToBuffer) {
       addItemToBuffer(item);
@@ -778,6 +737,29 @@ bool_t lowercaseselected;
     if(keyActionProcessed) {
       refreshScreen();
     }
+
+*/
+
+
+/*3*/          else if(item == ITM_DOWN_ARROW) {
+                if(nextChar == NC_NORMAL) nextChar = NC_SUBSCRIPT; else if(nextChar == NC_SUPERSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
+                keyActionProcessed = true;
+              }
+
+/*4*/          else if(item == ITM_UP_ARROW) {
+                if(nextChar == NC_NORMAL) nextChar = NC_SUPERSCRIPT; else if(nextChar == NC_SUBSCRIPT) nextChar = NC_NORMAL;   //JM stack the SUP/NORMAL/SUB
+                keyActionProcessed = true;
+              }
+
+
+/*5*/          else if(indexOfItems[item].func == addItemToBuffer) {
+                 addItemToBuffer(item);
+                 keyActionProcessed = true;
+               }
+
+/*6*/         if(keyActionProcessed) {
+                 refreshScreen();
+               }
 
               #ifdef PC_BUILD
                 sprintf(tmp,"^^^^processAimInput:AIM:end %d",item); jm_show_comment(tmp);
@@ -877,6 +859,7 @@ bool_t lowercaseselected;
         }
         else if(tamMode) {
           tamTransitionSystem(TT_ENTER);
+          updateTamBuffer();
           if(tamFunction == ITM_toINT && item == ITM_ENTER) {     //JMvv
             //addItemToBuffer(item);
             tamTransitionSystem(TT_CHB10);
@@ -1275,7 +1258,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
         closeNim();
 
-      if( !eRPN ) {                                    //JM NEWERPN
+      if( !eRPN ) {                                    //JM NEWERPN vv
         if(lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
           liftStack();
@@ -1290,7 +1273,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           }
         }
-      }
+      }                                                //JM NEWERPN ^^
       break;
 
       case CM_REGISTER_BROWSER:
@@ -1395,10 +1378,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       //case CM_ASM_OVER_TAM:
       //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  transitionSystemState = 0;
+      //  transitionSystemState = TS_OP_DIGIT_0;
       //  calcModeTam();
       //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       //  tamTransitionSystem(TT_NOTHING);
+      //  updateTamBuffer();
       //  break;
 
       //case CM_ASM_OVER_AIM:
@@ -1516,11 +1500,13 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
         tamTransitionSystem(TT_BACKSPACE);
+        updateTamBuffer();
       } else if(inputNamedVariable) {
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
         tamTransitionSystem(TT_VARIABLE);
+        updateTamBuffer();
       }
       return;
     }

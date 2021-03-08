@@ -83,7 +83,7 @@ void generateConstantArray(char *name, char *value) {
     strcat(defines, temp);
   }
 
-  strcat(realPointerDeclarations, "const real_t * const const_");
+  strcat(realPointerDeclarations, "TO_QSPI const real_t * const const_");
   strcat(realPointerDeclarations, name);
   strcat(realPointerDeclarations, whiteSpace);
   strcat(realPointerDeclarations, " = (real_t *)(constants + ");
@@ -119,7 +119,7 @@ void generateConstantArray34(char *name, char *value) {
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
-  strcat(real34PointerDeclarations, "const real34_t * const const34_");
+  strcat(real34PointerDeclarations, "TO_QSPI const real34_t * const const34_");
   strcat(real34PointerDeclarations, name);
   strcat(real34PointerDeclarations, whiteSpace);
   strcat(real34PointerDeclarations, " = (real34_t *)(constants + ");
@@ -155,7 +155,7 @@ void generateConstantArray51(char *name, char *value) {
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
-  strcat(real51PointerDeclarations, "const real_t * const const_");
+  strcat(real51PointerDeclarations, "TO_QSPI const real_t * const const_");
   strcat(real51PointerDeclarations, name);
   strcat(real51PointerDeclarations, whiteSpace);
   strcat(real51PointerDeclarations, " = (real_t *)(constants + ");
@@ -191,7 +191,7 @@ void generateConstantArray1071(char *name, char *value) {
   strcat(externalDeclarations, name);
   strcat(externalDeclarations, ";\n");
 
-  strcat(real1071PointerDeclarations, "const real_t * const const1071_");
+  strcat(real1071PointerDeclarations, "TO_QSPI const real_t * const const1071_");
   strcat(real1071PointerDeclarations, name);
   strcat(real1071PointerDeclarations, whiteSpace);
   strcat(real1071PointerDeclarations, " = (real_t *)(constants + ");
@@ -216,7 +216,7 @@ void generateAllConstants(void) {
   // constants used by the program
   idx = 0;
 
-  strcat(realArray, "const uint8_t constants[] = {\n");
+  strcat(realArray, "TO_QSPI const uint8_t constants[] = {\n");
 
   // Physical and mathematical constants
   // each constant has 55 significant digits

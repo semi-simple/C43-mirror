@@ -228,29 +228,30 @@ static void bessel_complex_asymptotic_large_x(const real_t *alpha_r, const real_
 // Polynomial U[k] (based on Abramowitz and Steven, p.366)
 #define NUMBER_OF_COEFF   100
 #define COEFF_BUFFER_SIZE (REAL34_SIZE * NUMBER_OF_COEFF)
-static void u_k(uint32_t k, const real_t *coeff/*array*/, const real_t *t, real_t *res, realContext_t *realContext) {
-	real_t t_n, tmp;
+static void u_k(uint32_t k, const real_t *coeff/*array*/, const real_t *t_r, const real_t *t_i, real_t *res_r, real_t *res_i, realContext_t *realContext) {
+	real_t t_n_r, t_n_i, tmp_r, tmp_i;
 	uint32_t i;
 
-	realCopy(t, &t_n); realCopy(const_0, res);
-	for(i = 1; i < k; ++i) realMultiply(&t_n, t, &t_n, realContext);
+	realCopy(t_r, &t_n_r), realCopy(t_i, &t_n_i);
+	realCopy(const_0, res_r), realCopy(const_0, res_i);
+	for(i = 1; i < k; ++i) mulComplexComplex(&t_n_r, &t_n_i, t_r, t_i, &t_n_r, &t_n_i, realContext);
 	for(i = 0; i < NUMBER_OF_COEFF; ++i) {
 		if(realIsZero(&coeff[i])) break;
-		realMultiply(&coeff[i], &t_n, &tmp, realContext);
-		realAdd(res, &tmp, res, realContext);
-		realMultiply(&t_n, t, &t_n, realContext);
-		realMultiply(&t_n, t, &t_n, realContext);
+		mulComplexComplex(&coeff[i], const_0, &t_n_r, &t_n_i, &tmp_r, &tmp_i, realContext);
+		realAdd(res_r, &tmp_r, res_r, realContext), realAdd(res_i, &tmp_i, res_i, realContext);
+		mulComplexComplex(&t_n_r, &t_n_i, t_r, t_i, &t_n_r, &t_n_i, realContext);
+		mulComplexComplex(&t_n_r, &t_n_i, t_r, t_i, &t_n_r, &t_n_i, realContext);
 	}
 }
-static void Sigma_u_k(const real_t *nu, const real_t *t, real_t *res, realContext_t *realContext) {
+static void Sigma_u_k(const real_t *nu, const real_t *t_r, const real_t *t_i, bool_t odd, bool_t even, real_t *res_r, real_t *res_i, realContext_t *realContext) {
 	real_t _coeff_current[NUMBER_OF_COEFF], _coeff_next[NUMBER_OF_COEFF];
 	real_t coeff_deriv[NUMBER_OF_COEFF];
 	real_t *coeff_current = _coeff_current, *coeff_next = _coeff_next, *coeff_tmpptr = NULL;
-	real_t nu_k, tmp, tmp2, prev;
+	real_t nu_k, tmp, tmp2, prev_r, prev_i;
 	uint32_t i, j;
 
-	realCopy(const_0, &prev);
-	realCopy(const_1, res);
+	realCopy(const_0, &prev_r), realCopy(const_0, &prev_i);
+	realCopy(even ? const_1 : const_0, res_r), realCopy(const_0, res_i);
 	realCopy(nu, &nu_k);
 
 	int32ToReal(24, &tmp);
@@ -263,16 +264,16 @@ static void Sigma_u_k(const real_t *nu, const real_t *t, real_t *res, realContex
 	for(i = 0; i < NUMBER_OF_COEFF; ++i) realZero(&coeff_next[i]);
 
 	for(i = 1; i < NUMBER_OF_COEFF; ++i) {
-		for(j = 0; j < NUMBER_OF_COEFF; ++j) {
-			if(realIsZero(&coeff_current[j])) break;
+		if(((i % 2 == 1) && odd) || ((i % 2 == 0) && even)) {
+			u_k(i, coeff_current, t_r, t_i, &tmp, &tmp2, realContext);
+			divComplexComplex(&tmp, &tmp2, &nu_k, const_0, &tmp, &tmp2, realContext);
+			if((!realIsSpecial(&tmp)) && !realIsSpecial(&tmp2)) {
+				realAdd(res_r, &tmp, res_r, realContext), realAdd(res_i, &tmp2, res_i, realContext);
+			}
+			realCopy(const_1, &tmp), tmp.exponent -= 73;
+			if(WP34S_RelativeError(res_r, &prev_r, &tmp, realContext) && WP34S_RelativeError(res_i, &prev_i, &tmp, realContext)) break;
+			realCopy(res_r, &prev_r), realCopy(res_i, &prev_i);
 		}
-		u_k(i, coeff_current, t, &tmp, realContext);
-		realDivide(&tmp, &nu_k, &tmp, realContext);
-		if(!realIsSpecial(&tmp))
-			realAdd(res, &tmp, res, realContext);
-		realCopy(const_1, &tmp), tmp.exponent -= 73;
-		if(WP34S_RelativeError(res, &prev, &tmp, realContext)) break;
-		realCopy(res, &prev);
 
 		// for the next iteration
 		realMultiply(&nu_k, nu, &nu_k, realContext);
@@ -345,8 +346,47 @@ static void bessel_asymptotic_large_order_hyp(const real_t *nu, const real_t *x,
 	realDivide(&coefficient, &tmp, &coefficient, realContext);
 
 	realDivide(const_1, &tanh_alpha, &t, realContext);
-	Sigma_u_k(nu, &t, &itrval, realContext);
+	Sigma_u_k(nu, &t, const_0, true, true, &itrval, &tmp, realContext);
 	realMultiply(&coefficient, &itrval, res, realContext);
+}
+
+
+
+static void bessel_asymptotic_large_order_trig(const real_t *nu, const real_t *x, real_t *res, realContext_t *realContext) {
+	real_t beta, sin_beta, cos_beta, tan_beta, cot_beta, coefficient, psi, sin_psi, cos_psi, lr, li, mr, mi;
+
+	// nu * sec(beta) = nu / cos(beta) = x
+	realDivide(nu, x, &cos_beta, realContext);
+	WP34S_Acos(&cos_beta, &beta, realContext);
+
+	realMultiply(&cos_beta, &cos_beta, &sin_beta, realContext); // cos²β
+	realSubtract(const_1, &sin_beta, &sin_beta, realContext); // sin²β
+	realSquareRoot(&sin_beta, &sin_beta, realContext); // sinβ
+	realDivide(&sin_beta, &cos_beta, &tan_beta, realContext); // tanβ
+
+	// coefficient
+	realDivide(const_2, const_pi, &coefficient, realContext);
+	realDivide(&coefficient, nu, &coefficient, realContext);
+	realDivide(&coefficient, &tan_beta, &coefficient, realContext);
+	realSquareRoot(&coefficient, &coefficient, realContext);
+
+	// psi = nu * (tan(beta) - beta) - pi/4
+	realSubtract(&tan_beta, &beta, &psi, realContext);
+	realMultiply(&psi, nu, &psi, realContext);
+	realSubtract(&psi, const_piOn4, &psi, realContext);
+	WP34S_Mod(&psi, const1071_2pi, &psi, realContext);
+	WP34S_SinCosTanTaylor(&psi, false, &sin_psi, &cos_psi, NULL, realContext);
+
+	realDivide(const_1, &tan_beta, &cot_beta, realContext);
+	Sigma_u_k(nu, const_0, &cot_beta, false, true, &lr, &li, realContext);
+	Sigma_u_k(nu, const_0, &cot_beta, true, false, &mr, &mi, realContext);
+	mulComplexComplex(&mr, &mi, const_0, const__1, &mr, &mi, realContext);
+	// li == mi == 0 ?
+
+	realMultiply(&lr, &cos_psi, &lr, realContext);
+	realMultiply(&mr, &sin_psi, &mr, realContext);
+	realAdd(&lr, &mr, res, realContext);
+	realMultiply(res, &coefficient, res, realContext);
 }
 
 
@@ -407,6 +447,8 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
 	}
 	if(realCompareGreaterThan(&a, const_90) && realCompareAbsLessThan(x, &a))
 		bessel_asymptotic_large_order_hyp(&a, x, res, realContext);
+	else if(realCompareGreaterThan(&a, const_90) && realCompareAbsGreaterThan(x, &a))
+		bessel_asymptotic_large_order_trig(&a, x, res, realContext);
 	else if(realCompareLessThan(&a, const_45) && realCompareAbsGreaterThan(x, const_90))
 		bessel_asymptotic_large_x(&a, x, res, realContext);
 	else

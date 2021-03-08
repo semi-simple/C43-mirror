@@ -134,7 +134,7 @@ all: $(BUILD_DIR)/$(TARGET).elf
 
 # forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
 $(BIN_DIR)forcecrc32:
-	gcc $(RESOURCES_DIR)forcecrc32.c -o $(BIN_DIR)forcecrc32
+	gcc $(RESOURCES_DIR)/forcecrc32.c -o $(BIN_DIR)forcecrc32
 
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))

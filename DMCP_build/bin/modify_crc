@@ -1,0 +1,33 @@
+#!/bin/bash
+
+pgm=$1
+
+q=build/${pgm}_qspi.bin
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+        # Host is Mac: use gstat for GNU version
+        STAT=gstat
+else
+        # Assume host is Linux: stat is GNU version
+        STAT=stat
+fi
+
+
+
+filesize() {
+	$STAT -Lc%s "$1"
+}
+
+
+if [ ! -f "$q" ];then
+	echo "ERROR: Missing qspi file '$q'"
+	exit 1
+fi
+
+sz=`filesize $q`
+
+dir=`dirname ${BASH_SOURCE[0]}`
+
+echo -n -e '\x00\x00\x00\x00' >> $q
+$dir/forcecrc32 $q $sz 000CFED6
+

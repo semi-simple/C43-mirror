@@ -17,6 +17,8 @@ endif
 # Build path
 BUILD_DIR = build
 
+RESOURCES_DIR = resources
+
 # Path to aux build scripts (including trailing /)
 # Leave empty for scripts in PATH
 BIN_DIR =
@@ -129,6 +131,11 @@ all: $(BUILD_DIR)/$(TARGET).elf
 #######################################
 # build the application
 #######################################
+
+# forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
+$(BIN_DIR)forcecrc32:
+	gcc $(RESOURCES_DIR)forcecrc32.c -o $(BIN_DIR)forcecrc32
+
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
@@ -150,12 +157,13 @@ $(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+$(BUILD_DIR)/$(TARGET).elf: $(BIN_DIR)forcecrc32 $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(OBJCOPY) --remove-section .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_flash.hex
 	$(OBJCOPY) --remove-section .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_flash.bin
 	$(OBJCOPY) --only-section   .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_qspi.hex
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
+	$(BIN_DIR)modify_crc $(TARGET)
 	$(BIN_DIR)check_qspi_crc $(TARGET) DMCP/qspi_crc.h || ( $(MAKE) clean && false )
 	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
 	$(SIZE) $@

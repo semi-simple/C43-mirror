@@ -133,8 +133,8 @@ all: $(BUILD_DIR)/$(TARGET).elf
 #######################################
 
 # forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
-$(BIN_DIR)forcecrc32:
-	gcc $(RESOURCES_DIR)/forcecrc32.c -o $(BIN_DIR)forcecrc32
+bin/forcecrc32:
+	gcc $(RESOURCES_DIR)/forcecrc32.c -o bin/forcecrc32
 
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
@@ -157,7 +157,7 @@ $(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
-$(BUILD_DIR)/$(TARGET).elf: $(BIN_DIR)forcecrc32 $(OBJECTS) Makefile
+$(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(OBJCOPY) --remove-section .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_flash.hex
 	$(OBJCOPY) --remove-section .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_flash.bin

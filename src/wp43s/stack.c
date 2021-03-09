@@ -260,25 +260,21 @@ void fnSwapXY(uint16_t unusedButMandatoryParameter) {
 
 /********************************************//**
  * \brief Shuffles the registers and and refreshes the stack.
- * the Shuffle order is in the last four chars of the tamBuffer
+ * the Shuffle order determined from the parameter with each
+ * consecutive two bits indicating the number above the X
+ * register
  *
- * \param[in] unusedButMandatoryParameter uint16_t
+ * For example
+ * - 11100100 indicates X, Y, Z, T
+ * - 10110001 indicates Z, T, X, Y
+ *
+ * \param[in] regist_order uint16_t
  * \return void
  ***********************************************/
-void fnShuffle(uint16_t unusedButMandatoryParameter) {
+void fnShuffle(uint16_t regist_order) {
   for(int i=0; i<4; i++) {
-    if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4  + i] == 'y') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'z') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_Z, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4 + i] == 't') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_T, REGISTER_X + i);
-    }
+    uint16_t regist_offset = (regist_order >> (i*2)) & 3;
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X + regist_offset, REGISTER_X + i);
   }
 }
 

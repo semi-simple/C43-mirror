@@ -44,7 +44,7 @@
 
 const font_t          *fontForShortInteger;
 const font_t          *cursorFont;
-const char             digits[17] = "0123456789ABCDEF";
+TO_QSPI const char     digits[17] = "0123456789ABCDEF";
 real51_t               const *gammaLanczosCoefficients;
 real39_t               const *angle180;
 real39_t               const *angle90;

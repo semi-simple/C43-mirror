@@ -45,7 +45,7 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2021.02"
+#define YEARMONTH                                 "2021.03"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"

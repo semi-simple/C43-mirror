@@ -557,7 +557,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
-const item_t indexOfItems[] = {
+TO_QSPI const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL

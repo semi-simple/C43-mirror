@@ -22,7 +22,7 @@
 
 
 
-void (* const Rdp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
+TO_QSPI void (* const Rdp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX ==> 1            2        3         4        5         6         7          8           9             10
 //          Long integer Real34   Complex34 Time     Date      String    Real34 mat Complex34 m Short integer Config data
             rdpError,    rdpReal, rdpCplx,  rdpTime, rdpError, rdpError, rdpRema,   rdpCxma,    rdpError,     rdpError

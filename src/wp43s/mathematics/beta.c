@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
+TO_QSPI void (* const beta[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
 // regX |    regY ==>    1             2             3             4          5          6          7          8          9          10
 //      V                Long integer  Real34        Complex34     Time       Date       String     Real34 mat Complex34  mat Short  Config data
 /*  1 Long integer  */ { betaLonILonI, betaRealLonI, betaCplxLonI, betaError, betaError, betaError, betaError, betaError, betaError, betaError },
@@ -61,7 +61,7 @@ void betaError(void) {
 void fnBeta(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  beta[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

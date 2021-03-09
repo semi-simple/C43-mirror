@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
+TO_QSPI void (* const gd[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX ==> 1            2       3         4            5            6            7            8            9             10
 //          Long integer Real34  Complex34 Time         Date         String       Real34 mat   Complex34 m  Short integer Config data
             gdLonI,      gdReal, gdCplx,   gdTypeError, gdTypeError, gdTypeError, gdTypeError, gdTypeError, gdTypeError,  gdTypeError
@@ -70,7 +70,7 @@ static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
  ***********************************************/
 void fnGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  matrix[getRegisterDataType(REGISTER_X)](GD_DIRECT_FUNCTION);
+  gd[getRegisterDataType(REGISTER_X)](GD_DIRECT_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
@@ -83,7 +83,7 @@ void fnGd(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnInvGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  matrix[getRegisterDataType(REGISTER_X)](GD_INVERSE_FUNCTION);
+  gd[getRegisterDataType(REGISTER_X)](GD_INVERSE_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 

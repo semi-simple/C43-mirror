@@ -15,7 +15,7 @@ MEMORY {
   /* RAM0   (xrw) : ORIGIN = 0x10000000, LENGTH =   32K-256 */
   FLASH   (rx) : ORIGIN = 0x08050000, LENGTH =  704K
   RAM    (xrw) : ORIGIN = 0x10000000, LENGTH =    8K
-  QSPI    (rx) : ORIGIN = 0x90000000, LENGTH = 2048K
+  QSPI    (rx) : ORIGIN = 0x90000000, LENGTH = 2048K-12K /* a 4K block from 0x901FD000 to 0x901FDFFF is reserved by DMCP */
 }
 
 /* Entry Point */

@@ -1144,7 +1144,7 @@
           }
         }
 
-        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tamMode) {
+        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
           if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
             xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
             yCursor = Y_POSITION_OF_NIM_LINE + 6;
@@ -1569,7 +1569,7 @@
       showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
     }
 
-    if(tamMode) {
+    if(tam.mode) {
       if(calcMode == CM_PEM) { // Variable line to display TAM informations
         lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
         showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);

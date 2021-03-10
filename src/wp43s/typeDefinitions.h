@@ -359,3 +359,17 @@ typedef enum {
   TS_OPO_ALPHA          = 30  //-> OPO_DIGIT_0
 } tamState_t;
 
+typedef struct {
+  tamState_t state;
+  uint16_t   mode;
+  bool_t     alpha;
+  int16_t    function;
+  int16_t    operation;
+  int16_t    currentOperation;
+  int16_t    value;
+  int16_t    min;
+  int16_t    max;
+  int16_t    digit;
+  int16_t    letteredRegister;
+} tamNewState_t;
+

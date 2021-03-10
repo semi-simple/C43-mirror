@@ -169,7 +169,7 @@
           // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
           // Use this variable to distinguish between the two
           fnKeyInCatalog = 1;
-          if(tamMode && (!inputNamedVariable || isAlphabeticSoftmenu())) {
+          if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
@@ -193,7 +193,7 @@
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
             }
-            if(inputNamedVariable) {
+            if(tam.alpha) {
               leaveTamMode();
             }
 
@@ -235,13 +235,13 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || (catalog && calcMode != CM_NIM) || inputNamedVariable) {
+    if(calcMode == CM_AIM || (catalog && calcMode != CM_NIM) || tam.alpha) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
 
     }
-    else if(tamMode) {
+    else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
     else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM) {
@@ -371,7 +371,7 @@
           showSoftmenu(item);
         }
         else {
-          if(item != ITM_NOP && inputNamedVariable && indexOfItems[item].func != addItemToBuffer) {
+          if(item != ITM_NOP && tam.alpha && indexOfItems[item].func != addItemToBuffer) {
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
             leaveTamMode();
           }
@@ -484,7 +484,7 @@
         if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
           keyActionProcessed = true;
         }
-        else if(tamMode) {
+        else if(tam.mode) {
           tamTransitionSystem(TT_ENTER);
           updateTamBuffer();
           keyActionProcessed = true;
@@ -509,8 +509,8 @@
           }
           break;
         }
-        else if(tamMode) {
-          if(inputNamedVariable) {
+        else if(tam.mode) {
+          if(tam.alpha) {
             processAimInput(item);
           } else {
             addItemToBuffer(item);
@@ -798,7 +798,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       return;
     }
 
-    if(tamMode) {
+    if(tam.mode) {
       if(numberOfTamMenusToPop > 1) {
         popSoftmenu();
         numberOfTamMenusToPop--;
@@ -842,7 +842,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       //case CM_ASM_OVER_TAM:
       //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  transitionSystemState = TS_OP_DIGIT_0;
       //  calcModeTam();
       //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
       //  tamTransitionSystem(TT_NOTHING);
@@ -944,12 +943,12 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     uint16_t lg;
     uint8_t *nextStep;
 
-    if(tamMode) {
-      if(!inputNamedVariable || stringByteLength(aimBuffer) == 0) {
+    if(tam.mode) {
+      if(!tam.alpha || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
         tamTransitionSystem(TT_BACKSPACE);
         updateTamBuffer();
-      } else if(inputNamedVariable) {
+      } else if(tam.alpha) {
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
@@ -1030,8 +1029,8 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(tamMode && !catalog) {
-      if(inputNamedVariable) {
+    if(tam.mode && !catalog) {
+      if(tam.alpha) {
         resetAlphaSelectionBuffer();
         if(currentSoftmenuScrolls()) {
           menuUp();
@@ -1113,8 +1112,8 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
  ***********************************************/
 void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(tamMode && !catalog) {
-      if(inputNamedVariable) {
+    if(tam.mode && !catalog) {
+      if(tam.alpha) {
         resetAlphaSelectionBuffer();
         if(currentSoftmenuScrolls()) {
           menuDown();

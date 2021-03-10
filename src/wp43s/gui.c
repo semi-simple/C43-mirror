@@ -1429,7 +1429,7 @@
     alphaCase = AC_UPPER;
     nextChar = NC_NORMAL;
 
-    if(!tamMode) {
+    if(!tam.mode) {
       calcMode = CM_AIM;
       liftStack();
 
@@ -1495,11 +1495,11 @@
    * \return void
    ***********************************************/
   void leaveAsmMode(void) {
-    if(tamMode) {
-      uint16_t savedTamMode = tamMode;
+    if(tam.mode) {
+      uint16_t savedTamMode = tam.mode;
       leaveTamMode();
-      tamMode = savedTamMode;
-      strcpy(tamBuffer, indexOfItems[tamFunction].itemSoftmenuName);
+      tam.mode = savedTamMode;
+      strcpy(tamBuffer, indexOfItems[tam.function].itemSoftmenuName);
       enterTamMode();
       return;
     }
@@ -1551,14 +1551,14 @@
    * \return void
    ***********************************************/
   void enterTamMode(void) {
-    transitionSystemState = TS_OP_DIGIT_0;
-    tamCurrentOperation = 0;
+    tam.state = TS_OP_DIGIT_0;
+    tam.currentOperation = 0;
 
     if(calcMode == CM_NIM) {
       closeNim();
     }
 
-    switch(tamMode) {
+    switch(tam.mode) {
       case TM_VALUE:
       case TM_VALUE_CHB:
       case TM_REGISTER:
@@ -1587,22 +1587,22 @@
         break;
 
       default:
-        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
+        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tam.mode!", tam.mode);
         displayBugScreen(errorMessage);
         return;
     }
 
     numberOfTamMenusToPop = 1;
 
-    tamNumber = 0;
-    if(tamMode == TM_SHUFFLE) {
-      transitionSystemState = TS_OP_DIGIT_0_4;
+    tam.value = 0;
+    if(tam.mode == TM_SHUFFLE) {
+      tam.state = TS_OP_DIGIT_0_4;
     }
-    else if(tamFunction == ITM_CNST) {
-      transitionSystemState = TS_CNST_0;
+    else if(tam.function == ITM_CNST) {
+      tam.state = TS_CNST_0;
     }
-    else if(tamFunction == ITM_BESTF) {
-      transitionSystemState = TS_BESTF_0;
+    else if(tam.function == ITM_BESTF) {
+      tam.state = TS_BESTF_0;
     }
     updateTamBuffer();
 
@@ -1621,8 +1621,8 @@
    * \return void
    ***********************************************/
   void leaveTamMode(void) {
-    inputNamedVariable = false;
-    tamMode = 0;
+    tam.alpha = false;
+    tam.mode = 0;
     catalog = CATALOG_NONE;
 
     while(numberOfTamMenusToPop--) {

@@ -23,7 +23,7 @@
 
 
 void fnGoto(uint16_t label) {
-  if(tamMode) {
+  if(tam.mode) {
     if(dynamicMenuItem >= 0) {
       fnGotoDot(label);
       return;

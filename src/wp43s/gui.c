@@ -1553,6 +1553,7 @@
   void enterTamMode(void) {
     tam.state = TS_OP_DIGIT_0;
     tam.currentOperation = 0;
+    tam.digitsSoFar = 0;
 
     if(calcMode == CM_NIM) {
       closeNim();

@@ -314,6 +314,7 @@
             tam.function = ITM_GTOP;
             tam.min = 1;
             tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+            tam.dot = true;
             strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
             strcat(tamBuffer, " _____");
             tam.state = TS_GOTO_0;
@@ -1253,104 +1254,66 @@
 
   void updateTamBuffer() {
     char regists[5];
+    char *tbPtr = tamBuffer;
+    int16_t op;
     if(tam.mode == 0) {
       return;
     }
-    switch(tam.state) {
-      case TS_OP_DIGIT_0:
-      case TS_OPO_DIGIT_0:
-        sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
-        break;
-      case TS_OP_DIGIT_1:
-      case TS_OPO_DIGIT_1:
-        sprintf(tamBuffer, "%s %d_", indexOfItems[getOperation()].itemCatalogName, tam.value);
-        break;
-      case TS_OP_DOT_0:
-      case TS_OPO_DOT_0:
-        sprintf(tamBuffer, "%s .__", indexOfItems[getOperation()].itemCatalogName);
-        break;
-      case TS_OP_DOT_1:
-      case TS_OPO_DOT_1:
-        sprintf(tamBuffer, "%s .%d_", indexOfItems[getOperation()].itemCatalogName, tam.value);
-        break;
-      case TS_OP_INDIRECT_0:
-      case TS_OPO_INDIRECT_0:
-        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "__", indexOfItems[getOperation()].itemCatalogName);
-        break;
-      case TS_OP_INDIRECT_1:
-      case TS_OPO_INDIRECT_1:
-        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW "%d_", indexOfItems[getOperation()].itemCatalogName, tam.value);
-        break;
-      case TS_OP_INDIRECT_DOT_0:
-      case TS_OPO_INDIRECT_DOT_0:
-        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".__", indexOfItems[getOperation()].itemCatalogName);
-        break;
-      case TS_OP_INDIRECT_DOT_1:
-      case TS_OPO_INDIRECT_DOT_1:
-        sprintf(tamBuffer, "%s " STD_RIGHT_ARROW ".%d_", indexOfItems[getOperation()].itemCatalogName, tam.value);
-        break;
-      case TS_OP_DIGIT_0_4:
-        // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
-        // consecutively, with the 'valid' bit eight above that number
-        // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
-        regists[4] = 0;
-        for(int i=0;i<4;i++) {
-          if((tam.value >> (i*2 + 8)) & 1) {
-            uint8_t regNum = (tam.value >> (i*2)) & 3;
-            regists[i] = (regNum == 3 ? 't' : 'x' + regNum);
-          }
-          else {
-            regists[i] = '_';
-          }
-        }
-        sprintf(tamBuffer, "%s %s", indexOfItems[getOperation()].itemCatalogName, regists);
-        break;
-      case TS_GOTO_0:
-        sprintf(tamBuffer, "GTO. _____");
-        break;
-      case TS_GOTO_1:
-        sprintf(tamBuffer, "GTO. %d____", tam.value);
-        break;
-      case TS_GOTO_2:
-        sprintf(tamBuffer, "GTO. %02d___", tam.value);
-        break;
-      case TS_GOTO_3:
-        sprintf(tamBuffer, "GTO. %03d__", tam.value);
-        break;
-      case TS_GOTO_4:
-        sprintf(tamBuffer, "GTO. %04d_", tam.value);
-        break;
-      case TS_CNST_0:
-        sprintf(tamBuffer, "CNST ___");
-        break;
-      case TS_CNST_1:
-        sprintf(tamBuffer, "CNST %d__", tam.value);
-        break;
-      case TS_CNST_2:
-        sprintf(tamBuffer, "CNST %02d_", tam.value);
-        break;
-      case TS_BESTF_0:
-        sprintf(tamBuffer, "BestF ____");
-        break;
-      case TS_BESTF_1:
-        sprintf(tamBuffer, "BestF %d___", tam.value);
-        break;
-      case TS_BESTF_2:
-        sprintf(tamBuffer, "BestF %02d__", tam.value);
-        break;
-      case TS_BESTF_3:
-        sprintf(tamBuffer, "BestF %03d_", tam.value);
-        break;
-      case TS_OP_ALPHA:
-      case TS_OPO_ALPHA:
-        if(aimBuffer[0] == 0) {
-          sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "_", indexOfItems[getOperation()].itemCatalogName);
+    op = getOperation();
+    if(op == ITM_GTO && tam.dot) {
+      op = ITM_GTOP;
+    }
+    tbPtr = stpcpy(tbPtr, indexOfItems[op].itemCatalogName);
+    tbPtr = stpcpy(tbPtr, " ");
+    if(tam.state == TS_OP_DIGIT_0_4) {
+      // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+      // consecutively, with the 'valid' bit eight above that number
+      // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
+      regists[4] = 0;
+      for(int i=0;i<4;i++) {
+        if((tam.value >> (i*2 + 8)) & 1) {
+          uint8_t regNum = (tam.value >> (i*2)) & 3;
+          regists[i] = (regNum == 3 ? 't' : 'x' + regNum);
         }
         else {
-          sprintf(tamBuffer, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, indexOfItems[getOperation()].itemCatalogName, aimBuffer);
+          regists[i] = '_';
         }
-        break;
+      }
+      tbPtr = stpcpy(tbPtr, regists);
     }
+    else {
+      if(tam.indirect) {
+        tbPtr = stpcpy(tbPtr, STD_RIGHT_ARROW);
+      }
+      if(tam.dot && op != ITM_GTOP) {
+        tbPtr = stpcpy(tbPtr, ".");
+      }
+      if(tam.alpha) {
+        tbPtr = stpcpy(tbPtr, STD_LEFT_SINGLE_QUOTE);
+        if(aimBuffer[0] == 0) {
+          tbPtr = stpcpy(tbPtr, "_");
+        }
+        else {
+          tbPtr = stpcpy(tbPtr, aimBuffer);
+          tbPtr = stpcpy(tbPtr, STD_RIGHT_SINGLE_QUOTE);
+        }
+      }
+      else {
+        uint8_t maxDigits = (tam.max < 10 ? 1 : (tam.max < 100 ? 2 : (tam.max < 1000 ? 3 : (tam.max < 10000 ? 4 : 5))));
+        uint8_t underscores = maxDigits - tam.digitsSoFar;
+        int16_t v = tam.value;
+        for(int i = tam.digitsSoFar - 1; i >= 0; i--) {
+          tbPtr[i] = '0' + (v % 10);
+          v /= 10;
+        }
+        tbPtr += tam.digitsSoFar;
+        for(int i = 0; i < underscores; i++) {
+          tbPtr[0] = '_';
+          tbPtr++;
+        }
+      }
+    }
+    tbPtr[0] = 0;
   }
 
   void tamTransitionSystem(uint16_t tamEvent) {
@@ -1401,6 +1364,7 @@
             tam.value = tam.digit;
             if(tam.value < tam.min) {
               tam.state = TS_OP_DIGIT_1;
+              tam.digitsSoFar = 1;
             }
             else if(tam.value > tam.max) {
             }
@@ -1410,6 +1374,7 @@
             }
             else {
               tam.state = TS_OP_DIGIT_1;
+              tam.digitsSoFar = 1;
             }
             return;
 
@@ -1417,12 +1382,14 @@
             if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
               if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && currentLocalFlags != NULL) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && currentLocalRegisters != NULL)) {
                 tam.state = TS_OP_DOT_0;
+                tam.dot = true;
               }
             }
             return;
 
           case TT_INDIRECT :
             tam.state = TS_OP_INDIRECT_0;
+            tam.indirect = true;
             return;
 
           case TT_BACKSPACE :
@@ -1489,16 +1456,19 @@
           case TT_DIGIT :
             tam.value = tam.digit;
             tam.state = TS_OPO_DIGIT_1;
+            tam.digitsSoFar = 1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
               tam.state = TS_OPO_DOT_0;
+              tam.dot = true;
             }
             return;
 
           case TT_INDIRECT :
             tam.state = TS_OPO_INDIRECT_0;
+            tam.indirect = true;
             return;
 
           default : {}
@@ -1525,6 +1495,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OP_DIGIT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1547,12 +1518,14 @@
               }
               else {
                 tam.state = TS_OP_DOT_1;
+                tam.digitsSoFar = 1;
               }
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OP_DIGIT_0;
+            tam.dot = false;
             return;
 
           default : {}
@@ -1580,6 +1553,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OP_DOT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1605,16 +1579,19 @@
           case TT_DIGIT :
             tam.value = tam.digit;
             tam.state = TS_OP_INDIRECT_1;
+            tam.digitsSoFar = 1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
               tam.state = TS_OP_INDIRECT_DOT_0;
+              tam.dot = true;
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OP_DIGIT_0;
+            tam.indirect = false;
             return;
 
           default : {}
@@ -1645,6 +1622,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OP_INDIRECT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1670,12 +1648,14 @@
               }
               else {
                 tam.state = TS_OP_INDIRECT_DOT_1;
+                tam.digitsSoFar = 1;
               }
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OP_INDIRECT_0;
+            tam.dot = false;
             return;
 
           default : {}
@@ -1710,6 +1690,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OP_INDIRECT_DOT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1732,6 +1713,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_DIGIT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1755,12 +1737,14 @@
               }
               else {
                 tam.state = TS_OPO_DOT_1;
+                tam.digitsSoFar = 1;
               }
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_DIGIT_0;
+            tam.dot = false;
             return;
 
           default : {}
@@ -1787,6 +1771,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_DOT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1812,16 +1797,19 @@
           case TT_DIGIT :
             tam.value = tam.digit;
             tam.state = TS_OPO_INDIRECT_1;
+            tam.digitsSoFar = 1;
             return;
 
           case TT_DOT :
             if(currentLocalRegisters != NULL) {
               tam.state = TS_OPO_INDIRECT_DOT_0;
+              tam.dot = true;
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_DIGIT_0;
+            tam.indirect = false;
             return;
 
           default : {}
@@ -1852,6 +1840,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_INDIRECT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1868,11 +1857,13 @@
             if(tam.digit < currentNumberOfLocalRegisters) {
               tam.value = tam.digit;
               tam.state = TS_OPO_INDIRECT_DOT_1;
+              tam.digitsSoFar = 1;
             }
             return;
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_INDIRECT_0;
+            tam.dot = false;
             return;
 
           default : {}
@@ -1905,6 +1896,7 @@
 
           case TT_BACKSPACE :
             tam.state = TS_OPO_INDIRECT_DOT_0;
+            tam.digitsSoFar = 0;
             return;
 
           default : {}
@@ -1956,6 +1948,7 @@
           case TT_DIGIT :
             tam.value = tam.digit;
             tam.state = TS_GOTO_1;
+            tam.digitsSoFar = 1;
             return;
 
           case TT_BACKSPACE :
@@ -1963,6 +1956,7 @@
             tam.min = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
             tam.max = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
             tam.state = TS_OP_DIGIT_0;
+            tam.dot = false;
             return;
 
           case TT_DOT:
@@ -2013,6 +2007,7 @@
           case TT_DIGIT :
             tam.value = tam.value*10 + tam.digit;
             tam.state = TS_GOTO_2;
+            tam.digitsSoFar = 2;
             return;
 
           case TT_ENTER : // GTO local label tam.value
@@ -2023,6 +2018,7 @@
           case TT_BACKSPACE :
             tam.value = 0;
             tam.state = TS_GOTO_0;
+            tam.digitsSoFar = 0;
         }
         return;
 
@@ -2041,6 +2037,7 @@
             }
             else {
               tam.state = TS_GOTO_3;
+              tam.digitsSoFar = 3;
             }
             return;
 
@@ -2052,6 +2049,7 @@
           case TT_BACKSPACE :
             tam.value /= 10;
             tam.state = TS_GOTO_1;
+            tam.digitsSoFar = 1;
         }
         return;
 
@@ -2070,6 +2068,7 @@
             }
             else {
               tam.state = TS_GOTO_4;
+              tam.digitsSoFar = 4;
             }
             return;
 
@@ -2083,6 +2082,7 @@
           case TT_BACKSPACE :
             tam.value /= 10;
             tam.state = TS_GOTO_2;
+            tam.digitsSoFar = 2;
         }
         return;
 
@@ -2111,6 +2111,7 @@
           case TT_BACKSPACE :
             tam.value /= 10;
             tam.state = TS_GOTO_3;
+            tam.digitsSoFar = 3;
         }
         return;
 
@@ -2128,6 +2129,7 @@
             }
             else {
               tam.state = TS_CNST_1;
+              tam.digitsSoFar = 1;
             }
             return;
 
@@ -2152,6 +2154,7 @@
             }
             else {
               tam.state = TS_CNST_2;
+              tam.digitsSoFar = 2;
             }
             return;
 
@@ -2163,6 +2166,7 @@
           case TT_BACKSPACE :
             tam.value = 0;
             tam.state = TS_CNST_0;
+            tam.digitsSoFar = 0;
         }
         return;
 
@@ -2189,6 +2193,7 @@
           case TT_BACKSPACE :
             tam.value /= 10;
             tam.state = TS_CNST_1;
+            tam.digitsSoFar = 1;
         }
         return;
 
@@ -2206,6 +2211,7 @@
             }
             else {
               tam.state = TS_BESTF_1;
+              tam.digitsSoFar = 1;
             }
             return;
 
@@ -2230,6 +2236,7 @@
             }
             else {
               tam.state = TS_BESTF_2;
+              tam.digitsSoFar = 2;
             }
             return;
 
@@ -2241,6 +2248,7 @@
           case TT_BACKSPACE :
             tam.value = 0;
             tam.state = TS_BESTF_0;
+            tam.digitsSoFar = 0;
         }
         return;
 
@@ -2259,6 +2267,7 @@
             }
             else {
               tam.state = TS_BESTF_3;
+              tam.digitsSoFar = 3;
             }
             return;
 
@@ -2270,6 +2279,7 @@
           case TT_BACKSPACE :
             tam.value = 0;
             tam.state = TS_BESTF_1;
+            tam.digitsSoFar = 1;
         }
         return;
 
@@ -2296,6 +2306,7 @@
           case TT_BACKSPACE :
             tam.value /= 10;
             tam.state = TS_BESTF_2;
+            tam.digitsSoFar = 2;
         }
         return;
 

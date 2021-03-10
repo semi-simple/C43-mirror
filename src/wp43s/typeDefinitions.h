@@ -366,6 +366,9 @@ typedef struct {
   int16_t    function;
   int16_t    operation;
   int16_t    currentOperation;
+  int16_t    digitsSoFar;
+  bool_t     dot;
+  bool_t     indirect;
   int16_t    value;
   int16_t    min;
   int16_t    max;

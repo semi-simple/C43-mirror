@@ -90,6 +90,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&tam.function,                       sizeof(tam.function),                       BACKUP);
     save(&tam.operation,                      sizeof(tam.operation),                      BACKUP);
     save(&tam.currentOperation,               sizeof(tam.currentOperation),               BACKUP);
+    save(&tam.digitsSoFar,                    sizeof(tam.digitsSoFar),                    BACKUP);
+    save(&tam.dot,                            sizeof(tam.dot),                            BACKUP);
+    save(&tam.indirect,                       sizeof(tam.indirect),                       BACKUP);
     save(&tam.value,                          sizeof(tam.value),                          BACKUP);
     save(&tam.min,                            sizeof(tam.min),                            BACKUP);
     save(&tam.max,                            sizeof(tam.max),                            BACKUP);
@@ -243,6 +246,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&tam.function,                       sizeof(tam.function),                       BACKUP);
       restore(&tam.operation,                      sizeof(tam.operation),                      BACKUP);
       restore(&tam.currentOperation,               sizeof(tam.currentOperation),               BACKUP);
+      restore(&tam.digitsSoFar,                    sizeof(tam.digitsSoFar),                    BACKUP);
+      restore(&tam.dot,                            sizeof(tam.dot),                            BACKUP);
+      restore(&tam.indirect,                       sizeof(tam.indirect),                       BACKUP);
       restore(&tam.value,                          sizeof(tam.value),                          BACKUP);
       restore(&tam.min,                            sizeof(tam.min),                            BACKUP);
       restore(&tam.max,                            sizeof(tam.max),                            BACKUP);

@@ -146,8 +146,8 @@
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 // Define the second tagline
 #define WHO2                                      "C43" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "HP42S" STD_SPACE_3_PER_EM "style" STD_SPACE_3_PER_EM "keys," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
-#define PROGRAM_NAME                              "WP43S"
-#define PROGRAM_VERSION                           "0.1"
+//#define PROGRAM_NAME                              "WP43C"   //JM in main.h
+//#define PROGRAM_VERSION                           "0.1"     //JM in main.h
 
 #define CHARS_PER_LINE                            80 // Used in the flag browser application
 

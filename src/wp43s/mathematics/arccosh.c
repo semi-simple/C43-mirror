@@ -64,7 +64,7 @@ void fnArccosh(uint16_t unusedButMandatoryParameter) {
 
 
 void arccoshLonI(void) {
-  real_t x, xSquared;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realCompareLessThan(&x, const_1)) {
@@ -109,7 +109,7 @@ void arccoshCxma(void) {
 
 
 void arccoshReal(void) {
-  real_t x, xSquared;
+  real_t x;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 

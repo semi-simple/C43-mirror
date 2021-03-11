@@ -140,7 +140,7 @@ uint8_t               *firstFreeProgramByte;
 uint8_t               *firstDisplayedStep;
 uint8_t               *currentStep;
 
-tamNewState_t          tam;
+tamState_t             tam;
 int16_t                currentRegisterBrowserScreen;
 int16_t                lineTWidth;
 int16_t                rbrRegister;

@@ -84,7 +84,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(globalRegister,                      sizeof(globalRegister),                     BACKUP);
     save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
     save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-    save(&tam.state,                          sizeof(tam.state),                          BACKUP);
     save(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
     save(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
     save(&tam.function,                       sizeof(tam.function),                       BACKUP);
@@ -240,7 +239,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(globalRegister,                      sizeof(globalRegister),                     BACKUP);
       restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
       restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-      restore(&tam.state,                          sizeof(tam.state),                          BACKUP);
       restore(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
       restore(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
       restore(&tam.function,                       sizeof(tam.function),                       BACKUP);

@@ -1551,13 +1551,16 @@
    * \return void
    ***********************************************/
   void enterTamMode(void) {
-    tam.state = TS_OP_DIGIT_0;
-    tam.currentOperation = 0;
-    tam.digitsSoFar = 0;
-
     if(calcMode == CM_NIM) {
       closeNim();
     }
+
+    tam.alpha = false;
+    tam.currentOperation = tam.function;
+    tam.digitsSoFar = 0;
+    tam.dot = false;
+    tam.indirect = false;
+    tam.value = 0;
 
     switch(tam.mode) {
       case TM_VALUE:
@@ -1595,16 +1598,6 @@
 
     numberOfTamMenusToPop = 1;
 
-    tam.value = 0;
-    if(tam.mode == TM_SHUFFLE) {
-      tam.state = TS_OP_DIGIT_0_4;
-    }
-    else if(tam.function == ITM_CNST) {
-      tam.state = TS_CNST_0;
-    }
-    else if(tam.function == ITM_BESTF) {
-      tam.state = TS_BESTF_0;
-    }
     updateTamBuffer();
 
     clearSystemFlag(FLAG_ALPHA);

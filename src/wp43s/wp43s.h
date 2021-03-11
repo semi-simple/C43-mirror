@@ -318,7 +318,7 @@
   extern uint8_t               *firstDisplayedStep;
   extern uint8_t               *currentStep;
 
-  extern tamNewState_t          tam;
+  extern tamState_t             tam;
   extern int16_t                currentRegisterBrowserScreen;
   extern int16_t                lineTWidth;
   extern int16_t                rbrRegister;

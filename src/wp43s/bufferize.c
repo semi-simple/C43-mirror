@@ -310,18 +310,7 @@
           tamTransitionSystem(TT_DIGIT);
         }
         else if(item == ITM_PERIOD) { // .
-          if(tam.function == ITM_GTO && tam.state == TS_OP_DIGIT_0) {
-            tam.function = ITM_GTOP;
-            tam.min = 1;
-            tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
-            tam.dot = true;
-            strcpy(tamBuffer, indexOfItems[ITM_GTOP].itemSoftmenuName);
-            strcat(tamBuffer, " _____");
-            tam.state = TS_GOTO_0;
-          }
-          else {
-            tamTransitionSystem(TT_DOT);
-          }
+          tamTransitionSystem(TT_DOT);
         }
         else if(item == ITM_INDIRECTION) { // Indirection
           tamTransitionSystem(TT_INDIRECT);
@@ -330,9 +319,6 @@
           tamTransitionSystem(TT_BACKSPACE);
         }
         else if(item == ITM_alpha) {
-          tam.alpha = true;
-          aimBuffer[0] = 0;
-          calcModeAim(NOPARAM);
           tamTransitionSystem(TT_VARIABLE);
         }
         else if(item == ITM_0P || item == ITM_1P) {
@@ -1255,17 +1241,12 @@
   void updateTamBuffer() {
     char regists[5];
     char *tbPtr = tamBuffer;
-    int16_t op;
     if(tam.mode == 0) {
       return;
     }
-    op = getOperation();
-    if(op == ITM_GTO && tam.dot) {
-      op = ITM_GTOP;
-    }
-    tbPtr = stpcpy(tbPtr, indexOfItems[op].itemCatalogName);
+    tbPtr = stpcpy(tbPtr, indexOfItems[getOperation()].itemCatalogName);
     tbPtr = stpcpy(tbPtr, " ");
-    if(tam.state == TS_OP_DIGIT_0_4) {
+    if(tam.mode == TM_SHUFFLE) {
       // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
       // consecutively, with the 'valid' bit eight above that number
       // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
@@ -1285,7 +1266,7 @@
       if(tam.indirect) {
         tbPtr = stpcpy(tbPtr, STD_RIGHT_ARROW);
       }
-      if(tam.dot && op != ITM_GTOP) {
+      if(tam.dot) {
         tbPtr = stpcpy(tbPtr, ".");
       }
       if(tam.alpha) {
@@ -1299,7 +1280,8 @@
         }
       }
       else {
-        uint8_t maxDigits = (tam.max < 10 ? 1 : (tam.max < 100 ? 2 : (tam.max < 1000 ? 3 : (tam.max < 10000 ? 4 : 5))));
+        int16_t max = (tam.dot ? ((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) ? NUMBER_OF_LOCAL_FLAGS : currentNumberOfLocalRegisters) : tam.max);
+        uint8_t maxDigits = (max < 10 ? 1 : (max < 100 ? 2 : (max < 1000 ? 3 : (max < 10000 ? 4 : 5))));
         uint8_t underscores = maxDigits - tam.digitsSoFar;
         int16_t v = tam.value;
         for(int i = tam.digitsSoFar - 1; i >= 0; i--) {
@@ -1317,654 +1299,51 @@
   }
 
   void tamTransitionSystem(uint16_t tamEvent) {
-    calcRegister_t value, regist;
+    int16_t min, max;
+    bool_t forceTry = false;
+    bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
 
-    switch(tam.state) {
-      //////////////////////////////
-      // OP __
-      case TS_OP_DIGIT_0 :
-        switch(tamEvent) {
-          case TT_OPERATION :
-            if(tam.mode == TM_STORCL) {
-              if(tam.currentOperation == ITM_Config || tam.currentOperation == ITM_Stack) {
-                return;
-              }
-
-              if(tam.operation == ITM_dddEL || tam.operation == ITM_dddIJ) {
-                tam.currentOperation = tam.operation;
-                reallyRunFunction(getOperation(), NOPARAM);
-                leaveTamMode();
-                return;
-              }
-
-              tam.currentOperation = tam.operation;
-
-              if(tam.currentOperation == ITM_Config || tam.currentOperation == ITM_Stack) {
-                return;
-              }
-
-              tam.state = TS_OPO_DIGIT_0;
-            }
-            return;
-
-          case TT_LETTER :
-            if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-              reallyRunFunction(getOperation(), tam.letteredRegister);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_VARIABLE :
-            if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-              tam.state = TS_OP_ALPHA;
-            }
-            return;
-
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(tam.value < tam.min) {
-              tam.state = TS_OP_DIGIT_1;
-              tam.digitsSoFar = 1;
-            }
-            else if(tam.value > tam.max) {
-            }
-            else if(tam.value*10 > tam.max) {
+    // Shuffle is handled completely differently to everything else
+    if(tam.mode == TM_SHUFFLE) {
+      // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+      // consecutively, with the 'valid' bit eight above that number
+      // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
+      if(tamEvent == TT_LETTER) {
+        for(int i=0; i<4; i++) {
+          if(!((tam.value >> (2*i + 8)) & 1)) {
+            uint16_t mask = 3 << (2*i);
+            tam.value |= 1 << (2*i + 8);
+            tam.value = (tam.value & ~mask) | (((tam.letteredRegister-REGISTER_X) << (2*i)) & mask);
+            if(i == 3) {
               reallyRunFunction(getOperation(), tam.value);
               leaveTamMode();
             }
-            else {
-              tam.state = TS_OP_DIGIT_1;
-              tam.digitsSoFar = 1;
-            }
-            return;
-
-          case TT_DOT :
-            if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-              if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && currentLocalFlags != NULL) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && currentLocalRegisters != NULL)) {
-                tam.state = TS_OP_DOT_0;
-                tam.dot = true;
-              }
-            }
-            return;
-
-          case TT_INDIRECT :
-            tam.state = TS_OP_INDIRECT_0;
-            tam.indirect = true;
-            return;
-
-          case TT_BACKSPACE :
-            leaveTamMode();
-            return;
-
-          case TT_INT :
-            fnIp(NOPARAM);
-            leaveTamMode();
-            return;
-
-          case TT_FP :
-            fnFp(NOPARAM);
-            leaveTamMode();
-            return;
-
-          case TT_CHB02 :
-            fnChangeBase(2);
-            leaveTamMode();
-            return;
-
-          case TT_BASE10 :
-            reallyRunFunction(getOperation(), 10);
-            leaveTamMode();
-            return;
-
-          case TT_BASE16 :
-            reallyRunFunction(getOperation(), 16);
-            leaveTamMode();
-            return;
-
-          default : {}
+            break;
+          }
         }
-        return;
-
-      //////////////////////////////
-      // OPo __
-      case TS_OPO_DIGIT_0 : // RCL+, RCL-, RCL×, RCL/, RCL^, RCLv, STO+, STO-, STO×, STO/, STO^ or RCLv
-        switch(tamEvent) {
-          case TT_BACKSPACE :
-            tam.currentOperation = tam.function;
-            tam.state = TS_OP_DIGIT_0;
-            return;
-
-          case TT_OPERATION :
-            if(tam.operation==tam.currentOperation) {
-              tam.currentOperation = tam.function;
-              tam.state = TS_OP_DIGIT_0;
-            }
-            else {
-              tam.currentOperation = tam.operation;
-            }
-            return;
-
-          case TT_LETTER :
-            reallyRunFunction(getOperation(), tam.letteredRegister);
+      }
+      else if(tamEvent == TT_BACKSPACE) {
+        // We won't have all four registers at this point as otherwise TAM would already be closed
+        for(int i=3; i>=0; i--) {
+          if((tam.value >> (2*i + 8)) & 1) {
+            tam.value &= ~(1 << (2*i + 8));
+            break;
+          }
+          else if(i == 0) {
             leaveTamMode();
-            return;
-
-          case TT_VARIABLE :
-            tam.state = TS_OPO_ALPHA;
-            return;
-
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            tam.state = TS_OPO_DIGIT_1;
-            tam.digitsSoFar = 1;
-            return;
-
-          case TT_DOT :
-            if(currentLocalRegisters != NULL) {
-              tam.state = TS_OPO_DOT_0;
-              tam.dot = true;
-            }
-            return;
-
-          case TT_INDIRECT :
-            tam.state = TS_OPO_INDIRECT_0;
-            tam.indirect = true;
-            return;
-
-          default : {}
+            break;
+          }
         }
-        return;
-
-      //////////////////////////////
-      // OP d_
-      case TS_OP_DIGIT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(tam.min <= (tam.value*10 + tam.digit) && (tam.value*10 + tam.digit) <= tam.max) {
-              reallyRunFunction(getOperation(), tam.value*10 + tam.digit);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            if(tam.min <= tam.value && tam.value <= tam.max) {
-              reallyRunFunction(getOperation(), tam.value);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_DIGIT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP .__
-      case TS_OP_DOT_0 :
-        // Here we are sure that:
-        // currentLocalFlags != NULL         in the case of a flag parameter
-        // currentNumberOfLocalRegisters > 0 in the case of a register parameter
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value < NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value < currentNumberOfLocalRegisters)) {
-              if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value*10 >= NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value*10 >= currentNumberOfLocalRegisters)) {
-                reallyRunFunction(getOperation(), tam.value + FIRST_LOCAL_REGISTER);
-                leaveTamMode();
-              }
-              else {
-                tam.state = TS_OP_DOT_1;
-                tam.digitsSoFar = 1;
-              }
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_DIGIT_0;
-            tam.dot = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP .d_
-      case TS_OP_DOT_1 :
-        // Here we are sure that:
-        // 0 <= tam.value < NUMBER_OF_LOCAL_FLAGS         in the case of a flag parameter
-        // 0 <= tam.value < currentNumberOfLocalRegisters in the case of a register parameter
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value*10 + tam.digit < NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value*10 + tam.digit < currentNumberOfLocalRegisters)) {
-              reallyRunFunction(getOperation(), tam.value*10 + tam.digit + FIRST_LOCAL_REGISTER);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(getOperation(), tam.value + FIRST_LOCAL_REGISTER);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_DOT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP -->__
-      case TS_OP_INDIRECT_0 :
-        switch(tamEvent) {
-          case TT_LETTER :
-            value = indirectAddressing(tam.letteredRegister, tam.min, tam.max);
-
-            if(lastErrorCode == 0) { // value is between tam.min and tam.max
-              reallyRunFunction(getOperation(), value);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_VARIABLE :
-            return;
-
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            tam.state = TS_OP_INDIRECT_1;
-            tam.digitsSoFar = 1;
-            return;
-
-          case TT_DOT :
-            if(currentLocalRegisters != NULL) {
-              tam.state = TS_OP_INDIRECT_DOT_0;
-              tam.dot = true;
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_DIGIT_0;
-            tam.indirect = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP -->d_
-      case TS_OP_INDIRECT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            value = indirectAddressing(tam.value*10 + tam.digit, tam.min, tam.max);
-
-            if(lastErrorCode == 0) { // value is between tam.min and tam.max
-              reallyRunFunction(getOperation(), value);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_ENTER :
-            value = indirectAddressing(tam.value, tam.min, tam.max);
-
-            if(lastErrorCode == 0) { // value is between tam.min and tam.max
-              reallyRunFunction(getOperation(), value);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_INDIRECT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP -->.__
-      case TS_OP_INDIRECT_DOT_0 :
-        // Here we are sure that:
-        // currentNumberOfLocalRegisters > 0
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value < NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value < currentNumberOfLocalRegisters)) {
-              if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value*10 >= NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value*10 >= currentNumberOfLocalRegisters)) {
-                value = indirectAddressing(tam.value + FIRST_LOCAL_REGISTER, tam.min, tam.max);
-
-                if(lastErrorCode == 0) { // value is between tam.min and tam.max
-                  reallyRunFunction(getOperation(), value);
-                }
-                leaveTamMode();
-              }
-              else {
-                tam.state = TS_OP_INDIRECT_DOT_1;
-                tam.digitsSoFar = 1;
-              }
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_INDIRECT_0;
-            tam.dot = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP -->.d_
-      case TS_OP_INDIRECT_DOT_1 :
-        // Here we are sure that:
-        // 0 <= tam.value < currentNumberOfLocalRegisters
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.value*10 + tam.digit < NUMBER_OF_LOCAL_FLAGS) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && tam.value*10 + tam.digit < currentNumberOfLocalRegisters)) {
-              value = indirectAddressing(tam.value*10 + tam.digit + FIRST_LOCAL_REGISTER, tam.min, tam.max);
-
-              if(lastErrorCode == 0) { // value is between tam.min and tam.max
-                reallyRunFunction(getOperation(), value);
-              }
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            value = indirectAddressing(tam.value + FIRST_LOCAL_REGISTER, tam.min, tam.max);
-
-            if(lastErrorCode == 0) { // value is between tam.min and tam.max
-              reallyRunFunction(getOperation(), value);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OP_INDIRECT_DOT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo d_
-      case TS_OPO_DIGIT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            reallyRunFunction(getOperation(), tam.value*10 + tam.digit);
-            leaveTamMode();
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(getOperation(), tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_DIGIT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo .__
-      case TS_OPO_DOT_0 :
-        // Here we are sure that:
-        // currentNumberOfLocalRegisters > 0
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(tam.value < currentNumberOfLocalRegisters) {
-              if(tam.value > tam.max) {
-              }
-              else if(tam.value*10 >= currentNumberOfLocalRegisters) {
-                reallyRunFunction(getOperation(), tam.value + FIRST_LOCAL_REGISTER);
-                leaveTamMode();
-              }
-              else {
-                tam.state = TS_OPO_DOT_1;
-                tam.digitsSoFar = 1;
-              }
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_DIGIT_0;
-            tam.dot = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo .d_
-      case TS_OPO_DOT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(tam.value*10 + tam.digit < currentNumberOfLocalRegisters) {
-              reallyRunFunction(getOperation(), tam.value*10 + tam.digit + FIRST_LOCAL_REGISTER);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            if(tam.value < currentNumberOfLocalRegisters) {
-              reallyRunFunction(getOperation(), tam.value + FIRST_LOCAL_REGISTER);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_DOT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo -->__
-      case TS_OPO_INDIRECT_0 :
-        switch(tamEvent) {
-          case TT_LETTER :
-            regist = indirectAddressing(tam.letteredRegister, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
-
-            if(lastErrorCode == 0) { // regist is between tam.min and tam.max
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_VARIABLE :
-            return;
-
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            tam.state = TS_OPO_INDIRECT_1;
-            tam.digitsSoFar = 1;
-            return;
-
-          case TT_DOT :
-            if(currentLocalRegisters != NULL) {
-              tam.state = TS_OPO_INDIRECT_DOT_0;
-              tam.dot = true;
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_DIGIT_0;
-            tam.indirect = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo -->d_
-      case TS_OPO_INDIRECT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            regist = indirectAddressing(tam.value*10 + tam.digit, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
-
-            if(lastErrorCode == 0) { // regist is between tam.min and tam.max
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_ENTER :
-            regist = indirectAddressing(tam.value, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
-
-            if(lastErrorCode == 0) { // regist is between tam.min and tam.max
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_INDIRECT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo -->.__
-      case TS_OPO_INDIRECT_DOT_0 :
-        // Here we are sure that:
-        // numberOfLocalRegisters > 0
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(tam.digit < currentNumberOfLocalRegisters) {
-              tam.value = tam.digit;
-              tam.state = TS_OPO_INDIRECT_DOT_1;
-              tam.digitsSoFar = 1;
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_INDIRECT_0;
-            tam.dot = false;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OPo -->.d_
-      case TS_OPO_INDIRECT_DOT_1 :
-        switch(tamEvent) {
-          case TT_DIGIT :
-            if(tam.value*10 + tam.digit < currentNumberOfLocalRegisters) {
-              regist = indirectAddressing(tam.value*10 + tam.digit + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
-
-              if(lastErrorCode == 0) { // regist is between tam.min and tam.max
-                reallyRunFunction(getOperation(), regist);
-              }
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            regist = indirectAddressing(tam.value + FIRST_LOCAL_REGISTER, 0, FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters);
-
-            if(lastErrorCode == 0) { // regist is between tam.min and tam.max
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.state = TS_OPO_INDIRECT_DOT_0;
-            tam.digitsSoFar = 0;
-            return;
-
-          default : {}
-        }
-        return;
-
-      //////////////////////////////
-      // OP ____
-      case TS_OP_DIGIT_0_4:
-        switch(tamEvent) {
-          // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
-          // consecutively, with the 'valid' bit eight above that number
-          // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
-          case TT_LETTER :
-            for(int i=0; i<4; i++) {
-              if(!((tam.value >> (2*i + 8)) & 1)) {
-                uint16_t mask = 3 << (2*i);
-                tam.value |= 1 << (2*i + 8);
-                tam.value = (tam.value & ~mask) | (((tam.letteredRegister-REGISTER_X) << (2*i)) & mask);
-                if(i == 3) {
-                  reallyRunFunction(getOperation(), tam.value);
-                  leaveTamMode();
-                }
-                return;
-              }
-            }
-            return;
-
-          case TT_BACKSPACE :
-            // We won't have all four registers at this point as otherwise TAM would already be closed
-            for(int i=3; i>=0; i--) {
-              if((tam.value >> (2*i + 8)) & 1) {
-                tam.value &= ~(1 << (2*i + 8));
-                return;
-              }
-              else if(i == 0) {
-                leaveTamMode();
-                return;
-              }
-            }
-            return;
-        }
-        return;
-
-      //////////////////////////////
-      // GTO. _____
-      case TS_GOTO_0:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            tam.state = TS_GOTO_1;
-            tam.digitsSoFar = 1;
-            return;
-
-          case TT_BACKSPACE :
-            tam.function = ITM_GTO;
-            tam.min = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
-            tam.max = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
-            tam.state = TS_OP_DIGIT_0;
-            tam.dot = false;
-            return;
-
-          case TT_DOT:
-            reallyRunFunction(ITM_GTOP, tam.max);
-            leaveTamMode();
-            return;
-
-          case TT_OPERATION:
+      }
+      return;
+    }
+
+    min = (tam.dot ? 0 : tam.min);
+    max = (tam.dot ? ((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) ? NUMBER_OF_LOCAL_FLAGS : currentNumberOfLocalRegisters) : tam.max);
+    switch(tamEvent) {
+      case TT_OPERATION:
+        if(!tam.alpha && !tam.digitsSoFar && !tam.indirect) {
+          if(tam.function == ITM_GTOP) {
             if(tam.operation == ITM_Max) { // UP
               if(currentLocalStepNumber == 1) { // We are on 1st step of current program
                 if(currentProgramNumber == 1) { // It's the 1st program in memory
@@ -1990,393 +1369,190 @@
               tam.value = programList[currentProgramNumber].step;
               reallyRunFunction(ITM_GTOP, tam.value);
               leaveTamMode();
+              return;
             }
-            return;
-
-          case TT_LETTER:
-            fnGoto(tam.letteredRegister);
-            leaveTamMode();
-            return;
-        }
-        return;
-
-      //////////////////////////////
-      // GTO. d____
-      case TS_GOTO_1:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            tam.state = TS_GOTO_2;
-            tam.digitsSoFar = 2;
-            return;
-
-          case TT_ENTER : // GTO local label tam.value
-            fnGoto(tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value = 0;
-            tam.state = TS_GOTO_0;
-            tam.digitsSoFar = 0;
-        }
-        return;
-
-      //////////////////////////////
-      // GTO. dd___
-      case TS_GOTO_2:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_GTOP, tam.value + programList[currentProgramNumber - 1].step - 1);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_GOTO_3;
-              tam.digitsSoFar = 3;
-            }
-            return;
-
-          case TT_ENTER : // GTO local label tam.value
-            fnGoto(tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value /= 10;
-            tam.state = TS_GOTO_1;
-            tam.digitsSoFar = 1;
-        }
-        return;
-
-      //////////////////////////////
-      // GTO. ddd__
-      case TS_GOTO_3:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_GTOP, tam.value + programList[currentProgramNumber - 1].step - 1);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_GOTO_4;
-              tam.digitsSoFar = 4;
-            }
-            return;
-
-          case TT_ENTER :
-            if(tam.value >= tam.min) {
-              reallyRunFunction(ITM_GTOP, tam.value + programList[currentProgramNumber - 1].step - 1);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.value /= 10;
-            tam.state = TS_GOTO_2;
-            tam.digitsSoFar = 2;
-        }
-        return;
-
-      //////////////////////////////
-      // GTO. dddd_
-      case TS_GOTO_4:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max || tam.value < tam.min) {
-              tam.value /= 10;
-            }
-            else {
-              reallyRunFunction(ITM_GTOP, tam.value + programList[currentProgramNumber - 1].step - 1);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            if(tam.value >= tam.min) {
-              reallyRunFunction(ITM_GTOP, tam.value + programList[currentProgramNumber - 1].step - 1);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_BACKSPACE :
-            tam.value /= 10;
-            tam.state = TS_GOTO_3;
-            tam.digitsSoFar = 3;
-        }
-        return;
-
-      //////////////////////////////
-      // CNST ___
-      case TS_CNST_0:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(tam.value > tam.max) {
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_CNST_1;
-              tam.digitsSoFar = 1;
-            }
-            return;
-
-          case TT_BACKSPACE :
-            leaveTamMode();
-            return;
-        }
-        return;
-
-      //////////////////////////////
-      // CNST d__
-      case TS_CNST_1:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_CNST_2;
-              tam.digitsSoFar = 2;
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(ITM_CNST, tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value = 0;
-            tam.state = TS_CNST_0;
-            tam.digitsSoFar = 0;
-        }
-        return;
-
-      //////////////////////////////
-      // CNST dd_
-      case TS_CNST_2:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(ITM_CNST, tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value /= 10;
-            tam.state = TS_CNST_1;
-            tam.digitsSoFar = 1;
-        }
-        return;
-
-      //////////////////////////////
-      // BestF ____
-      case TS_BESTF_0:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.digit;
-            if(tam.value > tam.max) {
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_BESTF_1;
-              tam.digitsSoFar = 1;
-            }
-            return;
-
-          case TT_BACKSPACE :
-            leaveTamMode();
-            return;
-        }
-        return;
-
-      //////////////////////////////
-      // BestF d___
-      case TS_BESTF_1:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_BESTF_2;
-              tam.digitsSoFar = 2;
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(ITM_CNST, tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value = 0;
-            tam.state = TS_BESTF_0;
-            tam.digitsSoFar = 0;
-        }
-        return;
-
-      //////////////////////////////
-      // BestF dd__
-      case TS_BESTF_2:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else if(tam.value*10 > tam.max) {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            else {
-              tam.state = TS_BESTF_3;
-              tam.digitsSoFar = 3;
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(ITM_CNST, tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value = 0;
-            tam.state = TS_BESTF_1;
-            tam.digitsSoFar = 1;
-        }
-        return;
-
-      //////////////////////////////
-      // BestF ddd_
-      case TS_BESTF_3:
-        switch(tamEvent) {
-          case TT_DIGIT :
-            tam.value = tam.value*10 + tam.digit;
-            if(tam.value > tam.max) {
-              tam.value /= 10;
-            }
-            else {
-              reallyRunFunction(ITM_CNST, tam.value);
-              leaveTamMode();
-            }
-            return;
-
-          case TT_ENTER :
-            reallyRunFunction(ITM_CNST, tam.value);
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.value /= 10;
-            tam.state = TS_BESTF_2;
-            tam.digitsSoFar = 2;
-        }
-        return;
-
-
-      //////////////////////////////
-      // OP '_
-      case TS_OP_ALPHA : // tam.alpha = 1
-        switch(tamEvent) {
-          case TT_ENTER:
-            if(tam.function == ITM_STO) {
-              regist = findOrAllocateNamedVariable(aimBuffer);
-            }
-            else {
-              regist = findNamedVariable(aimBuffer);
-              if(regist == INVALID_VARIABLE) {
-                temporaryInformation = TI_UNDEF_SOURCE_VAR;
+          }
+          else if(tam.mode == TM_STORCL && tam.currentOperation != ITM_Config && tam.currentOperation != ITM_Stack) {
+            if(tam.operation == tam.currentOperation) {
+              tam.currentOperation = tam.function;
+            } else {
+              tam.currentOperation = tam.operation;
+              if(tam.operation == ITM_dddEL || tam.operation == ITM_dddIJ) {
+                reallyRunFunction(getOperation(), NOPARAM);
+                leaveTamMode();
+                return;
               }
             }
-            aimBuffer[0] = 0;
-            if(regist != INVALID_VARIABLE) {
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
-
-          case TT_BACKSPACE :
-            tam.alpha = 0;
-            tam.state = TS_OP_DIGIT_0;
-            return;
-
-          default : {}
+          }
         }
         return;
 
-      //////////////////////////////
-      // OPo '_
-      case TS_OPO_ALPHA : // tam.alpha = 1
-        switch(tamEvent) {
-          case TT_ENTER:
-            if(tam.function == ITM_STO) {
-              regist = findOrAllocateNamedVariable(aimBuffer);
-            }
-            else {
-              regist = findNamedVariable(aimBuffer);
-              if(regist == INVALID_VARIABLE) {
-                temporaryInformation = TI_UNDEF_SOURCE_VAR;
-              }
-            }
-            aimBuffer[0] = 0;
-            if(regist != INVALID_VARIABLE) {
-              reallyRunFunction(getOperation(), regist);
-            }
-            leaveTamMode();
-            return;
+      case TT_LETTER:
+        if(!tam.digitsSoFar && !tam.alpha && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+          tam.value = tam.letteredRegister;
+          forceTry = true;
+        }
+        break;
 
-          case TT_BACKSPACE :
-            tam.alpha = 0;
-            tam.state = TS_OPO_DIGIT_0;
-            return;
-
-          default : {}
+      case TT_VARIABLE:
+        if(!tam.digitsSoFar && !tam.alpha && !tam.dot && !valueParameter && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+          tam.alpha = true;
+          aimBuffer[0] = 0;
+          calcModeAim(NOPARAM);
         }
         return;
 
-      //////////////////////////////
-      // This should never happen
-      default :
-        sprintf(errorMessage, "In function tamTransitionSystem: unknown state %" PRIu16 " of the TAM transition system! This should never happen!", tam.state);
-        displayBugScreen(errorMessage);
+      case TT_DIGIT:
+        if(!tam.alpha && (tam.value*10 + tam.digit) <= max) {
+          tam.value = tam.value*10 + tam.digit;
+          tam.digitsSoFar++;
+        }
+        break;
+
+      case TT_INT :
+        fnIp(NOPARAM);
+        leaveTamMode();
         return;
+
+      case TT_FP :
+        fnFp(NOPARAM);
+        leaveTamMode();
+        return;
+
+      case TT_CHB02:
+        tam.value = 2;
+        forceTry = true;
+        break;
+
+      case TT_BASE10:
+        tam.value = 10;
+        forceTry = true;
+        break;
+
+      case TT_BASE16:
+        tam.value = 16;
+        forceTry = true;
+        break;
+
+      case TT_DOT:
+        if(tam.function == ITM_GTOP) {
+          tam.value = tam.max;
+        }
+        else if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
+          if(tam.function == ITM_GTO) {
+            tam.function = ITM_GTOP;
+            tam.min = 1;
+            tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+          }
+          else if(tam.indirect && currentLocalRegisters != NULL) {
+            tam.dot = true;
+          }
+          else if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && currentLocalFlags != NULL) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && currentLocalRegisters != NULL)) {
+              tam.dot = true;
+            }
+          }
+        }
+        return;
+
+      case TT_INDIRECT:
+        if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
+          tam.indirect = true;
+        }
+        return;
+
+      case TT_ENTER:
+        forceTry = true;
+        break;
+
+      case TT_BACKSPACE:
+        if(tam.alpha) {
+          // backspaces within AIM are handled by addItemToBuffer, so this is if the aimBuffer is already empty
+          tam.alpha = false;
+          clearSystemFlag(FLAG_ALPHA);
+          #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+            calcModeTamGui();
+          #endif // PC_BUILD && (SCREEN_800X480 == 0)
+        }
+        else if(tam.digitsSoFar > 0) {
+          if(--tam.digitsSoFar != 0) {
+            tam.value /= 10;
+          }
+          else {
+            tam.value = 0;
+          }
+        }
+        else if(tam.function == ITM_GTOP) {
+          tam.function = ITM_GTO;
+          tam.min = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
+          tam.max = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
+        }
+        else if(tam.dot) {
+          tam.dot = false;
+        }
+        else if(tam.indirect) {
+          tam.indirect = false;
+        }
+        else if(tam.currentOperation != tam.function) {
+          tam.currentOperation = tam.function;
+        }
+        else {
+          leaveTamMode();
+        }
+        return;
+    }
+
+    // All operations that may try and evaluate the function shouldn't return but let execution fall through to here
+
+    if(!tam.alpha) {
+      // Check whether it is possible to add any more digits: if not, execute the function
+      if(min <= tam.value && tam.value <= max && (forceTry || tam.value*10 > max)) {
+        int16_t value = tam.value;
+        bool_t run = true;
+        if(tam.dot) {
+          value += FIRST_LOCAL_REGISTER;
+        }
+        if(tam.indirect) {
+          value = indirectAddressing(value, min, max);
+          run = (lastErrorCode == 0);
+        }
+        if(tam.function == ITM_GTOP) {
+          if(forceTry && tam.digitsSoFar < 3) {
+            fnGoto(value);
+          }
+          else {
+            reallyRunFunction(getOperation(), value + programList[currentProgramNumber - 1].step - 1);
+          }
+        }
+        else if(run) {
+          reallyRunFunction(getOperation(), value);
+        }
+        leaveTamMode();
+      }
+    }
+    else {
+      bool_t tryAllocate = (tam.function == ITM_STO && !tam.indirect);
+      int16_t value;
+      if(tryAllocate) {
+        value = findOrAllocateNamedVariable(aimBuffer);
+      }
+      else {
+        value = findNamedVariable(aimBuffer);
+        if(value == INVALID_VARIABLE) {
+          temporaryInformation = TI_UNDEF_SOURCE_VAR;
+        }
+      }
+      aimBuffer[0] = 0;
+      if(tam.indirect && value != INVALID_VARIABLE) {
+        value = indirectAddressing(value, min, max);
+        if(lastErrorCode != 0) {
+          value = INVALID_VARIABLE;
+        }
+      }
+      if(value != INVALID_VARIABLE) {
+        reallyRunFunction(getOperation(), value);
+      }
+      leaveTamMode();
     }
   }
 

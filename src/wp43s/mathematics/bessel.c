@@ -395,7 +395,7 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
 		else
 			bessel_recur(&a, x, realCompareAbsLessThan(x, &a), res, realContext);
 	}
-	else if(realCompareLessThan(&a, const_45) && realCompareAbsGreaterThan(x, const_90))
+	else if(realCompareAbsGreaterThan(x, const_90))
 		bessel_asymptotic_large_x(&a, x, res, realContext);
 	else
 		bessel(&a, x, true, res, realContext);

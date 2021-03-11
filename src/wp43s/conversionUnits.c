@@ -243,6 +243,16 @@ void fnCvtCaratKg(uint16_t multiplyDivide) {
 }
 
 
+void fnCvtLiangKg(uint16_t multiplyDivide) {
+  unitConversion(const_20, multiplyDivide);
+}
+
+
+void fnCvtJinKg(uint16_t multiplyDivide) {
+  unitConversion(const_2, multiplyDivide);
+}
+
+
 void fnCvtAuM(uint16_t multiplyDivide) {
   unitConversion(const_AuToM, multiplyDivide);
 }

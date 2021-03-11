@@ -1,5 +1,6 @@
 #!/bin/bash
-PATH=$PATH:./bin:/arm-eabi/bin
+PATH=$PATH:./bin
+PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
 
 rm -rf decNumberICU
 rm -rf src
@@ -7,4 +8,4 @@ ln -s ../decNumberICU
 ln -s ../src
 
 make clean
-make
+make -j8

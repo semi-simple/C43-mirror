@@ -2,10 +2,7 @@
 
 PATH=$PATH:/opt/local/include/
 PATH=$PATH:/opt/local/
-
-#PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
-PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-10-2020-q2-preview/bin
-
+PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
 PATH=$PATH:./bin:/arm-eabi/bin
 
 rm -rf decNumberICU
@@ -21,3 +18,7 @@ ln -s ../src
 make clean
 make -j8 --silent
 #--debug
+
+cp ./build/WP43S.pgm ../DM42\ binary/43S_JM.pgm
+cp ./build/WP43S_qspi.bin ../DM42\ binary/43S_JM_qspi.bin
+

@@ -15,18 +15,8 @@
  */
 
 /********************************************//**
- * \file arccosh.h
+ * \file bessel.h
  ***********************************************/
 
-void fnArccosh   (uint16_t unusedButMandatoryParameter);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-void arccoshError(void);
-#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
-#define arccoshError typeError
-#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-void arccoshLonI (void);
-void arccoshRema (void);
-void arccoshCxma (void);
-void arccoshReal (void);
-void arccoshCplx (void);
-void realArcosh  (const real_t *x, real_t *res, realContext_t *realContext);
+void fnBessel            (uint16_t unusedButMandatoryParameter);
+void WP34S_BesselJ       (const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext);

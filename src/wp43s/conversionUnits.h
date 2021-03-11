@@ -56,6 +56,8 @@ void fnCvtTrozKg    (uint16_t multiplyDivide);
 void fnCvtTonKg     (uint16_t multiplyDivide);
 void fnCvtShorttonKg(uint16_t multiplyDivide);
 void fnCvtCaratKg   (uint16_t multiplyDivide);
+void fnCvtLiangKg   (uint16_t multiplyDivide);
+void fnCvtJinKg     (uint16_t multiplyDivide);
 
 // Length
 void fnCvtAuM       (uint16_t multiplyDivide);

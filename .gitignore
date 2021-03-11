@@ -8,6 +8,7 @@
 .stamp-constantPointers
 .stamp-rasterFontsData
 .stamp-softmenuCatalog
+.stamp-testPgms
 callgrind.out*
 gmon.out
 wp43s.sav
@@ -31,6 +32,7 @@ DMCP_build/decNumberICU/
 # / before the executable files else directories under src/ are ignored
 /generateConstants
 /generateCatalogs
+/generateTestPgms
 /testSuite
 /ttf2RasterFonts
 /testTtf2RasterFonts

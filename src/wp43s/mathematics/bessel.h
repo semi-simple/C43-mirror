@@ -20,4 +20,3 @@
 
 void fnBessel            (uint16_t unusedButMandatoryParameter);
 void WP34S_BesselJ       (const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext);
-void WP34S_ComplexBesselJ(const real_t *alphax, const real_t *alphay, const real_t *xx, const real_t *xy, real_t *rx, real_t *ry, realContext_t *realContext);

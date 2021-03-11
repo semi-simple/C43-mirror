@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
+TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /*  0 */  "No error",
 /*  1 */  "An argument exceeds the function domain",
 /*  2 */  "Bad time or date input",

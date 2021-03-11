@@ -6200,20 +6200,20 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_KGtoTON >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoTON       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoTONb >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoTONb       & 0xff;
+    *(currentStep++) = (ITM_KGtoLIANG >> 8) | 0x80;
+    *(currentStep++) =  ITM_KGtoLIANG       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoTONc >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoTONc       & 0xff;
+    *(currentStep++) = (ITM_KGtoLIANGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_KGtoLIANGb       & 0xff;
 
     *(currentStep++) = (ITM_TONtoKG >> 8) | 0x80;
     *(currentStep++) =  ITM_TONtoKG       & 0xff;
 
-    *(currentStep++) = (ITM_TONtoKGb >> 8) | 0x80;
-    *(currentStep++) =  ITM_TONtoKGb       & 0xff;
+    *(currentStep++) = (ITM_LIANGtoKG >> 8) | 0x80;
+    *(currentStep++) =  ITM_LIANGtoKG       & 0xff;
 
-    *(currentStep++) = (ITM_TONtoKGc >> 8) | 0x80;
-    *(currentStep++) =  ITM_TONtoKGc       & 0xff;
+    *(currentStep++) = (ITM_LIANGtoKGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_LIANGtoKGb       & 0xff;
 
     *(currentStep++) = (ITM_KGtoTRZ >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoTRZ       & 0xff;
@@ -6323,8 +6323,8 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_CARATtoKGb >> 8) | 0x80;
     *(currentStep++) =  ITM_CARATtoKGb       & 0xff;
 
-    *(currentStep++) = (ITM_CARATtoKGc >> 8) | 0x80;
-    *(currentStep++) =  ITM_CARATtoKGc       & 0xff;
+    *(currentStep++) = (ITM_JINtoKG >> 8) | 0x80;
+    *(currentStep++) =  ITM_JINtoKG       & 0xff;
 
     *(currentStep++) = (ITM_KGtoCARAT >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoCARAT       & 0xff;
@@ -6332,8 +6332,8 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_KGtoCARATb >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoCARATb       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoCARATc >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoCARATc       & 0xff;
+    *(currentStep++) = (ITM_KGtoJIN >> 8) | 0x80;
+    *(currentStep++) =  ITM_KGtoJIN       & 0xff;
 
     *(currentStep++) = (ITM_QTtoM3 >> 8) | 0x80;
     *(currentStep++) =  ITM_QTtoM3       & 0xff;

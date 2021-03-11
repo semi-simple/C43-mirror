@@ -22,7 +22,7 @@
 
 static void dataTypeError(void);
 
-static void (* const functionMatrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const PercentSigma[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1                 2                 3              4              5              6              7              8              9              10
 //          Long integer      Real34            complex34      Time           Date           String         Real34 mat     Complex34 mat  Short integer  Config data
             percentSigmaLonI, percentSigmaReal, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError
@@ -70,7 +70,7 @@ void fnPercentSigma(uint16_t unusedButMandatoryParameter) {
   else {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-    functionMatrix[getRegisterDataType(REGISTER_X)]();
+    PercentSigma[getRegisterDataType(REGISTER_X)]();
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
   }

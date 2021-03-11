@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 //This variable is to store in flash memory
-const calcKey_t kbd_std[37] = {
+TO_QSPI const calcKey_t kbd_std[37] = {
 
 /*
 // JM Latest WP43S, for reference only, not used.

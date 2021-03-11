@@ -140,12 +140,14 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2021.02"
+#define YEARMONTH                                 "2021.03"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
 // Define the second tagline
 #define WHO2                                      "C43" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "HP42S" STD_SPACE_3_PER_EM "style" STD_SPACE_3_PER_EM "keys," STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Jaymos"   //JM ID
+#define PROGRAM_NAME                              "WP43S"
+#define PROGRAM_VERSION                           "0.1"
 
 #define CHARS_PER_LINE                            80 // Used in the flag browser application
 
@@ -817,7 +819,14 @@
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel
   #define LCD_EMPTY_VALUE                        255 // White (or empty) pixel
-#endif // DMCP_BUILD
+  #define TO_QSPI
+#else // DMCP_BUILD
+  #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)
+  #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
+  #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
+  #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
+  #define TO_QSPI                            __attribute__ ((section(".qspi")))
+#endif // !DMCP_BUILD
 
 
 //******************************
@@ -863,13 +872,6 @@
 #define currentSubroutineLevel               (currentSubroutineLevelData[1].subroutineLevel)
 #define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
 #define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
-
-#ifdef DMCP_BUILD
-  #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)
-  #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
-  #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
-  #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
-#endif // DMCP_BUILD
 
 //************************
 //* Macros for debugging *

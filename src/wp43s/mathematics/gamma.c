@@ -22,13 +22,13 @@
 
 
 
-void (* const Gamma[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const Gamma[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2          3          4           5           6           7           8           9             10
 //          Long integer Real34     Complex34  Time        Date        String      Real34 mat  Complex34 m Short integer Config data
             gammaLonI,   gammaReal, gammaCplx, gammaError, gammaError, gammaError, gammaError, gammaError, gammaError,   gammaError
 };
 
-void (* const lnGamma[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const lnGamma[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2            3            4             5             6             7             8             9             10
 //          Long integer Real34       Complex34    Time          Date          String        Real34 mat    Complex34 m   Short integer Config data
             lnGammaLonI, lnGammaReal, lnGammaCplx, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError, lnGammaError

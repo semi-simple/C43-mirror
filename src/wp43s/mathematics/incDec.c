@@ -22,7 +22,7 @@
 
 
 
-static void (* const incDec[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t, uint8_t) = {
+TO_QSPI void (* const incDec[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t, uint8_t) = {
 // reg ==>   1            2           3           4            5            6            7            8            9              10
 //           Long integer Real34      Complex34   Time         Date         String       Real34 mat   Complex34 m  Short integer  Config data
              incDecLonI,  incDecReal, incDecCplx, incDecError, incDecError, incDecError, incDecError, incDecError, incDecShoI,    incDecError

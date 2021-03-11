@@ -824,11 +824,11 @@ void decodeOneStep(uint8_t *step) {
         case ITM_STtoKGb:        //   308
         case ITM_STtoKGc:        //   309
         case ITM_KGtoTON:        //   310
-        case ITM_KGtoTONb:       //   311
-        case ITM_KGtoTONc:       //   312
+        case ITM_KGtoLIANG:      //   311
+        case ITM_KGtoLIANGb:     //   312
         case ITM_TONtoKG:        //   313
-        case ITM_TONtoKGb:       //   314
-        case ITM_TONtoKGc:       //   315
+        case ITM_LIANGtoKG:      //   314
+        case ITM_LIANGtoKGb:     //   315
         case ITM_KGtoTRZ:        //   316
         case ITM_KGtoTRZb:       //   317
         case ITM_TRZtoKG:        //   318
@@ -865,10 +865,10 @@ void decodeOneStep(uint8_t *step) {
         case ITM_YEARtoS:        //   349
         case ITM_CARATtoKG:      //   350
         case ITM_CARATtoKGb:     //   351
-        case ITM_CARATtoKGc:     //   352
+        case ITM_JINtoKG:        //   352
         case ITM_KGtoCARAT:      //   353
         case ITM_KGtoCARATb:     //   354
-        case ITM_KGtoCARATc:     //   355
+        case ITM_KGtoJIN:        //   355
         case ITM_QTtoM3:         //   356
         case ITM_M3toQT:         //   357
         case ITM_FATHOMtoM:      //   358

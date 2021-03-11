@@ -43,7 +43,7 @@ const char* getErrorMessage(FT_Error err) {
 }
 
 uint16_t hexToUint(const char *hexa) {
-    // the itialisation to zero prevents a 'variable used is not initialized' warning on Mac:
+    // the inialisation to zero prevents a 'variable used is not initialized' warning on Mac:
     uint16_t uint=0;
 
   if(   (('0' <= hexa[0] && hexa[0] <= '9') || ('A' <= hexa[0] && hexa[0] <= 'F') || ('a' <= hexa[0] && hexa[0] <= 'f'))
@@ -193,7 +193,7 @@ void exportCStructure(char const *ttfName) {
   ///////////////////////////////////////
   // Go thru all glyphs to render them //
   ///////////////////////////////////////
-  fprintf(cFile, "const font_t %s = {\n", fontName);
+  fprintf(cFile, "TO_QSPI const font_t %s = {\n", fontName);
   fprintf(cFile, "  .id             = %d,\n", fontName[0] == 'n' ? 0 : 1);
   //fprintf(cFile, "  .name           = \"%s\",\n", fontName);
   //fprintf(cFile, "  .ascender       = %d,\n", face->ascender/onePixelSize);
@@ -274,7 +274,7 @@ void exportCStructure(char const *ttfName) {
       //////////////////////
       // Render the glyph //
       //////////////////////
-      fprintf(cFile, "    // %s \n", glyphName);
+      fprintf(cFile, "    // %s\n", glyphName);
 
       fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d, .rank1=%3d, .rank2=%3d,\n",
                       (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph, rank1, rank2);

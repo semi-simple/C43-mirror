@@ -270,69 +270,7 @@
       }
 
       else if(tam.mode) {
-        if(item == ITM_ENTER) {
-          tamProcessInput(TT_ENTER);
-        }
-        else if(tam.alpha) {
-          // Text added above, just transition to variable to get the text
-          if(stringGlyphLength(aimBuffer) > 6) {
-            tamProcessInput(TT_ENTER);
-          }
-          else {
-            tamProcessInput(TT_VARIABLE);
-          }
-        }
-        else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
-          tam.operation = item;
-          tamProcessInput(TT_OPERATION);
-        }
-        else if(tam.function == ITM_toINT && item == ITM_REG_I) {
-          tamProcessInput(TT_INT);
-        }
-        else if(tam.function == ITM_toINT && item == ITM_alpha) {
-          tamProcessInput(TT_FP);
-        }
-        else if(tam.function == ITM_toINT && item == ITM_REG_D) {
-          tamProcessInput(TT_BASE10);
-        }
-        else if(tam.function == ITM_toINT && item == ITM_REG_B) {
-          tamProcessInput(TT_CHB02);
-        }
-        else if(tam.function == ITM_toINT && item == ITM_HEX) {
-          tamProcessInput(TT_BASE16);
-        }
-        else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) { // Lettered register
-          tam.letteredRegister = indexOfItems[item].param;
-          tamProcessInput(TT_LETTER);
-        }
-        else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
-          tam.digit = item - ITM_0;
-          tamProcessInput(TT_DIGIT);
-        }
-        else if(item == ITM_PERIOD) { // .
-          tamProcessInput(TT_DOT);
-        }
-        else if(item == ITM_INDIRECTION) { // Indirection
-          tamProcessInput(TT_INDIRECT);
-        }
-        else if(item == ITM_BACKSPACE) {
-          tamProcessInput(TT_BACKSPACE);
-        }
-        else if(item == ITM_alpha) {
-          tamProcessInput(TT_VARIABLE);
-        }
-        else if(item == ITM_0P || item == ITM_1P) {
-          reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
-          real34Copy(item == ITM_1P ? const34_1 : const34_0, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
-          tam.letteredRegister = TEMP_REGISTER_1;
-          tamProcessInput(TT_LETTER);
-        }
-        else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW)) {
-          tamProcessInput(TT_NOTHING);
-        }
-        else {
-          tamProcessInput(TT_NOTHING);
-        }
+        tamProcessInput(item);
       }
 
       else if(calcMode == CM_NIM) {

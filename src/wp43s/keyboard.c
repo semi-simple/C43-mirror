@@ -485,7 +485,7 @@
           keyActionProcessed = true;
         }
         else if(tam.mode) {
-          tamProcessInput(TT_ENTER);
+          tamProcessInput(ITM_ENTER);
           keyActionProcessed = true;
         }
         break;
@@ -928,12 +928,13 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     if(tam.mode) {
       if(!tam.alpha || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
-        tamProcessInput(TT_BACKSPACE);
+        tamProcessInput(ITM_BACKSPACE);
       } else if(tam.alpha) {
+        // TODO: move the aimBuffer manipulation into tam.c
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
-        tamProcessInput(TT_VARIABLE);
+        tamProcessInput(ITM_BACKSPACE);
       }
       return;
     }

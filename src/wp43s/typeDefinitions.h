@@ -327,17 +327,14 @@ typedef struct {
  ***********************************************/
 typedef struct {
   uint16_t   mode;
-  bool_t     alpha;
   int16_t    function;
-  int16_t    operation; // TODO: move into function call
+  bool_t     alpha;
   int16_t    currentOperation;
+  bool_t     dot;
+  bool_t     indirect;
   int16_t    digitsSoFar;
-  bool_t     dot; // TODO: combine with digitsSoFar
-  bool_t     indirect; // TODO: combine with digitsSoFar
   int16_t    value;
   int16_t    min;
   int16_t    max;
-  int16_t    digit; // TODO: move into function call
-  int16_t    letteredRegister; // TODO: move into function call
 } tamState_t;
 

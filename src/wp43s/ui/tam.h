@@ -21,5 +21,5 @@
 #ifndef TESTSUITE_BUILD
   void tamEnterMode    (void);
   void tamLeaveMode    (void);
-  void tamProcessInput (uint16_t tamEvent);
+  void tamProcessInput (uint16_t item);
 #endif // TESTSUITE_BUILD

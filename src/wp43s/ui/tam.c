@@ -401,7 +401,19 @@
    *
    * \return void
    ***********************************************/
-  void tamEnterMode(void) {
+  void tamEnterMode(int16_t func) {
+    tam.mode = indexOfItems[func].param;
+    tam.function = func;
+    tam.min = indexOfItems[func].tamMinMax >> TAM_MAX_BITS;
+    tam.max = indexOfItems[func].tamMinMax & TAM_MAX_MASK;
+    if(tam.max == 16383) { // Only case featuring more than TAM_MAX_BITS bits is GTO.
+      tam.max = 32766;
+    }
+
+    if(func == ITM_CNST) {
+      tam.max = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1;
+    }
+
     if(calcMode == CM_NIM) {
       closeNim();
     }
@@ -490,6 +502,9 @@
     if(item == ITM_ENTER) {
       event = TT_ENTER;
     }
+    else if(item == ITM_BACKSPACE) {
+      event = TT_BACKSPACE;
+    }
     else if(tam.alpha) {
       // Text added above, just transition to variable to get the text
       if(stringGlyphLength(aimBuffer) > 6) {
@@ -532,9 +547,6 @@
     else if(item == ITM_INDIRECTION) { // Indirection
       event = TT_INDIRECT;
     }
-    else if(item == ITM_BACKSPACE) {
-      event = TT_BACKSPACE;
-    }
     else if(item == ITM_alpha) {
       event = TT_VARIABLE;
     }
@@ -549,7 +561,19 @@
 
   void tamProcessInput(uint16_t item) {
     int16_t operation, digit, letteredRegister;
-    uint16_t event = keyToEvent(item, &operation, &digit, &letteredRegister);
+    uint16_t event;
+    if(item == ITM_BACKSPACE && tam.alpha && stringByteLength(aimBuffer) != 0) {
+      // Delete the last character and then 'transition' to get a redraw
+      int16_t lg = stringLastGlyph(aimBuffer);
+      aimBuffer[lg] = 0;
+      event = TT_VARIABLE;
+      operation = 0;
+      digit = 0;
+      letteredRegister = 0;
+    }
+    else {
+      event = keyToEvent(item, &operation, &digit, &letteredRegister);
+    }
     reallyTamTransitionSystem(event, operation, digit, letteredRegister);
     updateTamBuffer();
   }

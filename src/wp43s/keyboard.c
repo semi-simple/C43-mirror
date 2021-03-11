@@ -926,16 +926,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     uint8_t *nextStep;
 
     if(tam.mode) {
-      if(!tam.alpha || stringByteLength(aimBuffer) == 0) {
-        // If we're in AIM, then only transition if the AIM buffer is empty
-        tamProcessInput(ITM_BACKSPACE);
-      } else if(tam.alpha) {
-        // TODO: move the aimBuffer manipulation into tam.c
-        // Delete the last character and then 'transition' to get a redraw
-        lg = stringLastGlyph(aimBuffer);
-        aimBuffer[lg] = 0;
-        tamProcessInput(ITM_BACKSPACE);
-      }
+      tamProcessInput(ITM_BACKSPACE);
       return;
     }
 

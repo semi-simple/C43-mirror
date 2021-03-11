@@ -19,7 +19,7 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
-  void tamEnterMode    (void);
+  void tamEnterMode    (int16_t func);
   void tamLeaveMode    (void);
   void tamProcessInput (uint16_t item);
 #endif // TESTSUITE_BUILD

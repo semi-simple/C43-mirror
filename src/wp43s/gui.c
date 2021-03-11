@@ -1495,24 +1495,17 @@
    * \return void
    ***********************************************/
   void leaveAsmMode(void) {
-    if(tam.mode) {
-      uint16_t savedTamMode = tam.mode;
-      tamLeaveMode();
-      tam.mode = savedTamMode;
-      strcpy(tamBuffer, indexOfItems[tam.function].itemSoftmenuName);
-      tamEnterMode();
-      return;
-    }
-    else {
-      catalog = CATALOG_NONE;
-    }
+    catalog = CATALOG_NONE;
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
+      if(tam.mode && !tam.alpha) {
+        calcModeTamGui();
       }
-      else if(calcMode == CM_AIM) {
+      else if(calcMode == CM_AIM || (tam.mode && tam.alpha)) {
         calcModeAimGui();
+      }
+      else if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
+        calcModeNormalGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }

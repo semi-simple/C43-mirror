@@ -75,11 +75,6 @@ void fnBessel(uint16_t unusedButMandatoryParameter) {
 }
 
 
-static void debugShowReal(const char *label, const real_t *val) {
-	char valtxt[256];
-	realToString(val, valtxt);
-	printf("%s %s\n", label, valtxt);
-}
 
 // Hankel's asymptotic expansion (based on Abramowitz and Steven, p.364)
 static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {

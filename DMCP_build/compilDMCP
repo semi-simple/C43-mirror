@@ -25,3 +25,4 @@ make -j8 --silent
 
 mv build/WP43S.pgm build/WP43C.pgm
 cp build/WP43C.pgm ../DM42\ binary/C43.pgm
+cp build/WP43S_qspi.bin ../DM42\ binary/C43_qspi.bin

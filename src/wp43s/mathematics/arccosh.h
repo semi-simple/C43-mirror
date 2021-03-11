@@ -29,3 +29,4 @@ void arccoshRema (void);
 void arccoshCxma (void);
 void arccoshReal (void);
 void arccoshCplx (void);
+void realArcosh  (const real_t *x, real_t *res, realContext_t *realContext);

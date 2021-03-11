@@ -22,7 +22,7 @@
 
 static void dataTypeError(void);
 
-static void (* const functionMatrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const percentPlusMG[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>    1                      2                      3              4              5              6              7              8              9              10
 //      V                Long integer           Real34                 Complex34      Time           Date           String         Real34 mat     Complex34 mat  Short integer  Config data
 /*  1 Long integer  */ { percentPlusMGLonILonI, percentPlusMGRealLonI, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError},
@@ -71,7 +71,7 @@ static void dataTypeError(void) {
 void fnPercentPlusMG(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  percentPlusMG[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

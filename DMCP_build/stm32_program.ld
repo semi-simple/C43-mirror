@@ -5,7 +5,7 @@
  *                Set memory bank area and size if external memory is used.
  *  Target      : STMicroelectronics STM32
  *  Distribution: The file is distributed as is, without any warranty of any kind.
- *  Swissmicros - ld script for STM32 + QSPI 
+ *  Swissmicros - ld script for STM32 + QSPI
  *****************************************************************************************************/
 
 /* Specify the memory areas */
@@ -13,10 +13,9 @@ MEMORY {
   /* FLASH   (rx) : ORIGIN = 0x08000000, LENGTH = 1024K     */
   /* RAM    (xrw) : ORIGIN = 0x20000000, LENGTH =   96K     */
   /* RAM0   (xrw) : ORIGIN = 0x10000000, LENGTH =   32K-256 */
-/*  FLASH   (rx) : ORIGIN = 0x08050000, LENGTH =  704K */
   FLASH   (rx) : ORIGIN = 0x08050000, LENGTH =  704K
   RAM    (xrw) : ORIGIN = 0x10000000, LENGTH =    8K
-  QSPI    (rx) : ORIGIN = 0x90000000, LENGTH = 2048K
+  QSPI    (rx) : ORIGIN = 0x90000000, LENGTH = 2048K-12K /* a 4K block from 0x901FD000 to 0x901FDFFF is reserved by DMCP */
 }
 
 /* Entry Point */
@@ -28,7 +27,6 @@ SECTIONS {
     . = ALIGN(8);
     _qspi_start = .;   /* create a global symbol at qspi start */
     *(.qspi)           /* .qspi  sections */
-    *(.qspi*)          /* .qspi* sections */
     . = ALIGN(8);
     _qspi_end = .;     /* define a global symbols at end of qspi */
   } >QSPI /* AT> FLASH */
@@ -61,7 +59,7 @@ SECTIONS {
     _etext = .;        /* define a global symbols at end of code */
   } >FLASH
 
-  .ARM.extab   : { 
+  .ARM.extab   : {
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
@@ -82,7 +80,7 @@ SECTIONS {
     PROVIDE_HIDDEN (__preinit_array_end = .);
     . = ALIGN(8);
   } >FLASH
-  
+
   .init_array : {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__init_array_start = .);

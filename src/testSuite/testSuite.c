@@ -54,6 +54,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArg_all",              fnArg_all             },    //JM
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
+  {"fnBessel",               fnBessel              },
   {"fnBn",                   fnBn                  },
   {"fnBnStar",               fnBnStar              },
   {"fnCb",                   fnCb                  },

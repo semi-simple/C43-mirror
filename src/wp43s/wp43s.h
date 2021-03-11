@@ -147,6 +147,7 @@
 
 
   #include "assign.h"
+  #include "ui/tam.h"
   #include "bufferize.h"
   #include "browsers/browsers.h"
   #include "config.h"

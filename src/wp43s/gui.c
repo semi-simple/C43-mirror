@@ -1497,10 +1497,10 @@
   void leaveAsmMode(void) {
     if(tam.mode) {
       uint16_t savedTamMode = tam.mode;
-      leaveTamMode();
+      tamLeaveMode();
       tam.mode = savedTamMode;
       strcpy(tamBuffer, indexOfItems[tam.function].itemSoftmenuName);
-      enterTamMode();
+      tamEnterMode();
       return;
     }
     else {
@@ -1541,95 +1541,5 @@
     xCursor = 1;
     cursorEnabled = true;
     cursorFont = &numericFont;
-  }
-
-
-
-  /********************************************//**
-   * \brief Sets the calc mode to temporary alpha mode
-   *
-   * \return void
-   ***********************************************/
-  void enterTamMode(void) {
-    if(calcMode == CM_NIM) {
-      closeNim();
-    }
-
-    tam.alpha = false;
-    tam.currentOperation = tam.function;
-    tam.digitsSoFar = 0;
-    tam.dot = false;
-    tam.indirect = false;
-    tam.value = 0;
-
-    switch(tam.mode) {
-      case TM_VALUE:
-      case TM_VALUE_CHB:
-      case TM_REGISTER:
-        showSoftmenu(-MNU_TAM);
-        break;
-
-      case TM_CMP:
-        showSoftmenu(-MNU_TAMCMP);
-        break;
-
-      case TM_FLAGR:
-      case TM_FLAGW:
-        showSoftmenu(-MNU_TAMFLAG);
-        break;
-
-      case TM_STORCL:
-        showSoftmenu(-MNU_TAMSTORCL);
-        break;
-
-      case TM_SHUFFLE:
-        showSoftmenu(-MNU_TAMSHUFFLE);
-        break;
-
-      case TM_LABEL:
-        showSoftmenu(-MNU_TAMLABEL);
-        break;
-
-      default:
-        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tam.mode!", tam.mode);
-        displayBugScreen(errorMessage);
-        return;
-    }
-
-    numberOfTamMenusToPop = 1;
-
-    updateTamBuffer();
-
-    clearSystemFlag(FLAG_ALPHA);
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      calcModeTamGui();
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
-  }
-
-
-
-  /********************************************//**
-   * \brief Leaves the alpha selection mode
-   *
-   * \return void
-   ***********************************************/
-  void leaveTamMode(void) {
-    tam.alpha = false;
-    tam.mode = 0;
-    catalog = CATALOG_NONE;
-
-    while(numberOfTamMenusToPop--) {
-      popSoftmenu();
-    }
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
-      }
-      else if(calcMode == CM_AIM) {
-        calcModeAimGui();
-      }
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 #endif // !TESTSUITE_BUILD

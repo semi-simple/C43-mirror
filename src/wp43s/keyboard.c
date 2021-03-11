@@ -194,7 +194,7 @@
               closeAim();
             }
             if(tam.alpha) {
-              leaveTamMode();
+              tamLeaveMode();
             }
 
             if(lastErrorCode == 0) {
@@ -373,7 +373,7 @@
         else {
           if(item != ITM_NOP && tam.alpha && indexOfItems[item].func != addItemToBuffer) {
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
-            leaveTamMode();
+            tamLeaveMode();
           }
           runFunction(item);
         }
@@ -485,8 +485,7 @@
           keyActionProcessed = true;
         }
         else if(tam.mode) {
-          tamTransitionSystem(TT_ENTER);
-          updateTamBuffer();
+          tamProcessInput(TT_ENTER);
           keyActionProcessed = true;
         }
         break;
@@ -804,7 +803,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         numberOfTamMenusToPop--;
       }
       else {
-        leaveTamMode();
+        tamLeaveMode();
       }
       return;
     }
@@ -839,23 +838,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         leavePem();
         calcModeNormal();
         break;
-
-      //case CM_ASM_OVER_TAM:
-      //case CM_ASM_OVER_TAM_OVER_PEM:
-      //  calcModeTam();
-      //  sprintf(tamBuffer, "%s __", indexOfItems[getOperation()].itemCatalogName);
-      //  tamTransitionSystem(TT_NOTHING);
-      //  updateTamBuffer();
-      //  break;
-
-      //case CM_ASM_OVER_AIM:
-      //  calcModeAim(NOPARAM);
-      //  break;
-
-      //case CM_ASM_OVER_PEM: // TODO: is that correct
-      //  calcModeNormal();
-      //  calcMode = CM_PEM;
-       // break;
 
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
@@ -946,14 +928,12 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
     if(tam.mode) {
       if(!tam.alpha || stringByteLength(aimBuffer) == 0) {
         // If we're in AIM, then only transition if the AIM buffer is empty
-        tamTransitionSystem(TT_BACKSPACE);
-        updateTamBuffer();
+        tamProcessInput(TT_BACKSPACE);
       } else if(tam.alpha) {
         // Delete the last character and then 'transition' to get a redraw
         lg = stringLastGlyph(aimBuffer);
         aimBuffer[lg] = 0;
-        tamTransitionSystem(TT_VARIABLE);
-        updateTamBuffer();
+        tamProcessInput(TT_VARIABLE);
       }
       return;
     }

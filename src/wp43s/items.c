@@ -118,7 +118,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
         tam.max = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1;
       }
 
-      enterTamMode();
+      tamEnterMode();
       return;
     }
 

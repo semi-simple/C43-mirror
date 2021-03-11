@@ -15,27 +15,11 @@
  */
 
 /********************************************//**
- * \file gui.h
+ * \file tam.h
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
-  void fnOff                       (uint16_t unsuedParamButMandatory);
-  void calcModeNormal              (void);
-  void calcModeAim                 (uint16_t unusedButMandatoryParameter);
-  void calcModeNim                 (uint16_t unusedButMandatoryParameter);
-  void enterAsmModeIfMenuIsACatalog(int16_t id);
-  void leaveAsmMode                (void);
+  void tamEnterMode    (void);
+  void tamLeaveMode    (void);
+  void tamProcessInput (uint16_t tamEvent);
 #endif // TESTSUITE_BUILD
-
-#ifdef PC_BUILD
-  void setupUI                     (void);
-  #if (SCREEN_800X480 == 0)
-    void calcModeNormalGui         (void);
-    void calcModeAimGui            (void);
-    void calcModeTamGui            (void);
-  #endif // SCREEN_800X480
-#endif // PC_BUILD
-
-#ifndef DMCP_BUILD
-  void strReplace                  (char *haystack, const char *needle, const char *newNeedle);
-#endif // DMCP_BUILD

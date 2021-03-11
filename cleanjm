@@ -61,6 +61,10 @@ rm .//*\ [0-9]\.png
 
 find . -type f -name "*.dSYM" -exec rm {} \;
 find . -type f -name "WP43S\ *.elf" -exec rm {} \;
+find . -type f -name "WP43S_flash.*" -exec rm {} \;
+find . -type f -name "WP43S_qspi.*" -exec rm {} \;
+find . -type f -name "WP43S.elf" -exec rm {} \;
+find . -type f -name "WP43S.map" -exec rm {} \;
 find . -type f -name "rasterFontsData\ *.c" -exec rm {} \;
 
 find . -type f -name ".stamp-constantPointers 2" -exec rm {} \;

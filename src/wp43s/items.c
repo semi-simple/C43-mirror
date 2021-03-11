@@ -547,7 +547,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
-const item_t indexOfItems[] = {
+TO_QSPI const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL
@@ -874,7 +874,7 @@ const item_t indexOfItems[] = {
 /*  312 */  { fnCvtLiangKg,                multiply,                    "kg" STD_RIGHT_ARROW "lian",                   "li" STD_a_BREVE "ng",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  313 */  { fnCvtTonKg,                  multiply,                    "ton" STD_RIGHT_ARROW "kg",                    "ton" STD_RIGHT_ARROW "kg",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  314 */  { fnCvtLiangKg,                divide,                      "lian" STD_RIGHT_ARROW "kg",                   "li" STD_a_BREVE "ng",                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  315 */  { fnCvtLiangKg,                divide,                      "lian" STD_RIGHT_ARROW "kg",                   STD_RIGHT_ARROW "kg",                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  315 */  { fnCvtLiangKg,                divide,                      "lian" STD_RIGHT_ARROW "kg",                   STD_RIGHT_ARROW " kg",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  316 */  { fnCvtTrozKg,                 divide,                      "kg" STD_RIGHT_ARROW "trz",                    "kg " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  317 */  { fnCvtTrozKg,                 divide,                      "kg" STD_RIGHT_ARROW "trz",                    "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  318 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

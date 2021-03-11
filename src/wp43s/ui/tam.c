@@ -136,7 +136,7 @@
 
   static void reallyTamTransitionSystem(uint16_t tamEvent, int16_t operation, int16_t digit, int16_t letteredRegister) {
     int16_t min, max;
-    bool_t forceTry = false;
+    bool_t forceTry = false, tryOoR = false;
     bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
 
     // Shuffle is handled completely differently to everything else
@@ -227,6 +227,9 @@
         if(!tam.digitsSoFar && !tam.alpha && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
           tam.value = letteredRegister;
           forceTry = true;
+          // Register letters access registers not accessible via number codes, so we shouldn't look at the tam.max value
+          // when determining if this is valid
+          tryOoR = true;
         }
         break;
 
@@ -343,7 +346,7 @@
 
     if(!tam.alpha) {
       // Check whether it is possible to add any more digits: if not, execute the function
-      if(min <= tam.value && tam.value <= max && (forceTry || tam.value*10 > max)) {
+      if(min <= tam.value && (tryOoR || tam.value <= max) && (forceTry || tam.value*10 > max)) {
         int16_t value = tam.value;
         bool_t run = true;
         if(tam.dot) {
@@ -482,7 +485,7 @@
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
-  static uint16_t keyToEvent(uint16_t key, int16_t *operation, int16_t *digit, int16_t *letteredRegister) {
+  static uint16_t keyToEvent(uint16_t item, int16_t *operation, int16_t *digit, int16_t *letteredRegister) {
     uint16_t event = TT_NOTHING;
     if(item == ITM_ENTER) {
       event = TT_ENTER;

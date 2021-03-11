@@ -26,7 +26,7 @@
 /*<---- 6 f shifted functions ---->*/
 /*<---- 6 g shifted functions ---->*/
 #if DMCP_BUILD
-const int16_t menu_FCNS[] = {
+TO_QSPI const int16_t menu_FCNS[] = {
     220,  221,   67, 1404,   73, 1406,
      64,   62, 1407, 1748,  234,  238,
    1408, 1409, 1410,  124,   81,   82,
@@ -143,7 +143,7 @@ const int16_t menu_FCNS[] = {
    1719, 1676, 1720, 1721,  422,
   };
 #else // !DMCP_BUILD
-const int16_t menu_FCNS[] = {
+TO_QSPI const int16_t menu_FCNS[] = {
     220,  221,   67, 1404,   73, 1406,
      64,   62, 1407, 1748,  234,  238,
    1408, 1409, 1410,  124,   81,   82,
@@ -260,7 +260,7 @@ const int16_t menu_FCNS[] = {
    1721,  422,
   };
 #endif // DMCP_BUILD
-const int16_t menu_CONST[] = {
+TO_QSPI const int16_t menu_CONST[] = {
   128,  129,  130,  131,  132,  133,
   134,  135,  136,  137,  138,  139,
   140,  141,  142,  143,  144,  145,
@@ -276,7 +276,7 @@ const int16_t menu_CONST[] = {
   200,  201,  202,  203,  204,  205,
 
 };
-const int16_t menu_MENUS[] = {
+TO_QSPI const int16_t menu_MENUS[] = {
 -1313,-1314,-1316,-1207,-1317,-1212,
 -1319,-1320,-1322,-1323,-1324,-1325,
 -1326,-1327,-1328,-1329,-1330,-1217,
@@ -293,7 +293,7 @@ const int16_t menu_MENUS[] = {
 -1386,-1377,-1380,-1378,-1379,-1385,
 -1390,-1272,-1382,-1383,-1384,
 };
-const int16_t menu_SYSFL[] = {
+TO_QSPI const int16_t menu_SYSFL[] = {
   491,  477,  497,  498,  493,  494,
   474,  468,  467,  489,  472,  473,
   465,  470,  492,  499,  500,  476,
@@ -302,7 +302,7 @@ const int16_t menu_SYSFL[] = {
   485,  501,  486,  487,  463,  482,
   503,  483,  502,  464,  478,
 };
-const int16_t menu_alpha_INTL[] = {
+TO_QSPI const int16_t menu_alpha_INTL[] = {
   558,  691,  689,  694,  693,  692,
   695,  696,  688,  690,  697,  559,
   560,  700,  698,  699,  561,  702,
@@ -321,7 +321,7 @@ const int16_t menu_alpha_INTL[] = {
   582,  757,  756,  758,  583,  759,
   761,  760,
 };
-const int16_t menu_alpha_intl[] = {
+TO_QSPI const int16_t menu_alpha_intl[] = {
   584,  771,  769,  774,  773,  772,
   775,  776,  768,  770,  777,  585,
   586,  780,  778,  779,  587,  782,
@@ -340,7 +340,7 @@ const int16_t menu_alpha_intl[] = {
   608,  837,  836,  838,  609,  839,
   841,  840,
 };
-const int16_t menu_REGIST[] = {
+TO_QSPI const int16_t menu_REGIST[] = {
   531,  532,  533,  534,  536,  537,
   538,  535,  530,  527,  528,  529,
 

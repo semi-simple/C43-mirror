@@ -23,25 +23,13 @@
 
 #ifndef TESTSUITE_BUILD
   /* Names of day of week */
-  static const char *nameOfWday_en[8] = {
-    "invalid day of week", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-  };
+  TO_QSPI static const char *nameOfWday_en[8] = {"invalid day of week",                                   "Monday",            "Tuesday",                     "Wednesday",               "Thursday",           "Friday",             "Saturday",             "Sunday"};
   /*
-  static const char *nameOfWday_de[8] = {
-    "ung" STD_u_DIARESIS "ltiger Wochentag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
-  };
-  static const char *nameOfWday_fr[8] = {
-    "jour de la semaine invalide", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"
-  };
-  static const char *nameOfWday_es[8] = {
-    "d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes", "martes", "mi" STD_e_ACUTE "rcoles", "jueves", "viernes", "s" STD_a_ACUTE "bado", "domingo"
-  };
-  static const char *nameOfWday_it[8] = {
-    "giorno della settimana non valido", "luned" STD_i_GRAVE, "marted" STD_i_GRAVE, "mercoled" STD_i_GRAVE, "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato", "domenica"
-  };
-  static const char *nameOfWday_pt[8] = {
-    "dia inv" STD_a_ACUTE "lido da semana", "segunda-feira", "ter" STD_c_CEDILLA "a-feira", "quarta-feira", "quinta-feira", "sexta-feira", "s" STD_a_ACUTE "bado", "domingo"
-  };
+  TO_QSPI static const char *nameOfWday_de[8] = {ung" STD_u_DIARESIS "ltiger Wochentag",                  "Montag",            "Dienstag",                    "Mittwoch",                "Donnerstag",         "Freitag",            "Samstag",              "Sonntag"};
+  TO_QSPI static const char *nameOfWday_fr[8] = {"jour de la semaine invalide",                           "lundi",             "mardi",                       "mercredi",                "jeudi",              "vendredi",           "samedi",               "dimanche"};
+  TO_QSPI static const char *nameOfWday_es[8] = {"d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes",             "martes",                      "mi" STD_e_ACUTE "rcoles", "jueves",             "viernes",            "s" STD_a_ACUTE "bado", "domingo"};
+  TO_QSPI static const char *nameOfWday_it[8] = {"giorno della settimana non valido",                     "luned" STD_i_GRAVE, "marted" STD_i_GRAVE,          "mercoled" STD_i_GRAVE,    "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato",               "domenica"};
+  TO_QSPI static const char *nameOfWday_pt[8] = {"dia inv" STD_a_ACUTE "lido da semana",                  "segunda-feira",     "ter" STD_c_CEDILLA "a-feira", "quarta-feira",            "quinta-feira",       "sexta-feira",        "s" STD_a_ACUTE "bado", "domingo"};
   */
 #endif // TESTSUITE_BUILD
 

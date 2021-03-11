@@ -22,7 +22,7 @@
 
 
 
-void (* const GammaXyLower[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const GammaXyLower[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>   1                     2                     3                  4                  5                  6                  7                  8                  9                  10
 //      V               Long integer          Real34                Complex34          Time               Date               String             Real34 matrix      Complex34 matrix   Short integer      Config data
 /*  1 Long integer  */ {gammaXyLowerLonILonI, gammaXyLowerLonIReal, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError, gammaXyLowerError},

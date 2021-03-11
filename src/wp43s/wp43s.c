@@ -44,7 +44,7 @@
 
 const font_t          *fontForShortInteger;
 const font_t          *cursorFont;
-const char             digits[17] = "0123456789ABCDEF";
+TO_QSPI const char     digits[17] = "0123456789ABCDEF";
 real51_t               const *gammaLanczosCoefficients;
 real39_t               const *angle180;
 real39_t               const *angle90;
@@ -288,8 +288,7 @@ size_t                 wp43sMemInBlocks;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
     lcd_clear_buf();
-    lcd_putsAt(t24, 4, "Press the bottom left key.");
-    lcd_refresh();
+    lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();
     while(key != 33 && key != 37) {
       key = key_pop();
       while(key == -1) {
@@ -386,6 +385,11 @@ size_t                 wp43sMemInBlocks;
       addr = (uint32_t)get_hw_id();
       uIntToLongInteger(addr, li);
       convertLongIntegerToShortIntegerRegister(li, 10, 63);
+
+      ptr = (uint32_t *)resizeProgramMemory;
+      xcopy(&addr, &ptr, 4);
+      uIntToLongInteger(addr, li);
+      convertLongIntegerToShortIntegerRegister(li, 16, 64);
 
       longIntegerFree(li);
     #endif // 1

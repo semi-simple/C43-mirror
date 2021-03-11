@@ -22,7 +22,7 @@
 
 static void cpyxDataTypeError(uint16_t);
 
-void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
+TO_QSPI void (* const cpyx[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX |    regY ==>    1                  2                  3                  4                  5                  6                  7                  8                  9                  10
 //      V                Long integer       Real34             Complex34          Time               Date               String             Real34 mat         Complex34 mat      Short integer      Config data
 /*  1 Long integer  */ { cpyxLonILonI,      cpyxRealLonI,      cpyxCplxLonI,      cpyxDataTypeError, cpyxDataTypeError, cpyxDataTypeError, cpyxDataTypeError, cpyxDataTypeError, cpyxShoILonI,      cpyxDataTypeError},

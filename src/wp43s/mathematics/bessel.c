@@ -391,6 +391,35 @@ static void bessel_asymptotic_large_order_trig(const real_t *nu, const real_t *x
 
 
 
+// Recurrence relations (Abramowitz and Steven, p.361)
+static void plusMinus(bool_t subtracting, const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
+	if(subtracting)
+		realSubtract(a, b, res, realContext);
+	else
+		realAdd(a, b, res, realContext);
+}
+static void bessel_recur(const real_t *nu, const real_t *x, bool_t descending, real_t *res, realContext_t *realContext) {
+	real_t jnx, jn_1x, alpha, floor_nu;
+
+	realToIntegralValue(nu, &floor_nu, DEC_ROUND_FLOOR, realContext);
+	plusMinus(!descending, nu, &floor_nu, &alpha, realContext);
+	WP34S_BesselJ(&alpha, x, &jn_1x, realContext);
+	plusMinus(descending, &alpha, const_1, &alpha, realContext);
+	WP34S_BesselJ(&alpha, x, &jnx, realContext);
+	while(realCompareLessThan(descending ? nu : &alpha, descending ? &alpha : nu)) {
+		realMultiply(const_2, &alpha, res, realContext);
+		realDivide(res, x, res, realContext);
+		realMultiply(res, &jnx, res, realContext);
+		realSubtract(res, &jn_1x, res, realContext);
+
+		plusMinus(descending, &alpha, const_1, &alpha, realContext);
+		realCopy(&jnx, &jn_1x);
+		realCopy(res, &jnx);
+	}
+}
+
+
+
 /* The code below is ported from the WP 34s repository,
  * but never implemented in it. */
 static void bessel(const real_t *alpha, const real_t *x, bool_t neg, real_t *res, realContext_t *realContext) {
@@ -427,7 +456,7 @@ static void bessel(const real_t *alpha, const real_t *x, bool_t neg, real_t *res
 }
 
 void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
-	real_t a;
+	real_t a, beta, gamma;
 
 	if(realIsNaN(alpha) || realIsSpecial(x)) {
 		realCopy(const_NaN, res);
@@ -445,10 +474,18 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
 	if(realIsNegative(alpha) && realIsAnInteger(alpha)) {
 		realSetPositiveSign(&a);
 	}
-	if(realCompareGreaterThan(&a, const_90) && realCompareAbsLessThan(x, &a))
-		bessel_asymptotic_large_order_hyp(&a, x, res, realContext);
-	else if(realCompareGreaterThan(&a, const_90) && realCompareAbsGreaterThan(x, &a))
-		bessel_asymptotic_large_order_trig(&a, x, res, realContext);
+	if(realCompareGreaterThan(&a, const_90)) {
+		realSubtract(const_1, const_1on4, &beta, realContext);
+		realMultiply(&a, &beta, &beta, realContext);
+		realAdd(const_1, const_1on4, &gamma, realContext);
+		realMultiply(&a, &gamma, &gamma, realContext);
+		if(realCompareAbsLessThan(x, &beta))
+			bessel_asymptotic_large_order_hyp(&a, x, res, realContext);
+		else if(realCompareAbsGreaterThan(x, &gamma))
+			bessel_asymptotic_large_order_trig(&a, x, res, realContext);
+		else
+			bessel_recur(&a, x, realCompareAbsLessThan(x, &a), res, realContext);
+	}
 	else if(realCompareLessThan(&a, const_45) && realCompareAbsGreaterThan(x, const_90))
 		bessel_asymptotic_large_x(&a, x, res, realContext);
 	else

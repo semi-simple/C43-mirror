@@ -15,24 +15,22 @@ WP43S_APP = wp43s$(EXE)
 EXE =
 
 
-ifeq '$(findstring ;,$(PATH))' ';'
-	detected_OS := Windows
+ifeq ($(OS),Windows_NT)
+  EXE = .exe
+  CFLAGS += -D WIN32
+  detected_OS := Windows
 else
-	detected_OS := $(shell uname 2>/dev/null || echo Unknown)
-	detected_OS := $(patsubst CYGWIN%,Cygwin,$(detected_OS))
-	detected_OS := $(patsubst MSYS%,MSYS,$(detected_OS))
-	detected_OS := $(patsubst MINGW%,MSYS,$(detected_OS))
-endif
-
-ifeq ($(detected_OS),Windows)
-	EXE = .exe
-	CFLAGS += -D WIN32
-else ifeq ($(detected_OS),Darwin)        # Mac OS X
-	CFLAGS += -D OSX
-	CFLAGS += -I/usr/local/include/
-	LDFLAGS += -L/usr/local/lib
-else ifeq ($(detected_OS),Linux)
-	CFLAGS += -D LINUX
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Linux)
+    detected_OS := Linux
+    CFLAGS += -D LINUX
+  endif
+  ifeq ($(UNAME_S),Darwin)
+    detected_OS := Darwin
+    CFLAGS += -D OSX
+    CFLAGS += -I/usr/local/include/
+    LDFLAGS += -L/usr/local/lib
+  endif
 endif
 
 RASPBERRY = $(shell ./onARaspberry)

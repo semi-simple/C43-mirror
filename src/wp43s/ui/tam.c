@@ -297,7 +297,7 @@
       tam.value = 16;
       forceTry = true;
     }
-    else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_X) {
+    else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_T) {
       if(!tam.digitsSoFar && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
         tam.value = indexOfItems[item].param;
         forceTry = true;
@@ -319,9 +319,14 @@
     }
     else if(ITM_0 <= item && item <= ITM_9) {
       int16_t digit = item - ITM_0;
-      if(!tam.alpha && (tam.value*10 + digit) <= max) {
+      uint8_t maxDigits = (max < 10 ? 1 : (max < 100 ? 2 : (max < 1000 ? 3 : (max < 10000 ? 4 : 5))));
+      // If the number is below our minimum, prevent further entry of digits
+      if(!tam.alpha && (tam.value*10 + digit) <= max && tam.digitsSoFar < maxDigits) {
         tam.value = tam.value*10 + digit;
         tam.digitsSoFar++;
+        if(tam.digitsSoFar == maxDigits) {
+          forceTry = true;
+        }
       }
     }
     else if(item == ITM_PERIOD) {

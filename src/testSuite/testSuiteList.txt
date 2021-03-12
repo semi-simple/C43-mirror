@@ -243,6 +243,8 @@ fib
 gd
 invGd
 
+bessel
+
 zeta
 bn
 bn_star

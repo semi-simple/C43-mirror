@@ -1902,7 +1902,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     m = 0;
     while(softmenu[m].menuItem != 0) {
       if(softmenu[m].menuItem == id) {
-       if(!tamMode) softmenuStack[0].firstItem = lastCatalogPosition[catalog];
+       if(!tam.mode) softmenuStack[0].firstItem = lastCatalogPosition[catalog];
        break;
       }
       m++;

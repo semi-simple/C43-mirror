@@ -224,7 +224,7 @@ bool_t lastshiftG = false;
         if(calcMode != CM_CONFIRMATION)
           {
             if(item < 0) { // softmenu
-              if(item != -MNU_SYSFL || !catalog || transitionSystemState == 0) {
+              if(item != -MNU_SYSFL || !catalog /*|| transitionSystemState == 0*/) {
                 showSoftmenu(item);
               }
             }
@@ -266,7 +266,7 @@ bool_t lastshiftG = false;
               closeAim();
             }
             if(tam.alpha) {
-              leaveTamMode();
+              tamLeaveMode();
             }
 
               if(lastErrorCode == 0) {
@@ -857,11 +857,10 @@ bool_t lowercaseselected;
         }
         else if(tam.mode) {
           tamProcessInput(ITM_ENTER);
-          updateTamBuffer();
-          if(tamFunction == ITM_toINT && item == ITM_ENTER) {     //JMvv
-            //addItemToBuffer(item);
-            tamTransitionSystem(TT_CHB10);
-          }                                                       //JM^^
+//          if(tamFunction == ITM_toINT && item == ITM_ENTER) {     //JMvv
+  //          //addItemToBuffer(item);
+    //        tamTransitionSystem(TT_CHB10);
+      //    }                                                       //JM^^
           keyActionProcessed = true;
         } else if(calcMode == CM_NIM) {                           //JMvv
             addItemToBuffer(item);
@@ -1315,7 +1314,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
     if(tmp1 == -MNU_SYSFL) {                                                       //JM auto recover out of SYSFL
       numberOfTamMenusToPop = 2;
-      leaveTamMode();
+      tamLeaveMode();
       return;
     }
 

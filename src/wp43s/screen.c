@@ -1593,7 +1593,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_T) { // L1
       w = stringWidth(tmpString, &standardFont, true, true);
       showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
-    }
+      }
 
       else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
       w = stringWidth(tmpString + 300, &standardFont, true, true);
@@ -1813,6 +1813,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
+#ifdef WWW
         else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
           if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
             xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
@@ -2476,7 +2477,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
         }
-      }
+      
 
       if(regist == REGISTER_T) {
         lineTWidth = lineWidth;
@@ -2510,7 +2511,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       }
     }
   }
-
 
 
 int16_t refreshScreenCounter = 0;        //JM

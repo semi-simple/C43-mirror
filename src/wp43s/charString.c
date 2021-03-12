@@ -438,3 +438,12 @@ void *xcopy(void *dest, const void *source, int n) {
 
   return dest;
 }
+
+
+#ifdef WIN32
+  char *stpcpy(char *dest, const char *source)
+  {
+    const size_t l = strlen(source);
+    return (char *)memcpy(dest, source, l + 1) + l;
+  }
+#endif //WIN32

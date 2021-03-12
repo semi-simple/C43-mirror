@@ -38,7 +38,7 @@ void showAlphaModeonGui(void) {
   #ifdef PC_BUILD
     char tmp[200]; sprintf(tmp,"^^^^showAlphaModeonGui\n"); jm_show_comment(tmp);
   #endif //PC_BUILD
-  if(calcMode == CM_AIM || tamMode)    //vv dr JM
+  if(calcMode == CM_AIM || tam.mode)    //vv dr JM
   {
     #ifndef TESTSUITE_BUILD
     showHideAlphaMode();
@@ -771,7 +771,7 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
  //Note item1 MUST be set to 0 prior to calling.
  bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
  //printf("####B>> %d %d\n",item,* item1);
- if(calcMode == CM_AIM || (tamMode && inputNamedVariable) ) {
+ if(calcMode == CM_AIM || (tam.mode && tam.alpha) ) {
    if(!NL && GSHIFT) {
       switch(item) {
         case ITM_PI                : * item1 = ITM_7      ; break;

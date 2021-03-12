@@ -5969,29 +5969,29 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_FRtoDBc >> 8) | 0x80;
     *(currentStep++) =  ITM_FRtoDBc       & 0xff;
 
-    *(currentStep++) = (ITM_ACtoM2 >> 8) | 0x80;
-    *(currentStep++) =  ITM_ACtoM2       & 0xff;
+    *(currentStep++) = (ITM_ACtoHA >> 8) | 0x80;
+    *(currentStep++) =  ITM_ACtoHA       & 0xff;
 
-    *(currentStep++) = (ITM_ACtoM2b >> 8) | 0x80;
-    *(currentStep++) =  ITM_ACtoM2b       & 0xff;
+    *(currentStep++) = (ITM_ACtoHAb >> 8) | 0x80;
+    *(currentStep++) =  ITM_ACtoHAb       & 0xff;
 
-    *(currentStep++) = (ITM_M2toAC >> 8) | 0x80;
-    *(currentStep++) =  ITM_M2toAC       & 0xff;
+    *(currentStep++) = (ITM_HAtoAC >> 8) | 0x80;
+    *(currentStep++) =  ITM_HAtoAC       & 0xff;
 
-    *(currentStep++) = (ITM_M2toACb >> 8) | 0x80;
-    *(currentStep++) =  ITM_M2toACb       & 0xff;
+    *(currentStep++) = (ITM_HAtoACb >> 8) | 0x80;
+    *(currentStep++) =  ITM_HAtoACb       & 0xff;
 
-    *(currentStep++) = (ITM_ACUStoM2 >> 8) | 0x80;
-    *(currentStep++) =  ITM_ACUStoM2       & 0xff;
+    *(currentStep++) = (ITM_ACUStoHA >> 8) | 0x80;
+    *(currentStep++) =  ITM_ACUStoHA       & 0xff;
 
-    *(currentStep++) = (ITM_ACUStoM2b >> 8) | 0x80;
-    *(currentStep++) =  ITM_ACUStoM2b       & 0xff;
+    *(currentStep++) = (ITM_ACUStoHAb >> 8) | 0x80;
+    *(currentStep++) =  ITM_ACUStoHAb       & 0xff;
 
-    *(currentStep++) = (ITM_M2toACUS >> 8) | 0x80;
-    *(currentStep++) =  ITM_M2toACUS       & 0xff;
+    *(currentStep++) = (ITM_HAtoACUS >> 8) | 0x80;
+    *(currentStep++) =  ITM_HAtoACUS       & 0xff;
 
-    *(currentStep++) = (ITM_M2toACUSb >> 8) | 0x80;
-    *(currentStep++) =  ITM_M2toACUSb       & 0xff;
+    *(currentStep++) = (ITM_HAtoACUSb >> 8) | 0x80;
+    *(currentStep++) =  ITM_HAtoACUSb       & 0xff;
 
     *(currentStep++) = (ITM_PAtoATM >> 8) | 0x80;
     *(currentStep++) =  ITM_PAtoATM       & 0xff;
@@ -6065,41 +6065,41 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_MtoFTUSc >> 8) | 0x80;
     *(currentStep++) =  ITM_MtoFTUSc       & 0xff;
 
-    *(currentStep++) = (ITM_FZUKtoM3 >> 8) | 0x80;
-    *(currentStep++) =  ITM_FZUKtoM3       & 0xff;
+    *(currentStep++) = (ITM_FZUKtoML >> 8) | 0x80;
+    *(currentStep++) =  ITM_FZUKtoML       & 0xff;
 
-    *(currentStep++) = (ITM_FZUKtoM3b >> 8) | 0x80;
-    *(currentStep++) =  ITM_FZUKtoM3b       & 0xff;
+    *(currentStep++) = (ITM_FZUKtoMLb >> 8) | 0x80;
+    *(currentStep++) =  ITM_FZUKtoMLb       & 0xff;
 
-    *(currentStep++) = (ITM_M3toFZUK >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toFZUK       & 0xff;
+    *(currentStep++) = (ITM_MLtoFZUK >> 8) | 0x80;
+    *(currentStep++) =  ITM_MLtoFZUK       & 0xff;
 
-    *(currentStep++) = (ITM_M3toFZUKb >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toFZUKb       & 0xff;
+    *(currentStep++) = (ITM_MLtoFZUKb >> 8) | 0x80;
+    *(currentStep++) =  ITM_MLtoFZUKb       & 0xff;
 
-    *(currentStep++) = (ITM_FZUStoM3 >> 8) | 0x80;
-    *(currentStep++) =  ITM_FZUStoM3       & 0xff;
+    *(currentStep++) = (ITM_FZUStoML >> 8) | 0x80;
+    *(currentStep++) =  ITM_FZUStoML       & 0xff;
 
-    *(currentStep++) = (ITM_FZUStoM3b >> 8) | 0x80;
-    *(currentStep++) =  ITM_FZUStoM3b       & 0xff;
+    *(currentStep++) = (ITM_FZUStoMLb >> 8) | 0x80;
+    *(currentStep++) =  ITM_FZUStoMLb       & 0xff;
 
-    *(currentStep++) = (ITM_M3toFZUS >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toFZUS       & 0xff;
+    *(currentStep++) = (ITM_MLtoFZUS >> 8) | 0x80;
+    *(currentStep++) =  ITM_MLtoFZUS       & 0xff;
 
-    *(currentStep++) = (ITM_M3toFZUSb >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toFZUSb       & 0xff;
+    *(currentStep++) = (ITM_MLtoFZUSb >> 8) | 0x80;
+    *(currentStep++) =  ITM_MLtoFZUSb       & 0xff;
 
-    *(currentStep++) = (ITM_GLUKtoM3 >> 8) | 0x80;
-    *(currentStep++) =  ITM_GLUKtoM3       & 0xff;
+    *(currentStep++) = (ITM_GLUKtoL >> 8) | 0x80;
+    *(currentStep++) =  ITM_GLUKtoL       & 0xff;
 
-    *(currentStep++) = (ITM_M3toGLUK >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toGLUK       & 0xff;
+    *(currentStep++) = (ITM_LtoGLUK >> 8) | 0x80;
+    *(currentStep++) =  ITM_LtoGLUK       & 0xff;
 
-    *(currentStep++) = (ITM_GLUStoM3 >> 8) | 0x80;
-    *(currentStep++) =  ITM_GLUStoM3       & 0xff;
+    *(currentStep++) = (ITM_GLUStoL >> 8) | 0x80;
+    *(currentStep++) =  ITM_GLUStoL       & 0xff;
 
-    *(currentStep++) = (ITM_M3toGLUS >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toGLUS       & 0xff;
+    *(currentStep++) = (ITM_LtoGLUS >> 8) | 0x80;
+    *(currentStep++) =  ITM_LtoGLUS       & 0xff;
 
     *(currentStep++) = (ITM_HPEtoW >> 8) | 0x80;
     *(currentStep++) =  ITM_HPEtoW       & 0xff;
@@ -6131,11 +6131,11 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_PAtoINCHHGb >> 8) | 0x80;
     *(currentStep++) =  ITM_PAtoINCHHGb       & 0xff;
 
-    *(currentStep++) = (ITM_INCHtoM >> 8) | 0x80;
-    *(currentStep++) =  ITM_INCHtoM       & 0xff;
+    *(currentStep++) = (ITM_INCHtoMM >> 8) | 0x80;
+    *(currentStep++) =  ITM_INCHtoMM       & 0xff;
 
-    *(currentStep++) = (ITM_MtoINCH >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoINCH       & 0xff;
+    *(currentStep++) = (ITM_MMtoINCH >> 8) | 0x80;
+    *(currentStep++) =  ITM_MMtoINCH       & 0xff;
 
     *(currentStep++) = (ITM_WHtoJ >> 8) | 0x80;
     *(currentStep++) =  ITM_WHtoJ       & 0xff;
@@ -6149,11 +6149,11 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_LBStoKG >> 8) | 0x80;
     *(currentStep++) =  ITM_LBStoKG       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoOZ >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoOZ       & 0xff;
+    *(currentStep++) = (ITM_GtoOZ >> 8) | 0x80;
+    *(currentStep++) =  ITM_GtoOZ       & 0xff;
 
-    *(currentStep++) = (ITM_OZtoKG >> 8) | 0x80;
-    *(currentStep++) =  ITM_OZtoKG       & 0xff;
+    *(currentStep++) = (ITM_OZtoG >> 8) | 0x80;
+    *(currentStep++) =  ITM_OZtoG       & 0xff;
 
     *(currentStep++) = (ITM_KGtoSCW >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoSCW       & 0xff;
@@ -6215,17 +6215,17 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_LIANGtoKGb >> 8) | 0x80;
     *(currentStep++) =  ITM_LIANGtoKGb       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoTRZ >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoTRZ       & 0xff;
+    *(currentStep++) = (ITM_GtoTRZ >> 8) | 0x80;
+    *(currentStep++) =  ITM_GtoTRZ       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoTRZb >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoTRZb       & 0xff;
+    *(currentStep++) = (ITM_GtoTRZb >> 8) | 0x80;
+    *(currentStep++) =  ITM_GtoTRZb       & 0xff;
 
-    *(currentStep++) = (ITM_TRZtoKG >> 8) | 0x80;
-    *(currentStep++) =  ITM_TRZtoKG       & 0xff;
+    *(currentStep++) = (ITM_TRZtoG >> 8) | 0x80;
+    *(currentStep++) =  ITM_TRZtoG       & 0xff;
 
-    *(currentStep++) = (ITM_TRZtoKGb >> 8) | 0x80;
-    *(currentStep++) =  ITM_TRZtoKGb       & 0xff;
+    *(currentStep++) = (ITM_TRZtoGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_TRZtoGb       & 0xff;
 
     *(currentStep++) = (ITM_LBFtoN >> 8) | 0x80;
     *(currentStep++) =  ITM_LBFtoN       & 0xff;
@@ -6251,17 +6251,17 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_PAtoMMHGb >> 8) | 0x80;
     *(currentStep++) =  ITM_PAtoMMHGb       & 0xff;
 
-    *(currentStep++) = (ITM_MItoM >> 8) | 0x80;
-    *(currentStep++) =  ITM_MItoM       & 0xff;
+    *(currentStep++) = (ITM_MItoKM >> 8) | 0x80;
+    *(currentStep++) =  ITM_MItoKM       & 0xff;
 
-    *(currentStep++) = (ITM_MtoMI >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoMI       & 0xff;
+    *(currentStep++) = (ITM_KMtoMI >> 8) | 0x80;
+    *(currentStep++) =  ITM_KMtoMI       & 0xff;
 
-    *(currentStep++) = (ITM_MtoNMI >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoNMI       & 0xff;
+    *(currentStep++) = (ITM_KMtoNMI >> 8) | 0x80;
+    *(currentStep++) =  ITM_KMtoNMI       & 0xff;
 
-    *(currentStep++) = (ITM_NMItoM >> 8) | 0x80;
-    *(currentStep++) =  ITM_NMItoM       & 0xff;
+    *(currentStep++) = (ITM_NMItoKM >> 8) | 0x80;
+    *(currentStep++) =  ITM_NMItoKM       & 0xff;
 
     *(currentStep++) = (ITM_MtoPC >> 8) | 0x80;
     *(currentStep++) =  ITM_MtoPC       & 0xff;
@@ -6269,23 +6269,23 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_PCtoM >> 8) | 0x80;
     *(currentStep++) =  ITM_PCtoM       & 0xff;
 
-    *(currentStep++) = (ITM_MtoPOINT >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoPOINT       & 0xff;
+    *(currentStep++) = (ITM_MMtoPOINT >> 8) | 0x80;
+    *(currentStep++) =  ITM_MMtoPOINT       & 0xff;
 
-    *(currentStep++) = (ITM_MtoPOINTb >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoPOINTb       & 0xff;
+    *(currentStep++) = (ITM_MMtoPOINTb >> 8) | 0x80;
+    *(currentStep++) =  ITM_MMtoPOINTb       & 0xff;
 
-    *(currentStep++) = (ITM_MtoPOINTc >> 8) | 0x80;
-    *(currentStep++) =  ITM_MtoPOINTc       & 0xff;
+    *(currentStep++) = (ITM_MMtoPOINTc >> 8) | 0x80;
+    *(currentStep++) =  ITM_MMtoPOINTc       & 0xff;
 
-    *(currentStep++) = (ITM_POINTtoM >> 8) | 0x80;
-    *(currentStep++) =  ITM_POINTtoM       & 0xff;
+    *(currentStep++) = (ITM_POINTtoMM >> 8) | 0x80;
+    *(currentStep++) =  ITM_POINTtoMM       & 0xff;
 
-    *(currentStep++) = (ITM_POINTtoMb >> 8) | 0x80;
-    *(currentStep++) =  ITM_POINTtoMb       & 0xff;
+    *(currentStep++) = (ITM_POINTtoMMb >> 8) | 0x80;
+    *(currentStep++) =  ITM_POINTtoMMb       & 0xff;
 
-    *(currentStep++) = (ITM_POINTtoMc >> 8) | 0x80;
-    *(currentStep++) =  ITM_POINTtoMc       & 0xff;
+    *(currentStep++) = (ITM_POINTtoMMc >> 8) | 0x80;
+    *(currentStep++) =  ITM_POINTtoMMc       & 0xff;
 
     *(currentStep++) = (ITM_MtoYD >> 8) | 0x80;
     *(currentStep++) =  ITM_MtoYD       & 0xff;
@@ -6317,29 +6317,29 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_YEARtoS >> 8) | 0x80;
     *(currentStep++) =  ITM_YEARtoS       & 0xff;
 
-    *(currentStep++) = (ITM_CARATtoKG >> 8) | 0x80;
-    *(currentStep++) =  ITM_CARATtoKG       & 0xff;
+    *(currentStep++) = (ITM_CARATtoG >> 8) | 0x80;
+    *(currentStep++) =  ITM_CARATtoG       & 0xff;
 
-    *(currentStep++) = (ITM_CARATtoKGb >> 8) | 0x80;
-    *(currentStep++) =  ITM_CARATtoKGb       & 0xff;
+    *(currentStep++) = (ITM_CARATtoGb >> 8) | 0x80;
+    *(currentStep++) =  ITM_CARATtoGb       & 0xff;
 
     *(currentStep++) = (ITM_JINtoKG >> 8) | 0x80;
     *(currentStep++) =  ITM_JINtoKG       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoCARAT >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoCARAT       & 0xff;
+    *(currentStep++) = (ITM_GtoCARAT >> 8) | 0x80;
+    *(currentStep++) =  ITM_GtoCARAT       & 0xff;
 
-    *(currentStep++) = (ITM_KGtoCARATb >> 8) | 0x80;
-    *(currentStep++) =  ITM_KGtoCARATb       & 0xff;
+    *(currentStep++) = (ITM_GtoCARATb >> 8) | 0x80;
+    *(currentStep++) =  ITM_GtoCARATb       & 0xff;
 
     *(currentStep++) = (ITM_KGtoJIN >> 8) | 0x80;
     *(currentStep++) =  ITM_KGtoJIN       & 0xff;
 
-    *(currentStep++) = (ITM_QTtoM3 >> 8) | 0x80;
-    *(currentStep++) =  ITM_QTtoM3       & 0xff;
+    *(currentStep++) = (ITM_QTtoL >> 8) | 0x80;
+    *(currentStep++) =  ITM_QTtoL       & 0xff;
 
-    *(currentStep++) = (ITM_M3toQT >> 8) | 0x80;
-    *(currentStep++) =  ITM_M3toQT       & 0xff;
+    *(currentStep++) = (ITM_LtoQT >> 8) | 0x80;
+    *(currentStep++) =  ITM_LtoQT       & 0xff;
 
     *(currentStep++) = (ITM_FATHOMtoM >> 8) | 0x80;
     *(currentStep++) =  ITM_FATHOMtoM       & 0xff;

@@ -107,6 +107,8 @@ SRC_WP43S                = \
 		chi2.c f.c normal.c t.c) \
 	$(addprefix src/wp43s/browsers/, \
 		flagBrowser.c fontBrowser.c registerBrowser.c) \
+	$(addprefix src/wp43s/ui/, \
+		tam.c) \
 	$(addprefix src/wp43s/, \
 		addons.c graphs.c jm.c jm_graph.c inlineTest.c keyboardTweak.c radioButtonCatalog.c  graphText.c textfiles.c xeqm.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)

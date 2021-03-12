@@ -164,22 +164,6 @@
 #define NIM_BUFFER_LENGTH                        200 //JM(100-24) TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 #endif
 
-// TAM transition system
-#define TT_OPERATION                               0 // +, -, *, /, min, max
-#define TT_LETTER                                  1
-#define TT_VARIABLE                                2
-#define TT_DIGIT                                   3
-#define TT_ENTER                                   4
-#define TT_DOT                                     5 // For local flags and registers
-#define TT_INDIRECT                                6 // For indirect addressing
-#define TT_BACKSPACE                               7
-#define TT_BASE10                                  8
-#define TT_BASE16                                  9
-#define TT_INT                                    10
-#define TT_FP                                     11
-#define TT_CHB02                                  12
-#define TT_CHB10                                  13 //JM
-#define TT_NOTHING                                14
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 

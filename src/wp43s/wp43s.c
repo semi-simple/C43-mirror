@@ -57,7 +57,6 @@ void                   (*confirmedFunction)(uint16_t);
 // Variables stored in RAM
 bool_t                 funcOK;
 bool_t                 keyActionProcessed;
-bool_t                 inputNamedVariable;
 bool_t                 fnKeyInCatalog;
 bool_t                 hourGlassIconEnabled;
 bool_t                 watchIconEnabled;
@@ -111,7 +110,6 @@ char                   oldTime[8];
 char                   dateTimeString[12];
 char                   displayValueX[DISPLAY_VALUE_LEN];
 
-tamState_t             transitionSystemState;
 uint8_t                numScreensStandardFont;
 uint8_t                currentFntScr;
 uint8_t                currentFlgScr;
@@ -145,14 +143,7 @@ uint8_t               *firstFreeProgramByte;
 uint8_t               *firstDisplayedStep;
 uint8_t               *currentStep;
 
-int16_t                tamFunction;
-int16_t                tamNumber;
-int16_t                tamNumberMin;
-int16_t                tamNumberMax;
-int16_t                tamDigit;
-int16_t                tamOperation;
-int16_t                tamLetteredRegister;
-int16_t                tamCurrentOperation;
+tamState_t             tam;
 int16_t                currentRegisterBrowserScreen;
 int16_t                lineTWidth;
 int16_t                rbrRegister;
@@ -235,7 +226,6 @@ uint16_t               firstDisplayedLocalStepNumber;
 uint16_t               numberOfLabels;
 uint16_t               numberOfPrograms;
 uint16_t               numberOfNamedVariables;
-uint16_t               tamMode;
 uint16_t               currentLocalStepNumber;
 uint16_t               currentProgramNumber;
 

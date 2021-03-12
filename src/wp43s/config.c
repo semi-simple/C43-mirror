@@ -805,7 +805,7 @@ void fnReset(uint16_t confirmation) {
     serialIOIconEnabled = false;
     printerIconEnabled = false;
     thereIsSomethingToUndo = false;
-    inputNamedVariable = false;
+    tam.alpha = false;
     fnKeyInCatalog = false;
     shiftF = false;
     shiftG = false;
@@ -846,7 +846,7 @@ void fnReset(uint16_t confirmation) {
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
 
-    tamMode = 0;
+    tam.mode = 0;
     catalog = CATALOG_NONE;
     memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
     firstGregorianDay = 2361222 /* 14 Sept 1752 */;

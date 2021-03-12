@@ -129,24 +129,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
     #endif // PC_BUILD
 
-    if(tamMode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
-      tamMode = indexOfItems[func].param;
-      tamFunction = func;
-      tamNumberMin = indexOfItems[func].tamMinMax >> TAM_MAX_BITS;
-      tamNumberMax = indexOfItems[func].tamMinMax & TAM_MAX_MASK;
-      if(tamNumberMax == 16383) { // Only case featuring more than TAM_MAX_BITS bits is GTO.
-        tamNumberMax = 32766;
-      }
-
-      if(func == ITM_CNST) {
-        tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1;
-      }
-
-      enterTamMode();
+    if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
+      tamEnterMode(func);
       return;
     }
 
-    if(calcMode == CM_PEM && !tamMode) {
+    if(calcMode == CM_PEM && !tam.mode) {
       insertStepInProgram(func);
       return;
     }
@@ -397,8 +385,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnSdl                      (uint16_t unusedButMandatoryParameter) {}
   void fnSdr                      (uint16_t unusedButMandatoryParameter) {}
   void fnCvtToCurrentAngularMode  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtAcreM2                (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtAcreusM2              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAcreHa                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtAcreusHa              (uint16_t unusedButMandatoryParameter) {}
   void fnCvtAtmPa                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtAuM                   (uint16_t unusedButMandatoryParameter) {}
   void fnCvtBarPa                 (uint16_t unusedButMandatoryParameter) {}
@@ -408,10 +396,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnCvtFtM                   (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDegToRad              (uint16_t unusedButMandatoryParameter) {}
   void fnCvtSfeetM                (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtFlozukM3              (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtFlozusM3              (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtGalukM3               (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtGalusM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFlozukMl              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFlozusMl              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtGalukL                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtGalusL                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDbRatio               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtRatioDb               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtHpeW                  (uint16_t unusedButMandatoryParameter) {}
@@ -419,34 +407,34 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnCvtHpukW                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtInhgPa                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtMmhgPa                (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtInchM                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtInchMm                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtWhJ                   (uint16_t unusedButMandatoryParameter) {}
   void fnCvtLbKg                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtOzKg                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtOzG                   (uint16_t unusedButMandatoryParameter) {}
   void fnCvtStoneKg               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtShorttonKg            (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtTrozKg                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtTrozG                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtLbfN                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtMiM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMiKm                  (uint16_t unusedButMandatoryParameter) {}
   void fnCvtLyM                   (uint16_t unusedButMandatoryParameter) {}
   void fnCvtTonKg                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtTorrPa                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtYardM                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtPcM                   (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtPointM                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtPointMm               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtCToF                  (uint16_t unusedButMandatoryParameter) {}
   void fnCvtFToC                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtNmiM                  (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtNmiKm                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtPsiPa                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtShortcwtKg            (uint16_t unusedButMandatoryParameter) {}
   void fnCvtLbfftNm               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtRadToDeg              (uint16_t unusedButMandatoryParameter) {}
   void fnCvtFromCurrentAngularMode(uint16_t unusedButMandatoryParameter) {}
   void fnCvtYearS                 (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtCaratKg               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCaratG                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtJinKg                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtLiangKg               (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtQuartM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtQuartL                (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDmsToDeg              (uint16_t unusedButMandatoryParameter) {}
   void fnCvtFathomM               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtBarrelM3              (uint16_t unusedButMandatoryParameter) {}
@@ -917,14 +905,14 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  231 */  { fnCvtRatioDb,                20,                          "fr" STD_RIGHT_ARROW "dB",                     "field",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  232 */  { fnCvtRatioDb,                20,                          "fr" STD_RIGHT_ARROW "dB",                     "ratio",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  233 */  { fnCvtRatioDb,                20,                          "fr" STD_RIGHT_ARROW "dB",                     STD_RIGHT_ARROW " dB",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  234 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            "acre",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  235 */  { fnCvtAcreM2,                 multiply,                    "ac" STD_RIGHT_ARROW "m" STD_SUP_2,            STD_RIGHT_ARROW " m" STD_SUP_2,                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  236 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "m" STD_SUP_2 " " STD_RIGHT_ARROW,             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  237 */  { fnCvtAcreM2,                 divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac",            "acre",                                        (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  238 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     "acre" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  239 */  { fnCvtAcreusM2,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "m" STD_SUP_2,     STD_RIGHT_ARROW " m" STD_SUP_2,                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  240 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "m" STD_SUP_2 " " STD_RIGHT_ARROW,             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  241 */  { fnCvtAcreusM2,               divide,                      "m" STD_SUP_2 STD_RIGHT_ARROW "ac" STD_US,     "acre" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  234 */  { fnCvtAcreHa,                 multiply,                    "ac" STD_RIGHT_ARROW "ha",                     "acre",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  235 */  { fnCvtAcreHa,                 multiply,                    "ac" STD_RIGHT_ARROW "ha",                     STD_RIGHT_ARROW " ha",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  236 */  { fnCvtAcreHa,                 divide,                      "ha" STD_RIGHT_ARROW "ac",                     "ha " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  237 */  { fnCvtAcreHa,                 divide,                      "ha" STD_RIGHT_ARROW "ac",                     "acre",                                        (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  238 */  { fnCvtAcreusHa,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "ha",              "acre" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  239 */  { fnCvtAcreusHa,               multiply,                    "ac" STD_US STD_RIGHT_ARROW "ha",              STD_RIGHT_ARROW " ha",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  240 */  { fnCvtAcreusHa,               divide,                      "ha" STD_RIGHT_ARROW "ac" STD_US,              "ha " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  241 */  { fnCvtAcreusHa,               divide,                      "ha" STD_RIGHT_ARROW "ac" STD_US,              "acre" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  242 */  { fnCvtAtmPa,                  divide,                      "Pa" STD_RIGHT_ARROW "atm",                    "Pa" STD_RIGHT_ARROW "atm",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  243 */  { fnCvtAtmPa,                  multiply,                    "atm" STD_RIGHT_ARROW "Pa",                    "atm" STD_RIGHT_ARROW "Pa",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  244 */  { fnCvtAuM,                    multiply,                    "au" STD_RIGHT_ARROW "m",                      "au" STD_RIGHT_ARROW "m",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -949,18 +937,18 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  263 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "m " STD_RIGHT_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  264 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "survey",                                      (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  265 */  { fnCvtSfeetM,                 divide,                      "m" STD_RIGHT_ARROW "ft" STD_US,               "foot" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  266 */  { fnCvtFlozukM3,               multiply,                    "fz" STD_UK STD_RIGHT_ARROW "m" STD_SUP_3,     "floz" STD_UK,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  267 */  { fnCvtFlozukM3,               multiply,                    "fz" STD_UK STD_RIGHT_ARROW "m" STD_SUP_3,     STD_RIGHT_ARROW " m" STD_SUP_3,                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  268 */  { fnCvtFlozukM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_UK,     "m" STD_SUP_3 " " STD_RIGHT_ARROW,             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  269 */  { fnCvtFlozukM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_UK,     "floz" STD_UK,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  270 */  { fnCvtFlozusM3,               multiply,                    "fz" STD_US STD_RIGHT_ARROW "m" STD_SUP_3,     "floz" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  271 */  { fnCvtFlozusM3,               multiply,                    "fz" STD_US STD_RIGHT_ARROW "m" STD_SUP_3,     STD_RIGHT_ARROW " m" STD_SUP_3,                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  272 */  { fnCvtFlozusM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_US,     "m" STD_SUP_3 " " STD_RIGHT_ARROW,             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  273 */  { fnCvtFlozusM3,               divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "fz" STD_US,     "floz" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  274 */  { fnCvtGalukM3,                multiply,                    "gl" STD_UK STD_RIGHT_ARROW "m" STD_SUP_3,     "gl" STD_UK STD_RIGHT_ARROW "m" STD_SUP_3,     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  275 */  { fnCvtGalukM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,     "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_UK,     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  276 */  { fnCvtGalusM3,                multiply,                    "gl" STD_US STD_RIGHT_ARROW "m" STD_SUP_3,     "gl" STD_US STD_RIGHT_ARROW "m" STD_SUP_3,     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  277 */  { fnCvtGalusM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_US,     "m" STD_SUP_3 STD_RIGHT_ARROW "gl" STD_US,     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  266 */  { fnCvtFlozukMl,               multiply,                    "fz" STD_UK STD_RIGHT_ARROW "ml",              "floz" STD_UK,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  267 */  { fnCvtFlozukMl,               multiply,                    "fz" STD_UK STD_RIGHT_ARROW "ml",              STD_RIGHT_ARROW " ml",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  268 */  { fnCvtFlozukMl,               divide,                      "ml" STD_RIGHT_ARROW "fz" STD_UK,              "ml " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  269 */  { fnCvtFlozukMl,               divide,                      "ml" STD_RIGHT_ARROW "fz" STD_UK,              "floz" STD_UK,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  270 */  { fnCvtFlozusMl,               multiply,                    "fz" STD_US STD_RIGHT_ARROW "ml",              "floz" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  271 */  { fnCvtFlozusMl,               multiply,                    "fz" STD_US STD_RIGHT_ARROW "ml",              STD_RIGHT_ARROW " ml",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  272 */  { fnCvtFlozusMl,               divide,                      "ml" STD_RIGHT_ARROW "fz" STD_US,              "ml " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  273 */  { fnCvtFlozusMl,               divide,                      "ml" STD_RIGHT_ARROW "fz" STD_US,              "floz" STD_US,                                 (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  274 */  { fnCvtGalukL,                 multiply,                    "gal" STD_UK STD_RIGHT_ARROW "l",              "gal" STD_UK STD_RIGHT_ARROW "l",              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  275 */  { fnCvtGalukL,                 divide,                      "l" STD_RIGHT_ARROW "gal" STD_UK,              "l" STD_RIGHT_ARROW "gal" STD_UK,              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  276 */  { fnCvtGalusL,                 multiply,                    "gal" STD_US STD_RIGHT_ARROW "l",              "gal" STD_US STD_RIGHT_ARROW "l",              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  277 */  { fnCvtGalusL,                 divide,                      "l" STD_RIGHT_ARROW "gal" STD_US,              "l" STD_RIGHT_ARROW "gal" STD_US,              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  278 */  { fnCvtHpeW,                   multiply,                    "hp" STD_SUB_E STD_RIGHT_ARROW "W",            "hp" STD_SUB_E STD_RIGHT_ARROW "W",            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  279 */  { fnCvtHpeW,                   divide,                      "W" STD_RIGHT_ARROW "hp" STD_SUB_E,            "W" STD_RIGHT_ARROW "hp" STD_SUB_E,            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  280 */  { fnCvtHpmW,                   multiply,                    "hp" STD_SUB_M STD_RIGHT_ARROW "W",            "hp" STD_SUB_M STD_RIGHT_ARROW "W",            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -971,14 +959,14 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  285 */  { fnCvtInhgPa,                 multiply,                    "iHg" STD_RIGHT_ARROW "Pa",                    STD_RIGHT_ARROW " Pa",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  286 */  { fnCvtInhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "iHg",                    "Pa " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  287 */  { fnCvtInhgPa,                 divide,                      "Pa" STD_RIGHT_ARROW "iHg",                    "in.Hg",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  288 */  { fnCvtInchM,                  multiply,                    "in." STD_RIGHT_ARROW "m",                     "in." STD_RIGHT_ARROW "m",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  289 */  { fnCvtInchM,                  divide,                      "m" STD_RIGHT_ARROW "in.",                     "m" STD_RIGHT_ARROW "in.",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  288 */  { fnCvtInchMm,                 multiply,                    "in." STD_RIGHT_ARROW "mm",                    "in." STD_RIGHT_ARROW "mm",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  289 */  { fnCvtInchMm,                 divide,                      "mm" STD_RIGHT_ARROW "in.",                    "mm" STD_RIGHT_ARROW "in.",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  290 */  { fnCvtWhJ,                    multiply,                    "Wh" STD_RIGHT_ARROW "J",                      "Wh" STD_RIGHT_ARROW "J",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  291 */  { fnCvtWhJ,                    divide,                      "J" STD_RIGHT_ARROW "Wh",                      "J" STD_RIGHT_ARROW "Wh",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  292 */  { fnCvtLbKg,                   divide,                      "kg" STD_RIGHT_ARROW "lb.",                    "kg" STD_RIGHT_ARROW "lb.",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  293 */  { fnCvtLbKg,                   multiply,                    "lb." STD_RIGHT_ARROW "kg",                    "lb." STD_RIGHT_ARROW "kg",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  294 */  { fnCvtOzKg,                   divide,                      "kg" STD_RIGHT_ARROW "oz",                     "kg" STD_RIGHT_ARROW "oz",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  295 */  { fnCvtOzKg,                   multiply,                    "oz" STD_RIGHT_ARROW "kg",                     "oz" STD_RIGHT_ARROW "kg",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  294 */  { fnCvtOzG,                    divide,                      "g" STD_RIGHT_ARROW "oz",                      "g" STD_RIGHT_ARROW "oz",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  295 */  { fnCvtOzG,                    multiply,                    "oz" STD_RIGHT_ARROW "g",                      "oz" STD_RIGHT_ARROW "g",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  296 */  { fnCvtShortcwtKg,             divide,                      "kg" STD_RIGHT_ARROW "scw",                    "kg " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  297 */  { fnCvtShortcwtKg,             divide,                      "kg" STD_RIGHT_ARROW "scw",                    "sh.cwt",                                      (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  298 */  { fnCvtShortcwtKg,             multiply,                    "scw" STD_RIGHT_ARROW "kg",                    "short",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -999,10 +987,10 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  313 */  { fnCvtTonKg,                  multiply,                    "ton" STD_RIGHT_ARROW "kg",                    "ton" STD_RIGHT_ARROW "kg",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  314 */  { fnCvtLiangKg,                divide,                      "lian" STD_RIGHT_ARROW "kg",                   "li" STD_a_BREVE "ng",                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  315 */  { fnCvtLiangKg,                divide,                      "lian" STD_RIGHT_ARROW "kg",                   STD_RIGHT_ARROW " kg",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  316 */  { fnCvtTrozKg,                 divide,                      "kg" STD_RIGHT_ARROW "trz",                    "kg " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  317 */  { fnCvtTrozKg,                 divide,                      "kg" STD_RIGHT_ARROW "trz",                    "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  318 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  319 */  { fnCvtTrozKg,                 multiply,                    "trz" STD_RIGHT_ARROW "kg",                    STD_RIGHT_ARROW " kg",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  316 */  { fnCvtTrozG,                  divide,                      "g" STD_RIGHT_ARROW "trz",                     "g " STD_RIGHT_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  317 */  { fnCvtTrozG,                  divide,                      "g" STD_RIGHT_ARROW "trz",                     "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  318 */  { fnCvtTrozG,                  multiply,                    "trz" STD_RIGHT_ARROW "g",                     "tr.oz",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  319 */  { fnCvtTrozG,                  multiply,                    "trz" STD_RIGHT_ARROW "g",                     STD_RIGHT_ARROW " g",                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  320 */  { fnCvtLbfN,                   multiply,                    "lbf" STD_RIGHT_ARROW "N",                     "lbf" STD_RIGHT_ARROW "N",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  321 */  { fnCvtLbfN,                   divide,                      "N" STD_RIGHT_ARROW "lbf",                     "N" STD_RIGHT_ARROW "lbf",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  322 */  { fnCvtLyM,                    multiply,                    "l.y." STD_RIGHT_ARROW "m",                    "l.y." STD_RIGHT_ARROW "m",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -1011,18 +999,18 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  325 */  { fnCvtMmhgPa,                 multiply,                    "mmH" STD_RIGHT_SHORT_ARROW "Pa",              STD_RIGHT_ARROW " Pa",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  326 */  { fnCvtMmhgPa,                 divide,                      "Pa" STD_RIGHT_SHORT_ARROW "mmH",              "Pa " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  327 */  { fnCvtMmhgPa,                 divide,                      "Pa" STD_RIGHT_SHORT_ARROW "mmH",              "mm.Hg",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  328 */  { fnCvtMiM,                    multiply,                    "mi." STD_RIGHT_ARROW "m",                     "mi." STD_RIGHT_ARROW "m",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  329 */  { fnCvtMiM,                    divide,                      "m" STD_RIGHT_ARROW "mi.",                     "m" STD_RIGHT_ARROW "mi.",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  330 */  { fnCvtNmiM,                   divide,                      "m" STD_RIGHT_ARROW "nmi.",                    "m" STD_RIGHT_ARROW "nmi.",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  331 */  { fnCvtNmiM,                   multiply,                    "nmi." STD_RIGHT_ARROW "m",                    "nmi." STD_RIGHT_ARROW "m",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  328 */  { fnCvtMiKm,                   multiply,                    "mi." STD_RIGHT_ARROW "km",                    "mi." STD_RIGHT_ARROW "km",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  329 */  { fnCvtMiKm,                   divide,                      "km" STD_RIGHT_ARROW "mi.",                    "km" STD_RIGHT_ARROW "mi.",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  330 */  { fnCvtNmiKm,                  divide,                      "km" STD_RIGHT_ARROW "nmi.",                   "km" STD_RIGHT_ARROW "nmi.",                   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  331 */  { fnCvtNmiKm,                  multiply,                    "nmi." STD_RIGHT_ARROW "km",                   "nmi." STD_RIGHT_ARROW "km",                   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  332 */  { fnCvtPcM,                    divide,                      "m" STD_RIGHT_ARROW "pc",                      "m" STD_RIGHT_ARROW "pc",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  333 */  { fnCvtPcM,                    multiply,                    "pc" STD_RIGHT_ARROW "m",                      "pc" STD_RIGHT_ARROW "m",                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  334 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     "m " STD_RIGHT_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  335 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     "point",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  336 */  { fnCvtPointM,                 divide,                      "m" STD_RIGHT_ARROW "pt.",                     STD_SPACE_HAIR,                                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  337 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     "point",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  338 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
-/*  339 */  { fnCvtPointM,                 multiply,                    "pt." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  334 */  { fnCvtPointMm,                divide,                      "mm" STD_RIGHT_ARROW "pt.",                    "mm " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  335 */  { fnCvtPointMm,                divide,                      "mm" STD_RIGHT_ARROW "pt.",                    "point",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  336 */  { fnCvtPointMm,                divide,                      "mm" STD_RIGHT_ARROW "pt.",                    STD_SPACE_HAIR,                                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  337 */  { fnCvtPointMm,                multiply,                    "pt." STD_RIGHT_ARROW "mm",                    "point",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  338 */  { fnCvtPointMm,                multiply,                    "pt." STD_RIGHT_ARROW "mm",                    STD_RIGHT_ARROW " mm",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  339 */  { fnCvtPointMm,                multiply,                    "pt." STD_RIGHT_ARROW "mm",                    STD_SPACE_HAIR,                                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  340 */  { fnCvtYardM,                  divide,                      "m" STD_RIGHT_ARROW "yd.",                     "m" STD_RIGHT_ARROW "yd.",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  341 */  { fnCvtYardM,                  multiply,                    "yd." STD_RIGHT_ARROW "m",                     "yd." STD_RIGHT_ARROW "m",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  342 */  { fnCvtPsiPa,                  multiply,                    "psi" STD_RIGHT_ARROW "Pa",                    "psi" STD_RIGHT_ARROW "Pa",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -1033,14 +1021,14 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  347 */  { fnCvtTorrPa,                 multiply,                    "tor" STD_RIGHT_ARROW "Pa",                    STD_RIGHT_ARROW " Pa",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  348 */  { fnCvtYearS,                  divide,                      "s" STD_RIGHT_ARROW "year",                    "s" STD_RIGHT_ARROW "year",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  349 */  { fnCvtYearS,                  multiply,                    "year" STD_RIGHT_ARROW "s",                    "year" STD_RIGHT_ARROW "s",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  350 */  { fnCvtCaratKg,                multiply,                    "ct" STD_RIGHT_ARROW "kg",                     "carat",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  351 */  { fnCvtCaratKg,                multiply,                    "ct" STD_RIGHT_ARROW "kg",                     STD_RIGHT_ARROW " kg",                         (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  350 */  { fnCvtCaratG,                 multiply,                    "ct" STD_RIGHT_ARROW "g",                      "carat",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  351 */  { fnCvtCaratG,                 multiply,                    "ct" STD_RIGHT_ARROW "g",                      STD_RIGHT_ARROW " g",                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  352 */  { fnCvtJinKg,                  divide,                      "j" STD_i_MACRON "n" STD_RIGHT_ARROW "kg",     "j" STD_i_MACRON "n" STD_RIGHT_ARROW "kg",     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  353 */  { fnCvtCaratKg,                divide,                      "kg" STD_RIGHT_ARROW "ct",                     "kg " STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  354 */  { fnCvtCaratKg,                divide,                      "kg" STD_RIGHT_ARROW "ct",                     "carat",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
+/*  353 */  { fnCvtCaratG,                 divide,                      "g" STD_RIGHT_ARROW "ct",                      "g " STD_RIGHT_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  354 */  { fnCvtCaratG,                 divide,                      "g" STD_RIGHT_ARROW "ct",                      "carat",                                       (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  355 */  { fnCvtJinKg,                  multiply,                    "kg" STD_RIGHT_ARROW "j" STD_i_MACRON "n",     "kg" STD_RIGHT_ARROW "j" STD_i_MACRON "n",     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  356 */  { fnCvtQuartM3,                multiply,                    "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           "qt." STD_RIGHT_ARROW "m" STD_SUP_3,           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  357 */  { fnCvtQuartM3,                divide,                      "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           "m" STD_SUP_3 STD_RIGHT_ARROW "qt.",           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  356 */  { fnCvtQuartL,                 multiply,                    "qt." STD_RIGHT_ARROW "l",                     "qt." STD_RIGHT_ARROW "l",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  357 */  { fnCvtQuartL,                 divide,                      "l" STD_RIGHT_ARROW "qt.",                     "l" STD_RIGHT_ARROW "qt.",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  358 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     "fathom",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  359 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_RIGHT_ARROW " m",                          (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },
 /*  360 */  { fnCvtFathomM,                multiply,                    "fm." STD_RIGHT_ARROW "m",                     STD_SPACE_HAIR,                                (0 << TAM_MAX_BITS) |     0, CAT_DUPL | SLS_ENABLED   | US_ENABLED  },

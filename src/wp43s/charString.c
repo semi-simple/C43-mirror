@@ -392,7 +392,7 @@ void *xcopy(void *dest, const void *source, int n) {
 
 
 #ifdef WIN32
-  char *stpcpy(char *dest, const char *source);
+  char *stpcpy(char *dest, const char *source)
   {
     const size_t l = strlen(source);
     return (char *)memcpy(dest, source, len + 1) + l;

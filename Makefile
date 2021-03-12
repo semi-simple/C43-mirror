@@ -106,7 +106,9 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/distributions/, \
 		chi2.c f.c normal.c t.c) \
 	$(addprefix src/wp43s/browsers/, \
-		flagBrowser.c fontBrowser.c registerBrowser.c)
+		flagBrowser.c fontBrowser.c registerBrowser.c) \
+	$(addprefix src/wp43s/ui/, \
+		tam.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
 DEPS_WP43S               = $(SRC_WP43S:.c=.d)
 

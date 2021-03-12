@@ -1429,7 +1429,7 @@
     alphaCase = AC_UPPER;
     nextChar = NC_NORMAL;
 
-    if(!tamMode) {
+    if(!tam.mode) {
       calcMode = CM_AIM;
       liftStack();
 
@@ -1495,24 +1495,17 @@
    * \return void
    ***********************************************/
   void leaveAsmMode(void) {
-    if(tamMode) {
-      uint16_t savedTamMode = tamMode;
-      leaveTamMode();
-      tamMode = savedTamMode;
-      strcpy(tamBuffer, indexOfItems[tamFunction].itemSoftmenuName);
-      enterTamMode();
-      return;
-    }
-    else {
-      catalog = CATALOG_NONE;
-    }
+    catalog = CATALOG_NONE;
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
+      if(tam.mode && !tam.alpha) {
+        calcModeTamGui();
       }
-      else if(calcMode == CM_AIM) {
+      else if(calcMode == CM_AIM || (tam.mode && tam.alpha)) {
         calcModeAimGui();
+      }
+      else if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
+        calcModeNormalGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
@@ -1541,101 +1534,5 @@
     xCursor = 1;
     cursorEnabled = true;
     cursorFont = &numericFont;
-  }
-
-
-
-  /********************************************//**
-   * \brief Sets the calc mode to temporary alpha mode
-   *
-   * \return void
-   ***********************************************/
-  void enterTamMode(void) {
-    transitionSystemState = TS_OP_DIGIT_0;
-    tamCurrentOperation = 0;
-
-    if(calcMode == CM_NIM) {
-      closeNim();
-    }
-
-    switch(tamMode) {
-      case TM_VALUE:
-      case TM_VALUE_CHB:
-      case TM_REGISTER:
-        showSoftmenu(-MNU_TAM);
-        break;
-
-      case TM_CMP:
-        showSoftmenu(-MNU_TAMCMP);
-        break;
-
-      case TM_FLAGR:
-      case TM_FLAGW:
-        showSoftmenu(-MNU_TAMFLAG);
-        break;
-
-      case TM_STORCL:
-        showSoftmenu(-MNU_TAMSTORCL);
-        break;
-
-      case TM_SHUFFLE:
-        showSoftmenu(-MNU_TAMSHUFFLE);
-        break;
-
-      case TM_LABEL:
-        showSoftmenu(-MNU_TAMLABEL);
-        break;
-
-      default:
-        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
-        displayBugScreen(errorMessage);
-        return;
-    }
-
-    numberOfTamMenusToPop = 1;
-
-    tamNumber = 0;
-    if(tamMode == TM_SHUFFLE) {
-      transitionSystemState = TS_OP_DIGIT_0_4;
-    }
-    else if(tamFunction == ITM_CNST) {
-      transitionSystemState = TS_CNST_0;
-    }
-    else if(tamFunction == ITM_BESTF) {
-      transitionSystemState = TS_BESTF_0;
-    }
-    updateTamBuffer();
-
-    clearSystemFlag(FLAG_ALPHA);
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      calcModeTamGui();
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
-  }
-
-
-
-  /********************************************//**
-   * \brief Leaves the alpha selection mode
-   *
-   * \return void
-   ***********************************************/
-  void leaveTamMode(void) {
-    inputNamedVariable = false;
-    tamMode = 0;
-    catalog = CATALOG_NONE;
-
-    while(numberOfTamMenusToPop--) {
-      popSoftmenu();
-    }
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
-      }
-      else if(calcMode == CM_AIM) {
-        calcModeAimGui();
-      }
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 #endif // !TESTSUITE_BUILD

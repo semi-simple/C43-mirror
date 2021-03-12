@@ -63,22 +63,6 @@
 #define TAM_BUFFER_LENGTH                         32 // TODO: find the exact maximum needed
 #define NIM_BUFFER_LENGTH                        200 // TODO: find the exact maximum needed
 
-// TAM transition system
-#define TT_OPERATION                               0 // +, -, *, /, min, max
-#define TT_LETTER                                  1
-#define TT_VARIABLE                                2
-#define TT_DIGIT                                   3
-#define TT_ENTER                                   4
-#define TT_DOT                                     5 // For local flags and registers
-#define TT_INDIRECT                                6 // For indirect addressing
-#define TT_BACKSPACE                               7
-#define TT_BASE10                                  8
-#define TT_BASE16                                  9
-#define TT_INT                                    10
-#define TT_FP                                     11
-#define TT_CHB02                                  12
-#define TT_NOTHING                                13
-
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
 // List of errors

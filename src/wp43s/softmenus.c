@@ -908,7 +908,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       displayBugScreen(errorMessage);
     }
     else {
-      if(tamMode) {
+      if(tam.mode) {
         numberOfTamMenusToPop++;
       }
       pushSoftmenu(m);

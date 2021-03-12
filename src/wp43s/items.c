@@ -105,24 +105,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
     #endif // PC_BUILD
 
-    if(tamMode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
-      tamMode = indexOfItems[func].param;
-      tamFunction = func;
-      tamNumberMin = indexOfItems[func].tamMinMax >> TAM_MAX_BITS;
-      tamNumberMax = indexOfItems[func].tamMinMax & TAM_MAX_MASK;
-      if(tamNumberMax == 16383) { // Only case featuring more than TAM_MAX_BITS bits is GTO.
-        tamNumberMax = 32766;
-      }
-
-      if(func == ITM_CNST) {
-        tamNumberMax = NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071 + NUMBER_OF_CONSTANTS_34 - 1;
-      }
-
-      enterTamMode();
+    if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
+      tamEnterMode(func);
       return;
     }
 
-    if(calcMode == CM_PEM && !tamMode) {
+    if(calcMode == CM_PEM && !tam.mode) {
       insertStepInProgram(func);
       return;
     }

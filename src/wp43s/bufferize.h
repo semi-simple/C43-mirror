@@ -23,10 +23,7 @@
   void    resetAlphaSelectionBuffer(void);
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);
-  void    updateTamBuffer          (void);
-  void    tamTransitionSystem      (uint16_t tamEvent);
   void    closeNim                 (void);
   void    closeAim                 (void);
   void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);
-  int16_t getOperation             (void);
 #endif // TESTSUITE_BUILD

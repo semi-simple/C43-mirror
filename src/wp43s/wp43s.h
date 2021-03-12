@@ -147,6 +147,7 @@
 
 
   #include "assign.h"
+  #include "ui/tam.h"
   #include "bufferize.h"
   #include "browsers/browsers.h"
   #include "config.h"
@@ -231,7 +232,6 @@
   // Variables stored in RAM
   extern bool_t                 funcOK;
   extern bool_t                 keyActionProcessed;
-  extern bool_t                 inputNamedVariable;
   extern bool_t                 fnKeyInCatalog;
   extern bool_t                 hourGlassIconEnabled;
   extern bool_t                 watchIconEnabled;
@@ -286,7 +286,6 @@
   extern char                   dateTimeString[12];
   extern char                   displayValueX[DISPLAY_VALUE_LEN];
 
-  extern tamState_t             transitionSystemState;
   extern uint8_t                numScreensStandardFont;
   extern uint8_t                currentFntScr;
   extern uint8_t                currentFlgScr;
@@ -320,14 +319,7 @@
   extern uint8_t               *firstDisplayedStep;
   extern uint8_t               *currentStep;
 
-  extern int16_t                tamFunction;
-  extern int16_t                tamNumber;
-  extern int16_t                tamNumberMin;
-  extern int16_t                tamNumberMax;
-  extern int16_t                tamDigit;
-  extern int16_t                tamOperation;
-  extern int16_t                tamLetteredRegister;
-  extern int16_t                tamCurrentOperation;
+  extern tamState_t             tam;
   extern int16_t                currentRegisterBrowserScreen;
   extern int16_t                lineTWidth;
   extern int16_t                rbrRegister;
@@ -351,7 +343,6 @@
   extern uint16_t               numberOfLabels;
   extern uint16_t               numberOfPrograms;
   extern uint16_t               numberOfNamedVariables;
-  extern uint16_t               tamMode;
   extern uint16_t               currentLocalStepNumber;
   extern uint16_t               currentProgramNumber;
 

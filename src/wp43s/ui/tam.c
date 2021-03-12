@@ -14,29 +14,9 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file tam.c
- ***********************************************/
-
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  // TAM transition system
-  #define TT_OPERATION                               0 // +, -, *, /, min, max
-  #define TT_LETTER                                  1
-  #define TT_VARIABLE                                2
-  #define TT_DIGIT                                   3
-  #define TT_ENTER                                   4
-  #define TT_DOT                                     5 // For local flags and registers
-  #define TT_INDIRECT                                6 // For indirect addressing
-  #define TT_BACKSPACE                               7
-  #define TT_BASE02                                  8
-  #define TT_BASE10                                  9
-  #define TT_BASE16                                 10
-  #define TT_INT                                    11
-  #define TT_FP                                     12
-  #define TT_NOTHING                                13
-
   static int16_t _tamOperation(void) {
     switch(tam.function) {
       case ITM_STO :
@@ -72,6 +52,7 @@
       default :             return tam.function;
     }
   }
+
 
 
   static void _tamUpdateBuffer() {
@@ -134,6 +115,8 @@
     tbPtr[0] = 0;
   }
 
+
+
   static void _tamHandleShuffle(uint16_t item) {
     // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
     // consecutively, with the 'valid' bit eight above that number
@@ -172,7 +155,9 @@
     }
   }
 
-  static void _tamProcessInput(uint16_t item, uint16_t tamEvent, int16_t operation, int16_t digit, int16_t letteredRegister) {
+
+
+  static void _tamProcessInput(uint16_t item) {
     int16_t min, max;
     bool_t forceTry = false, tryOoR = false;
     bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
@@ -185,137 +170,17 @@
 
     min = (tam.dot ? 0 : tam.min);
     max = (tam.dot ? ((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) ? NUMBER_OF_LOCAL_FLAGS : currentNumberOfLocalRegisters) : tam.max);
-    switch(tamEvent) {
-      case TT_OPERATION:
-        if(!tam.alpha && !tam.digitsSoFar && !tam.indirect) {
-          if(tam.function == ITM_GTOP) {
-            if(operation == ITM_Max) { // UP
-              if(currentLocalStepNumber == 1) { // We are on 1st step of current program
-                if(currentProgramNumber == 1) { // It's the 1st program in memory
-                  return;
-                }
-                else { // It isn't the 1st program in memory
-                  tam.value = programList[currentProgramNumber - 2].step;
-                }
-              }
-              else { // We aren't on 1st step of current program
-                tam.value = programList[currentProgramNumber - 1].step;
-              }
-              reallyRunFunction(ITM_GTOP, tam.value);
-              tamLeaveMode();
-              return;
-            }
-
-            if(operation == ITM_Min) { // DOWN
-              if(currentProgramNumber == numberOfPrograms - 1) { // We are in the last program in memory
-                return;
-              }
-
-              tam.value = programList[currentProgramNumber].step;
-              reallyRunFunction(ITM_GTOP, tam.value);
-              tamLeaveMode();
-              return;
-            }
-          }
-          else if(tam.mode == TM_STORCL && tam.currentOperation != ITM_Config && tam.currentOperation != ITM_Stack) {
-            if(operation == tam.currentOperation) {
-              tam.currentOperation = tam.function;
-            } else {
-              tam.currentOperation = operation;
-              if(operation == ITM_dddEL || operation == ITM_dddIJ) {
-                reallyRunFunction(_tamOperation(), NOPARAM);
-                tamLeaveMode();
-                return;
-              }
-            }
-          }
+    if(item == ITM_ENTER || (tam.alpha && stringGlyphLength(aimBuffer) > 6)) {
+      forceTry = true;
+    }
+    else if(item == ITM_BACKSPACE) {
+      if(tam.alpha) {
+        if(stringByteLength(aimBuffer) != 0) {
+          // Delete the last character
+          int16_t lg = stringLastGlyph(aimBuffer);
+          aimBuffer[lg] = 0;
         }
-        return;
-
-      case TT_LETTER:
-        if(!tam.digitsSoFar && !tam.alpha && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-          tam.value = letteredRegister;
-          forceTry = true;
-          // Register letters access registers not accessible via number codes, so we shouldn't look at the tam.max value
-          // when determining if this is valid
-          tryOoR = true;
-        }
-        break;
-
-      case TT_VARIABLE:
-        if(!tam.digitsSoFar && !tam.alpha && !tam.dot && !valueParameter && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-          tam.alpha = true;
-          setSystemFlag(FLAG_ALPHA);
-          aimBuffer[0] = 0;
-          calcModeAim(NOPARAM);
-        }
-        return;
-
-      case TT_DIGIT:
-        if(!tam.alpha && (tam.value*10 + digit) <= max) {
-          tam.value = tam.value*10 + digit;
-          tam.digitsSoFar++;
-        }
-        break;
-
-      case TT_INT :
-        fnIp(NOPARAM);
-        tamLeaveMode();
-        return;
-
-      case TT_FP :
-        fnFp(NOPARAM);
-        tamLeaveMode();
-        return;
-
-      case TT_BASE02:
-        tam.value = 2;
-        forceTry = true;
-        break;
-
-      case TT_BASE10:
-        tam.value = 10;
-        forceTry = true;
-        break;
-
-      case TT_BASE16:
-        tam.value = 16;
-        forceTry = true;
-        break;
-
-      case TT_DOT:
-        if(tam.function == ITM_GTOP) {
-          tam.value = tam.max;
-        }
-        else if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
-          if(tam.function == ITM_GTO) {
-            tam.function = ITM_GTOP;
-            tam.min = 1;
-            tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
-          }
-          else if(tam.indirect && currentLocalRegisters != NULL) {
-            tam.dot = true;
-          }
-          else if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
-            if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && currentLocalFlags != NULL) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && currentLocalRegisters != NULL)) {
-              tam.dot = true;
-            }
-          }
-        }
-        return;
-
-      case TT_INDIRECT:
-        if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
-          tam.indirect = true;
-        }
-        return;
-
-      case TT_ENTER:
-        forceTry = true;
-        break;
-
-      case TT_BACKSPACE:
-        if(tam.alpha) {
+        else {
           // backspaces within AIM are handled by addItemToBuffer, so this is if the aimBuffer is already empty
           tam.alpha = false;
           clearSystemFlag(FLAG_ALPHA);
@@ -323,32 +188,172 @@
             calcModeTamGui();
           #endif // PC_BUILD && (SCREEN_800X480 == 0)
         }
-        else if(tam.digitsSoFar > 0) {
-          if(--tam.digitsSoFar != 0) {
-            tam.value /= 10;
-          }
-          else {
-            tam.value = 0;
-          }
-        }
-        else if(tam.function == ITM_GTOP) {
-          tam.function = ITM_GTO;
-          tam.min = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
-          tam.max = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
-        }
-        else if(tam.dot) {
-          tam.dot = false;
-        }
-        else if(tam.indirect) {
-          tam.indirect = false;
-        }
-        else if(tam.currentOperation != tam.function) {
-          tam.currentOperation = tam.function;
+      }
+      else if(tam.digitsSoFar > 0) {
+        if(--tam.digitsSoFar != 0) {
+          tam.value /= 10;
         }
         else {
-          tamLeaveMode();
+          tam.value = 0;
         }
-        return;
+      }
+      else if(tam.function == ITM_GTOP) {
+        tam.function = ITM_GTO;
+        tam.min = indexOfItems[ITM_GTO].tamMinMax >> TAM_MAX_BITS;
+        tam.max = indexOfItems[ITM_GTO].tamMinMax & TAM_MAX_MASK;
+      }
+      else if(tam.dot) {
+        tam.dot = false;
+      }
+      else if(tam.indirect) {
+        tam.indirect = false;
+      }
+      else if(tam.currentOperation != tam.function) {
+        tam.currentOperation = tam.function;
+      }
+      else {
+        tamLeaveMode();
+      }
+      return;
+    }
+    else if(tam.alpha) {
+      // Do nothing if it wasn't enter or backspace as the text input is handled elsewhere
+      return;
+    }
+    else if(item == ITM_alpha) {
+      if(!tam.digitsSoFar && !tam.dot && !valueParameter && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+        tam.alpha = true;
+        setSystemFlag(FLAG_ALPHA);
+        aimBuffer[0] = 0;
+        calcModeAim(NOPARAM);
+      }
+      return;
+    }
+    else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
+      if(!tam.digitsSoFar && !tam.indirect) {
+        if(tam.function == ITM_GTOP) {
+          if(item == ITM_Max) { // UP
+            if(currentLocalStepNumber == 1) { // We are on 1st step of current program
+              if(currentProgramNumber == 1) { // It's the 1st program in memory
+                return;
+              }
+              else { // It isn't the 1st program in memory
+                tam.value = programList[currentProgramNumber - 2].step;
+              }
+            }
+            else { // We aren't on 1st step of current program
+              tam.value = programList[currentProgramNumber - 1].step;
+            }
+            reallyRunFunction(ITM_GTOP, tam.value);
+            tamLeaveMode();
+            return;
+          }
+
+          if(item == ITM_Min) { // DOWN
+            if(currentProgramNumber == numberOfPrograms - 1) { // We are in the last program in memory
+              return;
+            }
+
+            tam.value = programList[currentProgramNumber].step;
+            reallyRunFunction(ITM_GTOP, tam.value);
+            tamLeaveMode();
+            return;
+          }
+        }
+        else if(tam.mode == TM_STORCL && tam.currentOperation != ITM_Config && tam.currentOperation != ITM_Stack) {
+          if(item == tam.currentOperation) {
+            tam.currentOperation = tam.function;
+          } else {
+            tam.currentOperation = item;
+            if(item == ITM_dddEL || item == ITM_dddIJ) {
+              reallyRunFunction(_tamOperation(), NOPARAM);
+              tamLeaveMode();
+              return;
+            }
+          }
+        }
+      }
+      return;
+    }
+    else if(tam.function == ITM_toINT && item == ITM_REG_I) {
+      fnIp(NOPARAM);
+      tamLeaveMode();
+      return;
+    }
+    else if(tam.function == ITM_toINT && item == ITM_alpha) {
+      fnFp(NOPARAM);
+      tamLeaveMode();
+      return;
+    }
+    else if(tam.function == ITM_toINT && item == ITM_REG_D) {
+      tam.value = 10;
+      forceTry = true;
+    }
+    else if(tam.function == ITM_toINT && item == ITM_REG_B) {
+      tam.value = 2;
+      forceTry = true;
+    }
+    else if(tam.function == ITM_toINT && item == ITM_HEX) {
+      tam.value = 16;
+      forceTry = true;
+    }
+    else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_X) {
+      if(!tam.digitsSoFar && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+        tam.value = indexOfItems[item].param;
+        forceTry = true;
+        // Register letters access registers not accessible via number codes, so we shouldn't look at the tam.max value
+        // when determining if this is valid
+        tryOoR = true;
+      }
+    }
+    else if(item == ITM_0P || item == ITM_1P) {
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+      real34Copy(item == ITM_1P ? const34_1 : const34_0, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+      if(!tam.digitsSoFar && tam.function != ITM_BESTF && tam.function != ITM_CNST && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+        tam.value = TEMP_REGISTER_1;
+        forceTry = true;
+        // Register letters access registers not accessible via number codes, so we shouldn't look at the tam.max value
+        // when determining if this is valid
+        tryOoR = true;
+      }
+    }
+    else if(ITM_0 <= item && item <= ITM_9) {
+      int16_t digit = item - ITM_0;
+      if(!tam.alpha && (tam.value*10 + digit) <= max) {
+        tam.value = tam.value*10 + digit;
+        tam.digitsSoFar++;
+      }
+    }
+    else if(item == ITM_PERIOD) {
+      if(tam.function == ITM_GTOP) {
+        tam.value = tam.max;
+      }
+      else if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
+        if(tam.function == ITM_GTO) {
+          tam.function = ITM_GTOP;
+          tam.min = 1;
+          tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+        }
+        else if(tam.indirect && currentLocalRegisters != NULL) {
+          tam.dot = true;
+        }
+        else if(tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+          if(((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && currentLocalFlags != NULL) || ((tam.mode != TM_FLAGR && tam.mode != TM_FLAGW) && currentLocalRegisters != NULL)) {
+            tam.dot = true;
+          }
+        }
+      }
+      return;
+    }
+    else if(item == ITM_INDIRECTION) {
+      if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
+        tam.indirect = true;
+      }
+      return;
+    }
+    else {
+      // Do nothing
+      return;
     }
 
     // All operations that may try and evaluate the function shouldn't return but let execution fall through to here
@@ -405,11 +410,8 @@
     }
   }
 
-  /********************************************//**
-   * \brief Sets the calc mode to TAM buffer mode
-   *
-   * \return void
-   ***********************************************/
+
+
   void tamEnterMode(int16_t func) {
     tam.mode = indexOfItems[func].param;
     tam.function = func;
@@ -481,11 +483,6 @@
 
 
 
-  /********************************************//**
-   * \brief Leaves the TAM buffer
-   *
-   * \return void
-   ***********************************************/
   void tamLeaveMode(void) {
     tam.alpha = false;
     tam.mode = 0;
@@ -506,84 +503,10 @@
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 
-  static uint16_t keyToEvent(uint16_t item, int16_t *operation, int16_t *digit, int16_t *letteredRegister) {
-    uint16_t event = TT_NOTHING;
-    if(item == ITM_ENTER) {
-      event = TT_ENTER;
-    }
-    else if(item == ITM_BACKSPACE) {
-      event = TT_BACKSPACE;
-    }
-    else if(tam.alpha) {
-      // Text added above, just transition to variable to get the text
-      if(stringGlyphLength(aimBuffer) > 6) {
-        event = TT_ENTER;
-      }
-      else {
-        event = TT_VARIABLE;
-      }
-    }
-    else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
-      *operation = item;
-      event = TT_OPERATION;
-    }
-    else if(tam.function == ITM_toINT && item == ITM_REG_I) {
-      event = TT_INT;
-    }
-    else if(tam.function == ITM_toINT && item == ITM_alpha) {
-      event = TT_FP;
-    }
-    else if(tam.function == ITM_toINT && item == ITM_REG_D) {
-      event = TT_BASE10;
-    }
-    else if(tam.function == ITM_toINT && item == ITM_REG_B) {
-      event = TT_BASE02;
-    }
-    else if(tam.function == ITM_toINT && item == ITM_HEX) {
-      event = TT_BASE16;
-    }
-    else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) { // Lettered register
-      *letteredRegister = indexOfItems[item].param;
-      event = TT_LETTER;
-    }
-    else if(ITM_0 <= item && item <= ITM_9) { // Digits from 0 to 9
-      *digit = item - ITM_0;
-      event = TT_DIGIT;
-    }
-    else if(item == ITM_PERIOD) { // .
-      event = TT_DOT;
-    }
-    else if(item == ITM_INDIRECTION) { // Indirection
-      event = TT_INDIRECT;
-    }
-    else if(item == ITM_alpha) {
-      event = TT_VARIABLE;
-    }
-    else if(item == ITM_0P || item == ITM_1P) {
-      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
-      real34Copy(item == ITM_1P ? const34_1 : const34_0, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
-      *letteredRegister = TEMP_REGISTER_1;
-      event = TT_LETTER;
-    }
-    return event;
-  }
+
 
   void tamProcessInput(uint16_t item) {
-    int16_t operation, digit, letteredRegister;
-    uint16_t event;
-    if(item == ITM_BACKSPACE && tam.alpha && stringByteLength(aimBuffer) != 0) {
-      // Delete the last character and then 'transition' to get a redraw
-      int16_t lg = stringLastGlyph(aimBuffer);
-      aimBuffer[lg] = 0;
-      event = TT_VARIABLE;
-      operation = 0;
-      digit = 0;
-      letteredRegister = 0;
-    }
-    else {
-      event = keyToEvent(item, &operation, &digit, &letteredRegister);
-    }
-    reallyTamTransitionSystem(item, event, operation, digit, letteredRegister);
+    _tamProcessInput(item);
     _tamUpdateBuffer();
   }
 #endif // TESTSUITE_BUILD

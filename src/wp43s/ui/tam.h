@@ -19,7 +19,29 @@
  ***********************************************/
 
 #ifndef TESTSUITE_BUILD
+  /********************************************//**
+   * \brief Sets the calc mode to TAM buffer mode
+   *
+   * \return void
+   ***********************************************/
   void tamEnterMode    (int16_t func);
+
+  /********************************************//**
+   * \brief Leaves the TAM buffer
+   *
+   * \return void
+   ***********************************************/
   void tamLeaveMode    (void);
+
+  /********************************************//**
+   * \brief Processes input for the TAM buffer
+   *
+   * At the moment this still assumes that AIM input
+   * is handled by addItemToBuffer rather than here
+   * except for backspaces
+   *
+   * \param[in] uint16_t item the ITM value to process
+   * \return void
+   ***********************************************/
   void tamProcessInput (uint16_t item);
 #endif // TESTSUITE_BUILD

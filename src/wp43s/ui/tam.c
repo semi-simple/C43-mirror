@@ -37,7 +37,7 @@
   #define TT_FP                                     12
   #define TT_NOTHING                                13
 
-  static int16_t getOperation(void) {
+  static int16_t _tamOperation(void) {
     switch(tam.function) {
       case ITM_STO :
         switch(tam.currentOperation) {
@@ -74,13 +74,13 @@
   }
 
 
-  static void updateTamBuffer() {
+  static void _tamUpdateBuffer() {
     char regists[5];
     char *tbPtr = tamBuffer;
     if(tam.mode == 0) {
       return;
     }
-    tbPtr = stpcpy(tbPtr, indexOfItems[getOperation()].itemCatalogName);
+    tbPtr = stpcpy(tbPtr, indexOfItems[_tamOperation()].itemCatalogName);
     tbPtr = stpcpy(tbPtr, " ");
     if(tam.mode == TM_SHUFFLE) {
       // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
@@ -134,31 +134,29 @@
     tbPtr[0] = 0;
   }
 
-  static void reallyTamTransitionSystem(uint16_t tamEvent, int16_t operation, int16_t digit, int16_t letteredRegister) {
-    int16_t min, max;
-    bool_t forceTry = false, tryOoR = false;
-    bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
-
-    // Shuffle is handled completely differently to everything else
-    if(tam.mode == TM_SHUFFLE) {
-      // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
-      // consecutively, with the 'valid' bit eight above that number
-      // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
-      if(tamEvent == TT_LETTER) {
+  static void _tamHandleShuffle(uint16_t item) {
+    // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
+    // consecutively, with the 'valid' bit eight above that number
+    // E.g. 0000010100001110 would mean that two registers have been entered: T, Z in that order
+    switch(item) {
+      case ITM_REG_X:
+      case ITM_REG_Y:
+      case ITM_REG_Z:
+      case ITM_REG_T:
         for(int i=0; i<4; i++) {
           if(!((tam.value >> (2*i + 8)) & 1)) {
             uint16_t mask = 3 << (2*i);
             tam.value |= 1 << (2*i + 8);
-            tam.value = (tam.value & ~mask) | (((letteredRegister-REGISTER_X) << (2*i)) & mask);
+            tam.value = (tam.value & ~mask) | (((item-ITM_REG_X) << (2*i)) & mask);
             if(i == 3) {
-              reallyRunFunction(getOperation(), tam.value);
+              reallyRunFunction(_tamOperation(), tam.value);
               tamLeaveMode();
             }
             break;
           }
         }
-      }
-      else if(tamEvent == TT_BACKSPACE) {
+        break;
+      case ITM_BACKSPACE:
         // We won't have all four registers at this point as otherwise TAM would already be closed
         for(int i=3; i>=0; i--) {
           if((tam.value >> (2*i + 8)) & 1) {
@@ -170,7 +168,18 @@
             break;
           }
         }
-      }
+        break;
+    }
+  }
+
+  static void _tamProcessInput(uint16_t item, uint16_t tamEvent, int16_t operation, int16_t digit, int16_t letteredRegister) {
+    int16_t min, max;
+    bool_t forceTry = false, tryOoR = false;
+    bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
+
+    // Shuffle is handled completely differently to everything else
+    if(tam.mode == TM_SHUFFLE) {
+      _tamHandleShuffle(item);
       return;
     }
 
@@ -214,7 +223,7 @@
             } else {
               tam.currentOperation = operation;
               if(operation == ITM_dddEL || operation == ITM_dddIJ) {
-                reallyRunFunction(getOperation(), NOPARAM);
+                reallyRunFunction(_tamOperation(), NOPARAM);
                 tamLeaveMode();
                 return;
               }
@@ -361,11 +370,11 @@
             fnGoto(value);
           }
           else {
-            reallyRunFunction(getOperation(), value + programList[currentProgramNumber - 1].step - 1);
+            reallyRunFunction(_tamOperation(), value + programList[currentProgramNumber - 1].step - 1);
           }
         }
         else if(run) {
-          reallyRunFunction(getOperation(), value);
+          reallyRunFunction(_tamOperation(), value);
         }
         tamLeaveMode();
       }
@@ -390,7 +399,7 @@
         }
       }
       if(value != INVALID_VARIABLE) {
-        reallyRunFunction(getOperation(), value);
+        reallyRunFunction(_tamOperation(), value);
       }
       tamLeaveMode();
     }
@@ -461,7 +470,7 @@
 
     numberOfTamMenusToPop = 1;
 
-    updateTamBuffer();
+    _tamUpdateBuffer();
 
     clearSystemFlag(FLAG_ALPHA);
 
@@ -574,7 +583,7 @@
     else {
       event = keyToEvent(item, &operation, &digit, &letteredRegister);
     }
-    reallyTamTransitionSystem(event, operation, digit, letteredRegister);
-    updateTamBuffer();
+    reallyTamTransitionSystem(item, event, operation, digit, letteredRegister);
+    _tamUpdateBuffer();
   }
 #endif // TESTSUITE_BUILD

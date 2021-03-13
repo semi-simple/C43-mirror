@@ -221,7 +221,8 @@
       return;
     }
     else if(item == ITM_alpha) {
-      if(!tam.digitsSoFar && !tam.dot && !valueParameter && tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB) {
+      // Only allow alpha mode for registers at the moment - we will implement labels later
+      if(!tam.digitsSoFar && !tam.dot && !valueParameter && tam.mode == TM_STORCL) {
         tam.alpha = true;
         setSystemFlag(FLAG_ALPHA);
         aimBuffer[0] = 0;
@@ -372,7 +373,7 @@
           value += FIRST_LOCAL_REGISTER;
         }
         if(tam.indirect) {
-          value = indirectAddressing(value, min, max);
+          value = indirectAddressing(value, (tam.mode == TM_STORCL), min, max);
           run = (lastErrorCode == 0);
         }
         if(tam.function == ITM_GTOP) {
@@ -398,12 +399,16 @@
       else {
         value = findNamedVariable(aimBuffer);
         if(value == INVALID_VARIABLE) {
-          temporaryInformation = TI_UNDEF_SOURCE_VAR;
+          displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(errorMessage, "string '%s' is not a named variable", aimBuffer);
+            moreInfoOnError("In function _tamProcessInput:", errorMessage, NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }
       }
       aimBuffer[0] = 0;
       if(tam.indirect && value != INVALID_VARIABLE) {
-        value = indirectAddressing(value, min, max);
+        value = indirectAddressing(value, (tam.mode == TM_STORCL), min, max);
         if(lastErrorCode != 0) {
           value = INVALID_VARIABLE;
         }

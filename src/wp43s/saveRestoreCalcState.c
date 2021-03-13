@@ -24,6 +24,8 @@
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
+static char *tmpRegisterString = NULL;
+
 static void save(const void *buffer, uint32_t size, void *stream) {
   #ifdef DMCP_BUILD
     UINT bytesWritten;
@@ -397,27 +399,29 @@ static void registerToSaveString(calcRegister_t regist) {
   uint64_t value;
   char *str, *cfg;
 
+  tmpRegisterString = tmpString + START_REGISTER_VALUE;
+
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
-      longIntegerToAllocatedString(lgInt, tmpString + START_REGISTER_VALUE, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
+      longIntegerToAllocatedString(lgInt, tmpRegisterString, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
       longIntegerFree(lgInt);
       strcpy(aimBuffer, "LonI");
       break;
 
     case dtString:
-      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpString + START_REGISTER_VALUE));
+      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpRegisterString));
       strcpy(aimBuffer, "Stri");
       break;
 
     case dtShortInteger:
       convertShortIntegerRegisterToUInt64(regist, &sign, &value);
-      sprintf(tmpString + START_REGISTER_VALUE, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
+      sprintf(tmpRegisterString, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
       strcpy(aimBuffer, "ShoI");
       break;
 
     case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString + START_REGISTER_VALUE);
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
       switch(getRegisterAngularMode(regist)) {
         case AM_DEGREE:
           strcpy(aimBuffer, "Real:DEG");
@@ -450,21 +454,21 @@ static void registerToSaveString(calcRegister_t regist) {
       break;
 
     case dtComplex34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString + START_REGISTER_VALUE);
-      strcat(tmpString + START_REGISTER_VALUE, " ");
-      real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + START_REGISTER_VALUE + strlen(tmpString + START_REGISTER_VALUE));
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
+      strcat(tmpRegisterString, " ");
+      real34ToString(REGISTER_IMAG34_DATA(regist), tmpRegisterString + strlen(tmpRegisterString));
       strcpy(aimBuffer, "Cplx");
       break;
 
     case dtConfig:
-      for(str=tmpString + START_REGISTER_VALUE, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
+      for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
       }
       strcpy(aimBuffer, "Conf");
       break;
 
     default:
-      strcpy(tmpString + START_REGISTER_VALUE, "???");
+      strcpy(tmpRegisterString, "???");
       strcpy(aimBuffer, "????");
   }
 }
@@ -500,7 +504,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
-    sprintf(tmpString, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -522,7 +526,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<currentNumberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
-    sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -537,7 +541,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
-    sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -545,8 +549,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   sprintf(tmpString, "STATISTICAL_SUMS\n%" PRIu16 "\n", (uint16_t)(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0));
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
-    realToString(statisticalSumsPointer + REAL_SIZE * i , tmpString + START_REGISTER_VALUE);
-    sprintf(tmpString, "%s\n", tmpString + START_REGISTER_VALUE);
+    realToString(statisticalSumsPointer + REAL_SIZE * i , tmpRegisterString);
+    sprintf(tmpString, "%s\n", tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 

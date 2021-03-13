@@ -495,11 +495,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     }
   #endif // DMCP_BUILD
 
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wrestrict"
-
   // Global registers
-  sprintf(tmpString, "GLOBAL_REGISTERS\n%" PRIu16 "\n", FIRST_LOCAL_REGISTER);
+  sprintf(tmpString, "GLOBAL_REGISTERS\n%" PRIu16 "\n", (uint16_t)(FIRST_LOCAL_REGISTER));
   save(tmpString, strlen(tmpString), BACKUP);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
@@ -545,14 +542,13 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   }
 
   // Statistical sums
-  sprintf(tmpString, "STATISTICAL_SUMS\n%" PRIu16 "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
+  sprintf(tmpString, "STATISTICAL_SUMS\n%" PRIu16 "\n", (uint16_t)(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0));
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
     realToString(statisticalSumsPointer + REAL_SIZE * i , tmpString + START_REGISTER_VALUE);
     sprintf(tmpString, "%s\n", tmpString + START_REGISTER_VALUE);
     save(tmpString, strlen(tmpString), BACKUP);
   }
-  #pragma GCC diagnostic pop
 
   // System flags
   sprintf(tmpString, "SYSTEM_FLAGS\n%" PRIu64 "\n", systemFlags);

@@ -145,6 +145,8 @@
     #define initFontBrowser()       {}
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
+  /* Turn off -Wunused-result for a specific function call */
+  #define ignore_result(M) if(1==((int)M)){;}
 
   #include "assign.h"
   #include "ui/tam.h"

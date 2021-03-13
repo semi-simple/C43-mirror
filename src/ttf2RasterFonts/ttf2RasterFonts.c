@@ -21,6 +21,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+/* Turn off -Wunused-result for a specific function call */
+#define ignore_result(M) if(1==((long int)M)){;}
+
 FT_Library library;
 FT_Error   error;
 FILE       *cFile, *hFile, *sortingOrder;
@@ -341,8 +344,8 @@ int main(int argc, char* argv[]) {
   // Read the sorting order //
   ////////////////////////////
   nbGlyphRanks = 0;
-  fgets(line, 500, sortingOrder); // Header
-  fgets(line, 500, sortingOrder);
+  ignore_result(fgets(line, 500, sortingOrder)); // Header
+  ignore_result(fgets(line, 500, sortingOrder));
   while(!feof(sortingOrder)) {
     pos = strlen(line) - 1;
 
@@ -364,7 +367,7 @@ int main(int argc, char* argv[]) {
 
     nbGlyphRanks++;
 
-    fgets(line, 500, sortingOrder);
+    ignore_result(fgets(line, 500, sortingOrder));
   }
 
   /////////////////////////////////////

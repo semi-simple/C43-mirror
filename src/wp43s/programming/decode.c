@@ -139,10 +139,7 @@ void getIndirectRegister(uint8_t *paramAddress, const char *op) {
 
 void getIndirectVariable(uint8_t *stringAddress, const char *op) {
   getStringLabelOrVariableName(stringAddress);
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wrestrict"
   sprintf(tmpString, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-  #pragma GCC diagnostic pop
 }
 
 
@@ -159,10 +156,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
         sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
       }
       else {
         sprintf(tmpString, "\nIn function decodeOp case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
@@ -178,10 +172,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
         sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -206,10 +197,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
         sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -277,10 +265,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
         sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
       }
       else if(opParam == VALUE_0) {
         sprintf(tmpString, "%s 0.", op);
@@ -332,27 +317,18 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_SHORT_INTEGER:
       getStringLabelOrVariableName(literalAddress + 1);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
       sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
       sprintf(tmpString + strlen(tmpString), "#%u", *literalAddress);
       break;
 
     case STRING_LONG_INTEGER:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
       sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
       break;
 
     case STRING_REAL34:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
       sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
       if(strchr(tmpString, 'e') == NULL && strchr(tmpString, '.') == NULL) {
         strcat(tmpString, RADIX34_MARK_STRING);
       }
@@ -360,18 +336,12 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_COMPLEX34:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
       xcopy(tmpString, tmpString + 1000, strlen(tmpString + 1000) + 1);
-      #pragma GCC diagnostic pop
       break;
 
     case STRING_LABEL_VARIABLE:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
       sprintf(tmpString, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpString + 1000);
-      #pragma GCC diagnostic pop
       break;
 
     //case STRING_DATE:

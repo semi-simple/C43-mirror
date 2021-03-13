@@ -566,14 +566,14 @@ void addTestPrograms(void) {
       freeProgramBytes = numberOfBytesForTheTestPrograms - 2;
     }
     else {
-      fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms);
+      ignore_result(fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms));
       printf("%u bytes\n", numberOfBytesUsed);
       if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
         printf("Increase allocated memory for programs!\n");
         fclose(testPgms);
         exit(0);
       }
-      fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms);
+      ignore_result(fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms));
       fclose(testPgms);
 
       firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);

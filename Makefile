@@ -23,7 +23,7 @@ else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
     detected_OS := Linux
-    CFLAGS += -D LINUX
+    CFLAGS += -D LINUX -D_XOPEN_SOURCE=700
   endif
   ifeq ($(UNAME_S),Darwin)
     detected_OS := Darwin

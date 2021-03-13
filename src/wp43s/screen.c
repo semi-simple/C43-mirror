@@ -1046,10 +1046,6 @@
         }
       }
 
-      else if(temporaryInformation == TI_UNDEF_SOURCE_VAR && regist == REGISTER_X) {
-        showString("Undefined source variable", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-      }
-
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
 

@@ -103,9 +103,10 @@
 #define ERROR_STRING_WOULD_BE_TOO_LONG            33
 #define ERROR_EMPTY_STRING                        34
 #define ERROR_NO_BACKUP_DATA                      35
-#define ERROR_BAD_INPUT                           36 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_UNDEF_SOURCE_VAR                    36
+#define ERROR_BAD_INPUT                           37 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     37
+#define NUMBER_OF_ERROR_CODES                     38
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -503,7 +504,6 @@
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
 #define TI_DAY_OF_WEEK                            33
-#define TI_UNDEF_SOURCE_VAR                       34
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

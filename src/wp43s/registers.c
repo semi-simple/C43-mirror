@@ -1043,10 +1043,19 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
  * \param regist calcRegister_t Register
  * \return void
  ***********************************************/
-int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxValue) {
+int16_t indirectAddressing(calcRegister_t regist, bool_t valueIsRegister, int16_t minValue, int16_t maxValue) {
   int16_t value;
+  bool_t isValidAlpha = false;
 
-  if(regist >= FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+  if(valueIsRegister) {
+    // Temorarily assign the maximum value to the maximum register
+    // We need to do better range checking later
+    maxValue = FIRST_NAMED_VARIABLE + numberOfNamedVariables;
+  }
+
+  if(regist >= FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters &&
+     (regist < FIRST_NAMED_VARIABLE ||
+        regist >= FIRST_NAMED_VARIABLE + numberOfNamedVariables)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
       sprintf(errorMessage, "local indirection register .%02d", regist - FIRST_LOCAL_REGISTER);
@@ -1106,6 +1115,19 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
     value = val;
   }
 
+  else if(getRegisterDataType(regist) == dtString && valueIsRegister) {
+    value = findNamedVariable(REGISTER_STRING_DATA(regist));
+    isValidAlpha = true;
+    if(value == INVALID_VARIABLE) {
+      displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "string '%s' is not a named variable", REGISTER_STRING_DATA(regist));
+        moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return 9999;
+    }
+  }
+
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #ifdef PC_BUILD
@@ -1113,6 +1135,17 @@ int16_t indirectAddressing(calcRegister_t regist, int16_t minValue, int16_t maxV
       moreInfoOnError("In function indirectAddressing:", errorMessage, "not suited for indirect addressing!", NULL);
     #endif // PC_BUILD
     return 9999;
+  }
+
+  if(valueIsRegister && minValue <= value && (value <= 99 || isValidAlpha)) {
+    return value;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "value = %d! Should be from %d to 99.", value, minValue);
+      moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
+    #endif // PC_BUILD
   }
 
   if(minValue <= value && value <= maxValue) {

@@ -37,7 +37,7 @@ void           fnClearRegisters                (uint16_t confirmation);
 void           fnGetLocR                       (uint16_t unusedButMandatoryParameter);
 void           adjustResult                    (calcRegister_t result, bool_t dropY, bool_t setCpxRes, calcRegister_t op1, calcRegister_t op2, calcRegister_t op3);
 void           copySourceRegisterToDestRegister(calcRegister_t rSource, calcRegister_t rDest);
-int16_t        indirectAddressing              (calcRegister_t regist, int16_t minValue, int16_t maxValue);
+int16_t        indirectAddressing              (calcRegister_t regist, bool_t valueIsRegister, int16_t minValue, int16_t maxValue);
 void           reallocateRegister              (calcRegister_t regist, uint32_t dataType, uint16_t dataSizeWithoutDataLenBlocks, uint32_t tag);
 void           fnToReal                        (uint16_t unusedButMandatoryParameter);
 #ifndef DMCP_BUILD

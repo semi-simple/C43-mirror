@@ -38,7 +38,9 @@
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
 
-#define _XOPEN_SOURCE                  700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
+#if __linux__ == 1
+  #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
+#endif // __linux__ == 1
 
 
 

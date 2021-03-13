@@ -1442,7 +1442,7 @@ uint8_t   displayStack_m = 255;                                                 
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
   int32_t w;
-  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
+  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
   char prefix[20], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   

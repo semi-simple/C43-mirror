@@ -122,7 +122,7 @@
   void showAngularMode(void) {
     uint32_t x = 0;
 
-    x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
+    x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9 pixel wide
 
     switch(currentAngularMode) {
       case AM_DEGREE: showGlyph(STD_DEGREE,             &standardFont, x, 0, vmNormal, true, false); // °  is 0+6 pixel wide
@@ -212,10 +212,10 @@ void showFracMode(void) {
 
       if(!getSystemFlag(FLAG_DENANY)) {
         if(getSystemFlag(FLAG_DENFIX)) {
-         showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
+          showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
         }
         else {
-         showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
+          showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
         }
       }
     }
@@ -270,7 +270,7 @@ void showFracMode(void) {
    ***********************************************/
   void showHideAlphaMode(void) {
     int status=0;
-    if(calcMode == CM_AIM || catalog) {
+    if(calcMode == CM_AIM || catalog || (tam.mode != 0 && tam.alpha)) {
 
       if(numLock && !shiftF && !shiftG) {
           if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
@@ -330,6 +330,7 @@ void showFracMode(void) {
       clearSystemFlag(FLAG_alphaCAP);
     }
   }
+
 
 
   /********************************************//**

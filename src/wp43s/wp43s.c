@@ -101,6 +101,7 @@ labelList_t           *labelList = NULL;
 programList_t         *programList = NULL;
 
 char                  *tmpString = NULL;
+char                  *tmpStringLabelOrVariableName = NULL;
 char                  *errorMessage;
 char                  *aimBuffer; // aimBuffer is also used for NIM
 char                  *nimBufferDisplay;

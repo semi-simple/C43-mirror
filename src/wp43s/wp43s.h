@@ -161,6 +161,9 @@
 #define INLINE_TEST                     //vv dr
 #undef INLINE_TEST                    //^^
 
+  /* Turn off -Wunused-result for a specific function call */
+  #define ignore_result(M) if(1==((int)M)){;}
+
   #include "assign.h"
   #include "ui/tam.h"
   #include "bufferize.h"
@@ -309,6 +312,7 @@
   extern programList_t         *programList;
 
   extern char                  *tmpString;
+  extern char                  *tmpStringLabelOrVariableName;
   extern char                  *errorMessage;
   extern char                  *aimBuffer; // aimBuffer is also used for NIM
   extern char                  *nimBufferDisplay;

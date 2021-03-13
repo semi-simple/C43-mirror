@@ -1014,7 +1014,7 @@ return FALSE;
         exit(1);
       }
 
-      fread(cssData, 1, fileLg, cssFile);
+      ignore_result(fread(cssData, 1, fileLg, cssFile));
       fclose(cssFile);
       cssData[fileLg] = 0;
 

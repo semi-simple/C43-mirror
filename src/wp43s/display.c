@@ -205,25 +205,25 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
       xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       if(digit <= 1) {
-        *(displayString)     = *(STD_SUP_0);
-        *(displayString + 1) = *(STD_SUP_0 + 1);
+        displayString[0] = STD_SUP_0[0];
+        displayString[1] = STD_SUP_0[1];
         displayString[1] += digit;
       }
       else if(digit <= 3) {
-        *(displayString)     = *(STD_SUP_2);
-        *(displayString + 1) = *(STD_SUP_2 + 1);
+        displayString[0] = STD_SUP_2[0];
+        displayString[1] = STD_SUP_2[1];
         displayString[1] += digit-2;
       }
       else {
-        *(displayString)     = *(STD_SUP_4);
-        *(displayString + 1) = *(STD_SUP_4 + 1);
+        displayString[0] = STD_SUP_4[0];
+        displayString[1] = STD_SUP_4[1];
         displayString[1] += digit-4;
       }
 
       if(insertGap && greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
         xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
-        *(displayString)     = *(separator);
-        *(displayString + 1) = *(separator + 1);
+        displayString[0] = separator[0];
+        displayString[1] = separator[1];
       }
     }
   }
@@ -254,8 +254,8 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
 
       xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
-      *(displayString)     = *(STD_SUB_0);
-      *(displayString + 1) = *(STD_SUB_0 + 1);
+      displayString[0] = STD_SUB_0[0];
+      displayString[1] = STD_SUB_0[1];
       displayString[1] += digit;
     }
   }
@@ -1086,8 +1086,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
         gap = 0;
         endingZero++;
         xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-        *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-        *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+        displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+        displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
       }
 
       u = intPart % 10;
@@ -1125,8 +1125,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+      displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+      displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
     }
 
     u = numer % 10;
@@ -1135,18 +1135,18 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
     if(u <= 1) {
-      *(displayString + insertAt)     = *(STD_SUP_0);
-      *(displayString + insertAt + 1) = *(STD_SUP_0 + 1);
+      displayString[insertAt]     = STD_SUP_0[0];
+      displayString[insertAt + 1] = STD_SUP_0[1];
       displayString[insertAt + 1] += u;
     }
     else if(u <= 3) {
-      *(displayString + insertAt)     = *(STD_SUP_2);
-      *(displayString + insertAt + 1) = *(STD_SUP_2 + 1);
+      displayString[insertAt]     = STD_SUP_2[0];
+      displayString[insertAt + 1] = STD_SUP_2[1];
       displayString[insertAt + 1] += u - 2;
     }
     else {
-      *(displayString + insertAt)     = *(STD_SUP_4);
-      *(displayString + insertAt + 1) = *(STD_SUP_4 + 1);
+      displayString[insertAt]     = STD_SUP_4[0];
+      displayString[insertAt + 1] = STD_SUP_4[1];
       displayString[insertAt + 1] += u - 4;
     }
 
@@ -1167,16 +1167,16 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+      displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+      displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
     }
 
     u = denom % 10;
     denom /= 10;
     endingZero++;
     xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-    *(displayString + insertAt)     = *(STD_SUB_0);
-    *(displayString + insertAt + 1) = *(STD_SUB_0 + 1);
+    displayString[insertAt]     = STD_SUB_0[0];
+    displayString[insertAt + 1] = STD_SUB_0[1];
     displayString[insertAt + 1] += u;
   } while(denom != 0);
 

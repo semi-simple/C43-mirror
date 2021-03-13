@@ -576,14 +576,14 @@ void addTestPrograms(void) {
       freeProgramBytes = numberOfBytesForTheTestPrograms - 2;
     }
     else {
-      fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms);
+      ignore_result(fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms));
       printf("%u bytes\n", numberOfBytesUsed);
       if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
         printf("Increase allocated memory for programs!\n");
         fclose(testPgms);
         exit(0);
       }
-      fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms);
+      ignore_result(fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms));
       fclose(testPgms);
 
       firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);
@@ -631,6 +631,8 @@ void fnReset(uint16_t confirmation) {
        aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
        nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
        tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+
+       tmpStringLabelOrVariableName = tmpString + 1000;
     }
     memset(tmpString,        0, TMP_STR_LENGTH);
     memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);

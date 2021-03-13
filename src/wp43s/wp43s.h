@@ -279,6 +279,7 @@
   extern programList_t         *programList;
 
   extern char                  *tmpString;
+  extern char                  *tmpStringLabelOrVariableName;
   extern char                  *errorMessage;
   extern char                  *aimBuffer; // aimBuffer is also used for NIM
   extern char                  *nimBufferDisplay;

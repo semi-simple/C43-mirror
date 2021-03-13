@@ -621,6 +621,8 @@ void fnReset(uint16_t confirmation) {
        aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
        nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
        tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+
+       tmpStringLabelOrVariableName = tmpString + 1000;
     }
     memset(tmpString,        0, TMP_STR_LENGTH);
     memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);

@@ -113,10 +113,10 @@
 #endif // !DMCP_BUILD
 
 
-void getStringLabelOrVariableName(uint8_t *stringAddress) {
+static void getStringLabelOrVariableName(uint8_t *stringAddress) {
   uint8_t stringLength = *(uint8_t *)(stringAddress++);
-  xcopy(tmpString + 1000, stringAddress, stringLength);
-  tmpString[1000 + stringLength] = 0;
+  xcopy(tmpStringLabelOrVariableName, stringAddress, stringLength);
+  tmpStringLabelOrVariableName[stringLength] = 0;
 }
 
 
@@ -139,7 +139,7 @@ void getIndirectRegister(uint8_t *paramAddress, const char *op) {
 
 void getIndirectVariable(uint8_t *stringAddress, const char *op) {
   getStringLabelOrVariableName(stringAddress);
-  sprintf(tmpString, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
+  sprintf(tmpString, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
 }
 
 
@@ -156,7 +156,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else {
         sprintf(tmpString, "\nIn function decodeOp case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
@@ -172,7 +172,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -197,7 +197,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -265,7 +265,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == VALUE_0) {
         sprintf(tmpString, "%s 0.", op);
@@ -317,18 +317,18 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_SHORT_INTEGER:
       getStringLabelOrVariableName(literalAddress + 1);
-      sprintf(tmpString, "%s", tmpString + 1000);
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       sprintf(tmpString + strlen(tmpString), "#%u", *literalAddress);
       break;
 
     case STRING_LONG_INTEGER:
       getStringLabelOrVariableName(literalAddress);
-      sprintf(tmpString, "%s", tmpString + 1000);
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       break;
 
     case STRING_REAL34:
       getStringLabelOrVariableName(literalAddress);
-      sprintf(tmpString, "%s", tmpString + 1000);
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       if(strchr(tmpString, 'e') == NULL && strchr(tmpString, '.') == NULL) {
         strcat(tmpString, RADIX34_MARK_STRING);
       }
@@ -336,12 +336,12 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_COMPLEX34:
       getStringLabelOrVariableName(literalAddress);
-      xcopy(tmpString, tmpString + 1000, strlen(tmpString + 1000) + 1);
+      xcopy(tmpString, tmpStringLabelOrVariableName, strlen(tmpStringLabelOrVariableName) + 1);
       break;
 
     case STRING_LABEL_VARIABLE:
       getStringLabelOrVariableName(literalAddress);
-      sprintf(tmpString, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpString + 1000);
+      sprintf(tmpString, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpStringLabelOrVariableName);
       break;
 
     //case STRING_DATE:

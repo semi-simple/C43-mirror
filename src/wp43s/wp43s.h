@@ -145,6 +145,8 @@
     #define initFontBrowser()       {}
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
+  /* Turn off -Wunused-result for a specific function call */
+  #define ignore_result(M) if(1==((int)M)){;}
 
   #include "assign.h"
   #include "ui/tam.h"
@@ -277,6 +279,7 @@
   extern programList_t         *programList;
 
   extern char                  *tmpString;
+  extern char                  *tmpStringLabelOrVariableName;
   extern char                  *errorMessage;
   extern char                  *aimBuffer; // aimBuffer is also used for NIM
   extern char                  *nimBufferDisplay;

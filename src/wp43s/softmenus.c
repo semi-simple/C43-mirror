@@ -606,7 +606,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         dynamicSoftmenu[menu].numItems = 4;
                         break;
 
-      default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", -dynamicSoftmenu[menu].menuItem);
+      default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", (int16_t)(-dynamicSoftmenu[menu].menuItem));
                         displayBugScreen(errorMessage);
     }
   }

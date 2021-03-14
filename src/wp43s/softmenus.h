@@ -29,3 +29,4 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   bool_t currentSoftmenuScrolls (void);
   bool_t isAlphabeticSoftmenu   (void);
 #endif // !TESTSUITE_BUILD
+char    *dynmenuGetLabel        (int16_t menuitem);

@@ -816,10 +816,17 @@
    ***********************************************/
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
+    char *functionName;
+    if(item != MNU_DYNAMIC) {
+      functionName = indexOfItems[abs(item)].itemCatalogName;
+    }
+    else {
+      functionName = dynmenuGetLabel(dynamicMenuItem);
+    }
 
     showFunctionNameItem = item;
     showFunctionNameCounter = delayInMs;
-    if(stringWidth(indexOfItems[abs(item)].itemCatalogName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
+    if(stringWidth(functionName, &standardFont, true, true) + 1 + lineTWidth > SCREEN_WIDTH) {
       clearRegisterLine(REGISTER_T, true, false);
     }
 
@@ -828,7 +835,7 @@
     getGlyphBounds(STD_SUP_g, 0, &numericFont, &gcol, &grow);
     lcd_fill_rect(0, Y_POSITION_OF_REGISTER_T_LINE, (fcol > gcol ? fcol : gcol), (frow > grow ? frow : grow), LCD_SET_VALUE);
 
-    showString(indexOfItems[abs(item)].itemCatalogName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+    showString(functionName, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
   }
 
 

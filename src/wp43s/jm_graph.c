@@ -32,7 +32,7 @@
 // runFunction(ITM_RAN)
 // runFunction(ITM_CLSIGMA): fnClSigma (0)
 // runFunction(ITM_SIGMAx)
-// runFunction(ITM_PLOT)
+// runFunction(ITM_PLOT_J)
 // runFunction(ITM_TICKS)
 // runFunction(ITM_NSIGMA)
 // runFunction(ITM_ sin): fnSin (0)
@@ -315,7 +315,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   }
   runFunction(ITM_CLSTK);
   runFunction(ITM_SIGMAx);
-  runFunction(ITM_PLOT);
+  runFunction(ITM_PLOT_J);
   #endif
 }
 
@@ -871,7 +871,7 @@ EndIteration:
   
   fnRCL(SREG_X2);
   
-  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT);
+  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT_J);
   running_program_jm =  running_temp;
   #endif
 }
@@ -901,6 +901,7 @@ void fnGraph (uint16_t func){
   PLOT_INTG = false;
   PLOT_DIFF = false;
   PLOT_RMS  = false;
+  PLOT_AXIS = true;
   PLOT_ZMX  = 0;
   PLOT_ZMY  = 0;
   fnClSigma(0);   //For some strange reason runFunction(ITM_CLSIGMA); does not work in this position !!! Cannot solve the riddle, rarther just call the function directly

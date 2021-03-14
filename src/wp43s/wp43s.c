@@ -192,6 +192,7 @@ bool_t                PLOT_INTG;                               //JM GRAPH
 bool_t                PLOT_DIFF;                               //JM GRAPH
 bool_t                PLOT_RMS;                                //JM GRAPH
 bool_t                PLOT_SHADE;                              //JM GRAPH
+bool_t                PLOT_AXIS;                               //JM GRAPH
 int8_t                PLOT_ZMX;                                //JM GRAPH
 int8_t                PLOT_ZMY;                                //JM GRAPH
 uint8_t               lastSetAngularMode;

@@ -1707,8 +1707,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
-#ifdef WWW
+
         else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
+/* JM Removed and replaced with JM CURSOR vv
           if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
             xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
             yCursor = Y_POSITION_OF_NIM_LINE + 6;
@@ -1735,10 +1736,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
         }
-#endif //WWW
+*/ // JMCURSOR ^^
 
 
   //JMCURSOR vv
+
         int16_t tmplen = stringByteLength(aimBuffer);
         if(T_cursorPos > tmplen) {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
         if(T_cursorPos < 0)      {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
@@ -2371,7 +2373,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
         }
-      
+      }
 
       if(regist == REGISTER_T) {
         lineTWidth = lineWidth;

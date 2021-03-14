@@ -8,17 +8,15 @@ macOS:
   tags:
     - macos
 
-dm42:
+linux:
   stage: build
   script:
-    - cd DMCP_build
-    - ./build_GMP_static_ARM_library
-    - ./build_WP43S.pgm_for_DM42_hardware
+    - make rebuild
   artifacts:
     paths:
-      - DMCP_build/build/WP43S.pgm
+      - wp43s
   tags:
-    - dm42
+    - linux
 
 windows:
   stage: build
@@ -29,6 +27,19 @@ windows:
       - wp43s.exe
   tags:
     - windows
+
+dm42:
+  stage: build
+  script:
+    - cd DMCP_build
+    - ./build_GMP_static_ARM_library
+    - ./build_WP43S.pgm_for_DM42_hardware
+  artifacts:
+    paths:
+      - DMCP_build/build/WP43S.pgm
+      - DMCP_build/build/WP43S_qspi.bin
+  tags:
+    - dm42
 
 testSuite:
   stage: test

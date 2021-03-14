@@ -536,9 +536,26 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         dynamicSoftmenu[menu].numItems = 0;
                         break;
 
-      case MNU_VAR:     dynamicSoftmenu[menu].menuContent = malloc(16);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "VAR\000to\000be\000coded", 16);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_VAR:     numberOfBytes = 1;
+                        memset(tmpString, 0, TMP_STR_LENGTH);
+                        for(i=0; i<numberOfNamedVariables; i++) {
+                          xcopy(tmpString + 15 * i, allNamedVariables[i].variableName + 1, allNamedVariables[i].variableName[0]);
+                          numberOfBytes += 1 + allNamedVariables[i].variableName[0];
+                        }
+
+                        if(numberOfNamedVariables != 0) {
+                          qsort(tmpString, numberOfNamedVariables, 15, sortMenu);
+                        }
+
+                        ptr = malloc(numberOfBytes);
+                        dynamicSoftmenu[menu].menuContent = ptr;
+                        for(i=0; i<numberOfNamedVariables; i++) {
+                          int16_t len = stringByteLength(tmpString + 15*i) + 1;
+                          xcopy(ptr, tmpString + 15*i, len);
+                          ptr += len;
+                        }
+
+                        dynamicSoftmenu[menu].numItems = numberOfNamedVariables;
                         break;
 
       case MNU_PROG:    numberOfBytes = 1;
@@ -963,5 +980,16 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
         return false;
     }
   }
-
 #endif // !TESTSUITE_BUILD
+
+char *dynmenuGetLabel(int16_t menuitem) {
+  if(menuitem < 0 || menuitem >= dynamicSoftmenu[softmenuStack[0].softmenuId].numItems) {
+    return "";
+  }
+  char *labelName = (char *)dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent;
+  while(menuitem > 0) {
+    labelName += stringByteLength(labelName) + 1;
+    menuitem--;
+  }
+  return labelName;
+}

@@ -507,6 +507,7 @@ void debugNIM(void) {
     if(alsm == CATALOG_AINT) return "CATALOG_AINT";
     if(alsm == CATALOG_aint) return "CATALOG_aint";
     if(alsm == CATALOG_PROG) return "CATALOG_PROG";
+    if(alsm == CATALOG_VAR)  return "CATALOG_VAR";
 
     return "CATALOG_????";
   }

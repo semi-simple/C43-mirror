@@ -531,7 +531,8 @@
 #define CATALOG_AINT                               5
 #define CATALOG_aint                               6
 #define CATALOG_PROG                               7
-#define NUMBER_OF_CATALOGS                         8
+#define CATALOG_VAR                                8
+#define NUMBER_OF_CATALOGS                         9
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1

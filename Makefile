@@ -82,6 +82,7 @@ SRC_WP43S                = \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
 		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+        plotstat.c \
 		rasterFontsData.c recall.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c store.c stringFuncs.c timer.c \

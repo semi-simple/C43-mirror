@@ -435,9 +435,10 @@
 #define CM_REGISTER_BROWSER                        5 // Register browser
 #define CM_FLAG_BROWSER                            6 // Flag browser
 #define CM_FONT_BROWSER                            7 // Font browser
-#define CM_ERROR_MESSAGE                           8 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN                           9 // Bug message on screen
-#define CM_CONFIRMATION                           10 // Waiting for confirmation or canceling
+#define CM_PLOT_STAT                               8 // Plot stats mode
+#define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN                          10 // Bug message on screen
+#define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0

@@ -894,7 +894,7 @@
       refreshDebugPanel();
     #endif // (DEBUG_PANEL == 1)
 
-    if(calcMode != CM_BUG_ON_SCREEN) {
+    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT)) {
       clearRegisterLine(regist, true, (regist != REGISTER_Y));
 
       #ifdef PC_BUILD
@@ -1618,6 +1618,14 @@
         showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;
         refreshStatusBar();
+        break;
+
+      case CM_PLOT_STAT:
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        refreshStatusBar();
+//        graph_plotmem();
+        hourGlassIconEnabled = false;
         break;
 
       default: {}

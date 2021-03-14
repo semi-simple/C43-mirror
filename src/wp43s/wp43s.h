@@ -174,6 +174,7 @@
   #include "mathematics/mathematics.h"
   #include "memory.h"
   #include "programming/programming.h"
+  #include "plotstat.h"
   #include "recall.h"
   #include "registers.h"
   #include "registerValueConversions.h"

@@ -967,16 +967,16 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
         return false;
     }
   }
-
-  char *dynmenuGetLabel(int16_t menuitem) {
-    if(menuitem < 0 || menuitem >= dynamicSoftmenu[softmenuStack[0].softmenuId].numItems) {
-      return "";
-    }
-    char *labelName = (char *)dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent;
-    while(menuitem > 0) {
-      labelName += stringByteLength(labelName) + 1;
-      menuitem--;
-    }
-    return labelName;
-  }
 #endif // !TESTSUITE_BUILD
+
+char *dynmenuGetLabel(int16_t menuitem) {
+  if(menuitem < 0 || menuitem >= dynamicSoftmenu[softmenuStack[0].softmenuId].numItems) {
+    return "";
+  }
+  char *labelName = (char *)dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent;
+  while(menuitem > 0) {
+    labelName += stringByteLength(labelName) + 1;
+    menuitem--;
+  }
+  return labelName;
+}

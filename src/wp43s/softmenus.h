@@ -28,5 +28,5 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   void   setCatalogLastPos      (void);
   bool_t currentSoftmenuScrolls (void);
   bool_t isAlphabeticSoftmenu   (void);
-  char  *dynmenuGetLabel        (int16_t menuitem);
 #endif // !TESTSUITE_BUILD
+char    *dynmenuGetLabel        (int16_t menuitem);

@@ -90,7 +90,7 @@ void fnGoto(uint16_t label) {
 
 void fnGotoDot(uint16_t globalStepNumber) {
   if(dynamicMenuItem >= 0) {
-    uint8_t *labelName = dynmenuGetLabel(dynamicMenuItem);
+    uint8_t *labelName = (uint8_t *)dynmenuGetLabel(dynamicMenuItem);
 
     if(*labelName == 0) {
       return;

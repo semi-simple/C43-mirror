@@ -1362,10 +1362,19 @@ void force_refresh(void) {
       longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^
+
+    char *functionName;
+    if(item != MNU_DYNAMIC) {
+      functionName = indexOfItems[abs(item)].itemCatalogName;
+    }
+    else {
+      functionName = dynmenuGetLabel(dynamicMenuItem);
+    }
+
   showFunctionNameItem = item;
   if(running_program_jm) return;                             //JM
   showFunctionNameCounter = delayInMs;
-  strcpy(padding,indexOfItems[abs(item)].itemCatalogName);   //JM
+  strcpy(padding,functionName);   //JM
   strcat(padding,"    ");                                    //JM
   if(stringWidth(padding, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(REGISTER_T, true, false);
@@ -1706,7 +1715,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
         }
-
 
         else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
 /* JM Removed and replaced with JM CURSOR vv

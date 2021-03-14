@@ -161,6 +161,7 @@
     int16_t min, max;
     bool_t forceTry = false, tryOoR = false;
     bool_t valueParameter = (tam.function == ITM_GTOP || tam.function == ITM_BESTF || tam.function == ITM_CNST);
+    char *forcedVar = NULL;
 
     // Shuffle is handled completely differently to everything else
     if(tam.mode == TM_SHUFFLE) {
@@ -215,6 +216,13 @@
         tamLeaveMode();
       }
       return;
+    }
+    else if(item == MNU_DYNAMIC) {
+      forcedVar = dynmenuGetLabel(dynamicMenuItem);
+      if(forcedVar[0] == 0) {
+        forcedVar = NULL;
+      }
+      forceTry = true;
     }
     else if(tam.alpha) {
       // Do nothing if it wasn't enter or backspace as the text input is handled elsewhere
@@ -364,7 +372,7 @@
 
     // All operations that may try and evaluate the function shouldn't return but let execution fall through to here
 
-    if(!tam.alpha) {
+    if(!tam.alpha && !forcedVar) {
       // Check whether it is possible to add any more digits: if not, execute the function
       if(min <= tam.value && (tryOoR || tam.value <= max) && (forceTry || tam.value*10 > max)) {
         int16_t value = tam.value;
@@ -391,17 +399,18 @@
       }
     }
     else {
+      char *buffer = (forcedVar ? forcedVar : aimBuffer);
       bool_t tryAllocate = (tam.function == ITM_STO && !tam.indirect);
       int16_t value;
       if(tryAllocate) {
-        value = findOrAllocateNamedVariable(aimBuffer);
+        value = findOrAllocateNamedVariable(buffer);
       }
       else {
-        value = findNamedVariable(aimBuffer);
+        value = findNamedVariable(buffer);
         if(value == INVALID_VARIABLE) {
           displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            sprintf(errorMessage, "string '%s' is not a named variable", aimBuffer);
+            sprintf(errorMessage, "string '%s' is not a named variable", buffer);
             moreInfoOnError("In function _tamProcessInput:", errorMessage, NULL, NULL);
           #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }

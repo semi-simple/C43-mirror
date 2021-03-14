@@ -37,6 +37,7 @@
     if(!(menuId==0 && jm_NO_BASE_SCREEN) ) { //JM
     switch(-softmenu[menuId].menuItem) {
       case MNU_PROG:
+      case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
         break;

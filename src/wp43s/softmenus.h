@@ -34,5 +34,6 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
 
 #endif // !TESTSUITE_BUILD
 
-  void   setCatalogLastPos      (void);
-  void   fnDumpMenus            (uint16_t unusedButMandatoryParameter);  //JM
+char    *dynmenuGetLabel        (int16_t menuitem);
+void     setCatalogLastPos      (void);
+void     fnDumpMenus            (uint16_t unusedButMandatoryParameter);  //JM

@@ -4284,6 +4284,7 @@ if(!tam.mode) {
       case MNU_ALPHAINTL: catalog = CATALOG_AINT; break;
       case MNU_ALPHAintl: catalog = CATALOG_aint; break;
       case MNU_PROG:      catalog = CATALOG_PROG; break;
+      case MNU_VAR:       catalog = CATALOG_VAR;  break;
       default:            catalog = CATALOG_NONE;
     }
     #ifdef PC_BUILD

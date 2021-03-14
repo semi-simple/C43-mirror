@@ -244,6 +244,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
+    case CM_PLOT_STAT:
     case CM_LISTXY:                     //JM
     case CM_GRAPH:                      //JM
       break;

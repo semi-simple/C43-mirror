@@ -327,6 +327,7 @@ void debugNIM(void) {
     if(cm == CM_REGISTER_BROWSER)      return "reg.bro";
     if(cm == CM_FLAG_BROWSER)          return "flg.bro";
     if(cm == CM_FONT_BROWSER)          return "fnt.bro";
+    if(cm == CM_PLOT_STAT)             return "plot.st";
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
     if(cm == CM_CONFIRMATION)          return "confirm";

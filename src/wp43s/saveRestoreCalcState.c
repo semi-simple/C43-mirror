@@ -484,6 +484,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)          {}
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
+        else if(calcMode == CM_PLOT_STAT)             {}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
@@ -498,6 +499,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
+        else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {

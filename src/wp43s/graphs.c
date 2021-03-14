@@ -169,18 +169,16 @@ void fnPy (uint16_t unusedButMandatoryParameter) {
 }
 
 void fnPlot(uint16_t unusedButMandatoryParameter) {
-  
-  hourGlassIconEnabled = true;
-  showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
   #else // !DMCP_BUILD
     refreshLcd(NULL);
   #endif // DMCP_BUILD
-
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
   Aspect_Square = true;
-  if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
-  if(previousCalcMode == CM_GRAPH) {
+  if(calcMode != CM_GRAPH && calcMode != CM_PLOT_STAT){previousCalcMode = calcMode;}
+  if(previousCalcMode == CM_GRAPH || previousCalcMode == CM_PLOT_STAT) {
     previousCalcMode = CM_NORMAL;
   }
   calcMode = CM_GRAPH;
@@ -194,14 +192,13 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
 
 void fnPlotLS(uint16_t unusedButMandatoryParameter) {
   Aspect_Square = false;
-  if(calcMode != CM_GRAPH){previousCalcMode = calcMode;}
-  if(previousCalcMode == CM_GRAPH) {
+  if(calcMode != CM_GRAPH && calcMode != CM_PLOT_STAT){previousCalcMode = calcMode;}
+  if(previousCalcMode == CM_GRAPH || previousCalcMode == CM_PLOT_STAT) {
     previousCalcMode = CM_NORMAL;
   }
   calcMode = CM_GRAPH;
   doRefreshSoftMenu = true;             //Plot graph is part of refreshScreen
 }
-
 
 void fnListXY(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD

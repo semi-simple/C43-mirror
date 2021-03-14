@@ -18,13 +18,6 @@
  * \file items.h
  ***********************************************/
 
-
-
-
-
-
-
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1455,7 +1448,7 @@
 #define MNU_PROG                      1394
 #define MNU_TAMLABEL                  1395
 #define MNU_DYNAMIC                   1396
-#define MNU_1397                      1397
+#define MNU_PLOT_STAT                 1397
 #define MNU_1398                      1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400
@@ -1818,7 +1811,7 @@
 #define ITM_TRANS                     1753
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
-#define ITM_1756                      1756
+#define ITM_PLOT_REGLINE              1756
 
 
 
@@ -2281,8 +2274,9 @@
 #define ITM_XPLOT                     2208
 #define ITM_XDEMO                     2209
 #define ITM_PRN                       2210
+#define ITM_PLOT_J                    2211
 
-#define LAST_ITEM                     2211   //JM
+#define LAST_ITEM                     2212   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

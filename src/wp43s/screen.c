@@ -560,7 +560,7 @@ void refreshFn(uint16_t timerType) {                        //vv dr - general ti
 void underline(int16_t y) {                     //JM
   int16_t i;
    for( i = 0; i < 6; i++ ){
-     if(calcMode != CM_GRAPH || ((calcMode == CM_GRAPH) && (i <= 1)))
+     if( (calcMode != CM_GRAPH && calcMode != CM_PLOT_STAT) || ((calcMode == CM_GRAPH || calcMode == CM_PLOT_STAT) && (i <= 1)))
        underline_softkey(i, y, true);
    }
 }                                               //JM
@@ -577,7 +577,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
 
-  if(calcMode == CM_GRAPH && xSoftkey >= 2) {
+  if((calcMode == CM_GRAPH || calcMode == CM_PLOT_STAT) && xSoftkey >= 2) {
       return;
   }
 
@@ -1471,7 +1471,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
     refreshDebugPanel();
   #endif
 
-    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
+    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
       clearRegisterLine(regist, true, (regist != REGISTER_Y));
 
       #ifdef PC_BUILD
@@ -2432,7 +2432,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   //clearScreen();  //JM do not use this clearscreen. Rather use the distributed clearscreens, WITH the if(last_CM != calcMode)
 
 
-  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
+  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_PLOT_STAT && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -2470,63 +2470,89 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
-    case CM_LISTXY:                     //JM
-    case CM_GRAPH:                      //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
           clearScreen();
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
           refreshRegisterLine(REGISTER_Y);
-        }                               //JM
       }
+
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }      //dr
 #endif
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
-      if(calcMode != CM_GRAPH && calcMode!=CM_LISTXY) {        //JM
         refreshRegisterLine(REGISTER_X);
-      }                                 //JM
+
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
 #endif
-
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
+
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         last_CM = calcMode;
         doRefreshSoftMenu = false;
-
         displayShiftAndTamBuffer();
-
-        if (calcMode != CM_LISTXY) showSoftmenuCurrentPart();
-
+        showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;
         refreshStatusBar();
-
-        if(calcMode == CM_GRAPH) {     //JM v
-          graph_plotmem();
-        }                              //JM ^
-        if(calcMode == CM_LISTXY) {     //JM v
-          fnStatList();
-        }                              //JM ^
-
 
       }
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(2); }      //dr
 #endif
+
       break;
 
-      default: {}
-    }
+    case CM_LISTXY:                     //JM
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        last_CM = calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        refreshStatusBar();
+        fnStatList();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+
+    case CM_GRAPH:                      //JM
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        last_CM = calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        refreshStatusBar();
+        graph_plotmem();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+
+    case CM_PLOT_STAT:
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        last_CM = calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        refreshStatusBar();
+        graph_plotmem();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+    default: {}
+  }
 
   #ifndef DMCP_BUILD
     refreshLcd(NULL);

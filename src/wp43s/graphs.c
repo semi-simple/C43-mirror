@@ -201,20 +201,6 @@ void fnListXY(uint16_t unusedButMandatoryParameter) {
 
 
 
-graphtype grf_x(int i) {
-  if (jm_NVECT) {return gr_y[i];}
-  else {return gr_x[i];}
-}
-
-graphtype grf_y(int i) {
-  if (jm_NVECT) {return gr_x[i];}
-  else {return gr_y[i];}
-}
-
-
-
-
-
 
 
 
@@ -281,34 +267,6 @@ graphtype grf_y(int i) {
         placePixel(xn-1,yn+2);
       }
 
-      void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        placePixel(xn,yn);                                   //   PLOT a cross
-        placePixel(xn-1,yn-1);
-        placePixel(xn-1,yn+1);
-        placePixel(xn+1,yn-1);
-        placePixel(xn+1,yn+1);
-        placePixel(xn-2,yn-2);
-        placePixel(xn-2,yn+2);
-        placePixel(xn+2,yn-2);
-        placePixel(xn+2,yn+2);
-      }
-
-      void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-        placePixel(xn-2,yn-2);                               //   PLOT a box
-        placePixel(xn-2,yn-1);
-        placePixel(xn-1,yn-2);
-        placePixel(xn-2,yn+2);
-        placePixel(xn-2,yn+1);
-        placePixel(xn-1,yn+2);
-        placePixel(xn+2,yn-2);
-        placePixel(xn+1,yn-2);
-        placePixel(xn+2,yn-1);
-        placePixel(xn+2,yn+2);
-        placePixel(xn+2,yn+1);
-        placePixel(xn+1,yn+2);
-      }
-
-
       void plotrms(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
         placePixel(xn+1,yn-1);                               //   PLOT a box
         placePixel(xn-1,yn-1);
@@ -369,6 +327,28 @@ float auto_tick(float tick_int_f) {
   //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
   return tick_int_f;
 }
+
+
+void graph_axis (void){
+  #ifndef TESTSUITE_BUILD
+    graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
+    graph_dy = 0;
+
+    if(graph_dx == 0) {
+      tick_int_x = auto_tick((x_max-x_min)/20);
+    } else {
+      tick_int_x = graph_dx;
+    }
+
+    if(graph_dy == 0) {
+      tick_int_y = auto_tick((y_max-y_min)/20);
+    } else {
+      tick_int_y = graph_dy;
+    }
+  #endif //TESTSUITE_BUILD
+  graph_axis_draw();
+}
+
 
 
 
@@ -507,190 +487,6 @@ void graph_text(void){
   #endif
 }
 
-
-
-//###################################################################################
-//Must be run before graph_text
-void graph_axis (void){
-  #ifndef TESTSUITE_BUILD
-  uint32_t cnt;
-
-  //GRAPH RANGE
-  //  graph_xmin= -3*3.14150;  graph_xmax= 2*3.14159;
-  //  graph_ymin= -2;          graph_ymax= +2;
-
-
-  clearScreenPixels();
-
-  graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
-  graph_dy = 0;
-
-  if(graph_dx == 0) {
-    tick_int_x = auto_tick((x_max-x_min)/20);
-  } else {
-    tick_int_x = graph_dx;
-  }
-
-  if(graph_dy == 0) {
-    tick_int_y = auto_tick((y_max-y_min)/20);
-  } else {
-    tick_int_y = graph_dy;
-  }
-
-
-  //GRAPH ZERO AXIS
-  yzero = screen_window_y(y_min,0,y_max);
-  xzero = screen_window_x(x_min,0,x_max);
-
-
-  uint32_t minnx, minny;
-  if (!Aspect_Square) {
-    minny = SCREEN_NONSQ_HMIN;
-    minnx = 0;
-  }
-  else {
-    minny = 0;
-    minnx = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
-  }
-
-
-  //SEPARATING LINE IF SQUARE
-  cnt = minny;
-  while (cnt!=SCREEN_HEIGHT_GRAPH) { 
-    if (Aspect_Square) {
-        setBlackPixel(minnx-1,cnt);   
-        setBlackPixel(minnx-2,cnt);   
-    }
-    cnt++; 
-  }
-
-  #ifdef STATDEBUG
-    printf("xzero=%d yzero=%d   \n",xzero,yzero);
-  #endif
-
-
-  graphtype x; 
-  graphtype y;
-
-  if( PLOT_AXIS && !(yzero == SCREEN_HEIGHT_GRAPH-1 || yzero == minny)) {
-    //DRAW XAXIS
-    if (Aspect_Square) {
-      cnt = minnx;
-    } else {
-      cnt = 0;
-    }
-
-    while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
-      setBlackPixel(cnt,yzero); 
-      cnt++; 
-    }
-
-   force_refresh();
-
-   if(0<x_max && 0>x_min) {
-     for(x=0; x<=x_max; x+=tick_int_x) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-        //printf(">>>>>A %f %d ",x,cnt);
-          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-1,minny)); //tick
-       }
-      for(x=0; x>=x_min; x+=-tick_int_x) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-        //printf(">>>>>B %f %d ",x,cnt);
-          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-1,minny)); //tick
-       }
-      for(x=0; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-2,minny)); //tick
-          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-3,minny)); //tick
-       }
-      for(x=0; x>=x_min; x+=-tick_int_x*5) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-2,minny)); //tick
-          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-3,minny)); //tick
-       }
-   } else {
-     for(x=x_min; x<=x_max; x+=tick_int_x) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-        //printf(">>>>>A %f %d ",x,cnt);
-          setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-1,minny)); //tick
-       }
-      for(x=x_min; x<=x_max; x+=tick_int_x*5) {       //draw x ticks
-        cnt = screen_window_x(x_min,x,x_max);
-          setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-2,minny)); //tick
-          setBlackPixel(cnt,min(yzero+3,SCREEN_HEIGHT_GRAPH-1)); //tick
-          setBlackPixel(cnt,max(yzero-3,minny)); //tick
-       }
-     }
-   }
-
-
-
-  if( PLOT_AXIS && !(xzero == SCREEN_WIDTH-1 || xzero == minnx)) {
-    //Write North arrow
-    if(jm_NVECT) {
-      showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
-      tmpString[0]=0x80 | 0x22;
-      tmpString[1]=0x06;
-      tmpString[2]=0;
-      showString(tmpString, &standardFont, xzero-4, minny+0, vmNormal, true, true);
-    }
-
-    //DRAW YAXIS
-    lcd_fill_rect(xzero,minny,1,SCREEN_HEIGHT_GRAPH-minny,0xFF);
-
-    force_refresh();
-    if(0<y_max && 0>y_min) {
-      for(y=0; y<=y_max; y+=tick_int_y) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-1,0),cnt); //tick
-        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-      for(y=0; y>=y_min; y+=-tick_int_y) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-1,0),cnt); //tick
-        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-      for(y=0; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-2,0),cnt); //tick
-        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-        setBlackPixel(max(xzero-3,0),cnt); //tick
-        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-      for(y=0; y>=y_min; y+=-tick_int_y*5) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-2,0),cnt); //tick
-        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-        setBlackPixel(max(xzero-3,0),cnt); //tick
-        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-    } else {
-      for(y=y_min; y<=y_max; y+=tick_int_y) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-1,0),cnt); //tick
-        setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-      for(y=y_min; y<=y_max; y+=tick_int_y*5) {       //draw y ticks
-        cnt = screen_window_y(y_min,y,y_max);
-        setBlackPixel(max(xzero-2,0),cnt); //tick
-        setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-        setBlackPixel(max(xzero-3,0),cnt); //tick
-        setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
-      }  
-    }
-  }
-
-  force_refresh();
-  #endif
-}
 
 
 
@@ -939,10 +735,10 @@ void graph_plotmem(void) {
       x_min = x_max - dx;
     }
    
-    x_min = x_min - dx * 0.015;
-    y_min = y_min - dy * 0.015;
-    x_max = x_max + dx * 0.015;
-    y_max = y_max + dy * 0.015;
+    x_min = x_min - dx * 0.015*3;
+    y_min = y_min - dy * 0.015*3;
+    x_max = x_max + dx * 0.015*3;
+    y_max = y_max + dy * 0.015*3;
 
 
     #ifdef STATDEBUG
@@ -981,154 +777,154 @@ void graph_plotmem(void) {
     rmsy = 0;
 
 //#################################################### vvv MAIN GRAPH LOOP vvv #########################
-/**/    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
-/**/      if(plotmode != _VECT) {
-/**/
-/**/        x = 0;
-/**/        y = 0;
-/**/
-/**/        if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg) || (PLOT_RMS && !invalid_rms) )) {                                                               //Differential dydx
-/**/          ddx = grf_x(ix) - grf_x(ix-1);
-/**/          plotDiff();   //dydx                                          //Differential
-/**/          inty0 = inty;
-/**/          plotInt();    //inty                                         //integral
-/**/          plotRms();    //RMSy
-/**/          x = (grf_x(ix) + grf_x(ix-1))/2;
-/**/          if(PLOT_DIFF) y = dydx;                 //y is the default graph
-/**/          if(PLOT_RMS)  y = rmsy;                 //y is the default graph
-/**/          if(PLOT_INTG) y = inty;                 //y is the default graph
-/**/        }
-/**/
-/**/        if(PLOT_BOX || PLOT_LINE || PLOT_CROSS) {
-/**/          x = grf_x(ix);
-/**/          y = grf_y(ix);
-/**/        }
-/**/
-/**/      } else {
-/**/        sx = sx + grf_x(ix);
-/**/        sy = sy + grf_y(ix);
-/**/        x = sx;
-/**/        y = sy;
-/**/      }
-/**/      xo = xN;
-/**/      yo = yN;
-/**/      xN = screen_window_x(x_min,x,x_max);
-/**/      yN = screen_window_y(y_min,y,y_max);
-/**/
-/**/      #ifdef STATDEBUG
-/**/      printf("plotting graph table[%d] = x:%f y:%f dydx:%f inty:%f xN:%d yN:%d ",ix,x,y,dydx,inty,  xN,yN);
-/**/      printf(" ... x-ddx/2=%d dydx=%d inty=%d\n",screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, dydx, y_max), screen_window_y( y_min, inty, y_max) );
-/**/      #endif
-/**/
-/**/      int16_t minN_y,minN_x;
-/**/      if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
-/**/      else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
-/**/      if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
-/**/  //      yo = yn;                              //old , new, to be able to draw a line between samples
-/**/        yn = yN;
-/**/  //      xo = xn;
-/**/        xn = xN;
-/**/
-/**/        #ifdef STATDEBUG
-/**/          printf("invalid_diff=%d invalid_intg=%d invalid_rms=%d \n",invalid_diff,invalid_intg,invalid_rms);
-/**/        #endif
-/**/
-/**/
-/**/        if(plotmode != _VECT) {
-/**/
-/**/          #ifdef STATDEBUG
-/**/            printf("Not _VECT\n");
-/**/          #endif
-/**/
-/**/          if(PLOT_CROSS) {
-/**/            #ifdef STATDEBUG
-/**/              printf("Plotting cross to x=%d y=%d\n",xn,yn);
-/**/            #endif
-/**/            plotcross(xn,yn);
-/**/          }
-/**/
-/**/          if(PLOT_BOX) {
-/**/            #ifdef STATDEBUG
-/**/              printf("Plotting box to x=%d y=%d\n",xn,yn);
-/**/            #endif
-/**/            plotbox(xn,yn);
-/**/          }
-/**/          //else placePixel(xn,yn);
-/**/
-/**/          if(PLOT_DIFF && !invalid_diff && ix != 0) {
-/**/            #ifdef STATDEBUG
-/**/              printf("Plotting Delta x=%f dy=%f \n",x-ddx/2,dydx);
-/**/            #endif
-/**/            plotdelta( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, dydx, y_max) );
-/**/          }
-/**/
-/**/
-/**/          if(PLOT_RMS && !invalid_rms && ix != 0) {
-/**/            #ifdef STATDEBUG
-/**/              printf("Plotting RMSy x=%f rmsy=%f \n",x-ddx/2,rmsy);
-/**/            #endif
-/**/            plotrms( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, rmsy, y_max) );
-/**/          }
-/**/
-/**/
-/**/
-/**/          if(PLOT_INTG && !invalid_intg && ix !=0) {
-/**/            #ifdef STATDEBUG
-/**/              printf("Plotting Integral x=%f intg(x)=%f\n",x-ddx/2,inty);
-/**/            #endif
-/**/            uint16_t xN0   =screen_window_x( x_min, grf_x(ix-1), x_max);
-/**///          uint16_t xN1   =screen_window_x( x_min, grf_x(ix), x_max);
-/**/            uint16_t yNoff =screen_window_y( y_min, inty_off, y_max);
-/**/            uint16_t yN0   =screen_window_y( y_min, inty0, y_max);
-/**/            uint16_t yNintg=screen_window_y( y_min, inty, y_max);
-/**/            uint16_t xAvg  =((xN0+xN) >> 1);
-/**/            
-/**/            if(abs((int16_t)(xN-xN0)>=6)) {plotint( xAvg, yNintg );} else
-/**/                                          {//placePixel( xAvg, yNintg );
-/**/                                           plotrect(xAvg-1, yNintg-1, xAvg+1, yNintg+1);}
-/**/
-/**/            if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);} else
-/**/            if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);}
-/**/
-/**/            if(PLOT_SHADE) {
-/**/              if(abs((int16_t)(xN-xN0)>=6)) {
-/**/                plotrect(xN0,yNoff,xN,yN0);
-/**/                plotrect(xN0,yN0,xN,yNintg);
-/**/                plotline(xN0,yN0,xN,yNintg);
-/**/              } else {
-/**/                plotrect(xN0,yNoff,xN,yNintg);
-/**/                plotrect(xN0,yN0,xN,yNintg);
-/**/              }
-/**/            }
-/**/
-/**/
-/**/          }
-/**/
-/**/        } else {
-/**/          #ifdef STATDEBUG
-/**/            printf("Plotting arrow\n");
-/**/          #endif
-/**/          plotarrow(xo, yo, xn, yn);
-/**/        }
-/**/
-/**/        if(PLOT_LINE) {
-/**/          #ifdef STATDEBUG
-/**/            printf("Plotting line to x=%d y=%d\n",xn,yn);
-/**/          #endif
-/**/          plotline(xo, yo, xn, yn);
-/**/        }
-/**/
-/**/      } else {
-/**/        #ifdef PC_BUILD
-/**/          printf("Not plotted: ");
-/**/          if(!(xN<SCREEN_WIDTH_GRAPH )) printf("xN<SCREEN_WIDTH_GRAPH; ");
-/**/          if(!(xN>minN_x              )) printf("xN>minN_x; ");
-/**/          if(!(yN<SCREEN_HEIGHT_GRAPH)) printf("yN<SCREEN_HEIGHT_GRAPH");
-/**/          if(!(yN>1+minN_y            )) printf("yN>1+minN_y; ");
-/**/                    printf("Not plotted: xN=%d<SCREEN_WIDTH_GRAPH=%d && xN=%d>minN_x=%d && yN=%d<SCREEN_HEIGHT_GRAPH=%d && yN=%d>1+minN_y=%d\n",xN,SCREEN_WIDTH_GRAPH,xN,minN_x,yN,SCREEN_HEIGHT_GRAPH,yN,1+minN_y);
-/**/        #endif
-/**/      }
-/**/    }
+    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
+      if(plotmode != _VECT) {
+
+        x = 0;
+        y = 0;
+
+        if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg) || (PLOT_RMS && !invalid_rms) )) {                                                               //Differential dydx
+          ddx = grf_x(ix) - grf_x(ix-1);
+          plotDiff();   //dydx                                          //Differential
+          inty0 = inty;
+          plotInt();    //inty                                         //integral
+          plotRms();    //RMSy
+          x = (grf_x(ix) + grf_x(ix-1))/2;
+          if(PLOT_DIFF) y = dydx;                 //y is the default graph
+          if(PLOT_RMS)  y = rmsy;                 //y is the default graph
+          if(PLOT_INTG) y = inty;                 //y is the default graph
+        }
+
+        if(PLOT_BOX || PLOT_LINE || PLOT_CROSS) {
+          x = grf_x(ix);
+          y = grf_y(ix);
+        }
+
+      } else {
+        sx = sx + grf_x(ix);
+        sy = sy + grf_y(ix);
+        x = sx;
+        y = sy;
+      }
+      xo = xN;
+      yo = yN;
+      xN = screen_window_x(x_min,x,x_max);
+      yN = screen_window_y(y_min,y,y_max);
+
+      #ifdef STATDEBUG
+      printf("plotting graph table[%d] = x:%f y:%f dydx:%f inty:%f xN:%d yN:%d ",ix,x,y,dydx,inty,  xN,yN);
+      printf(" ... x-ddx/2=%d dydx=%d inty=%d\n",screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, dydx, y_max), screen_window_y( y_min, inty, y_max) );
+      #endif
+
+      int16_t minN_y,minN_x;
+      if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
+      else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
+      if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
+  //      yo = yn;                              //old , new, to be able to draw a line between samples
+        yn = yN;
+  //      xo = xn;
+        xn = xN;
+
+        #ifdef STATDEBUG
+          printf("invalid_diff=%d invalid_intg=%d invalid_rms=%d \n",invalid_diff,invalid_intg,invalid_rms);
+        #endif
+
+
+        if(plotmode != _VECT) {
+
+          #ifdef STATDEBUG
+            printf("Not _VECT\n");
+          #endif
+
+          if(PLOT_CROSS) {
+            #ifdef STATDEBUG
+              printf("Plotting cross to x=%d y=%d\n",xn,yn);
+            #endif
+            plotcross(xn,yn);
+          }
+
+          if(PLOT_BOX) {
+            #ifdef STATDEBUG
+              printf("Plotting box to x=%d y=%d\n",xn,yn);
+            #endif
+            plotbox(xn,yn);
+          }
+          //else placePixel(xn,yn);
+
+          if(PLOT_DIFF && !invalid_diff && ix != 0) {
+            #ifdef STATDEBUG
+              printf("Plotting Delta x=%f dy=%f \n",x-ddx/2,dydx);
+            #endif
+            plotdelta( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, dydx, y_max) );
+          }
+
+
+          if(PLOT_RMS && !invalid_rms && ix != 0) {
+            #ifdef STATDEBUG
+              printf("Plotting RMSy x=%f rmsy=%f \n",x-ddx/2,rmsy);
+            #endif
+            plotrms( screen_window_x( x_min, x-ddx/2, x_max), screen_window_y( y_min, rmsy, y_max) );
+          }
+
+
+
+          if(PLOT_INTG && !invalid_intg && ix !=0) {
+            #ifdef STATDEBUG
+              printf("Plotting Integral x=%f intg(x)=%f\n",x-ddx/2,inty);
+            #endif
+            uint16_t xN0   =screen_window_x( x_min, grf_x(ix-1), x_max);
+//          uint16_t xN1   =screen_window_x( x_min, grf_x(ix), x_max);
+            uint16_t yNoff =screen_window_y( y_min, inty_off, y_max);
+            uint16_t yN0   =screen_window_y( y_min, inty0, y_max);
+            uint16_t yNintg=screen_window_y( y_min, inty, y_max);
+            uint16_t xAvg  =((xN0+xN) >> 1);
+            
+            if(abs((int16_t)(xN-xN0)>=6)) {plotint( xAvg, yNintg );} else
+                                          {//placePixel( xAvg, yNintg );
+                                           plotrect(xAvg-1, yNintg-1, xAvg+1, yNintg+1);}
+
+            if(abs((int16_t)(xN-xN0)>=6)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);} else
+            if(abs((int16_t)(xN-xN0)>=4)) {plotline(xN, yNintg, xAvg+2, yNintg);plotline(xAvg-2, yNintg, xN0, yNintg);}
+
+            if(PLOT_SHADE) {
+              if(abs((int16_t)(xN-xN0)>=6)) {
+                plotrect(xN0,yNoff,xN,yN0);
+                plotrect(xN0,yN0,xN,yNintg);
+                plotline(xN0,yN0,xN,yNintg);
+              } else {
+                plotrect(xN0,yNoff,xN,yNintg);
+                plotrect(xN0,yN0,xN,yNintg);
+              }
+            }
+
+
+          }
+
+        } else {
+          #ifdef STATDEBUG
+            printf("Plotting arrow\n");
+          #endif
+          plotarrow(xo, yo, xn, yn);
+        }
+
+        if(PLOT_LINE) {
+          #ifdef STATDEBUG
+            printf("Plotting line to x=%d y=%d\n",xn,yn);
+          #endif
+          plotline(xo, yo, xn, yn);
+        }
+
+      } else {
+        #ifdef PC_BUILD
+          printf("Not plotted: ");
+          if(!(xN<SCREEN_WIDTH_GRAPH )) printf("xN<SCREEN_WIDTH_GRAPH; ");
+          if(!(xN>minN_x              )) printf("xN>minN_x; ");
+          if(!(yN<SCREEN_HEIGHT_GRAPH)) printf("yN<SCREEN_HEIGHT_GRAPH");
+          if(!(yN>1+minN_y            )) printf("yN>1+minN_y; ");
+                    printf("Not plotted: xN=%d<SCREEN_WIDTH_GRAPH=%d && xN=%d>minN_x=%d && yN=%d<SCREEN_HEIGHT_GRAPH=%d && yN=%d>1+minN_y=%d\n",xN,SCREEN_WIDTH_GRAPH,xN,minN_x,yN,SCREEN_HEIGHT_GRAPH,yN,1+minN_y);
+        #endif
+      }
+    }
 //#################################################### ^^^ MAIN GRAPH LOOP ^^^ #########################
 
 

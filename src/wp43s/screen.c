@@ -2545,7 +2545,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         displayShiftAndTamBuffer();
         showSoftmenuCurrentPart();
         refreshStatusBar();
-        graph_plotmem();
+        graphPlotstat();
         hourGlassIconEnabled = false;
         showHideHourGlass();
       }

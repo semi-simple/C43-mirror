@@ -72,19 +72,16 @@ extern  int8_t PLOT_ZMX;
 extern  int8_t PLOT_ZMY;
 #define _VECT 0
 #define _SCAT 1
-int8_t plotmode;    //VECTOR or SCATTER
 
-//Note: graph_xmin, graph_xmax set from X.FN GRAPH
-float     tick_int_x;
-float     tick_int_y;
-float     x_min; 
-float     x_max;
-float     y_min;
-float     y_max;
-uint32_t  xzero;
-uint32_t  yzero;
-
-
+int8_t   plotmode;    //VECTOR or SCATTER
+float    tick_int_x;
+float    tick_int_y;
+float    x_min; 
+float    x_max;
+float    y_min;
+float    y_max;
+uint32_t xzero;
+uint32_t yzero;
 
 
 
@@ -97,24 +94,30 @@ uint32_t  yzero;
 
 
 //Utility functions
-void    placePixel(uint32_t x, uint32_t y);
-void    removePixel(uint32_t x, uint32_t y);
-void    clearScreenPixels();
+void    placePixel         (uint32_t x, uint32_t y);
+void    removePixel        (uint32_t x, uint32_t y);
+void    clearScreenPixels  ();
+void    plotcross          (uint16_t xn, uint8_t yn);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+void    plotbox            (uint16_t xn, uint8_t yn);                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
+void    graph_axis_draw    (void);
 
 
 //graph functions
 void    graph_setupmemory  (void);
 void    graph_sigmaplus    (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 void    graph_end          (void);
+graphtype grf_x(int i);
+graphtype grf_y(int i);
+
 #ifndef TESTSUITE_BUILD
 int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max);
 int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 #endif
 
 
-
-void fnPlotStat    (uint16_t unusedButMandatoryParameter);
-void fnPlotRegLine (uint16_t unusedButMandatoryParameter);
+void    graphPlotstat      (void);
+void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
+void    fnPlotRegLine      (uint16_t unusedButMandatoryParameter);
  

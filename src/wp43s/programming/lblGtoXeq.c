@@ -90,15 +90,7 @@ void fnGoto(uint16_t label) {
 
 void fnGotoDot(uint16_t globalStepNumber) {
   if(dynamicMenuItem >= 0) {
-    if(dynamicMenuItem >= dynamicSoftmenu[softmenuStack[0].softmenuId].numItems) {
-      return;
-    }
-
-    uint8_t *labelName = dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent;
-    while(dynamicMenuItem > 0) {
-      labelName += stringByteLength((char *)labelName) + 1;
-      dynamicMenuItem--;
-    }
+    uint8_t *labelName = dynmenuGetLabel(dynamicMenuItem);
 
     if(*labelName == 0) {
       return;

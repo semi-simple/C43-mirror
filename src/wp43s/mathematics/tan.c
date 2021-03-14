@@ -30,15 +30,15 @@ TO_QSPI void (* const Tan[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 
 
 
-void longIntegerAngleReduction(calcRegister_t regist, uint8_t angularMode, real_t *reducedAngle) {
+void longIntegerAngleReduction(calcRegister_t regist, angularMode_t angularMode, real_t *reducedAngle) {
   uint32_t oneTurn;
 
   switch(angularMode) {
-    case AM_DEGREE:
-    case AM_DMS:    oneTurn = 360; break;
-    case AM_MULTPI: oneTurn =   2; break;
-    case AM_GRAD:   oneTurn = 400; break;
-    default:        oneTurn =   0;
+    case amMultPi: oneTurn =   2; break;
+    case amGrad:   oneTurn = 400; break;
+    case amDegree:
+    case amDMS:    oneTurn = 360; break;
+    default:       oneTurn =   0;
   }
 
   if(oneTurn == 0) {
@@ -102,7 +102,7 @@ void tanLonI(void) {
     return;
   }
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   if(realIsZero(&cos)) {
     realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -131,11 +131,10 @@ void tanReal(void) {
   }
   else {
     real_t sin, cos, tan;
-    uint32_t xAngularMode;
+    angularMode_t xAngularMode = getRegisterAngularMode(REGISTER_X);
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &tan);
-    xAngularMode = getRegisterAngularMode(REGISTER_X);
-    WP34S_Cvt2RadSinCosTan(&tan, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &sin, &cos, &tan, &ctxtReal39);
+    WP34S_Cvt2RadSinCosTan(&tan, (xAngularMode == amNone ? currentAngularMode : xAngularMode), &sin, &cos, &tan, &ctxtReal39);
 
     if(realIsZero(&cos) && !getSystemFlag(FLAG_SPCRES)) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -153,7 +152,7 @@ void tanReal(void) {
       }
     }
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -179,7 +178,7 @@ uint8_t TanComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real
     real_t numerReal, denomReal;
     real_t numerImag, denomImag;
 
-    WP34S_Cvt2RadSinCosTan(xReal, AM_RADIAN, &sina, &cosa, NULL, realContext);
+    WP34S_Cvt2RadSinCosTan(xReal, amRadian, &sina, &cosa, NULL, realContext);
     WP34S_SinhCosh(xImag, &sinhb, &coshb, realContext);
 
     realMultiply(&sina, &coshb, &numerReal, realContext);

@@ -69,7 +69,7 @@ void arcsinLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arcsinCplx();
@@ -97,7 +97,7 @@ void arcsinLonI(void) {
     if(realIsNegative(&x)) {
       real34ChangeSign(REGISTER_REAL34_DATA(REGISTER_X));
     }
-    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
+    convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, currentAngularMode);
   }
 }
 
@@ -123,7 +123,7 @@ void arcsinReal(void) {
 
   if(realCompareAbsGreaterThan(&x, const_1)) {
     if(getFlag(FLAG_CPXRES)) {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
       arcsinCplx();
@@ -142,12 +142,8 @@ void arcsinReal(void) {
   }
 
   WP34S_Asin(&x, &x, &ctxtReal39);
-  convertAngleFromTo(&x, AM_RADIAN, currentAngularMode, &ctxtReal39);
+  convertAngleFromTo(&x, amRadian, currentAngularMode, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-
-  if(currentAngularMode == AM_DMS) {
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 void arcsinCplx(void) {

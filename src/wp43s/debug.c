@@ -134,13 +134,13 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 
     case dtReal34:
       switch(getRegisterTag(regist)) {
-        case AM_DEGREE:             return "degree  ";
-        case AM_DMS:                return "dms     ";
-        case AM_RADIAN:             return "radian  ";
-        case AM_MULTPI:             return "multPi  ";
-        case AM_GRAD:               return "grad    ";
-        case AM_NONE:               return "none    ";
-        default:                    return "???     ";
+        case amRadian:             return "radian  ";
+        case amMultPi:             return "multPi  ";
+        case amGrad:               return "grad    ";
+        case amDegree:             return "degree  ";
+        case amDMS:                return "dms     ";
+        case amNone:               return "none    ";
+        default:                   return "???     ";
       }
 
     case dtComplex34:
@@ -151,7 +151,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
     case dtTime:
     case dtConfig:
       switch(getRegisterTag(regist)) {
-        case AM_NONE:               return "        ";
+        case amNone:               return "        ";
         default:                    return "???     ";
       }
 
@@ -171,13 +171,13 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
  * \param[in] am uint16_t Angular mode
  * \return char*          Name of the angular mode
  ***********************************************/
-char * getAngularModeName(uint16_t angularMode) {
-  if(angularMode == AM_DEGREE) return "degree";
-  if(angularMode == AM_DMS   ) return "d.ms  ";
-  if(angularMode == AM_RADIAN) return "radian";
-  if(angularMode == AM_MULTPI) return "multPi";
-  if(angularMode == AM_GRAD  ) return "grad  ";
-  if(angularMode == AM_NONE)   return "none  ";
+char * getAngularModeName(angularMode_t angularMode) {
+  if(angularMode == amRadian) return "radian";
+  if(angularMode == amMultPi) return "multPi";
+  if(angularMode == amGrad  ) return "grad  ";
+  if(angularMode == amDegree) return "degree";
+  if(angularMode == amDMS   ) return "d.ms  ";
+  if(angularMode == amNone)   return "none  ";
 
   return "???   ";
 }
@@ -539,7 +539,7 @@ void debugNIM(void) {
 
     if(getRegisterDataType(regist) == dtReal34) {
       formatReal34Debug(string + n, (real34_t *)getRegisterDataPointer(regist));
-      if(getRegisterAngularMode(regist) != AM_NONE) {
+      if(getRegisterAngularMode(regist) != amNone) {
         n = stringByteLength(string);
         strcpy(string + n++, " ");
         strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));

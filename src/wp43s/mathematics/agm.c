@@ -88,7 +88,7 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
       realMultiply(&cReal, const_1on2, &aReal, &ctxtReal39); // a = (a + b) / 2
     }
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else { // Complex input
@@ -108,7 +108,7 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
       realMultiply(&cImag, const_1on2, &aImag, &ctxtReal39); // a = (a + b) / 2 imag part
     }
 
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&aImag, REGISTER_IMAG34_DATA(REGISTER_X));
   }

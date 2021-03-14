@@ -79,16 +79,16 @@ void argReal(void) {
   }
   else {
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))){
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     }
     else
       if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_180, REGISTER_REAL34_DATA(REGISTER_X));
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
         setRegisterAngularMode(REGISTER_X, currentAngularMode);
       }
   }
@@ -101,7 +101,7 @@ void argCplx(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
   realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
-  convertAngleFromTo(&imag, AM_RADIAN, currentAngularMode, &ctxtReal39);
+  convertAngleFromTo(&imag, amRadian, currentAngularMode, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
   realToReal34(&imag, REGISTER_REAL34_DATA(REGISTER_X));

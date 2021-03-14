@@ -107,10 +107,14 @@ void fnRsd(uint16_t digits) {
 void senaryDigitToDecimal(bool_t pre_grouped, real_t *val, realContext_t *realContext) {
   real_t sixtieths, st;
   realDivide(const_100, const_60, &st, realContext);
-  if(pre_grouped)
+
+  if(pre_grouped) {
     realDivideRemainder(val, const_10, &sixtieths, realContext);
-  else
+  }
+  else {
     realCopy(val, &sixtieths);
+  }
+
   realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_DOWN, realContext);
   realSubtract(val, &sixtieths, val, realContext);
   realMultiply(&sixtieths, &st, &sixtieths, realContext);
@@ -121,10 +125,14 @@ void senaryDigitToDecimal(bool_t pre_grouped, real_t *val, realContext_t *realCo
 void decimalDigitToSenary(bool_t pre_grouped, real_t *val, realContext_t *realContext) {
   real_t sixtieths, st;
   realDivide(const_60, const_100, &st, realContext);
-  if(pre_grouped)
+
+  if(pre_grouped) {
     realDivideRemainder(val, const_10, &sixtieths, realContext);
-  else
+  }
+  else {
     realCopy(val, &sixtieths);
+  }
+
   realToIntegralValue(&sixtieths, &sixtieths, DEC_ROUND_DOWN, realContext);
   realSubtract(val, &sixtieths, val, realContext);
   realMultiply(&sixtieths, &st, &sixtieths, realContext);
@@ -177,6 +185,22 @@ void rsdCxma(uint16_t digits) {
 
 void rsdReal(uint16_t digits) {
   real_t val;
+
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
+    real34FromDegToDms(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+  roundToSignificantDigits(&val, &val, digits, &ctxtReal39);
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
+    real34FromDmsToDeg(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+}
+/*void rsdReal(uint16_t digits) {
+  real_t val;
   int32_t i;
 
   updateDisplayValueX = true;
@@ -185,7 +209,7 @@ void rsdReal(uint16_t digits) {
   updateDisplayValueX = false;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
     for(i = 0; i < 2; ++i){
       val.exponent += 1;
       senaryDigitToDecimal(true, &val, &ctxtReal39);
@@ -194,17 +218,17 @@ void rsdReal(uint16_t digits) {
     val.exponent -= 4;
   }
   roundToSignificantDigits(&val, &val, digits, &ctxtReal39);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
     for(i = 0; i < 2; ++i){
       val.exponent += 1;
       decimalDigitToSenary(true, &val, &ctxtReal39);
       val.exponent += 1;
     }
     val.exponent -= 4;
-    convertAngleFromTo(&val, AM_DMS, AM_DMS, &ctxtReal39);
+    convertAngleFromTo(&val, amDMS, amDMS, &ctxtReal39);
   }
   realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
-}
+}*/
 
 
 

@@ -89,7 +89,7 @@ void lnLonI(void) {
 
   if(longIntegerIsZero(lgInt)) {
     if(getSystemFlag(FLAG_SPCRES)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
@@ -106,18 +106,18 @@ void lnLonI(void) {
 
     if(longIntegerIsPositive(lgInt)) {
       WP34S_Ln(&x, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
       WP34S_Ln(&x, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else if(getSystemFlag(FLAG_SPCRES)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
@@ -149,7 +149,7 @@ void lnShoI(void) {
   real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   if(realIsZero(&x)) {
     if(getSystemFlag(FLAG_SPCRES)) {
@@ -170,7 +170,7 @@ void lnShoI(void) {
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
       WP34S_Ln(&x, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -214,7 +214,7 @@ void lnReal(void) {
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
         realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
       }
@@ -235,7 +235,7 @@ void lnReal(void) {
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
       WP34S_Ln(&x, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(const_pi, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -249,7 +249,7 @@ void lnReal(void) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

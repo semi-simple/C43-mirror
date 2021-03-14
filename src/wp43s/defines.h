@@ -392,14 +392,6 @@
 #define DF_SCI                                     2
 #define DF_ENG                                     3
 
-// Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0  | This is because of the tables
-#define AM_RADIAN                                  1 // radian must be 1  | angle45, angle90, and angle180
-#define AM_MULTPI                                  2 // multpi must be 2  | for angle reduction before
-#define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
-#define AM_DMS                                     4
-#define AM_NONE                                    5
-
 // Date format 2 bits
 #define DF_DMY                                     0
 #define DF_YMD                                     1

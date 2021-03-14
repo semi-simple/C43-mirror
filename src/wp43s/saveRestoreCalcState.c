@@ -423,27 +423,27 @@ static void registerToSaveString(calcRegister_t regist) {
     case dtReal34:
       real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
       switch(getRegisterAngularMode(regist)) {
-        case AM_DEGREE:
+        case amDegree:
           strcpy(aimBuffer, "Real:DEG");
           break;
 
-        case AM_DMS:
+        case amDMS:
           strcpy(aimBuffer, "Real:DMS");
           break;
 
-        case AM_RADIAN:
+        case amRadian:
           strcpy(aimBuffer, "Real:RAD");
           break;
 
-        case AM_MULTPI:
+        case amMultPi:
           strcpy(aimBuffer, "Real:MULTPI");
           break;
 
-        case AM_GRAD:
+        case amGrad:
           strcpy(aimBuffer, "Real:GRAD");
           break;
 
-        case AM_NONE:
+        case amNone:
           strcpy(aimBuffer, "Real");
           break;
 
@@ -752,15 +752,15 @@ int32_t stringToInt32(const char *str) {
 
 
 static void restoreRegister(calcRegister_t regist, char *type, char *value) {
-  uint32_t tag = AM_NONE;
+  uint32_t tag = amNone;
 
   if(type[4] == ':') {
-         if(type[5] == 'D' && type[6] == 'E') tag = AM_DEGREE;
-    else if(type[5] == 'D' && type[6] == 'M') tag = AM_DMS;
-    else if(type[5] == 'R')                   tag = AM_RADIAN;
-    else if(type[5] == 'M')                   tag = AM_MULTPI;
-    else if(type[5] == 'G')                   tag = AM_GRAD;
-    else                                      tag = AM_NONE;
+         if(type[5] == 'R')                   tag = amRadian;
+    else if(type[5] == 'M')                   tag = amMultPi;
+    else if(type[5] == 'G')                   tag = amGrad;
+    else if(type[5] == 'D' && type[6] == 'E') tag = amDegree;
+    else if(type[5] == 'D' && type[6] == 'M') tag = amDMS;
+    else                                      tag = amNone;
 
     reallocateRegister(regist, dtReal34, REAL34_SIZE, tag);
     stringToReal34(value, REGISTER_REAL34_DATA(regist));
@@ -785,7 +785,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
 
     utf8ToString((uint8_t *)value, errorMessage);
     len = stringByteLength(errorMessage) + 1;
-    reallocateRegister(regist, dtString, TO_BLOCKS(len), AM_NONE);
+    reallocateRegister(regist, dtString, TO_BLOCKS(len), amNone);
     xcopy(REGISTER_STRING_DATA(regist), errorMessage, len);
   }
 
@@ -803,7 +803,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
   else if(strcmp(type, "Cplx") == 0) {
     char *imaginaryPart;
 
-    reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, amNone);
     imaginaryPart = value;
     while(*imaginaryPart != ' ') imaginaryPart++;
     *(imaginaryPart++) = 0;
@@ -814,7 +814,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
   else if(strcmp(type, "Conf") == 0) {
     char *cfg;
 
-    reallocateRegister(regist, dtConfig, CONFIG_SIZE, AM_NONE);
+    reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
     for(cfg=(char *)REGISTER_CONFIG_DATA(regist), tag=0; tag<sizeof(dtConfigDescriptor_t); tag++, value+=2, cfg++) {
       *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 8) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
     }

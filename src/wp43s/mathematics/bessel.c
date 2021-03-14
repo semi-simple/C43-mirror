@@ -25,7 +25,7 @@
 static bool_t besselGetParam(calcRegister_t regist, real_t *r, realContext_t *realContext) {
   switch(getRegisterDataType(regist)) {
     case dtReal34:
-      if(getRegisterAngularMode(regist) == AM_NONE) {
+      if(getRegisterAngularMode(regist) == amNone) {
        real34ToReal(REGISTER_REAL34_DATA(regist), r);
        return true;
       }
@@ -50,7 +50,7 @@ void fnBessel(uint16_t unusedButMandatoryParameter) {
   if(besselGetParam(REGISTER_X, &x, &ctxtReal75) && besselGetParam(REGISTER_Y, &n, &ctxtReal75)) {
     if(realIsAnInteger(&n) || (!realIsNegative(&x))) {
       WP34S_BesselJ(&n, &x, &r, &ctxtReal75);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else if(getSystemFlag(FLAG_CPXRES)) { // Real -> Complex
@@ -59,7 +59,7 @@ void fnBessel(uint16_t unusedButMandatoryParameter) {
       WP34S_Mod(&n, const_2, &a, &ctxtReal75);
       realMultiply(&a, const_pi, &a, &ctxtReal75);
       realPolarToRectangular(&r, &a, &r, &a, &ctxtReal75);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
     }

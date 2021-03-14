@@ -67,7 +67,7 @@ void arcsinhLonI(void) {
   real_t x, xSquared;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   // arcsinh(x) = ln(x + sqrt(x� + 1))
   realMultiply(&x, &x, &xSquared, &ctxtReal39);
@@ -99,7 +99,7 @@ void arcsinhReal(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     ArcsinhReal(&x, &x, &ctxtReal51);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

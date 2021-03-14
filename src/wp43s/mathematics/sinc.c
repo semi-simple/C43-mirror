@@ -71,7 +71,7 @@ void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t
   real_t ii;
 
 
-//  fnCvtFromCurrentAngularMode(AM_RADIAN);
+//  fnCvtFromCurrentAngularMode(amRadian);
 
   realCopy(real, &rr);
   realCopy(imag, &ii);
@@ -83,7 +83,7 @@ void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t
   else {
     real_t sina, cosa, sinhb, coshb, sinR, sinImag;
 
-    WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
+    WP34S_Cvt2RadSinCosTan(real, amRadian, &sina, &cosa, NULL, realContext);
     WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
     realMultiply(&sina, &coshb, resReal, realContext);
@@ -106,12 +106,12 @@ void sincLonI(void) {
     realCopy(const_1, &x);
   }
   else {
-    longIntegerAngleReduction(REGISTER_X, AM_RADIAN, &x);
-    WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, &sine, NULL, NULL, &ctxtReal39);
+    longIntegerAngleReduction(REGISTER_X, amRadian, &x);
+    WP34S_Cvt2RadSinCosTan(&x, amRadian, &sine, NULL, NULL, &ctxtReal39);
     realDivide(&sine, &x, &x, &ctxtReal39);
   }
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -152,17 +152,17 @@ void sincReal(void) {
       realCopy(const_1, &x);
     }
     else {
-      uint32_t registerAngularMode = getRegisterAngularMode(REGISTER_X);
-      if(registerAngularMode != AM_NONE) {
-        convertAngleFromTo(&x, registerAngularMode, AM_RADIAN, &ctxtReal39);
+      angularMode_t registerAngularMode = getRegisterAngularMode(REGISTER_X);
+      if(registerAngularMode != amNone) {
+        convertAngleFromTo(&x, registerAngularMode, amRadian, &ctxtReal39);
       }
-      WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, &sine, NULL, NULL, &ctxtReal39);
+      WP34S_Cvt2RadSinCosTan(&x, amRadian, &sine, NULL, NULL, &ctxtReal39);
       realDivide(&sine, &x, &x, &ctxtReal39);
     }
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

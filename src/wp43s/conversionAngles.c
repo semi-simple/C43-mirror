@@ -79,7 +79,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       break;
 
     case dtReal34:
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X) == AM_NONE ? currentAngularMode : getRegisterAngularMode(REGISTER_X), toAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X) == amNone ? currentAngularMode : getRegisterAngularMode(REGISTER_X), toAngularMode);
       setRegisterAngularMode(REGISTER_X, toAngularMode);
       break;
 
@@ -101,14 +101,14 @@ void fnCvtDegToRad(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
-      setRegisterAngularMode(REGISTER_X, AM_RADIAN);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, amRadian);
+      setRegisterAngularMode(REGISTER_X, amRadian);
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_RADIAN);
-        setRegisterAngularMode(REGISTER_X, AM_RADIAN);
+      if(getRegisterAngularMode(REGISTER_X) == amDegree || getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, amRadian);
+        setRegisterAngularMode(REGISTER_X, amRadian);
       }
       else {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -137,14 +137,14 @@ void fnCvtRadToDeg(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
-      setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amDegree);
+      setRegisterAngularMode(REGISTER_X, amDegree);
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_RADIAN || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, AM_DEGREE);
-        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      if(getRegisterAngularMode(REGISTER_X) == amRadian || getRegisterAngularMode(REGISTER_X) == amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amDegree);
+        setRegisterAngularMode(REGISTER_X, amDegree);
       }
       else {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -173,14 +173,12 @@ void fnCvtDegToDms(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-      setRegisterAngularMode(REGISTER_X, AM_DMS);
+      setRegisterAngularMode(REGISTER_X, amDMS);
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_DEGREE || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, AM_DMS);
-        setRegisterAngularMode(REGISTER_X, AM_DMS);
+      if(getRegisterAngularMode(REGISTER_X) == amDegree || getRegisterAngularMode(REGISTER_X) == amNone) {
+        setRegisterAngularMode(REGISTER_X, amDMS);
       }
       else {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -209,14 +207,12 @@ void fnCvtDmsToDeg(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-      setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      setRegisterAngularMode(REGISTER_X, amDegree);
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      if(getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amNone) {
+        setRegisterAngularMode(REGISTER_X, amDegree);
       }
       else {
         displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -239,7 +235,7 @@ void fnCvtDmsToDeg(uint16_t unusedButMandatoryParameter) {
 
 
 
-void convertAngle34FromTo(real34_t *angle34, uint32_t fromAngularMode, uint32_t toAngularMode) {
+void convertAngle34FromTo(real34_t *angle34, angularMode_t fromAngularMode, angularMode_t toAngularMode) {
   real_t angle;
 
   real34ToReal(angle34, &angle);
@@ -249,122 +245,49 @@ void convertAngle34FromTo(real34_t *angle34, uint32_t fromAngularMode, uint32_t 
 
 
 
-void convertAngleFromTo(real_t *angle, uint32_t fromAngularMode, uint32_t toAngularMode, realContext_t *realContext) {
-  int16_t sign;
-  bool_t toDms;
-  real_t degrees, minutes, seconds;
-
-  if(fromAngularMode == AM_DMS) {
-    // Convert angle from DMS to DEGREE
-    sign = realIsNegative(angle) ? -1 : 1;
-    realSetPositiveSign(angle);
-
-    decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
-    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, realContext);
-
-    realSubtract(angle, &degrees, angle, realContext);
-    realMultiply(angle, const_100, angle, realContext);
-
-    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, realContext);
-
-    realSubtract(angle, &minutes, angle, realContext);
-    realMultiply(angle, const_100, &seconds, realContext);
-
-    if(realCompareGreaterEqual(&seconds, const_60)) {
-      realSubtract(&seconds, const_60, &seconds, realContext);
-      realAdd(&minutes, const_1, &minutes, realContext);
-    }
-
-    if(realCompareGreaterEqual(&minutes, const_60)) {
-      realSubtract(&minutes, const_60, &minutes, realContext);
-      realAdd(&degrees, const_1, &degrees, realContext);
-    }
-
-    realDivide(&minutes, const_60,   &minutes, realContext);
-    realDivide(&seconds, const_3600, &seconds, realContext);
-
-    realAdd(&degrees, &minutes, angle, realContext);
-    realAdd(angle,    &seconds, angle, realContext);
-
-    if(sign == -1) {
-      realSetNegativeSign(angle);
-    }
-
-    fromAngularMode = AM_DEGREE;
-  }
-
-  if(toAngularMode == AM_DMS) {
-    toAngularMode = AM_DEGREE;
-    toDms = true;
-  }
-  else {
-    toDms = false;
-  }
-
+void convertAngleFromTo(real_t *angle, angularMode_t fromAngularMode, angularMode_t toAngularMode, realContext_t *realContext) {
   switch(fromAngularMode) {
-    case AM_DEGREE:
+    case amRadian:
       switch(toAngularMode) {
-        case AM_RADIAN: realDivide(  angle, const_180onPi, angle, realContext); break;
-        case AM_MULTPI: realDivide(  angle, const_180,     angle, realContext); break;
-        case AM_GRAD:   realDivide(  angle, const_9on10,   angle, realContext); break;
+        case amMultPi: realDivide(  angle, const_pi,      angle, realContext); break;
+        case amGrad:   realMultiply(angle, const_200onPi, angle, realContext); break;
+        case amDegree:
+        case amDMS:    realMultiply(angle, const_180onPi, angle, realContext); break;
         default: {}
       }
       break;
 
-    case AM_RADIAN:
+    case amMultPi:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_180onPi, angle, realContext); break;
-        case AM_MULTPI: realDivide(  angle, const_pi,      angle, realContext); break;
-        case AM_GRAD:   realMultiply(angle, const_200onPi, angle, realContext); break;
+        case amRadian: realMultiply(angle, const_pi,      angle, realContext); break;
+        case amGrad:   realMultiply(angle, const_200,     angle, realContext); break;
+        case amDegree:
+        case amDMS:    realMultiply(angle, const_180,     angle, realContext); break;
         default: {}
       }
       break;
 
-    case AM_MULTPI:
+    case amGrad:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_180,     angle, realContext); break;
-        case AM_RADIAN: realMultiply(angle, const_pi,      angle, realContext); break;
-        case AM_GRAD:   realMultiply(angle, const_200,     angle, realContext); break;
+        case amRadian: realDivide(  angle, const_200onPi, angle, realContext); break;
+        case amMultPi: realDivide(  angle, const_200,     angle, realContext); break;
+        case amDegree:
+        case amDMS:    realMultiply(angle, const_9on10,   angle, realContext); break;
         default: {}
       }
       break;
 
-    case AM_GRAD:
+    case amDegree:
+    case amDMS:
       switch(toAngularMode) {
-        case AM_DEGREE: realMultiply(angle, const_9on10,   angle, realContext); break;
-        case AM_RADIAN: realDivide(  angle, const_200onPi, angle, realContext); break;
-        case AM_MULTPI: realDivide(  angle, const_200,     angle, realContext); break;
+        case amRadian: realDivide(  angle, const_180onPi, angle, realContext); break;
+        case amMultPi: realDivide(  angle, const_180,     angle, realContext); break;
+        case amGrad:   realDivide(  angle, const_9on10,   angle, realContext); break;
         default: {}
       }
       break;
 
     default: {}
-  }
-
-  if(toDms) {
-    // Convert angle from DEGREE to DMS
-    sign = realIsNegative(angle) ? -1 : 1;
-    realSetPositiveSign(angle);
-
-    realToIntegralValue(angle, &degrees, DEC_ROUND_DOWN, realContext);
-
-    realSubtract(angle, &degrees, angle, realContext);
-    realMultiply(angle, const_60, angle, realContext);
-
-    realToIntegralValue(angle, &minutes, DEC_ROUND_DOWN, realContext);
-
-    realSubtract(angle, &minutes, angle, realContext);
-    realMultiply(angle, const_60, &seconds, realContext);
-
-    realDivide(&minutes, const_100,   &minutes, realContext);
-    realDivide(&seconds, const_10000, &seconds, realContext);
-
-    realAdd(&degrees, &minutes, angle, realContext);
-    realAdd(angle,    &seconds, angle, realContext);
-
-    if(sign == -1) {
-      realSetNegativeSign(angle);
-    }
   }
 }
 
@@ -472,4 +395,93 @@ void setInfiniteComplexAngle(uint32_t angle, real_t *x, real_t *y) {
     default: realCopy(const_plusInfinity, y);
              break;
   }
+}
+
+
+
+/********************************************//**
+ * \brief Converts a real34 from DMS to DEG
+ *
+ * \param[in]  angleDms real34_t* Real to be conveted to DEG, the format of the real must be ddd.mm.ssfffffff e.g. 12.345678 = 12°34'56.78"
+ * \param[out] angleDec real34_t* Converted real, from the example above the result is 12.58243888888888888888888888888889°
+ * \return void
+ ***********************************************/
+void real34FromDmsToDeg(const real34_t *angleDms, real34_t *angleDec) {
+  real_t angle, degrees, minutes, seconds;
+
+  real34ToReal(angleDms, &angle);
+  realSetPositiveSign(&angle);
+
+  decContextClearStatus(&ctxtReal34, DEC_Invalid_operation);
+  realToIntegralValue(&angle, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+
+  realSubtract(&angle, &degrees, &angle, &ctxtReal39);
+  realMultiply(&angle, const_100, &angle, &ctxtReal39);
+
+  realToIntegralValue(&angle, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+
+  realSubtract(&angle, &minutes, &angle, &ctxtReal39);
+  realMultiply(&angle, const_100, &seconds, &ctxtReal39);
+
+  if(realCompareGreaterEqual(&seconds, const_60)) {
+    realSubtract(&seconds, const_60, &seconds, &ctxtReal39);
+    realAdd(&minutes, const_1, &minutes, &ctxtReal39);
+  }
+
+  if(realCompareGreaterEqual(&minutes, const_60)) {
+    realSubtract(&minutes, const_60, &minutes, &ctxtReal39);
+    realAdd(&degrees, const_1, &degrees, &ctxtReal39);
+  }
+
+  realDivide(&minutes, const_60,   &minutes, &ctxtReal39);
+  realDivide(&seconds, const_3600, &seconds, &ctxtReal39);
+
+  realAdd(&degrees, &minutes, &angle, &ctxtReal39);
+  realAdd(&angle,   &seconds, &angle, &ctxtReal39);
+
+  if(real34IsNegative(angleDms)) {
+    realSetNegativeSign(&angle);
+  }
+
+  realToReal34(&angle, angleDec);
+}
+
+
+
+/********************************************//**
+ * \brief Converts a real34 from DEG to DMS
+ *
+ * \param[in]  angleDec real34_t* Real to be conveted to DMS, 23.456789°
+ * \param[out] angleDms real34_t* Converted real, from the example above the result 23.27244404 = 23°27'24.4404"
+ * \return void
+ ***********************************************/
+void real34FromDegToDms(const real34_t *angleDec, real34_t *angleDms) {
+  real_t angle, degrees, minutes, seconds;
+
+  real34ToReal(angleDec, &angle);
+  realSetPositiveSign(&angle);
+
+  realToIntegralValue(&angle, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+
+  realSubtract(&angle, &degrees, &angle, &ctxtReal39);
+  realMultiply(&angle, const_60, &angle, &ctxtReal39);
+
+  realToIntegralValue(&angle, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+
+  realSubtract(&angle, &minutes, &angle, &ctxtReal39);
+  realMultiply(&angle, const_60, &seconds, &ctxtReal39);
+
+  realDivide(&minutes, const_100,   &minutes, &ctxtReal39);
+  realDivide(&seconds, const_10000, &seconds, &ctxtReal39);
+
+  realAdd(&degrees, &minutes, &angle, &ctxtReal39);
+  realAdd(&angle,   &seconds, &angle, &ctxtReal39);
+
+  if(real34IsNegative(angleDec)) {
+    realSetNegativeSign(&angle);
+  }
+
+  realToReal34(&angle, angleDms);
+
+  checkDms34(angleDms);
 }

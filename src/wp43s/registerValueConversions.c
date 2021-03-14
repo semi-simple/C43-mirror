@@ -54,7 +54,7 @@ void convertLongIntegerRegisterToReal34Register(calcRegister_t source, calcRegis
   convertLongIntegerRegisterToLongInteger(source, lgInt);
   longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
   longIntegerFree(lgInt);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, amNone);
   stringToReal34(tmpString, REGISTER_REAL34_DATA(destination));
 }
 
@@ -125,7 +125,7 @@ void convertShortIntegerRegisterToReal34Register(calcRegister_t source, calcRegi
   real34_t lowWord;
 
   convertShortIntegerRegisterToUInt64(source, &sign, &value);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, amNone);
 
   uInt32ToReal34(value >> 32, REGISTER_REAL34_DATA(destination));
   uInt32ToReal34(value & 0x00000000ffffffff, &lowWord);
@@ -381,7 +381,7 @@ void convertTimeRegisterToReal34Register(calcRegister_t source, calcRegister_t d
   real34_t real34, value34;
   real34Copy(REGISTER_REAL34_DATA(source), &real34);
   int32ToReal34(3600, &value34);
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, amNone);
   real34Divide(&real34, &value34, REGISTER_REAL34_DATA(destination));
 }
 
@@ -391,7 +391,7 @@ void convertReal34RegisterToTimeRegister(calcRegister_t source, calcRegister_t d
   real34_t real34, value34;
   real34Copy(REGISTER_REAL34_DATA(source), &real34);
   int32ToReal34(3600, &value34);
-  reallocateRegister(destination, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtTime, REAL34_SIZE, amNone);
   real34Multiply(&real34, &value34, REGISTER_REAL34_DATA(destination));
 }
 
@@ -426,7 +426,7 @@ void convertDateRegisterToReal34Register(calcRegister_t source, calcRegister_t d
     int32ToReal34(1000000, &val), real34Divide(&y, &val, &y);
   }
 
-  reallocateRegister(destination, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtReal34, REAL34_SIZE, amNone);
   real34Add(&y, &m, REGISTER_REAL34_DATA(destination));
   real34Add(REGISTER_REAL34_DATA(destination), &d, REGISTER_REAL34_DATA(destination));
   if(isNegative) real34SetNegativeSign(REGISTER_REAL34_DATA(destination));
@@ -465,7 +465,7 @@ void convertReal34RegisterToDateRegister(calcRegister_t source, calcRegister_t d
       return;
   }
 
-  reallocateRegister(destination, dtDate, REAL34_SIZE, AM_NONE);
+  reallocateRegister(destination, dtDate, REAL34_SIZE, amNone);
   if     (getSystemFlag(FLAG_YMD)) composeJulianDay(&part1, &part2, &part3, REGISTER_REAL34_DATA(destination));
   else if(getSystemFlag(FLAG_MDY)) composeJulianDay(&part3, &part1, &part2, REGISTER_REAL34_DATA(destination));
   else if(getSystemFlag(FLAG_DMY)) composeJulianDay(&part3, &part2, &part1, REGISTER_REAL34_DATA(destination));

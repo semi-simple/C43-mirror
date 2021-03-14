@@ -40,7 +40,7 @@ void fnBn(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+  else if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == amNone) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   }
   else {
@@ -56,7 +56,7 @@ void fnBn(uint16_t unusedButMandatoryParameter) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -74,7 +74,7 @@ void fnBnStar(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+  else if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == amNone) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   }
   else {
@@ -90,7 +90,7 @@ void fnBnStar(uint16_t unusedButMandatoryParameter) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));
   }
 

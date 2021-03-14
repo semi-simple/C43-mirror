@@ -27,7 +27,7 @@ static bool_t getOrthoPolyParam(calcRegister_t regist, real_t *val, realContext_
       convertLongIntegerRegisterToReal(regist, val, realContext);
       return true;
     case dtReal34:
-      if(getRegisterAngularMode(regist) == AM_NONE) {
+      if(getRegisterAngularMode(regist) == amNone) {
         real34ToReal(REGISTER_REAL34_DATA(regist), val);
         return true;
       }
@@ -57,7 +57,7 @@ void fnOrthoPoly(uint16_t kind) {
       }
       else {
         WP34S_OrthoPoly(kind, &x, &y, &z, &ans, &ctxtReal39);
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
         if(kind == ORTHOPOLY_LAGUERRE_L_ALPHA) fnDropY(NOPARAM);
       }

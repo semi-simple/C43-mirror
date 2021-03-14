@@ -41,9 +41,9 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     xIsAReal = true;
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
-      if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
+      if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), amRadian);
+        setRegisterAngularMode(REGISTER_X, amNone);
         xIsAReal = false;
       }
     }
@@ -60,7 +60,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &temp);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&temp));
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
 
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
       if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
@@ -73,7 +73,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
         real34ToReal(VARIABLE_REAL34_DATA(&temp), &magnitude);
         real34ToReal(VARIABLE_IMAG34_DATA(&temp), &theta);
         if(xIsAReal) {
-          convertAngleFromTo(&theta, currentAngularMode, AM_RADIAN, &ctxtReal39);
+          convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
         }
         if(realCompareLessThan(&magnitude, const_0)) {
           realSetPositiveSign(&magnitude);

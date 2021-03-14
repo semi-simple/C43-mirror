@@ -101,7 +101,7 @@ void invertLonI(void) {
 
       realDivide(const_1, &reX, &reX, &ctxtReal39);
 
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&reX, REGISTER_REAL34_DATA(REGISTER_X));
     }
 
@@ -156,7 +156,7 @@ void invertReal(void) {
   else {
     real34Divide(const34_1, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

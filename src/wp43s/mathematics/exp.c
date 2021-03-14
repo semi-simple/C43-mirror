@@ -79,7 +79,7 @@ void expComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t 
   }
 
  realExp(real, &expa, realContext);
- WP34S_Cvt2RadSinCosTan(imag, AM_RADIAN, &sin, &cos, NULL, realContext);
+ WP34S_Cvt2RadSinCosTan(imag, amRadian, &sin, &cos, NULL, realContext);
  realMultiply(&expa, &cos, resReal, realContext);
  realMultiply(&expa, &sin, resImag, realContext);
 }
@@ -97,7 +97,7 @@ void expLonI(void) {
 
   convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
   realExp(&a, &a, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -120,7 +120,7 @@ void expShoI(void) {
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   realExp(&x, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -140,7 +140,7 @@ void expReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   realExp(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

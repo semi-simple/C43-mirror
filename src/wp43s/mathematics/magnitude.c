@@ -88,7 +88,7 @@ void magnitudeShoI(void) {
 
 void magnitudeReal(void) {
   real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -98,7 +98,7 @@ void magnitudeCplx(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   realMultiply(&a, &a, &a, &ctxtReal39);
   realFMA(&b, &b, &a, &a, &ctxtReal39);

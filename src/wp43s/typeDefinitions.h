@@ -110,24 +110,38 @@ typedef enum {
 
 
 /********************************************//**
+ * \typedef angularMode_t
+ * \brief angular units
+ ***********************************************/
+typedef enum {
+  amRadian =  0, // radian must be 0  | This is because of the tables
+  amMultPi =  1, // multpi must be 1  | angle45, angle90, and angle180
+  amGrad   =  2, // grad   must be 2  | for angle reduction before
+  amDegree =  3, // degree must be 3  | Taylor trig computation.
+  amDMS    =  4,
+  amNone   =  5
+} angularMode_t;
+
+
+/********************************************//**
  * \typedef dtConfigDescriptor_t
  * \brief Configuration for STOCFG and RCLCFG
  ***********************************************/
 typedef struct {
-  uint8_t   shortIntegerMode;
-  uint8_t   shortIntegerWordSize;
-  uint8_t   displayFormat;
-  uint8_t   displayFormatDigits;
-  uint8_t   groupingGap;
-  uint8_t   currentAngularMode;
-  uint8_t   displayStack;
-  uint8_t   roundingMode;
-  uint8_t   timeDisplayFormatDigits;
-  uint8_t   reservedForPossibleFutureUse[3];
-  uint32_t  denMax;
-  uint32_t  firstGregorianDay;
-  uint64_t  systemFlags;
-  calcKey_t kbd_usr[37];
+  uint8_t       shortIntegerMode;
+  uint8_t       shortIntegerWordSize;
+  uint8_t       displayFormat;
+  uint8_t       displayFormatDigits;
+  uint8_t       groupingGap;
+  uint8_t       displayStack;
+  uint8_t       roundingMode;
+  uint8_t       timeDisplayFormatDigits;
+  uint8_t       reservedForPossibleFutureUse[3];
+  angularMode_t currentAngularMode;
+  uint32_t      denMax;
+  uint32_t      firstGregorianDay;
+  uint64_t      systemFlags;
+  calcKey_t     kbd_usr[37];
 } dtConfigDescriptor_t;
 
 
@@ -337,4 +351,3 @@ typedef struct {
   int16_t    min;
   int16_t    max;
 } tamState_t;
-

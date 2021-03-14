@@ -86,7 +86,7 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
     realMultiply(&rr, const_pi, &rr, realContext);
     realMultiply(&ii, const_pi, &ii, realContext);
 
-    WP34S_Cvt2RadSinCosTan(&rr, AM_RADIAN, &sina, &cosa, NULL, realContext);
+    WP34S_Cvt2RadSinCosTan(&rr, amRadian, &sina, &cosa, NULL, realContext);
     WP34S_SinhCosh(&ii, &sinhb, &coshb, realContext);
 
     realMultiply(&sina, &coshb, resReal, realContext);
@@ -103,11 +103,11 @@ void sincpiComplex(const real_t *real, const real_t *imag, real_t *resReal, real
 void sincpiLonI(void) {
 
   if(longIntegerIsZeroRegister(REGISTER_X)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -158,17 +158,17 @@ void sincpiReal(void) {
       realCopy(const_0, &x);
     }
     else {
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-        setRegisterAngularMode(REGISTER_X, AM_MULTPI);
+      if(getRegisterAngularMode(REGISTER_X) == amNone) {
+        setRegisterAngularMode(REGISTER_X, amMultPi);
       }
-      convertAngleFromTo(&x, getRegisterAngularMode(REGISTER_X), AM_RADIAN, &ctxtReal39);
-      WP34S_Cvt2RadSinCosTan(&x, AM_RADIAN, &sine, NULL, NULL, &ctxtReal39);
+      convertAngleFromTo(&x, getRegisterAngularMode(REGISTER_X), amRadian, &ctxtReal39);
+      WP34S_Cvt2RadSinCosTan(&x, amRadian, &sine, NULL, NULL, &ctxtReal39);
       realDivide(&sine, &x, &x, &ctxtReal39);
     }
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

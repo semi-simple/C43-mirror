@@ -614,9 +614,8 @@
 
             case CM_PLOT_STAT:
               if(item == ITM_EXIT || item == ITM_BACKSPACE) {
-                calcMode = previousCalcMode;
+                fnPlotClose(0);
               }
-              //keyActionProcessed = true;
               break;
 
             case CM_CONFIRMATION:
@@ -856,8 +855,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_BUG_ON_SCREEN:
-      case CM_PLOT_STAT:
         calcMode = previousCalcMode;
+        break;
+
+      case CM_PLOT_STAT:
+        calcMode = CM_NORMAL;
+        popSoftmenu();
         break;
 
       case CM_CONFIRMATION:

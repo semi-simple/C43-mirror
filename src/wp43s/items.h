@@ -1812,8 +1812,9 @@
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
 #define ITM_PLOT_REGLINE              1756
+#define ITM_CLOSE                     1757
 
-#define LAST_ITEM                     1757
+#define LAST_ITEM                     1758
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

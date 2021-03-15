@@ -735,30 +735,6 @@ void fnReset(uint16_t confirmation) {
     ((dataBlock_t *)memPtr)->matrixColumns = 1;
     real34Zero(memPtr + 4);
 
-#define NAMED_VAR(LETTER, VALUE) \
-    allocateNamedVariable(STD_##LETTER, dtReal34, REAL34_SIZE); \
-    uInt32ToReal34(VALUE, REGISTER_REAL34_DATA(FIRST_NAMED_VARIABLE + numberOfNamedVariables - 1));
-
-    NAMED_VAR(A, 100)
-    NAMED_VAR(B, 222)
-    NAMED_VAR(C, 300)
-    NAMED_VAR(D, 400)
-    NAMED_VAR(E, 500)
-    NAMED_VAR(F, 600)
-    NAMED_VAR(G, 600)
-    NAMED_VAR(H, 600)
-    NAMED_VAR(I, 600)
-    NAMED_VAR(J, 600)
-    NAMED_VAR(K, 600)
-    NAMED_VAR(L, 600)
-    NAMED_VAR(M, 600)
-    NAMED_VAR(N, 600)
-    NAMED_VAR(O, 600)
-    NAMED_VAR(P, 600)
-    NAMED_VAR(Q, 600)
-    NAMED_VAR(R, 600)
-    NAMED_VAR(S, 600)
-
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
     #endif // PC_BUILD

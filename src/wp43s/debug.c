@@ -521,15 +521,24 @@ void debugNIM(void) {
    * \return char*          Name of the alpha selection menu
    ***********************************************/
   char * getAlphaSelectionMenuName(uint16_t alsm) {
-    if(alsm == CATALOG_NONE) return "CATALOG_NONE";
-    if(alsm == CATALOG_FCNS) return "CATALOG_FCNS";
-    if(alsm == CATALOG_CNST) return "CATALOG_CNST";
-    if(alsm == CATALOG_MENU) return "CATALOG_MENU";
-    if(alsm == CATALOG_SYFL) return "CATALOG_SYFL";
-    if(alsm == CATALOG_AINT) return "CATALOG_AINT";
-    if(alsm == CATALOG_aint) return "CATALOG_aint";
-    if(alsm == CATALOG_PROG) return "CATALOG_PROG";
-    if(alsm == CATALOG_VAR)  return "CATALOG_VAR";
+    if(alsm == CATALOG_NONE)     return "CATALOG_NONE";
+    if(alsm == CATALOG_FCNS)     return "CATALOG_FCNS";
+    if(alsm == CATALOG_CNST)     return "CATALOG_CNST";
+    if(alsm == CATALOG_MENU)     return "CATALOG_MENU";
+    if(alsm == CATALOG_SYFL)     return "CATALOG_SYFL";
+    if(alsm == CATALOG_AINT)     return "CATALOG_AINT";
+    if(alsm == CATALOG_aint)     return "CATALOG_aint";
+    if(alsm == CATALOG_PROG)     return "CATALOG_PROG";
+    if(alsm == CATALOG_VAR)      return "CATALOG_VAR";
+    if(alsm == CATALOG_MATRS)    return "CATALOG_MATRS";
+    if(alsm == CATALOG_STRINGS)  return "CATALOG_STRINGS";
+    if(alsm == CATALOG_DATES)    return "CATALOG_DATES";
+    if(alsm == CATALOG_TIMES)    return "CATALOG_TIMES";
+    if(alsm == CATALOG_ANGLES)   return "CATALOG_ANGLES";
+    if(alsm == CATALOG_SINTS)    return "CATALOG_SINTS";
+    if(alsm == CATALOG_LINTS)    return "CATALOG_LINTS";
+    if(alsm == CATALOG_REALS)    return "CATALOG_REALS";
+    if(alsm == CATALOG_CPXS)     return "CATALOG_CPXS";
 
     return "CATALOG_????";
   }

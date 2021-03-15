@@ -486,6 +486,43 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
 
 
+  static void _dynmenuConstructVars(int16_t menu, bool_t applyFilter, dataType_t typeFilter, bool_t isAngular) {
+    uint16_t numberOfBytes, numberOfVars;
+    uint8_t *ptr;
+    numberOfBytes = 1;
+    numberOfVars = 0;
+    memset(tmpString, 0, TMP_STR_LENGTH);
+    for(int i=0; i<numberOfNamedVariables; i++) {
+      calcRegister_t regist = i+FIRST_NAMED_VARIABLE;
+      dataType_t dt = getRegisterDataType(regist);
+      if(!applyFilter || (dt != dtReal34 && dt == typeFilter) ||
+          (typeFilter == dtReal34Matrix && dt == dtComplex34Matrix) ||
+          (typeFilter == dtReal34 && dt == dtReal34 &&
+            ((isAngular && getRegisterAngularMode(regist) != amNone) ||
+             (!isAngular && getRegisterAngularMode(regist) == amNone)))) {
+        xcopy(tmpString + 15 * numberOfVars, allNamedVariables[i].variableName + 1, allNamedVariables[i].variableName[0]);
+        numberOfVars++;
+        numberOfBytes += 1 + allNamedVariables[i].variableName[0];
+      }
+    }
+
+    if(numberOfVars != 0) {
+      qsort(tmpString, numberOfVars, 15, sortMenu);
+    }
+
+    ptr = malloc(numberOfBytes);
+    dynamicSoftmenu[menu].menuContent = ptr;
+    for(int i=0; i<numberOfVars; i++) {
+      int16_t len = stringByteLength(tmpString + 15*i) + 1;
+      xcopy(ptr, tmpString + 15*i, len);
+      ptr += len;
+    }
+
+    dynamicSoftmenu[menu].numItems = numberOfVars;
+  }
+
+
+
   static void initVariableSoftmenu(int16_t menu) {
     int16_t i, numberOfBytes, numberOfGlobalLabels;
     uint8_t *ptr;
@@ -536,26 +573,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         dynamicSoftmenu[menu].numItems = 0;
                         break;
 
-      case MNU_VAR:     numberOfBytes = 1;
-                        memset(tmpString, 0, TMP_STR_LENGTH);
-                        for(i=0; i<numberOfNamedVariables; i++) {
-                          xcopy(tmpString + 15 * i, allNamedVariables[i].variableName + 1, allNamedVariables[i].variableName[0]);
-                          numberOfBytes += 1 + allNamedVariables[i].variableName[0];
-                        }
-
-                        if(numberOfNamedVariables != 0) {
-                          qsort(tmpString, numberOfNamedVariables, 15, sortMenu);
-                        }
-
-                        ptr = malloc(numberOfBytes);
-                        dynamicSoftmenu[menu].menuContent = ptr;
-                        for(i=0; i<numberOfNamedVariables; i++) {
-                          int16_t len = stringByteLength(tmpString + 15*i) + 1;
-                          xcopy(ptr, tmpString + 15*i, len);
-                          ptr += len;
-                        }
-
-                        dynamicSoftmenu[menu].numItems = numberOfNamedVariables;
+      case MNU_VAR:     _dynmenuConstructVars(menu, false, 0, false);
                         break;
 
       case MNU_PROG:    numberOfBytes = 1;
@@ -584,49 +602,31 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         dynamicSoftmenu[menu].numItems = numberOfGlobalLabels;
                         break;
 
-      case MNU_MATRS:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "MATRS\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_MATRS:   _dynmenuConstructVars(menu, true, dtReal34Matrix, false);
                         break;
 
-      case MNU_STRINGS: dynamicSoftmenu[menu].menuContent = malloc(20);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "STRINGS\000to\000be\000coded", 20);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_STRINGS: _dynmenuConstructVars(menu, true, dtString, false);
                         break;
 
-      case MNU_DATES:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "DATES\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_DATES:   _dynmenuConstructVars(menu, true, dtDate, false);
                         break;
 
-      case MNU_TIMES:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "TIMES\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_TIMES:   _dynmenuConstructVars(menu, true, dtTime, false);
                         break;
 
-      case MNU_ANGLES:  dynamicSoftmenu[menu].menuContent = malloc(19);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "ANGLES\000to\000be\000coded", 19);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_ANGLES:  _dynmenuConstructVars(menu, true, dtReal34, true);
                         break;
 
-      case MNU_SINTS:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "SINTS\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_SINTS:   _dynmenuConstructVars(menu, true, dtShortInteger, false);
                         break;
 
-      case MNU_LINTS:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "LINTS\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_LINTS:   _dynmenuConstructVars(menu, true, dtLongInteger, false);
                         break;
 
-      case MNU_REALS:   dynamicSoftmenu[menu].menuContent = malloc(18);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "REALS\000to\000be\000coded", 18);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_REALS:   _dynmenuConstructVars(menu, true, dtReal34, false);
                         break;
 
-      case MNU_CPXS:    dynamicSoftmenu[menu].menuContent = malloc(17);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "CPXS\000to\000be\000coded", 17);
-                        dynamicSoftmenu[menu].numItems = 4;
+      case MNU_CPXS:    _dynmenuConstructVars(menu, true, dtComplex34, false);
                         break;
 
       default:          sprintf(errorMessage, "In function initVariableSoftmenu: unexpected variable softmenu %" PRId16 "!", (int16_t)(-dynamicSoftmenu[menu].menuItem));

@@ -105,7 +105,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
     #endif // PC_BUILD
 
-    if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
+    if(func == ITM_RCL && dynamicMenuItem > -1) {
+      char *varCatalogItem = dynmenuGetLabel(dynamicMenuItem);
+      calcRegister_t regist = findNamedVariable(varCatalogItem);
+      if(regist != INVALID_VARIABLE) {
+       reallyRunFunction(func, regist);
+      }
+      return;
+    }
+    else if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
       tamEnterMode(func);
       return;
     }

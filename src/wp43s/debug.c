@@ -164,6 +164,27 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 }
 
 
+/********************************************//**
+ * \brief Returns the name of a curvefitting mode
+ *
+ * \param[in] am uint16_t curvefitting mode
+ * \return char*          Name of the curvefitting mode
+ ***********************************************/
+char * getCurveFitModeName(uint16_t selection) {
+    if(selection == CF_LINEAR_FITTING)      return "Linear     ";
+    if(selection == CF_EXPONENTIAL_FITTING) return "Exponential";
+    if(selection == CF_LOGARITHMIC_FITTING) return "Logarithmic";
+    if(selection == CF_POWER_FITTING)       return "Power      ";
+    if(selection == CF_ROOT_FITTING)        return "Root       ";
+    if(selection == CF_HYPERBOLIC_FITTING)  return "Hyperbolic ";
+    if(selection == CF_PARABOLIC_FITTING)   return "Parabolic  ";
+    if(selection == CF_CAUCHY_FITTING)      return "Cauchy peak";
+    if(selection == CF_GAUSS_FITTING)       return "Gauss peak ";
+    if(selection == CF_ORTHOGONAL_FITTING)  return "Orthogonal ";
+
+    return "???        ";
+  }
+
 
 /********************************************//**
  * \brief Returns the name of a angular mode

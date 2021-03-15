@@ -65,6 +65,7 @@ char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article
 char *getRegisterTagName                  (calcRegister_t regist, bool_t padWithBlanks);
 char *getShortIntegerModeName             (uint16_t im);
 char *getAngularModeName                  (uint16_t angularMode);
+char *getCurveFitModeName                 (uint16_t selection);
 //void  debugNIM                            (void); Never used
 
 #ifdef PC_BUILD

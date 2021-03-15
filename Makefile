@@ -14,33 +14,41 @@ TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43s$(EXE)
 EXE =
 
+CC = gcc
 
 ifeq ($(OS),Windows_NT)
   EXE = .exe
-  CFLAGS += -D WIN32
+  CFLAGS += -DWIN32
   detected_OS := Windows
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
     detected_OS := Linux
-    CFLAGS += -D LINUX
+    CFLAGS += -DLINUX
   endif
   ifeq ($(UNAME_S),Darwin)
     detected_OS := Darwin
-    CFLAGS += -D OSX
-    CFLAGS += -I/usr/local/include/
-    LDFLAGS += -L/usr/local/lib
+    CC = clang
+    CFLAGS += -DOSX
+    ifneq ($(wildcard /opt/homebrew/.),)
+      # Homebrew on Arm Macs installs into /opt/homebrew
+      CFLAGS += -I/opt/homebrew/include
+      LDFLAGS += -L/opt/homebrew/lib
+    else
+      CFLAGS += -I/usr/local/include/
+      LDFLAGS += -L/usr/local/lib
+    endif
   endif
 endif
 
 RASPBERRY = $(shell ./onARaspberry)
 
-
-CC = gcc
 INC = -IdecNumberICU -Isrc/wp43s -Isrc/testSuite
 
 ifeq ($(DEST), gitlab)
 	CFLAGS += -march=x86-64
+else ifeq ($(detected_OS),Darwin)
+	# Don't add -march=native on macOS as it isn't supported in clang on Arm
 else
 	CFLAGS += -march=native
 endif

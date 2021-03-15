@@ -61,6 +61,9 @@ void initStatisticalSums(void) {
     realCopy(const_minusInfinity, SIGMA_XMAX);
     realCopy(const_minusInfinity, SIGMA_YMAX);
   }
+  if(telltale != MEM_INITIALIZED) {
+    graph_setupmemory();
+  }
 }
 
 
@@ -68,6 +71,7 @@ void initStatisticalSums(void) {
 void fnClSigma(uint16_t unusedButMandatoryParameter) {
   if(statisticalSumsPointer != NULL) {
     freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
+    graph_end();
     statisticalSumsPointer = NULL;
   }
 }
@@ -216,6 +220,8 @@ void fnSigma(uint16_t plusMinus) {
       // sigma 1/y
       realDivide(const_1, &y, &tmpReal1, realContext);
       realAdd(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
+
+      graph_sigmaplus(+1, &x, &y);
     }
     else { // SIGMA-
       // n
@@ -307,6 +313,8 @@ void fnSigma(uint16_t plusMinus) {
       // sigma 1/y
       realDivide(const_1, &y, &tmpReal1, realContext);
       realSubtract(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
+
+      graph_sigmaplus(-1, &x, &y);
     }
 
     temporaryInformation = TI_STATISTIC_SUMS;

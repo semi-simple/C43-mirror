@@ -616,7 +616,7 @@
               if(item == ITM_EXIT || item == ITM_BACKSPACE) {
                 calcMode = previousCalcMode;
               }
-              keyActionProcessed = true;
+              //keyActionProcessed = true;
               break;
 
             case CM_CONFIRMATION:

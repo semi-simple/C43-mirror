@@ -191,6 +191,30 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
 
+    save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+    save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+    save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+    save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+    save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+    save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+    save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+    save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+    save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+    save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+    save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
+    save(&PLOT_AXIS      ,                    sizeof(PLOT_AXIS    ),                      BACKUP);
+    save(&PLOT_ZMX       ,                    sizeof(PLOT_ZMX     ),                      BACKUP);
+    save(&PLOT_ZMY       ,                    sizeof(PLOT_ZMY     ),                      BACKUP);
+    save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
+    save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
+    save(&telltale,                           sizeof(telltale),                           BACKUP);
+    save(&ix_count,                           sizeof(ix_count),                           BACKUP);
+
+
     fclose(BACKUP);
     printf("End of calc's backup\n");
   }
@@ -346,6 +370,29 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
+
+      restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+      restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+      restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+      restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+      restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+      restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+      restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+      restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+      restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+      restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+      restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+      restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
+      restore(&PLOT_AXIS    ,                      sizeof(PLOT_AXIS    ),                      BACKUP);
+      restore(&PLOT_ZMX     ,                      sizeof(PLOT_ZMX     ),                      BACKUP);
+      restore(&PLOT_ZMY     ,                      sizeof(PLOT_ZMY     ),                      BACKUP);
+      restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
+      restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
+      restore(&telltale,                           sizeof(telltale),                           BACKUP);
+      restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");
@@ -627,6 +674,24 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "exponentLimit\n%" PRId16 "\n", exponentLimit);
   save(tmpString, strlen(tmpString), BACKUP);
+
+
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
+  sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%u\n",ix_count);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%E\n",telltale);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<LIM; i++) {
+    sprintf(tmpString, "%E\n",gr_x[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+    sprintf(tmpString, "%E\n",gr_y[i]);
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
+
+
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);
@@ -1094,6 +1159,27 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       }
     }
   }
+
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
+  else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
+    char* end;
+    readLine(stream, tmpString); // Number of params
+
+    readLine(stream, tmpString); // ix_count
+    ix_count = stringToInt16(tmpString);
+    readLine(stream, tmpString); // telltale
+    telltale = strtod(tmpString, &end);
+    graph_setupmemory();
+    for(i=0; i<LIM; i++) {
+      readLine(stream, tmpString);
+      gr_x[i] = strtod(tmpString, &end);
+      readLine(stream, tmpString);
+      gr_y[i] = strtod(tmpString, &end);
+      //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
+    }
+  }
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
+
 }
 
 
@@ -1128,6 +1214,7 @@ void fnLoad(uint16_t loadMode) {
   restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
   restoreOneSection(BACKUP, loadMode); // PROGRAMS
   restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
+  restoreOneSection(BACKUP, loadMode); // Graph memory //JM
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);

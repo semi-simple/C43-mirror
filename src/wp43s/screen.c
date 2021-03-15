@@ -1631,7 +1631,7 @@
         displayShiftAndTamBuffer();
         showSoftmenuCurrentPart();
         refreshStatusBar();
-//        graph_plotmem();
+        graphPlotstat();
         hourGlassIconEnabled = false;
         break;
 

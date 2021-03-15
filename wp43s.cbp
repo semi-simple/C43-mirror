@@ -406,6 +406,9 @@
 		<Unit filename="src/testSuite/exp.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/expmod.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/expt.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -542,6 +545,9 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/month.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/mulmod.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/multiplication_complex.txt">
@@ -2107,6 +2113,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/neighb.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/opmod.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/opmod.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

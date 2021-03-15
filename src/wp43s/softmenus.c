@@ -491,8 +491,9 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       dataType_t dt = getRegisterDataType(regist);
       if(!applyFilter || (dt != dtReal34 && dt == typeFilter) ||
           (typeFilter == dtReal34Matrix && dt == dtComplex34Matrix) ||
-          (dt == dtReal34 && !isAngular && getRegisterAngularMode(regist) == amNone) ||
-          (dt == dtReal34 && isAngular && getRegisterAngularMode(regist) != amNone)) {
+          (typeFilter == dtReal34 && dt == dtReal34 &&
+            ((isAngular && getRegisterAngularMode(regist) != amNone) ||
+             (!isAngular && getRegisterAngularMode(regist) == amNone)))) {
         xcopy(tmpString + 15 * numberOfVars, allNamedVariables[i].variableName + 1, allNamedVariables[i].variableName[0]);
         numberOfVars++;
         numberOfBytes += 1 + allNamedVariables[i].variableName[0];

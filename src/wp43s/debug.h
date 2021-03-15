@@ -64,7 +64,7 @@ char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t p
 char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);
 char *getRegisterTagName                  (calcRegister_t regist, bool_t padWithBlanks);
 char *getShortIntegerModeName             (uint16_t im);
-char *getAngularModeName                  (uint16_t angularMode);
+char *getAngularModeName                  (angularMode_t angularMode);
 //void  debugNIM                            (void); Never used
 
 #ifdef PC_BUILD

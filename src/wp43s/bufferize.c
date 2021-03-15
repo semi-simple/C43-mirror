@@ -873,8 +873,8 @@
               convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
             }
 
-            checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-            setRegisterAngularMode(REGISTER_X, AM_DMS);
+            real34FromDmsToDeg(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+            setRegisterAngularMode(REGISTER_X, amDMS);
 
             setSystemFlag(FLAG_ASLIFT);
             return;
@@ -1329,7 +1329,7 @@
             longIntegerFree(value);
           }
           else if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
             stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
           }
           else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
@@ -1404,7 +1404,7 @@
               return;
             }
 
-            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
             int32ToReal34(numer, REGISTER_REAL34_DATA(REGISTER_X));
             int32ToReal34(denom, &temp);
             real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
@@ -1425,7 +1425,7 @@
             }
             aimBuffer[imaginaryMantissaSignLocation] = 0;
 
-            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
             stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
 
             stringToReal34(aimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -1442,7 +1442,7 @@
 
                 real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
                 real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
-                convertAngleFromTo(&theta, currentAngularMode, AM_RADIAN, &ctxtReal39);
+                convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
                 if(realCompareLessThan(&magnitude, const_0)) {
                   realSetPositiveSign(&magnitude);
                   realAdd(&theta, const_pi, &theta, &ctxtReal39);
@@ -1474,7 +1474,7 @@
     else {
       int16_t len = stringByteLength(aimBuffer) + 1;
 
-      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
 
       xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
       aimBuffer[0] = 0;

@@ -27,7 +27,7 @@
 
 // Have to be careful here to ensure that every function we call can handle
 // the increased size of the numbers we're using.
-void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext) {
+void WP34S_Cvt2RadSinCosTan(const real_t *an, angularMode_t angularMode, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext) {
   bool_t sinNeg = false, cosNeg = false, swap = false;
   real_t angle;
 
@@ -46,11 +46,6 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
 
   realCopy(an, &angle);
 
-  if(angularMode == AM_DMS) {
-    angularMode = AM_DEGREE;
-    convertAngleFromTo(&angle, AM_DMS, AM_DEGREE, realContext);
-  }
-
   // sin(-x) = -sin(x), cos(-x) = cos(x)
   if(realIsNegative(&angle)) {
     sinNeg = true;
@@ -58,19 +53,19 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
   }
 
   switch(angularMode) {
-    case AM_DEGREE:
+    case amDegree:
       WP34S_Mod(&angle, const_360,     &angle, realContext); // mod(angle, 360°) --> angle
       break;
 
-    case AM_RADIAN:
+    case amRadian:
       WP34S_Mod(&angle, const1071_2pi, &angle, realContext); // mod(angle, 2pi) --> angle
       break;
 
-    case AM_MULTPI:
+    case amMultPi:
       WP34S_Mod(&angle, const_2,       &angle, realContext); // mod(angle, 2) --> angle
       break;
 
-    case AM_GRAD:
+    case amGrad:
       WP34S_Mod(&angle, const_400,     &angle, realContext); // mod(angle, 400g) --> angle
       break;
 
@@ -109,7 +104,7 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
       swap = !swap;
     }
 
-    convertAngleFromTo(&angle, angularMode, AM_RADIAN, realContext);
+    convertAngleFromTo(&angle, angularMode, amRadian, realContext);
     WP34S_SinCosTanTaylor(&angle, swap, swap?cosOut:sinOut, swap?sinOut:cosOut, tanOut, realContext); // angle in radian
   }
 
@@ -1556,7 +1551,7 @@ void WP34S_Zeta(const real_t *x, real_t *res, realContext_t *realContext) {
     zeta_calc(&q, &reg1, &reg7, &p, realContext);
     WP34S_Asin(const_1, &q, realContext);
     realMultiply(&q, &reg7, &q, realContext);
-    WP34S_Cvt2RadSinCosTan(&q, AM_RADIAN, &r, NULL, NULL, realContext);
+    WP34S_Cvt2RadSinCosTan(&q, amRadian, &r, NULL, NULL, realContext);
     realMultiply(&p, &r, &p, realContext);
     realDivide(&p, const_pi, &p, realContext);
     realPower(const_2pi, &reg7, &q, realContext);

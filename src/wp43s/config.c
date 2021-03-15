@@ -680,7 +680,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the global registers
     memset(globalRegister, 0, sizeof(globalRegister));
     for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -689,7 +689,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
     memset(savedStackRegister, 0, sizeof(savedStackRegister));
     for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -797,7 +797,7 @@ void fnReset(uint16_t confirmation) {
     displayFormat = DF_ALL;
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
-    currentAngularMode = AM_DEGREE;
+    currentAngularMode = amDegree;
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
     setSystemFlag(FLAG_MULTx);
@@ -833,9 +833,9 @@ void fnReset(uint16_t confirmation) {
     lastErrorCode = 0;
 
     gammaLanczosCoefficients = (real51_t *)const_gammaC01;
-    angle180 = (real39_t *)const_180;
-    angle90  = (real39_t *)const_90;
-    angle45  = (real39_t *)const_45;
+    angle180 = (real39_t *)const_pi;
+    angle90  = (real39_t *)const_piOn2;
+    angle45  = (real39_t *)const_piOn4;
 
     #ifndef TESTSUITE_BUILD
       resetAlphaSelectionBuffer();
@@ -882,7 +882,7 @@ void fnReset(uint16_t confirmation) {
     //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpString, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), AM_NONE);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), amNone);
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpString);
 
 

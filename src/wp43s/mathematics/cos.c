@@ -67,7 +67,7 @@ void cosComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t 
   // cos(a + i b) = cos(a)*cosh(b) - i*sin(a)*sinh(b)
   real_t sina, cosa, sinhb, coshb;
 
-  WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
+  WP34S_Cvt2RadSinCosTan(real, amRadian, &sina, &cosa, NULL, realContext);
   WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
   realMultiply(&cosa, &coshb, resReal, realContext);
@@ -83,7 +83,7 @@ void cosLonI(void) {
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
   WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, NULL, &x, NULL, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -107,14 +107,14 @@ void cosReal(void) {
   }
   else {
     real_t x;
-    uint32_t xAngularMode;
+    angularMode_t xAngularMode;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
-    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), NULL, &x, NULL, &ctxtReal39);
+    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == amNone ? currentAngularMode : xAngularMode), NULL, &x, NULL, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

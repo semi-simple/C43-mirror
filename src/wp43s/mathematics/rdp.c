@@ -147,6 +147,22 @@ void rdpCxma(uint16_t digits) {
 
 void rdpReal(uint16_t digits) {
   real_t val;
+
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
+    real34FromDegToDms(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
+  }
+
+  real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
+  roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
+  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
+    real34FromDmsToDeg(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+}
+/*void rdpReal(uint16_t digits) {
+  real_t val;
   int32_t i;
 
   updateDisplayValueX = true;
@@ -156,7 +172,7 @@ void rdpReal(uint16_t digits) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
 
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
     for(i = 0; i < 2; ++i){
       val.exponent += 1;
       senaryDigitToDecimal(true, &val, &ctxtReal39);
@@ -165,18 +181,18 @@ void rdpReal(uint16_t digits) {
     val.exponent -= 4;
   }
   roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
+  if(getRegisterAngularMode(REGISTER_X) == amDMS) {
     for(i = 0; i < 2; ++i){
       val.exponent += 1;
       decimalDigitToSenary(true, &val, &ctxtReal39);
       val.exponent += 1;
     }
     val.exponent -= 4;
-    convertAngleFromTo(&val, AM_DMS, AM_DMS, &ctxtReal39);
+    convertAngleFromTo(&val, amDMS, amDMS, &ctxtReal39);
   }
 
   realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
-}
+}*/
 
 
 

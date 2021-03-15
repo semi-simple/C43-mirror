@@ -69,12 +69,12 @@ void imagPartCplx(void) {
   real34_t ip;
 
   real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &ip);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   real34Copy(&ip, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 void imagPartReal(void) {
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -106,9 +106,10 @@
 #define ERROR_EMPTY_STRING                        34
 #define ERROR_NO_BACKUP_DATA                      35
 #define ERROR_UNDEF_SOURCE_VAR                    36
-#define ERROR_BAD_INPUT                           37 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_WRITE_PROTECTED_VAR                 37
+#define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     38
+#define NUMBER_OF_ERROR_CODES                     39
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -391,14 +392,6 @@
 #define DF_FIX                                     1
 #define DF_SCI                                     2
 #define DF_ENG                                     3
-
-// Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0  | This is because of the tables
-#define AM_RADIAN                                  1 // radian must be 1  | angle45, angle90, and angle180
-#define AM_MULTPI                                  2 // multpi must be 2  | for angle reduction before
-#define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
-#define AM_DMS                                     4
-#define AM_NONE                                    5
 
 // Date format 2 bits
 #define DF_DMY                                     0

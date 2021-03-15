@@ -129,7 +129,7 @@ void fnRandom(uint16_t unusedButMandatoryParameter) {
   x1.exponent -= 34;
 
   liftStack();
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x1, REGISTER_REAL34_DATA(REGISTER_X));
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);

@@ -78,7 +78,7 @@ void sqrtLonI(void) {
 
       convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
       realSquareRoot(&a, &a, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
@@ -86,7 +86,7 @@ void sqrtLonI(void) {
     real_t a;
 
     convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realSetPositiveSign(&a);
     realSquareRoot(&a, &a, &ctxtReal39);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
@@ -139,10 +139,10 @@ void sqrtReal(void) {
   if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) {
     realSquareRoot(&a, &a, &ctxtReal39);
     realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
   }
   else if(getFlag(FLAG_CPXRES)) {
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realSetPositiveSign(&a);
     realSquareRoot(&a, &a, &ctxtReal39);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));

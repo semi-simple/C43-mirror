@@ -118,7 +118,7 @@ void checkValueReal(uint16_t mode) {
       temporaryInformation = (getSystemFlag(FLAG_SPCRES) && real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X))) ? TI_TRUE : TI_FALSE;
       return;
   }
-  if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+  if(getRegisterAngularMode(REGISTER_X) == amNone) {
     switch(mode) {
       case CHECK_VALUE_POSITIVE_ZERO:
         temporaryInformation = (getSystemFlag(FLAG_SPCRES) && real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) && real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X))) ? TI_TRUE : TI_FALSE;

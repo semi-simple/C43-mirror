@@ -219,7 +219,7 @@ void modLonIReal(void) {
   }
 
   realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -250,7 +250,7 @@ void modRealLonI(void) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -327,7 +327,7 @@ void modShoIReal(void) {
   }
 
   realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -359,7 +359,7 @@ void modRealShoI(void) {
     realAdd(&r, &x, &r, &ctxtReal39);
   }
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -395,5 +395,5 @@ void modRealReal(void) {
   }
 
   realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }

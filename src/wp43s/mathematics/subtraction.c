@@ -148,7 +148,7 @@ void subDateLonI(void) {
   convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   int32ToReal34(86400, &val);
   real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -206,30 +206,21 @@ void subShoILonI(void) {
  ***********************************************/
 void subLonIReal(void) {
   real_t y, x;
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
+    realSubtract(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
 
@@ -243,30 +234,21 @@ void subLonIReal(void) {
  ***********************************************/
 void subRealLonI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
-  if(yAngularMode == AM_NONE) {
+  if(yAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    realSubtract(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -309,7 +291,7 @@ void subCplxLonI(void) {
 
   realSubtract(&a, &c, &c, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   real34Copy(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
@@ -339,11 +321,9 @@ void subTimeTime(void) {
  * \return void
  ***********************************************/
 void subTimeReal(void) {
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -361,11 +341,9 @@ void subTimeReal(void) {
  * \return void
  ***********************************************/
 void subRealTime(void) {
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode = getRegisterAngularMode(REGISTER_Y);
 
-  yAngularMode = getRegisterAngularMode(REGISTER_Y);
-
-  if(yAngularMode == AM_NONE) {
+  if(yAngularMode == amNone) {
     convertReal34RegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -404,16 +382,14 @@ void subDateDate(void) {
  * \return void
  ***********************************************/
 void subDateReal(void) {
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode = getRegisterAngularMode(REGISTER_X);
   real34_t val;
 
-  xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     int32ToReal34(86400, &val);
     real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), roundingMode);
     real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
-    reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
@@ -508,30 +484,20 @@ void subShoIShoI(void) {
  ***********************************************/
 void subShoIReal(void) {
   real_t y, x;
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode = getRegisterAngularMode(REGISTER_X);
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
+    realSubtract(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
 
@@ -545,30 +511,20 @@ void subShoIReal(void) {
  ***********************************************/
 void subRealShoI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode = getRegisterAngularMode(REGISTER_Y);
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-  yAngularMode = getRegisterAngularMode(REGISTER_Y);
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
-  if(yAngularMode == AM_NONE) {
+  if(yAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    realSubtract(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -599,7 +555,7 @@ void subShoICplx(void) {
 void subCplxShoI(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 
@@ -616,44 +572,30 @@ void subCplxShoI(void) {
  * \return void
  ***********************************************/
 void subRealReal(void) {
-  uint32_t yAngularMode, xAngularMode;
+  angularMode_t yAngularMode = getRegisterAngularMode(REGISTER_Y);
+  angularMode_t xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  yAngularMode = getRegisterAngularMode(REGISTER_Y);
-  xAngularMode = getRegisterAngularMode(REGISTER_X);
-
-  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+  if(yAngularMode == amNone && xAngularMode == amNone) {
     real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     real_t y, x;
 
-    if(yAngularMode == AM_NONE) {
+    if(yAngularMode == amNone) {
       yAngularMode = currentAngularMode;
     }
-    else if(xAngularMode == AM_NONE) {
+    else if(xAngularMode == amNone) {
       xAngularMode = currentAngularMode;
     }
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
 
-      realSubtract(&y, &x, &x, &ctxtReal39);
-
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else { //current angular mode is not DMS
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-
-      realSubtract(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    realSubtract(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -681,7 +623,7 @@ void subRealCplx(void) {
  ***********************************************/
 void subCplxReal(void) {
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 

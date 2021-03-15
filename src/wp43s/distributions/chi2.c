@@ -88,7 +88,7 @@ void fnChi2P(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Pdf_Chi2(&val, &dof, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -103,7 +103,7 @@ void fnChi2L(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Cdf_Chi2(&val, &dof, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -118,7 +118,7 @@ void fnChi2R(uint16_t unusedButMandatoryParameter) {
 
   if(checkParamChi2(&val, &dof)) {
     WP34S_Cdfu_Chi2(&val, &dof, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -147,7 +147,7 @@ void fnChi2I(uint16_t unusedButMandatoryParameter) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       else {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
       }
     }

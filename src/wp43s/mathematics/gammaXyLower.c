@@ -85,7 +85,7 @@ void gammaXyLowerLonILonI(void) {
   }
   else {
     WP34S_GammaP(&y, &x, &res, &ctxtReal39, false, false);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -105,7 +105,7 @@ void gammaXyLowerLonIReal(void) {
   }
   else {
     WP34S_GammaP(&y, &x, &res, &ctxtReal39, false, false);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }

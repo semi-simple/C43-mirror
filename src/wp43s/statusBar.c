@@ -152,11 +152,7 @@
  * \param void
  * \return void
  ***********************************************/
-void showFracMode(void) {
-    char str20[20];                                   //JM vv KEYS
-    char str40[40];
-
-    void conv() {
+    void conv(char * str20[20], char * str40[40]) {
       str40[0]=0;
       int16_t x = 0;
       int16_t y = 0;
@@ -178,6 +174,12 @@ void showFracMode(void) {
       }
     }                                                  //JM ^^ KEYS
 
+
+
+void showFracMode(void) {
+    char str20[20];                                   //JM vv KEYS
+    char str40[40];
+
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
   uint32_t x = 0;
@@ -187,10 +189,10 @@ void showFracMode(void) {
     
     if(lastIntegerBase>10 && lastIntegerBase<=16){
       x = showString("#KEY", &standardFont, X_FRAC_MODE, 0 , vmNormal, true, true);//-4 looks good
-      strcpy(str20,"A"); conv();
+      strcpy(str20,"A"); conv(str20, str40);
       x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
       x = showString("-",    &standardFont, x,  2 , vmNormal, true, true);         //-4 looks good
-      strcpy(str20,"F"); conv();
+      strcpy(str20,"F"); conv(str20, str40);
       x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
 
     } else

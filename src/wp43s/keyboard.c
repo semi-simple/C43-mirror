@@ -42,6 +42,19 @@
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
         break;
 
+      case MNU_MATRS:
+      case MNU_STRINGS:
+      case MNU_DATES:
+      case MNU_TIMES:
+      case MNU_ANGLES:
+      case MNU_SINTS:
+      case MNU_LINTS:
+      case MNU_REALS:
+      case MNU_CPXS:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_RCL);
+        break;
+
       default:
         sm = &softmenu[menuId];
         row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;

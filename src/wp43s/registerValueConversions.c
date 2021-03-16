@@ -291,7 +291,7 @@ void convertRealToLongInteger(const real_t *re, longInteger_t lgInt, enum roundi
   realToIntegralValue(re, &real, roundingMode, &ctxtReal39);
   realGetCoefficient(&real, bcd);
   sign = (realIsNegative(&real) ? 1 : 0);
-  exponent = realGetExponent(&real) - real.digits;
+  exponent = real.exponent;
 
   uIntToLongInteger(bcd[0], lgInt);
 

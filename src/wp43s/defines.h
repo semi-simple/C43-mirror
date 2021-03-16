@@ -672,7 +672,16 @@
 #define CATALOG_aint                               6
 #define CATALOG_PROG                               7
 #define CATALOG_VAR                                8
-#define NUMBER_OF_CATALOGS                         9
+#define CATALOG_MATRS                              9
+#define CATALOG_STRINGS                           10
+#define CATALOG_DATES                             11
+#define CATALOG_TIMES                             12
+#define CATALOG_ANGLES                            13
+#define CATALOG_SINTS                             14
+#define CATALOG_LINTS                             15
+#define CATALOG_REALS                             16
+#define CATALOG_CPXS                              17
+#define NUMBER_OF_CATALOGS                        18
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1
@@ -783,6 +792,9 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+
+#define OPMOD_MULTIPLY                             0
+#define OPMOD_POWER                                1
 
 #define ORTHOPOLY_HERMITE_H                        0
 #define ORTHOPOLY_HERMITE_HE                       1

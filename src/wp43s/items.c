@@ -129,7 +129,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
     #endif // PC_BUILD
 
-    if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
+    if(func == ITM_RCL && dynamicMenuItem > -1) {
+      char *varCatalogItem = dynmenuGetLabel(dynamicMenuItem);
+      calcRegister_t regist = findNamedVariable(varCatalogItem);
+      if(regist != INVALID_VARIABLE) {
+       reallyRunFunction(func, regist);
+      }
+      return;
+    }
+    else if(tam.mode == 0 && TM_VALUE <= indexOfItems[func].param && indexOfItems[func].param <= TM_CMP) {
       tamEnterMode(func);
       return;
     }
@@ -322,6 +330,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnIDivR                    (uint16_t unusedButMandatoryParameter) {}
   void fnMirror                   (uint16_t unusedButMandatoryParameter) {}
   void fnMod                      (uint16_t unusedButMandatoryParameter) {}
+  void fnMulMod                   (uint16_t unusedButMandatoryParameter) {}
+  void fnExpMod                   (uint16_t unusedButMandatoryParameter) {}
   void fnPower                    (uint16_t unusedButMandatoryParameter) {}
   void fnPi                       (uint16_t unusedButMandatoryParameter) {}
   void fnUserMode                 (uint16_t unusedButMandatoryParameter) {}
@@ -2375,7 +2385,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1677 */  { fnRange,                     NOPARAM,                     "RANGE",                                       "RANGE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1678 */  { fnGetRange,                  NOPARAM,                     "RANGE?",                                      "RANGE?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1679 */  { fnM1Pow,                     NOPARAM,                     "(-1)" STD_SUP_x,                              "(-1)" STD_SUP_x,                              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1680 */  { itemToBeCoded,               NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1680 */  { fnMulMod,                    NOPARAM,                     STD_CROSS "MOD",                               STD_CROSS "MOD",                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1681 */  { fnToDate,                    NOPARAM,                     STD_RIGHT_ARROW "DATE",                        STD_RIGHT_ARROW "DATE",                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1682 */  { itemToBeCoded,               NOPARAM,                     "1682",                                        "1682",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
 /* 1683 */  { itemToBeCoded,               NOPARAM,                     "1683",                                        "1683",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
@@ -2396,7 +2406,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1698 */  { fnPercentSigma,              NOPARAM,                     "%" STD_SIGMA,                                 "%" STD_SIGMA,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1699 */  { fnPercentPlusMG,             NOPARAM,                     "%+MG",                                        "%+MG",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1700 */  { itemToBeCoded,               NOPARAM,                     STD_INTEGRAL,                                  STD_INTEGRAL,                                  (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1701 */  { itemToBeCoded,               NOPARAM,                     "^MOD",                                        "^MOD",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1701 */  { fnExpMod,                    NOPARAM,                     "^MOD",                                        "^MOD",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1702 */  { itemToBeCoded,               NOPARAM,                     "|M|",                                         "|M|",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1703 */  { fnParallel,                  NOPARAM/*#JM#*/,             "|" STD_SPACE_3_PER_EM "|",                    "|" STD_SPACE_3_PER_EM "|",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },//JM
 /* 1704 */  { itemToBeCoded,               NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

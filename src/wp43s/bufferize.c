@@ -312,7 +312,8 @@ void kill_ASB_icon(void) {
         // NOP if not a single character input for search
         // or if we already have two characters in the search buffer
         else if(stringGlyphLength(indexOfItems[item].itemSoftmenuName) == 1 &&
-                (lgCatalogSelection < ((asmBuffer[0] & 0x80) ? 3 : 2))) {
+                (lgCatalogSelection < ((asmBuffer[0] & 0x80) ? 3 : 2)) &&
+                currentSoftmenuScrolls()) {
           int32_t pos = lgCatalogSelection++;
           if(asmBuffer[pos] != 0) {
             pos++;

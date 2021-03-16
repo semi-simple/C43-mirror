@@ -173,7 +173,8 @@ typedef struct {
 #define realExp(operand, res, ctxt)                            decNumberExp             (res, operand, ctxt)
 #define realFMA(factor1, factor2, term, res, ctxt)             decNumberFMA             (res, factor1,  factor2,  term, ctxt)
 #define realGetCoefficient(source, destination)                decNumberGetBCD          (source, (uint8_t *)(destination))
-#define realGetExponent(source)                                ((source)->digits)
+//#define realGetExponent(source)                                ((source)->digits)
+#define realGetExponent(source)                                ((source)->digits + (source)->exponent - 1)
 #define realGetSign(source)                                    (((source)->bits) & 0x80) // 0x80=negative and 0x00=positive
 #define realIsInfinite(source)                                 decNumberIsInfinite      (source)
 #define realIsNaN(source)                                      decNumberIsNaN           (source)

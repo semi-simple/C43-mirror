@@ -94,6 +94,7 @@
 #include "modulo.h"
 #include "multiplication.h"
 #include "neighb.h"
+#include "opmod.h"
 #include "ortho_polynom.h"
 #include "parallel.h"
 #include "pcg_basic.h"

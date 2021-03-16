@@ -296,13 +296,14 @@ void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo 
   placePixel(xn+1,yn+2);
 }
 
+static void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
+  plotline(a, b, c, b);
+  plotline(a, b, a, d);
+  plotline(c, d, c, b);
+  plotline(c, d, a, d);
+}
+
 void plotbox_fat(uint16_t xn, uint8_t yn) {                                         // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-  void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                     // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
-    plotline(a, b, c, b);
-    plotline(a, b, a, d);
-    plotline(c, d, c, b);
-    plotline(c, d, a, d);
-  }
   plotrect(xn-3,yn-3,xn+3,yn+3);
   plotrect(xn-2,yn-2,xn+2,yn+2);
 }
@@ -464,7 +465,7 @@ void graph_axis_draw (void){
     //Write North arrow
     if(jm_NVECT) {
       showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
-      tmpString[0]=0x80 | 0x22;
+      tmpString[0]=(char)((uint8_t)0x80 | (uint8_t)0x22);
       tmpString[1]=0x06;
       tmpString[2]=0;
       showString(tmpString, &standardFont, xzero-4, minny+0, vmNormal, true, true);
@@ -712,7 +713,7 @@ void graphPlotstat(void){
 
 
 uint16_t selection = 0;
-
+#ifndef TESTSUITE_BUILD
 void drawline(){
   #ifdef STATDEBUG
     printf("plotting line: %f x + %f\n",a1,a0);
@@ -805,6 +806,7 @@ void drawline(){
       }
     }
   }
+#endif //TESTSUITE_BUILD
 
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){

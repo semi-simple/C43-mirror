@@ -152,7 +152,7 @@
  * \param void
  * \return void
  ***********************************************/
-    void conv(char * str20[20], char * str40[40]) {
+    void conv(char * str20, char * str40) {
       str40[0]=0;
       int16_t x = 0;
       int16_t y = 0;

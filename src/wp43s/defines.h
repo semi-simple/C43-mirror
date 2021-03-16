@@ -641,6 +641,9 @@
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
 
+#define OPMOD_MULTIPLY                             0
+#define OPMOD_POWER                                1
+
 #define ORTHOPOLY_HERMITE_H                        0
 #define ORTHOPOLY_HERMITE_HE                       1
 #define ORTHOPOLY_LAGUERRE_L                       2

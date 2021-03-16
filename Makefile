@@ -100,7 +100,7 @@ SRC_WP43S                = \
 		cxToRe.c cpyx.c dblDivision.c dblMultiplication.c deltaPercent.c idiv.c idivr.c decomp.c dot.c \
 		division.c erf.c erfc.c exp.c expMOne.c expt.c factorial.c fib.c floor.c fractionalPart.c gamma.c gammaP.c gammaQ.c gammaXyLower.c gammaXyUpper.c gcd.c gd.c \
 		imaginaryPart.c int.c incDec.c integerPart.c invert.c iteration.c ixyz.c lcm.c ln.c lnPOne.c log10.c logxy.c lnbeta.c beta.c \
-		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c ortho_polynom.c parallel.c pcg_basic.c \
+		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c opmod.c ortho_polynom.c parallel.c pcg_basic.c \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
 		random.c rdp.c realPart.c remainder.c reToCx.c round.c roundi.c rsd.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\

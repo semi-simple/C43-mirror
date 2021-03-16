@@ -823,37 +823,37 @@ uint64_t WP34S_intLog10(uint64_t x) {
   return WP34S_build_value(r, signValue);
 }
 
+/* Calculate (a . b) mod c taking care to avoid overflow */
+uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
+  uint64_t x = 0, y = a % c;
+  while(b > 0) {
+    if((b & 1)) {
+      x = (x + y) % c;
+    }
+    y = (y + y) % c;
+    b /= 2;
+  }
+  return x % c;
+}
+
+
+
+/* Calculate (a ^ b) mod c */
+uint64_t WP34S_expmod(const uint64_t a, uint64_t b, const uint64_t c) {
+  uint64_t x = 1, y = a;
+  while(b > 0) {
+    if((b & 1)) {
+      x = WP34S_mulmod(x, y, c);
+    }
+    y = WP34S_mulmod(y, y, c);
+    b /= 2;
+  }
+  return (x % c);
+}
+
+
+
 #if 0
-  /* Calculate (a . b) mod c taking care to avoid overflow */
-  static uint64_t WP34S_mulmod(const uint64_t a, uint64_t b, const uint64_t c) {
-    uint64_t x = 0, y = a % c;
-    while(b > 0) {
-      if((b & 1)) {
-        x = (x + y) % c;
-      }
-      y = (y + y) % c;
-      b /= 2;
-    }
-    return x % c;
-  }
-
-
-
-  /* Calculate (a ^ b) mod c */
-  static uint64_t WP34S_expmod(const uint64_t a, uint64_t b, const uint64_t c) {
-    uint64_t x = 1, y = a;
-    while(b > 0) {
-      if((b & 1)) {
-        x = WP34S_mulmod(x, y, c);
-      }
-      y = WP34S_mulmod(y, y, c);
-      b /= 2;
-    }
-    return (x % c);
-  }
-
-
-
   /* Justify to the end of the register
    */
   void justify(int64_t (*shift)(int64_t), const int64_t mask)

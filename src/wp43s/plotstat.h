@@ -118,7 +118,7 @@ int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 
 
 void    graphPlotstat      (void);
-void    drawline           (int16_t fittype, graphtype a2, graphtype a1, graphtype a0);
+void    drawline           ();
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
 void    fnPlotRegLine      (uint16_t unusedButMandatoryParameter);

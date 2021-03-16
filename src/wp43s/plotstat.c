@@ -119,9 +119,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
   if(telltale != MEM_INITIALIZED) {
     graph_setupmemory();
-//    runFunction(ITM_CLSIGMA);
   }
-
 
   //Convert from X register to graphtype
   realToString(yy, tmpString);
@@ -141,16 +139,12 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     ix_count++;                              //Only used for VECT
     cnt = ix_count;
   } else {
-    //Convert from real to int
     realToInt32(SIGMA_N, cnt);
     ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
                                              //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
-//    realToString(SIGMA_N, tmpString);
-//    cnt = stringToInt16 (tmpString);
     #ifdef STATDEBUG
     printf("Count: %s, %d\n",tmpString,cnt);
     #endif
-
   }
   //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
 
@@ -177,17 +171,24 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 
 
 graphtype grf_x(int i) {
-  if (jm_NVECT) {return gr_y[i];}
-  else {return gr_x[i];}
+  if (jm_NVECT) {
+    return gr_y[i];
+  }
+  else {
+    return gr_x[i];
+  }
 }
 
 graphtype grf_y(int i) {
-  if (jm_NVECT) {return gr_x[i];}
-  else {return gr_y[i];}
+  if (jm_NVECT) {
+    return gr_x[i];
+  }
+  else {
+    return gr_y[i];
+  }
 }
 
 
-//###################################################################################
 #ifndef TESTSUITE_BUILD
   int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max) {
     int16_t temp;
@@ -210,6 +211,7 @@ graphtype grf_y(int i) {
     }
   }
 
+
   int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max) {
   int16_t temp, minn;
     if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
@@ -227,7 +229,6 @@ graphtype grf_y(int i) {
 #endif
 
 
-//###################################################################################
 void placePixel(uint32_t x, uint32_t y) {
 #ifndef TESTSUITE_BUILD
   uint32_t minn;
@@ -239,6 +240,7 @@ void placePixel(uint32_t x, uint32_t y) {
   }
 #endif //!TESTSUITE_BUILD
 }
+
 
 void removePixel(uint32_t x, uint32_t y) {
 #ifndef TESTSUITE_BUILD
@@ -252,6 +254,7 @@ void removePixel(uint32_t x, uint32_t y) {
 #endif //!TESTSUITE_BUILD
 }
 
+
 void clearScreenPixels(void) {
 #ifndef TESTSUITE_BUILD
   if (Aspect_Square) {
@@ -263,6 +266,7 @@ void clearScreenPixels(void) {
     lcd_fill_rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT_GRAPH, 0);
 #endif //!TESTSUITE_BUILD
 }
+
 
 #ifndef TESTSUITE_BUILD
 void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
@@ -292,22 +296,20 @@ void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo 
   placePixel(xn+1,yn+2);
 }
 
-void plotbox_fat(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-  void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
-    plotline(a, b, c, b);
-    plotline(a, b, a, d);
-    plotline(c, d, c, b);
-    plotline(c, d, a, d);
-  }
+static void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
+  plotline(a, b, c, b);
+  plotline(a, b, a, d);
+  plotline(c, d, c, b);
+  plotline(c, d, a, d);
+}
+
+void plotbox_fat(uint16_t xn, uint8_t yn) {                                         // Plots line from xo,yo to xn,yn; uses temporary x1,y1
   plotrect(xn-3,yn-3,xn+3,yn+3);
   plotrect(xn-2,yn-2,xn+2,yn+2);
 }
-
-
 #endif //!TESTSUITE_BUILD
 
 
-//###################################################################################
 void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {                   // Plots line from xo,yo to xn,yn; uses temporary x1,y1
    pixelline(xo,yo,xn,yn,1);
  }
@@ -346,7 +348,7 @@ void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal
         if(vmNormal) placePixel(xn,yn); else removePixel(xn,yn);
     }
   }
-//###################################################################################
+
 
 void force_refresh1(void) {
 #ifdef PC_BUILD
@@ -366,19 +368,10 @@ void graph_axis_draw (void){
   #ifndef TESTSUITE_BUILD
   uint32_t cnt;
 
-  //GRAPH RANGE: Typical
-  //  graph_xmin= -3*3.14150;  graph_xmax= 2*3.14159;
-  //  graph_ymin= -2;          graph_ymax= +2;
-
-
   clearScreenPixels();
-
-
-
   //GRAPH ZERO AXIS
   yzero = screen_window_y(y_min,0,y_max);
   xzero = screen_window_x(x_min,0,x_max);
-
 
   uint32_t minnx, minny;
   if (!Aspect_Square) {
@@ -404,7 +397,6 @@ void graph_axis_draw (void){
   #ifdef STATDEBUG
     printf("xzero=%d yzero=%d   \n",xzero,yzero);
   #endif
-
 
   graphtype x; 
   graphtype y;
@@ -469,12 +461,11 @@ void graph_axis_draw (void){
    }
 
 
-
   if( PLOT_AXIS && !(xzero == SCREEN_WIDTH-1 || xzero == minnx)) {
     //Write North arrow
     if(jm_NVECT) {
       showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
-      tmpString[0]=0x80 | 0x22;
+      tmpString[0]=(char)((uint8_t)0x80 | (uint8_t)0x22);
       tmpString[1]=0x06;
       tmpString[2]=0;
       showString(tmpString, &standardFont, xzero-4, minny+0, vmNormal, true, true);
@@ -527,11 +518,14 @@ void graph_axis_draw (void){
   force_refresh1();
   #endif
 }
-//###################################################################################
 
-uint16_t selection = 0;
-double   r = 0;
-double   smi2 = 0;
+
+graphtype a2 = 0;
+graphtype a1 = 0;
+graphtype a0 = 0;
+double r = 0;
+double smi2 = 0;
+
 
 void graphPlotstat(void){
   #ifndef TESTSUITE_BUILD
@@ -543,18 +537,13 @@ void graphPlotstat(void){
   graphtype y;
 
   statnum = 0;
-
   graph_axis_draw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   plotmode = _SCAT;
 
   if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
-
-//    runFunction(ITM_NSIGMA);
     realToInt32(SIGMA_N, statnum);   
-//    runFunction(ITM_DROP);
-
     #ifdef STATDEBUG
-    printf("statnum n=%d\n",statnum);
+      printf("statnum n=%d\n",statnum);
     #endif 
   }
 
@@ -565,39 +554,35 @@ void graphPlotstat(void){
     y_min = FLoatingMax;
     y_max = FLoatingMin;
     #ifdef STATDEBUG
-    printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis0: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
 
-//#################################################### vvv SCALING LOOP  vvv #########################
-  for(cnt=0; (cnt < LIM && cnt < statnum); cnt++) {
+    //#################################################### vvv SCALING LOOP  vvv
+    for(cnt=0; (cnt < LIM && cnt < statnum); cnt++) {
+      #ifdef STATDEBUG
+        printf("Axis0a: x: %f y: %f   \n",grf_x(cnt), grf_y(cnt));   
+      #endif
+      if(grf_x(cnt) < x_min) {x_min = grf_x(cnt);}
+      if(grf_x(cnt) > x_max) {x_max = grf_x(cnt);}
+      if(grf_y(cnt) < y_min) {y_min = grf_y(cnt);}
+      if(grf_y(cnt) > y_max) {y_max = grf_y(cnt);}
+      #ifdef STATDEBUG
+        printf("Axis0b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      #endif
+    }
+    //##  ################################################## ^^^ SCALING LOOP ^^^
     #ifdef STATDEBUG
-    printf("Axis0a: x: %f y: %f   \n",grf_x(cnt), grf_y(cnt));   
+      printf("Axis1a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
-    if(grf_x(cnt) < x_min) {x_min = grf_x(cnt);}
-    if(grf_x(cnt) > x_max) {x_max = grf_x(cnt);}
-    if(grf_y(cnt) < y_min) {y_min = grf_y(cnt);}
-    if(grf_y(cnt) > y_max) {y_max = grf_y(cnt);}
-    #ifdef STATDEBUG
-    printf("Axis0b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
-    #endif
-  }
-//#################################################### ^^^ SCALING LOOP ^^^ #########################
-
-
-    //Manipulate the obtained axes positions
-    #ifdef STATDEBUG
-    printf("Axis1a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
-    #endif
-
+  
     //Check and correct if min and max is swapped
     if(x_min>0 && x_min > x_max*0.99) {x_min = x_min - (-x_max+x_min)* 1.1;}
     if(x_min<0 && x_min > x_max*0.99) {x_min = x_min + (-x_max+x_min)* 1.1;}
-
     #ifdef STATDEBUG
-    printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
-
+  
     //Always include the 0 axis
     if(!extentx) {
       if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_min = 0;}}
@@ -607,7 +592,7 @@ void graphPlotstat(void){
       if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*y_max;} else {y_min = 0;}}
       if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*y_max;} else {y_max = 0;}}
     }
-
+  
     //Cause scales to be the same    
     if(jm_SCALE) {
       x_min = min(x_min,y_min);
@@ -615,24 +600,23 @@ void graphPlotstat(void){
       y_min = x_min;
       y_max = x_max;
     }
-
+  
+    //Calc zoom scales    
     if(PLOT_ZMX != 0) {
       x_min = pow(2.0,-PLOT_ZMX) * x_min;
       x_max = pow(2.0,-PLOT_ZMX) * x_max;
     }
-
     if(PLOT_ZMY != 0) {
       y_min = pow(2.0,-PLOT_ZMY) * y_min;
       y_max = pow(2.0,-PLOT_ZMY) * y_max;      
     }
-
     #ifdef STATDEBUG
-    printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
-
+  
     float dx = x_max-x_min;
     float dy = y_max-y_min;
-
+  
     if (dy == 0) {
       dy = 1;
       y_max = y_min + dy/2;
@@ -643,106 +627,98 @@ void graphPlotstat(void){
       x_max = x_min + dx/2;
       x_min = x_max - dx;
     }
-   
-    x_min = x_min - dx * 0.015*3;
-    y_min = y_min - dy * 0.015*3;
-    x_max = x_max + dx * 0.015*3;
-    y_max = y_max + dy * 0.015*3;
-
+    
+    x_min = x_min - dx * 0.05;
+    y_min = y_min - dy * 0.05;
+    x_max = x_max + dx * 0.05;
+    y_max = y_max + dy * 0.05;
     #ifdef STATDEBUG
-    printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
-
+  
     graph_axis_draw();
-
     yn = screen_window_y(y_min,grf_y(0),y_max);
     xn = screen_window_x(x_min,grf_x(0),x_max);
     xN = xn;
     yN = yn;
-
     #ifdef STATDEBUG
-    printf("Axis3c: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis3c: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
-
-    //GRAPH
-    ix = 0;
-
-//#################################################### vvv MAIN GRAPH LOOP vvv #########################
-        for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
-          x = grf_x(ix);
-          y = grf_y(ix);
-          xo = xN;
-          yo = yN;
-          xN = screen_window_x(x_min,x,x_max);
-          yN = screen_window_y(y_min,y,y_max);
-    
-          #ifdef STATDEBUG
-          printf("plotting graph table[%d] = x:%f y:%f xN:%d yN:%d ",ix,x,y,  xN,yN);
-          #endif
-    
-          int16_t minN_y,minN_x;
-          if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
-          else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
-          if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
-            yn = yN;
-            xn = xN;
-        
-            if(PLOT_CROSS) {
-              #ifdef STATDEBUG
-                printf("Plotting cross to x=%d y=%d\n",xn,yn);
-              #endif
-              plotcross(xn,yn);
-            }
   
-            if(PLOT_BOX) {
-              #ifdef STATDEBUG
-                printf("Plotting box to x=%d y=%d\n",xn,yn);
-              #endif
-              plotbox_fat(xn,yn);
-            }
-
-            if(PLOT_LINE) {
-              #ifdef STATDEBUG
-                printf("Plotting line to x=%d y=%d\n",xn,yn);
-              #endif
-              plotline(xo, yo, xn, yn);
-            }
-          } 
-          else {
-            #ifdef PC_BUILD
-              printf("Not plotted: ");
-              if(!(xN<SCREEN_WIDTH_GRAPH )) printf("xN<SCREEN_WIDTH_GRAPH; ");
-              if(!(xN>minN_x              )) printf("xN>minN_x; ");
-              if(!(yN<SCREEN_HEIGHT_GRAPH)) printf("yN<SCREEN_HEIGHT_GRAPH");
-              if(!(yN>1+minN_y            )) printf("yN>1+minN_y; ");
-                        printf("Not plotted: xN=%d<SCREEN_WIDTH_GRAPH=%d && xN=%d>minN_x=%d && yN=%d<SCREEN_HEIGHT_GRAPH=%d && yN=%d>1+minN_y=%d\n",xN,SCREEN_WIDTH_GRAPH,xN,minN_x,yN,SCREEN_HEIGHT_GRAPH,yN,1+minN_y);
-            #endif
-          }
+  
+    //#################################################### vvv MAIN GRAPH LOOP vvv
+    for (ix = 0; (ix < LIM && ix < statnum); ++ix) {
+      x = grf_x(ix);
+      y = grf_y(ix);
+      xo = xN;
+      yo = yN;
+      xN = screen_window_x(x_min,x,x_max);
+      yN = screen_window_y(y_min,y,y_max);
+    
+      #ifdef STATDEBUG
+      printf("plotting graph table[%d] = x:%f y:%f xN:%d yN:%d ",ix,x,y,  xN,yN);
+      #endif
+    
+      int16_t minN_y,minN_x;
+      if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
+      else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
+      if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
+        yn = yN;
+        xn = xN;
+    
+        if(PLOT_CROSS) {
+          #ifdef STATDEBUG
+            printf("Plotting cross to x=%d y=%d\n",xn,yn);
+          #endif
+          plotcross(xn,yn);
         }
-
-        //#################################################### ^^^ MAIN GRAPH LOOP ^^^ #########################
-        
-        //drawline(dt, a2, a1, a0);
-
-      } else {
-        displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          sprintf(errorMessage, "There is no statistical data available!");
-          moreInfoOnError("In function graph_plotmem:", errorMessage, NULL, NULL);
+    
+        if(PLOT_BOX) {
+          #ifdef STATDEBUG
+            printf("Plotting box to x=%d y=%d\n",xn,yn);
+          #endif
+          plotbox_fat(xn,yn);
+        }
+  
+        if(PLOT_LINE) {
+          #ifdef STATDEBUG
+            printf("Plotting line to x=%d y=%d\n",xn,yn);
+          #endif
+          plotline(xo, yo, xn, yn);
+        }
+      } 
+      else {
+        #ifdef PC_BUILD
+          printf("Not plotted: ");
+          if(!(xN<SCREEN_WIDTH_GRAPH )) printf("xN<SCREEN_WIDTH_GRAPH; ");
+          if(!(xN>minN_x              )) printf("xN>minN_x; ");
+          if(!(yN<SCREEN_HEIGHT_GRAPH)) printf("yN<SCREEN_HEIGHT_GRAPH");
+          if(!(yN>1+minN_y            )) printf("yN>1+minN_y; ");
+                    printf("Not plotted: xN=%d<SCREEN_WIDTH_GRAPH=%d && xN=%d>minN_x=%d && yN=%d<SCREEN_HEIGHT_GRAPH=%d && yN=%d>1+minN_y=%d\n",xN,SCREEN_WIDTH_GRAPH,xN,minN_x,yN,SCREEN_HEIGHT_GRAPH,yN,1+minN_y);
         #endif
       }
+    }
+    //#################################################### ^^^ MAIN GRAPH LOOP ^^^          
+  drawline();
+
+  } else {
+    displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "There is no statistical data available!");
+      moreInfoOnError("In function graphPlotstat:", errorMessage, NULL, NULL);
+    #endif
+  }
 #endif
 }
 
 
-
-
-
-void drawline(int16_t fittype, graphtype a2, graphtype a1, graphtype a0) {
+uint16_t selection = 0;
+#ifndef TESTSUITE_BUILD
+void drawline(){
   #ifdef STATDEBUG
     printf("plotting line: %f x + %f\n",a1,a0);
   #endif
-  if((fittype==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
+  if((selection==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
     #ifdef STATDEBUG
       printf("return\n");
     #endif
@@ -758,7 +734,7 @@ void drawline(int16_t fittype, graphtype a2, graphtype a1, graphtype a0) {
 
 
     for (ix = 0; ix <= numberIntervals; ++ix) {
-      switch(fittype) {
+      switch(selection) {
         case CF_LINEAR_FITTING: 
           x = x_min + dx * ix;
           y = a1 * x + a0; 
@@ -816,27 +792,26 @@ void drawline(int16_t fittype, graphtype a2, graphtype a1, graphtype a0) {
 
     #define autoinc 18
     int16_t index = 0;
-    if(fittype!=0) {
-      showString(getCurveFitModeName(fittype), &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -5, vmNormal, true, true);
+    if(selection!=0) {
+      showString(getCurveFitModeName(selection), &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -5, vmNormal, true, true);
       char ss[100];
       sprintf(ss,"a0=%4f",a0);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       sprintf(ss,"a1=%4f",a1);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      if(fittype == CF_PARABOLIC_FITTING || fittype == CF_GAUSS_FITTING || fittype == CF_CAUCHY_FITTING){ 
+      if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING){ 
         sprintf(ss,"a2=%4f",a2);    showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       }
       sprintf(ss,"r^2=%4f",r*r);    showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      if(fittype == CF_ORTHOGONAL_FITTING) {
+      if(selection == CF_ORTHOGONAL_FITTING) {
         sprintf(ss,"smi^2=%4f",smi2); showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       }
     }
   }
-
-
+#endif //TESTSUITE_BUILD
 
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
-calcMode = CM_NORMAL;
-fnKeyExit(0);
+  calcMode = CM_NORMAL;
+  fnKeyExit(0);
 }
 
 
@@ -864,17 +839,12 @@ void fnPlotStat(uint16_t unusedButMandatoryParameter){
 }
 
 
-
 void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
-    double   a0 = 0;
-    double   a1 = 0;
-    double   a2 = 0;
-  
-    if(selection == 0)                        selection = CF_ORTHOGONAL_FITTING;   else
-      if(selection == CF_ORTHOGONAL_FITTING)  selection = CF_LINEAR_FITTING;       else
-        if(selection == CF_LINEAR_FITTING)    selection = CF_EXPONENTIAL_FITTING;  else
+    if(selection == 0)                            selection = CF_ORTHOGONAL_FITTING;   else
+      if(selection == CF_ORTHOGONAL_FITTING)      selection = CF_LINEAR_FITTING;       else
+        if(selection == CF_LINEAR_FITTING)        selection = CF_EXPONENTIAL_FITTING;  else
           if(selection == CF_EXPONENTIAL_FITTING) selection = CF_LOGARITHMIC_FITTING;  else
-                 selection = 0;
+             selection = 0;
   
     /*
     #define CF_LINEAR_FITTING                          1
@@ -923,9 +893,9 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         a1 = (nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx);
         r  = (nn * sumxy - sumx*sumy) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumy2-sumy*sumy));
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        //   #ifdef STATDEBUG
-           printf("##### Linear %i a0=%f a1=%f \n",nn, a0, a1);
-        // #endif
+        #ifdef STATDEBUG
+          printf("##### Linear %i a0=%f a1=%f \n",nn, a0, a1);
+        #endif
         break;
 
       case CF_EXPONENTIAL_FITTING :
@@ -935,9 +905,9 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         a1 = a1exp;
         r = (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        //    #ifdef STATDEBUG
+        #ifdef STATDEBUG
           printf("##### EXPF %i a0=%f a1=%f \n",nn, a0, a1);
-        //  #endif
+        #endif
         break;
 
       case CF_LOGARITHMIC_FITTING :
@@ -947,9 +917,9 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         a1 = a1log;
         r = (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy)); //(rLOG)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        //    #ifdef STATDEBUG
+        #ifdef STATDEBUG
           printf("##### LOGF %i a0=%f a1=%f \n",nn, a0, a1);
-        //  #endif
+        #endif
         break;
 
       case CF_ORTHOGONAL_FITTING :
@@ -965,15 +935,15 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         a1 = a1a;
         a0 = a0a;
 
-        //    #ifdef STATDEBUG
+        #ifdef STATDEBUG
           printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",nn, a0a, a1a, smi2);
           printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",nn, a0b, a1b, smi2);
-        //  #endif
+        #endif
         break;
 
       default: break;
     }
-  graphPlotstat();
-  drawline(selection, a2, a1, a0);
+//  graphPlotstat();
+//  drawline();
 }
 

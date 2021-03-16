@@ -1055,6 +1055,9 @@ bool_t lowercaseselected;
               break;
 
             case CM_PLOT_STAT:
+              fnPlotClose(0);
+              break;
+
             case CM_LISTXY:                     //JM VV
             case CM_GRAPH:
                 if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
@@ -1383,9 +1386,13 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
     case CM_BUG_ON_SCREEN:
-    case CM_PLOT_STAT:
     case CM_LISTXY:                     //JM
       calcMode = previousCalcMode;
+      break;
+
+    case CM_PLOT_STAT:
+      calcMode = CM_NORMAL;
+      popSoftmenu();
       break;
 
     case CM_GRAPH:                      //JM vv

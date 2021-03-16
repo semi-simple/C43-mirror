@@ -2540,7 +2540,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
 
     case CM_PLOT_STAT:
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
-        last_CM = calcMode;
+        if(last_CM == 252) last_CM--; else last_CM = 252; //calcMode;
         doRefreshSoftMenu = false;
         displayShiftAndTamBuffer();
         showSoftmenuCurrentPart();

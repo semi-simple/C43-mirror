@@ -114,9 +114,9 @@ void percentSigmaLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &xReal, &ctxtReal39);
 
   if(percentSigma(&xReal, &rReal, &ctxtReal39)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
   }
 }
 

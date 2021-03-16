@@ -1239,7 +1239,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         else {
           int16_t len = stringByteLength(aimBuffer) + 1;
 
-          reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+          reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
           xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
 
           if( !eRPN ) {                                    //JM NEWERPN

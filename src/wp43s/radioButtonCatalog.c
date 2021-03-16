@@ -26,11 +26,11 @@
 
 const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
 //  itemNr    item                  parameter                         function
-/*  117 */  { ITM_DEG,              AM_DEGREE,              RB_AM },  //fnAngularMode
-/*  134 */  { ITM_DMS,              AM_DMS,                 RB_AM },  //fnAngularMode
-/*  229 */  { ITM_GRAD,             AM_GRAD,                RB_AM },  //fnAngularMode
-/*  375 */  { ITM_MULPI,            AM_MULTPI,              RB_AM },  //fnAngularMode
-/*  483 */  { ITM_RAD,              AM_RADIAN,              RB_AM },  //fnAngularMode
+/*  117 */  { ITM_DEG,              amDegree,              RB_AM },  //fnAngularMode
+/*  134 */  { ITM_DMS,              amDMS,                 RB_AM },  //fnAngularMode
+/*  229 */  { ITM_GRAD,             amGrad,                RB_AM },  //fnAngularMode
+/*  375 */  { ITM_MULPI,            amMultPi,              RB_AM },  //fnAngularMode
+/*  483 */  { ITM_RAD,              amRadian,              RB_AM },  //fnAngularMode
 /* 1965 */  { ITM_POLAR,            CM_POLAR,               RB_CM },  //fnSetSetJM          /*  464 */ //fnComplexMode
 /* 1969 */  { ITM_RECT,             CM_RECTANGULAR,         RB_CM },  //fnSetSetJM          /*  507 */ //fnComplexMode
 /* 1960 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnSetSetJM          /*   96 */ //fnComplexUnit

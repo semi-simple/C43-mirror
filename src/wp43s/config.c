@@ -663,10 +663,10 @@ void fnReset(uint16_t confirmation) {
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-    //kbd_usr[ 0].keyLblAim   = ITM_A_GRAVE;
-    //kbd_usr[ 0].fShiftedAim = ITM_A_GRAVE;
-    //kbd_usr[ 4].keyLblAim   = ITM_E_ACUTE;
-    //kbd_usr[ 4].fShiftedAim = ITM_E_ACUTE;
+    //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+    //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+    //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+    //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
     //kbd_usr[18].fShifted    = -MNU_VARS;
     //kbd_usr[18].gShifted    = CST_54;
     //kbd_usr[19].fShifted    = ITM_SW;
@@ -690,7 +690,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the global registers
     memset(globalRegister, 0, sizeof(globalRegister));
     for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -699,7 +699,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
     memset(savedStackRegister, 0, sizeof(savedStackRegister));
     for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -808,7 +808,7 @@ void fnReset(uint16_t confirmation) {
     displayFormat = DF_ALL;
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
-    currentAngularMode = AM_DEGREE;
+    currentAngularMode = amDegree;
     lastSetAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
@@ -845,9 +845,9 @@ void fnReset(uint16_t confirmation) {
     lastErrorCode = 0;
 
     gammaLanczosCoefficients = (real51_t *)const_gammaC01;
-    angle180 = (real39_t *)const_180;
-    angle90  = (real39_t *)const_90;
-    angle45  = (real39_t *)const_45;
+    angle180 = (real39_t *)const_pi;
+    angle90  = (real39_t *)const_piOn2;
+    angle45  = (real39_t *)const_piOn4;
 
     #ifndef TESTSUITE_BUILD
       resetAlphaSelectionBuffer();

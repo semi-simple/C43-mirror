@@ -38,15 +38,15 @@ const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same
 /* 14 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {3, 'I', 'S', 'M',  0,   0,   0,   0} },
 /* 15 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {6, 'R', 'E', 'A', 'L', 'D', 'F',  0} },
 /* 16 */  { .header = {.pointerToRegisterData = WP43S_NULL, .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 1, .notUsed = 0}, .reservedVariableName = {4, '#', 'D', 'E', 'C',  0,   0,   0} },
-/* 17 */  { .header = {.pointerToRegisterData = 0,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'A', 'C', 'C',  0,   0,   0,   0} },
-/* 18 */  { .header = {.pointerToRegisterData = 4,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 145, 'L', 'i', 'm',  0,   0} },
-/* 19 */  { .header = {.pointerToRegisterData = 8,          .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 147, 'L', 'i', 'm',  0,   0} },
-/* 20 */  { .header = {.pointerToRegisterData = 12,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'F', 'V',  0,   0,   0,   0,   0} },
-/* 21 */  { .header = {.pointerToRegisterData = 16,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'i', '%', '/', 'a',  0,   0,   0} },
-/* 22 */  { .header = {.pointerToRegisterData = 20,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'N', 'P', 'E', 'R',  0,   0,   0} },
-/* 23 */  { .header = {.pointerToRegisterData = 24,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'P', 'E', 'R', '/', 'a',  0,   0} },
-/* 24 */  { .header = {.pointerToRegisterData = 28,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'P', 'M', 'T',  0,   0,   0,   0} },
-/* 25 */  { .header = {.pointerToRegisterData = 32,         .dataType = dtReal34,      .tag = AM_NONE,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'P', 'V',  0,   0,   0,   0,   0} },
+/* 17 */  { .header = {.pointerToRegisterData = 0,          .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'A', 'C', 'C',  0,   0,   0,   0} },
+/* 18 */  { .header = {.pointerToRegisterData = 4,          .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 145, 'L', 'i', 'm',  0,   0} },
+/* 19 */  { .header = {.pointerToRegisterData = 8,          .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 161, 147, 'L', 'i', 'm',  0,   0} },
+/* 20 */  { .header = {.pointerToRegisterData = 12,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'F', 'V',  0,   0,   0,   0,   0} },
+/* 21 */  { .header = {.pointerToRegisterData = 16,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'i', '%', '/', 'a',  0,   0,   0} },
+/* 22 */  { .header = {.pointerToRegisterData = 20,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {4, 'N', 'P', 'E', 'R',  0,   0,   0} },
+/* 23 */  { .header = {.pointerToRegisterData = 24,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {5, 'P', 'E', 'R', '/', 'a',  0,   0} },
+/* 24 */  { .header = {.pointerToRegisterData = 28,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {3, 'P', 'M', 'T',  0,   0,   0,   0} },
+/* 25 */  { .header = {.pointerToRegisterData = 32,         .dataType = dtReal34,      .tag = amNone,     .readOnly = 0, .notUsed = 0}, .reservedVariableName = {2, 'P', 'V',  0,   0,   0,   0,   0} },
 /* 26 */  { .header = {.pointerToRegisterData = 36,         .dataType = dtLongInteger, .tag = LI_POSITIVE, .readOnly = 0, .notUsed = 0}, .reservedVariableName = {6, 'G', 'R', 'A', 'M', 'O', 'D',  0} },
 };
 
@@ -512,13 +512,13 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
         if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
-        setRegisterDataType(r, dtReal34, AM_NONE);
-        setRegisterDataPointer(r, allocWp43s(TO_BYTES(REAL34_SIZE)));
+        setRegisterDataType(r, dtReal34, amNone);
+        setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
         real34Zero(REGISTER_REAL34_DATA(r));
 
         }                                                   //JM defaults ^^
         else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
-          setRegisterDataType(r, dtComplex34, AM_NONE);
+          setRegisterDataType(r, dtComplex34, amNone);
           setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
@@ -556,12 +556,12 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
         if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
-        setRegisterDataType(r, dtReal34, AM_NONE);
+        setRegisterDataType(r, dtReal34, amNone);
         setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
         real34Zero(REGISTER_REAL34_DATA(r));
         }                                                   //JM defaults ^^
         else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
-          setRegisterDataType(r, dtComplex34, AM_NONE);
+          setRegisterDataType(r, dtComplex34, amNone);
           setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
           real34Zero(REGISTER_REAL34_DATA(r));
           real34Zero(REGISTER_IMAG34_DATA(r));
@@ -655,7 +655,7 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
   xcopy(allNamedVariables[regist].variableName + 1, variableName, len);
 
   regist += FIRST_NAMED_VARIABLE;
-  setRegisterDataType(regist, dataType, AM_NONE);
+  setRegisterDataType(regist, dataType, amNone);
   setRegisterDataPointer(regist, allocWp43s(fullDataSizeInBlocks));
 }
 
@@ -887,10 +887,10 @@ void clearRegister(calcRegister_t regist) {
   if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                       //JM defaults JMZERO
     if(getRegisterDataType(regist) == dtReal34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
-      setRegisterTag(regist, AM_NONE);
+      setRegisterTag(regist, amNone);
     }
     else{
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Zero(REGISTER_REAL34_DATA(regist));
     }
   }                                                                             //JM defaults ^^
@@ -898,10 +898,10 @@ void clearRegister(calcRegister_t regist) {
     if(getRegisterDataType(regist) == dtComplex34) {
       real34Zero(REGISTER_REAL34_DATA(regist));
       real34Zero(REGISTER_IMAG34_DATA(regist));
-      setRegisterTag(regist, AM_NONE);
+      setRegisterTag(regist, amNone);
     }
     else{
-      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, amNone);
       real34Zero(REGISTER_REAL34_DATA(regist));
       real34Zero(REGISTER_IMAG34_DATA(regist));
     }
@@ -1113,7 +1113,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
         displayBugScreen(errorMessage);
         sizeInBlocks = 0;
     }
-    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, AM_NONE);
+    reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, amNone);
   }
 
   xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), TO_BYTES(getRegisterFullSize(sourceRegister)));
@@ -1598,12 +1598,12 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
 
     case dtReal34:
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-      if(getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-        if(getRegisterAngularMode(REGISTER_X) == AM_DMS) {
-          convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DMS, AM_DEGREE);
-          setRegisterAngularMode(REGISTER_X, AM_DEGREE);                        //JM added AM_DEGREE: prevent stripping the tag if it was AM_DMS, to force an interim step to decimal degrees.
-        } else                                                                  //JM added else: prevent stripping the tag if it was AM_DMS, to force an interim step to decimal degrees.
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
+      if(getRegisterAngularMode(REGISTER_X) != amNone) {
+        if(getRegisterAngularMode(REGISTER_X) == amDMS) {
+          convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDMS, amDegree);
+          setRegisterAngularMode(REGISTER_X, amDegree);                        //JM added amDegree: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
+        } else                                                                  //JM added else: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
+        setRegisterAngularMode(REGISTER_X, amNone);
       }
       break;
 
@@ -1626,4 +1626,3 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       return;
   }
 }
-

@@ -59,7 +59,7 @@ static void incDecAndCompare(uint16_t regist, uint16_t mode) {
   real34_t fp, step;
   int8_t compared;
 
-  reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, amNone);
   getIterParam(regist, &fp, REGISTER_REAL34_DATA(TEMP_REGISTER_1), &step);
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
@@ -77,7 +77,7 @@ static void incDecAndCompare(uint16_t regist, uint16_t mode) {
         compared = real34CompareAbsLessThan(REGISTER_REAL34_DATA(regist), const34_1) ? 0 : 1;
         break;
       }
-      else if(getRegisterAngularMode(regist) == AM_NONE) {
+      else if(getRegisterAngularMode(regist) == amNone) {
         real34ToIntegralValue(REGISTER_REAL34_DATA(regist), REGISTER_REAL34_DATA(regist), DEC_ROUND_DOWN);
         if((mode >> 2) == DEC_FLAG) real34SetNegativeSign(&step);
         real34Add(REGISTER_REAL34_DATA(regist), &step, REGISTER_REAL34_DATA(regist));

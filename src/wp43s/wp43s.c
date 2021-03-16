@@ -99,6 +99,7 @@ freeMemoryRegion_t     freeMemoryRegions[MAX_FREE_REGION];
 pcg32_random_t         pcg32_global = PCG32_INITIALIZER;
 labelList_t           *labelList = NULL;
 programList_t         *programList = NULL;
+angularMode_t          currentAngularMode;
 
 char                  *tmpString = NULL;
 char                  *tmpStringLabelOrVariableName = NULL;
@@ -136,7 +137,6 @@ uint8_t                lastErrorCode;
 uint8_t                temporaryInformation;
 uint8_t                rbrMode;
 uint8_t                numScreensNumericFont;
-uint8_t                currentAngularMode;
 uint8_t               *beginOfProgramMemory;
 uint8_t               *beginOfCurrentProgram;
 uint8_t               *endOfCurrentProgram;

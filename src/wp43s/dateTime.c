@@ -87,8 +87,8 @@ bool_t checkDateArgument(calcRegister_t regist, real34_t *jd) {
       return true;
 
     case dtReal34:
-      if(getRegisterAngularMode(regist) == AM_NONE) {
-        reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE); // make sure TEMP_REGISTER_1 is not of dtDate type here
+      if(getRegisterAngularMode(regist) == amNone) {
+        reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, amNone); // make sure TEMP_REGISTER_1 is not of dtDate type here
         convertReal34RegisterToDateRegister(regist, TEMP_REGISTER_1);
         if(getRegisterDataType(TEMP_REGISTER_1) != dtDate) return false; // invalid date
         internalDateToJulianDay(REGISTER_REAL34_DATA(TEMP_REGISTER_1), jd);
@@ -394,7 +394,7 @@ void hmmssToSeconds(const real34_t *src, real34_t *dest) {
 void hmmssInRegisterToSeconds(calcRegister_t regist) {
   real34_t real34;
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
-  reallocateRegister(regist, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
   hmmssToSeconds(&real34, REGISTER_REAL34_DATA(regist));
 }
 
@@ -408,7 +408,7 @@ void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
       julianDayToInternalDate(REGISTER_REAL34_DATA(REGISTER_X), &date);
-      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
       real34Copy(&date, REGISTER_REAL34_DATA(REGISTER_X));
       break;
 
@@ -445,7 +445,7 @@ void fnSetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
   real34_t jd34;
   const uint32_t fgd = firstGregorianDay;
 
-  if((getRegisterDataType(REGISTER_X) == dtReal34) && (getRegisterAngularMode(REGISTER_X) == AM_NONE)) {
+  if((getRegisterDataType(REGISTER_X) == dtReal34) && (getRegisterAngularMode(REGISTER_X) == amNone)) {
     firstGregorianDay = 0u; // proleptic Gregorian mode
     if(checkDateArgument(REGISTER_X, &jd34)) {
       firstGregorianDay = real34ToUInt32(&jd34);
@@ -471,7 +471,7 @@ void fnGetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
 
   uInt32ToReal34(firstGregorianDay, &j);
   liftStack();
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -484,7 +484,7 @@ void fnXToDate(uint16_t unusedButMandatoryParameter) {
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+      if(getRegisterAngularMode(REGISTER_X) == amNone) {
         convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
         break;
       }
@@ -589,7 +589,7 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
         break;
 
       case dtReal34:
-        if(getRegisterAngularMode(r[i])) {
+        if(getRegisterAngularMode(r[i]) == amNone) {
           real34ToIntegralValue(REGISTER_REAL34_DATA(r[i]), part[i], DEC_ROUND_DOWN);
           break;
         }
@@ -617,7 +617,7 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
   fnDropY(NOPARAM);
   fnDropY(NOPARAM);
   composeJulianDay(&y, &m, &d, &j);
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -651,21 +651,21 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
     default:                             //JM ^^
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-      switch(getRegisterDataType(REGISTER_X)) {
-        case dtLongInteger :
-          convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
-          break;
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger :
+      convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+      break;
 
-        case dtTime:
-          /* already in hours: do nothing */
-          break;
+    case dtTime:
+      /* already in hours: do nothing */
+      break;
 
-        case dtReal34:
-          if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
-            convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
-            break;
-          }
-          /* fallthrough */
+    case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == amNone) {
+        convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+        break;
+      }
+      /* fallthrough */
 
         default :
           displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -703,7 +703,7 @@ void fnDate(uint16_t unusedButMandatoryParameter) {
 
   composeJulianDay(&y, &m, &d, &j);
   liftStack();
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
   temporaryInformation = TI_DAY_OF_WEEK;
 }
@@ -725,7 +725,7 @@ void fnTime(uint16_t unusedButMandatoryParameter) {
   #endif // DMCP_BUILD
 
   liftStack();
-  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
   real34Copy(&time34, REGISTER_REAL34_DATA(REGISTER_X));
 }
 

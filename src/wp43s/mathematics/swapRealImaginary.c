@@ -78,7 +78,7 @@ void swapRealReal(void) {                                                     //
   real34_t temp;
 
   real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &temp);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   real34Copy(&temp, REGISTER_IMAG34_DATA(REGISTER_X));
   real34Copy(const_0, REGISTER_REAL34_DATA(REGISTER_X));
 }

@@ -66,7 +66,7 @@ void fnZeta(uint16_t unusedButMandatoryParameter) {
 void zetaReal(void) {
   real_t x, res;
 
-  if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+  if(getRegisterAngularMode(REGISTER_X) == amNone) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     WP34S_Zeta(&x, &res, &ctxtReal39);
     realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));

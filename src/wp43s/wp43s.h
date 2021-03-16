@@ -311,6 +311,7 @@
   extern pcg32_random_t         pcg32_global;
   extern labelList_t           *labelList;
   extern programList_t         *programList;
+  extern angularMode_t          currentAngularMode;
 
   extern char                  *tmpString;
   extern char                  *tmpStringLabelOrVariableName;
@@ -350,7 +351,6 @@
   extern uint8_t                temporaryInformation;
   extern uint8_t                rbrMode;
   extern uint8_t                numScreensNumericFont;
-  extern uint8_t                currentAngularMode;
   extern uint8_t               *beginOfProgramMemory;
   extern uint8_t               *beginOfCurrentProgram;
   extern uint8_t               *endOfCurrentProgram;

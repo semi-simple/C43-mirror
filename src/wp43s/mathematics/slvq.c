@@ -249,40 +249,40 @@ void fnSlvq(uint16_t unusedButMandatoryParameter) {
   }
 
   if(realRoots) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-    reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
     realToReal34(&rReal,  REGISTER_REAL34_DATA(REGISTER_Z));
   }
   else { // !realRoots
     if(realIsZero(&x1Imag)) { // x1 is real
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(&x1Imag, REGISTER_IMAG34_DATA(REGISTER_X));
     }
 
     if(realIsZero(&x2Imag)) { // x2 is real
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
     }
     else {
-      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
       realToReal34(&x2Imag, REGISTER_IMAG34_DATA(REGISTER_Y));
     }
 
     if(realIsZero(&rImag)) { // r is real
-      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
     }
     else {
-      reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
       realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_Z));
     }

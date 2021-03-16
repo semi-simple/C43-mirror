@@ -77,7 +77,7 @@ void fnNormalP(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Pdf_Q(&val, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -94,7 +94,7 @@ void fnNormalL(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Cdf_Q(&val, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -111,7 +111,7 @@ void fnNormalR(uint16_t unusedButMandatoryParameter) {
     realSubtract(&val, &mu, &val, &ctxtReal39);
     realDivide(&val, &sigma, &val, &ctxtReal39);
     WP34S_Cdfu_Q(&val, &ans, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
@@ -135,7 +135,7 @@ void fnNormalI(uint16_t unusedButMandatoryParameter) {
       WP34S_Qf_Q(&val, &ans, &ctxtReal39);
       realMultiply(&ans, &sigma, &ans, &ctxtReal39);
       realAdd(&ans, &mu, &ans, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }

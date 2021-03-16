@@ -45,7 +45,7 @@ void fnIxyz(uint16_t unusedButMandatoryParameter) {
   if(ixyzConvert(REGISTER_X, &x) && ixyzConvert(REGISTER_Y, &a) && ixyzConvert(REGISTER_Z, &b)) {
     if(realCompareGreaterEqual(&x, const_0) && realCompareLessEqual(&x, const_1) && realCompareGreaterThan(&a, const_0) && realCompareGreaterThan(&b, const_0)) {
       WP34S_betai(&b, &a, &x, &val, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
       fnDropY(NOPARAM);
       fnDropY(NOPARAM);

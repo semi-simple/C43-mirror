@@ -69,13 +69,13 @@ void arctanhLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
   if(realIsZero(&x)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(realCompareEqual(&x, const_1)) {
       if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
@@ -87,7 +87,7 @@ void arctanhLonI(void) {
     }
     else if(realCompareEqual(&x, const__1)) {
       if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
@@ -99,13 +99,13 @@ void arctanhLonI(void) {
     }
     else {
       if(getFlag(FLAG_CPXRES)) {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
         real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
         arctanhCplx();
       }
       else if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
@@ -166,7 +166,7 @@ void arctanhReal(void) {
     else {
       if(realCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
-          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
           realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCplx();
@@ -187,7 +187,7 @@ void arctanhReal(void) {
       }
     }
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

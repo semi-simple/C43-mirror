@@ -197,7 +197,7 @@ void fnStoreMax(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreConfig(uint16_t regist) {
-  reallocateRegister(regist, dtConfig, CONFIG_SIZE, AM_NONE);
+  reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
   dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(regist);
 
   storeToDtConfigDescriptor(shortIntegerMode);

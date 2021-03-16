@@ -42,7 +42,7 @@
 // runFunction(ITM_ SIGMAPLUS): fnSigma (1);
 // runFunction(ITM_ ABS): fnMagnitude (0); 
 // runFunction(ITM_ ANGLE): fnArg_all (0);
-// runFunction(ITM_ DEG): fnAngularMode (AM_DEGREE);
+// runFunction(ITM_ DEG): fnAngularMode (amDegree);
 // runFunction(ITM_ SQUAREROOTX): fnSquareRoot (0); 
 // runFunction(ITM_ RAD);  fnAngularMode (AM_RADIAN);
 
@@ -304,7 +304,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduced the amount of sample data from 400 points to 40 points
 
     //convert double to X register
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
     stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
 

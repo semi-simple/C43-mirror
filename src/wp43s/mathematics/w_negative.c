@@ -67,7 +67,7 @@ void wNegLonI(void) {
   real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   wNegReal();
 }
@@ -80,7 +80,7 @@ void wNegReal(void) {
   realDivide(const__1, const_eE, &threshold, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-  if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+  if(getRegisterAngularMode(REGISTER_X) == amNone) {
     if(realCompareGreaterEqual(&x, &threshold) && realCompareLessEqual(&x, const_0)) {
       WP34S_LambertW(&x, &res, true, &ctxtReal39);
       realToReal34(&res, REGISTER_REAL34_DATA(REGISTER_X));

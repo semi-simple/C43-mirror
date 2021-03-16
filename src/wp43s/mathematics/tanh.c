@@ -69,7 +69,7 @@ void tanhLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   WP34S_Tanh(&x, &x, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -101,7 +101,7 @@ void tanhReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_Tanh(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -132,7 +132,7 @@ uint8_t TanhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, rea
     }
     else {
         WP34S_Tanh(xReal, rReal, &ctxtReal39);
-        WP34S_Cvt2RadSinCosTan(xImag, AM_RADIAN, &sina, &cosa, rImag, &ctxtReal39);
+        WP34S_Cvt2RadSinCosTan(xImag, amRadian, &sina, &cosa, rImag, &ctxtReal39);
 
         realCopy(const_1, &denomReal);
         realMultiply(rReal, rImag, &denomImag, &ctxtReal39);

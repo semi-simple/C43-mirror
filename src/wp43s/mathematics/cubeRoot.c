@@ -75,7 +75,7 @@ void curtLonI(void) {
     real_t x;
 
     convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     if(realIsPositive(&x)) {
       realPower(&x, const_1on3, &x, &ctxtReal39);
     }
@@ -153,7 +153,7 @@ void curtReal(void) {
     realSetNegativeSign(&x);
   }
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

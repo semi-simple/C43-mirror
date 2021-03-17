@@ -168,7 +168,7 @@ void factReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_Factorial(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

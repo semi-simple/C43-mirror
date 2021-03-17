@@ -43,7 +43,7 @@
 #define VERBOSE_LEVEL 0            //JM 0 = no text; 1 = essential text; 2 = extra debugging: on calc screen
 
 #define PC_BUILD_TELLTALE            //JM verbose on PC: jm_show_comment
-//#undef  PC_BUILD_TELLTALE
+#undef  PC_BUILD_TELLTALE
 
 
 #define PC_BUILD_VERBOSE1            //JM verbose XEQM basic operation on PC
@@ -133,6 +133,9 @@
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
 
+#if __linux__ == 1
+  #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
+#endif // __linux__ == 1
 
 
 
@@ -164,22 +167,6 @@
 #define NIM_BUFFER_LENGTH                        200 //JM(100-24) TEMP POC CHANGE FROM 100//JMMAX changed from 200 // TODO: find the exact maximum needed
 #endif
 
-// TAM transition system
-#define TT_OPERATION                               0 // +, -, *, /, min, max
-#define TT_LETTER                                  1
-#define TT_VARIABLE                                2
-#define TT_DIGIT                                   3
-#define TT_ENTER                                   4
-#define TT_DOT                                     5 // For local flags and registers
-#define TT_INDIRECT                                6 // For indirect addressing
-#define TT_BACKSPACE                               7
-#define TT_BASE10                                  8
-#define TT_BASE16                                  9
-#define TT_INT                                    10
-#define TT_FP                                     11
-#define TT_CHB02                                  12
-#define TT_CHB10                                  13 //JM
-#define TT_NOTHING                                14
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
@@ -220,9 +207,11 @@
 #define ERROR_STRING_WOULD_BE_TOO_LONG            33
 #define ERROR_EMPTY_STRING                        34
 #define ERROR_NO_BACKUP_DATA                      35
-#define ERROR_BAD_INPUT                           36 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_UNDEF_SOURCE_VAR                    36
+#define ERROR_WRITE_PROTECTED_VAR                 37
+#define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     37
+#define NUMBER_OF_ERROR_CODES                     39
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -549,15 +538,6 @@
 #define DF_SF                                      4   //JM
 #define DF_UN                                      5   //JM
 
-// Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0  | This is because of the tables
-#define AM_RADIAN                                  1 // radian must be 1  | angle45, angle90, and angle180
-#define AM_MULTPI                                  2 // multpi must be 2  | for angle reduction before
-#define AM_GRAD                                    3 // grad   must be 3  | Taylor trig computation.
-#define AM_DMS                                     4
-#define AM_NONE                                    5
-#define TM_HMS                                     6   //JM
-
 // Date format 2 bits
 #define DF_DMY                                     0
 #define DF_YMD                                     1
@@ -593,9 +573,10 @@
 #define CM_REGISTER_BROWSER                        5 // Register browser
 #define CM_FLAG_BROWSER                            6 // Flag browser
 #define CM_FONT_BROWSER                            7 // Font browser
-#define CM_ERROR_MESSAGE                           8 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN                           9 // Bug message on screen
-#define CM_CONFIRMATION                           10 // Waiting for confirmation or canceling
+#define CM_PLOT_STAT                               8 // Plot stats mode
+#define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN                          10 // Bug message on screen
+#define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
 
@@ -666,7 +647,6 @@
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
 #define TI_DAY_OF_WEEK                            33
-#define TI_UNDEF_SOURCE_VAR                       34
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -691,7 +671,17 @@
 #define CATALOG_AINT                               5
 #define CATALOG_aint                               6
 #define CATALOG_PROG                               7
-#define NUMBER_OF_CATALOGS                         8
+#define CATALOG_VAR                                8
+#define CATALOG_MATRS                              9
+#define CATALOG_STRINGS                           10
+#define CATALOG_DATES                             11
+#define CATALOG_TIMES                             12
+#define CATALOG_ANGLES                            13
+#define CATALOG_SINTS                             14
+#define CATALOG_LINTS                             15
+#define CATALOG_REALS                             16
+#define CATALOG_CPXS                              17
+#define NUMBER_OF_CATALOGS                        18
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1
@@ -802,6 +792,9 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+
+#define OPMOD_MULTIPLY                             0
+#define OPMOD_POWER                                1
 
 #define ORTHOPOLY_HERMITE_H                        0
 #define ORTHOPOLY_HERMITE_HE                       1

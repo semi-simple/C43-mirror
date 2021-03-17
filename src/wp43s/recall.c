@@ -248,6 +248,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(PLOT_DIFF);
     recallFromDtConfigDescriptor(PLOT_RMS );
     recallFromDtConfigDescriptor(PLOT_SHADE );
+    recallFromDtConfigDescriptor(PLOT_AXIS );
     recallFromDtConfigDescriptor(PLOT_ZMX );
     recallFromDtConfigDescriptor(PLOT_ZMY );
     recallFromDtConfigDescriptor(jm_HOME_MIR);      

@@ -121,25 +121,39 @@ typedef enum {
 
 
 /********************************************//**
+ * \typedef angularMode_t
+ * \brief angular units
+ ***********************************************/
+typedef enum {
+  amRadian =  0, // radian must be 0  | This is because of the tables
+  amMultPi =  1, // multpi must be 1  | angle45, angle90, and angle180
+  amGrad   =  2, // grad   must be 2  | for angle reduction before
+  amDegree =  3, // degree must be 3  | Taylor trig computation.
+  amDMS    =  4,
+  amNone   =  5
+} angularMode_t;
+#define TM_HMS                                     6   //JM
+
+
+/********************************************//**
  * \typedef dtConfigDescriptor_t
  * \brief Configuration for STOCFG and RCLCFG
  ***********************************************/
 typedef struct {
-  uint8_t   shortIntegerMode;
-  uint8_t   shortIntegerWordSize;
-  uint8_t   displayFormat;
-  uint8_t   displayFormatDigits;
-  uint8_t   groupingGap;
-  uint8_t   currentAngularMode;
-  uint8_t   lastSetAngularMode;
-  uint8_t   displayStack;
-  uint8_t   roundingMode;
-  uint8_t   timeDisplayFormatDigits;
-  uint8_t   reservedForPossibleFutureUse[3];
-  uint32_t  denMax;
-  uint32_t  firstGregorianDay;
-  uint64_t  systemFlags;
-  calcKey_t kbd_usr[37];
+  uint8_t       shortIntegerMode;
+  uint8_t       shortIntegerWordSize;
+  uint8_t       displayFormat;
+  uint8_t       displayFormatDigits;
+  uint8_t       groupingGap;
+  uint8_t       displayStack;
+  uint8_t       roundingMode;
+  uint8_t       timeDisplayFormatDigits;
+  uint8_t       reservedForPossibleFutureUse[3];
+  angularMode_t currentAngularMode;
+  uint32_t      denMax;
+  uint32_t      firstGregorianDay;
+  uint64_t      systemFlags;
+  calcKey_t     kbd_usr[37];
 
   //    int16_t   Norm_Key_00_VAR;                                           //JMCFGvv
   uint8_t SigFigMode;
@@ -175,6 +189,7 @@ typedef struct {
   bool_t PLOT_DIFF;
   bool_t PLOT_RMS;
   bool_t PLOT_SHADE;
+  bool_t PLOT_AXIS;
   int8_t PLOT_ZMX;
   int8_t PLOT_ZMY;
   bool_t jm_HOME_SUM;
@@ -370,39 +385,17 @@ typedef struct {
 
 /********************************************//**
  * \typedef tamState_t
- * \brief Enumeration of states for the TAM buffer
+ * \brief State for the TAM buffer
  ***********************************************/
-typedef enum {
-  TS_OP_DIGIT_0         = 0,  //-> OPO_DIGIT_0, OP_ALPHA, OP_DIGIT_1, OP_DOT_0, OP_INDIRECT_0
-  TS_OPO_DIGIT_0        = 1,  //-> OP_DIGIT_0, OPO_ALPHA, OPO_DIGIT_1, OPO_DOT_0, OPO_INDIRECT_0
-  TS_OP_DIGIT_1         = 2,  //-> OP_DIGIT_0
-  TS_OP_DOT_0           = 3,  //-> OP_DOT_1, OP_DIGIT_0
-  TS_OP_DOT_1           = 4,  //-> OP_DOT_0
-  TS_OP_INDIRECT_0      = 5,  //-> OP_INDIRECT_1, OP_INDIRECT_DOT_0, OP_DIGIT_0
-  TS_OP_INDIRECT_1      = 6,  //-> OP_INDIRECT_0
-  TS_OP_INDIRECT_DOT_0  = 7,  //-> OP_INDIRECT_DOT_1, OP_INDIRECT_0
-  TS_OP_INDIRECT_DOT_1  = 8,  //-> OP_INDIRECT_DOT_0
-  TS_OPO_DIGIT_1        = 9,  //-> OPO_DIGIT_0
-  TS_OPO_DOT_0          = 10, //-> OPO_DOT_1, OPO_DIGIT_0
-  TS_OPO_DOT_1          = 11, //-> OPO_DOT_0
-  TS_OPO_INDIRECT_0     = 12, //-> OPO_INDIRECT_1, OPO_INDIRECT_DOT_0, OPO_DIGIT_0
-  TS_OPO_INDIRECT_1     = 13, //-> OPO_INDIRECT_0
-  TS_OPO_INDIRECT_DOT_0 = 14, //-> OPO_INDIRECT_DOT_1, OPO_INDIRECT_0
-  TS_OPO_INDIRECT_DOT_1 = 15, //-> OPO_INDIRECT_DOT_0
-  TS_OP_DIGIT_0_4       = 16, //->
-  TS_GOTO_0             = 17, //-> GOTO_1, OP_DIGIT_0
-  TS_GOTO_1             = 18, //-> GOTO_2, GOTO_0
-  TS_GOTO_2             = 19, //-> GOTO_3, GOTO_1
-  TS_GOTO_3             = 20, //-> GOTO_4, GOTO_2
-  TS_GOTO_4             = 21, //-> GOTO_3
-  TS_CNST_0             = 22, //-> CNST_1
-  TS_CNST_1             = 23, //-> CNST_2, CNST_0
-  TS_CNST_2             = 24, //-> CNST_1
-  TS_BESTF_0            = 25, //-> BESTF_1
-  TS_BESTF_1            = 26, //-> BESTF_2, BESTF_0
-  TS_BESTF_2            = 27, //-> BESTF_3, BESTF_1
-  TS_BESTF_3            = 28, //-> BESTF_2
-  TS_OP_ALPHA           = 29, //-> OP_DIGIT_0
-  TS_OPO_ALPHA          = 30  //-> OPO_DIGIT_0
+typedef struct {
+  uint16_t   mode;
+  int16_t    function;
+  bool_t     alpha;
+  int16_t    currentOperation;
+  bool_t     dot;
+  bool_t     indirect;
+  int16_t    digitsSoFar;
+  int16_t    value;
+  int16_t    min;
+  int16_t    max;
 } tamState_t;
-

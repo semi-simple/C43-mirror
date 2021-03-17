@@ -149,6 +149,9 @@ idivr
 modulo
 remainder
 
+mulmod
+expmod
+
 dblDivision
 dblDivisionRemainder
 dblMultiplication

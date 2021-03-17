@@ -110,6 +110,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnErfc",                 fnErfc                },
   {"fnExp",                  fnExp                 },
   {"fnExpM1",                fnExpM1               },
+  {"fnExpMod",               fnExpMod              },
   {"fnExpt",                 fnExpt                },
   {"fnFactorial",            fnFactorial           },
   {"fnFib",                  fnFib                 },
@@ -175,6 +176,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
   {"fnMonth",                fnMonth               },
+  {"fnMulMod",               fnMulMod              },
   {"fnMultiply",             fnMultiply            },
   {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
@@ -241,42 +243,42 @@ const funcTest_t funcTestNoParam[] = {
 };
 
 const funcTest_t funcTestCvt[] = {
-  {"fnCvtAcreM2",     fnCvtAcreM2    },
-  {"fnCvtAcreusM2",   fnCvtAcreusM2  },
+  {"fnCvtAcreHa",     fnCvtAcreHa    },
+  {"fnCvtAcreusHa",   fnCvtAcreusHa  },
   {"fnCvtAtmPa",      fnCvtAtmPa     },
   {"fnCvtAuM",        fnCvtAuM       },
   {"fnCvtBarPa",      fnCvtBarPa     },
   {"fnCvtBtuJ",       fnCvtBtuJ      },
   {"fnCvtCalJ",       fnCvtCalJ      },
   {"fnCvtCwtKg",      fnCvtCwtKg     },
-  {"fnCvtFlozukM3",   fnCvtFlozukM3  },
-  {"fnCvtFlozusM3",   fnCvtFlozusM3  },
+  {"fnCvtFlozukMl",   fnCvtFlozukMl  },
+  {"fnCvtFlozusMl",   fnCvtFlozusMl  },
   {"fnCvtFtM",        fnCvtFtM       },
-  {"fnCvtGalukM3",    fnCvtGalukM3   },
-  {"fnCvtGalusM3",    fnCvtGalusM3   },
+  {"fnCvtGalukL",     fnCvtGalukL    },
+  {"fnCvtGalusL",     fnCvtGalusL    },
   {"fnCvtHpeW",       fnCvtHpeW      },
   {"fnCvtHpmW",       fnCvtHpmW      },
   {"fnCvtHpukW",      fnCvtHpukW     },
-  {"fnCvtInchM",      fnCvtInchM     },
+  {"fnCvtInchMm",     fnCvtInchMm    },
   {"fnCvtInhgPa",     fnCvtInhgPa    },
   {"fnCvtLbfN",       fnCvtLbfN      },
   {"fnCvtLbfftNm",    fnCvtLbfftNm   },
   {"fnCvtLbKg",       fnCvtLbKg      },
   {"fnCvtLyM",        fnCvtLyM       },
-  {"fnCvtMiM",        fnCvtMiM       },
-  {"fnCvtNmiM",       fnCvtNmiM      },
-  {"fnCvtOzKg",       fnCvtOzKg      },
+  {"fnCvtMiKm",       fnCvtMiKm      },
+  {"fnCvtNmiKm",      fnCvtNmiKm     },
+  {"fnCvtOzG",        fnCvtOzG       },
   {"fnCvtPcM",        fnCvtPcM       },
-  {"fnCvtPointM",     fnCvtPointM    },
+  {"fnCvtPointMm",    fnCvtPointMm   },
   {"fnCvtPsiPa",      fnCvtPsiPa     },
-  {"fnCvtQuartM3",    fnCvtQuartM3   },
+  {"fnCvtQuartL",     fnCvtQuartL    },
   {"fnCvtSfeetM",     fnCvtSfeetM    },
   {"fnCvtShortcwtKg", fnCvtShortcwtKg},
   {"fnCvtShorttonKg", fnCvtShorttonKg},
   {"fnCvtStoneKg",    fnCvtStoneKg   },
   {"fnCvtTonKg",      fnCvtTonKg     },
   {"fnCvtTorrPa",     fnCvtTorrPa    },
-  {"fnCvtTrozKg",     fnCvtTrozKg    },
+  {"fnCvtTrozG",      fnCvtTrozG     },
   {"fnCvtWhJ",        fnCvtWhJ       },
   {"fnCvtYardM",      fnCvtYardM     },
   {"fnCvtYearS",      fnCvtYearS     },
@@ -493,7 +495,8 @@ void getString(char *str) {
 
 void setParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
-  int32_t i, am = AM_DEGREE;
+  int32_t i;
+  angularMode_t am = amDegree;
 
   //printf("  setting %s\n", p);
 
@@ -642,23 +645,23 @@ void setParameter(char *p) {
   //Setting angular mode
   else if(strcmp(l, "AM") == 0) {
     if(strcmp(r, "DEG") == 0) {
-      currentAngularMode = AM_DEGREE;
+      currentAngularMode = amDegree;
       //printf("  Set angular mode to DEG\n");
     }
     else if(strcmp(r, "DMS") == 0) {
-      currentAngularMode = AM_DMS;
+      currentAngularMode = amDMS;
       //printf("  Set angular mode to DMS\n");
     }
     else if(strcmp(r, "RAD") == 0) {
-      currentAngularMode = AM_RADIAN;
+      currentAngularMode = amRadian;
       //printf("  Set angular mode to RAD\n");
     }
     else if(strcmp(r, "MULTPI") == 0) {
-      currentAngularMode = AM_MULTPI;
+      currentAngularMode = amMultPi;
       //printf("  Set angular mode to MULTPI\n");
     }
     else if(strcmp(r, "GRAD") == 0) {
-      currentAngularMode = AM_GRAD;
+      currentAngularMode = amGrad;
       //printf("  Set angular mode to GRAD\n");
     }
     else {
@@ -865,12 +868,12 @@ void setParameter(char *p) {
       r[i] = 0;
       strcpy(angMod, r + i + 1);
 
-           if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
-      else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
-      else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
-      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
+           if(strcmp(angMod, "DEG"   ) == 0) am = amDegree;
+      else if(strcmp(angMod, "DMS"   ) == 0) am = amDMS;
+      else if(strcmp(angMod, "RAD"   ) == 0) am = amRadian;
+      else if(strcmp(angMod, "MULTPI") == 0) am = amMultPi;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = amGrad;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = amNone;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
         abortTest();
@@ -891,7 +894,7 @@ void setParameter(char *p) {
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
-      reallocateRegister(regist, dtString, TO_BLOCKS(stringByteLength(r + 1) + 1), AM_NONE);
+      reallocateRegister(regist, dtString, TO_BLOCKS(stringByteLength(r + 1) + 1), amNone);
       strcpy(REGISTER_STRING_DATA(regist), r + 1);
     }
     else if(strcmp(l, "SHOI") == 0) {
@@ -955,7 +958,7 @@ void setParameter(char *p) {
         if(imag[i] == ',') imag[i] = '.';
       }
 
-      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, amNone);
       stringToReal34(real, REGISTER_REAL34_DATA(regist));
       stringToReal34(imag, REGISTER_IMAG34_DATA(regist));
     }
@@ -977,7 +980,7 @@ void setParameter(char *p) {
           }
         } while(r[k] != 0);
       }
-      am = AM_NONE;
+      am = amNone;
 
       // remove beginning and ending " and removing leading spaces
       xcopy(r, r + 1, strlen(r));
@@ -989,7 +992,7 @@ void setParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      reallocateRegister(regist, dtTime, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
       stringToReal34(r, REGISTER_REAL34_DATA(regist));
       if(isHms) {
         hmmssInRegisterToSeconds(regist);
@@ -1006,7 +1009,7 @@ void setParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       stringToReal34(r, REGISTER_REAL34_DATA(regist));
       convertReal34RegisterToDateRegister(regist, regist);
     }
@@ -1217,7 +1220,8 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 
 void checkExpectedOutParameter(char *p) {
   char l[2000], r[2000], real[200], imag[200], angMod[200], letter = 0;
-  int32_t i, am = AM_DEGREE;
+  int32_t i;
+  angularMode_t am = amDegree;
   real34_t expectedReal34, expectedImag34;
 
   //printf("  Checking %s\n", p);
@@ -1440,31 +1444,31 @@ void checkExpectedOutParameter(char *p) {
   //Checking angular mode
   else if(strcmp(l, "AM") == 0) {
     if(strcmp(r, "DEG") == 0) {
-      if(currentAngularMode != AM_DEGREE) {
+      if(currentAngularMode != amDegree) {
         printf("\nAngular mode should be DEGREE but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "DMS") == 0) {
-      if(currentAngularMode != AM_DMS) {
+      if(currentAngularMode != amDMS) {
         printf("\nAngular mode should be DMS but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "RAD") == 0) {
-      if(currentAngularMode != AM_RADIAN) {
+      if(currentAngularMode != amRadian) {
         printf("\nAngular mode should be RAD but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "MULTPI") == 0) {
-      if(currentAngularMode != AM_MULTPI) {
+      if(currentAngularMode != amMultPi) {
         printf("\nAngular mode should be MULTPI but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "GRAD") == 0) {
-      if(currentAngularMode != AM_GRAD) {
+      if(currentAngularMode != amGrad) {
         printf("\nAngular mode should be GRAD but it is not!\n");
         abortTest();
       }
@@ -1695,12 +1699,12 @@ void checkExpectedOutParameter(char *p) {
       r[i] = 0;
       strcpy(angMod, r + i + 1);
 
-           if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
-      else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
-      else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
-      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
+           if(strcmp(angMod, "DEG"   ) == 0) am = amDegree;
+      else if(strcmp(angMod, "DMS"   ) == 0) am = amDMS;
+      else if(strcmp(angMod, "RAD"   ) == 0) am = amRadian;
+      else if(strcmp(angMod, "MULTPI") == 0) am = amMultPi;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = amGrad;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = amNone;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
         abortTest();
@@ -1727,7 +1731,7 @@ void checkExpectedOutParameter(char *p) {
       }
     }
     else if(strcmp(l, "STRI") == 0) {
-      checkRegisterType(regist, letter, dtString, AM_NONE);
+      checkRegisterType(regist, letter, dtString, amNone);
       getString(r + 1);
 
       char *expected, *is;
@@ -1793,7 +1797,7 @@ void checkExpectedOutParameter(char *p) {
       }
     }
     else if(strcmp(l, "CPLX") == 0) {
-      checkRegisterType(regist, letter, dtComplex34, AM_NONE);
+      checkRegisterType(regist, letter, dtComplex34, amNone);
 
       // remove beginning and ending " and removing leading spaces
       xcopy(r, r + 1, strlen(r));
@@ -1869,7 +1873,7 @@ void checkExpectedOutParameter(char *p) {
           }
         } while(r[k] != 0);
       }
-      am = AM_NONE;
+      am = amNone;
 
       // remove beginning and ending " and removing leading spaces
       xcopy(r, r + 1, strlen(r));
@@ -1881,7 +1885,7 @@ void checkExpectedOutParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      checkRegisterType(regist, letter, dtTime, AM_NONE);
+      checkRegisterType(regist, letter, dtTime, amNone);
       stringToReal34(r, &expectedReal34);
       if(isHms) {
         hmmssToSeconds(&expectedReal34, &expectedReal34);
@@ -1904,8 +1908,8 @@ void checkExpectedOutParameter(char *p) {
         if(r[i] == ',') r[i] = '.';
       }
 
-      checkRegisterType(regist, letter, dtDate, AM_NONE);
-      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, AM_NONE);
+      checkRegisterType(regist, letter, dtDate, amNone);
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, amNone);
       stringToReal34(r, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
       convertReal34RegisterToDateRegister(TEMP_REGISTER_1, TEMP_REGISTER_1);
       real34Copy(REGISTER_REAL34_DATA(TEMP_REGISTER_1), &expectedReal34)

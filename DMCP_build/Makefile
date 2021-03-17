@@ -49,7 +49,8 @@ C_SOURCES += $(wildcard src/wp43s/*.c) \
              $(wildcard src/wp43s/browsers/*.c) \
              $(wildcard src/wp43s/logicalOps/*.c) \
              $(wildcard src/wp43s/programming/*.c) \
-             $(wildcard src/wp43s/distributions/*.c)
+             $(wildcard src/wp43s/distributions/*.c) \
+             $(wildcard src/wp43s/ui/*.c)
 
 # C++ sources
 #CXX_SOURCES += src/xxx.cc

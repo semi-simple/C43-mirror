@@ -1137,7 +1137,7 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
   //ix = 0;while (ix!=20) {printf("%d ",line1[ix]);ix++;}  printf(">>> loaded: str:%s\n",line1 + TMP_STR_LENGTH/2);  
   int16_t len = stringByteLength(line1 + TMP_STR_LENGTH/2);
   liftStack();
-  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
   strcpy(REGISTER_STRING_DATA(REGISTER_X),line1 + TMP_STR_LENGTH/2);
 
 }
@@ -1154,7 +1154,7 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
             copySourceRegisterToDestRegister(REGISTER_Z, REGISTER_Y);
 
             int16_t len = stringByteLength(aimBuffer) + 1;
-            reallocateRegister(REGISTER_Z, dtString, TO_BLOCKS(len), AM_NONE);
+            reallocateRegister(REGISTER_Z, dtString, TO_BLOCKS(len), amNone);
             xcopy(REGISTER_STRING_DATA(REGISTER_Z), aimBuffer, len);
             aimBuffer[0] = 0;
 
@@ -1191,7 +1191,7 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
       tmp[0]=0;
       int16_t len = stringByteLength(tmp) + 1;
 
-      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);           //Make blank string in X
+      reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);           //Make blank string in X
       xcopy(REGISTER_STRING_DATA(REGISTER_X), tmp, len);
       addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();//Convert Y number to string in X REGISTER
       adjustResult(REGISTER_X, false, false, -1, -1, -1);                          //Copy X string to Aimbuffer
@@ -1233,7 +1233,7 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
       setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
     }                                        //JM NEWERPN 
     liftStack();
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
     strcpy(REGISTER_STRING_DATA(REGISTER_X),line1);
     fnXEQMEDIT(0);
   }

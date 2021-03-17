@@ -113,10 +113,10 @@
 #endif // !DMCP_BUILD
 
 
-void getStringLabelOrVariableName(uint8_t *stringAddress) {
+static void getStringLabelOrVariableName(uint8_t *stringAddress) {
   uint8_t stringLength = *(uint8_t *)(stringAddress++);
-  xcopy(tmpString + 1000, stringAddress, stringLength);
-  tmpString[1000 + stringLength] = 0;
+  xcopy(tmpStringLabelOrVariableName, stringAddress, stringLength);
+  tmpStringLabelOrVariableName[stringLength] = 0;
 }
 
 
@@ -139,10 +139,7 @@ void getIndirectRegister(uint8_t *paramAddress, const char *op) {
 
 void getIndirectVariable(uint8_t *stringAddress, const char *op) {
   getStringLabelOrVariableName(stringAddress);
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wrestrict"
-  sprintf(tmpString, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-  #pragma GCC diagnostic pop
+  sprintf(tmpString, "%s " STD_RIGHT_ARROW STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
 }
 
 
@@ -159,10 +156,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else {
         sprintf(tmpString, "\nIn function decodeOp case PARAM_DECLARE_LABEL: opParam %u is not a valid label!\n", opParam);
@@ -178,10 +172,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -206,10 +197,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == INDIRECT_REGISTER) {
         getIndirectRegister(paramAddress, op);
@@ -277,10 +265,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
         getStringLabelOrVariableName(paramAddress);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wrestrict"
-        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpString + 1000);
-        #pragma GCC diagnostic pop
+        sprintf(tmpString, "%s " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, op, tmpStringLabelOrVariableName);
       }
       else if(opParam == VALUE_0) {
         sprintf(tmpString, "%s 0.", op);
@@ -317,7 +302,7 @@ static void decodeLiteral(uint8_t *literalAddress) {
     //  break;
 
     case BINARY_REAL34:
-      real34ToDisplayString((real34_t *)literalAddress, AM_NONE, tmpString, &standardFont, 9999, 34, false, STD_SPACE_4_PER_EM);
+      real34ToDisplayString((real34_t *)literalAddress, amNone, tmpString, &standardFont, 9999, 34, false, STD_SPACE_4_PER_EM);
       break;
 
     case BINARY_COMPLEX34:
@@ -332,27 +317,18 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_SHORT_INTEGER:
       getStringLabelOrVariableName(literalAddress + 1);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
-      sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       sprintf(tmpString + strlen(tmpString), "#%u", *literalAddress);
       break;
 
     case STRING_LONG_INTEGER:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
-      sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       break;
 
     case STRING_REAL34:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
-      sprintf(tmpString, "%s", tmpString + 1000);
-      #pragma GCC diagnostic pop
+      sprintf(tmpString, "%s", tmpStringLabelOrVariableName);
       if(strchr(tmpString, 'e') == NULL && strchr(tmpString, '.') == NULL) {
         strcat(tmpString, RADIX34_MARK_STRING);
       }
@@ -360,18 +336,12 @@ static void decodeLiteral(uint8_t *literalAddress) {
 
     case STRING_COMPLEX34:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
-      xcopy(tmpString, tmpString + 1000, strlen(tmpString + 1000) + 1);
-      #pragma GCC diagnostic pop
+      xcopy(tmpString, tmpStringLabelOrVariableName, strlen(tmpStringLabelOrVariableName) + 1);
       break;
 
     case STRING_LABEL_VARIABLE:
       getStringLabelOrVariableName(literalAddress);
-      #pragma GCC diagnostic push
-      #pragma GCC diagnostic ignored "-Wrestrict"
-      sprintf(tmpString, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpString + 1000);
-      #pragma GCC diagnostic pop
+      sprintf(tmpString, STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE, tmpStringLabelOrVariableName);
       break;
 
     //case STRING_DATE:
@@ -747,14 +717,14 @@ void decodeOneStep(uint8_t *step) {
         case ITM_FRtoDB:         //   231
         case ITM_FRtoDBb:        //   232
         case ITM_FRtoDBc:        //   233
-        case ITM_ACtoM2:         //   234
-        case ITM_ACtoM2b:        //   235
-        case ITM_M2toAC:         //   236
-        case ITM_M2toACb:        //   237
-        case ITM_ACUStoM2:       //   238
-        case ITM_ACUStoM2b:      //   239
-        case ITM_M2toACUS:       //   240
-        case ITM_M2toACUSb:      //   241
+        case ITM_ACtoHA:         //   234
+        case ITM_ACtoHAb:        //   235
+        case ITM_HAtoAC:         //   236
+        case ITM_HAtoACb:        //   237
+        case ITM_ACUStoHA:       //   238
+        case ITM_ACUStoHAb:      //   239
+        case ITM_HAtoACUS:       //   240
+        case ITM_HAtoACUSb:      //   241
         case ITM_PAtoATM:        //   242
         case ITM_ATMtoPA:        //   243
         case ITM_AUtoM:          //   244
@@ -779,18 +749,18 @@ void decodeOneStep(uint8_t *step) {
         case ITM_MtoFTUS:        //   263
         case ITM_MtoFTUSb:       //   264
         case ITM_MtoFTUSc:       //   265
-        case ITM_FZUKtoM3:       //   266
-        case ITM_FZUKtoM3b:      //   267
-        case ITM_M3toFZUK:       //   268
-        case ITM_M3toFZUKb:      //   269
-        case ITM_FZUStoM3:       //   270
-        case ITM_FZUStoM3b:      //   271
-        case ITM_M3toFZUS:       //   272
-        case ITM_M3toFZUSb:      //   273
-        case ITM_GLUKtoM3:       //   274
-        case ITM_M3toGLUK:       //   275
-        case ITM_GLUStoM3:       //   276
-        case ITM_M3toGLUS:       //   277
+        case ITM_FZUKtoML:       //   266
+        case ITM_FZUKtoMLb:      //   267
+        case ITM_MLtoFZUK:       //   268
+        case ITM_MLtoFZUKb:      //   269
+        case ITM_FZUStoML:       //   270
+        case ITM_FZUStoMLb:      //   271
+        case ITM_MLtoFZUS:       //   272
+        case ITM_MLtoFZUSb:      //   273
+        case ITM_GLUKtoL:        //   274
+        case ITM_LtoGLUK:        //   275
+        case ITM_GLUStoL:        //   276
+        case ITM_LtoGLUS:        //   277
         case ITM_HPEtoW:         //   278
         case ITM_WtoHPE:         //   279
         case ITM_HPMtoW:         //   280
@@ -801,14 +771,14 @@ void decodeOneStep(uint8_t *step) {
         case ITM_INCHHGtoPAb:    //   285
         case ITM_PAtoINCHHG:     //   286
         case ITM_PAtoINCHHGb:    //   287
-        case ITM_INCHtoM:        //   288
-        case ITM_MtoINCH:        //   289
+        case ITM_INCHtoMM:       //   288
+        case ITM_MMtoINCH:       //   289
         case ITM_WHtoJ:          //   290
         case ITM_JtoWH:          //   291
         case ITM_KGtoLBS:        //   292
         case ITM_LBStoKG:        //   293
-        case ITM_KGtoOZ:         //   294
-        case ITM_OZtoKG:         //   295
+        case ITM_GtoOZ:          //   294
+        case ITM_OZtoG:          //   295
         case ITM_KGtoSCW:        //   296
         case ITM_KGtoSCWb:       //   297
         case ITM_SCWtoKG:        //   298
@@ -829,10 +799,10 @@ void decodeOneStep(uint8_t *step) {
         case ITM_TONtoKG:        //   313
         case ITM_LIANGtoKG:      //   314
         case ITM_LIANGtoKGb:     //   315
-        case ITM_KGtoTRZ:        //   316
-        case ITM_KGtoTRZb:       //   317
-        case ITM_TRZtoKG:        //   318
-        case ITM_TRZtoKGb:       //   319
+        case ITM_GtoTRZ:         //   316
+        case ITM_GtoTRZb:        //   317
+        case ITM_TRZtoG:         //   318
+        case ITM_TRZtoGb:        //   319
         case ITM_LBFtoN:         //   320
         case ITM_NtoLBF:         //   321
         case ITM_LYtoM:          //   322
@@ -841,18 +811,18 @@ void decodeOneStep(uint8_t *step) {
         case ITM_MMHGtoPAb:      //   325
         case ITM_PAtoMMHG:       //   326
         case ITM_PAtoMMHGb:      //   327
-        case ITM_MItoM:          //   328
-        case ITM_MtoMI:          //   329
-        case ITM_MtoNMI:         //   330
-        case ITM_NMItoM:         //   331
+        case ITM_MItoKM:         //   328
+        case ITM_KMtoMI:         //   329
+        case ITM_KMtoNMI:        //   330
+        case ITM_NMItoKM:        //   331
         case ITM_MtoPC:          //   332
         case ITM_PCtoM:          //   333
-        case ITM_MtoPOINTb:      //   334
-        case ITM_MtoPOINT:       //   335
-        case ITM_MtoPOINTc:      //   336
-        case ITM_POINTtoM:       //   337
-        case ITM_POINTtoMb:      //   338
-        case ITM_POINTtoMc:      //   339
+        case ITM_MMtoPOINTb:     //   334
+        case ITM_MMtoPOINT:      //   335
+        case ITM_MMtoPOINTc:     //   336
+        case ITM_POINTtoMM:      //   337
+        case ITM_POINTtoMMb:     //   338
+        case ITM_POINTtoMMc:     //   339
         case ITM_MtoYD:          //   340
         case ITM_YDtoM:          //   341
         case ITM_PSItoPA:        //   342
@@ -863,14 +833,14 @@ void decodeOneStep(uint8_t *step) {
         case ITM_TORtoPAb:       //   347
         case ITM_StoYEAR:        //   348
         case ITM_YEARtoS:        //   349
-        case ITM_CARATtoKG:      //   350
-        case ITM_CARATtoKGb:     //   351
+        case ITM_CARATtoG:       //   350
+        case ITM_CARATtoGb:      //   351
         case ITM_JINtoKG:        //   352
-        case ITM_KGtoCARAT:      //   353
-        case ITM_KGtoCARATb:     //   354
+        case ITM_GtoCARAT:       //   353
+        case ITM_GtoCARATb:      //   354
         case ITM_KGtoJIN:        //   355
-        case ITM_QTtoM3:         //   356
-        case ITM_M3toQT:         //   357
+        case ITM_QTtoL:          //   356
+        case ITM_LtoQT:          //   357
         case ITM_FATHOMtoM:      //   358
         case ITM_FATHOMtoMb:     //   359
         case ITM_FATHOMtoMc:     //   360

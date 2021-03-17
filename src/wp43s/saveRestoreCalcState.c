@@ -24,6 +24,8 @@
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
+static char *tmpRegisterString = NULL;
+
 static void save(const void *buffer, uint32_t size, void *stream) {
   #ifdef DMCP_BUILD
     UINT bytesWritten;
@@ -84,14 +86,16 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(globalRegister,                      sizeof(globalRegister),                     BACKUP);
     save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
     save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-    save(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-    save(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-    save(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-    save(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-    save(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-    save(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-    save(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-    save(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+    save(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
+    save(&tam.function,                       sizeof(tam.function),                       BACKUP);
+    save(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
+    save(&tam.currentOperation,               sizeof(tam.currentOperation),               BACKUP);
+    save(&tam.dot,                            sizeof(tam.dot),                            BACKUP);
+    save(&tam.indirect,                       sizeof(tam.indirect),                       BACKUP);
+    save(&tam.digitsSoFar,                    sizeof(tam.digitsSoFar),                    BACKUP);
+    save(&tam.value,                          sizeof(tam.value),                          BACKUP);
+    save(&tam.min,                            sizeof(tam.min),                            BACKUP);
+    save(&tam.max,                            sizeof(tam.max),                            BACKUP);
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -103,7 +107,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&yCursor,                            sizeof(yCursor),                            BACKUP);
     save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
     save(&denMax,                             sizeof(denMax),                             BACKUP);
-    save(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
     save(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
     save(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
     save(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
@@ -128,7 +131,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
     save(&shiftF,                             sizeof(shiftF),                             BACKUP);
     save(&shiftG,                             sizeof(shiftG),                             BACKUP);
-    save(&tamMode,                            sizeof(tamMode),                            BACKUP);
     save(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
     save(&showContent,                        sizeof(showContent),                        BACKUP);
     save(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
@@ -189,6 +191,25 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
 
+    save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+    save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+    save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+    save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+    save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+    save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+    save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+    save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+    save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+    save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+    save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
+    save(&PLOT_AXIS      ,                    sizeof(PLOT_AXIS    ),                      BACKUP);
+    save(&PLOT_ZMX       ,                    sizeof(PLOT_ZMX     ),                      BACKUP);
+    save(&PLOT_ZMY       ,                    sizeof(PLOT_ZMY     ),                      BACKUP);
+
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
     save(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
@@ -210,23 +231,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
     save(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
     save(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
-    save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-    save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-    save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-    save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
-    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
-    save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-    save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-    save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-    save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-    save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-    save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-    save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-    save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
-    save(&PLOT_ZMX       ,                    sizeof(PLOT_ZMX     ),                      BACKUP);
-    save(&PLOT_ZMY       ,                    sizeof(PLOT_ZMY     ),                      BACKUP);
     save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
     save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
     save(&indic_x,                            sizeof(indic_x),                            BACKUP);
@@ -293,14 +297,16 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(globalRegister,                      sizeof(globalRegister),                     BACKUP);
       restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
       restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
-      restore(&tamFunction,                        sizeof(tamFunction),                        BACKUP);
-      restore(&tamNumber,                          sizeof(tamNumber),                          BACKUP);
-      restore(&tamNumberMin,                       sizeof(tamNumberMin),                       BACKUP);
-      restore(&tamNumberMax,                       sizeof(tamNumberMax),                       BACKUP);
-      restore(&tamDigit,                           sizeof(tamDigit),                           BACKUP);
-      restore(&tamOperation,                       sizeof(tamOperation),                       BACKUP);
-      restore(&tamLetteredRegister,                sizeof(tamLetteredRegister),                BACKUP);
-      restore(&tamCurrentOperation,                sizeof(tamCurrentOperation),                BACKUP);
+      restore(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
+      restore(&tam.function,                       sizeof(tam.function),                       BACKUP);
+      restore(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
+      restore(&tam.currentOperation,               sizeof(tam.currentOperation),               BACKUP);
+      restore(&tam.dot,                            sizeof(tam.dot),                            BACKUP);
+      restore(&tam.indirect,                       sizeof(tam.indirect),                       BACKUP);
+      restore(&tam.digitsSoFar,                    sizeof(tam.digitsSoFar),                    BACKUP);
+      restore(&tam.value,                          sizeof(tam.value),                          BACKUP);
+      restore(&tam.min,                            sizeof(tam.min),                            BACKUP);
+      restore(&tam.max,                            sizeof(tam.max),                            BACKUP);
       restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allNamedVariables = TO_PCMEMPTR(ramPtr);
@@ -312,7 +318,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
       restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
       restore(&denMax,                             sizeof(denMax),                             BACKUP);
-      restore(&transitionSystemState,              sizeof(transitionSystemState),              BACKUP);
       restore(&currentRegisterBrowserScreen,       sizeof(currentRegisterBrowserScreen),       BACKUP);
       restore(&currentFntScr,                      sizeof(currentFntScr),                      BACKUP);
       restore(&currentFlgScr,                      sizeof(currentFlgScr),                      BACKUP);
@@ -337,7 +342,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
       restore(&shiftF,                             sizeof(shiftF),                             BACKUP);
       restore(&shiftG,                             sizeof(shiftG),                             BACKUP);
-      restore(&tamMode,                            sizeof(tamMode),                            BACKUP);
       restore(&rbrMode,                            sizeof(rbrMode),                            BACKUP);
       restore(&showContent,                        sizeof(showContent),                        BACKUP);
       restore(&numScreensNumericFont,              sizeof(numScreensNumericFont),              BACKUP);
@@ -402,6 +406,25 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
 
+      restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
+      restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
+      restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
+      restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
+      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
+      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+      restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
+      restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
+      restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
+      restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
+      restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
+      restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
+      restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
+      restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
+      restore(&PLOT_AXIS    ,                      sizeof(PLOT_AXIS    ),                      BACKUP);
+      restore(&PLOT_ZMX     ,                      sizeof(PLOT_ZMX     ),                      BACKUP);
+      restore(&PLOT_ZMY     ,                      sizeof(PLOT_ZMY     ),                      BACKUP);
+
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
       restore(&ShiftTimoutMode,                    sizeof(ShiftTimoutMode),                    BACKUP);
@@ -423,23 +446,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&graph_xmax,                         sizeof(graph_xmax),                         BACKUP);
       restore(&graph_ymin,                         sizeof(graph_ymin),                         BACKUP);
       restore(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
-      restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-      restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-      restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-      restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
-      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
-      restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-      restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-      restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-      restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-      restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-      restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-      restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-      restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
-      restore(&PLOT_ZMX     ,                      sizeof(PLOT_ZMX     ),                      BACKUP);
-      restore(&PLOT_ZMY     ,                      sizeof(PLOT_ZMY     ),                      BACKUP);
       restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
       restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
       restore(&indic_x,                            sizeof(indic_x),                            BACKUP);
@@ -482,6 +488,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)          {}
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
+        else if(calcMode == CM_PLOT_STAT)             {}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
@@ -496,6 +503,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FLAG_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
+        else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {
@@ -519,49 +527,51 @@ static void registerToSaveString(calcRegister_t regist) {
   uint64_t value;
   char *str, *cfg;
 
+  tmpRegisterString = tmpString + START_REGISTER_VALUE;
+
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
       convertLongIntegerRegisterToLongInteger(regist, lgInt);
-      longIntegerToAllocatedString(lgInt, tmpString + START_REGISTER_VALUE, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
+      longIntegerToAllocatedString(lgInt, tmpRegisterString, TMP_STR_LENGTH - START_REGISTER_VALUE - 1);
       longIntegerFree(lgInt);
       strcpy(aimBuffer, "LonI");
       break;
 
     case dtString:
-      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpString + START_REGISTER_VALUE));
+      stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)(tmpRegisterString));
       strcpy(aimBuffer, "Stri");
       break;
 
     case dtShortInteger:
       convertShortIntegerRegisterToUInt64(regist, &sign, &value);
-      sprintf(tmpString + START_REGISTER_VALUE, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
+      sprintf(tmpRegisterString, "%c%" PRIu64 " %" PRIu32, sign ? '-' : '+', value, getRegisterShortIntegerBase(regist));
       strcpy(aimBuffer, "ShoI");
       break;
 
     case dtReal34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString + START_REGISTER_VALUE);
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
       switch(getRegisterAngularMode(regist)) {
-        case AM_DEGREE:
+        case amDegree:
           strcpy(aimBuffer, "Real:DEG");
           break;
 
-        case AM_DMS:
+        case amDMS:
           strcpy(aimBuffer, "Real:DMS");
           break;
 
-        case AM_RADIAN:
+        case amRadian:
           strcpy(aimBuffer, "Real:RAD");
           break;
 
-        case AM_MULTPI:
+        case amMultPi:
           strcpy(aimBuffer, "Real:MULTPI");
           break;
 
-        case AM_GRAD:
+        case amGrad:
           strcpy(aimBuffer, "Real:GRAD");
           break;
 
-        case AM_NONE:
+        case amNone:
           strcpy(aimBuffer, "Real");
           break;
 
@@ -572,21 +582,21 @@ static void registerToSaveString(calcRegister_t regist) {
       break;
 
     case dtComplex34:
-      real34ToString(REGISTER_REAL34_DATA(regist), tmpString + START_REGISTER_VALUE);
-      strcat(tmpString + START_REGISTER_VALUE, " ");
-      real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + START_REGISTER_VALUE + strlen(tmpString + START_REGISTER_VALUE));
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
+      strcat(tmpRegisterString, " ");
+      real34ToString(REGISTER_IMAG34_DATA(regist), tmpRegisterString + strlen(tmpRegisterString));
       strcpy(aimBuffer, "Cplx");
       break;
 
     case dtConfig:
-      for(str=tmpString + START_REGISTER_VALUE, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
+      for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
       }
       strcpy(aimBuffer, "Conf");
       break;
 
     default:
-      strcpy(tmpString + START_REGISTER_VALUE, "???");
+      strcpy(tmpRegisterString, "???");
       strcpy(aimBuffer, "????");
   }
 }
@@ -617,15 +627,12 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     }
   #endif // DMCP_BUILD
 
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wrestrict"
-
   // Global registers
-  sprintf(tmpString, "GLOBAL_REGISTERS\n%" PRIu16 "\n", FIRST_LOCAL_REGISTER);
+  sprintf(tmpString, "GLOBAL_REGISTERS\n%" PRIu16 "\n", (uint16_t)(FIRST_LOCAL_REGISTER));
   save(tmpString, strlen(tmpString), BACKUP);
   for(regist=0; regist<FIRST_LOCAL_REGISTER; regist++) {
     registerToSaveString(regist);
-    sprintf(tmpString, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -647,7 +654,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<currentNumberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
-    sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
@@ -662,19 +669,18 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<numberOfNamedVariables; i++) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
-    sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpString + START_REGISTER_VALUE);
+    sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
   // Statistical sums
-  sprintf(tmpString, "STATISTICAL_SUMS\n%" PRIu16 "\n", statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0);
+  sprintf(tmpString, "STATISTICAL_SUMS\n%" PRIu16 "\n", (uint16_t)(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0));
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<(statisticalSumsPointer ? NUMBER_OF_STATISTICAL_SUMS : 0); i++) {
-    realToString(statisticalSumsPointer + REAL_SIZE * i , tmpString + START_REGISTER_VALUE);
-    sprintf(tmpString, "%s\n", tmpString + START_REGISTER_VALUE);
+    realToString(statisticalSumsPointer + REAL_SIZE * i , tmpRegisterString);
+    sprintf(tmpString, "%s\n", tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
   }
-  #pragma GCC diagnostic pop
 
   // System flags
   sprintf(tmpString, "SYSTEM_FLAGS\n%" PRIu64 "\n", systemFlags);
@@ -896,15 +902,15 @@ int32_t stringToInt32(const char *str) {
 
 
 static void restoreRegister(calcRegister_t regist, char *type, char *value) {
-  uint32_t tag = AM_NONE;
+  uint32_t tag = amNone;
 
   if(type[4] == ':') {
-         if(type[5] == 'D' && type[6] == 'E') tag = AM_DEGREE;
-    else if(type[5] == 'D' && type[6] == 'M') tag = AM_DMS;
-    else if(type[5] == 'R')                   tag = AM_RADIAN;
-    else if(type[5] == 'M')                   tag = AM_MULTPI;
-    else if(type[5] == 'G')                   tag = AM_GRAD;
-    else                                      tag = AM_NONE;
+         if(type[5] == 'R')                   tag = amRadian;
+    else if(type[5] == 'M')                   tag = amMultPi;
+    else if(type[5] == 'G')                   tag = amGrad;
+    else if(type[5] == 'D' && type[6] == 'E') tag = amDegree;
+    else if(type[5] == 'D' && type[6] == 'M') tag = amDMS;
+    else                                      tag = amNone;
 
     reallocateRegister(regist, dtReal34, REAL34_SIZE, tag);
     stringToReal34(value, REGISTER_REAL34_DATA(regist));
@@ -929,7 +935,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
 
     utf8ToString((uint8_t *)value, errorMessage);
     len = stringByteLength(errorMessage) + 1;
-    reallocateRegister(regist, dtString, TO_BLOCKS(len), AM_NONE);
+    reallocateRegister(regist, dtString, TO_BLOCKS(len), amNone);
     xcopy(REGISTER_STRING_DATA(regist), errorMessage, len);
   }
 
@@ -947,7 +953,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
   else if(strcmp(type, "Cplx") == 0) {
     char *imaginaryPart;
 
-    reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, amNone);
     imaginaryPart = value;
     while(*imaginaryPart != ' ') imaginaryPart++;
     *(imaginaryPart++) = 0;
@@ -958,7 +964,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
   else if(strcmp(type, "Conf") == 0) {
     char *cfg;
 
-    reallocateRegister(regist, dtConfig, CONFIG_SIZE, AM_NONE);
+    reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
     for(cfg=(char *)REGISTER_CONFIG_DATA(regist), tag=0; tag<sizeof(dtConfigDescriptor_t); tag++, value+=2, cfg++) {
       *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 8) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
     }

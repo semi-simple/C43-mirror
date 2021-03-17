@@ -576,14 +576,14 @@ void addTestPrograms(void) {
       freeProgramBytes = numberOfBytesForTheTestPrograms - 2;
     }
     else {
-      fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms);
+      ignore_result(fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms));
       printf("%u bytes\n", numberOfBytesUsed);
       if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
         printf("Increase allocated memory for programs!\n");
         fclose(testPgms);
         exit(0);
       }
-      fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms);
+      ignore_result(fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms));
       fclose(testPgms);
 
       firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);
@@ -631,6 +631,8 @@ void fnReset(uint16_t confirmation) {
        aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
        nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
        tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+
+       tmpStringLabelOrVariableName = tmpString + 1000;
     }
     memset(tmpString,        0, TMP_STR_LENGTH);
     memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);
@@ -661,10 +663,10 @@ void fnReset(uint16_t confirmation) {
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-    //kbd_usr[ 0].keyLblAim   = ITM_A_GRAVE;
-    //kbd_usr[ 0].fShiftedAim = ITM_A_GRAVE;
-    //kbd_usr[ 4].keyLblAim   = ITM_E_ACUTE;
-    //kbd_usr[ 4].fShiftedAim = ITM_E_ACUTE;
+    //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
+    //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
+    //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
+    //kbd_usr[ 4].fShiftedAim = CHR_E_ACUTE;
     //kbd_usr[18].fShifted    = -MNU_VARS;
     //kbd_usr[18].gShifted    = CST_54;
     //kbd_usr[19].fShifted    = ITM_SW;
@@ -688,7 +690,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the global registers
     memset(globalRegister, 0, sizeof(globalRegister));
     for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -697,7 +699,7 @@ void fnReset(uint16_t confirmation) {
     // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
     memset(savedStackRegister, 0, sizeof(savedStackRegister));
     for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
-      setRegisterDataType(regist, dtReal34, AM_NONE);
+      setRegisterDataType(regist, dtReal34, amNone);
       memPtr = allocWp43s(REAL34_SIZE);
       setRegisterDataPointer(regist, memPtr);
       real34Zero(memPtr);
@@ -743,12 +745,6 @@ void fnReset(uint16_t confirmation) {
     ((dataBlock_t *)memPtr)->matrixColumns = 1;
     real34Zero(memPtr + 4);
 
-    allocateNamedVariable(STD_A, dtReal34, REAL34_SIZE);
-    uInt32ToReal34(100, REGISTER_REAL34_DATA(FIRST_NAMED_VARIABLE + 3));
-
-    allocateNamedVariable(STD_B, dtReal34, REAL34_SIZE);
-    uInt32ToReal34(222, REGISTER_REAL34_DATA(FIRST_NAMED_VARIABLE + 4));
-
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
     #endif // PC_BUILD
@@ -788,7 +784,7 @@ void fnReset(uint16_t confirmation) {
     displayFormat = DF_ALL;
     displayFormatDigits = 0;
     timeDisplayFormatDigits = 0;
-    currentAngularMode = AM_DEGREE;
+    currentAngularMode = amDegree;
     lastSetAngularMode = currentAngularMode;             //JM
     denMax = MAX_DENMAX;
     setSystemFlag(FLAG_DENANY);
@@ -805,7 +801,7 @@ void fnReset(uint16_t confirmation) {
     serialIOIconEnabled = false;
     printerIconEnabled = false;
     thereIsSomethingToUndo = false;
-    inputNamedVariable = false;
+    tam.alpha = false;
     fnKeyInCatalog = false;
     shiftF = false;
     shiftG = false;
@@ -825,9 +821,9 @@ void fnReset(uint16_t confirmation) {
     lastErrorCode = 0;
 
     gammaLanczosCoefficients = (real51_t *)const_gammaC01;
-    angle180 = (real39_t *)const_180;
-    angle90  = (real39_t *)const_90;
-    angle45  = (real39_t *)const_45;
+    angle180 = (real39_t *)const_pi;
+    angle90  = (real39_t *)const_piOn2;
+    angle45  = (real39_t *)const_piOn4;
 
     #ifndef TESTSUITE_BUILD
       resetAlphaSelectionBuffer();
@@ -846,7 +842,7 @@ void fnReset(uint16_t confirmation) {
     // RNG initialisation
     pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
 
-    tamMode = 0;
+    tam.mode = 0;
     catalog = CATALOG_NONE;
     memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
     firstGregorianDay = 2361222 /* 14 Sept 1752 */;
@@ -948,7 +944,7 @@ void fnReset(uint16_t confirmation) {
     //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
     //strcpy(tmpString, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), AM_NONE);
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), amNone);
     //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpString);
 
 

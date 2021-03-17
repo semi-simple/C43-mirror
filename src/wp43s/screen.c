@@ -81,14 +81,14 @@
   #endif                                                //JMCSV
   #if defined (PC_BUILD) || defined (DMCP_BUILD)        //JMCSV
 
-  static void angularUnitToString(uint32_t angularMode, char *string) {
+  static void angularUnitToString(angularMode_t angularMode, char *string) {
     switch(angularMode) {
-      case AM_DEGREE: strcpy(string, STD_DEGREE); break;
-      case AM_DMS:    strcpy(string, "d.ms");     break;
-      case AM_RADIAN: strcpy(string, "r");        break;
-      case AM_MULTPI: strcpy(string, STD_pi);     break;
-      case AM_GRAD:   strcpy(string, "g");        break;
-      case AM_NONE:   break;
+      case amRadian: strcpy(string, "r");        break;
+      case amMultPi: strcpy(string, STD_pi);     break;
+      case amGrad:   strcpy(string, "g");        break;
+      case amDegree: strcpy(string, STD_DEGREE); break;
+      case amDMS:    strcpy(string, "d.ms");     break;
+      case amNone:   break;
       default:        strcpy(string, "?");
     }
   }
@@ -560,7 +560,7 @@ void refreshFn(uint16_t timerType) {                        //vv dr - general ti
 void underline(int16_t y) {                     //JM
   int16_t i;
    for( i = 0; i < 6; i++ ){
-     if(calcMode != CM_GRAPH || ((calcMode == CM_GRAPH) && (i <= 1)))
+     if( (calcMode != CM_GRAPH && calcMode != CM_PLOT_STAT) || ((calcMode == CM_GRAPH || calcMode == CM_PLOT_STAT) && (i <= 1)))
        underline_softkey(i, y, true);
    }
 }                                               //JM
@@ -577,7 +577,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
   int16_t x, y, x1, y1, x2, y2;
   uint32_t tmp;
 
-  if(calcMode == CM_GRAPH && xSoftkey >= 2) {
+  if((calcMode == CM_GRAPH || calcMode == CM_PLOT_STAT) && xSoftkey >= 2) {
       return;
   }
 
@@ -705,7 +705,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
           #ifdef PC_BUILD          
             jm_show_calc_state("screen.c: Shft_handler: HOME3");
           #endif //PC_BUILD
-          if((softmenuStack[0].softmenuId == mm_MNU_HOME)) {              //JM shifts    //softmenuStackPointerJM
+          if(softmenuStack[0].softmenuId == mm_MNU_HOME) {              //JM shifts    //softmenuStackPointerJM
             popSoftmenu();                                                                                                  //JM shifts
           }
           else {
@@ -1362,10 +1362,19 @@ void force_refresh(void) {
       longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^
+
+    char *functionName;
+    if(item != MNU_DYNAMIC) {
+      functionName = indexOfItems[abs(item)].itemCatalogName;
+    }
+    else {
+      functionName = dynmenuGetLabel(dynamicMenuItem);
+    }
+
   showFunctionNameItem = item;
   if(running_program_jm) return;                             //JM
   showFunctionNameCounter = delayInMs;
-  strcpy(padding,indexOfItems[abs(item)].itemCatalogName);   //JM
+  strcpy(padding,functionName);   //JM
   strcat(padding,"    ");                                    //JM
   if(stringWidth(padding, &standardFont, true, true) + /*1*/ 20 + lineTWidth > SCREEN_WIDTH) {                //JM
     clearRegisterLine(REGISTER_T, true, false);
@@ -1442,7 +1451,7 @@ uint8_t   displayStack_m = 255;                                                 
  ***********************************************/
 void refreshRegisterLine(calcRegister_t regist) {
   int32_t w;
-  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
+  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
   char prefix[20], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
@@ -1462,7 +1471,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
     refreshDebugPanel();
   #endif
 
-    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
+    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
       clearRegisterLine(regist, true, (regist != REGISTER_Y));
 
       #ifdef PC_BUILD
@@ -1593,7 +1602,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_T) { // L1
       w = stringWidth(tmpString, &standardFont, true, true);
       showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
-    }
+      }
 
       else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
       w = stringWidth(tmpString + 300, &standardFont, true, true);
@@ -1625,14 +1634,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
-      else if(temporaryInformation == TI_UNDEF_SOURCE_VAR && regist == REGISTER_X) {
-        showString("Undefined source variable", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-      }
 
 
-// NEW SHOW
-                                                                         //JMSHOW vv
-
+// NEW SHOW                                                                  //JMSHOW vv
         else if(temporaryInformation == TI_SHOW_REGISTER_SMALL) {
           #define line_h0 21
           switch(regist) {
@@ -1688,10 +1692,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             default: {}
           }
         }
-                                                                         //JMSHOW ^^
 
-
-        else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {
+        else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {            //JMSHOW ^^
           #define line_h1 38
           switch(regist) {
             // L1
@@ -1724,15 +1726,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                              break;
             default: {}
           }
-//          if(getRegisterDataType(REGISTER_X) == dtReal34) {
-//            real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, 34, true, STD_SPACE_PUNCTUATION);
-//          }
-        }
-                                                                         //JMSHOW ^^
+        }                                                                 //JMSHOW ^^
 
 
-    else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
-      prefixWidth = 0;
+      else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
+        prefixWidth = 0;
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -1813,9 +1811,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
-        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tamMode) {
-
-#ifdef WWW
+        else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
+/* JM Removed and replaced with JM CURSOR vv
           if(stringWidth(aimBuffer, &standardFont, true, true) < SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
             xCursor = showString(aimBuffer, &standardFont, 1, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
             yCursor = Y_POSITION_OF_NIM_LINE + 6;
@@ -1842,10 +1839,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
         }
-#endif //WWW
+*/ // JMCURSOR ^^
 
 
   //JMCURSOR vv
+
         int16_t tmplen = stringByteLength(aimBuffer);
         if(T_cursorPos > tmplen) {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
         if(T_cursorPos < 0)      {T_cursorPos = tmplen;}     //Do range checking in case the cursor starts off outside of range
@@ -2496,7 +2494,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
     }
 
-    if(tamMode) {
+    if(tam.mode) {
       if(calcMode == CM_PEM) { // Variable line to display TAM informations
         lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
         showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
@@ -2514,7 +2512,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
   }
 
 
-
 int16_t refreshScreenCounter = 0;        //JM
 uint8_t last_CM = 255;
 void refreshScreen(void) {
@@ -2530,7 +2527,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   //clearScreen();  //JM do not use this clearscreen. Rather use the distributed clearscreens, WITH the if(last_CM != calcMode)
 
 
-  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
+  if(calcMode!=CM_AIM && calcMode!=CM_NIM && calcMode!=CM_PLOT_STAT && calcMode!=CM_GRAPH && calcMode!=CM_LISTXY) {last_CM = 254;}  //JM Force NON-CM_AIM and NON-CM_NIM to refresh to be compatible to 43S 
 
   switch(calcMode) {
     case CM_FLAG_BROWSER:
@@ -2568,63 +2565,89 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
     case CM_ASSIGN:
     case CM_ERROR_MESSAGE:
     case CM_CONFIRMATION:
-    case CM_LISTXY:                     //JM
-    case CM_GRAPH:                      //JM
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
       if(last_CM != calcMode) {
-        if(calcMode != CM_GRAPH && calcMode != CM_LISTXY) {      //JM
           clearScreen();
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
           refreshRegisterLine(REGISTER_Y);
-        }                               //JM
       }
+
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }      //dr
 #endif
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
-      if(calcMode != CM_GRAPH && calcMode!=CM_LISTXY) {        //JM
         refreshRegisterLine(REGISTER_X);
-      }                                 //JM
+
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(1); }      //dr
 #endif
-
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(2); }     //dr
 #endif
+
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         last_CM = calcMode;
         doRefreshSoftMenu = false;
-
         displayShiftAndTamBuffer();
-
-        if (calcMode != CM_LISTXY) showSoftmenuCurrentPart();
-
+        showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;
         refreshStatusBar();
-
-        if(calcMode == CM_GRAPH) {     //JM v
-          graph_plotmem();
-        }                              //JM ^
-        if(calcMode == CM_LISTXY) {     //JM v
-          fnStatList();
-        }                              //JM ^
-
 
       }
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(2); }      //dr
 #endif
+
       break;
 
-      default: {}
-    }
+    case CM_LISTXY:                     //JM
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        last_CM = calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        refreshStatusBar();
+        fnStatList();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+
+    case CM_GRAPH:                      //JM
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        last_CM = calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        refreshStatusBar();
+        graph_plotmem();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+
+    case CM_PLOT_STAT:
+      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
+        if(last_CM == 252) last_CM--; else last_CM = 252; //calcMode;
+        doRefreshSoftMenu = false;
+        displayShiftAndTamBuffer();
+        showSoftmenuCurrentPart();
+        refreshStatusBar();
+        graphPlotstat();
+        hourGlassIconEnabled = false;
+        showHideHourGlass();
+      }
+      break;
+
+    default: {}
+  }
 
   #ifndef DMCP_BUILD
     refreshLcd(NULL);

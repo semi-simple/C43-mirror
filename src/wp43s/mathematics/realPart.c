@@ -69,12 +69,12 @@ void realPartCplx(void) {
   real34_t rp;
 
   real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &rp);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   real34Copy(&rp, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 void realPartReal(void) {
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 

@@ -68,7 +68,7 @@ void arctanLonI(void) {
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   WP34S_Atan(&x, &x, &ctxtReal39);
-  convertAngleFromTo(&x, AM_RADIAN, currentAngularMode, &ctxtReal39);
+  convertAngleFromTo(&x, amRadian, currentAngularMode, &ctxtReal39);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
@@ -97,7 +97,7 @@ void arctanReal(void) {
         realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));
         real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
       }
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_MULTPI, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, currentAngularMode);
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
@@ -112,15 +112,11 @@ void arctanReal(void) {
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     WP34S_Atan(&x, &x, &ctxtReal39);
-    convertAngleFromTo(&x, AM_RADIAN, currentAngularMode, &ctxtReal39);
+    convertAngleFromTo(&x, amRadian, currentAngularMode, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 
   setRegisterAngularMode(REGISTER_X, currentAngularMode);
-
-  if(currentAngularMode == AM_DMS) {
-    checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-  }
 }
 
 

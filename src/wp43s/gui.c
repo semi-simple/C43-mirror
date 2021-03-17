@@ -270,7 +270,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("#######%d\n",event_keyval);
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
-if (calcMode == CM_AIM || tamMode) {
+if (calcMode == CM_AIM || tam.mode) {
 switch (event_keyval) {
 
     case 65507: // left Ctrl
@@ -1014,7 +1014,7 @@ return FALSE;
         exit(1);
       }
 
-      fread(cssData, 1, fileLg, cssFile);
+      ignore_result(fread(cssData, 1, fileLg, cssFile));
       fclose(cssFile);
       cssData[fileLg] = 0;
 
@@ -2112,7 +2112,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
 void labelCaptionTam(const calcKey_t *key, GtkWidget *button) {
   uint8_t lbl[22];
 
-  if(key->primaryTam == 0 || (key->keyId == 32 && tamMode != TM_VALUE_CHB)) { // Display H for changing base to hexadecimal
+  if(key->primaryTam == 0 || (key->keyId == 32 && tam.mode != TM_VALUE_CHB)) { // Display H for changing base to hexadecimal
     lbl[0] = 0;
   }
   else {
@@ -4234,7 +4234,7 @@ void setupUI(void) {
       char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
     #endif //PC_BUILD
 
-if(!tamMode) {
+if(!tam.mode) {
     if(!SH_BASE_AHOME) {
         showSoftmenu(-MNU_MyAlpha);
     } else
@@ -4246,7 +4246,7 @@ if(!tamMode) {
     nextChar = NC_NORMAL;
     numLock = false;
 
-    if(!tamMode) {
+    if(!tam.mode) {
       calcMode = CM_AIM;
       liftStack();
 
@@ -4277,13 +4277,23 @@ if(!tamMode) {
    ***********************************************/
   void enterAsmModeIfMenuIsACatalog(int16_t id) {
     switch(-id) {
-      case MNU_FCNS:      catalog = CATALOG_FCNS; break;
-      case MNU_CONST:     catalog = CATALOG_CNST; break;
-      case MNU_MENUS:     catalog = CATALOG_MENU; break;
-      case MNU_SYSFL:     catalog = CATALOG_SYFL; break;
-      case MNU_ALPHAINTL: catalog = CATALOG_AINT; break;
-      case MNU_ALPHAintl: catalog = CATALOG_aint; break;
-      case MNU_PROG:      catalog = CATALOG_PROG; break;
+      case MNU_FCNS:      catalog = CATALOG_FCNS;    break;
+      case MNU_CONST:     catalog = CATALOG_CNST;    break;
+      case MNU_MENUS:     catalog = CATALOG_MENU;    break;
+      case MNU_SYSFL:     catalog = CATALOG_SYFL;    break;
+      case MNU_ALPHAINTL: catalog = CATALOG_AINT;    break;
+      case MNU_ALPHAintl: catalog = CATALOG_aint;    break;
+      case MNU_PROG:      catalog = CATALOG_PROG;    break;
+      case MNU_VAR:       catalog = CATALOG_VAR;     break;
+      case MNU_MATRS:     catalog = CATALOG_MATRS;   break;
+      case MNU_STRINGS:   catalog = CATALOG_STRINGS; break;
+      case MNU_DATES:     catalog = CATALOG_DATES;   break;
+      case MNU_TIMES:     catalog = CATALOG_TIMES;   break;
+      case MNU_ANGLES:    catalog = CATALOG_ANGLES;  break;
+      case MNU_SINTS:     catalog = CATALOG_SINTS;   break;
+      case MNU_LINTS:     catalog = CATALOG_LINTS;   break;
+      case MNU_REALS:     catalog = CATALOG_REALS;   break;
+      case MNU_CPXS:      catalog = CATALOG_CPXS;    break;
       default:            catalog = CATALOG_NONE;
     }
     #ifdef PC_BUILD
@@ -4317,28 +4327,17 @@ if(!tamMode) {
    * \return void
    ***********************************************/
   void leaveAsmMode(void) {
-    #ifdef PC_BUILD
-      char tmp[200]; sprintf(tmp,"^^^^### leaveAsmMode"); jm_show_comment(tmp);
-    #endif //PC_BUILD
-
-    if(tamMode) {
-      uint16_t savedTamMode = tamMode;
-      leaveTamMode();
-      tamMode = savedTamMode;
-      strcpy(tamBuffer, indexOfItems[tamFunction].itemSoftmenuName);
-      enterTamMode();
-      return;
-    }
-    else {
-      catalog = CATALOG_NONE;
-    }
+    catalog = CATALOG_NONE;
 
     #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
+      if(tam.mode && !tam.alpha) {
+        calcModeTamGui();
       }
-      else if(calcMode == CM_AIM) {
+      else if(calcMode == CM_AIM || (tam.mode && tam.alpha)) {
         calcModeAimGui();
+      }
+      else if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
+        calcModeNormalGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
@@ -4371,117 +4370,13 @@ if(!tamMode) {
     cursorEnabled = true;
     cursorFont = &numericFont;
   }
-
-
-
-  /********************************************//**
-   * \brief Sets the calc mode to temporary alpha mode
-   *
-   * \return void
-   ***********************************************/
-  void enterTamMode(void) {
-    #ifdef PC_BUILD
-      char tmp[200]; sprintf(tmp,"^^^^### enterTamMode"); jm_show_comment(tmp);
-    #endif //PC_BUILD
-    transitionSystemState = TS_OP_DIGIT_0;
-    tamCurrentOperation = 0;
-
-    if(calcMode == CM_NIM) {
-      closeNim();
-    }
-
-    switch(tamMode) {
-      case TM_VALUE:
-      case TM_VALUE_CHB:
-      case TM_REGISTER:
-        showSoftmenu(-MNU_TAM);
-        break;
-
-      case TM_CMP:
-        showSoftmenu(-MNU_TAMCMP);
-        break;
-
-      case TM_FLAGR:
-      case TM_FLAGW:
-        showSoftmenu(-MNU_TAMFLAG);
-        break;
-
-      case TM_STORCL:
-        showSoftmenu(-MNU_TAMSTORCL);
-        break;
-
-      case TM_SHUFFLE:
-        showSoftmenu(-MNU_TAMSHUFFLE);
-        break;
-
-      case TM_LABEL:
-        showSoftmenu(-MNU_TAMLABEL);
-        break;
-
-      default:
-        sprintf(errorMessage, "In function calcModeTam: %" PRIu8 " is an unexpected value for tamMode!", tamMode);
-        displayBugScreen(errorMessage);
-        return;
-    }
-
-    numberOfTamMenusToPop = 1;
-
-    tamNumber = 0;
-    if(tamMode == TM_SHUFFLE) {
-      transitionSystemState = TS_OP_DIGIT_0_4;
-    }
-    else if(tamFunction == ITM_CNST) {
-      transitionSystemState = TS_CNST_0;
-    }
-    else if(tamFunction == ITM_BESTF) {
-      transitionSystemState = TS_BESTF_0;
-    }
-    updateTamBuffer();
-
-    clearSystemFlag(FLAG_ALPHA);
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      calcModeTamGui();
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
-  }
-
-
-
-  /********************************************//**
-   * \brief Leaves the alpha selection mode
-   *
-   * \return void
-   ***********************************************/
-  void leaveTamMode(void) {
-    #ifdef PC_BUILD
-      char tmp[200]; sprintf(tmp,"^^^^### leaveTamMode"); jm_show_comment(tmp);
-    #endif //PC_BUILD
-    inputNamedVariable = false;
-    tamMode = 0;
-    catalog = CATALOG_NONE;
-
-    while(numberOfTamMenusToPop--) {
-      popSoftmenu();
-    }
-
-    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-      if(calcMode == CM_NORMAL || calcMode == CM_PEM) {
-        calcModeNormalGui();
-      }
-      else if(calcMode == CM_AIM) {
-        calcModeAimGui();
-      }
-    #endif // PC_BUILD && (SCREEN_800X480 == 0)
-  }
-
   void refreshModeGui(void) {  //JM Added here to force icon update in Gui
     #ifdef PC_BUILD
       if     (calcMode == CM_NORMAL || calcMode == CM_PEM) calcModeNormalGui();
       else if(calcMode == CM_AIM) calcModeAimGui();
-      else if(tamMode) calcModeTamGui();
+      else if(tam.mode) calcModeTamGui();
       else if(catalog) calcModeAimGui();
     #endif
   }
-
 
 #endif // !TESTSUITE_BUILD

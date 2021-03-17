@@ -198,7 +198,7 @@ void divLonILonI(void) {
 
       convertLongIntegerRegisterToReal(REGISTER_Y, &yIc, &ctxtReal39);
       convertLongIntegerRegisterToReal(REGISTER_X, &xIc, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
       realDivide(&yIc, &xIc, &xIc, &ctxtReal39);
       realToReal34(&xIc, REGISTER_REAL34_DATA(REGISTER_X));
@@ -283,7 +283,7 @@ void divShoILonI(void) {
 void divLonIReal(void) {
   real_t y, x;
 
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
@@ -328,10 +328,10 @@ void divLonIReal(void) {
  ***********************************************/
 void divRealLonI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   if(realIsZero(&x)) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
@@ -362,23 +362,14 @@ void divRealLonI(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     yAngularMode = getRegisterAngularMode(REGISTER_Y);
 
-    if(yAngularMode == AM_NONE) {
+    if(yAngularMode == amNone) {
       realDivide(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      if(currentAngularMode == AM_DMS) {
-        convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-        checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-      }
-      else {
-        convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      }
+      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+      realDivide(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     }
   }
@@ -423,7 +414,7 @@ void divCplxLonI(void) {
   realDivide(&a, &c, &a, &ctxtReal39);
   realDivide(&b, &c, &b, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
@@ -444,7 +435,7 @@ void divTimeLonI(void) {
   real_t y, x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
 
   if(realIsZero(&x)) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
@@ -491,7 +482,7 @@ void divTimeShoI(void) {
   real_t y, x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
 
   if(realIsZero(&x)) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
@@ -561,13 +552,13 @@ void divTimeReal(void) {
 
   else {
     real34_t x;
-    uint32_t xAngularMode;
+    angularMode_t xAngularMode;
 
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-    if(xAngularMode == AM_NONE) { // time / real
-      reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+    if(xAngularMode == amNone) { // time / real
+      reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
       real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), &x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else { // time / angle
@@ -613,9 +604,9 @@ void divTimeTime(void) {
     real34_t b;
 
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &b);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), &b, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
   }
 }
 
@@ -771,7 +762,7 @@ void divShoIShoI(void) {
 void divShoIReal(void) {
   real_t y, x;
 
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
   if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))) {
@@ -816,10 +807,10 @@ void divShoIReal(void) {
  ***********************************************/
 void divRealShoI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   if(realIsZero(&x)) {
     if(real34IsZero(REGISTER_REAL34_DATA(REGISTER_Y))) {
@@ -850,23 +841,14 @@ void divRealShoI(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     yAngularMode = getRegisterAngularMode(REGISTER_Y);
 
-    if(yAngularMode == AM_NONE) {
+    if(yAngularMode == amNone) {
       realDivide(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      if(currentAngularMode == AM_DMS) {
-        convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-        checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-      }
-      else {
-        convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-        realDivide(&y, &x, &x, &ctxtReal39);
-        realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      }
+      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+      realDivide(&y, &x, &x, &ctxtReal39);
+      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     }
   }
@@ -905,7 +887,7 @@ void divCplxShoI(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 
@@ -948,45 +930,29 @@ void divRealReal(void) {
 
   else {
     real_t y, x;
-    uint32_t yAngularMode, xAngularMode;
+    angularMode_t yAngularMode, xAngularMode;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     yAngularMode = getRegisterAngularMode(REGISTER_Y);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-    if(yAngularMode != AM_NONE && xAngularMode != AM_NONE) { // angle / angle
-      if(yAngularMode == AM_DMS) {
-        convertAngleFromTo(&y, AM_DMS, AM_DEGREE, &ctxtReal39);
-        yAngularMode = AM_DEGREE;
-      }
-      if(xAngularMode == AM_DMS) {
-        convertAngleFromTo(&x, AM_DMS, AM_DEGREE, &ctxtReal39);
-        xAngularMode = AM_DEGREE;
-      }
+    if(yAngularMode != amNone && xAngularMode != amNone) { // angle / angle
       convertAngleFromTo(&x, xAngularMode, yAngularMode, &ctxtReal39);
       realDivide(&y, &x, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
+      setRegisterAngularMode(REGISTER_X, amNone);
     }
-    else if(yAngularMode == AM_NONE) { // real / (real or angle)
+    else if(yAngularMode == amNone) { // real / (real or angle)
       real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
+      setRegisterAngularMode(REGISTER_X, amNone);
     }
     else { // angle / real
-      if(yAngularMode == AM_DMS) {
-        convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-        yAngularMode = AM_DEGREE;
-      }
-
       realDivide(&y, &x, &x, &ctxtReal39);
 
       convertAngleFromTo(&x, yAngularMode, currentAngularMode, &ctxtReal39);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
-      if(currentAngularMode == AM_DMS) {
-        checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-      }
     }
   }
 }
@@ -1023,7 +989,7 @@ void divRealCplx(void) {
 void divCplxReal(void) {
   real34Divide(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
   real34Divide(REGISTER_IMAG34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_Y)); // imaginary part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 

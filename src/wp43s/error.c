@@ -30,14 +30,14 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /*  6 */  "No such label found",
 /*  7 */  "No such function",
 /*  8 */  "Out of range",
-/*  9 */  "Invalid integer input",
+/*  9 */  "Illegal digit in integer input for this base",
 /* 10 */  "Input is too long",
 /* 11 */  "RAM is full",
 /* 12 */  "Stack clash",
 /* 13 */  "Operation is undefined in this mode",
 /* 14 */  "Word size is too small",
 /* 15 */  "Too few data points for this statistic",
-/* 16 */  "Invalid distribution parameter",
+/* 16 */  "Distribution parameter out of valid range",
 /* 17 */  "I/O error",
 /* 18 */  "Invalid or corrupted data",
 /* 19 */  "Flash memory is write protected",
@@ -49,7 +49,7 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 25 */  "",
 /* 26 */  "Please enter a NEW name",
 /* 27 */  "Cannot delete a predefined item",
-/* 28 */  "No summation data",
+/* 28 */  "No summation data present",
 /* 29 */  "Item to be coded",
 /* 30 */  "Function to be coded for that data type",
 /* 31 */  "Input data types do not match",
@@ -57,7 +57,9 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 33 */  "Output would exceed 196 characters",
 /* 34 */  "This does not work with an empty string",
 /* 35 */  "No backup data found",
-/* 36 */  "Bad input" // This error is not in ReM and cannot occur (theoretically).
+/* 36 */  "Undefined source variable",
+/* 37 */  "This variable is write protected",
+/* 38 */  "Bad input" // This error is not in ReM and cannot occur (theoretically).
 };
 
 

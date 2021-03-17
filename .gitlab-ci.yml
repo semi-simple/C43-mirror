@@ -8,6 +8,26 @@ macOS:
   tags:
     - macos
 
+linux:
+  stage: build
+  script:
+    - make rebuild
+  artifacts:
+    paths:
+      - wp43s
+  tags:
+    - linux
+
+windows:
+  stage: build
+  script:
+    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make rebuild"
+  artifacts:
+    paths:
+      - wp43s.exe
+  tags:
+    - windows
+
 dm42:
   stage: build
   script:
@@ -17,18 +37,9 @@ dm42:
   artifacts:
     paths:
       - DMCP_build/build/WP43S.pgm
+      - DMCP_build/build/WP43S_qspi.bin
   tags:
     - dm42
-
-windows:
-  stage: build
-  script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make detected_OS=Windows rebuild"
-  artifacts:
-    paths:
-      - wp43s.exe
-  tags:
-    - windows
 
 testSuite:
   stage: test

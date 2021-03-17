@@ -32,7 +32,7 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -73,7 +73,7 @@ void fnCvtCToF(uint16_t unusedButMandatoryParameter) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -109,7 +109,7 @@ void fnCvtFToC(uint16_t unusedButMandatoryParameter) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -208,8 +208,8 @@ void fnCvtCwtKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtOzKg(uint16_t multiplyDivide) {
-  unitConversion(const_OzToKg, multiplyDivide);
+void fnCvtOzG(uint16_t multiplyDivide) {
+  unitConversion(const_OzToG, multiplyDivide);
 }
 
 
@@ -223,8 +223,8 @@ void fnCvtShortcwtKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtTrozKg(uint16_t multiplyDivide) {
-  unitConversion(const_TrozToKg, multiplyDivide);
+void fnCvtTrozG(uint16_t multiplyDivide) {
+  unitConversion(const_TrozToG, multiplyDivide);
 }
 
 
@@ -238,8 +238,8 @@ void fnCvtShorttonKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtCaratKg(uint16_t multiplyDivide) {
-  unitConversion(const_CaratToKg, multiplyDivide);
+void fnCvtCaratG(uint16_t multiplyDivide) {
+  unitConversion(const_CaratToG, multiplyDivide);
 }
 
 
@@ -258,8 +258,8 @@ void fnCvtAuM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtMiM(uint16_t multiplyDivide) {
-  unitConversion(const_MiToM, multiplyDivide);
+void fnCvtMiKm(uint16_t multiplyDivide) {
+  unitConversion(const_MiToKm, multiplyDivide);
 }
 
 
@@ -268,8 +268,8 @@ void fnCvtLyM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtNmiM(uint16_t multiplyDivide) {
-  unitConversion(const_NmiToM, multiplyDivide);
+void fnCvtNmiKm(uint16_t multiplyDivide) {
+  unitConversion(const_NmiToKm, multiplyDivide);
 }
 
 
@@ -283,8 +283,8 @@ void fnCvtPcM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtInchM(uint16_t multiplyDivide) {
-  unitConversion(const_InchToM, multiplyDivide);
+void fnCvtInchMm(uint16_t multiplyDivide) {
+  unitConversion(const_InchToMm, multiplyDivide);
 }
 
 
@@ -298,8 +298,8 @@ void fnCvtYardM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtPointM(uint16_t multiplyDivide) {
-  unitConversion(const_PointToM, multiplyDivide);
+void fnCvtPointMm(uint16_t multiplyDivide) {
+  unitConversion(const_PointToMm, multiplyDivide);
 }
 
 
@@ -338,23 +338,23 @@ void fnCvtFenM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtGalukM3(uint16_t multiplyDivide) {
-  unitConversion(const_GalukToM3, multiplyDivide);
+void fnCvtGalukL(uint16_t multiplyDivide) {
+  unitConversion(const_GalukToL, multiplyDivide);
 }
 
 
-void fnCvtGalusM3(uint16_t multiplyDivide) {
-  unitConversion(const_GalusToM3, multiplyDivide);
+void fnCvtGalusL(uint16_t multiplyDivide) {
+  unitConversion(const_GalusToL, multiplyDivide);
 }
 
 
-void fnCvtFlozukM3(uint16_t multiplyDivide) {
-  unitConversion(const_FlozukToM3, multiplyDivide);
+void fnCvtFlozukMl(uint16_t multiplyDivide) {
+  unitConversion(const_FlozukToMl, multiplyDivide);
 }
 
 
-void fnCvtFlozusM3(uint16_t multiplyDivide) {
-  unitConversion(const_FlozusToM3, multiplyDivide);
+void fnCvtFlozusMl(uint16_t multiplyDivide) {
+  unitConversion(const_FlozusToMl, multiplyDivide);
 }
 
 
@@ -363,18 +363,18 @@ void fnCvtBarrelM3(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtQuartM3(uint16_t multiplyDivide) {
-  unitConversion(const_QuartToM3, multiplyDivide);
+void fnCvtQuartL(uint16_t multiplyDivide) {
+  unitConversion(const_QuartToL, multiplyDivide);
 }
 
 
-void fnCvtAcreM2(uint16_t multiplyDivide) {
-  unitConversion(const_AccreToM2, multiplyDivide);
+void fnCvtAcreHa(uint16_t multiplyDivide) {
+  unitConversion(const_AccreToHa, multiplyDivide);
 }
 
 
-void fnCvtAcreusM2(uint16_t multiplyDivide) {
-  unitConversion(const_AccreusToM2, multiplyDivide);
+void fnCvtAcreusHa(uint16_t multiplyDivide) {
+  unitConversion(const_AccreusToHa, multiplyDivide);
 }
 
 
@@ -411,7 +411,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -448,7 +448,7 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);

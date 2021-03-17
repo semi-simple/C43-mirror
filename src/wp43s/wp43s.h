@@ -161,7 +161,11 @@
 #define INLINE_TEST                     //vv dr
 #undef INLINE_TEST                    //^^
 
+  /* Turn off -Wunused-result for a specific function call */
+  #define ignore_result(M) if(1==((int)M)){;}
+
   #include "assign.h"
+  #include "ui/tam.h"
   #include "bufferize.h"
   #include "browsers/browsers.h"
   #include "config.h"
@@ -186,6 +190,7 @@
   #include "mathematics/mathematics.h"
   #include "memory.h"
   #include "programming/programming.h"
+  #include "plotstat.h"
   #include "recall.h"
   #include "registers.h"
   #include "registerValueConversions.h"
@@ -261,7 +266,6 @@
   // Variables stored in RAM
   extern bool_t                 funcOK;
   extern bool_t                 keyActionProcessed;
-  extern bool_t                 inputNamedVariable;
   extern bool_t                 fnKeyInCatalog;
   extern bool_t                 hourGlassIconEnabled;
   extern bool_t                 watchIconEnabled;
@@ -307,8 +311,10 @@
   extern pcg32_random_t         pcg32_global;
   extern labelList_t           *labelList;
   extern programList_t         *programList;
+  extern angularMode_t          currentAngularMode;
 
   extern char                  *tmpString;
+  extern char                  *tmpStringLabelOrVariableName;
   extern char                  *errorMessage;
   extern char                  *aimBuffer; // aimBuffer is also used for NIM
   extern char                  *nimBufferDisplay;
@@ -318,7 +324,6 @@
   extern char                   dateTimeString[12];
   extern char                   displayValueX[DISPLAY_VALUE_LEN];
 
-  extern tamState_t             transitionSystemState;
   extern uint8_t                numScreensStandardFont;
   extern uint8_t                currentFntScr;
   extern uint8_t                currentFlgScr;
@@ -346,7 +351,6 @@
   extern uint8_t                temporaryInformation;
   extern uint8_t                rbrMode;
   extern uint8_t                numScreensNumericFont;
-  extern uint8_t                currentAngularMode;
   extern uint8_t               *beginOfProgramMemory;
   extern uint8_t               *beginOfCurrentProgram;
   extern uint8_t               *endOfCurrentProgram;
@@ -354,14 +358,7 @@
   extern uint8_t               *firstDisplayedStep;
   extern uint8_t               *currentStep;
 
-  extern int16_t                tamFunction;
-  extern int16_t                tamNumber;
-  extern int16_t                tamNumberMin;
-  extern int16_t                tamNumberMax;
-  extern int16_t                tamDigit;
-  extern int16_t                tamOperation;
-  extern int16_t                tamLetteredRegister;
-  extern int16_t                tamCurrentOperation;
+  extern tamState_t             tam;
   extern int16_t                currentRegisterBrowserScreen;
   extern int16_t                lineTWidth;
   extern int16_t                rbrRegister;
@@ -394,7 +391,6 @@
   extern uint16_t               numberOfLabels;
   extern uint16_t               numberOfPrograms;
   extern uint16_t               numberOfNamedVariables;
-  extern uint16_t               tamMode;
   extern uint16_t               currentLocalStepNumber;
   extern uint16_t               currentProgramNumber;
 

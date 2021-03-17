@@ -134,13 +134,13 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 
     case dtReal34:
       switch(getRegisterTag(regist)) {
-        case AM_DEGREE:             return "degree  ";
-        case AM_DMS:                return "dms     ";
-        case AM_RADIAN:             return "radian  ";
-        case AM_MULTPI:             return "multPi  ";
-        case AM_GRAD:               return "grad    ";
-        case AM_NONE:               return "none    ";
-        default:                    return "???     ";
+        case amRadian:             return "radian  ";
+        case amMultPi:             return "multPi  ";
+        case amGrad:               return "grad    ";
+        case amDegree:             return "degree  ";
+        case amDMS:                return "dms     ";
+        case amNone:               return "none    ";
+        default:                   return "???     ";
       }
 
     case dtComplex34:
@@ -151,7 +151,7 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
     case dtTime:
     case dtConfig:
       switch(getRegisterTag(regist)) {
-        case AM_NONE:               return "        ";
+        case amNone:               return "        ";
         default:                    return "???     ";
       }
 
@@ -164,6 +164,27 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 }
 
 
+/********************************************//**
+ * \brief Returns the name of a curvefitting mode
+ *
+ * \param[in] am uint16_t curvefitting mode
+ * \return char*          Name of the curvefitting mode
+ ***********************************************/
+char * getCurveFitModeName(uint16_t selection) {
+    if(selection == CF_LINEAR_FITTING)      return "Linear     ";
+    if(selection == CF_EXPONENTIAL_FITTING) return "Exponential";
+    if(selection == CF_LOGARITHMIC_FITTING) return "Logarithmic";
+    if(selection == CF_POWER_FITTING)       return "Power      ";
+    if(selection == CF_ROOT_FITTING)        return "Root       ";
+    if(selection == CF_HYPERBOLIC_FITTING)  return "Hyperbolic ";
+    if(selection == CF_PARABOLIC_FITTING)   return "Parabolic  ";
+    if(selection == CF_CAUCHY_FITTING)      return "Cauchy peak";
+    if(selection == CF_GAUSS_FITTING)       return "Gauss peak ";
+    if(selection == CF_ORTHOGONAL_FITTING)  return "Orthogonal ";
+
+    return "???        ";
+  }
+
 
 /********************************************//**
  * \brief Returns the name of a angular mode
@@ -171,13 +192,13 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
  * \param[in] am uint16_t Angular mode
  * \return char*          Name of the angular mode
  ***********************************************/
-char * getAngularModeName(uint16_t angularMode) {
-  if(angularMode == AM_DEGREE) return "degree";
-  if(angularMode == AM_DMS   ) return "d.ms  ";
-  if(angularMode == AM_RADIAN) return "radian";
-  if(angularMode == AM_MULTPI) return "multPi";
-  if(angularMode == AM_GRAD  ) return "grad  ";
-  if(angularMode == AM_NONE)   return "none  ";
+char * getAngularModeName(angularMode_t angularMode) {
+  if(angularMode == amRadian) return "radian";
+  if(angularMode == amMultPi) return "multPi";
+  if(angularMode == amGrad  ) return "grad  ";
+  if(angularMode == amDegree) return "degree";
+  if(angularMode == amDMS   ) return "d.ms  ";
+  if(angularMode == amNone)   return "none  ";
 
   return "???   ";
 }
@@ -327,6 +348,7 @@ void debugNIM(void) {
     if(cm == CM_REGISTER_BROWSER)      return "reg.bro";
     if(cm == CM_FLAG_BROWSER)          return "flg.bro";
     if(cm == CM_FONT_BROWSER)          return "fnt.bro";
+    if(cm == CM_PLOT_STAT)             return "plot.st";
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
     if(cm == CM_CONFIRMATION)          return "confirm";
@@ -500,14 +522,24 @@ void debugNIM(void) {
    * \return char*          Name of the alpha selection menu
    ***********************************************/
   char * getAlphaSelectionMenuName(uint16_t alsm) {
-    if(alsm == CATALOG_NONE) return "CATALOG_NONE";
-    if(alsm == CATALOG_FCNS) return "CATALOG_FCNS";
-    if(alsm == CATALOG_CNST) return "CATALOG_CNST";
-    if(alsm == CATALOG_MENU) return "CATALOG_MENU";
-    if(alsm == CATALOG_SYFL) return "CATALOG_SYFL";
-    if(alsm == CATALOG_AINT) return "CATALOG_AINT";
-    if(alsm == CATALOG_aint) return "CATALOG_aint";
-    if(alsm == CATALOG_PROG) return "CATALOG_PROG";
+    if(alsm == CATALOG_NONE)     return "CATALOG_NONE";
+    if(alsm == CATALOG_FCNS)     return "CATALOG_FCNS";
+    if(alsm == CATALOG_CNST)     return "CATALOG_CNST";
+    if(alsm == CATALOG_MENU)     return "CATALOG_MENU";
+    if(alsm == CATALOG_SYFL)     return "CATALOG_SYFL";
+    if(alsm == CATALOG_AINT)     return "CATALOG_AINT";
+    if(alsm == CATALOG_aint)     return "CATALOG_aint";
+    if(alsm == CATALOG_PROG)     return "CATALOG_PROG";
+    if(alsm == CATALOG_VAR)      return "CATALOG_VAR";
+    if(alsm == CATALOG_MATRS)    return "CATALOG_MATRS";
+    if(alsm == CATALOG_STRINGS)  return "CATALOG_STRINGS";
+    if(alsm == CATALOG_DATES)    return "CATALOG_DATES";
+    if(alsm == CATALOG_TIMES)    return "CATALOG_TIMES";
+    if(alsm == CATALOG_ANGLES)   return "CATALOG_ANGLES";
+    if(alsm == CATALOG_SINTS)    return "CATALOG_SINTS";
+    if(alsm == CATALOG_LINTS)    return "CATALOG_LINTS";
+    if(alsm == CATALOG_REALS)    return "CATALOG_REALS";
+    if(alsm == CATALOG_CPXS)     return "CATALOG_CPXS";
 
     return "CATALOG_????";
   }
@@ -540,7 +572,7 @@ void debugNIM(void) {
 
     if(getRegisterDataType(regist) == dtReal34) {
       formatReal34Debug(string + n, (real34_t *)getRegisterDataPointer(regist));
-      if(getRegisterAngularMode(regist) != AM_NONE) {
+      if(getRegisterAngularMode(regist) != amNone) {
         n = stringByteLength(string);
         strcpy(string + n++, " ");
         strcpy(string + n, getAngularModeName(getRegisterAngularMode(regist)));
@@ -844,13 +876,7 @@ void debugNIM(void) {
       }
 
       if(row < DEBUG_LINES) {
-        sprintf(string, "TAM mode                                  = %6u = %s",    tamMode,              getTamModeName(tamMode));
-        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
-        gtk_widget_show(lbl1[row++]);
-      }
-
-      if(row < DEBUG_LINES) {
-        sprintf(string, "transitionSystemState                     = %6u",         transitionSystemState);
+        sprintf(string, "TAM mode                                  = %6u = %s",    tam.mode,             getTamModeName(tam.mode));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

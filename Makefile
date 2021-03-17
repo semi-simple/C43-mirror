@@ -14,35 +14,42 @@ TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43c$(EXE)
 EXE =
 
+CC = gcc
 
-ifeq '$(findstring ;,$(PATH))' ';'
-	detected_OS := Windows
+ifeq ($(OS),Windows_NT)
+  EXE = .exe
+  CFLAGS += -DWIN32
+  detected_OS := Windows
 else
-	detected_OS := $(shell uname 2>/dev/null || echo Unknown)
-	detected_OS := $(patsubst CYGWIN%,Cygwin,$(detected_OS))
-	detected_OS := $(patsubst MSYS%,MSYS,$(detected_OS))
-	detected_OS := $(patsubst MINGW%,MSYS,$(detected_OS))
-endif
-
-ifeq ($(detected_OS),Windows)
-	EXE = .exe
-	CFLAGS += -D WIN32
-else ifeq ($(detected_OS),Darwin)        # Mac OS X
-	CFLAGS += -D OSX
-	CFLAGS += -I/usr/local/include/
-	LDFLAGS += -L/usr/local/lib
-else ifeq ($(detected_OS),Linux)
-	CFLAGS += -D LINUX
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S),Linux)
+    detected_OS := Linux
+    CFLAGS += -DLINUX
+  endif
+  ifeq ($(UNAME_S),Darwin)
+    detected_OS := Darwin
+#    CC = clang
+    CC = gcc
+    CFLAGS += -DOSX
+    ifneq ($(wildcard /opt/homebrew/.),)
+      # Homebrew on Arm Macs installs into /opt/homebrew
+      CFLAGS += -I/opt/homebrew/include
+      LDFLAGS += -L/opt/homebrew/lib
+    else
+      CFLAGS += -I/usr/local/include/
+      LDFLAGS += -L/usr/local/lib
+    endif
+  endif
 endif
 
 RASPBERRY = $(shell ./onARaspberry)
 
-
-CC = gcc
 INC = -IdecNumberICU -Isrc/wp43s -Isrc/testSuite
 
 ifeq ($(DEST), gitlab)
 	CFLAGS += -march=x86-64
+else ifeq ($(detected_OS),Darwin)
+	# Don't add -march=native on macOS as it isn't supported in clang on Arm
 else
 	CFLAGS += -march=native
 endif
@@ -84,6 +91,7 @@ SRC_WP43S                = \
 		constants.c conversionAngles.c conversionUnits.c \
 		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
 		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
+        plotstat.c \
 		rasterFontsData.c recall.c registerValueConversions.c registers.c \
 		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
 		stats.c statusBar.c store.c stringFuncs.c timer.c \
@@ -94,7 +102,7 @@ SRC_WP43S                = \
 		cxToRe.c cpyx.c dblDivision.c dblMultiplication.c deltaPercent.c idiv.c idivr.c decomp.c dot.c \
 		division.c erf.c erfc.c exp.c expMOne.c expt.c factorial.c fib.c floor.c fractionalPart.c gamma.c gammaP.c gammaQ.c gammaXyLower.c gammaXyUpper.c gcd.c gd.c \
 		imaginaryPart.c int.c incDec.c integerPart.c invert.c iteration.c ixyz.c lcm.c ln.c lnPOne.c log10.c logxy.c lnbeta.c beta.c \
-		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c ortho_polynom.c parallel.c pcg_basic.c \
+		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c opmod.c ortho_polynom.c parallel.c pcg_basic.c \
 		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
 		random.c rdp.c realPart.c remainder.c reToCx.c round.c roundi.c rsd.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
 		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
@@ -107,6 +115,8 @@ SRC_WP43S                = \
 		chi2.c f.c normal.c t.c) \
 	$(addprefix src/wp43s/browsers/, \
 		flagBrowser.c fontBrowser.c registerBrowser.c) \
+	$(addprefix src/wp43s/ui/, \
+		tam.c) \
 	$(addprefix src/wp43s/, \
 		addons.c graphs.c jm.c jm_graph.c inlineTest.c keyboardTweak.c radioButtonCatalog.c  graphText.c textfiles.c xeqm.c)
 OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)

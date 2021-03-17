@@ -86,7 +86,7 @@ void liftStack(void) {
   }
 
   setRegisterDataPointer(REGISTER_X, allocWp43s(REAL34_SIZE));
-  setRegisterDataType(REGISTER_X, dtReal34, AM_NONE);
+  setRegisterDataType(REGISTER_X, dtReal34, amNone);
 }
 
 

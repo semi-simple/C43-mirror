@@ -129,15 +129,15 @@ longInteger_t li;
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {       //JM vv add the obvious case that a number has 0/180 degrees. Why error for this.
     convertLongIntegerRegisterToLongInteger(REGISTER_X, li);
     if(longIntegerIsPositive(li) || longIntegerIsZero(li)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     } 
     else if(longIntegerIsNegative(li)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_180, REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     }
     longIntegerFree(li);
@@ -220,11 +220,11 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       }
 
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
-        if(getRegisterAngularMode(REGISTER_X) == AM_DMS || getRegisterAngularMode(REGISTER_X) == AM_DEGREE) {
+        if(getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amDegree) {
           fnKeyDotD(0);
           fnKeyDotD(0);  //2nd time to make sure it goes to REAL, not DEGREES as per           fnToReal(0); mod.
         } 
-        if(getRegisterAngularMode(REGISTER_X) == AM_NONE) {
+        if(getRegisterAngularMode(REGISTER_X) == amNone) {
           fnToHms(0);                   
         }
 
@@ -232,8 +232,8 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       else
       if(getRegisterDataType(REGISTER_X) == dtTime) {
         fnToHr(0);
-        setRegisterAngularMode(REGISTER_X, AM_DEGREE);
-        fnCvtFromCurrentAngularMode(AM_DMS);
+        setRegisterAngularMode(REGISTER_X, amDegree);
+        fnCvtFromCurrentAngularMode(amDMS);
       }
 
       copySourceRegisterToDestRegister(TEMP_REGISTER_1, REGISTER_L);   // STO TMP
@@ -244,6 +244,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
     case CM_REGISTER_BROWSER:
     case CM_FLAG_BROWSER:
     case CM_FONT_BROWSER:
+    case CM_PLOT_STAT:
     case CM_LISTXY:                     //JM
     case CM_GRAPH:                      //JM
       break;
@@ -312,7 +313,7 @@ void fnMultiplySI(uint16_t multiplier) {
 void fn_cnst_op_j(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(const_1, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -321,7 +322,7 @@ void fn_cnst_op_j(uint16_t unusedButMandatoryParameter) {
 void fn_cnst_op_aa(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 - 0.866
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
   chsCplx();
@@ -331,7 +332,7 @@ void fn_cnst_op_aa(uint16_t unusedButMandatoryParameter) {
 void fn_cnst_op_a(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(const_1on2, REGISTER_REAL34_DATA(REGISTER_X));  //-0.5 + 0.866i  : op a
   chsReal();
   realToReal34(const_rt3on2, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -341,7 +342,7 @@ void fn_cnst_op_a(uint16_t unusedButMandatoryParameter) {
 void fn_cnst_0_cpx(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -350,7 +351,7 @@ void fn_cnst_0_cpx(uint16_t unusedButMandatoryParameter) {
 void fn_cnst_1_cpx(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(const_1, REGISTER_REAL34_DATA(REGISTER_X));      // 0+i0
   realToReal34(const_0, REGISTER_IMAG34_DATA(REGISTER_X));
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -478,13 +479,13 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
   if (AMODE == TM_HMS) {
     if(getRegisterDataType(REGISTER_X) == dtTime) return;
-    if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) fnCvtFromCurrentAngularMode(AM_DEGREE); 
+    if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) != amNone) fnCvtFromCurrentAngularMode(amDegree); 
     fnKeyDotD(0);
     fnToHms(0); //covers longint & real
   } else {
     if(getRegisterDataType(REGISTER_X) == dtTime) {
       fnToHr(0);
-      setRegisterAngularMode(REGISTER_X, AM_DEGREE);
+      setRegisterAngularMode(REGISTER_X, amDegree);
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
@@ -733,7 +734,7 @@ void print_stck(){
 void doubleToXRegisterReal34(double x) {             //Convert from double to X register REAL34
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
     stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
     //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
@@ -746,7 +747,7 @@ void fnStrtoX(char aimBuffer[]) {      //DONE
   setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
   int16_t mem = stringByteLength(aimBuffer);
-  reallocateRegister(REGISTER_X, dtString, mem, AM_NONE);
+  reallocateRegister(REGISTER_X, dtString, mem, amNone);
   xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem + 1);
   setSystemFlag(FLAG_ASLIFT);
 }
@@ -758,7 +759,7 @@ void fnStrInputReal34(char inp1[]) {  // CONVERT STRING to REAL IN X      //DONE
   strcat(tmpString, inp1);
   setSystemFlag(FLAG_ASLIFT);   // 5
   liftStack();
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
   setSystemFlag(FLAG_ASLIFT);
 }
@@ -864,21 +865,21 @@ void timeToReal34(uint16_t hms) {                     //always 24 hour time;
     case 0:     //h
       int32ToReal34(sign ? -1 : +1, &value34);
       real34Multiply(&h34, &value34, &h34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&h34, REGISTER_REAL34_DATA(regist));
       break;
 
     case 1:     //m
       int32ToReal34(sign ? -1 : +1, &value34);
       real34Multiply(&m34, &value34, &m34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&m34, REGISTER_REAL34_DATA(regist));
       break;
 
     case 2:     //s
       int32ToReal34(sign ? -1 : +1, &value34);
       real34Multiply(&s34, &value34, &s34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&s34, REGISTER_REAL34_DATA(regist));
       break;
 
@@ -946,7 +947,7 @@ void dms34ToReal34(uint16_t dms) {
       int32ToReal34(sign, &value34);
       realToReal34(&degrees, &d34);
       real34Multiply(&d34, &value34, &d34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&d34, REGISTER_REAL34_DATA(regist));
       break;
 
@@ -954,7 +955,7 @@ void dms34ToReal34(uint16_t dms) {
       int32ToReal34(m, &m34);
       int32ToReal34(sign, &value34);
       real34Multiply(&m34, &value34, &m34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&m34, REGISTER_REAL34_DATA(regist));
       break;
 
@@ -968,7 +969,7 @@ void dms34ToReal34(uint16_t dms) {
 
       int32ToReal34(sign, &value34);
       real34Multiply(&s34, &value34, &s34);
-      reallocateRegister(regist, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&s34, REGISTER_REAL34_DATA(regist));
       break;
 
@@ -990,17 +991,17 @@ void notSexa(void) {
 
 void fnHrDeg (uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(0); else
+  if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(0); else
     if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(0); else {notSexa(); return;}
 }
 void fnMinute (uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(1); else
+  if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(1); else
     if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(1); else {notSexa(); return;}
 }
 void fnSecond (uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(2); else
+  if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34) dms34ToReal34(2); else
     if(getRegisterDataType(REGISTER_X) == dtTime) timeToReal34(2); else {notSexa(); return;}
 }
 
@@ -1009,7 +1010,7 @@ void fnTimeTo(uint16_t unusedButMandatoryParameter) {
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterAngularMode(REGISTER_X) == AM_DMS && getRegisterDataType(REGISTER_X) == dtReal34) {
+  if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34) {
     dms34ToReal34(0); 
     liftStack();
     copySourceRegisterToDestRegister(REGISTER_L, REGISTER_X);
@@ -1128,7 +1129,7 @@ void fnToTime(uint16_t unusedButMandatoryParameter) {
   real34Add(&hr, &m, &hr);
   real34Add(&hr, &s, &hr);
 
-  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
   real34Copy(&hr, REGISTER_REAL34_DATA(REGISTER_X));
 }
 

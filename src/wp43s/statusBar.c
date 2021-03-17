@@ -31,7 +31,7 @@
    ***********************************************/
   void refreshStatusBar(void) {
     #if (DEBUG_INSTEAD_STATUS_BAR == 1)
-      sprintf(tmpString, "%s%d %s/%s  mnu:%s fi:%d", catalog ? "asm:" : "", catalog, tamMode ? "/tam" : "", getCalcModeName(calcMode),indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, softmenuStack[0].firstItem);
+      sprintf(tmpString, "%s%d %s/%s  mnu:%s fi:%d", catalog ? "asm:" : "", catalog, tam.mode ? "/tam" : "", getCalcModeName(calcMode),indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, softmenuStack[0].firstItem);
       showString(tmpString, &standardFont, X_DATE, 0, vmNormal, true, true);
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
     showDateTime();
@@ -122,22 +122,22 @@
   void showAngularMode(void) {
     uint32_t x = 0;
 
-    x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9+3 pixel wide
+    x = showGlyph(STD_MEASURED_ANGLE, &standardFont, X_ANGULAR_MODE, 0, vmNormal, true, true); // Angle is 0+9 pixel wide
 
     switch(currentAngularMode) {
-      case AM_DEGREE: showGlyph(STD_DEGREE,             &standardFont, x, 0, vmNormal, true, false); // °  is 0+6 pixel wide
+      case amRadian: showGlyph(STD_SUP_r,              &standardFont, x, 0, vmNormal, true, false); // r  is 0+6 pixel wide
                       break;
 
-      case AM_DMS:    showGlyph(STD_RIGHT_DOUBLE_QUOTE, &standardFont, x, 0, vmNormal, true, false); // "  is 0+6 pixel wide
+      case amMultPi: showGlyph(STD_pi,                     &standardFont, x, 0, vmNormal, true, false); // pi is 0+9 pixel wide
                       break;
 
-      case AM_RADIAN: showGlyph(STD_SUP_r,              &standardFont, x, 0, vmNormal, true, false); // r  is 0+6 pixel wide
+      case amGrad:   showGlyph(STD_SUP_g,              &standardFont, x, 0, vmNormal, true, false); // g  is 0+6 pixel wide
                       break;
 
-      case AM_MULTPI: showGlyph(STD_pi,                     &standardFont, x, 0, vmNormal, true, false); // pi is 0+9 pixel wide
+      case amDegree: showGlyph(STD_DEGREE,             &standardFont, x, 0, vmNormal, true, false); // °  is 0+6 pixel wide
                       break;
 
-      case AM_GRAD:   showGlyph(STD_SUP_g,              &standardFont, x, 0, vmNormal, true, false); // g  is 0+6 pixel wide
+      case amDMS:    showGlyph(STD_RIGHT_DOUBLE_QUOTE, &standardFont, x, 0, vmNormal, true, false); // "  is 0+6 pixel wide
                       break;
 
       default:        showGlyph(STD_QUESTION_MARK, &standardFont, x, 0, vmNormal, true, false); // ?
@@ -152,11 +152,7 @@
  * \param void
  * \return void
  ***********************************************/
-void showFracMode(void) {
-    char str20[20];                                   //JM vv KEYS
-    char str40[40];
-
-    void conv() {
+    void conv(char * str20, char * str40) {
       str40[0]=0;
       int16_t x = 0;
       int16_t y = 0;
@@ -178,6 +174,12 @@ void showFracMode(void) {
       }
     }                                                  //JM ^^ KEYS
 
+
+
+void showFracMode(void) {
+    char str20[20];                                   //JM vv KEYS
+    char str40[40];
+
   showString(STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM STD_SPACE_EM, &standardFont, X_INTEGER_MODE-12*5, 0, vmNormal, true, true); // STD_SPACE_EM is 0+0+12 pixel wide
 
   uint32_t x = 0;
@@ -187,10 +189,10 @@ void showFracMode(void) {
     
     if(lastIntegerBase>10 && lastIntegerBase<=16){
       x = showString("#KEY", &standardFont, X_FRAC_MODE, 0 , vmNormal, true, true);//-4 looks good
-      strcpy(str20,"A"); conv();
+      strcpy(str20,"A"); conv(str20, str40);
       x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
       x = showString("-",    &standardFont, x,  2 , vmNormal, true, true);         //-4 looks good
-      strcpy(str20,"F"); conv();
+      strcpy(str20,"F"); conv(str20, str40);
       x = showString(str40,  &standardFont, x, -4 , vmNormal, true, true);         //-4 looks good
 
     } else
@@ -212,10 +214,10 @@ void showFracMode(void) {
 
       if(!getSystemFlag(FLAG_DENANY)) {
         if(getSystemFlag(FLAG_DENFIX)) {
-         showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
+          showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
         }
         else {
-         showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
+          showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
         }
       }
     }
@@ -270,7 +272,7 @@ void showFracMode(void) {
    ***********************************************/
   void showHideAlphaMode(void) {
     int status=0;
-    if(calcMode == CM_AIM || catalog) {
+    if(calcMode == CM_AIM || catalog || (tam.mode != 0 && tam.alpha)) {
 
       if(numLock && !shiftF && !shiftG) {
           if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
@@ -330,6 +332,7 @@ void showFracMode(void) {
       clearSystemFlag(FLAG_alphaCAP);
     }
   }
+
 
 
   /********************************************//**

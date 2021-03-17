@@ -57,7 +57,6 @@ void                   (*confirmedFunction)(uint16_t);
 // Variables stored in RAM
 bool_t                 funcOK;
 bool_t                 keyActionProcessed;
-bool_t                 inputNamedVariable;
 bool_t                 fnKeyInCatalog;
 bool_t                 hourGlassIconEnabled;
 bool_t                 watchIconEnabled;
@@ -100,8 +99,10 @@ freeMemoryRegion_t     freeMemoryRegions[MAX_FREE_REGION];
 pcg32_random_t         pcg32_global = PCG32_INITIALIZER;
 labelList_t           *labelList = NULL;
 programList_t         *programList = NULL;
+angularMode_t          currentAngularMode;
 
 char                  *tmpString = NULL;
+char                  *tmpStringLabelOrVariableName = NULL;
 char                  *errorMessage;
 char                  *aimBuffer; // aimBuffer is also used for NIM
 char                  *nimBufferDisplay;
@@ -111,7 +112,6 @@ char                   oldTime[8];
 char                   dateTimeString[12];
 char                   displayValueX[DISPLAY_VALUE_LEN];
 
-tamState_t             transitionSystemState;
 uint8_t                numScreensStandardFont;
 uint8_t                currentFntScr;
 uint8_t                currentFlgScr;
@@ -137,7 +137,6 @@ uint8_t                lastErrorCode;
 uint8_t                temporaryInformation;
 uint8_t                rbrMode;
 uint8_t                numScreensNumericFont;
-uint8_t                currentAngularMode;
 uint8_t               *beginOfProgramMemory;
 uint8_t               *beginOfCurrentProgram;
 uint8_t               *endOfCurrentProgram;
@@ -145,14 +144,7 @@ uint8_t               *firstFreeProgramByte;
 uint8_t               *firstDisplayedStep;
 uint8_t               *currentStep;
 
-int16_t                tamFunction;
-int16_t                tamNumber;
-int16_t                tamNumberMin;
-int16_t                tamNumberMax;
-int16_t                tamDigit;
-int16_t                tamOperation;
-int16_t                tamLetteredRegister;
-int16_t                tamCurrentOperation;
+tamState_t             tam;
 int16_t                currentRegisterBrowserScreen;
 int16_t                lineTWidth;
 int16_t                rbrRegister;
@@ -185,23 +177,24 @@ float                 graph_xmin;                              //JM Graph
 float                 graph_xmax;                              //JM Graph
 float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
-float                 graph_dx;                                //JM Graph
-float                 graph_dy;                                //JM Graph
-bool_t                extentx;                                 //JM Graph
-bool_t                extenty;                                 //JM Graph
-bool_t                jm_VECT;                                 //JM GRAPH
-bool_t                jm_NVECT;                                //JM GRAPH
-bool_t                jm_SCALE;                                //JM GRAPH
-bool_t                Aspect_Square;                           //JM GRAPH
-bool_t                PLOT_LINE;                               //JM GRAPH
-bool_t                PLOT_CROSS;                              //JM GRAPH
-bool_t                PLOT_BOX;                                //JM GRAPH
-bool_t                PLOT_INTG;                               //JM GRAPH
-bool_t                PLOT_DIFF;                               //JM GRAPH
-bool_t                PLOT_RMS;                                //JM GRAPH
-bool_t                PLOT_SHADE;                              //JM GRAPH
-int8_t                PLOT_ZMX;                                //JM GRAPH
-int8_t                PLOT_ZMY;                                //JM GRAPH
+// float                 graph_dx;                                //JM Graph
+// float                 graph_dy;                                //JM Graph
+// bool_t                extentx;                                 //JM Graph
+// bool_t                extenty;                                 //JM Graph
+// bool_t                jm_VECT;                                 //JM GRAPH
+// bool_t                jm_NVECT;                                //JM GRAPH
+// bool_t                jm_SCALE;                                //JM GRAPH
+// bool_t                Aspect_Square;                           //JM GRAPH
+// bool_t                PLOT_LINE;                               //JM GRAPH
+// bool_t                PLOT_CROSS;                              //JM GRAPH
+// bool_t                PLOT_BOX;                                //JM GRAPH
+// bool_t                PLOT_INTG;                               //JM GRAPH
+// bool_t                PLOT_DIFF;                               //JM GRAPH
+// bool_t                PLOT_RMS;                                //JM GRAPH
+// bool_t                PLOT_SHADE;                              //JM GRAPH
+// bool_t                PLOT_AXIS;                               //JM GRAPH
+// int8_t                PLOT_ZMX;                                //JM GRAPH
+// int8_t                PLOT_ZMY;                                //JM GRAPH
 uint8_t               lastSetAngularMode;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 #ifdef INLINE_TEST                                             //vv dr
@@ -235,7 +228,6 @@ uint16_t               firstDisplayedLocalStepNumber;
 uint16_t               numberOfLabels;
 uint16_t               numberOfPrograms;
 uint16_t               numberOfNamedVariables;
-uint16_t               tamMode;
 uint16_t               currentLocalStepNumber;
 uint16_t               currentProgramNumber;
 

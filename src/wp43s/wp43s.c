@@ -201,15 +201,29 @@ bool_t                AlphaSelectionBufferTimerRunning;        //JM
 bool_t                testEnabled;                             //
 uint16_t              testBitset;                              //
 #endif                                                         //^^
-int16_t               longpressDelayedkey2;          //JM
-int16_t               longpressDelayedkey3;               //JM
-int16_t               T_cursorPos;                 //JMCURSOR
-int16_t               SHOWregis;                   //JMSHOW
-int16_t               ListXYposition;              //JMSHOW
-int16_t               mm_MNU_HOME;                 //JM
-int16_t               mm_MNU_ALPHA;                //JM
-int16_t               MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
-int16_t               fnXEQMENUpos;                //JMXEQ
+int16_t                longpressDelayedkey2;         //JM
+int16_t                longpressDelayedkey3;         //JM
+int16_t                T_cursorPos;                  //JMCURSOR
+int16_t                SHOWregis;                    //JMSHOW
+int16_t                ListXYposition;               //JMSHOW
+int16_t                mm_MNU_HOME;                  //JM
+int16_t                mm_MNU_ALPHA;                 //JM
+int16_t                MY_ALPHA_MENU = MY_ALPHA_MENU_CNST;  //JM
+int16_t                JM_auto_doublepress_enabled;  //JM TIMER CLRDROP //drop
+int16_t                JM_auto_longpress_enabled;    //JM TIMER CLRDROP //clstk
+uint8_t                JM_SHIFT_HOME_TIMER1;         //Local to keyboard.c, but defined here
+int16_t                JM_ASN_MODE;                  //JM ASSIGN
+bool_t                 ULFL, ULGL;                   //JM Underline
+int16_t                FN_key_pressed, FN_key_pressed_last; //JM LONGPRESS FN
+bool_t                 FN_timeouts_in_progress;      //JM LONGPRESS FN
+bool_t                 Shft_timeouts;                //JM SHIFT NEW FN
+bool_t                 FN_timed_out_to_NOP;          //JM LONGPRESS FN
+bool_t                 FN_timed_out_to_RELEASE_EXEC; //JM LONGPRESS FN
+bool_t                 FN_handle_timed_out_to_EXEC;
+char                   indexOfItemsXEQM[18*8];       //JMXEQ
+int16_t                fnXEQMENUpos;                 //JMXEQ
+uint8_t                last_CM = 255;                //Do extern !!
+uint8_t                FN_state; // = ST_0_INIT;      
 
 int16_t                exponentSignLocation;
 int16_t                denominatorLocation;

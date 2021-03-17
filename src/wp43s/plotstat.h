@@ -46,8 +46,8 @@
 //Memory structure
 extern    graphtype *gr_x;
 extern    graphtype *gr_y;
-graphtype telltale;
-uint16_t  ix_count;
+extern    graphtype telltale;
+extern    uint16_t  ix_count;
 #define   MEM_INITIALIZED 199
 
 
@@ -73,15 +73,15 @@ extern  int8_t PLOT_ZMY;
 #define _VECT 0
 #define _SCAT 1
 
-int8_t   plotmode;    //VECTOR or SCATTER
-float    tick_int_x;
-float    tick_int_y;
-float    x_min; 
-float    x_max;
-float    y_min;
-float    y_max;
-uint32_t xzero;
-uint32_t yzero;
+extern int8_t   plotmode;    //VECTOR or SCATTER
+extern float    tick_int_x;
+extern float    tick_int_y;
+extern float    x_min; 
+extern float    x_max;
+extern float    y_min;
+extern float    y_max;
+extern uint32_t xzero;
+extern uint32_t yzero;
 
 
 

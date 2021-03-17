@@ -339,8 +339,8 @@
   extern uint8_t                calcMode;
   extern uint8_t                nextChar;
   extern uint8_t                displayStack;
-  extern uint8_t                displayStackSHOIDISP;        //JM SHOIDISP
-  extern bool_t                 numLock;                     //JM
+  extern uint8_t                displayStackSHOIDISP;         //JM SHOIDISP
+  extern bool_t                 numLock;                      //JM
   extern uint8_t                alphaCase;
   extern uint8_t                numLinesNumericFont;
   extern uint8_t                numLinesStandardFont;
@@ -376,15 +376,31 @@
   extern int16_t                numberOfTamMenusToPop;
 
   extern uint16_t               globalFlags[7];
-   extern int16_t               longpressDelayedkey2;        //JM
-  extern int16_t               longpressDelayedkey3;        //JM
-  extern int16_t               T_cursorPos;                 //JMCURSOR
-  extern int16_t               SHOWregis;                   //JMSHOW
-  extern int16_t               ListXYposition;              //JM
-  extern int16_t               mm_MNU_HOME;                 //JM
-  extern int16_t               mm_MNU_ALPHA;                //JM
-  extern int16_t               MY_ALPHA_MENU;               //JM Replaced define
-  extern uint8_t                lastSetAngularMode;        //JM
+  extern int16_t                longpressDelayedkey2;         //JM
+  extern int16_t                longpressDelayedkey3;         //JM
+  extern int16_t                T_cursorPos;                  //JMCURSOR
+  extern int16_t                SHOWregis;                    //JMSHOW
+  extern int16_t                ListXYposition;               //JM
+  extern int16_t                mm_MNU_HOME;                  //JM
+  extern int16_t                mm_MNU_ALPHA;                 //JM
+  extern int16_t                MY_ALPHA_MENU;                //JM Replaced define
+  extern uint8_t                lastSetAngularMode;           //JM
+  extern int16_t                JM_auto_doublepress_enabled;  //JM TIMER CLRDROP //drop
+  extern int16_t                JM_auto_longpress_enabled;    //JM TIMER CLRDROP //clstk
+  extern uint8_t                JM_SHIFT_HOME_TIMER1;         //Local to keyboard.c, but defined here
+  extern int16_t                JM_ASN_MODE;                  //JM ASSIGN
+  extern bool_t                 ULFL, ULGL;                   //JM Underline
+  extern int16_t                FN_key_pressed, FN_key_pressed_last; //JM LONGPRESS FN
+  extern bool_t                 FN_timeouts_in_progress;      //JM LONGPRESS FN
+  extern bool_t                 Shft_timeouts;                //JM SHIFT NEW FN
+  extern bool_t                 FN_timed_out_to_NOP;          //JM LONGPRESS FN
+  extern bool_t                 FN_timed_out_to_RELEASE_EXEC; //JM LONGPRESS FN
+  extern bool_t                 FN_handle_timed_out_to_EXEC;
+  extern char                   indexOfItemsXEQM[18*8];       //JMXEQ
+  extern int16_t                fnXEQMENUpos;                 //JMXEQ
+  extern uint8_t                last_CM;                      //Do extern !!
+  extern uint8_t                FN_state; // = ST_0_INIT;      
+
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];
   extern uint16_t               freeProgramBytes;
   extern uint16_t               firstDisplayedLocalStepNumber;

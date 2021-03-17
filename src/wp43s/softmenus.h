@@ -30,7 +30,7 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   bool_t isJMAlphaSoftmenu      (int16_t menuId);             //JM
 
   int16_t mm(int16_t id);                                     //JM
-  const   int16_t menu_A_HOME[360];                           //JM
+  extern TO_QSPI const int16_t menu_A_HOME[360];              //JM
 
 #endif // !TESTSUITE_BUILD
 

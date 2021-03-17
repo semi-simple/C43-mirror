@@ -22,8 +22,6 @@
 
 
 #include "wp43s.h"
-#include "math.h"
-#include "plotstat.h"
 
 //#define STATDEBUG
 

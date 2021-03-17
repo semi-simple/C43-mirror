@@ -52,8 +52,6 @@
 
 
 #include "wp43s.h"
-#include "math.h"
-#include "graphs.h"
 
 
 #define X 99

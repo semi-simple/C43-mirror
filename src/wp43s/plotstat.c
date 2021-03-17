@@ -19,12 +19,13 @@
  ***********************************************/
 
 #include "wp43s.h"
-#include "math.h"
 
 //#define STATDEBUG
 
 graphtype *gr_x;
 graphtype *gr_y;
+graphtype telltale;
+uint16_t  ix_count;
   
 float  graph_dx;
 float  graph_dy; 
@@ -44,6 +45,16 @@ bool_t PLOT_SHADE;
 bool_t PLOT_AXIS;
 int8_t PLOT_ZMX;
 int8_t PLOT_ZMY;
+
+int8_t   plotmode;    //VECTOR or SCATTER
+float    tick_int_x;
+float    tick_int_y;
+float    x_min; 
+float    x_max;
+float    y_min;
+float    y_max;
+uint32_t xzero;
+uint32_t yzero;
 
 
 void statGraphReset(void){

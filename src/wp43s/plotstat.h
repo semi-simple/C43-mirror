@@ -117,6 +117,7 @@ int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 #endif
 
 void    fnStatDemo         (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (void);
 void    drawline           ();
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);

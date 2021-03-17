@@ -29,8 +29,8 @@
 //
 //****************************************************************************************************************************
 
-#define   LIM             400  //Number of points; MUST be multiple of 4
-#define   graphtypeno   1        //1=float & 2=double
+#define   LIM          100     //Number of points; MUST be multiple of 4
+#define   graphtypeno   1      //1=float & 2=double
 
 #if (graphtypeno == 1)
   #define graphtype   float  

@@ -559,6 +559,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_L                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
+  void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2363,6 +2364,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1755 */  { itemToBeCoded,               NOPARAM,                     "xOUT",                                        "xOUT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1756 */  { fnPlotRegLine,               NOPARAM,                     "CENTRL",                                      "CENTRL",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1757 */  { fnPlotClose,                 NOPARAM,                     "CLOSE",                                       "CLOSE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1758 */  { fnStatDemo,                  NOPARAM,                     "ST.DEMO",                                     "ST.DEMO",                                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 
-/* 1758 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1759 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

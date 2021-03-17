@@ -180,7 +180,7 @@ TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_
                                              ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_STAT[]   = {
-                                             ITM_PLOT_REGLINE,              ITM_NULL,                   ITM_SIGMAPLUS,            ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_REGLINE,              ITM_STATDEMO,               ITM_SIGMAPLUS,            ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_CLOSE,                     ITM_NULL,                   ITM_CLSIGMA,              ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 

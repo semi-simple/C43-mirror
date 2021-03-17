@@ -525,6 +525,7 @@ graphtype a1 = 0;
 graphtype a0 = 0;
 double r = 0;
 double smi2 = 0;
+int32_t nn;
 
 
 void graphPlotstat(void){
@@ -758,24 +759,28 @@ void drawline(){
       xN = screen_window_x(x_min,x,x_max);
       yN = screen_window_y(y_min,y,y_max);
 
-      if(ix != 0) {  
+      if(ix > 0) {  //Allow for starting values to accumulate
         #ifdef STATDEBUG
         printf("plotting graph sample no %d ==> x:%f y:%f xN:%d yN:%d ",ix,x,y,  xN,yN);
         #endif
         int16_t minN_y,minN_x;
         if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
         else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
-        if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
+
+        #define tol 4
+        if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH-tol && yN>minN_y) {
           yn = yN;
           xn = xN;
           #ifdef STATDEBUG
             printf("Plotting box to x=%d y=%d\n",xn,yn);
           #endif
           plotbox(xn,yn);
-          #ifdef STATDEBUG
-            printf("Plotting line to x=%d y=%d\n",xn,yn);
-          #endif
-          plotline(xo, yo, xn, yn);
+          if(xo<SCREEN_WIDTH_GRAPH && xo>minN_x && yo<SCREEN_HEIGHT_GRAPH-tol && yo>minN_y) {
+            #ifdef STATDEBUG
+              printf("Plotting line to x=%d y=%d\n",xn,yn);
+            #endif
+            plotline(xo, yo, xn, yn);
+          }
         } 
         else {
           #ifdef PC_BUILD
@@ -795,6 +800,7 @@ void drawline(){
     if(selection!=0) {
       showString(getCurveFitModeName(selection), &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -5, vmNormal, true, true);
       char ss[100];
+      sprintf(ss,"n =%d",nn);       showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       sprintf(ss,"a0=%4f",a0);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       sprintf(ss,"a1=%4f",a1);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
       if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING){ 
@@ -860,7 +866,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
     */
 
 
-    int32_t nn;     realToInt32(SIGMA_N, nn);  
+    realToInt32(SIGMA_N, nn);  
     char ss[100];
     realToString(SIGMA_X2,   ss); double sumx2   = strtof (ss, NULL);
     realToString(SIGMA_Y2,   ss); double sumy2   = strtof (ss, NULL);
@@ -943,7 +949,39 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
 
       default: break;
     }
+
+    graph_axis_draw();                        //Draw the axis 
 //  graphPlotstat();
 //  drawline();
 }
+
+
+
+void fnStatDemo(uint16_t unusedButMandatoryParameter){
+  int8_t ix;
+  uint32_t ii;
+  runFunction(ITM_CLSIGMA);
+  srand((unsigned int)time(NULL));
+
+      for(ix=0; ix!=10; ix++) {
+        runFunction(ITM_RAN);
+        setSystemFlag(FLAG_ASLIFT);
+        liftStack();
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+        int32ToReal34(ix/2,REGISTER_REAL34_DATA(REGISTER_X));
+        runFunction(ITM_ADD);
+
+        runFunction(ITM_RAN);
+        setSystemFlag(FLAG_ASLIFT);
+        liftStack();
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+        int32ToReal34(ix,REGISTER_REAL34_DATA(REGISTER_X));
+        runFunction(ITM_ADD);
+
+        runFunction(ITM_SIGMAPLUS);
+        }
+
+
+}
+
 

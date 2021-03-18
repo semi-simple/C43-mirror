@@ -22,6 +22,7 @@
 
 
 #include "wp43s.h"
+#include "math.h"
 
 //#define STATDEBUG
 

@@ -18,10 +18,6 @@
  * \file items.h
  ***********************************************/
 
-
-
-
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2281,7 +2277,10 @@
 #define ITM_PRN                       2211
 #define ITM_PLOT_J                    2212
 
-#define LAST_ITEM                     2213   //JM
+#define ITM_STATDEMO                  2213
+#define ITM_STATDEMO1                 2214
+
+#define LAST_ITEM                     2215   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

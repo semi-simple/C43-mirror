@@ -395,7 +395,7 @@ void graph_axis_draw (void){
   }
 
   #ifdef STATDEBUG
-    printf("xzero=%d yzero=%d   \n",xzero,yzero);
+    printf("xzero=%d yzero=%d   \n",(int)xzero,(int)yzero);
   #endif
 
   graphtype x; 
@@ -922,7 +922,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r  = (nn * sumxy - sumx*sumy) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumy2-sumy*sumy));
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### Linear %i a0=%f a1=%f \n",nn, a0, a1);
+          printf("##### Linear %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
@@ -932,7 +932,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r = (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### EXPF %i a0=%f a1=%f \n",nn, a0, a1);
+          printf("##### EXPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
@@ -942,7 +942,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r = (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy)); //(rLOG)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### LOGF %i a0=%f a1=%f \n",nn, a0, a1);
+          printf("##### LOGF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
@@ -966,7 +966,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r = sqrt ( (B * sumlny + C * sumlnyonx - 1/nn * sumlny * sumlny) / (sumlny*sumlny - 1/nn * sumlny * sumlny) ); //(rROOT)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### ROOTF %i a0=%f a1=%f \n",nn, a0, a1);
+          printf("##### ROOTF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
@@ -976,7 +976,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r = sqrt ( (a0 * sum1ony + a1 * sumxony - 1/nn * sum1ony * sum1ony) / (sum1ony2 - 1/nn * sum1ony * sum1ony ) ); //(rHYP)
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### HYPF %i a0=%f a1=%f \n",nn, a0, a1);
+          printf("##### HYPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
@@ -992,7 +992,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
         r = sqrt( (a0 * sumy + a1 * sumxy + a2 * sumx2y - 1/nn * sumy * sumy) / (sumy2 - 1/nn * sumy * sumy) );
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### PARABF %i a0=%f a1=%f a2=%f\n",nn, a0, a1, a2);
+          printf("##### PARABF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
         #endif
         break;
 
@@ -1015,7 +1015,7 @@ r=-1;
 //error in the F term        r  = sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1/nn * sumlny * sumlny ) / (sumlny * sumlny - 1/nn * sumlny * sumlny) );
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",nn, a0, a1, a2);
+          printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
         #endif
         break;
 
@@ -1038,7 +1038,7 @@ r=-1;
         r  = sqrt ( (H * sum1ony + G * sumxony + F * sumx2ony - 1/nn * sum1ony * sum1ony) / (sum1ony2 - 1/nn * sum1ony * sum1ony) );
         smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
         #ifdef STATDEBUG
-          printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",nn, a0, a1, a2);
+          printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
         #endif
         break;
 
@@ -1051,7 +1051,7 @@ r=-1;
         a1 = a1a;
         a0 = a0a;
         #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",nn, a0a, a1a, smi2);
+          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",(int)nn, a0a, a1a, smi2);
         #endif
         break;
 
@@ -1064,7 +1064,7 @@ r=-1;
         a1 = a1b;
         a0 = a0b;
         #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",nn, a0b, a1b, smi2);
+          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",(int)nn, a0b, a1b, smi2);
         #endif
         break;
 
@@ -1077,9 +1077,8 @@ r=-1;
 }
 
 
-
-
 void fnStatDemo(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
   runFunction(ITM_CLSIGMA);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1171",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1171.05",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
@@ -1181,37 +1180,31 @@ void fnStatDemo(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1175.85",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1175.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("13",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1175.95",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
   }
 
 
-
-
-
-
 void fnStatDemo1(uint16_t unusedButMandatoryParameter){
+#ifndef TESTSUITE_BUILD
   int8_t ix;
   runFunction(ITM_CLSIGMA);
   srand((unsigned int)time(NULL));
-
-      for(ix=0; ix!=10; ix++) {
-        runFunction(ITM_RAN);
-        setSystemFlag(FLAG_ASLIFT);
-        liftStack();
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-        int32ToReal34(2000+ix/2,REGISTER_REAL34_DATA(REGISTER_X));
-        runFunction(ITM_ADD);
-
-        runFunction(ITM_RAN);
-        setSystemFlag(FLAG_ASLIFT);
-        liftStack();
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-        int32ToReal34(ix,REGISTER_REAL34_DATA(REGISTER_X));
-        runFunction(ITM_ADD);
-
-        runFunction(ITM_SIGMAPLUS);
-        }
-
-
+  for(ix=0; ix!=10; ix++) {
+    runFunction(ITM_RAN);
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    int32ToReal34(2000+ix/2,REGISTER_REAL34_DATA(REGISTER_X));
+    runFunction(ITM_ADD);
+    runFunction(ITM_RAN);
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    int32ToReal34(ix,REGISTER_REAL34_DATA(REGISTER_X));
+    runFunction(ITM_ADD);
+    runFunction(ITM_SIGMAPLUS);
+    }
+#endif //TESTSUITE_BUILD
 }
 
 

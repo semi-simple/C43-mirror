@@ -1710,6 +1710,7 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
   real34_t real34, value34, tmp34, h34, m34, s34;
+  longInteger_t hli;
   int32_t sign;
   uint32_t digits, tDigits = 0u, bDigits;
   char digitBuf[16], digitBuf2[48];
@@ -1791,7 +1792,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
 
   // Display Hours
   strcpy(displayString, sign ? "-" : "");
-  real34ToString(&h34, digitBuf2);
+  longIntegerInit(hli);
+  convertReal34ToLongInteger(&h34, hli, DEC_ROUND_DOWN);
+  longIntegerToAllocatedString(hli, digitBuf2, sizeof(digitBuf2));
+  longIntegerFree(hli);
 
   bufPtr = digitBuf2;
   digitBuf[1] = '\0';

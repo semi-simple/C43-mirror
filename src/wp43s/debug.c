@@ -1212,6 +1212,14 @@ void debugNIM(void) {
         gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
         gtk_widget_show(lbl2[row++]);
 
+        sprintf(string, STD_SIGMA "(x" STD_SUP_2 "ln(y))");
+        stringToUtf8(string, (uint8_t *)(string + 50));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);
+        gtk_widget_show(lbl1[row]);
+        formatRealDebug(string, SIGMA_X2lnY);
+        gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
+        gtk_widget_show(lbl2[row++]);
+
         sprintf(string, STD_SIGMA "(ln(y)/x)");
         stringToUtf8(string, (uint8_t *)(string + 50));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string + 50);

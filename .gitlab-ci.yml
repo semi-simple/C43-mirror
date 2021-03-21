@@ -2,9 +2,6 @@ macOS:
   stage: build
   script:
     - make rebuild
-  artifacts:
-    paths:
-      - wp43s
   tags:
     - macos
 
@@ -12,9 +9,6 @@ linux:
   stage: build
   script:
     - make rebuild
-  artifacts:
-    paths:
-      - wp43s
   tags:
     - linux
 
@@ -22,9 +16,6 @@ windows:
   stage: build
   script:
     - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make rebuild"
-  artifacts:
-    paths:
-      - wp43s.exe
   tags:
     - windows
 
@@ -34,10 +25,6 @@ dm42:
     - cd DMCP_build
     - ./build_GMP_static_ARM_library
     - ./build_WP43S.pgm_for_DM42_hardware
-  artifacts:
-    paths:
-      - DMCP_build/build/WP43S.pgm
-      - DMCP_build/build/WP43S_qspi.bin
   tags:
     - dm42
 

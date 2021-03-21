@@ -467,7 +467,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDecomp                   (uint16_t unusedButMandatoryParameter) {}
   void fnPlotStat                 (uint16_t unusedButMandatoryParameter) {}
   void fnPlotRegLine              (uint16_t unusedButMandatoryParameter) {}
-  void fnPlotClose                               (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotClose                (uint16_t unusedButMandatoryParameter) {}
   void fnSumXY                    (uint16_t unusedButMandatoryParameter) {}
   void fnMeanXY                   (uint16_t unusedButMandatoryParameter) {}
   void fnGeometricMeanXY          (uint16_t unusedButMandatoryParameter) {}
@@ -483,6 +483,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGeometricSampleStdDev    (uint16_t unusedButMandatoryParameter) {}
   void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter) {}
   void fnGeometricStandardError   (uint16_t unusedButMandatoryParameter) {}
+  void fnPopulationCovariance     (uint16_t unusedButMandatoryParameter) {}
+  void fnSampleCovariance         (uint16_t unusedButMandatoryParameter) {}
+  void fnCoefficientDetermination (uint16_t unusedButMandatoryParameter) {}
+  void fnMinExpStdDev             (uint16_t unusedButMandatoryParameter) {}
   void fnMaskl                    (uint16_t unusedButMandatoryParameter) {}
   void fnMaskr                    (uint16_t unusedButMandatoryParameter) {}
   void fnAsr                      (uint16_t unusedButMandatoryParameter) {}
@@ -561,6 +565,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
   void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {}
   void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {}
+  void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {}
+
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2038,8 +2044,8 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1430 */  { fnStoreMax,                  NOPARAM,                     "STO" STD_UP_ARROW,                            "Max",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1431 */  { fnConjugate,                 NOPARAM,                     "CONJ",                                        "conj",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1432 */  { fnRecallMax,                 NOPARAM,                     "RCL" STD_UP_ARROW,                            "Max",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1433 */  { itemToBeCoded,               NOPARAM,                     "CORR",                                        "r",                                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1434 */  { itemToBeCoded,               NOPARAM,                     "COV",                                         "cov",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1433 */  { fnCoefficientDetermination,  NOPARAM,                     "CORR",                                        "r",                                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1434 */  { fnPopulationCovariance,      NOPARAM,                     "COV",                                         "cov",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1435 */  { itemToBeCoded,               NOPARAM,                     "BestF?",                                      "BestF?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1436 */  { fnCross,                     NOPARAM,                     "CROSS",                                       "cross",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1437 */  { fnCxToRe,                    NOPARAM,                     "CX" STD_RIGHT_ARROW "RE",                     "CX" STD_RIGHT_ARROW "RE",                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2223,7 +2229,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1615 */  { fnStoreStack,                TM_REGISTER,                 "STOS",                                        "STOS",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1616 */  { fnSumXY,                     NOPARAM,                     "SUM",                                         "SUM",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1617 */  { fnWeightedSampleStdDev,      NOPARAM,                     "s" STD_SUB_w,                                 "s" STD_SUB_w,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1618 */  { itemToBeCoded,               NOPARAM,                     "s" STD_SUB_x STD_SUB_y,                       "s" STD_SUB_x STD_SUB_y,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1618 */  { fnSampleCovariance,          NOPARAM,                     "s" STD_SUB_x STD_SUB_y,                       "s" STD_SUB_x STD_SUB_y,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1619 */  { fnDisplayFormatTime,         TM_VALUE,                    "TDISP",                                       "TDISP",                                       (0 << TAM_MAX_BITS) |    18, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1620 */  { fnTicks,                     NOPARAM,                     "TICKS",                                       "TICKS",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1621 */  { fnTime,                      NOPARAM,                     "TIME",                                        "TIME",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2367,6 +2373,8 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1757 */  { fnPlotClose,                 NOPARAM,                     "CLOSE",                                       "CLOSE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1758 */  { fnStatDemo,                  NOPARAM,                     "DEMO1",                                       "DEMO1",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1759 */  { fnStatDemo1,                 NOPARAM,                     "DEMO2",                                       "DEMO2",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1760 */  { fnStatDemo2,                 NOPARAM,                     "DEMO3",                                       "DEMO3",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1761 */  { fnMinExpStdDev,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 
-/* 1760 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1762 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

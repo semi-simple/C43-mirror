@@ -29,8 +29,12 @@
 //
 //****************************************************************************************************************************
 
-#define   LIM          100     //Number of points; MUST be multiple of 4
-#define   graphtypeno   1      //1=float & 2=double
+#define   LIM              100     //Number of points; MUST be multiple of 4
+#define   graphtypeno        1     //1=float & 2=double
+#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points
+#define   numberIntervals 1500     // default 100,
+#define   fittedcurveboxes   0     // default 0 = smooth line
+
 
 #if (graphtypeno == 1)
   #define graphtype   float  
@@ -101,7 +105,7 @@ void    plotcross          (uint16_t xn, uint8_t yn);              // Plots line
 void    plotbox            (uint16_t xn, uint8_t yn);                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
-void    graph_axis_draw    (void);
+void    graphAxisDraw      (void);
 
 
 //graph functions
@@ -118,6 +122,7 @@ int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 
 void    fnStatDemo         (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (void);
 void    drawline           ();
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);

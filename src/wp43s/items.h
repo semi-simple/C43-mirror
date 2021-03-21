@@ -1815,8 +1815,10 @@
 #define ITM_CLOSE                     1757
 #define ITM_STATDEMO                  1758
 #define ITM_STATDEMO1                 1759
+#define ITM_STATDEMO2                 1760
+#define ITM_SMI                       1761
 
-#define LAST_ITEM                     1760
+#define LAST_ITEM                     1762
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

@@ -920,6 +920,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
     // D is clear: test infinite values and -0 values
     switch(resultDataType) {
       case dtReal34:
+      case dtTime:
+      case dtDate:
         if(real34IsInfinite(REGISTER_REAL34_DATA(res))) {
           displayCalcErrorMessage(real34IsPositive(REGISTER_REAL34_DATA(res)) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
         }
@@ -948,6 +950,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
     }
   }
+
+  if(resultDataType == dtDate) checkDateRange(REGISTER_REAL34_DATA(res));
 
   if(lastErrorCode != 0) {
     #ifdef TESTSUITE_BUILD

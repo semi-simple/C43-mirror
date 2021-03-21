@@ -703,7 +703,7 @@
 #define LM_SYSTEM_STATE                            5
 
 // Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2×(7×60 - 4 - 6×16) = 640 bytes
-#define NUMBER_OF_STATISTICAL_SUMS                27
+#define NUMBER_OF_STATISTICAL_SUMS                28
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
 #define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE)) // could be a real34
 #define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2)) // could be a real34
@@ -718,19 +718,20 @@
 #define SIGMA_lnY    ((real_t *)(statisticalSumsPointer + REAL_SIZE * 11))
 #define SIGMA_ln2Y   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 12))
 #define SIGMA_XlnY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 13))
-#define SIGMA_lnYonX ((real_t *)(statisticalSumsPointer + REAL_SIZE * 14))
-#define SIGMA_X2onY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 15))
-#define SIGMA_1onX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 16))
-#define SIGMA_1onX2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 17))
-#define SIGMA_XonY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 18))
-#define SIGMA_1onY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 19))
-#define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
-#define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
-#define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
-#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23)) // could be a real34
-#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
-#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
-#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
+#define SIGMA_X2lnY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 14))
+#define SIGMA_lnYonX ((real_t *)(statisticalSumsPointer + REAL_SIZE * 15))
+#define SIGMA_X2onY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 16))
+#define SIGMA_1onX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 17))
+#define SIGMA_1onX2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 18))
+#define SIGMA_XonY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 19))
+#define SIGMA_1onY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
+#define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
+#define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
+#define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 27)) // could be a real34
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100+6  //JM 100-->106 // Used in the font browser application

@@ -35,4 +35,4 @@ testSuite:
     - make testSuite
     - ./testSuite
   tags:
-    - testSuite
+    - macos

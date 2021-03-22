@@ -47,7 +47,7 @@ void fnCurveFitting(uint16_t curveFitting) {
       printf("Use the best fitting model out of\n");
     }
 
-    printf(getCurveFitModeNames(curveFitting));
+    printf("%s",getCurveFitModeNames(curveFitting));
     if(numberOfOnes == 1) {
       printf(" fitting model.\n");
     }

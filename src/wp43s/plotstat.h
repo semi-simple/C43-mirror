@@ -31,7 +31,7 @@
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
 #define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05 * 20    // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
 

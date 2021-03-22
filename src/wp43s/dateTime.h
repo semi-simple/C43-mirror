@@ -29,6 +29,7 @@ void composeJulianDay_g      (const real34_t *year, const real34_t *month, const
 void composeJulianDay_j      (const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd);
 void decomposeJulianDay      (const real34_t *jd, real34_t *year, real34_t *month, real34_t *day);
 uint32_t getDayOfWeek        (calcRegister_t regist);
+void checkDateRange          (const real34_t *date34);
 void hmmssToSeconds          (const real34_t *src, real34_t *dest);
 void hmmssInRegisterToSeconds(calcRegister_t regist);
 void checkTimeRange          (const real34_t *time34);

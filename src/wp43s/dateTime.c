@@ -396,7 +396,29 @@ void hmmssInRegisterToSeconds(calcRegister_t regist) {
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
   hmmssToSeconds(&real34, REGISTER_REAL34_DATA(regist));
+  checkTimeRange(REGISTER_REAL34_DATA(regist));
 }
+
+/********************************************//**
+ * \brief Check time range
+ *
+ * \param[in] time34 real34_t*
+ * \return void
+ ***********************************************/
+void checkTimeRange(const real34_t *time34) {
+  real34_t t, petahour;
+  real34CopyAbs(time34, &t);
+  stringToReal34("36000000000000000000.00000000000000", &petahour);
+  if(real34CompareGreaterEqual(&t, &petahour)) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "value of time type is too large");
+      moreInfoOnError("In function checkTimeRange:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+}
+
 
 
 void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
@@ -673,6 +695,8 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
+  checkTimeRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 

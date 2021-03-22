@@ -898,7 +898,7 @@
         break;
 
       case ITM_toHMS :
-        if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART) {
+        if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
 
           closeNim();
@@ -908,8 +908,12 @@
             }
 
             hmmssInRegisterToSeconds(REGISTER_X);
-
-            setSystemFlag(FLAG_ASLIFT);
+            if(lastErrorCode == 0) {
+              setSystemFlag(FLAG_ASLIFT);
+            }
+            else {
+              undo();
+            }
             return;
           }
         }

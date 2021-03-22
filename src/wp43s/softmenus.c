@@ -213,9 +213,9 @@ TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_
                                              ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_STAT[]   = {
-                                             ITM_PLOT_REGLINE,              ITM_STATDEMO,               ITM_SIGMAPLUS,            ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_CLOSE,                     ITM_STATDEMO1,              ITM_CLSIGMA,              ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+                                             ITM_PLOT_REGLINE,              ITM_SMI,                    ITM_SIGMAPLUS,            ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_CLOSE,                     ITM_STATDEMO2,              ITM_CLSIGMA,              ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_STATDEMO,                  ITM_STATDEMO1,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_STK[]         = { ITM_Xex,                       ITM_Yex,                    ITM_Zex,                  ITM_Tex,               ITM_SHUFFLE,                      ITM_CLSTK,                          //JM Re-arranged
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_DROPY,                          //JM Added CLRSTK

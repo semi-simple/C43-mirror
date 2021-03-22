@@ -28,8 +28,8 @@ else
   endif
   ifeq ($(UNAME_S),Darwin)
     detected_OS := Darwin
-#    CC = clang
-    CC = gcc
+    CC = clang
+#    CC = gcc
     CFLAGS += -DOSX
     ifneq ($(wildcard /opt/homebrew/.),)
       # Homebrew on Arm Macs installs into /opt/homebrew

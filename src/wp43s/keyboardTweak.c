@@ -181,7 +181,7 @@ void fg_processing_jm(void) {
               //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer].softmenu, mm_MNU_HOME);
               jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
               #endif //PC_BUILD
-              if((softmenuStack[0].softmenuId == mm_MNU_HOME)) {              //JM shifts
+              if(softmenuStack[0].softmenuId == mm_MNU_HOME) {              //JM shifts
                  //printf("popping\n");
                  popSoftmenu();                                                                                                //JM shifts
               }

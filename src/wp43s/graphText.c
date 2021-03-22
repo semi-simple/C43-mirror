@@ -504,7 +504,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   if (fr == 0) {
     sprintf(line,"Write error ID009 --> %d    \n",fr);            
     //print_linestr(line,false);
-    printf(line1);
+    printf("%s",line1);
     fclose(outfile);
     return (int)fr;
   } else {
@@ -634,7 +634,7 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
     if (fr == 0) {
       sprintf(line,"Write error ID012 --> %d %s\n",fr,inputstring);            
       //print_linestr(line,false);
-      printf(line);
+      printf("%s",line);
       fclose(outfile);
       return (int)fr;
     } 

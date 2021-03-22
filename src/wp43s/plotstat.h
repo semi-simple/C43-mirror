@@ -29,8 +29,12 @@
 //
 //****************************************************************************************************************************
 
-#define   LIM          100     //Number of points; MUST be multiple of 4
-#define   graphtypeno   1      //1=float & 2=double
+#define   LIM              100     //Number of points; MUST be multiple of 4
+#define   graphtypeno        1     //1=float & 2=double
+#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   numberIntervals   50     // default 50, auto increase if jumps found
+#define   fittedcurveboxes   0     // default 0 = smooth line
+
 
 #if (graphtypeno == 1)
   #define graphtype   float  
@@ -73,15 +77,15 @@ extern  int8_t PLOT_ZMY;
 #define _VECT 0
 #define _SCAT 1
 
-extern int8_t   plotmode;    //VECTOR or SCATTER
-extern float    tick_int_x;
-extern float    tick_int_y;
-extern float    x_min; 
-extern float    x_max;
-extern float    y_min;
-extern float    y_max;
-extern uint32_t xzero;
-extern uint32_t yzero;
+extern  int8_t   plotmode;    //VECTOR or SCATTER
+extern  float    tick_int_x;
+extern  float    tick_int_y;
+extern  float    x_min; 
+extern  float    x_max;
+extern  float    y_min;
+extern  float    y_max;
+extern  uint32_t xzero;
+extern  uint32_t yzero;
 
 
 
@@ -101,7 +105,7 @@ void    plotcross          (uint16_t xn, uint8_t yn);              // Plots line
 void    plotbox            (uint16_t xn, uint8_t yn);                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
-void    graph_axis_draw    (void);
+void    graphAxisDraw      (void);
 
 
 //graph functions
@@ -118,9 +122,11 @@ int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 
 void    fnStatDemo         (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (void);
 void    drawline           ();
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
+void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
 void    fnPlotRegLine      (uint16_t unusedButMandatoryParameter);
  

@@ -31,6 +31,7 @@ void decomposeJulianDay      (const real34_t *jd, real34_t *year, real34_t *mont
 uint32_t getDayOfWeek        (calcRegister_t regist);
 void hmmssToSeconds          (const real34_t *src, real34_t *dest);
 void hmmssInRegisterToSeconds(calcRegister_t regist);
+void checkTimeRange          (const real34_t *time34);
 void fnJulianToDate          (uint16_t unusedButMandatoryParameter);
 void fnDateToJulian          (uint16_t unusedButMandatoryParameter);
 void fnIsLeap                (uint16_t unusedButMandatoryParameter);

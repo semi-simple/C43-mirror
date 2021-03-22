@@ -2099,6 +2099,34 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
+          else if(temporaryInformation == TI_SXY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_x STD_SUB_y STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_COV) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_w STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_CORR) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_SMI) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_i STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
             if(regist == REGISTER_X) {
               strcpy(prefix, STD_x_BAR STD_SUB_H STD_SPACE_FIGURE "=");

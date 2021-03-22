@@ -25,13 +25,8 @@
 // This module is part of the C43 fork, and is copied here. 
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
-#define   zoomfactor 0.05      // default is 0.05, which is 5% space around the data points
-#define   numberIntervals 1500  // default 100,
-#define   fittedcurveboxes 0   // default 0 = smooth line
 
 //#define STATDEBUG
-
-#define ld long double
 
 graphtype *gr_x;
 graphtype *gr_y;
@@ -66,6 +61,7 @@ float    y_min;
 float    y_max;
 uint32_t xzero;
 uint32_t yzero;
+
 
 
 void statGraphReset(void){
@@ -227,7 +223,9 @@ graphtype grf_y(int i) {
       tempr = ((x-x_min)/(x_max-x_min)*(graphtype)(SCREEN_WIDTH_GRAPH-1.0));
       temp = (int16_t) tempr;
       //printf("--> %d (%f %f)  ",temp, x_min,x_max);
-      if (temp>SCREEN_WIDTH_GRAPH-1) {temp=SCREEN_WIDTH_GRAPH-1;}
+      if (temp>SCREEN_WIDTH_GRAPH-1) {
+        temp=SCREEN_WIDTH_GRAPH-1;
+      }
       else if (temp<0) {temp=0;}
       //printf("--> %d \n",temp);
       #ifdef PC_BUILD
@@ -345,11 +343,12 @@ void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {               
  }
 
 
+
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
     uint16_t x1;  //range 0-399
     uint8_t  y1;  //range 0-239
     #ifdef STATDEBUG
-    printf("pixelline: xo,yo,xn,yn: %d %d   %d %d \n",xo,yo,xn,yn);
+      printf("pixelline: xo,yo,xn,yn: %d %d   %d %d \n",xo,yo,xn,yn);
     #endif
     if(xo == xn && yo == yn) {
       if(vmNormal) placePixel(xn,yn); else removePixel(xn,yn);
@@ -368,6 +367,7 @@ void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal
         if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
       }
     }
+
     if(yo > yn) {
       for(y1=yo; y1!=yn; y1-=1) {
         x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
@@ -397,7 +397,7 @@ void force_refresh1(void) {
 }
 
 
-void graph_axis_draw (void){
+void graphAxisDraw (void){
   #ifndef TESTSUITE_BUILD
   uint32_t cnt;
 
@@ -566,12 +566,6 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
   strcpy(s02,s04);
 }
 
-double a2 = 0;
-double a1 = 0;
-double a0 = 0;
-double r = 0;
-double smi2 = 0;
-int32_t nn;
 
 
 void graphPlotstat(void){
@@ -584,8 +578,11 @@ void graphPlotstat(void){
   graphtype y;
 
   statnum = 0;
-  graph_axis_draw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
+  graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   plotmode = _SCAT;
+  //realContext_t *realContext = &ctxtReal39;
+  //realContext_t *realContext = &ctxtReal75;
+  realContext = &ctxtReal75;
 
   if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
     realToInt32(SIGMA_N, statnum);   
@@ -683,7 +680,7 @@ void graphPlotstat(void){
       printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
   
-    graph_axis_draw();
+    graphAxisDraw();
     yn = screen_window_y(y_min,grf_y(0),y_max);
     xn = screen_window_x(x_min,grf_x(0),x_max);
     xN = xn;
@@ -707,8 +704,14 @@ void graphPlotstat(void){
       #endif
     
       int16_t minN_y,minN_x;
-      if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
-      else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
+      if (!Aspect_Square) {
+        minN_y = SCREEN_NONSQ_HMIN; 
+        minN_x = 0;
+      }
+      else {
+        minN_y = 0; 
+        minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
+      }
       if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH && yN>minN_y) {
         yn = yN;
         xn = xN;
@@ -760,17 +763,23 @@ void graphPlotstat(void){
 }
 
 
-real_t        SS,TT,UU,aa0,aa1,aa2;
-realContext_t *realContext = &ctxtReal75;
-uint16_t      selection = 0;
+uint16_t selection = 0;              //Currently selected plot
 
 #ifndef TESTSUITE_BUILD
   void drawline(){
+    real_t SS,TT,UU;
+    double a0,a1,a2;
+    int32_t nn;
     if(!selection) return;
-    char ss[100];
-    #ifdef STATDEBUG
+      char ss[100];
+      realToString(&aa0, ss); a0 = strtof (ss, NULL);
+      realToString(&aa1, ss); a1 = strtof (ss, NULL);
+      realToString(&aa2, ss); a2 = strtof (ss, NULL);
+      realToInt32(SIGMA_N, nn);  
+
+//    #ifdef STATDEBUG
       printf("plotting line: a2 %f a1 %f a0 %f\n",a2,a1,a0);
-    #endif
+//    #endif
     if((selection==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
       #ifdef STATDEBUG
         printf("return\n");
@@ -778,13 +787,22 @@ uint16_t      selection = 0;
       return;
     }
     uint16_t  ix;
-    uint16_t  xo, xn, xN = 0; 
-    uint8_t   yo, yn, yN = 0;
+    uint16_t  xo = 0, xn, xN = 0; 
+    uint8_t   yo = 0, yn, yN = 0;
     double    x = 0; 
     double    y = 0;
+    int16_t   Intervals = numberIntervals * 10; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
 
-    for (ix = 0; ix <= numberIntervals; ++ix) {
-      x = x_min + (x_max-x_min)/(double)numberIntervals * (double)ix;
+    for (ix = 0; ix <= Intervals; ++ix) {       //Variable accuracy line plot
+
+      if(ix <= 1) Intervals = numberIntervals * 10; else
+        if(ix >= Intervals-1) Intervals = numberIntervals * 10; else
+          if(ix == 1) Intervals = numberIntervals;
+      if(ix > 2 && ix < Intervals-2 && abs(yN-yo) > 10 && Intervals == numberIntervals){
+        ix--;
+        Intervals = numberIntervals * 15;       //increase accuracy and time to complete, if a jump in y is found
+      } 
+      x = x_min + (x_max-x_min)/(double)Intervals * (double)ix;
 
       switch(selection) {
         case CF_LINEAR_FITTING: 
@@ -858,7 +876,14 @@ uint16_t      selection = 0;
           realToString(&TT, ss); y = strtof (ss, NULL);
           break;
         case CF_CAUCHY_FITTING:
-          y = 1/(a0*(x+a1)*(x+a1)+a2);
+          //          y = 1/(a0*(x+a1)*(x+a1)+a2);
+          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
+          realAdd     (&SS, &aa1, &TT, realContext);
+          realMultiply(&TT, &TT , &TT, realContext);
+          realMultiply(&TT, &aa0, &TT, realContext);
+          realAdd     (&TT, &aa2, &TT, realContext);
+          realDivide  (const_1, &TT, &TT, realContext);
+          realToString(&TT, ss); y = strtof (ss, NULL);
         default:break;
       }
       xo = xN;
@@ -866,7 +891,7 @@ uint16_t      selection = 0;
       xN = screen_window_x(x_min,x,x_max);
       yN = screen_window_y(y_min,y,y_max);
 
-      if(ix > 0) {  //Allow for starting values to accumulate
+      if(ix > 0) {  //Allow for starting values to accumulate at ix = 0
         #ifdef STATDEBUG
           printf("plotting graph sample no %d ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",ix,x_min,x,x_max,y_min,y,y_max,  xN,yN);
         #endif
@@ -902,24 +927,34 @@ uint16_t      selection = 0;
       }
     }
 
-    #define autoinc 18 //text line spacing
-    int16_t index = 0;
+    #define autoinc 19 //text line spacing
+    #define autoshift -5 //text line spacing
+    int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,getCurveFitModeName(selection%10000));
       if(selection == CF_ORTHOGONAL_FITTING      ) strcat(ss,"(+)"); else
       if(selection == CF_ORTHOGONAL_FITTING+10000) strcat(ss,"(-)");
-      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -5, vmNormal, true, true);
-      sprintf(ss,"n=%d",(int)nn);    showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      eformat(ss,"a0=",a0,7);        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      eformat(ss,"a1=",a1,7);        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, true, true);
+      strcpy(ss,getCurveFitModeFormula(selection%10000));
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, true, true);
+      sprintf(ss,"n=%d",(int)nn);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
+      eformat(ss,"a" STD_SUB_0 "=",a0,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -4 +autoshift, vmNormal, true, true);
+      eformat(ss,"a" STD_SUB_1 "=",a1,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -3 +autoshift, vmNormal, true, true);
 
       if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING){ 
-        eformat(ss,"a2=",a2,7);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+        eformat(ss,"a" STD_SUB_2 "=",a2,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
       }
-      eformat(ss,"r^2=",r*r,4);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+      eformat(ss,"r" STD_SUP_2 "=",r*r,4);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, true, true);
 
       if((selection == CF_ORTHOGONAL_FITTING) || (selection == CF_ORTHOGONAL_FITTING+10000)) {
-        eformat(ss,"smi^2=",smi2,4); showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+        eformat(ss,"s" STD_SUB_m STD_SUB_i "=",smi,4); 
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
       }
     }
   }
@@ -929,7 +964,17 @@ uint16_t      selection = 0;
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
   calcMode = CM_NORMAL;
   fnKeyExit(0);
+  fnUndo(0);
 }
+
+
+void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
+  calcMode = CM_NORMAL;
+  fnKeyExit(0);
+  fnUndo(0);
+  fnMinExpStdDev(0);
+}
+
 
 
 void fnPlotStat(uint16_t unusedButMandatoryParameter){
@@ -938,7 +983,7 @@ void fnPlotStat(uint16_t unusedButMandatoryParameter){
   calcMode = CM_PLOT_STAT;
   selection = 0;
   r = 0;
-  smi2 = 0;
+  smi = 0;
 
   #ifdef DMCP_BUILD
     lcd_refresh();
@@ -957,98 +1002,6 @@ void fnPlotStat(uint16_t unusedButMandatoryParameter){
 
 
 
-double sumx     ;
-double sumy     ;
-double sumx2    ;
-double sumx2y   ;
-double sumy2    ;
-double sumxy    ;
-double sumlnxlny;
-double sumx2lny ;
-double sumlnx   ;
-double sumln2x  ;
-double sumylnx  ;
-double sumlny   ;
-double sumln2y  ;
-double sumxlny  ;
-double sumlnyonx;
-double sumx2ony ;
-double sum1onx  ;
-double sum1onx2 ;
-double sumxony  ;
-double sum1ony  ;
-double sum1ony2 ;
-double sumx3    ;
-double sumx4    ;
-double maxy     ;
-double A, B, C, D, E, F, G, H;
-real_t AA,BB,CC,DD,EE,FF,GG,HH;
-
-void calc_AEFG(void){                        //Must be run after calc_BCD
-char ss[100];
-  //        A = nn * sumx2 - sumx * sumx;
-  int32ToReal(nn, &SS);
-  realMultiply(&SS, SIGMA_X2, &SS, realContext);
-  realMultiply(SIGMA_X, SIGMA_X, &TT, realContext);
-  realSubtract(&SS, &TT, &AA, realContext);
-  realToString(&AA,ss); A = strtof (ss, NULL);
-  printf("§ A: %f %f\n",A,nn * sumx2 - sumx * sumx);
-
-  //        E = nn * sumx4 - sumx2 * sumx2;
-  int32ToReal(nn, &SS);
-  realMultiply(&SS, SIGMA_X4, &SS, realContext);
-  realMultiply(SIGMA_X2, SIGMA_X2, &TT, realContext);
-  realSubtract(&SS, &TT, &EE, realContext);
-  realToString(&EE,ss); E = strtof (ss, NULL);
-  printf("§ E: %f %f\n",E,nn * sumx4 - sumx2 * sumx2);
-
-  //USING COMPONENTS OF BCD
-  //        F = (A*B - C*D) / (A*E - C*C);    //interchangably the a2 in PARABF
-  realMultiply(&AA, &BB, &SS, realContext);
-  realMultiply(&CC, &DD, &TT, realContext);
-  realSubtract(&SS, &TT, &UU, realContext);
-  realMultiply(&AA, &EE, &SS, realContext);
-  realMultiply(&CC, &CC, &TT, realContext);
-  realSubtract(&SS, &TT, &SS, realContext);
-  realDivide  (&UU,&SS,&FF,realContext);
-  realToString(&FF,ss); F = strtof (ss, NULL);
-  printf("§ F: %f %f\n",F,(A*B - C*D) / (A*E - C*C));
-
-  //        G = (D - F * C) / A;
-  realMultiply(&FF, &CC, &SS, realContext);
-  realSubtract(&DD, &SS, &SS, realContext);
-  realDivide  (&SS,&AA,&GG,realContext);
-  realToString(&GG,ss); G = strtof (ss, NULL);
-  printf("§ G: %f %f\n",G,(D - F * C) / A);
-}
-
-
-void calc_BCD(void){                        //Must be run before calc_AEFG
-char ss[100];
-  //        B = nn * sumx2y - sumx2 * sumy;
-  int32ToReal(nn, &SS);
-  realMultiply(&SS, SIGMA_X2Y, &SS, realContext);
-  realMultiply(SIGMA_X2, SIGMA_Y, &TT, realContext);
-  realSubtract(&SS, &TT, &BB, realContext);
-  realToString(&BB,ss); B = strtof (ss, NULL);
-  printf("§ B: %f %f\n",B,nn * sumx2y - sumx2 * sumy);
-
-  //        C = nn * sumx3 - sumx2 * sumx;
-  int32ToReal(nn, &SS);
-  realMultiply(&SS, SIGMA_X3, &SS, realContext);
-  realMultiply(SIGMA_X2, SIGMA_X, &TT, realContext);
-  realSubtract(&SS, &TT, &CC, realContext);
-  realToString(&CC,ss); C = strtof (ss, NULL);
-  printf("§ C: %f %f\n",C,nn * sumx3 - sumx2 * sumx);
-
-  //        D = nn * sumxy - sumx * sumy;
-  int32ToReal(nn, &SS);
-  realMultiply(&SS, SIGMA_XY, &SS, realContext);
-  realMultiply(SIGMA_X, SIGMA_Y, &TT, realContext);
-  realSubtract(&SS, &TT, &DD, realContext);
-  realToString(&DD,ss); D = strtof (ss, NULL);
-  printf("§ D: %f %f\n",D,nn * sumxy - sumx * sumy);
-}
 
 
 void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
@@ -1067,350 +1020,9 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
     if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
        selection = 0;
   
-
-    char ss[100];
-    realToInt32(SIGMA_N, nn);  
-    realToString(SIGMA_X ,     ss); sumx      = strtof (ss, NULL);
-    realToString(SIGMA_Y ,     ss); sumy      = strtof (ss, NULL);
-    realToString(SIGMA_X2,     ss); sumx2     = strtof (ss, NULL);
-    realToString(SIGMA_X2Y,    ss); sumx2y    = strtof (ss, NULL);
-    realToString(SIGMA_Y2,     ss); sumy2     = strtof (ss, NULL);
-    realToString(SIGMA_XY,     ss); sumxy     = strtof (ss, NULL);
-    realToString(SIGMA_lnXlnY, ss); sumlnxlny = strtof (ss, NULL);
-    realToString(SIGMA_lnX ,   ss); sumlnx    = strtof (ss, NULL);
-    realToString(SIGMA_ln2X,   ss); sumln2x   = strtof (ss, NULL);
-    realToString(SIGMA_YlnX,   ss); sumylnx   = strtof (ss, NULL);
-    realToString(SIGMA_lnY ,   ss); sumlny    = strtof (ss, NULL);
-    realToString(SIGMA_ln2Y,   ss); sumln2y   = strtof (ss, NULL);
-    realToString(SIGMA_XlnY,   ss); sumxlny   = strtof (ss, NULL);
-    realToString(SIGMA_X2lnY,  ss); sumx2lny  = strtof (ss, NULL);
-    realToString(SIGMA_lnYonX, ss); sumlnyonx = strtof (ss, NULL);
-    realToString(SIGMA_X2onY,  ss); sumx2ony  = strtof (ss, NULL);
-    realToString(SIGMA_1onX,   ss); sum1onx   = strtof (ss, NULL);
-    realToString(SIGMA_1onX2,  ss); sum1onx2  = strtof (ss, NULL);
-    realToString(SIGMA_XonY,   ss); sumxony   = strtof (ss, NULL);
-    realToString(SIGMA_1onY,   ss); sum1ony   = strtof (ss, NULL);
-    realToString(SIGMA_1onY2,  ss); sum1ony2  = strtof (ss, NULL);
-    realToString(SIGMA_X3,     ss); sumx3     = strtof (ss, NULL);
-    realToString(SIGMA_X4,     ss); sumx4     = strtof (ss, NULL);
-    realToString(SIGMA_YMAX,   ss); maxy      = strtof (ss, NULL);
-
-    fnMeanXY(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss); double x_ = strtof (ss, NULL);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss); double y_ = strtof (ss, NULL);
-    fnSampleStdDev(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss); double sx = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumx2 - sumx*sumx) );
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss); double sy = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumy2 - sumy*sumy) );
-    double sxy  = (1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
-           smi2 = sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
-           r    = sxy / (sx * sy);
-    printf(">>> sx=%f\n",sx);
-    printf(">>> sy=%f\n",sy);
-    printf(">>> sxy=%f\n",sxy);
-    printf(">>> smi2=%f\n",smi2);
-    printf(">>> r = %f\n",r);
-
-
-    double a1a, a1b, a0a, a0b;
-
-    switch(selection) {
-      case CF_LINEAR_FITTING :
-        a0 = (sumx2 * sumy  - sumx * sumxy) / (nn * sumx2 - sumx * sumx);
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r  = (nn * sumxy - sumx*sumy) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumy2-sumy*sumy));
-        smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        #ifdef STATDEBUG
-          printf("##### Linear %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_EXPONENTIAL_FITTING :
-        a0 = exp( (sumx2 * sumlny  - sumx * sumxlny) / (nn * sumx2 - sumx * sumx) );
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumxlny - sumx * sumlny ) / (nn * sumx2 - sumx * sumx);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
-        smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        #ifdef STATDEBUG
-          printf("##### EXPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_LOGARITHMIC_FITTING :
-        a0 = (sumln2x * sumy  - sumlnx * sumylnx) / (nn * sumln2x - sumlnx * sumlnx);
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumylnx - sumlnx * sumy ) / (nn * sumln2x - sumlnx * sumlnx);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy)); //(rLOG)
-        smi2 = sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy); 
-        #ifdef STATDEBUG
-          printf("##### LOGF %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_POWER_FITTING :
-        a0 = exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx) );
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumlnxlny - sumlnx * sumlny ) / (nn * sumln2x - sumlnx * sumlnx);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rPOW)
-        #ifdef STATDEBUG
-          printf("##### POWERF %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_ROOT_FITTING :
-        A = nn * sum1onx2 - sum1onx * sum1onx;
-        B = 1.0/A * (sum1onx2 * sumlny - sum1onx * sumlnyonx);
-        C = 1.0/A * (nn * sumlnyonx - sum1onx * sumlny);
-
-        a0 = exp (B);
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = exp (C);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = sqrt ( (B * sumlny + C * sumlnyonx - 1.0/nn * sumlny * sumlny) / (sumlny*sumlny - 1.0/nn * sumlny * sumlny) ); //(rROOT)
-        #ifdef STATDEBUG
-          printf("##### ROOTF %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_HYPERBOLIC_FITTING :
-        a0 = (sumx2 * sum1ony - sumx * sumxony) / (nn*sumx2 - sumx * sumx);
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn * sumxony - sumx * sum1ony) / (nn * sumx2 - sumx * sumx);
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = sqrt ( (a0 * sum1ony + a1 * sumxony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony ) ); //(rHYP)
-        #ifdef STATDEBUG
-          printf("##### HYPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
-        #endif
-        break;
-
-      case CF_PARABOLIC_FITTING :
-        printf("Parabolic fit:\n");
-        calc_BCD();
-        calc_AEFG();
-
-        //      a2 = F; //a2 = (A*B - C*D) / (A*E - C*C) = F. Not in ReM, but the formula is correct and prevents duplicate code.
-        realCopy (&FF,&aa2);
-        realToString(&aa2,ss); a2 = strtof (ss, NULL);
-        printf("§ a2: %f %f\n",a2,F);
-
-        //      a1 = G; //a1 = (D - a2 * C) / A = G; Not in ReM, but the formula is correct and prevents duplicate code.
-        realCopy (&GG,&aa1);
-        realToString(&aa1,ss); a1 = strtof (ss, NULL);
-        printf("§ a1: %f %f\n",a1,(D - a2 * C) / A);
-
-        //      a0 = 1.0/nn * (sumy - a2 * sumx2 - a1 * sumx);
-        realMultiply(&FF, SIGMA_X2, &TT, realContext);
-        realSubtract(SIGMA_Y , &TT, &HH, realContext);
-        realMultiply(&GG, SIGMA_X, &TT, realContext);
-        realSubtract(&HH, &TT, &HH, realContext);
-        int32ToReal (nn, &SS);
-        realDivide  (&HH,&SS,&aa0,realContext);
-        realToString(&aa0,ss); a0 = strtof (ss, NULL);
-        printf("§ a0: %f %f\n",a0,1.0/nn * (sumy - a2 * sumx2 - a1 * sumx));
-
-        //      r = sqrt( (a0 * sumy + a1 * sumxy + a2 * sumx2y - 1.0/nn * sumy * sumy) / (sumy2 - 1.0/nn * sumy * sumy) );
-        realMultiply(&aa0, SIGMA_Y, &SS, realContext);
-        realMultiply(&aa1, SIGMA_XY, &TT, realContext);
-        realAdd     (&SS, &TT,&SS,realContext);
-        realMultiply(&aa2, SIGMA_X2Y, &TT, realContext);
-        realAdd     (&SS, &TT,&SS,realContext); //interim in SS
-        realMultiply(SIGMA_Y, SIGMA_Y, &TT, realContext);
-        int32ToReal (nn,  &UU);
-        realDivide  (&TT, &UU,&UU,realContext);
-        realSubtract(&SS, &UU,&SS,realContext); //top in SS
-        realSubtract(SIGMA_Y2, &UU,&TT,realContext);
-        realDivide  (&SS, &TT,&SS,realContext); //R^2
-        realSquareRoot(&SS, &SS, realContext);
-        realToString(&SS, ss); r = strtof (ss, NULL);
-        printf("§ r^2: %f r: %f %f\n",r*r, r,sqrt( (a0 * sumy + a1 * sumxy + a2 * sumx2y - 1.0/nn * sumy * sumy) / (sumy2 - 1.0/nn * sumy * sumy) ) );
-
-        #ifdef STATDEBUG
-          printf("##### PARABF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
-        #endif
-        break;
-
-      case CF_GAUSS_FITTING :
-        printf("Gauss fit:\n");
-        calc_BCD();
-        calc_AEFG();
-
-        //        H = (1.0)/nn * (sumlny - F * sumx2 - G * sumx);
-        realMultiply(&FF, SIGMA_X2, &TT, realContext);
-        realSubtract(SIGMA_lnY, &TT, &HH, realContext);
-        realMultiply(&GG, SIGMA_X, &TT, realContext);
-        realSubtract(&HH, &TT, &HH, realContext);
-        int32ToReal (nn, &SS);
-        realDivide  (&HH,&SS,&HH,realContext);
-        realToString(&HH,ss); H = strtof (ss, NULL);
-        printf("§ H: %f %f\n",H,(1.0)/nn * (sumlny - F * sumx2 - G * sumx));
-
-        //        a2 = (1.0)/F;
-        realDivide  (const_1,&FF,&aa2,realContext);
-        realToString(&aa2,ss); a2 = strtof (ss, NULL);
-        printf("§ a2: %f %f\n",a2,(1.0)/F);
-
-        //        a1 = -G/(2.0) * a2;
-        realDivide  (&GG,const__1,&TT,realContext);
-        realDivide  (&TT,const_2 ,&TT,realContext);
-        realMultiply(&TT, &aa2, &aa1, realContext);
-        realToString(&aa1,ss); a1 = strtof (ss, NULL);
-        printf("§ a1: %f %f\n",a1,-G/(2.0) * a2);
-
-#ifdef AAA
-        //        a0 = maxy;  // exp (H - F * a1 * a1); //maxy;
-        realCopy    (SIGMA_YMAX,&aa0);
-        realToString(&aa0,ss); a0 = strtof (ss, NULL);
-        printf("§ a0: %f %f\n",a0,maxy);
-#endif //AAA
-
-        //GAUSS  a0 = exp (H - F * a1 * a1); //maxy;
-        realMultiply(&aa1,&aa1,&SS,realContext);
-        realMultiply(&SS,&FF,&SS,realContext);
-        realSubtract(&HH,&SS,&aa0,realContext);
-        realExp(&aa0,&aa0,realContext);           
-        realToString(&aa0,ss); a0 = strtof (ss, NULL);
-        printf("§ a0: %f %f\n",a0, exp (H - F * a1 * a1));
-
-        //        r  = sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumlny * sumlny - 1.0/nn * sumlny * sumlny) );
-        realMultiply(&HH, SIGMA_lnY, &SS, realContext);
-        realMultiply(&GG, SIGMA_XlnY, &TT, realContext);
-        realAdd     (&SS, &TT,&SS,realContext);
-        realMultiply(&FF, SIGMA_X2lnY, &TT, realContext);
-        realAdd     (&SS, &TT,&SS,realContext); //interim in SS
-        realMultiply(SIGMA_lnY, SIGMA_lnY, &TT, realContext);
-        int32ToReal (nn,  &UU);
-        realDivide  (&TT, &UU,&UU,realContext);
-        realSubtract(&SS, &UU,&SS,realContext); //top in SS
-
-        realSubtract(&TT, &UU,&TT,realContext); //use both TT and UU from above
-        realDivide  (&SS, &TT,&SS,realContext); //R^2
-        realSquareRoot(&SS, &SS, realContext);
-        realToString(&SS, ss); r = strtof (ss, NULL);
-        printf("§ r^2: %f r: %f %f\n",r*r, r,sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumlny * sumlny - 1.0/nn * sumlny * sumlny) ));
-        
-
-        #ifdef STATDEBUG
-          printf("A%f B%f C%f D%f E%f F%f G%f H%f   a0:%f a1:%f a2:%f r:%f r^2:%f\n",A,B,C,D,E,F,G,H,a0,a1,a2,r,r*r);
-        #endif
-        #ifdef STATDEBUG
-          printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
-        #endif
-        break;
-
-      case CF_CAUCHY_FITTING :
-        printf("Cauchy fit:\n");
-
-//Unknown constants.
-// R12 Assuming G
-// R13 Assuming F
-
-    //    r  = sqrt ( (H * sum1ony + G * sumxony + F * sumx2ony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony) );
-
-        
-        //      B = nn * sumx2ony - sumx2 * sum1ony;        
-        int32ToReal(nn, &SS);
-        realMultiply(&SS, SIGMA_X2onY, &SS, realContext);
-        realMultiply(SIGMA_X2, SIGMA_1onY, &TT, realContext);
-        realSubtract(&SS, &TT, &BB, realContext);
-        realToString(&BB,ss); B = strtof (ss, NULL);
-        printf("§ B: %f %f\n",B,nn * sumx2ony - sumx2 * sum1ony);
-
-        //      C = nn * sumx3 - sumx * sumx2;                     //C copied from PARABF. Exactly the same
-        int32ToReal(nn, &SS);
-        realMultiply(&SS, SIGMA_X3, &SS, realContext);
-        realMultiply(SIGMA_X2, SIGMA_X, &TT, realContext);
-        realSubtract(&SS, &TT, &CC, realContext);
-        realToString(&CC,ss); C = strtof (ss, NULL);
-        printf("§ C: %f %f\n",C,nn * sumx3 - sumx * sumx2);
-
-        //      D = nn * sumxony - sumx * sum1ony;
-        int32ToReal(nn, &SS);
-        realMultiply(&SS, SIGMA_XonY, &SS, realContext);
-        realMultiply(SIGMA_X, SIGMA_1onY, &TT, realContext);
-        realSubtract(&SS, &TT, &DD, realContext);
-        realToString(&DD,ss); D = strtof (ss, NULL);
-        printf("§ D: %f %f\n",D,nn * sumxony - sumx * sum1ony);
-
-        calc_AEFG();
-
-        //    H = 1.0/nn * (sum1ony - R12 * sumx - R13 * sumx2);
-        //old GAUSS CHANGED TO 1/y ; F and G left:      H = (1.0)/nn * (sum1ony - F * sumx2 - G * sumx);
-        realMultiply(&FF, SIGMA_X2, &TT, realContext);
-        realSubtract(SIGMA_1onY , &TT, &HH, realContext);
-        realMultiply(&GG, SIGMA_X, &TT, realContext);
-        realSubtract(&HH, &TT, &HH, realContext);
-        int32ToReal (nn, &SS);
-        realDivide  (&HH,&SS,&HH,realContext);
-        realToString(&HH,ss); H = strtof (ss, NULL);
-        printf("§ H: %f %f\n",H,(1.0)/nn * (sumlny - F * sumx2 - G * sumx));
-
-
-
-      //  a0 = F;
-        realCopy    (&FF,&aa0);
-//realCopy(SIGMA_YMAX,&aa0);
-        realToString(&aa0,ss); a0 = strtof (ss, NULL);
-        printf("§ a0: %f %f\n",a0,F);
-
-//        a1 = G/2.0 * a0;
-        realDivide  (&GG,const_2,&TT,realContext);
-        realMultiply(&TT, &aa0, &aa1, realContext);
-        realToString(&aa1,ss); a1 = strtof (ss, NULL);
-        printf("§ a1: %f %f\n",a1,G/2.0 * a0);
-
-  //      a2 = H - F * a1 * a1;
-        realMultiply(&aa1,&aa1,&SS,realContext);
-        realMultiply(&SS,&FF,&SS,realContext);
-        realSubtract(&HH,&SS,&aa2,realContext);
-        realToString(&aa0,ss); a2 = strtof (ss, NULL);
-        printf("§ a2: %f %f\n",a2, H - F * a1 * a1);
-
-
-
-        #ifdef STATDEBUG
-          printf("##### CAUCHY %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
-        #endif
-        break;
-
-      case CF_ORTHOGONAL_FITTING :
-        a1a = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx + sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
-        a0a  = y_ - a1a * x_;
-        //r = sxy / (sx * sy);
-        r  = (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) );
-        a1 = a1a;
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        a0 = a0a;
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",(int)nn, a0a, a1a, smi2);
-        #endif
-        break;
-
-      case CF_ORTHOGONAL_FITTING+10000 :
-        a1b = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx - sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
-        a0b  = y_ - a1b * x_;
-        //r = sxy / (sx * sy);
-        r  = (nn * sumxy - sumx * sumy) / (sqrt( nn * sumx2 - sumx * sumx) * sqrt( nn * sumy2 - sumy * sumy));
-        a1 = a1b;
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        a0 = a0b;
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi^2=%f\n",(int)nn, a0b, a1b, smi2);
-        #endif
-        break;
-
-      default: break;
-    }
-
-    graph_axis_draw();                        //Draw the axis 
+    processCurvefitSelection(selection);
+    graphAxisDraw();                        //Draw the axis 
 }
-
-
 
 
 void fnStatDemo(uint16_t unusedButMandatoryParameter){
@@ -1521,10 +1133,7 @@ void fnStatDemo(uint16_t unusedButMandatoryParameter){
   }
 
 
-
-
-
-
+//DEMO: Randomized linear
 void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 #ifndef TESTSUITE_BUILD
   int8_t ix;
@@ -1549,4 +1158,15 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 #endif //TESTSUITE_BUILD
 }
 
+//DEMO: 4 points to simulate a distribution
+void fnStatDemo2(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+  selection = 0;
+  runFunction(ITM_CLSIGMA);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.0000",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
+  }
 

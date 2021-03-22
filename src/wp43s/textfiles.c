@@ -27,8 +27,6 @@
 
 #include "wp43s.h"
 
-void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
-#ifndef TESTSUITE_BUILD
   uint8_t reg_Name(uint16_t no) {
     switch(no) {
       case 100:   return 'X'; break;
@@ -46,6 +44,9 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       default:return 0;break;
     }
   }
+
+void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
+#ifndef TESTSUITE_BUILD
 
   char csv[TMP_STR_LENGTH];
   tmpString[0] = 0;

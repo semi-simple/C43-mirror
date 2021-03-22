@@ -181,9 +181,60 @@ char * getCurveFitModeName(uint16_t selection) {
     if(selection == CF_CAUCHY_FITTING)      return "Cauchy peak";
     if(selection == CF_GAUSS_FITTING)       return "Gauss peak ";
     if(selection == CF_ORTHOGONAL_FITTING)  return "Orthogonal ";
-
     return "???        ";
   }
+
+char tmp_names[13];
+char * eatSpaces(const char * ss) {
+  strcpy(tmp_names,ss);
+  while(stringByteLength(tmp_names) > 0 && tmp_names[stringByteLength(tmp_names)-1] == 32) {
+    tmp_names[stringByteLength(tmp_names)-1] = 0;
+  }
+  return tmp_names;
+}
+
+/********************************************//**
+ * \brief Returns the names of the curve fit type
+ *
+ * \param[in] dt uint16_t Data type
+ * \return char*          Name of the curvefit type
+ ***********************************************/
+char * getCurveFitModeNames(uint16_t selection) {
+  errorMessage[0]=0;
+  if(selection & CF_LINEAR_FITTING)      {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_LINEAR_FITTING)      ));}
+  if(selection & CF_EXPONENTIAL_FITTING) {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_EXPONENTIAL_FITTING) ));}
+  if(selection & CF_LOGARITHMIC_FITTING) {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_LOGARITHMIC_FITTING) ));}
+  if(selection & CF_POWER_FITTING)       {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_POWER_FITTING)       ));}
+  if(selection & CF_ROOT_FITTING)        {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_ROOT_FITTING)        ));}
+  if(selection & CF_HYPERBOLIC_FITTING)  {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_HYPERBOLIC_FITTING)  ));}
+  if(selection & CF_PARABOLIC_FITTING)   {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_PARABOLIC_FITTING)   ));}
+  if(selection & CF_CAUCHY_FITTING)      {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_CAUCHY_FITTING)      ));}
+  if(selection & CF_GAUSS_FITTING)       {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_GAUSS_FITTING)       ));}
+  if(selection & CF_ORTHOGONAL_FITTING)  {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(CF_ORTHOGONAL_FITTING)  ));}
+  if(errorMessage[0]==0) return "???        ";
+  return errorMessage;
+}
+
+/********************************************//**
+ * \brief Returns the name of a curvefitting mode
+ *
+ * \param[in] am uint16_t curvefitting mode
+ * \return char*          Name of the curvefitting mode
+ ***********************************************/
+char * getCurveFitModeFormula(uint16_t selection) {
+    if(selection == CF_LINEAR_FITTING)      return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
+    if(selection == CF_EXPONENTIAL_FITTING) return "y=a" STD_SUB_0 " e" STD_SUP_a STD_SUP_1 STD_SUP_x;
+    if(selection == CF_LOGARITHMIC_FITTING) return "y=a" STD_SUB_0 " + a" STD_SUB_1 "lnx";
+    if(selection == CF_POWER_FITTING)       return "y=a" STD_SUB_0 " x" STD_SUP_a STD_SUP_1 ;
+    if(selection == CF_ROOT_FITTING)        return "y=a" STD_SUB_0 " a" STD_SUB_1 STD_SUP_1 STD_OBLIQUE4 STD_SUP_x;
+    if(selection == CF_HYPERBOLIC_FITTING)  return "y=(a" STD_SUB_0 " + xa" STD_SUB_1 ")" STD_SUP_MINUS_1;
+    if(selection == CF_PARABOLIC_FITTING)   return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "x" STD_SUP_2 "a" STD_SUB_2;
+    if(selection == CF_CAUCHY_FITTING)      return "y=(a" STD_SUB_0 "(x+a" STD_SUB_1 ")" STD_SUP_2 "+a" STD_SUB_2 ")" STD_SUP_MINUS_1;
+    if(selection == CF_GAUSS_FITTING)       return "y=a" STD_SUB_0 "e^((x-a" STD_SUB_1 ")" STD_SUP_2 "/a" STD_SUB_2 ")";
+    if(selection == CF_ORTHOGONAL_FITTING)  return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
+  return "???";
+  }
+
 
 
 /********************************************//**

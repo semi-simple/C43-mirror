@@ -32,6 +32,7 @@ uint32_t getDayOfWeek        (calcRegister_t regist);
 void checkDateRange          (const real34_t *date34);
 void hmmssToSeconds          (const real34_t *src, real34_t *dest);
 void hmmssInRegisterToSeconds(calcRegister_t regist);
+void checkTimeRange          (const real34_t *time34);
 void fnJulianToDate          (uint16_t unusedButMandatoryParameter);
 void fnDateToJulian          (uint16_t unusedButMandatoryParameter);
 void fnIsLeap                (uint16_t unusedButMandatoryParameter);

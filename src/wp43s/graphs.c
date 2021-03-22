@@ -350,33 +350,33 @@ void graph_axis (void){
 
 
 
-  void convertDigits(uint16_t ii, uint16_t oo, char * outstr) {
+  void convertDigits(uint16_t ii, uint16_t * oo, char * outstr) {
     switch (tmpString[ii]) {
-      case  48: outstr[oo++] = 0xa0; outstr[oo++] = 0x80; break; //.
-      case  49: outstr[oo++] = 0xa0; outstr[oo++] = 0x81; break; //.
-      case  50: outstr[oo++] = 0xa0; outstr[oo++] = 0x82; break; //.
-      case  51: outstr[oo++] = 0xa0; outstr[oo++] = 0x83; break; //.
-      case  52: outstr[oo++] = 0xa0; outstr[oo++] = 0x84; break; //.
-      case  53: outstr[oo++] = 0xa0; outstr[oo++] = 0x85; break; //.
-      case  54: outstr[oo++] = 0xa0; outstr[oo++] = 0x86; break; //.
-      case  55: outstr[oo++] = 0xa0; outstr[oo++] = 0x87; break; //.
-      case  56: outstr[oo++] = 0xa0; outstr[oo++] = 0x88; break; //.
-      case  57: outstr[oo++] = 0xa0; outstr[oo++] = 0x89; break; //.
+      case  48: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x80; break; //.
+      case  49: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x81; break; //.
+      case  50: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x82; break; //.
+      case  51: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x83; break; //.
+      case  52: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x84; break; //.
+      case  53: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x85; break; //.
+      case  54: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x86; break; //.
+      case  55: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x87; break; //.
+      case  56: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x88; break; //.
+      case  57: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x89; break; //.
 
-      case 120: outstr[oo++] = 0xa4; outstr[oo++] = 0xb3; break; //x
-      case 121: outstr[oo++] = 0xa4; outstr[oo++] = 0xb4; break; //y
-      case 'a': outstr[oo++] = 0xa4; outstr[oo++] = 0x9c; break; //a
-      case 's': outstr[oo++] = 0xa4; outstr[oo++] = 0xae; break; //s
-      case  58: outstr[oo++] = 0xa2; outstr[oo++] = 0x36; break; //:
-      case  43: outstr[oo++] = 0xa0; outstr[oo++] = 0x8a; break; //+
-      case  45: outstr[oo++] = 0xa0; outstr[oo++] = 0x8b; break; //-
-      case  46: outstr[oo++] = 0xa0; outstr[oo++] = 0x1a; break; //.
-      case  47: outstr[oo++] = 0xa4; outstr[oo++] = 0x25; break; ///
-      case 116: outstr[oo++] = 0xa0; outstr[oo++] = 0x9c; break; //t
-      case 105: outstr[oo++] = 0xa4; outstr[oo++] = 0xa4; break; //i
-      case 99 : outstr[oo++] = 0xa4; outstr[oo++] = 0x9e; break; //c
-      case 107: outstr[oo++] = 0xa4; outstr[oo++] = 0xa6; break; //k
-      default : outstr[oo++] = tmpString[ii];
+      case 120: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb3; break; //x
+      case 121: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb4; break; //y
+      case 'a': outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9c; break; //a
+      case 's': outstr[*oo++] = 0xa4; outstr[*oo++] = 0xae; break; //s
+      case  58: outstr[*oo++] = 0xa2; outstr[*oo++] = 0x36; break; //:
+      case  43: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8a; break; //+
+      case  45: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8b; break; //-
+      case  46: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x1a; break; //.
+      case  47: outstr[*oo++] = 0xa4; outstr[*oo++] = 0x25; break; ///
+      case 116: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x9c; break; //t
+      case 105: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa4; break; //i
+      case 99 : outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9e; break; //c
+      case 107: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa6; break; //k
+      default : outstr[*oo++] = tmpString[ii];
     }
   }
 
@@ -392,7 +392,7 @@ void graph_text(void){
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits(ii,oo,outstr);
+    convertDigits(ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -405,7 +405,7 @@ void graph_text(void){
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits(ii,oo,outstr);
+    convertDigits(ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -440,7 +440,7 @@ void graph_text(void){
     oo = 0;
     outstr[0]=0;
     while (tmpString[ii] != 0) {
-      convertDigits(ii,oo,outstr);
+      convertDigits(ii,&oo,outstr);
       ii++;
     }
   outstr[oo]=0;

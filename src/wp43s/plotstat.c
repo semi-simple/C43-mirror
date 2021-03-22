@@ -792,7 +792,7 @@ uint16_t selection = 0;              //Currently selected plot
     double    y = 0;
     int16_t   Intervals = numberIntervals * 10; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
 
-    for (ix = 0; ix <= Intervals; ++ix) {
+    for (ix = 0; ix <= Intervals; ++ix) {       //Variable accuracy line plot
 
       if(ix <= 1) Intervals = numberIntervals * 10; else
         if(ix >= Intervals-1) Intervals = numberIntervals * 10; else
@@ -890,7 +890,7 @@ uint16_t selection = 0;              //Currently selected plot
       xN = screen_window_x(x_min,x,x_max);
       yN = screen_window_y(y_min,y,y_max);
 
-      if(ix > 0) {  //Allow for starting values to accumulate at ix = 0
+      if(ix > 0) {  //Allow for starting values to accumulate in the registers at ix = 0
         #ifdef STATDEBUG
           printf("plotting graph sample no %d ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",ix,x_min,x,x_max,y_min,y,y_max,  xN,yN);
         #endif
@@ -1024,6 +1024,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
 }
 
 
+//DEMO: Arbitrary distribution to test. Close to a Normal.
 void fnStatDemo(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
@@ -1132,6 +1133,7 @@ void fnStatDemo(uint16_t unusedButMandatoryParameter){
   }
 
 
+//DEMO: Randomized linear
 void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 #ifndef TESTSUITE_BUILD
   int8_t ix;
@@ -1156,7 +1158,7 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 #endif //TESTSUITE_BUILD
 }
 
-
+//DEMO: 4 points to simulate a distribution
 void fnStatDemo2(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;

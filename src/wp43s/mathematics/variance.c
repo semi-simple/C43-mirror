@@ -180,19 +180,21 @@ void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
     realMultiply(SIGMA_X,SIGMA_X, &UU, realContext);
     realSubtract(&TT,&UU,&TT,realContext);
     realDivide(&TT,SIGMA_N,&TT,realContext);
-
     realSubtract(SIGMA_N,const_1,&UU,realContext);
     realDivide(&TT,&UU,&TT,realContext);
-    realDivide(&SS,&TT,&SS,realContext);
+    realSquareRoot(&TT,&TT,realContext);                 //this is sx
 
-    realMultiply(SIGMA_N,SIGMA_Y2, &TT, realContext);     //do sy
+    realDivide(&SS,&TT,&SS,realContext);                 //this is sxy/sx
+
+    realMultiply(SIGMA_N,SIGMA_Y2, &TT, realContext);    //do sy
     realMultiply(SIGMA_Y,SIGMA_Y, &UU, realContext);
     realSubtract(&TT,&UU,&TT,realContext);
     realDivide(&TT,SIGMA_N,&TT,realContext);
-
-    realSubtract(SIGMA_N,const_1,&UU,realContext);       //this is sxy/sx/sy
+    realSubtract(SIGMA_N,const_1,&UU,realContext);
     realDivide(&TT,&UU,&TT,realContext);
-    realDivide(&SS,&TT,&SS,realContext);
+    realSquareRoot(&TT,&TT,realContext);                 //this is sy
+
+    realDivide(&SS,&TT,&SS,realContext);                 //this is sxy/sx/sy
 
     liftStack();
     setSystemFlag(FLAG_ASLIFT);

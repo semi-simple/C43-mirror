@@ -175,7 +175,8 @@ char ss[100];
 void processCurvefitSelection(uint16_t selection){
     double x_,y_,sx,sy,sxy;
     char ss[100];
-    real_t SS,TT,UU;
+    real_t SS,TT,UU,VV,WW;
+    real_t S_X,S_Y,S_XY,RR,SMI,M_X,M_Y;
     double a1a, a1b, a0a, a0b;
 
     //Temporary, for ease of checking using double type
@@ -208,19 +209,26 @@ void processCurvefitSelection(uint16_t selection){
     fnMeanXY(0);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  x_ = strtof (ss, NULL);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  y_ = strtof (ss, NULL);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&M_X);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y),&M_Y);
 
     fnSampleStdDev(0);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sx = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumx2 - sumx*sumx) );
     real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  sy = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumy2 - sumy*sumy) );
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&S_X);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y),&S_Y);
 
     fnSampleCovariance(0);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sxy = strtof (ss, NULL); //(1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&S_XY);
 
     fnCoefficientDetermination(0);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  r = strtof (ss, NULL); //sxy / (sx * sy);
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&RR);
 
     fnMinExpStdDev(0);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  smi = strtof (ss, NULL); //sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&SMI);
 
     #ifdef PC_BUILD
       printf("\nSelection:%i\n",selection);
@@ -237,55 +245,244 @@ void processCurvefitSelection(uint16_t selection){
 
     switch(selection) {
       case CF_LINEAR_FITTING :
-        a0 = (sumx2 * sumy  - sumx * sumxy) / (nn * sumx2 - sumx * sumx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r  = (nn * sumxy - sumx*sumy) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumy2-sumy*sumy));
-        smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+        //      a0 = (sumx2 * sumy  - sumx * sumxy) / (nn * sumx2 - sumx * sumx);
+        realMultiply(SIGMA_X2,SIGMA_Y,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_XY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa0,realContext);
+
+        realToString(&aa0,ss); a0 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a0: %f %f\n",a0,(sumx2 * sumy  - sumx * sumxy) / (nn * sumx2 - sumx * sumx));
+        #endif //PC_BUILD
+
+        //      a1 = (nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx);
+        realMultiply(SIGMA_N,SIGMA_XY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_Y,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa1,realContext);
+
+        realToString(&aa1,ss); a1 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a1: %f %f\n",a1,(nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx));
+        #endif //PC_BUILD
+
+        smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+
+
+        //       r  = (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) );
+        realMultiply(SIGMA_N,SIGMA_XY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_Y,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);          //SS is top
+
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realSquareRoot(&TT,&TT,realContext);            //TT is bottom, factor 1
+
+        realMultiply(SIGMA_N,SIGMA_Y2,&UU,realContext);
+        realMultiply(SIGMA_Y,SIGMA_Y,&VV,realContext);
+        realSubtract(&UU,&VV,&UU,realContext);
+        realSquareRoot(&UU,&UU,realContext);            //UU is bottom factor 2
+
+        realDivide(&SS,&TT,&RR,realContext);
+        realDivide(&RR,&UU,&RR,realContext);            //r
+
+        realToString(&RR, ss); r = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
+        #endif //PC_BUILD
+
+
         #ifdef STATDEBUG
           printf("##### Linear %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
-      case CF_EXPONENTIAL_FITTING :
-        a0 = exp( (sumx2 * sumlny  - sumx * sumxlny) / (nn * sumx2 - sumx * sumx) );
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumxlny - sumx * sumlny ) / (nn * sumx2 - sumx * sumx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
-        smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+      case CF_EXPONENTIAL_FITTING :        
+        //      a0 = exp( (sumx2 * sumlny  - sumx * sumxlny) / (nn * sumx2 - sumx * sumx) );
+        realMultiply(SIGMA_X2,SIGMA_lnY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_XlnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa0,realContext);
+        realExp(&aa0,&aa0,realContext);
+
+        realToString(&aa0,ss); a0 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a0: %f %f\n",a0,exp( (sumx2 * sumlny  - sumx * sumxlny) / (nn * sumx2 - sumx * sumx) ));
+        #endif //PC_BUILD
+
+        //a1 = (nn  * sumxlny - sumx * sumlny ) / (nn * sumx2 - sumx * sumx);
+        realMultiply(SIGMA_N,SIGMA_XlnY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_lnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa1,realContext);
+
+        realToString(&aa1,ss); a1 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a1: %f %f\n",a1,(nn  * sumxlny - sumx * sumlny ) / (nn * sumx2 - sumx * sumx));
+        #endif //PC_BUILD
+
+        smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+
+        //      r = (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
+        realMultiply(SIGMA_N,SIGMA_XlnY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_lnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);          //SS is top
+
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realSquareRoot(&TT,&TT,realContext);            //TT is bottom, factor 1
+
+        realMultiply(SIGMA_N,SIGMA_ln2Y,&UU,realContext);
+        realMultiply(SIGMA_lnY,SIGMA_lnY,&VV,realContext);
+        realSubtract(&UU,&VV,&UU,realContext);
+        realSquareRoot(&UU,&UU,realContext);            //UU is bottom factor 2
+
+        realDivide(&SS,&TT,&RR,realContext);
+        realDivide(&RR,&UU,&RR,realContext);            //r
+
+        realToString(&RR, ss); r = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ r: %f %f\n",r, (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
+        #endif //PC_BUILD
         #ifdef STATDEBUG
           printf("##### EXPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
+
+
       case CF_LOGARITHMIC_FITTING :
-        a0 = (sumln2x * sumy  - sumlnx * sumylnx) / (nn * sumln2x - sumlnx * sumlnx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumylnx - sumlnx * sumy ) / (nn * sumln2x - sumlnx * sumlnx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy)); //(rLOG)
-        smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+        //      a0 = (sumln2x * sumy  - sumlnx * sumylnx) / (nn * sumln2x - sumlnx * sumlnx);
+        realMultiply(SIGMA_ln2X,SIGMA_Y,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_YlnX,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa0,realContext);
+
+        realToString(&aa0,ss); a0 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a0: %f %f\n",a0,(sumln2x * sumy  - sumlnx * sumylnx) / (nn * sumln2x - sumlnx * sumlnx));
+        #endif //PC_BUILD
+
+        //a1 = (nn  * sumylnx - sumlnx * sumy ) / (nn * sumln2x - sumlnx * sumlnx);;
+        realMultiply(SIGMA_N,SIGMA_YlnX,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_Y,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa1,realContext);
+
+        realToString(&aa1,ss); a1 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a1: %f %f\n",a1,a0 = (nn  * sumylnx - sumlnx * sumy ) / (nn * sumln2x - sumlnx * sumlnx));
+        #endif //PC_BUILD
+
+        smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+
+        //      r = (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy)); //(rLOG)
+        realMultiply(SIGMA_N,SIGMA_YlnX,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_Y,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);          //SS is top
+
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realSquareRoot(&TT,&TT,realContext);            //TT is bottom, factor 1
+
+        realMultiply(SIGMA_N,SIGMA_Y2,&UU,realContext);
+        realMultiply(SIGMA_Y,SIGMA_Y,&VV,realContext);
+        realSubtract(&UU,&VV,&UU,realContext);
+        realSquareRoot(&UU,&UU,realContext);            //UU is bottom factor 2
+
+        realDivide(&SS,&TT,&RR,realContext);
+        realDivide(&RR,&UU,&RR,realContext);            //r
+
+        realToString(&RR, ss); r = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ r: %f %f\n",r, (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy))); //(rLOG));
+        #endif //PC_BUILD
+
+
+
+
+
         #ifdef STATDEBUG
           printf("##### LOGF %i a0=%f a1=%f \n",(int)nn, a0, a1);
         #endif
         break;
 
       case CF_POWER_FITTING :
-        a0 = exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx) );
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-        a1 = (nn  * sumlnxlny - sumlnx * sumlny ) / (nn * sumln2x - sumlnx * sumlnx);
-//TODO REAL CONVERSION
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-        r = (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rPOW)
+        //      a0 = exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx)  );
+        realMultiply(SIGMA_ln2X,SIGMA_lnY,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnXlnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa0,realContext);
+        realExp(&aa0,&aa0,realContext);
+
+        realToString(&aa0,ss); a0 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a0: %f %f\n",a0,exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx) ));
+        #endif //PC_BUILD
+
+        //a1 = (nn  * sumlnxlny - sumlnx * sumlny ) / (nn * sumln2x - sumlnx * sumlnx);
+        realMultiply(SIGMA_N,SIGMA_lnXlnY,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realDivide(&SS,&TT,&aa1,realContext);
+
+        realToString(&aa1,ss); a1 = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ a1: %f %f\n",a1,a0 = exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx)  ));
+        #endif //PC_BUILD
+
+        smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+
+        //      r = (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny)); //(rEXP)
+        realMultiply(SIGMA_N,SIGMA_lnXlnY,&SS,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnY,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);          //SS is top
+
+        realMultiply(SIGMA_N,SIGMA_ln2X,&TT,realContext);
+        realMultiply(SIGMA_lnX,SIGMA_lnX,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realSquareRoot(&TT,&TT,realContext);            //TT is bottom, factor 1
+
+        realMultiply(SIGMA_N,SIGMA_ln2Y,&UU,realContext);
+        realMultiply(SIGMA_lnY,SIGMA_lnY,&VV,realContext);
+        realSubtract(&UU,&VV,&UU,realContext);
+        realSquareRoot(&UU,&UU,realContext);            //UU is bottom factor 2
+
+        realDivide(&SS,&TT,&RR,realContext);
+        realDivide(&RR,&UU,&RR,realContext);            //r
+
+        realToString(&RR, ss); r = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ r: %f %f\n",r, (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
+        #endif //PC_BUILD
         #ifdef STATDEBUG
           printf("##### POWERF %i a0=%f a1=%f \n",nn, a0, a1);
         #endif
@@ -549,32 +746,75 @@ void processCurvefitSelection(uint16_t selection){
 
 
       case CF_ORTHOGONAL_FITTING :
-        a1a = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx + sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
-        a0a  = y_ - a1a * x_;
-        //r = sxy / (sx * sy);
-        r  = (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) );
-        a1 = a1a;
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-//TODO REAL CONVERSION
-        a0 = a0a;
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-//TODO REAL CONVERSION
-        #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi=%f\n",(int)nn, a0a, a1a, smi);
-        #endif
-        break;
-
       case CF_ORTHOGONAL_FITTING+10000 :
-        a1b = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx - sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
-        a0b  = y_ - a1b * x_;
-        //r = sxy / (sx * sy);
-        r  = (nn * sumxy - sumx * sumy) / (sqrt( nn * sumx2 - sumx * sumx) * sqrt( nn * sumy2 - sumy * sumy));
-        a1 = a1b;
-  sprintf(ss,"%f",a1); stringToReal(ss,&aa1,realContext);
-//TODO REAL CONVERSION
-        a0 = a0b;
-  sprintf(ss,"%f",a0); stringToReal(ss,&aa0,realContext);
-//TODO REAL CONVERSION
+        // a1a = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx + sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
+        // a0a  = y_ - a1a * x_;
+        // a1b = 1.0 / (2.0 * sxy) * ( sy * sy - sx * sx - sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) );
+        // a0b = y_ - a1b * x_;
+        realMultiply(&S_Y,&S_Y,&SS,realContext);
+        realMultiply(&S_X,&S_X,&TT,realContext);
+        realSubtract(&SS,&TT,&UU,realContext);    //keep  uu = sy2-sx2
+        realMultiply(&UU,&UU,&VV,realContext);
+        realMultiply(&S_XY,&S_XY,&WW,realContext);
+        realMultiply(&VV,const_2,&WW,realContext);
+        realMultiply(&VV,const_2,&WW,realContext);
+        realAdd     (&WW,&VV,&VV,realContext);
+        realSquareRoot(&VV,&VV,realContext);  //sqrt term
+
+        realDivide(&UU,const_2,&UU,realContext);  //term1
+        realDivide(&UU,&S_XY,&UU,realContext);
+
+        realDivide(&VV,const_2,&VV,realContext);  //term2
+        realDivide(&VV,&S_XY,&VV,realContext);
+
+        if(selection == CF_ORTHOGONAL_FITTING) {
+          realAdd     (&UU,&VV,&aa1,realContext);   //a1
+          realMultiply(&aa1,&M_X,&SS,realContext);
+          realSubtract(&M_Y,&SS,&aa0,realContext);  //a0
+          realToString(&aa1, ss); a1a = strtof (ss, NULL); a1 = a1a;
+          realToString(&aa0, ss); a0a = strtof (ss, NULL); a0 = a0a;
+          #ifdef PC_BUILD
+            printf("§ a1: %f %f\n",a1,1.0 / (2.0 * sxy) * ( sy * sy - sx * sx + sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) ));
+            printf("§ a0: %f %f\n",a0,y_ - a1a * x_);
+          #endif //PC_BUILD
+        }
+        if(selection == CF_ORTHOGONAL_FITTING + 10000) {
+          realSubtract(&UU,&VV,&aa1,realContext);   //a1
+          realToString(&aa1, ss); a1b = strtof (ss, NULL);
+          realSubtract(&M_Y,&SS,&aa0,realContext);  //a0
+          realToString(&aa1, ss); a1b = strtof (ss, NULL); a1 = a1b;
+          realToString(&aa0, ss); a0b = strtof (ss, NULL); a0 = a0b;
+          #ifdef PC_BUILD
+            printf("§ a1: %f %f\n",a1,1.0 / (2.0 * sxy) * ( sy * sy - sx * sx - sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) ));
+            printf("§ a0: %f %f\n",a0,y_ - a1b * x_);
+          #endif //PC_BUILD
+        }
+
+        //r is copied from LINF
+        //       r  = (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) );
+        realMultiply(SIGMA_N,SIGMA_XY,&SS,realContext);
+        realMultiply(SIGMA_X,SIGMA_Y,&TT,realContext);
+        realSubtract(&SS,&TT,&SS,realContext);          //SS is top
+
+        realMultiply(SIGMA_N,SIGMA_X2,&TT,realContext);
+        realMultiply(SIGMA_X,SIGMA_X,&UU,realContext);
+        realSubtract(&TT,&UU,&TT,realContext);
+        realSquareRoot(&TT,&TT,realContext);            //TT is bottom, factor 1
+
+        realMultiply(SIGMA_N,SIGMA_Y2,&UU,realContext);
+        realMultiply(SIGMA_Y,SIGMA_Y,&VV,realContext);
+        realSubtract(&UU,&VV,&UU,realContext);
+        realSquareRoot(&UU,&UU,realContext);            //UU is bottom factor 2
+
+        realDivide(&SS,&TT,&RR,realContext);
+        realDivide(&RR,&UU,&RR,realContext);            //r
+
+        realToString(&RR, ss); r = strtof (ss, NULL);
+        #ifdef PC_BUILD
+          printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
+        #endif //PC_BUILD
+
+
         #ifdef STATDEBUG
           printf("##### ORTHOF %i a0=%f a1=%f smi=%f\n",(int)nn, a0b, a1b, smi);
         #endif

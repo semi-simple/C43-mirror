@@ -26,14 +26,12 @@
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
 
-
-
 //#define STATDEBUG
-
-#define ld long double
 
 graphtype *gr_x;
 graphtype *gr_y;
+graphtype telltale;
+uint16_t  ix_count;
   
 float  graph_dx;
 float  graph_dy; 
@@ -53,6 +51,17 @@ bool_t PLOT_SHADE;
 bool_t PLOT_AXIS;
 int8_t PLOT_ZMX;
 int8_t PLOT_ZMY;
+
+int8_t   plotmode;    //VECTOR or SCATTER
+float    tick_int_x;
+float    tick_int_y;
+float    x_min; 
+float    x_max;
+float    y_min;
+float    y_max;
+uint32_t xzero;
+uint32_t yzero;
+
 
 
 void statGraphReset(void){
@@ -567,11 +576,6 @@ void graphPlotstat(void){
   graphtype x; 
   graphtype y;
 
-  a2 = 0;
-  a1 = 0;
-  a0 = 0;
-  r = 0;
-  smi = 0;
   statnum = 0;
   graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   plotmode = _SCAT;
@@ -758,15 +762,19 @@ void graphPlotstat(void){
 }
 
 
+uint16_t selection = 0;              //Currently selected plot
 
 #ifndef TESTSUITE_BUILD
   void drawline(){
+    real_t SS,TT,UU;
     double a0,a1,a2;
+    int32_t nn;
     if(!selection) return;
       char ss[100];
       realToString(&aa0, ss); a0 = strtof (ss, NULL);
       realToString(&aa1, ss); a1 = strtof (ss, NULL);
       realToString(&aa2, ss); a2 = strtof (ss, NULL);
+      realToInt32(SIGMA_N, nn);  
 
 //    #ifdef STATDEBUG
       printf("plotting line: a2 %f a1 %f a0 %f\n",a2,a1,a0);
@@ -778,13 +786,22 @@ void graphPlotstat(void){
       return;
     }
     uint16_t  ix;
-    uint16_t  xo, xn, xN = 0; 
-    uint8_t   yo, yn, yN = 0;
+    uint16_t  xo = 0, xn, xN = 0; 
+    uint8_t   yo = 0, yn, yN = 0;
     double    x = 0; 
     double    y = 0;
+    int16_t   Intervals = numberIntervals * 10; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
 
-    for (ix = 0; ix <= numberIntervals; ++ix) {
-      x = x_min + (x_max-x_min)/(double)numberIntervals * (double)ix;
+    for (ix = 0; ix <= Intervals; ++ix) {
+
+      if(ix <= 1) Intervals = numberIntervals * 10; else
+        if(ix >= Intervals-1) Intervals = numberIntervals * 10; else
+          if(ix == 1) Intervals = numberIntervals;
+      if(ix > 2 && ix < Intervals-2 && abs(yN-yo) > 10 && Intervals == numberIntervals){
+        ix--;
+        Intervals = numberIntervals * 15;       //increase accuracy and time to complete, if a jump in y is found
+      } 
+      x = x_min + (x_max-x_min)/(double)Intervals * (double)ix;
 
       switch(selection) {
         case CF_LINEAR_FITTING: 
@@ -909,24 +926,34 @@ void graphPlotstat(void){
       }
     }
 
-    #define autoinc 18 //text line spacing
-    int16_t index = 0;
+    #define autoinc 19 //text line spacing
+    #define autoshift -5 //text line spacing
+    int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,getCurveFitModeName(selection%10000));
       if(selection == CF_ORTHOGONAL_FITTING      ) strcat(ss,"(+)"); else
       if(selection == CF_ORTHOGONAL_FITTING+10000) strcat(ss,"(-)");
-      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -5, vmNormal, true, true);
-      sprintf(ss,"n=%d",(int)nn);    showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      eformat(ss,"a0=",a0,7);        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
-      eformat(ss,"a1=",a1,7);        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, true, true);
+      strcpy(ss,getCurveFitModeFormula(selection%10000));
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, true, true);
+      sprintf(ss,"n=%d",(int)nn);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
+      eformat(ss,"a" STD_SUB_0 "=",a0,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -4 +autoshift, vmNormal, true, true);
+      eformat(ss,"a" STD_SUB_1 "=",a1,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -3 +autoshift, vmNormal, true, true);
 
       if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING){ 
-        eformat(ss,"a2=",a2,7);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+        eformat(ss,"a" STD_SUB_2 "=",a2,7);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
       }
-      eformat(ss,"r^2=",r*r,4);      showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+      eformat(ss,"r" STD_SUP_2 "=",r*r,4);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, true, true);
 
       if((selection == CF_ORTHOGONAL_FITTING) || (selection == CF_ORTHOGONAL_FITTING+10000)) {
-        eformat(ss,"smi=",smi,4); showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++, vmNormal, true, true);
+        eformat(ss,"s" STD_SUB_m STD_SUB_i "=",smi,4); 
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
       }
     }
   }
@@ -936,7 +963,17 @@ void graphPlotstat(void){
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
   calcMode = CM_NORMAL;
   fnKeyExit(0);
+  fnUndo(0);
 }
+
+
+void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
+  calcMode = CM_NORMAL;
+  fnKeyExit(0);
+  fnUndo(0);
+  fnMinExpStdDev(0);
+}
+
 
 
 void fnPlotStat(uint16_t unusedButMandatoryParameter){
@@ -982,60 +1019,7 @@ void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
     if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
        selection = 0;
   
-    char ss[100];
-    realToInt32(SIGMA_N, nn);  
-    realToString(SIGMA_X ,     ss); sumx      = strtof (ss, NULL);
-    realToString(SIGMA_Y ,     ss); sumy      = strtof (ss, NULL);
-    realToString(SIGMA_X2,     ss); sumx2     = strtof (ss, NULL);
-    realToString(SIGMA_X2Y,    ss); sumx2y    = strtof (ss, NULL);
-    realToString(SIGMA_Y2,     ss); sumy2     = strtof (ss, NULL);
-    realToString(SIGMA_XY,     ss); sumxy     = strtof (ss, NULL);
-    realToString(SIGMA_lnXlnY, ss); sumlnxlny = strtof (ss, NULL);
-    realToString(SIGMA_lnX ,   ss); sumlnx    = strtof (ss, NULL);
-    realToString(SIGMA_ln2X,   ss); sumln2x   = strtof (ss, NULL);
-    realToString(SIGMA_YlnX,   ss); sumylnx   = strtof (ss, NULL);
-    realToString(SIGMA_lnY ,   ss); sumlny    = strtof (ss, NULL);
-    realToString(SIGMA_ln2Y,   ss); sumln2y   = strtof (ss, NULL);
-    realToString(SIGMA_XlnY,   ss); sumxlny   = strtof (ss, NULL);
-    realToString(SIGMA_X2lnY,  ss); sumx2lny  = strtof (ss, NULL);
-    realToString(SIGMA_lnYonX, ss); sumlnyonx = strtof (ss, NULL);
-    realToString(SIGMA_X2onY,  ss); sumx2ony  = strtof (ss, NULL);
-    realToString(SIGMA_1onX,   ss); sum1onx   = strtof (ss, NULL);
-    realToString(SIGMA_1onX2,  ss); sum1onx2  = strtof (ss, NULL);
-    realToString(SIGMA_XonY,   ss); sumxony   = strtof (ss, NULL);
-    realToString(SIGMA_1onY,   ss); sum1ony   = strtof (ss, NULL);
-    realToString(SIGMA_1onY2,  ss); sum1ony2  = strtof (ss, NULL);
-    realToString(SIGMA_X3,     ss); sumx3     = strtof (ss, NULL);
-    realToString(SIGMA_X4,     ss); sumx4     = strtof (ss, NULL);
-    realToString(SIGMA_YMAX,   ss); maxy      = strtof (ss, NULL);
-
-    fnMeanXY(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  x_ = strtof (ss, NULL);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  y_ = strtof (ss, NULL);
-
-    fnSampleStdDev(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sx = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumx2 - sumx*sumx) );
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  sy = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumy2 - sumy*sumy) );
-
-    fnSampleCovariance(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sxy = strtof (ss, NULL); //(1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
-
-    fnCoefficientDetermination(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  r = strtof (ss, NULL); //sxy / (sx * sy);
-
-    fnMinExpStdDev(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  smi = strtof (ss, NULL); //sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
-
-    printf("\nSelection:%i\n",selection);
-    printf(">>> x_=%f\n",x_);
-    printf(">>> y_=%f\n",y_);
-    printf(">>> sx=%f\n",sx);
-    printf(">>> sy=%f\n",sy);
-    printf(">>> sxy=%f\n",sxy);
-    printf(">>> smi=%f\n",smi);
-    printf(">>> r = %f\n",r);
-
-    processCurvefitSelection();
+    processCurvefitSelection(selection);
     graphAxisDraw();                        //Draw the axis 
 }
 

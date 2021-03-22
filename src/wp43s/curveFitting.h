@@ -20,42 +20,10 @@
 
 #include "wp43s.h"
 
-
-double a0,a1,a2, x_, y_,sx,sy,sxy,smi,r;
-real_t AA,BB,CC,DD,EE,FF,GG,HH;  //Curve aux fitting variables
-real_t SS,TT,UU,aa0,aa1,aa2;     //Curve fitting variables
-uint16_t selection;              //Currently selected plot
-realContext_t *realContext;
+extern realContext_t *realContext;
+extern real_t aa0,aa1,aa2;          //Curve fitting variables, visible to plotstat
+extern double r,smi;          //TODO CONVERT r, smi TO REAL
 
 void fnCurveFitting           (uint16_t curveFitting);
-void processCurvefitSelection (void);
-
-
-//Temporary, for ease of checking using double type
-double A, B, C, D, E, F, G, H;
-int32_t nn      ;
-double sumx     ;
-double sumy     ;
-double sumx2    ;
-double sumx2y   ;
-double sumy2    ;
-double sumxy    ;
-double sumlnxlny;
-double sumx2lny ;
-double sumlnx   ;
-double sumln2x  ;
-double sumylnx  ;
-double sumlny   ;
-double sumln2y  ;
-double sumxlny  ;
-double sumlnyonx;
-double sumx2ony ;
-double sum1onx  ;
-double sum1onx2 ;
-double sumxony  ;
-double sum1ony  ;
-double sum1ony2 ;
-double sumx3    ;
-double sumx4    ;
-double maxy     ;
+void processCurvefitSelection (uint16_t selection);
 

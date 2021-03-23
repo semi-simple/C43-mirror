@@ -387,10 +387,10 @@ uint32_t getDayOfWeek(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void checkDateRange(const real34_t *date34) {
-  real34_t d, petayear;
-  real34CopyAbs(date34, &d);
-  stringToReal34("3155695348699627200.000000000000000", &petayear);
-  if(real34CompareGreaterEqual(&d, &petayear)) {
+  real34_t hundredgigayear, neghundredgigayear;
+  stringToReal34("3155695348699627200.000000000000000", &hundredgigayear);
+  stringToReal34("-3155759851268923200.000000000000000", &neghundredgigayear);
+  if(real34CompareGreaterEqual(date34, &hundredgigayear) || real34CompareLessThan(date34, &neghundredgigayear)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "value of date type is too large");
@@ -498,6 +498,10 @@ void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
+
+  // check range
+  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 void fnDateToJulian(uint16_t unusedButMandatoryParameter) {

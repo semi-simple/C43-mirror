@@ -970,14 +970,20 @@ void kill_ASB_icon(void) {
         break;
 
       case ITM_dotD :
-        if(nimNumberPart == NP_REAL_FLOAT_PART) {
+        if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
 
           closeNim();
           if(calcMode != CM_NIM && lastErrorCode == 0) {
             convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
+            checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
 
-            setSystemFlag(FLAG_ASLIFT);
+            if(lastErrorCode == 0) {
+              setSystemFlag(FLAG_ASLIFT);
+            }
+            else {
+              undo();
+            }
             return;
           }
         }

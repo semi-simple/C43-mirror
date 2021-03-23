@@ -346,6 +346,27 @@ uint32_t getDayOfWeek(calcRegister_t regist) {
 #undef DivInt
 
 /********************************************//**
+ * \brief Check date range
+ *
+ * \param[in] time34 real34_t*
+ * \return void
+ ***********************************************/
+void checkDateRange(const real34_t *date34) {
+  real34_t d, petayear;
+  real34CopyAbs(date34, &d);
+  stringToReal34("3155695348699627200.000000000000000", &petayear);
+  if(real34CompareGreaterEqual(&d, &petayear)) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "value of date type is too large");
+      moreInfoOnError("In function checkDateRange:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+}
+
+
+/********************************************//**
  * \brief Convert H.MMSS into seconds
  *
  * \param[in] src real34_t* H.MMSS-formatted time value (for input)
@@ -508,6 +529,8 @@ void fnXToDate(uint16_t unusedButMandatoryParameter) {
     case dtReal34:
       if(getRegisterAngularMode(REGISTER_X) == amNone) {
         convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
+        checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+        if(lastErrorCode != 0) undo();
         break;
       }
       /* fallthrough */
@@ -641,6 +664,10 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
   composeJulianDay(&y, &m, &d, &j);
   reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
+
+  // check range
+  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 

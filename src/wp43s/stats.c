@@ -209,6 +209,10 @@ void fnSigma(uint16_t plusMinus) {
       realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
       realAdd(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY, realContext);
 
+      // sigma x²ln(y)
+      realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
+      realAdd(SIGMA_X2lnY, &tmpReal1, SIGMA_X2lnY, realContext);
+
       // sigma 1/x
       realDivide(const_1, &x, &tmpReal1, realContext);
       realAdd(SIGMA_1onX, &tmpReal1, SIGMA_1onX, realContext);
@@ -301,6 +305,10 @@ void fnSigma(uint16_t plusMinus) {
       // sigma xln(y)
       realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
       realSubtract(SIGMA_XlnY, &tmpReal1, SIGMA_XlnY, realContext);
+
+      // sigma x²ln(y)
+      realMultiply(&tmpReal1, &x, &tmpReal1, realContext);
+      realAdd(SIGMA_X2lnY, &tmpReal1, SIGMA_X2lnY, realContext);
 
       // sigma 1/x
       realDivide(const_1, &x, &tmpReal1, realContext);

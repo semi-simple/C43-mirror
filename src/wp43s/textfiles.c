@@ -26,11 +26,7 @@
 //#define DISPLOADING
 
 #include "wp43s.h"
-#include "math.h"
-#include "graphText.h"
 
-void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
-#ifndef TESTSUITE_BUILD
   uint8_t reg_Name(uint16_t no) {
     switch(no) {
       case 100:   return 'X'; break;
@@ -48,6 +44,9 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       default:return 0;break;
     }
   }
+
+void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
+#ifndef TESTSUITE_BUILD
 
   char csv[TMP_STR_LENGTH];
   tmpString[0] = 0;
@@ -215,7 +214,7 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 
 
-int16_t line_x,line_y;
+int16_t t_line_x, t_line_y;
 
 void print_inlinestr(const char *line1, bool_t endline) {
 #ifndef TESTSUITE_BUILD
@@ -224,17 +223,17 @@ void print_inlinestr(const char *line1, bool_t endline) {
     int16_t ix = 0;
     int16_t ixx;
     ixx = stringByteLength(line1);
-    while(ix<ixx && ix<98 && line_x+stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
+    while(ix<ixx && ix<98 && t_line_x+stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
        xcopy(l1, line1, ix+1);
        l1[ix+1]=0;
        ix = stringNextGlyph(line1, ix);
     }
-    if(line_y < SCREEN_HEIGHT) { 
-        line_x = showString(l1, &standardFont, line_x, line_y, vmNormal, true, true);
+    if(t_line_y < SCREEN_HEIGHT) { 
+        t_line_x = showString(l1, &standardFont, t_line_x, t_line_y, vmNormal, true, true);
     }
     if(endline) {
-      line_y += 20;
-      line_x = 0;
+      t_line_y += 20;
+      t_line_x = 0;
     }
     force_refresh();
 #endif

@@ -612,7 +612,7 @@ bool_t lastshiftG = false;
           char tmp[200]; sprintf(tmp,"^^^^btnReleased %d:\'%s\'",item,(char *)data); jm_show_comment(tmp);
         #endif //PC_BUILD
 
-        if(item == ITM_SQUAREROOTX) closeNim();      //JM moved here, from bufferize see JMCLOSE
+        if(calcMode == CM_NIM && item == ITM_SQUAREROOTX) closeNim();      //JM moved here, from bufferize see JMCLOSE
 
         hideFunctionName();
         if(item < 0) {

@@ -27,3 +27,7 @@ void fnStandardError(uint16_t unusedButMandatoryParameter);
 void fnGeometricSampleStdDev(uint16_t unusedButMandatoryParameter);
 void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter);
 void fnGeometricStandardError(uint16_t unusedButMandatoryParameter);
+void fnPopulationCovariance(uint16_t unusedButMandatoryParameter);
+void fnSampleCovariance(uint16_t unusedButMandatoryParameter);
+void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter);
+void fnMinExpStdDev(uint16_t unusedButMandatoryParameter);

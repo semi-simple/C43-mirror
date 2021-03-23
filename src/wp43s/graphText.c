@@ -26,7 +26,6 @@
 //#define DISPLOADING
 
 #include "wp43s.h"
-#include "math.h"
 
 char                 filename_csv[40]; //JMMAX                //JM_CSV Changed from 60 to 40 to save 20 bytes.
 uint32_t             mem__32;                                 //JM_CSV
@@ -505,7 +504,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   if (fr == 0) {
     sprintf(line,"Write error ID009 --> %d    \n",fr);            
     //print_linestr(line,false);
-    printf(line1);
+    printf("%s",line1);
     fclose(outfile);
     return (int)fr;
   } else {
@@ -635,7 +634,7 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
     if (fr == 0) {
       sprintf(line,"Write error ID012 --> %d %s\n",fr,inputstring);            
       //print_linestr(line,false);
-      printf(line);
+      printf("%s",line);
       fclose(outfile);
       return (int)fr;
     } 
@@ -686,7 +685,7 @@ int16_t export_xy_to_file(graphtype x, graphtype y){ //PC_BUILD
 
 
 
-int16_t line_x,line_y;
+int16_t g_line_x, g_line_y;
 
 
 void print_linestr(const char *line1, bool_t line_init) {
@@ -697,23 +696,23 @@ void print_linestr(const char *line1, bool_t line_init) {
     int16_t ixx;
 
     if(line_init) {
-      line_y = 20;
-      line_x = 0;
+      g_line_y = 20;
+      g_line_x = 0;
     }
     ixx = stringByteLength(line1);
-    while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-line_x) {
+    while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-g_line_x) {
        xcopy(l1, line1, ix+1);
        l1[ix+1]=0;
        ix = stringNextGlyph(line1, ix);
     }
 
-    if(line_y < SCREEN_HEIGHT) { 
-        ixx = showString(l1, &standardFont, line_x, line_y, vmNormal, true, true);
+    if(g_line_y < SCREEN_HEIGHT) { 
+        ixx = showString(l1, &standardFont, g_line_x, g_line_y, vmNormal, true, true);
     }
-    line_y += 20;
-    if(line_y > SCREEN_HEIGHT - 20) {
-      line_y = 40;
-      line_x += 4;
+    g_line_y += 20;
+    if(g_line_y > SCREEN_HEIGHT - 20) {
+      g_line_y = 40;
+      g_line_x += 4;
     }
     force_refresh();
 #endif
@@ -721,18 +720,18 @@ void print_linestr(const char *line1, bool_t line_init) {
 
 void print_numberstr(const char *line1, bool_t line_init) {     //ONLY N=ASCII NUMBERS AND E AND . //FIXED FONT
 #ifndef TESTSUITE_BUILD
-    if(line_init) {line_y = 20;}
-    if(line_y < SCREEN_HEIGHT) { 
+    if(line_init) {g_line_y = 20;}
+    if(g_line_y < SCREEN_HEIGHT) { 
         int16_t cnt = 0;
         char tt[2];
-        while(line1[cnt] != 0 && line_x < SCREEN_WIDTH-8 +1) {
+        while(line1[cnt] != 0 && g_line_x < SCREEN_WIDTH-8 +1) {
           tt[0]=line1[cnt]; tt[1]=0;
-          line_x = showString(tt, &standardFont, cnt * 8, line_y, vmNormal, true, true);
+          g_line_x = showString(tt, &standardFont, cnt * 8, g_line_y, vmNormal, true, true);
           cnt++;
         }
     }
-    line_y += 20;
-    line_x = 0;
+    g_line_y += 20;
+    g_line_x = 0;
     force_refresh();
 #endif
 }

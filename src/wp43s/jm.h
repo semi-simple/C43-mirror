@@ -86,20 +86,6 @@ void reset_jm_defaults (int16_t toload);
 
 
 //keyboard.c  screen.c
-int16_t JM_auto_doublepress_enabled;              //JM TIMER CLRDROP //drop
-int16_t JM_auto_longpress_enabled;                //JM TIMER CLRDROP //clstk
-
-uint8_t JM_SHIFT_HOME_TIMER1;                     //Local to keyboard.c, but defined here
-int16_t JM_ASN_MODE;                              //JM ASSIGN
-
-bool_t ULFL, ULGL;                                //JM Underline
-
-int16_t FN_key_pressed, FN_key_pressed_last;      //JM LONGPRESS FN
-bool_t FN_timeouts_in_progress;                   //JM LONGPRESS FN
-bool_t Shft_timeouts;                             //JM SHIFT NEW FN
-bool_t FN_timed_out_to_NOP;                       //JM LONGPRESS FN
-bool_t FN_timed_out_to_RELEASE_EXEC;              //JM LONGPRESS FN
-bool_t FN_handle_timed_out_to_EXEC;
 
 
 // Confirmation Y or N changed from original WP43S because the alpha keys order changed
@@ -133,8 +119,6 @@ extern bool_t jm_LARGELI;                                           //JM flag to
 extern bool_t running_program_jm;                                   //JM program is running flag
 extern uint32_t indic_x;                                            //JM program progress indicators
 extern uint32_t indic_y;                                            //JM program progress indicators
-extern int16_t fnXEQMENUpos;                                        //JMXEQ
-char  indexOfItemsXEQM[18*8];                                       //JMXEQ
 
 
 // Additional routines needed in jm.c

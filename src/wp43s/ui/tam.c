@@ -365,6 +365,12 @@
       }
       return;
     }
+    else if(indexOfItems[item].func == fnGetSystemFlag && (tam.mode == TM_FLAGR || tam.mode == TM_FLAGW)) {
+      // A function key has been pressed that corresponds to a system flag
+      tam.value = indexOfItems[item].param;
+      tryOoR = true;
+      forceTry = true;
+    }
     else {
       // Do nothing
       return;
@@ -374,7 +380,7 @@
 
     if(!tam.alpha && !forcedVar) {
       // Check whether it is possible to add any more digits: if not, execute the function
-      if(min <= tam.value && (tryOoR || tam.value <= max) && (forceTry || tam.value*10 > max)) {
+      if((tryOoR || (min <= tam.value && tam.value <= max)) && (forceTry || tam.value*10 > max)) {
         int16_t value = tam.value;
         bool_t run = true;
         if(tam.dot) {

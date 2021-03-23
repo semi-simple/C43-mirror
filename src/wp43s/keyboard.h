@@ -36,8 +36,7 @@ void executeFunction(const char *data, int16_t item_);
 #define ST_1_PRESS1   1     //STATE 1 FIRST PRESS
 #define ST_2_REL1     2     //STATE 2 FIRST RELEASE
 #define ST_3_PRESS2   3     //STATE 3 SECOND PRESS     //Double click determination 2 to 3 < 75 ms.
-#define ST_4_REL2     4     //STATE 4 SECOND RELEASE
-uint8_t FN_state; // = ST_0_INIT;                      //JM ^^
+#define ST_4_REL2     4     //STATE 4 SECOND RELEASE   //JM ^^
 
 
 #ifdef PC_BUILD

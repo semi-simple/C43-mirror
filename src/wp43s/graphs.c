@@ -23,7 +23,6 @@
 
 #include "wp43s.h"
 #include "math.h"
-#include "plotstat.h"
 
 //#define STATDEBUG
 
@@ -346,11 +345,40 @@ void graph_axis (void){
       tick_int_y = graph_dy;
     }
   #endif //TESTSUITE_BUILD
-  graph_axis_draw();
+  graphAxisDraw();
 }
 
 
 
+  void convertDigits(uint16_t ii, uint16_t * oo, char * outstr) {
+    switch (tmpString[ii]) {
+      case  48: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x80; break; //.
+      case  49: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x81; break; //.
+      case  50: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x82; break; //.
+      case  51: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x83; break; //.
+      case  52: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x84; break; //.
+      case  53: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x85; break; //.
+      case  54: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x86; break; //.
+      case  55: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x87; break; //.
+      case  56: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x88; break; //.
+      case  57: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x89; break; //.
+
+      case 120: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb3; break; //x
+      case 121: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb4; break; //y
+      case 'a': outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9c; break; //a
+      case 's': outstr[*oo++] = 0xa4; outstr[*oo++] = 0xae; break; //s
+      case  58: outstr[*oo++] = 0xa2; outstr[*oo++] = 0x36; break; //:
+      case  43: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8a; break; //+
+      case  45: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8b; break; //-
+      case  46: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x1a; break; //.
+      case  47: outstr[*oo++] = 0xa4; outstr[*oo++] = 0x25; break; ///
+      case 116: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x9c; break; //t
+      case 105: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa4; break; //i
+      case 99 : outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9e; break; //c
+      case 107: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa6; break; //k
+      default : outstr[*oo++] = tmpString[ii];
+    }
+  }
 
 void graph_text(void){
   #ifndef TESTSUITE_BUILD
@@ -358,42 +386,13 @@ void graph_text(void){
   uint16_t ii;
   uint16_t oo;
   char outstr[300];
-  void convertDigits(void) {
-    switch (tmpString[ii]) {
-      case  48: outstr[oo++] = 0xa0; outstr[oo++] = 0x80; break; //.
-      case  49: outstr[oo++] = 0xa0; outstr[oo++] = 0x81; break; //.
-      case  50: outstr[oo++] = 0xa0; outstr[oo++] = 0x82; break; //.
-      case  51: outstr[oo++] = 0xa0; outstr[oo++] = 0x83; break; //.
-      case  52: outstr[oo++] = 0xa0; outstr[oo++] = 0x84; break; //.
-      case  53: outstr[oo++] = 0xa0; outstr[oo++] = 0x85; break; //.
-      case  54: outstr[oo++] = 0xa0; outstr[oo++] = 0x86; break; //.
-      case  55: outstr[oo++] = 0xa0; outstr[oo++] = 0x87; break; //.
-      case  56: outstr[oo++] = 0xa0; outstr[oo++] = 0x88; break; //.
-      case  57: outstr[oo++] = 0xa0; outstr[oo++] = 0x89; break; //.
-
-      case 120: outstr[oo++] = 0xa4; outstr[oo++] = 0xb3; break; //x
-      case 121: outstr[oo++] = 0xa4; outstr[oo++] = 0xb4; break; //y
-      case 'a': outstr[oo++] = 0xa4; outstr[oo++] = 0x9c; break; //a
-      case 's': outstr[oo++] = 0xa4; outstr[oo++] = 0xae; break; //s
-      case  58: outstr[oo++] = 0xa2; outstr[oo++] = 0x36; break; //:
-      case  43: outstr[oo++] = 0xa0; outstr[oo++] = 0x8a; break; //+
-      case  45: outstr[oo++] = 0xa0; outstr[oo++] = 0x8b; break; //-
-      case  46: outstr[oo++] = 0xa0; outstr[oo++] = 0x1a; break; //.
-      case  47: outstr[oo++] = 0xa4; outstr[oo++] = 0x25; break; ///
-      case 116: outstr[oo++] = 0xa0; outstr[oo++] = 0x9c; break; //t
-      case 105: outstr[oo++] = 0xa4; outstr[oo++] = 0xa4; break; //i
-      case 99 : outstr[oo++] = 0xa4; outstr[oo++] = 0x9e; break; //c
-      case 107: outstr[oo++] = 0xa4; outstr[oo++] = 0xa6; break; //k
-      default : outstr[oo++] = tmpString[ii];
-    }
-  }
 
   snprintf(tmpString, TMP_STR_LENGTH, "y %.3f/tick  ",tick_int_y);
   ii = 0;
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits();
+    convertDigits(ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -406,7 +405,7 @@ void graph_text(void){
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits();
+    convertDigits(ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -441,7 +440,7 @@ void graph_text(void){
     oo = 0;
     outstr[0]=0;
     while (tmpString[ii] != 0) {
-      convertDigits();
+      convertDigits(ii,&oo,outstr);
       ii++;
     }
   outstr[oo]=0;
@@ -514,27 +513,8 @@ void graph_plotmem(void) {
 //printf("TEST %d %d\n",screen_window_x(-0.405573,0.45,0.689633), screen_window_y(-0.405573,0.45,0.689633));
 //printf("TEST %d %d\n",screen_window_x(0,1,1), screen_window_y(0,1,1));
 
-  void plotDiff(void) {
-    if(ddx != 0) {
-      if(ix == 1)                                 // only two samples available
-        dydx = (grf_y(ix) - grf_y(ix-1)) / ddx;   // Differential
-      else if(ix >= 2)                            // ix >= 2 three samples available 0 1 2
-        dydx = ( grf_y(ix-2) - 4.0 * grf_y(ix-1) + 3.0 * grf_y(ix) ) / 2.0 / ddx; //ChE 205 — Formulas for Numerical Differentiation, formule 32
-    } 
-    else dydx = FLoatingMax;
-  }
 
-  void plotInt(void) {
-    inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;
-  }
 
-  void plotRms(void) {
-    rmsy = sqrt (
-    	          ( 
-    	          	(grf_x(ix-1)-grf_x(0)) * rmsy * rmsy +
-    	         (  ddx * (grf_y(ix) + grf_y(ix-1) ) / 2   *   (grf_y(ix) + grf_y(ix-1) ) / 2) 
-    	                                                                                     )  / (grf_x(ix)-grf_x(0)));
-  }
 
   statnum = 0;
 
@@ -609,17 +589,31 @@ void graph_plotmem(void) {
 /**/              if(grf_x(ix) < x_min) {x_min = grf_x(ix);}
 /**/              if(grf_x(ix) > x_max) {x_max = grf_x(ix);}
 /**/              if(PLOT_DIFF) {
-/**/                plotDiff(); //dydx                                            //Differential
+/**/                //plotDiff(); //dydx                                            //Differential
+                    if(ddx != 0) {
+                      if(ix == 1)                                 // only two samples available
+                        dydx = (grf_y(ix) - grf_y(ix-1)) / ddx;   // Differential
+                      else if(ix >= 2)                            // ix >= 2 three samples available 0 1 2
+                        dydx = ( grf_y(ix-2) - 4.0 * grf_y(ix-1) + 3.0 * grf_y(ix) ) / 2.0 / ddx; //ChE 205 — Formulas for Numerical Differentiation, formule 32
+                    } 
+                    else dydx = FLoatingMax;
+
 /**/                if(dydx < y_min) {y_min = dydx;}
 /**/                if(dydx > y_max) {y_max = dydx;}
 /**/              }
 /**/              if(PLOT_INTG) {
-/**/                plotInt();   //inty                                          //integral
-/**/                if(inty < y_min) {y_min = inty;}
+/**/                //plotInt();   //inty                                          //integral
+/**/                inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;
+                    if(inty < y_min) {y_min = inty;}
 /**/                if(inty > y_max) {y_max = inty;}
 /**/              }
 /**/              if(PLOT_RMS) {
-/**/                plotRms();   //inty                                          //integral
+/**/                //plotRms();   //inty                                          //integral
+                    rmsy = sqrt (
+                    ( (grf_x(ix-1)-grf_x(0)) * rmsy * rmsy +
+                      ( ddx * (grf_y(ix) + grf_y(ix-1) ) / 2   *   (grf_y(ix) + grf_y(ix-1) ) / 2) 
+                        )  / (grf_x(ix)-grf_x(0)));
+
 /**/                if(rmsy < y_min) {y_min = rmsy;}
 /**/                if(rmsy > y_max) {y_max = rmsy;}
 /**/              }
@@ -785,10 +779,26 @@ void graph_plotmem(void) {
 
         if(ix !=0 && ( (PLOT_DIFF && !invalid_diff) || (PLOT_INTG && !invalid_intg) || (PLOT_RMS && !invalid_rms) )) {                                                               //Differential dydx
           ddx = grf_x(ix) - grf_x(ix-1);
-          plotDiff();   //dydx                                          //Differential
+          //plotDiff();   //dydx                                          //Differential
+          if(ddx != 0) {
+            if(ix == 1)                                 // only two samples available
+              dydx = (grf_y(ix) - grf_y(ix-1)) / ddx;   // Differential
+            else if(ix >= 2)                            // ix >= 2 three samples available 0 1 2
+              dydx = ( grf_y(ix-2) - 4.0 * grf_y(ix-1) + 3.0 * grf_y(ix) ) / 2.0 / ddx; //ChE 205 — Formulas for Numerical Differentiation, formule 32
+          } 
+          else dydx = FLoatingMax;
+
           inty0 = inty;
-          plotInt();    //inty                                         //integral
-          plotRms();    //RMSy
+          //plotInt();    //inty                                         //integral
+          inty = inty + (grf_y(ix) + grf_y(ix-1)) / 2 * ddx;
+
+          //plotRms();    //RMSy
+          rmsy = sqrt (
+            ( 
+              (grf_x(ix-1)-grf_x(0)) * rmsy * rmsy +
+           (  ddx * (grf_y(ix) + grf_y(ix-1) ) / 2   *   (grf_y(ix) + grf_y(ix-1) ) / 2) 
+                                                                                       )  / (grf_x(ix)-grf_x(0)));
+
           x = (grf_x(ix) + grf_x(ix-1))/2;
           if(PLOT_DIFF) y = dydx;                 //y is the default graph
           if(PLOT_RMS)  y = rmsy;                 //y is the default graph

@@ -1741,22 +1741,28 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  real34_t j, y, m, d;
+  real34_t j, y, yy, m, d;
+  uint64_t yearVal;
   char sign[] = {0, 0};
 
   internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
   decomposeJulianDay(&j, &y, &m, &d);
   if(real34IsNegative(&y)) sign[0] = '-';
   real34CopyAbs(&y, &y);
+  real34CopyAbs(&y, &yy);
+  real34DivideRemainder(&y, const34_2p32, &y);
+  real34Divide(&yy, const34_2p32, &yy);
+  real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
+  yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
 
   if(getSystemFlag(FLAG_DMY)) {
-    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, real34ToUInt32(&y));
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu64, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearVal);
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, real34ToUInt32(&y));
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu64, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearVal);
   }
   else { // YMD
-    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, real34ToUInt32(&y), real34ToUInt32(&m), real34ToUInt32(&d));
+    sprintf(displayString, "%s%04" PRIu64 "-%02" PRIu32 "-%02" PRIu32, sign, yearVal, real34ToUInt32(&m), real34ToUInt32(&d));
   }
 }
 
@@ -1764,6 +1770,7 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
   real34_t real34, value34, tmp34, h34, m34, s34;
+  longInteger_t hli;
   int32_t sign;
   uint32_t digits, tDigits = 0u, bDigits;
   char digitBuf[16], digitBuf2[48];
@@ -1845,7 +1852,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
 
   // Display Hours
   strcpy(displayString, sign ? "-" : "");
-  real34ToString(&h34, digitBuf2);
+  longIntegerInit(hli);
+  convertReal34ToLongInteger(&h34, hli, DEC_ROUND_DOWN);
+  longIntegerToAllocatedString(hli, digitBuf2, sizeof(digitBuf2));
+  longIntegerFree(hli);
 
   bufPtr = digitBuf2;
   digitBuf[1] = '\0';
@@ -2066,6 +2076,41 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
 
 
+void SHOW_reset(void){
+  tmpString[   0] = 0; // L1
+  tmpString[ 300] = 0; // L2
+  tmpString[ 600] = 0; // L3
+  tmpString[ 900] = 0; // L4
+  tmpString[1200] = 0; // L5
+  tmpString[1500] = 0; // L6
+  tmpString[1800] = 0; // L7
+
+  temporaryInformation = TI_SHOW_REGISTER_SMALL;
+
+  tmpString[   0] = 0; // JM Initialise
+  tmpString[2100] = 0; // JM temp
+  tmpString[2400] = 0; // JM temp
+
+  if(SHOWregis >= 0 && SHOWregis < 100) {
+    snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
+  } else
+  switch (SHOWregis) {
+    case REGISTER_X: strcpy(tmpString + 2100, "X: "); break;
+    case REGISTER_Y: strcpy(tmpString + 2100, "Y: "); break;
+    case REGISTER_Z: strcpy(tmpString + 2100, "Z: "); break;
+    case REGISTER_T: strcpy(tmpString + 2100, "T: "); break;
+    case REGISTER_A: strcpy(tmpString + 2100, "A: "); break;
+    case REGISTER_B: strcpy(tmpString + 2100, "B: "); break;
+    case REGISTER_C: strcpy(tmpString + 2100, "C: "); break;
+    case REGISTER_D: strcpy(tmpString + 2100, "D: "); break;
+    case REGISTER_L: strcpy(tmpString + 2100, "L: "); break;
+    case REGISTER_I: strcpy(tmpString + 2100, "I: "); break;
+    case REGISTER_J: strcpy(tmpString + 2100, "J: "); break;
+    case REGISTER_K: strcpy(tmpString + 2100, "K: "); break;
+    default: break;
+  }
+}
+
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
 #ifndef TESTSUITE_BUILD
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
@@ -2110,41 +2155,6 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   }
 
 
-  void SHOW_reset(void){
-    tmpString[   0] = 0; // L1
-    tmpString[ 300] = 0; // L2
-    tmpString[ 600] = 0; // L3
-    tmpString[ 900] = 0; // L4
-    tmpString[1200] = 0; // L5
-    tmpString[1500] = 0; // L6
-    tmpString[1800] = 0; // L7
-
-    temporaryInformation = TI_SHOW_REGISTER_SMALL;
-
-    tmpString[   0] = 0; // JM Initialise
-    tmpString[2100] = 0; // JM temp
-    tmpString[2400] = 0; // JM temp
-
-
-    if(SHOWregis >= 0 && SHOWregis < 100) {
-      snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
-    } else
-    switch (SHOWregis) {
-      case REGISTER_X: strcpy(tmpString + 2100, "X: "); break;
-      case REGISTER_Y: strcpy(tmpString + 2100, "Y: "); break;
-      case REGISTER_Z: strcpy(tmpString + 2100, "Z: "); break;
-      case REGISTER_T: strcpy(tmpString + 2100, "T: "); break;
-      case REGISTER_A: strcpy(tmpString + 2100, "A: "); break;
-      case REGISTER_B: strcpy(tmpString + 2100, "B: "); break;
-      case REGISTER_C: strcpy(tmpString + 2100, "C: "); break;
-      case REGISTER_D: strcpy(tmpString + 2100, "D: "); break;
-      case REGISTER_L: strcpy(tmpString + 2100, "L: "); break;
-      case REGISTER_I: strcpy(tmpString + 2100, "I: "); break;
-      case REGISTER_J: strcpy(tmpString + 2100, "J: "); break;
-      case REGISTER_K: strcpy(tmpString + 2100, "K: "); break;
-      default: break;
-    }
-  }
 
   #ifndef TESTSUITE_BUILD
     #ifdef PC_BUILD

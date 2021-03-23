@@ -327,7 +327,7 @@ void fnGetStackSize(uint16_t unusedButMandatoryParameter) {
 void saveForUndo(void) {
   savedSystemFlags = systemFlags;
 
-  if(calcMode == CM_NIM && thereIsSomethingToUndo) {
+  if((calcMode == CM_NIM || calcMode == CM_AIM) && thereIsSomethingToUndo) {
     return;
   }
 

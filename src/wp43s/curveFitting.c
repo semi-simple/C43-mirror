@@ -173,7 +173,6 @@ char ss[100];
 
 
 void processCurvefitSelection(uint16_t selection){
-    double x_,y_,sx,sy,sxy;
     char ss[100];
     real_t SS,TT,UU,VV,WW;
     real_t S_X,S_Y,S_XY,RR,SMI,M_X,M_Y;
@@ -206,28 +205,43 @@ void processCurvefitSelection(uint16_t selection){
     realToString(SIGMA_X4,     ss); sumx4     = strtof (ss, NULL);
     realToString(SIGMA_YMAX,   ss); maxy      = strtof (ss, NULL);
 
+
+    #ifdef PC_BUILD
+      double x_,y_,sx,sy,sxy;
+    #endif
+
     fnMeanXY(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  x_ = strtof (ss, NULL);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  y_ = strtof (ss, NULL);
+    #ifdef PC_BUILD
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  x_ = strtof (ss, NULL);
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  y_ = strtof (ss, NULL);
+    #endif
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&M_X);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y),&M_Y);
 
     fnSampleStdDev(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sx = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumx2 - sumx*sumx) );
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  sy = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumy2 - sumy*sumy) );
+    #ifdef PC_BUILD
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sx = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumx2 - sumx*sumx) );
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_Y), ss);  sy = strtof (ss, NULL); //sqrt(1.0/(nn*(nn-1.0)) * ( nn *sumy2 - sumy*sumy) );
+    #endif
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&S_X);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y),&S_Y);
 
     fnSampleCovariance(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sxy = strtof (ss, NULL); //(1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
+    #ifdef PC_BUILD
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  sxy = strtof (ss, NULL); //(1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
+    #endif
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&S_XY);
 
     fnCoefficientDetermination(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  r = strtof (ss, NULL); //sxy / (sx * sy);
+    #ifdef PC_BUILD
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  r = strtof (ss, NULL); //sxy / (sx * sy);
+    #endif
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&RR);
 
     fnMinExpStdDev(0);
-    real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  smi = strtof (ss, NULL); //sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
+    #ifdef PC_BUILD
+      real34ToString(REGISTER_REAL34_DATA(REGISTER_X), ss);  smi = strtof (ss, NULL); //sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
+    #endif
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&SMI);
 
     #ifdef PC_BUILD

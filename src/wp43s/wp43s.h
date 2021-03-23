@@ -318,6 +318,12 @@
   extern char                  *errorMessage;
   extern char                  *aimBuffer; // aimBuffer is also used for NIM
   extern char                  *nimBufferDisplay;
+
+  /**
+   * Buffer for output of TAM current state. After calling ::tamProcessInput this
+   * buffer is updated to the latest TAM state and should be redrawn to the relevant
+   * part of the screen.
+   */
   extern char                  *tamBuffer;
   extern char                   asmBuffer[5];
   extern char                   oldTime[8];
@@ -358,6 +364,9 @@
   extern uint8_t               *firstDisplayedStep;
   extern uint8_t               *currentStep;
 
+  /**
+   * Instance of the internal state for TAM.
+   */
   extern tamState_t             tam;
   extern int16_t                currentRegisterBrowserScreen;
   extern int16_t                lineTWidth;

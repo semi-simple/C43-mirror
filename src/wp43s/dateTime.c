@@ -217,14 +217,28 @@ void composeJulianDay(const real34_t *year, const real34_t *month, const real34_
 
 // Gregorian
 void composeJulianDay_g(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
+  real34_t y, negVal;
   real34_t m_14_12; // round_down((month - 14) / 12)
   real34_t a, tmp;
+
+  int32ToReal34(-4712, &tmp);
+  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
+    AddInt(year, 4712, &y);
+    int32ToReal34(400, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
+    SubInt(&y, 4712, &y);
+    MulInt(&negVal, -400, &a);
+    real34Add(&y, &a, &y);
+  }
+  else {
+    real34Copy(year, &y);
+    real34Copy(const34_0, &negVal);
+  }
 
   // round_down((month - 14) / 12)
   SubInt(month, 14, &m_14_12);
   DivInt(&m_14_12, 12, &m_14_12);
 
-  AddInt(year, 4800, &a);
+  AddInt(&y, 4800, &a);
   real34Add(&a, &m_14_12, &a);
   MulInt(&a, 1461, &a);
   DivInt(&a, 4, jd);
@@ -236,7 +250,7 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
   DivInt(&a, 12, &a);
   real34Add(jd, &a, jd);
 
-  AddInt(year, 4900, &a);
+  AddInt(&y, 4900, &a);
   real34Add(&a, &m_14_12, &a);
   DivInt(&a, 100, &a);
   MulInt(&a, 3, &a);
@@ -245,17 +259,34 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   SubInt(jd, 32075, jd);
+
+  // Negative Julian date
+  MulInt(&negVal, 146097, &a);
+  real34Add(jd, &a, jd);
 }
 
 // Julian
 void composeJulianDay_j(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
-  real34_t a, tmp;
+  real34_t y, a, tmp, negVal;
 
-  MulInt(year, 367, jd);
+  int32ToReal34(-4712, &tmp);
+  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
+    AddInt(year, 4712, &y);
+    int32ToReal34(4, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
+    SubInt(&y, 4712, &y);
+    MulInt(&negVal, -4, &a);
+    real34Add(&y, &a, &y);
+  }
+  else {
+    real34Copy(year, &y);
+    real34Copy(const34_0, &negVal);
+  }
+
+  MulInt(&y, 367, jd);
 
   SubInt(month, 9, &a);
   DivInt(&a, 7, &a);
-  real34Add(&a, year, &a);
+  real34Add(&a, &y, &a);
   AddInt(&a, 5001, &a);
   MulInt(&a, 7, &a);
   DivInt(&a, 4, &a);
@@ -267,6 +298,10 @@ void composeJulianDay_j(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   AddInt(jd, 1729777, jd);
+
+  // Negative Julian date
+  MulInt(&negVal, 1461, &a);
+  real34Add(jd, &a, jd);
 }
 
 #undef DivInt

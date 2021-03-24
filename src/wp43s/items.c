@@ -678,6 +678,7 @@ TO_QSPI const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
 
+
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2471,14 +2472,14 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1753 */  { itemToBeCoded,               NOPARAM,                     "TRANS",                                       "TRANS",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1754 */  { itemToBeCoded,               NOPARAM,                     "xIN",                                         "xIN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1755 */  { itemToBeCoded,               NOPARAM,                     "xOUT",                                        "xOUT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1756 */  { fnPlotRegLine,               NOPARAM,                     "CENTRL",                                      "CENTRL",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1757 */  { fnPlotClose,                 NOPARAM,                     "CLOSE",                                       "CLOSE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1758 */  { fnPlotRegLine,               NOPARAM,                      "CENTRL"               ,                       "CENTRL"               ,                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1759 */  { fnPlotClose,                 NOPARAM,                      "CLOSE"                ,                       "CLOSE"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1760 */  { fnStatDemo,                  NOPARAM,                      "DEMO1"                ,                       "DEMO1"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1761 */  { fnStatDemo1,                 NOPARAM,                      "DEMO2"                ,                       "DEMO2"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1762 */  { fnStatDemo2,                 NOPARAM,                      "DEMO3"                ,                       "DEMO3"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1763 */  { fnPlotCloseSmi,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1756 */  { fnPlotRegLine,               NOPARAM,                      "CENTRL"               ,                       "CENTRL"               ,                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1757 */  { fnPlotClose,                 NOPARAM,                      "CLOSE"                ,                       "CLOSE"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1758 */  { fnStatDemo,                  NOPARAM,                      "DEMO1"                ,                       "DEMO1"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1759 */  { fnStatDemo1,                 NOPARAM,                      "DEMO2"                ,                       "DEMO2"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1760 */  { fnStatDemo2,                 NOPARAM,                      "DEMO3"                ,                       "DEMO3"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1761 */  { fnPlotCloseSmi,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1762 */  { itemToBeCoded,               NOPARAM,                     "1762",                                        "1762",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1763 */  { itemToBeCoded,               NOPARAM,                     "1763",                                        "1763",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1764 */  { itemToBeCoded,               NOPARAM,                     "1764",                                        "1764",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1765 */  { itemToBeCoded,               NOPARAM,                     "1765",                                        "1765",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1766 */  { itemToBeCoded,               NOPARAM,                     "1766",                                        "1766",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},

@@ -126,7 +126,7 @@
             strcpy(tmpString + CHARS_PER_LINE * ++line, "1 local register is allocated.");
           }
           else {
-            sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
+            sprintf(tmpString + CHARS_PER_LINE * ++line, "%" PRIu8 " local registers are allocated.", currentNumberOfLocalRegisters);
           }
         }
 

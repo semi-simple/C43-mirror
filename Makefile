@@ -177,7 +177,7 @@ dist_windows:	wp43s.exe
 	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
 	cp DM42\ binary/testPgms.bin $(WIN_DIST_DIR)/DM42\ binary/
 	cp wp43s_pre.css $(WIN_DIST_DIR)/
-	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
+#	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
 	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/DM42\ binary
@@ -188,7 +188,7 @@ dist_macos:	wp43s
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:
-	cd DMCP_build #&& ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
+	cd DMCP_build && ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
 	mkdir -p $(DM_DIST_DIR)
 	cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)

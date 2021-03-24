@@ -55,7 +55,7 @@ static bool_t checkParamF(real_t *x, real_t *i, real_t *j) {
   }
 
   if(!(checkRegisterNoFP(REGISTER_I) || checkRegisterNoFP(REGISTER_J))) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamF:", "d1 or d2 is not an integer", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -65,7 +65,7 @@ static bool_t checkParamF(real_t *x, real_t *i, real_t *j) {
     return true;
   }
   else if(realIsZero(i) || realIsNegative(i) || realIsZero(j) || realIsNegative(j)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamF:", "cannot calculate for d1 " STD_LESS_EQUAL " 0 or d2 " STD_LESS_EQUAL " 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)

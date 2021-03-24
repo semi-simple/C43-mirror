@@ -217,14 +217,28 @@ void composeJulianDay(const real34_t *year, const real34_t *month, const real34_
 
 // Gregorian
 void composeJulianDay_g(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
+  real34_t y, negVal;
   real34_t m_14_12; // round_down((month - 14) / 12)
   real34_t a, tmp;
+
+  int32ToReal34(-4712, &tmp);
+  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
+    AddInt(year, 4712, &y);
+    int32ToReal34(400, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
+    SubInt(&y, 4712, &y);
+    MulInt(&negVal, -400, &a);
+    real34Add(&y, &a, &y);
+  }
+  else {
+    real34Copy(year, &y);
+    real34Copy(const34_0, &negVal);
+  }
 
   // round_down((month - 14) / 12)
   SubInt(month, 14, &m_14_12);
   DivInt(&m_14_12, 12, &m_14_12);
 
-  AddInt(year, 4800, &a);
+  AddInt(&y, 4800, &a);
   real34Add(&a, &m_14_12, &a);
   MulInt(&a, 1461, &a);
   DivInt(&a, 4, jd);
@@ -236,7 +250,7 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
   DivInt(&a, 12, &a);
   real34Add(jd, &a, jd);
 
-  AddInt(year, 4900, &a);
+  AddInt(&y, 4900, &a);
   real34Add(&a, &m_14_12, &a);
   DivInt(&a, 100, &a);
   MulInt(&a, 3, &a);
@@ -245,17 +259,34 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   SubInt(jd, 32075, jd);
+
+  // Negative Julian date
+  MulInt(&negVal, 146097, &a);
+  real34Add(jd, &a, jd);
 }
 
 // Julian
 void composeJulianDay_j(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
-  real34_t a, tmp;
+  real34_t y, a, tmp, negVal;
 
-  MulInt(year, 367, jd);
+  int32ToReal34(-4712, &tmp);
+  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
+    AddInt(year, 4712, &y);
+    int32ToReal34(4, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
+    SubInt(&y, 4712, &y);
+    MulInt(&negVal, -4, &a);
+    real34Add(&y, &a, &y);
+  }
+  else {
+    real34Copy(year, &y);
+    real34Copy(const34_0, &negVal);
+  }
+
+  MulInt(&y, 367, jd);
 
   SubInt(month, 9, &a);
   DivInt(&a, 7, &a);
-  real34Add(&a, year, &a);
+  real34Add(&a, &y, &a);
   AddInt(&a, 5001, &a);
   MulInt(&a, 7, &a);
   DivInt(&a, 4, &a);
@@ -267,6 +298,10 @@ void composeJulianDay_j(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   AddInt(jd, 1729777, jd);
+
+  // Negative Julian date
+  MulInt(&negVal, 1461, &a);
+  real34Add(jd, &a, jd);
 }
 
 #undef DivInt
@@ -346,6 +381,27 @@ uint32_t getDayOfWeek(calcRegister_t regist) {
 #undef DivInt
 
 /********************************************//**
+ * \brief Check date range
+ *
+ * \param[in] time34 real34_t*
+ * \return void
+ ***********************************************/
+void checkDateRange(const real34_t *date34) {
+  real34_t hundredgigayear, neghundredgigayear;
+  stringToReal34("3155695348699627200.000000000000000", &hundredgigayear);
+  stringToReal34("-3155759851268923200.000000000000000", &neghundredgigayear);
+  if(real34CompareGreaterEqual(date34, &hundredgigayear) || real34CompareLessThan(date34, &neghundredgigayear)) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "value of date type is too large");
+      moreInfoOnError("In function checkDateRange:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+}
+
+
+/********************************************//**
  * \brief Convert H.MMSS into seconds
  *
  * \param[in] src real34_t* H.MMSS-formatted time value (for input)
@@ -396,7 +452,29 @@ void hmmssInRegisterToSeconds(calcRegister_t regist) {
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
   hmmssToSeconds(&real34, REGISTER_REAL34_DATA(regist));
+  checkTimeRange(REGISTER_REAL34_DATA(regist));
 }
+
+/********************************************//**
+ * \brief Check time range
+ *
+ * \param[in] time34 real34_t*
+ * \return void
+ ***********************************************/
+void checkTimeRange(const real34_t *time34) {
+  real34_t t, petahour;
+  real34CopyAbs(time34, &t);
+  stringToReal34("36000000000000000000.00000000000000", &petahour);
+  if(real34CompareGreaterEqual(&t, &petahour)) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "value of time type is too large");
+      moreInfoOnError("In function checkTimeRange:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+}
+
 
 
 void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
@@ -420,6 +498,10 @@ void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
+
+  // check range
+  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 void fnDateToJulian(uint16_t unusedButMandatoryParameter) {
@@ -486,6 +568,8 @@ void fnXToDate(uint16_t unusedButMandatoryParameter) {
     case dtReal34:
       if(getRegisterAngularMode(REGISTER_X) == amNone) {
         convertReal34RegisterToDateRegister(REGISTER_X, REGISTER_X);
+        checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+        if(lastErrorCode != 0) undo();
         break;
       }
       /* fallthrough */
@@ -625,6 +709,10 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
   composeJulianDay(&y, &m, &d, &j);
   reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
   julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
+
+  // check range
+  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 
@@ -673,6 +761,8 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
+  checkTimeRange(REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode != 0) undo();
 }
 
 

@@ -1687,22 +1687,28 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  real34_t j, y, m, d;
+  real34_t j, y, yy, m, d;
+  uint64_t yearVal;
   char sign[] = {0, 0};
 
   internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
   decomposeJulianDay(&j, &y, &m, &d);
   if(real34IsNegative(&y)) sign[0] = '-';
   real34CopyAbs(&y, &y);
+  real34CopyAbs(&y, &yy);
+  real34DivideRemainder(&y, const34_2p32, &y);
+  real34Divide(&yy, const34_2p32, &yy);
+  real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
+  yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
 
   if(getSystemFlag(FLAG_DMY)) {
-    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, real34ToUInt32(&y));
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu64, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearVal);
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, real34ToUInt32(&y));
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu64, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearVal);
   }
   else { // YMD
-    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, real34ToUInt32(&y), real34ToUInt32(&m), real34ToUInt32(&d));
+    sprintf(displayString, "%s%04" PRIu64 "-%02" PRIu32 "-%02" PRIu32, sign, yearVal, real34ToUInt32(&m), real34ToUInt32(&d));
   }
 }
 
@@ -1710,6 +1716,7 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
   real34_t real34, value34, tmp34, h34, m34, s34;
+  longInteger_t hli;
   int32_t sign;
   uint32_t digits, tDigits = 0u, bDigits;
   char digitBuf[16], digitBuf2[48];
@@ -1791,7 +1798,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
 
   // Display Hours
   strcpy(displayString, sign ? "-" : "");
-  real34ToString(&h34, digitBuf2);
+  longIntegerInit(hli);
+  convertReal34ToLongInteger(&h34, hli, DEC_ROUND_DOWN);
+  longIntegerToAllocatedString(hli, digitBuf2, sizeof(digitBuf2));
+  longIntegerFree(hli);
 
   bufPtr = digitBuf2;
   digitBuf[1] = '\0';

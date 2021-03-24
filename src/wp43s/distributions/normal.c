@@ -58,7 +58,7 @@ static bool_t checkParamNormal(real_t *x, real_t *i, real_t *j) {
     return true;
   }
   else if(realIsZero(j) || realIsNegative(j)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamNormal:", "cannot calculate for " STD_sigma " " STD_LESS_EQUAL " 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)

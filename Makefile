@@ -161,7 +161,41 @@ rebuild:
 	$(MAKE) mrproper
 	$(MAKE) all
 
-.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild
+ifeq ($(CI_COMMIT_TAG),)
+  WIN_DIST_DIR = wp43s-windows
+  MAC_DIST_DIR = wp43s-macos
+  DM_DIST_DIR = wp43s-dm42
+else
+  WIN_DIST_DIR = wp43s-windows-$(CI_COMMIT_TAG)
+  MAC_DIST_DIR = wp43s-macos-$(CI_COMMIT_TAG)
+  DM_DIST_DIR = wp43s-dm42-$(CI_COMMIT_TAG)
+endif
+
+dist_windows:	wp43s.exe
+	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/DM42\ binary
+	cp wp43s.exe $(WIN_DIST_DIR)/
+	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
+	cp DM42\ binary/testPgms.bin $(WIN_DIST_DIR)/DM42\ binary/
+	cp wp43s_pre.css $(WIN_DIST_DIR)/
+	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
+
+dist_macos:	wp43s
+	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/DM42\ binary
+	cp wp43s $(MAC_DIST_DIR)/
+	cp artwork/*.png $(MAC_DIST_DIR)/artwork/
+	cp DM42\ binary/testPgms.bin $(MAC_DIST_DIR)/DM42\ binary/
+	cp wp43s_pre.css $(MAC_DIST_DIR)/
+	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
+
+dist_dm42:
+	cd DMCP_build #&& ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
+	mkdir -p $(DM_DIST_DIR)
+	cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin $(DM_DIST_DIR)
+	cp -r offimg $(DM_DIST_DIR)
+	cp DM42\ binary/keymap.bin DM42\ binary/original_DM42_keymap.bin DM42\ binary/testPgms.bin $(DM_DIST_DIR)
+	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
+
+.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild dist_macos
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)

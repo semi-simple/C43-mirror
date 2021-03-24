@@ -2337,7 +2337,7 @@ TO_QSPI const item_t indexOfItems[] = {
 
 /* 1722 */  { fontBrowser,                 NOPARAM,                     "FBR",                                         "FBR",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED}, // Font browser
 
-/* 1723 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED},
+/* 1723 */  { fnUndo,                      NOPARAM,                     "UNDO",                                        STD_UNDO,                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 1724 */  { fnPem,                       NOPARAM,                     "P/R",                                         "P/R",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_CANCEL   },
 /* 1725 */  { itemToBeCoded,               NOPARAM,                     "R/S",                                         "R/S",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 /* 1726 */  { itemToBeCoded,               NOPARAM,                     "1726",                                        "1726",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_UNCHANGED},

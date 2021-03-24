@@ -73,6 +73,8 @@ upload:
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${RM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${DM42_PACKAGE} ${PACKAGE_REGISTRY_URL}/${DM42_PACKAGE}
+  tags:
+    - linux
 
 release:
   stage: release
@@ -85,3 +87,5 @@ release:
         --assets-link "{\"name\":\"Owner's Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}\"}" \
         --assets-link "{\"name\":\"Reference Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}\"}" \
         --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/${DM42_PACKAGE}\"}"
+  tags:
+    - linux

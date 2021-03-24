@@ -736,6 +736,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
     switch(calcMode) {
       case CM_NORMAL:
         setSystemFlag(FLAG_ASLIFT);
+        saveForUndo();
 
         liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -757,6 +758,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
 
           setSystemFlag(FLAG_ASLIFT);
+          saveForUndo();
           liftStack();
           clearSystemFlag(FLAG_ASLIFT);
 
@@ -770,6 +772,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 
         if(lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
+          saveForUndo();
           liftStack();
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -833,6 +836,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_AIM:
         if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
+          saveForUndo();
         }
         else {
           popSoftmenu();
@@ -851,6 +855,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
         leavePem();
         calcModeNormal();
+        saveForUndo();
         break;
 
       case CM_REGISTER_BROWSER:

@@ -22,7 +22,7 @@
 #include "math.h"
 
 
-
+uint16_t lrSelection = 1;
 
 /********************************************//**
  * \brief Sets the curve fitting mode
@@ -34,6 +34,8 @@
 void fnCurveFitting(uint16_t curveFitting) {
   #ifdef PC_BUILD
     uint16_t numberOfOnes;
+
+    lrSelection = curveFitting;
 
     numberOfOnes = curveFitting - ((curveFitting >> 1) & 0x5555);
     numberOfOnes = (numberOfOnes & 0x3333) + ((numberOfOnes >> 2) & 0x3333);

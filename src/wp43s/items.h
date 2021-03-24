@@ -1449,7 +1449,7 @@
 #define MNU_TAMLABEL                  1395
 #define MNU_DYNAMIC                   1396
 #define MNU_PLOT_STAT                 1397
-#define MNU_1398                      1398
+#define MNU_PLOT_LR                   1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400
 #define MNU_1401                      1401
@@ -1817,8 +1817,9 @@
 #define ITM_STATDEMO1                 1759
 #define ITM_STATDEMO2                 1760
 #define ITM_SMI                       1761
+#define ITM_PLOT_LR                   1762
 
-#define LAST_ITEM                     1762
+#define LAST_ITEM                     1763
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

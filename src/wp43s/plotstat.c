@@ -959,8 +959,10 @@ uint16_t selection = 0;              //Currently selected plot
   }
 #endif //TESTSUITE_BUILD
 
+uint16_t lastPlotMode = PLOT_NOTHING;
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
+  lastPlotMode = PLOT_NOTHING;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -968,6 +970,7 @@ void fnPlotClose(uint16_t unusedButMandatoryParameter){
 
 
 void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
+  lastPlotMode = PLOT_NOTHING;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -976,11 +979,14 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 
 
 
-void fnPlotStat(uint16_t unusedButMandatoryParameter){
+void fnPlotStat(uint16_t plotMode){
 #ifndef TESTSUITE_BUILD
+  if (lastPlotMode != PLOT_NOTHING) plotMode = lastPlotMode;
+  lastPlotMode = plotMode;
   statGraphReset(); 
+  if(plotMode == PLOT_START) selection = 0;
   calcMode = CM_PLOT_STAT;
-  selection = 0;
+
   r = 0;
   smi = 0;
 
@@ -993,34 +999,69 @@ void fnPlotStat(uint16_t unusedButMandatoryParameter){
   hourGlassIconEnabled = true;
   showHideHourGlass();
 
-  if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
-    showSoftmenu(-MNU_PLOT_STAT);
+  switch(plotMode) {
+    case PLOT_NOTHING:break;
+    case PLOT_FIT: printf("#################\n");
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
+           showSoftmenu(-MNU_PLOT_LR);
+         }
+         break;
+    default:
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
+           showSoftmenu(-MNU_PLOT_STAT);
+         }
+         break;
   }
+
+  if(plotMode != PLOT_START) fnPlotRegLine(plotMode);
 #endif //TESTSUITE_BUILD
 }
 
 
-
-
-
-void fnPlotRegLine(uint16_t unusedButMandatoryParameter){
-    //Cycling through the graphs, starting with ORTHOF
-    if(selection == 0                           ) selection = CF_ORTHOGONAL_FITTING ;     else
-    if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
-    if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_LINEAR_FITTING     ;     else
-    if(selection == CF_LINEAR_FITTING           ) selection = CF_EXPONENTIAL_FITTING;     else
-    if(selection == CF_EXPONENTIAL_FITTING      ) selection = CF_PARABOLIC_FITTING  ;     else
-    if(selection == CF_PARABOLIC_FITTING        ) selection = CF_LOGARITHMIC_FITTING;     else
-    if(selection == CF_LOGARITHMIC_FITTING      ) selection = CF_POWER_FITTING      ;     else
-    if(selection == CF_POWER_FITTING            ) selection = CF_ROOT_FITTING       ;     else
-    if(selection == CF_ROOT_FITTING             ) selection = CF_HYPERBOLIC_FITTING ;     else
-    if(selection == CF_HYPERBOLIC_FITTING       ) selection = CF_CAUCHY_FITTING     ;     else
-    if(selection == CF_CAUCHY_FITTING           ) selection = CF_GAUSS_FITTING      ;     else
-    if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
-       selection = 0;
-  
-    processCurvefitSelection(selection);
-    graphAxisDraw();                        //Draw the axis 
+void fnPlotRegLine(uint16_t plotMode){
+  switch(plotMode) {
+    case PLOT_CYCLEALL:
+      lastPlotMode = PLOT_CYCLEALL;
+      //Cycling through all graphs, starting with ORTHOF
+      if(selection == 0                           ) selection = CF_ORTHOGONAL_FITTING ;     else
+      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
+      if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_LINEAR_FITTING     ;     else
+      if(selection == CF_LINEAR_FITTING           ) selection = CF_EXPONENTIAL_FITTING;     else
+      if(selection == CF_EXPONENTIAL_FITTING      ) selection = CF_PARABOLIC_FITTING  ;     else
+      if(selection == CF_PARABOLIC_FITTING        ) selection = CF_LOGARITHMIC_FITTING;     else
+      if(selection == CF_LOGARITHMIC_FITTING      ) selection = CF_POWER_FITTING      ;     else
+      if(selection == CF_POWER_FITTING            ) selection = CF_ROOT_FITTING       ;     else
+      if(selection == CF_ROOT_FITTING             ) selection = CF_HYPERBOLIC_FITTING ;     else
+      if(selection == CF_HYPERBOLIC_FITTING       ) selection = CF_CAUCHY_FITTING     ;     else
+      if(selection == CF_CAUCHY_FITTING           ) selection = CF_GAUSS_FITTING      ;     else
+      if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
+         selection = 0;
+      processCurvefitSelection(selection);
+      graphAxisDraw();                        //Draw the axis 
+      break;
+    case PLOT_ORTHOF: 
+      //Cycling through ORTHOF (+) and (-)
+      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
+      if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_ORTHOGONAL_FITTING; else
+        selection = CF_ORTHOGONAL_FITTING;
+      processCurvefitSelection(selection);
+      graphAxisDraw();                        //Draw the axis 
+      break;
+    case PLOT_FIT:
+      //Show data and one curve fit selected
+      if(selection == 0) selection = 1; else selection = (selection%10000) << 1;
+      {
+        while((selection != (lrSelection & selection)) && selection%10000 < 1024){
+          selection = (selection%10000) << 1;
+        }
+      if(selection%10000 >= 1024) selection = 1;
+      }
+      graphPlotstat();
+      processCurvefitSelection(selection);
+      graphAxisDraw();                        //Draw the axis 
+      break;
+    default:break;
+  }
 }
 
 

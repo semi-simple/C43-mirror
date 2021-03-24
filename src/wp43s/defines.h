@@ -410,6 +410,13 @@
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
 
+// Plot curve fitting 3 bits
+#define PLOT_ORTHOF                                0
+#define PLOT_FIT                                   1
+#define PLOT_CYCLEALL                              2
+#define PLOT_START                                 3
+#define PLOT_NOTHING                               4
+
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0
 #define RM_HALF_UP                                 1

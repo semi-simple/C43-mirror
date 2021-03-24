@@ -128,5 +128,5 @@ void    drawline           ();
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
-void    fnPlotRegLine      (uint16_t unusedButMandatoryParameter);
+void    fnPlotRegLine      (uint16_t plotMode);
  

@@ -20,6 +20,7 @@
 
 #include "wp43s.h"
 
+extern uint16_t lrSelection;
 extern realContext_t *realContext;
 extern real_t aa0,aa1,aa2;          //Curve fitting variables, visible to plotstat
 extern double r,smi;          //TODO CONVERT r, smi TO REAL

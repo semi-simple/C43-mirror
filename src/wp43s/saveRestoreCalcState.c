@@ -522,7 +522,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
 
   // Local registers
-  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu16 "\n", currentNumberOfLocalRegisters);
+  sprintf(tmpString, "LOCAL_REGISTERS\n%" PRIu8 "\n", currentNumberOfLocalRegisters);
   save(tmpString, strlen(tmpString), BACKUP);
   for(i=0; i<currentNumberOfLocalRegisters; i++) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);

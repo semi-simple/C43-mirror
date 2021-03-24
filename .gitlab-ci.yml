@@ -24,7 +24,7 @@ linux:
     - apt-get install -qq -y libgtk-3-dev 
     - make rebuild
   tags:
-    - linux
+    - dm42
 
 windows:
   stage: build
@@ -59,7 +59,7 @@ testSuite:
     - make testSuite
     - ./testSuite
   tags:
-    - linux
+    - macos
 
 upload:
   stage: upload

@@ -85,7 +85,7 @@ void statGraphReset(void){
   PLOT_ZMY      = 0;
 
   plotmode      = _SCAT;
-  tick_int_x    = 0;
+  tick_int_x    = 0;        //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
   tick_int_y    = 0;
 }
 
@@ -446,6 +446,9 @@ void graphAxisDraw (void){
 
     while (cnt!=SCREEN_WIDTH_GRAPH-1) { 
       setBlackPixel(cnt,yzero); 
+      #ifdef STATDEBUG
+        printf("cnt=%d   \n",(int)cnt);
+      #endif
       cnt++; 
     }
 
@@ -453,6 +456,9 @@ void graphAxisDraw (void){
 
    if(0<x_max && 0>x_min) {
      for(x=0; x<=x_max; x+=tick_int_x) {                         //draw x ticks
+        #ifdef STATDEBUG
+          printf(">> x=%d   \n",(int)x);
+        #endif
         cnt = screen_window_x(x_min,x,x_max);
         //printf(">>>>>A %f %d ",x,cnt);
           setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
@@ -480,12 +486,18 @@ void graphAxisDraw (void){
        }
    } else {
      for(x=x_min; x<=x_max; x+=tick_int_x) {                     //draw x ticks
+        #ifdef STATDEBUG
+          printf(">>>x=%d   \n",(int)x);
+        #endif
         cnt = screen_window_x(x_min,x,x_max);
         //printf(">>>>>A %f %d ",x,cnt);
           setBlackPixel(cnt,min(yzero+1,SCREEN_HEIGHT_GRAPH-1)); //tick
           setBlackPixel(cnt,max(yzero-1,minny));                 //tick
        }
       for(x=x_min; x<=x_max; x+=tick_int_x*5) {                  //draw x ticks
+        #ifdef STATDEBUG
+          printf(">>>>x=%d   \n",(int)x);
+        #endif
         cnt = screen_window_x(x_min,x,x_max);
           setBlackPixel(cnt,min(yzero+2,SCREEN_HEIGHT_GRAPH-1)); //tick
           setBlackPixel(cnt,max(yzero-2,minny));                 //tick
@@ -512,16 +524,25 @@ void graphAxisDraw (void){
     force_refresh1();
     if(0<y_max && 0>y_min) {
       for(y=0; y<=y_max; y+=tick_int_y) {                     //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-1,0),cnt);                    //tick
         setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
       }  
       for(y=0; y>=y_min; y+=-tick_int_y) {                    //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-1,0),cnt);                    //tick
         setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
       }  
       for(y=0; y<=y_max; y+=tick_int_y*5) {                   //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>>>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-2,0),cnt);                    //tick
         setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
@@ -529,6 +550,9 @@ void graphAxisDraw (void){
         setBlackPixel(min(xzero+3,SCREEN_WIDTH_GRAPH-1),cnt); //tick
       }  
       for(y=0; y>=y_min; y+=-tick_int_y*5) {                  //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>>>>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-2,0),cnt);                    //tick
         setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
@@ -537,11 +561,17 @@ void graphAxisDraw (void){
       }  
     } else {
       for(y=y_min; y<=y_max; y+=tick_int_y) {                 //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>>>>>>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-1,0),cnt);                    //tick
         setBlackPixel(min(xzero+1,SCREEN_WIDTH_GRAPH-1),cnt); //tick
       }  
       for(y=y_min; y<=y_max; y+=tick_int_y*5) {               //draw y ticks
+        #ifdef STATDEBUG
+          printf(">>>>>>>>y=%d   \n",(int)y);
+        #endif
         cnt = screen_window_y(y_min,y,y_max);
         setBlackPixel(max(xzero-2,0),cnt);                    //tick
         setBlackPixel(min(xzero+2,SCREEN_WIDTH_GRAPH-1),cnt); //tick
@@ -1099,7 +1129,8 @@ void fnPlotRegLine(uint16_t plotMode){
 
     case PLOT_FIT:
       //Show data and one curve fit selected
-      if(selection == 0) selection = 1; else selection = (selection%10000) << 1;
+      selection = (selection%10000) << 1;
+      if(selection == 0) selection = 1;
         while((selection != (lrSelection & selection)) && selection%10000 < 1024){
           selection = (selection%10000) << 1;
         }

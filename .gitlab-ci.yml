@@ -7,13 +7,17 @@ stages:
 variables:
   OM_PACKAGE: "Owner_wp_43s_0_18s.pdf"
   RM_PACKAGE: "Reference_wp_43s_0_18s.pdf"
-  DM42_PACKAGE: "dm42firmware.zip"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/wp43s/${CI_COMMIT_TAG}"
 
 macOS:
   stage: build
   script:
     - make rebuild
+    - make dist_macos
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - wp43s-macos.zip
   tags:
     - macos
 
@@ -29,24 +33,22 @@ linux:
 windows:
   stage: build
   script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make rebuild"
+    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make rebuild; make dist_windows"
+#  artifacts:
+#    expire_in: 1 day
+#    paths:
+#      - wp43s-windows.zip
   tags:
     - wp43s_windows
 
 dm42:
   stage: build
   script:
-    - cd DMCP_build
-    - ./build_GMP_static_ARM_library
-    - ./build_WP43S.pgm_for_DM42_hardware
-    - cd ..
-    - mkdir DM42Firmware
-    - cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin DM42Firmware
-    - zip -r dm42firmware.zip DM42Firmware
+    - make dist_dm42
   artifacts:
     expire_in: 1 day
     paths:
-      - dm42firmware.zip
+      - wp43s-dm42.zip
   tags:
     - dm42
 
@@ -68,11 +70,15 @@ upload:
     - if: $CI_COMMIT_TAG
   script:
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${OM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-dm42.zip ${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}.zip
+#    - |
+#      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-macos.zip ${PACKAGE_REGISTRY_URL}/wp43s-macos-${CI_COMMIT_TAG}.zip
+#    - |
+#      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-windows.zip ${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}.zip
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${RM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${DM42_PACKAGE} ${PACKAGE_REGISTRY_URL}/${DM42_PACKAGE}
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${OM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}
   tags:
     - linux
 
@@ -84,8 +90,8 @@ release:
   script:
     - |
       release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
-        --assets-link "{\"name\":\"Owner's Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}\"}" \
+        --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}\"}" \
         --assets-link "{\"name\":\"Reference Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}\"}" \
-        --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/${DM42_PACKAGE}\"}"
+        --assets-link "{\"name\":\"Owner's Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}\"}"
   tags:
     - linux

@@ -175,6 +175,9 @@ char ss[100];
 
 
 void processCurvefitSelection(uint16_t selection){
+    #ifdef PC_BUILD
+      printf("processCurvefitSelection %u\n",selection);
+    #endif
     realContext = &ctxtReal75;
     char ss[100];
     real_t SS,TT,UU,VV,WW;

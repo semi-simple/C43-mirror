@@ -161,7 +161,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
                                              //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
     #ifdef STATDEBUG
-    printf("Count: %s, %d\n",tmpString,cnt);
+      printf("Count: %s, %d\n",tmpString,cnt);
     #endif
   }
   //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
@@ -570,6 +570,9 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
 
 
 void graphPlotstat(void){
+  #ifdef PC_BUILD
+    printf("####>>>>> graphPlotstat\n");
+  #endif
   #ifndef TESTSUITE_BUILD
   uint16_t  cnt, ix, statnum;
   uint16_t  xo, xn, xN; 
@@ -697,7 +700,7 @@ void graphPlotstat(void){
       yN = screen_window_y(y_min,y,y_max);
     
       #ifdef STATDEBUG
-      printf("plotting graph table[%d] = x:%f y:%f xN:%d yN:%d ",ix,x,y,  xN,yN);
+        printf("plotting graph table[%d] = x:%f y:%f xN:%d yN:%d ",ix,x,y,  xN,yN);
       #endif
     
       int16_t minN_y,minN_x;
@@ -747,6 +750,10 @@ void graphPlotstat(void){
       }
     }
     //#################################################### ^^^ MAIN GRAPH LOOP ^^^          
+  if(selection != 0) {
+    processCurvefitSelection(selection);
+  }
+
   drawline();
 
   } else {
@@ -762,7 +769,9 @@ void graphPlotstat(void){
 
 #ifndef TESTSUITE_BUILD
   void drawline(){
-
+    #ifdef PC_BUILD
+      printf("#####>>> drawline: selection:%u  lastplotmode:%u  lrSelection:%u\n",selection, lastPlotMode, lrSelection);
+    #endif //PC_BUILD
     #ifndef USEFLOAT
       real_t SS,TT,UU;
     #endif //USEFLOAT
@@ -775,9 +784,9 @@ void graphPlotstat(void){
       realToString(&aa2, ss); a2 = strtof (ss, NULL);
       realToInt32(SIGMA_N, nn);  
 
-//    #ifdef STATDEBUG
+    #ifdef PC_BUILD
       printf("plotting line: a2 %f a1 %f a0 %f\n",a2,a1,a0);
-//    #endif
+    #endif
     if((selection==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
       #ifdef STATDEBUG
         printf("return\n");
@@ -1075,8 +1084,8 @@ void fnPlotRegLine(uint16_t plotMode){
       if(selection == CF_CAUCHY_FITTING           ) selection = CF_GAUSS_FITTING      ;     else
       if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
          selection = 0;
-      processCurvefitSelection(selection);
-      graphAxisDraw();                        //Draw the axis 
+//      processCurvefitSelection(selection);
+//      graphAxisDraw();                        //Draw the axis 
       break;
 
     case PLOT_ORTHOF: 
@@ -1084,8 +1093,8 @@ void fnPlotRegLine(uint16_t plotMode){
       if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
       if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_ORTHOGONAL_FITTING; else
         selection = CF_ORTHOGONAL_FITTING;
-      processCurvefitSelection(selection);
-      graphAxisDraw();                        //Draw the axis 
+//      processCurvefitSelection(selection);
+//      graphAxisDraw();                        //Draw the axis 
       break;
 
     case PLOT_FIT:
@@ -1095,9 +1104,9 @@ void fnPlotRegLine(uint16_t plotMode){
           selection = (selection%10000) << 1;
         }
       if(selection%10000 >= 1024) selection = 0;
-      graphPlotstat();
-      processCurvefitSelection(selection);
-      graphAxisDraw();                        //Draw the axis 
+//      graphPlotstat();
+//      processCurvefitSelection(selection);
+//      graphAxisDraw();                        //Draw the axis 
       break;
 
     case PLOT_NOTHING:

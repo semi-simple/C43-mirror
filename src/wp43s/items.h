@@ -1818,8 +1818,9 @@
 #define ITM_STATDEMO2                 1760
 #define ITM_SMI                       1761
 #define ITM_PLOT_LR                   1762
+#define ITM_PLOT_SELLINE              1763
 
-#define LAST_ITEM                     1763
+#define LAST_ITEM                     1764
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

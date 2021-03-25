@@ -741,6 +741,12 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
+    #ifndef USEFLOAT
+      decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
+      ctxtRealShort.digits = 6;
+      ctxtRealShort.traps  = 0;
+    #endif //USEFLOAT
+
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
     ctxtReal39.traps  = 0;
@@ -763,6 +769,10 @@ void fnReset(uint16_t confirmation) {
 
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
+    lrSelection = CF_LINEAR_FITTING;
+    lastPlotMode = PLOT_NOTHING;
+    selection = 0;
+
 
     shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);

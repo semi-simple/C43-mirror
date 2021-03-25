@@ -1661,6 +1661,7 @@
         refreshStatusBar();
         graphPlotstat();
         hourGlassIconEnabled = false;
+        refreshStatusBar();
         break;
 
       default: {}

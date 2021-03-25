@@ -170,7 +170,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     gr_x[cnt-1]=x;
     gr_y[cnt-1]=y;
     #ifdef STATDEBUG
-    printf("Index: [%d]=(%f,%f)\n",cnt-1,x,y);
+      printf("Index: [%d]=(%f,%f)\n",cnt-1,x,y);
     #endif
   } else {
     if(plusminus == -1) {
@@ -178,7 +178,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
         gr_x[cnt-1]=-x;
         gr_y[cnt-1]=-y;
         #ifdef STATDEBUG
-        printf("Index: [%d]=(%f,%f)\n",cnt-1,-x,-y);
+          printf("Index: [%d]=(%f,%f)\n",cnt-1,-x,-y);
         #endif
       } else {
         // Non-vector mode TODO
@@ -309,6 +309,7 @@ void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo 
   placePixel(xn+2,yn+2);
 }
 
+
 void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
   placePixel(xn-2,yn-2);                               //   PLOT a box
   placePixel(xn-2,yn-1);
@@ -324,12 +325,14 @@ void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo 
   placePixel(xn+1,yn+2);
 }
 
+
 static void plotrect(uint16_t a, uint8_t b, uint16_t c, uint8_t d) {                // Plots rectangle from xo,yo to xn,yn; uses temporary x1,y1
   plotline(a, b, c, b);
   plotline(a, b, a, d);
   plotline(c, d, c, b);
   plotline(c, d, a, d);
 }
+
 
 void plotbox_fat(uint16_t xn, uint8_t yn) {                                         // Plots line from xo,yo to xn,yn; uses temporary x1,y1
   plotrect(xn-3,yn-3,xn+3,yn+3);
@@ -341,7 +344,6 @@ void plotbox_fat(uint16_t xn, uint8_t yn) {                                     
 void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {                   // Plots line from xo,yo to xn,yn; uses temporary x1,y1
    pixelline(xo,yo,xn,yn,1);
  }
-
 
 
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
@@ -567,7 +569,6 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
 }
 
 
-
 void graphPlotstat(void){
   #ifndef TESTSUITE_BUILD
   uint16_t  cnt, ix, statnum;
@@ -579,9 +580,6 @@ void graphPlotstat(void){
   statnum = 0;
   graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   plotmode = _SCAT;
-  //realContext_t *realContext = &ctxtReal39;
-  //realContext_t *realContext = &ctxtReal75;
-  realContext = &ctxtReal75;
 
   if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
     realToInt32(SIGMA_N, statnum);   
@@ -762,11 +760,12 @@ void graphPlotstat(void){
 }
 
 
-uint16_t selection = 0;              //Currently selected plot
-
 #ifndef TESTSUITE_BUILD
   void drawline(){
-    real_t SS,TT,UU;
+
+    #ifndef USEFLOAT
+      real_t SS,TT,UU;
+    #endif //USEFLOAT
     double a0,a1,a2;
     int32_t nn;
     if(!selection) return;
@@ -807,82 +806,109 @@ uint16_t selection = 0;              //Currently selected plot
         case CF_LINEAR_FITTING: 
         case CF_ORTHOGONAL_FITTING: 
         case CF_ORTHOGONAL_FITTING+10000: 
-          //         y = a1 * x + a0; 
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realMultiply(&SS, &aa1, &UU, realContext);
-          realAdd     (&UU, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
-          //printf("XXX0 %f %f\n",y, a1 * x + a0);
+          #ifdef USEFLOAT 
+            y = a1 * x + a0; 
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
+            realAdd     (&UU, &aa0, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+            //printf("XXX0 %f %f\n",y, a1 * x + a0);
+          #endif //USEFLOAT
           break;
         case CF_EXPONENTIAL_FITTING: 
-          //         y = a0 * exp(a1 * x); 
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realMultiply(&SS, &aa1, &UU, realContext);
-          realExp     (&UU, &UU,       realContext);
-          realMultiply(&UU, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
-          //printf("XXX1 %f %f\n",y, a0 * exp(a1 * x));
+          #ifdef USEFLOAT 
+            y = a0 * exp(a1 * x); 
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
+            realExp     (&UU, &UU,       &ctxtRealShort);
+            realMultiply(&UU, &aa0, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+            //printf("XXX1 %f %f\n",y, a0 * exp(a1 * x));
+          #endif //USEFLOAT
           break;
         case CF_LOGARITHMIC_FITTING: 
-          //         y = a0 + a1*log(x); 
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          WP34S_Ln    (&SS, &SS,       realContext);
-          realMultiply(&SS, &aa1, &UU, realContext);
-          realAdd     (&UU, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = a0 + a1*log(x); 
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            WP34S_Ln    (&SS, &SS,       &ctxtRealShort);
+            realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
+            realAdd     (&UU, &aa0, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_POWER_FITTING: 
-          //         y = a0 * pow(x,a1);
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realPower   (&SS, &aa1, &SS, realContext);
-          realMultiply(&SS, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = a0 * pow(x,a1);
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realPower   (&SS, &aa1, &SS, &ctxtRealShort);
+            realMultiply(&SS, &aa0, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_ROOT_FITTING: 
-          //         y = a0 * pow(a1,1/x);
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realDivide  (const_1, &SS, &SS, realContext);
-          realPower   (&aa1, &SS, &SS, realContext);
-          realMultiply(&SS, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = a0 * pow(a1,1/x);
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realDivide  (const_1, &SS, &SS, &ctxtRealShort);
+            realPower   (&aa1, &SS, &SS, &ctxtRealShort);    //very very slow with a1=0.9982, probably in the 0.4 < x < 1.0 area
+            realMultiply(&SS, &aa0, &SS, &ctxtRealShort);
+            realToString(&SS, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_HYPERBOLIC_FITTING: 
-          //       y = 1 / (a1 * x + a0);
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realMultiply(&SS, &aa1, &UU, realContext);
-          realAdd     (&UU, &aa0, &TT, realContext);
-          realDivide  (const_1, &TT, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = 1 / (a1 * x + a0);
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
+            realAdd     (&UU, &aa0, &TT, &ctxtRealShort);
+            realDivide  (const_1, &TT, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_PARABOLIC_FITTING: 
-          //          y = a2 * x * x + a1 * x + a0;
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realMultiply(&SS, &SS , &TT, realContext);
-          realMultiply(&TT, &aa2, &TT, realContext);
-          realMultiply(&SS, &aa1, &UU, realContext);
-          realAdd     (&TT, &UU,  &TT, realContext);
-          realAdd     (&TT, &aa0, &TT, realContext);          
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = a2 * x * x + a1 * x + a0;
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realMultiply(&SS, &SS , &TT, &ctxtRealShort);
+            realMultiply(&TT, &aa2, &TT, &ctxtRealShort);
+            realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
+            realAdd     (&TT, &UU,  &TT, &ctxtRealShort);
+            realAdd     (&TT, &aa0, &TT, &ctxtRealShort);          
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_GAUSS_FITTING:
-          //          y = a0 * exp( (x-a1)*(x-a1)/a2 );
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realSubtract(&SS, &aa1, &TT, realContext);
-          realMultiply(&TT, &TT , &TT, realContext);
-          realDivide  (&TT, &aa2, &TT, realContext);
-          realExp     (&TT, &TT ,      realContext);
-          realMultiply(&TT, &aa0, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = a0 * exp( (x-a1)*(x-a1)/a2 );
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realSubtract(&SS, &aa1, &TT, &ctxtRealShort);
+            realMultiply(&TT, &TT , &TT, &ctxtRealShort);
+            realDivide  (&TT, &aa2, &TT, &ctxtRealShort);
+            realExp     (&TT, &TT ,      &ctxtRealShort);
+            realMultiply(&TT, &aa0, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
           break;
         case CF_CAUCHY_FITTING:
-          //          y = 1/(a0*(x+a1)*(x+a1)+a2);
-          sprintf(ss,"%f",x); stringToReal(ss,&SS,realContext);
-          realAdd     (&SS, &aa1, &TT, realContext);
-          realMultiply(&TT, &TT , &TT, realContext);
-          realMultiply(&TT, &aa0, &TT, realContext);
-          realAdd     (&TT, &aa2, &TT, realContext);
-          realDivide  (const_1, &TT, &TT, realContext);
-          realToString(&TT, ss); y = strtof (ss, NULL);
+          #ifdef USEFLOAT 
+            y = 1/(a0*(x+a1)*(x+a1)+a2);
+          #else
+            sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
+            realAdd     (&SS, &aa1, &TT, &ctxtRealShort);
+            realMultiply(&TT, &TT , &TT, &ctxtRealShort);
+            realMultiply(&TT, &aa0, &TT, &ctxtRealShort);
+            realAdd     (&TT, &aa2, &TT, &ctxtRealShort);
+            realDivide  (const_1, &TT, &TT, &ctxtRealShort);
+            realToString(&TT, ss); y = strtof (ss, NULL);
+          #endif //USEFLOAT
         default:break;
       }
       xo = xN;
@@ -959,10 +985,10 @@ uint16_t selection = 0;              //Currently selected plot
   }
 #endif //TESTSUITE_BUILD
 
-uint16_t lastPlotMode = PLOT_NOTHING;
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
   lastPlotMode = PLOT_NOTHING;
+  selection = 0;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -971,6 +997,7 @@ void fnPlotClose(uint16_t unusedButMandatoryParameter){
 
 void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
   lastPlotMode = PLOT_NOTHING;
+  selection = 0;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -978,17 +1005,21 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 }
 
 
-
 void fnPlotStat(uint16_t plotMode){
+#ifdef STATDEBUG
+  printf("fnPlotStat1: selection = %u; Plotmode=%u\n",selection,plotMode);
+#endif //STATDEBUG
 #ifndef TESTSUITE_BUILD
-  if (lastPlotMode != PLOT_NOTHING) plotMode = lastPlotMode;
-  lastPlotMode = plotMode;
+  if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) plotMode = lastPlotMode;
+  calcMode = CM_PLOT_STAT;
   statGraphReset(); 
   if(plotMode == PLOT_START) selection = 0;
-  calcMode = CM_PLOT_STAT;
 
   r = 0;
   smi = 0;
+
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
 
   #ifdef DMCP_BUILD
     lcd_refresh();
@@ -996,29 +1027,37 @@ void fnPlotStat(uint16_t plotMode){
     refreshLcd(NULL);
   #endif // DMCP_BUILD
 
-  hourGlassIconEnabled = true;
-  showHideHourGlass();
-
   switch(plotMode) {
-    case PLOT_NOTHING:break;
-    case PLOT_FIT: printf("#################\n");
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
-           showSoftmenu(-MNU_PLOT_LR);
-         }
+    case PLOT_FIT:
+         #ifdef STATDEBUG
+           printf("################# PLOT_FIT: Push PLOT_LR menu; selection = %u\n",selection);
+         #endif //STATDEBUG
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) showSoftmenu(-MNU_PLOT_LR);
          break;
-    default:
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
-           showSoftmenu(-MNU_PLOT_STAT);
-         }
+    case PLOT_ORTHOF:
+    case PLOT_CYCLEALL:
+    case PLOT_START:
+         #ifdef STATDEBUG
+           printf("################# PLOT_START, PLOT_ORTHOF, PLOT_CYCLEALL): Push PLOT_STAT menu; selection = %u\n",selection);
+         #endif //STATDEBUG
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) showSoftmenu(-MNU_PLOT_STAT);
          break;
+    case PLOT_NOTHING:
+         break;
+    default: break;
   }
 
   if(plotMode != PLOT_START) fnPlotRegLine(plotMode);
+  else lastPlotMode = plotMode;
 #endif //TESTSUITE_BUILD
 }
 
 
 void fnPlotRegLine(uint16_t plotMode){
+  #ifdef STATDEBUG
+    printf("fnPlotRegLine: selection = %u\n",selection);
+  #endif //STATDEBUG
+  if(plotMode == PLOT_START) plotMode = PLOT_ORTHOF; /*PLOT_CYCLEALL*/
   switch(plotMode) {
     case PLOT_CYCLEALL:
       lastPlotMode = PLOT_CYCLEALL;
@@ -1039,6 +1078,7 @@ void fnPlotRegLine(uint16_t plotMode){
       processCurvefitSelection(selection);
       graphAxisDraw();                        //Draw the axis 
       break;
+
     case PLOT_ORTHOF: 
       //Cycling through ORTHOF (+) and (-)
       if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
@@ -1047,19 +1087,21 @@ void fnPlotRegLine(uint16_t plotMode){
       processCurvefitSelection(selection);
       graphAxisDraw();                        //Draw the axis 
       break;
+
     case PLOT_FIT:
       //Show data and one curve fit selected
       if(selection == 0) selection = 1; else selection = (selection%10000) << 1;
-      {
         while((selection != (lrSelection & selection)) && selection%10000 < 1024){
           selection = (selection%10000) << 1;
         }
-      if(selection%10000 >= 1024) selection = 1;
-      }
+      if(selection%10000 >= 1024) selection = 0;
       graphPlotstat();
       processCurvefitSelection(selection);
       graphAxisDraw();                        //Draw the axis 
       break;
+
+    case PLOT_NOTHING:
+    case PLOT_START:
     default:break;
   }
 }

@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         51  // Changed local register management
+#define BACKUP_VERSION         52  // Added lrSelection
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -190,6 +190,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
+    save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
+    save(&selection,                          sizeof(selection),                          BACKUP);
 
     save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
     save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
@@ -370,6 +373,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
+      restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
+      restore(&selection,                          sizeof(selection),                          BACKUP);
 
       restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
       restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);

@@ -68,6 +68,9 @@
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
+#define USEFLOAT                                     // Plot: Use standard double floats for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible optimisation.
+
+
 // List of errors
 #define ERROR_NONE                                 0
 #define ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN          1

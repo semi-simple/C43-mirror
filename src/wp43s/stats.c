@@ -73,6 +73,10 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
     freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     graph_end();
     statisticalSumsPointer = NULL;
+    lrSelection = CF_LINEAR_FITTING;  //linear regression selection
+    lastPlotMode = PLOT_NOTHING;      //last selected  plotmode
+    selection = 0;                    //Currently selected plot
+
   }
 }
 

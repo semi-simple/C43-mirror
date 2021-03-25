@@ -22,8 +22,6 @@
 #include "math.h"
 
 
-uint16_t lrSelection = 1;
-
 /********************************************//**
  * \brief Sets the curve fitting mode
  *
@@ -95,6 +93,7 @@ double maxy     ;               //^^
 
 
 void calc_BCD(void){                        //Aux terms, must be run before calc_AEFG
+realContext = &ctxtReal75;
 real_t SS,TT;
 char ss[100];
   //        B = nn * sumx2y - sumx2 * sumy;
@@ -128,6 +127,7 @@ char ss[100];
 
 
 void calc_AEFG(void){                        //Aux terms, must be run after calc_BCD
+realContext = &ctxtReal75;
 real_t SS,TT,UU;
 char ss[100];
   //        A = nn * sumx2 - sumx * sumx;
@@ -175,6 +175,7 @@ char ss[100];
 
 
 void processCurvefitSelection(uint16_t selection){
+    realContext = &ctxtReal75;
     char ss[100];
     real_t SS,TT,UU,VV,WW;
     real_t S_X,S_Y,S_XY,RR,SMI,M_X,M_Y;

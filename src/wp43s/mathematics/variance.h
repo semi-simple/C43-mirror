@@ -31,3 +31,7 @@ void fnPopulationCovariance(uint16_t unusedButMandatoryParameter);
 void fnSampleCovariance(uint16_t unusedButMandatoryParameter);
 void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter);
 void fnMinExpStdDev(uint16_t unusedButMandatoryParameter);
+void fnStatSMI(real_t *SMI);
+void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY);
+void fnStatSXY(real_t *SXY);
+void fnStatSX_SY(real_t *SX, real_t *SY);

@@ -130,60 +130,68 @@ void graph_end(void) {
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
-  graphtype x; 
-  graphtype y;
+  graphtype x,y;
+  realToInt32(SIGMA_N, cnt);
 
-  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(cnt <= LIM) {
+    if(jm_VECT || jm_NVECT) {
+      plotmode = _VECT;
+    } else {
+      plotmode = _SCAT;
+    }
 
-  if(telltale != MEM_INITIALIZED) {
-    graph_setupmemory();
-  }
+    if(telltale != MEM_INITIALIZED) {
+      graph_setupmemory();
+    }
 
-  //Convert from X register to graphtype
-  realToString(yy, tmpString);
-  y = strtof (tmpString, NULL);
-  //printf("y=%f ",y);
+    //Convert from X register to graphtype
+    realToString(yy, tmpString);
+    y = strtof (tmpString, NULL);
+    //printf("y=%f ",y);
 
-  //Convert from X register to graphtype
-  realToString(xx, tmpString);
-  x = strtof (tmpString, NULL);
-  //printf("x=%f ",x);
+    //Convert from X register to graphtype
+    realToString(xx, tmpString);
+    x = strtof (tmpString, NULL);
+    //printf("x=%f ",x);
 
-  #ifndef TESTSUITE_BUILD
-  //export_xy_to_file(x,y);                    //Write to CSV file
-  #endif
-
-  if(plotmode == _VECT ) {
-    ix_count++;                              //Only used for VECT
-    cnt = ix_count;
-  } else {
-    realToInt32(SIGMA_N, cnt);
-    ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
-                                             //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
-    #ifdef STATDEBUG
-      printf("Count: %s, %d\n",tmpString,cnt);
+    #ifndef TESTSUITE_BUILD
+    //export_xy_to_file(x,y);                    //Write to CSV file
     #endif
-  }
-  //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
 
-  if(plusminus == 1) {
-    gr_x[cnt-1]=x;
-    gr_y[cnt-1]=y;
-    #ifdef STATDEBUG
-      printf("Index: [%d]=(%f,%f)\n",cnt-1,x,y);
-    #endif
-  } else {
-    if(plusminus == -1) {
-      if(plotmode == _VECT ) {
-        gr_x[cnt-1]=-x;
-        gr_y[cnt-1]=-y;
-        #ifdef STATDEBUG
-          printf("Index: [%d]=(%f,%f)\n",cnt-1,-x,-y);
-        #endif
-      } else {
-        // Non-vector mode TODO
+    if(plotmode == _VECT ) {
+      ix_count++;                              //Only used for VECT
+      cnt = ix_count;
+    } else {
+      ix_count = cnt;                          //ix_count increments in VECT with Σ-, where SIGMA_N decrements with Σ- 
+                                               //if VECT is changed mid-process, it will cause x_count to assume SIGMA_N, which  will throw away the last values stored.
+      #ifdef STATDEBUG
+        printf("Count: %s, %d\n",tmpString,cnt);
+      #endif
+    }
+    //printf("Adding to graph table[%d] = x:%f y:%f\n",cnt,x,y);
+
+    if(plusminus == 1) {
+      gr_x[cnt-1]=x;
+      gr_y[cnt-1]=y;
+      #ifdef STATDEBUG
+        printf("Index: [%d]=(%f,%f)\n",cnt-1,x,y);
+      #endif
+    } else {
+      if(plusminus == -1) {
+        if(plotmode == _VECT ) {
+          gr_x[cnt-1]=-x;
+          gr_y[cnt-1]=-y;
+          #ifdef STATDEBUG
+            printf("Index: [%d]=(%f,%f)\n",cnt-1,-x,-y);
+          #endif
+        } else {
+          // Non-vector mode TODO
+        }
       }
     }
+  }  
+  else {
+      printf("In function SUM+ or SUM-:%u There is insufficient plot memory available, but stats totals still accumulate!\n",plusminus);
   }
 }
 
@@ -799,6 +807,7 @@ void graphPlotstat(void){
 
 #ifndef TESTSUITE_BUILD
   void drawline(){
+    if(!selection) return;
     #ifdef PC_BUILD
       printf("#####>>> drawline: selection:%u  lastplotmode:%u  lrSelection:%u\n",selection, lastPlotMode, lrSelection);
     #endif //PC_BUILD
@@ -807,12 +816,11 @@ void graphPlotstat(void){
     #endif //USEFLOAT
     double a0,a1,a2;
     int32_t nn;
-    if(!selection) return;
-      char ss[100];
-      realToString(&aa0, ss); a0 = strtof (ss, NULL);
-      realToString(&aa1, ss); a1 = strtof (ss, NULL);
-      realToString(&aa2, ss); a2 = strtof (ss, NULL);
-      realToInt32(SIGMA_N, nn);  
+    char ss[100];
+    realToString(&aa0, ss); a0 = strtof (ss, NULL);
+    realToString(&aa1, ss); a1 = strtof (ss, NULL);
+    realToString(&aa2, ss); a2 = strtof (ss, NULL);
+    realToInt32(SIGMA_N, nn);  
 
     #ifdef PC_BUILD
       printf("plotting line: a2 %f a1 %f a0 %f\n",a2,a1,a0);

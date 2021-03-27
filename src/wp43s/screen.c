@@ -1431,7 +1431,11 @@
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             if(regist == REGISTER_Y) {
               realToInt32(SIGMA_N, w);
-              sprintf(prefix, "Data point %03" PRId16, w);
+              if(w > LIM) {
+                sprintf(prefix, "Plot memory full; Data point %03" PRId16, w);                
+              } else {
+                sprintf(prefix, "Data point %03" PRId16, w);                
+              }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }

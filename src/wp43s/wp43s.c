@@ -72,6 +72,9 @@ bool_t                 programListEnd;
 bool_t                 serialIOIconEnabled;
 bool_t                 neverUsed;
 
+#ifndef USEFLOAT
+  realContext_t          ctxtRealShort;//   limited digits: used for higher speed internal real calcs
+#endif
 realContext_t          ctxtReal34;   //   34 digits
 realContext_t          ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
 realContext_t          ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
@@ -244,6 +247,9 @@ uint16_t               numberOfPrograms;
 uint16_t               numberOfNamedVariables;
 uint16_t               currentLocalStepNumber;
 uint16_t               currentProgramNumber;
+uint16_t               lrSelection;
+uint16_t               lastPlotMode;
+uint16_t               selection;
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;

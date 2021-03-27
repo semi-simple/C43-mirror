@@ -924,7 +924,13 @@ void kill_ASB_icon(void) {
         closeNim();
         if(calcMode != CM_NIM && lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
+          if(item == ITM_EXIT) {
+            saveForUndo();
+          }
           return;
+        }
+        if(item == ITM_EXIT) {
+          saveForUndo();
         }
         break;
 

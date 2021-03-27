@@ -184,6 +184,11 @@ char * getCurveFitModeName(uint16_t selection) {
     return "???        ";
   }
 
+
+/********************************************//**
+ * \brief Remove trailing spaces from the curvefitting mode name
+ *
+ ***********************************************/
 char tmp_names[13];
 char * eatSpaces(const char * ss) {
   strcpy(tmp_names,ss);
@@ -192,6 +197,7 @@ char * eatSpaces(const char * ss) {
   }
   return tmp_names;
 }
+
 
 /********************************************//**
  * \brief Returns the names of the curve fit type
@@ -215,6 +221,7 @@ char * getCurveFitModeNames(uint16_t selection) {
   return errorMessage;
 }
 
+
 /********************************************//**
  * \brief Returns the name of a curvefitting mode
  *
@@ -234,7 +241,6 @@ char * getCurveFitModeFormula(uint16_t selection) {
     if(selection == CF_ORTHOGONAL_FITTING)  return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
   return "???";
   }
-
 
 
 /********************************************//**
@@ -1120,7 +1126,7 @@ void debugNIM(void) {
 
       row = 0;
       gtk_label_set_label(GTK_LABEL(lbl1[row]), "Regis Type                  Address    Size");
-      sprintf(string, "Content of the %" PRIu16 " local registers", currentNumberOfLocalRegisters);
+      sprintf(string, "Content of the %" PRIu8 " local registers", currentNumberOfLocalRegisters);
       gtk_label_set_label(GTK_LABEL(lbl2[row]), string);
       gtk_widget_show(lbl1[row]);
       gtk_widget_show(lbl2[row++]);

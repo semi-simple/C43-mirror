@@ -281,8 +281,10 @@
   extern bool_t                 serialIOIconEnabled;
   extern bool_t                 neverUsed;
 
-  extern bool_t                AlphaSelectionBufferTimerRunning;                  //JM
-
+  extern bool_t                 AlphaSelectionBufferTimerRunning;                  //JM
+  #ifndef USEFLOAT
+    extern realContext_t          ctxtRealShort;//   Limited digits: used for high speed internal calcs
+  #endif //USEFLOAT
   extern realContext_t          ctxtReal34;   //   34 digits
   extern realContext_t          ctxtReal39;   //   39 digits: used for 34 digits intermediate calculations
   extern realContext_t          ctxtReal51;   //   51 digits: used for 34 digits intermediate calculations
@@ -418,7 +420,10 @@
   extern uint16_t               numberOfNamedVariables;
   extern uint16_t               currentLocalStepNumber;
   extern uint16_t               currentProgramNumber;
-
+  extern uint16_t               lrSelection;
+  extern uint16_t               lastPlotMode;
+  extern uint16_t               selection;
+  
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
 

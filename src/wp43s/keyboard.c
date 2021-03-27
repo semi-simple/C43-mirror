@@ -1222,6 +1222,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NORMAL:
         if( !eRPN ) {                                    //JM NEWERPN
         setSystemFlag(FLAG_ASLIFT);
+        saveForUndo();
 
         liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1230,7 +1231,8 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }                                               //JM NEWERPN vv
       else {
         if(getSystemFlag(FLAG_ASLIFT)) {
-          liftStack();
+         saveForUndo();
+         liftStack();
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           //printf("ERPN--2\n");
         }   
@@ -1257,12 +1259,14 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 
           if( !eRPN ) {                                    //JM NEWERPN
             setSystemFlag(FLAG_ASLIFT);
+            saveForUndo();
             liftStack();
             clearSystemFlag(FLAG_ASLIFT);
 
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
             aimBuffer[0] = 0;
           } else {
+//              saveForUndo();
               setSystemFlag(FLAG_ASLIFT);
               aimBuffer[0] = 0;
           }
@@ -1275,6 +1279,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       if( !eRPN ) {                                    //JM NEWERPN vv
         if(lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
+          saveForUndo();
           liftStack();
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1282,6 +1287,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
         if(lastErrorCode == 0) {
+            saveForUndo();
             liftStack();
             clearSystemFlag(FLAG_ASLIFT);
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1371,6 +1377,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 //TOFIX ^^
         if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
+          saveForUndo();
         }
         else {
           popSoftmenu();
@@ -1389,6 +1396,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
         leavePem();
         calcModeNormal();
+        saveForUndo();
         break;
 
       case CM_REGISTER_BROWSER:

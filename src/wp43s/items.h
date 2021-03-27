@@ -20,7 +20,6 @@
 
 
 
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1452,7 +1451,7 @@
 #define MNU_TAMLABEL                  1395
 #define MNU_DYNAMIC                   1396
 #define MNU_PLOT_STAT                 1397
-#define MNU_1398                      1398
+#define MNU_PLOT_LR                   1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400
 #define MNU_1401                      1401
@@ -1820,8 +1819,8 @@
 #define ITM_STATDEMO1                 1759
 #define ITM_STATDEMO2                 1760
 #define ITM_SMI                       1761
-#define ITM_1762                      1762
-#define ITM_1763                      1763
+#define ITM_PLOT_LR                   1762
+#define ITM_PLOT_SELLINE              1763
 #define ITM_1764                      1764
 #define ITM_1765                      1765
 #define ITM_1766                      1766

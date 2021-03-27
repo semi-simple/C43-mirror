@@ -170,6 +170,9 @@
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
+#define USEFLOAT                                     // Plot: Use standard double floats instead of short REAL for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible future optimisation.
+
+
 // List of errors
 #define ERROR_NONE                                 0
 #define ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN          1
@@ -554,6 +557,13 @@
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
+
+// Plot curve fitting 3 bits
+#define PLOT_ORTHOF                                0
+#define PLOT_FIT                                   1
+#define PLOT_CYCLEALL                              2
+#define PLOT_START                                 3
+#define PLOT_NOTHING                               4
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0

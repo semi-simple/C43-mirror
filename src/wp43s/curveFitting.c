@@ -63,31 +63,31 @@ realContext_t *realContext;
 
 double a0,a1,a2,smi,r;                      //vv Temporary, used as cross check of the math; can be removed later
 double A, B, C, D, E, F, G, H;
-int32_t nn      ;
-double sumx     ;
-double sumy     ;
-double sumx2    ;
-double sumx2y   ;
-double sumy2    ;
-double sumxy    ;
+int32_t nn;
+double sumx;
+double sumy;
+double sumx2;
+double sumx2y;
+double sumy2;
+double sumxy;
 double sumlnxlny;
-double sumx2lny ;
-double sumlnx   ;
-double sumln2x  ;
-double sumylnx  ;
-double sumlny   ;
-double sumln2y  ;
-double sumxlny  ;
+double sumx2lny;
+double sumlnx;
+double sumln2x;
+double sumylnx;
+double sumlny;
+double sumln2y;
+double sumxlny;
 double sumlnyonx;
-double sumx2ony ;
-double sum1onx  ;
-double sum1onx2 ;
-double sumxony  ;
-double sum1ony  ;
-double sum1ony2 ;
-double sumx3    ;
-double sumx4    ;
-double maxy     ;                           //^^
+double sumx2ony;
+double sum1onx;
+double sum1onx2;
+double sumxony;
+double sum1ony;
+double sum1ony2;
+double sumx3;
+double sumx4;
+double maxy;                           //^^
 
 void calc_BCD(void){                        //Aux terms, calc_BCD must be run before calc_AEFG
 realContext = &ctxtReal75;
@@ -729,10 +729,6 @@ void processCurvefitSelection(uint16_t selection){
           printf("Cauchy fit:\n");
         #endif //PC_BUILD
 
-        //Unknown constants.
-        // R12 Assuming G
-        // R13 Assuming F
-        
         //      B = nn * sumx2ony - sumx2 * sum1ony;        
         realMultiply(SIGMA_N, SIGMA_X2onY, &SS, realContext);
         realMultiply(SIGMA_X2, SIGMA_1onY, &TT, realContext);

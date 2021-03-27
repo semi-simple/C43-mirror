@@ -2677,7 +2677,8 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         graphPlotstat();
         hourGlassIconEnabled = false;
         refreshStatusBar();
-        break;
+      }
+      break;
 
     default: {}
   }

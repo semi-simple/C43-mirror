@@ -214,9 +214,9 @@ TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_
                                              ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_STAT[]   = {
-                                             ITM_PLOT_REGLINE,              ITM_SMI,                    ITM_SIGMAPLUS,            ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_CLOSE,                     ITM_STATDEMO2,              ITM_CLSIGMA,              ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_STATDEMO,                  ITM_STATDEMO1,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
+                                             ITM_PLOT_REGLINE,              ITM_SMI,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_CLOSE,                     ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_LR[]   = {
                                              ITM_PLOT_SELLINE,              ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
@@ -1618,7 +1618,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
               else if(item%10000 == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
                 showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }                                                                                //JM ^^
-              else if((item == ITM_CFG) || (item == ITM_PLOT_J) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour PLOT in reverse font to appear to be menus
+              else if((item == ITM_CFG) || (item ==ITM_PLOT_LR) || (item == ITM_PLOT_J) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour PLOT in reverse font to appear to be menus
                 showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }                                                                                //JM^^
 

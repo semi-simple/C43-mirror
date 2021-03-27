@@ -194,24 +194,24 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
     save(&selection,                          sizeof(selection),                          BACKUP);
 
-    save(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-    save(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-    save(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-    save(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+    save(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
+    save(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+    save(&extentx,                            sizeof(extentx),                            BACKUP);
+    save(&extenty,                            sizeof(extenty),                            BACKUP);
     save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
     save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
     save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
     save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-    save(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-    save(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-    save(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-    save(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-    save(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-    save(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-    save(&PLOT_SHADE     ,                    sizeof(PLOT_SHADE   ),                      BACKUP);
-    save(&PLOT_AXIS      ,                    sizeof(PLOT_AXIS    ),                      BACKUP);
-    save(&PLOT_ZMX       ,                    sizeof(PLOT_ZMX     ),                      BACKUP);
-    save(&PLOT_ZMY       ,                    sizeof(PLOT_ZMY     ),                      BACKUP);
+    save(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
+    save(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);
+    save(&PLOT_BOX,                           sizeof(PLOT_BOX),                           BACKUP);
+    save(&PLOT_INTG,                          sizeof(PLOT_INTG),                          BACKUP);
+    save(&PLOT_DIFF,                          sizeof(PLOT_DIFF),                          BACKUP);
+    save(&PLOT_RMS,                           sizeof(PLOT_RMS),                           BACKUP);
+    save(&PLOT_SHADE,                         sizeof(PLOT_SHADE),                         BACKUP);
+    save(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
+    save(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
+    save(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
     save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
@@ -377,24 +377,24 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
       restore(&selection,                          sizeof(selection),                          BACKUP);
 
-      restore(&graph_dx  ,                         sizeof(graph_dx  ),                         BACKUP);
-      restore(&graph_dy  ,                         sizeof(graph_dy  ),                         BACKUP);
-      restore(&extentx   ,                         sizeof(extentx   ),                         BACKUP);
-      restore(&extenty   ,                         sizeof(extenty   ),                         BACKUP);
+      restore(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
+      restore(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+      restore(&extentx,                            sizeof(extentx),                            BACKUP);
+      restore(&extenty,                            sizeof(extenty),                            BACKUP);
       restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
       restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
       restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
       restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
-      restore(&PLOT_LINE    ,                      sizeof(PLOT_LINE    ),                      BACKUP);
-      restore(&PLOT_CROSS   ,                      sizeof(PLOT_CROSS   ),                      BACKUP);
-      restore(&PLOT_BOX     ,                      sizeof(PLOT_BOX     ),                      BACKUP);
-      restore(&PLOT_INTG    ,                      sizeof(PLOT_INTG    ),                      BACKUP);
-      restore(&PLOT_DIFF    ,                      sizeof(PLOT_DIFF    ),                      BACKUP);
-      restore(&PLOT_RMS     ,                      sizeof(PLOT_RMS     ),                      BACKUP);
-      restore(&PLOT_SHADE   ,                      sizeof(PLOT_SHADE   ),                      BACKUP);
-      restore(&PLOT_AXIS    ,                      sizeof(PLOT_AXIS    ),                      BACKUP);
-      restore(&PLOT_ZMX     ,                      sizeof(PLOT_ZMX     ),                      BACKUP);
-      restore(&PLOT_ZMY     ,                      sizeof(PLOT_ZMY     ),                      BACKUP);
+      restore(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
+      restore(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);
+      restore(&PLOT_BOX,                           sizeof(PLOT_BOX),                           BACKUP);
+      restore(&PLOT_INTG,                          sizeof(PLOT_INTG),                          BACKUP);
+      restore(&PLOT_DIFF,                          sizeof(PLOT_DIFF),                          BACKUP);
+      restore(&PLOT_RMS,                           sizeof(PLOT_RMS),                           BACKUP);
+      restore(&PLOT_SHADE,                         sizeof(PLOT_SHADE),                         BACKUP);
+      restore(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
+      restore(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
+      restore(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
       restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
@@ -1220,7 +1220,7 @@ void fnLoad(uint16_t loadMode) {
   restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
   restoreOneSection(BACKUP, loadMode); // PROGRAMS
   restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
-  restoreOneSection(BACKUP, loadMode); // Graph memory //JM
+  restoreOneSection(BACKUP, loadMode); // Graph memory
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);

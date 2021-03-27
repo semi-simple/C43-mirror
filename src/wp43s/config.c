@@ -773,7 +773,6 @@ void fnReset(uint16_t confirmation) {
     lastPlotMode = PLOT_NOTHING;
     selection = 0;
 
-
     shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);
 

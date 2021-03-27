@@ -125,7 +125,6 @@ void fnWeightedStandardError(uint16_t unusedButMandatoryParameter) {
   calculateWeightedStandardDeviation(1, 1, 0, TI_WEIGHTEDSTDERR);
 }
 
-
 void fnStatSX_SY(real_t *SX, real_t *SY){
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
   real_t TT,UU;

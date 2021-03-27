@@ -1813,9 +1813,9 @@
 #define ITM_XOUT                      1755
 #define ITM_PLOT_REGLINE              1756
 #define ITM_CLOSE                     1757
-#define ITM_STATDEMO                  1758
-#define ITM_STATDEMO1                 1759
-#define ITM_STATDEMO2                 1760
+#define ITM_STATDEMO                  1758 //Temporary
+#define ITM_STATDEMO1                 1759 //Temporary
+#define ITM_STATDEMO2                 1760 //Temporary
 #define ITM_SMI                       1761
 #define ITM_PLOT_LR                   1762
 #define ITM_PLOT_SELLINE              1763

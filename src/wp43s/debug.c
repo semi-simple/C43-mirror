@@ -164,7 +164,6 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 }
 
 
-
 /********************************************//**
  * \brief Returns the name of a curvefitting mode
  *
@@ -185,6 +184,11 @@ char * getCurveFitModeName(uint16_t selection) {
     return "???        ";
   }
 
+
+/********************************************//**
+ * \brief Remove trailing spaces from the curvefitting mode name
+ *
+ ***********************************************/
 char tmp_names[13];
 char * eatSpaces(const char * ss) {
   strcpy(tmp_names,ss);
@@ -193,6 +197,7 @@ char * eatSpaces(const char * ss) {
   }
   return tmp_names;
 }
+
 
 /********************************************//**
  * \brief Returns the names of the curve fit type
@@ -216,6 +221,7 @@ char * getCurveFitModeNames(uint16_t selection) {
   return errorMessage;
 }
 
+
 /********************************************//**
  * \brief Returns the name of a curvefitting mode
  *
@@ -235,7 +241,6 @@ char * getCurveFitModeFormula(uint16_t selection) {
     if(selection == CF_ORTHOGONAL_FITTING)  return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
   return "???";
   }
-
 
 
 /********************************************//**

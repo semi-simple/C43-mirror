@@ -855,7 +855,7 @@ void graphPlotstat(void){
         case CF_ORTHOGONAL_FITTING+10000: 
           #ifdef USEFLOAT 
             y = a1 * x + a0; 
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
             realAdd     (&UU, &aa0, &TT, &ctxtRealShort);
@@ -866,7 +866,7 @@ void graphPlotstat(void){
         case CF_EXPONENTIAL_FITTING: 
           #ifdef USEFLOAT 
             y = a0 * exp(a1 * x); 
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
             realExp     (&UU, &UU,       &ctxtRealShort);
@@ -878,7 +878,7 @@ void graphPlotstat(void){
         case CF_LOGARITHMIC_FITTING: 
           #ifdef USEFLOAT 
             y = a0 + a1*log(x); 
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             WP34S_Ln    (&SS, &SS,       &ctxtRealShort);
             realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
@@ -889,7 +889,7 @@ void graphPlotstat(void){
         case CF_POWER_FITTING: 
           #ifdef USEFLOAT 
             y = a0 * pow(x,a1);
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realPower   (&SS, &aa1, &SS, &ctxtRealShort);
             realMultiply(&SS, &aa0, &TT, &ctxtRealShort);
@@ -899,7 +899,7 @@ void graphPlotstat(void){
         case CF_ROOT_FITTING: 
           #ifdef USEFLOAT 
             y = a0 * pow(a1,1/x);
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realDivide  (const_1, &SS, &SS, &ctxtRealShort);
             realPower   (&aa1, &SS, &SS, &ctxtRealShort);    //very very slow with a1=0.9982, probably in the 0.4 < x < 1.0 area
@@ -910,7 +910,7 @@ void graphPlotstat(void){
         case CF_HYPERBOLIC_FITTING: 
           #ifdef USEFLOAT 
             y = 1 / (a1 * x + a0);
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realMultiply(&SS, &aa1, &UU, &ctxtRealShort);
             realAdd     (&UU, &aa0, &TT, &ctxtRealShort);
@@ -921,7 +921,7 @@ void graphPlotstat(void){
         case CF_PARABOLIC_FITTING: 
           #ifdef USEFLOAT 
             y = a2 * x * x + a1 * x + a0;
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realMultiply(&SS, &SS , &TT, &ctxtRealShort);
             realMultiply(&TT, &aa2, &TT, &ctxtRealShort);
@@ -934,7 +934,7 @@ void graphPlotstat(void){
         case CF_GAUSS_FITTING:
           #ifdef USEFLOAT 
             y = a0 * exp( (x-a1)*(x-a1)/a2 );
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realSubtract(&SS, &aa1, &TT, &ctxtRealShort);
             realMultiply(&TT, &TT , &TT, &ctxtRealShort);
@@ -947,7 +947,7 @@ void graphPlotstat(void){
         case CF_CAUCHY_FITTING:
           #ifdef USEFLOAT 
             y = 1/(a0*(x+a1)*(x+a1)+a2);
-          #else
+          #else //USEFLOAT
             sprintf(ss,"%f",x); stringToReal(ss,&SS,&ctxtRealShort);
             realAdd     (&SS, &aa1, &TT, &ctxtRealShort);
             realMultiply(&TT, &TT , &TT, &ctxtRealShort);

@@ -563,9 +563,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_L                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {}
+  void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {} //Temporary
 
 #endif // GENERATE_CATALOGS
 

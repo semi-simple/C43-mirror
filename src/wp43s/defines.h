@@ -68,7 +68,7 @@
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
-#define USEFLOAT                                     // Plot: Use standard double floats for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible optimisation.
+#define USEFLOAT                                     // Plot: Use standard double floats instead of short REAL for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible future optimisation.
 
 
 // List of errors

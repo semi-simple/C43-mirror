@@ -1717,14 +1717,48 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
   real34_t real34, value34, tmp34, h34, m34, s34;
   longInteger_t hli;
-  int32_t sign;
+  int32_t sign, i;
   uint32_t digits, tDigits = 0u, bDigits;
   char digitBuf[16], digitBuf2[48];
   char* bufPtr;
   bool_t isValid12hTime = false, isAfternoon = false;
+  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
 
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   sign = real34IsNegative(&real34);
+
+  if(timeDisplayFormatDigits == 0) {
+    int32ToReal34(1000, &value34);
+    real34Divide(const34_1, &value34, &value34);
+  }
+  else if((timeDisplayFormatDigits == 1) || (timeDisplayFormatDigits == 2)) {
+    int32ToReal34(60, &value34);
+  }
+  else {
+    int32ToReal34(1, &value34);
+    int32ToReal34(10, &tmp34);
+    for(i = 3; i < timeDisplayFormatDigits; ++i) {
+      real34Divide(&value34, &tmp34, &value34);
+      if(i == 5) break;
+    }
+  }
+  if(real34CompareAbsLessThan(&real34, &value34)) {
+    if(ignoreTDisp) {
+      displayFormat = DF_ALL;
+      displayFormatDigits = 0;
+    }
+    else {
+      displayFormat = getSystemFlag(FLAG_ALLENG) ? DF_ENG : DF_SCI;
+      displayFormatDigits = 3;
+    }
+    real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), displayString, &standardFont, 2000, ignoreTDisp ? 34 : 15, false, STD_SPACE_4_PER_EM);
+    displayFormatDigits = savedDisplayFormatDigits;
+    displayFormat = savedDisplayFormat;
+    strcat(displayString, "s");
+    return;
+  }
+  displayFormatDigits = savedDisplayFormatDigits;
+  displayFormat = savedDisplayFormat;
 
   // Hours
   int32ToReal34(3600, &value34);

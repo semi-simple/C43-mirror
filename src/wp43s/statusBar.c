@@ -34,7 +34,9 @@
       sprintf(tmpString, "%s%d %s/%s  mnu:%s fi:%d", catalog ? "asm:" : "", catalog, tam.mode ? "/tam" : "", getCalcModeName(calcMode),indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, softmenuStack[0].firstItem);
       showString(tmpString, &standardFont, X_DATE, 0, vmNormal, true, true);
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
+      if(calcMode == CM_PLOT_STAT) lcd_fill_rect(0, 0, 158, 20, 0);
       showDateTime();
+      showHideHourGlass();
       if(calcMode == CM_PLOT_STAT) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
       showRealComplexResult();
       showComplexMode();
@@ -43,7 +45,6 @@
       showIntegerMode();
       showOverflowCarry();
       showHideAlphaMode();
-      showHideHourGlass();
       showHidePgmBegin();
       showHideWatch();
       showHideSerialIO();

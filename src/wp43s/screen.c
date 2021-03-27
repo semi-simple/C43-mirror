@@ -2647,7 +2647,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         refreshStatusBar();
         fnStatList();
         hourGlassIconEnabled = false;
-        showHideHourGlass();
+        refreshStatusBar();
       }
       break;
 
@@ -2661,7 +2661,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         refreshStatusBar();
         graph_plotmem();
         hourGlassIconEnabled = false;
-        showHideHourGlass();
+        refreshStatusBar();
       }
       break;
 

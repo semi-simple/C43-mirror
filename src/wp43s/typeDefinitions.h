@@ -130,9 +130,11 @@ typedef enum {
   amGrad   =  2, // grad   must be 2  | for angle reduction before
   amDegree =  3, // degree must be 3  | Taylor trig computation.
   amDMS    =  4,
-  amNone   =  5
+  amNone   =  5,
+  amSecond =  6, // not an angular but a time unit: for the routine unified with the real type
+  TM_HMS   =  7  // JM not an angular but a time unit: for the C43 usage
 } angularMode_t;
-#define TM_HMS                                     6   //JM
+//#define TM_HMS    7   //JM
 
 
 /********************************************//**

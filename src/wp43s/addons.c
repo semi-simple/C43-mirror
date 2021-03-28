@@ -501,6 +501,60 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
 
 
 
+void fnFromToCurrentAngularMode(uint16_t unusedButMandatoryParameter) {
+//  fnCvtToCurrentAngularMode(currentAngularMode);
+}
+
+
+/*
+void fnDRGToCurrentAngularMode(uint16_t fromAngularMode) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      if(fromAngularMode == currentAngularMode) {
+        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+        setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle (longint) default must be ADM = %s!", getAngularModeName(currentAngularMode));
+          moreInfoOnError("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+      break;
+
+    case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
+        setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "input angle34 must be tagged %s!", getAngularModeName(fromAngularMode));
+          moreInfoOnError("In function fnCvtToCurrentAngularMode:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+      break;
+
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnCvtToCurrentAngularMode:", "the input value must be a long integer, a real34 or an angle34", errorMessage, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+}
+*/
+
+
+
+
 void shrinkNimBuffer (void) {                              //JMNIM vv
   int16_t lastChar;                                        //if digits in NIMBUFFER, ensure switch to NIM,
   int16_t hexD = 0;

@@ -179,7 +179,7 @@ void processCurvefitSelection(uint16_t selection){
     uint16_t ix,jx;               //only a single graph can be displayed at once, so retain the single lowest bit, and clear the higher order bits.
     jx = 0;
     for(ix=0; ix!=15; ix++) {
-      jx = selection & ix;
+      jx = selection & (2 << ix);
       if(jx) break;
     }
     selection = jx;

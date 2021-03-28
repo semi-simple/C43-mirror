@@ -295,7 +295,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displaySt
  * \param[in]  x const real16_t*  Value to format
  * \return void
  ***********************************************/
-void realToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+static void realToDisplayString2a(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator, bool_t noFix) {
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
@@ -440,7 +440,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   // ALL mode //
   //////////////
   if(displayFormat == DF_ALL) {
-    if(exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
+    if(noFix || exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
       digitsToDisplay = numDigits - 1;
       digitToRound    = firstDigit + digitsToDisplay;
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
@@ -562,7 +562,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   // FIX mode //
   //////////////
   if(displayFormat == DF_FIX) {
-    if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
+    if(noFix || exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
@@ -904,6 +904,10 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   }
 }
 
+void realToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+  realToDisplayString2a(real34, displayString, displayHasNDigits, limitExponent, separator, false);
+}
+
 
 
 void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
@@ -1212,12 +1216,13 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
                                                                                     fs);
   }
   else {
-    realToDisplayString2(angle34, displayString, displayHasNDigits, limitExponent, separator);
+    realToDisplayString2a(angle34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond);
 
          if(mode == amRadian) strcat(displayString, STD_SUP_r);
     else if(mode == amMultPi) strcat(displayString, STD_pi);
     else if(mode == amGrad)   strcat(displayString, STD_SUP_g);
     else if(mode == amDegree) strcat(displayString, STD_DEGREE);
+    else if(mode == amSecond) strcat(displayString, "s");
     else {
       strcat(displayString, "?");
       sprintf(errorMessage, "In function angle34ToDisplayString2: %" PRIu8 " is an unexpected value for mode!", mode);
@@ -1716,6 +1721,7 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
 
 void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
   real34_t real34, value34, tmp34, h34, m34, s34;
+  real_t tmp;
   longInteger_t hli;
   int32_t sign, i;
   uint32_t digits, tDigits = 0u, bDigits;
@@ -1727,6 +1733,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
   real34Copy(REGISTER_REAL34_DATA(regist), &real34);
   sign = real34IsNegative(&real34);
 
+  // Short time (displayed like SCI/ENG)
   if(timeDisplayFormatDigits == 0) {
     int32ToReal34(1000, &value34);
     real34Divide(const34_1, &value34, &value34);
@@ -1742,7 +1749,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
       if(i == 5) break;
     }
   }
-  if(real34CompareAbsLessThan(&real34, &value34)) {
+  realCopy(const_1, &tmp), tmp.exponent -= 33;
+  realToReal34(&tmp, &tmp34);
+  real34DivideRemainder(&real34, &tmp34, &tmp34);
+  if(real34CompareAbsLessThan(&real34, &value34) || (!real34IsZero(&tmp34))) {
     if(ignoreTDisp) {
       displayFormat = DF_ALL;
       displayFormatDigits = 0;
@@ -1751,10 +1761,9 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
       displayFormat = getSystemFlag(FLAG_ALLENG) ? DF_ENG : DF_SCI;
       displayFormatDigits = 3;
     }
-    real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), displayString, &standardFont, 2000, ignoreTDisp ? 34 : 15, false, STD_SPACE_4_PER_EM);
+    real34ToDisplayString(REGISTER_REAL34_DATA(regist), amSecond, displayString, &standardFont, 2000, ignoreTDisp ? 34 : 15, false, STD_SPACE_4_PER_EM);
     displayFormatDigits = savedDisplayFormatDigits;
     displayFormat = savedDisplayFormat;
-    strcat(displayString, "s");
     return;
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -1767,13 +1776,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
   real34ToIntegralValue(&h34, &h34, DEC_ROUND_DOWN);
 
   // Pre-rounding
-  if(ignoreTDisp) {
-    bDigits = 0;
-    tDigits = 33;
-    int32ToReal34(10, &value34);
-    goto do_rounding;
-  }
-  else {
+  if(!ignoreTDisp) {
     switch(timeDisplayFormatDigits) {
       case 0:
         int32ToReal34(86400, &value34);

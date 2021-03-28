@@ -19,8 +19,6 @@
  ***********************************************/
 
 
-
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1948,8 +1946,8 @@
 #define ITM_SECOND                    1881
 #define ITM_toTIME                    1882
 #define ITM_TIMEto                    1883
-#define ITM_DRGto                     1884
-#define ITM_1885                      1885
+#define ITM_DRG                       1884
+#define ITM_DRGto                     1885
 #define ITM_CLA                       1886
 #define ITM_CLN                       1887
 #define ITM_DENANY                    1888

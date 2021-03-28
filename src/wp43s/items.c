@@ -670,7 +670,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnHrDeg                    (uint16_t unusedButMandatoryParameter) {}
   void fnToTime                   (uint16_t unusedButMandatoryParameter) {}
   void fnTimeTo                   (uint16_t unusedButMandatoryParameter) {}
-  void fnFromToCurrentAngularMode (uint16_t unusedButMandatoryParameter) {}
+  void fnDRG                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDRGto                    (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
@@ -2606,8 +2607,8 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1881 */  { fnSecond,                    NOPARAM,                     "SEC",                                         "SEC",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1882 */  { fnToTime,                    NOPARAM,                     STD_RIGHT_ARROW "TIME",                        STD_RIGHT_ARROW "TIME",                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1883 */  { fnTimeTo,                    NOPARAM,                     "TIME" STD_RIGHT_ARROW,                        "TIME" STD_RIGHT_ARROW,                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1884 */  { fnCvtToCurrentAngularMode,   amDegree,                    "DRG" STD_RIGHT_ARROW,                         "DRG" STD_RIGHT_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1885 */  { itemToBeCoded,               NOPARAM,                     "1885",                                        "1885",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1884 */  { fnDRG,                       NOPARAM,                     "DRG",                                         "DRG",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1885 */  { fnDRGto,                     NOPARAM,                     "DRG" STD_RIGHT_ARROW STD_RIGHT_ARROW,         "DRG" STD_RIGHT_ARROW STD_RIGHT_ARROW,         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1886 */  { fnCla,                       NOPARAM,                     "CLA",                                         "CLA",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_DISABLED  | US_UNCHANGED},//GRAPH
 /* 1887 */  { fnCln,                       NOPARAM,                     "CLN",                                         "CLN",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_DISABLED  | US_UNCHANGED},//GRAPH
 /* 1888 */  { fnSetSetJM,                  DM_ANY,                      "DENANY",                                      "DENANY",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},//JM DEN

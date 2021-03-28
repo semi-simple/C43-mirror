@@ -747,7 +747,10 @@ void kill_ASB_icon(void) {
         }
         break;
 
+
+      case ITM_i :                          //JM HP35 compatible, in NIM
       case ITM_CC :
+        if (item == ITM_i) resetShiftState();    //JM HP35 compatible, in NIM
         lastChar = strlen(aimBuffer) - 1;
 
         done = true;
@@ -1017,6 +1020,38 @@ void kill_ASB_icon(void) {
           }
         }
         break;
+
+
+      case ITM_DRG :
+      case ITM_DRGto :
+        if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
+          done = true;
+
+          closeNim();
+
+          if(calcMode != CM_NIM && lastErrorCode == 0) {
+            if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+              convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+            }
+            if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == amNone) {
+              setRegisterAngularMode(REGISTER_X, currentAngularMode);
+            } else {
+//              if(item == ITM_DRG) fnDRG(0); else
+//              if(item == ITM_DRG) fnDRGto(0);
+            }
+
+            if(lastErrorCode == 0) {
+              setSystemFlag(FLAG_ASLIFT);
+            }
+            else {
+              undo();
+            }
+            return;
+          }
+        }
+        break;
+
+
 
       default : keyActionProcessed = false;
     }

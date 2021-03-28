@@ -149,7 +149,7 @@ void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t 
   real_t angle, a2, t, j, z, sin, cos, compare;
   int i;
   bool_t endSin = (sinOut == NULL), endCos = (cosOut == NULL);
-  int32_t cmp, savedContextDigits;
+  int32_t savedContextDigits;
 
   savedContextDigits = realContext->digits;
   if(realContext->digits > 51) {
@@ -167,25 +167,16 @@ void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t 
   uInt32ToReal(1, &cos);
 
   for(i=1; !(endSin && endCos) && i<1000; i++) { // i goes up to 31 max in the test suite
-    int odd = i & 1;
-
     realAdd(&j, const_1, &j, realContext);
     realDivide(&a2, &j, &z, realContext);
     realMultiply(&t, &z, &t, realContext);
+    realChangeSign(&t);
 
     if(!endCos) {
       realCopy(&cos, &z);
-
-      if(odd) {
-        realSubtract(&cos, &t, &cos, realContext);
-      }
-      else {
-        realAdd(&cos, &t, &cos, realContext);
-      }
-
+      realAdd(&cos, &t, &cos, realContext);
       realCompare(&cos, &z, &compare, realContext);
-      realToInt32(&compare, cmp);
-      endCos = (cmp == 0);
+      endCos = realIsZero(&compare);
     }
 
     realAdd(&j, const_1, &j, realContext);
@@ -193,17 +184,9 @@ void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t 
 
     if(!endSin) {
       realCopy(&sin, &z);
-
-      if(odd) {
-        realSubtract(&sin, &t, &sin, realContext);
-      }
-      else {
-        realAdd(&sin, &t, &sin, realContext);
-      }
-
+      realAdd(&sin, &t, &sin, realContext);
       realCompare(&sin, &z, &compare, realContext);
-      realToInt32(&compare, cmp);
-      endSin = (cmp == 0);
+      endSin = realIsZero(&compare);
     }
   }
 

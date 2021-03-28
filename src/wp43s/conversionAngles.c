@@ -42,6 +42,9 @@ void fnCvtToCurrentAngularMode(uint16_t fromAngularMode) {
       break;
 
     case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == amNone) {
+        setRegisterAngularMode(REGISTER_X, currentAngularMode);
+      }
       if(getRegisterAngularMode(REGISTER_X) == fromAngularMode) {
         convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), fromAngularMode, currentAngularMode);
         setRegisterAngularMode(REGISTER_X, currentAngularMode);

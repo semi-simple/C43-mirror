@@ -1452,7 +1452,7 @@ uint8_t   displayStack_m = 255;                                                 
 void refreshRegisterLine(calcRegister_t regist) {
   int32_t w;
   int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
-  char prefix[20], lastBase[4];
+  char prefix[200], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
   if(displayStack != 4-displayStackSHOIDISP) {displayStack_m = displayStack;}   //JMSHOI
@@ -2099,6 +2099,49 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
+          else if(temporaryInformation == TI_LR) {
+            #define LRWidth 140
+            if(regist == REGISTER_X) {
+              strcpy(prefix,getCurveFitModeFormula(lrSelection));
+              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
+              }
+              strcat(prefix,"a" STD_SUB_0 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_Y) {
+              strcpy(prefix,"y=");
+              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
+              }
+              strcat(prefix, "a" STD_SUB_1 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(lrSelection == CF_CAUCHY_FITTING || lrSelection == CF_GAUSS_FITTING || lrSelection == CF_PARABOLIC_FITTING){
+              if(regist == REGISTER_Z) {
+                prefix[0]=0;
+                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                strcat(prefix, "a" STD_SUB_2 "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+              else if(regist == REGISTER_T) {
+                strcpy(prefix, getCurveFitModeName(lrSelection));
+                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }              
+            } else if(regist == REGISTER_Z) {
+                strcpy(prefix, getCurveFitModeName(lrSelection));
+                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+          }
+
           else if(temporaryInformation == TI_SXY) {
             if(regist == REGISTER_X) {
               strcpy(prefix, "s" STD_SUB_x STD_SUB_y STD_SPACE_FIGURE "=");
@@ -2674,14 +2717,14 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         showSoftmenuCurrentPart();
         refreshStatusBar();
         hourGlassIconEnabled = true;
-        graphPlotstat();
+        graphPlotstat(selection);
         hourGlassIconEnabled = false;
         refreshStatusBar();
       }
       break;
 
-    default: {}
-  }
+      default: {}
+    }
 
   #ifndef DMCP_BUILD
     refreshLcd(NULL);

@@ -31,7 +31,7 @@
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
 #define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05 * 50     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
 
@@ -123,8 +123,8 @@ int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 void    fnStatDemo         (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);
-void    graphPlotstat      (void);
-void    drawline           ();
+void    graphPlotstat      (uint16_t selection);
+void    drawline           (uint16_t selection);
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);

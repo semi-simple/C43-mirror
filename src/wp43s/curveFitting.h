@@ -27,4 +27,4 @@ extern double                   r,smi;            // TODO CONVERT r, smi TO REAL
 
 void   fnCurveFitting           (uint16_t curveFitting);
 void   processCurvefitSelection (uint16_t selection);
-
+void   fnProcessLR              (uint16_t unusedButMandatoryParameter);

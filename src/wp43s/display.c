@@ -1749,10 +1749,15 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
       if(i == 5) break;
     }
   }
-  realCopy(const_1, &tmp), tmp.exponent -= 33;
-  realToReal34(&tmp, &tmp34);
-  real34DivideRemainder(&real34, &tmp34, &tmp34);
-  if(real34CompareAbsLessThan(&real34, &value34) || (!real34IsZero(&tmp34))) {
+  if(real34CompareAbsLessThan(&real34, const34_1)) {
+    realCopy(const_1, &tmp), tmp.exponent -= 33;
+    realToReal34(&tmp, &tmp34);
+    real34DivideRemainder(&real34, &tmp34, &tmp34);
+  }
+  else {
+    real34Zero(&tmp34);
+  }
+  if((real34CompareAbsLessThan(&real34, &value34) || (!real34IsZero(&tmp34)))) {
     if(ignoreTDisp) {
       displayFormat = DF_ALL;
       displayFormatDigits = 0;

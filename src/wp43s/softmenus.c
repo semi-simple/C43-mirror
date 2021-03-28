@@ -59,8 +59,8 @@ TO_QSPI const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
-TO_QSPI const int16_t menu_CPX[]         = { ITM_RE,                        ITM_IM,                     ITM_MAGNITUDE,            ITM_ANGLE,             ITM_CONJ,                    ITM_REexIM,                         //JM re-arranged menu. CPX menu
-                                             KEY_COMPLEX,                   ITM_CC,                     ITM_DOT_PROD,                  ITM_CROSS_PROD,             ITM_SIGN,                    ITM_UNITV,                                          //JM re-arranged menu. CPX menu
+TO_QSPI const int16_t menu_CPX[]         = { ITM_CC,                        ITM_RE,                     ITM_IM,                   ITM_MAGNITUDE,         ITM_ANGLE,                   ITM_REexIM,                         //JM re-arranged menu. CPX menu
+                                             KEY_COMPLEX,                   ITM_CONJ,                   ITM_DOT_PROD,             ITM_CROSS_PROD,        ITM_SIGN,                    ITM_UNITV,                                          //JM re-arranged menu. CPX menu
                                              ITM_CPXI,                      ITM_CPXJ,                   ITM_CXtoRE,               ITM_REtoCX,            ITM_RECT,                    ITM_POLAR                     };    //JM re-arranged menu
                         /*KEY_CC1 removed this one*/
 
@@ -503,15 +503,15 @@ TO_QSPI const int16_t menu_A_HOME[360]   = { -1,-1,-1,-1,-1,-1,        -1,-1,-1,
 
 TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO MAKE JMHOME DEMO WORK
 /*HOME0 */           
-/*0x18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,           ITM_XFACT,                        //JM HOME
-                                             ITM_MAGNITUDE,       ITM_ANGLE,       ITM_PARALLEL,      ITM_CC,           ITM_toREC2,       ITM_toPOL2,                        //JM HOME
+/*0x18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,          ITM_CC,                        //JM HOME
+                                             ITM_MAGNITUDE,       ITM_ANGLE,       ITM_PARALLEL,      ITM_XFACT,        ITM_toREC2,       ITM_toPOL2,                        //JM HOME
                                              ITM_DEG,             ITM_RAD,         ITM_DMS,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
 /*HOME-1*/                                                                                                                                                                     //JM HOME
-/*1*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,           ITM_XFACT,                        //JM HOME
-                                             ITM_RI,              ITM_IP,          ITM_NULL,          ITM_NULL,         -MNU_BASE,        -MNU_INTS,                          //JM HOME
+/*1*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,          ITM_CC,                        //JM HOME
+                                             ITM_RI,              ITM_IP,          ITM_NULL,          ITM_XFACT,        -MNU_BASE,        -MNU_INTS,                          //JM HOME
                                              ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
 /*HOME-2*/                                                                                                                                                                     //JM HOME
-/*2*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,           ITM_XFACT,                        //JM HOME
+/*2*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,          ITM_CC,                        //JM HOME
                                              -MNU_TRI,            -MNU_CPX,        -MNU_EXP,          -MNU_XEQ,         -MNU_MyMenu,      -MNU_EE,                            //JM HOME
                                              -MNU_CONST,          ITM_RBR,         ITM_FLGSV,         ITM_H_SUMRY,      ITM_H_REPLCA,     ITM_H_FIXED,                        //JM HOME
                                        
@@ -663,8 +663,8 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
 
 
 /*HOME1*/
-                                           ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EXP,                      ITM_XFACT,                           //JM HOME
-                                           ITM_SI_f,                      ITM_SI_p,                   ITM_PARALLEL,             ITM_CC,                ITM_MAGNITUDE,               ITM_SI_T,                             //JM HOME                                    
+                                           ITM_SIGMAMINUS,                ITM_YX,                     ITM_SQUARE,               ITM_10x,               ITM_EXP,                     ITM_CC,                           //JM HOME
+                                           ITM_SI_f,                      ITM_SI_p,                   ITM_PARALLEL,             ITM_XFACT,             ITM_MAGNITUDE,               ITM_SI_T,                             //JM HOME                                    
                                            ITM_SI_n,                      ITM_SI_u,                   ITM_SI_m,                 ITM_SI_k,              ITM_SI_M,                    ITM_SI_G                              //JM UNITS SI
 
 //##################################################################################################################################################################################################################################

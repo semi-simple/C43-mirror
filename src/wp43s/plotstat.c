@@ -606,10 +606,9 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
   strcpy(s02,s04);
 }
 
-
-void graphPlotstat(void){
+void graphPlotstat(uint16_t selection){
   #ifdef PC_BUILD
-    printf("\n####>>>>> graphPlotstat\n");
+    printf("\n####>>>>> graphPlotstat selection:%u\n",selection);
   #endif
   #ifndef TESTSUITE_BUILD
   uint16_t  cnt, ix, statnum;
@@ -792,7 +791,7 @@ void graphPlotstat(void){
     processCurvefitSelection(selection);
   }
 
-  drawline();
+  drawline(selection);
 
   } else {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
@@ -806,10 +805,10 @@ void graphPlotstat(void){
 
 
 #ifndef TESTSUITE_BUILD
-  void drawline(){
+  void drawline(uint16_t selection){
     if(!selection) return;
     #ifdef PC_BUILD
-      printf("#####>>> drawline: selection:%u  lastplotmode:%u  lrSelection:%u\n",selection, lastPlotMode, lrSelection);
+      printf("#####>>> drawline: selection:%u:%s  lastplotmode:%u  lrSelection:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection);
     #endif //PC_BUILD
     #ifndef USEFLOAT
       real_t SS,TT,UU;
@@ -851,8 +850,7 @@ void graphPlotstat(void){
 
       switch(selection) {
         case CF_LINEAR_FITTING: 
-        case CF_ORTHOGONAL_FITTING: 
-        case CF_ORTHOGONAL_FITTING+10000: 
+        case CF_ORTHOGONAL_FITTING:
           #ifdef USEFLOAT 
             y = a1 * x + a0; 
           #else //USEFLOAT
@@ -1003,12 +1001,10 @@ void graphPlotstat(void){
     #define autoshift -5 //text line spacing
     int16_t index = -1;
     if(selection!=0) {
-      strcpy(ss,getCurveFitModeName(selection%10000));
-      if(selection == CF_ORTHOGONAL_FITTING      ) strcat(ss,"(+)"); else
-      if(selection == CF_ORTHOGONAL_FITTING+10000) strcat(ss,"(-)");
-
+      strcpy(ss,getCurveFitModeName(selection));
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, true, true);
-      strcpy(ss,getCurveFitModeFormula(selection%10000));
+      strcpy(ss,"y=");
+      strcat(ss,getCurveFitModeFormula(selection));
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, true, true);
       sprintf(ss,"n=%d",(int)nn);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
@@ -1024,7 +1020,7 @@ void graphPlotstat(void){
       eformat(ss,"r" STD_SUP_2 "=",r*r,4);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, true, true);
 
-      if((selection == CF_ORTHOGONAL_FITTING) || (selection == CF_ORTHOGONAL_FITTING+10000)) {
+      if(selection == CF_ORTHOGONAL_FITTING) {
         eformat(ss,"s" STD_SUB_m STD_SUB_i "=",smi,4); 
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
       }
@@ -1108,10 +1104,9 @@ void fnPlotRegLine(uint16_t plotMode){
   switch(plotMode) {
     case PLOT_CYCLEALL:
       lastPlotMode = PLOT_CYCLEALL;
-      //Cycling through all graphs, starting with ORTHOF
+      //Cycling through all graphs, starting with ORTHOF, in this sequence
       if(selection == 0                           ) selection = CF_ORTHOGONAL_FITTING ;     else
-      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
-      if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_LINEAR_FITTING     ;     else
+      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_LINEAR_FITTING     ;     else
       if(selection == CF_LINEAR_FITTING           ) selection = CF_EXPONENTIAL_FITTING;     else
       if(selection == CF_EXPONENTIAL_FITTING      ) selection = CF_PARABOLIC_FITTING  ;     else
       if(selection == CF_PARABOLIC_FITTING        ) selection = CF_LOGARITHMIC_FITTING;     else
@@ -1122,30 +1117,22 @@ void fnPlotRegLine(uint16_t plotMode){
       if(selection == CF_CAUCHY_FITTING           ) selection = CF_GAUSS_FITTING      ;     else
       if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
          selection = 0;
-//      processCurvefitSelection(selection);
-//      graphAxisDraw();                        //Draw the axis 
       break;
 
     case PLOT_ORTHOF: 
-      //Cycling through ORTHOF (+) and (-)
-      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_ORTHOGONAL_FITTING+10000;else
-      if(selection == CF_ORTHOGONAL_FITTING+10000 ) selection = CF_ORTHOGONAL_FITTING; else
-        selection = CF_ORTHOGONAL_FITTING;
-//      processCurvefitSelection(selection);
-//      graphAxisDraw();                        //Draw the axis 
+      selection = CF_ORTHOGONAL_FITTING;
       break;
 
     case PLOT_FIT:
       //Show data and one curve fit selected
-      selection = (selection%10000) << 1;
+      //printf("#####X %u %u \n",selection, lrSelection);
+      selection = (selection) << 1;
       if(selection == 0) selection = 1;
-        while((selection != (lrSelection & selection)) && selection%10000 < 1024){
-          selection = (selection%10000) << 1;
+        while((selection != (lrSelection & selection)) && selection < 1024){
+          //printf("#####Z %u %u \n",selection, lrSelection);
+          selection = (selection) << 1;
         }
-      if(selection%10000 >= 1024) selection = 0;
-//      graphPlotstat();
-//      processCurvefitSelection(selection);
-//      graphAxisDraw();                        //Draw the axis 
+      if(selection >= 1024) selection = 0;
       break;
 
     case PLOT_NOTHING:
@@ -1294,11 +1281,23 @@ void fnStatDemo2(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
   runFunction(ITM_CLSIGMA);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("30",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("50",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
+  }
+
+
+void fnStatDemo2a(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+  selection = 0;
+  runFunction(ITM_CLSIGMA);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.0000",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
   }
-
 

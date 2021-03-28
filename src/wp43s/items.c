@@ -563,6 +563,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_L                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
+  void fnProcessLR                (uint16_t unusedButMandatoryParameter) {}
   void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {} //Temporary
@@ -2127,7 +2128,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1513 */  { fnLoad,                      LM_SUMS,                     "LOAD" STD_SIGMA,                              "LOAD" STD_SIGMA,                              (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1514 */  { allocateLocalRegisters,      TM_VALUE,                    "LocR",                                        "LocR",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1515 */  { fnGetLocR,                   NOPARAM,                     "LocR?",                                       "LocR?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1516 */  { itemToBeCoded,               NOPARAM,                     "L.R.",                                        "L.R.",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1516 */  { fnProcessLR,                 NOPARAM,                     "L.R.",                                        "L.R.",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1517 */  { fnMant,                      NOPARAM,                     "MANT",                                        "MANT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1518 */  { itemToBeCoded,               NOPARAM,                     "Mat_X",                                       "Mat_X",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1519 */  { fnFreeMemory,                NOPARAM,                     "MEM?",                                        "MEM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

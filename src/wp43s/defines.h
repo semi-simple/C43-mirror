@@ -412,6 +412,7 @@
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
+#define CF_ORTHOGONAL_FITTING_                  1024 // Minus option
 
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0
@@ -514,6 +515,7 @@
 #define TI_COV                                    35
 #define TI_CORR                                   36
 #define TI_SMI                                    37
+#define TI_LR                                     38
 
 
 // Register browser mode

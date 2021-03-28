@@ -229,18 +229,19 @@ char * getCurveFitModeNames(uint16_t selection) {
  * \return char*          Name of the curvefitting mode
  ***********************************************/
 char * getCurveFitModeFormula(uint16_t selection) {
-    if(selection == CF_LINEAR_FITTING)      return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
-    if(selection == CF_EXPONENTIAL_FITTING) return "y=a" STD_SUB_0 " e" STD_SUP_a STD_SUP_1 STD_SUP_x;
-    if(selection == CF_LOGARITHMIC_FITTING) return "y=a" STD_SUB_0 " + a" STD_SUB_1 "lnx";
-    if(selection == CF_POWER_FITTING)       return "y=a" STD_SUB_0 " x" STD_SUP_a STD_SUP_1 ;
-    if(selection == CF_ROOT_FITTING)        return "y=a" STD_SUB_0 " a" STD_SUB_1 STD_SUP_1 STD_OBLIQUE4 STD_SUP_x;
-    if(selection == CF_HYPERBOLIC_FITTING)  return "y=(a" STD_SUB_0 " + xa" STD_SUB_1 ")" STD_SUP_MINUS_1;
-    if(selection == CF_PARABOLIC_FITTING)   return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "x" STD_SUP_2 "a" STD_SUB_2;
-    if(selection == CF_CAUCHY_FITTING)      return "y=(a" STD_SUB_0 "(x+a" STD_SUB_1 ")" STD_SUP_2 "+a" STD_SUB_2 ")" STD_SUP_MINUS_1;
-    if(selection == CF_GAUSS_FITTING)       return "y=a" STD_SUB_0 "e^((x-a" STD_SUB_1 ")" STD_SUP_2 "/a" STD_SUB_2 ")";
-    if(selection == CF_ORTHOGONAL_FITTING)  return "y=a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
+    if(selection == CF_LINEAR_FITTING)      return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 STD_SPACE_3_PER_EM "x";
+    if(selection == CF_EXPONENTIAL_FITTING) return "a" STD_SUB_0 STD_SPACE_3_PER_EM "e" STD_SUP_a STD_SUP_1 STD_SUP_x;
+    if(selection == CF_LOGARITHMIC_FITTING) return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "ln(x)";
+    if(selection == CF_POWER_FITTING)       return "a" STD_SUB_0 STD_SPACE_3_PER_EM "x" STD_SUP_a STD_SUP_1 ;
+    if(selection == CF_ROOT_FITTING)        return "a" STD_SUB_0 STD_SPACE_3_PER_EM "a" STD_SUB_1 STD_SUP_1 STD_OBLIQUE4 STD_SUP_x;
+    if(selection == CF_HYPERBOLIC_FITTING)  return "(a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "x" STD_SPACE_3_PER_EM "a" STD_SUB_1 ")" STD_SUP_MINUS_1;
+    if(selection == CF_PARABOLIC_FITTING)   return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x" STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_2 "x" STD_SUP_2;
+    if(selection == CF_CAUCHY_FITTING)      return "(a" STD_SUB_0 "(x+a" STD_SUB_1 ")" STD_SUP_2 "+a" STD_SUB_2 ")" STD_SUP_MINUS_1;
+    if(selection == CF_GAUSS_FITTING)       return "a" STD_SUB_0 "e^((x-a" STD_SUB_1 ")" STD_SUP_2 "/a" STD_SUB_2 ")";
+    if(selection == CF_ORTHOGONAL_FITTING)  return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "xa" STD_SUB_1;
   return "???";
   }
+
 
 
 /********************************************//**

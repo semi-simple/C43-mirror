@@ -29,7 +29,6 @@
  *
  ***********************************************/
 void fnCurveFitting(uint16_t curveFitting) {
-  uint16_t numberOfOnes;
   if(curveFitting == 0) curveFitting = 1023;
   lrSelection = curveFitting;
   lrChosen = 0;
@@ -37,7 +36,7 @@ void fnCurveFitting(uint16_t curveFitting) {
   processCurvefitSelection(curveFitting);           //TODO is this needed here? Or r, sxy ?
 
   #ifdef PC_BUILD
-
+    uint16_t numberOfOnes;
     numberOfOnes = lrCountOnes(curveFitting);
 
     if(numberOfOnes == 1) {

@@ -1007,7 +1007,7 @@ void graphPlotstat(uint16_t selection){
     int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,eatSpaces(getCurveFitModeName(selection)));
-      strcat(ss,((lrChosen == 0) || (lrChosen & selection != lrChosen)) ? "" : STD_SUP_ASTERISK);
+      strcat(ss,((lrChosen == 0) || ((lrChosen & selection) != lrChosen)) ? "" : STD_SUP_ASTERISK);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
       strcpy(ss,"y=");
       strcat(ss,getCurveFitModeFormula(selection));

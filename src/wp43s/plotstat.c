@@ -808,7 +808,7 @@ void graphPlotstat(uint16_t selection){
   void drawline(uint16_t selection){
     if(!selection) return;
     #ifdef PC_BUILD
-      printf("#####>>> drawline: selection:%u:%s  lastplotmode:%u  lrSelection:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection);
+      printf("#####>>> drawline: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
     #endif //PC_BUILD
     #ifndef USEFLOAT
       real_t SS,TT,UU;
@@ -997,32 +997,38 @@ void graphPlotstat(uint16_t selection){
       }
     }
 
+
+    #ifdef PC_BUILD
+      printf("#####>>> Labels selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
+    #endif //PC_BUILD
+
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
     int16_t index = -1;
     if(selection!=0) {
-      strcpy(ss,getCurveFitModeName(selection));
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, true, true);
+      strcpy(ss,eatSpaces(getCurveFitModeName(selection)));
+      strcat(ss,((lrChosen == 0) || (lrChosen & selection != lrChosen)) ? "" : STD_SUP_ASTERISK);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
       strcpy(ss,"y=");
       strcat(ss,getCurveFitModeFormula(selection));
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);
       sprintf(ss,"n=%d",(int)nn);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
       eformat(ss,"a" STD_SUB_0 "=",a0,7);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -4 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -4 +autoshift, vmNormal, false, false);
       eformat(ss,"a" STD_SUB_1 "=",a1,7);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -3 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -3 +autoshift, vmNormal, false, false);
 
-      if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING){ 
+      if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING) { 
         eformat(ss,"a" STD_SUB_2 "=",a2,7);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
       }
       eformat(ss,"r" STD_SUP_2 "=",r*r,4);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, false, false);
 
       if(selection == CF_ORTHOGONAL_FITTING) {
         eformat(ss,"s" STD_SUB_m STD_SUB_i "=",smi,4); 
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, true, true);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
       }
     }
   }
@@ -1097,6 +1103,7 @@ void fnPlotStat(uint16_t plotMode){
 
 
 void fnPlotRegLine(uint16_t plotMode){
+  uint16_t tmpSelect;
   #ifdef STATDEBUG
     printf("fnPlotRegLine: selection = %u\n",selection);
   #endif //STATDEBUG
@@ -1124,11 +1131,13 @@ void fnPlotRegLine(uint16_t plotMode){
       break;
 
     case PLOT_FIT:
-      //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found.
+      //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found. If a chosen curve is there, override.
       //printf("#####X %u %u \n",selection, lrSelection);
+//      tmpSelect = lrChosen == 0 ? (lrSelection == 0 ? 1023 : lrSelection) : lrChosen;
+      tmpSelect = (lrSelection == 0 ? 1023 : lrSelection);
       selection = (selection) << 1;
       if(selection == 0) selection = 1;
-        while((selection != ( (lrSelection == 0 ? 1023 : lrSelection) & selection)) && selection < 1024){
+        while((selection != ( (tmpSelect) & selection)) && selection < 1024){
           //printf("#####Z %u %u \n",selection, lrSelection);
           selection = (selection) << 1;
         }

@@ -29,16 +29,16 @@
  *
  ***********************************************/
 void fnCurveFitting(uint16_t curveFitting) {
-    lrSelection = curveFitting;
-    processCurvefitSelection(curveFitting);
+  uint16_t numberOfOnes;
+  if(curveFitting == 0) curveFitting = 1023;
+  lrSelection = curveFitting;
+  lrChosen = 0;
+
+  processCurvefitSelection(curveFitting);           //TODO is this needed here? Or r, sxy ?
 
   #ifdef PC_BUILD
-    uint16_t numberOfOnes;
 
-    numberOfOnes = curveFitting - ((curveFitting >> 1) & 0x5555);
-    numberOfOnes = (numberOfOnes & 0x3333) + ((numberOfOnes >> 2) & 0x3333);
-    numberOfOnes = (numberOfOnes + (numberOfOnes >> 4)) & 0x0f0f;
-    numberOfOnes = (uint16_t)(numberOfOnes * 0x0101) >> 8;
+    numberOfOnes = lrCountOnes(curveFitting);
 
     if(numberOfOnes == 1) {
       printf("Use the ");
@@ -57,6 +57,16 @@ void fnCurveFitting(uint16_t curveFitting) {
   #endif // PC_BUILD
 }
 
+
+
+uint16_t lrCountOnes(uint16_t curveFitting) {
+    uint16_t numberOfOnes;
+    numberOfOnes = curveFitting - ((curveFitting >> 1) & 0x5555);
+    numberOfOnes = (numberOfOnes & 0x3333) + ((numberOfOnes >> 2) & 0x3333);
+    numberOfOnes = (numberOfOnes + (numberOfOnes >> 4)) & 0x0f0f;
+    numberOfOnes = (uint16_t)(numberOfOnes * 0x0101) >> 8;
+    return numberOfOnes; 
+}
 
 
 /********************************************//**
@@ -101,7 +111,7 @@ void fnProcessLRfind(uint16_t curveFitting){
 	  printf("Found best fit: %u %s\n",s,getCurveFitModeNames(s));
 	#endif //PC_BUILD
   processCurvefitSelection(s);
-  lrSelection = s;                //overwrite the combination of curves, for the selected one.
+  lrChosen = s;
 
   temporaryInformation = TI_LR;
   if(s == CF_CAUCHY_FITTING || s == CF_GAUSS_FITTING || s == CF_PARABOLIC_FITTING) {
@@ -286,8 +296,8 @@ void processCurvefitSelection(uint16_t selection){
     realToString(SIGMA_X4,     ss); sumx4     = strtof (ss, NULL);
     realToString(SIGMA_YMAX,   ss); maxy      = strtof (ss, NULL);   // ^^
 
-    realDivide(SIGMA_X,SIGMA_N,&M_X,&ctxtReal39);
-    realDivide(SIGMA_Y,SIGMA_N,&M_Y,&ctxtReal39);
+    realDivide(SIGMA_X,SIGMA_N,&M_X,realContext); //&ctxtReal39);
+    realDivide(SIGMA_Y,SIGMA_N,&M_Y,realContext); //&ctxtReal39);
     fnStatR   (&RR_, &S_XY, &S_X, &S_Y);
     fnStatSMI (&SMI_);
     #ifdef PC_BUILD
@@ -303,6 +313,7 @@ void processCurvefitSelection(uint16_t selection){
       realToString(&S_Y,  ss); sy  = strtof (ss, NULL);
       realToString(&S_XY, ss); sxy = strtof (ss, NULL);    // (1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
       printf("\nSelection:%i\n",selection);
+      printf("Converted from 75 digit Real's to double float for display here:\n");
       printf(">>> x_=%f\n",x_);
       printf(">>> y_=%f\n",y_);
       printf(">>> sx=%f\n",sx);

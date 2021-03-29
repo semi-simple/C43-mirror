@@ -20,11 +20,11 @@
 
 #include "wp43s.h"
 
-extern uint16_t                 lrSelection;
-extern realContext_t            *realContext;
-extern real_t                   aa0,aa1,aa2;      // Curve fitting variables, visible to plotstat
-extern double                   r,smi;            // TODO CONVERT r, smi TO REAL
-
-void   fnCurveFitting           (uint16_t curveFitting);
-void   processCurvefitSelection (uint16_t selection);
-void   fnProcessLR              (uint16_t unusedButMandatoryParameter);
+extern  realContext_t            *realContext;
+extern  real_t                   aa0,aa1,aa2;      // Curve fitting variables, visible to plotstat
+extern  double                   r,smi;            // TODO CONVERT r, smi TO REAL
+ 
+void    fnCurveFitting           (uint16_t curveFitting);
+void    processCurvefitSelection (uint16_t selection);
+void    fnProcessLR              (uint16_t unusedButMandatoryParameter);
+uint16_t lrCountOnes             (uint16_t curveFitting);

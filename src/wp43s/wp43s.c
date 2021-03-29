@@ -171,6 +171,7 @@ uint16_t               numberOfNamedVariables;
 uint16_t               currentLocalStepNumber;
 uint16_t               currentProgramNumber;
 uint16_t               lrSelection;
+uint16_t               lrChosen;
 uint16_t               lastPlotMode;
 uint16_t               selection;
 

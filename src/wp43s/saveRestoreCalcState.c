@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         52  // Added lrSelection
+#define BACKUP_VERSION         53  // Added lrChosen
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -191,6 +191,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
     save(&selection,                          sizeof(selection),                          BACKUP);
 
@@ -374,6 +375,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
       restore(&selection,                          sizeof(selection),                          BACKUP);
 

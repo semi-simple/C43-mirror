@@ -1378,47 +1378,51 @@
             }
           }
 
+
           else if(temporaryInformation == TI_LR) {
             #define LRWidth 140
-            if(regist == REGISTER_X) {
-              strcpy(prefix,getCurveFitModeFormula(lrSelection));
-              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                strcat(prefix,STD_SPACE_6_PER_EM);
-              }
-              strcat(prefix,"a" STD_SUB_0 "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-            else if(regist == REGISTER_Y) {
-              strcpy(prefix,"y=");
-              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                strcat(prefix,STD_SPACE_6_PER_EM);
-              }
-              strcat(prefix, "a" STD_SUB_1 "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-            else if(lrSelection == CF_CAUCHY_FITTING || lrSelection == CF_GAUSS_FITTING || lrSelection == CF_PARABOLIC_FITTING){
+            if(lrSelection == CF_CAUCHY_FITTING || lrSelection == CF_GAUSS_FITTING || lrSelection == CF_PARABOLIC_FITTING){
+              if(regist == REGISTER_X) {
+                strcpy(prefix,getCurveFitModeFormula(lrSelection));
+                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                strcat(prefix,"a" STD_SUB_0 "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              } else
+              if(regist == REGISTER_Y) {
+                strcpy(prefix,"y=");
+                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                strcat(prefix, "a" STD_SUB_1 "=");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              } else
               if(regist == REGISTER_Z) {
-                prefix[0]=0;
+                strcpy(prefix, getCurveFitModeName(lrSelection));
                 while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
                 strcat(prefix, "a" STD_SUB_2 "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               }
-              else if(regist == REGISTER_T) {
-                strcpy(prefix, getCurveFitModeName(lrSelection));
-                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                  strcat(prefix,STD_SPACE_6_PER_EM);
-                }
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }              
-            } else if(regist == REGISTER_Z) {
-                strcpy(prefix, getCurveFitModeName(lrSelection));
-                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                  strcat(prefix,STD_SPACE_6_PER_EM);
-                }
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else 
+            if(regist == REGISTER_X) {
+              strcpy(prefix,"y=");
+              strcat(prefix,getCurveFitModeFormula(lrSelection));
+              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
               }
+              strcat(prefix,"a" STD_SUB_0 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else if(regist == REGISTER_Y) {
+              strcpy(prefix, getCurveFitModeName(lrSelection));
+              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
+              }
+              strcat(prefix, "a" STD_SUB_1 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
           }
 
           else if(temporaryInformation == TI_SXY) {

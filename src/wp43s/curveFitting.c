@@ -74,11 +74,11 @@ void fnProcessLRfind(uint16_t curveFitting){
 	#endif //PC_BUILD
   if(curveFitting == 0) curveFitting = 1023;
   double rmax = -1e38;
-  uint16_t s = 0;
+  uint16_t s = curveFitting;
   uint16_t ix,jx;                  //only a single graph can be evaluated at once, so retain the single lowest bit, and clear the higher order bits.
   jx = 0;
   for(ix=0; ix<10; ix++) {         //up to 2^9 inclusive
-    jx = curveFitting & ((2 << ix)/2);
+    jx = curveFitting & ((1 << ix));
     if(jx) {
       #ifdef PC_BUILD
         printf("processCurvefitSelection curveFitting:%u sweep:%u %s\n",curveFitting,jx,getCurveFitModeNames(jx));
@@ -90,10 +90,14 @@ void fnProcessLRfind(uint16_t curveFitting){
       if(r*r > rmax && r*r <= 1.0) {
       	rmax = r*r;
       	s = jx;
+        #ifdef PC_BUILD
+          printf("> > s:%u rr:%f rmax:%f\n",s,r*r,rmax);
+        #endif
       }
     }
   }
 	#ifdef PC_BUILD
+     printf("---- s:%u rr:%f rmax:%f\n",s,r*r,rmax);
 	  printf("Found best fit: %u %s\n",s,getCurveFitModeNames(s));
 	#endif //PC_BUILD
   processCurvefitSelection(s);
@@ -242,7 +246,7 @@ void processCurvefitSelection(uint16_t selection){
     uint16_t ix,jx;               //only a single graph can be displayed at once, so retain the single lowest bit, and clear the higher order bits.
     jx = 0;
     for(ix=0; ix!=10; ix++) {
-      jx = selection & ((2 << ix)/2);
+      jx = selection & ((1 << ix));
       if(jx) break;
     }
     selection = jx;
@@ -898,8 +902,8 @@ void processCurvefitSelection(uint16_t selection){
         realSubtract(&SS,&TT,&UU,realContext);    //keep  uu = sy2-sx2
         realMultiply(&UU,&UU,&VV,realContext);
         realMultiply(&S_XY,&S_XY,&WW,realContext);
-        realMultiply(&VV,const_2,&WW,realContext);
-        realMultiply(&VV,const_2,&WW,realContext);
+        realMultiply(&WW,const_2,&WW,realContext);
+        realMultiply(&WW,const_2,&WW,realContext);
         realAdd     (&WW,&VV,&VV,realContext);
         realSquareRoot(&VV,&VV,realContext);  //sqrt term
 

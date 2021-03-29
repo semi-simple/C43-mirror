@@ -1813,14 +1813,17 @@
 #define ITM_XOUT                      1755
 #define ITM_PLOT_REGLINE              1756
 #define ITM_CLOSE                     1757
-#define ITM_STATDEMO                  1758 //Temporary
+#define ITM_STATDEMO0                 1758 //Temporary
 #define ITM_STATDEMO1                 1759 //Temporary
 #define ITM_STATDEMO2                 1760 //Temporary
 #define ITM_SMI                       1761
 #define ITM_PLOT_LR                   1762
 #define ITM_PLOT_SELLINE              1763
+#define ITM_STATDEM105                1764 //Temporary
+#define ITM_STATDEM107                1765 //Temporary
+#define ITM_STATDEM109                1766 //Temporary
 
-#define LAST_ITEM                     1764
+#define LAST_ITEM                     1767
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

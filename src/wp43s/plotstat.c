@@ -1124,11 +1124,11 @@ void fnPlotRegLine(uint16_t plotMode){
       break;
 
     case PLOT_FIT:
-      //Show data and one curve fit selected
+      //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found.
       //printf("#####X %u %u \n",selection, lrSelection);
       selection = (selection) << 1;
       if(selection == 0) selection = 1;
-        while((selection != (lrSelection & selection)) && selection < 1024){
+        while((selection != ( (lrSelection == 0 ? 1023 : lrSelection) & selection)) && selection < 1024){
           //printf("#####Z %u %u \n",selection, lrSelection);
           selection = (selection) << 1;
         }
@@ -1143,7 +1143,7 @@ void fnPlotRegLine(uint16_t plotMode){
 
 
 //DEMO: Arbitrary distribution to test. Close to a Normal.
-void fnStatDemo(uint16_t unusedButMandatoryParameter){
+void fnStatDemo0(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
   runFunction(ITM_CLSIGMA);
@@ -1276,8 +1276,8 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 #endif //TESTSUITE_BUILD
 }
 
-//DEMO: 4 points to simulate a distribution
-void fnStatDemo2(uint16_t unusedButMandatoryParameter){
+//DEMO: 4 points to simulate a distribution, from p105 of OM
+void fnStatDemo105(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
   runFunction(ITM_CLSIGMA);
@@ -1289,8 +1289,39 @@ void fnStatDemo2(uint16_t unusedButMandatoryParameter){
   #endif //TESTSUITE_BUILD
   }
 
+//DEMO: points to simulate a distribution, from p107 of OM
+void fnStatDemo107(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+  selection = 0;
+  runFunction(ITM_CLSIGMA);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1945",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("696",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1955",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1330",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1965",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1750",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1971",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2243",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1973",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2484",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1950",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("994",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1960",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1512",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1970",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2162",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1972",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2382",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
+  }
 
-void fnStatDemo2a(uint16_t unusedButMandatoryParameter){
+//DEMO:  points to simulate a distribution, from p109 of OM
+void fnStatDemo109(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+  selection = 0;
+  runFunction(ITM_CLSIGMA);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.63",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("20",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("40",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.61",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("60",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.21",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("80",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
+  }
+
+
+
+void fnStatDemo2(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
   runFunction(ITM_CLSIGMA);

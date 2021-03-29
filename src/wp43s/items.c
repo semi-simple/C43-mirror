@@ -564,9 +564,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
   void fnProcessLR                (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemo                 (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo0                (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo105              (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo107              (uint16_t unusedButMandatoryParameter) {} //Temporary
+  void fnStatDemo109              (uint16_t unusedButMandatoryParameter) {} //Temporary
 
 #endif // GENERATE_CATALOGS
 
@@ -1904,7 +1907,7 @@ TO_QSPI const item_t indexOfItems[] = {
 
 
 // Curve fitting
-/* 1297 */  { fnCurveFitting,              TM_VALUE,                    "BestF",                                       "BestF",                                       (1 << TAM_MAX_BITS) |  1023, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1297 */  { fnCurveFitting,              TM_VALUE,                    "BestF",                                       "BestF",                                       (0 << TAM_MAX_BITS) |  1023, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1298 */  { fnCurveFitting,              CF_EXPONENTIAL_FITTING,      "ExpF",                                        "ExpF",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1299 */  { fnCurveFitting,              CF_LINEAR_FITTING,           "LinF",                                        "LinF",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1300 */  { fnCurveFitting,              CF_LOGARITHMIC_FITTING,      "LogF",                                        "LogF",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2372,12 +2375,15 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1755 */  { itemToBeCoded,               NOPARAM,                     "xOUT",                                        "xOUT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1756 */  { fnPlotStat,                  PLOT_ORTHOF,/*PLOT_CYCLEALL*/"CENTRL",                                      "CENTRL",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1757 */  { fnPlotClose,                 NOPARAM,                     "CLOSE",                                       "CLOSE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },
-/* 1758 */  { fnStatDemo,                  NOPARAM,                     "DEMO1",                                       "DEMO1",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1759 */  { fnStatDemo1,                 NOPARAM,                     "DEMO2",                                       "DEMO2",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1760 */  { fnStatDemo2,                 NOPARAM,                     "DEMO3",                                       "DEMO3",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1758 */  { fnStatDemo0,                 NOPARAM,                     "DEMO0",                                       "DEMO0",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1759 */  { fnStatDemo1,                 NOPARAM,                     "DEMO1",                                       "DEMO1",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1760 */  { fnStatDemo2,                 NOPARAM,                     "DEMO2",                                       "DEMO2",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1761 */  { fnPlotCloseSmi,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },
 /* 1762 */  { fnPlotStat,                  PLOT_FIT,                    "LRPLOT",                                      "LRPLOT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1763 */  { fnPlotStat,                  PLOT_FIT,                    "LRPLOT",                                      "LRPLOT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1764 */  { fnStatDemo105,               NOPARAM,                     "DEM105",                                      "DEM105",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1765 */  { fnStatDemo107,               NOPARAM,                     "DEM107",                                      "DEM107",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1766 */  { fnStatDemo109,               NOPARAM,                     "DEM109",                                      "DEM109",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 
-/* 1764 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1767 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

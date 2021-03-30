@@ -53,10 +53,6 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, angularMode_t angularMode, real_t 
   }
 
   switch(angularMode) {
-    case amDegree:
-      WP34S_Mod(&angle, const_360,     &angle, realContext); // mod(angle, 360°) --> angle
-      break;
-
     case amRadian:
       WP34S_Mod(&angle, const1071_2pi, &angle, realContext); // mod(angle, 2pi) --> angle
       break;
@@ -67,6 +63,12 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, angularMode_t angularMode, real_t 
 
     case amGrad:
       WP34S_Mod(&angle, const_400,     &angle, realContext); // mod(angle, 400g) --> angle
+      break;
+
+    case amDegree:
+    case amDMS:
+      WP34S_Mod(&angle, const_360,     &angle, realContext); // mod(angle, 360°) --> angle
+      angularMode = amDegree;
       break;
 
     default: {}

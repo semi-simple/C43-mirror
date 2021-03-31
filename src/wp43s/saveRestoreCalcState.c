@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         52  // Added lrSelection
+#define BACKUP_VERSION         54  // Added PLOT_ZOOM
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -191,8 +191,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
-    save(&selection,                          sizeof(selection),                          BACKUP);
+    save(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
     save(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
     save(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
@@ -212,6 +213,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
     save(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
     save(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
+    save(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
     save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
@@ -409,8 +411,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
-      restore(&selection,                          sizeof(selection),                          BACKUP);
+      restore(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
       restore(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
       restore(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
@@ -430,6 +433,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
       restore(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
       restore(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
+      restore(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
       restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);

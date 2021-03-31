@@ -198,9 +198,13 @@ void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY){
 }
 
 void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
-  real_t RR,SXY,SX,SY;
+  real_t RR,SXY,SX,SY,SMI,aa0,aa1,aa2;
   if(checkMinimumDataPoints(const_2)) {
-    fnStatR(&RR,&SXY,&SX,&SY);
+    if(lrChosen == 0) {                        //if lrChosen contains something, the stat data exists
+      fnStatR(&RR,&SXY,&SX,&SY);
+    } else {
+      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
+      }
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     realToReal34(&RR, REGISTER_REAL34_DATA(REGISTER_X));
@@ -227,9 +231,13 @@ void fnStatSMI(real_t *SMI){
 }
 
 void fnMinExpStdDev(uint16_t unusedButMandatoryParameter){ //smi
-  real_t SMI;
+  real_t SMI,RR,aa0,aa1,aa2;
   if(checkMinimumDataPoints(const_2)) {
-    fnStatSMI(&SMI);
+    if(lrChosen == CF_ORTHOGONAL_FITTING) {               //if lrChosen contains something, the stat data exists
+      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
+    } else {
+      fnStatSMI(&SMI);
+      }
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
     realToReal34(&SMI, REGISTER_REAL34_DATA(REGISTER_X));

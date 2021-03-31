@@ -31,7 +31,7 @@
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
 #define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05 * 50     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
 
@@ -56,24 +56,26 @@ extern    uint16_t  ix_count;
 
 
 //Graph options
-extern  float  graph_dx;
-extern  float  graph_dy;
-extern  bool_t extentx;
-extern  bool_t extenty;
-extern  bool_t jm_VECT;
-extern  bool_t jm_NVECT;
-extern  bool_t jm_SCALE;
-extern  bool_t Aspect_Square;
-extern  bool_t PLOT_LINE;
-extern  bool_t PLOT_CROSS;
-extern  bool_t PLOT_BOX;
-extern  bool_t PLOT_INTG; 
-extern  bool_t PLOT_DIFF; 
-extern  bool_t PLOT_RMS; 
-extern  bool_t PLOT_SHADE; 
-extern  bool_t PLOT_AXIS;
-extern  int8_t PLOT_ZMX;
-extern  int8_t PLOT_ZMY;
+extern  float    graph_dx;
+extern  float    graph_dy;
+extern  bool_t   extentx;
+extern  bool_t   extenty;
+extern  bool_t   jm_VECT;
+extern  bool_t   jm_NVECT;
+extern  bool_t   jm_SCALE;
+extern  bool_t   Aspect_Square;
+extern  bool_t   PLOT_LINE;
+extern  bool_t   PLOT_CROSS;
+extern  bool_t   PLOT_BOX;
+extern  bool_t   PLOT_INTG; 
+extern  bool_t   PLOT_DIFF; 
+extern  bool_t   PLOT_RMS; 
+extern  bool_t   PLOT_SHADE; 
+extern  bool_t   PLOT_AXIS;
+extern  int8_t   PLOT_ZMX;
+extern  int8_t   PLOT_ZMY;
+extern  uint8_t  PLOT_ZOOM;
+
 #define _VECT 0
 #define _SCAT 1
 
@@ -120,13 +122,18 @@ int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max);
 int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
 #endif
 
-void    fnStatDemo         (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo0        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo105      (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo107      (uint16_t unusedButMandatoryParameter);
+void    fnStatDemo109      (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (uint16_t selection);
-void    drawline           (uint16_t selection);
+void    drawline           (uint16_t selection, double rr, double smi, real_t *aa0, real_t *aa1, real_t *aa2);
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
-void    fnPlotRegLine      (uint16_t plotMode);
+void    fnPlotRegressionLine(uint16_t plotMode);
+void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
+
  

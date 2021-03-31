@@ -1443,16 +1443,19 @@ void hideFunctionName(void) {
 
 
 uint8_t   displayStack_m = 255;                                                  //JMSHOIDISP
-/********************************************//**
- * \brief Displays one register line
- *
- * \param[in] regist int16_t Register line to display
- * \return void
- ***********************************************/
-void refreshRegisterLine(calcRegister_t regist) {
-  int32_t w;
-  int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
-  char prefix[200], lastBase[4];
+
+  /********************************************//**
+   * \brief Displays one register line
+   *
+   * \param[in] regist int16_t Register line to display
+   * \return void
+   ***********************************************/
+  void refreshRegisterLine(calcRegister_t regist) {
+    int32_t w;
+    int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
+    bool_t prefixPre = true;
+    bool_t prefixPost = true;
+    char prefix[200], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
   if(displayStack != 4-displayStackSHOIDISP) {displayStack_m = displayStack;}   //JMSHOI
@@ -2099,47 +2102,58 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
-          else if(temporaryInformation == TI_LR) {
+
+          else if(temporaryInformation == TI_LR && lrChosen != 0) {
             #define LRWidth 140
-            if(regist == REGISTER_X) {
-              strcpy(prefix,getCurveFitModeFormula(lrSelection));
-              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                strcat(prefix,STD_SPACE_6_PER_EM);
-              }
-              strcat(prefix,"a" STD_SUB_0 "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-            else if(regist == REGISTER_Y) {
-              strcpy(prefix,"y=");
-              while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                strcat(prefix,STD_SPACE_6_PER_EM);
-              }
-              strcat(prefix, "a" STD_SUB_1 "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-            else if(lrSelection == CF_CAUCHY_FITTING || lrSelection == CF_GAUSS_FITTING || lrSelection == CF_PARABOLIC_FITTING){
+            bool_t prefixPre = false;
+            bool_t prefixPost = false;
+
+            if(lrChosen == CF_CAUCHY_FITTING || lrChosen == CF_GAUSS_FITTING || lrChosen == CF_PARABOLIC_FITTING){
+              if(regist == REGISTER_X) {
+                strcpy(prefix,getCurveFitModeFormula(lrChosen));
+                while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                strcat(prefix,"a" STD_SUB_0 "=");
+                prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
+              } else
+              if(regist == REGISTER_Y) {
+                strcpy(prefix,"y=");
+                while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
+                  strcat(prefix,STD_SPACE_6_PER_EM);
+                }
+                strcat(prefix, "a" STD_SUB_1 "=");
+                prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
+              } else
               if(regist == REGISTER_Z) {
-                prefix[0]=0;
-                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
+                strcpy(prefix, eatSpaces(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
+                while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
                 strcat(prefix, "a" STD_SUB_2 "=");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+                prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               }
-              else if(regist == REGISTER_T) {
-                strcpy(prefix, getCurveFitModeName(lrSelection));
-                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                  strcat(prefix,STD_SPACE_6_PER_EM);
-                }
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }              
-            } else if(regist == REGISTER_Z) {
-                strcpy(prefix, getCurveFitModeName(lrSelection));
-                while(stringWidth(prefix, &standardFont, true, true) + 1 < LRWidth) {
-                  strcat(prefix,STD_SPACE_6_PER_EM);
-                }
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else
+
+            if(regist == REGISTER_X) {
+              strcpy(prefix,"y=");
+              strcat(prefix,getCurveFitModeFormula(lrChosen));
+              while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
               }
+              strcat(prefix,"a" STD_SUB_0 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
+            } else if(regist == REGISTER_Y) {
+              strcpy(prefix, eatSpaces(getCurveFitModeName(lrChosen)));
+              if(lrCountOnes(lrSelection)>1) strcat(prefix,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
+              while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
+                strcat(prefix,STD_SPACE_6_PER_EM);
+              }
+              strcat(prefix, "a" STD_SUB_1 "=");
+              prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
+            }
+
           }
 
           else if(temporaryInformation == TI_SXY) {
@@ -2156,9 +2170,17 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
-          else if(temporaryInformation == TI_CORR) {
+          else if(temporaryInformation == TI_CORR) { 
+//TODO TEMP
+printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
+            
             if(regist == REGISTER_X) {
-              strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+              if(lrChosen == 0) {
+                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
+              } else {
+                strcpy(prefix,eatSpaces(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+              }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
@@ -2269,7 +2291,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(prefixWidth > 0) {
-            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
           showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
         }
@@ -2717,7 +2739,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         showSoftmenuCurrentPart();
         refreshStatusBar();
         hourGlassIconEnabled = true;
-        graphPlotstat(selection);
+        graphPlotstat(plotSelection);
         hourGlassIconEnabled = false;
         refreshStatusBar();
       }

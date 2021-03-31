@@ -20,16 +20,17 @@
 
 
 
-void     fnCvtToCurrentAngularMode  (uint16_t fromAngularMode);
-void     fnCvtFromCurrentAngularMode(uint16_t toAngularMode);
-void     fnCvtDegToRad              (uint16_t unusedButMandatoryParameter);
-void     fnCvtDegToDms              (uint16_t unusedButMandatoryParameter);
-void     fnCvtDmsToDeg              (uint16_t unusedButMandatoryParameter);
-void     fnCvtRadToDeg              (uint16_t unusedButMandatoryParameter);
-void     convertAngle34FromTo       (real34_t *angle34, angularMode_t fromAngularMode, angularMode_t toAngularMode);
-void     convertAngleFromTo         (real_t *angle, angularMode_t fromAngularMode, angularMode_t toAngularMode, realContext_t *realContext);
-void     checkDms34                 (real34_t *angle34Dms);
-uint32_t getInfiniteComplexAngle    (real_t *x, real_t *y);
-void     setInfiniteComplexAngle    (uint32_t angle, real_t *x, real_t *y);
-void     real34FromDmsToDeg         (const real34_t *angleDms, real34_t *angleDec);
-void     real34FromDegToDms         (const real34_t *angleDec, real34_t *angleDms);
+void     fnCvtToCurrentAngularMode   (uint16_t fromAngularMode);
+void     fnCvtFromCurrentAngularMode (uint16_t toAngularMode);
+void     fnCvtDmsToCurrentAngularMode(uint16_t unusedButMandatoryParameter);
+void     fnCvtDegToRad               (uint16_t unusedButMandatoryParameter);
+void     fnCvtDegToDms               (uint16_t unusedButMandatoryParameter);
+void     fnCvtDmsToDeg               (uint16_t unusedButMandatoryParameter);
+void     fnCvtRadToDeg               (uint16_t unusedButMandatoryParameter);
+void     convertAngle34FromTo        (real34_t *angle34, angularMode_t fromAngularMode, angularMode_t toAngularMode);
+void     convertAngleFromTo          (real_t *angle, angularMode_t fromAngularMode, angularMode_t toAngularMode, realContext_t *realContext);
+void     checkDms34                  (real34_t *angle34Dms);
+uint32_t getInfiniteComplexAngle     (real_t *x, real_t *y);
+void     setInfiniteComplexAngle     (uint32_t angle, real_t *x, real_t *y);
+void     real34FromDmsToDeg          (const real34_t *angleDms, real34_t *angleDec);
+void     real34FromDegToDms          (const real34_t *angleDec, real34_t *angleDms);

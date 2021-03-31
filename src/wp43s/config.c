@@ -780,8 +780,9 @@ void fnReset(uint16_t confirmation) {
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
     lrSelection = CF_LINEAR_FITTING;
+    lrChosen    = 0;
     lastPlotMode = PLOT_NOTHING;
-    selection = 0;
+    plotSelection = 0;
 
 //    shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);

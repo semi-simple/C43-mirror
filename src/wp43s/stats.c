@@ -74,8 +74,10 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
     statisticalSumsPointer = NULL;
     graph_end();                            // release plot memory
     lrSelection = CF_LINEAR_FITTING;        // linear regression selection
+    lrChosen = 0;                           // linear regression selection
     lastPlotMode = PLOT_NOTHING;            // last selected  plotmode
-    selection = 0;                          // Currently selected linear regression mode
+    plotSelection = 0;                      // Currently selected linear regression mode
+    PLOT_ZOOM = 0;                          // Currently selected plot zoom level
   }
 }
 

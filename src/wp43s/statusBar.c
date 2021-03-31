@@ -34,26 +34,28 @@
       sprintf(tmpString, "%s%d %s/%s  mnu:%s fi:%d", catalog ? "asm:" : "", catalog, tam.mode ? "/tam" : "", getCalcModeName(calcMode),indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, softmenuStack[0].firstItem);
       showString(tmpString, &standardFont, X_DATE, 0, vmNormal, true, true);
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
-    showDateTime();
-    showRealComplexResult();
-    showComplexMode();
-    showAngularMode();
-    showFracMode();
-    showIntegerMode();
-    showOverflowCarry();
-    showHideAlphaMode();
-    showHideHourGlass();
-    showHidePgmBegin();
-    showHideWatch();
-    showHideSerialIO();
-    showHidePrinter();
-    showHideUserMode();
-    #ifdef DMCP_BUILD
-      showHideUsbLowBattery();
-    #else // !DMCP_BUILD
-      showHideStackLift();
-    #endif // DMCP_BUILD
-    showHideASB();                            //JM
+      if(calcMode == CM_PLOT_STAT) lcd_fill_rect(0, 0, 158, 20, 0);
+      showDateTime();
+      showHideHourGlass();
+      if(calcMode == CM_PLOT_STAT) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
+      showRealComplexResult();
+      showComplexMode();
+      showAngularMode();
+      showFracMode();
+      showIntegerMode();
+      showOverflowCarry();
+      showHideAlphaMode();
+      showHidePgmBegin();
+      showHideWatch();
+      showHideSerialIO();
+      showHidePrinter();
+      showHideUserMode();
+      #ifdef DMCP_BUILD
+        showHideUsbLowBattery();
+      #else // !DMCP_BUILD
+        showHideStackLift();
+      #endif // DMCP_BUILD
+      showHideASB();                            //JM
     #endif // DEBUG_INSTEAD_STATUS_BAR == 1
   }
 
@@ -343,7 +345,7 @@ void showFracMode(void) {
    ***********************************************/
   void showHideHourGlass(void) {
     if(hourGlassIconEnabled) {
-      showGlyph(STD_HOURGLASS, &standardFont, X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide
+      showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
     }
   }
 

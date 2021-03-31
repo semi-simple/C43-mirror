@@ -37,6 +37,8 @@ void fnJM_2SI       (uint16_t unusedButMandatoryParameter);
 void fnRoundi2      (uint16_t unusedButMandatoryParameter);
 void fnRound2       (uint16_t unusedButMandatoryParameter);
 void fnAngularModeJM(uint16_t unusedButMandatoryParameter);
+void fnDRG          (uint16_t unusedButMandatoryParameter);
+void fnDRGto        (uint16_t unusedButMandatoryParameter);
 void fnChangeBaseJM (uint16_t unusedButMandatoryParameter);
 void fnChangeBaseMNU(uint16_t unusedButMandatoryParameter);
 void fnInDefault    (uint16_t inputDefault);

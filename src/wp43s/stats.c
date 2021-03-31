@@ -71,8 +71,13 @@ void initStatisticalSums(void) {
 void fnClSigma(uint16_t unusedButMandatoryParameter) {
   if(statisticalSumsPointer != NULL) {
     freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
-    graph_end();                                               //JMGRAPH
     statisticalSumsPointer = NULL;
+    graph_end();                            // release plot memory
+    lrSelection = CF_LINEAR_FITTING;        // linear regression selection
+    lrChosen = 0;                           // linear regression selection
+    lastPlotMode = PLOT_NOTHING;            // last selected  plotmode
+    plotSelection = 0;                      // Currently selected linear regression mode
+    PLOT_ZOOM = 0;                          // Currently selected plot zoom level
   }
 }
 

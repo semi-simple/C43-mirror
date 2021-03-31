@@ -537,7 +537,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
       }
 
       if(TO_WP43SMEMPTR(SIGMA_X2lnY) == block) {
-        sprintf(tmpString, "real75 Σxlny data");
+        sprintf(tmpString, "real75 Σx²lny data");
         return;
       }
 
@@ -685,7 +685,7 @@ void resizeProgramMemory(uint16_t newSizeInBlocks) {
       }
 
       if(TO_WP43SMEMPTR(SIGMA_X2lnY) + shift == block) {
-        sprintf(tmpString, "real75 saved for undo Σxlny data");
+        sprintf(tmpString, "real75 saved for undo Σx²lny data");
         return;
       }
 

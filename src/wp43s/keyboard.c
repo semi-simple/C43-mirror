@@ -234,29 +234,20 @@ bool_t lastshiftG = false;
             refreshScreen();
             return;
           }
-  
-        if(calcMode != CM_CONFIRMATION)
-          {
-            if(item < 0) { // softmenu
-              if(item != -MNU_SYSFL || !catalog /*|| transitionSystemState == 0*/) {
-                showSoftmenu(item);
-              }
-            }
-            else 
-            // If we are in the catalog in TAM then a normal key press should affect the Alpha Selection Buffer to choose
-            // an item from the catalog, but a function key press should put the item in the TAM buffer
-            // Use this variable to distinguish between the two
-            fnKeyInCatalog = 1;
-            if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
-              addItemToBuffer(item);
-            }
-            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
-              addItemToNimBuffer(item);
-            }
-            else if(calcMode == CM_NIM && item == ITM_i) {    //JMvv To make DIGITS menu's i work like HP35S' i
-              item = ITM_CC;
-              addItemToNimBuffer(item);              
-            }                                                 //JM^^
+
+          // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+          // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+          // Use this variable to distinguish between the two
+          fnKeyInCatalog = 1;
+          if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
+            addItemToBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+            addItemToNimBuffer(item);
+          }
+          else if((calcMode == CM_NIM) && (item==ITM_DRG || item==ITM_DRGto) && !catalog) {   //JM
+            addItemToNimBuffer(item);
+          }                                                                                   //JM
 
 //            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
 //              if(calcMode == CM_NORMAL) {
@@ -267,15 +258,15 @@ bool_t lastshiftG = false;
 //CLASH WITH ARROWS !!
 //
 //            }
-            else if(item > 0) { // function
-              if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
-                closeNim();     
-                if(calcMode != CM_NIM) {
-                  if(indexOfItems[item].func == fnConstant) {
-                    setSystemFlag(FLAG_ASLIFT);
-                  }
+          else if(item > 0) { // function
+            if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+            closeNim();
+              if(calcMode != CM_NIM) {
+                if(indexOfItems[item].func == fnConstant) {
+                  setSystemFlag(FLAG_ASLIFT);
                 }
               }
+            }
             if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
               closeAim();
             }
@@ -289,7 +280,6 @@ bool_t lastshiftG = false;
             }
           }
           fnKeyInCatalog = 0;
-          }
         }
       }
   #ifdef PC_BUILD
@@ -1222,6 +1212,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NORMAL:
         if( !eRPN ) {                                    //JM NEWERPN
         setSystemFlag(FLAG_ASLIFT);
+        saveForUndo();
 
         liftStack();
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1230,7 +1221,8 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }                                               //JM NEWERPN vv
       else {
         if(getSystemFlag(FLAG_ASLIFT)) {
-          liftStack();
+         saveForUndo();
+         liftStack();
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           //printf("ERPN--2\n");
         }   
@@ -1257,12 +1249,14 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 
           if( !eRPN ) {                                    //JM NEWERPN
             setSystemFlag(FLAG_ASLIFT);
+            saveForUndo();
             liftStack();
             clearSystemFlag(FLAG_ASLIFT);
 
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
             aimBuffer[0] = 0;
           } else {
+//              saveForUndo();
               setSystemFlag(FLAG_ASLIFT);
               aimBuffer[0] = 0;
           }
@@ -1275,6 +1269,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       if( !eRPN ) {                                    //JM NEWERPN vv
         if(lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
+          saveForUndo();
           liftStack();
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1282,6 +1277,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
         if(lastErrorCode == 0) {
+            saveForUndo();
             liftStack();
             clearSystemFlag(FLAG_ASLIFT);
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
@@ -1371,6 +1367,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 //TOFIX ^^
         if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
+          saveForUndo();
         }
         else {
           popSoftmenu();
@@ -1389,6 +1386,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
         leavePem();
         calcModeNormal();
+        saveForUndo();
         break;
 
       case CM_REGISTER_BROWSER:

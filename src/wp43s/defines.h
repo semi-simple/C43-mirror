@@ -170,6 +170,9 @@
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
+#define USEFLOAT                                     // Plot: Use standard double floats instead of short REAL for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible future optimisation.
+
+
 // List of errors
 #define ERROR_NONE                                 0
 #define ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN          1
@@ -554,6 +557,15 @@
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
+#define CF_ORTHOGONAL_FITTING_                  1024 // Minus option
+
+// Plot curve fitting 3 bits
+#define PLOT_ORTHOF                                0
+#define PLOT_FIT                                   1
+#define PLOT_LR                                    2
+#define PLOT_CYCLEALL                              3
+#define PLOT_START                                 4
+#define PLOT_NOTHING                               5
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0
@@ -651,6 +663,7 @@
 #define TI_COV                                    35
 #define TI_CORR                                   36
 #define TI_SMI                                    37
+#define TI_LR                                     38
 
 
 // Register browser mode
@@ -825,6 +838,7 @@
   #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
   #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
   #define TO_QSPI                            __attribute__ ((section(".qspi")))
+  //#define TO_QSPI
 #endif // !DMCP_BUILD
 
 

@@ -145,6 +145,12 @@ bool_t isLeapYear(const real34_t *year) {
 bool_t isValidDay(const real34_t *year, const real34_t *month, const real34_t *day) {
   real34_t val;
 
+  // Year (this rejects year -4713 and earlier)
+  real34ToIntegralValue(year, &val, DEC_ROUND_FLOOR), real34Subtract(year, &val, &val);
+  if(!real34IsZero(&val)) return false;
+  int32ToReal34(-4712, &val), real34Compare(year, &val, &val);
+  if(real34ToInt32(&val) < 0) return false;
+
   // Day
   real34ToIntegralValue(day, &val, DEC_ROUND_FLOOR), real34Subtract(day, &val, &val);
   if(!real34IsZero(&val)) return false;
@@ -217,28 +223,14 @@ void composeJulianDay(const real34_t *year, const real34_t *month, const real34_
 
 // Gregorian
 void composeJulianDay_g(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
-  real34_t y, negVal;
   real34_t m_14_12; // round_down((month - 14) / 12)
   real34_t a, tmp;
-
-  int32ToReal34(-4712, &tmp);
-  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
-    AddInt(year, 4712, &y);
-    int32ToReal34(400, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
-    SubInt(&y, 4712, &y);
-    MulInt(&negVal, -400, &a);
-    real34Add(&y, &a, &y);
-  }
-  else {
-    real34Copy(year, &y);
-    real34Copy(const34_0, &negVal);
-  }
 
   // round_down((month - 14) / 12)
   SubInt(month, 14, &m_14_12);
   DivInt(&m_14_12, 12, &m_14_12);
 
-  AddInt(&y, 4800, &a);
+  AddInt(year, 4800, &a);
   real34Add(&a, &m_14_12, &a);
   MulInt(&a, 1461, &a);
   DivInt(&a, 4, jd);
@@ -250,7 +242,7 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
   DivInt(&a, 12, &a);
   real34Add(jd, &a, jd);
 
-  AddInt(&y, 4900, &a);
+  AddInt(year, 4900, &a);
   real34Add(&a, &m_14_12, &a);
   DivInt(&a, 100, &a);
   MulInt(&a, 3, &a);
@@ -259,34 +251,17 @@ void composeJulianDay_g(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   SubInt(jd, 32075, jd);
-
-  // Negative Julian date
-  MulInt(&negVal, 146097, &a);
-  real34Add(jd, &a, jd);
 }
 
 // Julian
 void composeJulianDay_j(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
-  real34_t y, a, tmp, negVal;
+  real34_t a, tmp;
 
-  int32ToReal34(-4712, &tmp);
-  if(real34CompareLessThan(year, &tmp)) { // Negative Julian date
-    AddInt(year, 4712, &y);
-    int32ToReal34(4, &tmp), real34Divide(&y, &tmp, &negVal), real34ToIntegralValue(&negVal, &negVal, DEC_ROUND_FLOOR);
-    SubInt(&y, 4712, &y);
-    MulInt(&negVal, -4, &a);
-    real34Add(&y, &a, &y);
-  }
-  else {
-    real34Copy(year, &y);
-    real34Copy(const34_0, &negVal);
-  }
-
-  MulInt(&y, 367, jd);
+  MulInt(year, 367, jd);
 
   SubInt(month, 9, &a);
   DivInt(&a, 7, &a);
-  real34Add(&a, &y, &a);
+  real34Add(&a, year, &a);
   AddInt(&a, 5001, &a);
   MulInt(&a, 7, &a);
   DivInt(&a, 4, &a);
@@ -298,10 +273,6 @@ void composeJulianDay_j(const real34_t *year, const real34_t *month, const real3
 
   real34Add(jd, day, jd);
   AddInt(jd, 1729777, jd);
-
-  // Negative Julian date
-  MulInt(&negVal, 1461, &a);
-  real34Add(jd, &a, jd);
 }
 
 #undef DivInt
@@ -387,10 +358,9 @@ uint32_t getDayOfWeek(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void checkDateRange(const real34_t *date34) {
-  real34_t hundredgigayear, neghundredgigayear;
+  real34_t hundredgigayear;
   stringToReal34("3155695348699627200.000000000000000", &hundredgigayear);
-  stringToReal34("-3155759851268923200.000000000000000", &neghundredgigayear);
-  if(real34CompareGreaterEqual(date34, &hundredgigayear) || real34CompareLessThan(date34, &neghundredgigayear)) {
+  if(real34CompareGreaterEqual(date34, &hundredgigayear) || real34IsNegative(date34)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "value of date type is too large");

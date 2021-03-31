@@ -125,66 +125,17 @@ void fnWeightedStandardError(uint16_t unusedButMandatoryParameter) {
   calculateWeightedStandardDeviation(1, 1, 0, TI_WEIGHTEDSTDERR);
 }
 
-
-void fnPopulationCovariance(uint16_t unusedButMandatoryParameter){    //COVxy
+void fnStatSX_SY(real_t *SX, real_t *SY){
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
-  real_t SS,TT;
+  real_t TT,UU;
   if(checkMinimumDataPoints(const_2)) {
-    liftStack();
-    setSystemFlag(FLAG_ASLIFT);
-
-    realMultiply(SIGMA_N,SIGMA_XY, &SS, realContext);
-    realMultiply(SIGMA_X,SIGMA_Y, &TT, realContext);
-    realSubtract(&SS,&TT,&SS,realContext);
-    realDivide(&SS,SIGMA_N,&SS,realContext);
-
-    realDivide(&SS,SIGMA_N,&SS,realContext);
-    realToReal34(&SS, REGISTER_REAL34_DATA(REGISTER_X));
-
-    temporaryInformation = TI_COV;
-  }
-}
-void fnSampleCovariance(uint16_t unusedButMandatoryParameter){    //sxy
-  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
-  real_t SS,TT;
-  if(checkMinimumDataPoints(const_2)) {
-    liftStack();
-    setSystemFlag(FLAG_ASLIFT);
-
-    realMultiply(SIGMA_N,SIGMA_XY, &SS, realContext);
-    realMultiply(SIGMA_X,SIGMA_Y, &TT, realContext);
-    realSubtract(&SS,&TT,&SS,realContext);
-    realDivide(&SS,SIGMA_N,&SS,realContext);
-
-    realSubtract(SIGMA_N,const_1,&TT,realContext);
-    realDivide(&SS,&TT,&SS,realContext);
-    realToReal34(&SS, REGISTER_REAL34_DATA(REGISTER_X));
-
-    temporaryInformation = TI_SXY;
-  }
-}
-void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
-  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
-  real_t SS,TT,UU;
-  if(checkMinimumDataPoints(const_2)) {
-
-    realMultiply(SIGMA_N,SIGMA_XY, &SS, realContext);    //do sxy
-    realMultiply(SIGMA_X,SIGMA_Y, &TT, realContext);
-    realSubtract(&SS,&TT,&SS,realContext);
-    realDivide(&SS,SIGMA_N,&SS,realContext);
-
-    realSubtract(SIGMA_N,const_1,&TT,realContext);
-    realDivide(&SS,&TT,&SS,realContext);
-
     realMultiply(SIGMA_N,SIGMA_X2, &TT, realContext);    //do sx
     realMultiply(SIGMA_X,SIGMA_X, &UU, realContext);
     realSubtract(&TT,&UU,&TT,realContext);
     realDivide(&TT,SIGMA_N,&TT,realContext);
     realSubtract(SIGMA_N,const_1,&UU,realContext);
     realDivide(&TT,&UU,&TT,realContext);
-    realSquareRoot(&TT,&TT,realContext);                 //this is sx
-
-    realDivide(&SS,&TT,&SS,realContext);                 //this is sxy/sx
+    realSquareRoot(&TT,SX,realContext);                 //this is sx
 
     realMultiply(SIGMA_N,SIGMA_Y2, &TT, realContext);    //do sy
     realMultiply(SIGMA_Y,SIGMA_Y, &UU, realContext);
@@ -192,56 +143,104 @@ void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
     realDivide(&TT,SIGMA_N,&TT,realContext);
     realSubtract(SIGMA_N,const_1,&UU,realContext);
     realDivide(&TT,&UU,&TT,realContext);
-    realSquareRoot(&TT,&TT,realContext);                 //this is sy
+    realSquareRoot(&TT,SY,realContext);                 //this is sy
+  }
+}
 
-    realDivide(&SS,&TT,&SS,realContext);                 //this is sxy/sx/sy
+void fnStatSXY(real_t *SXY){
+  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
+  real_t SS,TT;
+  if(checkMinimumDataPoints(const_2)) {
+    realMultiply(SIGMA_N,SIGMA_XY, &SS, realContext);    //do sxy
+    realMultiply(SIGMA_X,SIGMA_Y, &TT, realContext);
+    realSubtract(&SS,&TT,&SS,realContext);
+    realDivide(&SS,SIGMA_N,&SS,realContext);
+    realSubtract(SIGMA_N,const_1,&TT,realContext);
+    realDivide(&SS,&TT,SXY,realContext);
+  }
+}
+
+void fnPopulationCovariance(uint16_t unusedButMandatoryParameter){    //COVxy
+  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
+  real_t TT,SXY;
+  if(checkMinimumDataPoints(const_2)) {
+    fnStatSXY(&SXY);
+    realSubtract(SIGMA_N,const_1,&TT,realContext);
+    realMultiply(&SXY,&TT,&SXY,realContext);
+    realDivide(&SXY,SIGMA_N,&TT,realContext);
 
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
-    realToReal34(&SS, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&TT, REGISTER_REAL34_DATA(REGISTER_X));
+    temporaryInformation = TI_COV;
+  }
+}
 
+void fnSampleCovariance(uint16_t unusedButMandatoryParameter){    //sxy
+  real_t SXY;
+  if(checkMinimumDataPoints(const_2)) {
+    fnStatSXY(&SXY);
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    realToReal34(&SXY, REGISTER_REAL34_DATA(REGISTER_X));
+    temporaryInformation = TI_SXY;
+  }
+}
+
+void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY){
+  realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
+  if(checkMinimumDataPoints(const_2)) {
+    fnStatSX_SY(SX,SY);
+    fnStatSXY(SXY);
+    realDivide(SXY,SX,RR,realContext);                 //this is sxy/sx
+    realDivide(RR,SY,RR,realContext);                 //this is sxy/sx/sy  
+  }
+}
+
+void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
+  real_t RR,SXY,SX,SY,SMI,aa0,aa1,aa2;
+  if(checkMinimumDataPoints(const_2)) {
+    if(lrChosen == 0) {                        //if lrChosen contains something, the stat data exists
+      fnStatR(&RR,&SXY,&SX,&SY);
+    } else {
+      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
+      }
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    realToReal34(&RR, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_CORR;
   }
 }
 
-void fnMinExpStdDev(uint16_t unusedButMandatoryParameter){ //smi
+void fnStatSMI(real_t *SMI){
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
-  real_t RR,SS,TT,UU,SX2,SY2;
+  real_t RR,SXY,SX,SY,RR2,SX2,SY2,UU,SS,TT;
   if(checkMinimumDataPoints(const_2)) {
-
-    realMultiply(SIGMA_N,SIGMA_X2, &TT, realContext);    //do sx
-    realMultiply(SIGMA_X,SIGMA_X, &UU, realContext);
-    realSubtract(&TT,&UU,&TT,realContext);
-    realDivide(&TT,SIGMA_N,&TT,realContext);
-
-    realSubtract(SIGMA_N,const_1,&UU,realContext);
-    realDivide(&TT,&UU,&SS,realContext);
-    realMultiply(&SS,&SS,&SX2,realContext);               //   --> sx^2
-
-    realMultiply(SIGMA_N,SIGMA_Y2, &TT, realContext);     //do sy
-    realMultiply(SIGMA_Y,SIGMA_Y, &UU, realContext);
-    realSubtract(&TT,&UU,&TT,realContext);
-    realDivide(&TT,SIGMA_N,&TT,realContext);
-
-    realSubtract(SIGMA_N,const_1,&UU,realContext);
-    realDivide(&TT,&UU,&TT,realContext);
-    realMultiply(&TT,&TT,&SY2,realContext);               //  -->sy^2
-
-    fnCoefficientDetermination(0);
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X),&RR);   //r
-    realMultiply(&RR,&RR,&RR,realContext);                //r^2
-
-    realSubtract(const_1,&RR,&SS,realContext);
-    realMultiply(&RR,&SY2,&TT,realContext);
-    realSubtract(&SX2,&TT,&TT,realContext);
-    realDivide(&SS,&TT,&UU,realContext);
-
+    fnStatR(&RR,&SXY,&SX,&SY);
+    realMultiply(&SX,&SX,&SX2,realContext);               //   --> sx^2
+    realMultiply(&SY,&SY,&SY2,realContext);               //   --> sy^2
+    realMultiply(&RR,&RR,&RR2,realContext);               //   --> r^2
+    realSubtract(const_1,&RR2,&SS,realContext);           //  sqrt[ (1-r) / [(r.SY2 - SX) (1-r)] * SX2.SY2 ]
+    realMultiply(&RR2,&SY2,&TT,realContext);
+    realAdd     (&TT,&SX,&TT,realContext);
+    realDivide  (&SS,&TT,&UU,realContext);
     realMultiply(&UU,&SX2,&UU,realContext);
-    realMultiply(&UU,&SY2,&UU,realContext);              //smi2
-    realSquareRoot(&UU, &UU, &ctxtReal39);
+    realMultiply(&UU,&SY2,&UU,realContext);               //  --> smi2
+    realSquareRoot(&UU, SMI, &ctxtReal39);  
+  }
+}
 
-    realToReal34(&UU, REGISTER_REAL34_DATA(REGISTER_X)); //Place in X, which was pushed with r
-
+void fnMinExpStdDev(uint16_t unusedButMandatoryParameter){ //smi
+  real_t SMI,RR,aa0,aa1,aa2;
+  if(checkMinimumDataPoints(const_2)) {
+    if(lrChosen == CF_ORTHOGONAL_FITTING) {               //if lrChosen contains something, the stat data exists
+      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
+    } else {
+      fnStatSMI(&SMI);
+      }
+    liftStack();
+    setSystemFlag(FLAG_ASLIFT);
+    realToReal34(&SMI, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_SMI;
   }
 }

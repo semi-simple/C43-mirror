@@ -55,7 +55,7 @@ const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same
 /********************************************//**
  * \brief returns the data type of a register
  *
- * \param[in] r calcRegister_t Register number
+ * \param[in] regist Register number
  * \return uint32_t      Data type
  ***********************************************/
 uint32_t getRegisterDataType(calcRegister_t regist) {
@@ -130,7 +130,7 @@ uint32_t getRegisterDataType(calcRegister_t regist) {
 /********************************************//**
  * \brief returns the data pointer of a register
  *
- * \param[in] r calcRegister_t Register number
+ * \param[in] regist Register number
  * \return dataBlock_t *       Data pointer
  ***********************************************/
 dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
@@ -200,7 +200,7 @@ dataBlock_t *getRegisterDataPointer(calcRegister_t regist) {
  * \brief returns the data information of a register:
  *        Angular mode or base
  *
- * \param[in] r calcRegister_t Register number
+ * \param[in] regist Register number
  * \return uint32_t      Angular mode
  ***********************************************/
 uint32_t getRegisterTag(calcRegister_t regist) {
@@ -269,10 +269,9 @@ uint32_t getRegisterTag(calcRegister_t regist) {
 /********************************************//**
  * \brief Sets the data type of a register
  *
- * \param[in] r calcRegister_t        Register number
- * \param[in] dataType uint16_t Data type
- * \param[in] tag      uint16_t Tag
- * \return void
+ * \param[in] regist Register number
+ * \param[in] dataType Data type
+ * \param[in] tag      Tag
  ***********************************************/
 void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag) {
   if(regist <= LAST_GLOBAL_REGISTER) { // Global register
@@ -346,9 +345,8 @@ void setRegisterDataType(calcRegister_t regist, uint16_t dataType, uint32_t tag)
 /********************************************//**
  * \brief Sets the data pointer of a register
  *
- * \param[in] r calcRegister_t        Register number
- * \param[in] dataType uint16_t Data pointer
- * \return void
+ * \param[in] regist Register number
+ * \param[in] memPtr Data pointer
  ***********************************************/
 void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
   uint32_t dataPointer = TO_WP43SMEMPTR(memPtr);
@@ -418,9 +416,8 @@ void setRegisterDataPointer(calcRegister_t regist, void *memPtr) {
  * \brief Sets the data information of a register:
  *        angular mode or base
  *
- * \param[in] r calcRegister_t        Register number
- * \param[in] dataType uint16_t Angular mode
- * \return void
+ * \param[in] regist Register number
+ * \param[in] tag Angular mode
  ***********************************************/
 void setRegisterTag(calcRegister_t regist, uint32_t tag) {
   if(regist <= LAST_GLOBAL_REGISTER) { // Global register
@@ -486,8 +483,7 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
  * \brief Allocates local registers. Works when increasing
  * and when decreasing the number of local registers.
  *
- * \param[in] numberOfRegistersToAllocate uint16_t Number of registers to allocate
- * \return void
+ * \param[in] numberOfRegistersToAllocate Number of registers to allocate
  ***********************************************/
 void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
   if(numberOfRegistersToAllocate > 99) {
@@ -613,8 +609,9 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 /********************************************//**
  * \brief Allocates 1 named variable.
  *
- * \param[in] variableName const char* Register name
- * \return void
+ * \param[in] variableName Variable name
+ * \param[in] dataType The content type of the variable
+ * \param[in] fullDataSizeInBlocks How many blocks the named variable will require for storage
  ***********************************************/
 void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16_t fullDataSizeInBlocks) {
   calcRegister_t regist;
@@ -714,9 +711,8 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
 /********************************************//**
  * \brief Sets the max length of string in blocks
  *
- * \param[in] r calcRegister_t            Register number
- * \param[in] maxStringLen uint16_t       Max length of the string
- * \return void
+ * \param[in] regist Register number
+ * \param[in] maxDataLen Max length of the string
  ***********************************************/
 void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
   if(regist <= LAST_GLOBAL_REGISTER) { // Global register
@@ -782,9 +778,8 @@ void setRegisterMaxDataLength(calcRegister_t regist, uint16_t maxDataLen) {
           including trailing 0, or a
           long integer in blocks
  *
- * \param[in] r calcRegister_t Register number
- * \return uint32_t            Number of blocks
- *
+ * \param[in] regist Register number
+ * \return Number of blocks
  ***********************************************/
 uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
   if(regist <= LAST_GLOBAL_REGISTER) { // Global register
@@ -848,8 +843,8 @@ uint16_t getRegisterMaxDataLength(calcRegister_t regist) {
 /********************************************//**
  * \brief Returns the full data size of a register in blocks
  *
- * \param[in] r calcRegister_t Register number
- * \return uint16_t    Number of blocks. For a string this
+ * \param[in] regist Register number
+ * \return             Number of blocks. For a string this
  *                     is the number of bytes reserved for
  *                     the string (including the ending 0)
  *                     plus 1 block holding the max size
@@ -880,8 +875,7 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
 /********************************************//**
  * \brief Clears a register, that is, sets it to 0,0 real16
  *
- * \param[in] r calcRegister_t Register number
- * \return void
+ * \param[in] regist Register number
  ***********************************************/
 void clearRegister(calcRegister_t regist) {
   if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                       //JM defaults JMZERO
@@ -932,8 +926,7 @@ void clearRegister(calcRegister_t regist) {
  * \brief Clears all the regs (globals and locals),
  * that is sets them to 0,0 real16s
  *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
+ * \param[in] confirmation Current status of the confirmation of clearing registers
  ***********************************************/
 void fnClearRegisters(uint16_t confirmation) {
   if(confirmation == NOT_CONFIRMED) {
@@ -968,7 +961,6 @@ void fnClearRegisters(uint16_t confirmation) {
  * \brief Sets X to the number of local registers
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void fnGetLocR(uint16_t unusedButMandatoryParameter) {
   longInteger_t locR;
@@ -1094,7 +1086,6 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
  *
  * \param[in] sourceRegister Source register
  * \param[in] destRegister   Destination register
- * \return void
  ***********************************************/
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
   if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
@@ -1330,8 +1321,9 @@ int16_t indirectAddressing(calcRegister_t regist, bool_t valueIsRegister, int16_
   /********************************************//**
    * \brief Prints the content of a register to the console
    *
-   * \param r calcRegister_t Register number
-   * \return void
+   * \param[in] regist calcRegister_t Register number
+   * \param[in] before text to display before the register value
+   * \param[in] after text to display after the register value
    ***********************************************/
   void printRegisterToConsole(calcRegister_t regist, const char *before, const char *after) {
     char str[3000];
@@ -1521,8 +1513,9 @@ int16_t indirectAddressing(calcRegister_t regist, bool_t valueIsRegister, int16_
   /********************************************//**
    * \brief Prints the content of a long integer to the console
    *
-   * \param r int16_t Register number
-   * \return void
+   * \param[in] value long integer value to print
+   * \param[in] before text to display before the value
+   * \param[in] after text to display after the value
    ***********************************************/
   void printLongIntegerToConsole(const longInteger_t value, const char *before, const char *after) {
     char str[3000];

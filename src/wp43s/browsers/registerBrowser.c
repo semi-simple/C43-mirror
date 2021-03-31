@@ -132,6 +132,22 @@
             sprintf(tmpString, "%" PRIu32 " character%s " STD_CORRESPONDS_TO " 4+%" PRIu32 " bytes", (uint32_t)stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", (uint32_t)TO_BYTES(getRegisterMaxDataLength(regist)));
           }
         }
+        else if(getRegisterDataType(regist) == dtTime) {
+          if(showContent) {
+            timeToDisplayString(regist, tmpString, true);
+          }
+          else {
+            sprintf(tmpString, "%d bytes", (int16_t)TO_BYTES(REAL34_SIZE));
+          }
+        }
+        else if(getRegisterDataType(regist) == dtDate) {
+          if(showContent) {
+            dateToDisplayString(regist, tmpString);
+          }
+          else {
+            sprintf(tmpString, "%d bytes", (int16_t)TO_BYTES(REAL34_SIZE));
+          }
+        }
         else if(getRegisterDataType(regist) == dtConfig) {
           if(showContent) {
             strcpy(tmpString, "Configuration data");
@@ -210,6 +226,22 @@
               }
               else {
                 sprintf(tmpString, "%" PRIu32 " character%s " STD_CORRESPONDS_TO " 4+4+%" PRIu32 " bytes", (uint32_t)stringGlyphLength(REGISTER_STRING_DATA(regist)), stringGlyphLength(REGISTER_STRING_DATA(regist))==1 ? "" : "s", (uint32_t)TO_BYTES(getRegisterMaxDataLength(regist)));
+              }
+            }
+            else if(getRegisterDataType(regist) == dtTime) {
+              if(showContent) {
+                timeToDisplayString(regist, tmpString, true);
+              }
+              else {
+                sprintf(tmpString, "%d bytes", (int16_t)TO_BYTES(REAL34_SIZE));
+              }
+            }
+            else if(getRegisterDataType(regist) == dtDate) {
+              if(showContent) {
+                dateToDisplayString(regist, tmpString);
+              }
+              else {
+                sprintf(tmpString, "%d bytes", (int16_t)TO_BYTES(REAL34_SIZE));
               }
             }
             else if(getRegisterDataType(regist) == dtConfig) {

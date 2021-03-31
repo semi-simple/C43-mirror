@@ -500,6 +500,32 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
 }
 
 
+void fnDRG(uint16_t unusedButMandatoryParameter) {
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    setRegisterAngularMode(REGISTER_X,currentAngularMode);
+  }
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    uint16_t dest = getRegisterAngularMode(REGISTER_X);
+    if (dest == amNone) dest = currentAngularMode;
+    switch(dest) {
+      case amRadian : dest = amGrad; break;
+      case amMultPi : dest = amDMS;  break;
+      case amGrad   : dest = amMultPi;break;
+      case amDegree : dest = amRadian;break;
+      case amDMS    : dest = amDegree;break;
+      default:break;
+    }
+  fnCvtFromCurrentAngularMode(dest);
+  }
+}
+
+
+void fnDRGto(uint16_t unusedButMandatoryParameter) {
+  fnDRG(0);
+  fnAngularMode(getRegisterAngularMode(REGISTER_X));
+}
+
 
 void shrinkNimBuffer (void) {                              //JMNIM vv
   int16_t lastChar;                                        //if digits in NIMBUFFER, ensure switch to NIM,

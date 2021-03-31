@@ -713,10 +713,10 @@ void graphPlotstat(uint16_t selection){
       x_min = x_max - dx;
     }
     
-    x_min = x_min - dx * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
-    y_min = y_min - dy * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
-    x_max = x_max + dx * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
-    y_max = y_max + dy * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
+    x_min = x_min - dx * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_min = y_min - dy * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
+    x_max = x_max + dx * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_max = y_max + dy * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
     #ifdef STATDEBUG
       printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
@@ -1168,9 +1168,7 @@ void fnPlotRegLine(uint16_t plotMode){
 
 void fnPlotZoom(uint16_t unusedButMandatoryParameter){
    PLOT_ZOOM++;
-   printf("### %u\n",(PLOT_ZOOM & 0x04));
    void refreshScreen(void);
-  
 }
 
 

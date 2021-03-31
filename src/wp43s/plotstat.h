@@ -56,25 +56,25 @@ extern    uint16_t  ix_count;
 
 
 //Graph options
-extern  float  graph_dx;
-extern  float  graph_dy;
-extern  bool_t extentx;
-extern  bool_t extenty;
-extern  bool_t jm_VECT;
-extern  bool_t jm_NVECT;
-extern  bool_t jm_SCALE;
-extern  bool_t Aspect_Square;
-extern  bool_t PLOT_LINE;
-extern  bool_t PLOT_CROSS;
-extern  bool_t PLOT_BOX;
-extern  bool_t PLOT_INTG; 
-extern  bool_t PLOT_DIFF; 
-extern  bool_t PLOT_RMS; 
-extern  bool_t PLOT_SHADE; 
-extern  bool_t PLOT_AXIS;
-extern  int8_t PLOT_ZMX;
-extern  int8_t PLOT_ZMY;
-extern  uint8_t PLOT_ZOOM;
+extern  float    graph_dx;
+extern  float    graph_dy;
+extern  bool_t   extentx;
+extern  bool_t   extenty;
+extern  bool_t   jm_VECT;
+extern  bool_t   jm_NVECT;
+extern  bool_t   jm_SCALE;
+extern  bool_t   Aspect_Square;
+extern  bool_t   PLOT_LINE;
+extern  bool_t   PLOT_CROSS;
+extern  bool_t   PLOT_BOX;
+extern  bool_t   PLOT_INTG; 
+extern  bool_t   PLOT_DIFF; 
+extern  bool_t   PLOT_RMS; 
+extern  bool_t   PLOT_SHADE; 
+extern  bool_t   PLOT_AXIS;
+extern  int8_t   PLOT_ZMX;
+extern  int8_t   PLOT_ZMY;
+extern  uint8_t  PLOT_ZOOM;
 
 #define _VECT 0
 #define _SCAT 1
@@ -133,7 +133,7 @@ void    drawline           (uint16_t selection, double rr, double smi, real_t *a
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
-void    fnPlotRegLine      (uint16_t plotMode);
+void    fnPlotRegressionLine(uint16_t plotMode);
 void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
 
  

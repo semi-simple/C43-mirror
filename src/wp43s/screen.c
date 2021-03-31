@@ -1731,7 +1731,7 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
         showSoftmenuCurrentPart();
         refreshStatusBar();
         hourGlassIconEnabled = true;
-        graphPlotstat(selection);
+        graphPlotstat(plotSelection);
         hourGlassIconEnabled = false;
         refreshStatusBar();
         break;

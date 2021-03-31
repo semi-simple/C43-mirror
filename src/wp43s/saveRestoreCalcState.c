@@ -193,7 +193,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
     save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
-    save(&selection,                          sizeof(selection),                          BACKUP);
+    save(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
     save(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
     save(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
@@ -378,7 +378,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
       restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
-      restore(&selection,                          sizeof(selection),                          BACKUP);
+      restore(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
       restore(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
       restore(&graph_dy,                           sizeof(graph_dy),                           BACKUP);

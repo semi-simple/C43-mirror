@@ -22,10 +22,10 @@
 #include "math.h"
 
 
-// This module is part of the C43 fork, and is copied here. 
+// This module originates and is part of the C43 fork, and is copied here. 
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
-real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
+static real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
 
 
 //#define STATDEBUG
@@ -35,35 +35,35 @@ graphtype *gr_y;
 graphtype telltale;
 uint16_t  ix_count;
   
-float  graph_dx;
-float  graph_dy; 
-bool_t extentx;
-bool_t extenty;
-bool_t jm_VECT;
-bool_t jm_NVECT;
-bool_t jm_SCALE;
-bool_t Aspect_Square;
-bool_t PLOT_LINE;
-bool_t PLOT_CROSS;
-bool_t PLOT_BOX;
-bool_t PLOT_INTG;
-bool_t PLOT_DIFF;
-bool_t PLOT_RMS;
-bool_t PLOT_SHADE;
-bool_t PLOT_AXIS;
-int8_t PLOT_ZMX;
-int8_t PLOT_ZMY;
-uint8_t PLOT_ZOOM;
+float     graph_dx;           // Many unused functions in WP43S. Do not change the variables.
+float     graph_dy; 
+bool_t    extentx;
+bool_t    extenty;
+bool_t    jm_VECT;
+bool_t    jm_NVECT;
+bool_t    jm_SCALE;
+bool_t    Aspect_Square;
+bool_t    PLOT_LINE;
+bool_t    PLOT_CROSS;
+bool_t    PLOT_BOX;
+bool_t    PLOT_INTG;
+bool_t    PLOT_DIFF;
+bool_t    PLOT_RMS;
+bool_t    PLOT_SHADE;
+bool_t    PLOT_AXIS;
+int8_t    PLOT_ZMX;
+int8_t    PLOT_ZMY;
+uint8_t   PLOT_ZOOM;
 
-int8_t   plotmode;    //VECTOR or SCATTER
-float    tick_int_x;
-float    tick_int_y;
-float    x_min; 
-float    x_max;
-float    y_min;
-float    y_max;
-uint32_t xzero;
-uint32_t yzero;
+int8_t    plotmode;
+float     tick_int_x;
+float     tick_int_y;
+float     x_min; 
+float     x_max;
+float     y_min;
+float     y_max;
+uint32_t  xzero;
+uint32_t  yzero;
 
 
 
@@ -88,8 +88,8 @@ void statGraphReset(void){
   PLOT_ZMY      = 0;
   PLOT_ZOOM     = 0;
 
-  plotmode      = _SCAT;
-  tick_int_x    = 0;        //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
+  plotmode      = _SCAT;      //VECTOR or SCATTER
+  tick_int_x    = 0;          //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
   tick_int_y    = 0;
 }
 
@@ -159,7 +159,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     //printf("x=%f ",x);
 
     #ifndef TESTSUITE_BUILD
-    //export_xy_to_file(x,y);                    //Write to CSV file
+    //export_xy_to_file(x,y);                  //Write to CSV file
     #endif
 
     if(plotmode == _VECT ) {
@@ -1052,7 +1052,7 @@ void graphPlotstat(uint16_t selection){
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
   lastPlotMode = PLOT_NOTHING;
-  selection = 0;
+  plotSelection = 0;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -1061,7 +1061,7 @@ void fnPlotClose(uint16_t unusedButMandatoryParameter){
 
 void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
   lastPlotMode = PLOT_NOTHING;
-  selection = 0;
+  plotSelection = 0;
   calcMode = CM_NORMAL;
   fnKeyExit(0);
   fnUndo(0);
@@ -1069,12 +1069,15 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 }
 
 
+//** Called from keyboard
+//** plotSelection = 0 means that no curve fit is plotted
+//
 void fnPlotStat(uint16_t plotMode){
 #ifdef STATDEBUG
-  printf("fnPlotStat1: selection = %u; Plotmode=%u\n",selection,plotMode);
+  printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
 #endif //STATDEBUG
 #ifdef PC_BUILD
-  printf("#####>>> fnPlotStat1: selection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), plotMode, lastPlotMode, lrSelection, lrChosen);
+  printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
 #endif //PC_BUILD
 
 
@@ -1082,7 +1085,7 @@ void fnPlotStat(uint16_t plotMode){
   if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) plotMode = lastPlotMode;
   calcMode = CM_PLOT_STAT;
   statGraphReset(); 
-  if(plotMode == PLOT_START) selection = 0;
+  if(plotMode == PLOT_START) plotSelection = 0;
 
   hourGlassIconEnabled = true;
   showHideHourGlass();
@@ -1094,9 +1097,10 @@ void fnPlotStat(uint16_t plotMode){
   #endif // DMCP_BUILD
 
   switch(plotMode) {
+    case PLOT_LR:
     case PLOT_FIT:
          #ifdef STATDEBUG
-           printf("################# PLOT_FIT: Push PLOT_LR menu; selection = %u\n",selection);
+           printf("################# PLOT_FIT: Push PLOT_LR menu; plotSelection = %u\n",plotSelection);
          #endif //STATDEBUG
          if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) showSoftmenu(-MNU_PLOT_LR);
          break;
@@ -1104,7 +1108,7 @@ void fnPlotStat(uint16_t plotMode){
     case PLOT_CYCLEALL:
     case PLOT_START:
          #ifdef STATDEBUG
-           printf("################# PLOT_START, PLOT_ORTHOF, PLOT_CYCLEALL): Push PLOT_STAT menu; selection = %u\n",selection);
+           printf("################# PLOT_START, PLOT_ORTHOF, PLOT_CYCLEALL): Push PLOT_STAT menu; plotSelection = %u\n",plotSelection);
          #endif //STATDEBUG
          if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) showSoftmenu(-MNU_PLOT_STAT);
          break;
@@ -1113,54 +1117,67 @@ void fnPlotStat(uint16_t plotMode){
     default: break;
   }
 
-  if(plotMode != PLOT_START) fnPlotRegLine(plotMode);
+  if(plotMode != PLOT_START) fnPlotRegressionLine(plotMode);
   else lastPlotMode = plotMode;
 #endif //TESTSUITE_BUILD
 }
 
 
-void fnPlotRegLine(uint16_t plotMode){
+void fnPlotRegressionLine(uint16_t plotMode){
   #ifdef STATDEBUG
     printf("fnPlotRegLine: selection = %u\n",selection);
   #endif //STATDEBUG
-  if(plotMode == PLOT_START) plotMode = PLOT_ORTHOF; /*PLOT_CYCLEALL*/
+
   switch(plotMode) {
     case PLOT_CYCLEALL:
       lastPlotMode = PLOT_CYCLEALL;
       //Cycling through all graphs, starting with ORTHOF, in this sequence
-      if(selection == 0                           ) selection = CF_ORTHOGONAL_FITTING ;     else
-      if(selection == CF_ORTHOGONAL_FITTING       ) selection = CF_LINEAR_FITTING     ;     else
-      if(selection == CF_LINEAR_FITTING           ) selection = CF_EXPONENTIAL_FITTING;     else
-      if(selection == CF_EXPONENTIAL_FITTING      ) selection = CF_PARABOLIC_FITTING  ;     else
-      if(selection == CF_PARABOLIC_FITTING        ) selection = CF_LOGARITHMIC_FITTING;     else
-      if(selection == CF_LOGARITHMIC_FITTING      ) selection = CF_POWER_FITTING      ;     else
-      if(selection == CF_POWER_FITTING            ) selection = CF_ROOT_FITTING       ;     else
-      if(selection == CF_ROOT_FITTING             ) selection = CF_HYPERBOLIC_FITTING ;     else
-      if(selection == CF_HYPERBOLIC_FITTING       ) selection = CF_CAUCHY_FITTING     ;     else
-      if(selection == CF_CAUCHY_FITTING           ) selection = CF_GAUSS_FITTING      ;     else
-      if(selection == CF_GAUSS_FITTING            ) selection = 0                     ;     else
-         selection = 0;
+      if(plotSelection == 0                           ) plotSelection = CF_ORTHOGONAL_FITTING ;     else
+      if(plotSelection == CF_ORTHOGONAL_FITTING       ) plotSelection = CF_LINEAR_FITTING     ;     else
+      if(plotSelection == CF_LINEAR_FITTING           ) plotSelection = CF_EXPONENTIAL_FITTING;     else
+      if(plotSelection == CF_EXPONENTIAL_FITTING      ) plotSelection = CF_PARABOLIC_FITTING  ;     else
+      if(plotSelection == CF_PARABOLIC_FITTING        ) plotSelection = CF_LOGARITHMIC_FITTING;     else
+      if(plotSelection == CF_LOGARITHMIC_FITTING      ) plotSelection = CF_POWER_FITTING      ;     else
+      if(plotSelection == CF_POWER_FITTING            ) plotSelection = CF_ROOT_FITTING       ;     else
+      if(plotSelection == CF_ROOT_FITTING             ) plotSelection = CF_HYPERBOLIC_FITTING ;     else
+      if(plotSelection == CF_HYPERBOLIC_FITTING       ) plotSelection = CF_CAUCHY_FITTING     ;     else
+      if(plotSelection == CF_CAUCHY_FITTING           ) plotSelection = CF_GAUSS_FITTING      ;     else
+      if(plotSelection == CF_GAUSS_FITTING            ) plotSelection = 0                     ;     else
+         plotSelection = 0;
       break;
 
     case PLOT_ORTHOF: 
-      selection = CF_ORTHOGONAL_FITTING;
+      plotSelection = CF_ORTHOGONAL_FITTING;
       break;
 
     case PLOT_FIT:
       //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found. If a chosen curve is there, override.
-      //printf("#####X %u %u \n",selection, lrSelection);
-//      tmpSelect = lrChosen == 0 ? (lrSelection == 0 ? 1023 : lrSelection) : lrChosen;
-      selection = selection << 1;
-      if(selection == 0) selection = 1;
-      while((selection != ( (lrSelection == 0 ? 1023 : lrSelection) & selection)) && selection < 1024){
-        //printf("#####Z %u %u \n",selection, lrSelection);
-        selection = (selection) << 1;
+      //printf("#####X %u %u \n",plotSelection, lrSelection);
+      plotSelection = plotSelection << 1;
+      if(plotSelection == 0) plotSelection = 1;
+      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){
+        //printf("#####Z %u %u \n",plotSelection, lrSelection);
+        plotSelection = plotSelection << 1;
       }
-      if(selection >= 1024) selection = 0;  //purposely change to zero graph display
+      if(plotSelection >= 1024) plotSelection = 0;  //purposely change to zero graph display
       break;
 
-    case PLOT_NOTHING:
+    case PLOT_LR:
+      //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found. If a chosen curve is there, override.
+      plotSelection = lrChosen;
+      if(plotSelection == 0) plotSelection = 1;
+      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){
+        plotSelection = plotSelection << 1;
+      }
+      if(plotSelection >= 1024) plotSelection = 0;  //purposely change to zero graph display
+      break;
+
     case PLOT_START:
+      plotMode = PLOT_ORTHOF; /*PLOT_CYCLEALL*/
+      break;
+
+    case PLOT_NOTHING: 
+      break;
     default:break;
   }
 }
@@ -1168,7 +1185,9 @@ void fnPlotRegLine(uint16_t plotMode){
 
 void fnPlotZoom(uint16_t unusedButMandatoryParameter){
    PLOT_ZOOM++;
-   void refreshScreen(void);
+   #ifndef TESTSUITE_BUILD
+     void refreshScreen(void);
+   #endif //TESTSUITE_BUILD
 }
 
 
@@ -1176,7 +1195,7 @@ void fnPlotZoom(uint16_t unusedButMandatoryParameter){
 //DEMO: Arbitrary distribution to test. Close to a Normal.
 void fnStatDemo0(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
-  selection = 0;
+  plotSelection = 0;
   runFunction(ITM_CLSIGMA);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.99574829932",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.99579081633",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
@@ -1281,85 +1300,81 @@ void fnStatDemo0(uint16_t unusedButMandatoryParameter){
   #endif //TESTSUITE_BUILD
   }
 
-
 //DEMO: Randomized linear
 void fnStatDemo1(uint16_t unusedButMandatoryParameter){
-#ifndef TESTSUITE_BUILD
-  int8_t ix;
-  runFunction(ITM_CLSIGMA);
-  selection = 0;
-  srand((unsigned int)time(NULL));
-  for(ix=0; ix!=10; ix++) {
-    runFunction(ITM_RAN);
-    setSystemFlag(FLAG_ASLIFT);
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    int32ToReal34(2000+ix/2,REGISTER_REAL34_DATA(REGISTER_X));
-    runFunction(ITM_ADD);
-    runFunction(ITM_RAN);
-    setSystemFlag(FLAG_ASLIFT);
-    liftStack();
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    int32ToReal34(ix,REGISTER_REAL34_DATA(REGISTER_X));
-    runFunction(ITM_ADD);
-    runFunction(ITM_SIGMAPLUS);
-    }
-#endif //TESTSUITE_BUILD
+  #ifndef TESTSUITE_BUILD
+    int8_t ix;
+    runFunction(ITM_CLSIGMA);
+    plotSelection = 0;
+    srand((unsigned int)time(NULL));
+    for(ix=0; ix!=10; ix++) {
+      runFunction(ITM_RAN);
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      int32ToReal34(2000+ix/2,REGISTER_REAL34_DATA(REGISTER_X));
+      runFunction(ITM_ADD);
+      runFunction(ITM_RAN);
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      int32ToReal34(ix,REGISTER_REAL34_DATA(REGISTER_X));
+      runFunction(ITM_ADD);
+      runFunction(ITM_SIGMAPLUS);
+      }
+  #endif //TESTSUITE_BUILD
+}
+
+void fnStatDemo2(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+    plotSelection = 0;
+    runFunction(ITM_CLSIGMA);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.0000",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  #endif //TESTSUITE_BUILD
 }
 
 //DEMO: 4 points to simulate a distribution, from p105 of OM
 void fnStatDemo105(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
-  selection = 0;
-  runFunction(ITM_CLSIGMA);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("30",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("50",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    plotSelection = 0;
+    runFunction(ITM_CLSIGMA);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("30",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("50",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
-  }
+}
 
 //DEMO: points to simulate a distribution, from p107 of OM
 void fnStatDemo107(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
-  selection = 0;
-  runFunction(ITM_CLSIGMA);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1945",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("696",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1955",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1330",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1965",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1750",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1971",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2243",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1973",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2484",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1950",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("994",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1960",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1512",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1970",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2162",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1972",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2382",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    plotSelection = 0;
+    runFunction(ITM_CLSIGMA);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1945",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("696",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1955",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1330",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1965",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1750",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1971",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2243",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1973",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2484",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1950",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("994",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1960",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1512",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1970",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2162",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1972",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2382",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
-  }
+}
 
 //DEMO:  points to simulate a distribution, from p109 of OM
 void fnStatDemo109(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
-  selection = 0;
-  runFunction(ITM_CLSIGMA);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.63",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("20",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("40",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.61",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("60",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.21",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("80",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    plotSelection = 0;
+    runFunction(ITM_CLSIGMA);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.63",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("20",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("40",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.61",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("60",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.21",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("80",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
-  }
-
-
-
-void fnStatDemo2(uint16_t unusedButMandatoryParameter){
-  #ifndef TESTSUITE_BUILD
-  selection = 0;
-  runFunction(ITM_CLSIGMA);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.0000",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  #endif //TESTSUITE_BUILD
-  }
-
+}

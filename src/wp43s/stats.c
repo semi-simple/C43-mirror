@@ -76,8 +76,8 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
     lrSelection = CF_LINEAR_FITTING;        // linear regression selection
     lrChosen = 0;                           // linear regression selection
     lastPlotMode = PLOT_NOTHING;            // last selected  plotmode
-    selection = 0;                          // Currently selected linear regression mode
-    PLOT_ZOOM = 0;
+    plotSelection = 0;                      // Currently selected linear regression mode
+    PLOT_ZOOM = 0;                          // Currently selected plot zoom level
   }
 }
 

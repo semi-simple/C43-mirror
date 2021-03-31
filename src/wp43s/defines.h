@@ -417,9 +417,10 @@
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0
 #define PLOT_FIT                                   1
-#define PLOT_CYCLEALL                              2
-#define PLOT_START                                 3
-#define PLOT_NOTHING                               4
+#define PLOT_LR                                    2
+#define PLOT_CYCLEALL                              3
+#define PLOT_START                                 4
+#define PLOT_NOTHING                               5
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0

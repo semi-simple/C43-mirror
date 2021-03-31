@@ -173,7 +173,7 @@ uint16_t               currentProgramNumber;
 uint16_t               lrSelection;
 uint16_t               lrChosen;
 uint16_t               lastPlotMode;
-uint16_t               selection;
+uint16_t               plotSelection;
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;

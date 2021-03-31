@@ -364,7 +364,7 @@
   extern uint16_t               lrSelection;
   extern uint16_t               lrChosen;
   extern uint16_t               lastPlotMode;
-  extern uint16_t               selection;
+  extern uint16_t               plotSelection;
   
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;

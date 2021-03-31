@@ -1822,8 +1822,9 @@
 #define ITM_STATDEM105                1764 //Temporary
 #define ITM_STATDEM107                1765 //Temporary
 #define ITM_STATDEM109                1766 //Temporary
+#define ITM_PLOTZOOM                  1767
 
-#define LAST_ITEM                     1767
+#define LAST_ITEM                     1768
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

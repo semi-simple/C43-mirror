@@ -31,7 +31,7 @@
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
 #define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05 * 50     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
 
@@ -74,6 +74,8 @@ extern  bool_t PLOT_SHADE;
 extern  bool_t PLOT_AXIS;
 extern  int8_t PLOT_ZMX;
 extern  int8_t PLOT_ZMY;
+extern  uint8_t PLOT_ZOOM;
+
 #define _VECT 0
 #define _SCAT 1
 
@@ -127,9 +129,11 @@ void    fnStatDemo105      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo107      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo109      (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (uint16_t selection);
-void    drawline           (uint16_t selection);
+void    drawline           (uint16_t selection, double rr, double smi, real_t *aa0, real_t *aa1, real_t *aa2);
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
 void    fnPlotRegLine      (uint16_t plotMode);
+void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
+
  

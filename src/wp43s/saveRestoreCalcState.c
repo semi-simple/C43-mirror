@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         53  // Added lrChosen
+#define BACKUP_VERSION         54  // Added PLOT_ZOOM
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -213,6 +213,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
     save(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
     save(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
+    save(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
     save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
@@ -397,6 +398,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&PLOT_AXIS,                          sizeof(PLOT_AXIS),                          BACKUP);
       restore(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
       restore(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
+      restore(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
       restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);

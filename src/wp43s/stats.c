@@ -77,6 +77,7 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
     lrChosen = 0;                           // linear regression selection
     lastPlotMode = PLOT_NOTHING;            // last selected  plotmode
     selection = 0;                          // Currently selected linear regression mode
+    PLOT_ZOOM = 0;
   }
 }
 

@@ -25,6 +25,8 @@
 // This module is part of the C43 fork, and is copied here. 
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
+real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
+
 
 //#define STATDEBUG
 
@@ -51,6 +53,7 @@ bool_t PLOT_SHADE;
 bool_t PLOT_AXIS;
 int8_t PLOT_ZMX;
 int8_t PLOT_ZMY;
+uint8_t PLOT_ZOOM;
 
 int8_t   plotmode;    //VECTOR or SCATTER
 float    tick_int_x;
@@ -83,6 +86,7 @@ void statGraphReset(void){
   PLOT_AXIS     = false;
   PLOT_ZMX      = 0;
   PLOT_ZMY      = 0;
+  PLOT_ZOOM     = 0;
 
   plotmode      = _SCAT;
   tick_int_x    = 0;        //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
@@ -608,8 +612,8 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
 
 void graphPlotstat(uint16_t selection){
   #ifdef PC_BUILD
-    printf("\n####>>>>> graphPlotstat selection:%u\n",selection);
-  #endif
+    printf("#####>>> graphPlotstat: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
+  #endif //PC_BUILD
   #ifndef TESTSUITE_BUILD
   uint16_t  cnt, ix, statnum;
   uint16_t  xo, xn, xN; 
@@ -709,10 +713,10 @@ void graphPlotstat(uint16_t selection){
       x_min = x_max - dx;
     }
     
-    x_min = x_min - dx * zoomfactor;
-    y_min = y_min - dy * zoomfactor;
-    x_max = x_max + dx * zoomfactor;
-    y_max = y_max + dy * zoomfactor;
+    x_min = x_min - dx * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
+    y_min = y_min - dy * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
+    x_max = x_max + dx * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
+    y_max = y_max + dy * zoomfactor * (pow(4.0,(PLOT_ZOOM & 0x03)));
     #ifdef STATDEBUG
       printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
@@ -787,11 +791,21 @@ void graphPlotstat(uint16_t selection){
       }
     }
     //#################################################### ^^^ MAIN GRAPH LOOP ^^^          
+
+
+
+  char ss[50];
+  double rr=0;
+  double smi=0;
+
   if(selection != 0) {
-    processCurvefitSelection(selection);
+    processCurvefitSelection(selection, &RR, &SMI, &aa0, &aa1, &aa2);
+    realMultiply(&RR,&RR,&RR,&ctxtReal39);
+    realToString(&RR,ss); rr = strtof (ss, NULL);
+    realToString(&SMI,ss); smi = strtof (ss, NULL);
   }
 
-  drawline(selection);
+  drawline(selection, rr, smi, &aa0, &aa1, &aa2);
 
   } else {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X);
@@ -805,7 +819,7 @@ void graphPlotstat(uint16_t selection){
 
 
 #ifndef TESTSUITE_BUILD
-  void drawline(uint16_t selection){
+  void drawline(uint16_t selection, double rr, double smi, real_t *aa0, real_t *aa1, real_t *aa2){
     if(!selection) return;
     #ifdef PC_BUILD
       printf("#####>>> drawline: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
@@ -816,9 +830,9 @@ void graphPlotstat(uint16_t selection){
     double a0,a1,a2;
     int32_t nn;
     char ss[100];
-    realToString(&aa0, ss); a0 = strtof (ss, NULL);
-    realToString(&aa1, ss); a1 = strtof (ss, NULL);
-    realToString(&aa2, ss); a2 = strtof (ss, NULL);
+    realToString(aa0, ss); a0 = strtof (ss, NULL);
+    realToString(aa1, ss); a1 = strtof (ss, NULL);
+    realToString(aa2, ss); a2 = strtof (ss, NULL);
     realToInt32(SIGMA_N, nn);  
 
     #ifdef PC_BUILD
@@ -1007,7 +1021,7 @@ void graphPlotstat(uint16_t selection){
     int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,eatSpaces(getCurveFitModeName(selection)));
-      strcat(ss,((lrChosen == 0) || ((lrChosen & selection) != lrChosen)) ? "" : STD_SUP_ASTERISK);
+      if(lrCountOnes(lrSelection)>1 && selection == lrChosen) strcat(ss,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
       strcpy(ss,"y=");
       strcat(ss,getCurveFitModeFormula(selection));
@@ -1023,7 +1037,7 @@ void graphPlotstat(uint16_t selection){
         eformat(ss,"a" STD_SUB_2 "=",a2,7);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
       }
-      eformat(ss,"r" STD_SUP_2 "=",r*r,4);
+      eformat(ss,"r" STD_SUP_2 "=",rr,4);
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ +autoshift, vmNormal, false, false);
 
       if(selection == CF_ORTHOGONAL_FITTING) {
@@ -1033,6 +1047,7 @@ void graphPlotstat(uint16_t selection){
     }
   }
 #endif //TESTSUITE_BUILD
+
 
 
 void fnPlotClose(uint16_t unusedButMandatoryParameter){
@@ -1058,14 +1073,16 @@ void fnPlotStat(uint16_t plotMode){
 #ifdef STATDEBUG
   printf("fnPlotStat1: selection = %u; Plotmode=%u\n",selection,plotMode);
 #endif //STATDEBUG
+#ifdef PC_BUILD
+  printf("#####>>> fnPlotStat1: selection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), plotMode, lastPlotMode, lrSelection, lrChosen);
+#endif //PC_BUILD
+
+
 #ifndef TESTSUITE_BUILD
   if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) plotMode = lastPlotMode;
   calcMode = CM_PLOT_STAT;
   statGraphReset(); 
   if(plotMode == PLOT_START) selection = 0;
-
-  r = 0;
-  smi = 0;
 
   hourGlassIconEnabled = true;
   showHideHourGlass();
@@ -1103,7 +1120,6 @@ void fnPlotStat(uint16_t plotMode){
 
 
 void fnPlotRegLine(uint16_t plotMode){
-  uint16_t tmpSelect;
   #ifdef STATDEBUG
     printf("fnPlotRegLine: selection = %u\n",selection);
   #endif //STATDEBUG
@@ -1134,14 +1150,13 @@ void fnPlotRegLine(uint16_t plotMode){
       //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found. If a chosen curve is there, override.
       //printf("#####X %u %u \n",selection, lrSelection);
 //      tmpSelect = lrChosen == 0 ? (lrSelection == 0 ? 1023 : lrSelection) : lrChosen;
-      tmpSelect = (lrSelection == 0 ? 1023 : lrSelection);
-      selection = (selection) << 1;
+      selection = selection << 1;
       if(selection == 0) selection = 1;
-        while((selection != ( (tmpSelect) & selection)) && selection < 1024){
-          //printf("#####Z %u %u \n",selection, lrSelection);
-          selection = (selection) << 1;
-        }
-      if(selection >= 1024) selection = 0;
+      while((selection != ( (lrSelection == 0 ? 1023 : lrSelection) & selection)) && selection < 1024){
+        //printf("#####Z %u %u \n",selection, lrSelection);
+        selection = (selection) << 1;
+      }
+      if(selection >= 1024) selection = 0;  //purposely change to zero graph display
       break;
 
     case PLOT_NOTHING:
@@ -1149,6 +1164,15 @@ void fnPlotRegLine(uint16_t plotMode){
     default:break;
   }
 }
+
+
+void fnPlotZoom(uint16_t unusedButMandatoryParameter){
+   PLOT_ZOOM++;
+   printf("### %u\n",(PLOT_ZOOM & 0x04));
+   void refreshScreen(void);
+  
+}
+
 
 
 //DEMO: Arbitrary distribution to test. Close to a Normal.
@@ -1290,11 +1314,11 @@ void fnStatDemo105(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   selection = 0;
   runFunction(ITM_CLSIGMA);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("30",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("50",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("30",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("2.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("50",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
   }
 

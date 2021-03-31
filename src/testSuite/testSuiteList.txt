@@ -296,3 +296,8 @@ f_p
 f_l
 f_r
 f_i
+
+logNormal_p
+logNormal_l
+logNormal_r
+logNormal_i

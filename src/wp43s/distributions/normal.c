@@ -68,15 +68,28 @@ static bool_t checkParamNormal(real_t *x, real_t *i, real_t *j) {
 }
 
 
-void fnNormalP(uint16_t unusedButMandatoryParameter) {
-  real_t val, mu, sigma, ans;
+static void normalP(bool_t logNormal) {
+  real_t val, alval, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamNormal(&val, &mu, &sigma)) {
-    realSubtract(&val, &mu, &val, &ctxtReal39);
-    realDivide(&val, &sigma, &val, &ctxtReal39);
-    WP34S_Pdf_Q(&val, &ans, &ctxtReal39);
+    if(logNormal && realIsZero(&val)) {
+      realZero(&ans);
+    }
+    else {
+      if(logNormal) {
+        realCopy(&val, &alval);
+        WP34S_Ln(&alval, &val, &ctxtReal39);
+      }
+      realSubtract(&val, &mu, &val, &ctxtReal39);
+      realDivide(&val, &sigma, &val, &ctxtReal39);
+      WP34S_Pdf_Q(&val, &ans, &ctxtReal39);
+      if(logNormal) {
+        realDivide(&ans, &sigma, &ans, &ctxtReal39);
+        realDivide(&ans, &alval, &ans, &ctxtReal39);
+      }
+    }
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -85,15 +98,21 @@ void fnNormalP(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnNormalL(uint16_t unusedButMandatoryParameter) {
+static void normalL(bool_t logNormal) {
   real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamNormal(&val, &mu, &sigma)) {
-    realSubtract(&val, &mu, &val, &ctxtReal39);
-    realDivide(&val, &sigma, &val, &ctxtReal39);
-    WP34S_Cdf_Q(&val, &ans, &ctxtReal39);
+    if(logNormal && realIsZero(&val)) {
+      realZero(&ans);
+    }
+    else {
+      if(logNormal) WP34S_Ln(&val, &val, &ctxtReal39);
+      realSubtract(&val, &mu, &val, &ctxtReal39);
+      realDivide(&val, &sigma, &val, &ctxtReal39);
+      WP34S_Cdf_Q(&val, &ans, &ctxtReal39);
+    }
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -102,15 +121,21 @@ void fnNormalL(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnNormalR(uint16_t unusedButMandatoryParameter) {
+static void normalR(bool_t logNormal) {
   real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(checkParamNormal(&val, &mu, &sigma)) {
-    realSubtract(&val, &mu, &val, &ctxtReal39);
-    realDivide(&val, &sigma, &val, &ctxtReal39);
-    WP34S_Cdfu_Q(&val, &ans, &ctxtReal39);
+    if(logNormal && realIsZero(&val)) {
+      realCopy(const_1, &ans);
+    }
+    else {
+      if(logNormal) WP34S_Ln(&val, &val, &ctxtReal39);
+      realSubtract(&val, &mu, &val, &ctxtReal39);
+      realDivide(&val, &sigma, &val, &ctxtReal39);
+      WP34S_Cdfu_Q(&val, &ans, &ctxtReal39);
+    }
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -119,7 +144,7 @@ void fnNormalR(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnNormalI(uint16_t unusedButMandatoryParameter) {
+static void normalI(bool_t logNormal) {
   real_t val, mu, sigma, ans;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -135,12 +160,49 @@ void fnNormalI(uint16_t unusedButMandatoryParameter) {
       WP34S_Qf_Q(&val, &ans, &ctxtReal39);
       realMultiply(&ans, &sigma, &ans, &ctxtReal39);
       realAdd(&ans, &mu, &ans, &ctxtReal39);
+      if(logNormal) realExp(&ans, &ans, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
     }
   }
 
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+}
+
+
+
+void fnNormalP(uint16_t unusedButMandatoryParameter) {
+  normalP(false);
+}
+
+void fnNormalL(uint16_t unusedButMandatoryParameter) {
+  normalL(false);
+}
+
+void fnNormalR(uint16_t unusedButMandatoryParameter) {
+  normalR(false);
+}
+
+void fnNormalI(uint16_t unusedButMandatoryParameter) {
+  normalI(false);
+}
+
+
+
+void fnLogNormalP(uint16_t unusedButMandatoryParameter) {
+  normalP(true);
+}
+
+void fnLogNormalL(uint16_t unusedButMandatoryParameter) {
+  normalL(true);
+}
+
+void fnLogNormalR(uint16_t unusedButMandatoryParameter) {
+  normalR(true);
+}
+
+void fnLogNormalI(uint16_t unusedButMandatoryParameter) {
+  normalI(true);
 }
 
 

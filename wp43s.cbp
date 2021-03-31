@@ -517,6 +517,18 @@
 		<Unit filename="src/testSuite/log2.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/logNormal_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/logxy.txt">
 			<Option target="testSuite" />
 		</Unit>

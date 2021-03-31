@@ -19,6 +19,8 @@
  ***********************************************/
 
 
+
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1814,16 +1816,16 @@
 #define ITM_XOUT                      1755
 #define ITM_PLOT_REGLINE              1756
 #define ITM_CLOSE                     1757
-#define ITM_STATDEMO                  1758
+#define ITM_STATDEMO0                 1758
 #define ITM_STATDEMO1                 1759
 #define ITM_STATDEMO2                 1760
 #define ITM_SMI                       1761
 #define ITM_PLOT_LR                   1762
 #define ITM_PLOT_SELLINE              1763
-#define ITM_1764                      1764
-#define ITM_1765                      1765
-#define ITM_1766                      1766
-#define ITM_1767                      1767
+#define ITM_STATDEM105                1764
+#define ITM_STATDEM107                1765
+#define ITM_STATDEM109                1766
+#define ITM_PLOTZOOM                  1767
 #define ITM_1768                      1768
 #define ITM_1769                      1769
 #define ITM_1770                      1770

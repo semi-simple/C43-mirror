@@ -25,8 +25,9 @@
 // This module is part of the C43 fork, and is copied here. 
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
-static real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
-
+#ifndef TESTSUITE_BUILD
+  static real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
+#endif
 
 //#define STATDEBUG
 

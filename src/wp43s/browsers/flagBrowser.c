@@ -346,7 +346,7 @@
             showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
           }
           else {
-            sprintf(tmpString,"%" PRIu16 " local registers are allocated.", currentNumberOfLocalRegisters);
+            sprintf(tmpString,"%" PRIu8 " local registers are allocated.", currentNumberOfLocalRegisters);
             showString(tmpString, &standardFont, 1, 132-1, vmNormal, true, true);
           }
         }

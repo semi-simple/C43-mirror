@@ -94,8 +94,8 @@ uint16_t lrCountOnes(uint16_t curveFitting) {
 void fnProcessLRfind(uint16_t curveFitting){
 	#ifdef PC_BUILD
     char ss[50];
-    double r2;
-    double rmax;
+    double r2 = 0;
+    double rmax = 0;
 	  printf("Processing for best fit: %s\n",getCurveFitModeNames(curveFitting));
 	#endif //PC_BUILD
   //if(curveFitting == 0) curveFitting = 511; //Do not convert from 0 here. Conversion only done after input.

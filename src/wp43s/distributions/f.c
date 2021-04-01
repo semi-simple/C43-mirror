@@ -64,6 +64,13 @@ static bool_t checkParamF(real_t *x, real_t *i, real_t *j) {
   else if(getSystemFlag(FLAG_SPCRES)) {
     return true;
   }
+  else if(realIsNegative(x)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function checkParamF:", "cannot calculate for x < 0", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
   else if(realIsZero(i) || realIsNegative(i) || realIsZero(j) || realIsNegative(j)) {
     displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

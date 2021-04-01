@@ -77,6 +77,12 @@ static void normalP(bool_t logNormal) {
     if(logNormal && realIsZero(&val)) {
       realZero(&ans);
     }
+    else if(logNormal && realIsNegative(&val)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnLogNormalP:", "cannot calculate for x < 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
     else {
       if(logNormal) {
         realCopy(&val, &alval);
@@ -107,6 +113,12 @@ static void normalL(bool_t logNormal) {
     if(logNormal && realIsZero(&val)) {
       realZero(&ans);
     }
+    else if(logNormal && realIsNegative(&val)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnLogNormalP:", "cannot calculate for x < 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
     else {
       if(logNormal) WP34S_Ln(&val, &val, &ctxtReal39);
       realSubtract(&val, &mu, &val, &ctxtReal39);
@@ -129,6 +141,12 @@ static void normalR(bool_t logNormal) {
   if(checkParamNormal(&val, &mu, &sigma)) {
     if(logNormal && realIsZero(&val)) {
       realCopy(const_1, &ans);
+    }
+    else if(logNormal && realIsNegative(&val)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnLogNormalP:", "cannot calculate for x < 0", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
       if(logNormal) WP34S_Ln(&val, &val, &ctxtReal39);

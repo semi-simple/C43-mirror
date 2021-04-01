@@ -149,6 +149,10 @@ void fnExponentialI(uint16_t unusedButMandatoryParameter) {
  ******************************************************/
 
 void WP34S_Pdf_Expon(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  if(realCompareLessEqual(x, const_0)) {
+    realCopy(const_0, res);
+    return;
+  }
   if(realIsSpecial(lambda)) {
     realZero(res); /* Can only be infinite which has zero probability */
     return;
@@ -160,6 +164,10 @@ void WP34S_Pdf_Expon(const real_t *x, const real_t *lambda, real_t *res, realCon
 }
 
 void WP34S_Cdfu_Expon(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  if(realCompareLessEqual(x, const_0)) {
+    realCopy(const_1, res);
+    return;
+  }
   if(realIsSpecial(lambda)) {
     realCopy(const_plusInfinity, res);
     return;
@@ -174,6 +182,10 @@ void WP34S_Cdfu_Expon(const real_t *x, const real_t *lambda, real_t *res, realCo
 }
 
 void WP34S_Cdf_Expon(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  if(realCompareLessEqual(x, const_0)) {
+    realCopy(const_0, res);
+    return;
+  }
   if(realIsSpecial(lambda)) {
     realCopy(const_plusInfinity, res);
     return;

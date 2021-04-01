@@ -306,3 +306,8 @@ cauchy_p
 cauchy_l
 cauchy_r
 cauchy_i
+
+exponential_p
+exponential_l
+exponential_r
+exponential_i

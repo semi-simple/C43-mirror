@@ -301,3 +301,8 @@ logNormal_p
 logNormal_l
 logNormal_r
 logNormal_i
+
+cauchy_p
+cauchy_l
+cauchy_r
+cauchy_i

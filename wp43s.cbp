@@ -289,6 +289,18 @@
 		<Unit filename="src/testSuite/bn_star.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/cauchy_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/ceil.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1030,6 +1042,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/display.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/cauchy.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/cauchy.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

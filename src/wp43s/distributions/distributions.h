@@ -20,6 +20,7 @@
 
 
 
+#include "cauchy.h"
 #include "chi2.h"
 #include "f.h"
 #include "normal.h"

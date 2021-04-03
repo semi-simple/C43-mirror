@@ -321,3 +321,8 @@ weibull_p
 weibull_l
 weibull_r
 weibull_i
+
+geometric_p
+geometric_l
+geometric_r
+geometric_i

@@ -657,6 +657,10 @@
 #define QF_NEWTON_BINOMIAL                         2
 #define QF_NEWTON_GEOMETRIC                        3
 
+#define QF_DISCRETE_CDF_POISSON                    0
+#define QF_DISCRETE_CDF_BINOMIAL                   1
+#define QF_DISCRETE_CDF_GEOMETRIC                  2
+
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel
   #define LCD_EMPTY_VALUE                        255 // White (or empty) pixel

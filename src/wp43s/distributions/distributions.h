@@ -24,6 +24,7 @@
 #include "chi2.h"
 #include "exponential.h"
 #include "f.h"
+#include "geometric.h"
 #include "logistic.h"
 #include "normal.h"
 #include "t.h"

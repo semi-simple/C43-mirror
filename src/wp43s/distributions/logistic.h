@@ -15,15 +15,15 @@
  */
 
 /********************************************//**
- * \file distributions.h
+ * \file logistic.h
  ***********************************************/
 
+void fnLogisticP     (uint16_t unusedButMandatoryParameter);
+void fnLogisticL     (uint16_t unusedButMandatoryParameter);
+void fnLogisticR     (uint16_t unusedButMandatoryParameter);
+void fnLogisticI     (uint16_t unusedButMandatoryParameter);
 
-
-#include "cauchy.h"
-#include "chi2.h"
-#include "exponential.h"
-#include "f.h"
-#include "logistic.h"
-#include "normal.h"
-#include "t.h"
+void WP34S_Pdf_Logit (const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
+void WP34S_Cdfu_Logit(const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
+void WP34S_Cdf_Logit (const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
+void WP34S_Qf_Logit  (const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);

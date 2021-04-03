@@ -311,3 +311,8 @@ exponential_p
 exponential_l
 exponential_r
 exponential_i
+
+logistic_p
+logistic_l
+logistic_r
+logistic_i

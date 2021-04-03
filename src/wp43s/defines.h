@@ -68,8 +68,6 @@
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
-#define USEFLOAT                                     // Plot: Use standard double floats instead of short REAL for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible future optimisation.
-
 
 // List of errors
 #define ERROR_NONE                                 0
@@ -517,7 +515,8 @@
 #define TI_CORR                                   36
 #define TI_SMI                                    37
 #define TI_LR                                     38
-
+#define TI_CALCX                                  39
+#define TI_CALCY                                  40
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

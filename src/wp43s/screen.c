@@ -1450,6 +1450,20 @@
             }
           }
 
+          else if(temporaryInformation == TI_CALCY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_y_CIRC STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_CALCX) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_CIRC STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           else if(temporaryInformation == TI_CORR) { 
 //TODO TEMP
 printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));

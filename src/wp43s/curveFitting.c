@@ -25,6 +25,7 @@
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables
 realContext_t *realContext;
+realContext_t *realContextForecast;
 
 
 //vv Temporary, used as cross check of the math; can be removed later
@@ -92,8 +93,11 @@ uint16_t lrCountOnes(uint16_t curveFitting) {
  * \return void
  ***********************************************/
 void fnProcessLRfind(uint16_t curveFitting){
+  realCopy(const_0,&aa0);
+  realCopy(const_0,&aa1);
+  realCopy(const_0,&aa2);
 	#ifdef PC_BUILD
-    char ss[50];
+    char ss[100];
     double r2 = 0;
     double rmax = 0;
 	  printf("Processing for best fit: %s\n",getCurveFitModeNames(curveFitting));
@@ -258,7 +262,6 @@ char ss[100];
 void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, real_t *aa0, real_t *aa1, real_t *aa2){
     real_t AA,BB,CC,DD,EE,FF,GG,HH;   // Curve aux fitting variables
     real_t SS,TT,UU;                  // Temporary curve fitting variables
-
     uint16_t ix,jx;               //only a single graph can be displayed at once, so retain the single lowest bit, and clear the higher order bits if ever control comes here with multpile graph selections
     jx = 0;
     for(ix=0; ix!=10; ix++) {     //up to 2^9 inclusive of 512 which is ORTHOF. The ReM is respectedby usage of 0 only, not by manual selection.
@@ -975,4 +978,158 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     }
   }
 
+
+  void yIsFnx(uint8_t USEFLOAT, uint16_t selection, double x, double *y, double a0, double a1, double a2, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
+      *y = 0;
+      realCopy(const_0,YY);
+      char ss[100];
+      real_t SS,TT,UU;
+      if(USEFLOAT == useREAL4) {
+        realContextForecast = &ctxtRealShort;
+      } else 
+      if(USEFLOAT == useREAL39) {
+        realContextForecast = &ctxtReal39;
+      }
+      switch(selection) {
+        case CF_LINEAR_FITTING: 
+        case CF_ORTHOGONAL_FITTING:
+          if(USEFLOAT == 0) { 
+            //sprintf(ss,"%f",x); stringToReal(ss,&SS,realContextForecast);
+            *y = a1 * x + a0; 
+          } else {
+            char ss[100];
+            realMultiply(XX, aa1, &UU, realContextForecast);
+            realAdd     (&UU, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_EXPONENTIAL_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = a0 * exp(a1 * x); 
+          } else {
+            realMultiply(XX, aa1, &UU, realContextForecast);
+            realExp     (&UU, &UU,       realContextForecast);
+            realMultiply(&UU, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_LOGARITHMIC_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = a0 + a1*log(x); 
+          } else {
+            WP34S_Ln    (XX, &SS,       realContextForecast);
+            realMultiply(&SS, aa1, &UU, realContextForecast);
+            realAdd     (&UU, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_POWER_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = a0 * pow(x,a1);
+          } else {
+            realPower   (XX, aa1, &SS, realContextForecast);
+            realMultiply(&SS, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_ROOT_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = a0 * pow(a1,1/x);
+          } else {
+            realDivide  (const_1, XX, &SS, realContextForecast);
+            realPower   (aa1, &SS, &SS, realContextForecast);    //very very slow with a1=0.9982, probably in the 0.4 < x < 1.0 area
+            realMultiply(&SS, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_HYPERBOLIC_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = 1 / (a1 * x + a0);
+          } else {
+            realMultiply(XX, aa1, &UU, realContextForecast);
+            realAdd     (&UU, aa0, &TT, realContextForecast);
+            realDivide  (const_1, &TT, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_PARABOLIC_FITTING: 
+          if(USEFLOAT == 0) { 
+            *y = a2 * x * x + a1 * x + a0;
+          } else {
+            realMultiply(XX, &SS , &TT, realContextForecast);
+            realMultiply(&TT, aa2, &TT, realContextForecast);
+            realMultiply(&SS, aa1, &UU, realContextForecast);
+            realAdd     (&TT, &UU,  &TT, realContextForecast);
+            realAdd     (&TT, aa0, &TT, realContextForecast);          
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_GAUSS_FITTING:
+          if(USEFLOAT == 0) { 
+            *y = a0 * exp( (x-a1)*(x-a1)/a2 );
+          } else {
+            realSubtract(XX, aa1, &TT, realContextForecast);
+            realMultiply(&TT, &TT , &TT, realContextForecast);
+            realDivide  (&TT, aa2, &TT, realContextForecast);
+            realExp     (&TT, &TT ,      realContextForecast);
+            realMultiply(&TT, aa0, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+          break;
+        case CF_CAUCHY_FITTING:
+          if(USEFLOAT == 0) { 
+            *y = 1/(a0*(x+a1)*(x+a1)+a2);
+          } else {
+            realAdd     (XX, aa1, &TT, realContextForecast);
+            realMultiply(&TT, &TT , &TT, realContextForecast);
+            realMultiply(&TT, aa0, &TT, realContextForecast);
+            realAdd     (&TT, aa2, &TT, realContextForecast);
+            realDivide  (const_1, &TT, &TT, realContextForecast);
+            realToString(&TT, ss); *y = strtof (ss, NULL);
+            realCopy    (&TT,YY);
+          }
+        default:break;
+      }
+  }
+
+
+  void fnYIsFnx(uint16_t unusedButMandatoryParameter){
+  real_t XX,YY,RR,SMI,aa0,aa1,aa2;
+  uint16_t sel=1;
+  double x=-99,y = 0,a0=-99,a1=-99,a2=-99;
+  realCopy(const_0,&aa0);
+  realCopy(const_0,&aa1);
+  realCopy(const_0,&aa2);
+  if(checkMinimumDataPoints(const_2)) {
+    if(lrChosen == 0) sel = 1;
+    else sel = lrChosen;
+    processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+    }
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &XX);
+      yIsFnx(useREAL39, sel, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
+
+      realToReal34(&YY,REGISTER_REAL34_DATA(REGISTER_X));
+
+      setSystemFlag(FLAG_ASLIFT);
+      temporaryInformation = TI_CALCY;
+    } else {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "data type %s cannot be used with L.R.!", getRegisterDataTypeName(REGISTER_X, false, false));
+        moreInfoOnError("In function fnYIsFnx:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+}
 

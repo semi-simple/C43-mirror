@@ -741,11 +741,9 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
-    #ifndef USEFLOAT
-      decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
-      ctxtRealShort.digits = 6;
-      ctxtRealShort.traps  = 0;
-    #endif //USEFLOAT
+    decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
+    ctxtRealShort.digits = 6;
+    ctxtRealShort.traps  = 0;
 
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;

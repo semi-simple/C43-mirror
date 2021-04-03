@@ -582,8 +582,8 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
   //////////////
   if(displayFormat == DF_FIX) {
     if(noFix || exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
-//*JM SIGFIGNEW     digitsToDisplay = displayFormatDigits;
-//*JM SIGFIGNEW      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
+      digitsToDisplay = displayFormatDigits;
+      digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
       ovrENG = getSystemFlag(FLAG_ALLENG);
     }
@@ -592,7 +592,7 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
 
       int displayFormatDigits_active;                                    //JM SIGFIGNEW vv
       if(SigFigMode >= 1) {
-        displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);    //Convert SIG to FIX.
+        displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);  //Convert SIG to FIX.
       } else {
         displayFormatDigits_active = displayFormatDigits;
       }                                                                  //JM SIGFIGNEW ^^
@@ -601,7 +601,7 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
 
-      if(SigFigMode >= 1) {                                             //JM SIGFIGNEW vv
+      if(SigFigMode >= 1) {                                              //JM SIGFIGNEW vv
         digitToRound = firstDigit + SigFigMode;
       } else {
         digitToRound = lastDigit;
@@ -627,14 +627,14 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
         exponent++;
       }
 
-      //JM SIGFIG - blank out non-sig digits to the right                                 //JM SIGFIGNEW vv
+      //JM SIGFIG - blank out non-sig digits to the right                 //JM SIGFIGNEW vv
       if(SigFigMode>=1) {
         if((SigFigMode+1)-exponent-1 < 0) {
            for (digitCount = firstDigit + (SigFigMode+1); digitCount <= lastDigit; digitCount++) {
             bcd[digitCount] = 0;
             }
         }
-      }                                                                                   //JM SIGFIG
+      }                                                                   //JM SIGFIG
 
       // The sign
       if(sign) {

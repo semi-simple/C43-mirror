@@ -316,3 +316,8 @@ logistic_p
 logistic_l
 logistic_r
 logistic_i
+
+weibull_p
+weibull_l
+weibull_r
+weibull_i

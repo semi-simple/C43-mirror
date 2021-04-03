@@ -15,16 +15,15 @@
  */
 
 /********************************************//**
- * \file distributions.h
+ * \file weibull.h
  ***********************************************/
 
+void fnWeibullP     (uint16_t unusedButMandatoryParameter);
+void fnWeibullL     (uint16_t unusedButMandatoryParameter);
+void fnWeibullR     (uint16_t unusedButMandatoryParameter);
+void fnWeibullI     (uint16_t unusedButMandatoryParameter);
 
-
-#include "cauchy.h"
-#include "chi2.h"
-#include "exponential.h"
-#include "f.h"
-#include "logistic.h"
-#include "normal.h"
-#include "t.h"
-#include "weibull.h"
+void WP34S_Pdf_Weib (const real_t *x, const real_t *b, const real_t *t, real_t *res, realContext_t *realContext);
+void WP34S_Cdfu_Weib(const real_t *x, const real_t *b, const real_t *t, real_t *res, realContext_t *realContext);
+void WP34S_Cdf_Weib (const real_t *x, const real_t *b, const real_t *t, real_t *res, realContext_t *realContext);
+void WP34S_Qf_Weib  (const real_t *x, const real_t *b, const real_t *t, real_t *res, realContext_t *realContext);

@@ -71,7 +71,7 @@ static bool_t checkParamBinomial(real_t *x, real_t *i, real_t *j) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
-  else if(realIsZero(i) || realIsNegative(i) || realIsNegative(j)) {
+  else if(realIsNegative(i) || realCompareGreaterThan(i, const_1) || realIsNegative(j)) {
     displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function checkParamBinomial:", "the parameters must be 0 " STD_LESS_EQUAL " p " STD_LESS_EQUAL " 1 and n > 0", NULL, NULL);
@@ -212,16 +212,11 @@ void WP34S_Pdf_Binomial(const real_t *x, const real_t *p0, const real_t *n, real
   realSubtract(n, x, &q, realContext);
   realMultiply(&p, &q, &p, realContext);
   realExp(&p, &p, realContext);
-  // x n (n-x)LnP x
   realCopy(n, &nn);
   realCopy(x, &xx);
   cyxReal(&nn, &xx, &q, realContext);
-  // nCx (n-x)LnP x
   realMultiply(&p, &q, &p, realContext);
-  // (nCx)(n-x)LnP x
-  // x p0 (nCx)(n-x)LnP x
   realPower(p0, x, &q, realContext);
-  // p0^x (nCx)(n-x)LnP x
   realMultiply(&p, &q, res, realContext);
 }
 

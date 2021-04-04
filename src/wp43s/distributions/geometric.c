@@ -56,10 +56,10 @@ static bool_t checkParamGeometric(real_t *x, real_t *i) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
-  else if(realIsZero(i) || realIsNegative(i)) {
+  else if(realIsZero(i) || realIsNegative(i) || realCompareGreaterThan(i, const_1)) {
     displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamGeometric:", "the parameter must be 0 " STD_LESS_EQUAL " p " STD_LESS_EQUAL " 1", NULL, NULL);
+      moreInfoOnError("In function checkParamGeometric:", "the parameter must be 0 < p " STD_LESS_EQUAL " 1", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }

@@ -59,7 +59,7 @@ static bool_t checkParamPoisson(real_t *x, real_t *i) {
   else if(realIsZero(i) || realIsNegative(i)) {
     displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamPoisson:", "the parameter must be 0 " STD_LESS_EQUAL " " STD_lambda " > 0", NULL, NULL);
+      moreInfoOnError("In function checkParamPoisson:", "the parameter must be " STD_lambda " > 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }

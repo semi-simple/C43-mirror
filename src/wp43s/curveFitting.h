@@ -32,3 +32,5 @@ void     fnProcessLR             (uint16_t unusedButMandatoryParameter);
 uint16_t lrCountOnes             (uint16_t curveFitting);
 void     yIsFnx                  (uint8_t  USEFLOAT, uint16_t selection, double x, double *y, double a0, double a1, double a2, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2);
 void     fnYIsFnx                (uint16_t unusedButMandatoryParameter);
+void     fnXIsFny                (uint16_t unusedButMandatoryParameter);
+void     fnCurveFittingLR        (uint16_t unusedButMandatoryParameter);

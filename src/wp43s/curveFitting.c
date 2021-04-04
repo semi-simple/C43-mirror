@@ -27,7 +27,6 @@ static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables
 realContext_t *realContext;
 realContext_t *realContextForecast;
 
-
 //vv Temporary, used as cross check of the math; can be removed later
 double A, B, C, D, E, F, G, H;
 int32_t nn;
@@ -39,15 +38,39 @@ double sumx,sumy,sumx2,sumx2y,sumy2,sumxy,sumlnxlny,sumx2lny,sumlnx,sumln2x,sumy
  * \brief Sets the curve fitting mode
  *
  * \param[in] curveFitting uint16_t Curve fitting mode
- * \return void
  *
+ *
+ * \return void
+ * \Input from defines, is "1" to exclude a method, examples:
+ * \LinF=CF_LINEAR_FITTING = 1. This "1" excludes LinF
+ * \448 = 1 1100 0000, Excluding 3 param models.
+ * \0   = 0 0000 0000, Exlcluding nothing
+ * \510 = 1 1111 1110, Excludes everything except LINF (default)
+ * \511 not allowed from keyboard, as it is internally used to allow ORTHOF.
+ *
+ * \The internal representation reverses the logic, i.e. ones represent allowed methods
  ***********************************************/
-void fnCurveFitting(uint16_t curveFitting) {
-  if(curveFitting == 0) curveFitting = 511;         //Auto selection excludes ORTHOF
-  lrSelection = curveFitting;
-  lrChosen = 0;
 
-//  processCurvefitSelection(curveFitting, &RR, &,, &notUsed, &notUsed, &notUsed);           //TODO is this needed here? Or r, sxy ?
+//all input in EXCLUSIONS, and is masked (AND) with 0x01FF to blank all high bits, before and after inversion.
+//if input = 0 0000 0000 then invert result to 0x01FF, i.e. allow all except ORTHOF
+//if input = 0 0000 0001 to 1 1111 1110, invert result, i.e. all can be excluded except 0x0001 (LinF)
+//if input = 1 1111 1111 then            invert reselt AND 0x03FF, meaning setting it to 0x0200, only ORTHOF   
+//Change BestF keyboard input to limit from 0 to 0x01FE (510)
+//Change ORTHOF input to be 0x1FF (511) or value NOT(512) AND 0x03FF
+//Change all method softmenu buttons to be NOT(value) AND 0x01FF
+
+void fnCurveFitting(uint16_t curveFitting) {
+  curveFitting = curveFitting & 0x01FF;
+  temporaryInformation = TI_STATISTIC_LR;
+
+  if(curveFitting >= 0 && curveFitting < 0x01FF) {
+    curveFitting = (~curveFitting) & 0x01FF;
+  }
+  else if (curveFitting == 0x01FF) {
+    curveFitting = 0x0200;
+  }
+  lrSelection = curveFitting;                 // lrSelection is used to store the BestF method, in inverse, i.e. 1 indicating allowed method
+  lrChosen = 0;                               // lrChosen    is used to indicate if there was a L.R. selection. Can be only one bit.
 
   #ifdef PC_BUILD
     uint16_t numberOfOnes;
@@ -72,7 +95,23 @@ void fnCurveFitting(uint16_t curveFitting) {
 
 
 
-uint16_t lrCountOnes(uint16_t curveFitting) {
+/********************************************//**
+ * \brief Sets X to the set L.R.
+ *
+ * \param[in] unusedButMandatoryParameter uint16_t
+ * \return void
+ ***********************************************/
+void fnCurveFittingLR(uint16_t unusedButMandatoryParameter) {
+  longInteger_t lr;
+  liftStack();
+  longIntegerInit(lr);
+  uIntToLongInteger((~lrSelection) & 0x01FF, lr);           // Input mask 01 1111 1111 EXCLUDES 10 0000 0000, which is ORTHOF, as it is not in the OM
+  convertLongIntegerToLongIntegerRegister(lr, REGISTER_X);
+  longIntegerFree(lr);
+}
+
+
+uint16_t lrCountOnes(uint16_t curveFitting) { // count the number of allowed methods
     uint16_t numberOfOnes;
     numberOfOnes = curveFitting - ((curveFitting >> 1) & 0x5555);
     numberOfOnes = (numberOfOnes & 0x3333) + ((numberOfOnes >> 2) & 0x3333);
@@ -282,6 +321,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     #ifdef PC_BUILD
       double a0,a1,a2;                                                 // Temporary, for ease of checking using double type
       double smi,r;
+      smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
     #endif
     realToInt32(SIGMA_N, nn);
     realToString(SIGMA_X ,     ss); sumx      = strtof (ss, NULL);
@@ -312,7 +352,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     realDivide(SIGMA_X,SIGMA_N,&M_X,realContext); //&ctxtReal39);     //vv
     realDivide(SIGMA_Y,SIGMA_N,&M_Y,realContext); //&ctxtReal39);
     fnStatR   (RR_, &S_XY, &S_X, &S_Y);
-    fnStatSMI (SMI_);                                                //^^ TODO IS THIS NEEDED HERE?
+    fnStatSMI (SMI_);
 
     #ifdef PC_BUILD
       realToString(SMI_, ss); smi = strtof (ss, NULL);   // sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
@@ -383,7 +423,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef PC_BUILD
-          smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
           realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
           printf("§ r^2: %f \n",r*r);
@@ -444,7 +483,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef PC_BUILD
-          smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
           realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
@@ -504,7 +542,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef PC_BUILD
-          smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
           realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy))); //(rLOG));
           printf("§ r^2: %f \n",r*r);
@@ -565,7 +602,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef PC_BUILD
-          smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
           realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
@@ -969,7 +1005,8 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
         #ifdef STATDEBUG
-          printf("##### ORTHOF %i a0=%f a1=%f smi=%f\n",(int)nn, a0b, a1b, smi);
+          smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
+          printf("##### ORTHOF %i a0=%f a1=%f smi=%f\n",(int)nn, a0, a1, smi);
         #endif
         break;
 
@@ -997,7 +1034,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             //sprintf(ss,"%f",x); stringToReal(ss,&SS,realContextForecast);
             *y = a1 * x + a0; 
           } else {
-            char ss[100];
             realMultiply(XX, aa1, &UU, realContextForecast);
             realAdd     (&UU, aa0, &TT, realContextForecast);
             realToString(&TT, ss); *y = strtof (ss, NULL);
@@ -1062,9 +1098,9 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           if(USEFLOAT == 0) { 
             *y = a2 * x * x + a1 * x + a0;
           } else {
-            realMultiply(XX, &SS , &TT, realContextForecast);
+            realMultiply(XX, XX , &TT, realContextForecast);
             realMultiply(&TT, aa2, &TT, realContextForecast);
-            realMultiply(&SS, aa1, &UU, realContextForecast);
+            realMultiply(XX, aa1, &UU, realContextForecast);
             realAdd     (&TT, &UU,  &TT, realContextForecast);
             realAdd     (&TT, aa0, &TT, realContextForecast);          
             realToString(&TT, ss); *y = strtof (ss, NULL);
@@ -1101,6 +1137,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   }
 
 
+
   void fnYIsFnx(uint16_t unusedButMandatoryParameter){
   real_t XX,YY,RR,SMI,aa0,aa1,aa2;
   uint16_t sel=1;
@@ -1109,8 +1146,12 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   realCopy(const_0,&aa1);
   realCopy(const_0,&aa2);
   if(checkMinimumDataPoints(const_2)) {
-    if(lrChosen == 0) sel = 1;
-    else sel = lrChosen;
+    if(lrChosen == 0) {
+      sel = 1; 
+    }
+    else {
+      sel = lrChosen;
+    }
     processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
@@ -1118,7 +1159,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     if(getRegisterDataType(REGISTER_X) == dtReal34) {
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &XX);
       yIsFnx(useREAL39, sel, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
-
       realToReal34(&YY,REGISTER_REAL34_DATA(REGISTER_X));
 
       setSystemFlag(FLAG_ASLIFT);
@@ -1133,3 +1173,86 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   }
 }
 
+
+
+
+
+  void xIsFny(uint16_t selection, uint8_t rootNo, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
+      realCopy(const_0,XX);
+      real_t SS,TT,UU;
+      realContextForecast = &ctxtReal39;
+      switch(selection) {
+        case CF_LINEAR_FITTING: 
+        case CF_ORTHOGONAL_FITTING:
+          //x = (y - a0) / a1;
+          realSubtract(YY, aa0, &UU, realContextForecast);
+          realDivide  (&UU,aa1, &TT, realContextForecast);
+          realCopy    (&TT,XX);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_PARABOLIC_FITTING:
+          // (1/(2.a2)) . ( -a1 +- sqrt(a1.a1 - 4a2.(a0 - y) ) )
+          realSubtract(YY,aa0,&UU,realContextForecast);
+          realMultiply(const_2,&UU,&UU,realContextForecast);
+          realMultiply(const_2,&UU,&UU,realContextForecast);
+          realMultiply(aa2,&UU,&UU,realContextForecast);
+          realMultiply(aa1,aa1,&TT,realContextForecast);
+          realAdd     (&UU,&TT,&UU,realContextForecast);  //swapped terms around minus, therefore add
+          realSquareRoot(&UU,&UU,realContextForecast);
+
+          realSubtract(const_0,aa1,&SS,realContextForecast);
+          if(rootNo == 1)
+            realSubtract(&SS,&UU,&SS,realContextForecast);      //This term could be Add due to plus and minus
+          if(rootNo == 2)
+            realAdd   (&SS,&UU,&SS,realContextForecast);      //This term could be Add due to plus and minus
+
+          realDivide(&SS,const_2,&SS,realContextForecast);
+          realDivide(&SS,aa2,XX,realContextForecast);
+          temporaryInformation = TI_CALCX2;
+          break;
+        default:break;
+      }
+  }
+
+
+
+  void fnXIsFny(uint16_t unusedButMandatoryParameter){
+  real_t XX,YY,RR,SMI,aa0,aa1,aa2;
+  uint16_t sel=1;
+  realCopy(const_0,&aa0);
+  realCopy(const_0,&aa1);
+  realCopy(const_0,&aa2);
+  if(checkMinimumDataPoints(const_2)) {
+    if(lrChosen == 0) {
+      sel = 1; 
+    }
+    else {
+      sel = lrChosen;
+    }
+    processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+    }
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &YY);
+      xIsFny(sel, 1, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
+      realToReal34(&XX,REGISTER_REAL34_DATA(REGISTER_X));
+
+      if(sel == CF_PARABOLIC_FITTING) {
+        xIsFny(sel, 2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);        
+        liftStack();
+        setSystemFlag(FLAG_ASLIFT);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+        realToReal34(&XX,REGISTER_REAL34_DATA(REGISTER_X));
+      }
+
+      setSystemFlag(FLAG_ASLIFT);
+    } else {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "data type %s cannot be used with L.R.!", getRegisterDataTypeName(REGISTER_X, false, false));
+        moreInfoOnError("In function fnXIsFny:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+}

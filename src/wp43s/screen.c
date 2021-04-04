@@ -1464,10 +1464,18 @@
             }
           }
 
-          else if(temporaryInformation == TI_CORR) { 
-//TODO TEMP
-printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
-            
+          else if(temporaryInformation == TI_CALCX2) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_CIRC STD_SUB_1 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else
+            if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_x_CIRC STD_SUB_2 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_CORR) {             
             if(regist == REGISTER_X) {
               if(lrChosen == 0) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
@@ -1512,7 +1520,7 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             realToInt32(SIGMA_N, w);
             if(regist == REGISTER_X && w > LIM) {
-              sprintf(prefix, "Plot memory full");                
+              sprintf(prefix, "Plot memory full, continuing");                
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
@@ -1520,6 +1528,18 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }
+          }
+
+         else if(temporaryInformation == TI_STATISTIC_LR) {
+            if(regist == REGISTER_Y) {
+              if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+                sprintf(prefix, "L.R. selected to OrthoF");
+              } else {
+                sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
+              }
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
+            }            
           }
 
           real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);

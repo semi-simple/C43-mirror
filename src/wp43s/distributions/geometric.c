@@ -212,9 +212,11 @@ void WP34S_qf_discrete_final(uint16_t dist, const real_t *r, const real_t *p, co
 
   switch(dist) { // qf_discrete_cdf
     case QF_DISCRETE_CDF_POISSON:
-      WP34S_Cdf_Poisson(r, i, &q, realContext);
+      WP34S_Cdf_Poisson2(r, i, &q, realContext);
       break;
-    //case QF_DISCRETE_CDF_BINOMIAL:
+    case QF_DISCRETE_CDF_BINOMIAL:
+      WP34S_Cdf_Binomial2(r, i, j, &q, realContext);
+      break;
     case QF_DISCRETE_CDF_GEOMETRIC:
       WP34S_Cdf_Geom(r, i, &q, realContext);
       break;

@@ -325,7 +325,7 @@ qf_newton_do_bisect:
         WP34S_Cdf_Poisson2(&r_r, p1, &r_w, realContext);
         break;
       case QF_NEWTON_BINOMIAL:
-        // cdf_binomial
+        WP34S_Cdf_Binomial2(&r_r, p1, p2, &r_w, realContext);
         break;
     }
     realSubtract(&r_w, &r_p, &r_z, realContext);
@@ -360,7 +360,7 @@ qf_newton_fixed:
         WP34S_Pdf_Poisson(&r_r, p1, &q, realContext);
         break;
       case QF_NEWTON_BINOMIAL:
-        // to be coded
+        WP34S_Pdf_Binomial(&r_r, p1, p2, &q, realContext);
         break;
     }
     if(realIsZero(&q)) {

@@ -283,6 +283,18 @@
 		<Unit filename="src/testSuite/beta.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/binomial_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/bn.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1102,6 +1114,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/display.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/binomial.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/binomial.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

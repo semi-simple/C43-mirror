@@ -20,6 +20,7 @@
 
 
 
+#include "binomial.h"
 #include "cauchy.h"
 #include "chi2.h"
 #include "exponential.h"

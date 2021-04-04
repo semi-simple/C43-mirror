@@ -327,6 +327,11 @@ geometric_l
 geometric_r
 geometric_i
 
+binomial_p
+binomial_l
+binomial_r
+binomial_i
+
 poisson_p
 poisson_l
 poisson_r

@@ -62,7 +62,7 @@ static void cpyxDataTypeError(uint16_t unused) {
 // Cyx/Pyx calculation function
 //-----------------------------------------------------------------------------
 
-static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext) {
+void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext) {
   bool_t inputAreIntegers = (realIsAnInteger(x) && realIsAnInteger(y));
 
   realSubtract(y, x, result, realContext);

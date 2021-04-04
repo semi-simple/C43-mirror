@@ -581,6 +581,10 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGeometricL                (uint16_t unusedButMandatoryParameter) {}
   void fnGeometricR                (uint16_t unusedButMandatoryParameter) {}
   void fnGeometricI                (uint16_t unusedButMandatoryParameter) {}
+  void fnBinomialP                 (uint16_t unusedButMandatoryParameter) {}
+  void fnBinomialL                 (uint16_t unusedButMandatoryParameter) {}
+  void fnBinomialR                 (uint16_t unusedButMandatoryParameter) {}
+  void fnBinomialI                 (uint16_t unusedButMandatoryParameter) {}
   void fnPoissonP                  (uint16_t unusedButMandatoryParameter) {}
   void fnPoissonL                  (uint16_t unusedButMandatoryParameter) {}
   void fnPoissonR                  (uint16_t unusedButMandatoryParameter) {}
@@ -1825,10 +1829,10 @@ TO_QSPI const item_t indexOfItems[] = {
 
 // Probability distributions
 /* 1207 */  { itemToBeCoded,                NOPARAM,                     "Binom:",                                      "Binom:",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
-/* 1208 */  { itemToBeCoded,                NOPARAM,                     "Binom" STD_SUB_p,                             "Binom" STD_SUB_p,                             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1209 */  { itemToBeCoded,                NOPARAM,                     "Binom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Binom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1210 */  { itemToBeCoded,                NOPARAM,                     "Binom" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Binom" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1211 */  { itemToBeCoded,                NOPARAM,                     "Binom" STD_SUP_MINUS_1,                       "Binom" STD_SUP_MINUS_1,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1208 */  { fnBinomialP,                  NOPARAM,                     "Binom" STD_SUB_p,                             "Binom" STD_SUB_p,                             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1209 */  { fnBinomialL,                  NOPARAM,                     "Binom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Binom" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1210 */  { fnBinomialR,                  NOPARAM,                     "Binom" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   "Binom" STD_GAUSS_WHITE_L STD_GAUSS_BLACK_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1211 */  { fnBinomialI,                  NOPARAM,                     "Binom" STD_SUP_MINUS_1,                       "Binom" STD_SUP_MINUS_1,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1212 */  { itemToBeCoded,                NOPARAM,                     "Cauch:",                                      "Cauch:",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
 /* 1213 */  { fnCauchyP,                    NOPARAM,                     "Cauch" STD_SUB_p,                             "Cauch" STD_SUB_p,                             (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1214 */  { fnCauchyL,                    NOPARAM,                     "Cauch" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   "Cauch" STD_GAUSS_BLACK_L STD_GAUSS_WHITE_R,   (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

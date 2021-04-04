@@ -244,7 +244,7 @@ void WP34S_Cdf_Binomial(const real_t *x, const real_t *p0, const real_t *n, real
   real_t p;
 
   if(!binomial_param(n, res)) return;
-  realToIntegralValue(x, &p, DEC_ROUND_CEILING, realContext);
+  realToIntegralValue(x, &p, DEC_ROUND_FLOOR, realContext);
   WP34S_Cdf_Binomial2(&p, p0, n, res, realContext);
 }
 

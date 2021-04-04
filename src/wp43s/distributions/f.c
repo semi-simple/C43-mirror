@@ -283,7 +283,7 @@ void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estima
 
 	/* Set flags based on distribution */
   // f_newton_setflags
-  if(r_dist == QF_NEWTON_POISSON || r_dist == QF_NEWTON_BINOMIAL)
+  if(r_dist == QF_NEWTON_POISSON || r_dist == QF_NEWTON_BINOMIAL || r_dist == QF_NEWTON_NEGBINOM)
     f_discrete = true; // Poisson or Binomial
 
   // qf_f_flags
@@ -327,6 +327,9 @@ qf_newton_do_bisect:
       case QF_NEWTON_BINOMIAL:
         WP34S_Cdf_Binomial2(&r_r, p1, p2, &r_w, realContext);
         break;
+      case QF_NEWTON_NEGBINOM:
+        cdf_NegBinomial2(&r_r, p1, p2, &r_w, realContext);
+        break;
     }
     realSubtract(&r_w, &r_p, &r_z, realContext);
     if(realCompareGreaterEqual(&r_z, const_0)) { // qf_newton_fix_high
@@ -361,6 +364,9 @@ qf_newton_fixed:
         break;
       case QF_NEWTON_BINOMIAL:
         WP34S_Pdf_Binomial(&r_r, p1, p2, &q, realContext);
+        break;
+      case QF_NEWTON_NEGBINOM:
+        pdf_NegBinomial(&r_r, p1, p2, &q, realContext);
         break;
     }
     if(realIsZero(&q)) {

@@ -322,6 +322,11 @@ weibull_l
 weibull_r
 weibull_i
 
+negBinomial_p
+negBinomial_l
+negBinomial_r
+negBinomial_i
+
 geometric_p
 geometric_l
 geometric_r

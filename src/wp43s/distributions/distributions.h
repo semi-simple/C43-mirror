@@ -27,6 +27,7 @@
 #include "f.h"
 #include "geometric.h"
 #include "logistic.h"
+#include "negBinom.h"
 #include "normal.h"
 #include "poisson.h"
 #include "t.h"

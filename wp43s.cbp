@@ -649,6 +649,18 @@
 		<Unit filename="src/testSuite/multiplication_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/negBinomial_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/neighb.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -1196,6 +1208,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/logistic.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/negBinom.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/negBinom.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

@@ -656,10 +656,12 @@
 #define QF_NEWTON_POISSON                          1
 #define QF_NEWTON_BINOMIAL                         2
 #define QF_NEWTON_GEOMETRIC                        3
+#define QF_NEWTON_NEGBINOM                         4
 
 #define QF_DISCRETE_CDF_POISSON                    0
 #define QF_DISCRETE_CDF_BINOMIAL                   1
 #define QF_DISCRETE_CDF_GEOMETRIC                  2
+#define QF_DISCRETE_CDF_NEGBINOM                   3
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

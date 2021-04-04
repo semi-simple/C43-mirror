@@ -27,5 +27,6 @@
 #include "geometric.h"
 #include "logistic.h"
 #include "normal.h"
+#include "poisson.h"
 #include "t.h"
 #include "weibull.h"

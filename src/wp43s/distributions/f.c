@@ -322,7 +322,7 @@ qf_newton_do_bisect:
         WP34S_Cdf_F(&r_r, p1, p2, &r_w, realContext);
         break;
       case QF_NEWTON_POISSON:
-        // cdf_poisson
+        WP34S_Cdf_Poisson2(&r_r, p1, &r_w, realContext);
         break;
       case QF_NEWTON_BINOMIAL:
         // cdf_binomial
@@ -357,6 +357,8 @@ qf_newton_fixed:
         WP34S_Pdf_F(&r_r, p1, p2, &q, realContext);
         break;
       case QF_NEWTON_POISSON:
+        WP34S_Pdf_Poisson(&r_r, p1, &q, realContext);
+        break;
       case QF_NEWTON_BINOMIAL:
         // to be coded
         break;
@@ -416,10 +418,8 @@ qf_newton_done:
   realCopy(&r_r, &p);
 qf_newton_done2:
   if(f_discrete) { // qf_discrete_exit
-    realToIntegralValue(&p, &p, DEC_ROUND_FLOOR, realContext);
-    // To be coded
-    // r_dist-1, P, R_P
-    //CALL qf_discrete_final
+    realToIntegralValue(&p, &q, DEC_ROUND_FLOOR, realContext);
+    WP34S_qf_discrete_final(r_dist - 1, &q, &r_p, p1, p2, &p, realContext);
   }
   realCopy(&p, res);
   return;

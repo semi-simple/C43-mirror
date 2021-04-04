@@ -15,19 +15,19 @@
  */
 
 /********************************************//**
- * \file geometric.c
+ * \file poisson.c
  ***********************************************/
 
 #include "wp43s.h"
 
 
-static bool_t checkParamGeometric(real_t *x, real_t *i) {
+static bool_t checkParamPoisson(real_t *x, real_t *i) {
   if(   ((getRegisterDataType(REGISTER_X) != dtReal34) && (getRegisterDataType(REGISTER_X) != dtLongInteger))
      || ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "Values in register X and I must be of the real or long integer type");
-        moreInfoOnError("In function checkParamGeometric:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function checkParamPoisson:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
@@ -52,14 +52,14 @@ static bool_t checkParamGeometric(real_t *x, real_t *i) {
   else if(realIsNegative(x)) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamGeometric:", "cannot calculate for x < 0", NULL, NULL);
+      moreInfoOnError("In function checkParamPoisson:", "cannot calculate for x < 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
   else if(realIsZero(i) || realIsNegative(i)) {
     displayCalcErrorMessage(ERROR_INVALID_DISTRIBUTION_PARAM, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function checkParamGeometric:", "the parameter must be 0 " STD_LESS_EQUAL " p " STD_LESS_EQUAL " 1", NULL, NULL);
+      moreInfoOnError("In function checkParamPoisson:", "the parameter must be 0 " STD_LESS_EQUAL " " STD_lambda " > 0", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
@@ -67,13 +67,13 @@ static bool_t checkParamGeometric(real_t *x, real_t *i) {
 }
 
 
-void fnGeometricP(uint16_t unusedButMandatoryParameter) {
+void fnPoissonP(uint16_t unusedButMandatoryParameter) {
   real_t val, ans, prob;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamGeometric(&val, &prob)) {
-    WP34S_Pdf_Geom(&val, &prob, &ans, &ctxtReal39);
+  if(checkParamPoisson(&val, &prob)) {
+    WP34S_Pdf_Poisson(&val, &prob, &ans, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -82,13 +82,13 @@ void fnGeometricP(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnGeometricL(uint16_t unusedButMandatoryParameter) {
+void fnPoissonL(uint16_t unusedButMandatoryParameter) {
   real_t val, ans, prob;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamGeometric(&val, &prob)) {
-    WP34S_Cdf_Geom(&val, &prob, &ans, &ctxtReal39);
+  if(checkParamPoisson(&val, &prob)) {
+    WP34S_Cdf_Poisson(&val, &prob, &ans, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -97,13 +97,13 @@ void fnGeometricL(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnGeometricR(uint16_t unusedButMandatoryParameter) {
+void fnPoissonR(uint16_t unusedButMandatoryParameter) {
   real_t val, ans, prob;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamGeometric(&val, &prob)) {
-    WP34S_Cdfu_Geom(&val, &prob, &ans, &ctxtReal39);
+  if(checkParamPoisson(&val, &prob)) {
+    WP34S_Cdfu_Poisson(&val, &prob, &ans, &ctxtReal39);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
   }
@@ -112,12 +112,12 @@ void fnGeometricR(uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnGeometricI(uint16_t unusedButMandatoryParameter) {
+void fnPoissonI(uint16_t unusedButMandatoryParameter) {
   real_t val, ans, prob;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(checkParamGeometric(&val, &prob)) {
+  if(checkParamPoisson(&val, &prob)) {
     if((!getSystemFlag(FLAG_SPCRES)) && (realCompareLessEqual(&val, const_0) || realCompareGreaterEqual(&val, const_1))) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -125,7 +125,7 @@ void fnGeometricI(uint16_t unusedButMandatoryParameter) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      WP34S_Qf_Geom(&val, &prob, &ans, &ctxtReal39);
+      WP34S_Qf_Poisson(&val, &prob, &ans, &ctxtReal39);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&ans, REGISTER_REAL34_DATA(REGISTER_X));
     }
@@ -140,23 +140,50 @@ void fnGeometricI(uint16_t unusedButMandatoryParameter) {
  * This functions are borrowed from the WP34S project
  ******************************************************/
 
-void WP34S_Pdf_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_t *realContext) {
-  real_t p;
+/* Stack contains probability in Z, variance in Y and mean in X.
+ * Returns a normal approximation in X.
+ */
+void WP34S_normal_moment_approx(const real_t *prob, const real_t *var, const real_t *mean, real_t *res, realContext_t *realContext) {
+  real_t p, q, r;
 
-  if(realIsNegative(x) || (!realIsAnInteger(x))) {
+  WP34S_qf_q_est(prob, &p, NULL, realContext);
+  realPower(&p, const_2, &q, realContext);
+  realSubtract(&q, const_1, &q, realContext);
+  int32ToReal(6, &r);
+  realDivide(&q, &r, &q, realContext);
+  realDivide(&q, var, &q, realContext);
+  realAdd(&p, &q, &p, realContext);
+  realMultiply(&p, var, &p, realContext);
+  realAdd(&p, mean, res, realContext);
+}
+
+/* One parameter Poission distribution
+ * Real parameter lambda in I.
+ */
+void WP34S_Pdf_Poisson(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  real_t p, q, r;
+
+  if(realIsNegative(x) /* poission1_param */ || (!realIsAnInteger(x) /* pdf_poisson_xout */)) {
     realZero(res);
     return;
   }
-  realMultiply(p0, const__1, &p, realContext);
-  WP34S_Ln1P(&p, &p, realContext);
-  realMultiply(x, &p, &p, realContext);
-  realExp(&p, &p, realContext);
-  realMultiply(&p, p0, res, realContext);
+  WP34S_Ln(lambda, &p, realContext);
+  realMultiply(&p, x, &p, realContext);
+  realSubtract(&p, lambda, &p, realContext);
+  realAdd(x, const_1, &q, realContext);
+  WP34S_LnGamma(&q, &r, realContext);
+  realSubtract(&p, &r, &q, realContext); // ln(PDF) = x*ln(lambda) - lambda - lngamma(x+1)
+  realExp(&q, res, realContext);
 }
 
-void WP34S_Cdfu_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_t *realContext) {
-  real_t p, q;
+void WP34S_Cdfu_Poisson(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  real_t p;
 
+  if(realCompareLessEqual(lambda, const_0)) { // poission1_param
+    realZero(res);
+    return;
+  }
+  // cdfu_poisson_xout
   realToIntegralValue(x, &p, DEC_ROUND_CEILING, realContext);
   if(realCompareLessThan(&p, const_1)) {
     realCopy(const_1, res);
@@ -166,13 +193,24 @@ void WP34S_Cdfu_Geom(const real_t *x, const real_t *p0, real_t *res, realContext
     realCopy(const_0, res);
     return;
   }
-  realSubtract(const_1, p0, &q, realContext);
-  realPower(&q, &p, res, realContext);
+  WP34S_GammaP(lambda, &p, res, realContext, false, true);
 }
 
-void WP34S_Cdf_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_t *realContext) {
-  real_t p, q;
+void WP34S_Cdf_Poisson(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  real_t p;
 
+  if(realCompareLessEqual(lambda, const_0)) { // poission1_param
+    realZero(res);
+    return;
+  }
+  // cdf_poisson_xout
+  realToIntegralValue(x, &p, DEC_ROUND_FLOOR, realContext);
+  WP34S_Cdf_Poisson2(&p, lambda, res, realContext);
+}
+void WP34S_Cdf_Poisson2(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
+  real_t p;
+
+  // cdf_poisson
   if(realCompareLessThan(x, const_0)) {
     realCopy(const_0, res);
     return;
@@ -181,50 +219,20 @@ void WP34S_Cdf_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_
     realCopy(const_1, res);
     return;
   }
-  realToIntegralValue(x, &p, DEC_ROUND_FLOOR, realContext);
-  realAdd(&p, const_1, &p, realContext);
-  realMultiply(p0, const__1, &q, realContext);
-  WP34S_Ln1P(&q, &q, realContext);
-  realMultiply(&p, &q, &p, realContext);
-  WP34S_ExpM1(&p, res, realContext);
-  realChangeSign(res);
+  realAdd(x, const_1, &p, realContext);
+  WP34S_GammaP(lambda, &p, res, realContext, true, true);
 }
 
-void WP34S_Qf_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_t *realContext) {
+void WP34S_Qf_Poisson(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext) {
   real_t p, q;
 
-  if(realCompareLessEqual(x, const_0)) {
+  if(realCompareLessEqual(lambda, const_0)) { // poission1_param
     realZero(res);
     return;
   }
-  realMultiply(x, const__1, &p, realContext);
-  WP34S_Ln1P(&p, &p, realContext);
-  realMultiply(p0, const__1, &q, realContext);
-  WP34S_Ln1P(&q, &q, realContext);
-  realDivide(&p, &q, &p, realContext);
-  realSubtract(&p, const_1, &p, realContext);
-  realToIntegralValue(&p, &p, DEC_ROUND_FLOOR, realContext);
-  WP34S_qf_discrete_final(QF_DISCRETE_CDF_GEOMETRIC, &p, x, p0, const_0, res, realContext);
-}
 
-void WP34S_qf_discrete_final(uint16_t dist, const real_t *r, const real_t *p, const real_t *i, const real_t *j, real_t *res, realContext_t *realContext) {
-  real_t q;
-
-  switch(dist) { // qf_discrete_cdf
-    case QF_DISCRETE_CDF_POISSON:
-      WP34S_Cdf_Poisson(r, i, &q, realContext);
-      break;
-    //case QF_DISCRETE_CDF_BINOMIAL:
-    case QF_DISCRETE_CDF_GEOMETRIC:
-      WP34S_Cdf_Geom(r, i, &q, realContext);
-      break;
-    default: // unlikely
-      realZero(&q);
-  }
-  if(realCompareLessThan(&q, p)) {
-    realAdd(r, const_1, res, realContext);
-  }
-  else { // qf_discrere_out
-    realCopy(r, res);
-  }
+  // qf_poisson_xout
+  realSquareRoot(lambda, &p, realContext);
+  WP34S_normal_moment_approx(x, &p, lambda, &q, realContext);
+  WP34S_Qf_Newton(QF_NEWTON_POISSON, x, &q, lambda, NULL, res, realContext);
 }

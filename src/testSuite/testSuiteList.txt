@@ -326,3 +326,8 @@ geometric_p
 geometric_l
 geometric_r
 geometric_i
+
+poisson_p
+poisson_l
+poisson_r
+poisson_i

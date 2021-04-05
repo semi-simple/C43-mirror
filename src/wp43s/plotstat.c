@@ -997,10 +997,9 @@ void fnPlotStat(uint16_t plotMode){
          if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) showSoftmenu(-MNU_PLOT_LR);
          break;
     case PLOT_ORTHOF:
-    case PLOT_CYCLEALL:
     case PLOT_START:
          #ifdef STATDEBUG
-           printf("################# PLOT_START, PLOT_ORTHOF, PLOT_CYCLEALL): Push PLOT_STAT menu; plotSelection = %u\n",plotSelection);
+           printf("################# PLOT_START, PLOT_ORTHOF): Push PLOT_STAT menu; plotSelection = %u\n",plotSelection);
          #endif //STATDEBUG
          if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) showSoftmenu(-MNU_PLOT_STAT);
          break;
@@ -1021,25 +1020,9 @@ void fnPlotRegressionLine(uint16_t plotMode){
   #endif //STATDEBUG
 
   switch(plotMode) {
-    case PLOT_CYCLEALL:
-      lastPlotMode = PLOT_CYCLEALL;
-      //Cycling through all graphs, starting with ORTHOF, in this sequence
-      if(plotSelection == 0                           ) plotSelection = CF_ORTHOGONAL_FITTING ;     else
-      if(plotSelection == CF_ORTHOGONAL_FITTING       ) plotSelection = CF_LINEAR_FITTING     ;     else
-      if(plotSelection == CF_LINEAR_FITTING           ) plotSelection = CF_EXPONENTIAL_FITTING;     else
-      if(plotSelection == CF_EXPONENTIAL_FITTING      ) plotSelection = CF_PARABOLIC_FITTING  ;     else
-      if(plotSelection == CF_PARABOLIC_FITTING        ) plotSelection = CF_LOGARITHMIC_FITTING;     else
-      if(plotSelection == CF_LOGARITHMIC_FITTING      ) plotSelection = CF_POWER_FITTING      ;     else
-      if(plotSelection == CF_POWER_FITTING            ) plotSelection = CF_ROOT_FITTING       ;     else
-      if(plotSelection == CF_ROOT_FITTING             ) plotSelection = CF_HYPERBOLIC_FITTING ;     else
-      if(plotSelection == CF_HYPERBOLIC_FITTING       ) plotSelection = CF_CAUCHY_FITTING     ;     else
-      if(plotSelection == CF_CAUCHY_FITTING           ) plotSelection = CF_GAUSS_FITTING      ;     else
-      if(plotSelection == CF_GAUSS_FITTING            ) plotSelection = 0                     ;     else
-         plotSelection = 0;
-      break;
-
     case PLOT_ORTHOF: 
       plotSelection = CF_ORTHOGONAL_FITTING;
+      lrChosen = CF_ORTHOGONAL_FITTING;
       break;
 
     case PLOT_FIT:
@@ -1065,7 +1048,7 @@ void fnPlotRegressionLine(uint16_t plotMode){
       break;
 
     case PLOT_START:
-      plotMode = PLOT_ORTHOF; /*PLOT_CYCLEALL*/
+      plotMode = PLOT_ORTHOF;
       break;
 
     case PLOT_NOTHING: 

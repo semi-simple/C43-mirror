@@ -63,11 +63,14 @@ void fnCurveFitting(uint16_t curveFitting) {
   curveFitting = curveFitting & 0x01FF;
   temporaryInformation = TI_STATISTIC_LR;
 
-  if(curveFitting >= 0 && curveFitting < 0x01FF) {
-    curveFitting = (~curveFitting) & 0x01FF;
+  if(curveFitting < 0x01FF) {                 // note curveFitting >= 0
+    curveFitting = (~curveFitting) & 0x01FF;  // see above
   }
   else if (curveFitting == 0x01FF) {
-    curveFitting = 0x0200;
+    curveFitting = 0x0200;                    // see above
+  }
+  else {
+    curveFitting = 0;                         // illegal value, therefore defaulting to none
   }
   lrSelection = curveFitting;                 // lrSelection is used to store the BestF method, in inverse, i.e. 1 indicating allowed method
   lrChosen = 0;                               // lrChosen    is used to indicate if there was a L.R. selection. Can be only one bit.

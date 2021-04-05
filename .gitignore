@@ -24,6 +24,7 @@ DMCP_build/decNumberICU/
 # used by cLion
 .idea/
 
+!windows\ binaries/wp43s609.exe
 !windows\ binaries/wp43.exe
 !DM42\ binary/keymap.bin
 !DM42\ binary/testPgms.bin

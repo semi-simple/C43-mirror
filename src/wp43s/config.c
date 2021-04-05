@@ -751,11 +751,9 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
-    #ifndef USEFLOAT
-      decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
-      ctxtRealShort.digits = 6;
-      ctxtRealShort.traps  = 0;
-    #endif //USEFLOAT
+    decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
+    ctxtRealShort.digits = 6;
+    ctxtRealShort.traps  = 0;
 
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
@@ -973,7 +971,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_103b"
+#define VERSION1 "_103c_609"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"

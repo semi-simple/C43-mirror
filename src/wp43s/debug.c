@@ -165,23 +165,24 @@ char * getRegisterTagName(calcRegister_t regist, bool_t padWithBlanks) {
 
 
 /********************************************//**
- * \brief Returns the single name of a curvefitting mode, ??? if multiple names are defined in bits
- *
+ * \brief Returns the single name of a curvefitting mode, or ??? if multiple names are defined in bits
  * \param[in] am uint16_t curvefitting mode
  * \return char*          Name of the curvefitting mode
  ***********************************************/
-char * getCurveFitModeName(uint16_t selection) {
-    if(selection == CF_LINEAR_FITTING)      return "Linear     ";
-    if(selection == CF_EXPONENTIAL_FITTING) return "Exponential";
-    if(selection == CF_LOGARITHMIC_FITTING) return "Logarithmic";
-    if(selection == CF_POWER_FITTING)       return "Power      ";
-    if(selection == CF_ROOT_FITTING)        return "Root       ";
-    if(selection == CF_HYPERBOLIC_FITTING)  return "Hyperbolic ";
-    if(selection == CF_PARABOLIC_FITTING)   return "Parabolic  ";
-    if(selection == CF_CAUCHY_FITTING)      return "Cauchy peak";
-    if(selection == CF_GAUSS_FITTING)       return "Gauss peak ";
-    if(selection == CF_ORTHOGONAL_FITTING)  return "Orthogonal ";
-    return "???        ";
+char * getCurveFitModeName(uint16_t selection) {          //Can be only one bit. ??? if invalid.
+    switch( selection & 0x03FF ){
+      case CF_LINEAR_FITTING:      return "Linear     ";
+      case CF_EXPONENTIAL_FITTING: return "Exponential";
+      case CF_LOGARITHMIC_FITTING: return "Logarithmic";
+      case CF_POWER_FITTING:       return "Power      ";
+      case CF_ROOT_FITTING:        return "Root       ";
+      case CF_HYPERBOLIC_FITTING:  return "Hyperbolic ";
+      case CF_PARABOLIC_FITTING:   return "Parabolic  ";
+      case CF_CAUCHY_FITTING:      return "Cauchy peak";
+      case CF_GAUSS_FITTING:       return "Gauss peak ";
+      case CF_ORTHOGONAL_FITTING:  return "Orthogonal ";
+      default: return "???        "; break;
+    }
   }
 
 
@@ -201,6 +202,7 @@ char * eatSpaces(const char * ss) {
 
 /********************************************//**
  * \brief Returns all selected names of the curve fit types
+ * \note that a single bit EXCLUDES a method
  *
  * \param[in] dt uint16_t Data type
  * \return char*          Name of the curvefit type
@@ -209,7 +211,10 @@ char * getCurveFitModeNames(uint16_t selection) {
   uint16_t ix;
   errorMessage[0]=0;
   for(ix = 0; ix < 10; ix++) {
-    if(selection & (1 << ix)) {strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");strcat(errorMessage,eatSpaces(getCurveFitModeName(1 << ix)));}
+    if(selection & (1 << ix)) {
+      strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");
+      strcat(errorMessage, eatSpaces(getCurveFitModeName(1 << ix)));
+    }
   }
   if(errorMessage[0]==0) return "???        ";
   return errorMessage;
@@ -222,18 +227,20 @@ char * getCurveFitModeNames(uint16_t selection) {
  * \param[in] am uint16_t curvefitting mode
  * \return char*          Formula of the curvefitting mode
  ***********************************************/
-char * getCurveFitModeFormula(uint16_t selection) {
-    if(selection == CF_LINEAR_FITTING)      return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x";
-    if(selection == CF_EXPONENTIAL_FITTING) return "a" STD_SUB_0 STD_SPACE_3_PER_EM "e" STD_SUP_a STD_SUP_1 STD_SUP_x;
-    if(selection == CF_LOGARITHMIC_FITTING) return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "ln(x)";
-    if(selection == CF_POWER_FITTING)       return "a" STD_SUB_0 STD_SPACE_3_PER_EM "x" STD_SUP_a STD_SUP_1 ;
-    if(selection == CF_ROOT_FITTING)        return "a" STD_SUB_0 STD_SPACE_3_PER_EM "a" STD_SUB_1 STD_SUP_1 STD_OBLIQUE4 STD_SUP_x;
-    if(selection == CF_HYPERBOLIC_FITTING)  return "(a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x)" STD_SUP_MINUS_1;
-    if(selection == CF_PARABOLIC_FITTING)   return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x" STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_2 "x" STD_SUP_2;
-    if(selection == CF_CAUCHY_FITTING)      return "(a" STD_SUB_0 "(x+a" STD_SUB_1 ")" STD_SUP_2 "+a" STD_SUB_2 ")" STD_SUP_MINUS_1;
-    if(selection == CF_GAUSS_FITTING)       return "a" STD_SUB_0 "e^" STD_LEFT_SQUARE_BRACKET STD_LEFT_SQUARE_BRACKET "x-a" STD_SUB_1 STD_RIGHT_SQUARE_BRACKET STD_SUP_2 "/a" STD_SUB_2 STD_RIGHT_SQUARE_BRACKET;
-    if(selection == CF_ORTHOGONAL_FITTING)  return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x";
-  return "???";
+char * getCurveFitModeFormula(uint16_t selection) {          //Can be only one bit. ??? if invalid.
+    switch( selection & 0x03FF ){
+      case CF_LINEAR_FITTING:      return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x";
+      case CF_EXPONENTIAL_FITTING: return "a" STD_SUB_0 STD_SPACE_3_PER_EM "e" STD_SUP_a STD_SUP_1 STD_SUP_x;
+      case CF_LOGARITHMIC_FITTING: return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "ln(x)";
+      case CF_POWER_FITTING:       return "a" STD_SUB_0 STD_SPACE_3_PER_EM "x" STD_SUP_a STD_SUP_1 ;
+      case CF_ROOT_FITTING:        return "a" STD_SUB_0 STD_SPACE_3_PER_EM "a" STD_SUB_1 STD_SUP_1 STD_OBLIQUE4 STD_SUP_x;
+      case CF_HYPERBOLIC_FITTING:  return "(a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x)" STD_SUP_MINUS_1;
+      case CF_PARABOLIC_FITTING:   return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x" STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_2 "x" STD_SUP_2;
+      case CF_CAUCHY_FITTING:      return "(a" STD_SUB_0 "(x+a" STD_SUB_1 ")" STD_SUP_2 "+a" STD_SUB_2 ")" STD_SUP_MINUS_1;
+      case CF_GAUSS_FITTING:       return "a" STD_SUB_0 "e^" STD_LEFT_SQUARE_BRACKET STD_LEFT_SQUARE_BRACKET "x-a" STD_SUB_1 STD_RIGHT_SQUARE_BRACKET STD_SUP_2 "/a" STD_SUB_2 STD_RIGHT_SQUARE_BRACKET;
+      case CF_ORTHOGONAL_FITTING:  return "a" STD_SUB_0 STD_SPACE_3_PER_EM "+" STD_SPACE_3_PER_EM "a" STD_SUB_1 "x";
+      default: return "???        "; break;
+    }
   }
 
 

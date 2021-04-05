@@ -171,6 +171,7 @@ void fnPopulationCovariance(uint16_t unusedButMandatoryParameter){    //COVxy
 
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&TT, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_COV;
   }
@@ -182,6 +183,7 @@ void fnSampleCovariance(uint16_t unusedButMandatoryParameter){    //sxy
     fnStatSXY(&SXY);
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&SXY, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_SXY;
   }
@@ -198,15 +200,18 @@ void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY){
 }
 
 void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
-  real_t RR,SXY,SX,SY,SMI,aa0,aa1,aa2;
+  real_t RR,SMI,aa0,aa1,aa2;
+//  real_t SXY,SX,SY;
   if(checkMinimumDataPoints(const_2)) {
     if(lrChosen == 0) {                        //if lrChosen contains something, the stat data exists
-      fnStatR(&RR,&SXY,&SX,&SY);
-    } else {
-      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
-      }
+//      fnStatR(&RR,&SXY,&SX,&SY);
+      lrChosen = CF_LINEAR_FITTING;
+      lrSelection = CF_LINEAR_FITTING;
+    }
+    processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&RR, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_CORR;
   }
@@ -233,13 +238,12 @@ void fnStatSMI(real_t *SMI){
 void fnMinExpStdDev(uint16_t unusedButMandatoryParameter){ //smi
   real_t SMI,RR,aa0,aa1,aa2;
   if(checkMinimumDataPoints(const_2)) {
-    if(lrChosen == CF_ORTHOGONAL_FITTING) {               //if lrChosen contains something, the stat data exists
-      processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
-    } else {
-      fnStatSMI(&SMI);
-      }
+    lrChosen = CF_ORTHOGONAL_FITTING;                      //force to ORTHOF only
+    lrSelection = CF_ORTHOGONAL_FITTING;
+    processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
     liftStack();
     setSystemFlag(FLAG_ASLIFT);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&SMI, REGISTER_REAL34_DATA(REGISTER_X));
     temporaryInformation = TI_SMI;
   }

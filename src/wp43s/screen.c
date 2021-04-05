@@ -1455,6 +1455,7 @@ uint8_t   displayStack_m = 255;                                                 
     int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
     bool_t prefixPre = true;
     bool_t prefixPost = true;
+
     char prefix[200], lastBase[4];
 
 if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGISTER_X) == dtShortInteger) { //JMSHOI                   
@@ -1565,10 +1566,13 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
-      else if(temporaryInformation == TI_WHO && regist == REGISTER_X) {
-        clearRegisterLine(REGISTER_Y, true, true); //JM ID
-        showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-        showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + 1) + 6, vmNormal, true, true);      // JM ID
+      else if(temporaryInformation == TI_WHO)
+        if (regist == REGISTER_X) {
+          showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+        } else {
+        if (regist == REGISTER_Y) {
+          showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);          
+        }
       }
 
       else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
@@ -2156,6 +2160,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
           }
 
+
           else if(temporaryInformation == TI_SXY) {
             if(regist == REGISTER_X) {
               strcpy(prefix, "s" STD_SUB_x STD_SUB_y STD_SPACE_FIGURE "=");
@@ -2170,10 +2175,32 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
+          else if(temporaryInformation == TI_CALCY) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_y_CIRC STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_CALCX) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_CIRC STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_CALCX2) {
+            if(regist == REGISTER_X) {
+              strcpy(prefix, STD_x_CIRC STD_SUB_1 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else
+            if(regist == REGISTER_Y) {
+              strcpy(prefix, STD_x_CIRC STD_SUB_2 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           else if(temporaryInformation == TI_CORR) { 
-//TODO TEMP
-printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
-            
             if(regist == REGISTER_X) {
               if(lrChosen == 0) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
@@ -2191,6 +2218,7 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
+
 
           else if(temporaryInformation == TI_HARMMEANX_HARMMEANY) {
             if(regist == REGISTER_X) {
@@ -2217,7 +2245,7 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             realToInt32(SIGMA_N, w);
             if(regist == REGISTER_X && w > LIM) {
-              sprintf(prefix, "Plot memory full");                
+              sprintf(prefix, "Plot memory full, continuing");                
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
@@ -2226,6 +2254,19 @@ printf("####$$ %u %u %u\n",lrSelection,lrChosen,lrCountOnes(lrSelection));
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }
           }
+
+         else if(temporaryInformation == TI_STATISTIC_LR) {
+            if(regist == REGISTER_Y) {
+              if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+                sprintf(prefix, "L.R. selected to OrthoF");
+              } else {
+                sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
+              }
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
+            }            
+          }
+
 
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {

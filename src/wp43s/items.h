@@ -1815,7 +1815,7 @@
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
 #define ITM_PLOT_REGLINE              1756
-#define ITM_CLOSE                     1757
+#define ITM_1757                      1757
 #define ITM_STATDEMO0                 1758
 #define ITM_STATDEMO1                 1759
 #define ITM_STATDEMO2                 1760

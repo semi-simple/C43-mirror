@@ -2158,7 +2158,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   bool_t thereIsANextLine;
-  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed;
+  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed, aa;
   real34_t real34;
   char *separator;
 
@@ -2328,6 +2328,36 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           tmpString[++dest] = 0;
         }
       }
+
+      if(getRegisterAngularMode(SHOWregis) != amNone) {
+        aa = getRegisterAngularMode(SHOWregis);
+        switch(getRegisterAngularMode(SHOWregis)) {
+          case amDegree: aa = amDMS; break;
+          case amRadian: aa = amDegree; break;
+          case amGrad: aa = amRadian; break;
+          case amMultPi: aa = amRadian; break;
+          case amDMS: aa = amDegree; break;
+          default:break;
+        }
+        real34Copy(REGISTER_REAL34_DATA(SHOWregis), &real34);
+        convertAngle34FromTo(&real34, getRegisterAngularMode(SHOWregis), aa);
+        real34ToDisplayString(&real34, aa, tmpString + 2103, &numericFont, 2000, 34, false, separator);
+        last = 2100 + stringByteLength(tmpString + 2100);
+        source = 2100;
+        for(d=600; d<=900 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+        }
+      }
+      
+
       break;
 
 
@@ -2494,7 +2524,6 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           source++;
           tmpString[++dest] = 0;
         }
-
         if(source < last && groupingGap!=0) {                  //Not in the last line
           if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
           if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
@@ -2503,6 +2532,90 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           tmpString[dest] = 0;
         }            
       }
+printf("####>> %s§\n",tmpString + 0);
+      aa = getRegisterTag(SHOWregis);
+      if(aa >= 5 && aa != 8){
+        setRegisterTag(SHOWregis,8);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        strcpy(tmpString + 2400,tmpString + 2100);
+        last = 2400 + stringByteLength(tmpString + 2400);
+        source = 2400;
+        for(d=300; d<=900 ; d+=300) {
+          dest = d;
+          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+          if(source < last && groupingGap!=0) {                  //Not in the last line
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            tmpString[dest] = 0;
+          }            
+        }
+      }
+printf("####>> %s§\n",tmpString + 300);
+      if(aa >= 3 && aa != 10){
+        setRegisterTag(SHOWregis,10);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        strcpy(tmpString + 2400,tmpString + 2100);
+        last = 2400 + stringByteLength(tmpString + 2400);
+        source = 2400;
+        for(d=600; d<=900 ; d+=300) {
+          dest = d;
+          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+          if(source < last && groupingGap!=0) {                  //Not in the last line
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            tmpString[dest] = 0;
+          }            
+        }
+      }
+printf("####>> %s§\n",tmpString + 600);
+      if(aa >= 3 && aa != 16){
+        setRegisterTag(SHOWregis,16);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        strcpy(tmpString + 2400,tmpString + 2100);
+        last = 2400 + stringByteLength(tmpString + 2400);
+        source = 2400;
+        for(d=900; d<=900 ; d+=300) {
+          dest = d;
+          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+          if(source < last && groupingGap!=0) {                  //Not in the last line
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
+            tmpString[dest] = 0;
+          }            
+        }
+      }
+    setRegisterTag(SHOWregis,aa);
+printf("####>> %s§\n",tmpString + 900);
       break;
 
     case dtTime:

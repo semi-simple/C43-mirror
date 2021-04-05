@@ -2294,8 +2294,10 @@
 #define ITM_XDEMO                     2225
 #define ITM_PRN                       2226
 #define ITM_PLOT_J                    2227
+#define ITM_USER_DRG                  2228
+#define ITM_USER_2DRG                 2229
 
-#define LAST_ITEM                     2228   //JM
+#define LAST_ITEM                     2230   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

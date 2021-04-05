@@ -1257,6 +1257,20 @@ void fnUserJM(uint16_t jmUser) {
 
 
 
+  case USER_DRG:                                              //USER_DEFAULTS FOR USER: E+ E+
+    kbd_usr[0].primary     = ITM_DRG;
+    Norm_Key_00_VAR        = ITM_DRG;
+    fnRefreshState();                                 //drJM
+    fnSetFlag(FLAG_USER);
+    break;
+
+  case USER_2DRG:                                              //USER_DEFAULTS FOR USER: E+ E+
+    kbd_usr[0].primary     = ITM_DRGto;
+    Norm_Key_00_VAR        = ITM_DRGto;
+    fnRefreshState();                                 //drJM
+    fnSetFlag(FLAG_USER);
+    break;
+
   case USER_SIGMAPLUS:                                              //USER_DEFAULTS FOR USER: E+ E+
     kbd_usr[0].primary     = ITM_SIGMAPLUS;
     Norm_Key_00_VAR        = ITM_SIGMAPLUS;

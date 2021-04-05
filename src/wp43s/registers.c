@@ -1598,9 +1598,11 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
       if(getRegisterAngularMode(REGISTER_X) != amNone) {
         if(getRegisterAngularMode(REGISTER_X) == amDMS) {
-          convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDMS, amDegree);
-          setRegisterAngularMode(REGISTER_X, amDegree);                        //JM added amDegree: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
-        } else                                                                  //JM added else: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
+          temporaryInformation = TI_FROM_DMS;
+//          convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDMS, amDegree);
+//          setRegisterAngularMode(REGISTER_X, amDegree);                        //JM added amDegree: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
+        } 
+//        else                                                                  //JM added else: prevent stripping the tag if it was amDMS, to force an interim step to decimal degrees.
         setRegisterAngularMode(REGISTER_X, amNone);
       }
       break;

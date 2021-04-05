@@ -30,6 +30,16 @@
 #endif //TESTSUITE_BUILD
 
 
+#ifdef DMCP_BUILD
+  #undef DEMO0
+  #undef DEMO1
+  #undef DEMO2
+  #undef DEMO105
+  #undef DEMO107
+  #undef DEMO109
+#endif
+
+
 //#define STATDEBUG
 
 graphtype *gr_x;
@@ -1069,6 +1079,7 @@ void fnPlotZoom(uint16_t unusedButMandatoryParameter){
 
 //DEMO: Arbitrary distribution to test. Close to a Normal.
 void fnStatDemo0(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO0
   #ifndef TESTSUITE_BUILD
   plotSelection = 0;
   runFunction(ITM_CLSIGMA);
@@ -1173,10 +1184,12 @@ void fnStatDemo0(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.99991496599",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("13",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.99995748299",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
+#endif //DEMO0
   }
 
 //DEMO: Randomized linear
 void fnStatDemo1(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO1
   #ifndef TESTSUITE_BUILD
     int8_t ix;
     runFunction(ITM_CLSIGMA);
@@ -1198,9 +1211,11 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
       runFunction(ITM_SIGMAPLUS);
       }
   #endif //TESTSUITE_BUILD
+#endif //DEMO1
 }
 
 void fnStatDemo2(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO2
   #ifndef TESTSUITE_BUILD
     plotSelection = 0;
     runFunction(ITM_CLSIGMA);
@@ -1209,10 +1224,12 @@ void fnStatDemo2(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
+#endif //DEMO2
 }
 
 //DEMO: 4 points to simulate a distribution, from p105 of OM
 void fnStatDemo105(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO105
   #ifndef TESTSUITE_BUILD
     plotSelection = 0;
     runFunction(ITM_CLSIGMA);
@@ -1222,10 +1239,12 @@ void fnStatDemo105(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
+#endif //DEMO105
 }
 
 //DEMO: points to simulate a distribution, from p107 of OM
 void fnStatDemo107(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO107
   #ifndef TESTSUITE_BUILD
     plotSelection = 0;
     runFunction(ITM_CLSIGMA);
@@ -1239,10 +1258,12 @@ void fnStatDemo107(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1970",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2162",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1972",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2382",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
+#endif //DEMO107
 }
 
 //DEMO:  points to simulate a distribution, from p109 of OM
 void fnStatDemo109(uint16_t unusedButMandatoryParameter){
+#ifdef DEMO109
   #ifndef TESTSUITE_BUILD
     plotSelection = 0;
     runFunction(ITM_CLSIGMA);
@@ -1252,4 +1273,5 @@ void fnStatDemo109(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("60",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.21",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("80",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
   #endif //TESTSUITE_BUILD
+#endif //DEMO109
 }

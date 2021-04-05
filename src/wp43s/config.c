@@ -20,6 +20,7 @@
 
 #include "wp43s.h"
 
+#undef DEMO_REGISTERS
 
 
 /********************************************//**
@@ -989,7 +990,7 @@ void fnReset(uint16_t confirmation) {
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 L1: main C43 template");
+    fnStrtoX("C43 L1: C43 template");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
     fnStrtoX("C43 L42: unmodified DM42");
@@ -999,7 +1000,7 @@ void fnReset(uint16_t confirmation) {
 //    fnDrop(0);
 //    fnStrtoX("C43 LARGE TEXT");
 
-#ifdef NOT_NEEDED
+#ifdef DEMO_REGISTERS
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);

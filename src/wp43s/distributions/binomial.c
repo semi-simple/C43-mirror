@@ -212,13 +212,14 @@ void WP34S_Pdf_Binomial(const real_t *x, const real_t *p0, const real_t *n, real
   WP34S_Ln1P(&p, &p, realContext);
   realSubtract(n, x, &q, realContext);
   realMultiply(&p, &q, &p, realContext);
-  realExp(&p, &p, realContext);
   realCopy(n, &nn);
   realCopy(x, &xx);
-  cyxReal(&nn, &xx, &q, realContext);
-  realMultiply(&p, &q, &p, realContext);
-  realPower(p0, x, &q, realContext);
-  realMultiply(&p, &q, res, realContext);
+  logCyxReal(&nn, &xx, &q, realContext);
+  realAdd(&p, &q, &p, realContext);
+  WP34S_Ln(p0, &q, realContext);
+  realMultiply(&q, x, &q, realContext);
+  realAdd(&p, &q, &p, realContext);
+  realExp(&p, res, realContext);
 }
 
 void WP34S_Cdfu_Binomial(const real_t *x, const real_t *p0, const real_t *n, real_t *res, realContext_t *realContext) {

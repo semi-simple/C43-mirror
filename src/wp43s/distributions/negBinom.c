@@ -207,18 +207,19 @@ void pdf_NegBinomial(const real_t *x, const real_t *p0, const real_t *r, real_t 
 
   realMultiply(p0, const__1, &p, realContext);
   WP34S_Ln1P(&p, &p, realContext);       // ln(1 - p0)
-  realMultiply(&p, r, &p, realContext); // ln((1 - p0) ^ r)
-  realExp(&p, &p, realContext);          // (1 - p0) ^ r
+  realMultiply(&p, r, &p, realContext);  // ln((1 - p0) ^ r)
 
-  realPower(p0, x, &q, realContext);    // p0 ^ x
-  realMultiply(&p, &q, &p, realContext);
+  WP34S_Ln(p0, &q, realContext);
+  realMultiply(&q, x, &q, realContext);  // ln(p0 ^ x)
+  realAdd(&p, &q, &p, realContext);
 
   realAdd(x, r, &q, realContext);
   realSubtract(&q, const_1, &q, realContext);
   realCopy(x, &xx);
-  cyxReal(&q, &xx, &c, realContext);
+  logCyxReal(&q, &xx, &c, realContext);
 
-  realMultiply(&p, &c, res, realContext);
+  realAdd(&p, &c, &p, realContext);
+  realExp(&p, res, realContext);
 }
 
 // I[p](k, r)

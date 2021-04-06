@@ -22,7 +22,6 @@
 #include "math.h"
 
 
-
 //#define GAUSSF_MAX_OVERRIDE                      // Test setting
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables

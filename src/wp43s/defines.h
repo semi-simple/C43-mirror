@@ -57,16 +57,6 @@
 #define VERBOSE_SCREEN               //JM Used at new SHOW. Needs PC_BUILD.
 #undef  VERBOSE_SCREEN
 
-#define DEBUG_STAT 0                 //JM verbose level can be 1 or 2 (more)
-#if (DEBUG_STAT == 1)
-  #define STATDEBUG
-  #undef STATDEBUGVERBOSE
-#endif
-#if (DEBUG_STAT == 2)
-  #define STATDEBUG
-  #define STATDEBUGVERBOSE
-#endif
-
 
 
 //Allow longpress CHS and EEX
@@ -150,7 +140,21 @@
 #endif // __linux__ == 1
 
 
+#define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
+#if (DEBUG_STAT == 0)
+  #undef STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 1)
+  #define STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 2)
+  #define STATDEBUG
+  #define STATDEBUG_VERBOSE
+#endif
 
+	
 
 //*************************
 //* Other defines         *

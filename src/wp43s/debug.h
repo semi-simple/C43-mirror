@@ -58,7 +58,7 @@
   void   formatReal34Debug                  (char *str, real34_t *real34);
   void   formatRealDebug                    (char *str, real_t *real);
   void   formatComplex34Debug               (char *str, void *addr);
-#endif // (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
+#endif // (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)  || (DEBUG_STAT >= 1)
 
 char *getDataTypeName                     (uint16_t dt, bool_t article, bool_t padWithBlanks);
 char *getRegisterDataTypeName             (calcRegister_t regist, bool_t article, bool_t padWithBlanks);

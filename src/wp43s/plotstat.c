@@ -1241,6 +1241,7 @@ void fnStatDemo0(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599169E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794435E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
    #endif //TESTSUITE_BUILD
+  #endif //DEMO0
   }
 
 //DEMO: Randomized linear

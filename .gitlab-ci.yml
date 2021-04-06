@@ -8,6 +8,7 @@ variables:
   OM_PACKAGE: "Owner_wp_43s_0_18s.pdf"
   RM_PACKAGE: "Reference_wp_43s_0_18s.pdf"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/wp43s/${CI_COMMIT_TAG}"
+  GIT_SUBMODULE_STRATEGY: recursive
 
 macOS:
   stage: build

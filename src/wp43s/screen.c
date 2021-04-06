@@ -1475,8 +1475,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
     refreshDebugPanel();
   #endif
 
-    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM
-      clearRegisterLine(regist, true, (regist != REGISTER_Y));
+    if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM      
+      if(temporaryInformation != TI_SHOW_REGISTER_BIG) {                        //JMSHOW
+        clearRegisterLine(regist, true, (regist != REGISTER_Y));
+      }                                                                         //JMSHOW
 
       #ifdef PC_BUILD
         #if (DEBUG_REGISTER_L == 1 || SHOW_MEMORY_STATUS == 1)

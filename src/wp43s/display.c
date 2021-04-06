@@ -2119,39 +2119,50 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
 
 void SHOW_reset(void){
-  tmpString[   0] = 0; // L1
-  tmpString[ 300] = 0; // L2
-  tmpString[ 600] = 0; // L3
-  tmpString[ 900] = 0; // L4
-  tmpString[1200] = 0; // L5
-  tmpString[1500] = 0; // L6
-  tmpString[1800] = 0; // L7
+  char ss[3];
+  uint8_t ix;
+
+  for(ix=0; ix<=8; ix++) { //L1 ... L7
+    tmpString[ix*300]=0;    
+  }
 
   temporaryInformation = TI_SHOW_REGISTER_SMALL;
 
-  tmpString[   0] = 0; // JM Initialise
-  tmpString[2100] = 0; // JM temp
-  tmpString[2400] = 0; // JM temp
-
+  ss[0]=0;
+  ss[1]=0;
   if(SHOWregis >= 0 && SHOWregis < 100) {
     snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
   } else
   switch (SHOWregis) {
-    case REGISTER_X: strcpy(tmpString + 2100, "X: "); break;
-    case REGISTER_Y: strcpy(tmpString + 2100, "Y: "); break;
-    case REGISTER_Z: strcpy(tmpString + 2100, "Z: "); break;
-    case REGISTER_T: strcpy(tmpString + 2100, "T: "); break;
-    case REGISTER_A: strcpy(tmpString + 2100, "A: "); break;
-    case REGISTER_B: strcpy(tmpString + 2100, "B: "); break;
-    case REGISTER_C: strcpy(tmpString + 2100, "C: "); break;
-    case REGISTER_D: strcpy(tmpString + 2100, "D: "); break;
-    case REGISTER_L: strcpy(tmpString + 2100, "L: "); break;
-    case REGISTER_I: strcpy(tmpString + 2100, "I: "); break;
-    case REGISTER_J: strcpy(tmpString + 2100, "J: "); break;
-    case REGISTER_K: strcpy(tmpString + 2100, "K: "); break;
+    case REGISTER_X: ss[0]='X'; break;
+    case REGISTER_Y: ss[0]='Y'; break;
+    case REGISTER_Z: ss[0]='Z'; break;
+    case REGISTER_T: ss[0]='T'; break;
+    case REGISTER_A: ss[0]='A'; break;
+    case REGISTER_B: ss[0]='B'; break;
+    case REGISTER_C: ss[0]='C'; break;
+    case REGISTER_D: ss[0]='D'; break;
+    case REGISTER_L: ss[0]='L'; break;
+    case REGISTER_I: ss[0]='I'; break;
+    case REGISTER_J: ss[0]='J'; break;
+    case REGISTER_K: ss[0]='K'; break;
     default: break;
   }
+  strcpy(tmpString + 2100, ss);
+  strcat(tmpString + 2100, ": ");
 }
+
+
+void checkAndEat(int16_t *source, int16_t last, int16_t *dest) {
+  uint8_t ix;
+  if(*source < last && groupingGap!=0) {                  //Not in the last line
+    for(ix=0; ix<=3; ix++) {
+      if(!(tmpString[(*dest)-2] & 0x80)) {(*dest)--; (*source)--;} //Eat away characters at the end to line up the last space          
+    }
+    tmpString[*dest] = 0;
+  }            
+}
+
 
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
 #ifndef TESTSUITE_BUILD
@@ -2524,15 +2535,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           source++;
           tmpString[++dest] = 0;
         }
-        if(source < last && groupingGap!=0) {                  //Not in the last line
-          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
-          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-          if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-          tmpString[dest] = 0;
-        }            
+        checkAndEat(&source, last, &dest);
       }
-printf("####>> %s§\n",tmpString + 0);
+      tmpString[300]=0;
       aa = getRegisterTag(SHOWregis);
       if(aa >= 5 && aa != 8){
         setRegisterTag(SHOWregis,8);
@@ -2542,7 +2547,7 @@ printf("####>> %s§\n",tmpString + 0);
         source = 2400;
         for(d=300; d<=900 ; d+=300) {
           dest = d;
-          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
           while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
@@ -2551,16 +2556,10 @@ printf("####>> %s§\n",tmpString + 0);
             source++;
             tmpString[++dest] = 0;
           }
-          if(source < last && groupingGap!=0) {                  //Not in the last line
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            tmpString[dest] = 0;
-          }            
+          checkAndEat(&source, last, &dest);
         }
       }
-printf("####>> %s§\n",tmpString + 300);
+      tmpString[600]=0;
       if(aa >= 3 && aa != 10){
         setRegisterTag(SHOWregis,10);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
@@ -2569,7 +2568,7 @@ printf("####>> %s§\n",tmpString + 300);
         source = 2400;
         for(d=600; d<=900 ; d+=300) {
           dest = d;
-          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
           while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
@@ -2578,16 +2577,10 @@ printf("####>> %s§\n",tmpString + 300);
             source++;
             tmpString[++dest] = 0;
           }
-          if(source < last && groupingGap!=0) {                  //Not in the last line
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            tmpString[dest] = 0;
-          }            
+          checkAndEat(&source, last, &dest);
         }
       }
-printf("####>> %s§\n",tmpString + 600);
+      tmpString[900]=0;
       if(aa >= 3 && aa != 16){
         setRegisterTag(SHOWregis,16);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
@@ -2596,7 +2589,7 @@ printf("####>> %s§\n",tmpString + 600);
         source = 2400;
         for(d=900; d<=900 ; d+=300) {
           dest = d;
-          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
           while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
@@ -2605,17 +2598,10 @@ printf("####>> %s§\n",tmpString + 600);
             source++;
             tmpString[++dest] = 0;
           }
-          if(source < last && groupingGap!=0) {                  //Not in the last line
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;} //Eat away characters at the end to line up the last space
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            if(!(tmpString[dest-2] & 0x80)) {dest--; source--;}
-            tmpString[dest] = 0;
-          }            
+          checkAndEat(&source, last, &dest);
         }
       }
-    setRegisterTag(SHOWregis,aa);
-printf("####>> %s§\n",tmpString + 900);
+      setRegisterTag(SHOWregis,aa);
       break;
 
     case dtTime:

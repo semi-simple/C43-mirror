@@ -21,6 +21,10 @@
 #include "wp43s.h"
 #include "math.h"
 
+//STATDEBUG only effective with PC_BUILD
+#define STATDEBUG
+
+
 //#define GAUSSF_MAX_OVERRIDE                      // Test setting
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables
@@ -322,7 +326,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     real_t S_X,S_Y,S_XY,M_X,M_Y;
 
     #ifdef PC_BUILD
-      double a0,a1,a2;                                                 // Temporary, for ease of checking using double type
+      double a0,a1,a2=0;                                                 // Temporary, for ease of checking using double type
       double smi,r;
       smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
     #endif
@@ -430,8 +434,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### Linear %i a0=%f a1=%f \n",(int)nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -490,8 +497,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r, (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### EXPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -549,8 +559,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r, (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy))); //(rLOG));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### LOGF %i a0=%f a1=%f \n",(int)nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -609,8 +622,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r, (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### POWERF %i a0=%f a1=%f \n",nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -667,8 +683,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
 
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### ROOTF %i a0=%f a1=%f \n",(int)nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -720,8 +739,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
 
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### HYPF %i a0=%f a1=%f \n",(int)nn, a0, a1);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -775,8 +797,20 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r,sqrt( (a0 * sumy + a1 * sumxy + a2 * sumx2y - 1.0/nn * sumy * sumy) / (sumy2 - 1.0/nn * sumy * sumy) ) );
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### PARABF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
+          formatRealDebug(ss, &AA); printf("§§ AA: %s\n",ss);
+          formatRealDebug(ss, &BB); printf("§§ BB: %s\n",ss);
+          formatRealDebug(ss, &CC); printf("§§ CC: %s\n",ss);
+          formatRealDebug(ss, &DD); printf("§§ DD: %s\n",ss);
+          formatRealDebug(ss, &EE); printf("§§ EE: %s\n",ss);
+          formatRealDebug(ss, &FF); printf("§§ FF: %s\n",ss);
+          formatRealDebug(ss, &GG); printf("§§ GG: %s\n",ss);
+          formatRealDebug(ss, &HH); printf("§§ HH: %s\n",ss);
+          formatRealDebug(ss, aa2); printf("§§ A2: %s\n",ss);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -844,17 +878,29 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
 
         realSubtract(SIGMA_ln2Y, &UU,&TT,realContext); //use UU from above
         realDivide  (&SS, &TT,&SS,realContext); //R^2
-        realSquareRoot(&SS, &SS, realContext);
+        realSquareRoot(&SS, RR_, realContext);
         #ifdef PC_BUILD
-          realToString(&SS, ss); r = strtof (ss, NULL);
+          realToString(&RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n", r,sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumln2y - 1.0/nn * sumlny * sumlny) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("A%f B%f C%f D%f E%f F%f G%f H%f   a0:%f a1:%f a2:%f r:%f r^2:%f\n",A,B,C,D,E,F,G,H,a0,a1,a2,r,r*r);
+          formatRealDebug(ss, &AA); printf("§§ AA: %s\n",ss);
+          formatRealDebug(ss, &BB); printf("§§ BB: %s\n",ss);
+          formatRealDebug(ss, &CC); printf("§§ CC: %s\n",ss);
+          formatRealDebug(ss, &DD); printf("§§ DD: %s\n",ss);
+          formatRealDebug(ss, &EE); printf("§§ EE: %s\n",ss);
+          formatRealDebug(ss, &FF); printf("§§ FF: %s\n",ss);
+          formatRealDebug(ss, &GG); printf("§§ GG: %s\n",ss);
+          formatRealDebug(ss, &HH); printf("§§ HH: %s\n",ss);
         #endif
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### GAUSSF %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
+          formatRealDebug(ss, aa2); printf("§§ A2: %s\n",ss);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -941,15 +987,30 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
 
         realSubtract(SIGMA_1onY2, &UU,&TT,realContext); //use UU from above
         realDivide  (&SS, &TT,&SS,realContext); //R^2
-        realSquareRoot(&SS, &SS, realContext);
+        realSquareRoot(&SS, RR_, realContext);
         #ifdef PC_BUILD
-          realToString(&SS, ss); r = strtof (ss, NULL);
+          realToString(&RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, sqrt ( (H * sum1ony + G * sumxony + F * sumx2ony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
 
-        #ifdef STATDEBUG
+        #if defined STATDEBUG && defined PC_BUILD
+          printf("A%f B%f C%f D%f E%f F%f G%f H%f   a0:%f a1:%f a2:%f r:%f r^2:%f\n",A,B,C,D,E,F,G,H,a0,a1,a2,r,r*r);
+          formatRealDebug(ss, &AA); printf("§§ AA: %s\n",ss);
+          formatRealDebug(ss, &BB); printf("§§ BB: %s\n",ss);
+          formatRealDebug(ss, &CC); printf("§§ CC: %s\n",ss);
+          formatRealDebug(ss, &DD); printf("§§ DD: %s\n",ss);
+          formatRealDebug(ss, &EE); printf("§§ EE: %s\n",ss);
+          formatRealDebug(ss, &FF); printf("§§ FF: %s\n",ss);
+          formatRealDebug(ss, &GG); printf("§§ GG: %s\n",ss);
+          formatRealDebug(ss, &HH); printf("§§ HH: %s\n",ss);
+        #endif
+        #if defined STATDEBUG && defined PC_BUILD
           printf("##### CAUCHY %i a0=%f a1=%f a2=%f\n",(int)nn, a0, a1, a2);
+          formatRealDebug(ss, aa2); printf("§§ A2: %s\n",ss);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 
@@ -1007,9 +1068,28 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
-        #ifdef STATDEBUG
+
+        #if defined STATDEBUG && defined PC_BUILD
+          printf("A%f B%f C%f D%f E%f F%f G%f H%f   a0:%f a1:%f a2:%f r:%f r^2:%f\n",A,B,C,D,E,F,G,H,a0,a1,a2,r,r*r);
+          formatRealDebug(ss, &S_X); printf("§§ S_X: %s\n",ss);
+          formatRealDebug(ss, &S_Y); printf("§§ S_Y: %s\n",ss);
+          formatRealDebug(ss, &S_XY); printf("§§ SXY: %s\n",ss);
+          formatRealDebug(ss, &M_X); printf("§§ M_X: %s\n",ss);
+          formatRealDebug(ss, &M_Y); printf("§§ M_Y: %s\n",ss);
+          formatRealDebug(ss, SIGMA_N ); printf("§§ SIGMA_N : %s\n",ss);
+          formatRealDebug(ss, SIGMA_X ); printf("§§ SIGMA_X : %s\n",ss);
+          formatRealDebug(ss, SIGMA_Y ); printf("§§ SIGMA_Y : %s\n",ss);
+          formatRealDebug(ss, SIGMA_XY); printf("§§ SIGMA_XY: %s\n",ss);
+          formatRealDebug(ss, SIGMA_X2); printf("§§ SIGMA_X2: %s\n",ss);
+          formatRealDebug(ss, SIGMA_Y2); printf("§§ SIGMA_Y2: %s\n",ss);
+        #endif
+
+        #if defined STATDEBUG && defined PC_BUILD
           smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
           printf("##### ORTHOF %i a0=%f a1=%f smi=%f\n",(int)nn, a0, a1, smi);
+          formatRealDebug(ss, aa1); printf("§§ A1: %s\n",ss);
+          formatRealDebug(ss, aa0); printf("§§ A0: %s\n",ss);
+          formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         break;
 

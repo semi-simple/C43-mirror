@@ -140,7 +140,7 @@
 #endif // __linux__ == 1
 
 
-#define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
+#define DEBUG_STAT                       1 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
 #if (DEBUG_STAT == 0)
   #undef STATDEBUG
   #undef STATDEBUG_VERBOSE
@@ -573,16 +573,16 @@
 #define CF_ORTHOGONAL_FITTING                    512
 
 // Curve fitting excluding all other curve fitting bits, 10 bits
-#define CF_LINEAR_FITTING_EX                     (~CF_EXPONENTIAL_FITTING) & 0x01FF
-#define CF_EXPONENTIAL_FITTING_EX                (~CF_LINEAR_FITTING) & 0x01FF     
+#define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF
+#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF     
 #define CF_LOGARITHMIC_FITTING_EX                (~CF_LOGARITHMIC_FITTING) & 0x01FF
-#define CF_POWER_FITTING_EX                      (~CF_ORTHOGONAL_FITTING) & 0x03FF 
-#define CF_ROOT_FITTING_EX                       (~CF_POWER_FITTING) & 0x01FF      
-#define CF_HYPERBOLIC_FITTING_EX                 (~CF_GAUSS_FITTING) & 0x01FF      
-#define CF_PARABOLIC_FITTING_EX                  (~CF_CAUCHY_FITTING) & 0x01FF     
-#define CF_CAUCHY_FITTING_EX                     (~CF_PARABOLIC_FITTING) & 0x01FF  
-#define CF_GAUSS_FITTING_EX                      (~CF_HYPERBOLIC_FITTING) & 0x01FF 
-#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ROOT_FITTING) & 0x01FF       
+#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF 
+#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF      
+#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF      
+#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF     
+#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF  
+#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF 
+#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF       
 
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0

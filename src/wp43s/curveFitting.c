@@ -21,9 +21,6 @@
 #include "wp43s.h"
 #include "math.h"
 
-//STATDEBUG only effective with PC_BUILD
-#define STATDEBUG
-
 
 //#define GAUSSF_MAX_OVERRIDE                      // Test setting
 
@@ -880,7 +877,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS, &TT,&SS,realContext); //R^2
         realSquareRoot(&SS, RR_, realContext);
         #ifdef PC_BUILD
-          realToString(&RR_, ss); r = strtof (ss, NULL);
+          realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n", r,sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumln2y - 1.0/nn * sumlny * sumlny) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD
@@ -989,7 +986,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS, &TT,&SS,realContext); //R^2
         realSquareRoot(&SS, RR_, realContext);
         #ifdef PC_BUILD
-          realToString(&RR_, ss); r = strtof (ss, NULL);
+          realToString(RR_, ss); r = strtof (ss, NULL);
           printf("§ r: %f %f\n",r, sqrt ( (H * sum1ony + G * sumxony + F * sumx2ony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony) ));
           printf("§ r^2: %f \n",r*r);
         #endif //PC_BUILD

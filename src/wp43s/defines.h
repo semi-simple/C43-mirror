@@ -43,7 +43,21 @@
 #endif // __linux__ == 1
 
 
+#define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
+#if (DEBUG_STAT == 0)
+  #undef STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 1)
+  #define STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 2)
+  #define STATDEBUG
+  #define STATDEBUG_VERBOSE
+#endif
 
+	
 
 //*************************
 //* Other defines         *

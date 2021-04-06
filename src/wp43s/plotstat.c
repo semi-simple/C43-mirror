@@ -30,17 +30,22 @@
 #endif //TESTSUITE_BUILD
 
 
-#ifdef DMCP_BUILD
+#ifndef PC_BUILD
   #undef DEMO0
   #undef DEMO1
   #undef DEMO2
   #undef DEMO105
   #undef DEMO107
   #undef DEMO109
+#else
+  #define DEMO0
+  #define DEMO1
+  #define DEMO2
+  #define DEMO105
+  #define DEMO107
+  #define DEMO109
 #endif
 
-
-//#define STATDEBUG
 
 graphtype *gr_x;
 graphtype *gr_y;
@@ -130,9 +135,24 @@ void graph_setupmemory(void) {
   
   if((telltale==MEM_INITIALIZED) && (gr_x != NULL) && (gr_y != NULL)){
     for (i = 0; i < LIM; ++i) { 
+      #ifdef STATDEBUG
+        gr_x[i] = 85.1;
+        gr_y[i] = 170.1; 
+        if(fabs(gr_x[i]-85.1) > 0.00001 || fabs(gr_y[i]-170.1) > 0.00001) printf("### ERROR MEMORY A %i: x should be 85.1 and is %f; y should be 170.1 and is %f\n",i,gr_x[i],gr_y[i]);
+        gr_x[i] = 170.1;
+        gr_y[i] = 85.1; 
+        if(fabs(gr_x[i]-170.1) > 0.00001 || fabs(gr_y[i]-85.1) > 0.00001) printf("### ERROR MEMORY B %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
+      #endif
       gr_x[i] = 0;
       gr_y[i] = 0; 
+      #ifdef STATDEBUG
+        if(gr_x[i]!=0.0 || gr_y[i]!=0.0) printf("### ERROR MEMORY C %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
+      #endif
     }
+  } else {
+    #ifdef PC_BUILD
+      printf("### ERROR MEMORY D NOT INITIALIZED\n");
+    #endif //PC_BUILD
   }
 }
 
@@ -373,7 +393,7 @@ void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {               
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
     uint16_t x1;  //range 0-399
     uint8_t  y1;  //range 0-239
-    #ifdef STATDEBUG
+    #ifdef STATDEBUGVERBOSE
       printf("pixelline: xo,yo,xn,yn: %d %d   %d %d \n",xo,yo,xn,yn);
     #endif
     if(xo == xn && yo == yn) {
@@ -853,19 +873,38 @@ void graphPlotstat(uint16_t selection){
     uint16_t  ix;
     uint16_t  xo = 0, xn, xN = 0; 
     uint8_t   yo = 0, yn, yN = 0;
-    double    x = 0; 
+    double    x = x_min; 
     double    y = 0;
-    int16_t   Intervals = numberIntervals * 10; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
+    int16_t   factor = 10;
+    int16_t   Intervals = numberIntervals * factor; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
+    uint16_t  iterations = 0;
+    int16_t   jumpMonitor = 0;
+    bool_t    onScreen = false;
 
-    for (ix = 0; ix <= Intervals; ++ix) {       //Variable accuracy line plot
+    for (ix = 0; iterations < 1000 && x < x_max+(x_max-x_min)*0.5 && xN < SCREEN_WIDTH; ++ix) {       //Variable accuracy line plot
+      iterations++;
 
-      if(ix <= 1) Intervals = numberIntervals * 10; else
-        if(ix >= Intervals-1) Intervals = numberIntervals * 10; else
-          if(ix == 1) Intervals = numberIntervals;
-      if(ix > 2 && ix < Intervals-2 && abs(yN-yo) > 10 && Intervals == numberIntervals){
-        ix--;
-        Intervals = numberIntervals * 15;       //increase accuracy and time to complete, if a jump in y is found
-      } 
+
+          if(abs(yN-yo) > 10 && Intervals == numberIntervals && onScreen){
+            if(jumpMonitor <= 2) jumpMonitor++;
+          } else if(((abs(yN-yo) < 2) && (Intervals > numberIntervals)) || !onScreen){
+            if(jumpMonitor > -factor) jumpMonitor--;
+          }
+
+          if( !(y > y_min+0.05*(y_max-y_min) && y < y_max-0.05*(y_max-y_min)) || !(x > x_min+0.05*(x_max-x_min) && x < x_max-0.05*(x_max-x_min)) )
+            jumpMonitor = 10; else
+
+          if(jumpMonitor >= 1 && Intervals == numberIntervals) {
+            ix = max(1,(ix-2))*factor;       //backtrack a little
+            Intervals = numberIntervals * factor;       //increase accuracy and time to complete, if a jump in y is found
+            jumpMonitor = 0;
+          } else
+          if(jumpMonitor <= -factor && Intervals > numberIntervals) {
+            ix = max(1,(uint16_t)(ix/factor)-1*0);       //backtrack a little
+            Intervals = numberIntervals;
+            jumpMonitor = 0;
+          }
+
       x = x_min + (x_max-x_min)/(double)Intervals * (double)ix;
       if(USEFLOATING != 0) {
         sprintf(ss,"%f",x); stringToReal(ss,&XX,&ctxtReal39);
@@ -879,7 +918,7 @@ void graphPlotstat(uint16_t selection){
 
       if(ix > 0) {  //Allow for starting values to accumulate in the registers at ix = 0
         #ifdef STATDEBUG
-          printf("plotting graph sample no %d ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",ix,x_min,x,x_max,y_min,y,y_max,  xN,yN);
+          printf("plotting graph: jm:%i iter:%u ix:%d I.vals:%u ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",jumpMonitor,iterations,ix,Intervals,x_min,x,x_max,y_min,y,y_max,  xN,yN);
         #endif
         int16_t minN_y,minN_x;
         if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
@@ -887,20 +926,22 @@ void graphPlotstat(uint16_t selection){
 
         #define tol 4
         if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH-tol && yN>minN_y) {
+          onScreen = true;
           yn = yN;
           xn = xN;
-          #ifdef STATDEBUG
+          #ifdef STATDEBUGVERBOSE
             printf("Plotting box to x=%d y=%d\n",xn,yn);
           #endif
           if(fittedcurveboxes) plotbox(xn,yn);
           if(xo < SCREEN_WIDTH_GRAPH && xo > minN_x && yo < SCREEN_HEIGHT_GRAPH-tol && yo > minN_y) {
-            #ifdef STATDEBUG
+            #ifdef STATDEBUGVERBOSE
               printf("Plotting line to x=%d y=%d\n",xn,yn);
             #endif
             plotline(xo, yo, xn, yn);
           }
         } 
         else {
+          onScreen = false;
           #ifdef STATDEBUG
             printf("Not plotted line: (%u %u) ",xN,yN);
             if(!(xN < SCREEN_WIDTH_GRAPH ))  printf("x>>%u ",SCREEN_WIDTH_GRAPH); else
@@ -945,6 +986,10 @@ void graphPlotstat(uint16_t selection){
       if(selection == CF_ORTHOGONAL_FITTING) {
         eformat(ss,"s" STD_SUB_m STD_SUB_i "=",smi,4); 
         showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
+        eformat(ss,"x,y" STD_SUB_m STD_SUB_i STD_SUB_n "=", x_min,5);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
+        eformat(ss,"x,y" STD_SUB_m STD_SUB_a STD_SUB_x "=", x_max,5);
+        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
       }
     }
   }
@@ -982,6 +1027,18 @@ void fnPlotStat(uint16_t plotMode){
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
 #endif //PC_BUILD
 
+#ifdef STATDEBUG
+  uint16_t i;
+  int16_t cnt;
+  realToInt32(SIGMA_N, cnt);
+  printf("Stored values\n");
+  for (i = 0; i < LIM && i < cnt; ++i) { 
+    printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
+  }
+#endif //STATDEBUG
+
+
+jm_SCALE = false;
 
 #ifndef TESTSUITE_BUILD
   if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) plotMode = lastPlotMode;
@@ -1008,6 +1065,7 @@ void fnPlotStat(uint16_t plotMode){
          break;
     case PLOT_ORTHOF:
     case PLOT_START:
+         jm_SCALE = true;
          #ifdef STATDEBUG
            printf("################# PLOT_START, PLOT_ORTHOF): Push PLOT_STAT menu; plotSelection = %u\n",plotSelection);
          #endif //STATDEBUG
@@ -1026,7 +1084,7 @@ void fnPlotStat(uint16_t plotMode){
 
 void fnPlotRegressionLine(uint16_t plotMode){
   #ifdef STATDEBUG
-    printf("fnPlotRegLine: selection = %u\n",selection);
+  printf("fnPlotRegressionLine: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   #endif //STATDEBUG
 
   switch(plotMode) {

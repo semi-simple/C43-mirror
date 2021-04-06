@@ -43,7 +43,7 @@ endif
 
 RASPBERRY = $(shell ./onARaspberry)
 
-INC = -IdecNumberICU -Isrc/wp43s -Isrc/testSuite
+INC = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
 
 ifeq ($(DEST), gitlab)
 	CFLAGS += -march=x86-64
@@ -80,7 +80,7 @@ CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
 
 LDFLAGS += -lgmp -lm `pkg-config --libs freetype2` `pkg-config --libs gtk+-3.0`
 
-SRC_DECIMAL              = $(addprefix decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
+SRC_DECIMAL              = $(addprefix dep/decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
 OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
 DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
@@ -146,7 +146,7 @@ DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix DM42 binary/, testPgms.bin)
+GEN_BIN_TESTPGMS         = $(addprefix binaries/DM42/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
@@ -154,7 +154,7 @@ STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCata
 
 all: 	wp43s
 ifeq '$(detected_OS)' 'Darwin'
-	rsync -u wp43s MacOs\ binaries
+	rsync -u wp43s binaries/macOS
 endif
 
 rebuild:
@@ -172,18 +172,18 @@ else
 endif
 
 dist_windows:	wp43s.exe
-	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/DM42\ binary
+	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/DM42
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
-	cp DM42\ binary/testPgms.bin $(WIN_DIST_DIR)/DM42\ binary/
+	cp binaries/DM42/testPgms.bin $(WIN_DIST_DIR)/binaries/DM42/
 	cp wp43s_pre.css $(WIN_DIST_DIR)/
 #	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/DM42\ binary
+	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/DM42
 	cp wp43s $(MAC_DIST_DIR)/
 	cp artwork/*.png $(MAC_DIST_DIR)/artwork/
-	cp DM42\ binary/testPgms.bin $(MAC_DIST_DIR)/DM42\ binary/
+	cp binaries/DM42/testPgms.bin $(MAC_DIST_DIR)/binaries/DM42/
 	cp wp43s_pre.css $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
@@ -192,7 +192,7 @@ dist_dm42:
 	mkdir -p $(DM_DIST_DIR)
 	cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)
-	cp DM42\ binary/keymap.bin DM42\ binary/original_DM42_keymap.bin DM42\ binary/testPgms.bin $(DM_DIST_DIR)
+	cp binaries/DM42/keymap.bin binaries/DM42/original_DM42_keymap.bin binaries/DM42/testPgms.bin $(DM_DIST_DIR)
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
 .PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild dist_macos
@@ -232,8 +232,8 @@ clean_decNumberICU:
 
 -include $(DEPS_DECIMAL)
 
-decNumberICU/%.o: decNumberICU/%.c
-	@echo -e "\n====> decNumberICU/%.o: $@ <===="
+dep/decNumberICU/%.o: dep/decNumberICU/%.c
+	@echo -e "\n====> dep/decNumberICU/%.o: $@ <===="
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 
@@ -368,8 +368,8 @@ src/wp43s/%.ts.o: src/wp43s/%.c .stamp-constantPointers
 	@echo -e "\n====> src/wp43s/%.ts.o: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-decNumberICU/%.ts.o: decNumberICU/%.c
-	@echo -e "\n====> decNumberICU/%.ts.o: $@ <===="
+dep/decNumberICU/%.ts.o: dep/decNumberICU/%.c
+	@echo -e "\n====> dep/decNumberICU/%.ts.o: $@ <===="
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 

@@ -26,31 +26,31 @@ BIN_DIR =
 ######################################
 # System sources
 ######################################
-C_INCLUDES += -IDMCP
-C_SOURCES += DMCP/sys/pgm_syscalls.c
-ASM_SOURCES = DMCP/startup_pgm.s
+C_INCLUDES += -I../dep/DMCP_SDK/dmcp -I../src/wp43s-dmcp
+C_SOURCES += ../dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c
+ASM_SOURCES = ../dep/DMCP_SDK/dmcp/startup_pgm.s
 
 #######################################
 # Custom section
 #######################################
 
 # Includes
-C_INCLUDES += -Isrc/wp43s -IdecNumberICU -Igmp-6.2.0
+C_INCLUDES += -I../src/wp43s -I../dep/decNumberICU -Igmp-6.2.0
 
 # C sources
-C_SOURCES += decNumberICU/decContext.c
-C_SOURCES += decNumberICU/decDouble.c
-C_SOURCES += decNumberICU/decimal128.c
-C_SOURCES += decNumberICU/decimal64.c
-C_SOURCES += decNumberICU/decNumber.c
-C_SOURCES += decNumberICU/decQuad.c
-C_SOURCES += $(wildcard src/wp43s/*.c) \
-             $(wildcard src/wp43s/mathematics/*.c) \
-             $(wildcard src/wp43s/browsers/*.c) \
-             $(wildcard src/wp43s/logicalOps/*.c) \
-             $(wildcard src/wp43s/programming/*.c) \
-             $(wildcard src/wp43s/distributions/*.c) \
-             $(wildcard src/wp43s/ui/*.c)
+C_SOURCES += ../dep/decNumberICU/decContext.c
+C_SOURCES += ../dep/decNumberICU/decDouble.c
+C_SOURCES += ../dep/decNumberICU/decimal128.c
+C_SOURCES += ../dep/decNumberICU/decimal64.c
+C_SOURCES += ../dep/decNumberICU/decNumber.c
+C_SOURCES += ../dep/decNumberICU/decQuad.c
+C_SOURCES += $(wildcard ../src/wp43s/*.c) \
+             $(wildcard ../src/wp43s/mathematics/*.c) \
+             $(wildcard ../src/wp43s/browsers/*.c) \
+             $(wildcard ../src/wp43s/logicalOps/*.c) \
+             $(wildcard ../src/wp43s/programming/*.c) \
+             $(wildcard ../src/wp43s/distributions/*.c) \
+             $(wildcard ../src/wp43s/ui/*.c)
 
 # C++ sources
 #CXX_SOURCES += src/xxx.cc
@@ -165,7 +165,7 @@ $(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_qspi.hex
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)modify_crc $(TARGET)
-	$(BIN_DIR)check_qspi_crc $(TARGET) DMCP/qspi_crc.h || ( $(MAKE) clean && false )
+	$(BIN_DIR)check_qspi_crc $(TARGET) ../src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean && false )
 	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
 	$(SIZE) $@
 

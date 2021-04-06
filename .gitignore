@@ -25,6 +25,7 @@ DMCP_build/decNumberICU/
 .idea/
 
 !windows\ binaries/wp43s609.exe
+!windows\ binaries/wp43s609B.exe
 !windows\ binaries/wp43s.exe
 !DM42\ binary/keymap.bin
 !DM42\ binary/testPgms.bin

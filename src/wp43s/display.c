@@ -2169,7 +2169,8 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
   bool_t thereIsANextLine;
-  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed, aa;
+  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed, aa, aa2=0, aa3=0, aa4=0;
+  uint64_t nn;
   real34_t real34;
   char *separator;
 
@@ -2520,7 +2521,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       } else {
         strcpy(tmpString + 2400,tmpString + 2100);
       }
- 
+ 	
 
       last = 2400 + stringByteLength(tmpString + 2400);
       source = 2400;
@@ -2537,14 +2538,74 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
         checkAndEat(&source, last, &dest);
       }
-      tmpString[300]=0;
+
+      convertShortIntegerRegisterToUInt64(REGISTER_X, &aa, &nn);
       aa = getRegisterTag(SHOWregis);
-      if(aa >= 5 && aa != 8){
-        setRegisterTag(SHOWregis,8);
+      switch(aa){
+      	case 2: if(nn <= 0x00000000FFFFFFFF) {
+      		      aa2=0;  aa3=8;  aa4=16; break;
+      	        } else {
+      	          aa2=0;  aa3=0;  aa4=0; break;
+      	        }
+      	case 3: if(nn <= 0x00000000FFFFFFFF) {
+      		      aa2=0;  aa3=8;  aa4=16; break;
+      	        } else {
+      	          aa2=0;  aa3=0;  aa4=16; break;
+      	        }
+      	case 4: if(nn <= 0x00000000FFFFFFFF) {
+      		      aa2=8;  aa3=10;  aa4=16; break;
+      	        } else {
+      	          aa2=0;  aa3=8;  aa4=16; break;
+      	        }
+      	case 5:
+      	case 6:
+      	case 7: if(nn <= 0x00000000FFFFFFFF) {
+      		      aa2=8;  aa3=10;  aa4=16; break;
+      	        } else 
+      	        if(nn <= 0x003FFFFFFFFFFFFF) {
+      	          aa2=0;  aa3=8;  aa4=16; break;
+      	        } else {
+      	          aa2=0;  aa3=0;  aa4=16; break;
+      	        }
+      	case  9:
+      	case 11: if(nn <= 0x001FFFFFFFFFFFFF) {
+      	           aa2= 8;  aa3=10;  aa4=16; break;
+      	         } else {
+      	           aa2= 0;  aa3= 8;  aa4=16; break;
+      	         }
+      	case 12:
+      	case 13:
+      	case 14: 
+      	case 15: if(nn <= 0x001FFFFFFFFFFFFF) {
+      	           aa2= 8;  aa3=10;  aa4=16; break;
+      	         } else {
+      	           aa2=10;  aa3= 0;  aa4=16; break;
+      	         }
+      	case 16: if(nn <= 0x00000000FFFFFFFF) {
+      	           aa2=4;  aa3= 8;  aa4=10; break;
+      	         } else {
+      	           aa2=10;  aa3= 0;  aa4=8; break;
+      	         }
+      	case 10: if(nn <= 0x00000000FFFFFFFF) {
+      	           aa2=4;  aa3= 8;  aa4=16; break;
+      	         } else {
+      	           aa2=0;  aa3= 8;  aa4=16; break;
+      	         }
+      	case  8: if(nn <= 0x00000000FFFFFFFF) {
+      	           aa2=4;  aa3=10;  aa4=16; break;
+      	         } else {
+      	           aa2=10;  aa3=0;  aa4=16; break;
+      	         }
+      }
+
+
+      if(aa2){
+        setRegisterTag(SHOWregis,aa2);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
+        tmpString[300]=0;
         for(d=300; d<=900 ; d+=300) {
           dest = d;
           if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
@@ -2559,13 +2620,13 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           checkAndEat(&source, last, &dest);
         }
       }
-      tmpString[600]=0;
-      if(aa >= 3 && aa != 10){
-        setRegisterTag(SHOWregis,10);
+      if(aa3){
+        setRegisterTag(SHOWregis,aa3);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
+        tmpString[600]=0;
         for(d=600; d<=900 ; d+=300) {
           dest = d;
           if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
@@ -2580,13 +2641,13 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           checkAndEat(&source, last, &dest);
         }
       }
-      tmpString[900]=0;
-      if(aa >= 3 && aa != 16){
-        setRegisterTag(SHOWregis,16);
+      if(aa4){
+        setRegisterTag(SHOWregis,aa4);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
+        tmpString[900]=0;
         for(d=900; d<=900 ; d+=300) {
           dest = d;
           if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:

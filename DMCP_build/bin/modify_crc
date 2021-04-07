@@ -26,7 +26,7 @@ fi
 
 sz=`filesize $q`
 
-dir=`dirname ${BASH_SOURCE[0]}`
+dir=`dirname $q`
 
 echo -n -e '\x00\x00\x00\x00' >> $q
 $dir/forcecrc32 $q $sz 000CFED6

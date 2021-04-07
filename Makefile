@@ -188,7 +188,7 @@ dist_macos:	wp43s
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:
-	cd DMCP_build && ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
+	cd DMCP_build && make
 	mkdir -p $(DM_DIST_DIR)
 	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)

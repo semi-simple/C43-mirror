@@ -146,7 +146,7 @@ DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix binaries/DM42/, testPgms.bin)
+GEN_BIN_TESTPGMS         = $(addprefix binaries/dmcp/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
@@ -172,27 +172,27 @@ else
 endif
 
 dist_windows:	wp43s.exe
-	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/DM42
+	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
-	cp binaries/DM42/testPgms.bin $(WIN_DIST_DIR)/binaries/DM42/
+	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp wp43s_pre.css $(WIN_DIST_DIR)/
 #	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/DM42
+	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/dmcp
 	cp wp43s $(MAC_DIST_DIR)/
 	cp artwork/*.png $(MAC_DIST_DIR)/artwork/
-	cp binaries/DM42/testPgms.bin $(MAC_DIST_DIR)/binaries/DM42/
+	cp binaries/dmcp/testPgms.bin $(MAC_DIST_DIR)/binaries/dmcp/
 	cp wp43s_pre.css $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:
 	cd DMCP_build && ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
 	mkdir -p $(DM_DIST_DIR)
-	cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin $(DM_DIST_DIR)
+	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)
-	cp binaries/DM42/keymap.bin binaries/DM42/original_DM42_keymap.bin binaries/DM42/testPgms.bin $(DM_DIST_DIR)
+	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
 .PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild dist_macos

@@ -15,7 +15,7 @@ endif
 # pathes
 #######################################
 # Build path
-BUILD_DIR = build
+BUILD_DIR = ../build/dmcp
 
 RESOURCES_DIR = resources
 
@@ -121,13 +121,15 @@ CFLAGS += -MD -MP -MF .dep/$(@F).d
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = stm32_program.ld
+LDSCRIPT = ../src/wp43s-dmcp/stm32_program.ld
 LIBDIR =
 LDFLAGS = $(CPUFLAGS) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections -Wl,--wrap=_malloc_r
 
-
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf
+
+../dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c:
+	git submodule update --init --recursive ../dep/DMCP_SDK
 
 #######################################
 # build the application
@@ -166,7 +168,7 @@ $(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)modify_crc $(TARGET)
 	$(BIN_DIR)check_qspi_crc $(TARGET) ../src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean && false )
-	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
+	$(BIN_DIR)add_pgm_chsum $(BUILD_DIR)/$(TARGET)_flash.bin $(BUILD_DIR)/$(TARGET).pgm
 	$(SIZE) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
@@ -183,7 +185,6 @@ $(BUILD_DIR):
 #######################################
 clean:
 	-rm -fR .dep $(BUILD_DIR)/*.o $(BUILD_DIR)/*.lst
-
 
 #######################################
 # dependencies

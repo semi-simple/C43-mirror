@@ -332,6 +332,11 @@ geometric_l
 geometric_r
 geometric_i
 
+hypergeometric_p
+hypergeometric_l
+hypergeometric_r
+hypergeometric_i
+
 binomial_p
 binomial_l
 binomial_r

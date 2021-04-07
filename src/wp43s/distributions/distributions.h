@@ -26,6 +26,7 @@
 #include "exponential.h"
 #include "f.h"
 #include "geometric.h"
+#include "hyper.h"
 #include "logistic.h"
 #include "negBinom.h"
 #include "normal.h"

@@ -263,7 +263,7 @@ void WP34S_Qf_F(const real_t *x, const real_t *d1, const real_t *d2, real_t *res
   realMultiply(&q, const_2, &q, realContext);
   realExp(&q, &q, realContext);
 
-  WP34S_Qf_Newton(QF_NEWTON_F, &reg0, &q, d1, d2, res, realContext);
+  WP34S_Qf_Newton(QF_NEWTON_F, &reg0, &q, d1, d2, NULL, res, realContext);
 }
 
 
@@ -271,7 +271,7 @@ void WP34S_Qf_F(const real_t *x, const real_t *d1, const real_t *d2, real_t *res
 /* The Newton step solver.
  * Target value in Y, function identifier in X, estimate in Z.
  */
-void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estimate, const real_t *p1, const real_t *p2, real_t *res, realContext_t *realContext) {
+void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estimate, const real_t *p1, const real_t *p2, const real_t *p3, real_t *res, realContext_t *realContext) {
   real_t p, q;
   real_t r_p, r_low, r_high, r_maxstep, r_r, r_z, r_w;
   uint32_t r_iterations;
@@ -283,7 +283,7 @@ void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estima
 
 	/* Set flags based on distribution */
   // f_newton_setflags
-  if(r_dist == QF_NEWTON_POISSON || r_dist == QF_NEWTON_BINOMIAL || r_dist == QF_NEWTON_NEGBINOM)
+  if(r_dist != QF_NEWTON_F)
     f_discrete = true; // Poisson or Binomial
 
   // qf_f_flags
@@ -330,6 +330,9 @@ qf_newton_do_bisect:
       case QF_NEWTON_NEGBINOM:
         cdf_NegBinomial2(&r_r, p1, p2, &r_w, realContext);
         break;
+      case QF_NEWTON_HYPERGEOMETRIC:
+        cdf_Hypergeometric2(&r_r, p1, p2, p3, &r_w, &ctxtReal75);
+        break;
     }
     realSubtract(&r_w, &r_p, &r_z, realContext);
     if(realCompareGreaterEqual(&r_z, const_0)) { // qf_newton_fix_high
@@ -367,6 +370,9 @@ qf_newton_fixed:
         break;
       case QF_NEWTON_NEGBINOM:
         pdf_NegBinomial(&r_r, p1, p2, &q, realContext);
+        break;
+      case QF_NEWTON_HYPERGEOMETRIC:
+        pdf_Hypergeometric(&r_r, p1, p2, p3, &q, realContext);
         break;
     }
     if(realIsZero(&q)) {
@@ -425,7 +431,7 @@ qf_newton_done:
 qf_newton_done2:
   if(f_discrete) { // qf_discrete_exit
     realToIntegralValue(&p, &q, DEC_ROUND_FLOOR, realContext);
-    WP34S_qf_discrete_final(r_dist - 1, &q, &r_p, p1, p2, &p, realContext);
+    WP34S_qf_discrete_final(r_dist - 1, &q, &r_p, p1, p2, p3, &p, realContext);
   }
   realCopy(&p, res);
   return;

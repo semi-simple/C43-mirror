@@ -212,6 +212,7 @@ void WP34S_Pdf_Binomial(const real_t *x, const real_t *p0, const real_t *n, real
   WP34S_Ln1P(&p, &p, realContext);
   realSubtract(n, x, &q, realContext);
   realMultiply(&p, &q, &p, realContext);
+  // Rewrote below with ln(yCx) function
   realCopy(n, &nn);
   realCopy(x, &xx);
   logCyxReal(&nn, &xx, &q, realContext);
@@ -281,6 +282,6 @@ void WP34S_Qf_Binomial(const real_t *x, const real_t *p0, const real_t *n, real_
   realMultiply(&q, &p, &p, realContext);      // variance = np(1-p)
   realSquareRoot(&q, &q, realContext);
   WP34S_normal_moment_approx(x, &q, &p, &r, realContext);
-  WP34S_Qf_Newton(QF_NEWTON_BINOMIAL, x, &r, p0, n, &p, realContext);
+  WP34S_Qf_Newton(QF_NEWTON_BINOMIAL, x, &r, p0, n, NULL, &p, realContext);
   realCopy(realCompareLessEqual(&p, n) ? &p : n, res);
 }

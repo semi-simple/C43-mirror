@@ -234,5 +234,5 @@ void WP34S_Qf_Poisson(const real_t *x, const real_t *lambda, real_t *res, realCo
   // qf_poisson_xout
   realSquareRoot(lambda, &p, realContext);
   WP34S_normal_moment_approx(x, &p, lambda, &q, realContext);
-  WP34S_Qf_Newton(QF_NEWTON_POISSON, x, &q, lambda, NULL, res, realContext);
+  WP34S_Qf_Newton(QF_NEWTON_POISSON, x, &q, lambda, NULL, NULL, res, realContext);
 }

@@ -276,5 +276,5 @@ void qf_NegBinomial(const real_t *x, const real_t *p0, const real_t *r, real_t *
   realSquareRoot(&var, &var, realContext);
 
   WP34S_normal_moment_approx(x, &var, &mean, &s, realContext);
-  WP34S_Qf_Newton(QF_NEWTON_NEGBINOM, x, &s, p0, r, res, realContext);
+  WP34S_Qf_Newton(QF_NEWTON_NEGBINOM, x, &s, p0, r, NULL, res, realContext);
 }

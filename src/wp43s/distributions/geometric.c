@@ -204,10 +204,10 @@ void WP34S_Qf_Geom(const real_t *x, const real_t *p0, real_t *res, realContext_t
   realDivide(&p, &q, &p, realContext);
   realSubtract(&p, const_1, &p, realContext);
   realToIntegralValue(&p, &p, DEC_ROUND_FLOOR, realContext);
-  WP34S_qf_discrete_final(QF_DISCRETE_CDF_GEOMETRIC, &p, x, p0, const_0, res, realContext);
+  WP34S_qf_discrete_final(QF_DISCRETE_CDF_GEOMETRIC, &p, x, p0, NULL, NULL, res, realContext);
 }
 
-void WP34S_qf_discrete_final(uint16_t dist, const real_t *r, const real_t *p, const real_t *i, const real_t *j, real_t *res, realContext_t *realContext) {
+void WP34S_qf_discrete_final(uint16_t dist, const real_t *r, const real_t *p, const real_t *i, const real_t *j, const real_t *k, real_t *res, realContext_t *realContext) {
   real_t q;
 
   switch(dist) { // qf_discrete_cdf
@@ -222,6 +222,9 @@ void WP34S_qf_discrete_final(uint16_t dist, const real_t *r, const real_t *p, co
       break;
     case QF_DISCRETE_CDF_NEGBINOM:
       cdf_NegBinomial2(r, i, j, &q, &ctxtReal51);
+      break;
+    case QF_DISCRETE_CDF_HYPERGEOMETRIC:
+      cdf_Hypergeometric2(r, i, j, k, &q, &ctxtReal75);
       break;
     default: // unlikely
       realZero(&q);

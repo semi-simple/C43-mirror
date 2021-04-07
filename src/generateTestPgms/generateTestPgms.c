@@ -11368,9 +11368,9 @@ int main(int argc, char* argv[]) {
   *(currentStep++) = 255; // .END.
   *(currentStep++) = 255; // .END.
 
-  testPgms = fopen("binaries/DM42/testPgms.bin", "wb");
+  testPgms = fopen("binaries/dmcp/testPgms.bin", "wb");
   if(testPgms == NULL) {
-    fprintf(stderr, "Cannot create file binaries/DM42/testPgms.bin\n");
+    fprintf(stderr, "Cannot create file binaries/dmcp/testPgms.bin\n");
     exit(1);
   }
 
@@ -11379,7 +11379,7 @@ int main(int argc, char* argv[]) {
   fwrite(memory,      1, sizeOfPgms,         testPgms);
   fclose(testPgms);
 
-  printf("Test programs generated in\ndirectory: binaries/DM42\nfile:      testPgms.bin\n");
+  printf("Test programs generated in\ndirectory: binaries/dmcp\nfile:      testPgms.bin\n");
 
   return 0;
 }

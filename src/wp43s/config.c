@@ -557,9 +557,9 @@ void addTestPrograms(void) {
   #else // !DMCP_BUILD
     FILE *testPgms;
 
-    testPgms = fopen("binaries/DM42/testPgms.bin", "rb");
+    testPgms = fopen("binaries/dmcp/testPgms.bin", "rb");
     if(testPgms == NULL) {
-      printf("Cannot open file binaries/DM42/testPgms.bin\n");
+      printf("Cannot open file binaries/dmcp/testPgms.bin\n");
       *(beginOfProgramMemory)     = 255; // .END.
       *(beginOfProgramMemory + 1) = 255; // .END.
       firstFreeProgramByte = beginOfProgramMemory;

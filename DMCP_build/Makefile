@@ -15,13 +15,11 @@ endif
 # pathes
 #######################################
 # Build path
-BUILD_DIR = build
-
-RESOURCES_DIR = resources
+BUILD_DIR = ../build/dmcp
 
 # Path to aux build scripts (including trailing /)
 # Leave empty for scripts in PATH
-BIN_DIR =
+BIN_DIR = bin/
 
 ######################################
 # System sources
@@ -35,7 +33,7 @@ ASM_SOURCES = ../dep/DMCP_SDK/dmcp/startup_pgm.s
 #######################################
 
 # Includes
-C_INCLUDES += -I../src/wp43s -I../dep/decNumberICU -Igmp-6.2.0
+C_INCLUDES += -I../src/wp43s -I../dep/decNumberICU -I../dep/gmp-6.2.0
 
 # C sources
 C_SOURCES += ../dep/decNumberICU/decContext.c
@@ -71,7 +69,8 @@ C_DEFS += -DDMCP_BUILD -DOS32BIT -DUSE_HAL_DRIVER -DSTM32L476xx -DARM
 
 # Libraries
 #LIBS += lib/gcc111libbid_hard.a
-LIBS += gmp-6.2.0/.libs/libgmp.a
+GMPLIB = ../dep/gmp-6.2.0/.libs/libgmp.a
+LIBS += $(GMPLIB)
 
 
 #######################################
@@ -115,27 +114,29 @@ CFLAGS  += $(DBGFLAGS)
 LDFLAGS += $(DBGFLAGS)
 
 # Generate dependency information
-CFLAGS += -MD -MP -MF .dep/$(@F).d
+CFLAGS += -MD -MP -MF $(BUILD_DIR)/.dep/$(@F).d
 
 #######################################
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = stm32_program.ld
+LDSCRIPT = ../src/wp43s-dmcp/stm32_program.ld
 LIBDIR =
 LDFLAGS = $(CPUFLAGS) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections -Wl,--wrap=_malloc_r
 
-
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf
+
+../dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c:
+	git submodule update --init --recursive ../dep/DMCP_SDK
 
 #######################################
 # build the application
 #######################################
 
 # forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
-bin/forcecrc32:
-	gcc $(RESOURCES_DIR)/forcecrc32.c -o bin/forcecrc32
+$(BUILD_DIR)/forcecrc32: $(BUILD_DIR)
+	gcc ../dep/forcecrc32.c -o $(BUILD_DIR)/forcecrc32
 
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
@@ -149,6 +150,22 @@ vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 
+../dep/gmp-6.2.0:
+	wget -qO- https://gmplib.org/download/gmp/gmp-6.2.0.tar.lz | tar --lzip -xv -C ../dep
+
+$(GMPLIB): ../dep/gmp-6.2.0
+	cd ../dep/gmp-6.2.0 && ./configure \
+		--build=x86_64-pc-linux-gnu \
+		--host=arm-none-eabi \
+		--disable-assembly \
+		--disable-shared \
+		--disable-fft \
+		--disable-werror \
+		--disable-cxx \
+		LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now' \
+		CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -s -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing -fstack-protector -finline-limit=64 -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+	cd ../dep/gmp-6.2.0 && make -j8 V=1
+
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
@@ -158,7 +175,7 @@ $(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
-$(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
+$(BUILD_DIR)/$(TARGET).elf: $(BUILD_DIR)/forcecrc32 $(GMPLIB) $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(OBJCOPY) --remove-section .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_flash.hex
 	$(OBJCOPY) --remove-section .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_flash.bin
@@ -166,7 +183,7 @@ $(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)modify_crc $(TARGET)
 	$(BIN_DIR)check_qspi_crc $(TARGET) ../src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean && false )
-	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
+	$(BIN_DIR)add_pgm_chsum $(BUILD_DIR)/$(TARGET)_flash.bin $(BUILD_DIR)/$(TARGET).pgm
 	$(SIZE) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
@@ -182,13 +199,12 @@ $(BUILD_DIR):
 # clean up
 #######################################
 clean:
-	-rm -fR .dep $(BUILD_DIR)/*.o $(BUILD_DIR)/*.lst
-
+	-rm -fR $(BUILD_DIR)/.dep $(BUILD_DIR)/*.o $(BUILD_DIR)/*.lst
 
 #######################################
 # dependencies
 #######################################
--include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+-include $(shell mkdir -p $(BUILD_DIR)/.dep 2>/dev/null) $(wildcard $(BUILD_DIR)/.dep/*)
 
 .PHONY: clean all
 

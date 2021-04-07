@@ -13,6 +13,7 @@ TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
 TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43s$(EXE)
 EXE =
+BUILD_DIR = build
 
 CC = gcc
 
@@ -81,76 +82,59 @@ CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
 LDFLAGS += -lgmp -lm `pkg-config --libs freetype2` `pkg-config --libs gtk+-3.0`
 
 SRC_DECIMAL              = $(addprefix dep/decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
-OBJ_DECIMAL              = $(SRC_DECIMAL:.c=.o)
-DEPS_DECIMAL             = $(SRC_DECIMAL:.c=.d)
 
-SRC_WP43S                = \
-	$(addprefix src/wp43s/, \
-		assign.c bufferize.c charString.c config.c constantPointers.c \
-		constants.c conversionAngles.c conversionUnits.c \
-		curveFitting.c dateTime.c debug.c display.c error.c flags.c \
-		fonts.c fractions.c gui.c integers.c items.c keyboard.c \
-		rasterFontsData.c recall.c registerValueConversions.c registers.c \
-		saveRestoreCalcState.c screen.c softmenus.c sort.c stack.c \
-		stats.c statusBar.c store.c stringFuncs.c timer.c \
-		wp43s.c memory.c) \
-	$(addprefix src/wp43s/mathematics/, \
-		10pow.c 2pow.c addition.c agm.c arccos.c arccosh.c arcsin.c arcsinh.c arctan.c arctanh.c arg.c bessel.c bn.c \
-		ceil.c changeSign.c checkValue.c compare.c comparisonReals.c conjugate.c cos.c cosh.c cross.c cube.c cubeRoot.c \
-		cxToRe.c cpyx.c dblDivision.c dblMultiplication.c deltaPercent.c idiv.c idivr.c decomp.c dot.c \
-		division.c erf.c erfc.c exp.c expMOne.c expt.c factorial.c fib.c floor.c fractionalPart.c gamma.c gammaP.c gammaQ.c gammaXyLower.c gammaXyUpper.c gcd.c gd.c \
-		imaginaryPart.c int.c incDec.c integerPart.c invert.c iteration.c ixyz.c lcm.c ln.c lnPOne.c log10.c logxy.c lnbeta.c beta.c \
-		log2.c magnitude.c mant.c max.c mean.c min.c minusOnePow.c modulo.c multiplication.c neighb.c opmod.c ortho_polynom.c parallel.c pcg_basic.c \
-		percent.c percentMRR.c percentPlusMG.c percentSigma.c percentT.c power.c prime.c \
-		random.c rdp.c realPart.c remainder.c reToCx.c round.c roundi.c rsd.c shiftDigits.c sign.c sin.c sinc.c sincpi.c sinh.c slvq.c square.c squareRoot.c \
-		subtraction.c swapRealImaginary.c tan.c tanh.c toPolar.c toRect.c ulp.c unitVector.c xthRoot.c\
-		variance.c w_inverse.c w_negative.c w_positive.c wp34s.c zeta.c) \
-	$(addprefix src/wp43s/programming/, \
-		decode.c lblGtoXeq.c manage.c nextStep.c) \
-	$(addprefix src/wp43s/logicalOps/, \
-		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
-	$(addprefix src/wp43s/distributions/, \
-		chi2.c f.c normal.c t.c) \
-	$(addprefix src/wp43s/browsers/, \
-		flagBrowser.c fontBrowser.c registerBrowser.c) \
-	$(addprefix src/wp43s/ui/, \
-		tam.c)
-OBJ_WP43S                = $(SRC_WP43S:.c=.o) $(OBJ_DECIMAL)
-DEPS_WP43S               = $(SRC_WP43S:.c=.d)
+SRC_WP43S                = $(SRC_DECIMAL) \
+                           $(wildcard src/wp43s/*.c) \
+                           $(wildcard src/wp43s/mathematics/*.c) \
+                           $(wildcard src/wp43s/browsers/*.c) \
+                           $(wildcard src/wp43s/logicalOps/*.c) \
+                           $(wildcard src/wp43s/programming/*.c) \
+                           $(wildcard src/wp43s/distributions/*.c) \
+                           $(wildcard src/wp43s/ui/*.c)
 
-SRC_TESTSUITE            = $(addprefix src/testSuite/, testSuite.c)
-OBJ_TESTSUITE            = $(SRC_TESTSUITE:.c=.o) $(OBJ_WP43S:.o=.ts.o)
-DEPS_TESTSUITE           = $(OBJ_TESTSUITE:.o=.d)
+OBJ_WP43S                = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_WP43S:.c=.o)))
+DEPS_WP43S               = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_WP43S:.c=.d)))
 
-SRC_GENERATECONSTANTS    = $(addprefix src/generateConstants/, generateConstants.c)
-OBJ_GENERATECONSTANTS    = $(SRC_GENERATECONSTANTS:.c=.o) $(OBJ_DECIMAL)
-DEPS_GENERATECONSTANTS   = $(SRC_GENERATECONSTANTS:.c=.d)
+SRC_TESTSUITE            = $(SRC_WP43S) \
+                           $(addprefix src/testSuite/, testSuite.c)
+OBJ_TESTSUITE            = $(addprefix $(BUILD_DIR)/testSuite/,$(notdir $(SRC_TESTSUITE:.c=.o)))
+DEPS_TESTSUITE           = $(addprefix $(BUILD_DIR)/testSuite/,$(notdir $(SRC_TESTSUITE:.c=.d)))
 
-SRC_GENERATECATALOGS     = $(addprefix src/generateCatalogs/, generateCatalogs.c)
-SRC_GENERATECATALOGS2    = $(addprefix src/wp43s/, charString.c fonts.c items.c rasterFontsData.c sort.c)
-OBJ_GENERATECATALOGS     = $(SRC_GENERATECATALOGS:.c=.o) $(SRC_GENERATECATALOGS2:.c=.gc.o)
-DEPS_GENERATECATALOGS    = $(SRC_GENERATECATALOGS:.c=.d) $(SRC_GENERATECATALOGS2:.c=.d)
+SRC_GENERATECONSTANTS    = $(SRC_DECIMAL) \
+                           $(addprefix src/generateConstants/, generateConstants.c)
+OBJ_GENERATECONSTANTS    = $(addprefix $(BUILD_DIR)/generateConstants/,$(notdir $(SRC_GENERATECONSTANTS:.c=.o)))
+DEPS_GENERATECONSTANTS   = $(addprefix $(BUILD_DIR)/generateConstants/,$(notdir $(SRC_GENERATECONSTANTS:.c=.d)))
+
+SRC_GENERATECATALOGS     = $(addprefix src/generateCatalogs/, generateCatalogs.c) \
+                           $(addprefix src/wp43s/, charString.c fonts.c items.c rasterFontsData.c sort.c)
+OBJ_GENERATECATALOGS     = $(addprefix $(BUILD_DIR)/generateCatalogs/,$(notdir $(SRC_GENERATECATALOGS:.c=.o)))
+DEPS_GENERATECATALOGS    = $(addprefix $(BUILD_DIR)/generateCatalogs/,$(notdir $(SRC_GENERATECATALOGS:.c=.d)))
 
 SRC_GENERATETESTPGMS    = $(addprefix src/generateTestPgms/, generateTestPgms.c)
-OBJ_GENERATETESTPGMS    = $(SRC_GENERATETESTPGMS:.c=.o)
-DEPS_GENERATETESTPGMS   = $(SRC_GENERATETESTPGMS:.c=.d)
+OBJ_GENERATETESTPGMS    = $(addprefix $(BUILD_DIR)/generateTestPgms/,$(notdir $(SRC_GENERATETESTPGMS:.c=.o)))
+DEPS_GENERATETESTPGMS   = $(addprefix $(BUILD_DIR)/generateTestPgms/,$(notdir $(SRC_GENERATETESTPGMS:.c=.d)))
 
 SRC_TTF2RASTERFONTS      = $(addprefix src/ttf2RasterFonts/, ttf2RasterFonts.c)
-OBJ_TTF2RASTERFONTS      = $(SRC_TTF2RASTERFONTS:.c=.o)
-DEPS_TTF2RASTERFONTS     = $(SRC_TTF2RASTERFONTS:.c=.d)
+OBJ_TTF2RASTERFONTS      = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TTF2RASTERFONTS:.c=.o)))
+DEPS_TTF2RASTERFONTS     = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TTF2RASTERFONTS:.c=.d)))
 
-SRC_TESTTTF2RASTERFONTS  = $(addprefix src/ttf2RasterFonts/, testTtf2RasterFonts.c)
-OBJ_TESTTTF2RASTERFONTS  = $(SRC_TESTTTF2RASTERFONTS:.c=.o) src/wp43s/rasterFontsData.o
-DEPS_TESTTTF2RASTERFONTS = $(SRC_TESTTTF2RASTERFONTS:.c=.d)
+SRC_TESTTTF2RASTERFONTS  = $(addprefix src/ttf2RasterFonts/, testTtf2RasterFonts.c) \
+                           $(addprefix src/wp43s/, rasterFontsData.c)
+OBJ_TESTTTF2RASTERFONTS  = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TESTTTF2RASTERFONTS:.c=.o)))
+DEPS_TESTTTF2RASTERFONTS = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TESTTTF2RASTERFONTS:.c=.d)))
 
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix binaries/DM42/, testPgms.bin)
+GEN_BIN_TESTPGMS         = $(addprefix binaries/dmcp/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
 STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCatalog .stamp-testPgms
+
+vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
+          src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
+          src/wp43s/ui
 
 all: 	wp43s
 ifeq '$(detected_OS)' 'Darwin'
@@ -172,30 +156,30 @@ else
 endif
 
 dist_windows:	wp43s.exe
-	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/DM42
+	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
-	cp binaries/DM42/testPgms.bin $(WIN_DIST_DIR)/binaries/DM42/
+	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp wp43s_pre.css $(WIN_DIST_DIR)/
 #	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/DM42
+	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/dmcp
 	cp wp43s $(MAC_DIST_DIR)/
 	cp artwork/*.png $(MAC_DIST_DIR)/artwork/
-	cp binaries/DM42/testPgms.bin $(MAC_DIST_DIR)/binaries/DM42/
+	cp binaries/dmcp/testPgms.bin $(MAC_DIST_DIR)/binaries/dmcp/
 	cp wp43s_pre.css $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:
-	cd DMCP_build && ./build_GMP_static_ARM_library && ./build_WP43S.pgm_for_DM42_hardware
+	cd DMCP_build && make
 	mkdir -p $(DM_DIST_DIR)
-	cp DMCP_build/build/WP43S.pgm DMCP_build/build/WP43S_qspi.bin $(DM_DIST_DIR)
+	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)
-	cp binaries/DM42/keymap.bin binaries/DM42/original_DM42_keymap.bin binaries/DM42/testPgms.bin $(DM_DIST_DIR)
+	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
-.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper decNumberICU sources rebuild dist_macos
+.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper sources rebuild dist_macos
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)
@@ -211,7 +195,7 @@ endif
 
 sources: $(STAMP_FILES)
 
-clean_all: clean_decNumberICU clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
+clean_all: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite
 
 mrproper: clean_all
 	#rm -f $(GENERATED_SOURCES)
@@ -226,21 +210,28 @@ mrproper: clean_all
 	rm -f gmon.out
 
 
-clean_decNumberICU:
-	rm -f $(OBJ_DECIMAL)
-	rm -f $(DEPS_DECIMAL)
+$(BUILD_DIR)/simulator:
+	mkdir -p $(BUILD_DIR)/simulator
 
--include $(DEPS_DECIMAL)
+$(BUILD_DIR)/testSuite:
+	mkdir -p $(BUILD_DIR)/testSuite
 
-dep/decNumberICU/%.o: dep/decNumberICU/%.c
-	@echo -e "\n====> dep/decNumberICU/%.o: $@ <===="
-	$(CC) $(CFLAGS) -c -o $@ $<
+$(BUILD_DIR)/generateConstants:
+	mkdir -p $(BUILD_DIR)/generateConstants
+
+$(BUILD_DIR)/generateCatalogs:
+	mkdir -p $(BUILD_DIR)/generateCatalogs
+
+$(BUILD_DIR)/generateTestPgms:
+	mkdir -p $(BUILD_DIR)/generateTestPgms
+
+$(BUILD_DIR)/ttf2RasterFonts:
+	mkdir -p $(BUILD_DIR)/ttf2RasterFonts
 
 
 
 clean_generateConstants:
-	rm -f $(OBJ_GENERATECONSTANTS)
-	rm -f $(DEPS_GENERATECONSTANTS)
+	rm -rf $(BUILD_DIR)/generateConstants
 
 -include $(DEPS_GENERATECONSTANTS)
 
@@ -248,8 +239,8 @@ $(GENERATECONSTANTS_APP): $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> $(GENERATECONSTANTS_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_GENERATECONSTANTS) -o $@ $(LDFLAGS)
 
-src/generateConstants/%.o: src/generateConstants/%.c
-	@echo -e "\n====> src/generateConstants/%.o: $@ <===="
+$(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 .stamp-constantPointers: $(GENERATECONSTANTS_APP)
@@ -262,8 +253,7 @@ $(GEN_SRC_CONSTANTPOINTERS): .stamp-constantPointers
 
 
 clean_generateCatalogs:
-	rm -f $(OBJ_GENERATECATALOGS)
-	rm -f $(DEPS_GENERATECATALOGS)
+	rm -rf $(BUILD_DIR)/generateCatalogs
 
 -include $(DEPS_GENERATECATALOGS)
 
@@ -272,12 +262,8 @@ $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
 	@echo -e "\n====> $(GENERATECATALOGS_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_GENERATECATALOGS) -o $@ $(LDFLAGS)
 
-src/generateCatalogs/%.o: src/generateCatalogs/%.c
-	@echo -e "\n====> src/generateCatalogs/%.o: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
-
-src/wp43s/%.gc.o: src/wp43s/%.c .stamp-constantPointers
-	@echo -e "\n====> src/wp43s/%.gc.o: $@ <===="
+$(BUILD_DIR)/generateCatalogs/%.o: %.c .stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 .stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
@@ -290,8 +276,7 @@ $(GEN_SRC_SOFTMENUCATALOGS): .stamp-softmenuCatalog
 
 
 clean_generateTestPgms:
-	rm -f $(OBJ_GENERATETESTPGMS)
-	rm -f $(DEPS_GENERATETESTPGMS)
+	rm -rf $(BUILD_DIR)/generateTestPgms
 
 -include $(DEPS_GENERATETESTPGMS)
 
@@ -299,8 +284,8 @@ $(GENERATETESTPGMS_APP): $(OBJ_GENERATETESTPGMS)
 	@echo -e "\n====> $(GENERATETESTPGMS_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_GENERATETESTPGMS) -o $@ $(LDFLAGS)
 
-src/generateTestPgms/%.o: src/generateTestPgms/%.c
-	@echo -e "\n====> src/generateTestPgms/%.o: $@ <===="
+$(BUILD_DIR)/generateTestPgms/%.o: %.c | $(BUILD_DIR)/generateTestPgms
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 .stamp-testPgms: $(GENERATETESTPGMS_APP)
@@ -313,8 +298,7 @@ $(GEN_BIN_TESTPGMS): .stamp-testPgms
 
 
 clean_ttf2RasterFonts:
-	rm -f $(OBJ_TTF2RASTERFONTS)
-	rm -f $(DEPS_TTF2RASTERFONTS)
+	rm -rf $(BUILD_DIR)/ttf2RasterFonts
 
 -include $(DEPS_TTF2RASTERFONTS)
 
@@ -322,8 +306,8 @@ $(TTF2RASTERFONTS_APP): $(OBJ_TTF2RASTERFONTS)
 	@echo -e "\n====> $(TTF2RASTERFONTS_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_TTF2RASTERFONTS) -o $@ $(LDFLAGS)
 
-src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
-	@echo -e "\n====> src/ttf2RasterFonts/%.o: $@ <===="
+$(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 .stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
@@ -331,14 +315,13 @@ src/ttf2RasterFonts/%.o: src/ttf2RasterFonts/%.c
 	./$(TTF2RASTERFONTS_APP) > /dev/null
 	touch $@
 
-src/wp43s/rasterFontsData.o: .stamp-rasterFontsData
+$(BUILD_DIR)/ttf2RasterFonts/rasterFontsData.o: .stamp-rasterFontsData
 
 $(GEN_SRC_RASTERFONTSDATA): .stamp-rasterFontsData
 
 
 clean_testTtf2RasterFonts:
-	rm -f $(OBJ_TESTTTF2RASTERFONTS)
-	rm -f $(DEPS_TESTTTF2RASTERFONTS)
+	rm -f $(BUILD_DIR)/ttf2RasterFonts/testTtf2RasterFonts.o
 
 -include $(DEPS_TESTTTF2RASTERFONTS)
 
@@ -346,12 +329,11 @@ $(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS)
 	@echo -e "\n====> $(TESTTTF2RASTERFONTS_APP): binary/exe <===="
 	$(CC) $(CFLAGS) $(OBJ_TESTTTF2RASTERFONTS) -o $@ $(LDFLAGS)
 
-src/ttf2RasterFonts/testTtf2RasterFonts.o: .stamp-constantPointers
+$(BUILD_DIR)/ttf2RasterFonts/testTtf2RasterFonts.o: .stamp-constantPointers
 
 
 clean_testSuite:
-	rm -f $(OBJ_TESTSUITE)
-	rm -f $(DEPS_TESTSUITE) $(DEPS_WP43S)
+	rm -rf $(BUILD_DIR)/testSuite
 
 -include $(DEPS_TESTSUITE)
 
@@ -360,23 +342,14 @@ $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(LDFLAGS)
 
-src/testSuite/%.o: src/testSuite/%.c .stamp-constantPointers
-	@echo -e "\n====> src/testSuite/%.o: $@ <===="
+$(BUILD_DIR)/testSuite/%.o: %.c .stamp-constantPointers | $(BUILD_DIR)/testSuite
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
-
-src/wp43s/%.ts.o: src/wp43s/%.c .stamp-constantPointers
-	@echo -e "\n====> src/wp43s/%.ts.o: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
-
-dep/decNumberICU/%.ts.o: dep/decNumberICU/%.c
-	@echo -e "\n====> dep/decNumberICU/%.ts.o: $@ <===="
-	$(CC) $(CFLAGS) -c -o $@ $<
 
 
 
 clean_wp43s:
-	rm -f $(OBJ_WP43S)
-	rm -f $(DEPS_WP43S)
+	rm -rf $(BUILD_DIR)/simulator
 
 -include $(DEPS_WP43S)
 
@@ -384,6 +357,6 @@ $(WP43S_APP): $(OBJ_WP43S)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_WP43S) -o $(WP43S_APP) $(LDFLAGS)
 
-src/wp43s/%.o: src/wp43s/%.c .stamp-constantPointers .stamp-softmenuCatalog .stamp-testPgms
-	@echo -e "\n====> src/wp43s/%.o: $@ <===="
+$(BUILD_DIR)/simulator/%.o: %.c .stamp-constantPointers .stamp-softmenuCatalog .stamp-testPgms | $(BUILD_DIR)/simulator
+	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<

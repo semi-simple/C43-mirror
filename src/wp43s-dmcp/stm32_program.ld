@@ -134,7 +134,7 @@ SECTIONS {
     libc.a ( * )
     libm.a ( * )
     libgcc.a ( * )
-    gmp-6.2.0/.libs/libgmp.a ( * )
+    ../dep/gmp-6.2.0/.libs/libgmp.a ( * )
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }

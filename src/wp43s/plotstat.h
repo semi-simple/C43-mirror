@@ -30,22 +30,14 @@
 //****************************************************************************************************************************
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
-#define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05f    // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
 #define   USEFLOATING useFLOAT     // useFLOAT is faster then useREAL4 and used for graph reproduction
 
-
-#if (graphtypeno == 1)
-  #define graphtype   float  
-  #define FLoatingMax 1e38     //convenient round figures used for maxima and minima determination
-  #define FLoatingMin -1e38
-#elif (graphtypeno == 2)
-  #define graphtype   double
-  #define FLoatingMax 1e308
-  #define FLoatingMin -1e308
-#endif
+#define   graphtype      float  
+#define   FLoatingMax    1e38f     //convenient round figures used for maxima and minima determination
+#define   FLoatingMin    -1e38f
 
 
 //Memory structure
@@ -109,6 +101,8 @@ void    plotbox            (uint16_t xn, uint8_t yn);                // Plots li
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void    graphAxisDraw      (void);
+void    realToFloat        (real_t *vv, graphtype *v);
+void    realToDouble       (real_t *vv, double *v);
 
 
 //graph functions

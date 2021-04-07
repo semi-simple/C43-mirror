@@ -119,22 +119,22 @@ void graph_setupmemory(void) {
   if((telltale==MEM_INITIALIZED) && (gr_x != NULL) && (gr_y != NULL)){
     for (i = 0; i < LIM; ++i) { 
       #if defined STATDEBUG && defined PC_BUILD
-        gr_x[i] = 85.1;
-        gr_y[i] = 170.1; 
-        if(fabs(gr_x[i]-85.1) > 0.00001 || fabs(gr_y[i]-170.1) > 0.00001) printf("### ERROR MEMORY A %i: x should be 85.1 and is %f; y should be 170.1 and is %f\n",i,gr_x[i],gr_y[i]);
+        gr_x[i] = 85.1f;
+        gr_y[i] = 170.1f; 
+        if(fabs(gr_x[i]-85.1f) > 0.00001f || fabs(gr_y[i]-170.1f) > 0.00001f) printf("### ERROR MEMORY TEST A %i: x should be 85.1 and is %f; y should be 170.1 and is %f\n",i,gr_x[i],gr_y[i]);
         gr_x[i] = 170.1;
         gr_y[i] = 85.1; 
-        if(fabs(gr_x[i]-170.1) > 0.00001 || fabs(gr_y[i]-85.1) > 0.00001) printf("### ERROR MEMORY B %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
+        if(fabs(gr_x[i]-170.1f) > 0.00001f || fabs(gr_y[i]-85.1f) > 0.00001f) printf("### ERROR MEMORY TEST B %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
       #endif
-      gr_x[i] = 0;
-      gr_y[i] = 0; 
+      gr_x[i] = 0.0f;
+      gr_y[i] = 0.0f; 
       #if defined STATDEBUG && defined PC_BUILD
-        if(gr_x[i]!=0.0 || gr_y[i]!=0.0) printf("### ERROR MEMORY C %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
+        if(gr_x[i]!=0.0f || gr_y[i]!=0.0f) printf("### ERROR MEMORY TEST C %i: x should be 170.1 and is %f; y should be 85.1 and is %f\n",i,gr_x[i],gr_y[i]);
       #endif
     }
   } else {
-    #ifdef PC_BUILD
-      printf("### ERROR MEMORY D NOT INITIALIZED\n");
+    #if defined STATDEBUG && defined PC_BUILD
+      printf("### ERROR MEMORY TEST D NOT INITIALIZED\n");
     #endif //PC_BUILD
   }
 }
@@ -143,6 +143,69 @@ void graph_end(void) {
   free(gr_x);
   free(gr_y);
   telltale = 0;
+}
+
+
+
+// ALSO CHECK FOR stringToReal and stringToReal34
+
+
+bool_t replaceRadix(char *instr) {
+  char tmpString1[50];
+  uint16_t ix;
+  uint8_t  radix;
+
+  sprintf(tmpString1, "%f",1.1f);
+  ix = 0;
+  while(tmpString1[ix] != 0 && tmpString1[ix] != ',' && tmpString1[ix] != '.') {
+    ix++;
+  }
+  if(tmpString1[ix] == 0) {
+    return false;
+  } else {
+    radix = tmpString1[ix];
+    #ifdef PC_BUILD
+      strcpy(tmpString1,radix == '.' ? "." : radix == ',' ? "," : "X");
+      printf("Found radix = %s %u ", tmpString1,radix);
+    #endif
+  }
+
+  ix = 0;
+  while(instr[ix] != 0 && instr[ix] != ',' && instr[ix] != '.') {
+    ix++;
+  }
+  
+  if(instr[ix] == 0) {
+    return false;
+  } else {
+    #ifdef PC_BUILD
+      if(instr[ix] != radix) printf(" Replaced radix ");
+    #endif
+    instr[ix] = radix;
+    return true;
+  }
+}
+
+
+void realToFloat(real_t *vv, graphtype *v) {
+  char tmpString1[100];                      //allow for 75 digits
+  realToString(vv, tmpString1);
+  replaceRadix(tmpString1);
+  *v = strtof (tmpString1, NULL);    
+  #ifdef PC_BUILD
+    printf(" %s:%f\n",tmpString1,*v);
+  #endif
+}
+
+
+void realToDouble(real_t *vv, double *v) {
+  char tmpString1[100];                      //allow for 75 digits
+  realToString(vv, tmpString1);
+  replaceRadix(tmpString1);
+  *v = strtof (tmpString1, NULL);    
+  #ifdef PC_BUILD
+    printf(" %s:%f\n",tmpString1,*v);
+  #endif
 }
 
 
@@ -163,13 +226,11 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
     }
 
     //Convert from X register to graphtype
-    realToString(yy, tmpString);
-    y = strtof (tmpString, NULL);
+    realToFloat(yy,&y);
     //printf("y=%f ",y);
 
     //Convert from X register to graphtype
-    realToString(xx, tmpString);
-    x = strtof (tmpString, NULL);
+    realToFloat(xx, &x);
     //printf("x=%f ",x);
 
     #ifndef TESTSUITE_BUILD
@@ -237,7 +298,7 @@ graphtype grf_y(int i) {
   int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max) {
     int16_t temp; graphtype tempr;
     if (Aspect_Square) {
-      tempr = ((x-x_min)/(x_max-x_min)*(graphtype)(SCREEN_HEIGHT_GRAPH-1.0));
+      tempr = ((x-x_min)/(x_max-x_min)*(graphtype)(SCREEN_HEIGHT_GRAPH-1.0f));
       temp = (int16_t) tempr;
       if (temp>SCREEN_HEIGHT_GRAPH-1) {
         temp=SCREEN_HEIGHT_GRAPH-1;
@@ -246,7 +307,7 @@ graphtype grf_y(int i) {
       return temp+SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
     } 
     else {  //FULL SCREEN
-      tempr = ((x-x_min)/(x_max-x_min)*(graphtype)(SCREEN_WIDTH_GRAPH-1.0));
+      tempr = ((x-x_min)/(x_max-x_min)*(graphtype)(SCREEN_WIDTH_GRAPH-1.0f));
       temp = (int16_t) tempr;
       //printf("--> %d (%f %f)  ",temp, x_min,x_max);
       if (temp>SCREEN_WIDTH_GRAPH-1) {
@@ -268,7 +329,7 @@ graphtype grf_y(int i) {
     if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
     else minn = 0;
 
-    tempr = ((y-y_min)/(y_max-y_min)*(graphtype)(SCREEN_HEIGHT_GRAPH-1.0 - minn));
+    tempr = ((y-y_min)/(y_max-y_min)*(graphtype)(SCREEN_HEIGHT_GRAPH-1.0f - minn));
     temp = (int16_t) tempr;
     if (temp>SCREEN_HEIGHT_GRAPH-1 - minn) {
       temp=SCREEN_HEIGHT_GRAPH-1 - minn;
@@ -613,7 +674,7 @@ void graphAxisDraw (void){
 
 void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
   char s03[100]; char s04[100];
-  if(((fabs(inreal) > 1000000.0 || fabs(inreal) < 0.001)) && (inreal != 0)) {
+  if(((fabs(inreal) > 1000000.0f || fabs(inreal) < 0.001f)) && (inreal != 0.0f)) {
     sprintf(s03,"%.*e",prec,inreal);
   } else {
     sprintf(s03,"%.*f",prec,inreal);
@@ -625,9 +686,9 @@ void eformat (char* s02, char* s01, double inreal, uint8_t prec) {
 }
 
 void graphPlotstat(uint16_t selection){
-  #ifdef PC_BUILD
+  #if defined STATDEBUG && defined PC_BUILD
     printf("#####>>> graphPlotstat: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
-  #endif //PC_BUILD
+  #endif //STATDEBUG
   #ifndef TESTSUITE_BUILD
   uint16_t  cnt, ix, statnum;
   uint16_t  xo, xn, xN; 
@@ -676,20 +737,20 @@ void graphPlotstat(uint16_t selection){
     #endif
   
     //Check and correct if min and max is swapped
-    if(x_min>0 && x_min > x_max) {x_min = x_min - (-x_max+x_min)* 1.1;}
-    if(x_min<0 && x_min > x_max) {x_min = x_min + (-x_max+x_min)* 1.1;}
+    if(x_min>0.0f && x_min > x_max) {x_min = x_min - (-x_max+x_min)* 1.1f;}
+    if(x_min<0.0f && x_min > x_max) {x_min = x_min + (-x_max+x_min)* 1.1f;}
     #if defined STATDEBUG && defined PC_BUILD
       printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
   
     //Always include the 0 axis
     if(!extentx) {
-      if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_min = 0;}}
-      if(x_min<0 && x_max<0) {if(x_min>=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+      if(x_min>0.0f && x_max>0.0f) {if(x_min<=x_max) {x_min = -0.05f*x_max;} else {x_min = 0.0f;}}
+      if(x_min<0.0f && x_max<0.0f) {if(x_min>=x_max) {x_min = -0.05f*x_max;} else {x_max = 0.0f;}}
     }
     if(!extenty) {
-      if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*y_max;} else {y_min = 0;}}
-      if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*y_max;} else {y_max = 0;}}
+      if(y_min>0.0f && y_max>0.0f) {if(y_min<=y_max) {y_min = -0.05f*y_max;} else {y_min = 0.0f;}}
+      if(y_min<0.0f && y_max<0.0f) {if(y_min>=y_max) {y_min = -0.05f*y_max;} else {y_max = 0.0f;}}
     }
   
     //Cause scales to be the same    
@@ -702,12 +763,12 @@ void graphPlotstat(uint16_t selection){
   
     //Calc zoom scales    
     if(PLOT_ZMX != 0) {
-      x_min = pow(2.0,-PLOT_ZMX) * x_min;
-      x_max = pow(2.0,-PLOT_ZMX) * x_max;
+      x_min = pow(2.0f,-PLOT_ZMX) * x_min;
+      x_max = pow(2.0f,-PLOT_ZMX) * x_max;
     }
     if(PLOT_ZMY != 0) {
-      y_min = pow(2.0,-PLOT_ZMY) * y_min;
-      y_max = pow(2.0,-PLOT_ZMY) * y_max;      
+      y_min = pow(2.0f,-PLOT_ZMY) * y_min;
+      y_max = pow(2.0f,-PLOT_ZMY) * y_max;      
     }
     #if defined STATDEBUG && defined PC_BUILD
       printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
@@ -716,21 +777,21 @@ void graphPlotstat(uint16_t selection){
     graphtype dx = x_max-x_min;
     graphtype dy = y_max-y_min;
   
-    if (dy == 0) {
-      dy = 1;
-      y_max = y_min + dy/2;
+    if (dy == 0.0f) {
+      dy = 1.0f;
+      y_max = y_min + dy/2.0f;
       y_min = y_max - dy;
     }
-    if (dx == 0) {
-      dx = 1;
-      x_max = x_min + dx/2;
+    if (dx == 0.0f) {
+      dx = 1.0f;
+      x_max = x_min + dx/2.0f;
       x_min = x_max - dx;
     }
     
-    x_min = x_min - dx * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
-    y_min = y_min - dy * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
-    x_max = x_max + dx * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
-    y_max = y_max + dy * zoomfactor * (pow(4.5,(int8_t)(PLOT_ZOOM & 0x03)));
+    x_min = x_min - dx * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_min = y_min - dy * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    x_max = x_max + dx * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_max = y_max + dy * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
     #if defined STATDEBUG && defined PC_BUILD
       printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
@@ -830,17 +891,19 @@ void graphPlotstat(uint16_t selection){
   void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
     real_t XX,YY;
     if(!selection) return;
-    #ifdef PC_BUILD
+    #if defined STATDEBUG && defined PC_BUILD
       printf("#####>>> drawline: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
-    #endif //PC_BUILD
-    double rr,smi,a0,a1,a2;
+    #endif //STATDEBUG
+    float rr,smi,a0,a1,a2;
     int32_t nn;
     char ss[100];
-    realToString(RR, ss);  rr = strtof (ss, NULL);
-    realToString(SMI, ss); smi = strtof (ss, NULL);
-    realToString(aa0, ss); a0 = strtof (ss, NULL);
-    realToString(aa1, ss); a1 = strtof (ss, NULL);
-    realToString(aa2, ss); a2 = strtof (ss, NULL);
+
+
+    realToFloat(RR , &rr );
+    realToFloat(SMI, &smi);
+    realToFloat(aa0, &a0 );
+    realToFloat(aa1, &a1 );
+    realToFloat(aa2, &a2 );
     realToInt32(SIGMA_N, nn);  
 
     #ifdef PC_BUILD
@@ -848,7 +911,7 @@ void graphPlotstat(uint16_t selection){
     #endif
     if((selection==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
       #if defined STATDEBUG && defined PC_BUILD
-        printf("return\n");
+        printf("return, nothing selected, zero parameters, nothing to draw\n");
       #endif
       return;
     }
@@ -856,8 +919,8 @@ void graphPlotstat(uint16_t selection){
     uint16_t  xo = 0, xn, xN = 0; 
     uint8_t   yo = 0, yn, yN = 0;
     double    x = x_min; 
-    double    y = 0;
-    int16_t   factor = 10;
+    double    y = 0.0;
+    int16_t   factor = 5;
     int16_t   Intervals = numberIntervals * factor; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
     uint16_t  iterations = 0;
     int16_t   jumpMonitor = 0;
@@ -873,11 +936,11 @@ void graphPlotstat(uint16_t selection){
             if(jumpMonitor > -factor) jumpMonitor--;
           }
 
-          if( !(y > y_min+0.05*(y_max-y_min) && y < y_max-0.05*(y_max-y_min)) || !(x > x_min+0.05*(x_max-x_min) && x < x_max-0.05*(x_max-x_min)) )
-            jumpMonitor = 10; else
-
+          if( !(y > y_min+0.05f*(y_max-y_min) && y < y_max-0.05f*(y_max-y_min)) || !(x > x_min+0.05f*(x_max-x_min) && x < x_max-0.05f*(x_max-x_min)) ) {
+            jumpMonitor = 10;
+          } else
           if(jumpMonitor >= 1 && Intervals == numberIntervals) {
-            ix = max(1,(ix-2))*factor;       //backtrack a little
+            ix = max(1,(ix-2))*factor;                  //backtrack a little
             Intervals = numberIntervals * factor;       //increase accuracy and time to complete, if a jump in y is found
             jumpMonitor = 0;
           } else
@@ -887,16 +950,17 @@ void graphPlotstat(uint16_t selection){
             jumpMonitor = 0;
           }
 
-      x = x_min + (x_max-x_min)/(double)Intervals * (double)ix;
+      x = (double)x_min + (double)(x_max-x_min)/(double)Intervals * (double)ix;
       if(USEFLOATING != 0) {
+        //TODO create REAL from ix if REALS will be used
         sprintf(ss,"%f",x); stringToReal(ss,&XX,&ctxtReal39);
       }
       yIsFnx( USEFLOATING, selection, x, &y, a0, a1, a2, &XX, &YY, RR, SMI, aa0, aa1, aa2);
 
       xo = xN;
       yo = yN;
-      xN = screen_window_x(x_min,x,x_max);
-      yN = screen_window_y(y_min,y,y_max);
+      xN = screen_window_x(x_min,(graphtype)x,x_max);
+      yN = screen_window_y(y_min,(graphtype)y,y_max);
 
       if(ix > 0) {  //Allow for starting values to accumulate in the registers at ix = 0
         #if defined STATDEBUG && defined PC_BUILD
@@ -937,9 +1001,9 @@ void graphPlotstat(uint16_t selection){
     }
 
 
-    #ifdef PC_BUILD
+    #if defined STATDEBUG && defined PC_BUILD
       printf("#####>>> Labels selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
-    #endif //PC_BUILD
+    #endif //STATDEBUG
 
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
@@ -1004,10 +1068,8 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 void fnPlotStat(uint16_t plotMode){
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
-#endif //STATDEBUG
-#ifdef PC_BUILD
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
-#endif //PC_BUILD
+#endif //STATDEBUG
 
 #if defined STATDEBUG && defined PC_BUILD
   uint16_t i;
@@ -1122,106 +1184,106 @@ void fnStatDemo0(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
   plotSelection = 0;
   runFunction(ITM_CLSIGMA);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0005.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.3887943864964E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794424E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599145E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.54938188039194E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.46143177310602E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.60522805518558E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.90893843426479E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.33028757450481E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.18295779512542E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.00621802076691E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0004.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.12535174719256E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.47959601804496E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.35534780279297E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.13372713874794E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.35257520000972E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.78511739212891E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.54016287307904E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.86437423315165E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.57128496416346E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.70548243028099E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0003.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000123409804086678",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000222629856918886",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000393669040655073",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000682328052756367",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00115922917390458",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00193045413622769",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00315111159844441",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00504176025969093",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00790705405159337",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0121551783299148",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0002.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0183156388887341",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0270518468663502",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0391638950989869",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0555762126114828",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0773047404432994",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.105399224561864",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.140858420921045",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.184519523992989",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.236927758682121",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.298197279429887",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0001.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.367879441171442",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.44485806622294",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.527292424043048",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.612626394184415",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.69767632607103",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.778800783071404",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.852143788966211",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.913931185271228",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.960789439152323",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0000.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.990049833749168",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.990049833749168",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.960789439152324",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.913931185271229",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.852143788966212",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.778800783071406",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.697676326071032",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.612626394184417",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.527292424043049",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.444858066222942",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.367879441171443",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.298197279429888",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.236927758682122",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.18451952399299",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.140858420921045",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.105399224561865",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0773047404432999",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0555762126114832",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0391638950989871",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0001.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0270518468663504",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0183156388887342",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.012155178329915",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00790705405159345",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00504176025969098",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00315111159844444",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00193045413622771",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00115922917390459",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000682328052756376",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000393669040655078",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0002.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000222629856918889",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000123409804086679",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.70548243028109E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.57128496416351E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.86437423315168E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.54016287307918E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.78511739212897E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.35257520000976E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.13372713874796E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.35534780279306E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0003.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.47959601804501E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.00000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.12535174719258E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.10000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.00621802076701E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.20000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.18295779512548E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.30000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.33028757450501E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.40000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.90893843426488E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.50000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.60522805518562E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.60000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.46143177310618E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.70000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.54938188039201E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.80000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599169E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0004.90000000000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794435E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-5.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.3887943864964E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794424E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599145E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.54938188039194E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.46143177310602E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.60522805518558E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.90893843426479E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.33028757450481E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.18295779512542E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.00621802076691E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-4.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.12535174719256E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.47959601804496E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.35534780279297E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.13372713874794E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.35257520000972E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.78511739212891E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.54016287307904E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.86437423315165E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.57128496416346E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.70548243028099E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-3.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000123409804086678",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000222629856918886",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000393669040655073",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000682328052756367",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00115922917390458",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00193045413622769",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00315111159844441",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00504176025969093",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00790705405159337",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0121551783299148",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-2.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0183156388887341",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0270518468663502",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0391638950989869",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0555762126114828",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0773047404432994",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.105399224561864",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.140858420921045",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.184519523992989",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.236927758682121",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.298197279429887",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-1.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.367879441171442",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.44485806622294",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.527292424043048",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.612626394184415",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.69767632607103",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.778800783071404",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.852143788966211",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.913931185271228",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.960789439152323",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("-0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.990049833749168",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.990049833749168",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.960789439152324",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.913931185271229",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.852143788966212",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.778800783071406",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.697676326071032",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.612626394184417",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.527292424043049",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "0.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.444858066222942",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.367879441171443",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.298197279429888",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.236927758682122",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.18451952399299",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.140858420921045",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.105399224561865",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0773047404432999",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0555762126114832",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0391638950989871",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "1.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0270518468663504",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0183156388887342",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.012155178329915",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00790705405159345",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00504176025969098",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00315111159844444",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00193045413622771",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.00115922917390459",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000682328052756376",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000393669040655078",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "2.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000222629856918889",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.000123409804086679",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.70548243028109E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.57128496416351E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.86437423315168E-05",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.54016287307918E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("4.78511739212897E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.35257520000976E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.13372713874796E-06",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.35534780279306E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "3.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.47959601804501E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.0",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.12535174719258E-07",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("5.00621802076701E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.2",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.18295779512548E-08",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.3",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.33028757450501E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.4",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.90893843426488E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.5",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.60522805518562E-09",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.6",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.46143177310618E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.54938188039201E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599169E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794435E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
    #endif //TESTSUITE_BUILD
   }
 
